@@ -1,0 +1,37 @@
+# Model Context Protocol - Requirements
+
+# This file lists the packages and dependencies required for the Model Context Protocol module.
+# The `environment_setup/` module may use this file to provision the necessary environment.
+
+# PLEASE RENAME/ADAPT THIS FILE and its contents based on the primary language and package manager for this module.
+# For example:
+# - Python: `requirements.txt` (pip), `environment.yml` (conda), or `pyproject.toml` (poetry/pdm)
+# - Node.js: `package.json`
+# - Java: `pom.xml` (Maven), `build.gradle` (Gradle)
+# - Go: `go.mod`
+# - Rust: `Cargo.toml`
+# - Ruby: `Gemfile`
+# - etc.
+
+# Example for a Python module (if this were `requirements.txt`):
+# requests==2.25.1
+# numpy>=1.20.0
+# pandas # for latest version
+
+# Example for a Node.js module (if this were `package.json`, content would be JSON):
+# {
+#   "name": "module-name",
+#   "version": "0.1.0",
+#   "dependencies": {
+#     "library-a": "^1.2.3",
+#     "library-b": "~4.5.6"
+#   },
+#   "devDependencies": {
+#     "testing-framework": "^7.8.9"
+#   }
+# }
+
+# Add your module-specific dependencies below, following the appropriate format for your chosen language/tooling.
+
+# [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
+# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1 

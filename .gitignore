@@ -1,0 +1,64 @@
+# General .gitignore for Codomyrmex project
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Compiled files
+*.o
+*.a
+*.so
+*.lib
+*.dll
+*.exe
+
+# Compressed files
+*.zip
+*.tar.gz
+*.rar
+
+# Logs
+*.log
+
+# Build directories (general)
+build/
+dist/
+bin/
+out/
+
+# Coverage reports
+coverage/
+.coverage
+
+# Specific tool caches/outputs (add more as needed)
+.pytest_cache/
+.mypy_cache/
+.tox/
+
+# Secrets - ensure these are not committed if used locally
+# secrets.yml
+# *.credential 
