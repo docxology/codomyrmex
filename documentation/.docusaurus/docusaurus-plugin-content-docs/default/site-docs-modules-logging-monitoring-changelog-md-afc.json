@@ -1,0 +1,27 @@
+{
+  "id": "modules/logging_monitoring/changelog",
+  "title": "Logging & Monitoring - Changelog",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/logging_monitoring/changelog.md",
+  "sourceDirName": "modules/logging_monitoring",
+  "slug": "/modules/logging_monitoring/changelog",
+  "permalink": "/codomyrmex/modules/logging_monitoring/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/logging_monitoring/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Changelog",
+    "title": "Logging & Monitoring - Changelog"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/logging_monitoring/usage_examples"
+  },
+  "next": {
+    "title": "Security",
+    "permalink": "/codomyrmex/modules/logging_monitoring/security"
+  }
+}

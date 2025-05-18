@@ -1,0 +1,28 @@
+{
+  "id": "modules/static_analysis/static-analysis-mcp-tool-specification",
+  "title": "Static Analysis - MCP Tool Specification",
+  "description": "This document outlines MCP tools provided by the Static Analysis module.",
+  "source": "@site/docs/modules/static_analysis/mcp_tool_specification.md",
+  "sourceDirName": "modules/static_analysis",
+  "slug": "/modules/static_analysis/static-analysis-mcp-tool-specification",
+  "permalink": "/codomyrmex/modules/static_analysis/static-analysis-mcp-tool-specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/static_analysis/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "static-analysis-mcp-tool-specification",
+    "title": "Static Analysis - MCP Tool Specification",
+    "sidebar_label": "MCP Tool Specification"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "API Specification",
+    "permalink": "/codomyrmex/modules/static_analysis/static-analysis-api-specification"
+  },
+  "next": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/static_analysis/static-analysis-usage-examples"
+  }
+}

@@ -1,0 +1,48 @@
+# Cursor Rules for the Documentation Module
+
+## 0. Preamble
+These rules are specific to the `documentation` module (which builds the Docusaurus site) and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Generates and serves the comprehensive documentation website for the Codomyrmex project using Docusaurus.
+-   **Key Technologies/Tools**: Docusaurus, Markdown, Node.js, npm/yarn, React (for Docusaurus components).
+-   Refer to this module's main `README.md` (located at `../../documentation/README.md`) for an overview of the documentation hub itself.
+
+## 2. Key Files & Structure in the `documentation` Module
+When working within this module, pay close attention to:
+-   `README.md`: How to run and build the documentation site.
+-   `docusaurus.config.js`: Main Docusaurus configuration (site metadata, theme, plugins, navbar, footer).
+-   `sidebars.js`: Defines the sidebar navigation structure for all documented modules.
+-   `package.json`: Node.js dependencies and scripts (`start`, `build`).
+-   `docs/`: The root directory for all Markdown documentation content that Docusaurus processes.
+    -   `docs/intro.md`: The main landing page of the documentation site.
+    -   `docs/modules/`: Contains subdirectories for each Codomyrmex module, holding their documentation.
+    -   `docs/project/`: Project-wide documents (Contributing, License, etc.).
+-   `src/css/custom.css`: Custom styling for the Docusaurus site.
+-   `static/`: Static assets like images.
+
+## 3. Content & Formatting Standards for Documentation
+-   **Clarity and Accuracy**: Documentation must be clear, accurate, and up-to-date.
+-   **Consistent Structure**: Follow the established structure for module documentation (Overview, API, MCP, Changelog, Security, Usage Examples, Detailed Docs/Tutorials).
+-   **Markdown Usage**: Use standard Markdown. Ensure frontmatter (`sidebar_label`, `title`, `slug`, `id`) is used correctly for Docusaurus.
+-   **Links**: All internal links within the documentation site must be relative and correct. External links should be verified.
+-   **Adding New Modules**: When a new Codomyrmex module is documented, create its subdirectory in `docs/modules/` and update `sidebars.js` accordingly. Refer to the tutorial in `documentation/docs/modules/documentation/docs/tutorials/example_tutorial.md`.
+
+## 4. Docusaurus Specifics
+-   **`docusaurus.config.js`**: Changes here affect the entire site. Understand the impact before modifying.
+-   **`sidebars.js`**: Critical for navigation. Ensure correct IDs and paths are used. The structure should be logical and user-friendly.
+-   **Custom Components**: If adding custom React components for Docusaurus, they should be well-tested and placed in `src/components/`.
+
+## 5. Testing Documentation Changes
+-   Always run the local development server (`npm run start` or `yarn start` from the `documentation` directory) to preview changes.
+-   Navigate through the site, especially new or modified sections, to check rendering and links.
+-   Verify that `npm run build` completes without errors.
+
+## 6. Documentation for the `documentation` Module Itself
+-   The `documentation/docs/modules/documentation/` subdirectory contains documentation *about* this documentation module (meta-documentation).
+-   Keep this meta-documentation current, especially the technical overview and tutorials on managing the doc site.
+
+## 7. Final Check for the `documentation` Module
+-   Ensure the Docusaurus site builds and runs correctly.
+-   Verify navigation and links.
+-   Confirm that documentation for all modules is consistently presented. 

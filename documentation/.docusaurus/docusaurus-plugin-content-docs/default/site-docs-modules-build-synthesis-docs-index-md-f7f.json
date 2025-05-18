@@ -1,0 +1,28 @@
+{
+  "id": "modules/build_synthesis/docs/build-synthesis-module-docs-index",
+  "title": "Build Synthesis - Detailed Documentation",
+  "description": "This section provides deeper insights into the Build Synthesis module.",
+  "source": "@site/docs/modules/build_synthesis/docs/index.md",
+  "sourceDirName": "modules/build_synthesis/docs",
+  "slug": "/modules/build_synthesis/docs/",
+  "permalink": "/codomyrmex/modules/build_synthesis/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/build_synthesis/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "build-synthesis-module-docs-index",
+    "title": "Build Synthesis - Detailed Documentation",
+    "sidebar_label": "Module Docs Home"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy",
+    "permalink": "/codomyrmex/modules/build_synthesis/build-synthesis-security"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/build_synthesis/docs/build-synthesis-technical-overview"
+  }
+}

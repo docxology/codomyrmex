@@ -1,0 +1,28 @@
+{
+  "id": "modules/static_analysis/docs/tutorials/static-analysis-example-tutorial",
+  "title": "Example Tutorial - Configuring Pylint",
+  "description": "Before you begin, ensure you have the following:",
+  "source": "@site/docs/modules/static_analysis/docs/tutorials/static-analysis-example-tutorial.md",
+  "sourceDirName": "modules/static_analysis/docs/tutorials",
+  "slug": "/modules/static_analysis/docs/tutorials/static-analysis-example-tutorial",
+  "permalink": "/codomyrmex/modules/static_analysis/docs/tutorials/static-analysis-example-tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/static_analysis/docs/tutorials/static-analysis-example-tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "static-analysis-example-tutorial",
+    "title": "Example Tutorial - Configuring Pylint",
+    "sidebar_label": "Pylint Configuration Tutorial"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/static_analysis/docs/tutorials/"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/codomyrmex/modules/build_synthesis/"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "modules/logging_monitoring/docs/tutorials/example_tutorial",
+  "title": "example_tutorial",
+  "description": "",
+  "source": "@site/docs/modules/logging_monitoring/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/logging_monitoring/docs/tutorials",
+  "slug": "/modules/logging_monitoring/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/logging_monitoring/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/logging_monitoring/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials Index",
+    "permalink": "/codomyrmex/modules/logging_monitoring/docs/tutorials/"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/codomyrmex/modules/model_context_protocol/"
+  }
+}

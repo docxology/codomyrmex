@@ -1,0 +1,50 @@
+# Cursor Rules for the code_execution_sandbox Module
+
+## 0. Preamble
+These rules are specific to the `code_execution_sandbox` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides a secure environment for executing arbitrary code snippets or entire scripts. It is crucial for features like AI-generated code testing, running user-provided plugins, or executing potentially untrusted code.
+-   **Key Technologies/Tools**: Sandboxing technologies (e.g., Docker, nsjail, Firecracker), various language runtimes, Judge0.
+-   Refer to the module's main `README.md` (located at `../../code_execution_sandbox/README.md`) for a comprehensive overview.
+
+## 2. Key Files & Structure in `code_execution_sandbox` Module
+When working within this module, pay close attention to:
+-   `README.md`: Overview of sandbox capabilities and security principles.
+-   `API_SPECIFICATION.md`: API for submitting code for execution.
+-   `MCP_TOOL_SPECIFICATION.md`: MCP tools for code execution.
+-   `CHANGELOG.md`: Changes to sandbox environments or execution capabilities.
+-   `SECURITY.md`: **CRITICAL DOCUMENT**. Outlines security measures, threat model, and responsible disclosure for the sandbox.
+-   `requirements.txt`: Dependencies for the sandbox management system itself.
+-   `docs/`: Detailed documentation on supported languages, resource limits, security configurations.
+-   `src/` (or equivalent): Core logic for setting up sandboxes, managing execution, and enforcing limits.
+-   `tests/`: Tests for sandbox isolation, resource limiting, and API functionality.
+
+## 3. Coding Standards & Practices for `code_execution_sandbox`
+-   **Security First**: Every change must be evaluated for security impact. Adhere strictly to the principles in `SECURITY.md`.
+-   **Isolation**: Ensure robust isolation between executed code and the host system/other executions.
+-   **Resource Management**: Implement and test strict resource limits (CPU, memory, time, network).
+-   **Error Handling**: Clearly report execution errors, timeouts, or sandbox setup failures.
+-   **Language Runtimes**: Keep sandbox images and language runtimes updated with security patches.
+
+## 4. Testing in `code_execution_sandbox`
+-   **Security Tests**: Include tests specifically designed to probe for sandbox escapes or vulnerabilities.
+-   **Resource Limit Tests**: Verify that resource limits are correctly enforced.
+-   **Functionality Tests**: Test execution of various code snippets in all supported languages.
+-   Refer to `code_execution_sandbox/tests/README.md`.
+
+## 5. Documentation for `code_execution_sandbox`
+-   `SECURITY.md` must be extremely detailed and accurate.
+-   Document supported languages, their versions, and available libraries within the sandbox.
+-   Clearly specify default and configurable resource limits.
+-   Provide guidance on secure usage of the sandbox API/tools.
+
+## 6. Specific Considerations for `code_execution_sandbox`
+-   **NO UNNECESSARY PRIVILEGES**: The sandbox manager and code within sandboxes must run with the absolute minimum privileges required.
+-   **Network Access**: Default to NO network access. If allowed, it must be explicitly configured, restricted, and justified.
+-   **Filesystem Access**: Sandboxed code should operate on an ephemeral filesystem. Input/output must be managed carefully.
+
+## 7. Final Check for `code_execution_sandbox`
+-   Re-verify all security configurations and isolation mechanisms.
+-   Ensure all tests, especially security-related ones, pass.
+-   Update `SECURITY.md` and `CHANGELOG.md` for any relevant changes. 

@@ -34,4 +34,11 @@
 # Add your module-specific dependencies below, following the appropriate format for your chosen language/tooling.
 
 # [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
-# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1 
+# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1
+
+# This file can be used for Python dependencies if any Python scripts are part of the documentation build process (e.g., pre-processing scripts).
+# If the documentation module relies solely on Node.js and Docusaurus, this file might not be needed or can be left empty.
+
+# Example (if you had a Python script for doc generation):
+# mkdocs-material
+# beautifulsoup4 

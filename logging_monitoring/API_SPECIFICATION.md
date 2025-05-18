@@ -2,60 +2,49 @@
 
 ## Introduction
 
-(Briefly describe the purpose of this API and how it facilitates interaction with the module.)
+This document specifies the Application Programming Interface (API) for the Logging Monitoring module. The primary purpose of this API is to provide a centralized and configurable way for other modules within the Codomyrmex project to perform logging.
 
 ## Endpoints / Functions / Interfaces
 
-(Detail each API endpoint, function, or interface provided by this module. Use a consistent format.)
+### Function 1: `setup_logging()`
 
-### Endpoint/Function 1: `example_function()`
-
-- **Description**: (What this function does.)
-- **Method**: (e.g., GET, POST, or N/A for library functions)
-- **Path**: (e.g., `/api/module/resource` or N/A)
+- **Description**: Initializes and configures the logging system for the entire Codomyrmex application. This function should be called once, typically at the application's entry point. It configures aspects like log level, log format, and log output destinations (console, file) based on environment variables or sensible defaults.
+- **Method**: N/A (Library function)
+- **Path**: N/A (Importable function)
 - **Parameters/Arguments**:
-    - `param1` (type): Description of parameter.
-    - `param2` (type, optional): Description of parameter. Default: `value`.
-- **Request Body** (if applicable):
-    ```json
-    {
-      "key": "value"
-    }
-    ```
-- **Returns/Response**:
-    - **Success (e.g., 200 OK)**:
-        ```json
-        {
-          "data": "result"
-        }
-        ```
-    - **Error (e.g., 4xx/5xx)**:
-        ```json
-        {
-          "error": "description"
-        }
-        ```
-- **Events Emitted** (if applicable):
-    - `event_name`: Description of event and its payload.
+    - This function currently takes no direct arguments. It reads its configuration from environment variables:
+        - `CODOMYRMEX_LOG_LEVEL` (str, optional): Sets the logging threshold. Examples: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL". Defaults to "INFO".
+        - `CODOMYRMEX_LOG_FILE` (str, optional): Path to a file where logs should be written. If not provided or empty, logs are only sent to the console. Example: `logs/app.log`.
+        - `CODOMYRMEX_LOG_FORMAT` (str, optional): A Python logging format string or the keyword "DETAILED". Defaults to `"%(asctime)s - %(name)s - %(levelname)s - %(message)s"`. "DETAILED" uses `"%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"`.
+- **Request Body**: N/A
+- **Returns/Response**: None. This function configures the logging system as a side effect.
+- **Events Emitted**: N/A
+- **Idempotency**: The function is designed to be idempotent; subsequent calls after the first successful configuration will have no further effect.
 
-### Endpoint/Function 2: ...
+### Function 2: `get_logger(name: str)`
+
+- **Description**: Retrieves a `logging.Logger` instance, configured according to the settings applied by `setup_logging()`. This is the primary way other modules should obtain a logger to emit messages.
+- **Method**: N/A (Library function)
+- **Path**: N/A (Importable function)
+- **Parameters/Arguments**:
+    - `name` (str): The name for the logger. It is highly recommended to use the `__name__` special variable of the calling module for this argument (e.g., `logger = get_logger(__name__)`). This helps in identifying the source of log messages.
+- **Request Body**: N/A
+- **Returns/Response**:
+    - `logging.Logger`: An instance of a Python logger, ready for use.
+- **Events Emitted**: N/A
 
 ## Data Models
 
-(Define any common data structures or models used by the API.)
-
-### Model: `ExampleModel`
-- `field1` (type): Description.
-- `field2` (type): Description.
+(No specific complex data models are exposed by this logging API beyond standard Python types and `logging.Logger` objects.)
 
 ## Authentication & Authorization
 
-(Describe how API access is secured, if applicable.)
+(Not applicable for this internal logging module.)
 
 ## Rate Limiting
 
-(Specify any rate limits imposed on API usage.)
+(Not applicable for this internal logging module.)
 
 ## Versioning
 
-(Explain the API versioning strategy.) 
+(This module follows the general versioning strategy of the Codomyrmex project. API stability is aimed for, with changes documented in the CHANGELOG.md.) 

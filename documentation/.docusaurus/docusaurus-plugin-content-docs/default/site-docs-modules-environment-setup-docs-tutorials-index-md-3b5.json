@@ -1,0 +1,27 @@
+{
+  "id": "modules/environment_setup/docs/tutorials/index",
+  "title": "Environment Setup - Tutorials",
+  "description": "Welcome to the tutorials section for the Environment Setup module.",
+  "source": "@site/docs/modules/environment_setup/docs/tutorials/index.md",
+  "sourceDirName": "modules/environment_setup/docs/tutorials",
+  "slug": "/modules/environment_setup/docs/tutorials/",
+  "permalink": "/codomyrmex/modules/environment_setup/docs/tutorials/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/environment_setup/docs/tutorials/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Tutorials Index",
+    "title": "Environment Setup - Tutorials"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/environment_setup/docs/technical_overview"
+  },
+  "next": {
+    "title": "Verifying Setup",
+    "permalink": "/codomyrmex/modules/environment_setup/docs/tutorials/example_tutorial"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "modules/static_analysis/static-analysis-security",
+  "title": "Static Analysis - Security Policy",
+  "description": "This document outlines security procedures and policies for the Static Analysis module.",
+  "source": "@site/docs/modules/static_analysis/security.md",
+  "sourceDirName": "modules/static_analysis",
+  "slug": "/modules/static_analysis/static-analysis-security",
+  "permalink": "/codomyrmex/modules/static_analysis/static-analysis-security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/static_analysis/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "static-analysis-security",
+    "title": "Static Analysis - Security Policy",
+    "sidebar_label": "Security Policy"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog",
+    "permalink": "/codomyrmex/modules/static_analysis/static-analysis-changelog"
+  },
+  "next": {
+    "title": "Module Docs Home",
+    "permalink": "/codomyrmex/modules/static_analysis/docs/"
+  }
+}

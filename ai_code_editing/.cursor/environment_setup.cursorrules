@@ -1,0 +1,45 @@
+# Cursor Rules for the environment_setup Module
+
+## 0. Preamble
+These rules are specific to the `environment_setup` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides scripts, documentation, and tools for setting up local and CI/CD development environments for the Codomyrmex project.
+-   **Key Technologies/Tools**: Shell scripting (Bash), Python (for `env_checker.py`), Docker (for containerized environments), virtual environment tools (`venv`).
+-   Refer to this module's main `README.md` (located at `../../environment_setup/README.md`) for detailed setup instructions.
+
+## 2. Key Files & Structure in `environment_setup` Module
+When working within this module, pay close attention to:
+-   `README.md`: Primary guide for setting up development environments.
+-   `env_checker.py`: Python script to check for dependencies and environment variables.
+-   Setup scripts (e.g., shell scripts for installing tools).
+-   Dockerfile(s) for development environments (if used).
+-   `requirements.txt`: Dependencies needed for the setup scripts themselves (e.g., `python-dotenv` for `env_checker.py`).
+-   `docs/`: Detailed explanations of environment configurations, troubleshooting.
+
+## 3. Coding Standards & Practices for `environment_setup`
+-   **Script Robustness**: Setup scripts must be robust, handle potential errors gracefully, and be idempotent where possible.
+-   **Clarity of Instructions**: Documentation (`README.md`, `docs/`) must provide clear, step-by-step instructions for users on different operating systems.
+-   **Cross-Platform Consideration**: Aim for cross-platform compatibility where feasible, or provide clear OS-specific instructions.
+-   **Dependency Management**: Clearly list all prerequisite software and tools. `env_checker.py` should accurately report missing dependencies.
+-   **Environment Variables**: Use a `.env` file convention for managing secrets and environment-specific configurations. `env_checker.py` helps guide this.
+
+## 4. Testing in `environment_setup`
+-   Manually test setup instructions on different operating systems (Linux, macOS, Windows/WSL).
+-   Test `env_checker.py` for correct detection of dependencies and environment variables.
+-   If Dockerfiles are used for dev environments, test building and running them.
+
+## 5. Documentation for `environment_setup`
+-   The `README.md` is critical and must be kept perfectly up-to-date.
+-   Document common troubleshooting steps.
+-   Explain the purpose and usage of `env_checker.py` and any other scripts.
+
+## 6. Specific Considerations for `environment_setup`
+-   **Security of API Keys/Secrets**: Emphasize secure handling of API keys (e.g., for LLMs) using `.env` files and not committing them to version control.
+-   **Version Pinning**: Encourage version pinning of key development tools (Python, Node.js, etc.) for reproducible environments, or specify tested ranges.
+-   **CI/CD Integration**: Consider how these setup scripts will be used in CI/CD pipelines.
+
+## 7. Final Check for `environment_setup`
+-   Ensure all setup instructions are accurate and tested.
+-   Verify `env_checker.py` works as expected.
+-   Confirm that the documentation clearly explains how to prepare a working development environment for Codomyrmex. 

@@ -1,0 +1,28 @@
+{
+  "id": "modules/ai_code_editing/ai-code-editing-usage-examples",
+  "title": "AI Code Editing - Usage Examples",
+  "description": "Example 1: Generating a Python Function Docstring",
+  "source": "@site/docs/modules/ai_code_editing/usage_examples.md",
+  "sourceDirName": "modules/ai_code_editing",
+  "slug": "/modules/ai_code_editing/ai-code-editing-usage-examples",
+  "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-usage-examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/ai_code_editing/usage_examples.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "ai-code-editing-usage-examples",
+    "title": "AI Code Editing - Usage Examples",
+    "sidebar_label": "Usage Examples"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-mcp-tool-specification"
+  },
+  "next": {
+    "title": "Changelog",
+    "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-changelog"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "modules/ai_code_editing/ai-code-editing-mcp-tool-specification",
+  "title": "AI Code Editing - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Ai Code Editing module that are intended to be integrated with the Model Context Protocol (MCP).",
+  "source": "@site/docs/modules/ai_code_editing/mcp_tool_specification.md",
+  "sourceDirName": "modules/ai_code_editing",
+  "slug": "/modules/ai_code_editing/ai-code-editing-mcp-tool-specification",
+  "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-mcp-tool-specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/ai_code_editing/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "ai-code-editing-mcp-tool-specification",
+    "title": "AI Code Editing - MCP Tool Specification",
+    "sidebar_label": "MCP Tool Specification"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "API Specification",
+    "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-api-specification"
+  },
+  "next": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-usage-examples"
+  }
+}

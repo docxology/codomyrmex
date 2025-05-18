@@ -1,0 +1,27 @@
+{
+  "id": "modules/git_operations/api_specification",
+  "title": "Git Operations - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/git_operations/api_specification.md",
+  "sourceDirName": "modules/git_operations",
+  "slug": "/modules/git_operations/api_specification",
+  "permalink": "/codomyrmex/modules/git_operations/api_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/git_operations/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "API Specification",
+    "title": "Git Operations - API Specification"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Git Operations",
+    "permalink": "/codomyrmex/modules/git_operations"
+  },
+  "next": {
+    "title": "MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/git_operations/mcp_tool_specification"
+  }
+}

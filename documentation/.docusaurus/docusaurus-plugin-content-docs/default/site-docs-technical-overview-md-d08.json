@@ -1,0 +1,15 @@
+{
+  "id": "technical_overview",
+  "title": "Documentation - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Documentation module.",
+  "source": "@site/docs/technical_overview.md",
+  "sourceDirName": ".",
+  "slug": "/technical_overview",
+  "permalink": "/codomyrmex/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

@@ -1,22 +1,17 @@
-# Documentation - Documentation
+# Welcome to Codomyrmex Documentation
 
-Welcome to the detailed documentation for the Documentation module.
+Codomyrmex is a modular, extensible coding workspace designed to integrate open-source tools for building, documenting, analyzing, executing, and visualizing code.
 
-This documentation provides in-depth information beyond the main `README.md` for this module. It is intended for developers working on or with this module, and for users seeking a deeper understanding of its capabilities and design.
+This documentation site provides comprehensive information about the Codomyrmex project, its core functional modules, architecture, and guidelines for users and contributors.
 
-The main `documentation/` module of the Codomyrmex project may compile this content into a central documentation website.
+## Getting Started
 
-## Table of Contents
+- **Explore Modules**: Dive into the specifics of each [module](./category/modules) to understand its capabilities and how it fits into the Codomyrmex ecosystem.
+- **Development Setup**: Learn how to set up your environment for contributing or using Codomyrmex with the [Environment Setup Guide](./development/environment-setup).
+- **Contributing**: Interested in contributing? Check out the [Contributing Guidelines](./project/contributing).
 
-- [Technical Overview](./technical_overview.md)
-- [API Specification](../API_SPECIFICATION.md) (Link to the main API spec)
-- [Usage Examples](../USAGE_EXAMPLES.md) (Link to usage examples)
-- [Tutorials](./tutorials/)
-  - [Example Tutorial](./tutorials/example_tutorial.md)
-- [Contributing Guidelines](../CONTRIBUTING.md) (Link to contribution guide)
+## Project Vision
 
-## How to Use This Documentation
+The Codomyrmex project aims to unify various coding-related functions into a cohesive package, leveraging proven GitHub-backed projects to enable extensibility, maintainability, and support for polyglot development workflows.
 
-- Start with the [Technical Overview](./technical_overview.md) for a high-level understanding of the module's architecture.
-- Refer to the [API Specification](../API_SPECIFICATION.md) for details on how to interact with the module programmatically.
-- Explore the [Usage Examples](../USAGE_EXAMPLES.md) and [Tutorials](./tutorials/) to see the module in action. 
+Use the sidebar to navigate through the different sections of the documentation. 

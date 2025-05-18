@@ -1,0 +1,28 @@
+{
+  "id": "modules/build_synthesis/build-synthesis-index",
+  "title": "Build Synthesis Module",
+  "description": "Overview",
+  "source": "@site/docs/modules/build_synthesis/index.md",
+  "sourceDirName": "modules/build_synthesis",
+  "slug": "/modules/build_synthesis/",
+  "permalink": "/codomyrmex/modules/build_synthesis/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/build_synthesis/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "build-synthesis-index",
+    "title": "Build Synthesis Module",
+    "sidebar_label": "Overview"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Pylint Configuration Tutorial",
+    "permalink": "/codomyrmex/modules/static_analysis/docs/tutorials/static-analysis-example-tutorial"
+  },
+  "next": {
+    "title": "API Specification",
+    "permalink": "/codomyrmex/modules/build_synthesis/build-synthesis-api-specification"
+  }
+}

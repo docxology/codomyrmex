@@ -1,0 +1,28 @@
+{
+  "id": "modules/documentation/index",
+  "title": "Documentation Module (Meta)",
+  "description": "This module is responsible for generating and serving the comprehensive documentation website for the Codomyrmex project.",
+  "source": "@site/docs/modules/documentation/index.md",
+  "sourceDirName": "modules/documentation",
+  "slug": "/modules/documentation",
+  "permalink": "/codomyrmex/modules/documentation",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/documentation/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Documentation Module",
+    "title": "Documentation Module (Meta)",
+    "slug": "/modules/documentation"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Example Tutorial",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/example_tutorial"
+  },
+  "next": {
+    "title": "API Specification",
+    "permalink": "/codomyrmex/modules/documentation/api_specification"
+  }
+}

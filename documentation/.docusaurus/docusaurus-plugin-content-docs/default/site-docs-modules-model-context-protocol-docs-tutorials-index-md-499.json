@@ -1,0 +1,28 @@
+{
+  "id": "modules/model_context_protocol/docs/tutorials/model-context-protocol-tutorials-index",
+  "title": "Model Context Protocol - Tutorials",
+  "description": "Welcome to the tutorials section for the Model Context Protocol module.",
+  "source": "@site/docs/modules/model_context_protocol/docs/tutorials/index.md",
+  "sourceDirName": "modules/model_context_protocol/docs/tutorials",
+  "slug": "/modules/model_context_protocol/docs/tutorials/",
+  "permalink": "/codomyrmex/modules/model_context_protocol/docs/tutorials/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/model_context_protocol/docs/tutorials/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "model-context-protocol-tutorials-index",
+    "title": "Model Context Protocol - Tutorials",
+    "sidebar_label": "Tutorials"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/model_context_protocol/docs/model-context-protocol-technical-overview"
+  },
+  "next": {
+    "title": "Example Tutorial",
+    "permalink": "/codomyrmex/modules/model_context_protocol/docs/tutorials/model-context-protocol-example-tutorial"
+  }
+}

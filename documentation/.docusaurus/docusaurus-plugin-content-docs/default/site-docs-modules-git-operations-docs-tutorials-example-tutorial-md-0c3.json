@@ -1,0 +1,27 @@
+{
+  "id": "modules/git_operations/docs/tutorials/example_tutorial",
+  "title": "Tutorial: Basic Git Interactions (Conceptual)",
+  "description": "This tutorial will guide you through conceptually using the Git Operations module to perform basic Git tasks like cloning a repository and checking its status.",
+  "source": "@site/docs/modules/git_operations/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/git_operations/docs/tutorials",
+  "slug": "/modules/git_operations/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/git_operations/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/git_operations/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Basic Git Interactions",
+    "title": "Tutorial: Basic Git Interactions (Conceptual)"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials Index",
+    "permalink": "/codomyrmex/modules/git_operations/docs/tutorials/"
+  },
+  "next": {
+    "title": "Logging & Monitoring",
+    "permalink": "/codomyrmex/modules/logging_monitoring"
+  }
+}

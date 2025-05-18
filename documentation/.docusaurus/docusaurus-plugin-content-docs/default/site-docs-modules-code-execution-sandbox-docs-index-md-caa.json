@@ -1,0 +1,27 @@
+{
+  "id": "modules/code_execution_sandbox/docs/index",
+  "title": "Code Execution Sandbox - Module Documentation",
+  "description": "Welcome to the detailed documentation for the Code Execution Sandbox module.",
+  "source": "@site/docs/modules/code_execution_sandbox/docs/index.md",
+  "sourceDirName": "modules/code_execution_sandbox/docs",
+  "slug": "/modules/code_execution_sandbox/docs/",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/code_execution_sandbox/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Module Docs Home",
+    "title": "Code Execution Sandbox - Module Documentation"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-security"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/technical_overview"
+  }
+}

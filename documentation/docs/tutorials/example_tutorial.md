@@ -6,7 +6,7 @@ This tutorial will guide you through the process of using [Feature X] of the Doc
 
 Before you begin, ensure you have the following:
 
-- The Documentation module installed and configured (see main [README.md](../README.md)).
+- The Documentation module installed and configured (see main [README.md](../index.md)).
 - (Any specific tools, accounts, or data needed for this tutorial, e.g., an API key, sample data file).
 - Familiarity with (basic concepts related to the module or feature).
 
@@ -74,7 +74,7 @@ print(f"Processed result: {result}")
   - **Solution**: (How to fix it.)
 - **Output is not as expected**: 
   - Double-check your input data and configuration against the examples.
-  - Consult the [API Specification](../API_SPECIFICATION.md) for `feature_x`.
+  - Consult the API Specification for `feature_x`.
 
 ## 6. Next Steps
 
@@ -83,4 +83,4 @@ Congratulations on completing this tutorial!
 Now you can try:
 - Exploring [Related Feature Y].
 - Using [Feature X] with your own data.
-- Consulting the [Advanced Usage Guide for Feature X](./advanced_feature_x_guide.md) (if applicable). 
+- Consulting an advanced usage guide for [Feature X] (if applicable). 

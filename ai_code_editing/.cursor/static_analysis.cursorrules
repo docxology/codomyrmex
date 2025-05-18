@@ -1,0 +1,46 @@
+# Cursor Rules for the static_analysis Module
+
+## 0. Preamble
+These rules are specific to the `static_analysis` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Centralizes linting, security scanning, code quality metrics, and other static analysis tasks for the Codomyrmex project.
+-   **Key Technologies/Tools**: Linters (ESLint, Pylint, Flake8), security scanners (SonarQube, CodeQL, Bandit), code quality tools (Radon, Lizard), potentially `analysis-tools.dev` for integrating various analyzers.
+-   Refer to this module's main `README.md` (located at `../../static_analysis/README.md`) for information on configured tools and how to run analyses.
+
+## 2. Key Files & Structure in `static_analysis` Module
+When working within this module, pay close attention to:
+-   `README.md`: How to run static analysis, interpret results, and configure tools.
+-   Configuration files for analysis tools (e.g., `.eslintrc.js`, `pylintrc`, SonarQube project settings if managed here).
+-   Scripts for running analysis tools and aggregating reports.
+-   `API_SPECIFICATION.md`: If analysis results are exposed via an API.
+-   `MCP_TOOL_SPECIFICATION.md`: If MCP tools are provided to trigger analyses or query results.
+-   `docs/`: Detailed guides on specific linters/scanners, how to fix common issues, and understanding quality metrics.
+-   `requirements.txt`: Dependencies for the analysis tools themselves if installed centrally by this module.
+
+## 3. Coding Standards & Practices for `static_analysis`
+-   **Tool Configuration**: Configurations for linters and scanners should be consistent with project coding standards and aim to improve code quality and security.
+-   **Actionable Reporting**: Analysis results should be presented in an actionable way, making it easy for developers to find and fix issues.
+-   **Baseline and New Issues**: Differentiate between new issues introduced by changes and existing codebase issues (if applicable, e.g., SonarQube quality gates).
+-   **Integration with Development Workflow**: Aim to integrate static analysis early in the development cycle (e.g., pre-commit hooks, CI checks).
+
+## 4. Testing in `static_analysis`
+-   Test configurations of analysis tools to ensure they are correctly identifying known issues in sample code.
+-   Verify that scripts for running analyses work correctly.
+-   Test integration with CI/CD if static analysis is part of automated checks.
+
+## 5. Documentation for `static_analysis`
+-   Clearly document which tools are used and how they are configured.
+-   Provide guidance on interpreting reports and fixing common issues flagged by the analyzers.
+-   Explain how to customize or suppress specific rules if necessary (with justification).
+
+## 6. Specific Considerations for `static_analysis`
+-   **False Positives**: Be aware of and manage potential false positives from analysis tools. Provide mechanisms or documentation for suppression where appropriate.
+-   **Performance**: Static analysis runs should be reasonably fast to avoid significantly slowing down development workflows or CI builds.
+-   **Extensibility**: Allow for easy addition or updating of analysis tools and rule sets.
+-   **Focus on Prevention**: Static analysis should help prevent bugs, security vulnerabilities, and code quality issues from entering the codebase.
+
+## 7. Final Check for `static_analysis`
+-   Ensure analysis tools are correctly configured and produce accurate, actionable results.
+-   Verify that documentation clearly explains how to use the tools and interpret their output.
+-   Confirm that the chosen tools and configurations align with the project's quality and security goals. 

@@ -1,0 +1,21 @@
+# Core toolkit for code analysis and LLM integration
+cased-kit
+
+# For .env file support
+python-dotenv
+
+# For semantic search and default embedding functions
+sentence-transformers
+chromadb
+
+# LLM Providers (optional, depending on usage with Summarizer, DocstringIndexer)
+openai
+anthropic
+google-generativeai
+
+# For specific tutorials/recipes (e.g., PR reviewer, as seen in kit docs)
+unidiff
+requests
+
+# For dependency graph visualization (optional)
+# graphviz # Also requires Graphviz system package to be installed (e.g., via apt, brew) 

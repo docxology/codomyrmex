@@ -1,0 +1,27 @@
+{
+  "id": "modules/environment_setup/security",
+  "title": "Environment Setup - Security Policy",
+  "description": "This document outlines security procedures and policies for the environment_setup module.",
+  "source": "@site/docs/modules/environment_setup/security.md",
+  "sourceDirName": "modules/environment_setup",
+  "slug": "/modules/environment_setup/security",
+  "permalink": "/codomyrmex/modules/environment_setup/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/environment_setup/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Security",
+    "title": "Environment Setup - Security Policy"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog",
+    "permalink": "/codomyrmex/modules/environment_setup/changelog"
+  },
+  "next": {
+    "title": "Module Docs Home",
+    "permalink": "/codomyrmex/modules/environment_setup/docs/"
+  }
+}

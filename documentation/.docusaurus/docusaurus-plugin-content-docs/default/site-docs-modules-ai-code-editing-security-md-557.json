@@ -1,0 +1,28 @@
+{
+  "id": "modules/ai_code_editing/ai-code-editing-security",
+  "title": "AI Code Editing - Security Policy",
+  "description": "This document outlines security procedures and policies for the Ai Code Editing module.",
+  "source": "@site/docs/modules/ai_code_editing/security.md",
+  "sourceDirName": "modules/ai_code_editing",
+  "slug": "/modules/ai_code_editing/ai-code-editing-security",
+  "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/ai_code_editing/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "ai-code-editing-security",
+    "title": "AI Code Editing - Security Policy",
+    "sidebar_label": "Security Policy"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog",
+    "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-changelog"
+  },
+  "next": {
+    "title": "Module Docs Home",
+    "permalink": "/codomyrmex/modules/ai_code_editing/docs/"
+  }
+}

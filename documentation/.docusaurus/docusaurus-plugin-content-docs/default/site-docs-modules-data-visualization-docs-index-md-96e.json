@@ -1,0 +1,27 @@
+{
+  "id": "modules/data_visualization/docs/index",
+  "title": "Data Visualization - Module Documentation",
+  "description": "Welcome to the detailed documentation for the Data Visualization module.",
+  "source": "@site/docs/modules/data_visualization/docs/index.md",
+  "sourceDirName": "modules/data_visualization/docs",
+  "slug": "/modules/data_visualization/docs/",
+  "permalink": "/codomyrmex/modules/data_visualization/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/data_visualization/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Module Docs Home",
+    "title": "Data Visualization - Module Documentation"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security",
+    "permalink": "/codomyrmex/modules/data_visualization/security"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/technical_overview"
+  }
+}

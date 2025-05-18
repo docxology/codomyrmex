@@ -1,0 +1,28 @@
+{
+  "id": "modules/model_context_protocol/model-context-protocol-usage-examples",
+  "title": "Model Context Protocol - Usage Examples",
+  "description": "Example 1: Basic Usage",
+  "source": "@site/docs/modules/model_context_protocol/usage_examples.md",
+  "sourceDirName": "modules/model_context_protocol",
+  "slug": "/modules/model_context_protocol/model-context-protocol-usage-examples",
+  "permalink": "/codomyrmex/modules/model_context_protocol/model-context-protocol-usage-examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/model_context_protocol/usage_examples.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "model-context-protocol-usage-examples",
+    "title": "Model Context Protocol - Usage Examples",
+    "sidebar_label": "Usage Examples"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/model_context_protocol/model-context-protocol-mcp-tool-specification"
+  },
+  "next": {
+    "title": "Changelog",
+    "permalink": "/codomyrmex/modules/model_context_protocol/model-context-protocol-changelog"
+  }
+}

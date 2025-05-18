@@ -1,0 +1,28 @@
+{
+  "id": "modules/build_synthesis/docs/tutorials/build-synthesis-example-tutorial",
+  "title": "Tutorial - Creating a Custom Build Target",
+  "description": "This tutorial demonstrates how to define and use a custom build target within a module, managed by the Build Synthesis system.",
+  "source": "@site/docs/modules/build_synthesis/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/build_synthesis/docs/tutorials",
+  "slug": "/modules/build_synthesis/docs/tutorials/build-synthesis-example-tutorial",
+  "permalink": "/codomyrmex/modules/build_synthesis/docs/tutorials/build-synthesis-example-tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/build_synthesis/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "build-synthesis-example-tutorial",
+    "title": "Tutorial - Creating a Custom Build Target",
+    "sidebar_label": "Custom Build Target Tutorial"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/build_synthesis/docs/tutorials/"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/"
+  }
+}

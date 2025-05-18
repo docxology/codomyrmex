@@ -1,0 +1,28 @@
+{
+  "id": "modules/code_execution_sandbox/code-execution-sandbox-changelog",
+  "title": "Code Execution Sandbox - Changelog",
+  "description": "[Unreleased]",
+  "source": "@site/docs/modules/code_execution_sandbox/changelog.md",
+  "sourceDirName": "modules/code_execution_sandbox",
+  "slug": "/modules/code_execution_sandbox/code-execution-sandbox-changelog",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/code_execution_sandbox/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "code-execution-sandbox-changelog",
+    "title": "Code Execution Sandbox - Changelog",
+    "sidebar_label": "Changelog"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/USAGE_EXAMPLES"
+  },
+  "next": {
+    "title": "Security Policy",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-security"
+  }
+}

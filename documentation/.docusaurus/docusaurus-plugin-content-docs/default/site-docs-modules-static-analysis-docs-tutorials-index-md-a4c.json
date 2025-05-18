@@ -1,0 +1,28 @@
+{
+  "id": "modules/static_analysis/docs/tutorials/static-analysis-tutorials-index",
+  "title": "Static Analysis - Tutorials",
+  "description": "This section provides tutorials for using the Static Analysis module.",
+  "source": "@site/docs/modules/static_analysis/docs/tutorials/index.md",
+  "sourceDirName": "modules/static_analysis/docs/tutorials",
+  "slug": "/modules/static_analysis/docs/tutorials/",
+  "permalink": "/codomyrmex/modules/static_analysis/docs/tutorials/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/static_analysis/docs/tutorials/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "static-analysis-tutorials-index",
+    "title": "Static Analysis - Tutorials",
+    "sidebar_label": "Tutorials"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/static_analysis/docs/static-analysis-technical-overview"
+  },
+  "next": {
+    "title": "Pylint Configuration Tutorial",
+    "permalink": "/codomyrmex/modules/static_analysis/docs/tutorials/static-analysis-example-tutorial"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "modules/logging_monitoring/mcp_tool_specification",
+  "title": "Logging & Monitoring - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Logging & Monitoring module that could be integrated with the Model Context Protocol (MCP). Currently, the core functionality of this module (setuplogging, getlogger) is designed for direct Python integration within the Codomyrmex application and is not exposed as discrete MCP tools.",
+  "source": "@site/docs/modules/logging_monitoring/mcp_tool_specification.md",
+  "sourceDirName": "modules/logging_monitoring",
+  "slug": "/modules/logging_monitoring/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/logging_monitoring/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/logging_monitoring/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "MCP Tool Specification",
+    "title": "Logging & Monitoring - MCP Tool Specification"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "API Specification",
+    "permalink": "/codomyrmex/modules/logging_monitoring/api_specification"
+  },
+  "next": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/logging_monitoring/usage_examples"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "modules/code_execution_sandbox/USAGE_EXAMPLES",
+  "title": "Code Execution Sandbox - Usage Examples",
+  "description": "Example 1: Basic Usage",
+  "source": "@site/docs/modules/code_execution_sandbox/USAGE_EXAMPLES.md",
+  "sourceDirName": "modules/code_execution_sandbox",
+  "slug": "/modules/code_execution_sandbox/USAGE_EXAMPLES",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/USAGE_EXAMPLES",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/code_execution_sandbox/USAGE_EXAMPLES.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Usage Examples",
+    "title": "Code Execution Sandbox - Usage Examples"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-mcp-tool-specification"
+  },
+  "next": {
+    "title": "Changelog",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-changelog"
+  }
+}

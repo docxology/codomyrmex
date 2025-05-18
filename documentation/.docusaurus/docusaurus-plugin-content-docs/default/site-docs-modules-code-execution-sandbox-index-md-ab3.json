@@ -1,0 +1,28 @@
+{
+  "id": "modules/code_execution_sandbox/code-execution-sandbox-index",
+  "title": "Code Execution Sandbox Module",
+  "description": "Overview",
+  "source": "@site/docs/modules/code_execution_sandbox/index.md",
+  "sourceDirName": "modules/code_execution_sandbox",
+  "slug": "/modules/code_execution_sandbox/",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/code_execution_sandbox/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "code-execution-sandbox-index",
+    "title": "Code Execution Sandbox Module",
+    "sidebar_label": "Overview"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Custom Build Target Tutorial",
+    "permalink": "/codomyrmex/modules/build_synthesis/docs/tutorials/build-synthesis-example-tutorial"
+  },
+  "next": {
+    "title": "API Specification",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-api-specification"
+  }
+}

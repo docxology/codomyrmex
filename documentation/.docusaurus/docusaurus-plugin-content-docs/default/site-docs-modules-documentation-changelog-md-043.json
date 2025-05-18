@@ -1,0 +1,27 @@
+{
+  "id": "modules/documentation/changelog",
+  "title": "Documentation Module - Changelog",
+  "description": "All notable changes to this module (the documentation hub itself) will be documented in this file.",
+  "source": "@site/docs/modules/documentation/changelog.md",
+  "sourceDirName": "modules/documentation",
+  "slug": "/modules/documentation/changelog",
+  "permalink": "/codomyrmex/modules/documentation/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/documentation/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Changelog",
+    "title": "Documentation Module - Changelog"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/documentation/usage_examples"
+  },
+  "next": {
+    "title": "Security",
+    "permalink": "/codomyrmex/modules/documentation/security"
+  }
+}

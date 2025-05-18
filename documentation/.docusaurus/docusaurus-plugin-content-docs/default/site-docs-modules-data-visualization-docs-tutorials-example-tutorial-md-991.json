@@ -1,0 +1,27 @@
+{
+  "id": "modules/data_visualization/docs/tutorials/example_tutorial",
+  "title": "Data Visualization - Example Tutorial: Getting Started with [Feature X]",
+  "description": "This tutorial will guide you through the process of using [Feature X] of the Data Visualization module.",
+  "source": "@site/docs/modules/data_visualization/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/data_visualization/docs/tutorials",
+  "slug": "/modules/data_visualization/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/data_visualization/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Example Tutorial",
+    "title": "Data Visualization - Example Tutorial: Getting Started with [Feature X]"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials Index",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/"
+  },
+  "next": {
+    "title": "Documentation Module",
+    "permalink": "/codomyrmex/modules/documentation"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "modules/model_context_protocol/docs/model-context-protocol-technical-overview",
+  "title": "Model Context Protocol - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Model Context Protocol module.",
+  "source": "@site/docs/modules/model_context_protocol/docs/technical_overview.md",
+  "sourceDirName": "modules/model_context_protocol/docs",
+  "slug": "/modules/model_context_protocol/docs/model-context-protocol-technical-overview",
+  "permalink": "/codomyrmex/modules/model_context_protocol/docs/model-context-protocol-technical-overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/model_context_protocol/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "model-context-protocol-technical-overview",
+    "title": "Model Context Protocol - Technical Overview",
+    "sidebar_label": "Technical Overview"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Module Docs Home",
+    "permalink": "/codomyrmex/modules/model_context_protocol/docs/"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/model_context_protocol/docs/tutorials/"
+  }
+}

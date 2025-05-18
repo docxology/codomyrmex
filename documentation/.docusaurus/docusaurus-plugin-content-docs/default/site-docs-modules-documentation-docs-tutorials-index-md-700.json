@@ -1,0 +1,27 @@
+{
+  "id": "modules/documentation/docs/tutorials/index",
+  "title": "Documentation Module - Tutorials",
+  "description": "Welcome to the tutorials section for the documentation module.",
+  "source": "@site/docs/modules/documentation/docs/tutorials/index.md",
+  "sourceDirName": "modules/documentation/docs/tutorials",
+  "slug": "/modules/documentation/docs/tutorials/",
+  "permalink": "/codomyrmex/modules/documentation/docs/tutorials/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/documentation/docs/tutorials/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Tutorials Index",
+    "title": "Documentation Module - Tutorials"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/documentation/docs/technical_overview"
+  },
+  "next": {
+    "title": "Adding New Module Docs",
+    "permalink": "/codomyrmex/modules/documentation/docs/tutorials/example_tutorial"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "modules/environment_setup/docs/technical_overview",
+  "title": "Environment Setup - Technical Overview",
+  "description": "This document provides a detailed technical overview of the components within the Environment Setup module itself.",
+  "source": "@site/docs/modules/environment_setup/docs/technical_overview.md",
+  "sourceDirName": "modules/environment_setup/docs",
+  "slug": "/modules/environment_setup/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/environment_setup/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/environment_setup/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Technical Overview",
+    "title": "Environment Setup - Technical Overview"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Module Docs Home",
+    "permalink": "/codomyrmex/modules/environment_setup/docs/"
+  },
+  "next": {
+    "title": "Tutorials Index",
+    "permalink": "/codomyrmex/modules/environment_setup/docs/tutorials/"
+  }
+}

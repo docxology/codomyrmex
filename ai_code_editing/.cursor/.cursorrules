@@ -1,0 +1,104 @@
+# Cursor Rules for the Ai Code Editing Module
+
+## General Principles
+
+1.  **Understand Context**: Before making changes, thoroughly understand the module's purpose (`ai_code_editing`), its key components, and how it integrates with the broader Codomyrmex ecosystem. Review `README.md`, `API_SPECIFICATION.md`, and `MCP_TOOL_SPECIFICATION.md` if necessary.
+2.  **Modularity**: Ensure code is modular, well-encapsulated, and follows the single responsibility principle. Changes should be localized and minimize side effects.
+3.  **Clarity & Readability**: Write clear, concise, and well-documented code. Prioritize readability for human developers.
+4.  **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns within the `ai_code_editing` module and the Codomyrmex project.
+5.  **Testability**: Write code that is easily testable. New features should be accompanied by relevant unit and/or integration tests in the `tests/` directory.
+6.  **Security**: Be mindful of security implications. Refer to `SECURITY.md` for reporting and handling vulnerabilities. Code should be robust against common vulnerabilities.
+7.  **Efficiency**: Write efficient code, but not at the expense of clarity or maintainability unless performance is a critical, documented requirement for a specific component.
+8.  **User-Focused**: When dealing with APIs or tools (`MCP_TOOL_SPECIFICATION.md`), design them with the end-user (developer or LLM) in mind. Ensure they are intuitive and well-documented.
+9.  **Documentation**: Keep documentation (`README.md`, `API_SPECIFICATION.md`, `docs/`, etc.) up-to-date with code changes.
+
+## File Handling & Structure
+
+1.  **Existing Files**:
+    *   When modifying existing files, respect the established structure and conventions within that file.
+    *   Before significant refactoring, confirm the rationale and potential impact.
+2.  **New Files**:
+    *   Place new files in appropriate directories (e.g., new features in their own sub-modules, tests in `tests/unit` or `tests/integration`).
+    *   Follow established naming conventions for files and directories.
+    *   If creating a new component or significant feature, consider if it needs its own `README.md` or documentation entry.
+3.  **Standard Files**:
+    *   `README.md`: High-level overview, integration points, getting started.
+    *   `API_SPECIFICATION.md`: Details for programmatic interfaces (REST, functions).
+    *   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol.
+    *   `CHANGELOG.md`: Document all notable changes.
+    *   `SECURITY.md`: Security policy and vulnerability reporting.
+    *   `USAGE_EXAMPLES.md`: Practical examples.
+    *   `requirements.txt` (or equivalent): Manage dependencies.
+    *   `docs/`: In-depth documentation, technical overviews, tutorials.
+    *   `tests/`: Unit, integration, and other tests.
+4.  **.gitignore**: Ensure `.gitignore` is updated for new file types or build artifacts that should not be committed.
+
+## Coding Practices
+
+1.  **Language Specifics**:
+    *   If Python (common in Codomyrmex): Follow PEP 8. Use type hinting.
+    *   Adapt to the primary language of the module if different (e.g., JavaScript, Java). The `requirements.txt` file suggests Python, but always confirm.
+2.  **Comments**:
+    *   Comment complex logic, non-obvious decisions, and public APIs.
+    *   Avoid redundant comments that merely restate the code.
+    *   Use TODO/FIXME comments appropriately with context or issue tracker references.
+3.  **Error Handling**:
+    *   Implement robust error handling.
+    *   Use specific exception types where appropriate.
+    *   Provide clear error messages that can help with debugging.
+4.  **Dependencies**:
+    *   Minimize new dependencies. Justify their inclusion.
+    *   Update `requirements.txt` (or equivalent) with new dependencies, specifying versions for stability.
+5.  **Configuration**:
+    *   Make configurations clear and manageable.
+    *   Distinguish between runtime configuration and build-time settings.
+    *   Sensitive information should not be hardcoded; use environment variables or secure configuration management (refer to project-level guidelines if available).
+
+## Tool Usage (MCP & APIs)
+
+1.  **MCP Tools**:
+    *   When defining or modifying MCP tools, ensure the `MCP_TOOL_SPECIFICATION.md` is updated.
+    *   Pay close attention to:
+        *   `Invocation Name`: Must be unique and descriptive.
+        *   `Input Schema`: Clearly define parameters, types, and if they are required.
+        *   `Output Schema`: Define the structure of successful returns.
+        *   `Error Handling`: Specify error codes and messages.
+        *   `Idempotency`: Clearly state if a tool is idempotent.
+        *   `Usage Examples`: Provide clear examples for LLM invocation.
+        *   `Security Considerations`: Detail any potential risks.
+2.  **Module APIs**:
+    *   Update `API_SPECIFICATION.md` for any changes to functions, endpoints, or data models.
+    *   Ensure clarity in request/response formats, parameters, and authentication (if applicable).
+
+## Testing
+
+1.  **Coverage**: Strive for high test coverage for new and modified code.
+2.  **Types of Tests**:
+    *   **Unit Tests** (`tests/unit`): Test individual components or functions in isolation. Mock external dependencies.
+    *   **Integration Tests** (`tests/integration`): Test interactions between components or with external services (use test doubles or controlled environments).
+3.  **Test Writing**:
+    *   Tests should be clear, concise, and independent.
+    *   Follow existing testing patterns in the module.
+    *   Refer to `tests/README.md` for specific instructions on running tests.
+
+## Communication & Interaction
+
+1.  **Clarity of Intent**: Clearly state what you are trying to achieve with each set of changes.
+2.  **Iterative Changes**: Prefer smaller, incremental changes over large, monolithic ones. This makes review easier and reduces risk.
+3.  **Information Gathering**: If unsure, ask clarifying questions or use available tools (e.g., `codebase_search`, `read_file`) to gather more context before proceeding.
+4.  **Explaining Changes**: Briefly explain the rationale behind significant changes, especially if they deviate from previous patterns or involve complex logic.
+5.  **Addressing Feedback**: Incorporate feedback thoughtfully. If you disagree, explain your reasoning.
+
+## Specific to `ai_code_editing` Module
+
+1.  **Core Focus**: This module is about AI-assisted code editing. Changes should align with this purpose.
+2.  **Integration with LLMs/AI Agents**: Many components may be designed for interaction with AI. Keep this in mind for API design, tool specifications, and data structures.
+3.  **Extensibility**: Design components to be extensible where appropriate, allowing for new editing capabilities or strategies to be added in the future.
+
+## Review and Finalization
+
+1.  **Self-Review**: Before finalizing, review your changes against these rules and the module's specific guidelines.
+2.  **Changelog**: Update `CHANGELOG.md` for any user-facing or significant internal changes.
+3.  **Dependencies**: Double-check that `requirements.txt` (or equivalent) is accurate.
+
+By adhering to these rules, we aim to maintain a high-quality, robust, and maintainable `ai_code_editing` module within the Codomyrmex project. 

@@ -1,0 +1,28 @@
+{
+  "id": "modules/build_synthesis/build-synthesis-security",
+  "title": "Build Synthesis - Security Policy",
+  "description": "Reporting a Vulnerability",
+  "source": "@site/docs/modules/build_synthesis/security.md",
+  "sourceDirName": "modules/build_synthesis",
+  "slug": "/modules/build_synthesis/build-synthesis-security",
+  "permalink": "/codomyrmex/modules/build_synthesis/build-synthesis-security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/build_synthesis/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "build-synthesis-security",
+    "title": "Build Synthesis - Security Policy",
+    "sidebar_label": "Security Policy"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog",
+    "permalink": "/codomyrmex/modules/build_synthesis/build-synthesis-changelog"
+  },
+  "next": {
+    "title": "Module Docs Home",
+    "permalink": "/codomyrmex/modules/build_synthesis/docs/"
+  }
+}

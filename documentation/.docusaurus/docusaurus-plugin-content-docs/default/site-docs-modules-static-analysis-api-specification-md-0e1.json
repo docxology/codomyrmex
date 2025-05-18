@@ -1,0 +1,28 @@
+{
+  "id": "modules/static_analysis/static-analysis-api-specification",
+  "title": "Static Analysis - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/static_analysis/api_specification.md",
+  "sourceDirName": "modules/static_analysis",
+  "slug": "/modules/static_analysis/static-analysis-api-specification",
+  "permalink": "/codomyrmex/modules/static_analysis/static-analysis-api-specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/static_analysis/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "static-analysis-api-specification",
+    "title": "Static Analysis - API Specification",
+    "sidebar_label": "API Specification"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Overview",
+    "permalink": "/codomyrmex/modules/static_analysis/"
+  },
+  "next": {
+    "title": "MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/static_analysis/static-analysis-mcp-tool-specification"
+  }
+}

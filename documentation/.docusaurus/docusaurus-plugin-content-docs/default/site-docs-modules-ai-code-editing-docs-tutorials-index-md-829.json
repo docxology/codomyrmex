@@ -1,0 +1,28 @@
+{
+  "id": "modules/ai_code_editing/docs/tutorials/ai-code-editing-tutorials-index",
+  "title": "AI Code Editing - Tutorials",
+  "description": "This section provides tutorials for using the AI Code Editing module.",
+  "source": "@site/docs/modules/ai_code_editing/docs/tutorials/index.md",
+  "sourceDirName": "modules/ai_code_editing/docs/tutorials",
+  "slug": "/modules/ai_code_editing/docs/tutorials/",
+  "permalink": "/codomyrmex/modules/ai_code_editing/docs/tutorials/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/ai_code_editing/docs/tutorials/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "ai-code-editing-tutorials-index",
+    "title": "AI Code Editing - Tutorials",
+    "sidebar_label": "Tutorials"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/ai_code_editing/docs/ai-code-editing-technical-overview"
+  },
+  "next": {
+    "title": "Code Generation Tutorial",
+    "permalink": "/codomyrmex/modules/ai_code_editing/docs/tutorials/ai-code-editing-example-tutorial"
+  }
+}

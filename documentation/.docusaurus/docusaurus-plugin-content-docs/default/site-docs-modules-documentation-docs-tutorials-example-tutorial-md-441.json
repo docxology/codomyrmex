@@ -1,0 +1,27 @@
+{
+  "id": "modules/documentation/docs/tutorials/example_tutorial",
+  "title": "Tutorial: Adding a New Module to Documentation",
+  "description": "This tutorial guides you through the process of integrating documentation from a new or existing Codomyrmex module into the central Docusaurus-based documentation website.",
+  "source": "@site/docs/modules/documentation/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/documentation/docs/tutorials",
+  "slug": "/modules/documentation/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/documentation/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/documentation/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Adding New Module Docs",
+    "title": "Tutorial: Adding a New Module to Documentation"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials Index",
+    "permalink": "/codomyrmex/modules/documentation/docs/tutorials/"
+  },
+  "next": {
+    "title": "Environment Setup",
+    "permalink": "/codomyrmex/modules/environment_setup"
+  }
+}

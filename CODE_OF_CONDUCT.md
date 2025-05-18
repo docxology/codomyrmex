@@ -1,17 +1,5 @@
 # Contributor Covenant Code of Conduct
 
-## Our Pledge
-
-We as members, contributors, and leaders pledge to make participation in our
-community a harassment-free experience for everyone, regardless of age, body
-size, visible or invisible disability, ethnicity, sex characteristics, gender
-identity and expression, level of experience, education, socio-economic status,
-nationality, personal appearance, race, religion, or sexual identity
-and orientation.
-
-We pledge to act and interact in ways that contribute to an open, welcoming,
-diverse, inclusive, and healthy community.
-
 ## Our Standards
 
 Examples of behavior that contributes to a positive environment for our
@@ -59,8 +47,8 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
-[INSERT CONTACT METHOD].
-All complaints will be reviewed and investigated promptly and fairly.
+blanket@activeinference.institute .
+All complaints will be reviewed.
 
 All community leaders are obligated to respect the privacy and security of the
 reporter of any incident.
@@ -118,6 +106,4 @@ version 2.1, available at
 [https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].
 
 [homepage]: https://www.contributor-covenant.org
-[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
-
-(Remember to replace `[INSERT CONTACT METHOD]` with an actual email address or contact point for reporting violations.) 
+[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html 

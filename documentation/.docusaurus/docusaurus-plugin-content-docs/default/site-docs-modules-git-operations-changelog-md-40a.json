@@ -1,0 +1,27 @@
+{
+  "id": "modules/git_operations/changelog",
+  "title": "Git Operations - Changelog",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/git_operations/changelog.md",
+  "sourceDirName": "modules/git_operations",
+  "slug": "/modules/git_operations/changelog",
+  "permalink": "/codomyrmex/modules/git_operations/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/git_operations/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Changelog",
+    "title": "Git Operations - Changelog"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/git_operations/usage_examples"
+  },
+  "next": {
+    "title": "Security",
+    "permalink": "/codomyrmex/modules/git_operations/security"
+  }
+}

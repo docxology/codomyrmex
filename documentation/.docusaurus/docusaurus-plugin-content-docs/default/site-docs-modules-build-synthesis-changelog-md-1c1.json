@@ -1,0 +1,28 @@
+{
+  "id": "modules/build_synthesis/build-synthesis-changelog",
+  "title": "Build Synthesis - Changelog",
+  "description": "[Unreleased]",
+  "source": "@site/docs/modules/build_synthesis/changelog.md",
+  "sourceDirName": "modules/build_synthesis",
+  "slug": "/modules/build_synthesis/build-synthesis-changelog",
+  "permalink": "/codomyrmex/modules/build_synthesis/build-synthesis-changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/build_synthesis/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "build-synthesis-changelog",
+    "title": "Build Synthesis - Changelog",
+    "sidebar_label": "Changelog"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/build_synthesis/build-synthesis-usage-examples"
+  },
+  "next": {
+    "title": "Security Policy",
+    "permalink": "/codomyrmex/modules/build_synthesis/build-synthesis-security"
+  }
+}

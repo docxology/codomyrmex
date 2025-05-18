@@ -1,0 +1,28 @@
+{
+  "id": "modules/model_context_protocol/docs/model-context-protocol-module-docs-index",
+  "title": "Model Context Protocol - Detailed Documentation",
+  "description": "Welcome to the detailed documentation for the Model Context Protocol module.",
+  "source": "@site/docs/modules/model_context_protocol/docs/index.md",
+  "sourceDirName": "modules/model_context_protocol/docs",
+  "slug": "/modules/model_context_protocol/docs/",
+  "permalink": "/codomyrmex/modules/model_context_protocol/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/model_context_protocol/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "model-context-protocol-module-docs-index",
+    "title": "Model Context Protocol - Detailed Documentation",
+    "sidebar_label": "Module Docs Home"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy",
+    "permalink": "/codomyrmex/modules/model_context_protocol/model-context-protocol-security"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/model_context_protocol/docs/model-context-protocol-technical-overview"
+  }
+}

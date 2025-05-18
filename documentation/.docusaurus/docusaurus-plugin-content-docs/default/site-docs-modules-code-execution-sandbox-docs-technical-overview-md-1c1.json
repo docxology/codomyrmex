@@ -1,0 +1,27 @@
+{
+  "id": "modules/code_execution_sandbox/docs/technical_overview",
+  "title": "Code Execution Sandbox - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Code Execution Sandbox module.",
+  "source": "@site/docs/modules/code_execution_sandbox/docs/technical_overview.md",
+  "sourceDirName": "modules/code_execution_sandbox/docs",
+  "slug": "/modules/code_execution_sandbox/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/code_execution_sandbox/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Technical Overview",
+    "title": "Code Execution Sandbox - Technical Overview"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Module Docs Home",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/"
+  },
+  "next": {
+    "title": "Tutorials Index",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/tutorials/"
+  }
+}

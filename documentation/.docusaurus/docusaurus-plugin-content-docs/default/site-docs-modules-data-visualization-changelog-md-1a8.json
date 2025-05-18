@@ -1,0 +1,27 @@
+{
+  "id": "modules/data_visualization/changelog",
+  "title": "Data Visualization - Changelog",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/data_visualization/changelog.md",
+  "sourceDirName": "modules/data_visualization",
+  "slug": "/modules/data_visualization/changelog",
+  "permalink": "/codomyrmex/modules/data_visualization/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/data_visualization/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Changelog",
+    "title": "Data Visualization - Changelog"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/data_visualization/usage_examples"
+  },
+  "next": {
+    "title": "Security",
+    "permalink": "/codomyrmex/modules/data_visualization/security"
+  }
+}

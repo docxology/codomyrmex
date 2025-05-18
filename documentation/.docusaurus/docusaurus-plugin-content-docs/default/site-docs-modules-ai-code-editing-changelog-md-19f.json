@@ -1,0 +1,28 @@
+{
+  "id": "modules/ai_code_editing/ai-code-editing-changelog",
+  "title": "AI Code Editing - Changelog",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/ai_code_editing/changelog.md",
+  "sourceDirName": "modules/ai_code_editing",
+  "slug": "/modules/ai_code_editing/ai-code-editing-changelog",
+  "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/ai_code_editing/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "ai-code-editing-changelog",
+    "title": "AI Code Editing - Changelog",
+    "sidebar_label": "Changelog"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-usage-examples"
+  },
+  "next": {
+    "title": "Security Policy",
+    "permalink": "/codomyrmex/modules/ai_code_editing/ai-code-editing-security"
+  }
+}

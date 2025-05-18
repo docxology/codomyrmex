@@ -1,0 +1,451 @@
+{
+  "/codomyrmex/-d67": {
+    "__comp": "5e95c892",
+    "__context": {
+      "plugin": "aba21aa0"
+    }
+  },
+  "/codomyrmex/-be9": {
+    "__comp": "a7bd4aaa",
+    "__props": "b0423b9b"
+  },
+  "/codomyrmex/-b93": {
+    "__comp": "a94703ab"
+  },
+  "/codomyrmex/category/modules-fb0": {
+    "__comp": "14eb3368",
+    "__props": "ac4d7817"
+  },
+  "/codomyrmex/development/environment-setup-b8b": {
+    "__comp": "17896441",
+    "content": "847cf367"
+  },
+  "/codomyrmex/modules/ai_code_editing/-3a1": {
+    "__comp": "17896441",
+    "content": "e95e15d3"
+  },
+  "/codomyrmex/modules/ai_code_editing/ai-code-editing-api-specification-00f": {
+    "__comp": "17896441",
+    "content": "0ecd4c2b"
+  },
+  "/codomyrmex/modules/ai_code_editing/ai-code-editing-changelog-9a3": {
+    "__comp": "17896441",
+    "content": "19fc8e1c"
+  },
+  "/codomyrmex/modules/ai_code_editing/ai-code-editing-mcp-tool-specification-c1a": {
+    "__comp": "17896441",
+    "content": "8ca480b7"
+  },
+  "/codomyrmex/modules/ai_code_editing/ai-code-editing-security-345": {
+    "__comp": "17896441",
+    "content": "55773b32"
+  },
+  "/codomyrmex/modules/ai_code_editing/ai-code-editing-usage-examples-afc": {
+    "__comp": "17896441",
+    "content": "fac67e1c"
+  },
+  "/codomyrmex/modules/ai_code_editing/docs/-ed1": {
+    "__comp": "17896441",
+    "content": "271952e7"
+  },
+  "/codomyrmex/modules/ai_code_editing/docs/ai-code-editing-technical-overview-873": {
+    "__comp": "17896441",
+    "content": "832cf6cc"
+  },
+  "/codomyrmex/modules/ai_code_editing/docs/tutorials/-1af": {
+    "__comp": "17896441",
+    "content": "8297bdf8"
+  },
+  "/codomyrmex/modules/ai_code_editing/docs/tutorials/ai-code-editing-example-tutorial-110": {
+    "__comp": "17896441",
+    "content": "91c377d0"
+  },
+  "/codomyrmex/modules/build_synthesis/-e16": {
+    "__comp": "17896441",
+    "content": "58065858"
+  },
+  "/codomyrmex/modules/build_synthesis/build-synthesis-api-specification-0b1": {
+    "__comp": "17896441",
+    "content": "03721bc8"
+  },
+  "/codomyrmex/modules/build_synthesis/build-synthesis-changelog-666": {
+    "__comp": "17896441",
+    "content": "1c120ab0"
+  },
+  "/codomyrmex/modules/build_synthesis/build-synthesis-mcp-tool-specification-f9f": {
+    "__comp": "17896441",
+    "content": "91502896"
+  },
+  "/codomyrmex/modules/build_synthesis/build-synthesis-security-60e": {
+    "__comp": "17896441",
+    "content": "9c14ceaa"
+  },
+  "/codomyrmex/modules/build_synthesis/build-synthesis-usage-examples-092": {
+    "__comp": "17896441",
+    "content": "a512dcd4"
+  },
+  "/codomyrmex/modules/build_synthesis/docs/-d93": {
+    "__comp": "17896441",
+    "content": "f7faff08"
+  },
+  "/codomyrmex/modules/build_synthesis/docs/build-synthesis-technical-overview-d2d": {
+    "__comp": "17896441",
+    "content": "18b8c31f"
+  },
+  "/codomyrmex/modules/build_synthesis/docs/tutorials/-77a": {
+    "__comp": "17896441",
+    "content": "f5b6087e"
+  },
+  "/codomyrmex/modules/build_synthesis/docs/tutorials/build-synthesis-example-tutorial-f06": {
+    "__comp": "17896441",
+    "content": "8ad0269d"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/-44b": {
+    "__comp": "17896441",
+    "content": "ab3b295f"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-api-specification-0ef": {
+    "__comp": "17896441",
+    "content": "8de22c55"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-changelog-b0c": {
+    "__comp": "17896441",
+    "content": "885d3c9c"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-mcp-tool-specification-663": {
+    "__comp": "17896441",
+    "content": "6b42674d"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-security-ecf": {
+    "__comp": "17896441",
+    "content": "aff5c8b1"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/docs/-90e": {
+    "__comp": "17896441",
+    "content": "caa67372"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/docs/technical_overview-dc8": {
+    "__comp": "17896441",
+    "content": "1c157f83"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/docs/tutorials/-e06": {
+    "__comp": "17896441",
+    "content": "7cf99f1b"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/docs/tutorials/example_tutorial-3be": {
+    "__comp": "17896441",
+    "content": "3ea933f0"
+  },
+  "/codomyrmex/modules/code_execution_sandbox/USAGE_EXAMPLES-bc7": {
+    "__comp": "17896441",
+    "content": "57c99ec2"
+  },
+  "/codomyrmex/modules/data_visualization-228": {
+    "__comp": "17896441",
+    "content": "e525df29"
+  },
+  "/codomyrmex/modules/data_visualization/api_specification-59c": {
+    "__comp": "17896441",
+    "content": "94d9e946"
+  },
+  "/codomyrmex/modules/data_visualization/changelog-895": {
+    "__comp": "17896441",
+    "content": "1a8ce56a"
+  },
+  "/codomyrmex/modules/data_visualization/docs/-1a0": {
+    "__comp": "17896441",
+    "content": "96eb3229"
+  },
+  "/codomyrmex/modules/data_visualization/docs/technical_overview-623": {
+    "__comp": "17896441",
+    "content": "529809db"
+  },
+  "/codomyrmex/modules/data_visualization/docs/tutorials/-f42": {
+    "__comp": "17896441",
+    "content": "bb8f5474"
+  },
+  "/codomyrmex/modules/data_visualization/docs/tutorials/example_tutorial-f10": {
+    "__comp": "17896441",
+    "content": "991448e8"
+  },
+  "/codomyrmex/modules/data_visualization/mcp_tool_specification-848": {
+    "__comp": "17896441",
+    "content": "5607a81a"
+  },
+  "/codomyrmex/modules/data_visualization/security-5cb": {
+    "__comp": "17896441",
+    "content": "1398577d"
+  },
+  "/codomyrmex/modules/data_visualization/usage_examples-021": {
+    "__comp": "17896441",
+    "content": "68c36832"
+  },
+  "/codomyrmex/modules/documentation-50a": {
+    "__comp": "17896441",
+    "content": "5c036bcb"
+  },
+  "/codomyrmex/modules/documentation/api_specification-efc": {
+    "__comp": "17896441",
+    "content": "aa5ffb2a"
+  },
+  "/codomyrmex/modules/documentation/changelog-929": {
+    "__comp": "17896441",
+    "content": "043687de"
+  },
+  "/codomyrmex/modules/documentation/docs/-6f5": {
+    "__comp": "17896441",
+    "content": "3fde9de1"
+  },
+  "/codomyrmex/modules/documentation/docs/technical_overview-004": {
+    "__comp": "17896441",
+    "content": "5b4d017f"
+  },
+  "/codomyrmex/modules/documentation/docs/tutorials/-7ac": {
+    "__comp": "17896441",
+    "content": "700aaf95"
+  },
+  "/codomyrmex/modules/documentation/docs/tutorials/example_tutorial-7ca": {
+    "__comp": "17896441",
+    "content": "4414ac9f"
+  },
+  "/codomyrmex/modules/documentation/mcp_tool_specification-17d": {
+    "__comp": "17896441",
+    "content": "c4f14e10"
+  },
+  "/codomyrmex/modules/documentation/security-a05": {
+    "__comp": "17896441",
+    "content": "6cabe209"
+  },
+  "/codomyrmex/modules/documentation/usage_examples-303": {
+    "__comp": "17896441",
+    "content": "14a9d5d6"
+  },
+  "/codomyrmex/modules/environment_setup-273": {
+    "__comp": "17896441",
+    "content": "bf1f6808"
+  },
+  "/codomyrmex/modules/environment_setup/api_specification-047": {
+    "__comp": "17896441",
+    "content": "2b675742"
+  },
+  "/codomyrmex/modules/environment_setup/changelog-9ef": {
+    "__comp": "17896441",
+    "content": "c9335cc6"
+  },
+  "/codomyrmex/modules/environment_setup/docs/-278": {
+    "__comp": "17896441",
+    "content": "cee6615a"
+  },
+  "/codomyrmex/modules/environment_setup/docs/technical_overview-8d0": {
+    "__comp": "17896441",
+    "content": "a5dc5479"
+  },
+  "/codomyrmex/modules/environment_setup/docs/tutorials/-32b": {
+    "__comp": "17896441",
+    "content": "3b589b1c"
+  },
+  "/codomyrmex/modules/environment_setup/docs/tutorials/example_tutorial-b69": {
+    "__comp": "17896441",
+    "content": "b332242f"
+  },
+  "/codomyrmex/modules/environment_setup/mcp_tool_specification-09c": {
+    "__comp": "17896441",
+    "content": "b3eec32a"
+  },
+  "/codomyrmex/modules/environment_setup/security-1d7": {
+    "__comp": "17896441",
+    "content": "62b98587"
+  },
+  "/codomyrmex/modules/environment_setup/usage_examples-23c": {
+    "__comp": "17896441",
+    "content": "d381f4c7"
+  },
+  "/codomyrmex/modules/git_operations-44a": {
+    "__comp": "17896441",
+    "content": "dd643f82"
+  },
+  "/codomyrmex/modules/git_operations/api_specification-441": {
+    "__comp": "17896441",
+    "content": "1c115e0c"
+  },
+  "/codomyrmex/modules/git_operations/changelog-469": {
+    "__comp": "17896441",
+    "content": "40aeabfb"
+  },
+  "/codomyrmex/modules/git_operations/docs/-f60": {
+    "__comp": "17896441",
+    "content": "41caca07"
+  },
+  "/codomyrmex/modules/git_operations/docs/technical_overview-5af": {
+    "__comp": "17896441",
+    "content": "6694af7e"
+  },
+  "/codomyrmex/modules/git_operations/docs/tutorials/-845": {
+    "__comp": "17896441",
+    "content": "35faea24"
+  },
+  "/codomyrmex/modules/git_operations/docs/tutorials/example_tutorial-1e0": {
+    "__comp": "17896441",
+    "content": "0c32c48b"
+  },
+  "/codomyrmex/modules/git_operations/mcp_tool_specification-2f5": {
+    "__comp": "17896441",
+    "content": "6d4e922f"
+  },
+  "/codomyrmex/modules/git_operations/security-618": {
+    "__comp": "17896441",
+    "content": "b4711bcb"
+  },
+  "/codomyrmex/modules/git_operations/usage_examples-653": {
+    "__comp": "17896441",
+    "content": "b837d088"
+  },
+  "/codomyrmex/modules/logging_monitoring-e30": {
+    "__comp": "17896441",
+    "content": "abc654c1"
+  },
+  "/codomyrmex/modules/logging_monitoring/api_specification-8fb": {
+    "__comp": "17896441",
+    "content": "9ea7bf3f"
+  },
+  "/codomyrmex/modules/logging_monitoring/changelog-e28": {
+    "__comp": "17896441",
+    "content": "afc71794"
+  },
+  "/codomyrmex/modules/logging_monitoring/docs/-b94": {
+    "__comp": "17896441",
+    "content": "111803a1"
+  },
+  "/codomyrmex/modules/logging_monitoring/docs/technical_overview-2b3": {
+    "__comp": "17896441",
+    "content": "a223858c"
+  },
+  "/codomyrmex/modules/logging_monitoring/docs/tutorials/-fc1": {
+    "__comp": "17896441",
+    "content": "fe09baa6"
+  },
+  "/codomyrmex/modules/logging_monitoring/docs/tutorials/example_tutorial-888": {
+    "__comp": "17896441",
+    "content": "67bbc69b"
+  },
+  "/codomyrmex/modules/logging_monitoring/mcp_tool_specification-ddb": {
+    "__comp": "17896441",
+    "content": "3e912c57"
+  },
+  "/codomyrmex/modules/logging_monitoring/security-2f1": {
+    "__comp": "17896441",
+    "content": "6760400f"
+  },
+  "/codomyrmex/modules/logging_monitoring/usage_examples-c53": {
+    "__comp": "17896441",
+    "content": "42a56a6e"
+  },
+  "/codomyrmex/modules/model_context_protocol/-0df": {
+    "__comp": "17896441",
+    "content": "97db6088"
+  },
+  "/codomyrmex/modules/model_context_protocol/docs/-4bf": {
+    "__comp": "17896441",
+    "content": "13174c03"
+  },
+  "/codomyrmex/modules/model_context_protocol/docs/model-context-protocol-technical-overview-d9e": {
+    "__comp": "17896441",
+    "content": "ab92aeef"
+  },
+  "/codomyrmex/modules/model_context_protocol/docs/tutorials/-944": {
+    "__comp": "17896441",
+    "content": "499aad9d"
+  },
+  "/codomyrmex/modules/model_context_protocol/docs/tutorials/model-context-protocol-example-tutorial-ef5": {
+    "__comp": "17896441",
+    "content": "f6b76407"
+  },
+  "/codomyrmex/modules/model_context_protocol/model-context-protocol-api-specification-e0e": {
+    "__comp": "17896441",
+    "content": "ea523c10"
+  },
+  "/codomyrmex/modules/model_context_protocol/model-context-protocol-changelog-7d6": {
+    "__comp": "17896441",
+    "content": "01b4e32b"
+  },
+  "/codomyrmex/modules/model_context_protocol/model-context-protocol-mcp-tool-specification-bff": {
+    "__comp": "17896441",
+    "content": "f246637b"
+  },
+  "/codomyrmex/modules/model_context_protocol/model-context-protocol-security-844": {
+    "__comp": "17896441",
+    "content": "68400722"
+  },
+  "/codomyrmex/modules/model_context_protocol/model-context-protocol-usage-examples-46f": {
+    "__comp": "17896441",
+    "content": "ce98c96e"
+  },
+  "/codomyrmex/modules/static_analysis/-aec": {
+    "__comp": "17896441",
+    "content": "30d2d236"
+  },
+  "/codomyrmex/modules/static_analysis/docs/-656": {
+    "__comp": "17896441",
+    "content": "ccef953a"
+  },
+  "/codomyrmex/modules/static_analysis/docs/static-analysis-technical-overview-d4a": {
+    "__comp": "17896441",
+    "content": "cad02567"
+  },
+  "/codomyrmex/modules/static_analysis/docs/tutorials/-08e": {
+    "__comp": "17896441",
+    "content": "a4cd5bd6"
+  },
+  "/codomyrmex/modules/static_analysis/docs/tutorials/static-analysis-example-tutorial-a06": {
+    "__comp": "17896441",
+    "content": "a2e28618"
+  },
+  "/codomyrmex/modules/static_analysis/docs/tutorials/static-analysis-pylint-example-tutorial-1ab": {
+    "__comp": "17896441",
+    "content": "4e1e757d"
+  },
+  "/codomyrmex/modules/static_analysis/static-analysis-api-specification-000": {
+    "__comp": "17896441",
+    "content": "0e1dcdbf"
+  },
+  "/codomyrmex/modules/static_analysis/static-analysis-changelog-250": {
+    "__comp": "17896441",
+    "content": "11d1bed1"
+  },
+  "/codomyrmex/modules/static_analysis/static-analysis-mcp-tool-specification-edc": {
+    "__comp": "17896441",
+    "content": "20d8930b"
+  },
+  "/codomyrmex/modules/static_analysis/static-analysis-security-c13": {
+    "__comp": "17896441",
+    "content": "72ed8da3"
+  },
+  "/codomyrmex/modules/static_analysis/static-analysis-usage-examples-806": {
+    "__comp": "17896441",
+    "content": "54f7c501"
+  },
+  "/codomyrmex/project/code-of-conduct-2a5": {
+    "__comp": "17896441",
+    "content": "0dc8c699"
+  },
+  "/codomyrmex/project/contributing-f03": {
+    "__comp": "17896441",
+    "content": "f43e4bb9"
+  },
+  "/codomyrmex/project/license-7d2": {
+    "__comp": "17896441",
+    "content": "1c08f827"
+  },
+  "/codomyrmex/technical_overview-a9b": {
+    "__comp": "17896441",
+    "content": "d08c7f5a"
+  },
+  "/codomyrmex/tutorials/example_tutorial-f9d": {
+    "__comp": "17896441",
+    "content": "a86e319c"
+  },
+  "/codomyrmex/-3cb": {
+    "__comp": "17896441",
+    "content": "c377a04b"
+  }
+}

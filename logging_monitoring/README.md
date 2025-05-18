@@ -1,38 +1,102 @@
-# Logging Monitoring
+---
+sidebar_label: 'Logging & Monitoring'
+title: 'Logging & Monitoring Module'
+slug: /modules/logging_monitoring
+---
+
+# Logging & Monitoring
 
 ## Overview
 
-(Provide a concise overview of this module, its purpose, and its core functionalities within the Codomyrmex ecosystem.)
+The Logging & Monitoring module provides a centralized and configurable logging mechanism for all Codomyrmex modules. It aims to offer a simple, flexible, and consistent way to record application events, errors, and diagnostic information.
+
+Key features include:
+- Easy setup via a single function call.
+- Configuration through environment variables (leveraging `.env` files).
+- Support for standard log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+- Customizable log formats.
+- Output to console and/or a log file.
+- Straightforward integration into other modules using a `get_logger(__name__)` pattern.
 
 ## Key Components
 
-(List and briefly describe the key sub-components, libraries, or tools utilized or developed within this module.)
-
-- Component A: ...
-- Component B: ...
+- **`logger_config.py`**: This core file contains the primary logic:
+    - `setup_logging()`: Initializes and configures the logging system based on environment variables or sensible defaults.
+    - `get_logger(name: str)`: A factory function that other modules use to obtain a named logger instance.
+- **Environment Variables**: Configuration is primarily managed via environment variables (see Configuration section).
 
 ## Integration Points
 
-(Describe how this module interacts with other parts of the Codomyrmex system or external services.
-- **Provides:** (List APIs, data, or services this module offers to others. Link to [API Specification](API_SPECIFICATION.md) if applicable.)
-- **Consumes:** (List APIs, data, or services this module uses from others.)
-- Refer to the [API Specification](API_SPECIFICATION.md) and [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) for detailed programmatic interfaces.)
+- **Provides**:
+    - `setup_logging()`: A function to be called once at application startup to configure the entire logging system.
+    - `get_logger(name: str)`: A function that returns a `logging.Logger` instance, allowing other modules to emit log messages through the centralized system.
+    - These are exposed via `from codomyrmex.logging_monitoring import setup_logging, get_logger`.
+- **Consumes**:
+    - Environment variables for configuration (e.g., `CODOMYRMEX_LOG_LEVEL`, `CODOMYRMEX_LOG_FILE`). It uses `python-dotenv` to load these from a `.env` file in the project root.
+    - Relies on the standard Python `logging` module.
+- Refer to the [API Specification](./API_SPECIFICATION.md) and [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md) (if applicable for future tools) for detailed programmatic interfaces.
 
 ## Getting Started
 
-(Provide instructions on how to set up, configure, and use this module.)
+To use the logging module:
 
 ### Prerequisites
 
-(List any dependencies or prerequisites required to use or develop this module.)
+- Python 3.7+ (due to `logging.basicConfig(force=True)` usage, though `logging` itself is older).
+- The `python-dotenv` package should be listed in the main project `requirements.txt` and installed in your environment. Refer to the main project's Environment Setup documentation for guidance.
 
 ### Installation
 
-(Provide installation steps, if applicable.)
+This module is part of the Codomyrmex project. Ensure it's available in your Python path. No separate installation beyond project setup is typically required.
 
 ### Configuration
 
-(Detail any necessary configuration steps.)
+1.  **Create/Update `.env` file**:
+    In the root directory of the Codomyrmex project, create or update a `.env` file. Add the following variables to customize logging (all are optional):
+
+    ```env
+    # Logging Configuration
+    CODOMYRMEX_LOG_LEVEL=INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL (Default: INFO)
+    CODOMYRMEX_LOG_FILE=logs/codomyrmex.log  # Path to log file. If commented out or empty, logs to console only.
+    CODOMYRMEX_LOG_FORMAT="%(asctime)s - %(name)s - %(levelname)s - %(message)s" # Or use "DETAILED"
+    # Example of detailed format: "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"
+    ```
+    *Ensure the directory for `CODOMYRMEX_LOG_FILE` (e.g., `logs/`) exists if you specify a file, or ensure the application has permissions to create it.* The logger does not create directories.
+
+2.  **Initialize Logging in Your Main Application Script**:
+    Call `setup_logging()` once at the beginning of your main application script or entry point.
+
+    ```python
+    # main_script.py or app.py
+    from codomyrmex.logging_monitoring import setup_logging, get_logger
+
+    def main():
+        setup_logging() # Initialize logging system
+        # ... rest of your application logic ...
+        logger = get_logger(__name__) # Example usage in main script
+        logger.info("Application started.")
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+3.  **Use Loggers in Other Modules**:
+    In any other module, import `get_logger` and use it to obtain a logger instance.
+
+    ```python
+    # some_module.py
+    from codomyrmex.logging_monitoring import get_logger
+
+    logger = get_logger(__name__) # Best practice to use module's name
+
+    def my_function():
+        logger.info("my_function was called.")
+        try:
+            # ... some operation ...
+            result = 10 / 0 # Example operation
+        except ZeroDivisionError as e:
+            logger.error(f"An error occurred: {e}", exc_info=True) # Log exception info
+    ```
 
 ## Development
 
@@ -40,17 +104,22 @@
 
 ### Code Structure
 
-(Briefly describe the organization of code within this module. For a more detailed architectural view, see the [Technical Overview](./docs/technical_overview.md).)
+- `__init__.py`: Exports public functions (`setup_logging`, `get_logger`).
+- `logger_config.py`: Contains the core implementation of `setup_logging` and `get_logger`.
+
+For a more detailed architectural view, see the [Technical Overview](./docs/technical_overview.md).
 
 ### Building & Testing
 
-(Instructions for building and running tests for this module.)
+- To test this module, you can run `python -m codomyrmex.logging_monitoring.logger_config` which includes a basic `if __name__ == '__main__':` block for demonstration.
+- For integrated testing, ensure your main application calls `setup_logging()` and then verify log outputs based on your configuration when other modules use `get_logger()`.
+- Refer to the main project's testing guidelines and the `tests/` directory ([tests/README.md](./tests/README.md)) within this module for specific test scripts.
 
 ## Further Information
 
-- [API Specification](API_SPECIFICATION.md)
-- [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) (If this module exposes tools via MCP)
-- [Usage Examples](USAGE_EXAMPLES.md)
-- [Detailed Documentation](./docs/index.md)
-- [Changelog](CHANGELOG.md)
-- [Security Policy](SECURITY.md) 
+- [API Specification](./API_SPECIFICATION.md)
+- [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md) (If this module exposes tools via MCP - Not currently applicable for basic logging functions)
+- [Usage Examples](./USAGE_EXAMPLES.md)
+- [Detailed Documentation](./docs/index.md) (This refers to docs within this module, which may need creation or adjustment)
+- [Changelog](./CHANGELOG.md)
+- [Security Policy](./SECURITY.md)

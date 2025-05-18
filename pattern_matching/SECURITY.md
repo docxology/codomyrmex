@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email [MAINTAINER_EMAIL_OR_SECURITY_CONTACT] with the subject line: "SECURITY Vulnerability Report: Pattern Matching - [Brief Description]".
+Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Pattern Matching - [Brief Description]".
 
 Please include the following information in your report:
 

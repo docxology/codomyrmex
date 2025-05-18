@@ -1,0 +1,570 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/codomyrmex/",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/codomyrmex/",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "development/environment-setup",
+              "path": "/codomyrmex/development/environment-setup",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/codomyrmex/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/ai-code-editing-api-specification",
+              "path": "/codomyrmex/modules/ai_code_editing/ai-code-editing-api-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/ai-code-editing-changelog",
+              "path": "/codomyrmex/modules/ai_code_editing/ai-code-editing-changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/ai-code-editing-index",
+              "path": "/codomyrmex/modules/ai_code_editing/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/ai-code-editing-mcp-tool-specification",
+              "path": "/codomyrmex/modules/ai_code_editing/ai-code-editing-mcp-tool-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/ai-code-editing-security",
+              "path": "/codomyrmex/modules/ai_code_editing/ai-code-editing-security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/ai-code-editing-usage-examples",
+              "path": "/codomyrmex/modules/ai_code_editing/ai-code-editing-usage-examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/docs/ai-code-editing-module-docs-index",
+              "path": "/codomyrmex/modules/ai_code_editing/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/docs/ai-code-editing-technical-overview",
+              "path": "/codomyrmex/modules/ai_code_editing/docs/ai-code-editing-technical-overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/docs/tutorials/ai-code-editing-example-tutorial",
+              "path": "/codomyrmex/modules/ai_code_editing/docs/tutorials/ai-code-editing-example-tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/ai_code_editing/docs/tutorials/ai-code-editing-tutorials-index",
+              "path": "/codomyrmex/modules/ai_code_editing/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/build-synthesis-api-specification",
+              "path": "/codomyrmex/modules/build_synthesis/build-synthesis-api-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/build-synthesis-changelog",
+              "path": "/codomyrmex/modules/build_synthesis/build-synthesis-changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/build-synthesis-index",
+              "path": "/codomyrmex/modules/build_synthesis/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/build-synthesis-mcp-tool-specification",
+              "path": "/codomyrmex/modules/build_synthesis/build-synthesis-mcp-tool-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/build-synthesis-security",
+              "path": "/codomyrmex/modules/build_synthesis/build-synthesis-security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/build-synthesis-usage-examples",
+              "path": "/codomyrmex/modules/build_synthesis/build-synthesis-usage-examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/docs/build-synthesis-module-docs-index",
+              "path": "/codomyrmex/modules/build_synthesis/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/docs/build-synthesis-technical-overview",
+              "path": "/codomyrmex/modules/build_synthesis/docs/build-synthesis-technical-overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/docs/tutorials/build-synthesis-example-tutorial",
+              "path": "/codomyrmex/modules/build_synthesis/docs/tutorials/build-synthesis-example-tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/build_synthesis/docs/tutorials/build-synthesis-tutorials-index",
+              "path": "/codomyrmex/modules/build_synthesis/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/code-execution-sandbox-api-specification",
+              "path": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-api-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/code-execution-sandbox-changelog",
+              "path": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/code-execution-sandbox-index",
+              "path": "/codomyrmex/modules/code_execution_sandbox/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/code-execution-sandbox-mcp-tool-specification",
+              "path": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-mcp-tool-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/code-execution-sandbox-security",
+              "path": "/codomyrmex/modules/code_execution_sandbox/code-execution-sandbox-security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/docs/index",
+              "path": "/codomyrmex/modules/code_execution_sandbox/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/docs/technical_overview",
+              "path": "/codomyrmex/modules/code_execution_sandbox/docs/technical_overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/docs/tutorials/example_tutorial",
+              "path": "/codomyrmex/modules/code_execution_sandbox/docs/tutorials/example_tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/docs/tutorials/index",
+              "path": "/codomyrmex/modules/code_execution_sandbox/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/code_execution_sandbox/USAGE_EXAMPLES",
+              "path": "/codomyrmex/modules/code_execution_sandbox/USAGE_EXAMPLES",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/api_specification",
+              "path": "/codomyrmex/modules/data_visualization/api_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/changelog",
+              "path": "/codomyrmex/modules/data_visualization/changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/docs/index",
+              "path": "/codomyrmex/modules/data_visualization/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/docs/technical_overview",
+              "path": "/codomyrmex/modules/data_visualization/docs/technical_overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/docs/tutorials/example_tutorial",
+              "path": "/codomyrmex/modules/data_visualization/docs/tutorials/example_tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/docs/tutorials/index",
+              "path": "/codomyrmex/modules/data_visualization/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/index",
+              "path": "/codomyrmex/modules/data_visualization",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/mcp_tool_specification",
+              "path": "/codomyrmex/modules/data_visualization/mcp_tool_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/security",
+              "path": "/codomyrmex/modules/data_visualization/security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/data_visualization/usage_examples",
+              "path": "/codomyrmex/modules/data_visualization/usage_examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/api_specification",
+              "path": "/codomyrmex/modules/documentation/api_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/changelog",
+              "path": "/codomyrmex/modules/documentation/changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/docs/index",
+              "path": "/codomyrmex/modules/documentation/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/docs/technical_overview",
+              "path": "/codomyrmex/modules/documentation/docs/technical_overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/docs/tutorials/example_tutorial",
+              "path": "/codomyrmex/modules/documentation/docs/tutorials/example_tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/docs/tutorials/index",
+              "path": "/codomyrmex/modules/documentation/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/index",
+              "path": "/codomyrmex/modules/documentation",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/mcp_tool_specification",
+              "path": "/codomyrmex/modules/documentation/mcp_tool_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/security",
+              "path": "/codomyrmex/modules/documentation/security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/documentation/usage_examples",
+              "path": "/codomyrmex/modules/documentation/usage_examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/api_specification",
+              "path": "/codomyrmex/modules/environment_setup/api_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/changelog",
+              "path": "/codomyrmex/modules/environment_setup/changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/docs/index",
+              "path": "/codomyrmex/modules/environment_setup/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/docs/technical_overview",
+              "path": "/codomyrmex/modules/environment_setup/docs/technical_overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/docs/tutorials/example_tutorial",
+              "path": "/codomyrmex/modules/environment_setup/docs/tutorials/example_tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/docs/tutorials/index",
+              "path": "/codomyrmex/modules/environment_setup/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/index",
+              "path": "/codomyrmex/modules/environment_setup",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/mcp_tool_specification",
+              "path": "/codomyrmex/modules/environment_setup/mcp_tool_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/security",
+              "path": "/codomyrmex/modules/environment_setup/security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/environment_setup/usage_examples",
+              "path": "/codomyrmex/modules/environment_setup/usage_examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/api_specification",
+              "path": "/codomyrmex/modules/git_operations/api_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/changelog",
+              "path": "/codomyrmex/modules/git_operations/changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/docs/index",
+              "path": "/codomyrmex/modules/git_operations/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/docs/technical_overview",
+              "path": "/codomyrmex/modules/git_operations/docs/technical_overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/docs/tutorials/example_tutorial",
+              "path": "/codomyrmex/modules/git_operations/docs/tutorials/example_tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/docs/tutorials/index",
+              "path": "/codomyrmex/modules/git_operations/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/index",
+              "path": "/codomyrmex/modules/git_operations",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/mcp_tool_specification",
+              "path": "/codomyrmex/modules/git_operations/mcp_tool_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/security",
+              "path": "/codomyrmex/modules/git_operations/security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/git_operations/usage_examples",
+              "path": "/codomyrmex/modules/git_operations/usage_examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/api_specification",
+              "path": "/codomyrmex/modules/logging_monitoring/api_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/changelog",
+              "path": "/codomyrmex/modules/logging_monitoring/changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/docs/index",
+              "path": "/codomyrmex/modules/logging_monitoring/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/docs/technical_overview",
+              "path": "/codomyrmex/modules/logging_monitoring/docs/technical_overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/docs/tutorials/example_tutorial",
+              "path": "/codomyrmex/modules/logging_monitoring/docs/tutorials/example_tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/docs/tutorials/index",
+              "path": "/codomyrmex/modules/logging_monitoring/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/index",
+              "path": "/codomyrmex/modules/logging_monitoring",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/mcp_tool_specification",
+              "path": "/codomyrmex/modules/logging_monitoring/mcp_tool_specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/security",
+              "path": "/codomyrmex/modules/logging_monitoring/security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/logging_monitoring/usage_examples",
+              "path": "/codomyrmex/modules/logging_monitoring/usage_examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/docs/model-context-protocol-module-docs-index",
+              "path": "/codomyrmex/modules/model_context_protocol/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/docs/model-context-protocol-technical-overview",
+              "path": "/codomyrmex/modules/model_context_protocol/docs/model-context-protocol-technical-overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/docs/tutorials/model-context-protocol-example-tutorial",
+              "path": "/codomyrmex/modules/model_context_protocol/docs/tutorials/model-context-protocol-example-tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/docs/tutorials/model-context-protocol-tutorials-index",
+              "path": "/codomyrmex/modules/model_context_protocol/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/model-context-protocol-api-specification",
+              "path": "/codomyrmex/modules/model_context_protocol/model-context-protocol-api-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/model-context-protocol-changelog",
+              "path": "/codomyrmex/modules/model_context_protocol/model-context-protocol-changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/model-context-protocol-index",
+              "path": "/codomyrmex/modules/model_context_protocol/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/model-context-protocol-mcp-tool-specification",
+              "path": "/codomyrmex/modules/model_context_protocol/model-context-protocol-mcp-tool-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/model-context-protocol-security",
+              "path": "/codomyrmex/modules/model_context_protocol/model-context-protocol-security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/model_context_protocol/model-context-protocol-usage-examples",
+              "path": "/codomyrmex/modules/model_context_protocol/model-context-protocol-usage-examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/docs/static-analysis-module-docs-index",
+              "path": "/codomyrmex/modules/static_analysis/docs/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/docs/static-analysis-technical-overview",
+              "path": "/codomyrmex/modules/static_analysis/docs/static-analysis-technical-overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/docs/tutorials/static-analysis-example-tutorial",
+              "path": "/codomyrmex/modules/static_analysis/docs/tutorials/static-analysis-example-tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/docs/tutorials/static-analysis-pylint-example-tutorial",
+              "path": "/codomyrmex/modules/static_analysis/docs/tutorials/static-analysis-pylint-example-tutorial"
+            },
+            {
+              "id": "modules/static_analysis/docs/tutorials/static-analysis-tutorials-index",
+              "path": "/codomyrmex/modules/static_analysis/docs/tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/static-analysis-api-specification",
+              "path": "/codomyrmex/modules/static_analysis/static-analysis-api-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/static-analysis-changelog",
+              "path": "/codomyrmex/modules/static_analysis/static-analysis-changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/static-analysis-index",
+              "path": "/codomyrmex/modules/static_analysis/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/static-analysis-mcp-tool-specification",
+              "path": "/codomyrmex/modules/static_analysis/static-analysis-mcp-tool-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/static-analysis-security",
+              "path": "/codomyrmex/modules/static_analysis/static-analysis-security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/static_analysis/static-analysis-usage-examples",
+              "path": "/codomyrmex/modules/static_analysis/static-analysis-usage-examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "project/code-of-conduct",
+              "path": "/codomyrmex/project/code-of-conduct",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "project/contributing",
+              "path": "/codomyrmex/project/contributing",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "project/license",
+              "path": "/codomyrmex/project/license",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "technical_overview",
+              "path": "/codomyrmex/technical_overview"
+            },
+            {
+              "id": "tutorials/example_tutorial",
+              "path": "/codomyrmex/tutorials/example_tutorial"
+            },
+            {
+              "id": "/category/modules",
+              "path": "/codomyrmex/category/modules",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/codomyrmex/",
+                "label": "index"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

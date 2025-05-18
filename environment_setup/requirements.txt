@@ -34,4 +34,10 @@
 # Add your module-specific dependencies below, following the appropriate format for your chosen language/tooling.
 
 # [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
-# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1 
+# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1
+
+# This module's Python dependencies (e.g., python-dotenv, requests for env_checker.py)
+# are currently met by the global `requirements.txt` in the project root.
+#
+# If this module later develops specific Python dependencies not included globally,
+# they should be listed here. 

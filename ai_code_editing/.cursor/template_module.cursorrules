@@ -1,0 +1,50 @@
+# Cursor Rules for the Template Module
+
+## 0. Preamble
+These rules are specific to the `template/` directory and its subdirectories (like `template/module_template/`) and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This directory houses various templates used throughout the Codomyrmex project. This includes templates for new modules (`module_template`), standardized file structures, boilerplate code, documentation snippets, and potentially CI/CD pipeline configurations.
+-   **Goal**: To ensure consistency, accelerate development, and enforce best practices when creating new components or files based on these templates.
+-   Refer to `../../template/README.md` (if it exists) or individual template subdirectories for specific instructions.
+
+## 2. Key Files & Structure in `template` Module
+-   `template/module_template/`: A complete template for creating a new functional module within Codomyrmex. Rules for this specific template are in `template_module_template.cursorrules`.
+-   Other subdirectories might contain templates for:
+    -   `docs/`: Standard documentation file templates (e.g., `README_template.md`, `API_SPECIFICATION_template.md`).
+    -   `configs/`: Boilerplate configuration files.
+    -   `scripts/`: Common utility script templates.
+-   Each template or template group should ideally have its own `README.md` explaining its purpose, placeholders, and how to use it.
+
+## 3. Working with Templates
+1.  **Understanding Placeholders**: Templates often contain placeholders (e.g., `__MODULE_NAME__`, `{{VARIABLE}}`). When using a template, ensure all placeholders are correctly identified and replaced with appropriate values for the specific instance.
+2.  **Adherence to Structure**: When creating a new module or file from a template, maintain the directory structure and file naming conventions defined by the template unless there's a strong, documented reason to deviate.
+3.  **Customization**: Templates provide a starting point. They can and should be customized to fit the specific needs of the new component, but core structural and conventional aspects should be preserved if they enforce project-wide standards.
+4.  **Updating Templates**:
+    -   If a project-wide standard changes (e.g., a new required section in `README.md` files), the relevant templates in this directory should be updated accordingly.
+    -   Changes to templates should be version-controlled and documented (e.g., in a `CHANGELOG.md` for the `template` module or the specific template).
+5.  **Creating New Templates**:
+    -   If a new reusable structure or boilerplate is identified, consider creating a new template for it within this directory.
+    -   New templates should be well-documented, explaining their purpose and usage.
+
+## 4. Coding Standards & Practices for Templates
+-   **Clarity and Generality**: Templates should be as clear and generally applicable as possible.
+-   **Minimalism**: Include only what is essential for the boilerplate. Avoid overly specific or complex logic that might not be universally needed.
+-   **Comments**: Use comments within templates to explain placeholders, sections that require customization, or the purpose of certain boilerplate elements.
+
+## 5. Documentation for Templates
+-   Each distinct template or group of related templates (e.g., `module_template`) should have its own `README.md` file within its subdirectory.
+-   This `README.md` should explain:
+    -   The purpose of the template.
+    -   How to use it (e.g., "copy this directory and then run `rename_script.py __NEW_NAME__`").
+    -   List and explain all placeholders.
+    -   Describe any included scripts or automation for template instantiation.
+
+## 6. Specific Considerations for the `template` Module
+-   **Consistency Enforcement**: The primary role of this module is to help enforce consistency across the project.
+-   **Automation**: Consider scripts or tools (perhaps within `build_synthesis` or the templates themselves) to automate the process of instantiating templates and replacing placeholders.
+
+## 7. Final Check when working with/on Templates
+-   If using a template: Have all placeholders been correctly replaced? Does the new component adhere to the template's structure and intent?
+-   If modifying a template: Is the change justified? Has it been documented? Have related templates or documentation been updated if necessary? Is the template still easy to understand and use?
+-   If creating a new template: Is it well-documented? Does it address a clear need for reusability? 

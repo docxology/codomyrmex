@@ -1,0 +1,27 @@
+{
+  "id": "modules/git_operations/docs/tutorials/index",
+  "title": "Git Operations - Tutorials",
+  "description": "Welcome to the tutorials section for the Git Operations module.",
+  "source": "@site/docs/modules/git_operations/docs/tutorials/index.md",
+  "sourceDirName": "modules/git_operations/docs/tutorials",
+  "slug": "/modules/git_operations/docs/tutorials/",
+  "permalink": "/codomyrmex/modules/git_operations/docs/tutorials/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/git_operations/docs/tutorials/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Tutorials Index",
+    "title": "Git Operations - Tutorials"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/git_operations/docs/technical_overview"
+  },
+  "next": {
+    "title": "Basic Git Interactions",
+    "permalink": "/codomyrmex/modules/git_operations/docs/tutorials/example_tutorial"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "modules/static_analysis/docs/tutorials/static-analysis-pylint-example-tutorial",
+  "title": "Example Tutorial - Configuring Pylint",
+  "description": "This tutorial will guide you through configuring Pylint, a popular Python linter, within the Static Analysis module for a specific project.",
+  "source": "@site/docs/modules/static_analysis/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/static_analysis/docs/tutorials",
+  "slug": "/modules/static_analysis/docs/tutorials/static-analysis-pylint-example-tutorial",
+  "permalink": "/codomyrmex/modules/static_analysis/docs/tutorials/static-analysis-pylint-example-tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/modules/static_analysis/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "static-analysis-pylint-example-tutorial",
+    "title": "Example Tutorial - Configuring Pylint",
+    "sidebar_label": "Pylint Configuration Tutorial"
+  }
+}

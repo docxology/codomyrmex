@@ -10,6 +10,7 @@ We take all security reports seriously.
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
 Instead, please email [MAINTAINER_EMAIL_OR_SECURITY_CONTACT] with the subject line: "SECURITY Vulnerability Report: [Module Name] - [Brief Description]".
+<!-- IMPORTANT: When using this template for a new module, replace [MAINTAINER_EMAIL_OR_SECURITY_CONTACT] and [Module Name] above. -->
 
 Please include the following information in your report:
 
