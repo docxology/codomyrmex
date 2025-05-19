@@ -45,6 +45,8 @@ The logging module is configured using environment variables, which are convenie
 
     CODOMYRMEX_LOG_FORMAT="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
     # Custom format for log messages. You can also use "DETAILED" for a more verbose default.
+
+    CODOMYRMEX_LOG_OUTPUT_TYPE=TEXT # Or "JSON"
     ```
 
 ### Step 2: Create a Main Application Script
@@ -75,9 +77,11 @@ Let's create a simple main script that will initialize logging and simulate some
         logger = get_logger(__name__)
 
         logger.info("Application starting up...")
-        logger.debug("Configuration: Log Level=%s, Log File=%s", 
+        logger.debug("Configuration: Log Level=%s, Log File=%s, Output Type=%s, Format=%s", 
                      logger.getEffectiveLevel(), 
-                     [h.baseFilename for h in logger.handlers if hasattr(h, 'baseFilename')])
+                     [h.baseFilename for h in logger.handlers if hasattr(h, 'baseFilename')],
+                     os.getenv('CODOMYRMEX_LOG_OUTPUT_TYPE', 'TEXT').upper(),
+                     [h.formatter._fmt for h in logger.handlers if hasattr(h, 'formatter') and h.formatter is not None and hasattr(h.formatter, '_fmt') and h.formatter._fmt is not None])
 
         for i in range(3):
             logger.info(f"Main loop iteration {i + 1}")
@@ -137,7 +141,7 @@ Let's create the `worker.py` module that our `main_app.py` will use. This module
     Example content of `tutorial_app.log` (timestamps will vary):
     ```log
     2023-10-27 10:00:00,123 [INFO] __main__: Application starting up...
-    2023-10-27 10:00:00,124 [DEBUG] __main__: Configuration: Log Level=10, Log File=['tutorial_app.log']
+    2023-10-27 10:00:00,124 [DEBUG] __main__: Configuration: Log Level=10, Log File=['tutorial_app.log'], Output Type=TEXT, Format=
     2023-10-27 10:00:00,125 [INFO] __main__: Main loop iteration 1
     2023-10-27 10:00:00,126 [INFO] worker: Starting task: Task 1
     2023-10-27 10:00:00,127 [DEBUG] worker: Successfully completed task: Task 1
@@ -180,5 +184,6 @@ Now you can try:
 - Changing `CODOMYRMEX_LOG_LEVEL` in `.env` to `INFO` or `WARNING` and observe how fewer messages are logged.
 - Modifying `CODOMYRMEX_LOG_FORMAT` to experiment with different log appearances.
 - Commenting out `CODOMYRMEX_LOG_FILE` to see console-only logging.
-- Integrating this logging into more complex parts of your Codomyrmex project.
+- Setting `CODOMYRMEX_LOG_OUTPUT_TYPE` to `JSON` and observing the structured log output.
+- Commenting out `CODOMYRMEX_LOG_FILE` to see console-only logging (works for both `TEXT` and `JSON` output).
 - Reviewing the [API Specification](../API_SPECIFICATION.md) for more details on configuration options. 

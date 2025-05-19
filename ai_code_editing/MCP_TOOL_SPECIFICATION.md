@@ -1,135 +1,128 @@
-# Ai Code Editing - MCP Tool Specification
+# AI Code Editing - MCP Tool Specification
 
-This document outlines the specification for tools within the Ai Code Editing module that are intended to be integrated with the Model Context Protocol (MCP).
+This document outlines the specification for tools within the AI Code Editing module that are intended to be integrated with the Model Context Protocol (MCP). These tools leverage Large Language Models (LLMs) to perform code generation and modification tasks.
 
-## Tool: `[Tool Name]`
+## General Considerations
+
+- **LLM Dependency**: These tools rely on external LLM providers (e.g., OpenAI, Anthropic). API keys and configurations for these services must be set up in the environment.
+- **Prompt Engineering**: The quality of results will heavily depend on the clarity and specificity of the prompts provided to the tools.
+- **Determinism**: LLM outputs can be non-deterministic. Multiple calls with the exact same input may yield slightly different results.
+
+---
+
+## Tool: `generate_code_snippet`
 
 ### 1. Tool Purpose and Description
 
-(Provide a clear, concise description of what the tool does and its primary use case within the context of an LLM or AI agent.)
+Generates a snippet of code in a specified programming language based on a natural language prompt and optional existing code context.
 
 ### 2. Invocation Name
 
-(The unique name used to call this tool via the MCP.)
-
-`unique_tool_invocation_name`
+`generate_code_snippet`
 
 ### 3. Input Schema (Parameters)
 
-(Define the expected input parameters for the tool. Use a structured format, e.g., JSON Schema or a clear table.)
-
-**Format:** Table or JSON Schema
-
-| Parameter Name | Type        | Required | Description                                      | Example Value      |
-| :------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
-| `param1`       | `string`    | Yes      | Description of the first parameter.              | `"example_value"`  |
-| `param2`       | `integer`   | No       | Description of the second parameter. Default: `0`. | `42`               |
-| `param3`       | `boolean`   | Yes      | Description of the third parameter.              | `true`             |
-| `param4`       | `array[string]` | No   | Description of an array parameter.               | `["a", "b", "c"]`  |
-| `param5`       | `object`    | No       | Description of an object parameter.              | `{"key": "value"}` |
-
-**JSON Schema Example (Alternative):**
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "param1": {
-      "type": "string",
-      "description": "Description of the first parameter."
-    },
-    "param2": {
-      "type": "integer",
-      "description": "Description of the second parameter.",
-      "default": 0
-    },
-    // ... more parameters
-  },
-  "required": ["param1", "param3"]
-}
-```
+| Parameter Name   | Type     | Required | Description                                                                                                | Example Value                                                                         |
+| :--------------- | :------- | :------- | :--------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------ |
+| `prompt`         | `string` | Yes      | Natural language description of the code to be generated.                                                  | `"Create a Python function that calculates the factorial of a number recursively."`       |
+| `language`       | `string` | Yes      | The target programming language for the generated code (e.g., "python", "javascript", "java").         | `"python"`                                                                            |
+| `context_code`   | `string` | No       | Optional: Existing code snippet or broader context to guide the generation (e.g., surrounding code, class definition). | `"class MathUtils:\n    # Function should be part of this class"`                    |
+| `llm_provider`   | `string` | No       | Specify the LLM provider (e.g., "openai", "anthropic"). If omitted, a default provider will be used.       | `"openai"`                                                                            |
+| `model_name`     | `string` | No       | Specify a particular model from the provider (e.g., "gpt-4", "claude-2"). If omitted, a default model is used. | `"gpt-3.5-turbo"`                                                                     |
 
 ### 4. Output Schema (Return Value)
 
-(Define the structure of the data returned by the tool upon successful execution.)
-
-**Format:** Table or JSON Schema
-
-| Field Name | Type     | Description                                  | Example Value     |
-| :--------- | :------- | :------------------------------------------- | :---------------- |
-| `result`   | `string` | The primary result of the tool execution.    | `"Success!"`      |
-| `details`  | `object` | Additional details or structured output.     | `{"info": "..."}` |
-
-**JSON Schema Example (Alternative):**
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "result": {
-      "type": "string",
-      "description": "The primary result of the tool execution."
-    },
-    "details": {
-      "type": "object",
-      "description": "Additional details or structured output."
-      // Define nested properties if necessary
-    }
-  },
-  "required": ["result"]
-}
-```
+| Field Name       | Type     | Description                                                                 | Example Value                                                                    |
+| :--------------- | :------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------- |
+| `status`         | `string` | Generation status: "success", "failure".                                    | `"success"`                                                                      |
+| `generated_code` | `string` | The code snippet generated by the LLM. Null if status is "failure".         | `"def factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n-1)"` |
+| `error_message`  | `string` | Error description if `status` is "failure" (e.g., API error, content filtering). | `"LLM API request failed."`                                                      |
 
 ### 5. Error Handling
 
-(Describe how errors are reported. What kind of error messages or codes can be expected?)
-
-- **Error Code `[CODE_1]`**: Description of this error condition.
-- **Error Code `[CODE_2]`**: Description of another error condition.
-- General error message format: `{"error": "description_of_error", "code": "ERROR_CODE"}`
+- Errors from the LLM provider (API issues, rate limits, content policies) will result in a "failure" status and an `error_message`.
+- Invalid input parameters (e.g., unsupported `language`) can also lead to failure.
 
 ### 6. Idempotency
 
-(Specify if the tool is idempotent. If not, explain any side effects of multiple identical calls.)
-
-- Idempotent: (Yes/No)
-- Side Effects: (Describe if not idempotent)
+- **Idempotent**: Generally No.
+- **Explanation**: LLMs are often non-deterministic by default to encourage creativity. Even with the same prompt, subsequent calls might produce slightly varied code, unless specific sampling parameters (like temperature=0) are enforced by the underlying implementation and supported by the LLM.
 
 ### 7. Usage Examples (for MCP context)
 
-(Provide examples of how an LLM might formulate a call to this tool.)
-
-**Example 1: Basic Call**
-
 ```json
 {
-  "tool_name": "unique_tool_invocation_name",
+  "tool_name": "generate_code_snippet",
   "arguments": {
-    "param1": "some input",
-    "param3": false
-  }
-}
-```
-
-**Example 2: With Optional Parameters**
-
-```json
-{
-  "tool_name": "unique_tool_invocation_name",
-  "arguments": {
-    "param1": "another input",
-    "param2": 100,
-    "param3": true
+    "prompt": "Write a Python function to find the largest element in a list.",
+    "language": "python"
   }
 }
 ```
 
 ### 8. Security Considerations
 
-(Outline any security implications of using this tool, e.g., access to file system, network requests, data sensitivity.)
+- **Prompt Injection**: Maliciously crafted prompts could potentially try to exploit the LLM or the system interpreting its output. Input sanitization or careful handling of prompts is important, though challenging.
+- **Generated Code Quality**: Code generated by LLMs may contain bugs, inefficiencies, or security vulnerabilities. It should always be reviewed before use in production systems.
+- **Data Privacy**: Prompts and context code sent to external LLM providers might be logged or used for training by the provider, depending on their terms of service. Avoid sending sensitive or proprietary information unless the provider and module configuration ensure appropriate data handling.
 
 ---
 
-## Tool: `[Another Tool Name]`
+## Tool: `refactor_code_snippet`
 
-(Repeat the above structure for each tool provided by this module that interfaces with MCP.) 
+### 1. Tool Purpose and Description
+
+Takes an existing code snippet and a refactoring instruction (e.g., improve efficiency, add comments, convert to a different style) and returns the refactored code using an LLM.
+
+### 2. Invocation Name
+
+`refactor_code_snippet`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name            | Type     | Required | Description                                                                                                   | Example Value                                                                      |
+| :------------------------ | :------- | :------- | :------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------- |
+| `code_snippet`            | `string` | Yes      | The existing piece of code to be refactored.                                                                  | `"def f(n): return 1 if n==0 else n*f(n-1)"`                                        |
+| `refactoring_instruction` | `string` | Yes      | Natural language instruction describing the desired refactoring (e.g., "add type hints", "make it iterative"). | `"Add type hints and a docstring to this Python factorial function."`                |
+| `language`                | `string` | Yes      | The programming language of the `code_snippet` (e.g., "python", "javascript").                            | `"python"`                                                                         |
+| `llm_provider`            | `string` | No       | Specify the LLM provider. Defaults to a configured provider.                                                  | `"anthropic"`                                                                      |
+| `model_name`              | `string` | No       | Specify a particular model. Defaults to a model suitable for refactoring.                                   | `"claude-instant-1"`                                                               |
+
+### 4. Output Schema (Return Value)
+
+| Field Name        | Type     | Description                                                                                       | Example Value                                                                                                     |
+| :---------------- | :------- | :------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------- |
+| `status`          | `string` | Refactoring status: "success", "failure", "no_change_needed".                                     | `"success"`                                                                                                       |
+| `refactored_code` | `string` | The refactored code snippet. May be same as input if no change was deemed necessary or possible.    | `"def factorial(n: int) -> int:\n    \"\"\"Calculates factorial.\"\"\"\n    return 1 if n == 0 else n * factorial(n - 1)"` |
+| `explanation`     | `string` | Optional: An explanation from the LLM about the changes made or why no changes were made.         | `"Added type hints for n and the return value, and included a standard docstring."`                             |
+| `error_message`   | `string` | Error description if `status` is "failure".                                                       | `"LLM could not understand the refactoring instruction for the given code."`                                  |
+
+### 5. Error Handling
+
+- Similar to `generate_code_snippet`, failures can occur due to LLM API issues or if the LLM cannot perform the requested refactoring.
+
+### 6. Idempotency
+
+- **Idempotent**: Generally No.
+- **Explanation**: Similar to code generation, LLM-based refactoring can be non-deterministic. The exact output might vary on subsequent identical calls.
+
+### 7. Usage Examples (for MCP context)
+
+```json
+{
+  "tool_name": "refactor_code_snippet",
+  "arguments": {
+    "code_snippet": "for i in range(len(my_list)):\n  print(my_list[i])",
+    "refactoring_instruction": "Convert this Python loop to a more Pythonic way of iterating through a list.",
+    "language": "python"
+  }
+}
+```
+
+### 8. Security Considerations
+
+- **Instruction Injection**: Malicious `refactoring_instruction` could attempt to guide the LLM to produce harmful code.
+- **Output Review**: Refactored code must be reviewed as it can introduce errors or vulnerabilities, just like newly generated code.
+- **Data Privacy**: The `code_snippet` and `refactoring_instruction` are sent to an external LLM provider. Consider data privacy implications.
+
+--- 

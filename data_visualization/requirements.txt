@@ -36,7 +36,23 @@
 # If this module is Python-based and all its dependencies are already covered by the
 # project's root requirements.txt, please note that here explicitly.
 # e.g.:
-# # This module currently uses dependencies from the root requirements.txt file.
+# This module currently uses dependencies from the root requirements.txt file.
+# If this module develops specific Python dependencies not included globally,
+# (e.g., matplotlib, seaborn, plotly), they should be listed here.
 
 # [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
-# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1 
+# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1
+
+# Core plotting dependencies
+matplotlib==3.10.3
+seaborn==0.13.2
+numpy==2.2.6
+
+# Logging and environment setup (used via Codomyrmex project)
+# These are expected to be installed at the project level:
+# - logging_monitoring (for logging)
+# - environment_setup (for environment/dependency checks)
+# - python-dotenv (required by both logging_monitoring and environment_setup)
+
+# If running this module standalone, ensure these are installed:
+# pip install matplotlib seaborn numpy python-dotenv 

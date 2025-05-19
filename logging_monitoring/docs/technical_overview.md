@@ -87,8 +87,9 @@ Configuration is primarily through the following environment variables, typicall
 
 - `CODOMYRMEX_LOG_LEVEL`: (Default: `INFO`) Sets the minimum severity level for messages to be logged. Accepted values: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`.
 - `CODOMYRMEX_LOG_FILE`: (Default: None - console only) Specifies the path to a log file. If set, logs will be written to this file in append mode.
+- `CODOMYRMEX_LOG_OUTPUT_TYPE`: (Default: `TEXT`) Specifies the output format of the logs. Can be `"TEXT"` or `"JSON"`.
 - `CODOMYRMEX_LOG_FORMAT`: (Default: `"%(asctime)s - %(name)s - %(levelname)s - %(message)s"`)
-  A Python logging format string. Can also be set to the special value `"DETAILED"` to use a more verbose predefined format (`"%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"`).
+  A Python logging format string, used when `CODOMYRMEX_LOG_OUTPUT_TYPE` is `"TEXT"`. Can also be set to the special value `"DETAILED"` to use a more verbose predefined format (`"%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"`). This setting is ignored if `CODOMYRMEX_LOG_OUTPUT_TYPE` is `"JSON"`.
 
 ## 6. Scalability and Performance
 
@@ -99,12 +100,13 @@ Configuration is primarily through the following environment variables, typicall
 ## 7. Security Aspects
 
 - **Log Content**: Developers should be mindful not to log sensitive information (passwords, API keys, personal data) unless absolutely necessary and properly secured (e.g., if logs are encrypted or access-controlled). This module does not add any specific filtering for sensitive data.
+  When using JSON logging, be aware that all extra fields passed to logger calls (e.g. `logger.info("message", extra={"key": "value"})`) will be included in the JSON output. Review logged data to ensure no sensitive information is unintentionally exposed in these extra fields.
 - **File Permissions**: If logging to a file (`CODOMYRMEX_LOG_FILE`), the application must have appropriate write permissions for the specified path. The module itself does not manage file permissions or log rotation.
 - **Log Injection**: While log messages are typically strings, if user-supplied data is logged directly without sanitization, there could be a risk of log injection (e.g., forging log entries with newline characters). This is a general application concern rather than specific to this module, but users should be aware.
 
 ## 8. Future Development / Roadmap
 
-- **Structured Logging**: Option to output logs in a structured format like JSON, which is beneficial for log analysis tools.
+- **Advanced Structured Logging**: Further enhancements to JSON logging, such as more configurable fields or integration with specific structured logging libraries if needed.
 - **Asynchronous Logging**: For high-throughput applications, an option to perform logging I/O operations asynchronously to minimize impact on application performance.
 - **Log Rotation Configuration**: Basic built-in support for log rotation if `CODOMYRMEX_LOG_FILE` is used, though often this is handled by external tools (like `logrotate` on Linux).
 - **Configuration from a file**: Allow loading configuration from a dedicated logging config file (e.g., YAML or JSON) in addition to environment variables.

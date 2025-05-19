@@ -15,7 +15,8 @@ This document specifies the Application Programming Interface (API) for the Logg
     - This function currently takes no direct arguments. It reads its configuration from environment variables:
         - `CODOMYRMEX_LOG_LEVEL` (str, optional): Sets the logging threshold. Examples: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL". Defaults to "INFO".
         - `CODOMYRMEX_LOG_FILE` (str, optional): Path to a file where logs should be written. If not provided or empty, logs are only sent to the console. Example: `logs/app.log`.
-        - `CODOMYRMEX_LOG_FORMAT` (str, optional): A Python logging format string or the keyword "DETAILED". Defaults to `"%(asctime)s - %(name)s - %(levelname)s - %(message)s"`. "DETAILED" uses `"%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"`.
+        - `CODOMYRMEX_LOG_FORMAT` (str, optional): A Python logging format string or the keyword "DETAILED" for text output. Defaults to `"%(asctime)s - %(name)s - %(levelname)s - %(message)s"`. "DETAILED" uses `"%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"`. This is ignored if `CODOMYRMEX_LOG_OUTPUT_TYPE` is "JSON".
+        - `CODOMYRMEX_LOG_OUTPUT_TYPE` (str, optional): Specifies the log output format. Can be "TEXT" or "JSON". Defaults to "TEXT".
 - **Request Body**: N/A
 - **Returns/Response**: None. This function configures the logging system as a side effect.
 - **Events Emitted**: N/A

@@ -13,6 +13,7 @@ This example demonstrates how to initialize the logging system in a main applica
 CODOMYRMEX_LOG_LEVEL=DEBUG
 CODOMYRMEX_LOG_FILE=app_debug.log
 CODOMYRMEX_LOG_FORMAT="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+CODOMYRMEX_LOG_OUTPUT_TYPE=TEXT
 ```
 
 **2. Main application script (e.g., `main.py` in project root):**
@@ -75,7 +76,7 @@ This example shows how to use the "DETAILED" log format and set a higher log lev
 # .env
 CODOMYRMEX_LOG_LEVEL=WARNING
 CODOMYRMEX_LOG_FORMAT=DETAILED
-# CODOMYRMEX_LOG_FILE is omitted, so logs will only go to console
+CODOMYRMEX_LOG_OUTPUT_TYPE=TEXT
 ```
 
 **2. Using the same Python scripts as in Example 1.**
@@ -85,9 +86,38 @@ CODOMYRMEX_LOG_FORMAT=DETAILED
 - **Console Output**: 
     - Only WARNING and ERROR level messages will be displayed.
     - The format will be more detailed: `%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s`.
-    - You would see the "Application starting..." (INFO) and debug messages.
-    - You would see the "Attempted to divide by zero!" (ERROR) message from `my_module`.
+    - You would *not* see the "Application starting..." (INFO) and debug messages because the level is WARNING.
+    - You *would* see the "Attempted to divide by zero!" (ERROR) message from `my_module`.
 - **File Output**: No log file will be created as `CODOMYRMEX_LOG_FILE` is not set.
+
+## Example 3: JSON Log Output
+
+This example demonstrates how to configure the logging system to output logs in JSON format.
+
+**1. Configure `.env` file (in project root):**
+
+```env
+# .env
+CODOMYRMEX_LOG_LEVEL=INFO
+CODOMYRMEX_LOG_FILE=app_json.log
+CODOMYRMEX_LOG_OUTPUT_TYPE=JSON
+# CODOMYRMEX_LOG_FORMAT is ignored when CODOMYRMEX_LOG_OUTPUT_TYPE is JSON
+```
+
+**2. Using the same Python scripts as in Example 1 (`main.py` and `my_module.py`).**
+
+### Expected Outcome
+
+- **Console Output**: Log messages (INFO level and above) will be printed to the console, formatted as JSON objects, one per line.
+- **File Output**: A file named `app_json.log` will be created (or appended to). It will contain the same JSON log messages.
+- Each JSON log entry will contain fields like `timestamp`, `level`, `name`, `module`, `funcName`, `lineno`, and `message`.
+- If `extra` data is passed to a log call (e.g., `logger.info("message", extra={"custom_key": "custom_value"})`), it will appear under an `"extra"` field in the JSON.
+
+**Example JSON Log Entry (content will vary):**
+```json
+{"timestamp":"2023-10-27T12:34:56.789012Z","level":"INFO","name":"my_module","module":"my_module","funcName":"do_something","lineno":10,"message":"do_something() called in my_module."}
+{"timestamp":"2023-10-27T12:34:56.790000Z","level":"ERROR","name":"my_module","module":"my_module","funcName":"do_something","lineno":15,"message":"Attempted to divide by zero!","exception":"Traceback (most recent call last):\\n  File \\"my_module.py\\\", line 13, in do_something\\n    x = 1 / 0\\nZeroDivisionError: division by zero"}
+```
 
 ## Common Pitfalls & Troubleshooting
 

@@ -1,11 +1,47 @@
-# Module-specific .gitignore
+# Data Visualization - .gitignore
 
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Node
+# Matplotlib/plot outputs
+*.png
+*.svg
+*.pdf
+*.jpg
+*.jpeg
+output/
+plot_outputs/
+test_outputs_data_visualization/
+
+# Logs (from logging_monitoring)
+logs/
+*.log
+
+# Environment files (from environment_setup)
+.env
+.env.*
+!/.env.example
+
+# IDE and OS specific
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Temporary files
+*.tmp
+*.bak
+*.patch
+
+# Coverage reports
+coverage/
+.coverage
+.pytest_cache/
+
+# Node (if docs or frontend)
 node_modules/
 dist/
 .npm
@@ -17,30 +53,4 @@ yarn-error.log*
 build/
 *.o
 *.a
-*.so
-
-# IDE and OS specific
-.vscode/
-.idea/
-*.swp
-*.swo
-.DS_Store
-
-# Logs
-logs/
-*.log
-
-# Environment files
-.env
-.env.*
-!/.env.example
-
-# Temporary files
-*.tmp
-*.bak
-*.patch
-
-# Coverage reports
-coverage/
-.coverage
-.pytest_cache/ 
+*.so 

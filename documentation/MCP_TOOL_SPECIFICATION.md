@@ -1,135 +1,115 @@
 # Documentation - MCP Tool Specification
 
-This document outlines the specification for tools within the Documentation module that are intended to be integrated with the Model Context Protocol (MCP).
+This document outlines the specification for tools within the Documentation module that are intended to be integrated with the Model Context Protocol (MCP). These tools primarily interact with the Docusaurus documentation website generation process.
 
-## Tool: `[Tool Name]`
+## General Considerations
+
+- **Dependencies**: These tools rely on Node.js, npm/yarn, and the Docusaurus installation within the `documentation` module directory.
+- **Working Directory**: Operations are typically performed relative to the `documentation` module directory or the project root.
+- **File System Access**: Tools will interact with the file system to run builds and potentially serve content.
+
+---
+
+## Tool: `trigger_documentation_build`
 
 ### 1. Tool Purpose and Description
 
-(Provide a clear, concise description of what the tool does and its primary use case within the context of an LLM or AI agent.)
+Triggers the build process for the Docusaurus documentation website. This generates a static version of the site.
 
 ### 2. Invocation Name
 
-(The unique name used to call this tool via the MCP.)
-
-`unique_tool_invocation_name`
+`trigger_documentation_build`
 
 ### 3. Input Schema (Parameters)
 
-(Define the expected input parameters for the tool. Use a structured format, e.g., JSON Schema or a clear table.)
-
-**Format:** Table or JSON Schema
-
-| Parameter Name | Type        | Required | Description                                      | Example Value      |
-| :------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
-| `param1`       | `string`    | Yes      | Description of the first parameter.              | `"example_value"`  |
-| `param2`       | `integer`   | No       | Description of the second parameter. Default: `0`. | `42`               |
-| `param3`       | `boolean`   | Yes      | Description of the third parameter.              | `true`             |
-| `param4`       | `array[string]` | No   | Description of an array parameter.               | `["a", "b", "c"]`  |
-| `param5`       | `object`    | No       | Description of an object parameter.              | `{"key": "value"}` |
-
-**JSON Schema Example (Alternative):**
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "param1": {
-      "type": "string",
-      "description": "Description of the first parameter."
-    },
-    "param2": {
-      "type": "integer",
-      "description": "Description of the second parameter.",
-      "default": 0
-    },
-    // ... more parameters
-  },
-  "required": ["param1", "param3"]
-}
-```
+| Parameter Name    | Type     | Required | Description                                                                                           | Example Value |
+| :---------------- | :------- | :------- | :---------------------------------------------------------------------------------------------------- | :------------ |
+| `clean_build`     | `boolean`| No       | Whether to perform a clean build (e.g., remove previous `build` directory contents). Default: `false`. | `true`        |
+| `package_manager` | `string` | No       | Specifies the package manager to use (`"npm"` or `"yarn"`). Default: `"npm"`.                      | `"yarn"`      |
 
 ### 4. Output Schema (Return Value)
 
-(Define the structure of the data returned by the tool upon successful execution.)
-
-**Format:** Table or JSON Schema
-
-| Field Name | Type     | Description                                  | Example Value     |
-| :--------- | :------- | :------------------------------------------- | :---------------- |
-| `result`   | `string` | The primary result of the tool execution.    | `"Success!"`      |
-| `details`  | `object` | Additional details or structured output.     | `{"info": "..."}` |
-
-**JSON Schema Example (Alternative):**
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "result": {
-      "type": "string",
-      "description": "The primary result of the tool execution."
-    },
-    "details": {
-      "type": "object",
-      "description": "Additional details or structured output."
-      // Define nested properties if necessary
-    }
-  },
-  "required": ["result"]
-}
-```
+| Field Name      | Type     | Description                                                                            | Example Value                                      |
+| :-------------- | :------- | :------------------------------------------------------------------------------------- | :------------------------------------------------- |
+| `status`        | `string` | Build status: "success", "failure".                                                    | `"success"`                                        |
+| `output_path`   | `string` | Path to the directory containing the built static site (e.g., `"documentation/build/"`). | `"./documentation/build/"`                       |
+| `log_output`    | `string` | A summary or key excerpts from the build log.                                          | `"Docusaurus build completed successfully."`       |
+| `error_message` | `string` | Error description if `status` is "failure".                                            | `"npm run build command failed with exit code 1."` |
 
 ### 5. Error Handling
 
-(Describe how errors are reported. What kind of error messages or codes can be expected?)
-
-- **Error Code `[CODE_1]`**: Description of this error condition.
-- **Error Code `[CODE_2]`**: Description of another error condition.
-- General error message format: `{"error": "description_of_error", "code": "ERROR_CODE"}`
+- Failures during the build process (e.g., Docusaurus errors, command execution failures) will result in a "failure" status and details in `error_message` and `log_output`.
 
 ### 6. Idempotency
 
-(Specify if the tool is idempotent. If not, explain any side effects of multiple identical calls.)
-
-- Idempotent: (Yes/No)
-- Side Effects: (Describe if not idempotent)
+- **Idempotent**: No, if `clean_build` is false and sources change. Yes, if `clean_build` is true and sources are the same (though timestamps might differ).
+- **Explanation**: The build process modifies the `documentation/build` directory. Subsequent calls can produce different results if underlying documentation source files have changed.
 
 ### 7. Usage Examples (for MCP context)
 
-(Provide examples of how an LLM might formulate a call to this tool.)
-
-**Example 1: Basic Call**
-
 ```json
 {
-  "tool_name": "unique_tool_invocation_name",
+  "tool_name": "trigger_documentation_build",
   "arguments": {
-    "param1": "some input",
-    "param3": false
-  }
-}
-```
-
-**Example 2: With Optional Parameters**
-
-```json
-{
-  "tool_name": "unique_tool_invocation_name",
-  "arguments": {
-    "param1": "another input",
-    "param2": 100,
-    "param3": true
+    "clean_build": true,
+    "package_manager": "yarn"
   }
 }
 ```
 
 ### 8. Security Considerations
 
-(Outline any security implications of using this tool, e.g., access to file system, network requests, data sensitivity.)
+- **Command Execution**: Ensures that only predefined build commands are executed. No arbitrary command execution based on input.
+- **Resource Usage**: Documentation builds can consume resources. Ensure this is managed if run in constrained environments.
 
 ---
 
-## Tool: `[Another Tool Name]`
+## Tool: `check_documentation_environment`
 
-(Repeat the above structure for each tool provided by this module that interfaces with MCP.) 
+### 1. Tool Purpose and Description
+
+Checks if the necessary environment (Node.js, npm/yarn) for building and serving the Docusaurus documentation is correctly set up.
+
+### 2. Invocation Name
+
+`check_documentation_environment`
+
+### 3. Input Schema (Parameters)
+
+(This tool currently takes no input parameters.)
+
+### 4. Output Schema (Return Value)
+
+| Field Name      | Type     | Description                                                                      | Example Value                                                |
+| :-------------- | :------- | :------------------------------------------------------------------------------- | :----------------------------------------------------------- |
+| `status`        | `string` | Overall check status: "success" (all good), "warning" (minor issues), "error" (major issues). | `"success"`                                                  |
+| `node_detected` | `boolean`| Whether Node.js was found.                                                         | `true`                                                       |
+| `node_version`  | `string` | Detected Node.js version, or null if not found.                                  | `"v18.16.0"`                                                 |
+| `npm_detected`  | `boolean`| Whether npm was found.                                                             | `true`                                                       |
+| `npm_version`   | `string` | Detected npm version, or null if not found.                                      | `"9.5.1"`                                                    |
+| `yarn_detected` | `boolean`| Whether yarn was found.                                                            | `false`                                                      |
+| `yarn_version`  | `string` | Detected yarn version, or null if not found.                                     | `null`                                                       |
+| `message`       | `string` | A summary message about the environment status.                                    | `"Node.js and npm detected. Yarn not found (optional)."`       |
+
+### 5. Error Handling
+
+- Errors during command execution (e.g., `node --version`) are caught and reflected in the status and message.
+
+### 6. Idempotency
+
+- **Idempotent**: Yes. Checking the environment does not change its state.
+
+### 7. Usage Examples (for MCP context)
+
+```json
+{
+  "tool_name": "check_documentation_environment",
+  "arguments": {}
+}
+```
+
+### 8. Security Considerations
+
+- Executes version checking commands (`node --version`, etc.). Assumes these commands are safe and do not pose a risk in the execution environment.
+
+--- 

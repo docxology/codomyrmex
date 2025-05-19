@@ -9,8 +9,8 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email [MAINTAINER_EMAIL_OR_SECURITY_CONTACT] with the subject line: "SECURITY Vulnerability Report: [Module Name] - [Brief Description]".
-<!-- IMPORTANT: When using this template for a new module, replace [MAINTAINER_EMAIL_OR_SECURITY_CONTACT] and [Module Name] above. -->
+Instead, please email [YOUR_MODULE_SECURITY_CONTACT_EMAIL_OR_DEFAULT_PROJECT_EMAIL] with the subject line: "SECURITY Vulnerability Report: [Module Name] - [Brief Description]".
+<!-- IMPORTANT: When using this template for a new module, replace [YOUR_MODULE_SECURITY_CONTACT_EMAIL_OR_DEFAULT_PROJECT_EMAIL] and [Module Name] above. Ensure the email is appropriate for security disclosures. -->
 
 Please include the following information in your report:
 
@@ -20,7 +20,7 @@ Please include the following information in your report:
 - The version(s) of the module affected.
 - Your name and contact information (optional).
 
-We aim to acknowledge receipt of your vulnerability report within [e.g., 48 hours] and will work with you to understand and remediate the issue. We may request additional information if needed.
+We aim to acknowledge receipt of your vulnerability report within [Specify Expected Response Time, e.g., 2-3 business days] and will work with you to understand and remediate the issue. We may request additional information if needed.
 
 Public disclosure of the vulnerability will be coordinated with you after the vulnerability has been fixed and an update is available, or after a reasonable period if a fix is not immediately possible.
 

@@ -6,7 +6,7 @@ These rules are specific to the `build_synthesis` module and supplement `general
 ## 1. Module Purpose & Context
 -   **Core Functionality**: Manages build processes and AI-powered code generation/synthesis. It aims to automate and standardize how various project components are built and how AI can assist in generating boilerplate or synthesized code.
 -   **Key Technologies/Tools**: Build systems (e.g., Make, Docker, Webpack, pip build), code generation tools, Python.
--   Refer to the module's main `README.md` (located at `../../build_synthesis/README.md`) for a comprehensive overview.
+-   Refer to the module\'s main `README.md` (located at `../../build_synthesis/README.md`) for a comprehensive overview.
 
 ## 2. Key Files & Structure in `build_synthesis` Module
 When working within this module, pay close attention to:

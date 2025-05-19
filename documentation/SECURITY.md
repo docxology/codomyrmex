@@ -19,7 +19,7 @@ Please include the following information in your report:
 - The version(s) of the module affected.
 - Your name and contact information (optional).
 
-We aim to acknowledge receipt of your vulnerability report within [e.g., 48 hours] and will work with you to understand and remediate the issue. We may request additional information if needed.
+We aim to acknowledge receipt of your vulnerability report within [Specify Expected Response Time, e.g., 2-3 business days] and will work with you to understand and remediate the issue. We may request additional information if needed.
 
 Public disclosure of the vulnerability will be coordinated with you after the vulnerability has been fixed and an update is available, or after a reasonable period if a fix is not immediately possible.
 

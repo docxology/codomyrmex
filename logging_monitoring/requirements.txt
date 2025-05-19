@@ -1,9 +1,18 @@
 # Logging Monitoring - Requirements
 
-# This file lists module-specific packages and dependencies for the Logging Monitoring module.
-# However, common project-wide dependencies, such as `python-dotenv` (used by this module
-# for loading .env configuration), are expected to be listed in the main `requirements.txt`
-# at the root of the Codomyrmex project.
+# This file lists module-specific Python packages and dependencies for the Logging Monitoring module.
+
+# Core logging functionality:
+# python-json-logger==3.3.0 # Removed as logger_config.py uses a custom JsonFormatter
+
+# Common project-wide dependencies, such as `python-dotenv`,
+# are managed in the root `requirements.txt` file.
+
+# If this module introduces other specific third-party libraries purely for its own
+# advanced functionalities (e.g., a specialized log shipping library not used elsewhere),
+# they should be listed here with pinned versions.
+# Example:
+# # specialized-log-shipper==2.1.0
 
 # The `environment_setup/` module provides guidance on setting up the overall project environment,
 # which includes installing dependencies from the root `requirements.txt`.
@@ -56,4 +65,11 @@
 # in the project root.
 #
 # If this module later develops specific Python dependencies not included globally,
-# they should be listed here. 
+# they should be listed here.
+
+# This module may have specific logging library dependencies.
+# If using Loguru and it's not in the root requirements.txt, add it here:
+# loguru>=0.7.0
+
+# If other dependencies are covered by the root requirements.txt, state that.
+# Otherwise, list all specific dependencies for this module here. 

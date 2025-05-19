@@ -1,21 +1,25 @@
 # Core toolkit for code analysis and LLM integration
-cased-kit
+cased-kit==0.3.0
 
 # For .env file support
-python-dotenv
+python-dotenv==1.1.0
 
 # For semantic search and default embedding functions
-sentence-transformers
-chromadb
+# sentence-transformers # To be moved to specific module(s) if needed
+# chromadb # To be moved to specific module(s) if needed
 
 # LLM Providers (optional, depending on usage with Summarizer, DocstringIndexer)
-openai
-anthropic
-google-generativeai
+# openai # To be moved to specific module(s) if needed
+# anthropic # To be moved to specific module(s) if needed
+# google-generativeai # To be moved to specific module(s) if needed
 
 # For specific tutorials/recipes (e.g., PR reviewer, as seen in kit docs)
-unidiff
-requests
+# unidiff # To be moved to specific module(s) if needed
+# requests # To be moved to specific module(s) if needed
 
 # For dependency graph visualization (optional)
 # graphviz # Also requires Graphviz system package to be installed (e.g., via apt, brew) 
+
+# For Data Visualization module - These are managed in data_visualization/requirements.txt
+# matplotlib
+# numpy 

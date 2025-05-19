@@ -1,7 +1,21 @@
 # Documentation - Requirements
 
-# This file lists the packages and dependencies required for the Documentation module.
-# The `environment_setup/` module may use this file to provision the necessary environment.
+# This file lists the Python packages and dependencies required for any Python-based helper scripts
+# used in the Documentation module's build process (e.g., pre-processing scripts for Docusaurus).
+# The `environment_setup/` module may use this file to provision the necessary Python environment for such scripts.
+
+# Node.js dependencies for the Docusaurus site itself are managed in `documentation/package.json`.
+
+# If this module uses Python helper scripts with specific dependencies, list them below, ensuring to pin exact versions.
+# Example:
+# beautifulsoup4==4.12.3  # For a script that pre-processes markdown
+# requests==2.31.0        # For a script that fetches external data for docs
+
+# Currently, no specific Python helper scripts with unique dependencies are part of this module.
+# If such scripts are added, their dependencies should be listed here.
+
+# General format:
+# [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
 
 # PLEASE RENAME/ADAPT THIS FILE and its contents based on the primary language and package manager for this module.
 # For example:
@@ -37,8 +51,4 @@
 # [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1
 
 # This file can be used for Python dependencies if any Python scripts are part of the documentation build process (e.g., pre-processing scripts).
-# If the documentation module relies solely on Node.js and Docusaurus, this file might not be needed or can be left empty.
-
-# Example (if you had a Python script for doc generation):
-# mkdocs-material
-# beautifulsoup4 
+# If the documentation module relies solely on Node.js and Docusaurus, this file might not be needed or can be left empty. 

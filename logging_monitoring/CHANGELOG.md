@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- 
+- Option for structured JSON log output via `CODOMYRMEX_LOG_OUTPUT_TYPE` environment variable. Includes a `JsonFormatter`.
 
 ### Changed
 - 

@@ -1,6 +1,6 @@
 # Model Context Protocol - Requirements
 
-# This file lists the packages and dependencies required for the Model Context Protocol module.
+# This file lists Python packages and dependencies required for the Model Context Protocol module.
 # The `environment_setup/` module may use this file to provision the necessary environment.
 
 # PLEASE RENAME/ADAPT THIS FILE and its contents based on the primary language and package manager for this module.
@@ -36,7 +36,23 @@
 # If this module is Python-based and all its dependencies are already covered by the
 # project's root requirements.txt, please note that here explicitly.
 # e.g.:
-# # This module currently uses dependencies from the root requirements.txt file.
+# This module currently uses dependencies from the root requirements.txt file.
+# If this module develops specific Python dependencies not included globally,
+# (e.g., for schema validation like jsonschema), they should be listed here.
 
 # [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
-# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1 
+# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1
+
+# For schema definition and validation (e.g., if using JSON Schema for MCP messages)
+jsonschema==4.23.0
+
+# If this module develops other specific Python dependencies (e.g., for Protocol Buffers generation/handling
+# if that format is chosen, or specific client/server libraries for an example implementation),
+# they should be listed here with pinned versions.
+# Example:
+# # protobuf==3.20.3
+
+# If all other dependencies are covered by the root requirements.txt, this can be stated.
+# Currently, aside from potential schema tools like jsonschema, other dependencies are
+# expected to be covered by the root requirements.txt or not applicable if the protocol
+# itself is language-agnostic and implemented by other modules. 

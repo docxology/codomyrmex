@@ -2,60 +2,61 @@
 
 ## Introduction
 
-(Briefly describe the purpose of this API and how it facilitates interaction with the module.)
+<!-- TODO: Briefly describe the purpose of this API and how it facilitates interaction with the Ai Code Editing module. What are the main use cases? -->
 
 ## Endpoints / Functions / Interfaces
 
-(Detail each API endpoint, function, or interface provided by this module. Use a consistent format.)
+<!-- TODO: Detail each API endpoint, function, or interface provided by this module. Use a consistent format. Replace example_function() with actual specifications. -->
 
 ### Endpoint/Function 1: `example_function()`
 
-- **Description**: (What this function does.)
-- **Method**: (e.g., GET, POST, or N/A for library functions)
-- **Path**: (e.g., `/api/module/resource` or N/A)
+- **Description**: <!-- TODO: What this function does. -->
+- **Method**: <!-- TODO: e.g., GET, POST, or N/A for library functions -->
+- **Path**: <!-- TODO: e.g., /api/module/resource or N/A -->
 - **Parameters/Arguments**:
-    - `param1` (type): Description of parameter.
-    - `param2` (type, optional): Description of parameter. Default: `value`.
+    - `param1` (type): <!-- TODO: Description of parameter. -->
+    - `param2` (type, optional): <!-- TODO: Description of parameter. Default: value. -->
 - **Request Body** (if applicable):
     ```json
     {
-      "key": "value"
+      "key": "value" <!-- TODO: Define actual request body structure -->
     }
     ```
 - **Returns/Response**:
     - **Success (e.g., 200 OK)**:
         ```json
         {
-          "data": "result"
+          "data": "result" <!-- TODO: Define actual success response structure -->
         }
         ```
     - **Error (e.g., 4xx/5xx)**:
         ```json
         {
-          "error": "description"
+          "error": "description" <!-- TODO: Define actual error response structure and common error codes -->
         }
         ```
 - **Events Emitted** (if applicable):
-    - `event_name`: Description of event and its payload.
+    - `event_name`: <!-- TODO: Description of event and its payload. -->
 
-### Endpoint/Function 2: ...
+### Endpoint/Function 2: ... <!-- TODO: Add more endpoints/functions as needed -->
 
 ## Data Models
 
-(Define any common data structures or models used by the API.)
+<!-- TODO: Define any common data structures or models used by the API. -->
 
 ### Model: `ExampleModel`
-- `field1` (type): Description.
-- `field2` (type): Description.
+- `field1` (type): <!-- TODO: Description of field1. -->
+- `field2` (type): <!-- TODO: Description of field2. -->
+<!-- TODO: Add more models as needed -->
 
 ## Authentication & Authorization
 
-(Describe how API access is secured, if applicable.)
+<!-- TODO: Describe how API access is secured, if applicable. E.g., API keys, OAuth tokens, etc. -->
 
 ## Rate Limiting
 
-(Specify any rate limits imposed on API usage.)
+<!-- TODO: Specify any rate limits imposed on API usage (e.g., requests per second/minute/day). -->
 
 ## Versioning
 
-(Explain the API versioning strategy.) 
+<!-- TODO: Explain the API versioning strategy (e.g., URI path versioning /v1/, header versioning). --> 

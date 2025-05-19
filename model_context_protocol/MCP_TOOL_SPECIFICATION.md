@@ -1,135 +1,43 @@
-# Model Context Protocol - MCP Tool Specification
+# Model Context Protocol (MCP) - Tool Specification Guidelines
 
-This document outlines the specification for tools within the Model Context Protocol module that are intended to be integrated with the Model Context Protocol (MCP).
+## Purpose of this Document
 
-## Tool: `[Tool Name]`
+This document serves as the **meta-specification** for how `MCP_TOOL_SPECIFICATION.md` files should be created and maintained across all Codomyrmex modules. It does not define MCP tools for the `model_context_protocol` module itself (as this module defines the protocol, not tools that use it directly in the same way other modules do).
 
-### 1. Tool Purpose and Description
+Instead, it establishes the standards and points to the resources developers should use when specifying tools that their modules expose via the Model Context Protocol.
 
-(Provide a clear, concise description of what the tool does and its primary use case within the context of an LLM or AI agent.)
+## Canonical Template for MCP Tool Specifications
 
-### 2. Invocation Name
+All modules that expose tools via MCP **must** use the canonical template located at:
 
-(The unique name used to call this tool via the MCP.)
+[`template/module_template/MCP_TOOL_SPECIFICATION.md`](../../template/module_template/MCP_TOOL_SPECIFICATION.md)
 
-`unique_tool_invocation_name`
+This template provides a detailed structure and instructions for defining:
+- Tool Purpose and Description
+- Invocation Name
+- Input Schema (Parameters)
+- Output Schema (Return Value)
+- Error Handling
+- Idempotency
+- Usage Examples (for MCP context)
+- Security Considerations
 
-### 3. Input Schema (Parameters)
+## Key Principles for Defining MCP Tools
 
-(Define the expected input parameters for the tool. Use a structured format, e.g., JSON Schema or a clear table.)
+When defining tools for your module, adhere to the following principles, which are also embedded in the template's instructions:
 
-**Format:** Table or JSON Schema
+1.  **Clarity and Conciseness**: The tool's purpose, inputs, and outputs should be immediately understandable.
+2.  **Action-Oriented**: Tools should represent discrete actions or queries that an LLM or other agent can meaningfully invoke.
+3.  **Well-Defined Schemas**: Input and output schemas must be precise. Use clear data types and specify required fields. The template provides guidance on using tables or JSON Schema snippets.
+4.  **Robust Error Handling**: Define how your tool reports errors. Be specific about potential error conditions.
+5.  **Idempotency Considerations**: Clearly state whether your tool is idempotent and explain any side effects of repeated calls.
+6.  **Security First**: Pay close attention to the security implications of your tool, especially if it involves file system access, network requests, code execution, or handling sensitive data. The template includes a dedicated section for this.
+7.  **Practical Examples**: Provide realistic usage examples in the MCP JSON format to illustrate how the tool should be called.
 
-| Parameter Name | Type        | Required | Description                                      | Example Value      |
-| :------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
-| `param1`       | `string`    | Yes      | Description of the first parameter.              | `"example_value"`  |
-| `param2`       | `integer`   | No       | Description of the second parameter. Default: `0`. | `42`               |
-| `param3`       | `boolean`   | Yes      | Description of the third parameter.              | `true`             |
-| `param4`       | `array[string]` | No   | Description of an array parameter.               | `["a", "b", "c"]`  |
-| `param5`       | `object`    | No       | Description of an object parameter.              | `{"key": "value"}` |
+## Responsibility
 
-**JSON Schema Example (Alternative):**
+Each module owner is responsible for ensuring their `MCP_TOOL_SPECIFICATION.md` accurately reflects the tools their module provides and adheres to the structure and guidelines provided by the canonical template.
 
-```json
-{
-  "type": "object",
-  "properties": {
-    "param1": {
-      "type": "string",
-      "description": "Description of the first parameter."
-    },
-    "param2": {
-      "type": "integer",
-      "description": "Description of the second parameter.",
-      "default": 0
-    },
-    // ... more parameters
-  },
-  "required": ["param1", "param3"]
-}
-```
+## Future Enhancements
 
-### 4. Output Schema (Return Value)
-
-(Define the structure of the data returned by the tool upon successful execution.)
-
-**Format:** Table or JSON Schema
-
-| Field Name | Type     | Description                                  | Example Value     |
-| :--------- | :------- | :------------------------------------------- | :---------------- |
-| `result`   | `string` | The primary result of the tool execution.    | `"Success!"`      |
-| `details`  | `object` | Additional details or structured output.     | `{"info": "..."}` |
-
-**JSON Schema Example (Alternative):**
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "result": {
-      "type": "string",
-      "description": "The primary result of the tool execution."
-    },
-    "details": {
-      "type": "object",
-      "description": "Additional details or structured output."
-      // Define nested properties if necessary
-    }
-  },
-  "required": ["result"]
-}
-```
-
-### 5. Error Handling
-
-(Describe how errors are reported. What kind of error messages or codes can be expected?)
-
-- **Error Code `[CODE_1]`**: Description of this error condition.
-- **Error Code `[CODE_2]`**: Description of another error condition.
-- General error message format: `{"error": "description_of_error", "code": "ERROR_CODE"}`
-
-### 6. Idempotency
-
-(Specify if the tool is idempotent. If not, explain any side effects of multiple identical calls.)
-
-- Idempotent: (Yes/No)
-- Side Effects: (Describe if not idempotent)
-
-### 7. Usage Examples (for MCP context)
-
-(Provide examples of how an LLM might formulate a call to this tool.)
-
-**Example 1: Basic Call**
-
-```json
-{
-  "tool_name": "unique_tool_invocation_name",
-  "arguments": {
-    "param1": "some input",
-    "param3": false
-  }
-}
-```
-
-**Example 2: With Optional Parameters**
-
-```json
-{
-  "tool_name": "unique_tool_invocation_name",
-  "arguments": {
-    "param1": "another input",
-    "param2": 100,
-    "param3": true
-  }
-}
-```
-
-### 8. Security Considerations
-
-(Outline any security implications of using this tool, e.g., access to file system, network requests, data sensitivity.)
-
----
-
-## Tool: `[Another Tool Name]`
-
-(Repeat the above structure for each tool provided by this module that interfaces with MCP.) 
+As the Model Context Protocol evolves, the canonical template and these guidelines may be updated. Module developers should refer back to this document and the template periodically. 

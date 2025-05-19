@@ -9,115 +9,133 @@ It aims to consolidate documentation from all Codomyrmex modules, providing a ce
 
 Key features include:
 - Unified documentation for all modules.
-- Versioning support (to be configured).
 - Search functionality.
-- Potentially, blog/update sections.
+- Versioning support (to be configured as needed).
+- Blog/update sections (can be enabled if desired).
 
 ## Structure
 
+The Docusaurus project is structured as follows:
+
 - `docs/`: Contains the Markdown files that form the content of the documentation site. 
-    - `intro.md`: The main landing page (renamed from `index.md` for Docusaurus convention if `routeBasePath` is `/`).
-    - `project/`: Markdown files related to the overall project (Contributing, Code of Conduct, License).
-    - `modules/`: This directory will be structured to hold documentation from individual Codomyrmex modules. (This might involve a build step to copy files here).
-    - `development/`: Documentation related to development processes, like environment setup.
-- `src/`: Contains non-documentation files like custom React components or CSS.
-    - `css/custom.css`: Custom styling.
-- `static/`: Static assets like images.
-- `docusaurus.config.js`: Main Docusaurus configuration file.
-- `sidebars.js`: Defines the sidebar structure for navigation.
-- `package.json`: Node.js project manifest, including dependencies and scripts for Docusaurus.
+    - `intro.md`: The main landing page for the documentation.
+    - `project/`: Markdown files related to the overall Codomyrmex project (e.g., Contributing, Code of Conduct, License).
+    - `modules/`: This directory is intended to hold documentation sourced from individual Codomyrmex modules. The aggregation process might involve a build step or script to copy/link relevant files here.
+    - `development/`: Documentation related to development processes, architecture, and environment setup.
+- `src/`: Contains non-documentation files like custom React components (under `src/components/`) or custom CSS (under `src/css/`).
+    - `css/custom.css`: For custom styling overrides.
+- `static/`: Static assets like images, which will be copied to the root of the build output.
+- `docusaurus.config.js`: The main Docusaurus configuration file. Controls site metadata, plugins, themes, and presets.
+- `sidebars.js`: Defines the structure and content of the navigation sidebar(s).
+- `package.json`: Node.js project manifest. Lists dependencies (Docusaurus, React, etc.) and scripts (`start`, `build`, `serve`).
 
 ## Getting Started (Running Locally)
 
 ### Prerequisites
 
-- Node.js (version 18.0 or higher recommended, see `package.json` engines).
-- npm or yarn.
+- **Node.js**: Version 18.0 or higher is recommended. Check Docusaurus documentation for current specific version compatibility if issues arise.
+- **npm or yarn**: A Node.js package manager. `npm` usually comes with Node.js. `yarn` can be installed separately if preferred.
 
-Refer to the main `environment_setup/README.md` for instructions on installing Node.js if you haven't already.
+Refer to the main `environment_setup/README.md` in the Codomyrmex project root for general instructions on installing Node.js.
 
 ### Installation
 
-1.  Navigate to the `documentation` directory:
+1.  Navigate to the `documentation` directory within the Codomyrmex project:
     ```bash
     cd documentation
     ```
-2.  Install dependencies:
+2.  Install the Node.js dependencies listed in `package.json`:
     ```bash
     npm install
-    # or
+    # OR, if you prefer yarn:
     # yarn install
     ```
 
 ### Running the Development Server
 
-1.  Start the Docusaurus development server:
+To start the Docusaurus local development server with live reloading:
+
+1.  Ensure you are in the `documentation` directory.
+2.  Run the start script:
     ```bash
     npm run start
-    # or
+    # OR, with yarn:
     # yarn start
     ```
-    This command starts a local development server (usually on `http://localhost:3000`) and opens up a browser window. Most changes are reflected live without having to restart the server.
+This command typically starts the server on `http://localhost:3000` and opens it in your default web browser. Changes to Markdown files or Docusaurus configuration will usually reflect live.
 
 ### Building the Static Site
 
-To generate a static build of the website (typically for deployment):
-```bash
-npm run build
-# or
-# yarn build
-```
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+To generate a static build of the website, suitable for deployment to a hosting service:
+
+1.  Ensure you are in the `documentation` directory.
+2.  Run the build script:
+    ```bash
+    npm run build
+    # OR, with yarn:
+    # yarn build
+    ```
+This command generates the static HTML, CSS, and JavaScript assets into the `documentation/build` directory.
+
+### Serving the Static Build Locally
+
+After building the site, you can serve it locally to preview the production version:
+
+1. Ensure you have built the site (see above).
+2. Run the serve script:
+    ```bash
+    npm run serve
+    # OR, with yarn:
+    # yarn serve
+    ```
+This usually serves the site from `http://localhost:3000` (or another port if 3000 is in use).
 
 ### Using the `documentation_website.py` Helper Script
 
-A Python script `documentation_website.py` is provided within this `documentation` module to streamline common operations related to the Docusaurus site. This script requires Python to be installed and accessible in your environment. It also relies on `codomyrmex.logging_monitoring` for logging, so ensure the main project dependencies are installed (see root `requirements.txt`).
+A Python script `documentation_website.py` is provided within this `documentation` module to streamline common operations related to the Docusaurus site. This script requires Python to be installed and accessible in your environment. It also attempts to use `codomyrmex.logging_monitoring` for enhanced logging, so ensure the main project Python dependencies are installed (see root `requirements.txt`).
 
-To use the script, navigate to the Codomyrmex project root and run:
+To use the script, navigate to the Codomyrmex project root and run commands like:
 ```bash
 python documentation/documentation_website.py [action] [--pm <npm|yarn>]
 ```
 
-**Key Actions:**
-*   **No action (default - `full_cycle`)**: If you run the script without specifying an action, it will perform a full sequence:
-    1.  `checkenv`: Check for Node.js and npm/yarn.
-    2.  `install`: Install Docusaurus dependencies (using npm by default, or yarn if specified with `--pm yarn`).
-    3.  `build`: Build the static Docusaurus site.
-    4.  `assess`: Open the built site in your browser and print an assessment checklist to the console.
-    5.  `serve`: Serve the built static site (usually on `http://localhost:3000`). This command is blocking and will run until you stop it (Ctrl+C).
-*   `checkenv`: Only checks for Node.js and npm/yarn.
-*   `install`: Only installs Docusaurus dependencies.
-*   `start`: Runs the Docusaurus development server with hot-reloading (equivalent to `npm run start`). This is for development and shows live changes.
-*   `build`: Only builds the static Docusaurus site.
-*   `serve`: Serves the previously built static site from the `documentation/build/` directory.
-*   `assess`: Opens the default site URL (`http://localhost:3000`) in a browser and prints an assessment checklist. This expects a server (either `start` or `serve`) to be running.
+**Key Actions defined in `documentation_website.py`:**
+*   **No action (default - `full_cycle`)**: Performs a sequence: `checkenv`, `install`, `build`, `assess` (opens browser), and `serve`.
+*   `checkenv`: Checks for Node.js and npm/yarn.
+*   `install`: Installs Docusaurus dependencies (`npm install` or `yarn install`).
+*   `start`: Runs the Docusaurus development server (`npm run start` or `yarn start`).
+*   `build`: Builds the static Docusaurus site (`npm run build` or `yarn build`).
+*   `serve`: Serves the previously built static site from `documentation/build/` (`npm run serve` or `yarn serve`).
+*   `assess`: Opens the default site URL (`http://localhost:3000`) in a browser and prints an assessment checklist (expects a server to be running).
 
-**Package Manager:**
-*   You can specify the package manager using the `--pm` argument. For example, to use yarn:
+**Package Manager Option:**
+*   Use the `--pm` argument to specify `npm` or `yarn`. If omitted, `npm` is the default.
     ```bash
-    python documentation/documentation_website.py --pm yarn
-    # or for a specific action:
-    python documentation/documentation_website.py install --pm yarn
+    python documentation/documentation_website.py build --pm yarn
     ```
-    If `--pm` is not provided, `npm` is used by default.
-
-The script provides logging for each step. If the `codomyrmex.logging_monitoring` module cannot be imported, it will fall back to basic Python logging and print a warning.
+Refer to the script's internal help (`python documentation/documentation_website.py --help`) for the most up-to-date list of actions and options.
 
 ## Integrating Module Documentation
 
-A key function of this module is to aggregate documentation from other Codomyrmex modules. The strategy for this will likely involve:
-1.  Defining a consistent documentation structure within each module (e.g., `README.md`, `API_SPECIFICATION.md`, `docs/index.md`, `docs/technical_overview.md`).
-2.  A build script or Docusaurus plugin configuration that copies or links these Markdown files into the `documentation/docs/modules/<module-name>/` directory before the Docusaurus build process.
-3.  Updating `sidebars.js` to correctly reference these aggregated module documents.
+A key function of this module is to aggregate and present documentation from other Codomyrmex modules. The strategy for this typically involves:
+
+1.  **Consistent Documentation in Modules**: Each Codomyrmex module should maintain its own documentation (e.g., `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, and potentially a `docs/` subdirectory with more detailed guides like `technical_overview.md`).
+2.  **Aggregation Mechanism**: A process (manual, scripted via `documentation_website.py`, or using Docusaurus features/plugins) will be needed to gather these Markdown files. The target location within this module is typically `documentation/docs/modules/<module-name>/`.
+    - This might involve copying files or creating symlinks during a pre-build step.
+    - The `documentation_website.py` script may be enhanced to automate parts of this aggregation.
+3.  **Sidebar Configuration**: The `documentation/sidebars.js` file must be updated to include links to the aggregated module documentation, creating a structured and navigable hierarchy.
+4.  **Cross-Module Linking**: Ensure links between module documents and the main project documentation work correctly.
+
+The specific implementation of this aggregation should be detailed in this module's `docs/technical_overview.md` or a dedicated guide within the documentation site itself.
 
 ## Further Information
 
-- For specific API or tool specifications *of this documentation module itself* (if any), refer to:
-    - [API Specification](API_SPECIFICATION.md)
-    - [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md)
-- [Usage Examples](USAGE_EXAMPLES.md) for this module.
-- [Detailed Documentation for this module](./docs/index.md) (if different from the site landing page).
-- [Changelog](CHANGELOG.md)
-- [Security Policy](SECURITY.md)
+- For specific API or tool specifications *of this documentation module itself* (e.g., related to the `documentation_website.py` script or any future automation tools built herein), refer to:
+    - [API Specification](API_SPECIFICATION.md) (Placeholder, for any direct Python APIs this module might expose)
+    - [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) (Details MCP tools like `trigger_documentation_build`)
+- [Usage Examples](USAGE_EXAMPLES.md): Examples for using any specific tools or scripts within this module.
+- [Detailed Documentation for this module](./docs/index.md): If this module has its own specific detailed guides beyond this README.
+- [Changelog](CHANGELOG.md): Tracks changes to the documentation module itself.
+- [Security Policy](SECURITY.md): Security considerations for this module (e.g., related to running build scripts or serving content).
 
-(The files `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, etc., in this directory should describe the `documentation` module itself, not the entire project's documentation process unless specifically about tools *within* this module for managing documentation.) 
+(Note: The `API_SPECIFICATION.md`, `USAGE_EXAMPLES.md`, etc., in this directory pertain to the `documentation` module's own components, not the overall Codomyrmex project documentation content, unless specifically about tools for managing that content.) 

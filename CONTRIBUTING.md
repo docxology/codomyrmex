@@ -58,6 +58,30 @@ We welcome contributions in various forms, including but not limited to:
 3.  The maintainers will review your PR. Be prepared for discussions and make adjustments based on feedback.
 4.  Once approved and all checks pass, your PR will be merged.
 
+## Dependency Management
+
+The Codomyrmex project employs a hybrid approach to dependency management to balance clarity, modularity, and reproducibility:
+
+1.  **Root `requirements.txt`**:
+    *   This file, located at the project root, should list core dependencies essential for the overall project structure, development tooling (e.g., global linters, pre-commit hooks not specific to a module), or shared utilities used across multiple modules.
+    *   Dependencies listed here should be broadly applicable.
+
+2.  **Module-Specific `requirements.txt`**:
+    *   Each individual module (e.g., `ai_code_editing/`, `data_visualization/`) should have its own `requirements.txt` file.
+    *   This file lists dependencies required *only* for that specific module to function.
+    *   This approach keeps modules self-contained and prevents unnecessary installation of dependencies for users or developers who are only interested in a subset of modules.
+
+3.  **Version Pinning**:
+    *   **All** `requirements.txt` files (both root and module-specific) **must** use version pinning for every listed dependency.
+    *   Specify exact versions (e.g., `library_name==1.2.3`) rather than ranges or unpinned versions. This is crucial for ensuring reproducible builds and avoiding unexpected behavior due to automatic updates of transitive dependencies.
+    *   When adding or updating a dependency, determine and specify the exact version that has been tested and confirmed to work.
+
+4.  **Review and Justification**:
+    *   When adding a new dependency, consider whether it should be in the root `requirements.txt` or a module-specific one.
+    *   Be prepared to justify the inclusion of new dependencies in pull requests, especially for the root file.
+
+This strategy aims to make the project manageable as it scales, allowing individual modules to evolve their dependencies without impacting others, while ensuring a stable and predictable environment for all contributors.
+
 ## Code of Conduct
 
 All contributors are expected to read and adhere to the project's [Code of Conduct](./CODE_OF_CONDUCT.md). Please ensure you are familiar with its contents.

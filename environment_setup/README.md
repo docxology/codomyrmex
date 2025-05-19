@@ -1,162 +1,162 @@
-# Environment Setup for Codomyrmex
+# Environment Setup for Codomyrmex Project
 
-This document outlines the steps to set up the development environment for the Codomyrmex project.
+This first part of this document outlines the general steps to set up the development environment for the **entire Codomyrmex project**. For details specific to the `environment_setup` module itself, see the sections further below starting with "## Environment Setup Module Overview".
 
-## Prerequisites
+## I. General Project Development Environment Setup
+
+**(Note: These instructions cover the setup for the overall Codomyrmex project. Consider moving this section to the main project `README.md` for better organization.)**
+
+### Prerequisites
 
 - Python 3.9 or higher
 - `pip` (Python package installer)
 - `git`
+- Node.js (Version 18.0 or higher, for `documentation` module)
+- npm or yarn (for `documentation` module)
 
-## Setup Instructions
+### Setup Instructions
 
 1.  **Clone the Repository (if you haven't already):**
     ```bash
-    git clone <repository_url>
+    git clone <repository_url> # Replace <repository_url> with the actual URL
     cd codomyrmex
     ```
 
-2.  **Create and Activate a Virtual Environment:**
+2.  **Create and Activate a Python Virtual Environment:**
     It's highly recommended to use a virtual environment to manage project dependencies.
     ```bash
     python -m venv .venv
     source .venv/bin/activate  # On Windows: .venv\Scripts\activate
     ```
 
-3.  **Install Dependencies:**
-    The project dependencies, including the `cased/kit` toolkit, are listed in the `requirements.txt` file at the root of the project.
+3.  **Install Python Dependencies:**
+    The project dependencies, including the `cased/kit` toolkit and `python-dotenv`, are listed in the `requirements.txt` file at the root of the project.
     ```bash
     pip install -r requirements.txt
     ```
 
-4.  **Graphviz (Optional for Dependency Visualization):**
-    Some modules, like those for visualizing code dependencies using `cased/kit`, may require Graphviz.
-    -   Install the Graphviz system package. Instructions can be found at [graphviz.org](https://graphviz.org/download/).
-    -   Then, install the Python bindings (uncomment `graphviz` in `requirements.txt` or install separately):
-        ```bash
-        pip install graphviz
-        ```
-
-5.  **API Keys (Optional for LLM features):**
-    If you plan to use features of `cased/kit` that interact with Large Language Models (e.g., code summarization, docstring indexing with LLM-generated summaries), you will need to set up API keys for the respective services (OpenAI, Anthropic, Google Cloud).
-    Set these as environment variables:
-    ```bash
-    export OPENAI_API_KEY="sk-..."
-    export ANTHROPIC_API_KEY="sk-ant-..."
-    export GOOGLE_API_KEY="AIzaSy..."
+4.  **Set Up API Keys (for LLM features):**
+    If you plan to use features interacting with Large Language Models (e.g., via `ai_code_editing` or `cased/kit`), you will need API keys for services like OpenAI, Anthropic, or Google Cloud.
+    Create a `.env` file in the project root (`codomyrmex/.env`) and add your keys:
+    ```env
+    OPENAI_API_KEY="sk-..."
+    ANTHROPIC_API_KEY="sk-ant-..."
+    GOOGLE_API_KEY="AIzaSy..."
+    # Add other environment-specific variables here
     ```
+    The `python-dotenv` library (installed via `requirements.txt`) will load these variables. The `env_checker.py` script in the `environment_setup` module can help verify this setup.
 
-## Documentation Site Development (Using Docusaurus)
+5.  **Graphviz (Optional for Dependency Visualization):**
+    Some modules or tools (like `cased/kit` for dependency graphs) may require Graphviz.
+    -   Install the Graphviz system package: [graphviz.org/download/](https://graphviz.org/download/).
+    -   Install the Python bindings: `pip install graphviz` (ensure it's in the root `requirements.txt` if widely used).
 
-The main documentation website is built using Docusaurus and is managed within the `documentation/` module. To work on or build the documentation site locally:
+6.  **Setup for the `documentation` Module (Docusaurus):**
+    The project documentation website is built using Docusaurus.
+    -   Navigate to the `documentation` directory: `cd documentation`
+    -   Install Node.js dependencies: `npm install` (or `yarn install`)
+    -   Refer to `documentation/README.md` for commands to run the dev server or build the site.
 
-### Prerequisites for Documentation
+---
 
-- **Node.js**: Version 18.0 or higher is recommended. You can download it from [nodejs.org](https://nodejs.org/) or use a version manager like [nvm](https://github.com/nvm-sh/nvm).
-- **npm** (usually comes with Node.js) or **yarn**.
+## II. `environment_setup` Module Overview
 
-### Setting up the Documentation Environment
+This module is dedicated to ensuring a smooth and consistent setup experience for developers working on the Codomyrmex project. It provides instructions, scripts (like `env_checker.py`), and guidance for installing prerequisites, configuring dependencies, and managing environment variables (such as API keys). Its primary aim is to simplify the initial onboarding process and to help maintain a stable development environment across different systems.
 
-1.  **Navigate to the `documentation` module directory:**
-    ```bash
-    cd ../documentation  # Assuming you are in the root 'codomyrmex' directory, or adjust path accordingly
-    ```
+## Key Components of the `environment_setup` Module
 
-2.  **Install Docusaurus dependencies:**
-    ```bash
-    npm install
-    # OR if you prefer yarn
-    # yarn install
-    ```
+- **`env_checker.py` Script**: A Python script containing utility functions:
+    - `ensure_dependencies_installed()`: Verifies the presence of crucial project dependencies (like `cased/kit`, `python-dotenv`) by attempting to import them. It provides instructional messages if dependencies are missing, guiding the user to install them via the root `requirements.txt`.
+    - `check_and_setup_env_vars(repo_root_path: str)`: Checks for a `.env` file in the specified repository root. If missing, it guides the user on creating one with the necessary API key placeholders (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`).
+- **Setup Instructions & Documentation**: This `README.md` file for the `environment_setup` module itself.
+- **Virtual Environment Guidance**: Reinforces the use of virtual environments (e.g., Python's `venv`).
+- **Dependency Manifests**: Primarily relies on the root `requirements.txt`. This module's own `requirements.txt` is for any dependencies specific to `env_checker.py` itself, if they were not in the root (currently, they are expected to be in the root).
+- **`.env` File Management**: Provides guidance (via `env_checker.py` and documentation) for creating and managing `.env` files for sensitive information.
 
-3.  **Run the Docusaurus development server:**
-    ```bash
-    npm run start
-    # OR
-    # yarn start
-    ```
-    This will typically start the site at `http://localhost:3000`.
+## Integration Points of the `environment_setup` Module
 
-4.  **Build the static documentation site:**
-    ```bash
-    npm run build
-    # OR
-    # yarn build
-    ```
-    The output will be in `documentation/build/`.
+This module is foundational for all other development activities within Codomyrmex:
 
-Refer to the `documentation/README.md` for more details on the Docusaurus setup and structure.
-
-## Using `cased/kit`
-
-The `cased/kit` toolkit is a core component for many modules within this project. It provides functionalities for:
-- Codebase mapping and symbol extraction
-- Text and semantic code search
-- Dependency analysis
-- Code summarization
-- Building context for LLMs
-
-Refer to the documentation of individual modules for specific examples of how `cased/kit` is utilized. The official `cased/kit` documentation (as provided in our project context) is also a key resource.
-
-## Overview
-
-(Provide a concise overview of this module, its purpose, and its core functionalities within the Codomyrmex ecosystem.)
-
-## Key Components
-
-(List and briefly describe the key sub-components, libraries, or tools utilized or developed within this module.)
-
-- Component A: ...
-- Component B: ...
-- **`env_checker.py`**: Provides utility functions to check for core dependencies (like `cased/kit`, `python-dotenv`) and to guide users in setting up `.env` files for API keys. These functions are designed to be imported and used by other modules within the Codomyrmex project to ensure a consistent environment.
-
-## Integration Points
-
-(Describe how this module interacts with other parts of the Codomyrmex system or external services.
 - **Provides:**
-    - From `env_checker.py`:
-        - `ensure_dependencies_installed()`: A function to verify that essential project dependencies are available.
-        - `check_and_setup_env_vars(repo_root_path: str)`: A function to check for the presence of a `.env` file and provide guidance for creating it, particularly for LLM API keys.
-    - General guidance and scripts for setting up the overall Codomyrmex development environment.
+    - **A Well-Defined Development Environment**: Through its documentation and the `env_checker.py` script, it helps ensure all developers have the necessary tools, Python dependencies (e.g., `cased/kit`, `python-dotenv`), and configurations (e.g., API keys via `.env` files loaded by `python-dotenv`).
+    - **`env_checker.py` Utilities** (callable by other scripts or for direct use):
+        - `ensure_dependencies_installed()`: Verifies essential project Python dependencies.
+        - `check_and_setup_env_vars(repo_root_path: str)`: Validates and guides `.env` file setup for API keys.
+    - **Guidance on System Prerequisites**: Information on required system-level tools like Python, pip, git.
+
 - **Consumes:**
-    - Python standard library (`os`, `sys`).
-    - `cased/kit` (for checking its presence).
-    - `python-dotenv` (for checking its presence and for loading `.env` files if this module were to use them directly, though `env_checker.py` primarily guides other modules).
-- Refer to the [API Specification](API_SPECIFICATION.md) and [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) for detailed programmatic interfaces.)
+    - **Operating System Utilities**: Relies on `python` and `pip` being available on the developer's system.
+    - **Project `requirements.txt`**: `env_checker.py` implicitly relies on this file for listing the necessary Python packages that should be installed.
+    - **`cased/kit` and `python-dotenv`**: `env_checker.py` specifically checks for the presence of these key libraries.
+    - **(Indirectly) All other Codomyrmex modules**: All modules depend on a correctly set up environment. They may directly import and use functions from `env_checker.py` at the beginning of their scripts to validate the environment.
 
-## Getting Started
+- Refer to the [API Specification](./API_SPECIFICATION.md) (currently a template) and [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md) (currently N/A) for detailed programmatic interfaces for this module itself.
 
-(Provide instructions on how to set up, configure, and use this module.)
+## Getting Started with the `environment_setup` Module
 
-### Prerequisites
+The primary way to "use" this module is by following the general project setup instructions (see Part I of this README or the main project README) and by potentially running the `env_checker.py` script to validate your environment.
 
-(List any dependencies or prerequisites required to use or develop this module.)
+### Prerequisites for using `env_checker.py`
 
-### Installation
+- Python 3.9+ installed and accessible.
+- The Codomyrmex project cloned.
 
-(Provide installation steps, if applicable.)
+### Running `env_checker.py`
 
-### Configuration
+You can run the script directly from the project root to check your setup:
 
-(Detail any necessary configuration steps.)
+```bash
+python environment_setup/env_checker.py
+```
+This will execute the checks within its `if __name__ == '__main__':` block, which calls `ensure_dependencies_installed()` and `check_and_setup_env_vars()`.
 
-## Development
+Other scripts or modules within Codomyrmex might import and call these functions directly:
+```python
+from environment_setup.env_checker import ensure_dependencies_installed, check_and_setup_env_vars
+import os
 
-(Information for developers contributing to this module.)
+# Early in your script
+ensure_dependencies_installed()
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) # Adjust as needed
+check_and_setup_env_vars(project_root)
+
+# ... rest of your script ...
+```
+
+### Configuration for this Module
+
+This module itself (`env_checker.py`) does not require external configuration beyond having Python installed. Its behavior is to check for configurations needed by *other* modules (like the `.env` file).
+
+## Development of the `environment_setup` Module
+
+Contributions to this module would typically involve enhancing `env_checker.py` to check for new common dependencies, improve instructional messages, or add more comprehensive environment validation.
 
 ### Code Structure
 
-(Briefly describe the organization of code within this module. For a more detailed architectural view, see the [Technical Overview](./docs/technical_overview.md).)
+- `README.md`: This file.
+- `env_checker.py`: Core Python script with environment checking functions.
+- `API_SPECIFICATION.md`: Template for API specs if `env_checker.py` functions were to be formally documented as an API.
+- `MCP_TOOL_SPECIFICATION.md`: Currently N/A, as this module doesn't expose MCP tools.
+- `requirements.txt`: For any Python dependencies *specific* to `env_checker.py` that are not in the root `requirements.txt` (currently, none expected).
+- `docs/`: For more detailed documentation, if needed (e.g., `technical_overview.md`).
+- `tests/`: For unit tests for `env_checker.py`.
 
 ### Building & Testing
 
-(Instructions for building and running tests for this module.)
+- **Building**: This module consists of Python scripts and does not require a separate build step.
+- **Testing**: Unit tests for `env_checker.py` should be developed in the `environment_setup/tests/` directory.
+    - Tests would involve mocking `sys.exit`, `os.path.exists`, `importlib` (for import checks), and `builtins.print` to verify correct behavior and output under various conditions (e.g., dependencies missing, `.env` file present/absent).
+    - Example test execution (using `pytest` from the project root):
+      ```bash
+      pytest environment_setup/tests/
+      ```
+    Refer to `environment_setup/tests/README.md` for specific testing instructions for this module.
 
 ## Further Information
 
-- [API Specification](API_SPECIFICATION.md)
-- [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) (If this module exposes tools via MCP)
-- [Usage Examples](USAGE_EXAMPLES.md)
+- [API Specification](./API_SPECIFICATION.md)
+- [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md)
+- [Usage Examples](./USAGE_EXAMPLES.md)
 - [Detailed Documentation](./docs/index.md)
-- [Changelog](CHANGELOG.md)
-- [Security Policy](SECURITY.md) 
+- [Changelog](./CHANGELOG.md)
+- [Security Policy](./SECURITY.md) 

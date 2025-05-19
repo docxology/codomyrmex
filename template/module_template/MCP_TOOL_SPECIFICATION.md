@@ -1,135 +1,101 @@
-# [Module Name] - MCP Tool Specification
+# [Module Name] - MCP Tool Specification Template
 
-This document outlines the specification for tools within the [Module Name] module that are intended to be integrated with the Model Context Protocol (MCP).
+This document serves as a template for defining tools within the `[Module Name]` module that are intended to be integrated with the Model Context Protocol (MCP).
 
-## Tool: `[Tool Name]`
+**Instructions for Use:**
+1.  Replace `[Module Name]` in the title above and throughout this document with the actual name of your module.
+2.  For each tool you define, copy the "Tool: `[YourToolName]`" section.
+3.  Replace all bracketed placeholders (e.g., `[YourToolName]`, `[Brief description...]`, `[ParameterName]`, `[DataType]`, etc.) with specific details for your tool.
+4.  Provide concrete examples for Input/Output schemas and MCP usage.
+5.  If a section (like Idempotency or specific Security Considerations beyond general file path validation) is not applicable, clearly state "N/A" or provide a relevant explanation.
+6.  Refer to the `model_context_protocol` module's documentation for overarching MCP guidelines and schema definitions.
+
+## General Considerations for [Module Name] Tools
+
+- **Dependencies**: Clearly list any other Codomyrmex modules or significant external libraries required by the tools in this module. (e.g., "All tools require the `logging_monitoring` module. Ensure `setup_logging()` is called.")
+- **Initialization**: Specify any module-level initialization required before tools can be invoked.
+- **Error Handling**: Describe the general error handling strategy for tools in this module (e.g., "Errors are logged using `logging_monitoring`. Tools return an `{'error': 'description'}` object on failure.").
+- **Security**: Outline any module-wide security considerations. Specific tool security notes can be added to each tool's section.
+
+---
+
+## Tool: `[YourToolName]`
 
 ### 1. Tool Purpose and Description
 
-(Provide a clear, concise description of what the tool does and its primary use case within the context of an LLM or AI agent.)
+[Brief description of what the tool does, its primary function, and its intended use case within the MCP framework.]
 
 ### 2. Invocation Name
 
-(The unique name used to call this tool via the MCP.)
-
-`unique_tool_invocation_name`
+`[your_tool_invocation_name]`
+(This should be a unique, descriptive name, typically in snake_case, used to call the tool via MCP.)
 
 ### 3. Input Schema (Parameters)
 
-(Define the expected input parameters for the tool. Use a structured format, e.g., JSON Schema or a clear table.)
+Describe the expected input parameters for the tool. Use a table format.
 
-**Format:** Table or JSON Schema
+| Parameter Name   | Type        | Required | Description                                      | Example Value      |
+| :-------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
+| `[Parameter1Name]` | `[DataType]` | Yes/No   | `[Description of parameter1]`                  | `[ExampleValue1]`  |
+| `[Parameter2Name]` | `[DataType]` | Yes/No   | `[Description of parameter2 (e.g., optional, with default value X)]` | `[ExampleValue2]`  |
+| `output_path`   | `string`    | No       | `[Commonly, if the tool generates a file: File path to save the output. If None/not provided, behavior should be defined (e.g., not saved, returned directly).]` | `"./output/[module_name]/[tool_name]/result.txt"`  |
+| `...`           | `...`       | ...      | `...`                                            | `...`              |
 
-| Parameter Name | Type        | Required | Description                                      | Example Value      |
-| :------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
-| `param1`       | `string`    | Yes      | Description of the first parameter.              | `"example_value"`  |
-| `param2`       | `integer`   | No       | Description of the second parameter. Default: `0`. | `42`               |
-| `param3`       | `boolean`   | Yes      | Description of the third parameter.              | `true`             |
-| `param4`       | `array[string]` | No   | Description of an array parameter.               | `["a", "b", "c"]`  |
-| `param5`       | `object`    | No       | Description of an object parameter.              | `{"key": "value"}` |
-
-**JSON Schema Example (Alternative):**
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "param1": {
-      "type": "string",
-      "description": "Description of the first parameter."
-    },
-    "param2": {
-      "type": "integer",
-      "description": "Description of the second parameter.",
-      "default": 0
-    },
-    // ... more parameters
-  },
-  "required": ["param1", "param3"]
-}
-```
+**Notes on Input Schema:**
+- Specify data types clearly (e.g., `string`, `integer`, `float`, `boolean`, `array[string]`, `object`, `enum["val1", "val2"]`).
+- For complex objects, you might reference a JSON schema definition or detail the object structure.
 
 ### 4. Output Schema (Return Value)
 
-(Define the structure of the data returned by the tool upon successful execution.)
+Describe the structure of the data returned by the tool upon successful execution.
 
-**Format:** Table or JSON Schema
+| Field Name      | Type        | Description                                                                   | Example Value      |
+| :-------------- | :---------- | :---------------------------------------------------------------------------- | :----------------- |
+| `[ResultField1]`| `[DataType]`| `[Description of the result field]`                                           | `[ExampleResult1]` |
+| `[ResultField2]`| `[DataType]`| `[Description of another result field]`                                       | `[ExampleResult2]` |
+| `output_path`   | `string`    | `[If applicable: The path where the output file was saved. Null if not saved.]` | `"./output/[module_name]/[tool_name]/result.txt"` |
+| `status`        | `string`    | `[e.g., "success", "completed_with_warnings"]`                                | `"success"`        |
 
-| Field Name | Type     | Description                                  | Example Value     |
-| :--------- | :------- | :------------------------------------------- | :---------------- |
-| `result`   | `string` | The primary result of the tool execution.    | `"Success!"`      |
-| `details`  | `object` | Additional details or structured output.     | `{"info": "..."}` |
-
-**JSON Schema Example (Alternative):**
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "result": {
-      "type": "string",
-      "description": "The primary result of the tool execution."
-    },
-    "details": {
-      "type": "object",
-      "description": "Additional details or structured output."
-      // Define nested properties if necessary
-    }
-  },
-  "required": ["result"]
-}
-```
+**Notes on Output Schema:**
+- Clearly define what constitutes a successful output.
+- If the tool primarily has side effects (e.g., saving a file, modifying system state) and doesn't return substantial data, reflect that (e.g., `{"status": "success", "message": "Operation completed."}`).
 
 ### 5. Error Handling
 
-(Describe how errors are reported. What kind of error messages or codes can be expected?)
-
-- **Error Code `[CODE_1]`**: Description of this error condition.
-- **Error Code `[CODE_2]`**: Description of another error condition.
-- General error message format: `{"error": "description_of_error", "code": "ERROR_CODE"}`
+- **Specific Errors**: Detail any specific error conditions or codes the tool might return, beyond general module errors.
+    - `[ErrorCode1]`: `[Description of error and when it occurs]`
+    - `[ErrorCode2]`: `[Description of error and when it occurs]`
+- **Return Format on Error**: Reiterate or specify the error object format (e.g., `{"error": "Specific error message related to [YourToolName]", "details": {...}}`).
 
 ### 6. Idempotency
 
-(Specify if the tool is idempotent. If not, explain any side effects of multiple identical calls.)
-
-- Idempotent: (Yes/No)
-- Side Effects: (Describe if not idempotent)
+- **Idempotent**: Yes/No/Partially
+- **Explanation**: `[Explain why the tool is or isn't idempotent. If not fully idempotent, describe the conditions under which repeated calls might have different effects (e.g., if it modifies state or relies on external non-idempotent services).]`
+    - Example (Idempotent): "Yes. Calling the tool multiple times with the same input parameters will produce the same output file (if `output_path` is specified) or return the same result without further side effects."
+    - Example (Not Idempotent): "No. Each call creates a new unique resource."
 
 ### 7. Usage Examples (for MCP context)
 
-(Provide examples of how an LLM might formulate a call to this tool.)
-
-**Example 1: Basic Call**
+Provide one or more examples of how this tool would be invoked within an MCP message. Use JSON format.
 
 ```json
 {
-  "tool_name": "unique_tool_invocation_name",
+  "tool_name": "[your_tool_invocation_name]",
   "arguments": {
-    "param1": "some input",
-    "param3": false
-  }
-}
-```
-
-**Example 2: With Optional Parameters**
-
-```json
-{
-  "tool_name": "unique_tool_invocation_name",
-  "arguments": {
-    "param1": "another input",
-    "param2": 100,
-    "param3": true
+    "[Parameter1Name]": "[ExampleValue1]",
+    "[Parameter2Name]": "[ExampleValue2]"
+    // Add other necessary arguments for a comprehensive example
   }
 }
 ```
 
 ### 8. Security Considerations
 
-(Outline any security implications of using this tool, e.g., access to file system, network requests, data sensitivity.)
+- **Input Validation**: `[Describe any specific input validation performed by the tool beyond basic type checking, especially for strings that might be used in file paths, commands, or queries.]`
+- **Permissions**: `[If the tool interacts with the file system, network, or other system resources, specify any required permissions for the environment executing the tool.]`
+- **Data Handling**: `[Note any sensitive data types handled by the tool and how they are protected (e.g., "User IDs are processed but not logged").]`
+- **Output Sanitization**: `[If the tool's output could be displayed in a sensitive context, mention any sanitization performed.]`
+- **File Paths**: (If `output_path` or similar is used) "Ensure that any user-supplied file paths are rigorously validated and restricted to designated writable directories to prevent unauthorized file access, overwrites, or path traversal vulnerabilities. The application running the MCP tool server must operate with appropriate, least-privilege file system permissions."
 
 ---
-
-## Tool: `[Another Tool Name]`
-
-(Repeat the above structure for each tool provided by this module that interfaces with MCP.) 
+<!-- Add more tool specifications below by copying the "Tool: `[YourToolName]`" section. --> 

@@ -31,12 +31,11 @@
 #   }
 # }
 
-# Add your module-specific dependencies below, following the appropriate format for your chosen language/tooling.
-
-# If this module is Python-based and all its dependencies are already covered by the
-# project's root requirements.txt, please note that here explicitly.
-# e.g.:
-# # This module currently uses dependencies from the root requirements.txt file.
+# This module currently uses dependencies from the root requirements.txt file.
+# If this module develops specific Python dependencies not included globally,
+# they should be listed here.
+# Example:
+# specific-build-tool-api==0.5.0
 
 # [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
 # [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1 
