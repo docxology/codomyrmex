@@ -61,7 +61,7 @@ This module is a core part of the Codomyrmex project. No separate installation i
 
 1.  **Clone the Repository**: If not already done:
     ```bash
-    git clone https://github.com/your-org/codomyrmex.git
+    git clone https://github.com/codomyrmex-project-org/codomyrmex.git
     cd codomyrmex
     ```
 2.  **Set up Environment**: Follow instructions in `environment_setup/README.md`.

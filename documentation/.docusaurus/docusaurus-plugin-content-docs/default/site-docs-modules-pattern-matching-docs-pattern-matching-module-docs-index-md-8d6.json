@@ -1,0 +1,27 @@
+{
+  "id": "modules/pattern_matching/docs/pattern-matching-module-docs-index",
+  "title": "Pattern Matching - Detailed Documentation",
+  "description": "Welcome to the detailed documentation for the Pattern Matching module.",
+  "source": "@site/docs/modules/pattern_matching/docs/pattern-matching-module-docs-index.md",
+  "sourceDirName": "modules/pattern_matching/docs",
+  "slug": "/modules/pattern_matching/docs/pattern-matching-module-docs-index",
+  "permalink": "/codomyrmex/modules/pattern_matching/docs/pattern-matching-module-docs-index",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex/tree/main/docs/modules/pattern_matching/docs/pattern-matching-module-docs-index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Detailed Documentation",
+    "title": "Pattern Matching - Detailed Documentation"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security",
+    "permalink": "/codomyrmex/modules/pattern_matching/pattern-matching-security"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/pattern_matching/docs/pattern-matching-technical-overview"
+  }
+}

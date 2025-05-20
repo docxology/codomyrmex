@@ -17,6 +17,12 @@ This document provides a detailed technical overview of the Static Analysis modu
 - **Data Flow**: (How does data move through the module?)
 - **Core Algorithms/Logic**: (Explain any complex algorithms or business logic central to the module.)
 - **External Dependencies**: (List specific libraries or services it relies on and why.)
+    - Pylint: For linting Python code.
+    - Flake8: For style checking and linting Python code.
+    - Bandit: For security analysis of Python code.
+    - Radon: For code complexity metrics.
+    - Lizard: For cyclomatic complexity analysis.
+    - Pyrefly: For static type checking of Python code.
 
 ```mermaid
 flowchart TD

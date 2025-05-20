@@ -1,0 +1,31 @@
+{
+  "name": "codomyrmex",
+  "version": "0.1.0",
+  "description": "Codomyrmex - AI-powered code analysis and automation toolkit",
+  "private": true,
+  "scripts": {
+    "serve": "cd documentation && npm run serve",
+    "start": "cd documentation && npm run start",
+    "build": "cd documentation && npm run build",
+    "test": "echo \"Error: please use module-specific tests\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codomyrmex-project-org/codomyrmex.git"
+  },
+  "keywords": [
+    "code-analysis",
+    "ai",
+    "llm",
+    "developer-tools"
+  ],
+  "author": "Codomyrmex Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codomyrmex-project-org/codomyrmex/issues"
+  },
+  "homepage": "https://github.com/codomyrmex-project-org/codomyrmex#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

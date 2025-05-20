@@ -1,62 +1,109 @@
-# Ai Code Editing - API Specification
+# AI Code Editing - API Specification
 
 ## Introduction
 
-<!-- TODO: Briefly describe the purpose of this API and how it facilitates interaction with the Ai Code Editing module. What are the main use cases? -->
+This API specification documents the programmatic interfaces for the AI Code Editing module of Codomyrmex. The module provides tools to generate and refactor code using LLM-powered assistants through a set of Python functions that can be imported and used directly in applications or scripts.
 
-## Endpoints / Functions / Interfaces
+## Functions
 
-<!-- TODO: Detail each API endpoint, function, or interface provided by this module. Use a consistent format. Replace example_function() with actual specifications. -->
+### Function: `generate_code_snippet()`
 
-### Endpoint/Function 1: `example_function()`
-
-- **Description**: <!-- TODO: What this function does. -->
-- **Method**: <!-- TODO: e.g., GET, POST, or N/A for library functions -->
-- **Path**: <!-- TODO: e.g., /api/module/resource or N/A -->
+- **Description**: Generates code based on a natural language prompt and optional context.
+- **Method**: N/A (Python function)
+- **Path**: N/A
 - **Parameters/Arguments**:
-    - `param1` (type): <!-- TODO: Description of parameter. -->
-    - `param2` (type, optional): <!-- TODO: Description of parameter. Default: value. -->
-- **Request Body** (if applicable):
-    ```json
-    {
-      "key": "value" <!-- TODO: Define actual request body structure -->
-    }
-    ```
+    - `prompt` (string): Natural language description of the code to be generated.
+    - `language` (string): Target programming language (e.g., "python", "javascript").
+    - `context_code` (string, optional): Existing code snippet to provide context for generation.
+    - `llm_provider` (string, optional): LLM provider to use (e.g., "openai", "anthropic"). Default: "openai".
+    - `model_name` (string, optional): Specific model from the provider. If omitted, a default model is used.
 - **Returns/Response**:
-    - **Success (e.g., 200 OK)**:
-        ```json
+    - **Success**:
+        ```python
         {
-          "data": "result" <!-- TODO: Define actual success response structure -->
+          "status": "success",
+          "generated_code": "def max_value(numbers):\n    return max(numbers)",
+          "error_message": None
         }
         ```
-    - **Error (e.g., 4xx/5xx)**:
-        ```json
+    - **Failure**:
+        ```python
         {
-          "error": "description" <!-- TODO: Define actual error response structure and common error codes -->
+          "status": "failure",
+          "generated_code": None,
+          "error_message": "LLM API request failed: Rate limit exceeded"
         }
         ```
-- **Events Emitted** (if applicable):
-    - `event_name`: <!-- TODO: Description of event and its payload. -->
 
-### Endpoint/Function 2: ... <!-- TODO: Add more endpoints/functions as needed -->
+### Function: `refactor_code_snippet()`
+
+- **Description**: Refactors existing code according to natural language instructions.
+- **Method**: N/A (Python function)
+- **Path**: N/A
+- **Parameters/Arguments**:
+    - `code_snippet` (string): The existing code to be refactored.
+    - `refactoring_instruction` (string): Natural language instruction describing the desired refactoring.
+    - `language` (string): The programming language of the code snippet.
+    - `llm_provider` (string, optional): LLM provider to use. Default: "openai".
+    - `model_name` (string, optional): Specific model to use. If omitted, a default model is used.
+- **Returns/Response**:
+    - **Success**:
+        ```python
+        {
+          "status": "success",
+          "refactored_code": "def max_value(numbers: list) -> int:\n    if not numbers:\n        raise ValueError(\"List cannot be empty\")\n    return max(numbers)",
+          "explanation": "Added type hints and error handling for empty lists",
+          "error_message": None
+        }
+        ```
+    - **No Change**:
+        ```python
+        {
+          "status": "no_change_needed",
+          "refactored_code": "def max_value(numbers): ...",
+          "explanation": "The code is already optimal for the given requirements",
+          "error_message": None
+        }
+        ```
+    - **Failure**:
+        ```python
+        {
+          "status": "failure",
+          "refactored_code": None,
+          "explanation": None,
+          "error_message": "LLM could not understand the refactoring instruction"
+        }
+        ```
+
+### Helper Function: `get_llm_client()`
+
+- **Description**: Helper function to initialize and return an LLM client.
+- **Method**: N/A (Internal Python function)
+- **Path**: N/A
+- **Parameters/Arguments**:
+    - `provider` (string): The LLM provider to use.
+    - `model_name` (string, optional): Specific model to use. If omitted, a default model is used.
+- **Returns/Response**: Tuple of (client, model_name)
+- **Exceptions**:
+    - `ImportError`: If the required client library is not installed.
+    - `ValueError`: If the provider is not supported or configuration is invalid.
 
 ## Data Models
 
-<!-- TODO: Define any common data structures or models used by the API. -->
-
-### Model: `ExampleModel`
-- `field1` (type): <!-- TODO: Description of field1. -->
-- `field2` (type): <!-- TODO: Description of field2. -->
-<!-- TODO: Add more models as needed -->
+No explicit data models are defined for this module beyond the dictionary structures returned by the functions.
 
 ## Authentication & Authorization
 
-<!-- TODO: Describe how API access is secured, if applicable. E.g., API keys, OAuth tokens, etc. -->
+This module requires appropriate API keys to be set in environment variables:
+- `OPENAI_API_KEY`: For OpenAI services
+- `ANTHROPIC_API_KEY`: For Anthropic services
+
+The module uses the environment_setup module to verify and load these environment variables.
 
 ## Rate Limiting
 
-<!-- TODO: Specify any rate limits imposed on API usage (e.g., requests per second/minute/day). -->
+Rate limiting is handled by the underlying LLM providers. The module itself does not implement additional rate limiting but will return appropriate error messages if rate limits are encountered.
 
 ## Versioning
 
-<!-- TODO: Explain the API versioning strategy (e.g., URI path versioning /v1/, header versioning). --> 
+This API follows semantic versioning. Breaking changes to the function signatures or return values will result in a major version update, while backward-compatible enhancements will result in minor version updates. 

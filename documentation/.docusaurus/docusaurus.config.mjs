@@ -7,9 +7,9 @@ export default {
   "title": "Codomyrmex Documentation",
   "tagline": "Modular, Extensible Coding Workspace",
   "favicon": "img/favicon.ico",
-  "url": "https://your-codomyrmex-docs-url.com",
+  "url": "https://YOUR_DOCS_URL.com",
   "baseUrl": "/codomyrmex/",
-  "organizationName": "your-github-org",
+  "organizationName": "YOUR_GITHUB_ORG_OR_USER",
   "projectName": "codomyrmex",
   "onBrokenLinks": "throw",
   "onBrokenMarkdownLinks": "warn",
@@ -27,7 +27,7 @@ export default {
       {
         "docs": {
           "sidebarPath": "./sidebars.js",
-          "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/",
+          "editUrl": "https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex/tree/main/",
           "routeBasePath": "/"
         },
         "blog": false,
@@ -53,7 +53,7 @@ export default {
           "label": "Documentation"
         },
         {
-          "href": "https://github.com/your-github-org/codomyrmex",
+          "href": "https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex",
           "label": "GitHub",
           "position": "right"
         }
@@ -81,12 +81,12 @@ export default {
           "items": [
             {
               "label": "GitHub",
-              "href": "https://github.com/your-github-org/codomyrmex"
+              "href": "https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex"
             }
           ]
         }
       ],
-      "copyright": "Copyright © 2025 Codomyrmex. Built with Docusaurus."
+      "copyright": "Copyright © 2025 Codomyrmex Project. Built with Docusaurus."
     },
     "prism": {
       "theme": {

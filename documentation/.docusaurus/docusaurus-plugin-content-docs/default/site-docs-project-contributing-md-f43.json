@@ -8,7 +8,7 @@
   "permalink": "/codomyrmex/project/contributing",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/your-github-org/codomyrmex/tree/main/docs/project/contributing.md",
+  "editUrl": "https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex/tree/main/docs/project/contributing.md",
   "tags": [],
   "version": "current",
   "frontMatter": {
@@ -19,7 +19,7 @@
   "sidebar": "tutorialSidebar",
   "previous": {
     "title": "Welcome to Codomyrmex Documentation",
-    "permalink": "/codomyrmex/"
+    "permalink": "/codomyrmex/intro"
   },
   "next": {
     "title": "Code of Conduct",

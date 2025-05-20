@@ -57,7 +57,7 @@ def check_and_setup_env_vars(repo_root_path: str):
         print(f"[WARN] .env file not found at '{env_file_path}'.")
         print("[INSTRUCTION] To use LLM-dependent features (like code summarization and advanced docstring indexing), API keys are recommended.")
         print("[INSTRUCTION] Please create a '.env' file in the root of your repository ('{repo_root_path}') with the following format:")
-        print("------------- .env file example ------------- SCRIPT_DIR_CONSTANT ")
+        print("------------- .env file example ------------- ")
         print("OPENAI_API_KEY=\"your_openai_api_key_here\"")
         print("ANTHROPIC_API_KEY=\"your_anthropic_api_key_here\"")
         print("GOOGLE_API_KEY=\"your_google_api_key_here\"")

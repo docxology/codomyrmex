@@ -34,7 +34,12 @@ This security policy applies only to the `Environment Setup` module within the C
 ## Best Practices for Using This Module
 
 - Always use the latest stable version of the module.
-- Follow the principle of least privilege when configuring access or permissions related to this module.
-- Regularly review configurations and logs for suspicious activity.
+- **Secure API Key Management**: 
+    - When creating the `.env` file as guided by this module (e.g., by `env_checker.py`), ensure it is stored securely and **never commit it to version control** (e.g., Git).
+    - The project's root `.gitignore` should already list `.env`, but always double-check.
+    - Grant API keys the minimum necessary permissions required for their intended use.
+    - Regularly review and rotate API keys if supported by the provider, or if a compromise is suspected.
+- Follow the principle of least privilege when configuring access or permissions related to any scripts or tools from this module, though they primarily perform local checks.
+- Regularly review configurations and any logs (if `env_checker.py` were to produce them) for suspicious activity.
 
 Thank you for helping keep Codomyrmex and the Environment Setup module secure. 

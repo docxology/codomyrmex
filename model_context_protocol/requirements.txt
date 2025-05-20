@@ -55,4 +55,13 @@ jsonschema==4.23.0
 # If all other dependencies are covered by the root requirements.txt, this can be stated.
 # Currently, aside from potential schema tools like jsonschema, other dependencies are
 # expected to be covered by the root requirements.txt or not applicable if the protocol
-# itself is language-agnostic and implemented by other modules. 
+# itself is language-agnostic and implemented by other modules.
+
+# This module uses dependencies from the root requirements.txt file, including:
+# - jsonschema==4.23.0
+# - python-dotenv>=1.0.0
+
+# If this module requires additional dependencies not in the root requirements.txt,
+# they should be listed here.
+
+# No additional dependencies currently required 

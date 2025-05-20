@@ -24,7 +24,7 @@ Runs specified static analysis tools (e.g., linters, security scanners, complexi
 | Parameter Name   | Type          | Required | Description                                                                                                | Example Value                                  |
 | :--------------- | :------------ | :------- | :--------------------------------------------------------------------------------------------------------- | :--------------------------------------------- |
 | `target_paths`   | `array[string]`| Yes      | List of file or directory paths to analyze relative to the project root.                                     | `["src/my_module/", "tests/test_file.py"]`     |
-| `tools`          | `array[string]`| No       | Specific tools to run (e.g., "pylint", "flake8", "bandit", "radon", "lizard"). Default: runs a predefined set of primary tools. | `["pylint", "bandit"]`                       |
+| `tools`          | `array[string]`| No       | Specific tools to run (e.g., "pylint", "flake8", "bandit", "radon", "lizard", "pyrefly"). Default: runs a predefined set of primary tools. | `["pylint", "bandit"]`                       |
 | `language`       | `string`      | No       | The primary programming language of the target_paths, to help select appropriate tools or configurations. (e.g., "python", "javascript") | `"python"`                                     |
 | `config_file`    | `string`      | No       | Path to a custom configuration file for the analysis tools (format depends on tools being run).          | `"./.custom_pylintrc"`                         |
 | `options`        | `object`      | No       | Additional tool-specific options. Structure depends on tools. (e.g. `{"pylint": {"disable": "C0114"}}`) | `{"pylint": {"jobs": "2"}}`                 |
@@ -81,7 +81,7 @@ Runs specified static analysis tools (e.g., linters, security scanners, complexi
   "tool_name": "run_static_analysis",
   "arguments": {
     "target_paths": ["src/module_a/file.py"],
-    "tools": ["pylint", "bandit"],
+    "tools": ["pylint", "bandit", "pyrefly"],
     "language": "python"
   }
 }
@@ -91,7 +91,7 @@ Expected output (example):
 ```json
 {
   "status": "completed_with_issues",
-  "summary": "Pylint found 3 issues. Bandit found 1 high severity issue.",
+  "summary": "Pylint found 3 issues. Bandit found 1 high severity issue. Pyrefly found 2 type errors.",
   "tool_results": [
     {
       "tool_name": "pylint",
@@ -108,6 +108,14 @@ Expected output (example):
         {"file_path": "src/module_a/file.py", "line_number": 25, "code": "B101", "message": "Use of assert detected."}
       ],
       "report_path": "./output/static_analysis/bandit_report_datetime.json"
+    },
+    {
+      "tool_name": "pyrefly",
+      "issue_count": 2,
+      "issues": [
+        {"file_path": "src/module_a/file.py", "line_number": 15, "code": "type-error", "message": "Incompatible type for 'my_var'"}
+      ],
+      "report_path": "./output/static_analysis/pyrefly_report_datetime.txt"
     }
   ],
   "error_message": null
@@ -118,7 +126,7 @@ Expected output (example):
 
 - **Input Validation**: `target_paths` must be validated to ensure they are within the project directory and do not represent attempts at path traversal. `language` and `tools` must be from an allow-list.
 - **Tool Execution**: Static analysis tools themselves can sometimes have vulnerabilities or be resource-intensive. Running them should be done with appropriate user permissions and potentially resource limits if analyzing very large or complex codebases.
-- **Configuration Files**: If `config_file` is accepted, its path and content should be validated. Malicious configuration files could potentially alter tool behavior undesirably.
+- **Configuration Files**: If `config_file` is accepted, its path and content should be validated. Malicious configuration files could potentially alter tool behavior undesirably. Pyrefly uses `pyrefly.toml` or `pyproject.toml` which should be managed by the user.
 - **Output Handling**: Reports from tools might contain snippets of source code. Ensure these are handled appropriately if displayed or stored, respecting data privacy if the code is sensitive.
 
 ---

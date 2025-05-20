@@ -1,44 +1,84 @@
-# Testing Build Synthesis
+# Build Synthesis - Test Suite
 
-This document describes how to run tests for the Build Synthesis module.
+This directory contains the test suite for the Build Synthesis module of the Codomyrmex project.
 
-## Prerequisites
+## Test Organization
 
-(List any specific prerequisites or setup required to run the tests for this module, e.g., specific SDKs, environment variables, database setup.)
+The tests are organized into two main categories:
 
-- Prerequisite 1: ...
-- Prerequisite 2: ...
+- **Unit Tests**: Located in `unit/`. These tests focus on testing individual functions or classes in isolation, such as template processing logic or build script parsing, with dependencies mocked.
+- **Integration Tests**: Located in `integration/`. These tests verify the interaction between different components or with actual build tools on small, controlled examples. For example, testing the `trigger_build` MCP tool with a mock project structure.
 
 ## Running Tests
 
-(Provide clear instructions on how to execute the tests. This might involve specific commands, scripts, or IDE configurations.)
+### Prerequisites
+
+- Python 3.8 or higher
+- All development dependencies installed:
+  ```bash
+  # Ensure you are in the project root directory
+  pip install -r build_synthesis/requirements.txt
+  pip install -r requirements.txt  # Root project requirements
+  pip install pytest pytest-mock  # Test dependencies
+  ```
+- Any build tools that the module itself might invoke (e.g., `make`, `docker`, Python's `build` module) should be available in the system PATH if tests rely on them.
+
+### Running Unit Tests
+
+From the project root:
+
+```bash
+# Run all unit tests for build_synthesis
+pytest build_synthesis/tests/unit/
+
+# Run a specific test file (replace with actual file name)
+# pytest build_synthesis/tests/unit/test_orchestrator.py
+
+# Run a specific test class (replace with actual names)
+# pytest build_synthesis/tests/unit/test_orchestrator.py::TestBuildOrchestrator
+
+# Run a specific test (replace with actual names)
+# pytest build_synthesis/tests/unit/test_orchestrator.py::TestBuildOrchestrator::test_some_specific_logic
+```
+
+### Running Integration Tests
+
+**Note**: Integration tests might perform actual build operations on mock projects or synthesize code structures, which could create temporary files or directories. These should be cleaned up by the tests.
+
+```bash
+# Run all integration tests for build_synthesis
+pytest build_synthesis/tests/integration/
+
+# Example: Run a specific integration test for triggering a build
+# pytest build_synthesis/tests/integration/test_trigger_build_integration.py
+```
+
+## Writing New Tests
 
 ### Unit Tests
 
-```bash
-# Example command to run unit tests
-pytest path/to/module/tests/unit
-# or
-# npm run test:unit
-```
+- Each core piece of logic (e.g., functions for parsing build files, generating parts of a synthesized module, utility functions) should have corresponding unit tests.
+- Use `unittest.mock` to mock external system calls (e.g., `subprocess.run` if calling build tools directly) or dependencies on other Codomyrmex modules.
+- Test for various inputs, including edge cases and expected failure conditions.
 
 ### Integration Tests
 
+- Integration tests should verify the end-to-end flow of MCP tools like `trigger_build` and `synthesize_code_component`.
+- For `trigger_build`, set up a minimal, mock project structure (e.g., in a temporary directory) with a simple build script (e.g., a Makefile or `pyproject.toml`) and verify that the build is invoked and expected artifacts are (notionally) produced or logs indicate success.
+- For `synthesize_code_component`, provide a specification and verify that the generated directory structure and key files match expectations based on `template/module_template/`.
+- Ensure tests clean up any files or directories they create.
+
+## Test Coverage
+
+To generate a coverage report (ensure `pytest-cov` is installed):
+
 ```bash
-# Example command to run integration tests
-pytest path/to/module/tests/integration
-# or
-# npm run test:integration
+# Run tests with coverage for the build_synthesis module
+pytest --cov=build_synthesis build_synthesis/tests/
+
+# Generate an HTML report (output will be in an htmlcov/ directory)
+pytest --cov=build_synthesis --cov-report=html build_synthesis/tests/
 ```
-
-### End-to-End (E2E) Tests
-
-```bash
-# Example command to run E2E tests
-# ./scripts/run-e2e-tests.sh
-```
-
-(Adjust the commands and sections above based on the testing frameworks and types of tests relevant to the module.)
 
 ## Test Structure
 

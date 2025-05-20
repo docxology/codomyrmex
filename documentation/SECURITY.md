@@ -33,8 +33,13 @@ This security policy applies only to the `Documentation` module within the Codom
 
 ## Best Practices for Using This Module
 
-- Always use the latest stable version of the module.
-- Follow the principle of least privilege when configuring access or permissions related to this module.
-- Regularly review configurations and logs for suspicious activity.
+- Always use the latest stable version of the module and its dependencies (including Docusaurus and Node.js packages).
+- Follow the principle of least privilege when configuring access or permissions related to this module (e.g., file system permissions for the build process or server).
+- Regularly review configurations and logs for suspicious activity, especially if the documentation site is publicly hosted.
+- <!-- TODO: Consider adding any Docusaurus-specific security best practices. For example:
+  - Be cautious when adding custom scripts or third-party plugins to Docusaurus; ensure they are from trusted sources.
+  - If the documentation site processes or displays any form of user input (not typical for static sites, but possible with customizations), ensure it is properly sanitized to prevent XSS attacks.
+  - Keep Node.js and npm/yarn updated to patch known vulnerabilities in the build toolchain.
+-->
 
 Thank you for helping keep Codomyrmex and the Documentation module secure. 

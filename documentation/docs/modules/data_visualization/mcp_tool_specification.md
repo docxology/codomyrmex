@@ -387,8 +387,4 @@ Generates a pie chart to show proportions of categories.
 
 - Path validation for `output_path`.
 
----
-<!-- End of tool specifications for Data Visualization -->
-
-
-</rewritten_file> 
+<!-- End of tool specifications for Data Visualization --> 

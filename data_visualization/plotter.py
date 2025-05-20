@@ -105,41 +105,54 @@ def create_heatmap(
 # Ensure logging is set up if running this file directly for testing
 # For project-wide use, setup_logging() from logging_monitoring should be called by the main application.
 
-# Test Data
-x_simple = [1, 2, 3, 4, 5]
-y_simple = [2, 3, 5, 7, 6]
-y_multiple = [[1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [2, 2, 2, 2, 2]]
-line_labels_multiple = ['Ascending', 'Descending', 'Constant']
-categories_simple = ['A', 'B', 'C', 'D', 'E']
-values_simple = [10, 24, 15, 30, 22]
-histogram_data_simple = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5]
+if __name__ == "__main__":
+    # Configure basic logging if running standalone for testing
+    # This is a simplified setup; for proper project logging,
+    # the main application should call logging_monitoring.setup_logging().
+    if not logger.hasHandlers() or all(isinstance(h, logging.NullHandler) for h in logger.handlers):
+        # If the logger (either codomyrmex or fallback) still has no effective handlers, set up a basic one.
+        # This check avoids reconfiguring if the fallback logging.basicConfig already ran or if
+        # a parent logger is already configured.
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        logger.info("Configured basic logging for direct plotter.py execution.")
+    
+    logger.info("Running plotter.py directly for testing purposes...")
 
-# Create a test_outputs directory
-test_output_dir = "test_outputs_data_visualization"
-os.makedirs(test_output_dir, exist_ok=True)
-logger.info(f"Test outputs will be saved in ./{test_output_dir}")
+    # Test Data
+    x_simple = [1, 2, 3, 4, 5]
+    y_simple = [2, 3, 5, 7, 6]
+    y_multiple = [[1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [2, 2, 2, 2, 2]]
+    line_labels_multiple = ['Ascending', 'Descending', 'Constant']
+    categories_simple = ['A', 'B', 'C', 'D', 'E']
+    values_simple = [10, 24, 15, 30, 22]
+    histogram_data_simple = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5]
 
-# Test Bar Chart
-create_bar_chart(categories_simple, values_simple, 
-                 title="Test Vertical Bar Chart", 
-                 output_path=os.path.join(test_output_dir, "bar_chart_vertical.png"))
-create_bar_chart(categories_simple, values_simple, 
-                 title="Test Horizontal Bar Chart", 
-                 horizontal=True, 
-                 output_path=os.path.join(test_output_dir, "bar_chart_horizontal.png"))
+    # Create a test_outputs directory
+    test_output_dir = "test_outputs_data_visualization"
+    os.makedirs(test_output_dir, exist_ok=True)
+    logger.info(f"Test outputs will be saved in ./{test_output_dir}")
 
-# Test Pie Chart
-pie_labels = ['Frogs', 'Hogs', 'Dogs', 'Logs']
-pie_sizes = [15, 30, 45, 10]
-pie_explode = (0, 0.1, 0, 0)  # explode the 2nd slice (Hogs)
-create_pie_chart(pie_labels, pie_sizes, 
-                 title="Test Pie Chart", 
-                 explode=pie_explode,
-                 output_path=os.path.join(test_output_dir, "pie_chart.png"))
+    # Test Bar Chart
+    create_bar_chart(categories_simple, values_simple, 
+                     title="Test Vertical Bar Chart", 
+                     output_path=os.path.join(test_output_dir, "bar_chart_vertical.png"))
+    create_bar_chart(categories_simple, values_simple, 
+                     title="Test Horizontal Bar Chart", 
+                     horizontal=True, 
+                     output_path=os.path.join(test_output_dir, "bar_chart_horizontal.png"))
 
-logger.info(f"Completed direct testing of plotter.py. Check the '{test_output_dir}' directory for output images.")
-# To see plots during testing, you can set show_plot=True, but ensure your environment supports GUI.
-# create_scatter_plot(x_simple, y_simple, title="Test Show Scatter Plot", show_plot=True) 
+    # Test Pie Chart
+    pie_labels = ['Frogs', 'Hogs', 'Dogs', 'Logs']
+    pie_sizes = [15, 30, 45, 10]
+    pie_explode = (0, 0.1, 0, 0)  # explode the 2nd slice (Hogs)
+    create_pie_chart(pie_labels, pie_sizes, 
+                     title="Test Pie Chart", 
+                     explode=pie_explode,
+                     output_path=os.path.join(test_output_dir, "pie_chart.png"))
+
+    logger.info(f"Completed direct testing of plotter.py. Check the '{test_output_dir}' directory for output images.")
+    # To see plots during testing, you can set show_plot=True, but ensure your environment supports GUI.
+    # create_scatter_plot(x_simple, y_simple, title="Test Show Scatter Plot", show_plot=True)
 
 __all__ = [
     'create_line_plot',

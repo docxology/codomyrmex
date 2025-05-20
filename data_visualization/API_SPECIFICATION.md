@@ -127,4 +127,7 @@ Use the `environment_setup` module to check/install dependencies and set up envi
 
 ## Versioning
 
-(This module follows the general versioning strategy of the Codomyrmex project. API stability is aimed for, with changes documented in the `CHANGELOG.md`.) 
+<!-- TODO: Confirm the versioning strategy. Typically, this module will follow the overall project's semantic versioning. 
+Changes to function signatures or significantly altered plot outputs would constitute minor or major version bumps. 
+New plot types would be minor version additions. Bug fixes (e.g., correcting plot rendering issues) would be patch versions. 
+All significant changes should be noted in the module's CHANGELOG.md. --> 

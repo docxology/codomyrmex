@@ -17,7 +17,11 @@
             },
             {
               "id": "index",
-              "path": "/codomyrmex/",
+              "path": "/codomyrmex/"
+            },
+            {
+              "id": "intro",
+              "path": "/codomyrmex/intro",
               "sidebar": "tutorialSidebar"
             },
             {
@@ -471,6 +475,60 @@
               "sidebar": "tutorialSidebar"
             },
             {
+              "id": "modules/pattern_matching/docs/pattern-matching-module-docs-index",
+              "path": "/codomyrmex/modules/pattern_matching/docs/pattern-matching-module-docs-index",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/docs/pattern-matching-technical-overview",
+              "path": "/codomyrmex/modules/pattern_matching/docs/pattern-matching-technical-overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/docs/tutorials/pattern-matching-example-tutorial",
+              "path": "/codomyrmex/modules/pattern_matching/docs/tutorials/pattern-matching-example-tutorial",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index",
+              "path": "/codomyrmex/modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/pattern-matching-api-specification",
+              "path": "/codomyrmex/modules/pattern_matching/pattern-matching-api-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/pattern-matching-changelog",
+              "path": "/codomyrmex/modules/pattern_matching/pattern-matching-changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/pattern-matching-index",
+              "path": "/codomyrmex/modules/pattern_matching",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/pattern-matching-mcp-tool-specification",
+              "path": "/codomyrmex/modules/pattern_matching/pattern-matching-mcp-tool-specification",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/pattern-matching-security",
+              "path": "/codomyrmex/modules/pattern_matching/pattern-matching-security",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "modules/pattern_matching/pattern-matching-tasks",
+              "path": "/codomyrmex/modules/pattern_matching/pattern-matching-tasks"
+            },
+            {
+              "id": "modules/pattern_matching/pattern-matching-usage-examples",
+              "path": "/codomyrmex/modules/pattern_matching/pattern-matching-usage-examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "modules/static_analysis/docs/static-analysis-module-docs-index",
               "path": "/codomyrmex/modules/static_analysis/docs/",
               "sidebar": "tutorialSidebar"
@@ -557,8 +615,8 @@
           "sidebars": {
             "tutorialSidebar": {
               "link": {
-                "path": "/codomyrmex/",
-                "label": "index"
+                "path": "/codomyrmex/intro",
+                "label": "intro"
               }
             }
           }

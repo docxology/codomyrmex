@@ -7,6 +7,7 @@ The Static Analysis module provides tools and integrations for analyzing source 
 ## Key Components
 
 - **Linter Integrations**: Support for or wrappers around common linters (e.g., Pylint, Flake8 for Python; ESLint for JavaScript) to identify code errors, style issues, and potential bugs.
+- **Type Checker Integrations**: Support for advanced type checkers like Pyrefly to enhance type safety and code reliability.
 - **Style Checker Integrations**: Tools for enforcing consistent code style (e.g., Black, Prettier).
 - **Security Scanning Tools**: Integration with static application security testing (SAST) tools (e.g., Bandit for Python) to detect common security vulnerabilities in code.
 - **Code Complexity Analyzers**: Tools to measure cyclomatic complexity, cognitive complexity, or other metrics to identify overly complex code sections.
@@ -44,7 +45,7 @@ To analyze a module, you would typically invoke the `run_static_analysis` tool w
   "tool_name": "run_static_analysis",
   "arguments": {
     "target_paths": ["src/my_module/"],
-    "tools": ["pylint", "bandit"],
+    "tools": ["pylint", "bandit", "pyrefly"],
     "language": "python"
   }
 }
@@ -60,6 +61,7 @@ Refer to [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) and the [MCP Tool Specification]
     - Bandit (Security Scanner)
     - Radon (Complexity Metrics)
     - Lizard (Cyclomatic Complexity)
+    - Pyrefly (Type Checker)
 - Project-wide dependencies as listed in the root `requirements.txt`.
 
 ### Installation
@@ -79,12 +81,12 @@ Configuration for the Static Analysis module primarily involves:
 
 1.  **`run_static_analysis` Tool Parameters**: As detailed in the [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md), you can configure:
     - `target_paths`: The specific files or directories to analyze.
-    - `tools`: An array of tool names (e.g., "pylint", "flake8") to execute. If omitted, a default set of primary tools may run.
+    - `tools`: An array of tool names (e.g., "pylint", "flake8", "pyrefly") to execute. If omitted, a default set of primary tools may run.
     - `language`: To help select appropriate tools or configurations (e.g., "python").
     - `config_file`: Path to a custom, overarching configuration file (if supported by the runner implementation).
     - `options`: Tool-specific options.
 
-2.  **Individual Tool Configurations**: Many of the integrated static analysis tools (like Pylint, Flake8, Bandit) support their own configuration files (e.g., `.pylintrc`, `pyproject.toml`, `.bandit`). These files should be placed in appropriate locations within the project (often the root or module directory) for the tools to discover them. Refer to the documentation of each specific tool for its configuration options and file formats.
+2.  **Individual Tool Configurations**: Many of the integrated static analysis tools (like Pylint, Flake8, Bandit, Pyrefly) support their own configuration files (e.g., `.pylintrc`, `pyproject.toml` for Black/Flake8/Pyrefly, `.bandit`, `pyrefly.toml`). These files should be placed in appropriate locations within the project (often the root or module directory) for the tools to discover them. Refer to the documentation of each specific tool for its configuration options and file formats.
 
 ## Development
 

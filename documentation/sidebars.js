@@ -16,7 +16,7 @@ const sidebars = {
 
   // But we can create a sidebar manually
   tutorialSidebar: [
-    'index',
+    'intro',
     {
       type: 'category',
       label: 'Project Overview',
@@ -24,6 +24,14 @@ const sidebars = {
         'project/contributing',
         'project/code-of-conduct',
         'project/license',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Development',
+      items: [
+        'development/environment-setup',
+        'development/testing-strategy',
       ],
     },
     {
@@ -36,8 +44,13 @@ const sidebars = {
         slug: '/category/modules'
       },
       items: [
-        // This section will be populated later, e.g.:
-        // 'modules/build_synthesis/index',
+        // TODO: For each module and sub-category added below (e.g., 'AI Code Editing', 'Detailed Docs & Tutorials', 'Tutorials'):
+        // 1. Ensure a corresponding markdown file exists for each `link: {type: 'doc', id: '...'}`. 
+        //    For example, for 'modules/ai_code_editing/ai-code-editing-index', a file 
+        //    `docs/modules/ai_code_editing/ai-code-editing-index.md` must be created.
+        // 2. Ensure that all linked documents (e.g., 'modules/ai_code_editing/ai-code-editing-api-specification') 
+        //    exist at the specified path within `docs/modules/` (e.g., by copying/renaming from source module dirs).
+        // 3. The actual content for these index pages needs to be written.
         {
           type: 'category',
           label: 'AI Code Editing',
@@ -284,6 +297,34 @@ const sidebars = {
                   link: {type: 'doc', id: 'modules/logging_monitoring/docs/tutorials/index'},
                   items: [
                     'modules/logging_monitoring/docs/tutorials/example_tutorial',
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Pattern Matching',
+          link: {type: 'doc', id: 'modules/pattern_matching/pattern-matching-index'},
+          items: [
+            'modules/pattern_matching/pattern-matching-api-specification',
+            'modules/pattern_matching/pattern-matching-mcp-tool-specification',
+            'modules/pattern_matching/pattern-matching-usage-examples',
+            'modules/pattern_matching/pattern-matching-changelog',
+            'modules/pattern_matching/pattern-matching-security',
+            {
+              type: 'category',
+              label: 'Detailed Docs & Tutorials',
+              link: {type: 'doc', id: 'modules/pattern_matching/docs/pattern-matching-module-docs-index'},
+              items: [
+                'modules/pattern_matching/docs/pattern-matching-technical-overview',
+                {
+                  type: 'category',
+                  label: 'Tutorials',
+                  link: {type: 'doc', id: 'modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index'},
+                  items: [
+                    'modules/pattern_matching/docs/tutorials/pattern-matching-example-tutorial',
                   ]
                 }
               ]

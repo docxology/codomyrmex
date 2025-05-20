@@ -4,15 +4,15 @@ import ComponentCreator from '@docusaurus/ComponentCreator';
 export default [
   {
     path: '/codomyrmex/',
-    component: ComponentCreator('/codomyrmex/', 'd67'),
+    component: ComponentCreator('/codomyrmex/', '06e'),
     routes: [
       {
         path: '/codomyrmex/',
-        component: ComponentCreator('/codomyrmex/', 'be9'),
+        component: ComponentCreator('/codomyrmex/', '4c4'),
         routes: [
           {
             path: '/codomyrmex/',
-            component: ComponentCreator('/codomyrmex/', 'b93'),
+            component: ComponentCreator('/codomyrmex/', '1c4'),
             routes: [
               {
                 path: '/codomyrmex/category/modules',
@@ -23,6 +23,12 @@ export default [
               {
                 path: '/codomyrmex/development/environment-setup',
                 component: ComponentCreator('/codomyrmex/development/environment-setup', 'b8b'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/intro',
+                component: ComponentCreator('/codomyrmex/intro', '4a2'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
@@ -567,6 +573,71 @@ export default [
                 sidebar: "tutorialSidebar"
               },
               {
+                path: '/codomyrmex/modules/pattern_matching',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching', '925'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/docs/pattern-matching-module-docs-index',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/docs/pattern-matching-module-docs-index', '7e0'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/docs/pattern-matching-technical-overview',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/docs/pattern-matching-technical-overview', 'c68'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/docs/tutorials/pattern-matching-example-tutorial',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/docs/tutorials/pattern-matching-example-tutorial', '820'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index', '238'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/pattern-matching-api-specification',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/pattern-matching-api-specification', '02b'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/pattern-matching-changelog',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/pattern-matching-changelog', 'ace'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/pattern-matching-mcp-tool-specification',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/pattern-matching-mcp-tool-specification', '564'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/pattern-matching-security',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/pattern-matching-security', '29b'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/pattern-matching-tasks',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/pattern-matching-tasks', '338'),
+                exact: true
+              },
+              {
+                path: '/codomyrmex/modules/pattern_matching/pattern-matching-usage-examples',
+                component: ComponentCreator('/codomyrmex/modules/pattern_matching/pattern-matching-usage-examples', '359'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
                 path: '/codomyrmex/modules/static_analysis/',
                 component: ComponentCreator('/codomyrmex/modules/static_analysis/', 'aec'),
                 exact: true,
@@ -661,9 +732,8 @@ export default [
               },
               {
                 path: '/codomyrmex/',
-                component: ComponentCreator('/codomyrmex/', '3cb'),
-                exact: true,
-                sidebar: "tutorialSidebar"
+                component: ComponentCreator('/codomyrmex/', '038'),
+                exact: true
               }
             ]
           }

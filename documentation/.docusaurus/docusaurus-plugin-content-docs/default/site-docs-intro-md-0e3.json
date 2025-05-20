@@ -1,0 +1,20 @@
+{
+  "id": "intro",
+  "title": "Welcome to Codomyrmex Documentation",
+  "description": "This is the central documentation hub for the Codomyrmex project.",
+  "source": "@site/docs/intro.md",
+  "sourceDirName": ".",
+  "slug": "/intro",
+  "permalink": "/codomyrmex/intro",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex/tree/main/docs/intro.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "next": {
+    "title": "Contributing",
+    "permalink": "/codomyrmex/project/contributing"
+  }
+}

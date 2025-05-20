@@ -2,60 +2,52 @@
 
 ## Introduction
 
-(Briefly describe the purpose of this API and how it facilitates interaction with the module.)
+This document specifies the Application Programming Interface (API) for the `environment_setup` module. The API consists of Python functions that can be imported and used by other modules or scripts within the Codomyrmex project to verify and guide the setup of the development environment.
+
+These functions are primarily sourced from the `env_checker.py` script.
 
 ## Endpoints / Functions / Interfaces
 
-(Detail each API endpoint, function, or interface provided by this module. Use a consistent format.)
+### Function 1: `ensure_dependencies_installed()`
 
-### Endpoint/Function 1: `example_function()`
+- **Source**: `environment_setup.env_checker.ensure_dependencies_installed`
+- **Description**: Checks if essential Python dependencies for the Codomyrmex project (e.g., `cased`, `dotenv`) are installed by attempting to import them. If a dependency is missing, it prints an instructional message to `stderr` and calls `sys.exit(1)`.
+- **Method**: N/A (Python function)
+- **Path**: N/A (Importable function)
+- **Parameters/Arguments**: None.
+- **Request Body**: N/A
+- **Returns/Response**: None. 
+  - **Side Effects**: Prints messages to `stderr` and may terminate the calling script via `sys.exit(1)` if essential dependencies are missing.
+- **Events Emitted**: N/A
 
-- **Description**: (What this function does.)
-- **Method**: (e.g., GET, POST, or N/A for library functions)
-- **Path**: (e.g., `/api/module/resource` or N/A)
+### Function 2: `check_and_setup_env_vars(repo_root_path: str)`
+
+- **Source**: `environment_setup.env_checker.check_and_setup_env_vars`
+- **Description**: Checks for the existence of a `.env` file at the specified `repo_root_path`. 
+    - If it exists, it informs the user.
+    - If it does not exist, it prints a message guiding the user to create one, including a template with common API key placeholders (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`). It then calls `sys.exit(1)`.
+    - It attempts to load the `.env` file using `dotenv.load_dotenv()` if the file exists.
+- **Method**: N/A (Python function)
+- **Path**: N/A (Importable function)
 - **Parameters/Arguments**:
-    - `param1` (type): Description of parameter.
-    - `param2` (type, optional): Description of parameter. Default: `value`.
-- **Request Body** (if applicable):
-    ```json
-    {
-      "key": "value"
-    }
-    ```
-- **Returns/Response**:
-    - **Success (e.g., 200 OK)**:
-        ```json
-        {
-          "data": "result"
-        }
-        ```
-    - **Error (e.g., 4xx/5xx)**:
-        ```json
-        {
-          "error": "description"
-        }
-        ```
-- **Events Emitted** (if applicable):
-    - `event_name`: Description of event and its payload.
-
-### Endpoint/Function 2: ...
+    - `repo_root_path` (str): The absolute path to the root of the Codomyrmex repository where the `.env` file is expected.
+- **Request Body**: N/A
+- **Returns/Response**: None.
+  - **Side Effects**: Prints messages to `stdout` or `stderr`. May call `sys.exit(1)` if the `.env` file is missing after guidance. Attempts to load environment variables from the `.env` file into the current process's environment.
+- **Events Emitted**: N/A
 
 ## Data Models
 
-(Define any common data structures or models used by the API.)
-
-### Model: `ExampleModel`
-- `field1` (type): Description.
-- `field2` (type): Description.
+N/A for these functions.
 
 ## Authentication & Authorization
 
-(Describe how API access is secured, if applicable.)
+N/A. These are local utility functions.
 
 ## Rate Limiting
 
-(Specify any rate limits imposed on API usage.)
+N/A.
 
 ## Versioning
 
-(Explain the API versioning strategy.) 
+These functions will be versioned as part of the `environment_setup` module, following the overall project's semantic versioning. Changes to function signatures or core behavior will be noted in the module's `CHANGELOG.md`. 

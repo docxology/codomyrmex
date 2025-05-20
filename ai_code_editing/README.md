@@ -56,7 +56,7 @@ This module is part of the Codomyrmex project. Clone the main repository to get 
 
 1.  **Clone the Repository**:
     ```bash
-    git clone https://github.com/your-org/codomyrmex.git
+    git clone https://github.com/codomyrmex-project-org/codomyrmex.git
     cd codomyrmex
     ```
 2.  **Set up Environment**: Follow instructions in `environment_setup/README.md` to prepare your Python environment and install dependencies from `requirements.txt` (root and module-specific if any).

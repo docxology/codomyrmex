@@ -4,22 +4,44 @@ cased-kit==0.3.0
 # For .env file support
 python-dotenv==1.1.0
 
-# For semantic search and default embedding functions
-# sentence-transformers # To be moved to specific module(s) if needed
-# chromadb # To be moved to specific module(s) if needed
+# LLM Providers
+openai>=1.0.0         # OpenAI API client for GPT models
+anthropic>=0.5.0      # Anthropic API client for Claude models
+# google-generativeai>=0.3.0  # Uncomment if needed
 
-# LLM Providers (optional, depending on usage with Summarizer, DocstringIndexer)
-# openai # To be moved to specific module(s) if needed
-# anthropic # To be moved to specific module(s) if needed
-# google-generativeai # To be moved to specific module(s) if needed
+# For semantic search and embedding
+sentence-transformers>=2.2.2
+chromadb>=0.4.13
 
-# For specific tutorials/recipes (e.g., PR reviewer, as seen in kit docs)
-# unidiff # To be moved to specific module(s) if needed
-# requests # To be moved to specific module(s) if needed
+# For code execution sandbox
+docker>=5.0.0
+
+# For schema validation (used in model_context_protocol)
+jsonschema==4.23.0
+
+# For static analysis
+pylint==3.3.7
+flake8==7.2.0
+bandit==1.8.3
+radon==6.0.1
+lizard==1.17.30
+
+# For data visualization
+matplotlib==3.10.3
+seaborn==0.13.2
+numpy==2.2.6
+
+# For git operations
+GitPython>=3.1.37
+
+# For specific tutorials/recipes
+unidiff>=0.7.5
+requests>=2.31.0
 
 # For dependency graph visualization (optional)
-# graphviz # Also requires Graphviz system package to be installed (e.g., via apt, brew) 
+# graphviz # Also requires Graphviz system package to be installed (e.g., via apt, brew)
 
-# For Data Visualization module - These are managed in data_visualization/requirements.txt
-# matplotlib
-# numpy 
+# For testing
+pytest>=7.4.0
+pytest-mock>=3.11.1
+pytest-cov>=4.1.0 

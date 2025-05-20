@@ -1,43 +1,17 @@
-# Environment Setup - Requirements
+# Environment Setup Module - Python Requirements
 
-# This file lists the packages and dependencies required for the Environment Setup module.
-# The `environment_setup/` module may use this file to provision the necessary environment.
+# This file is for listing Python package dependencies required *specifically* by the
+# `environment_setup` module (e.g., for `env_checker.py`) that are NOT already
+# covered by the main Codomyrmex project's root `requirements.txt` file.
 
-# PLEASE RENAME/ADAPT THIS FILE and its contents based on the primary language and package manager for this module.
-# For example:
-# - Python: `requirements.txt` (pip), `environment.yml` (conda), or `pyproject.toml` (poetry/pdm)
-# - Node.js: `package.json`
-# - Java: `pom.xml` (Maven), `build.gradle` (Gradle)
-# - Go: `go.mod`
-# - Rust: `Cargo.toml`
-# - Ruby: `Gemfile`
-# - etc.
+# Currently, Python scripts within this module (like `env_checker.py`) rely on:
+# 1. Python's standard library (e.g., `sys`, `os`).
+# 2. Packages listed in the main project's root `requirements.txt` (e.g., `kit` from `cased-kit`, `python-dotenv`).
 
-# Example for a Python module (if this were `requirements.txt`):
-# requests==2.25.1
-# numpy>=1.20.0
-# pandas # for latest version
+# If this module were to develop helper scripts requiring additional Python dependencies
+# not present in the root `requirements.txt`, those unique dependencies should be listed below,
+# ensuring to pin exact versions.
+# Example:
+# specific-env-setup-helper-lib==1.0.0
 
-# Example for a Node.js module (if this were `package.json`, content would be JSON):
-# {
-#   "name": "module-name",
-#   "version": "0.1.0",
-#   "dependencies": {
-#     "library-a": "^1.2.3",
-#     "library-b": "~4.5.6"
-#   },
-#   "devDependencies": {
-#     "testing-framework": "^7.8.9"
-#   }
-# }
-
-# Add your module-specific dependencies below, following the appropriate format for your chosen language/tooling.
-
-# [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
-# [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1
-
-# This module's Python dependencies (e.g., python-dotenv, requests for env_checker.py)
-# are currently met by the global `requirements.txt` in the project root.
-#
-# If this module later develops specific Python dependencies not included globally,
-# they should be listed here. 
+# As of now, there are no unique Python dependencies for this module to list here. 

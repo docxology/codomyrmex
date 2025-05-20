@@ -2,17 +2,13 @@
 const config = {
   title: 'Codomyrmex Documentation',
   tagline: 'Modular, Extensible Coding Workspace',
-  favicon: 'img/favicon.ico', // You'll need to create this image
+  favicon: 'img/favicon.ico',
 
-  // Set the production url of your site here
-  url: 'https://your-codomyrmex-docs-url.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/codomyrmex/', // Adjust if deploying to a different path
+  url: 'https://YOUR_DOCS_URL.com',
+  baseUrl: '/codomyrmex/',
 
-  // GitHub pages deployment config.
-  organizationName: 'your-github-org', // Replace with your GitHub org/user name
-  projectName: 'codomyrmex', // Replace with your repo name
+  organizationName: 'YOUR_GITHUB_ORG_OR_USER',
+  projectName: 'codomyrmex',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -29,11 +25,10 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          editUrl: 'https://github.com/your-github-org/codomyrmex/tree/main/',
-          routeBasePath: '/', // Serve docs at the site's root
+          editUrl: 'https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex/tree/main/',
+          routeBasePath: '/',
         },
-        blog: false, // Optional: disable the blog plugin
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -44,13 +39,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg', // You'll need to create this image
+      image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: 'Codomyrmex',
         logo: {
           alt: 'Codomyrmex Logo',
-          src: 'img/logo.svg', // You'll need to create this image
+          src: 'img/logo.svg',
         },
         items: [
           {
@@ -59,9 +53,8 @@ const config = {
             position: 'left',
             label: 'Documentation',
           },
-          // {to: '/blog', label: 'Blog', position: 'left'}, // If you enable blog
           {
-            href: 'https://github.com/your-github-org/codomyrmex',
+            href: 'https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex',
             label: 'GitHub',
             position: 'right',
           },
@@ -82,25 +75,19 @@ const config = {
           {
             title: 'Community',
             items: [
-              // Add links to your community channels if any
-              // {
-              //   label: 'Stack Overflow',
-              //   href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              // },
             ],
           },
           {
             title: 'More',
             items: [
-              // {label: 'Blog', to: '/blog'}, // If you enable blog
               {
                 label: 'GitHub',
-                href: 'https://github.com/your-github-org/codomyrmex',
+                href: 'https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Codomyrmex. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Codomyrmex Project. Built with Docusaurus.`,
       },
       prism: {
         theme: require('prism-react-renderer').themes.github,
