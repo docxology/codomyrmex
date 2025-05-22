@@ -1,6 +1,27 @@
-# Welcome to Codomyrmex Documentation
+---
+sidebar_position: 1
+slug: /
+---
 
-This is the central documentation hub for the Codomyrmex project.
+# Welcome to Codomyrmex
+
+**Codomyrmex** is a modular and extensible coding workspace designed to enhance developer productivity through intelligent tools and seamless integration of AI capabilities.
+
+This documentation provides comprehensive information about the Codomyrmex project, its architecture, individual modules, and guides for users, developers, and contributors.
+
+## Getting Started
+
+-   **New to Codomyrmex?** Start with the [Project Overview](./project-overview/) to understand its goals and structure.
+-   **Ready to install?** Head over to the [Environment Setup](./development-guides/environment-setup.md) guide.
+-   **Want to contribute?** Check out our [Contributing Guidelines](./project-overview/contributing.md).
+
+## Explore the Modules
+
+Codomyrmex is composed of several specialized modules. Dive into their specific documentation to learn more:
+
+[Browse Modules](./modules/)
+
+Use the sidebar navigation to explore all available documentation sections.
 
 <!-- TODO: Flesh out this introduction. 
 Key things to include:
@@ -22,12 +43,6 @@ Use the sidebar on the left to navigate through the different sections:
     - Usage Examples (`USAGE_EXAMPLES.md`)
     - Changelogs, Security Information, and more.
     - Detailed technical overviews and tutorials.
-
-## Getting Started
-
-<!-- TODO: Add a section on how to quickly get started with Codomyrmex itself, possibly linking to the `environment_setup` module documentation or a general project setup guide. -->
-
-To get started with setting up your environment for Codomyrmex, please refer to the [Environment Setup](./modules/environment_setup/index.md) module documentation.
 
 ## Contributing
 

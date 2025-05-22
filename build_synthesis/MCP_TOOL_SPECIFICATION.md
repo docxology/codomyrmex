@@ -6,6 +6,7 @@ This document outlines the specification for tools within the Build Synthesis mo
 
 - **Dependencies**: Tools may rely on build systems (e.g., Make, Docker, language-specific build tools) and templating engines.
 - **File System Access**: These tools will likely interact extensively with the file system to read sources, write artifacts, and generate code.
+- **Alignment with Python API**: The MCP tools defined here are designed to be wrappers or interfaces to the core Python API functions detailed in `API_SPECIFICATION.md`. Parameter names and functionalities should closely align.
 
 ---
 
@@ -13,7 +14,8 @@ This document outlines the specification for tools within the Build Synthesis mo
 
 ### 1. Tool Purpose and Description
 
-Triggers a build process for a specified component or target within the project. This could involve compiling code, packaging artifacts, or running build scripts.
+Initiates a build process for a specified target (e.g., a component, module, or specific build configuration name).
+This tool maps to the `trigger_build` Python API function.
 
 ### 2. Invocation Name
 
@@ -21,31 +23,33 @@ Triggers a build process for a specified component or target within the project.
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name    | Type     | Required | Description                                                                                                | Example Value                               |
-| :---------------- | :------- | :------- | :--------------------------------------------------------------------------------------------------------- | :------------------------------------------ |
-| `target_component`| `string` | Yes      | Identifier for the component or build target (e.g., module name, specific script, Docker image tag part).    | `"data_visualization_module"` or `"main_app"` |
-| `build_profile`   | `string` | No       | Optional build profile or configuration (e.g., "debug", "release", "test"). Default: `"default"`.        | `"release"`                                 |
-| `output_path`     | `string` | No       | Suggested path for build artifacts. Module may override or use predefined paths.                           | `"./output/builds/"`                        |
-| `clean_build`     | `boolean`| No       | Whether to perform a clean build (e.g., remove previous artifacts before building). Default: `false`.      | `true`                                      |
-| `options`         | `object` | No       | Additional build-specific options.                                                                         | `{"skip_tests": true}`                     |
+| Parameter Name          | Type    | Required | Description                                                                                                   | Example Value                                            |
+| :---------------------- | :------ | :------- | :------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------- |
+| `target`                | `string`| Yes      | Identifier for the build target (e.g., "module:ai_code_editing", "docker:my_service", "project_docs").       | `"module:ai_code_editing"`                                 |
+| `config`                | `object`| No       | Build configuration parameters (e.g., profile, version). Structure may vary based on target.                | `{"profile": "release", "version": "1.2.0"}`              |
+| `output_path_suggestion`| `string`| No       | Suggested base directory for build artifacts.                                                                 | `"./output/builds/"`                                     |
+| `clean_build`           | `boolean`| No       | If `True`, forces a clean build. Default: `False`.                                                              | `true`                                                   |
+| `build_options`         | `object`| No       | Additional, potentially target-specific, build options or overrides.                                        | `{"skip_tests": true, "verbose_logging": false}`      |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name      | Type     | Description                                                                                      | Example Value                                              |
-| :-------------- | :------- | :----------------------------------------------------------------------------------------------- | :--------------------------------------------------------- |
-| `status`        | `string` | Build status: "success", "failure", "partial_success".                                           | `"success"`                                                |
-| `artifact_paths`| `array[string]` | List of paths to generated artifacts (e.g., executables, libraries, archives, image IDs). Empty if none. | `["./dist/my_app.whl", "./output/reports/build.log"]` |
-| `log_output`    | `string` | A summary or key excerpts from the build log. Full log may be in `artifact_paths`.               | `"Build completed in 120s. 2 warnings."`                 |
-| `error_message` | `string` | Error description if `status` is "failure".                                                      | `"Compilation failed for module X."`                     |
+| Field Name             | Type          | Description                                                                                                  | Example Value                                                        |
+| :--------------------- | :------------ | :----------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------- |
+| `status`               | `string`      | Build initiation status: "success", "failure", "pending".                                                    | `"pending"`                                                          |
+| `build_id`             | `string`      | Unique identifier for the build, especially if asynchronous. Empty if build failed immediately.              | `"build_job_170248A9Z"`                                              |
+| `message`              | `string`      | Message about the initiation status or immediate error.                                                      | `"Build for target 'module:ai_code_editing' initiated."`              |
+| `artifact_paths`       | `array[string]`| List of paths to generated artifacts if build completes synchronously and successfully. May be empty.          | `["./dist/ai_code_editing.whl"]`                                   |
+| `log_output_summary`   | `string`      | Brief summary of build logs or initial log lines if build completes synchronously.                           | `"Initial compilation started..."`                                   |
+| `error_message`        | `string`      | Error description if immediate `status` is "failure".                                                          | `"Invalid target specified."`                                        |
 
 ### 5. Error Handling
 
-- Build failures will result in a "failure" status and details in `error_message` and `log_output`.
-- Configuration errors (e.g., invalid `target_component`) will also be reported.
+- Immediate failures (e.g., invalid `target`) result in a "failure" `status` and `error_message`.
+- For asynchronous builds, `status` might be "pending", and subsequent status checks are needed via `get_build_status`.
 
 ### 6. Idempotency
 
-- **Idempotent**: Generally No. Re-running a build typically overwrites previous artifacts or creates new ones, potentially with different timestamps or content if sources changed.
+- **Idempotent**: Generally No. Re-running a build typically overwrites previous artifacts or creates new ones.
 - **Explanation**: Side effects include file system changes. A `clean_build` option further modifies behavior.
 
 ### 7. Usage Examples (for MCP context)
@@ -54,8 +58,8 @@ Triggers a build process for a specified component or target within the project.
 {
   "tool_name": "trigger_build",
   "arguments": {
-    "target_component": "core_library",
-    "build_profile": "release",
+    "target": "module:core_library",
+    "config": {"profile": "release"},
     "clean_build": true
   }
 }
@@ -63,71 +67,188 @@ Triggers a build process for a specified component or target within the project.
 
 ### 8. Security Considerations
 
-- **Command Injection**: Build scripts or commands invoked must be carefully constructed to avoid injection vulnerabilities if `target_component` or `options` influence command execution.
-- **Resource Usage**: Builds can be resource-intensive. Consider safeguards against excessive CPU/memory/disk usage.
-- **Dependency Security**: The build process might download or use third-party dependencies; their security should be considered (though this is a broader project concern).
+- **Command Injection**: Build scripts or commands invoked must be carefully constructed if `target` or `build_options` influence command execution.
+- **Resource Usage**: Builds can be resource-intensive.
+- **Dependency Security**: Build process might download dependencies; their security should be considered.
 
 ---
 
-## Tool: `synthesize_code_component`
+## Tool: `get_build_status`
 
 ### 1. Tool Purpose and Description
 
-Generates code for a new software component (e.g., a new module, class, function boilerplate) based on a provided specification or template.
+Retrieves the current status and details of a previously initiated build using its `build_id`.
+This tool maps to the `get_build_status` Python API function.
 
 ### 2. Invocation Name
 
-`synthesize_code_component`
+`get_build_status`
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name      | Type     | Required | Description                                                                                                | Example Value                                                               |
-| :------------------ | :------- | :------- | :--------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- |
-| `component_type`    | `string` | Yes      | Type of component to synthesize (e.g., "codomyrmex_module", "python_class", "api_endpoint").                | `"codomyrmex_module"`                                                         |
-| `component_name`    | `string` | Yes      | Name for the new component (e.g., "MyNewModule", "UserService").                                           | `"MyNewUtility"`                                                            |
-| `output_directory`  | `string` | Yes      | Base directory where the new component's files should be generated (e.g., `"./modules/"`, `"./src/services/"`). | `"./codomyrmex/"`                                                              |
-| `specification`     | `object` | No       | Detailed specification for the component, structure depends on `component_type`. (e.g., for a class: methods, attributes). | `{"module_description": "Handles user authentication."}`                     |
-| `template_name`     | `string` | No       | Name of a pre-defined template to use for synthesis. May override or supplement `specification`.         | `"default_rest_controller"`                                                 |
+| Parameter Name | Type   | Required | Description                                          | Example Value           |
+| :------------- | :----- | :------- | :--------------------------------------------------- | :---------------------- |
+| `build_id`     | `string`| Yes      | The unique identifier of the build (from `trigger_build`). | `"build_job_170248A9Z"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name        | Type          | Description                                                                            | Example Value                                                              |
-| :---------------- | :------------ | :------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
-| `status`          | `string`      | Synthesis status: "success", "failure", "partial_success".                             | `"success"`                                                                |
-| `generated_files` | `array[string]`| List of paths to the files and directories created for the new component.              | `["./codomyrmex/my_new_utility/__init__.py", "./codomyrmex/my_new_utility/README.md"]` |
-| `log_output`      | `string`      | Summary of the synthesis process or key messages.                                        | `"Generated module MyNewUtility with 3 files."`                            |
-| `error_message`   | `string`      | Error description if `status` is "failure".                                            | `"Component type 'unknown_type' not supported."`                           |
+| Field Name            | Type          | Description                                                                                             | Example Value                                                       |
+| :-------------------- | :------------ | :------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------ |
+| `build_id`            | `string`      | The build identifier.                                                                                   | `"build_job_170248A9Z"`                                             |
+| `status`              | `string`      | Current build status: "pending", "in_progress", "success", "failure", "cancelled".                | `"in_progress"`                                                     |
+| `progress_percentage` | `integer`     | Optional. Estimated completion percentage (0-100).                                                      | `75`                                                                |
+| `message`             | `string`      | Current status message (e.g., "Compiling module X...", "Build failed: Error Y").                        | `"Linking final artifact..."`                                       |
+| `artifact_paths`      | `array[string]`| List of paths to generated artifacts. Populated if `status` is "success".                               | `["./dist/core_library.whl"]`                                     |
+| `log_file_path`       | `string`      | Optional. Path to a detailed build log file.                                                              | `"./output/logs/build_job_170248A9Z.log"`                         |
+| `error_details`       | `string`      | Detailed error message if `status` is "failure".                                                          | `"Linker error: undefined symbol 'xyz'."`                           |
 
 ### 5. Error Handling
 
-- Errors such as invalid `component_type`, issues with `specification`, or file system write failures will result in a "failure" status.
+- If `build_id` is not found or invalid, an appropriate error status/message should be returned by the tool itself (e.g. status:"error", message: "Invalid build_id").
 
 ### 6. Idempotency
 
-- **Idempotent**: Generally No. Re-running with the same parameters would likely attempt to create the same files, potentially failing or overwriting if they already exist.
-- **Explanation**: Strong side effects on the file system. Some implementations might offer an `overwrite` flag.
+- **Idempotent**: Yes. Multiple calls with the same valid `build_id` should return the current state of that build without causing further side effects on the build itself.
 
 ### 7. Usage Examples (for MCP context)
 
 ```json
 {
-  "tool_name": "synthesize_code_component",
+  "tool_name": "get_build_status",
   "arguments": {
-    "component_type": "codomyrmex_module",
-    "component_name": "NewReportingModule",
-    "output_directory": "./codomyrmex/",
-    "specification": {
-      "description": "A module for generating weekly reports.",
-      "initial_functions": ["generate_report", "email_report"]
-    }
+    "build_id": "build_job_170248A9Z"
   }
 }
 ```
 
 ### 8. Security Considerations
 
-- **File System Writes**: Must ensure that `output_directory` and `component_name` are validated to prevent writing outside of intended project areas (path traversal vulnerabilities).
-- **Code Injection in Templates**: If synthesis uses templates that can embed parts of `specification` or `component_name` directly into code, these inputs must be sanitized to prevent code injection into the generated files.
-- **Permissions**: The tool needs appropriate write permissions for the `output_directory`.
+- Ensure `build_id` does not allow enumeration of arbitrary system information.
+- Returned `log_file_path` or `artifact_paths` should be validated and within expected project boundaries.
+
+---
+
+## Tool: `synthesize_component_from_prompt`
+
+### 1. Tool Purpose and Description
+
+Generates a new code component (e.g., function, class, small module) based on a natural language prompt, primarily using an LLM.
+This tool maps to the `synthesize_component_from_prompt` Python API function.
+
+### 2. Invocation Name
+
+`synthesize_component_from_prompt`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name    | Type     | Required | Description                                                                         | Example Value                                                                |
+| :---------------- | :------- | :------- | :---------------------------------------------------------------------------------- | :--------------------------------------------------------------------------- |
+| `prompt`          | `string` | Yes      | Detailed natural language description of the component to be synthesized.           | `"Create a Python function to calculate factorial recursively with a docstring."` |
+| `language`        | `string` | Yes      | Target programming language (e.g., "python", "javascript").                         | `"python"`                                                                   |
+| `target_directory`| `string` | Yes      | The directory where the generated file(s) should be placed.                         | `"./src/utils/"`                                                             |
+| `context_code`    | `string` | No       | Existing code snippet(s) to provide context to the LLM.                             | `"class MathHelpers:\n    # new function will be part of this class"`          |
+| `style_guide`     | `string` | No       | Instructions or examples related to coding style or conventions.                    | `"Follow PEP8. Max line length 88."`                                       |
+| `llm_config`      | `object` | No       | Configuration for the LLM (e.g., provider, model name). Defaults to module settings.| `{"model_name": "gpt-4-turbo"}`                                              |
+
+### 4. Output Schema (Return Value)
+
+| Field Name        | Type     | Description                                                                                               | Example Value                                                                   |
+| :---------------- | :------- | :-------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
+| `status`          | `string` | Synthesis status: "success", "failure".                                                                   | `"success"`                                                                     |
+| `generated_files` | `object` | A dictionary where keys are filenames and values are the string content of the generated files.             | `{"factorial.py": "def factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n-1)"}` |
+| `explanation`     | `string` | LLM-generated explanation of the synthesized code (if any).                                               | `"This function calculates factorial using recursion..."`                     |
+| `error_message`   | `string` | Error description if `status` is "failure".                                                               | `"LLM request failed due to invalid API key."`                                |
+
+### 5. Error Handling
+
+- Errors such as LLM failures, invalid prompts, or file system write issues will result in a "failure" `status`.
+
+### 6. Idempotency
+
+- **Idempotent**: No. Re-running with the same parameters will likely attempt to create and write the same files, potentially overwriting or erroring if they exist.
+- **Explanation**: Strong side effects on the file system.
+
+### 7. Usage Examples (for MCP context)
+
+```json
+{
+  "tool_name": "synthesize_component_from_prompt",
+  "arguments": {
+    "prompt": "Generate a Python class for a simple User with name and email attributes.",
+    "language": "python",
+    "target_directory": "./models/",
+    "style_guide": "Include type hints."
+  }
+}
+```
+
+### 8. Security Considerations
+
+- **File System Writes**: Validate `target_directory` to prevent writing outside intended project areas.
+- **Prompt Injection**: If `prompt`, `context_code`, or `style_guide` can be influenced by untrusted external sources, this could lead to prompt injection attacks against the LLM.
+- **Resource Usage**: LLM calls can be resource-intensive (API costs, time).
+
+---
+
+## Tool: `synthesize_component_from_spec`
+
+### 1. Tool Purpose and Description
+
+Generates a new code component based on a structured specification file (e.g., a JSON or YAML file) or a pre-defined template.
+This tool maps to the `synthesize_component_from_spec` Python API function.
+
+### 2. Invocation Name
+
+`synthesize_component_from_spec`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name       | Type    | Required | Description                                                                                                | Example Value                               |
+| :------------------- | :------ | :------- | :--------------------------------------------------------------------------------------------------------- | :------------------------------------------ |
+| `specification_file` | `string`| Yes      | Path to the structured specification file (e.g., JSON, YAML) for the component.                            | `"./specs/new_module_spec.json"`            |
+| `language`           | `string`| Yes      | Target programming language (if not implicitly defined by spec/template).                                  | `"python"`                                  |
+| `target_directory`   | `string`| Yes      | The directory where generated file(s) should be placed.                                                    | `"./codomyrmex_modules/"`                   |
+| `template_name`      | `string`| No       | Name of a pre-defined component template to use. The specification can augment/override template parts.      | `"default_codomyrmex_module_v1"`            |
+| `llm_assisted`       | `boolean`| No       | If `True`, an LLM may be used to fill in parts of the template or interpret parts of the spec. Default: `False`. | `true`                                      |
+| `llm_config`         | `object`| No       | Configuration for the LLM if `llm_assisted` is `True`. Defaults to module settings.                        | `{"model_name": "gpt-3.5-turbo"}`           |
+
+### 4. Output Schema (Return Value)
+
+| Field Name        | Type     | Description                                                                                               | Example Value                                                              |
+| :---------------- | :------- | :-------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
+| `status`          | `string` | Synthesis status: "success", "failure".                                                                   | `"success"`                                                                |
+| `generated_files` | `object` | A dictionary where keys are filenames and values are the string content of the generated files.             | `{"my_new_module/__init__.py": "", "my_new_module/main.py": "# Main logic"}` |
+| `log_output`      | `string` | Summary of the synthesis process or key messages.                                                           | `"Generated 2 files for component based on spec_v1.json."`               |
+| `error_message`   | `string` | Error description if `status` is "failure".                                                               | `"Template 'invalid_template' not found."`                               |
+
+### 5. Error Handling
+
+- Errors such as missing/invalid `specification_file`, template issues, or file system write failures will result in a "failure" `status`.
+
+### 6. Idempotency
+
+- **Idempotent**: No. Re-running would likely attempt to create the same files, potentially failing or overwriting if they exist.
+- **Explanation**: Strong side effects on the file system.
+
+### 7. Usage Examples (for MCP context)
+
+```json
+{
+  "tool_name": "synthesize_component_from_spec",
+  "arguments": {
+    "specification_file": "./module_specs/user_service.yaml",
+    "language": "python",
+    "target_directory": "./services/user_service/",
+    "template_name": "fastapi_service_template"
+  }
+}
+```
+
+### 8. Security Considerations
+
+- **File System Writes**: Validate `target_directory` to prevent writing outside intended project areas.
+- **Code Injection in Templates/Specs**: If templates or specification files can embed user-controlled strings directly into generated code without sanitization, this could be a risk.
+- **Specification File Parsing**: Ensure robust and secure parsing of `specification_file` to prevent vulnerabilities from malformed spec files (e.g., XML DTD attacks if XML is used, etc.).
+- **Permissions**: Tool needs appropriate write permissions.
 
 --- 

@@ -29,8 +29,8 @@ Generates a heatmap from a 2D data array, with optional axis labels, color map, 
 | `y_label`       | string      | No       | Y-axis label. Default: "Y-axis".                 | `"Y"`             |
 | `cmap`          | string      | No       | Matplotlib colormap.                             | `"viridis"`        |
 | `colorbar_label`| string      | No       | Label for the colorbar.                          | `"Intensity"`      |
-| `output_path`   | string      | No       | File path to save the plot. If None, plot is not saved. | `"./output/heatmap.png"`  |
-| `show_plot`     | boolean     | No       | If True, displays the plot. Default: `false`.    | `false`            |
+| `output_path`   | string      | No       | File path to save the plot. If None, plot is not saved. The path should be absolute or relative to a pre-defined writable directory for the MCP agent. | `"./output/heatmap.png"`  |
+| `show_plot`     | boolean     | No       | If True, attempts to display the plot (behavior might be backend-dependent for a server-side MCP tool and generally not recommended for automated agents). Default: `false`.    | `false`            |
 | `annot`         | boolean     | No       | If True, annotates each cell. Default: `false`.  | `true`             |
 | `fmt`           | string      | No       | Format string for annotations. Default: `".2f"`.| `".1f"`            |
 | `figure_size`   | tuple[float,float] | No | Size of the figure (width, height) in inches. Default: `(10, 8)`. | `[8,6]` |
@@ -39,8 +39,8 @@ Generates a heatmap from a 2D data array, with optional axis labels, color map, 
 
 | Field Name    | Type   | Description                                                                 | Example Value     |
 | :------------ | :----- | :-------------------------------------------------------------------------- | :---------------- |
-| `output_path` | string | The path where the plot was saved, if `output_path` was provided. Else null. | `"./output/heatmap.png"` |
-| `fig_details` | object | Information about the generated figure (e.g., if it was shown or closed).   | `{"status": "saved"}` |
+| `output_path` | string | The absolute path where the plot was saved, if `output_path` was provided. Else null. | `"/mnt/shared/output/heatmap.png"` |
+| `fig_details` | object | Information about the generated figure (e.g., if it was saved or an attempt to show was made).   | `{"status": "saved_to_path"}` |
 
 ### 5. Error Handling
 
@@ -94,7 +94,8 @@ Generates a line plot from X and Y data. Can plot multiple lines if Y data is a 
 | `title`        | string      | No       | Title of the plot. Default: "Line Plot".         | `"Sales Over Time"`|
 | `x_label`      | string      | No       | X-axis label. Default: "X-axis".                 | `"Month"`          |
 | `y_label`      | string      | No       | Y-axis label. Default: "Y-axis".                 | `"Sales (Units)"`  |
-| `output_path`  | string      | No       | File path to save the plot. If None, not saved.  | `"./output/line.png"`|
+| `output_path`  | string      | No       | File path to save the plot. If None, not saved. The path should be absolute or relative to a pre-defined writable directory.  | `"./output/line.png"`|
+| `show_plot`    | boolean     | No       | If True, attempts to display the plot. Default: `false`. | `false`           |
 | `line_labels`  | array[string] | No     | Labels for multiple lines (for legend). Auto-generated if not provided for multiple lines. | `["Product A", "Product B"]` |
 | `markers`      | boolean     | No       | If True, adds markers to data points. Default: `false`. | `true`            |
 | `figure_size`  | tuple[float,float] | No | Size of the figure (width, height) in inches. Default: `(10, 6)`. | `[12,7]`          |
@@ -104,8 +105,8 @@ Generates a line plot from X and Y data. Can plot multiple lines if Y data is a 
 
 | Field Name    | Type   | Description                                                                 | Example Value     |
 | :------------ | :----- | :-------------------------------------------------------------------------- | :---------------- |
-| `output_path` | string | The path where the plot was saved, if `output_path` was provided. Else null. | `"./output/line.png"` |
-| `fig_details` | object | Information about the generated figure.                                     | `{"status": "saved"}` |
+| `output_path` | string | The absolute path where the plot was saved, if `output_path` was provided. Else null. | `"/mnt/shared/output/line.png"` |
+| `fig_details` | object | Information about the generated figure.                                     | `{"status": "saved_to_path"}` |
 
 ### 5. Error Handling
 
@@ -159,7 +160,8 @@ Generates a scatter plot from X and Y data points.
 | `title`        | string      | No       | Title of the plot. Default: "Scatter Plot".      | `"Correlation"`    |
 | `x_label`      | string      | No       | X-axis label. Default: "X-axis".                 | `"Height"`         |
 | `y_label`      | string      | No       | Y-axis label. Default: "Y-axis".                 | `"Weight"`         |
-| `output_path`  | string      | No       | File path to save the plot.                      | `"./output/scatter.png"`|
+| `output_path`  | string      | No       | File path to save the plot. The path should be absolute or relative to a pre-defined writable directory.                      | `"./output/scatter.png"`|
+| `show_plot`    | boolean     | No       | If True, attempts to display the plot. Default: `false`. | `false`           |
 | `dot_size`     | integer     | No       | Size of the dots. Default: `20`.                 | `30`               |
 | `dot_color`    | string      | No       | Color of the dots. Default: `"blue"`.          | `"red"`            |
 | `alpha`        | float       | No       | Transparency of dots (0-1). Default: `0.7`.      | `0.5`              |
@@ -169,8 +171,8 @@ Generates a scatter plot from X and Y data points.
 
 | Field Name    | Type   | Description                                  | Example Value     |
 | :------------ | :----- | :------------------------------------------- | :---------------- |
-| `output_path` | string | Path where plot was saved, if applicable.    | `"./output/scatter.png"` |
-| `fig_details` | object | Info about the generated figure.             | `{"status": "saved"}` |
+| `output_path` | string | Absolute path where plot was saved, if applicable.    | `"/mnt/shared/output/scatter.png"` |
+| `fig_details` | object | Info about the generated figure.             | `{"status": "saved_to_path"}` |
 
 ### 5. Error Handling
 
@@ -216,27 +218,28 @@ Generates a bar chart from categories and their corresponding values. Can be ver
 
 | Parameter Name | Type        | Required | Description                                      | Example Value      |
 | :------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
-| `categories`   | array[string] | Yes    | List of category names.                          | `["A", "B", "C"]`|
-| `values`       | array[float] | Yes     | List of values for each category.                | `[10, 20, 15]`     |
-| `title`        | string      | No       | Title of the plot. Default: "Bar Chart".         | `"Sales by Region"`|
-| `x_label`      | string      | No       | X-axis (or category axis) label. Default: "Categories". | `"Region"`         |
-| `y_label`      | string      | No       | Y-axis (or value axis) label. Default: "Values".   | `"Total Sales"`    |
-| `output_path`  | string      | No       | File path to save the plot.                      | `"./output/bar.png"`|
-| `horizontal`   | boolean     | No       | If True, creates a horizontal bar chart. Default: `false`. | `true`            |
-| `bar_color`    | string      | No       | Color of the bars. Default: `"skyblue"`.       | `"#FFC300"`       |
-| `figure_size`  | tuple[float,float] | No | Size of the figure (width, height) in inches. Default: `(10, 6)`. | `[10,7]`          |
+| `categories`   | array[string] | Yes      | List of strings for category labels.             | `["A", "B", "C"]`  |
+| `values`       | array[float] | Yes      | List of numerical values for each category.      | `[10, 20, 15]`     |
+| `title`        | string      | No       | Title of the chart. Default: "Bar Chart".        | `"Category Sales"` |
+| `x_label`      | string      | No       | X-axis label. Default: "Categories".             | `"Product Type"`   |
+| `y_label`      | string      | No       | Y-axis label. Default: "Values".                 | `"Units Sold"`     |
+| `output_path`  | string      | No       | File path to save the chart. The path should be absolute or relative to a pre-defined writable directory.                     | `"./output/bar.png"`|
+| `show_plot`    | boolean     | No       | If True, attempts to display the chart. Default: `false`. | `false`           |
+| `horizontal`   | boolean     | No       | If True, creates a horizontal bar chart. Default: `false`. | `true`           |
+| `bar_color`    | string      | No       | Color of the bars. Default: Matplotlib default.  | `"skyblue"`      |
+| `figure_size`  | tuple[float,float] | No | Size of the figure (width, height) in inches. Default: `(10, 6)`. | `[8,5]`            |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name    | Type   | Description                                  | Example Value     |
 | :------------ | :----- | :------------------------------------------- | :---------------- |
-| `output_path` | string | Path where plot was saved, if applicable.    | `"./output/bar.png"` |
-| `fig_details` | object | Info about the generated figure.             | `{"status": "saved"}` |
+| `output_path` | string | Absolute path where plot was saved, if applicable.    | `"/mnt/shared/output/bar.png"` |
+| `fig_details` | object | Info about the generated figure.             | `{"status": "saved_to_path"}` |
 
 ### 5. Error Handling
 
 - Logs errors/warnings. Returns `{"error": "description"}` on failure.
-- Handles empty or mismatched data.
+- Handles empty or mismatched data (categories vs. values).
 
 ### 6. Idempotency
 
@@ -248,9 +251,11 @@ Generates a bar chart from categories and their corresponding values. Can be ver
 {
   "tool_name": "create_bar_chart",
   "arguments": {
-    "categories": ["East", "West", "North"],
-    "values": [120, 150, 90],
-    "title": "Regional Performance",
+    "categories": ["Q1", "Q2", "Q3", "Q4"],
+    "values": [150, 200, 180, 220],
+    "title": "Quarterly Revenue",
+    "x_label": "Quarter",
+    "y_label": "Revenue (USD)",
     "output_path": "./output/mcp_bar_chart.png",
     "horizontal": false
   }
@@ -259,7 +264,7 @@ Generates a bar chart from categories and their corresponding values. Can be ver
 
 ### 8. Security Considerations
 
-- Path validation for `output_path`.
+- Path validation for `output_path` is crucial. Restrict write access.
 
 ---
 
@@ -267,7 +272,7 @@ Generates a bar chart from categories and their corresponding values. Can be ver
 
 ### 1. Tool Purpose and Description
 
-Generates a histogram to show the distribution of a dataset.
+Generates a histogram to display the distribution of a single numerical dataset.
 
 ### 2. Invocation Name
 
@@ -277,22 +282,24 @@ Generates a histogram to show the distribution of a dataset.
 
 | Parameter Name | Type        | Required | Description                                      | Example Value      |
 | :------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
-| `data`         | array[float] | Yes     | List of numerical data.                          | `[1,2,2,3,3,3,4]`  |
-| `bins`         | integer     | No       | Number of bins in the histogram. Default: `10`.  | `20`               |
-| `title`        | string      | No       | Title of the plot. Default: "Histogram".         | `"Data Distribution"`|
-| `x_label`      | string      | No       | X-axis label. Default: "Value".                  | `"Score"`          |
+| `data`         | array[float]| Yes      | 1D array of numerical data.                      | `[1,2,2,3,3,3,4,4,5]`|
+| `bins`         | integer or string or array[float] | No | Number of bins, or a string strategy (e.g., "auto"), or array of bin edges. Default: `10`. | `15` or `"auto"`|
+| `title`        | string      | No       | Title of the histogram. Default: "Histogram".    | `"Data Distribution"`|
+| `x_label`      | string      | No       | X-axis label. Default: "Value".                  | `"Measurement"`    |
 | `y_label`      | string      | No       | Y-axis label. Default: "Frequency".              | `"Count"`          |
-| `output_path`  | string      | No       | File path to save the plot.                      | `"./output/hist.png"`|
-| `hist_color`   | string      | No       | Color of the histogram bars. Default: `"cornflowerblue"`. | `"lightgreen"`   |
-| `edge_color`   | string      | No       | Color of the bar edges. Default: `"black"`.     | `"grey"`         |
-| `figure_size`  | tuple[float,float] | No | Size of the figure (width, height) in inches. Default: `(10, 6)`. | `[9,6]`            |
+| `output_path`  | string      | No       | File path to save the histogram. The path should be absolute or relative to a pre-defined writable directory. | `"./output/histogram.png"`|
+| `show_plot`    | boolean     | No       | If True, attempts to display the histogram. Default: `false`. | `false`           |
+| `hist_color`   | string      | No       | Color of the histogram bars. Default: Matplotlib default. | `"cornflowerblue"` |
+| `edge_color`   | string      | No       | Color of bar edges. Default: `"black"`.          | `"gray"`           |
+| `density`      | boolean     | No       | If True, normalize to form a probability density. Default: `false`. | `true`            |
+| `figure_size`  | tuple[float,float] | No | Size of the figure (width, height) in inches. Default: `(10, 6)`. | `[8,5]`            |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name    | Type   | Description                                  | Example Value     |
 | :------------ | :----- | :------------------------------------------- | :---------------- |
-| `output_path` | string | Path where plot was saved, if applicable.    | `"./output/hist.png"` |
-| `fig_details` | object | Info about the generated figure.             | `{"status": "saved"}` |
+| `output_path` | string | Absolute path where plot was saved, if applicable.    | `"/mnt/shared/output/histogram.png"` |
+| `fig_details` | object | Info about the generated figure.             | `{"status": "saved_to_path"}` |
 
 ### 5. Error Handling
 
@@ -309,17 +316,18 @@ Generates a histogram to show the distribution of a dataset.
 {
   "tool_name": "create_histogram",
   "arguments": {
-    "data": [5, 10, 10, 15, 20, 20, 20, 25, 30],
+    "data": [10, 12, 12, 13, 15, 15, 15, 18, 20, 22],
     "bins": 5,
-    "title": "Value Frequency",
-    "output_path": "./output/mcp_histogram.png"
+    "title": "Value Distribution",
+    "output_path": "./output/mcp_histogram.png",
+    "hist_color": "green"
   }
 }
 ```
 
 ### 8. Security Considerations
 
-- Path validation for `output_path`.
+- Path validation for `output_path` is crucial. Restrict write access.
 
 ---
 
@@ -327,7 +335,7 @@ Generates a histogram to show the distribution of a dataset.
 
 ### 1. Tool Purpose and Description
 
-Generates a pie chart to show proportions of categories.
+Generates a pie chart to show proportions of different categories.
 
 ### 2. Invocation Name
 
@@ -337,27 +345,28 @@ Generates a pie chart to show proportions of categories.
 
 | Parameter Name | Type        | Required | Description                                      | Example Value      |
 | :------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
-| `labels`       | array[string] | Yes    | List of labels for each slice.                   | `["A", "B", "C"]`|
-| `sizes`        | array[float] | Yes     | List of sizes (proportions) for each slice.      | `[40, 30, 30]`     |
-| `title`        | string      | No       | Title of the plot. Default: "Pie Chart".         | `"Market Share"`   |
-| `output_path`  | string      | No       | File path to save the plot.                      | `"./output/pie.png"`|
-| `autopct`      | string      | No       | Format string for slice percentages. Default: `"%1.1f%%"`. | `"%1.0f%%"`       |
-| `startangle`   | integer     | No       | Angle to start the first slice. Default: `90`.   | `0`                |
-| `explode`      | array[float] | No      | List of offsets for slices (to "explode" them). E.g., `[0, 0.1, 0]`. Length must match labels. | `[0, 0.1, 0]`    |
+| `labels`       | array[string] | Yes      | List of labels for each slice.                   | `["A", "B", "C"]`  |
+| `sizes`        | array[float] | Yes      | List of numerical values for slice sizes.        | `[40, 30, 30]`     |
+| `title`        | string      | No       | Title of the chart. Default: "Pie Chart".        | `"Market Share"`   |
+| `output_path`  | string      | No       | File path to save the chart. The path should be absolute or relative to a pre-defined writable directory. | `"./output/pie.png"`|
+| `show_plot`    | boolean     | No       | If True, attempts to display the chart. Default: `false`. | `false`           |
+| `autopct`      | string      | No       | Format string for slice values (e.g., "%1.1f%%"). Default: `"%1.1f%%"`. | `"%1.0f%%"`        |
+| `startangle`   | float       | No       | Rotates start of pie chart (degrees). Default: `90`.| `0`                |
+| `explode`      | array[float] | No      | List of offsets for each slice (e.g., [0, 0.1, 0]). | `[0, 0.1, 0]`      |
+| `colors`       | array[string] | No      | List of colors for slices. Default: Matplotlib defaults. | `["gold", "lightcoral", "lightskyblue"]` |
 | `figure_size`  | tuple[float,float] | No | Size of the figure (width, height) in inches. Default: `(8, 8)`. | `[7,7]`            |
-
 
 ### 4. Output Schema (Return Value)
 
 | Field Name    | Type   | Description                                  | Example Value     |
 | :------------ | :----- | :------------------------------------------- | :---------------- |
-| `output_path` | string | Path where plot was saved, if applicable.    | `"./output/pie.png"` |
-| `fig_details` | object | Info about the generated figure.             | `{"status": "saved"}` |
+| `output_path` | string | Absolute path where plot was saved, if applicable.    | `"/mnt/shared/output/pie_chart.png"` |
+| `fig_details` | object | Info about the generated figure.             | `{"status": "saved_to_path"}` |
 
 ### 5. Error Handling
 
 - Logs errors/warnings. Returns `{"error": "description"}` on failure.
-- Handles empty or mismatched data.
+- Handles empty or mismatched data (labels vs. sizes).
 
 ### 6. Idempotency
 
@@ -369,18 +378,20 @@ Generates a pie chart to show proportions of categories.
 {
   "tool_name": "create_pie_chart",
   "arguments": {
-    "labels": ["Product X", "Product Y", "Other"],
-    "sizes": [60, 25, 15],
-    "title": "Sales Distribution",
+    "labels": ["Product X", "Product Y", "Product Z"],
+    "sizes": [250, 450, 300],
+    "title": "Sales Distribution by Product",
     "output_path": "./output/mcp_pie_chart.png",
-    "explode": [0.05, 0, 0]
+    "explode": [0, 0.05, 0],
+    "startangle": 45
   }
 }
 ```
 
 ### 8. Security Considerations
 
-- Path validation for `output_path`.
+- Path validation for `output_path` is crucial. Restrict write access.
+- Ensure `labels` and other string inputs are handled safely if they come from untrusted sources, though typical plotting libraries are robust against injection via labels.
 
 ---
 <!-- End of tool specifications for Data Visualization --> 

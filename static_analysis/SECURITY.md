@@ -19,7 +19,7 @@ Please include the following information in your report:
 - The version(s) of the module affected.
 - Your name and contact information (optional).
 
-We aim to acknowledge receipt of your vulnerability report within [Specify Expected Response Time, e.g., 2-3 business days] and will work with you to understand and remediate the issue. We may request additional information if needed.
+We aim to acknowledge receipt of your vulnerability report within 2-3 business days and will work with you to understand and remediate the issue. We may request additional information if needed.
 
 Public disclosure of the vulnerability will be coordinated with you after the vulnerability has been fixed and an update is available, or after a reasonable period if a fix is not immediately possible.
 
@@ -33,8 +33,14 @@ This security policy applies only to the `Static Analysis` module within the Cod
 
 ## Best Practices for Using This Module
 
-- Always use the latest stable version of the module.
+- Always use the latest stable version of this module and all underlying static analysis tools (Pylint, Flake8, Bandit, Pyrefly, etc.).
+- **Tool Security**: Be aware that static analysis tools themselves can have vulnerabilities. Keep them updated from official sources. If a tool processes configuration files (e.g., `.pylintrc`, `pyproject.toml`), ensure these configurations are secure and not sourced from untrusted locations if they can influence tool behavior dangerously (e.g., loading arbitrary plugins).
+- **Input Code Security**: Static analysis tools parse and analyze source code. While they don't execute it, malformed or maliciously crafted code could potentially find vulnerabilities in the parsers or checkers of these tools, leading to excessive resource consumption or crashes.
+- **Secure Configuration**: Ensure that configuration files for the analysis tools (e.g., `.pylintrc`, `pyproject.toml` sections for Flake8, Bandit, Pyrefly) are secure. Avoid configurations that might load untrusted plugins or execute arbitrary code during analysis, if such features exist in the tools.
+- **Output Handling**: The output from static analysis tools (lists of issues, code snippets) might reveal information about the analyzed code's structure or potential vulnerabilities. Handle this output securely, especially if it's stored or displayed.
+- **Resource Consumption**: Running multiple static analysis tools, especially on large codebases or with complex checks enabled, can be resource-intensive (CPU, memory). Configure analysis appropriately for the environment.
+- **Dependency Security**: Ensure that Python and any libraries used by this module or the static analysis tools are kept up to date.
 - Follow the principle of least privilege when configuring access or permissions related to this module.
-- Regularly review configurations and logs for suspicious activity.
+- Regularly review configurations for the static analysis tools and logs from this module for suspicious activity.
 
 Thank you for helping keep Codomyrmex and the Static Analysis module secure. 

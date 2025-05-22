@@ -19,7 +19,7 @@ Please include the following information in your report:
 - The version(s) of the module affected.
 - Your name and contact information (optional).
 
-We aim to acknowledge receipt of your vulnerability report within [Specify Expected Response Time, e.g., 2-3 business days] and will work with you to understand and remediate the issue. We may request additional information if needed.
+We aim to acknowledge receipt of your vulnerability report within 2-3 business days and will work with you to understand and remediate the issue. We may request additional information if needed.
 
 Public disclosure of the vulnerability will be coordinated with you after the vulnerability has been fixed and an update is available, or after a reasonable period if a fix is not immediately possible.
 
@@ -34,6 +34,14 @@ This security policy applies only to the `Build Synthesis` module within the Cod
 ## Best Practices for Using This Module
 
 - Always use the latest stable version of the module.
+- **Dependency Security**: If the build process involves fetching dependencies (e.g., from PyPI, npm, Maven), ensure sources are trusted and consider using lockfiles and checksum verification to mitigate supply chain risks. Regularly audit dependencies for known vulnerabilities.
+- **Build Environment Security**: Ensure the environment where builds are performed is secure and isolated, especially if building code from untrusted sources or with untrusted build scripts.
+- **Artifact Security**: Securely store and distribute build artifacts. Implement signing and verification if artifacts are consumed by other critical systems.
+- **Code Synthesis Risks**: If this module synthesizes code (e.g., from prompts or specifications):
+    - Treat synthesized code as untrusted until reviewed.
+    - Sanitize inputs to code synthesis functions to prevent injection attacks that could influence the generated code negatively.
+    - Be mindful of resource consumption during code synthesis.
+- **Secure API Key Handling**: If interacting with external services for code synthesis (e.g., LLMs), manage API keys securely.
 - Follow the principle of least privilege when configuring access or permissions related to this module.
 - Regularly review configurations and logs for suspicious activity.
 

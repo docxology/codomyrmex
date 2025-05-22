@@ -100,7 +100,7 @@ Configuration is primarily through the following environment variables, typicall
 ## 7. Security Aspects
 
 - **Log Content**: Developers should be mindful not to log sensitive information (passwords, API keys, personal data) unless absolutely necessary and properly secured (e.g., if logs are encrypted or access-controlled). This module does not add any specific filtering for sensitive data.
-  When using JSON logging, be aware that all extra fields passed to logger calls (e.g. `logger.info("message", extra={"key": "value"})`) will be included in the JSON output. Review logged data to ensure no sensitive information is unintentionally exposed in these extra fields.
+  When using JSON logging (via the custom `JsonFormatter` in `logger_config.py`), be aware that all fields passed in the `extra` dictionary to logger calls (e.g. `logger.info("message", extra={"key": "value"})`) will be included as top-level fields in the JSON output. Review logged data to ensure no sensitive information is unintentionally exposed in these `extra` fields.
 - **File Permissions**: If logging to a file (`CODOMYRMEX_LOG_FILE`), the application must have appropriate write permissions for the specified path. The module itself does not manage file permissions or log rotation.
 - **Log Injection**: While log messages are typically strings, if user-supplied data is logged directly without sanitization, there could be a risk of log injection (e.g., forging log entries with newline characters). This is a general application concern rather than specific to this module, but users should be aware.
 

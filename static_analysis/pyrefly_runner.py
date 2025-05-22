@@ -2,18 +2,34 @@ import subprocess
 import json
 import re
 import os
-import logging
+import sys
 
-# --- Logger Setup ---
-# Configure basic logging. In a larger application, this might be configured externally.
-logger = logging.getLogger(__name__)
-# Set default logging level. Can be overridden if the script is used as a module.
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
-else:
-    # If imported as a module, don't configure basicConfig, assume parent configures
-    logger.addHandler(logging.NullHandler())
+# Add project root for sibling module imports if run directly
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..')) # static_analysis -> codomyrmex
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
+try:
+    from logging_monitoring.logger_config import get_logger, setup_logging
+except ImportError:
+    # Fallback for environments where logging_monitoring might not be discoverable
+    # This is less ideal but provides a basic operational mode.
+    import logging
+    print("Warning: Could not import Codomyrmex logging. Using standard Python logging.", file=sys.stderr)
+    def setup_logging(): # Dummy setup_logging
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+    def get_logger(name):
+        _logger = logging.getLogger(name)
+        if not _logger.handlers: # Avoid adding handlers multiple times if already configured
+            _handler = logging.StreamHandler(sys.stdout)
+            _formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+            _handler.setFormatter(_formatter)
+            _logger.addHandler(_handler)
+            _logger.setLevel(logging.INFO)
+        return _logger
+
+logger = get_logger(__name__)
 
 # Regex to attempt to parse Pyrefly errors, this is a guess and might need refinement
 # Example: <path>:<line>:<col> <Error Code> <description>
@@ -171,6 +187,9 @@ def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict:
     return results
 
 if __name__ == "__main__":
+    # Ensure logging is set up when script is run directly
+    # This will use environment variables or defaults defined in logger_config.py
+    setup_logging() 
     logger.info("Executing pyrefly_runner.py directly for testing example.")
 
     # Define a hypothetical project root and target file for the example.

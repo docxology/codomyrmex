@@ -106,6 +106,8 @@ def setup_logging():
     logging.basicConfig(level=log_level, handlers=handlers, force=True)
     
     # If specific libraries are too verbose, their log levels can be adjusted here:
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
     # logging.getLogger("some_verbose_library").setLevel(logging.WARNING)
 
     logging.getLogger(__name__).info(

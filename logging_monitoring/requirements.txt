@@ -1,32 +1,19 @@
-# Logging Monitoring - Requirements
+# Logging & Monitoring - Module-Specific Requirements
 
-# This file lists module-specific Python packages and dependencies for the Logging Monitoring module.
+# This module (`logging_monitoring`) primarily utilizes Python's built-in `logging` module
+# and relies on `python-dotenv` for environment variable loading.
 
-# Core logging functionality:
-# python-json-logger==3.3.0 # Removed as logger_config.py uses a custom JsonFormatter
+# `python-dotenv` is a project-wide dependency and is managed in the root `requirements.txt` file.
 
-# Common project-wide dependencies, such as `python-dotenv`,
-# are managed in the root `requirements.txt` file.
+# There are currently no additional Python package dependencies specific to this module
+# that are not already covered by the root `requirements.txt` or Python's standard library.
 
-# If this module introduces other specific third-party libraries purely for its own
-# advanced functionalities (e.g., a specialized log shipping library not used elsewhere),
-# they should be listed here with pinned versions.
+# If future enhancements (e.g., integration with advanced logging libraries like `structlog`,
+# or specific log shipping/monitoring client libraries) require additional dependencies
+# not intended for project-wide use, they should be listed here with pinned versions.
 # Example:
-# # specialized-log-shipper==2.1.0
-
-# The `environment_setup/` module provides guidance on setting up the overall project environment,
-# which includes installing dependencies from the root `requirements.txt`.
-
-# This logging module primarily relies on Python's built-in `logging` module and `python-dotenv`.
-# If this module were to introduce other specific third-party libraries purely for its own
-# advanced functionalities (e.g., a specialized log shipping library not used elsewhere),
-# they would be listed here.
-
-# For now, no additional module-specific dependencies are required beyond what is provided
-# by standard Python and the project-level `python-dotenv`.
-
-# Example if a specific library was needed for this module only:
-# # specialized-logging-handler==1.2.3
+# # structlog==23.1.0
+# # opentelemetry-api==1.18.0
 
 # PLEASE RENAME/ADAPT THIS FILE and its contents based on the primary language and package manager for this module.
 # For example:

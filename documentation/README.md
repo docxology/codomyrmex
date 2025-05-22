@@ -19,9 +19,10 @@ The Docusaurus project is structured as follows:
 
 - `docs/`: Contains the Markdown files that form the content of the documentation site. 
     - `intro.md`: The main landing page for the documentation.
-    - `project/`: Markdown files related to the overall Codomyrmex project (e.g., Contributing, Code of Conduct, License).
-    - `modules/`: This directory is intended to hold documentation sourced from individual Codomyrmex modules. The aggregation process might involve a build step or script to copy/link relevant files here.
-    - `development/`: Documentation related to development processes, architecture, and environment setup.
+    - `project/`: Markdown files related to the overall Codomyrmex project (e.g., general contribution guidelines, code of conduct, license information, overall architecture).
+    - `modules/`: This directory is intended to hold documentation sourced from individual Codomyrmex modules. The aggregation process involves copying relevant files (like `README.md`, `API_SPECIFICATION.md`, `docs/technical_overview.md`, `docs/tutorials/*`) into subdirectories named after each module (e.g., `docs/modules/ai_code_editing/`).
+    - `development/`: Documentation related to development processes, advanced setup, and specific architectural deep-dives for the project as a whole.
+    - `tutorials/`: Project-wide tutorials that may span multiple modules or cover general concepts.
 - `src/`: Contains non-documentation files like custom React components (under `src/components/`) or custom CSS (under `src/css/`).
     - `css/custom.css`: For custom styling overrides.
 - `static/`: Static assets like images, which will be copied to the root of the build output.
@@ -94,6 +95,8 @@ This usually serves the site from `http://localhost:3000` (or another port if 30
 
 A Python script `documentation_website.py` is provided within this `documentation` module to streamline common operations related to the Docusaurus site. This script requires Python to be installed and accessible in your environment. It also attempts to use `codomyrmex.logging_monitoring` for enhanced logging, so ensure the main project Python dependencies are installed (see root `requirements.txt`).
 
+The script currently supports actions like checking the environment (`checkenv`), installing dependencies (`install`), starting the dev server (`start`), building the static site (`build`), and serving the build (`serve`). It can also attempt to open the site in a browser (`assess`).
+
 To use the script, navigate to the Codomyrmex project root and run commands like:
 ```bash
 python documentation/documentation_website.py [action] [--pm <npm|yarn>]
@@ -102,11 +105,12 @@ python documentation/documentation_website.py [action] [--pm <npm|yarn>]
 **Key Actions defined in `documentation_website.py`:**
 *   **No action (default - `full_cycle`)**: Performs a sequence: `checkenv`, `install`, `build`, `assess` (opens browser), and `serve`.
 *   `checkenv`: Checks for Node.js and npm/yarn.
-*   `install`: Installs Docusaurus dependencies (`npm install` or `yarn install`).
-*   `start`: Runs the Docusaurus development server (`npm run start` or `yarn start`).
-*   `build`: Builds the static Docusaurus site (`npm run build` or `yarn build`).
-*   `serve`: Serves the previously built static site from `documentation/build/` (`npm run serve` or `yarn serve`).
+*   `install`: Installs Docusaurus dependencies (`npm install` or `yarn install` in the `documentation/` directory).
+*   `start`: Runs the Docusaurus development server (`npm run start` or `yarn start` from `documentation/`).
+*   `build`: Builds the static Docusaurus site (`npm run build` or `yarn build` from `documentation/`).
+*   `serve`: Serves the previously built static site from `documentation/build/` (`npm run serve` or `yarn serve` from `documentation/`).
 *   `assess`: Opens the default site URL (`http://localhost:3000`) in a browser and prints an assessment checklist (expects a server to be running).
+*   `aggregate_docs`: (Conceptual, future enhancement) This action would automate copying documentation from individual modules into the `documentation/docs/modules/` directory. Currently, this aggregation is a manual or semi-automated step.
 
 **Package Manager Option:**
 *   Use the `--pm` argument to specify `npm` or `yarn`. If omitted, `npm` is the default.
@@ -117,25 +121,79 @@ Refer to the script's internal help (`python documentation/documentation_website
 
 ## Integrating Module Documentation
 
-A key function of this module is to aggregate and present documentation from other Codomyrmex modules. The strategy for this typically involves:
+A key function of this module is to aggregate and present documentation from other Codomyrmex modules. The current strategy involves:
 
-1.  **Consistent Documentation in Modules**: Each Codomyrmex module should maintain its own documentation (e.g., `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, and potentially a `docs/` subdirectory with more detailed guides like `technical_overview.md`).
-2.  **Aggregation Mechanism**: A process (manual, scripted via `documentation_website.py`, or using Docusaurus features/plugins) will be needed to gather these Markdown files. The target location within this module is typically `documentation/docs/modules/<module-name>/`.
-    - This might involve copying files or creating symlinks during a pre-build step.
-    - The `documentation_website.py` script may be enhanced to automate parts of this aggregation.
-3.  **Sidebar Configuration**: The `documentation/sidebars.js` file must be updated to include links to the aggregated module documentation, creating a structured and navigable hierarchy.
-4.  **Cross-Module Linking**: Ensure links between module documents and the main project documentation work correctly.
+1.  **Consistent Documentation in Modules**: Each Codomyrmex module (e.g., `ai_code_editing`, `data_visualization`) MUST maintain its own documentation. This typically includes:
+    *   `README.md` (module overview, basic usage)
+    *   `API_SPECIFICATION.md` (for any Python APIs)
+    *   `MCP_TOOL_SPECIFICATION.md` (for Model Context Protocol tools)
+    *   `docs/technical_overview.md` (detailed architecture, design decisions)
+    *   `docs/tutorials/*.md` (specific tutorials for the module's features)
+    *   Other relevant files like `SECURITY.md`, `CHANGELOG.md`, `USAGE_EXAMPLES.md`.
+2.  **Aggregation/Copying Mechanism**:
+    *   **Current Approach**: Relevant Markdown files from each module are manually or script-assisted (e.g., using a custom script or future enhancements to `documentation_website.py`) copied into a corresponding subdirectory within `documentation/docs/modules/`. For example, `ai_code_editing/README.md` would be copied to `documentation/docs/modules/ai_code_editing/README.md`.
+    *   The `documentation_website.py` script may be enhanced in the future with an `aggregate_docs` action to automate this.
+3.  **Sidebar Configuration**: The `documentation/sidebars.js` file must be manually updated to include links to the aggregated module documentation, creating a structured and navigable hierarchy. This ensures that all copied module documents appear in the website's navigation.
+4.  **Cross-Module Linking**: When writing documentation, use relative Markdown links. Docusaurus will resolve these correctly if the file structure is maintained during aggregation. For example, a link from `ai_code_editing/docs/technical_overview.md` to `ai_code_editing/README.md` should work as `../README.md` within the module, and Docusaurus should handle this correctly once both are in `documentation/docs/modules/ai_code_editing/`.
 
-The specific implementation of this aggregation should be detailed in this module's `docs/technical_overview.md` or a dedicated guide within the documentation site itself.
+The specific implementation details of aggregation and any automation scripts should be further detailed in this module's `docs/technical_overview.md` or a dedicated guide within the documentation site itself (e.g., under `docs/development/DocumentationPipeline.md`).
+
+## Project Documentation Structure (High-Level)
+
+The documentation website aims for the following general structure:
+
+- **Introduction**: Landing page with an overview of Codomyrmex.
+- **Getting Started**: Essential setup, installation, and basic usage guides for the project.
+- **Project Information**:
+    - Overall Architecture
+    - Contribution Guidelines (Code & Documentation)
+    - Code of Conduct
+    - License
+- **Modules**: Dedicated sections for each Codomyrmex module, providing:
+    - Overview (from module `README.md`)
+    - API Specifications (if applicable)
+    - MCP Tool Specifications (if applicable)
+    - Technical Overviews
+    - Tutorials
+    - Usage Examples
+    - Security Information
+    - Changelogs
+- **Tutorials**: Project-wide tutorials that cover broader concepts or workflows involving multiple modules.
+- **Development Guides**: Information for developers contributing to Codomyrmex, including:
+    - Advanced Environment Setup
+    - Coding Standards
+    - Testing Strategies
+    - Documentation Pipeline (how this site is built and maintained)
+- **API Reference (Future)**: Potentially auto-generated API documentation for Python modules.
+- **Blog/Updates (Optional)**: For project news and announcements.
+
+## Contributing to Documentation
+
+Contributions to the Codomyrmex documentation are vital and highly encouraged! The process generally involves:
+
+1.  **Identify the Correct Location**:
+    *   **Module-Specific Content**: For documentation directly related to a single Codomyrmex module (e.g., `ai_code_editing`'s features, API, or tutorials), edits MUST be made to the Markdown files (`README.md`, `API_SPECIFICATION.md`, `docs/*`, etc.) located *within that module's own directory* (e.g., `ai_code_editing/docs/technical_overview.md`). **Do not directly edit files under `documentation/docs/modules/` as these are copies and your changes will be overwritten.**
+    *   **Project-Wide Content**: For documentation that spans the entire project (e.g., overall architecture, top-level tutorials, general contribution guidelines, Code of Conduct), edits should be made to files within the `documentation` module itself, typically under `documentation/docs/project/`, `documentation/docs/development/`, or `documentation/docs/tutorials/`.
+    *   **Docusaurus Site Configuration**: Changes to the website's structure, navigation (sidebars), overall appearance, or build process involve editing files like `docusaurus.config.js`, `sidebars.js`, or `src/css/custom.css` within this `documentation` module.
+2.  **Make Your Edits**: Write clear, concise, and accurate documentation. Follow existing style and formatting.
+3.  **Aggregation (If editing module-specific docs)**: After making changes to module-local documentation, the aggregation mechanism (currently manual copying or future `documentation_website.py aggregate_docs` action) needs to be performed to bring your updated files into the `documentation/docs/modules/` directory. If `sidebars.js` needs changes (e.g., new tutorial file added), edit `documentation/sidebars.js` accordingly.
+4.  **Testing Locally**:
+    *   Navigate to the `documentation` directory: `cd documentation`
+    *   Install dependencies if you haven't already: `npm install` (or `yarn install`)
+    *   Run the Docusaurus development server: `npm run start` (or `yarn start`, or `python ../documentation_website.py start`)
+    *   Preview your changes in your browser (usually `http://localhost:3000`). Ensure content renders correctly, formatting is good, and all links work.
+5.  **Submitting Changes**: Follow the general Codomyrmex project contribution guidelines (see main `CONTRIBUTING.md` in the project root) for committing your changes and submitting a pull request.
+
+Detailed guidelines on documentation style, voice, use of Markdown features, and specific conventions for structuring content will be maintained within the documentation site itself, under `docs/project/CONTRIBUTING_TO_DOCUMENTATION.md`.
 
 ## Further Information
 
 - For specific API or tool specifications *of this documentation module itself* (e.g., related to the `documentation_website.py` script or any future automation tools built herein), refer to:
-    - [API Specification](API_SPECIFICATION.md) (Placeholder, for any direct Python APIs this module might expose)
-    - [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) (Details MCP tools like `trigger_documentation_build`)
-- [Usage Examples](USAGE_EXAMPLES.md): Examples for using any specific tools or scripts within this module.
-- [Detailed Documentation for this module](./docs/index.md): If this module has its own specific detailed guides beyond this README.
-- [Changelog](CHANGELOG.md): Tracks changes to the documentation module itself.
-- [Security Policy](SECURITY.md): Security considerations for this module (e.g., related to running build scripts or serving content).
+    - [API Specification](API_SPECIFICATION.md) (Details any Python APIs this module might expose, e.g., for `documentation_website.py`)
+    - [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) (Details MCP tools like `trigger_documentation_build` if implemented)
+- [Usage Examples](USAGE_EXAMPLES.md): Examples for using any specific tools or scripts within this `documentation` module.
+- [Detailed Documentation for this module](./docs/index.md): Specific guides for the `documentation` module itself (e.g., technical overview, how to manage the Docusaurus setup).
+- [Changelog](CHANGELOG.md): Tracks changes to the `documentation` module's infrastructure and scripts.
+- [Security Policy](SECURITY.md): Security considerations for this module (e.g., related to build scripts, dependencies, or serving content).
 
 (Note: The `API_SPECIFICATION.md`, `USAGE_EXAMPLES.md`, etc., in this directory pertain to the `documentation` module's own components, not the overall Codomyrmex project documentation content, unless specifically about tools for managing that content.) 

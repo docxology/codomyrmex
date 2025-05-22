@@ -1,12 +1,16 @@
-# Data Visualization - Requirements
+# Data Visualization - Module-Specific Requirements
 
-# This module uses dependencies from the root requirements.txt file, including:
-# - matplotlib==3.10.3
-# - seaborn==0.13.2
-# - numpy==2.2.6
-# - python-dotenv>=1.0.0
+# This module relies on the following primary Python libraries for its functionality.
+# These versions are pinned for stability and reproducibility.
+numpy==1.26.4
+matplotlib==3.8.4
+seaborn==0.13.2
 
-# If this module requires additional dependencies not in the root requirements.txt,
-# they should be listed here.
+# This module may also utilize common libraries from the root `requirements.txt`
+# such as `python-dotenv` if configuration loading is needed directly within
+# visualization scripts or utilities specific to this module.
+
+# If this module later requires other specific dependencies not included globally
+# or in the list above, they should be added here with pinned versions.
 
 # No additional dependencies currently required 

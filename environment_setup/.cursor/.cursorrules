@@ -1,0 +1,56 @@
+# Cursor Rules for the environment_setup Module
+
+## 0. Preamble
+These rules are specific to the `environment_setup` module and supplement the root `../.cursor/.cursorrules` file. Always adhere to the root rules unless explicitly overridden here.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides documentation and scripts (primarily `env_checker.py`) to ensure a consistent and verifiable development environment for the Codomyrmex project. It guides the setup of prerequisites, Python dependencies, and API key configurations (`.env` files).
+-   **Key Technologies/Tools**: Python (for `env_checker.py`), Markdown (for documentation), Shell commands (for setup instructions).
+-   Refer to this module's `README.md` for a comprehensive overview.
+
+## 2. Key Files & Structure
+When working within this module, pay close attention to:
+-   `README.md`: Main documentation for project setup and for this module's components.
+-   `env_checker.py`: Python script for validating dependencies and `.env` file setup.
+-   `SECURITY.md`: Security considerations for the development environment and setup process.
+-   `USAGE_EXAMPLES.md`: Examples of using `env_checker.py` and general setup workflows.
+-   `docs/technical_overview.md`: Technical details of `env_checker.py` and module design.
+-   `docs/tutorials/troubleshooting_common_setup_issues.md`: Guide for resolving common setup problems.
+-   `API_SPECIFICATION.md`: (Currently a template) For any formal API definitions of `env_checker.py` functions.
+-   `CHANGELOG.md`: Log changes to this module's scripts or documentation.
+-   `requirements.txt`: (Currently minimal/empty) For any dependencies *unique* to `env_checker.py` that are not in the root project `requirements.txt`.
+
+## 3. Coding Standards & Practices
+
+### For `env_checker.py` (Python):
+-   Follow Python PEP 8 guidelines.
+-   Ensure script is robust, with clear error messages and appropriate use of `sys.exit()` on critical failures.
+-   Prioritize clear, instructional print statements to guide the user.
+-   When modifying paths or assumptions about project structure, ensure they remain robust (e.g., `project_root` determination).
+-   Avoid handling or logging actual API key values; focus on placeholder guidance and file existence.
+
+### For Documentation (Markdown):
+-   Keep setup instructions in `README.md` and troubleshooting guides accurate, up-to-date, and easy to follow for all supported operating systems.
+-   Ensure consistency between documented steps and the behavior of `env_checker.py`.
+-   Use clear and unambiguous language.
+
+## 4. Testing
+-   **`env_checker.py`**:
+    -   Manually test `env_checker.py` under various conditions: missing dependencies, missing `.env` file, existing `.env` file, incorrect project root (if that part of the script is modified).
+    -   Unit tests (in `tests/`) should cover the logic of `ensure_dependencies_installed` and `check_and_setup_env_vars`, mocking file system operations and imports where necessary.
+-   **Documentation**: 
+    -   Manually walk through setup instructions in `README.md` and troubleshooting steps on different OS (if feasible) to verify accuracy.
+    -   Check for clarity and completeness of explanations.
+
+## 5. Documentation (Meta-Documentation for this Module)
+-   Keep this module's `README.md`, `docs/technical_overview.md`, and `USAGE_EXAMPLES.md` reflective of `env_checker.py`'s current functionality and the overall setup strategy.
+
+## 6. Specific Considerations for `environment_setup`
+-   **Cross-Platform Compatibility**: Ensure setup instructions and `env_checker.py` (as much as Python allows) are compatible with major developer platforms (Linux, macOS, Windows).
+-   **Clarity for Beginners**: The setup process is often a developer's first interaction with the project. Prioritize clarity and simple, actionable steps.
+-   **Security First**: When guiding users on `.env` files or installing tools, always consider the security implications as outlined in `SECURITY.md`.
+
+## 7. Final Check
+-   Verify that `env_checker.py` runs correctly and provides the intended guidance.
+-   Read through all documentation in this module to ensure it is consistent and accurate.
+-   Update this module's `CHANGELOG.md` if significant changes were made to scripts or core documentation. 

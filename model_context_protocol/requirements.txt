@@ -43,8 +43,10 @@
 # [Dependency Name]==[Version Specifier] # e.g., my-library==1.0.0
 # [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1
 
-# For schema definition and validation (e.g., if using JSON Schema for MCP messages)
+# For schema definition and validation (e.g., if using JSON Schema for MCP messages
+# and Pydantic for Python models of MCP messages)
 jsonschema==4.23.0
+pydantic==2.8.2
 
 # If this module develops other specific Python dependencies (e.g., for Protocol Buffers generation/handling
 # if that format is chosen, or specific client/server libraries for an example implementation),
@@ -53,7 +55,7 @@ jsonschema==4.23.0
 # # protobuf==3.20.3
 
 # If all other dependencies are covered by the root requirements.txt, this can be stated.
-# Currently, aside from potential schema tools like jsonschema, other dependencies are
+# Currently, aside from schema tools like jsonschema and pydantic, other dependencies are
 # expected to be covered by the root requirements.txt or not applicable if the protocol
 # itself is language-agnostic and implemented by other modules.
 

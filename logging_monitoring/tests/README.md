@@ -1,65 +1,68 @@
 # Testing Logging Monitoring
 
-This document describes how to run tests for the Logging Monitoring module.
+This document describes how to run tests for the `logging_monitoring` module within the Codomyrmex project.
 
 ## Prerequisites
 
-(List any specific prerequisites or setup required to run the tests for this module, e.g., specific SDKs, environment variables, database setup.)
-
-- Prerequisite 1: ...
-- Prerequisite 2: ...
+- **Python Environment**: A Python environment (3.7+ recommended) with `pytest` and `python-dotenv` installed. These are typically part of the main project's development dependencies (see root `requirements.txt`).
+- **Project Root**: Tests should generally be run from the Codomyrmex project root directory to ensure correct path resolution for `.env` files and module imports.
 
 ## Running Tests
 
-(Provide clear instructions on how to execute the tests. This might involve specific commands, scripts, or IDE configurations.)
-
 ### Unit Tests
 
-```bash
-# Example command to run unit tests
-pytest path/to/module/tests/unit
-# or
-# npm run test:unit
-```
+Unit tests for the `logging_monitoring` module are located in the `logging_monitoring/tests/unit/` directory. The primary file is `test_logger_config.py`.
+
+To run these tests:
+
+1.  Navigate to the project root directory in your terminal.
+2.  Execute `pytest` targeting the module's test directory:
+
+    ```bash
+    pytest logging_monitoring/tests/unit/
+    ```
+
+    Alternatively, to run a specific test file:
+
+    ```bash
+    pytest logging_monitoring/tests/unit/test_logger_config.py
+    ```
 
 ### Integration Tests
 
-```bash
-# Example command to run integration tests
-pytest path/to/module/tests/integration
-# or
-# npm run test:integration
-```
+Currently, there are no dedicated integration tests for this module beyond the implicit integration of its usage in other modules. The unit tests for `logger_config.py` cover interactions with environment variables and file system (via mocking where appropriate).
 
 ### End-to-End (E2E) Tests
 
-```bash
-# Example command to run E2E tests
-# ./scripts/run-e2e-tests.sh
-```
-
-(Adjust the commands and sections above based on the testing frameworks and types of tests relevant to the module.)
+Not applicable for this foundational logging utility module in isolation. E2E tests for the overall application would verify that logging output is correctly generated as part of broader functionalities.
 
 ## Test Structure
 
-(Briefly describe how the tests are organized within this `tests/` directory, e.g., by feature, by type (unit, integration), etc.)
-
-- `unit/`: Contains unit tests.
-- `integration/`: Contains integration tests.
-- `fixtures/` or `data/`: Contains test data or fixtures.
+-   `unit/`: Contains unit tests.
+    -   `test_logger_config.py`: Tests the functionality of `setup_logging()` and `get_logger()` from `logger_config.py`, including various configurations for log levels, formats (TEXT, JSON), and output destinations (console, file).
+-   `integration/`: (Currently no specific integration tests for this module itself).
+-   `fixtures/` or `data/`: (Currently not used, but could be added for complex test data if needed).
 
 ## Writing Tests
 
-(Provide guidelines or link to resources on how to write new tests for this module.)
+When contributing new tests for `logger_config.py` or other components of this module:
 
-- Follow the existing testing patterns and frameworks.
-- Ensure tests are independent and can be run in any order.
-- Mock external dependencies for unit tests where appropriate.
-- Aim for good test coverage.
+-   **Framework**: Use `pytest`.
+-   **Mocking**: Utilize `pytest` fixtures and `unittest.mock` (e.g., `mocker` fixture from `pytest-mock`) to mock:
+    -   Environment variables (`os.getenv`).
+    -   File system operations (`logging.FileHandler`, `os.path.exists`, etc.) if testing file output aspects without creating actual files, or use `tmp_path` fixture for temporary files.
+    -   `logging.basicConfig` and `logging.getLogger().addHandler` calls to inspect their arguments.
+-   **Assertions**: Assert on:
+    -   The configuration of loggers (level, handlers, formatters).
+    -   The content of log messages (if capturing output).
+    -   Warnings printed to `stderr` for invalid configurations.
+-   **Idempotency**: Ensure `setup_logging()` remains idempotent even if called multiple times in tests (though the `_logging_configured` flag handles this, tests can verify it).
+-   **Coverage**: Aim to cover different code paths based on environment variable settings.
+-   Refer to existing tests in `test_logger_config.py` for patterns.
 
 ## Troubleshooting Failed Tests
 
-(Offer advice on how to debug or troubleshoot failing tests.)
-
-- Check logs for detailed error messages.
-- Ensure all prerequisites are met and the environment is correctly configured. 
+-   **Environment Variables**: Ensure that tests properly mock or isolate environment variables to avoid interference from your actual `.env` files or shell environment.
+-   **File Paths**: If testing file logging, ensure paths are handled correctly, especially if using temporary files/directories provided by `pytest` (like `tmp_path`).
+-   **Mocking Issues**: Double-check that mocks are configured correctly and that the functions/objects you intend to mock are the ones actually being called.
+-   **`_logging_configured` state**: Some tests might need to reset the `logging_monitoring.logger_config._logging_configured` flag to `False` if they need to re-run `setup_logging()` under different conditions within the same test session (though `pytest` usually isolates test functions). If issues arise, check this state variable. 

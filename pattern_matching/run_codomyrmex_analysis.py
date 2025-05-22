@@ -2,6 +2,8 @@ import os
 import shutil
 import json
 import sys
+from tqdm import tqdm # Added tqdm
+from typing import List, Callable, Optional # Added Optional for type hinting embed_fn
 
 # Add project root to Python path to allow sibling module imports
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -12,6 +14,17 @@ if PROJECT_ROOT not in sys.path:
 from dotenv import load_dotenv
 from kit import Repository, DocstringIndexer # Summarizer is accessed via repo.get_summarizer()
 from kit.summaries import OpenAIConfig # Added import for OpenAIConfig
+from kit.llms.openai import OpenAIConfig as KitOpenAIConfig # Explicit import for summarizer config
+
+# Attempt to import SentenceTransformer for explicit embedding function
+try:
+    from sentence_transformers import SentenceTransformer
+except ImportError:
+    # This print will be visible if the script is run and the import fails
+    # The logger might not be initialized yet.
+    print("[CRITICAL SETUP ERROR] `sentence-transformers` package not found. DocstringIndexer will likely fail. Please install it: pip install sentence-transformers")
+    SentenceTransformer = None # Allow script to proceed but DocstringIndexer will fail if used
+
 # Attempt to import the new environment setup function
 try:
     from environment_setup.env_checker import check_and_setup_env_vars, ensure_dependencies_installed as ensure_core_deps_installed
@@ -90,11 +103,44 @@ ANALYSIS_CONFIG = {
 logger = None # Will be initialized in run_full_analysis
 PRINTED_ONCE_KEYS = set() # For print_once utility
 
+# --- Global Embedding Function (for DocstringIndexer) ---
+DEFAULT_EMBEDDING_MODEL = 'all-MiniLM-L6-v2'
+_embed_fn_instance: Optional[Callable[[str], List[float]]] = None
+
+def get_embedding_function(model_name: str = DEFAULT_EMBEDDING_MODEL):
+    global _embed_fn_instance
+    if _embed_fn_instance is not None:
+        return _embed_fn_instance
+
+    if SentenceTransformer is None:
+        err_msg = f"[CRITICAL EMBEDDING ERROR] SentenceTransformer library not available. Cannot create embedding function for model '{model_name}'."
+        if logger: # Check if logger exists
+            logger.error(err_msg)
+        else:
+            print(err_msg)
+        return None
+
+    try:
+        st_model = SentenceTransformer(model_name)
+        _embed_fn_instance = lambda text: st_model.encode(text).tolist()
+        if logger: # Check if logger exists
+            logger.info(f"Successfully initialized sentence-transformer model '{model_name}' for embeddings.")
+        else:
+            print(f"[INFO] Successfully initialized sentence-transformer model '{model_name}' for embeddings (logger not yet active).")
+        return _embed_fn_instance
+    except Exception as e:
+        err_msg = f"[CRITICAL EMBEDDING ERROR] Failed to initialize SentenceTransformer model '{model_name}': {e}"
+        if logger: # Check if logger exists
+            logger.error(err_msg)
+        else:
+            print(err_msg)
+        return None
+
 # --- Helper Functions for Individual Analysis Stages ---
 
 def _perform_repository_index(repo: Repository, full_output_path: str, relative_output_dir_name: str, config: dict, _logger):
     errors = []
-    _logger.info("Starting: Repository Index generation")
+    # _logger.info("Starting: Repository Index generation") # tqdm will show this
     if config.get("run_repository_index", True):
         try:
             repo.write_index(os.path.join(full_output_path, "repository_index.json"))
@@ -109,7 +155,7 @@ def _perform_repository_index(repo: Repository, full_output_path: str, relative_
 
 def _perform_dependency_analysis(repo: Repository, full_output_path: str, relative_output_dir_name: str, config: dict, _logger):
     errors = []
-    _logger.info("Starting: Python Dependency Analysis")
+    # _logger.info("Starting: Python Dependency Analysis")
     if config.get("run_dependency_analysis", True):
         try:
             py_files_exist = any(f_info.get('path', '').endswith(".py") for f_info in repo.get_file_tree())
@@ -121,11 +167,11 @@ def _perform_dependency_analysis(repo: Repository, full_output_path: str, relati
                     cycles = analyzer.find_cycles()
                     with open(os.path.join(full_output_path, "dependency_cycles.txt"), "w") as f:
                         if cycles:
-                            f.write(f"Found {len(cycles)} circular dependencies:\\n")
+                            f.write(f"Found {len(cycles)} circular dependencies:\n")
                             for cycle_list in cycles: # cycles is a list of lists
-                                f.write(f"  {' -> '.join(cycle_list)} -> {cycle_list[0]}\\n")
+                                f.write(f"  {' -> '.join(cycle_list)} -> {cycle_list[0]}\n")
                         else:
-                            f.write("No circular dependencies found.\\n")
+                            f.write("No circular dependencies found.\n")
                     
                     analyzer.generate_llm_context(output_format="markdown", output_path=os.path.join(full_output_path, "dependency_llm_context.md"))
                     
@@ -149,10 +195,11 @@ def _perform_dependency_analysis(repo: Repository, full_output_path: str, relati
 def _perform_text_search(repo: Repository, full_output_path: str, relative_output_dir_name: str, config: dict, _logger):
     errors = []
     text_search_results_data = {}
-    _logger.info("Starting: Text Search")
+    # _logger.info("Starting: Text Search")
     if config.get("run_text_search", True):
         try:
-            for query in config.get("text_search_queries", ["TODO", "FIXME"]):
+            queries = config.get("text_search_queries", ["TODO", "FIXME"])
+            for query in tqdm(queries, desc=f"Text Searching in {relative_output_dir_name}", unit="query", leave=False):
                 results = repo.search_text(query, file_pattern="*.*") # search all files
                 text_search_results_data[query] = results
             with open(os.path.join(full_output_path, "text_search_results.json"), "w") as f:
@@ -168,7 +215,7 @@ def _perform_text_search(repo: Repository, full_output_path: str, relative_outpu
 
 def _perform_code_summarization(repo: Repository, full_output_path: str, relative_output_dir_name: str, config: dict, llm_config: OpenAIConfig, _logger):
     errors = []
-    _logger.info("Starting: Code Summarization (Optional)")
+    # _logger.info("Starting: Code Summarization (Optional)")
     if config.get("run_code_summarization", True):
         summaries_output_dir = os.path.join(full_output_path, "code_summaries")
         os.makedirs(summaries_output_dir, exist_ok=True)
@@ -216,7 +263,7 @@ def _perform_code_summarization(repo: Repository, full_output_path: str, relativ
                 if hasattr(summarizer, 'config') and hasattr(summarizer.config, 'model'):
                     model_name = summarizer.config.model
                 _logger.info(f"Attempting to summarize {len(files_to_summarize_selected)} files for {relative_output_dir_name} using model '{model_name}' (char limit: {max_char_limit})...")
-                for file_path_in_repo in files_to_summarize_selected:
+                for file_path_in_repo in tqdm(files_to_summarize_selected, desc=f"Summarizing files in {relative_output_dir_name}", unit="file", leave=False):
                     try:
                         full_file_path = os.path.join(repo.repo_path, file_path_in_repo)
                         file_size = os.path.getsize(full_file_path) # Check actual file size in bytes (approx chars)
@@ -249,86 +296,95 @@ def _perform_code_summarization(repo: Repository, full_output_path: str, relativ
 
 def _perform_docstring_indexing(repo: Repository, full_output_path: str, relative_output_dir_name: str, config: dict, llm_config: OpenAIConfig, _logger):
     errors = []
-    _logger.info("Starting: Docstring Indexing and Search (Optional)")
+    # _logger.info("Starting: Docstring Indexing (Optional)")
     if config.get("run_docstring_indexing", True):
-        docstring_index_persist_dir = os.path.join(full_output_path, "docstring_index_data")
+        docstring_output_dir = os.path.join(full_output_path, "docstring_index_data")
+        # Persist dir for ChromaDB (DocstringIndexer's default backend)
+        # Needs to be unique per analysis target to avoid collisions if multiple analyses run concurrently
+        # or if the script is re-run for different modules.
+        # A simple way is to use a subdirectory named after `relative_output_dir_name`
+        # However, `relative_output_dir_name` can contain slashes (e.g., module_template_review/...), 
+        # so replace them for a valid directory name.
+        sanitized_dir_name = relative_output_dir_name.replace("/", "_").replace("\\", "_")
+        persist_dir_for_indexer = os.path.join(docstring_output_dir, sanitized_dir_name + "_chromadb")
+        os.makedirs(persist_dir_for_indexer, exist_ok=True) 
+
         try:
-            from sentence_transformers import SentenceTransformer # Dynamically import to check availability
+            summarizer_for_indexer = repo.get_summarizer(config=llm_config)
+            embedding_model_name = config.get("embedding_model", DEFAULT_EMBEDDING_MODEL)
             
-            embed_model_name = config.get("embedding_model", 'all-MiniLM-L6-v2')
-            embed_model = None
-            device_used = "auto (default)"
+            # Get the embedding function
+            current_embed_fn = get_embedding_function(embedding_model_name)
+            if not current_embed_fn:
+                err_msg = f"Skipping Docstring Indexing for {relative_output_dir_name}: Embedding function could not be initialized for model '{embedding_model_name}'. Check previous errors."
+                _logger.error(err_msg)
+                errors.append(err_msg)
+                return errors # Critical failure for this stage
+            
+            _logger.info(f"Initializing DocstringIndexer for {relative_output_dir_name} with embedding model '{embedding_model_name}' and persist_dir='{persist_dir_for_indexer}'.")
+            
+            # Pass the explicitly defined embed_fn and persist_dir
+            indexer = DocstringIndexer(
+                repo=repo, 
+                summarizer=summarizer_for_indexer, 
+                embed_fn=current_embed_fn,
+                persist_dir=persist_dir_for_indexer
+            )
+            
+            model_name = 'default LLM'
+            if hasattr(summarizer_for_indexer, 'config') and hasattr(summarizer_for_indexer.config, 'model'):
+                model_name = summarizer_for_indexer.config.model
 
-            try:
-                _logger.info(f"Attempting to load SentenceTransformer model '{embed_model_name}' with auto device selection.")
-                embed_model = SentenceTransformer(embed_model_name) # Default device selection
-                embed_model.encode("test sentence") # Test to catch device issues early
-                device_used = str(embed_model.device) # Actual device
-                _logger.info(f"Successfully loaded SentenceTransformer model on device: {device_used}")
-            except Exception as e_model_load:
-                print_once(f"st_model_load_failed_{embed_model_name}", f"Failed to load SentenceTransformer model '{embed_model_name}': {e_model_load}. Docstring indexing will be impacted.", level="warning", _logger=_logger)
-                errors.append(f"Failed to load SentenceTransformer model for {relative_output_dir_name}: {e_model_load}")
-                embed_model = None
+            _logger.info(f"Building docstring index for {relative_output_dir_name} using summarizer model '{model_name}'...")
+            
+            # Build the index (symbol-level by default, can be configured via `level`)
+            # Consider making `file_extensions` configurable as well.
+            indexer.build(force=True, level="symbol", file_extensions=[".py", ".md"]) # Force rebuild, symbol level for better granularity
 
-            if embed_model: # Proceed only if model loaded successfully
-                _logger.info(f"Building docstring index for {relative_output_dir_name} using '{embed_model_name}' (this may take time)...")
-                os.makedirs(docstring_index_persist_dir, exist_ok=True)
-                
+            _logger.info(f"Completed: Docstring indexing for {relative_output_dir_name}")
+
+            # Example search (optional, for verification)
+            search_query = config.get("docstring_search_query", "example function usage")
+            search_results = indexer.get_searcher().search(search_query, top_k=3)
+            with open(os.path.join(full_output_path, "docstring_search_example_results.json"), "w") as f:
+                # Convert search results to a more JSON-serializable format if they contain non-standard objects
+                # For now, assuming they are dicts of basic types or lists of such.
                 try:
-                    summarizer = repo.get_summarizer(config=llm_config)
-                except Exception as e_summ_init:
-                    _logger.error(f"Failed to initialize Summarizer for DocstringIndexer in {relative_output_dir_name}: {e_summ_init}")
-                    errors.append(f"Summarizer init failed for DocstringIndexer in {relative_output_dir_name}: {e_summ_init}")
-                    return errors # Stop if summarizer cannot be initialized
+                    json.dump(search_results, f, indent=2)
+                except TypeError as te:
+                    _logger.warning(f"Could not serialize docstring search results to JSON: {te}. Writing basic info.")
+                    json.dump([str(r) for r in search_results], f, indent=2)
+            _logger.info(f"  Performed example docstring search for '{search_query}' for {relative_output_dir_name}")
 
-                indexer = DocstringIndexer(
-                    repo=repo,
-                    summarizer=summarizer,
-                    embed_fn=embed_model.encode, # Use the encode method of the loaded model
-                    persist_dir=docstring_index_persist_dir
-                )
-                indexer.build(force=True) # Build the index using DocstringIndexer
-
-                actual_searcher = indexer.get_searcher() # Get the SummarySearcher instance
-
-                search_query = config.get("docstring_search_query", "example function")
-                docstring_search_results_data = actual_searcher.search(search_query, top_k=3) # Perform search using SummarySearcher
-                
-                with open(os.path.join(full_output_path, "docstring_search_results.json"), "w") as f:
-                    json.dump(docstring_search_results_data, f, indent=2)
-                _logger.info(f"Completed: Docstring index and search for {relative_output_dir_name}.")
-            else:
-                _logger.warning(f"Skipping docstring indexing for {relative_output_dir_name} as embedding model '{embed_model_name}' could not be loaded.")
-
-        except ImportError:
-            err_msg_import = "Docstring indexing feature requires 'sentence-transformers'. Install with 'pip install sentence-transformers'."
-            print_once("sentence_transformers_missing_docstring", err_msg_import, level="warning", _logger=_logger)
-            _logger.warning(f"Docstring indexing skipped for {relative_output_dir_name}: 'sentence-transformers' not found.")
-            errors.append(f"Docstring indexing skipped for {relative_output_dir_name}: sentence-transformers not found.")
-        except Exception as e_doc_index:
-            err_msg_doc = f"Docstring indexing feature may be limited or skipped for {relative_output_dir_name}: {e_doc_index}. (Likely missing API key, model issue, or setup problem)."
-            print_once("docstring_indexer_failed_" + relative_output_dir_name, err_msg_doc, level="warning", _logger=_logger)
-            errors.append(err_msg_doc)
+        except ImportError as ie_st:
+            # This specific catch is for sentence-transformers not being installed.
+            err_msg = f"Docstring indexing skipped for {relative_output_dir_name} due to missing 'sentence-transformers'. Error: {ie_st}. Please install the package."
+            print_once("docstring_indexer_import_error_" + relative_output_dir_name, err_msg, level="error", _logger=_logger)
+            errors.append(err_msg)
+        except Exception as e_dsi:
+            err_msg = f"Failed: Docstring indexing for {relative_output_dir_name}: {e_dsi}"
+            _logger.error(err_msg)
+            errors.append(err_msg)
     else:
-        _logger.info(f"Skipped: Docstring Indexing and Search for {relative_output_dir_name} as per config.")
+        _logger.info(f"Skipped: Docstring Indexing for {relative_output_dir_name} as per config.")
     return errors
 
 def _perform_symbol_extraction(repo: Repository, full_output_path: str, relative_output_dir_name: str, config: dict, _logger):
     errors = []
     all_symbols_data = []
-    _logger.info("Starting: Extract All Symbols (Python files)")
+    # _logger.info("Starting: Extract All Symbols (Python files)")
     if config.get("run_symbol_extraction", True):
         try:
             # Assuming repo.extract_symbols() gives all symbols from python files
             # If it needs specific file types, that should be handled here or in the kit.
-            all_symbols_data = repo.extract_symbols()
+            all_symbols_data = repo.extract_symbols() # This could be slow for large repos
             
             output_file = os.path.join(full_output_path, "all_python_symbols.json")
             with open(output_file, "w") as f:
                 json.dump(all_symbols_data, f, indent=2)
             
             if all_symbols_data:
-                _logger.info(f"Completed: Extracted and wrote all Python symbols for {relative_output_dir_name}")
+                _logger.info(f"Completed: Extracted and wrote {len(all_symbols_data)} Python symbols for {relative_output_dir_name}")
             else:
                 _logger.info(f"No Python symbols extracted for {relative_output_dir_name}")
         except Exception as e:
@@ -341,40 +397,36 @@ def _perform_symbol_extraction(repo: Repository, full_output_path: str, relative
 
 def _perform_symbol_usage_analysis(repo: Repository, all_symbols_data: list, full_output_path: str, relative_output_dir_name: str, config: dict, _logger):
     errors = []
-    _logger.info("Starting: Find Symbol Usages")
+    # _logger.info("Starting: Find Symbol Usages")
     if config.get("run_symbol_usage_analysis", True):
         symbols_output_dir = os.path.join(full_output_path, "symbol_usages")
         os.makedirs(symbols_output_dir, exist_ok=True)
         
         symbols_to_check = config.get("symbols_to_find_usages", [])
         
-        # Optionally, add all extracted top-level symbols from the current module if desired
-        # extracted_local_symbols = [sym['name'] for sym in all_symbols_data if sym.get('file_path') and not os.path.dirname(sym['file_path'])] # very basic
-        # symbols_to_check = list(set(symbols_to_check + extracted_local_symbols))
-
         if not symbols_to_check:
-            _logger.info(f"No symbols configured or extracted for usage analysis in {relative_output_dir_name}.")
+            _logger.info(f"No symbols configured for usage analysis in {relative_output_dir_name}.")
         else:
             _logger.info(f"Analyzing usages for {len(symbols_to_check)} configured symbols in {relative_output_dir_name}...")
-            for symbol_name in symbols_to_check:
+            for symbol_name in tqdm(symbols_to_check, desc=f"Finding symbol usages in {relative_output_dir_name}", unit="symbol", leave=False):
                 try:
                     usages = repo.find_symbol_usages(symbol_name) 
                     usage_file_name = f"{symbol_name.replace('.', '_').replace('/', '_')}_usages.json" # Sanitize name
                     with open(os.path.join(symbols_output_dir, usage_file_name), "w") as f:
                         json.dump(usages, f, indent=2)
-                    _logger.info(f"  Completed: Found and wrote usages for symbol '{symbol_name}' to {os.path.join(symbols_output_dir, usage_file_name)}")
+                    # _logger.info(f"  Completed: Found and wrote usages for symbol '{symbol_name}' to {os.path.join(symbols_output_dir, usage_file_name)}")
                 except Exception as e_usage:
                     err_msg = f"  Failed to find usages for symbol '{symbol_name}' in {relative_output_dir_name}: {e_usage}"
                     _logger.error(err_msg)
                     errors.append(err_msg)
-        _logger.info(f"Completed: Symbol usage search for {relative_output_dir_name}")
+            _logger.info(f"Completed: Symbol usage search for {relative_output_dir_name}")
     else:
         _logger.info(f"Skipped: Symbol Usage Analysis for {relative_output_dir_name} as per config.")
     return errors
 
 def _perform_text_search_context_extraction(repo: Repository, text_search_results_data: dict, full_output_path: str, relative_output_dir_name: str, config: dict, _logger):
     errors = []
-    _logger.info("Starting: Extract Context for Text Search Results")
+    # _logger.info("Starting: Extract Context for Text Search Results")
     if config.get("run_text_search_context_extraction", True):
         if not text_search_results_data:
             _logger.info(f"Skipped: No text search results to extract context from for {relative_output_dir_name}.")
@@ -385,20 +437,33 @@ def _perform_text_search_context_extraction(repo: Repository, text_search_result
                 
                 max_contexts = config.get("max_text_search_contexts_to_extract", 1)
                 extracted_count = 0
-
-                for query, results in text_search_results_data.items():
+                
+                # Using tqdm for iterating over queries
+                for query, results in tqdm(text_search_results_data.items(), desc=f"Extracting contexts in {relative_output_dir_name}", unit="query", leave=False):
                     if not results: continue
                     query_contexts = []
-                    for res in results:
+                    # Potentially use tqdm here if results list can be very long
+                    for res_idx, res in enumerate(results):
                         if extracted_count >= max_contexts: break
                         try:
-                            # Assuming kit.Repository has a method to get context.
-                            # This is a placeholder for actual kit functionality.
-                            # context = repo.get_context_for_match(res['file_path'], res['line_number'], window_size=5) 
-                            # For now, we just save the match itself as a pseudo-context
                             file_path = res.get('file_path', 'Unknown_file')
                             line_number = res.get('line_number', 'Unknown_line')
-                            context = {"match_info": res, "context_snippet": f"Context for {file_path} line {line_number} (TODO: implement actual context extraction)"}
+                            # Placeholder for actual context extraction. This might need a repo method.
+                            # For now, just log that context extraction would happen here.
+                            # context_snippet = f"Context for {file_path} line {line_number} (TODO: implement actual context extraction via repo.get_context_for_match)"
+                            
+                            # Attempt to use get_context_for_match if available (hypothetical)
+                            context_snippet = f"Context for {file_path} line {line_number} not extracted (method unavailable)."
+                            if hasattr(repo, 'get_context_for_match'):
+                                try:
+                                    # Assuming get_context_for_match returns a string or serializable object
+                                    context_snippet_data = repo.get_context_for_match(res['file_path'], res['line_number'], window_size=5)
+                                    context_snippet = json.dumps(context_snippet_data) if not isinstance(context_snippet_data, str) else context_snippet_data
+                                except Exception as e_get_ctx:
+                                     _logger.warning(f"Could not get context snippet for {file_path} line {line_number}: {e_get_ctx}")
+
+
+                            context = {"match_info": res, "context_snippet": context_snippet}
                             query_contexts.append(context)
                             extracted_count +=1
                         except Exception as e_ctx:
@@ -417,31 +482,33 @@ def _perform_text_search_context_extraction(repo: Repository, text_search_result
          _logger.info(f"Skipped: Text Search Context Extraction for {relative_output_dir_name} as per config.")
     return errors
 
+def _get_chunking_example_output_path(full_output_path: str, file_path_in_repo: str, type:str = "lines"):
+    chunking_output_dir = os.path.join(full_output_path, "file_chunking_examples")
+    os.makedirs(chunking_output_dir, exist_ok=True)
+    base_name = os.path.basename(file_path_in_repo).replace(".", "_")
+    return os.path.join(chunking_output_dir, f"{base_name}_chunks_by_{type}.json")
+
 def _perform_chunking_examples(repo: Repository, full_output_path: str, relative_output_dir_name: str, config: dict, _logger):
     errors = []
-    _logger.info("Starting: Generate File Chunking Examples")
+    # _logger.info("Starting: Generate File Chunking Examples")
     if config.get("run_chunking_examples", True):
         chunking_output_dir = os.path.join(full_output_path, "file_chunking_examples")
         os.makedirs(chunking_output_dir, exist_ok=True)
         try:
-            # Select files for chunking examples (similar to summarization selection)
             candidate_files = [
                 f_info.get('path') for f_info in repo.get_file_tree()
                 if f_info.get('path') and not f_info.get('is_dir') and f_info.get('path', '').endswith((".py", ".md", ".txt"))
             ]
-            # Simple sort: prefer .py, then by name
             candidate_files.sort(key=lambda x: (0 if x.endswith('.py') else 1, x)) 
             
             files_for_examples = candidate_files[:config.get("max_files_for_chunking_examples", 1)]
 
             if files_for_examples:
                 _logger.info(f"Generating chunking examples for {len(files_for_examples)} files in {relative_output_dir_name}...")
-                for file_path_in_repo in files_for_examples:
+                for file_path_in_repo in tqdm(files_for_examples, desc=f"Generating chunk examples in {relative_output_dir_name}", unit="file", leave=False):
                     _logger.info(f"  Processing chunks for {file_path_in_repo}")
                     try:
-                        # Example: Chunk by lines (customize as needed)
-                        line_chunks = repo.chunk_file_by_lines(file_path_in_repo, max_lines=50) # Path relative to repo root
-                        # Example: Chunk by symbols (if applicable, e.g. for Python)
+                        line_chunks = repo.chunk_file_by_lines(file_path_in_repo, max_lines=50)
                         symbol_chunks = []
                         if file_path_in_repo.endswith('.py'):
                             try:
@@ -456,7 +523,7 @@ def _perform_chunking_examples(repo: Repository, full_output_path: str, relative
                         }
                         chunk_file_name = os.path.basename(file_path_in_repo).replace(".", "_") + "_chunking_example.json"
                         with open(os.path.join(chunking_output_dir, chunk_file_name), "w", encoding='utf-8') as f:
-                            json.dump(example_data, f, indent=2, default=lambda o: '<not serializable>') # Handle non-serializable if any
+                            json.dump(example_data, f, indent=2, default=lambda o: '<not serializable>')
                     except FileNotFoundError:
                         _logger.warning(f"  File not found for chunking example: {file_path_in_repo}")
                     except Exception as e_chunk_file:
@@ -477,70 +544,82 @@ def _perform_chunking_examples(repo: Repository, full_output_path: str, relative
 
 
 # --- Main Analysis Orchestration Function ---
-def analyze_repository_path(path_to_analyze: str, relative_output_dir_name: str, config: dict):
+def analyze_repository_path(path_to_analyze: str, relative_output_dir_name: str, config: dict, module_pbar_desc: str):
     """
     Runs a suite of kit analyses on the given repository path and saves results.
     Returns a list of error messages encountered.
     """
-    global logger # Ensure we use the globally initialized logger
+    global logger
     if not logger:
-        # Fallback if called directly without run_full_analysis setting up the logger
-        # This isn't ideal, but a safeguard.
-        print("[WARN] Logger not initialized in analyze_repository_path. Using basic print.")
-        _logger_instance = print 
+        print("[WARN] Logger not initialized in analyze_repository_path. Using basic print for initial messages.")
+        # A simple fallback logger for when the main logger isn't ready
+        class DummyLogger:
+            def info(self, msg): print(f"[INFO] {msg}")
+            def warning(self, msg): print(f"[WARNING] {msg}")
+            def error(self, msg): print(f"[ERROR] {msg}")
+        _logger_instance = DummyLogger()
     else:
-        _logger_instance = logger # Use the initialized logger
+        _logger_instance = logger
 
     all_errors_for_path = []
 
     full_output_path = os.path.join(BASE_OUTPUT_DIR, relative_output_dir_name)
     os.makedirs(full_output_path, exist_ok=True)
     
-    _logger_instance.info(f"----- Starting Analysis for: {path_to_analyze} -----")
-    _logger_instance.info(f"Outputting to: {full_output_path}")
+    _logger_instance.info(f"----- Starting Analysis for: {path_to_analyze} ({relative_output_dir_name}) -----")
+    # _logger_instance.info(f"Outputting to: {full_output_path}") # Redundant with tqdm desc
 
     try:
         repo = Repository(path_to_analyze)
-        # Determine LLM config once, pass to relevant functions
-        llm_model_name = config.get("llm_model_for_summaries", "gpt-4o-mini") # Make configurable if needed elsewhere
+        llm_model_name = config.get("llm_model_for_summaries", "gpt-4o-mini")
         llm_config = OpenAIConfig(model=llm_model_name)
 
-        # 1. Repository Index
-        all_errors_for_path.extend(_perform_repository_index(repo, full_output_path, relative_output_dir_name, config, _logger_instance))
-
-        # 2. Dependency Analysis
-        all_errors_for_path.extend(_perform_dependency_analysis(repo, full_output_path, relative_output_dir_name, config, _logger_instance))
-
-        # 3. Text Search
-        text_search_results, text_search_errors = _perform_text_search(repo, full_output_path, relative_output_dir_name, config, _logger_instance)
-        all_errors_for_path.extend(text_search_errors)
-
-        # 4. Code Summarization
-        all_errors_for_path.extend(_perform_code_summarization(repo, full_output_path, relative_output_dir_name, config, llm_config, _logger_instance))
-
-        # 5. Docstring Indexing and Search
-        all_errors_for_path.extend(_perform_docstring_indexing(repo, full_output_path, relative_output_dir_name, config, llm_config, _logger_instance))
+        # Define analysis stages for tqdm
+        analysis_stages = []
+        if config.get("run_repository_index", True): analysis_stages.append(("Repo Index", lambda: _perform_repository_index(repo, full_output_path, relative_output_dir_name, config, _logger_instance)))
+        if config.get("run_dependency_analysis", True): analysis_stages.append(("Deps Analysis", lambda: _perform_dependency_analysis(repo, full_output_path, relative_output_dir_name, config, _logger_instance)))
         
-        # 6. Extract All Symbols
-        all_symbols, symbol_extraction_errors = _perform_symbol_extraction(repo, full_output_path, relative_output_dir_name, config, _logger_instance)
-        all_errors_for_path.extend(symbol_extraction_errors)
+        # Text search returns data, so handle it slightly differently
+        text_search_results = {}
+        if config.get("run_text_search", True):
+            def text_search_stage():
+                nonlocal text_search_results # To modify the outer scope variable
+                results, errors = _perform_text_search(repo, full_output_path, relative_output_dir_name, config, _logger_instance)
+                text_search_results = results
+                return errors
+            analysis_stages.append(("Text Search", text_search_stage))
         
-        # 7. Find Symbol Usages
-        all_errors_for_path.extend(_perform_symbol_usage_analysis(repo, all_symbols, full_output_path, relative_output_dir_name, config, _logger_instance))
+        if config.get("run_code_summarization", True): analysis_stages.append(("Summarization", lambda: _perform_code_summarization(repo, full_output_path, relative_output_dir_name, config, llm_config, _logger_instance)))
+        if config.get("run_docstring_indexing", True): analysis_stages.append(("Docstring Index", lambda: _perform_docstring_indexing(repo, full_output_path, relative_output_dir_name, config, llm_config, _logger_instance)))
         
-        # 8. Extract Context for Text Search Results
-        all_errors_for_path.extend(_perform_text_search_context_extraction(repo, text_search_results, full_output_path, relative_output_dir_name, config, _logger_instance))
+        # Symbol extraction returns data
+        all_symbols = []
+        if config.get("run_symbol_extraction", True):
+            def symbol_extraction_stage():
+                nonlocal all_symbols
+                symbols, errors = _perform_symbol_extraction(repo, full_output_path, relative_output_dir_name, config, _logger_instance)
+                all_symbols = symbols
+                return errors
+            analysis_stages.append(("Symbol Extract", symbol_extraction_stage))
 
-        # 9. Generate File Chunking Examples
-        all_errors_for_path.extend(_perform_chunking_examples(repo, full_output_path, relative_output_dir_name, config, _logger_instance))
+        if config.get("run_symbol_usage_analysis", True): analysis_stages.append(("Symbol Usages", lambda: _perform_symbol_usage_analysis(repo, all_symbols, full_output_path, relative_output_dir_name, config, _logger_instance)))
+        if config.get("run_text_search_context_extraction", True): analysis_stages.append(("Text Contexts", lambda: _perform_text_search_context_extraction(repo, text_search_results, full_output_path, relative_output_dir_name, config, _logger_instance)))
+        if config.get("run_chunking_examples", True): analysis_stages.append(("Chunk Examples", lambda: _perform_chunking_examples(repo, full_output_path, relative_output_dir_name, config, _logger_instance)))
+
+        # Iterate through stages with tqdm
+        for stage_name, stage_func in tqdm(analysis_stages, desc=f"Analyzing {module_pbar_desc}", unit="stage", leave=False):
+            errors = stage_func()
+            if errors: # errors is expected to be a list
+                all_errors_for_path.extend(errors)
+                _logger_instance.error(f"Errors encountered during '{stage_name}' for {relative_output_dir_name}: {errors}")
+
 
     except Exception as e_repo_init:
         err_msg = f"FATAL: Could not initialize Repository for path {path_to_analyze}: {e_repo_init}"
         _logger_instance.error(err_msg)
         all_errors_for_path.append(err_msg)
-        # If repo init fails, most other steps are pointless for this path
     
-    _logger_instance.info(f"----- Finished analysis for: {path_to_analyze} -----")
+    _logger_instance.info(f"----- Finished analysis for: {path_to_analyze} ({relative_output_dir_name}) -----")
     return all_errors_for_path
 
 
@@ -550,26 +629,22 @@ def run_full_analysis():
     Main function to orchestrate the analysis of all configured modules and the full repository.
     """
     global logger, PRINTED_ONCE_KEYS
-    setup_logging()  # Configure the logging system
-    logger = get_logger(__name__)  # Get a logger instance for this script/module
-    PRINTED_ONCE_KEYS.clear() # Reset for each full run
+    setup_logging()
+    logger = get_logger(__name__)
+    PRINTED_ONCE_KEYS.clear()
 
-    overall_errors = [] # Collect all errors from all analysis runs
+    overall_errors = []
 
     logger.info("--- Starting Codomyrmex Review Script ---")
 
-    # Initial Environment & Dependency Checks
     try:
         logger.info("Running initial environment and dependency checks...")
-        # check_and_setup_env_vars() # Assuming .env is loaded or not strictly needed for this script post-load_dotenv
-        ensure_core_deps_installed() # Removed logger=logger argument
+        ensure_core_deps_installed()
         logger.info("Environment and dependency checks completed.")
     except Exception as e_env_check:
         logger.error(f"Environment check failed: {e_env_check}. Attempting to continue but some features might be affected.")
         overall_errors.append(f"Environment check failed: {e_env_check}")
 
-
-    # Clean up old output directory
     if os.path.exists(BASE_OUTPUT_DIR):
         logger.info(f"Removing existing output directory: {BASE_OUTPUT_DIR}")
         try:
@@ -577,27 +652,27 @@ def run_full_analysis():
         except OSError as e:
             logger.error(f"Error removing directory {BASE_OUTPUT_DIR}: {e}. Please check permissions or remove manually.")
             overall_errors.append(f"Error removing directory {BASE_OUTPUT_DIR}: {e}")
-            # Decide if script should exit; for now, it will try to continue.
-            # sys.exit(1) 
     os.makedirs(BASE_OUTPUT_DIR, exist_ok=True)
     logger.info(f"Created base output directory: {BASE_OUTPUT_DIR}")
 
-    # Analyze each module
-    for module_dir_name in MODULE_DIRS:
+    # Analyze each module with a main progress bar
+    logger.info(f"Analyzing {len(MODULE_DIRS)} modules...")
+    for module_dir_name in tqdm(MODULE_DIRS, desc="Overall Module Progress", unit="module"):
         module_path = os.path.join(REPO_ROOT_PATH, module_dir_name)
         if not os.path.isdir(module_path):
             logger.warning(f"Module directory not found: {module_path}. Skipping.")
             overall_errors.append(f"Module directory not found: {module_path}")
             continue
         
-        # Use module name for output subdirectory (e.g., "ai_code_editing_review")
         output_dir_name_for_module = os.path.basename(module_dir_name).replace('.', '_') + "_review"
-        module_errors = analyze_repository_path(module_path, output_dir_name_for_module, ANALYSIS_CONFIG)
+        # Pass a clean description for the inner pbar
+        module_pbar_description = os.path.basename(module_dir_name)
+        module_errors = analyze_repository_path(module_path, output_dir_name_for_module, ANALYSIS_CONFIG, module_pbar_description)
         overall_errors.extend(module_errors)
 
     # Analyze the full repository
     logger.info("----- Starting Analysis for: Full Repository -----")
-    full_repo_errors = analyze_repository_path(REPO_ROOT_PATH, "full_repository_review", ANALYSIS_CONFIG)
+    full_repo_errors = analyze_repository_path(REPO_ROOT_PATH, "full_repository_review", ANALYSIS_CONFIG, "Full Repository")
     overall_errors.extend(full_repo_errors)
     logger.info("----- Finished Analysis for: Full Repository -----")
     
@@ -606,7 +681,8 @@ def run_full_analysis():
 
     if overall_errors:
         logger.error("--- Summary of Errors Encountered During Analysis ---")
-        for i, err in enumerate(overall_errors):
+        # Use tqdm for error summary if it's long, or just print
+        for i, err in enumerate(tqdm(overall_errors, desc="Summarizing Errors", unit="error", leave=False) if len(overall_errors) > 10 else overall_errors):
             logger.error(f"  Error {i+1}: {err}")
         logger.error("--- End of Error Summary ---")
     else:
@@ -620,25 +696,33 @@ def print_once(key, message, level="info", _logger=None):
     Prints a message only once per script run, based on the key.
     Uses the global logger if _logger is not provided.
     """
-    global PRINTED_ONCE_KEYS, logger # Corrected global declaration
+    global PRINTED_ONCE_KEYS, logger
     
-    current_logger = _logger if _logger else logger # Use the global logger if _logger is None
-    if not current_logger: # Fallback if logger somehow isn't set
-        print(f"[PRINT_ONCE FALLBACK - {level.upper()}]: ({key}) {message}")
-        return
-
+    current_logger = _logger if _logger else logger
+    
     if key not in PRINTED_ONCE_KEYS:
-        if level == "info":
-            current_logger.info(f"({key}) {message}")
-        elif level == "warning":
-            current_logger.warning(f"({key}) {message}")
-        elif level == "error":
-            current_logger.error(f"({key}) {message}")
-        else: # default to info
-            current_logger.info(f"({key}) {message}")
+        if not current_logger:
+            try:
+                tqdm.write(f"[PRINT_ONCE FALLBACK - {level.upper()}]: ({key}) {message}")
+            except Exception:
+                print(f"[PRINT_ONCE FALLBACK - {level.upper()}]: ({key}) {message}")
+        else:
+            log_method = getattr(current_logger, level, None)
+            if not callable(log_method):
+                # Fallback to info if the specified level is not a valid method
+                log_method = getattr(current_logger, "info", None)
+            
+            if callable(log_method):
+                log_method(f"({key}) {message}")
+            else:
+                # Absolute fallback if no logging method is found (should be rare)
+                try:
+                    tqdm.write(f"[PRINT_ONCE UNEXPECTED FALLBACK - {level.upper()}]: ({key}) {message}")
+                except Exception:
+                    print(f"[PRINT_ONCE UNEXPECTED FALLBACK - {level.upper()}]: ({key}) {message}")
         PRINTED_ONCE_KEYS.add(key)
 
 
 if __name__ == "__main__":
-    load_dotenv() # Load .env file variables into environment
+    load_dotenv()
     run_full_analysis() 

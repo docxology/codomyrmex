@@ -4,10 +4,10 @@ const config = {
   tagline: 'Modular, Extensible Coding Workspace',
   favicon: 'img/favicon.ico',
 
-  url: 'https://YOUR_DOCS_URL.com',
+  url: 'https://ActiveInference.github.io',
   baseUrl: '/codomyrmex/',
 
-  organizationName: 'YOUR_GITHUB_ORG_OR_USER',
+  organizationName: 'ActiveInference',
   projectName: 'codomyrmex',
 
   onBrokenLinks: 'throw',
@@ -25,7 +25,7 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          editUrl: 'https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex/tree/main/',
+          editUrl: 'https://github.com/ActiveInference/codomyrmex/tree/main/',
           routeBasePath: '/',
         },
         blog: false,
@@ -43,7 +43,7 @@ const config = {
       navbar: {
         title: 'Codomyrmex',
         logo: {
-          alt: 'Codomyrmex Logo',
+          alt: 'Codomyrmex Project Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -54,7 +54,7 @@ const config = {
             label: 'Documentation',
           },
           {
-            href: 'https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex',
+            href: 'https://github.com/ActiveInference/codomyrmex',
             label: 'GitHub',
             position: 'right',
           },
@@ -64,7 +64,7 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
               {
                 label: 'Introduction',
@@ -73,16 +73,11 @@ const config = {
             ],
           },
           {
-            title: 'Community',
-            items: [
-            ],
-          },
-          {
             title: 'More',
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/YOUR_GITHUB_ORG_OR_USER/codomyrmex',
+                href: 'https://github.com/ActiveInference/codomyrmex',
               },
             ],
           },

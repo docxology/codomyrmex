@@ -198,66 +198,159 @@ print(f"Output:\n{result['stdout']}")
 ### Check Supported Languages
 
 ```python
-from code_execution_sandbox.code_executor import SUPPORTED_LANGUAGES
+from code_execution_sandbox import get_supported_languages # Assuming such a function exists
 
-print("Supported languages:")
-for language, config in SUPPORTED_LANGUAGES.items():
-    print(f"- {language} (using {config['image']})")
+# supported_langs = get_supported_languages()
+# print("Supported languages:", supported_langs)
+# TODO: Implement and document this function if it's part of the module's direct API.
+# For MCP, supported languages are typically documented in the MCP_TOOL_SPECIFICATION.md.
 ```
 
-### Error Handling Best Practices
+## Using `execute_code` via Model Context Protocol (MCP)
 
-```python
-from code_execution_sandbox import execute_code
+The `execute_code` tool is designed to be called via the Model Context Protocol. Below are conceptual examples of how an agent or MCP client might invoke it.
 
-def safely_execute_user_code(language, code):
-    """Safely execute user-provided code with proper error handling."""
-    try:
-        result = execute_code(
-            language=language,
-            code=code,
-            timeout=10
-        )
-        
-        if result["status"] == "success":
-            return {
-                "success": True,
-                "output": result["stdout"],
-                "execution_time": result["execution_time"]
-            }
-        elif result["status"] == "timeout":
-            return {
-                "success": False,
-                "error": "Your code took too long to execute (timeout).",
-                "partial_output": result["stdout"]
-            }
-        elif result["status"] == "execution_error":
-            return {
-                "success": False,
-                "error": "Your code generated an error.",
-                "error_details": result["stderr"],
-                "partial_output": result["stdout"]
-            }
-        else:
-            return {
-                "success": False,
-                "error": f"Sandbox error: {result['error_message']}"
-            }
-    except Exception as e:
-        return {
-            "success": False,
-            "error": f"System error: {str(e)}"
-        }
+### MCP Example: Simple Python Execution
 
-# Example usage
-result = safely_execute_user_code("python", "print('Hello, World!')")
-print(result)
+**Request:**
+```json
+{
+  "tool_name": "execute_code",
+  "arguments": {
+    "language": "python",
+    "code": "print('Hello from MCP in Python!')\nx = 10 + 20\nprint(f'The result is: {x}')",
+    "timeout": 15
+  }
+}
 ```
 
-## Security Considerations
+**Expected Response (example):**
+```json
+{
+  "stdout": "Hello from MCP in Python!\nThe result is: 30\n",
+  "stderr": "",
+  "exit_code": 0,
+  "execution_time": 0.08,
+  "status": "success",
+  "error_message": null
+}
+```
 
-- Always treat all code as untrusted. The sandbox provides isolation but is not 100% secure against determined attackers.
-- Avoid running the sandbox as root or with elevated privileges.
-- Consider running the Docker daemon with additional security measures.
-- Regularly update Docker and the base container images to get security patches.
-- Monitor resource usage to detect abuse (e.g., cryptomining attempts). 
+### MCP Example: JavaScript with Stdin
+
+**Request:**
+```json
+{
+  "tool_name": "execute_code",
+  "arguments": {
+    "language": "javascript",
+    "code": "process.stdin.on('data', function (data) { console.log('JS received: ' + data.toString()); });",
+    "stdin": "Test input for JS",
+    "timeout": 5
+  }
+}
+```
+
+**Expected Response (example):**
+```json
+{
+  "stdout": "JS received: Test input for JS\n",
+  "stderr": "",
+  "exit_code": 0,
+  "execution_time": 0.15,
+  "status": "success",
+  "error_message": null
+}
+```
+
+### MCP Example: Bash Script Execution
+
+**Request:**
+```json
+{
+  "tool_name": "execute_code",
+  "arguments": {
+    "language": "bash",
+    "code": "#!/bin/bash\necho \"Hello from Bash via MCP!\"\nwhoami\ndate",
+    "timeout": 5
+  }
+}
+```
+
+**Expected Response (example):**
+```json
+{
+  "stdout": "Hello from Bash via MCP!\nsandbox_user\n<current date and time>\n",
+  "stderr": "",
+  "exit_code": 0,
+  "execution_time": 0.05,
+  "status": "success",
+  "error_message": null
+}
+```
+*(Note: `whoami` output depends on the user configured inside the sandbox container, e.g., `sandbox_user` or `nobody`)*
+
+### MCP Example: Handling a Timeout
+
+**Request:**
+```json
+{
+  "tool_name": "execute_code",
+  "arguments": {
+    "language": "python",
+    "code": "import time\nwhile True: time.sleep(0.1)",
+    "timeout": 2
+  }
+}
+```
+
+**Expected Response (example):**
+```json
+{
+  "stdout": "", 
+  "stderr": "",
+  "exit_code": null, // Or a system-specific code for timeout, e.g., 137, 124
+  "execution_time": 2.0,
+  "status": "timeout",
+  "error_message": "Execution timed out after 2 seconds."
+}
+```
+
+### MCP Example: Code with an Error
+
+**Request:**
+```json
+{
+  "tool_name": "execute_code",
+  "arguments": {
+    "language": "python",
+    "code": "print('About to error...')\nresult = 1 / 0",
+    "timeout": 5
+  }
+}
+```
+
+**Expected Response (example):**
+```json
+{
+  "stdout": "About to error...\n",
+  "stderr": "Traceback (most recent call last):\n  File \"/sandbox/code.py\", line 2, in <module>\n    result = 1 / 0\nZeroDivisionError: division by zero\n",
+  "exit_code": 1,
+  "execution_time": 0.07,
+  "status": "execution_error",
+  "error_message": "Code execution resulted in an error."
+}
+```
+
+## Resource Limits and Security Notes
+
+-   **Implicit Limits**: The Code Execution Sandbox enforces strict, non-configurable (at runtime via MCP call) limits on resources like CPU, memory, and total execution time (a global maximum applies even if `timeout` parameter is set higher). These are defined in the sandbox module's secure configuration.
+-   **Network Access**: By default, sandboxed code has **NO** network access. This is a critical security measure. If specific, trusted use cases require network access for a particular language runtime, this must be explicitly configured by an administrator in the sandbox module's setup, with strict allow-lists for target hosts/ports.
+-   **Filesystem Access**: Sandboxed code operates with a very restricted view of the filesystem. It typically has a temporary, ephemeral working directory and cannot access the host filesystem or other parts of the project. Any files needed by the code must be provided within the `code` payload itself (e.g. as string literals) or through future parameters if file passing is supported by the `execute_code` tool (which would involve securely copying data into the sandbox).
+-   **Security of Submitted Code**: 
+    -   While the sandbox aims to contain execution, always treat the `code` submitted to this tool as potentially untrusted, especially if derived from user input or AI generation.
+    -   Avoid including sensitive information (API keys, passwords, PII) directly within the `code` string. If code needs secrets, a more secure pattern (like the sandbox calling a trusted external service that holds the secret) should be used if feasible.
+    -   Review the [SECURITY.md](./SECURITY.md) for this module for a comprehensive understanding of its security posture, threat model, and best practices.
+-   **Idempotency and Sessions**: The `session_id` parameter is mentioned in the MCP specification. If the specific sandbox implementation supports persistent sessions (e.g., to allow `pip install` in one call and then run code using that package in a subsequent call within the same session), this can affect idempotency. If sessions are not supported or `session_id` is not used, each call is independent. Assume calls are independent unless your specific implementation guarantees session persistence and details its behavior.
+
+Remember to consult the `code_execution_sandbox/MCP_TOOL_SPECIFICATION.md` for the most up-to-date details on the `execute_code` tool's parameters and behavior. 

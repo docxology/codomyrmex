@@ -123,4 +123,105 @@ These READMEs provide the command sequences for initial setup.
   - **Solution**: 
     - Double-check you are in the correct Python virtual environment (`source .venv/bin/activate`).
     - Run `pip list` to see installed packages in the current environment.
-    - Ensure `requirements.txt` in the project root is up-to-date and re-run `pip install -r requirements.txt`. 
+    - Ensure `requirements.txt` in the project root is up-to-date and re-run `pip install -r requirements.txt`.
+
+## Example 4: First-Time Full Project Setup Checklist (Conceptual Example)
+
+This scenario walks through the typical commands a developer would run for a first-time setup, as primarily documented in `environment_setup/README.md` (Part I) or the main project `README.md`.
+
+**Goal**: To get the Codomyrmex project cloned, Python environment set up, dependencies installed, and basic configuration (like `.env`) in place.
+
+```bash
+# 1. Ensure Prerequisites are Met (Manual Check):
+#    - Python 3.9+ installed?
+#    - pip available?
+#    - git installed?
+#    - Node.js 18.0+ and npm/yarn (if working on documentation module)?
+#    (Refer to system-specific guides for installing these if missing)
+
+echo "Step 1: Prerequisites - Assumed to be met by the developer."
+
+# 2. Clone the Repository:
+git clone https://github.com/your-username/codomyrmex.git # Replace with actual URL
+cd codomyrmex
+echo "Step 2: Repository cloned and current directory changed to codomyrmex/"
+
+# 3. Create and Activate a Python Virtual Environment:
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+echo "Step 3: Python virtual environment .venv created and activated."
+
+# 4. Install Root Python Dependencies:
+pip install -r requirements.txt
+echo "Step 4: Root Python dependencies installed from requirements.txt."
+
+# 5. Run `env_checker.py` to verify dependencies and .env setup:
+python environment_setup/env_checker.py
+# This script will guide you if `.env` is missing or if essential packages from requirements.txt
+# were not installed correctly (e.g., due to pip issues).
+# If it prompts to create `.env`, follow its instructions and add your API keys.
+echo "Step 5: env_checker.py executed. Follow its guidance if any issues reported."
+
+# 6. (Optional) Setup for the `documentation` Module (Docusaurus):
+# If you need to work on or build the documentation website:
+read -p "Do you need to set up the documentation module (Docusaurus)? (y/n): " setup_docs
+if [[ "$setup_docs" == "y" || "$setup_docs" == "Y" ]]; then
+  cd documentation
+  echo "Installing Node.js dependencies for Docusaurus... (This might take a moment)"
+  npm install # or yarn install
+  echo "Docusaurus dependencies installed. You can now run 'npm run start' here."
+  cd .. # Return to project root
+else
+  echo "Skipping documentation module setup."
+fi
+
+echo "Step 6: Documentation module setup (if chosen) complete or skipped."
+
+echo "Basic Codomyrmex development environment setup is complete!"
+```
+
+**Expected Outcome**: 
+- The project is cloned.
+- A Python virtual environment is active with necessary packages.
+- `env_checker.py` has confirmed dependencies and guided `.env` creation.
+- (If chosen) Docusaurus dependencies are installed.
+- The developer is ready to start working on the project.
+
+## Example 5: Setting Up for a Specific Module with Unique Needs (Conceptual)
+
+While Codomyrmex aims for a unified base setup, a specific module might have an additional, unique setup step not covered by the global `requirements.txt` (e.g., installing a specific system library or a tool not manageable by pip).
+
+**Scenario**: Imagine a hypothetical `special_hardware_interface` module needs a system driver and a special Python package installed directly from a Git URL.
+
+**Instructions for this would typically be in `special_hardware_interface/README.md`:**
+
+```markdown
+# special_hardware_interface - README
+
+## Prerequisites
+
+- Ensure the main Codomyrmex project environment is set up (see `environment_setup/README.md`).
+
+## Module-Specific Setup
+
+1.  **Install System Driver**: 
+    ```bash
+    # (Instructions for installing the XYZ driver for your OS)
+    # sudo apt-get install xyz-driver # Example for Debian/Ubuntu
+    ```
+2.  **Install Special Python Package** (within your active `.venv`):
+    ```bash
+    pip install git+https://example.com/vendor/special_xyz_python_lib.git#egg=special_xyz
+    ```
+3.  **Verify**: 
+    Run the module's verification script (if provided):
+    ```bash
+    python special_hardware_interface/verify_setup.py
+    ```
+```
+
+**Key Takeaway**: For module-specific setup steps beyond the common environment:
+1.  Always check that module's `README.md` first.
+2.  Perform these steps *after* the main project setup and *within* the activated project virtual environment (`.venv`).
+
+This `environment_setup` module primarily focuses on the *common* baseline. Individual modules are responsible for documenting their *additional unique* setup requirements. 

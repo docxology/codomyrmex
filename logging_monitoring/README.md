@@ -15,7 +15,7 @@ Key features include:
 - Configuration through environment variables (leveraging `.env` files via `python-dotenv`).
 - Support for standard log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL).
 - Customizable log formats for text output, including a "DETAILED" predefined format.
-- Option for structured JSON log output for easier parsing by log management systems.
+- Option for structured JSON log output for easier parsing by log management systems and more robust querying.
 - Output to console and/or a log file.
 - Straightforward integration into other modules using the standard Python `logging.getLogger(__name__)` pattern, facilitated by a helper `get_logger(__name__)` function.
 
@@ -66,6 +66,7 @@ The logging behavior is configured via environment variables, typically set in a
                                         # Alternatively, use "DETAILED" for a predefined detailed format.
                                         # This is ignored if CODOMYRMEX_LOG_OUTPUT_TYPE=JSON. Default: "%(asctime)s - %(name)s - %(levelname)s - %(message)s".
     CODOMYRMEX_LOG_OUTPUT_TYPE=TEXT    # Options: "TEXT" or "JSON". Default: TEXT.
+    # Setting to JSON is highly recommended for production or when integrating with log analysis platforms.
     ```
     **Note**: The logging system itself does not create directories for `CODOMYRMEX_LOG_FILE`. Ensure the specified path is writable or the directory exists.
 

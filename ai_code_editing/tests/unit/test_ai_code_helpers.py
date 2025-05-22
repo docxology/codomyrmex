@@ -129,6 +129,96 @@ class TestGenerateCodeSnippet(unittest.TestCase):
         self.assertIsNone(result["generated_code"])
         self.assertIsNotNone(result["error_message"])
 
+    @patch('ai_code_editing.ai_code_helpers.get_llm_client')
+    def test_generate_code_openai_api_error(self, mock_get_client):
+        """Test code generation when OpenAI API call fails."""
+        mock_client = MagicMock()
+        mock_client.chat.completions.create.side_effect = Exception("OpenAI API Error")
+        mock_get_client.return_value = (mock_client, "gpt-3.5-turbo")
+        
+        result = generate_code_snippet(
+            prompt="Test prompt",
+            language="python",
+            llm_provider="openai"
+        )
+        
+        self.assertEqual(result["status"], "failure")
+        self.assertIsNone(result["generated_code"])
+        self.assertIn("OpenAI API Error", result["error_message"])
+
+    @patch('ai_code_editing.ai_code_helpers.get_llm_client')
+    def test_generate_code_anthropic_api_error(self, mock_get_client):
+        """Test code generation when Anthropic API call fails."""
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = Exception("Anthropic API Error")
+        mock_get_client.return_value = (mock_client, "claude-instant-1")
+        
+        result = generate_code_snippet(
+            prompt="Test prompt",
+            language="python",
+            llm_provider="anthropic"
+        )
+        
+        self.assertEqual(result["status"], "failure")
+        self.assertIsNone(result["generated_code"])
+        self.assertIn("Anthropic API Error", result["error_message"])
+
+    @patch('ai_code_editing.ai_code_helpers.get_llm_client')
+    def test_generate_code_openai_malformed_response(self, mock_get_client):
+        """Test code generation with OpenAI when LLM response is malformed."""
+        mock_client = MagicMock()
+        # Malformed: choices list is empty
+        mock_response_empty_choices = MagicMock()
+        mock_response_empty_choices.choices = []
+        mock_client.chat.completions.create.return_value = mock_response_empty_choices
+        mock_get_client.return_value = (mock_client, "gpt-3.5-turbo")
+
+        result = generate_code_snippet(prompt="Test", language="python", llm_provider="openai")
+        self.assertEqual(result["status"], "failure")
+        self.assertIsNone(result["generated_code"])
+        self.assertIn("Malformed response from OpenAI", result["error_message"].lower())
+
+        # Malformed: message.content is missing
+        mock_response_missing_content = MagicMock()
+        mock_choice_no_content = MagicMock()
+        mock_message_no_content = MagicMock()
+        del mock_message_no_content.content # Or mock_message_no_content.content = None
+        mock_choice_no_content.message = mock_message_no_content
+        mock_response_missing_content.choices = [mock_choice_no_content]
+        mock_client.chat.completions.create.return_value = mock_response_missing_content
+        
+        result = generate_code_snippet(prompt="Test", language="python", llm_provider="openai")
+        self.assertEqual(result["status"], "failure")
+        self.assertIsNone(result["generated_code"])
+        self.assertIn("malformed response from openai", result["error_message"].lower())
+
+    @patch('ai_code_editing.ai_code_helpers.get_llm_client')
+    def test_generate_code_anthropic_malformed_response(self, mock_get_client):
+        """Test code generation with Anthropic when LLM response is malformed."""
+        mock_client = MagicMock()
+        # Malformed: content list is empty
+        mock_response_empty_content_list = MagicMock()
+        mock_response_empty_content_list.content = []
+        mock_client.messages.create.return_value = mock_response_empty_content_list
+        mock_get_client.return_value = (mock_client, "claude-instant-1")
+
+        result = generate_code_snippet(prompt="Test", language="python", llm_provider="anthropic")
+        self.assertEqual(result["status"], "failure")
+        self.assertIsNone(result["generated_code"])
+        self.assertIn("malformed response from anthropic", result["error_message"].lower())
+
+        # Malformed: text attribute is missing from content block
+        mock_response_missing_text = MagicMock()
+        mock_content_block_no_text = MagicMock()
+        del mock_content_block_no_text.text # Or mock_content_block_no_text.text = None
+        mock_response_missing_text.content = [mock_content_block_no_text]
+        mock_client.messages.create.return_value = mock_response_missing_text
+        
+        result = generate_code_snippet(prompt="Test", language="python", llm_provider="anthropic")
+        self.assertEqual(result["status"], "failure")
+        self.assertIsNone(result["generated_code"])
+        self.assertIn("malformed response from anthropic", result["error_message"].lower())
+
 
 class TestRefactorCodeSnippet(unittest.TestCase):
     """Tests for the refactor_code_snippet function."""
@@ -187,6 +277,124 @@ class TestRefactorCodeSnippet(unittest.TestCase):
         self.assertEqual(result["status"], "no_change_needed")
         self.assertEqual(result["refactored_code"], original_code)
     
+    @patch('ai_code_editing.ai_code_helpers.get_llm_client')
+    def test_refactor_code_openai_api_error(self, mock_get_client):
+        """Test code refactoring when OpenAI API call fails."""
+        mock_client = MagicMock()
+        mock_client.chat.completions.create.side_effect = Exception("OpenAI API Error")
+        mock_get_client.return_value = (mock_client, "gpt-3.5-turbo")
+        
+        result = refactor_code_snippet(
+            code_snippet="print('hello')",
+            refactoring_instruction="Optimize",
+            language="python",
+            llm_provider="openai"
+        )
+        
+        self.assertEqual(result["status"], "failure")
+        self.assertIsNone(result["refactored_code"])
+        self.assertIn("OpenAI API Error", result["error_message"])
+
+    @patch('ai_code_editing.ai_code_helpers.get_llm_client')
+    def test_refactor_code_anthropic_api_error(self, mock_get_client):
+        """Test code refactoring when Anthropic API call fails."""
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = Exception("Anthropic API Error")
+        mock_get_client.return_value = (mock_client, "claude-instant-1")
+        
+        result = refactor_code_snippet(
+            code_snippet="print('hello')",
+            refactoring_instruction="Optimize",
+            language="python",
+            llm_provider="anthropic"
+        )
+        
+        self.assertEqual(result["status"], "failure")
+        self.assertIsNone(result["refactored_code"])
+        self.assertIn("Anthropic API Error", result["error_message"])
+
+    @patch('ai_code_editing.ai_code_helpers.get_llm_client')
+    def test_refactor_code_openai_malformed_response(self, mock_get_client):
+        """Test code refactoring with OpenAI when LLM response is malformed (e.g., no code block)."""
+        mock_client = MagicMock()
+        mock_response = MagicMock()
+        mock_choice_no_code_block = MagicMock()
+        mock_message_no_code_block = MagicMock()
+        mock_message_no_code_block.content = "This is not a code block."
+        mock_choice_no_code_block.message = mock_message_no_code_block
+        mock_response.choices = [mock_choice_no_code_block]
+        mock_client.chat.completions.create.return_value = mock_response
+        mock_get_client.return_value = (mock_client, "gpt-3.5-turbo")
+
+        result = refactor_code_snippet(
+            code_snippet="print('hello')", 
+            refactoring_instruction="Optimize", 
+            language="python", 
+            llm_provider="openai"
+        )
+        self.assertEqual(result["status"], "failure") # Or "no_change_needed" if that's the fallback
+        self.assertIn("could not extract refactored code", result["error_message"].lower())
+
+        # Test case: response is None or not a string (OpenAI)
+        mock_message_none_content = MagicMock()
+        mock_message_none_content.content = None
+        mock_choice_none_content = MagicMock()
+        mock_choice_none_content.message = mock_message_none_content
+        mock_response_none_content = MagicMock()
+        mock_response_none_content.choices = [mock_choice_none_content]
+        mock_client.chat.completions.create.return_value = mock_response_none_content
+        mock_get_client.return_value = (mock_client, "gpt-3.5-turbo")
+
+        result = refactor_code_snippet(
+            code_snippet="print('hello')",
+            refactoring_instruction="Optimize",
+            language="python",
+            llm_provider="openai"
+        )
+        self.assertEqual(result["status"], "failure")
+        self.assertIn("empty or invalid response", result["error_message"].lower())
+
+
+    @patch('ai_code_editing.ai_code_helpers.get_llm_client')
+    def test_refactor_code_anthropic_malformed_response(self, mock_get_client):
+        """Test code refactoring with Anthropic when LLM response is malformed (e.g., no code block)."""
+        mock_client = MagicMock()
+        mock_response = MagicMock()
+        mock_content_block_no_code = MagicMock()
+        mock_content_block_no_code.text = "This is not a code block."
+        mock_response.content = [mock_content_block_no_code]
+        mock_client.messages.create.return_value = mock_response
+        mock_get_client.return_value = (mock_client, "claude-instant-1")
+
+        result = refactor_code_snippet(
+            code_snippet="print('hello')", 
+            refactoring_instruction="Optimize", 
+            language="python", 
+            llm_provider="anthropic"
+        )
+        self.assertEqual(result["status"], "failure") # Or "no_change_needed"
+        self.assertIn("could not extract refactored code", result["error_message"].lower())
+
+        # Test case: response is None or not a string (Anthropic)
+        mock_content_block_none = MagicMock()
+        mock_content_block_none.text = None
+        mock_response_none_content = MagicMock()
+        mock_response_none_content.content = [mock_content_block_none]
+        mock_client.messages.create.return_value = mock_response_none_content
+        mock_get_client.return_value = (mock_client, "claude-instant-1")
+
+        result = refactor_code_snippet(
+            code_snippet="print('hello')",
+            refactoring_instruction="Optimize",
+            language="python",
+            llm_provider="anthropic"
+        )
+        self.assertEqual(result["status"], "failure")
+        self.assertIn("empty or invalid response", result["error_message"].lower())
+
 
 if __name__ == '__main__':
-    unittest.main() 
+    # unittest.main()
+    # Using a more explicit way to run tests, which might satisfy some linters
+    suite = unittest.TestLoader().loadTestsFromModule(__import__(__name__))
+    unittest.TextTestRunner().run(suite) 

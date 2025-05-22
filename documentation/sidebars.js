@@ -20,7 +20,15 @@ const sidebars = {
     {
       type: 'category',
       label: 'Project Overview',
+      link: {
+        type: 'generated-index',
+        title: 'Project Overview',
+        description: 'Learn about the Codomyrmex project, how to contribute, and its core principles.',
+        slug: '/project-overview'
+      },
       items: [
+        'project/architecture',
+        'project/CONTRIBUTING_TO_DOCUMENTATION',
         'project/contributing',
         'project/code-of-conduct',
         'project/license',
@@ -28,10 +36,33 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Development',
+      label: 'Development Guides',
+      link: {
+        type: 'generated-index',
+        title: 'Development Guides',
+        description: 'Guides for developers contributing to or working with Codomyrmex.',
+        slug: '/development-guides'
+      },
       items: [
         'development/environment-setup',
-        'development/testing-strategy',
+        'project/TESTING_STRATEGY',
+        'project/ERROR_HANDLING_LOGGING',
+        'development/documentation-pipeline',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Project Tutorials',
+      link: {
+        type: 'generated-index',
+        title: 'Project Tutorials',
+        description: 'General tutorials covering broad concepts or multi-module workflows within Codomyrmex.',
+        slug: '/project-tutorials'
+      },
+      items: [
+        // Add project-wide tutorials here, e.g.:
+        // 'tutorials/understanding-mcp',
+        // 'tutorials/creating-a-new-module',
       ],
     },
     {
@@ -40,69 +71,37 @@ const sidebars = {
       link: {
         type: 'generated-index',
         title: 'Codomyrmex Modules',
-        description: 'Learn about the different modules in the Codomyrmex project.',
-        slug: '/category/modules'
+        description: 'Explore the capabilities of individual Codomyrmex modules.',
+        slug: '/modules'
       },
       items: [
-        // TODO: For each module and sub-category added below (e.g., 'AI Code Editing', 'Detailed Docs & Tutorials', 'Tutorials'):
-        // 1. Ensure a corresponding markdown file exists for each `link: {type: 'doc', id: '...'}`. 
-        //    For example, for 'modules/ai_code_editing/ai-code-editing-index', a file 
-        //    `docs/modules/ai_code_editing/ai-code-editing-index.md` must be created.
-        // 2. Ensure that all linked documents (e.g., 'modules/ai_code_editing/ai-code-editing-api-specification') 
-        //    exist at the specified path within `docs/modules/` (e.g., by copying/renaming from source module dirs).
-        // 3. The actual content for these index pages needs to be written.
         {
           type: 'category',
           label: 'AI Code Editing',
-          link: {type: 'doc', id: 'modules/ai_code_editing/ai-code-editing-index'},
+          link: {type: 'doc', id: 'modules/ai_code_editing/README'},
           items: [
-            'modules/ai_code_editing/ai-code-editing-api-specification',
-            'modules/ai_code_editing/ai-code-editing-mcp-tool-specification',
-            'modules/ai_code_editing/ai-code-editing-usage-examples',
-            'modules/ai_code_editing/ai-code-editing-changelog',
-            'modules/ai_code_editing/ai-code-editing-security',
+            'modules/ai_code_editing/API_SPECIFICATION',
+            'modules/ai_code_editing/MCP_TOOL_SPECIFICATION',
+            'modules/ai_code_editing/USAGE_EXAMPLES',
+            'modules/ai_code_editing/CHANGELOG',
+            'modules/ai_code_editing/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/ai_code_editing/docs/ai-code-editing-module-docs-index'},
-              items: [
-                'modules/ai_code_editing/docs/ai-code-editing-technical-overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/ai_code_editing/docs/tutorials/ai-code-editing-tutorials-index'},
-                  items: [
-                    'modules/ai_code_editing/docs/tutorials/ai-code-editing-example-tutorial',
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          type: 'category',
-          label: 'Static Analysis',
-          link: {type: 'doc', id: 'modules/static_analysis/static-analysis-index'},
-          items: [
-            'modules/static_analysis/static-analysis-api-specification',
-            'modules/static_analysis/static-analysis-mcp-tool-specification',
-            'modules/static_analysis/static-analysis-usage-examples',
-            'modules/static_analysis/static-analysis-changelog',
-            'modules/static_analysis/static-analysis-security',
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/ai_code_editing/docs/technical_overview'},
+              items: []
+            },
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/static_analysis/docs/static-analysis-module-docs-index'},
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'AI Code Editing Tutorials',
+                slug: '/modules/ai-code-editing/tutorials'
+              },
               items: [
-                'modules/static_analysis/docs/static-analysis-technical-overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/static_analysis/docs/tutorials/static-analysis-tutorials-index'},
-                  items: [
-                    'modules/static_analysis/docs/tutorials/static-analysis-example-tutorial',
-                  ]
-                }
+                'modules/ai_code_editing/docs/tutorials/generate_code_snippet_tutorial',
+                'modules/ai_code_editing/docs/tutorials/refactor_code_snippet_tutorial',
               ]
             }
           ]
@@ -110,27 +109,30 @@ const sidebars = {
         {
           type: 'category',
           label: 'Build Synthesis',
-          link: {type: 'doc', id: 'modules/build_synthesis/build-synthesis-index'},
+          link: {type: 'doc', id: 'modules/build_synthesis/README'},
           items: [
-            'modules/build_synthesis/build-synthesis-api-specification',
-            'modules/build_synthesis/build-synthesis-mcp-tool-specification',
-            'modules/build_synthesis/build-synthesis-usage-examples',
-            'modules/build_synthesis/build-synthesis-changelog',
-            'modules/build_synthesis/build-synthesis-security',
+            'modules/build_synthesis/API_SPECIFICATION',
+            'modules/build_synthesis/MCP_TOOL_SPECIFICATION',
+            'modules/build_synthesis/USAGE_EXAMPLES',
+            'modules/build_synthesis/CHANGELOG',
+            'modules/build_synthesis/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/build_synthesis/docs/build-synthesis-module-docs-index'},
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/build_synthesis/docs/technical_overview'},
+              items: []
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Build Synthesis Tutorials',
+                slug: '/modules/build-synthesis/tutorials'
+              },
               items: [
-                'modules/build_synthesis/docs/build-synthesis-technical-overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/build_synthesis/docs/tutorials/build-synthesis-tutorials-index'},
-                  items: [
-                    'modules/build_synthesis/docs/tutorials/build-synthesis-example-tutorial',
-                  ]
-                }
+                'modules/build_synthesis/docs/tutorials/trigger_build_tutorial',
+                'modules/build_synthesis/docs/tutorials/synthesize_code_component_tutorial',
               ]
             }
           ]
@@ -138,27 +140,29 @@ const sidebars = {
         {
           type: 'category',
           label: 'Code Execution Sandbox',
-          link: {type: 'doc', id: 'modules/code_execution_sandbox/code-execution-sandbox-index'},
+          link: {type: 'doc', id: 'modules/code_execution_sandbox/README'},
           items: [
-            'modules/code_execution_sandbox/code-execution-sandbox-api-specification',
-            'modules/code_execution_sandbox/code-execution-sandbox-mcp-tool-specification',
+            'modules/code_execution_sandbox/API_SPECIFICATION',
+            'modules/code_execution_sandbox/MCP_TOOL_SPECIFICATION',
             'modules/code_execution_sandbox/USAGE_EXAMPLES',
-            'modules/code_execution_sandbox/code-execution-sandbox-changelog',
-            'modules/code_execution_sandbox/code-execution-sandbox-security',
+            'modules/code_execution_sandbox/CHANGELOG',
+            'modules/code_execution_sandbox/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/code_execution_sandbox/docs/index'},
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/code_execution_sandbox/docs/technical_overview'},
+              items: []
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Code Execution Sandbox Tutorials',
+                slug: '/modules/code-execution-sandbox/tutorials'
+              },
               items: [
-                'modules/code_execution_sandbox/docs/technical_overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/code_execution_sandbox/docs/tutorials/index'},
-                  items: [
-                    'modules/code_execution_sandbox/docs/tutorials/example_tutorial',
-                  ]
-                }
+                'modules/code_execution_sandbox/docs/tutorials/execute_code_tutorial',
               ]
             }
           ]
@@ -166,55 +170,64 @@ const sidebars = {
         {
           type: 'category',
           label: 'Data Visualization',
-          link: {type: 'doc', id: 'modules/data_visualization/index'},
+          link: {type: 'doc', id: 'modules/data_visualization/README'},
           items: [
-            'modules/data_visualization/api_specification',
-            'modules/data_visualization/mcp_tool_specification',
-            'modules/data_visualization/usage_examples',
-            'modules/data_visualization/changelog',
-            'modules/data_visualization/security',
+            'modules/data_visualization/API_SPECIFICATION',
+            'modules/data_visualization/MCP_TOOL_SPECIFICATION',
+            'modules/data_visualization/USAGE_EXAMPLES',
+            'modules/data_visualization/CHANGELOG',
+            'modules/data_visualization/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/data_visualization/docs/index'},
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/data_visualization/docs/technical_overview'},
+              items: []
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Data Visualization Tutorials',
+                slug: '/modules/data-visualization/tutorials'
+              },
               items: [
-                'modules/data_visualization/docs/technical_overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/data_visualization/docs/tutorials/index'},
-                  items: [
-                    'modules/data_visualization/docs/tutorials/example_tutorial',
-                  ]
-                }
+                'modules/data_visualization/docs/tutorials/generating_a_bar_chart_tutorial',
+                'modules/data_visualization/docs/tutorials/generating_a_histogram_tutorial',
+                'modules/data_visualization/docs/tutorials/generating_a_line_plot_tutorial',
+                'modules/data_visualization/docs/tutorials/generating_a_pie_chart_tutorial',
+                'modules/data_visualization/docs/tutorials/generating_a_scatter_plot_tutorial',
+                'modules/data_visualization/docs/tutorials/mcp_heatmap_tutorial',
               ]
             }
           ]
         },
         {
           type: 'category',
-          label: 'Documentation Module (Meta)',
-          link: {type: 'doc', id: 'modules/documentation/index'},
+          label: 'Documentation (Meta)',
+          link: {type: 'doc', id: 'modules/documentation/README'},
           items: [
-            'modules/documentation/api_specification',
-            'modules/documentation/mcp_tool_specification',
-            'modules/documentation/usage_examples',
-            'modules/documentation/changelog',
-            'modules/documentation/security',
+            'modules/documentation/API_SPECIFICATION',
+            'modules/documentation/MCP_TOOL_SPECIFICATION',
+            'modules/documentation/USAGE_EXAMPLES',
+            'modules/documentation/CHANGELOG',
+            'modules/documentation/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/documentation/docs/index'},
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/documentation/docs/technical_overview'},
+              items: [] 
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Documentation Module Tutorials',
+                slug: '/modules/documentation-meta/tutorials' 
+              },
               items: [
-                'modules/documentation/docs/technical_overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/documentation/docs/tutorials/index'},
-                  items: [
-                    'modules/documentation/docs/tutorials/example_tutorial',
-                  ]
-                }
+                'modules/documentation/docs/tutorials/example_tutorial',
               ]
             }
           ]
@@ -222,27 +235,29 @@ const sidebars = {
         {
           type: 'category',
           label: 'Environment Setup',
-          link: {type: 'doc', id: 'modules/environment_setup/index'},
+          link: {type: 'doc', id: 'modules/environment_setup/README'},
           items: [
-            'modules/environment_setup/api_specification',
-            'modules/environment_setup/mcp_tool_specification',
-            'modules/environment_setup/usage_examples',
-            'modules/environment_setup/changelog',
-            'modules/environment_setup/security',
+            'modules/environment_setup/API_SPECIFICATION',
+            'modules/environment_setup/MCP_TOOL_SPECIFICATION',
+            'modules/environment_setup/USAGE_EXAMPLES',
+            'modules/environment_setup/CHANGELOG',
+            'modules/environment_setup/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/environment_setup/docs/index'},
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/environment_setup/docs/technical_overview'},
+              items: []
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Environment Setup Tutorials',
+                slug: '/modules/environment-setup/tutorials'
+              },
               items: [
-                'modules/environment_setup/docs/technical_overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/environment_setup/docs/tutorials/index'},
-                  items: [
-                    'modules/environment_setup/docs/tutorials/example_tutorial',
-                  ]
-                }
+                'modules/environment_setup/docs/tutorials/example_tutorial',
               ]
             }
           ]
@@ -250,27 +265,29 @@ const sidebars = {
         {
           type: 'category',
           label: 'Git Operations',
-          link: {type: 'doc', id: 'modules/git_operations/index'},
+          link: {type: 'doc', id: 'modules/git_operations/README'},
           items: [
-            'modules/git_operations/api_specification',
-            'modules/git_operations/mcp_tool_specification',
-            'modules/git_operations/usage_examples',
-            'modules/git_operations/changelog',
-            'modules/git_operations/security',
+            'modules/git_operations/API_SPECIFICATION',
+            'modules/git_operations/MCP_TOOL_SPECIFICATION',
+            'modules/git_operations/USAGE_EXAMPLES',
+            'modules/git_operations/CHANGELOG',
+            'modules/git_operations/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/git_operations/docs/index'},
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/git_operations/docs/technical_overview'},
+              items: []
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Git Operations Tutorials',
+                slug: '/modules/git-operations/tutorials'
+              },
               items: [
-                'modules/git_operations/docs/technical_overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/git_operations/docs/tutorials/index'},
-                  items: [
-                    'modules/git_operations/docs/tutorials/example_tutorial',
-                  ]
-                }
+                'modules/git_operations/docs/tutorials/example_tutorial',
               ]
             }
           ]
@@ -278,55 +295,29 @@ const sidebars = {
         {
           type: 'category',
           label: 'Logging & Monitoring',
-          link: {type: 'doc', id: 'modules/logging_monitoring/index'},
+          link: {type: 'doc', id: 'modules/logging_monitoring/README'},
           items: [
-            'modules/logging_monitoring/api_specification',
-            'modules/logging_monitoring/mcp_tool_specification',
-            'modules/logging_monitoring/usage_examples',
-            'modules/logging_monitoring/changelog',
-            'modules/logging_monitoring/security',
+            'modules/logging_monitoring/API_SPECIFICATION',
+            'modules/logging_monitoring/MCP_TOOL_SPECIFICATION',
+            'modules/logging_monitoring/USAGE_EXAMPLES',
+            'modules/logging_monitoring/CHANGELOG',
+            'modules/logging_monitoring/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/logging_monitoring/docs/index'},
-              items: [
-                'modules/logging_monitoring/docs/technical_overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/logging_monitoring/docs/tutorials/index'},
-                  items: [
-                    'modules/logging_monitoring/docs/tutorials/example_tutorial',
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          type: 'category',
-          label: 'Pattern Matching',
-          link: {type: 'doc', id: 'modules/pattern_matching/pattern-matching-index'},
-          items: [
-            'modules/pattern_matching/pattern-matching-api-specification',
-            'modules/pattern_matching/pattern-matching-mcp-tool-specification',
-            'modules/pattern_matching/pattern-matching-usage-examples',
-            'modules/pattern_matching/pattern-matching-changelog',
-            'modules/pattern_matching/pattern-matching-security',
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/logging_monitoring/docs/technical_overview'},
+              items: []
+            },
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/pattern_matching/docs/pattern-matching-module-docs-index'},
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Logging & Monitoring Tutorials',
+                slug: '/modules/logging-monitoring/tutorials'
+              },
               items: [
-                'modules/pattern_matching/docs/pattern-matching-technical-overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/pattern_matching/docs/tutorials/pattern-matching-tutorials-index'},
-                  items: [
-                    'modules/pattern_matching/docs/tutorials/pattern-matching-example-tutorial',
-                  ]
-                }
+                'modules/logging_monitoring/docs/tutorials/example_tutorial',
               ]
             }
           ]
@@ -334,27 +325,89 @@ const sidebars = {
         {
           type: 'category',
           label: 'Model Context Protocol',
-          link: {type: 'doc', id: 'modules/model_context_protocol/model-context-protocol-index'},
+          link: {type: 'doc', id: 'modules/model_context_protocol/README'},
           items: [
-            'modules/model_context_protocol/model-context-protocol-api-specification',
-            'modules/model_context_protocol/model-context-protocol-mcp-tool-specification',
-            'modules/model_context_protocol/model-context-protocol-usage-examples',
-            'modules/model_context_protocol/model-context-protocol-changelog',
-            'modules/model_context_protocol/model-context-protocol-security',
+            'modules/model_context_protocol/API_SPECIFICATION',
+            'modules/model_context_protocol/MCP_TOOL_SPECIFICATION',
+            'modules/model_context_protocol/USAGE_EXAMPLES',
+            'modules/model_context_protocol/CHANGELOG',
+            'modules/model_context_protocol/SECURITY',
             {
               type: 'category',
-              label: 'Detailed Docs & Tutorials',
-              link: {type: 'doc', id: 'modules/model_context_protocol/docs/model-context-protocol-module-docs-index'},
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/model_context_protocol/docs/technical_overview'},
+              items: []
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Model Context Protocol Tutorials',
+                slug: '/modules/model-context-protocol/tutorials'
+              },
               items: [
-                'modules/model_context_protocol/docs/model-context-protocol-technical-overview',
-                {
-                  type: 'category',
-                  label: 'Tutorials',
-                  link: {type: 'doc', id: 'modules/model_context_protocol/docs/tutorials/model-context-protocol-tutorials-index'},
-                  items: [
-                    'modules/model_context_protocol/docs/tutorials/model-context-protocol-example-tutorial',
-                  ]
-                }
+                'modules/model_context_protocol/docs/tutorials/example_tutorial',
+              ]
+            }
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Pattern Matching',
+          link: {type: 'doc', id: 'modules/pattern_matching/README'},
+          items: [
+            'modules/pattern_matching/API_SPECIFICATION',
+            'modules/pattern_matching/MCP_TOOL_SPECIFICATION',
+            'modules/pattern_matching/USAGE_EXAMPLES',
+            'modules/pattern_matching/CHANGELOG',
+            'modules/pattern_matching/SECURITY',
+            {
+              type: 'category',
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/pattern_matching/docs/technical_overview'},
+              items: []
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Pattern Matching Tutorials',
+                slug: '/modules/pattern-matching/tutorials'
+              },
+              items: [
+                'modules/pattern_matching/docs/tutorials/example_tutorial',
+              ]
+            }
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Static Analysis',
+          link: {type: 'doc', id: 'modules/static_analysis/README'},
+          items: [
+            'modules/static_analysis/API_SPECIFICATION',
+            'modules/static_analysis/MCP_TOOL_SPECIFICATION',
+            'modules/static_analysis/USAGE_EXAMPLES',
+            'modules/static_analysis/CHANGELOG',
+            'modules/static_analysis/SECURITY',
+            {
+              type: 'category',
+              label: 'Technical Overview',
+              link: {type: 'doc', id: 'modules/static_analysis/docs/technical_overview'},
+              items: []
+            },
+            {
+              type: 'category',
+              label: 'Tutorials',
+              link: {
+                type: 'generated-index',
+                title: 'Static Analysis Tutorials',
+                slug: '/modules/static-analysis/tutorials'
+              },
+              items: [
+                'modules/static_analysis/docs/tutorials/example_tutorial',
               ]
             }
           ]

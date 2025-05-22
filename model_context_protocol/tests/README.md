@@ -1,65 +1,81 @@
-# Testing Model Context Protocol
+# Testing the Model Context Protocol Module
 
-This document describes how to run tests for the Model Context Protocol module.
+This document describes how to run tests for the `model_context_protocol` module.
+
+## Overview
+
+Tests for this module primarily focus on validating the Pydantic models for MCP message structures (`MCPToolCall`, `MCPToolResult`, `MCPErrorDetail`) defined in `model_context_protocol/mcp_schemas.py`.
+
+As this module's main role is to define a protocol and provide schema utilities, the tests ensure that these schemas correctly parse valid data, reject invalid data, and enforce the defined constraints (e.g., error object presence on failure).
 
 ## Prerequisites
 
-(List any specific prerequisites or setup required to run the tests for this module, e.g., specific SDKs, environment variables, database setup.)
-
-- Prerequisite 1: ...
-- Prerequisite 2: ...
+1.  **Python Environment**: A Python 3.8+ environment is recommended.
+2.  **Dependencies**: Ensure all dependencies for this module and the project root are installed. From the project root directory (`codomyrmex/`):
+    ```bash
+    pip install -r requirements.txt
+    pip install -r model_context_protocol/requirements.txt 
+    # (Ensure pytest is installed, typically via the root requirements.txt or a dev requirements file)
+    ```
+    Specifically, `pytest` and `pydantic` are required to run these tests.
 
 ## Running Tests
 
-(Provide clear instructions on how to execute the tests. This might involve specific commands, scripts, or IDE configurations.)
+All tests for this module are unit tests and can be run using `pytest`.
 
-### Unit Tests
+### From the Project Root Directory (`codomyrmex/`):
 
+To run all tests within the `model_context_protocol` module:
 ```bash
-# Example command to run unit tests
-pytest path/to/module/tests/unit
+pytest model_context_protocol/tests/
+```
+
+To run tests in a specific file (e.g., `test_mcp_schemas.py`):
+```bash
+pytest model_context_protocol/tests/unit/test_mcp_schemas.py
+```
+
+To run a specific test class or function using the `-k` flag:
+```bash
+pytest model_context_protocol/tests/unit/test_mcp_schemas.py -k TestMCPToolResult
+pytest model_context_protocol/tests/unit/test_mcp_schemas.py -k "TestMCPToolResult and test_valid_success_result"
+```
+
+### From the Module Directory (`codomyrmex/model_context_protocol/`):
+
+If your current directory is `model_context_protocol/`:
+```bash
+pytest tests/
 # or
-# npm run test:unit
+python -m pytest tests/
 ```
-
-### Integration Tests
-
-```bash
-# Example command to run integration tests
-pytest path/to/module/tests/integration
-# or
-# npm run test:integration
-```
-
-### End-to-End (E2E) Tests
-
-```bash
-# Example command to run E2E tests
-# ./scripts/run-e2e-tests.sh
-```
-
-(Adjust the commands and sections above based on the testing frameworks and types of tests relevant to the module.)
 
 ## Test Structure
 
-(Briefly describe how the tests are organized within this `tests/` directory, e.g., by feature, by type (unit, integration), etc.)
+-   **`tests/unit/`**: Contains unit tests.
+    -   `test_mcp_schemas.py`: Unit tests for the Pydantic models in `model_context_protocol.mcp_schemas`.
+-   **`tests/integration/`**: Currently, no integration tests are defined for this module, as its primary components are schema definitions and Pydantic models. Future integration tests might involve testing a reference MCP tool implementation or a validator tool if developed.
+    -   `.gitkeep`: Placeholder file.
 
-- `unit/`: Contains unit tests.
-- `integration/`: Contains integration tests.
-- `fixtures/` or `data/`: Contains test data or fixtures.
+## Writing New Tests
 
-## Writing Tests
-
-(Provide guidelines or link to resources on how to write new tests for this module.)
-
-- Follow the existing testing patterns and frameworks.
-- Ensure tests are independent and can be run in any order.
-- Mock external dependencies for unit tests where appropriate.
-- Aim for good test coverage.
+-   **Location**: New unit tests for Pydantic models or other Python utilities should be added to `tests/unit/`.
+-   **Framework**: Use `pytest` for writing tests.
+-   **Conventions**:
+    -   Test filenames should start with `test_`.
+    -   Test functions should start with `test_`.
+    -   Use descriptive names for test functions and classes.
+    -   Organize tests into classes (e.g., `TestMCPToolCall`) for better structure.
+-   **Assertions**: Use standard `assert` statements.
+-   **Testing Exceptions**: Use `pytest.raises(ExceptionType)` to test for expected exceptions (e.g., `pydantic.ValidationError`).
+-   **Coverage**: Aim for comprehensive coverage of the Pydantic model validations, including valid cases, invalid cases for each field, and custom validator logic.
 
 ## Troubleshooting Failed Tests
 
-(Offer advice on how to debug or troubleshoot failing tests.)
-
-- Check logs for detailed error messages.
-- Ensure all prerequisites are met and the environment is correctly configured. 
+-   **Import Errors (`ModuleNotFoundError`)**: 
+    -   Ensure you are running `pytest` from the project root directory (`codomyrmex/`) or that your Python path is correctly set up so that the `model_context_protocol` package and its modules are importable.
+    -   Verify that all dependencies, especially `pydantic`, are installed in your active Python environment.
+-   **Validation Errors (`pydantic.ValidationError`)**: 
+    -   Carefully examine the error output from `pytest`. Pydantic provides detailed information about which field failed validation and why.
+    -   Compare the test input data with the Pydantic model definitions in `mcp_schemas.py` and the expected behavior (including custom validators).
+-   **Assertion Errors**: Review the assertion that failed and the values involved to understand the discrepancy. 

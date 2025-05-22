@@ -6,6 +6,22 @@ The Git Operations module is designed to provide a standardized interface and a 
 
 **Note on Scope**: This module provides *tools* for Git automation. For guidelines on project-wide Git practices, such as branching strategy, commit message conventions, and the Pull Request (PR) process, please refer to the main [Codomyrmex Contributing Guidelines](../../CONTRIBUTING.md).
 
+## Typical Project Git Workflow Context
+
+While detailed Git practices are in `CONTRIBUTING.md`, understanding the typical workflow helps contextualize the tools this `git_operations` module might provide. The Codomyrmex project generally follows a common Git workflow:
+
+1.  **Main Branch**: The `main` (or `master`) branch represents the primary line of development, always aiming to be stable and production-ready.
+2.  **Feature Branches**: Development for new features, bug fixes, or experiments occurs on separate branches, typically named descriptively (e.g., `feature/new-auth-system`, `fix/bug-123-memory-leak`, `docs/update-readme`). These branches are usually created from the latest `main`.
+3.  **Commits**: Work is committed incrementally to feature branches with clear, conventional commit messages (see `CONTRIBUTING.md` for format).
+4.  **Pull Requests (PRs)**: Once a feature or fix is complete and tested locally, a Pull Request is opened to merge the feature branch back into `main`. PRs are reviewed by other team members.
+5.  **Merging**: After review and approval (and passing any CI checks), the feature branch is merged into `main`.
+
+This module could provide tools to automate or assist with parts of this workflow, such as:
+-   Creating feature branches with conventional names.
+-   Validating commit messages before committing.
+-   Automating parts of the PR creation or merging process (with appropriate safeguards).
+-   Extracting information for release notes from Git history.
+
 ## Key Components
 
 - **Git Command Wrapper/Library**: A core set of Python functions that abstract and wrap common `git` command-line interface (CLI) commands (e.g., `clone`, `commit`, `push`, `pull`, `branch`, `checkout`, `status`, `log`, `diff`). This aims to provide a robust, error-handled, and Pythonic way to interact with Git repositories, often using libraries like `GitPython` or by managing `subprocess` calls carefully.
