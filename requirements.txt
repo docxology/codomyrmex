@@ -1,78 +1,75 @@
 # Core toolkit for code analysis and LLM integration
-cased-kit==0.3.0
+cased-kit
 
 # For .env file support
-python-dotenv==1.1.0
+python-dotenv
 
 # LLM Providers
-openai>=1.79.0
-anthropic==0.51.0
-# google-generativeai>=0.3.0  # Uncomment if needed
+openai
+anthropic
+google-generativeai
 
 # For semantic search and embedding
-sentence-transformers>=4.1.0
-chromadb==1.0.9
+sentence-transformers
+chromadb
 
 # For code execution sandbox
-docker==7.1.0
+docker
 
 # For schema validation (used in model_context_protocol)
-jsonschema==4.23.0
+jsonschema
 
 # For static analysis
-pylint==3.3.7
-flake8==7.2.0
-bandit==1.8.3
-radon==6.0.1
-lizard==1.17.30
+pylint
+flake8
+bandit
+radon
+lizard
 
 # For data visualization
-matplotlib==3.10.3
-seaborn==0.13.2
-numpy==2.2.6
+matplotlib
+seaborn
+numpy
 
 # For git operations
-GitPython==3.1.44
+GitPython
 
 # For specific tutorials/recipes
-unidiff==0.7.5
-requests==2.32.3
+unidiff
+requests
 
 # For dependency graph visualization (optional)
-# graphviz # Also requires Graphviz system package to be installed (e.g., via apt, brew)
+# graphviz  # Also requires Graphviz system package to be installed
 
 # For testing
-pytest==8.3.5
-pytest-mock==3.14.0
-pytest-cov==5.0.0
+pytest
+pytest-mock
+pytest-cov
 
-# FastAPI - For creating API endpoints.
-fastapi>=0.100.0
-
-# Uvicorn - ASGI server for FastAPI.
-uvicorn>=0.20.0
-
-# Pydantic - Data validation and settings management.
-pydantic>=2.0
+# FastAPI - For creating API endpoints
+fastapi
+uvicorn
+pydantic
 
 # Loguru - For logging.
-loguru>=0.6.0
+loguru
 
 # Watchdog - For monitoring file system events.
-watchdog>=2.3.0
+watchdog
 
 # Diff Match Patch - For generating and applying patches.
-diff-match-patch>=20200713
+diff-match-patch
 
 # Tiktoken - For tokenizing text with OpenAI models.
-tiktoken>=0.4.0
+tiktoken
 
 # For syntax highlighting (often a dependency for other tools)
-Pygments>=2.10.0
+Pygments
 
 # For progress bars
-tqdm>=4.60.0
+tqdm
 
-# Depending on specific linters or formatters used by static_analysis or other modules (examples):
-# black
-# mypy
+# Development tools
+black
+mypy
+ruff

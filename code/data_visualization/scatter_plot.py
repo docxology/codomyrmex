@@ -26,7 +26,7 @@ def create_scatter_plot(
     Uses logging_monitoring for logging.
     """
     logger.debug(f"Generating scatter plot titled '{title}'")
-    if not x_data or not y_data:
+    if len(x_data) == 0 or len(y_data) == 0:
         logger.warning("Empty data provided for scatter plot. No plot generated.")
         return
     if len(x_data) != len(y_data):

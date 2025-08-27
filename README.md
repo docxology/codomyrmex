@@ -1,6 +1,73 @@
 # Codomyrmex: A Modular, Extensible Coding Workspace
 
-This design outlines a modular, extensible coding workspace that integrates open-source tools for building, documenting, analyzing, executing, and visualizing code.
+**🚀 NOW FULLY FUNCTIONAL!** A complete, modular coding workspace that integrates the latest open-source tools for building, documenting, analyzing, executing, and visualizing code. Uses cutting-edge package versions for optimal performance.
+
+## Quick Start 🚀
+
+**Codomyrmex is now functional!** Here's how to get started in under 5 minutes:
+
+### 1. Automated Setup
+```bash
+# Clone and setup everything automatically
+git clone https://github.com/codomyrmex/codomyrmex.git
+cd codomyrmex
+bash code/environment_setup/scripts/setup_dev_env.sh
+```
+
+### 2. Manual Setup (Alternative)
+```bash
+# Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -e .
+
+# Check setup
+codomyrmex check
+```
+
+### 3. Verify Installation
+```bash
+codomyrmex info     # See project overview
+codomyrmex check    # Verify environment setup
+```
+
+### 4. Start Using Modules
+```bash
+# Run the example script to see everything working
+python example_usage.py
+```
+
+Or try individual modules:
+```python
+# Example: Use data visualization
+from codomyrmex.code.data_visualization import create_line_plot
+import numpy as np
+
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+create_line_plot(x, y, title="Sample Plot", output_path="plot.png")
+```
+
+**✅ What's Working Now:**
+- Environment setup and dependency management (latest versions)
+- Logging and monitoring system
+- Data visualization (plots, charts, graphs)
+- Static analysis tools (pylint, flake8, bandit)
+- CLI interface for quick checks
+- Modular architecture with proper imports
+- AI/LLM integration (OpenAI, Anthropic, Google)
+- Code execution capabilities
+- Testing framework
+- All with latest package versions!
+
+**🔄 Future Enhancements:**
+- Advanced AI code editing workflows
+- Build synthesis automation
+- Documentation website (Docusaurus)
+- Git operations integration
+- Additional visualization types
 
 ## Core Functional Modules
 
@@ -30,11 +97,13 @@ This section outlines the general steps to set up the development environment fo
 
 ### Prerequisites
 
-- Python 3.9 or higher
-- `pip` (Python package installer)
+- Python 3.10 or higher (uses latest package versions for best performance)
+- `pip` (Python package installer) OR `uv` (recommended - faster and more reliable)
 - `git`
 - Node.js (Version 18.0 or higher, for `documentation` module)
 - npm or yarn (for `documentation` module)
+
+**Note:** `uv` is a fast Python package manager that can replace pip and virtualenv. It's highly recommended for this project. Install it from https://github.com/astral-sh/uv
 
 ### Setup Instructions
 
@@ -44,17 +113,33 @@ This section outlines the general steps to set up the development environment fo
     cd codomyrmex
     ```
 
-2.  **Create and Activate a Python Virtual Environment:**
-    It's highly recommended to use a virtual environment to manage project dependencies.
+2.  **Set up Python Environment:**
+
+    **Option A: Using uv (Recommended - Faster and More Reliable)**
     ```bash
-    python -m venv .venv
+    # Install uv if you haven't already (visit https://github.com/astral-sh/uv)
+    # Create and activate virtual environment
+    uv venv .venv
     source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+    # Install dependencies
+    uv pip install -e .
     ```
 
-3.  **Install Python Dependencies:**
-    The project dependencies, including the `cased/kit` toolkit and `python-dotenv`, are listed in the `requirements.txt` file at the root of the project.
+    **Option B: Using pip (Traditional Method)**
     ```bash
+    # Create and activate virtual environment
+    python -m venv .venv
+    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+    # Install dependencies
     pip install -r requirements.txt
+    ```
+
+    **Option C: Automated Setup Script**
+    ```bash
+    # Run the automated setup script (supports both uv and pip)
+    bash environment_setup/scripts/setup_dev_env.sh
     ```
 
 4.  **Set Up API Keys (for LLM features):**
@@ -96,16 +181,22 @@ This section outlines the general steps to set up the development environment fo
         pylint **/*.py
         flake8 .
         ```
-    - **Tests**: The project uses `pytest` for Python tests. Run tests from the project root:
-        ```bash
-        # Run all tests
-        pytest
-        # Run tests for a specific module
-        pytest ai_code_editing/tests/
-        # Run tests for a specific file
-        pytest ai_code_editing/tests/unit/test_example.py
-        ```
-    - Refer to individual module `README.md` files or their `tests/README.md` for module-specific testing or linting instructions.
+    - **Tests**: The project uses `pytest` for Python tests with coverage reporting. Run tests from the project root:
+    ```bash
+    # Run all tests with coverage
+    pytest
+
+    # Run tests for a specific module
+    pytest testing/unit/test_ai_code_editing.py
+
+    # Run tests for a specific file
+    pytest testing/unit/test_ai_code_editing.py::TestAICodeEditing::test_ai_code_helpers_import
+
+    # Run with coverage report
+    pytest --cov-report=html
+    open testing/htmlcov/index.html  # View coverage report in browser
+    ```
+- Refer to individual module `README.md` files or their `tests/README.md` for module-specific testing or linting instructions.
 
 ## Project Governance & Contribution
 

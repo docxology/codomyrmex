@@ -1,8 +1,22 @@
 import sys
 import os
+import subprocess
+from pathlib import Path
 
 # Store the original script directory to correctly locate files relative to REPO_ROOT_PATH
 _script_dir = os.path.dirname(__file__)
+
+def is_uv_available():
+    """Check if uv is available on the system."""
+    try:
+        subprocess.run(['uv', '--version'], capture_output=True, check=True)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+def is_uv_environment():
+    """Check if we're in a uv-managed environment."""
+    return os.environ.get('UV_ACTIVE') == '1' or os.environ.get('VIRTUAL_ENV') and 'uv' in os.environ.get('VIRTUAL_ENV', '')
 
 def ensure_dependencies_installed():
     """
@@ -29,10 +43,27 @@ def ensure_dependencies_installed():
         # Determine the workspace root. Assumes env_checker.py is in environment_setup/ under the root.
         workspace_root = os.path.abspath(os.path.join(_script_dir, '..')) # Use _script_dir
         requirements_path = os.path.join(workspace_root, 'requirements.txt')
+        pyproject_path = os.path.join(workspace_root, 'pyproject.toml')
         readme_path = os.path.join(workspace_root, 'environment_setup', 'README.md')
 
-        print("[INSTRUCTION] Please ensure you have set up the Python virtual environment and installed all dependencies.", file=sys.stderr)
+        print("[INSTRUCTION] Please ensure you have set up the Python environment and installed all dependencies.", file=sys.stderr)
         print("\nTo set up/update the environment:", file=sys.stderr)
+
+        # Check if uv is available and prefer it
+        if is_uv_available():
+            print("\n[OPTION 1] Using uv (recommended - faster and more reliable):", file=sys.stderr)
+            print(f"1. Navigate to the project root: cd {workspace_root}", file=sys.stderr)
+            print("2. Create and activate uv environment:", file=sys.stderr)
+            print("   uv venv .venv", file=sys.stderr)
+            print("   source .venv/bin/activate  (Linux/macOS)", file=sys.stderr)
+            print("   .venv\\Scripts\\activate    (Windows)", file=sys.stderr)
+            print("3. Install dependencies:", file=sys.stderr)
+            print("   uv pip install -e .", file=sys.stderr)
+        else:
+            print("\n[OPTION 1] Using uv (recommended - install uv first):", file=sys.stderr)
+            print("   Visit: https://github.com/astral-sh/uv", file=sys.stderr)
+
+        print("\n[OPTION 2] Using pip (traditional method):", file=sys.stderr)
         print("1. Create and activate a virtual environment in the project root (e.g., 'codomyrmex/').", file=sys.stderr)
         print("   Example: python -m venv .venv", file=sys.stderr)
         print("            source .venv/bin/activate  (Linux/macOS)", file=sys.stderr)
@@ -40,10 +71,19 @@ def ensure_dependencies_installed():
         print(f"2. Install/update dependencies from '{requirements_path}':", file=sys.stderr)
         print(f"   pip install -r \"{requirements_path}\"", file=sys.stderr)
         print(f"   (Ensure 'cased-kit' and 'python-dotenv' are listed in {requirements_path})", file=sys.stderr)
+
         print("\nFor detailed setup instructions, please refer to: '{readme_path}'", file=sys.stderr)
         sys.exit(1)
     else:
         print("[INFO] Core dependencies (kit, python-dotenv) are installed.")
+
+        # Check environment type
+        if is_uv_environment():
+            print("[INFO] Running in uv-managed environment.")
+        elif os.environ.get('VIRTUAL_ENV'):
+            print("[INFO] Running in pip-managed virtual environment.")
+        else:
+            print("[INFO] Running in system Python environment.")
 
 def check_and_setup_env_vars(repo_root_path: str):
     """
