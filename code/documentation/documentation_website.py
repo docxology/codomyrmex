@@ -5,6 +5,8 @@ import subprocess
 import argparse
 import webbrowser
 import shutil  # For checking if command exists
+import glob
+from pathlib import Path
 
 # --- Determine project structure and add appropriate path to sys.path for package import ---
 _codomyrmex_dir_for_import_msg = "Unknown"
@@ -302,6 +304,69 @@ def print_assessment_checklist():
         print(f"- [ ] {item}")
     print("--- End of Checklist ---")
 
+def aggregate_docs(source_root: str = None, dest_root: str = None):
+    """Aggregate module documentation into the Docusaurus docs/modules folder.
+
+    This copies canonical documentation files from each code/<module>/ directory into
+    documentation/docs/modules/<module>/ so the Docusaurus site can present a unified view.
+
+    By default, it scans the project `code/` directory (one level under project root)
+    and copies recognized documentation files and the `docs/` subfolder contents.
+    """
+    logger.info("Starting documentation aggregation process...")
+
+    project_root = os.path.abspath(os.path.join(DOCUSAURUS_ROOT_DIR, '..'))
+    source_root = source_root or os.path.join(project_root, 'code')
+    dest_root = dest_root or os.path.join(DOCUSAURUS_ROOT_DIR, 'docs', 'modules')
+
+    logger.info(f"Source docs root: {source_root}")
+    logger.info(f"Destination docs root: {dest_root}")
+
+    os.makedirs(dest_root, exist_ok=True)
+
+    # Recognized top-level module doc filenames to copy
+    top_level_files = [
+        'README.md', 'API_SPECIFICATION.md', 'MCP_TOOL_SPECIFICATION.md',
+        'USAGE_EXAMPLES.md', 'CHANGELOG.md', 'SECURITY.md'
+    ]
+
+    for module_path in sorted(glob.glob(os.path.join(source_root, '*'))):
+        if not os.path.isdir(module_path):
+            continue
+        module_name = os.path.basename(module_path)
+        dest_module_dir = os.path.join(dest_root, module_name)
+        # Create destination module dir
+        os.makedirs(dest_module_dir, exist_ok=True)
+
+        # Copy top-level recognized files
+        for fname in top_level_files:
+            src = os.path.join(module_path, fname)
+            if os.path.exists(src):
+                try:
+                    shutil.copy2(src, dest_module_dir)
+                    logger.info(f"Copied {src} -> {dest_module_dir}")
+                except Exception as e:
+                    logger.error(f"Failed to copy {src} -> {dest_module_dir}: {e}")
+
+        # Copy module docs/ subtree if present
+        src_docs_dir = os.path.join(module_path, 'docs')
+        if os.path.exists(src_docs_dir) and os.path.isdir(src_docs_dir):
+            # Destination docs subfolder
+            dest_docs_subdir = os.path.join(dest_module_dir, 'docs')
+            # Remove existing dest subtree to avoid stale files
+            if os.path.exists(dest_docs_subdir):
+                try:
+                    shutil.rmtree(dest_docs_subdir)
+                except Exception as e:
+                    logger.warning(f"Could not remove existing docs at {dest_docs_subdir}: {e}")
+            try:
+                shutil.copytree(src_docs_dir, dest_docs_subdir)
+                logger.info(f"Copied docs tree {src_docs_dir} -> {dest_docs_subdir}")
+            except Exception as e:
+                logger.error(f"Failed to copy docs tree {src_docs_dir} -> {dest_docs_subdir}: {e}")
+
+    logger.info("Documentation aggregation complete. Please review 'documentation/docs/modules' for results.")
+
 def assess_site():
     """Guides user through assessing the site by opening browser and printing checklist."""
     logger.info(f"Attempting to open {EFFECTIVE_DOCS_URL} in your web browser.")
@@ -324,7 +389,7 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter
     )
     parser.add_argument("action", nargs='?', default=DEFAULT_ACTION,
-                        choices=["checkenv", "install", "start", "build", "serve", "assess", DEFAULT_ACTION], 
+                        choices=["checkenv", "install", "start", "build", "serve", "assess", "aggregate_docs", DEFAULT_ACTION], 
                         help=("Action to perform:\n"
                               "'checkenv'   Check Node.js/npm/yarn.\n"
                               "'install'    Install Docusaurus dependencies.\n"
@@ -332,6 +397,7 @@ def main():
                               "'build'      Build the static Docusaurus site to the 'build/' directory.\n"
                               "'serve'      Serve the statically built site from 'build/'.\n"
                               "'assess'     Open browser to site and print assessment checklist.\n"
+                              "'aggregate_docs' Aggregate module documentation into 'docs/modules'.\n"
                              f"'{DEFAULT_ACTION}' (Default) Perform: checkenv -> install -> build -> assess -> serve."))
     parser.add_argument("--pm", choices=["npm", "yarn"], default="npm", 
                         help="Package manager to use (npm or yarn). Default: npm.")
@@ -358,6 +424,8 @@ def main():
         assess_site() # Assess after starting the server
     elif action_to_perform == "assess":
         assess_site()
+    elif action_to_perform == "aggregate_docs":
+        aggregate_docs()
     elif action_to_perform == DEFAULT_ACTION:
         logger.info(f"--- Starting '{DEFAULT_ACTION}' sequence ---")
         if not check_doc_environment():

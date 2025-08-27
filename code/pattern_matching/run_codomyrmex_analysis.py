@@ -12,9 +12,7 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from dotenv import load_dotenv
-from kit import Repository, DocstringIndexer # Summarizer is accessed via repo.get_summarizer()
-from kit.summaries import OpenAIConfig # Added import for OpenAIConfig
-from kit.llms.openai import OpenAIConfig as KitOpenAIConfig # Explicit import for summarizer config
+from kit import Repository, DocstringIndexer, OpenAIConfig # Summarizer is accessed via repo.get_summarizer()
 
 # Attempt to import SentenceTransformer for explicit embedding function
 try:

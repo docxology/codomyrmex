@@ -56,7 +56,7 @@ class TestEnvironmentSetup:
 
             captured = capsys.readouterr()
             assert "[ERROR] The 'cased/kit' library is not installed" in captured.err
-            assert "[INSTRUCTION] Please ensure you have set up the Python virtual environment" in captured.err
+            assert "[INSTRUCTION] Please ensure you have set up the Python environment" in captured.err
 
     def test_ensure_dependencies_installed_missing_dotenv(self, capsys):
         """Test dependency check when python-dotenv is missing."""
