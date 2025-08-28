@@ -1,0 +1,24 @@
+{
+  "id": "modules/data_visualization/docs/tutorials/generating_a_scatter_plot_tutorial",
+  "title": "Data Visualization - Tutorial: Generating a Scatter Plot",
+  "description": "This tutorial will guide you through generating a scatter plot using the Data Visualization module's direct Python functions. We'll cover plotting data points, basic customizations, and saving the output.",
+  "source": "@site/docs/modules/data_visualization/docs/tutorials/generating_a_scatter_plot_tutorial.md",
+  "sourceDirName": "modules/data_visualization/docs/tutorials",
+  "slug": "/modules/data_visualization/docs/tutorials/generating_a_scatter_plot_tutorial",
+  "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/generating_a_scatter_plot_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/docs/tutorials/generating_a_scatter_plot_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Visualization - Tutorial: Generating a Pie Chart",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/generating_a_pie_chart_tutorial"
+  },
+  "next": {
+    "title": "Data Visualization - Tutorial: Generating a Heatmap via MCP",
+    "permalink": "/codomyrmex/modules/data_visualization/docs/tutorials/mcp_heatmap_tutorial"
+  }
+}

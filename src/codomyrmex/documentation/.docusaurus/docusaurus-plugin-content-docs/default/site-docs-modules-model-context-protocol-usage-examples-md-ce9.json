@@ -1,0 +1,24 @@
+{
+  "id": "modules/model_context_protocol/usage_examples",
+  "title": "Model Context Protocol (MCP) - Usage Examples",
+  "description": "This document provides practical examples related to the Model Context Protocol (MCP). It shows how other modules should structure their tool specifications and how AI agents might interact with these tools using MCP messages.",
+  "source": "@site/docs/modules/model_context_protocol/usage_examples.md",
+  "sourceDirName": "modules/model_context_protocol",
+  "slug": "/modules/model_context_protocol/usage_examples",
+  "permalink": "/codomyrmex/modules/model_context_protocol/usage_examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/usage_examples.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Model Context Protocol (MCP) - Meta-Specification for Tool Definitions",
+    "permalink": "/codomyrmex/modules/model_context_protocol/mcp_tool_specification"
+  },
+  "next": {
+    "title": "Changelog for Model Context Protocol",
+    "permalink": "/codomyrmex/modules/model_context_protocol/changelog"
+  }
+}

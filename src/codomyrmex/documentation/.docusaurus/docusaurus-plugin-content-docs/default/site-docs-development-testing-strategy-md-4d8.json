@@ -1,0 +1,19 @@
+{
+  "id": "development/testing-strategy",
+  "title": "Project Testing Strategy",
+  "description": "This document outlines the comprehensive testing strategy for the Codomyrmex project, ensuring software quality, reliability, and maintainability across all modules.",
+  "source": "@site/docs/development/testing_strategy.md",
+  "sourceDirName": "development",
+  "slug": "/development/testing-strategy",
+  "permalink": "/codomyrmex/development/testing-strategy",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/development/testing_strategy.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "testing-strategy",
+    "title": "Project Testing Strategy",
+    "sidebar_label": "Testing Strategy"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "modules/git_operations/mcp_tool_specification",
+  "title": "Git Operations - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Git Operations module that are intended to be integrated with the Model Context Protocol (MCP).",
+  "source": "@site/docs/modules/git_operations/mcp_tool_specification.md",
+  "sourceDirName": "modules/git_operations",
+  "slug": "/modules/git_operations/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/git_operations/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/git_operations/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Git Operations - API Specification",
+    "permalink": "/codomyrmex/modules/git_operations/api_specification"
+  },
+  "next": {
+    "title": "Git Operations - Usage Examples",
+    "permalink": "/codomyrmex/modules/git_operations/usage_examples"
+  }
+}

@@ -449,13 +449,13 @@ pip install -e .[visualization]
 
 1. **Install Documentation Dependencies:**
    ```bash
-   cd code/documentation
+   cd src/codomyrmex/documentation
    npm install
    ```
 
 2. **Build Documentation:**
    ```bash
-   cd code/documentation
+   cd src/codomyrmex/documentation
    npm run build
    npm run serve  # To preview locally
    ```
@@ -471,7 +471,7 @@ pip install -e .[visualization]
 **Solutions:**
 ```bash
 # Clear cache and rebuild
-cd code/documentation
+cd src/codomyrmex/documentation
 rm -rf .docusaurus/
 npm run clear
 npm run build
@@ -585,7 +585,7 @@ pip list | grep codomyrmex
 ## 📞 Getting Help
 
 ### **Community Resources**
-- **[📖 Documentation](code/documentation/README.md)** - Comprehensive guides
+- **[📖 Documentation](src/codomyrmex/documentation/README.md)** - Comprehensive guides
 - **[💬 GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)** - Ask questions
 - **[🐛 GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)** - Report bugs
 - **[📧 Mailing List](mailto:codomyrmex-users@googlegroups.com)** - Community discussions
@@ -622,4 +622,4 @@ for key in api_keys:
 
 ---
 
-**💡 Still having issues?** Check the [full documentation](code/documentation/README.md) or create an issue on GitHub with your error messages and environment details.
+**💡 Still having issues?** Check the [full documentation](src/codomyrmex/documentation/README.md) or create an issue on GitHub with your error messages and environment details.

@@ -1,0 +1,15 @@
+{
+  "id": "modules/ai_code_editing/docs/index",
+  "title": "Ai Code Editing - Documentation",
+  "description": "Welcome to the detailed documentation for the Ai Code Editing module.",
+  "source": "@site/docs/modules/ai_code_editing/docs/index.md",
+  "sourceDirName": "modules/ai_code_editing/docs",
+  "slug": "/modules/ai_code_editing/docs/",
+  "permalink": "/codomyrmex/modules/ai_code_editing/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/ai_code_editing/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

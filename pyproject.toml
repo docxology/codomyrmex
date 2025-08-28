@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "codomyrmex"
@@ -35,75 +35,56 @@ classifiers = [
 dependencies = [
     # Core toolkit for code analysis and LLM integration
     "cased-kit",
-
     # For .env file support
     "python-dotenv",
-
     # LLM Providers
     "openai",
     "anthropic",
     "google-generativeai",
-
     # For semantic search and embedding
     "sentence-transformers",
     "chromadb",
-
     # For code execution sandbox
     "docker",
-
     # For schema validation (used in model_context_protocol)
     "jsonschema",
-
     # For static analysis
     "pylint",
     "flake8",
     "bandit",
     "radon",
     "lizard",
-
     # For data visualization
     "matplotlib",
     "seaborn",
     "numpy",
-
     # For git operations
     "GitPython",
-
     # For specific tutorials/recipes
     "unidiff",
     "requests",
-
     # For dependency graph visualization (optional)
     # "graphviz",  # Also requires Graphviz system package to be installed
-
     # For testing
     "pytest",
     "pytest-mock",
     "pytest-cov",
-
     # FastAPI - For creating API endpoints
     "fastapi",
     "uvicorn",
     "pydantic",
-
     # Loguru - For logging.
     "loguru",
-
     # Watchdog - For monitoring file system events.
     "watchdog",
-
     # Diff Match Patch - For generating and applying patches.
     "diff-match-patch",
-
     # Tiktoken - For tokenizing text with OpenAI models.
     "tiktoken",
-
     # For syntax highlighting (often a dependency for other tools)
     "Pygments",
-
     # For progress bars
     "tqdm",
-
     # Development tools
     "black",
     "mypy",
@@ -117,22 +98,36 @@ Issues = "https://github.com/codomyrmex/codomyrmex/issues"
 Documentation = "https://codomyrmex.readthedocs.io/"
 
 [tool.hatch.build.targets.wheel]
-packages = ["code"]
+packages = ["src/codomyrmex"]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+    "pre-commit>=3.0.0",
+]
+
+[tool.uv.sources]
+codomyrmex = { workspace = true }
 
 [project.scripts]
 codomyrmex = "codomyrmex_cli:main"
 
 [tool.pytest.ini_options]
-testpaths = ["testing"]
+testpaths = ["testing", "src"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
     "--verbose",
     "--tb=short",
-    "--cov=code",
+    "--cov=src/codomyrmex",
     "--cov-report=term-missing",
-    "--cov-report=html:testing/htmlcov",
+    "--cov-report=html:htmlcov",
     "--cov-fail-under=80",
 ]
 markers = [
@@ -142,7 +137,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["code"]
+source = ["src/codomyrmex"]
 omit = [
     "*/tests/*",
     "*/test_*.py",

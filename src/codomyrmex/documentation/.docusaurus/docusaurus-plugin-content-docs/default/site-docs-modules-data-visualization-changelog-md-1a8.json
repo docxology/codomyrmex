@@ -1,0 +1,24 @@
+{
+  "id": "modules/data_visualization/changelog",
+  "title": "Changelog for Data Visualization",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/data_visualization/changelog.md",
+  "sourceDirName": "modules/data_visualization",
+  "slug": "/modules/data_visualization/changelog",
+  "permalink": "/codomyrmex/modules/data_visualization/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Visualization - Usage Examples",
+    "permalink": "/codomyrmex/modules/data_visualization/usage_examples"
+  },
+  "next": {
+    "title": "Security Policy for Data Visualization",
+    "permalink": "/codomyrmex/modules/data_visualization/security"
+  }
+}

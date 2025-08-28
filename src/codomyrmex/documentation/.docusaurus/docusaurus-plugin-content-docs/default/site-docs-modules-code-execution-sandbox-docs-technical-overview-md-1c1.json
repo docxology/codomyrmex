@@ -1,0 +1,24 @@
+{
+  "id": "modules/code_execution_sandbox/docs/technical_overview",
+  "title": "Code Execution Sandbox - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Code Execution Sandbox module. Its primary role is the secure execution of untrusted code, making its architecture and design choices critical for the overall security of the Codomyrmex project.",
+  "source": "@site/docs/modules/code_execution_sandbox/docs/technical_overview.md",
+  "sourceDirName": "modules/code_execution_sandbox/docs",
+  "slug": "/modules/code_execution_sandbox/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/code_execution_sandbox/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy for Code Execution Sandbox",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/code-execution-sandbox/tutorials"
+  }
+}

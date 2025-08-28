@@ -1,0 +1,26 @@
+{
+  "id": "project/CONTRIBUTING_TO_DOCUMENTATION",
+  "title": "Contributing to Documentation",
+  "description": "Thank you for your interest in contributing to the Codomyrmex project documentation! High-quality documentation is crucial for making the project accessible, understandable, and easy to use for everyone.",
+  "source": "@site/docs/project/CONTRIBUTING_TO_DOCUMENTATION.md",
+  "sourceDirName": "project",
+  "slug": "/project/CONTRIBUTING_TO_DOCUMENTATION",
+  "permalink": "/codomyrmex/project/CONTRIBUTING_TO_DOCUMENTATION",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/project/CONTRIBUTING_TO_DOCUMENTATION.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Contributing to Documentation"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Project Architecture",
+    "permalink": "/codomyrmex/project/architecture"
+  },
+  "next": {
+    "title": "Contributing",
+    "permalink": "/codomyrmex/project/contributing"
+  }
+}

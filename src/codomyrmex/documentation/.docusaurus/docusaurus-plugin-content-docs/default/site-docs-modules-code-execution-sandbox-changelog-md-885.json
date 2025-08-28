@@ -1,0 +1,24 @@
+{
+  "id": "modules/code_execution_sandbox/changelog",
+  "title": "Changelog for Code Execution Sandbox",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/code_execution_sandbox/changelog.md",
+  "sourceDirName": "modules/code_execution_sandbox",
+  "slug": "/modules/code_execution_sandbox/changelog",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/code_execution_sandbox/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Code Execution Sandbox - Usage Examples",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/usage_examples"
+  },
+  "next": {
+    "title": "Security Policy for Code Execution Sandbox",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/security"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "modules/documentation/mcp_tool_specification",
+  "title": "Documentation Module - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Documentation module that are intended to be integrated with the Model Context Protocol (MCP). These tools primarily interact with the Docusaurus documentation website generation process.",
+  "source": "@site/docs/modules/documentation/mcp_tool_specification.md",
+  "sourceDirName": "modules/documentation",
+  "slug": "/modules/documentation/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/documentation/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/documentation/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "MCP Tool Specification",
+    "title": "Documentation Module - MCP Tool Specification"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "API Specification",
+    "permalink": "/codomyrmex/modules/documentation/api_specification"
+  },
+  "next": {
+    "title": "Usage Examples",
+    "permalink": "/codomyrmex/modules/documentation/usage_examples"
+  }
+}

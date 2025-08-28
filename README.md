@@ -11,7 +11,7 @@
 # Clone and setup everything automatically
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-bash code/environment_setup/scripts/setup_dev_env.sh
+bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
 ```
 
 ### 2. Manual Setup (Alternative)
@@ -94,10 +94,10 @@ create_line_plot(x, y, title="Sample Plot", output_path="plot.png")
 ## 📚 Documentation & Resources
 
 ### **Complete Documentation Suite**
-- **[📖 Full Documentation](code/documentation/README.md)** - Comprehensive guides, tutorials, and API references
-- **[🏗️ Architecture Overview](code/documentation/docs/project/architecture.md)** - System design and data flow
-- **[🧪 Testing Strategy](code/documentation/docs/project/TESTING_STRATEGY.md)** - Quality assurance approach
-- **[🤝 Contributing Guide](code/documentation/docs/project/contributing.md)** - How to contribute effectively
+- **[📖 Full Documentation](src/codomyrmex/documentation/README.md)** - Comprehensive guides, tutorials, and API references
+- **[🏗️ Architecture Overview](src/codomyrmex/documentation/docs/project/architecture.md)** - System design and data flow
+- **[🧪 Testing Strategy](src/codomyrmex/documentation/docs/project/TESTING_STRATEGY.md)** - Quality assurance approach
+- **[🤝 Contributing Guide](src/codomyrmex/documentation/docs/project/contributing.md)** - How to contribute effectively
 - **[🔧 Module Interdependencies](MODULE_RELATIONSHIPS.md)** - How modules work together
 - **[🚀 Quick Start Guide](QUICKSTART.md)** - Get running in 3 minutes
 - **[🔍 Troubleshooting Guide](TROUBLESHOOTING.md)** - Common issues and solutions
@@ -105,11 +105,11 @@ create_line_plot(x, y, title="Sample Plot", output_path="plot.png")
 ### **Module-Specific Documentation**
 | Module | Documentation | API Reference | Tutorials |
 |--------|---------------|---------------|-----------|
-| **AI Code Editing** | [📚 Docs](code/documentation/docs/modules/ai_code_editing/) | [🔌 API](code/documentation/docs/modules/ai_code_editing/api_specification.md) | [🎓 Tutorials](code/documentation/docs/modules/ai_code_editing/docs/tutorials/) |
-| **Data Visualization** | [📚 Docs](code/documentation/docs/modules/data_visualization/) | [🔌 API](code/documentation/docs/modules/data_visualization/api_specification.md) | [🎓 Tutorials](code/documentation/docs/modules/data_visualization/docs/tutorials/) |
-| **Code Execution** | [📚 Docs](code/documentation/docs/modules/code_execution_sandbox/) | [🔌 API](code/documentation/docs/modules/code_execution_sandbox/api_specification.md) | [🎓 Tutorials](code/documentation/docs/modules/code_execution_sandbox/docs/tutorials/) |
-| **Pattern Matching** | [📚 Docs](code/documentation/docs/modules/pattern_matching/) | [🔌 API](code/documentation/docs/modules/pattern_matching/pattern-matching-api-specification.md) | [🎓 Tutorials](code/documentation/docs/modules/pattern_matching/docs/tutorials/) |
-| **Static Analysis** | [📚 Docs](code/documentation/docs/modules/static_analysis/) | [🔌 API](code/documentation/docs/modules/static_analysis/api_specification.md) | [🎓 Tutorials](code/documentation/docs/modules/static_analysis/docs/tutorials/) |
+| **AI Code Editing** | [📚 Docs](src/codomyrmex/documentation/docs/modules/ai_code_editing/) | [🔌 API](src/codomyrmex/documentation/docs/modules/ai_code_editing/api_specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/ai_code_editing/docs/tutorials/) |
+| **Data Visualization** | [📚 Docs](src/codomyrmex/documentation/docs/modules/data_visualization/) | [🔌 API](src/codomyrmex/documentation/docs/modules/data_visualization/api_specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/data_visualization/docs/tutorials/) |
+| **Code Execution** | [📚 Docs](src/codomyrmex/documentation/docs/modules/code_execution_sandbox/) | [🔌 API](src/codomyrmex/documentation/docs/modules/code_execution_sandbox/api_specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/code_execution_sandbox/docs/tutorials/) |
+| **Pattern Matching** | [📚 Docs](src/codomyrmex/documentation/docs/modules/pattern_matching/) | [🔌 API](src/codomyrmex/documentation/docs/modules/pattern_matching/pattern-matching-api-specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/pattern_matching/docs/tutorials/) |
+| **Static Analysis** | [📚 Docs](src/codomyrmex/documentation/docs/modules/static_analysis/) | [🔌 API](src/codomyrmex/documentation/docs/modules/static_analysis/api_specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/static_analysis/docs/tutorials/) |
 
 ## Getting Started: Development Environment Setup
 

@@ -1,0 +1,19 @@
+{
+  "id": "modules/logging_monitoring/index",
+  "title": "Logging & Monitoring Module",
+  "description": "Overview",
+  "source": "@site/docs/modules/logging_monitoring/index.md",
+  "sourceDirName": "modules/logging_monitoring",
+  "slug": "/modules/logging_monitoring",
+  "permalink": "/codomyrmex/modules/logging_monitoring",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/logging_monitoring/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Logging & Monitoring",
+    "title": "Logging & Monitoring Module",
+    "slug": "/modules/logging_monitoring"
+  }
+}

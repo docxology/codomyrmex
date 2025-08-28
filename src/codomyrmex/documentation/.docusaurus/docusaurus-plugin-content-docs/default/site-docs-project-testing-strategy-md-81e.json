@@ -1,0 +1,24 @@
+{
+  "id": "project/TESTING_STRATEGY",
+  "title": "Project-Wide Testing Strategy",
+  "description": "This document outlines the comprehensive testing strategy for the Codomyrmex project, ensuring code quality, reliability, and maintainability across all modules.",
+  "source": "@site/docs/project/TESTING_STRATEGY.md",
+  "sourceDirName": "project",
+  "slug": "/project/TESTING_STRATEGY",
+  "permalink": "/codomyrmex/project/TESTING_STRATEGY",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/project/TESTING_STRATEGY.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Environment Setup",
+    "permalink": "/codomyrmex/development/environment-setup"
+  },
+  "next": {
+    "title": "Project-Wide Error Handling and Logging Best Practices",
+    "permalink": "/codomyrmex/project/ERROR_HANDLING_LOGGING"
+  }
+}

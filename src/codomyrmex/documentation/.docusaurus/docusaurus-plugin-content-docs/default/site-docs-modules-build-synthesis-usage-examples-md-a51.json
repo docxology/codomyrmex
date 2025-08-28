@@ -1,0 +1,24 @@
+{
+  "id": "modules/build_synthesis/usage_examples",
+  "title": "Build Synthesis - Usage Examples",
+  "description": "Example 1: Basic Usage - Triggering a Build via MCP",
+  "source": "@site/docs/modules/build_synthesis/usage_examples.md",
+  "sourceDirName": "modules/build_synthesis",
+  "slug": "/modules/build_synthesis/usage_examples",
+  "permalink": "/codomyrmex/modules/build_synthesis/usage_examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/build_synthesis/usage_examples.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Build Synthesis - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/build_synthesis/mcp_tool_specification"
+  },
+  "next": {
+    "title": "Changelog for Build Synthesis",
+    "permalink": "/codomyrmex/modules/build_synthesis/changelog"
+  }
+}

@@ -9,7 +9,7 @@ Get up and running with Codomyrmex in **3 minutes** or less!
 # Clone and setup everything automatically
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-bash code/environment_setup/scripts/setup_dev_env.sh
+bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
 ```
 
 ### **Option 2: Manual Setup**
@@ -107,7 +107,7 @@ codomyrmex info
 pytest testing/unit/ -v
 
 # Generate documentation
-cd code/documentation && npm run build
+cd src/codomyrmex/documentation && npm run build
 ```
 
 ### **Environment Variables**
@@ -130,9 +130,9 @@ GOOGLE_API_KEY="your-google-key"
 ## 🎓 Next Steps
 
 ### **Learn More**
-- **[📖 Full Documentation](code/documentation/README.md)** - Complete guides and tutorials
+- **[📖 Full Documentation](src/codomyrmex/documentation/README.md)** - Complete guides and tutorials
 - **[🔧 Module Relationships](MODULE_RELATIONSHIPS.md)** - How modules work together
-- **[🧪 Testing Strategy](code/documentation/docs/project/TESTING_STRATEGY.md)** - Quality assurance
+- **[🧪 Testing Strategy](src/codomyrmex/documentation/docs/project/TESTING_STRATEGY.md)** - Quality assurance
 
 ### **Common Workflows**
 
@@ -216,4 +216,4 @@ production_code = refactor_code_snippet(
 
 ---
 
-**🎉 You're ready to start building with Codomyrmex!** Check out the [full documentation](code/documentation/README.md) for advanced features and detailed tutorials.
+**🎉 You're ready to start building with Codomyrmex!** Check out the [full documentation](src/codomyrmex/documentation/README.md) for advanced features and detailed tutorials.

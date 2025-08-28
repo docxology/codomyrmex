@@ -12,13 +12,13 @@ from pathlib import Path
 from typing import Optional
 import argparse
 
-# Add the code directory to Python path
-code_dir = Path(__file__).parent / "code"
-if str(code_dir) not in sys.path:
-    sys.path.insert(0, str(code_dir))
+# Add the src directory to Python path
+src_dir = Path(__file__).parent / "src"
+if str(src_dir) not in sys.path:
+    sys.path.insert(0, str(src_dir))
 
 try:
-    from logging_monitoring.logger_config import get_logger, setup_logging
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     logger = get_logger(__name__)
 except ImportError:
     # Fallback logging

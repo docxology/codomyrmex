@@ -1,0 +1,24 @@
+{
+  "id": "modules/static_analysis/usage_examples",
+  "title": "Static Analysis - Usage Examples",
+  "description": "Example 1: Basic Usage",
+  "source": "@site/docs/modules/static_analysis/usage_examples.md",
+  "sourceDirName": "modules/static_analysis",
+  "slug": "/modules/static_analysis/usage_examples",
+  "permalink": "/codomyrmex/modules/static_analysis/usage_examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/static_analysis/usage_examples.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Static Analysis - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/static_analysis/mcp_tool_specification"
+  },
+  "next": {
+    "title": "Changelog for Static Analysis",
+    "permalink": "/codomyrmex/modules/static_analysis/changelog"
+  }
+}

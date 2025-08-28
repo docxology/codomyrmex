@@ -1,0 +1,19 @@
+{
+  "id": "modules/data_visualization/index",
+  "title": "Data Visualization Module",
+  "description": "Overview",
+  "source": "@site/docs/modules/data_visualization/index.md",
+  "sourceDirName": "modules/data_visualization",
+  "slug": "/modules/data_visualization",
+  "permalink": "/codomyrmex/modules/data_visualization",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Data Visualization",
+    "title": "Data Visualization Module",
+    "slug": "/modules/data_visualization"
+  }
+}

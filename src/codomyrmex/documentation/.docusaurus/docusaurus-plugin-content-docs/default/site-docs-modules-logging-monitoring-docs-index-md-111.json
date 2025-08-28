@@ -1,0 +1,15 @@
+{
+  "id": "modules/logging_monitoring/docs/index",
+  "title": "Logging Monitoring - Documentation",
+  "description": "Welcome to the detailed documentation for the Logging Monitoring module.",
+  "source": "@site/docs/modules/logging_monitoring/docs/index.md",
+  "sourceDirName": "modules/logging_monitoring/docs",
+  "slug": "/modules/logging_monitoring/docs/",
+  "permalink": "/codomyrmex/modules/logging_monitoring/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/logging_monitoring/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

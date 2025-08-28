@@ -1,0 +1,15 @@
+{
+  "id": "modules/static_analysis/docs/index",
+  "title": "Static Analysis - Documentation",
+  "description": "Welcome to the detailed documentation for the Static Analysis module.",
+  "source": "@site/docs/modules/static_analysis/docs/index.md",
+  "sourceDirName": "modules/static_analysis/docs",
+  "slug": "/modules/static_analysis/docs/",
+  "permalink": "/codomyrmex/modules/static_analysis/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/static_analysis/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

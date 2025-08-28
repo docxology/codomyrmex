@@ -1,0 +1,27 @@
+{
+  "id": "modules/documentation/docs/technical_overview",
+  "title": "Documentation Module - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Documentation module itself, focusing on its role as the Docusaurus-based documentation hub.",
+  "source": "@site/docs/modules/documentation/docs/technical_overview.md",
+  "sourceDirName": "modules/documentation/docs",
+  "slug": "/modules/documentation/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/documentation/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/documentation/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Technical Overview",
+    "title": "Documentation Module - Technical Overview"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security",
+    "permalink": "/codomyrmex/modules/documentation/security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/documentation-meta/tutorials"
+  }
+}

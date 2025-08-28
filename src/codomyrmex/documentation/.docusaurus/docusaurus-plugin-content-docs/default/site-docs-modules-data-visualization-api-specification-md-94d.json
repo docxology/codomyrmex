@@ -1,0 +1,24 @@
+{
+  "id": "modules/data_visualization/api_specification",
+  "title": "Data Visualization - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/data_visualization/api_specification.md",
+  "sourceDirName": "modules/data_visualization",
+  "slug": "/modules/data_visualization/api_specification",
+  "permalink": "/codomyrmex/modules/data_visualization/api_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Visualization",
+    "permalink": "/codomyrmex/modules/data_visualization/"
+  },
+  "next": {
+    "title": "Data Visualization - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/data_visualization/mcp_tool_specification"
+  }
+}

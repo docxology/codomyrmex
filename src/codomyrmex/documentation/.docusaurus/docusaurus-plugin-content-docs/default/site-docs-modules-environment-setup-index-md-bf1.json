@@ -1,0 +1,19 @@
+{
+  "id": "modules/environment_setup/index",
+  "title": "Environment Setup Module",
+  "description": "This document outlines the steps to set up the development environment for the Codomyrmex project.",
+  "source": "@site/docs/modules/environment_setup/index.md",
+  "sourceDirName": "modules/environment_setup",
+  "slug": "/modules/environment_setup",
+  "permalink": "/codomyrmex/modules/environment_setup",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Environment Setup",
+    "title": "Environment Setup Module",
+    "slug": "/modules/environment_setup"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "modules/git_operations/index",
+  "title": "Git Operations Module",
+  "description": "Overview",
+  "source": "@site/docs/modules/git_operations/index.md",
+  "sourceDirName": "modules/git_operations",
+  "slug": "/modules/git_operations",
+  "permalink": "/codomyrmex/modules/git_operations",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/git_operations/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Git Operations",
+    "title": "Git Operations Module",
+    "slug": "/modules/git_operations"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "modules/pattern_matching/docs/index",
+  "title": "Pattern Matching - Documentation",
+  "description": "Welcome to the detailed documentation for the Pattern Matching module.",
+  "source": "@site/docs/modules/pattern_matching/docs/index.md",
+  "sourceDirName": "modules/pattern_matching/docs",
+  "slug": "/modules/pattern_matching/docs/",
+  "permalink": "/codomyrmex/modules/pattern_matching/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

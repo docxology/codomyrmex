@@ -1,0 +1,24 @@
+{
+  "id": "modules/code_execution_sandbox/README",
+  "title": "Code Execution Sandbox",
+  "description": "Overview",
+  "source": "@site/docs/modules/code_execution_sandbox/README.md",
+  "sourceDirName": "modules/code_execution_sandbox",
+  "slug": "/modules/code_execution_sandbox/",
+  "permalink": "/codomyrmex/modules/code_execution_sandbox/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/code_execution_sandbox/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Build Synthesis - Tutorial: Synthesizing a New Codomyrmex Module with synthesize_component_from_spec",
+    "permalink": "/codomyrmex/modules/build_synthesis/docs/tutorials/synthesize_code_component_tutorial"
+  },
+  "next": {
+    "title": "Code Execution Sandbox - API Specification",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/api_specification"
+  }
+}

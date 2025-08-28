@@ -1,0 +1,24 @@
+{
+  "id": "modules/environment_setup/mcp_tool_specification",
+  "title": "Environment Setup - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Environment Setup module that are intended to be integrated with the Model Context Protocol (MCP).",
+  "source": "@site/docs/modules/environment_setup/mcp_tool_specification.md",
+  "sourceDirName": "modules/environment_setup",
+  "slug": "/modules/environment_setup/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/environment_setup/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Environment Setup - API Specification",
+    "permalink": "/codomyrmex/modules/environment_setup/api_specification"
+  },
+  "next": {
+    "title": "Environment Setup - Usage Examples",
+    "permalink": "/codomyrmex/modules/environment_setup/usage_examples"
+  }
+}

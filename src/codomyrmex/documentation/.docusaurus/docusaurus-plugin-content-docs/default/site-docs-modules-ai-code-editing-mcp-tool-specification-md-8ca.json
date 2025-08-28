@@ -1,0 +1,24 @@
+{
+  "id": "modules/ai_code_editing/mcp_tool_specification",
+  "title": "AI Code Editing - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the AI Code Editing module that are intended to be integrated with the Model Context Protocol (MCP). These tools leverage Large Language Models (LLMs) to perform code generation and modification tasks.",
+  "source": "@site/docs/modules/ai_code_editing/mcp_tool_specification.md",
+  "sourceDirName": "modules/ai_code_editing",
+  "slug": "/modules/ai_code_editing/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/ai_code_editing/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/ai_code_editing/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "AI Code Editing - API Specification",
+    "permalink": "/codomyrmex/modules/ai_code_editing/api_specification"
+  },
+  "next": {
+    "title": "AI Code Editing - Usage Examples",
+    "permalink": "/codomyrmex/modules/ai_code_editing/usage_examples"
+  }
+}

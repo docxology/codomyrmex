@@ -1,0 +1,24 @@
+{
+  "id": "modules/build_synthesis/mcp_tool_specification",
+  "title": "Build Synthesis - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Build Synthesis module that are intended to be integrated with the Model Context Protocol (MCP).",
+  "source": "@site/docs/modules/build_synthesis/mcp_tool_specification.md",
+  "sourceDirName": "modules/build_synthesis",
+  "slug": "/modules/build_synthesis/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/build_synthesis/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/build_synthesis/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Build Synthesis - API Specification",
+    "permalink": "/codomyrmex/modules/build_synthesis/api_specification"
+  },
+  "next": {
+    "title": "Build Synthesis - Usage Examples",
+    "permalink": "/codomyrmex/modules/build_synthesis/usage_examples"
+  }
+}

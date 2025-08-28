@@ -1,0 +1,24 @@
+{
+  "id": "modules/environment_setup/security",
+  "title": "Security Policy for Environment Setup",
+  "description": "This document outlines security procedures, policies, and key considerations for the Environment Setup module. The primary goal of this module is to facilitate a secure and consistent development environment for the Codomyrmex project.",
+  "source": "@site/docs/modules/environment_setup/security.md",
+  "sourceDirName": "modules/environment_setup",
+  "slug": "/modules/environment_setup/security",
+  "permalink": "/codomyrmex/modules/environment_setup/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog for Environment Setup",
+    "permalink": "/codomyrmex/modules/environment_setup/changelog"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/environment_setup/docs/technical_overview"
+  }
+}

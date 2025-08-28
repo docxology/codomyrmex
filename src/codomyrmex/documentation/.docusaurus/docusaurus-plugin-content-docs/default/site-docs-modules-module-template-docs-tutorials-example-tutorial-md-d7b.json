@@ -1,0 +1,15 @@
+{
+  "id": "modules/module_template/docs/tutorials/example_tutorial",
+  "title": "[Module Name] - Example Tutorial: Getting Started with [Feature X]",
+  "description": "This tutorial will guide you through the process of using [Feature X] of the [Module Name] module.",
+  "source": "@site/docs/modules/module_template/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/module_template/docs/tutorials",
+  "slug": "/modules/module_template/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/module_template/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/module_template/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

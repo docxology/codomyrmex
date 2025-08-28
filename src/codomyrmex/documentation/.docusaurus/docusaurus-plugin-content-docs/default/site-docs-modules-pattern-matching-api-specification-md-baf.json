@@ -1,0 +1,15 @@
+{
+  "id": "modules/pattern_matching/api_specification",
+  "title": "Pattern Matching - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/pattern_matching/api_specification.md",
+  "sourceDirName": "modules/pattern_matching",
+  "slug": "/modules/pattern_matching/api_specification",
+  "permalink": "/codomyrmex/modules/pattern_matching/api_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

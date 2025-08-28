@@ -1,0 +1,24 @@
+{
+  "id": "modules/pattern_matching/docs/tutorials/example_tutorial",
+  "title": "Pattern Matching - Example Tutorial: Getting Started with [Feature X]",
+  "description": "This tutorial will guide you through the process of using [Feature X] of the Pattern Matching module.",
+  "source": "@site/docs/modules/pattern_matching/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/pattern_matching/docs/tutorials",
+  "slug": "/modules/pattern_matching/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/pattern_matching/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/pattern-matching/tutorials"
+  },
+  "next": {
+    "title": "Static Analysis",
+    "permalink": "/codomyrmex/modules/static_analysis/"
+  }
+}

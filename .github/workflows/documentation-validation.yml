@@ -1,0 +1,92 @@
+name: Documentation Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'code/**/docs/**'
+      - 'code/**/README.md'
+      - 'code/**/CHANGELOG.md'
+      - 'code/**/API_SPECIFICATION.md'
+      - 'code/documentation/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'code/**/docs/**'
+      - 'code/**/README.md'
+      - 'code/**/CHANGELOG.md'
+      - 'code/**/API_SPECIFICATION.md'
+      - 'code/documentation/**'
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Aggregate documentation
+      run: |
+        cd code/documentation
+        python documentation_website.py aggregate_docs
+
+    - name: Validate documentation versions
+      run: |
+        cd code/documentation
+        python documentation_website.py validate_docs
+
+    - name: Run comprehensive documentation quality check
+      run: |
+        cd code/documentation
+        python scripts/validate_docs_quality.py
+
+    - name: Check for documentation drift
+      run: |
+        # Check if aggregated docs are up to date
+        if [ -n "$(git status --porcelain docs/modules/)" ]; then
+          echo "Documentation drift detected! Aggregated docs are out of sync."
+          git status docs/modules/
+          exit 1
+        else
+          echo "Documentation is up to date."
+        fi
+
+  link-check:
+    runs-on: ubuntu-latest
+    needs: validate-docs
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Docusaurus dependencies
+      run: |
+        cd code/documentation
+        npm install
+
+    - name: Build documentation site
+      run: |
+        cd code/documentation
+        npm run build
+
+    - name: Check links
+      run: |
+        cd code/documentation
+        npx hyperlink --canonical-root https://codomyrmex.readthedocs.io/ build/
+      continue-on-error: true

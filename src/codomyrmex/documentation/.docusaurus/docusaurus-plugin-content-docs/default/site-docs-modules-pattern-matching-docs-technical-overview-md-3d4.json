@@ -1,0 +1,24 @@
+{
+  "id": "modules/pattern_matching/docs/technical_overview",
+  "title": "Pattern Matching - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Pattern Matching module.",
+  "source": "@site/docs/modules/pattern_matching/docs/technical_overview.md",
+  "sourceDirName": "modules/pattern_matching/docs",
+  "slug": "/modules/pattern_matching/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/pattern_matching/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security",
+    "permalink": "/codomyrmex/modules/pattern_matching/pattern-matching-security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/pattern-matching/tutorials"
+  }
+}

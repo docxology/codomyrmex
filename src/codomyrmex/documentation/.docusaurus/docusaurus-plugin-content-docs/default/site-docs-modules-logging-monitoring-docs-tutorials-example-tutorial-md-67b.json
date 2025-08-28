@@ -1,0 +1,24 @@
+{
+  "id": "modules/logging_monitoring/docs/tutorials/example_tutorial",
+  "title": "Logging Monitoring - Tutorial: Setting Up and Using Centralized Logging",
+  "description": "This tutorial will guide you through the process of setting up and using the centralized logging feature of the Logging Monitoring module in your Codomyrmex project.",
+  "source": "@site/docs/modules/logging_monitoring/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/logging_monitoring/docs/tutorials",
+  "slug": "/modules/logging_monitoring/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/logging_monitoring/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/logging_monitoring/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/logging-monitoring/tutorials"
+  },
+  "next": {
+    "title": "Model Context Protocol",
+    "permalink": "/codomyrmex/modules/model_context_protocol/"
+  }
+}

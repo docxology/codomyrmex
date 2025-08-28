@@ -1,0 +1,15 @@
+{
+  "id": "modules/module_template/mcp_tool_specification",
+  "title": "[Module Name] - MCP Tool Specification Template",
+  "description": "This document serves as a template for defining tools within the [Module Name] module that are intended to be integrated with the Model Context Protocol (MCP).",
+  "source": "@site/docs/modules/module_template/mcp_tool_specification.md",
+  "sourceDirName": "modules/module_template",
+  "slug": "/modules/module_template/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/module_template/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/module_template/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

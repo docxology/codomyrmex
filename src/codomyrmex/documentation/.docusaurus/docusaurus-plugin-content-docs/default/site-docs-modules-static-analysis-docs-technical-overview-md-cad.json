@@ -1,0 +1,24 @@
+{
+  "id": "modules/static_analysis/docs/technical_overview",
+  "title": "Static Analysis - Technical Overview",
+  "description": "This document provides a detailed technical overview of the Static Analysis module.",
+  "source": "@site/docs/modules/static_analysis/docs/technical_overview.md",
+  "sourceDirName": "modules/static_analysis/docs",
+  "slug": "/modules/static_analysis/docs/technical_overview",
+  "permalink": "/codomyrmex/modules/static_analysis/docs/technical_overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/static_analysis/docs/technical_overview.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Security Policy for Static Analysis",
+    "permalink": "/codomyrmex/modules/static_analysis/security"
+  },
+  "next": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/static-analysis/tutorials"
+  }
+}

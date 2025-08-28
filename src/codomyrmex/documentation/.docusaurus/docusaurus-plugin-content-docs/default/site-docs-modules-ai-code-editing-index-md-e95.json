@@ -1,0 +1,19 @@
+{
+  "id": "modules/ai_code_editing/ai-code-editing-index",
+  "title": "AI Code Editing Module",
+  "description": "Overview",
+  "source": "@site/docs/modules/ai_code_editing/index.md",
+  "sourceDirName": "modules/ai_code_editing",
+  "slug": "/modules/ai_code_editing/",
+  "permalink": "/codomyrmex/modules/ai_code_editing/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/ai_code_editing/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "ai-code-editing-index",
+    "title": "AI Code Editing Module",
+    "sidebar_label": "Overview"
+  }
+}

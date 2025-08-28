@@ -1,0 +1,24 @@
+{
+  "id": "modules/model_context_protocol/changelog",
+  "title": "Changelog for Model Context Protocol",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/model_context_protocol/changelog.md",
+  "sourceDirName": "modules/model_context_protocol",
+  "slug": "/modules/model_context_protocol/changelog",
+  "permalink": "/codomyrmex/modules/model_context_protocol/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Model Context Protocol (MCP) - Usage Examples",
+    "permalink": "/codomyrmex/modules/model_context_protocol/usage_examples"
+  },
+  "next": {
+    "title": "Security Policy for Model Context Protocol",
+    "permalink": "/codomyrmex/modules/model_context_protocol/security"
+  }
+}

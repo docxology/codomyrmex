@@ -1,0 +1,27 @@
+{
+  "id": "modules/pattern_matching/pattern-matching-security",
+  "title": "Pattern Matching - Security",
+  "description": "Reporting a Vulnerability",
+  "source": "@site/docs/modules/pattern_matching/pattern-matching-security.md",
+  "sourceDirName": "modules/pattern_matching",
+  "slug": "/modules/pattern_matching/pattern-matching-security",
+  "permalink": "/codomyrmex/modules/pattern_matching/pattern-matching-security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/pattern-matching-security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Security",
+    "title": "Pattern Matching - Security"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog",
+    "permalink": "/codomyrmex/modules/pattern_matching/pattern-matching-changelog"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/pattern_matching/docs/technical_overview"
+  }
+}

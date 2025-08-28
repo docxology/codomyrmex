@@ -1,0 +1,24 @@
+{
+  "id": "modules/environment_setup/docs/tutorials/example_tutorial",
+  "title": "Environment Setup - Troubleshooting Common Setup Issues",
+  "description": "This document provides troubleshooting tips for common environment setup issues encountered while setting up the Codomyrmex project, along with some OS-specific considerations.",
+  "source": "@site/docs/modules/environment_setup/docs/tutorials/example_tutorial.md",
+  "sourceDirName": "modules/environment_setup/docs/tutorials",
+  "slug": "/modules/environment_setup/docs/tutorials/example_tutorial",
+  "permalink": "/codomyrmex/modules/environment_setup/docs/tutorials/example_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/docs/tutorials/example_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/environment-setup/tutorials"
+  },
+  "next": {
+    "title": "Git Operations Module",
+    "permalink": "/codomyrmex/modules/git_operations/"
+  }
+}

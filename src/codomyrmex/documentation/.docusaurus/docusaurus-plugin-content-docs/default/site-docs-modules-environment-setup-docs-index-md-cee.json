@@ -1,0 +1,15 @@
+{
+  "id": "modules/environment_setup/docs/index",
+  "title": "Environment Setup - Documentation",
+  "description": "Welcome to the detailed documentation for the Environment Setup module.",
+  "source": "@site/docs/modules/environment_setup/docs/index.md",
+  "sourceDirName": "modules/environment_setup/docs",
+  "slug": "/modules/environment_setup/docs/",
+  "permalink": "/codomyrmex/modules/environment_setup/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

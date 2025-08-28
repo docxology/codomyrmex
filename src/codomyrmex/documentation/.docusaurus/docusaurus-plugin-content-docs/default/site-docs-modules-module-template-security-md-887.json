@@ -1,0 +1,15 @@
+{
+  "id": "modules/module_template/security",
+  "title": "Security Policy for [Module Name]",
+  "description": "This document outlines security procedures and policies for the [Module Name] module.",
+  "source": "@site/docs/modules/module_template/security.md",
+  "sourceDirName": "modules/module_template",
+  "slug": "/modules/module_template/security",
+  "permalink": "/codomyrmex/modules/module_template/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/module_template/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

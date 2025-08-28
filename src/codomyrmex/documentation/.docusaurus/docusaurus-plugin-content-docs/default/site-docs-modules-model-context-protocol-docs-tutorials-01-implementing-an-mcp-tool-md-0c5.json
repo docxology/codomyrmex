@@ -1,0 +1,16 @@
+{
+  "id": "modules/model_context_protocol/docs/tutorials/implementing_an_mcp_tool",
+  "title": "Tutorial: Implementing an MCP-Compliant Tool in Python",
+  "description": "Goal: This tutorial guides you through the process of implementing a Python function that can be exposed as a Model Context Protocol (MCP) compliant tool. We will cover creating a basic tool specification, writing the Python function, and using the provided Pydantic models (MCPToolCall, MCPToolResult) to handle requests and responses. It includes code examples for a hypothetical string utility tool.",
+  "source": "@site/docs/modules/model_context_protocol/docs/tutorials/01_implementing_an_mcp_tool.md",
+  "sourceDirName": "modules/model_context_protocol/docs/tutorials",
+  "slug": "/modules/model_context_protocol/docs/tutorials/implementing_an_mcp_tool",
+  "permalink": "/codomyrmex/modules/model_context_protocol/docs/tutorials/implementing_an_mcp_tool",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/docs/tutorials/01_implementing_an_mcp_tool.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {}
+}

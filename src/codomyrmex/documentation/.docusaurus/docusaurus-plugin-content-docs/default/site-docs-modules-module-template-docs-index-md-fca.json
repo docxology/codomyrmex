@@ -1,0 +1,15 @@
+{
+  "id": "modules/module_template/docs/index",
+  "title": "[Module Name] - Documentation",
+  "description": "Welcome to the detailed documentation for the [Module Name] module.",
+  "source": "@site/docs/modules/module_template/docs/index.md",
+  "sourceDirName": "modules/module_template/docs",
+  "slug": "/modules/module_template/docs/",
+  "permalink": "/codomyrmex/modules/module_template/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/module_template/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

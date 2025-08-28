@@ -1,0 +1,19 @@
+{
+  "id": "modules/model_context_protocol/model-context-protocol-index",
+  "title": "Model Context Protocol Module",
+  "description": "Overview",
+  "source": "@site/docs/modules/model_context_protocol/index.md",
+  "sourceDirName": "modules/model_context_protocol",
+  "slug": "/modules/model_context_protocol/",
+  "permalink": "/codomyrmex/modules/model_context_protocol/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "model-context-protocol-index",
+    "title": "Model Context Protocol Module",
+    "sidebar_label": "Overview"
+  }
+}

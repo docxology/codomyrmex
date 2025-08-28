@@ -1,0 +1,24 @@
+{
+  "id": "modules/git_operations/docs/tutorials/creating_feature_branch_tutorial",
+  "title": "Git Operations - Tutorial: Creating a Feature Branch",
+  "description": "This tutorial guides you through using a conceptual createfeaturebranch function from the Git Operations module to start new development work in a Codomyrmex project, adhering to typical project conventions.",
+  "source": "@site/docs/modules/git_operations/docs/tutorials/creating_feature_branch_tutorial.md",
+  "sourceDirName": "modules/git_operations/docs/tutorials",
+  "slug": "/modules/git_operations/docs/tutorials/creating_feature_branch_tutorial",
+  "permalink": "/codomyrmex/modules/git_operations/docs/tutorials/creating_feature_branch_tutorial",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/git_operations/docs/tutorials/creating_feature_branch_tutorial.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorials",
+    "permalink": "/codomyrmex/modules/git-operations/tutorials"
+  },
+  "next": {
+    "title": "Logging & Monitoring",
+    "permalink": "/codomyrmex/modules/logging_monitoring"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "project/ERROR_HANDLING_LOGGING",
+  "title": "Project-Wide Error Handling and Logging Best Practices",
+  "description": "This document outlines the best practices for error handling and logging within the Codomyrmex project. Consistent and effective error management is crucial for maintainability, debugging, and operational stability.",
+  "source": "@site/docs/project/ERROR_HANDLING_LOGGING.md",
+  "sourceDirName": "project",
+  "slug": "/project/ERROR_HANDLING_LOGGING",
+  "permalink": "/codomyrmex/project/ERROR_HANDLING_LOGGING",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/project/ERROR_HANDLING_LOGGING.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Project-Wide Testing Strategy",
+    "permalink": "/codomyrmex/project/TESTING_STRATEGY"
+  },
+  "next": {
+    "title": "Documentation Pipeline",
+    "permalink": "/codomyrmex/development/documentation-pipeline"
+  }
+}

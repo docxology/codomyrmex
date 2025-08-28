@@ -1,0 +1,24 @@
+{
+  "id": "modules/static_analysis/changelog",
+  "title": "Changelog for Static Analysis",
+  "description": "All notable changes to this module will be documented in this file.",
+  "source": "@site/docs/modules/static_analysis/changelog.md",
+  "sourceDirName": "modules/static_analysis",
+  "slug": "/modules/static_analysis/changelog",
+  "permalink": "/codomyrmex/modules/static_analysis/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/static_analysis/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Static Analysis - Usage Examples",
+    "permalink": "/codomyrmex/modules/static_analysis/usage_examples"
+  },
+  "next": {
+    "title": "Security Policy for Static Analysis",
+    "permalink": "/codomyrmex/modules/static_analysis/security"
+  }
+}

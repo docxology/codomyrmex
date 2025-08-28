@@ -1,0 +1,26 @@
+{
+  "id": "project/architecture",
+  "title": "Codomyrmex Project Architecture",
+  "description": "This document provides a high-level overview of the Codomyrmex project architecture. The project is designed to be modular, allowing for independent development and functionality of its various components while ensuring they can interoperate effectively.",
+  "source": "@site/docs/project/architecture.md",
+  "sourceDirName": "project",
+  "slug": "/project/architecture",
+  "permalink": "/codomyrmex/project/architecture",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/project/architecture.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Project Architecture"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Project Overview",
+    "permalink": "/codomyrmex/project-overview"
+  },
+  "next": {
+    "title": "Contributing to Documentation",
+    "permalink": "/codomyrmex/project/CONTRIBUTING_TO_DOCUMENTATION"
+  }
+}

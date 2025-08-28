@@ -1,0 +1,24 @@
+{
+  "id": "modules/pattern_matching/README",
+  "title": "Pattern Matching Module (Leveraging cased/kit)",
+  "description": "Overview",
+  "source": "@site/docs/modules/pattern_matching/README.md",
+  "sourceDirName": "modules/pattern_matching",
+  "slug": "/modules/pattern_matching/",
+  "permalink": "/codomyrmex/modules/pattern_matching/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/pattern_matching/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Model Context Protocol - Example Tutorial: Getting Started with [Feature X]",
+    "permalink": "/codomyrmex/modules/model_context_protocol/docs/tutorials/example_tutorial"
+  },
+  "next": {
+    "title": "API Specification",
+    "permalink": "/codomyrmex/modules/pattern_matching/pattern-matching-api-specification"
+  }
+}

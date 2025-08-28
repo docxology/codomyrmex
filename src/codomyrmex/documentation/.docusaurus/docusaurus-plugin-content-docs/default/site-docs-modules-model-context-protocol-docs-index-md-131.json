@@ -1,0 +1,15 @@
+{
+  "id": "modules/model_context_protocol/docs/index",
+  "title": "Model Context Protocol - Documentation",
+  "description": "Welcome to the detailed documentation for the Model Context Protocol module.",
+  "source": "@site/docs/modules/model_context_protocol/docs/index.md",
+  "sourceDirName": "modules/model_context_protocol/docs",
+  "slug": "/modules/model_context_protocol/docs/",
+  "permalink": "/codomyrmex/modules/model_context_protocol/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/model_context_protocol/docs/index.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

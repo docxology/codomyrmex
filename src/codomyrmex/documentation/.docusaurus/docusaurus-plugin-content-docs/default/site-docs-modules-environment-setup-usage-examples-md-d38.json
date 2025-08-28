@@ -1,0 +1,24 @@
+{
+  "id": "modules/environment_setup/usage_examples",
+  "title": "Environment Setup - Usage Examples",
+  "description": "This document provides usage examples for the environmentsetup module, primarily focusing on the envchecker.py script and its functions.",
+  "source": "@site/docs/modules/environment_setup/usage_examples.md",
+  "sourceDirName": "modules/environment_setup",
+  "slug": "/modules/environment_setup/usage_examples",
+  "permalink": "/codomyrmex/modules/environment_setup/usage_examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/environment_setup/usage_examples.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Environment Setup - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/environment_setup/mcp_tool_specification"
+  },
+  "next": {
+    "title": "Changelog for Environment Setup",
+    "permalink": "/codomyrmex/modules/environment_setup/changelog"
+  }
+}

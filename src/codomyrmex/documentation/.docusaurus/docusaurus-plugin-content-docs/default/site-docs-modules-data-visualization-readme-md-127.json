@@ -1,0 +1,24 @@
+{
+  "id": "modules/data_visualization/README",
+  "title": "Data Visualization",
+  "description": "Overview",
+  "source": "@site/docs/modules/data_visualization/README.md",
+  "sourceDirName": "modules/data_visualization",
+  "slug": "/modules/data_visualization/",
+  "permalink": "/codomyrmex/modules/data_visualization/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Code Execution Sandbox - Tutorial: Using execute_code",
+    "permalink": "/codomyrmex/modules/code_execution_sandbox/docs/tutorials/execute_code_tutorial"
+  },
+  "next": {
+    "title": "Data Visualization - API Specification",
+    "permalink": "/codomyrmex/modules/data_visualization/api_specification"
+  }
+}

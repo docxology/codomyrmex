@@ -1,0 +1,24 @@
+{
+  "id": "modules/data_visualization/mcp_tool_specification",
+  "title": "Data Visualization - MCP Tool Specification",
+  "description": "This document outlines the specification for tools within the Data Visualization module that are intended to be integrated with the Model Context Protocol (MCP).",
+  "source": "@site/docs/modules/data_visualization/mcp_tool_specification.md",
+  "sourceDirName": "modules/data_visualization",
+  "slug": "/modules/data_visualization/mcp_tool_specification",
+  "permalink": "/codomyrmex/modules/data_visualization/mcp_tool_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/data_visualization/mcp_tool_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Visualization - API Specification",
+    "permalink": "/codomyrmex/modules/data_visualization/api_specification"
+  },
+  "next": {
+    "title": "Data Visualization - Usage Examples",
+    "permalink": "/codomyrmex/modules/data_visualization/usage_examples"
+  }
+}

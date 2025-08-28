@@ -1,0 +1,24 @@
+{
+  "id": "modules/build_synthesis/security",
+  "title": "Security Policy for Build Synthesis",
+  "description": "This document outlines security procedures and policies for the Build Synthesis module.",
+  "source": "@site/docs/modules/build_synthesis/security.md",
+  "sourceDirName": "modules/build_synthesis",
+  "slug": "/modules/build_synthesis/security",
+  "permalink": "/codomyrmex/modules/build_synthesis/security",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/build_synthesis/security.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Changelog for Build Synthesis",
+    "permalink": "/codomyrmex/modules/build_synthesis/changelog"
+  },
+  "next": {
+    "title": "Technical Overview",
+    "permalink": "/codomyrmex/modules/build_synthesis/docs/technical_overview"
+  }
+}

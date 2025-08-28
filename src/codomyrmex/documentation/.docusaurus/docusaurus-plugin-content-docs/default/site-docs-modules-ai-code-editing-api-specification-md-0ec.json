@@ -1,0 +1,24 @@
+{
+  "id": "modules/ai_code_editing/api_specification",
+  "title": "AI Code Editing - API Specification",
+  "description": "Introduction",
+  "source": "@site/docs/modules/ai_code_editing/api_specification.md",
+  "sourceDirName": "modules/ai_code_editing",
+  "slug": "/modules/ai_code_editing/api_specification",
+  "permalink": "/codomyrmex/modules/ai_code_editing/api_specification",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ActiveInference/codomyrmex/tree/main/docs/modules/ai_code_editing/api_specification.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Ai Code Editing",
+    "permalink": "/codomyrmex/modules/ai_code_editing/"
+  },
+  "next": {
+    "title": "AI Code Editing - MCP Tool Specification",
+    "permalink": "/codomyrmex/modules/ai_code_editing/mcp_tool_specification"
+  }
+}

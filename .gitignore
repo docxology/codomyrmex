@@ -63,3 +63,5 @@ coverage/
 # Secrets - ensure these are not committed if used locally
 # secrets.yml
 # *.credential 
+/code/documentation/.docusaurus
+/code/documentation/.docusaurus
