@@ -1,56 +1,122 @@
-"""Unit tests for build_synthesis module."""
+#!/usr/bin/env python3
+"""
+Unit tests for the Build Synthesis module.
+"""
 
-import pytest
+import unittest
+import tempfile
+import os
 import sys
-from unittest.mock import patch, MagicMock
+from pathlib import Path
+
+# Add src to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+
+from codomyrmex.build_synthesis.build_orchestrator import (
+    check_build_environment,
+    synthesize_build_artifact,
+    validate_build_output,
+    orchestrate_build_pipeline
+)
 
 
-class TestBuildSynthesis:
+class TestBuildSynthesis(unittest.TestCase):
     """Test cases for build synthesis functionality."""
 
-    def test_build_synthesis_import(self, code_dir):
-        """Test that we can import build_synthesis module."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
+    def setUp(self):
+        """Set up test fixtures."""
+        self.test_dir = tempfile.mkdtemp()
 
-        try:
-            from build_synthesis import __init__
-            assert __init__ is not None
-        except ImportError as e:
-            pytest.fail(f"Failed to import build_synthesis: {e}")
+    def tearDown(self):
+        """Clean up test fixtures."""
+        import shutil
+        shutil.rmtree(self.test_dir, ignore_errors=True)
 
-    def test_build_synthesis_module_structure(self, code_dir):
-        """Test that build_synthesis has expected basic structure."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
+    def test_check_build_environment(self):
+        """Test build environment checking."""
+        result = check_build_environment()
+        # This should work regardless of what's installed
+        self.assertIsInstance(result, bool)
 
-        import build_synthesis
+    def test_synthesize_python_executable(self):
+        """Test synthesis of Python executable."""
+        source_file = os.path.join(self.test_dir, "test_script.py")
+        output_file = os.path.join(self.test_dir, "test_executable.py")
 
-        assert hasattr(build_synthesis, '__file__')
-        assert hasattr(build_synthesis, '__name__')
-        assert build_synthesis.__name__ == 'build_synthesis'
-        # This module appears to be a template/placeholder
-        # Add more structural tests if actual implementation is added
+        # Create a simple Python script
+        with open(source_file, 'w') as f:
+            f.write("""
+def main():
+    print("Hello from test script!")
 
-    def test_build_synthesis_placeholder_behavior(self, code_dir):
-        """Test placeholder behavior for build_synthesis module."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
+if __name__ == "__main__":
+    main()
+""")
 
-        # This test verifies the module can be imported but has no actual functionality yet
-        import build_synthesis
+        result = synthesize_build_artifact(
+            source_path=source_file,
+            output_path=output_file,
+            artifact_type="executable"
+        )
 
-        # The module exists but is likely a placeholder/template
-        assert build_synthesis is not None
-        assert hasattr(build_synthesis, '__file__')
+        self.assertTrue(result)
+        self.assertTrue(os.path.exists(output_file))
 
-    def test_build_synthesis_import_error_handling(self, code_dir):
-        """Test error handling when build_synthesis cannot be imported."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
+        # Check that the output contains expected content
+        with open(output_file, 'r') as f:
+            content = f.read()
+            self.assertIn("import", content)
+            self.assertIn("main()", content)
 
-        # This test ensures that the module can be imported without errors
-        import build_synthesis
+    def test_validate_build_output(self):
+        """Test build output validation."""
+        # Create a test file with proper Python code
+        test_file = os.path.join(self.test_dir, "test_output.py")
+        with open(test_file, 'w') as f:
+            f.write("# Test Python file\nimport sys\ndef main():\n    print('Hello')\n\nif __name__ == '__main__':\n    main()\n")
 
-        assert hasattr(build_synthesis, '__file__')
-        assert hasattr(build_synthesis, '__name__')
+        validation = validate_build_output(test_file)
+
+        self.assertTrue(validation["exists"])
+        self.assertTrue(validation["is_file"])
+        self.assertTrue(validation["size_bytes"] > 0)
+        self.assertEqual(len(validation["errors"]), 0)
+
+    def test_orchestrate_build_pipeline(self):
+        """Test build pipeline orchestration."""
+        build_config = {
+            "dependencies": [],
+            "build_commands": [
+                ["python", "-c", "print('Test build command')"]
+            ],
+            "artifacts": []
+        }
+
+        results = orchestrate_build_pipeline(build_config)
+
+        self.assertIsInstance(results, dict)
+        self.assertIn("overall_success", results)
+        self.assertIn("stages", results)
+        self.assertIn("artifacts", results)
+        self.assertIn("errors", results)
+
+    def test_synthesize_nonexistent_source(self):
+        """Test synthesis with nonexistent source file."""
+        result = synthesize_build_artifact(
+            source_path="/nonexistent/file.py",
+            output_path=os.path.join(self.test_dir, "output.py"),
+            artifact_type="executable"
+        )
+
+        self.assertFalse(result)
+
+    def test_validate_nonexistent_output(self):
+        """Test validation of nonexistent output file."""
+        validation = validate_build_output("/nonexistent/file.py")
+
+        self.assertFalse(validation["exists"])
+        self.assertIn("does not exist", validation["errors"][0])
+
+
+if __name__ == '__main__':
+    unittest.main()
