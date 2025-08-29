@@ -3,6 +3,7 @@
 import pytest
 import sys
 import os
+import subprocess
 import tempfile
 from unittest.mock import patch, MagicMock
 from pathlib import Path
@@ -17,7 +18,7 @@ class TestEnvironmentSetupComprehensive:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from environment_setup import env_checker
+            from codomyrmex.environment_setup import env_checker
             assert env_checker is not None
         except ImportError as e:
             pytest.fail(f"Failed to import env_checker: {e}")
@@ -28,7 +29,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_available
+        from codomyrmex.environment_setup.env_checker import is_uv_available
 
         mock_result = MagicMock()
         mock_result.returncode = 0
@@ -44,7 +45,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_available
+        from codomyrmex.environment_setup.env_checker import is_uv_available
 
         mock_subprocess.side_effect = FileNotFoundError("uv command not found")
 
@@ -57,11 +58,9 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_available
+        from codomyrmex.environment_setup.env_checker import is_uv_available
 
-        mock_result = MagicMock()
-        mock_result.returncode = 1
-        mock_subprocess.return_value = mock_result
+        mock_subprocess.side_effect = subprocess.CalledProcessError(1, 'uv')
 
         result = is_uv_available()
         assert result is False
@@ -72,7 +71,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_environment
+        from codomyrmex.environment_setup.env_checker import is_uv_environment
 
         result = is_uv_environment()
         assert result is True
@@ -83,7 +82,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_environment
+        from codomyrmex.environment_setup.env_checker import is_uv_environment
 
         result = is_uv_environment()
         assert result is True
@@ -94,7 +93,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_environment
+        from codomyrmex.environment_setup.env_checker import is_uv_environment
 
         result = is_uv_environment()
         assert result is False
@@ -105,7 +104,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_environment
+        from codomyrmex.environment_setup.env_checker import is_uv_environment
 
         result = is_uv_environment()
         assert result is False
@@ -115,7 +114,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         with patch.dict('sys.modules', {
             'kit': MagicMock(),
@@ -133,7 +132,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         def mock_import(name, *args, **kwargs):
             if name == 'kit':
@@ -141,8 +140,10 @@ class TestEnvironmentSetupComprehensive:
             return MagicMock()
 
         with patch('builtins.__import__', side_effect=mock_import):
-            result = ensure_dependencies_installed()
-
+            with pytest.raises(SystemExit) as exc_info:
+                ensure_dependencies_installed()
+            
+            assert exc_info.value.code == 1
             captured = capsys.readouterr()
             assert "[ERROR] The 'cased/kit' library is not installed or not found." in captured.err
 
@@ -151,7 +152,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         def mock_import(name, *args, **kwargs):
             if name == 'dotenv':
@@ -159,8 +160,10 @@ class TestEnvironmentSetupComprehensive:
             return MagicMock()
 
         with patch('builtins.__import__', side_effect=mock_import):
-            result = ensure_dependencies_installed()
-
+            with pytest.raises(SystemExit) as exc_info:
+                ensure_dependencies_installed()
+            
+            assert exc_info.value.code == 1
             captured = capsys.readouterr()
             assert "[ERROR] The 'python-dotenv' library is not installed or not found." in captured.err
             assert "This is needed for loading API keys from a .env file." in captured.err
@@ -170,7 +173,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         def mock_import(name, *args, **kwargs):
             if name in ['kit', 'dotenv']:
@@ -178,8 +181,10 @@ class TestEnvironmentSetupComprehensive:
             return MagicMock()
 
         with patch('builtins.__import__', side_effect=mock_import):
-            result = ensure_dependencies_installed()
-
+            with pytest.raises(SystemExit) as exc_info:
+                ensure_dependencies_installed()
+            
+            assert exc_info.value.code == 1
             captured = capsys.readouterr()
             assert "[ERROR] The 'cased/kit' library is not installed or not found." in captured.err
             assert "[ERROR] The 'python-dotenv' library is not installed or not found." in captured.err
@@ -190,7 +195,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 
         # Create a dummy .env file
         env_file = tmp_path / ".env"
@@ -201,14 +206,14 @@ class TestEnvironmentSetupComprehensive:
         captured = capsys.readouterr()
         assert f"[INFO] Checking for .env file at: {env_file}" in captured.out
         assert f"[INFO] .env file found at '{env_file}'." in captured.out
-        assert "[INFO] .env file check completed. API keys should now be loaded" in captured.out
+        assert "Make sure it contains your API keys if you plan to use LLM features" in captured.out
 
     def test_check_and_setup_env_vars_file_missing(self, code_dir, capsys, tmp_path):
         """Test check_and_setup_env_vars when .env file is missing."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 
         # Ensure .env file doesn't exist
         env_file_path = tmp_path / ".env"
@@ -229,7 +234,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup import env_checker
+        from codomyrmex.environment_setup import env_checker
 
         # Check that all expected functions exist
         expected_functions = [
@@ -248,7 +253,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup import env_checker
+        from codomyrmex.environment_setup import env_checker
 
         # Check that _script_dir is defined
         assert hasattr(env_checker, '_script_dir')
@@ -259,7 +264,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         def mock_import(name, *args, **kwargs):
             if name == 'kit':
@@ -267,11 +272,14 @@ class TestEnvironmentSetupComprehensive:
             return MagicMock()
 
         with patch('builtins.__import__', side_effect=mock_import):
-            result = ensure_dependencies_installed()
-
+            with pytest.raises(SystemExit) as exc_info:
+                ensure_dependencies_installed()
+            
+            assert exc_info.value.code == 1
             captured = capsys.readouterr()
             # Should still check dotenv even if kit fails
             assert "[INFO] python-dotenv library found." in captured.out
+            assert "Unexpected error while checking 'cased/kit' library: Unexpected error" in captured.err
 
     @patch('os.path.exists')
     @patch('os.path.join')
@@ -280,7 +288,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 
         mock_join.return_value = "/mock/path/.env"
         mock_exists.return_value = True
@@ -296,7 +304,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_available
+        from codomyrmex.environment_setup.env_checker import is_uv_available
 
         with patch('subprocess.run', side_effect=Exception("Unexpected error")):
             result = is_uv_available()
@@ -307,7 +315,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import is_uv_environment
+        from codomyrmex.environment_setup.env_checker import is_uv_environment
 
         # Test with empty UV_ACTIVE
         with patch.dict(os.environ, {"UV_ACTIVE": ""}):
@@ -324,7 +332,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         def mock_import(name, *args, **kwargs):
             if name in ['kit', 'dotenv']:
@@ -332,8 +340,10 @@ class TestEnvironmentSetupComprehensive:
             return MagicMock()
 
         with patch('builtins.__import__', side_effect=mock_import):
-            result = ensure_dependencies_installed()
-
+            with pytest.raises(SystemExit) as exc_info:
+                ensure_dependencies_installed()
+            
+            assert exc_info.value.code == 1
             captured = capsys.readouterr()
             # Check that instructions include key sections
             assert "[INSTRUCTION] Please ensure you have set up the Python environment" in captured.err
@@ -346,7 +356,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup.env_checker import check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 
         check_and_setup_env_vars(str(tmp_path))
 
@@ -363,7 +373,7 @@ class TestEnvironmentSetupComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from environment_setup import env_checker
+        from codomyrmex.environment_setup import env_checker
 
         # Test that the module can access logging functions
         assert hasattr(env_checker, 'sys')
@@ -377,7 +387,7 @@ class TestEnvironmentSetupComprehensive:
 
         # This would normally be tested by running the module directly,
         # but we can test the functions it calls
-        from environment_setup.env_checker import ensure_dependencies_installed, check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed, check_and_setup_env_vars
 
         # Test that the functions can be called without errors
         ensure_dependencies_installed()

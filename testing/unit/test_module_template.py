@@ -105,7 +105,7 @@ class TestModuleTemplate:
         """Test that expected template files exist."""
         from pathlib import Path
 
-        template_dir = code_dir / "module_template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
 
         # Check that basic template files exist
         assert (template_dir / "__init__.py").exists()

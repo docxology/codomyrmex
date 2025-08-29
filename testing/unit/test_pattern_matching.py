@@ -18,7 +18,7 @@ class TestPatternMatching:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from pattern_matching import run_codomyrmex_analysis
+            from codomyrmex.pattern_matching import run_codomyrmex_analysis
             assert run_codomyrmex_analysis is not None
         except ImportError as e:
             pytest.fail(f"Failed to import run_codomyrmex_analysis: {e}")
@@ -28,7 +28,7 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from pattern_matching import run_codomyrmex_analysis
+        from codomyrmex.pattern_matching import run_codomyrmex_analysis
 
         assert hasattr(run_codomyrmex_analysis, '__file__')
         assert hasattr(run_codomyrmex_analysis, 'run_full_analysis')

@@ -15,7 +15,7 @@ def get_codomyrmex_logger(name: str) -> logging.Logger:
     Falls back to standard Python logging if the Codomyrmex module is not found.
     """
     try:
-        from logging_monitoring import get_logger
+        from codomyrmex.logging_monitoring.logger_config import get_logger
         logger_instance = get_logger(name)
     except ImportError:
         logger_instance = logging.getLogger(name)

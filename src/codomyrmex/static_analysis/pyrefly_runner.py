@@ -11,7 +11,7 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 try:
-    from logging_monitoring.logger_config import get_logger, setup_logging
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 except ImportError:
     # Fallback for environments where logging_monitoring might not be discoverable
     # This is less ideal but provides a basic operational mode.
@@ -34,7 +34,7 @@ logger = get_logger(__name__)
 # Regex to attempt to parse Pyrefly errors, this is a guess and might need refinement
 # Example: <path>:<line>:<col> <Error Code> <description>
 # or path:line:col: <message type>: <message>
-PYREFLY_ERROR_PATTERN = re.compile(r"([^:]+):(\\d+):(\\d+):?(?:\\s+[^\\s]+:)?\\s*(.*)") # Adjusted to be more flexible with error codes/types
+PYREFLY_ERROR_PATTERN = re.compile(r"([^:]+):(\d+):(\d+):\s*(.*)") # Adjusted to be more flexible with error codes/types
 
 def parse_pyrefly_output(output: str, project_root: str) -> list:
     """
@@ -59,9 +59,9 @@ def parse_pyrefly_output(output: str, project_root: str) -> list:
                     # If joining with project_root doesn't make sense (e.g. path is already absolute)
                     # and original path exists, use original path.
                     # This can happen if Pyrefly outputs absolute paths.
-                     file_path = os.path.relpath(raw_file_path.strip(), project_root) \
-                                   if os.path.isabs(raw_file_path.strip()) and raw_file_path.strip().startswith(project_root) \
-                                   else raw_file_path.strip()
+                    file_path = os.path.relpath(raw_file_path.strip(), project_root) \
+                                  if os.path.isabs(raw_file_path.strip()) and raw_file_path.strip().startswith(project_root) \
+                                  else raw_file_path.strip()
                 else:
                     file_path = os.path.relpath(abs_raw_path, project_root)
 
@@ -137,7 +137,7 @@ def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict:
             combined_output_parts.append("--- Pyrefly STDERR ---")
             combined_output_parts.append(stderr_output)
         
-        results["raw_output"] = "\\n".join(combined_output_parts)
+        results["raw_output"] = "\n".join(combined_output_parts)
         logger.debug(f"Pyrefly raw stdout:\\n{stdout_output}")
         logger.debug(f"Pyrefly raw stderr:\\n{stderr_output}")
         
@@ -146,12 +146,12 @@ def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict:
         # but include stderr content for parsing as well if stdout is empty or has no issues.
         # Some tools output to stderr for errors AND findings.
         output_to_parse = stdout_output
-        if not output_to_parse and stderr_output : # If stdout is empty, try stderr
-             output_to_parse = stderr_output
+        if not output_to_parse and stderr_output: # If stdout is empty, try stderr
+            output_to_parse = stderr_output
         elif stdout_output and stderr_output: # If both have content, combine them for parsing
             # This might be noisy but ensures we don't miss errors if they are split.
             # Or, Pyrefly might clearly delineate. For now, let's assume errors could be in either/both.
-            output_to_parse = stdout_output + "\\n" + stderr_output
+            output_to_parse = stdout_output + "\n" + stderr_output
             
         parsed_issues = parse_pyrefly_output(output_to_parse, project_root)
         results["issues"] = parsed_issues
@@ -164,12 +164,12 @@ def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict:
                 # Prefer stderr for general error messages if no issues parsed
                 if stderr_output:
                     error_summary += f" Stderr: {stderr_output}"
-                elif stdout_output: 
-                     error_summary += f" Stdout: {stdout_output}"
+                elif stdout_output:
+                    error_summary += f" Stdout: {stdout_output}"
                 results["error"] = error_summary
                 logger.error(error_summary)
                 if not results["raw_output"]: # Ensure raw_output is populated if it wasn't
-                     results["raw_output"] = error_summary
+                    results["raw_output"] = error_summary
         else:
             logger.info("Pyrefly completed successfully (exit code 0).")
 
@@ -189,7 +189,7 @@ def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict:
 if __name__ == "__main__":
     # Ensure logging is set up when script is run directly
     # This will use environment variables or defaults defined in logger_config.py
-    setup_logging() 
+    setup_logging()
     logger.info("Executing pyrefly_runner.py directly for testing example.")
 
     # Define a hypothetical project root and target file for the example.

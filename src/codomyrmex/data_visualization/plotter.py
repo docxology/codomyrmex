@@ -20,7 +20,7 @@ from .plot_utils import get_codomyrmex_logger, save_plot, apply_common_aesthetic
 
 # Attempt to import Codomyrmex logging utilities
 try:
-    from logging_monitoring import get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     # Fallback to standard logging if Codomyrmex specific logging is not available

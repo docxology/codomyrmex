@@ -510,15 +510,25 @@ class SystemDiscovery:
     def _check_core_dependencies(self) -> None:
         """Check core dependencies status."""
         print(f"\n📦 Core Dependencies:")
-        
-        core_deps = [
-            'python-dotenv', 'cased-kit', 'openai', 'anthropic', 
-            'matplotlib', 'numpy', 'pytest', 'fastapi'
-        ]
-        
+
+        # Map package names to their actual import names
+        dep_mapping = {
+            'python-dotenv': 'dotenv',
+            'cased-kit': 'kit',
+            'openai': 'openai',
+            'anthropic': 'anthropic',
+            'matplotlib': 'matplotlib',
+            'numpy': 'numpy',
+            'pytest': 'pytest',
+            'fastapi': 'fastapi'
+        }
+
+        core_deps = list(dep_mapping.keys())
+
         for dep in core_deps:
             try:
-                importlib.import_module(dep.replace('-', '_'))
+                import_name = dep_mapping[dep]
+                importlib.import_module(import_name)
                 print(f"   ✅ {dep}")
             except ImportError:
                 print(f"   ❌ {dep}")
@@ -678,10 +688,19 @@ class SystemDiscovery:
         }
         
         # Check dependencies
-        core_deps = ['python-dotenv', 'cased-kit', 'openai', 'anthropic', 'matplotlib', 'numpy', 'pytest']
-        for dep in core_deps:
+        dep_mapping = {
+            'python-dotenv': 'dotenv',
+            'cased-kit': 'kit',
+            'openai': 'openai',
+            'anthropic': 'anthropic',
+            'matplotlib': 'matplotlib',
+            'numpy': 'numpy',
+            'pytest': 'pytest'
+        }
+
+        for dep, import_name in dep_mapping.items():
             try:
-                importlib.import_module(dep.replace('-', '_'))
+                importlib.import_module(import_name)
                 status["dependencies"][dep] = True
             except ImportError:
                 status["dependencies"][dep] = False

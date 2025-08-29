@@ -129,7 +129,7 @@ class TestTemplate:
         assert template_dir.exists()
 
         # Compare with a known module that has content
-        ai_code_editing_dir = code_dir / "ai_code_editing"
+        ai_code_editing_dir = code_dir / "codomyrmex" / "ai_code_editing"
         assert ai_code_editing_dir.exists()
 
         # Template should have fewer items than a developed module

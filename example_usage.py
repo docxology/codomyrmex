@@ -9,17 +9,17 @@ Run this after setting up your environment to see it in action!
 import sys
 from pathlib import Path
 
-# Add the code directory to Python path
-code_dir = Path(__file__).parent / "code"
-if str(code_dir) not in sys.path:
-    sys.path.insert(0, str(code_dir))
+# Add the src directory to Python path
+src_dir = Path(__file__).parent / "src"
+if str(src_dir) not in sys.path:
+    sys.path.insert(0, str(src_dir))
 
 def demo_data_visualization():
     """Demonstrate the data visualization module."""
     print("📊 Demonstrating Data Visualization Module...")
 
     try:
-        from data_visualization import create_line_plot, create_bar_chart, create_scatter_plot
+        from codomyrmex.data_visualization import create_line_plot, create_bar_chart, create_scatter_plot
         import numpy as np
 
         # Create sample data
@@ -80,7 +80,7 @@ def demo_logging():
     print("📋 Demonstrating Logging & Monitoring Module...")
 
     try:
-        from logging_monitoring.logger_config import setup_logging, get_logger
+        from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
 
         # Setup logging
         setup_logging()

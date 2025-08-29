@@ -61,13 +61,42 @@ SUPPORTED_LANGUAGES = {
         "command": ["node", "{filename}"],
         "timeout_factor": 1.2,
     },
+    "java": {
+        "image": "openjdk:11-jre-slim",
+        "extension": "java",
+        "command": ["sh", "-c", "javac {filename} && java $(basename {filename} .java)"],
+        "timeout_factor": 1.5,
+    },
+    "cpp": {
+        "image": "gcc:9",
+        "extension": "cpp",
+        "command": ["sh", "-c", "g++ -o /tmp/program {filename} && /tmp/program"],
+        "timeout_factor": 1.5,
+    },
+    "c": {
+        "image": "gcc:9",
+        "extension": "c",
+        "command": ["sh", "-c", "gcc -o /tmp/program {filename} && /tmp/program"],
+        "timeout_factor": 1.5,
+    },
+    "go": {
+        "image": "golang:1.19-alpine",
+        "extension": "go",
+        "command": ["go", "run", "{filename}"],
+        "timeout_factor": 1.3,
+    },
+    "rust": {
+        "image": "rust:1.65-slim",
+        "extension": "rs",
+        "command": ["sh", "-c", "rustc {filename} -o /tmp/program && /tmp/program"],
+        "timeout_factor": 1.5,
+    },
     "bash": {
         "image": "bash:5.1",
         "extension": "sh",
         "command": ["bash", "{filename}"],
         "timeout_factor": 1.2,
     },
-    # Add more languages as needed
 }
 
 # Default Docker run arguments for security

@@ -723,4 +723,8 @@ def print_once(key, message, level="info", _logger=None):
 
 if __name__ == "__main__":
     load_dotenv()
-    run_full_analysis() 
+    run_full_analysis()
+else:
+    # When imported as a module, just set up the logger without running analysis
+    setup_logging()
+    logger = get_logger(__name__) 

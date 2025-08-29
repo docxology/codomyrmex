@@ -15,14 +15,14 @@ class TestAICodeEditing:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from ai_code_editing import ai_code_helpers
+            from codomyrmex.ai_code_editing import ai_code_helpers
             assert ai_code_helpers is not None
         except ImportError as e:
             pytest.fail(f"Failed to import ai_code_helpers: {e}")
 
     def test_claude_task_master_placeholder_file(self, code_dir):
         """Test that claude_task_master is a placeholder file with URL."""
-        claude_task_master_path = code_dir / "ai_code_editing" / "claude_task_master.py"
+        claude_task_master_path = code_dir / "codomyrmex" / "ai_code_editing" / "claude_task_master.py"
         assert claude_task_master_path.exists()
 
         # Read the file content - should contain just a URL
@@ -33,7 +33,7 @@ class TestAICodeEditing:
 
     def test_openai_codex_placeholder_file(self, code_dir):
         """Test that openai_codex is a placeholder file with URL."""
-        openai_codex_path = code_dir / "ai_code_editing" / "openai_codex.py"
+        openai_codex_path = code_dir / "codomyrmex" / "ai_code_editing" / "openai_codex.py"
         assert openai_codex_path.exists()
 
         # Read the file content - should contain just a URL
@@ -48,7 +48,7 @@ class TestAICodeEditing:
             sys.path.insert(0, str(code_dir))
 
         # This module may be a placeholder, so we just test that the file exists
-        openai_codex_path = code_dir / "ai_code_editing" / "openai_codex.py"
+        openai_codex_path = code_dir / "codomyrmex" / "ai_code_editing" / "openai_codex.py"
         assert openai_codex_path.exists()
 
     def test_claude_task_master_initialization(self, code_dir):
@@ -57,7 +57,7 @@ class TestAICodeEditing:
             sys.path.insert(0, str(code_dir))
 
         # This module may be a placeholder, so we just test that the file exists
-        claude_task_master_path = code_dir / "ai_code_editing" / "claude_task_master.py"
+        claude_task_master_path = code_dir / "codomyrmex" / "ai_code_editing" / "claude_task_master.py"
         assert claude_task_master_path.exists()
 
     def test_ai_code_helpers_structure(self, code_dir):
@@ -65,7 +65,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing import ai_code_helpers
+        from codomyrmex.ai_code_editing import ai_code_helpers
 
         # Check that the module has expected attributes/functions
         assert hasattr(ai_code_helpers, '__file__')
@@ -292,7 +292,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing import ai_code_helpers
+        from codomyrmex.ai_code_editing import ai_code_helpers
 
         assert hasattr(ai_code_helpers, 'DEFAULT_LLM_PROVIDER')
         assert hasattr(ai_code_helpers, 'DEFAULT_LLM_MODEL')

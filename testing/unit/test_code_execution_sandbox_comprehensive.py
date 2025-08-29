@@ -17,7 +17,7 @@ class TestCodeExecutionSandboxComprehensive:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from code_execution_sandbox import code_executor
+            from codomyrmex.code_execution_sandbox import code_executor
             assert code_executor is not None
         except ImportError as e:
             pytest.fail(f"Failed to import code_executor: {e}")
@@ -28,7 +28,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import check_docker_available
+        from codomyrmex.code_execution_sandbox.code_executor import check_docker_available
 
         mock_result = MagicMock()
         mock_result.returncode = 0
@@ -44,7 +44,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import check_docker_available
+        from codomyrmex.code_execution_sandbox.code_executor import check_docker_available
 
         mock_result = MagicMock()
         mock_result.returncode = 1
@@ -58,7 +58,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import validate_language
+        from codomyrmex.code_execution_sandbox.code_executor import validate_language
 
         # Test supported languages
         supported_languages = ['python', 'javascript', 'java', 'cpp', 'c', 'go', 'rust']
@@ -70,7 +70,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import validate_language
+        from codomyrmex.code_execution_sandbox.code_executor import validate_language
 
         result = validate_language("unsupported_lang")
         assert result is False
@@ -80,7 +80,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import validate_timeout
+        from codomyrmex.code_execution_sandbox.code_executor import validate_timeout
 
         assert validate_timeout(10) == 10
         assert validate_timeout(1) == 1
@@ -91,7 +91,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import validate_timeout
+        from codomyrmex.code_execution_sandbox.code_executor import validate_timeout
 
         # Test that values are clamped to valid range
         assert validate_timeout(0) == 1  # MIN_TIMEOUT
@@ -99,19 +99,21 @@ class TestCodeExecutionSandboxComprehensive:
         # Note: float values are not converted to int, they are clamped as-is
         assert validate_timeout(10.5) == 10.5
 
-    @patch('tempfile.NamedTemporaryFile')
-    def test_prepare_code_file(self, mock_temp_file, code_dir):
+    @patch('builtins.open', new_callable=MagicMock)
+    @patch('tempfile.mkdtemp')
+    def test_prepare_code_file(self, mock_mkdtemp, mock_open, code_dir):
         """Test prepare_code_file function."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import prepare_code_file
+        from codomyrmex.code_execution_sandbox.code_executor import prepare_code_file
 
+        # Mock the temporary directory creation
+        mock_mkdtemp.return_value = "/tmp/codomyrmex_sandbox_12345"
+        
+        # Mock the file opening
         mock_file = MagicMock()
-        mock_file.name = "/tmp/test.py"
-        mock_context = MagicMock()
-        mock_context.__enter__.return_value = mock_file
-        mock_temp_file.return_value = mock_context
+        mock_open.return_value.__enter__.return_value = mock_file
 
         code = "print('Hello, World!')"
         language = "python"
@@ -121,23 +123,23 @@ class TestCodeExecutionSandboxComprehensive:
         # The function creates a file with the language extension
         expected_filename = f"code.py"  # python extension is 'py'
         assert filename == expected_filename
-        mock_file.write.assert_called_once_with(code.encode('utf-8'))
-        mock_file.flush.assert_called_once()
+        assert file_path == "/tmp/codomyrmex_sandbox_12345"
+        mock_file.write.assert_called_once_with(code)
+        mock_mkdtemp.assert_called_once_with(prefix="codomyrmex_sandbox_")
 
-    @patch('subprocess.run')
-    def test_run_code_in_docker_success(self, mock_subprocess, code_dir):
+    @patch('subprocess.Popen')
+    def test_run_code_in_docker_success(self, mock_popen, code_dir):
         """Test run_code_in_docker successful execution."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import run_code_in_docker
+        from codomyrmex.code_execution_sandbox.code_executor import run_code_in_docker
 
-        # Mock subprocess.run for successful execution
-        mock_result = MagicMock()
-        mock_result.returncode = 0
-        mock_result.stdout = "Hello, World!"
-        mock_result.stderr = ""
-        mock_subprocess.return_value = mock_result
+        # Mock subprocess.Popen for successful execution
+        mock_process = MagicMock()
+        mock_process.communicate.return_value = ("Hello, World!", "")
+        mock_process.returncode = 0
+        mock_popen.return_value = mock_process
 
         result = run_code_in_docker(
             language="python",
@@ -153,16 +155,16 @@ class TestCodeExecutionSandboxComprehensive:
         assert "execution_time" in result
         assert result["status"] == "success"
 
-        mock_subprocess.assert_called_once()
+        mock_popen.assert_called_once()
 
-    @patch('code_execution_sandbox.code_executor.check_docker_available')
-    @patch('code_execution_sandbox.code_executor.validate_language')
-    @patch('code_execution_sandbox.code_executor.validate_timeout')
-    @patch('code_execution_sandbox.code_executor.validate_session_id')
-    @patch('code_execution_sandbox.code_executor.prepare_code_file')
-    @patch('code_execution_sandbox.code_executor.prepare_stdin_file')
-    @patch('code_execution_sandbox.code_executor.run_code_in_docker')
-    @patch('code_execution_sandbox.code_executor.cleanup_temp_files')
+    @patch('codomyrmex.code_execution_sandbox.code_executor.check_docker_available')
+    @patch('codomyrmex.code_execution_sandbox.code_executor.validate_language')
+    @patch('codomyrmex.code_execution_sandbox.code_executor.validate_timeout')
+    @patch('codomyrmex.code_execution_sandbox.code_executor.validate_session_id')
+    @patch('codomyrmex.code_execution_sandbox.code_executor.prepare_code_file')
+    @patch('codomyrmex.code_execution_sandbox.code_executor.prepare_stdin_file')
+    @patch('codomyrmex.code_execution_sandbox.code_executor.run_code_in_docker')
+    @patch('codomyrmex.code_execution_sandbox.code_executor.cleanup_temp_files')
     def test_execute_code_success(self, mock_cleanup, mock_run_docker, mock_prepare_stdin,
                                 mock_prepare_code, mock_validate_session, mock_validate_timeout,
                                 mock_validate_lang, mock_check_docker, code_dir):
@@ -170,7 +172,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox.code_executor import execute_code
+        from codomyrmex.code_execution_sandbox.code_executor import execute_code
 
         # Setup mocks
         mock_check_docker.return_value = True
@@ -216,7 +218,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox import code_executor
+        from codomyrmex.code_execution_sandbox import code_executor
 
         # Check that language configurations exist
         assert hasattr(code_executor, 'SUPPORTED_LANGUAGES')
@@ -235,7 +237,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox import code_executor
+        from codomyrmex.code_execution_sandbox import code_executor
 
         assert hasattr(code_executor, 'DEFAULT_TIMEOUT')
         assert hasattr(code_executor, 'MAX_TIMEOUT')

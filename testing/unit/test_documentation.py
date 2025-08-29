@@ -18,7 +18,7 @@ class TestDocumentation:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from documentation import documentation_website
+            from codomyrmex.documentation import documentation_website
             assert documentation_website is not None
         except ImportError as e:
             pytest.fail(f"Failed to import documentation_website: {e}")
@@ -28,7 +28,7 @@ class TestDocumentation:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from documentation import documentation_website
+        from codomyrmex.documentation import documentation_website
 
         assert hasattr(documentation_website, '__file__')
         assert hasattr(documentation_website, 'main')

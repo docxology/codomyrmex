@@ -14,7 +14,7 @@ class TestStaticAnalysis:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from static_analysis import pyrefly_runner
+            from codomyrmex.static_analysis import pyrefly_runner
             assert pyrefly_runner is not None
         except ImportError as e:
             pytest.fail(f"Failed to import pyrefly_runner: {e}")
@@ -24,7 +24,7 @@ class TestStaticAnalysis:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from static_analysis import pyrefly_runner
+        from codomyrmex.static_analysis import pyrefly_runner
 
         assert hasattr(pyrefly_runner, '__file__')
         # Add more structural tests based on actual implementation
@@ -37,7 +37,7 @@ class TestStaticAnalysis:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from static_analysis import pyrefly_runner
+        from codomyrmex.static_analysis import pyrefly_runner
 
         # Mock subprocess.run to return a result
         mock_result = MagicMock()
@@ -56,7 +56,7 @@ class TestStaticAnalysis:
             sys.path.insert(0, str(code_dir))
 
         # Test pyrefly_runner specifically since it's mentioned in the module
-        from static_analysis import pyrefly_runner
+        from codomyrmex.static_analysis import pyrefly_runner
         assert pyrefly_runner is not None
 
         # Check that it has expected attributes

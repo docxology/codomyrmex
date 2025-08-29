@@ -73,16 +73,26 @@ def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
                               capture_output=True, text=True, check=True)
 
         if initial_commit:
-            # Create initial commit
-            readme_path = os.path.join(path, 'README.md')
-            if not os.path.exists(readme_path):
-                with open(readme_path, 'w') as f:
-                    f.write("# Project\n\nInitial commit.\n")
+            # Create initial commit only if there are no commits yet
+            try:
+                # Check if there are any commits
+                result = subprocess.run(['git', 'rev-list', '--count', 'HEAD'], 
+                                      cwd=path, capture_output=True, text=True, check=False)
+                has_commits = result.returncode == 0 and int(result.stdout.strip()) > 0
+            except (ValueError, subprocess.SubprocessError):
+                has_commits = False
+            
+            if not has_commits:
+                # Create initial commit
+                readme_path = os.path.join(path, 'README.md')
+                if not os.path.exists(readme_path):
+                    with open(readme_path, 'w') as f:
+                        f.write("# Project\n\nInitial commit.\n")
 
-            subprocess.run(['git', 'add', 'README.md'], cwd=path, check=True)
-            subprocess.run(['git', '-c', 'user.email=system@codomyrmex.dev',
-                           '-c', 'user.name=Codomyrmex System',
-                           'commit', '-m', 'Initial commit'], cwd=path, check=True)
+                subprocess.run(['git', 'add', 'README.md'], cwd=path, check=True)
+                subprocess.run(['git', '-c', 'user.email=system@codomyrmex.dev',
+                               '-c', 'user.name=Codomyrmex System',
+                               'commit', '-m', 'Initial commit'], cwd=path, check=True)
 
         logger.info("Git repository initialized successfully")
         return True
@@ -316,19 +326,35 @@ def get_status(repository_path: str = None) -> Dict[str, any]:
             if not line.strip():
                 continue
 
-            status_code = line[:2]
-            filename = line[3:]
+            # Git status --porcelain format: XY filename
+            # X = index status, Y = worktree status
+            if len(line) < 3:
+                continue
+                
+            index_status = line[0]
+            worktree_status = line[1]
+            filename = line[3:]  # Skip the space after status codes
 
-            if status_code[0] in ['M', 'A', 'D', 'R']:
-                if 'M' in status_code:
+            # Check index status (staged changes)
+            if index_status == 'A':
+                status_info["added"].append(filename)
+            elif index_status == 'M':
+                status_info["modified"].append(filename)
+            elif index_status == 'D':
+                status_info["deleted"].append(filename)
+            elif index_status == 'R':
+                status_info["renamed"].append(filename)
+            
+            # Check worktree status (unstaged changes)
+            if worktree_status == 'M':
+                if filename not in status_info["modified"]:
                     status_info["modified"].append(filename)
-                if 'A' in status_code:
-                    status_info["added"].append(filename)
-                if 'D' in status_code:
+            elif worktree_status == 'D':
+                if filename not in status_info["deleted"]:
                     status_info["deleted"].append(filename)
-                if 'R' in status_code:
-                    status_info["renamed"].append(filename)
-            elif status_code[0] == '?':
+            
+            # Untracked files
+            if index_status == '?' and worktree_status == '?':
                 status_info["untracked"].append(filename)
 
         logger.debug(f"Repository status: {len(status_lines)} changes")
@@ -376,6 +402,270 @@ def get_commit_history(limit: int = 10, repository_path: str = None) -> List[Dic
     except Exception as e:
         logger.error(f"Unexpected error getting commit history: {e}")
         return []
+
+def merge_branch(source_branch: str, target_branch: str = None, repository_path: str = None, 
+                 strategy: str = None) -> bool:
+    """Merge a source branch into the target branch."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+    
+    if target_branch is None:
+        target_branch = get_current_branch(repository_path)
+        if not target_branch:
+            logger.error("Could not determine target branch for merge")
+            return False
+
+    try:
+        logger.info(f"Merging branch '{source_branch}' into '{target_branch}' in {repository_path}")
+
+        # Switch to target branch first
+        if not switch_branch(target_branch, repository_path):
+            logger.error(f"Failed to switch to target branch '{target_branch}'")
+            return False
+
+        # Prepare merge command
+        cmd = ['git', 'merge']
+        if strategy:
+            cmd.extend(['-s', strategy])
+        cmd.append(source_branch)
+
+        result = subprocess.run(cmd, cwd=repository_path, 
+                              capture_output=True, text=True, check=True)
+
+        logger.info(f"Successfully merged '{source_branch}' into '{target_branch}'")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to merge branch '{source_branch}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error merging branch: {e}")
+        return False
+
+def rebase_branch(target_branch: str, repository_path: str = None, interactive: bool = False) -> bool:
+    """Rebase current branch onto target branch."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        current_branch = get_current_branch(repository_path)
+        logger.info(f"Rebasing branch '{current_branch}' onto '{target_branch}' in {repository_path}")
+
+        cmd = ['git', 'rebase']
+        if interactive:
+            cmd.append('-i')
+        cmd.append(target_branch)
+
+        result = subprocess.run(cmd, cwd=repository_path,
+                              capture_output=True, text=True, check=True)
+
+        logger.info(f"Successfully rebased '{current_branch}' onto '{target_branch}'")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to rebase onto '{target_branch}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error rebasing branch: {e}")
+        return False
+
+def create_tag(tag_name: str, message: str = None, repository_path: str = None) -> bool:
+    """Create a Git tag."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info(f"Creating tag '{tag_name}' in {repository_path}")
+
+        cmd = ['git', 'tag']
+        if message:
+            cmd.extend(['-a', tag_name, '-m', message])
+        else:
+            cmd.append(tag_name)
+
+        result = subprocess.run(cmd, cwd=repository_path,
+                              capture_output=True, text=True, check=True)
+
+        logger.info(f"Tag '{tag_name}' created successfully")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to create tag '{tag_name}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error creating tag: {e}")
+        return False
+
+def list_tags(repository_path: str = None) -> List[str]:
+    """List all Git tags."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.debug("Listing Git tags")
+
+        result = subprocess.run(['git', 'tag', '-l'], cwd=repository_path,
+                              capture_output=True, text=True, check=True)
+
+        tags = [tag.strip() for tag in result.stdout.strip().split('\n') if tag.strip()]
+        logger.debug(f"Found {len(tags)} tags")
+        return tags
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to list tags: {e}")
+        return []
+    except Exception as e:
+        logger.error(f"Unexpected error listing tags: {e}")
+        return []
+
+def stash_changes(message: str = None, repository_path: str = None) -> bool:
+    """Stash current changes."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info(f"Stashing changes in {repository_path}")
+
+        cmd = ['git', 'stash']
+        if message:
+            cmd.extend(['push', '-m', message])
+
+        result = subprocess.run(cmd, cwd=repository_path,
+                              capture_output=True, text=True, check=True)
+
+        logger.info("Changes stashed successfully")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to stash changes: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error stashing changes: {e}")
+        return False
+
+def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
+    """Apply stashed changes."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info(f"Applying stash in {repository_path}")
+
+        cmd = ['git', 'stash', 'apply']
+        if stash_ref:
+            cmd.append(stash_ref)
+
+        result = subprocess.run(cmd, cwd=repository_path,
+                              capture_output=True, text=True, check=True)
+
+        logger.info("Stash applied successfully")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to apply stash: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error applying stash: {e}")
+        return False
+
+def list_stashes(repository_path: str = None) -> List[Dict[str, str]]:
+    """List all stashes."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.debug("Listing Git stashes")
+
+        result = subprocess.run(['git', 'stash', 'list'], cwd=repository_path,
+                              capture_output=True, text=True, check=True)
+
+        stashes = []
+        for line in result.stdout.strip().split('\n'):
+            if line.strip():
+                # Parse stash format: stash@{0}: WIP on branch: message
+                parts = line.split(': ', 2)
+                if len(parts) >= 2:
+                    stashes.append({
+                        "ref": parts[0],
+                        "branch_info": parts[1] if len(parts) > 1 else "",
+                        "message": parts[2] if len(parts) > 2 else ""
+                    })
+
+        logger.debug(f"Found {len(stashes)} stashes")
+        return stashes
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to list stashes: {e}")
+        return []
+    except Exception as e:
+        logger.error(f"Unexpected error listing stashes: {e}")
+        return []
+
+def get_diff(file_path: str = None, staged: bool = False, repository_path: str = None) -> str:
+    """Get diff of changes."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.debug("Getting Git diff")
+
+        cmd = ['git', 'diff']
+        if staged:
+            cmd.append('--staged')
+        if file_path:
+            cmd.append(file_path)
+
+        result = subprocess.run(cmd, cwd=repository_path,
+                              capture_output=True, text=True, check=True)
+
+        logger.debug(f"Retrieved diff ({len(result.stdout)} characters)")
+        return result.stdout
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to get diff: {e}")
+        return ""
+    except Exception as e:
+        logger.error(f"Unexpected error getting diff: {e}")
+        return ""
+
+def reset_changes(mode: str = "mixed", target: str = "HEAD", repository_path: str = None) -> bool:
+    """Reset repository to a specific state."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    valid_modes = ["soft", "mixed", "hard"]
+    if mode not in valid_modes:
+        logger.error(f"Invalid reset mode '{mode}'. Valid modes: {valid_modes}")
+        return False
+
+    try:
+        logger.info(f"Resetting repository to '{target}' with mode '{mode}' in {repository_path}")
+
+        cmd = ['git', 'reset', f'--{mode}', target]
+        result = subprocess.run(cmd, cwd=repository_path,
+                              capture_output=True, text=True, check=True)
+
+        logger.info(f"Repository reset successfully")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to reset repository: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error resetting repository: {e}")
+        return False
 
 if __name__ == "__main__":
     # Ensure logging is set up when script is run directly

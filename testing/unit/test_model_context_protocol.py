@@ -15,7 +15,7 @@ class TestModelContextProtocol:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from model_context_protocol import mcp_schemas
+            from codomyrmex.model_context_protocol import mcp_schemas
             assert mcp_schemas is not None
         except ImportError as e:
             pytest.fail(f"Failed to import mcp_schemas: {e}")
@@ -25,7 +25,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from model_context_protocol import mcp_schemas
+        from codomyrmex.model_context_protocol import mcp_schemas
 
         assert hasattr(mcp_schemas, '__file__')
         assert hasattr(mcp_schemas, 'MCPErrorDetail')

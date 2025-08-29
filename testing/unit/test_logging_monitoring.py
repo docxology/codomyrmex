@@ -14,7 +14,7 @@ class TestLoggingMonitoring:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from logging_monitoring import logger_config
+            from codomyrmex.logging_monitoring import logger_config
             assert logger_config is not None
         except ImportError as e:
             pytest.fail(f"Failed to import logger_config: {e}")
@@ -24,7 +24,7 @@ class TestLoggingMonitoring:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from logging_monitoring import logger_config
+        from codomyrmex.logging_monitoring import logger_config
 
         assert hasattr(logger_config, '__file__')
         # Add more structural tests based on actual implementation
@@ -36,7 +36,7 @@ class TestLoggingMonitoring:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from logging_monitoring import logger_config
+        from codomyrmex.logging_monitoring import logger_config
 
         # This test would need to be adjusted based on actual function signatures
         # Example:
@@ -52,7 +52,7 @@ class TestLoggingMonitoring:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from logging_monitoring import logger_config
+        from codomyrmex.logging_monitoring import logger_config
 
         mock_logger = MagicMock()
         mock_get_logger.return_value = mock_logger

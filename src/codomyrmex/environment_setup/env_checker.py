@@ -13,10 +13,22 @@ def is_uv_available():
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
+    except Exception:
+        # Handle any other unexpected errors gracefully
+        return False
 
 def is_uv_environment():
     """Check if we're in a uv-managed environment."""
-    return os.environ.get('UV_ACTIVE') == '1' or os.environ.get('VIRTUAL_ENV') and 'uv' in os.environ.get('VIRTUAL_ENV', '')
+    # Check if UV_ACTIVE is set to '1'
+    if os.environ.get('UV_ACTIVE') == '1':
+        return True
+    
+    # Check if VIRTUAL_ENV contains 'uv'
+    virtual_env = os.environ.get('VIRTUAL_ENV')
+    if virtual_env and 'uv' in virtual_env:
+        return True
+    
+    return False
 
 def ensure_dependencies_installed():
     """
@@ -30,6 +42,9 @@ def ensure_dependencies_installed():
     except (ImportError, ModuleNotFoundError):
         dependencies_ok = False
         print("[ERROR] The 'cased/kit' library is not installed or not found.", file=sys.stderr)
+    except Exception as e:
+        dependencies_ok = False
+        print(f"[ERROR] Unexpected error while checking 'cased/kit' library: {e}", file=sys.stderr)
 
     try:
         import dotenv
@@ -38,6 +53,9 @@ def ensure_dependencies_installed():
         dependencies_ok = False
         print("[ERROR] The 'python-dotenv' library is not installed or not found.", file=sys.stderr)
         print("[INFO]  This is needed for loading API keys from a .env file.", file=sys.stderr)
+    except Exception as e:
+        dependencies_ok = False
+        print(f"[ERROR] Unexpected error while checking 'python-dotenv' library: {e}", file=sys.stderr)
 
     if not dependencies_ok:
         # Determine the workspace root. Assumes env_checker.py is in environment_setup/ under the root.

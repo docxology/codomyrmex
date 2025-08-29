@@ -17,14 +17,14 @@ class TestEnvironmentSetup:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from environment_setup import env_checker
+            from codomyrmex.environment_setup import env_checker
             assert env_checker is not None
         except ImportError as e:
             pytest.fail(f"Failed to import env_checker: {e}")
 
     def test_ensure_dependencies_installed_success(self, capsys):
         """Test successful dependency check."""
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         with patch('builtins.__import__') as mock_import:
             # Mock successful imports
@@ -41,7 +41,7 @@ class TestEnvironmentSetup:
 
     def test_ensure_dependencies_installed_missing_kit(self, capsys):
         """Test dependency check when kit is missing."""
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         def mock_import(name, *args, **kwargs):
             if name == 'kit':
@@ -60,7 +60,7 @@ class TestEnvironmentSetup:
 
     def test_ensure_dependencies_installed_missing_dotenv(self, capsys):
         """Test dependency check when python-dotenv is missing."""
-        from environment_setup.env_checker import ensure_dependencies_installed
+        from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
         def mock_import(name, *args, **kwargs):
             if name == 'dotenv':
@@ -78,7 +78,7 @@ class TestEnvironmentSetup:
 
     def test_check_and_setup_env_vars_file_exists(self, tmp_path, capsys):
         """Test env file check when file exists."""
-        from environment_setup.env_checker import check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 
         # Create a dummy .env file
         env_file = tmp_path / ".env"
@@ -92,7 +92,7 @@ class TestEnvironmentSetup:
 
     def test_check_and_setup_env_vars_file_missing(self, tmp_path, capsys):
         """Test env file check when file is missing."""
-        from environment_setup.env_checker import check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 
         # Ensure .env file doesn't exist
         env_file = tmp_path / ".env"
@@ -111,7 +111,7 @@ class TestEnvironmentSetup:
     @patch('dotenv.load_dotenv')
     def test_check_and_setup_env_vars_with_mocking(self, mock_load_dotenv, mock_exists, capsys):
         """Test env file check with mocked file operations."""
-        from environment_setup.env_checker import check_and_setup_env_vars
+        from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 
         # Mock file exists
         mock_exists.return_value = True

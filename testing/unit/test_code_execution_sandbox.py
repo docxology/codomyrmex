@@ -14,7 +14,7 @@ class TestCodeExecutionSandbox:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from code_execution_sandbox import code_executor
+            from codomyrmex.code_execution_sandbox import code_executor
             assert code_executor is not None
         except ImportError as e:
             pytest.fail(f"Failed to import code_executor: {e}")
@@ -24,7 +24,7 @@ class TestCodeExecutionSandbox:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox import code_executor
+        from codomyrmex.code_execution_sandbox import code_executor
 
         assert hasattr(code_executor, '__file__')
         # Add more structural tests based on actual implementation
@@ -37,7 +37,7 @@ class TestCodeExecutionSandbox:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox import code_executor
+        from codomyrmex.code_execution_sandbox import code_executor
 
         # Mock subprocess.run to return a successful result
         mock_result = MagicMock()
@@ -55,7 +55,7 @@ class TestCodeExecutionSandbox:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from code_execution_sandbox import code_executor
+        from codomyrmex.code_execution_sandbox import code_executor
 
         # Test that the module can import security-related dependencies
         # This would need to be adjusted based on actual imports in the module

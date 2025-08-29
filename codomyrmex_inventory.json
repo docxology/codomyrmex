@@ -1,0 +1,1109 @@
+{
+  "project_info": {
+    "name": "Codomyrmex",
+    "version": "0.1.0",
+    "root_path": "/Users/4d/Documents/GitHub/codomyrmex",
+    "python_version": "3.13.7 (main, Aug 14 2025, 11:12:11) [Clang 17.0.0 (clang-1700.0.13.3)]",
+    "timestamp": "2025-08-29T05:10:15.607998"
+  },
+  "modules": {
+    "documentation": {
+      "name": "documentation",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+      "description": "This module is responsible for generating and serving the comprehensive documentation website for the Codomyrmex project.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "aggregate_docs",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "(source_root: str = None, dest_root: str = None)",
+          "docstring": "Aggregate module documentation into the Docusaurus docs/modules folder.\n\nThis copies canonical documentation files from each src/codomyrmex/<module>/ directory into\ndocumentation/docs/modules/<module>/ so the Docusaurus site can present a unified view.\n\nBy default, it scans the project `src/codomyrmex/` directory and copies recognized\ndocumentation files and the `docs/` subfolder contents.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 306,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "assess_site",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Guides user through assessing the site by opening browser and printing checklist.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 443,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "build_static_site",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "(package_manager='npm')",
+          "docstring": "Builds the static Docusaurus site.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 222,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "check_doc_environment",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Checks for Node.js and npm/yarn.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 114,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "documentation_website",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "other",
+          "signature": "<module 'codomyrmex.documentation.documentation_website' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "install_dependencies",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "(package_manager='npm')",
+          "docstring": "Installs Docusaurus dependencies.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 175,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "print_assessment_checklist",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Prints a checklist for manually assessing the documentation website.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 289,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "run_command_stream_output",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "(command_parts, cwd)",
+          "docstring": "Helper to run a shell command and stream its output to the logger.\nReturns True if successful, False otherwise.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 146,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "serve_static_site",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "(package_manager='npm')",
+          "docstring": "Serves the built static Docusaurus site.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 240,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "start_dev_server",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "(package_manager='npm')",
+          "docstring": "Starts the Docusaurus development server (hot-reloading).",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 190,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "validate_doc_versions",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Validate version consistency between source and aggregated documentation.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py",
+          "line_number": 377,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-29 04:52:11"
+    },
+    "terminal_interface": {
+      "name": "terminal_interface",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+      "description": "Codomyrmex Terminal Interface Module\n\nThis module provides interactive terminal interfaces and utilities for\nexploring and interacting with the Codomyrmex ecosystem in engaging,\naccessible ways.",
+      "version": "0.1.0",
+      "capabilities": [
+        {
+          "name": "CommandRunner",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "type": "class",
+          "signature": "class CommandRunner",
+          "docstring": "Utility class for running commands with beautiful output formatting.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/terminal_utils.py",
+          "line_number": 224,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "InteractiveShell",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "type": "class",
+          "signature": "class InteractiveShell",
+          "docstring": "Interactive shell for exploring the Codomyrmex ecosystem.\n\nThis shell provides a fun, accessible way to discover modules,\nrun demos, check status, and interact with the system like\nan epistemic forager exploring a vast nest.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/interactive_shell.py",
+          "line_number": 33,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "TerminalFormatter",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "type": "class",
+          "signature": "class TerminalFormatter",
+          "docstring": "Utility class for formatting terminal output with colors and styles.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/terminal_utils.py",
+          "line_number": 18,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "interactive_shell",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "type": "other",
+          "signature": "<module 'codomyrmex.terminal_interface.interactive_shell' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/interactive_shell.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "terminal_utils",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "type": "other",
+          "signature": "<module 'codomyrmex.terminal_interface.terminal_utils' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/terminal_utils.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": false,
+      "has_docs": false,
+      "last_modified": "2025-08-28 15:20:18"
+    },
+    "pattern_matching": {
+      "name": "pattern_matching",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching",
+      "description": "This module focuses on identifying specific patterns and structures within the Codomyrmex codebase. It extensively utilizes the `cased/kit` toolkit, which provides powerful features for various types of pattern matching, code analysis, and search.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "analyze_repository_path",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching",
+          "type": "function",
+          "signature": "(path_to_analyze: str, relative_output_dir_name: str, config: dict, module_pbar_desc: str)",
+          "docstring": "Runs a suite of kit analyses on the given repository path and saves results.\nReturns a list of error messages encountered.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching/run_codomyrmex_analysis.py",
+          "line_number": 545,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "get_embedding_function",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching",
+          "type": "function",
+          "signature": "(model_name: str = 'all-MiniLM-L6-v2')",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching/run_codomyrmex_analysis.py",
+          "line_number": 108,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "print_once",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching",
+          "type": "function",
+          "signature": "(key, message, level='info', _logger=None)",
+          "docstring": "Prints a message only once per script run, based on the key.\nUses the global logger if _logger is not provided.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching/run_codomyrmex_analysis.py",
+          "line_number": 692,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "run_codomyrmex_analysis",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching",
+          "type": "other",
+          "signature": "<module 'codomyrmex.pattern_matching.run_codomyrmex_analysis' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching/run_codomyrmex_analysis.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "run_full_analysis",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Main function to orchestrate the analysis of all configured modules and the full repository.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching/run_codomyrmex_analysis.py",
+          "line_number": 625,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-29 05:08:10"
+    },
+    "static_analysis": {
+      "name": "static_analysis",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis",
+      "description": "The Static Analysis module provides tools and integrations for analyzing source code without executing it. Its core purpose is to enhance code quality, identify potential bugs, enforce coding standards, and detect security vulnerabilities early in the development lifecycle. This module may incorporate linters, style checkers, complexity analyzers, and other static analysis tools relevant to the languages and frameworks used within the Codomyrmex project.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "parse_pyrefly_output",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis",
+          "type": "function",
+          "signature": "(output: str, project_root: str) -> list",
+          "docstring": "Parses the raw output from Pyrefly to extract structured error information.\nThis is a basic parser and might need significant improvement based on actual Pyrefly output.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/pyrefly_runner.py",
+          "line_number": 39,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "pyrefly_runner",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis",
+          "type": "other",
+          "signature": "<module 'codomyrmex.static_analysis.pyrefly_runner' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/pyrefly_runner.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "run_pyrefly_analysis",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis",
+          "type": "function",
+          "signature": "(target_paths: list[str], project_root: str) -> dict",
+          "docstring": "Runs Pyrefly static type checker on the given paths and returns the analysis results.\n\nArgs:\n    target_paths: A list of file or directory paths to analyze.\n    project_root: The root directory of the project, used for resolving paths\n                  and for Pyrefly to find its configuration.\n\nReturns:\n    A dictionary containing the analysis results from Pyrefly, conforming to\n    the MCP_TOOL_SPECIFICATION for 'tool_results'.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/pyrefly_runner.py",
+          "line_number": 87,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [
+        "pyrefly"
+      ],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-29 05:08:10"
+    },
+    "ai_code_editing": {
+      "name": "ai_code_editing",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing",
+      "description": "The AI Code Editing module is a core component of the Codomyrmex project, designed to provide intelligent capabilities for understanding, generating, and modifying source code. It leverages artificial intelligence models and techniques to assist developers with tasks such as code completion, refactoring, bug detection, code summarization, and automated generation of code snippets or entire functions. This module aims to enhance developer productivity and improve code quality through AI-powered assistance.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "ai_code_helpers",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing",
+          "type": "other",
+          "signature": "<module 'codomyrmex.ai_code_editing.ai_code_helpers' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "generate_code_snippet",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing",
+          "type": "function",
+          "signature": "(prompt: str, language: str, context_code: Optional[str] = None, llm_provider: str = 'openai', model_name: Optional[str] = None) -> Dict[str, Any]",
+          "docstring": "Generate code snippet based on natural language prompt and optional context code.\n\nArgs:\n    prompt: Natural language description of the code to be generated\n    language: Target programming language for the generated code\n    context_code: Optional existing code snippet or broader context to guide generation\n    llm_provider: LLM provider to use (e.g., \"openai\", \"anthropic\")\n    model_name: Specific model to use (provider-dependent)\n    \nReturns:\n    Dictionary containing generation status and ",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+          "line_number": 102,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "refactor_code_snippet",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing",
+          "type": "function",
+          "signature": "(code_snippet: str, refactoring_instruction: str, language: str, llm_provider: str = 'openai', model_name: Optional[str] = None) -> Dict[str, Any]",
+          "docstring": "Refactor code snippet based on provided instruction.\n\nArgs:\n    code_snippet: Existing code to be refactored\n    refactoring_instruction: Natural language instruction for refactoring\n    language: Programming language of the code snippet\n    llm_provider: LLM provider to use (e.g., \"openai\", \"anthropic\")\n    model_name: Specific model to use (provider-dependent)\n    \nReturns:\n    Dictionary containing refactoring status and results",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+          "line_number": 215,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [
+        "tiktoken"
+      ],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-27 07:33:41"
+    },
+    "environment_setup": {
+      "name": "environment_setup",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+      "description": "For general project development environment setup instructions (covering prerequisites, cloning, virtual environments, Python dependencies, API keys, Docusaurus, linters, and tests for the entire Codomyrmex project), please refer to the **\"Getting Started: Development Environment Setup\"** section in the [main project README.md](../../README.md).",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "check_and_setup_env_vars",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+          "type": "function",
+          "signature": "(repo_root_path: str)",
+          "docstring": "Checks for a .env file in the repository root and guides the user to create one if it's missing.\nAlso, reminds about API keys for LLM features.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py",
+          "line_number": 88,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "ensure_dependencies_installed",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Checks if primary dependencies 'kit' and 'python-dotenv' are installed.\nIf not, it prints detailed instructions for setting them up.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py",
+          "line_number": 21,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "env_checker",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+          "type": "other",
+          "signature": "<module 'codomyrmex.environment_setup.env_checker' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "is_uv_available",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Check if uv is available on the system.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py",
+          "line_number": 9,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "is_uv_environment",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Check if we're in a uv-managed environment.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py",
+          "line_number": 17,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-29 04:52:11"
+    },
+    "module_template": {
+      "name": "module_template",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/module_template",
+      "description": "**Note for Developers:** This is a template README.md for new Codomyrmex modules. When creating a new module, copy this file (and the entire `template/module_template/` directory structure) to your new module's root. Then, replace all bracketed placeholders (e.g., `[Module Name]`, `[Your specific component...]`) and instructional text in parentheses `(...)` with information specific to your module.",
+      "version": "unknown",
+      "capabilities": [],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-27 07:33:47"
+    },
+    "data_visualization": {
+      "name": "data_visualization",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+      "description": "The Data Visualization module for Codomyrmex provides a suite of functions to generate common plot types using Matplotlib and Seaborn. It is tightly integrated with the Codomyrmex logging and environment setup systems for robust, reproducible, and well-logged visualizations.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "bar_chart",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "other",
+          "signature": "<module 'codomyrmex.data_visualization.bar_chart' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/bar_chart.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "create_bar_chart",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "function",
+          "signature": "(categories: list, values: list, title: str = 'Bar Chart', x_label: str = 'Categories', y_label: str = 'Values', output_path: str = None, show_plot: bool = False, horizontal: bool = False, bar_color: str = 'skyblue')",
+          "docstring": "Generates a bar chart (vertical or horizontal).\nUses logging_monitoring for logging.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/bar_chart.py",
+          "line_number": 12,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "create_heatmap",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "function",
+          "signature": "(data: list, x_labels: list = None, y_labels: list = None, title: str = 'Heatmap', x_label: str = None, y_label: str = None, cmap: str = 'viridis', colorbar_label: str = None, output_path: str = None, show_plot: bool = False, annot: bool = False, fmt: str = '.2f', figure_size: tuple = (10, 6))",
+          "docstring": "Generates a heatmap from a 2D data array.\nUses Matplotlib for plotting and plot_utils for saving and aesthetics.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/plotter.py",
+          "line_number": 36,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "create_histogram",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "function",
+          "signature": "(data: list, bins: int = 10, title: str = 'Histogram', x_label: str = 'Value', y_label: str = 'Frequency', output_path: str = None, show_plot: bool = False, hist_color: str = 'cornflowerblue', edge_color: str = 'black')",
+          "docstring": "Generates a histogram.\nUses logging_monitoring for logging.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/histogram.py",
+          "line_number": 12,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "create_line_plot",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "function",
+          "signature": "(x_data: list, y_data: list, title: str = 'Line Plot', x_label: str = 'X-axis', y_label: str = 'Y-axis', output_path: str = None, show_plot: bool = False, line_labels: list = None, markers: bool = False, figure_size: tuple = (10, 6))",
+          "docstring": "Generates a line plot.\nUses logging_monitoring for logging.\nIf y_data is a list of lists, and x_data is a single list, multiple lines are plotted.\nIf line_labels are provided, they will be used for the legend.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/line_plot.py",
+          "line_number": 13,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "create_pie_chart",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "function",
+          "signature": "(labels: list, sizes: list, title: str = 'Pie Chart', output_path: str = None, show_plot: bool = False, autopct: str = '%1.1f%%', startangle: int = 90, explode: list = None)",
+          "docstring": "Generates a pie chart.\nUses logging_monitoring for logging.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/pie_chart.py",
+          "line_number": 12,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "create_scatter_plot",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "function",
+          "signature": "(x_data: list, y_data: list, title: str = 'Scatter Plot', x_label: str = 'X-axis', y_label: str = 'Y-axis', output_path: str = None, show_plot: bool = False, dot_size: int = 20, dot_color: str = 'blue', alpha: float = 0.7)",
+          "docstring": "Generates a scatter plot.\nUses logging_monitoring for logging.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/scatter_plot.py",
+          "line_number": 12,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "histogram",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "other",
+          "signature": "<module 'codomyrmex.data_visualization.histogram' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/histogram.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "line_plot",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "other",
+          "signature": "<module 'codomyrmex.data_visualization.line_plot' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/line_plot.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "pie_chart",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "other",
+          "signature": "<module 'codomyrmex.data_visualization.pie_chart' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/pie_chart.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "plot_utils",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "other",
+          "signature": "<module 'codomyrmex.data_visualization.plot_utils' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/plot_utils.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "plotter",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "other",
+          "signature": "<module 'codomyrmex.data_visualization.plotter' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/plotter.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "scatter_plot",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "type": "other",
+          "signature": "<module 'codomyrmex.data_visualization.scatter_plot' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/scatter_plot.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [
+        "numpy",
+        "matplotlib",
+        "seaborn"
+      ],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-27 07:33:47"
+    },
+    "code_execution_sandbox": {
+      "name": "code_execution_sandbox",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox",
+      "description": "The Code Execution Sandbox module provides a secure and isolated environment for running untrusted or dynamically generated code. Its primary function is to allow code execution while strictly controlling its access to system resources, network, and file system, thereby preventing malicious actions and ensuring the stability of the host system. This is crucial for features that involve code generation or execution based on external inputs, such as AI-assisted coding or plugin systems.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "code_executor",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox",
+          "type": "other",
+          "signature": "<module 'codomyrmex.code_execution_sandbox.code_executor' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/code_executor.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "execute_code",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox",
+          "type": "function",
+          "signature": "(language: str, code: str, stdin: Optional[str] = None, timeout: Optional[int] = None, session_id: Optional[str] = None) -> Dict[str, Any]",
+          "docstring": "Execute a code snippet in a sandboxed environment.\n\nArgs:\n    language: Programming language of the code\n    code: Source code to execute\n    stdin: Standard input to provide to the program\n    timeout: Maximum execution time in seconds (default: 30)\n    session_id: Optional session identifier for persistent environments\n\nReturns:\n    Dictionary with execution results: stdout, stderr, exit_code, execution_time, status",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/code_executor.py",
+          "line_number": 294,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-27 07:33:47"
+    },
+    "logging_monitoring": {
+      "name": "logging_monitoring",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring",
+      "description": "---",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "get_logger",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring",
+          "type": "function",
+          "signature": "(name: str) -> logging.Logger",
+          "docstring": "Retrieves a logger instance with the specified name.\n\nIt's recommended to use `__name__` as the logger name for module-level logging.\n`setup_logging()` should be called before using loggers obtained from this function\nto ensure they are properly configured. If `setup_logging()` has not been called,\nthis function will still return a logger, but it might use Python's default\nlogging configuration (which logs warnings and above to stderr).\n\nArgs:\n    name: The name for the logger. Typically `__name",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring/logger_config.py",
+          "line_number": 119,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logger_config",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring",
+          "type": "other",
+          "signature": "<module 'codomyrmex.logging_monitoring.logger_config' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring/logger_config.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "setup_logging",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Configures logging for the Codomyrmex project.\n\nThis function should be called once, typically at the application's entry point.\nIt reads configuration from environment variables:\n- CODOMYRMEX_LOG_LEVEL: Logging level (e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL). Defaults to INFO.\n- CODOMYRMEX_LOG_FILE: Optional path to a log file. If not set, logs to console.\n- CODOMYRMEX_LOG_FORMAT: Optional custom log format string for TEXT output.\n                       Defaults to DEFAULT_LOG_FORMAT. Set t",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring/logger_config.py",
+          "line_number": 41,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-27 07:33:44"
+    },
+    "system_discovery": {
+      "name": "system_discovery",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+      "description": "Codomyrmex System Discovery Module\n\nThis module provides comprehensive system discovery and orchestration capabilities\nfor the Codomyrmex ecosystem. It scans all modules, discovers capabilities,\nreports on system status, and provides interactive exploration tools.",
+      "version": "0.1.0",
+      "capabilities": [
+        {
+          "name": "CapabilityScanner",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "type": "class",
+          "signature": "class CapabilityScanner",
+          "docstring": "Advanced capability scanner for the Codomyrmex ecosystem.\n\nProvides deep analysis of code capabilities including functions, classes,\nmethods, and their relationships.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/capability_scanner.py",
+          "line_number": 74,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "StatusReporter",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "type": "class",
+          "signature": "class StatusReporter",
+          "docstring": "Comprehensive status reporting for the Codomyrmex system.\n\nProvides detailed health checks, dependency analysis, and system\ndiagnostics with beautiful terminal output.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/status_reporter.py",
+          "line_number": 26,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "SystemDiscovery",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "type": "class",
+          "signature": "class SystemDiscovery",
+          "docstring": "Comprehensive system discovery and orchestration for Codomyrmex.\n\nThis class provides the main interface for discovering all modules,\ntheir capabilities, system status, and interactive exploration.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/discovery_engine.py",
+          "line_number": 60,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "capability_scanner",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "type": "other",
+          "signature": "<module 'codomyrmex.system_discovery.capability_scanner' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/capability_scanner.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "discovery_engine",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "type": "other",
+          "signature": "<module 'codomyrmex.system_discovery.discovery_engine' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/discovery_engine.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "status_reporter",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "type": "other",
+          "signature": "<module 'codomyrmex.system_discovery.status_reporter' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/status_reporter.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": false,
+      "has_docs": false,
+      "last_modified": "2025-08-29 05:03:58"
+    },
+    "model_context_protocol": {
+      "name": "model_context_protocol",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol",
+      "description": "The Model Context Protocol (MCP) is a foundational specification within the Codomyrmex ecosystem, designed to standardize communication and interaction between AI models (particularly Large Language Models - LLMs), autonomous AI agents, and a diverse suite of software tools.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "MCPErrorDetail",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol",
+          "type": "class",
+          "signature": "class MCPErrorDetail",
+          "docstring": "Standard structure for detailed error information in MCP responses.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/mcp_schemas.py",
+          "line_number": 5,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "MCPToolCall",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol",
+          "type": "class",
+          "signature": "class MCPToolCall",
+          "docstring": "Represents a call to an MCP tool.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/mcp_schemas.py",
+          "line_number": 11,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "MCPToolResult",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol",
+          "type": "class",
+          "signature": "class MCPToolResult",
+          "docstring": "Represents the result of an MCP tool execution.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/mcp_schemas.py",
+          "line_number": 19,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "mcp_schemas",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol",
+          "type": "other",
+          "signature": "<module 'codomyrmex.model_context_protocol.mcp_schemas' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/mcp_schemas.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [
+        "jsonschema",
+        "pydantic"
+      ],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-29 04:52:11"
+    },
+    "build_synthesis": {
+      "name": "build_synthesis",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis",
+      "description": "The Build Synthesis module is responsible for automating the build processes and synthesizing various artifacts within the Codomyrmex ecosystem. This includes compiling code, packaging components, generating necessary boilerplate or derived code, and ensuring that build outputs are correctly structured and managed. It aims to provide a consistent and reliable mechanism for constructing and assembling different parts of the project.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "build_orchestrator",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis",
+          "type": "other",
+          "signature": "<module 'codomyrmex.build_synthesis.build_orchestrator' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_orchestrator.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "check_build_environment",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis",
+          "type": "function",
+          "signature": "()",
+          "docstring": "Check if the build environment is properly configured.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_orchestrator.py",
+          "line_number": 42,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "orchestrate_build_pipeline",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis",
+          "type": "function",
+          "signature": "(build_config: Dict[str, <built-in function any>]) -> Dict[str, <built-in function any>]",
+          "docstring": "Orchestrate a complete build pipeline.\n\nArgs:\n    build_config: Dictionary containing build configuration\n\nReturns:\n    Dictionary with build results",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_orchestrator.py",
+          "line_number": 241,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "run_build_command",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis",
+          "type": "function",
+          "signature": "(command: List[str], cwd: str = None) -> Tuple[bool, str, str]",
+          "docstring": "Run a build command and return the result.\n\nArgs:\n    command: List of command arguments\n    cwd: Working directory for the command\n\nReturns:\n    Tuple of (success, stdout, stderr)",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_orchestrator.py",
+          "line_number": 69,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "synthesize_build_artifact",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis",
+          "type": "function",
+          "signature": "(source_path: str, output_path: str, artifact_type: str = 'executable') -> bool",
+          "docstring": "Synthesize a build artifact from source code.\n\nArgs:\n    source_path: Path to source file or directory\n    output_path: Path where artifact should be created\n    artifact_type: Type of artifact to create ('executable', 'library', 'package')\n\nReturns:\n    True if synthesis was successful, False otherwise",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_orchestrator.py",
+          "line_number": 110,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "validate_build_output",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis",
+          "type": "function",
+          "signature": "(output_path: str) -> Dict[str, <built-in function any>]",
+          "docstring": "Validate that build output meets expectations.\n\nArgs:\n    output_path: Path to the build output\n\nReturns:\n    Dictionary with validation results",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_orchestrator.py",
+          "line_number": 194,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-29 04:52:11"
+    },
+    "git_operations": {
+      "name": "git_operations",
+      "path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+      "description": "The Git Operations module is designed to provide a standardized interface and a set of tools for performing common Git actions programmatically within the Codomyrmex ecosystem. This can be utilized by other modules, AI agents (if MCP tools are developed), or CI/CD processes to interact with Git repositories, manage branches, commits, and other version control tasks effectively and consistently.",
+      "version": "unknown",
+      "capabilities": [
+        {
+          "name": "add_files",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(file_paths: List[str], repository_path: str = None) -> bool",
+          "docstring": "Add files to the Git staging area.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 188,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "check_git_availability",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "() -> bool",
+          "docstring": "Check if Git is available on the system.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 42,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "clone_repository",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(url: str, destination: str, branch: str = None) -> bool",
+          "docstring": "Clone a Git repository to the specified destination.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 97,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "commit_changes",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(message: str, repository_path: str = None) -> bool",
+          "docstring": "Commit staged changes with the given message.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 212,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "create_branch",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(branch_name: str, repository_path: str = None) -> bool",
+          "docstring": "Create and switch to a new Git branch.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 121,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "get_commit_history",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(limit: int = 10, repository_path: str = None) -> List[Dict[str, str]]",
+          "docstring": "Get recent commit history.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 344,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "get_current_branch",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(repository_path: str = None) -> Optional[str]",
+          "docstring": "Get the name of the current Git branch.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 168,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "get_status",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(repository_path: str = None) -> Dict[str, <built-in function any>]",
+          "docstring": "Get the current Git repository status.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 293,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "git_manager",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "other",
+          "signature": "<module 'codomyrmex.git_operations.git_manager' from '/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "initialize_git_repository",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(path: str, initial_commit: bool = True) -> bool",
+          "docstring": "Initialize a new Git repository at the specified path.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 66,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "is_git_repository",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(path: str = None) -> bool",
+          "docstring": "Check if the given path is a Git repository.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 54,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "pull_changes",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(remote: str = 'origin', branch: str = None, repository_path: str = None) -> bool",
+          "docstring": "Pull changes from a remote repository.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 264,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "push_changes",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(remote: str = 'origin', branch: str = None, repository_path: str = None) -> bool",
+          "docstring": "Push committed changes to a remote repository.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 235,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "switch_branch",
+          "module_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations",
+          "type": "function",
+          "signature": "(branch_name: str, repository_path: str = None) -> bool",
+          "docstring": "Switch to an existing Git branch.",
+          "file_path": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py",
+          "line_number": 145,
+          "is_public": true,
+          "dependencies": []
+        }
+      ],
+      "dependencies": [],
+      "is_importable": true,
+      "has_tests": true,
+      "has_docs": true,
+      "last_modified": "2025-08-29 04:52:11"
+    }
+  },
+  "system_status": {
+    "python": {
+      "version": "3.13.7",
+      "executable": "/Users/4d/Documents/GitHub/codomyrmex/.venv/bin/python",
+      "virtual_env": true
+    },
+    "project": {
+      "src_exists": true,
+      "tests_exist": true,
+      "venv_exists": true
+    },
+    "dependencies": {
+      "python-dotenv": true,
+      "cased-kit": true,
+      "openai": true,
+      "anthropic": true,
+      "matplotlib": true,
+      "numpy": true,
+      "pytest": true
+    },
+    "git": {
+      "is_repo": true,
+      "branch": "main",
+      "clean": false
+    }
+  }
+}
