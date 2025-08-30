@@ -1,0 +1,355 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_VERSION: "0.4.18"
+
+jobs:
+  lint-and-format:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Cache pre-commit hooks
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ env.PYTHON_VERSION }}-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Run Ruff linting
+        run: |
+          uv run ruff check . --output-format=github
+
+      - name: Run Ruff formatting check
+        run: |
+          uv run ruff format --check .
+
+      - name: Run Black formatting check
+        run: |
+          uv run black --check --diff .
+
+      - name: Run MyPy type checking
+        run: |
+          uv run mypy src/
+
+      - name: Run additional linters
+        run: |
+          # Pylint for comprehensive linting
+          uv run pylint src/codomyrmex/ || true
+          
+          # Flake8 for style guide enforcement
+          uv run flake8 src/codomyrmex/ || true
+
+  security-scan:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Run Bandit security scan
+        run: |
+          uv run bandit -r src/codomyrmex/ -f json -o bandit-report.json || true
+          uv run bandit -r src/codomyrmex/ || true
+
+      - name: Upload Bandit results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-results
+          path: bandit-report.json
+
+  complexity-analysis:
+    name: Code Complexity Analysis
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Run Radon complexity analysis
+        run: |
+          echo "## Cyclomatic Complexity Analysis" >> complexity-report.md
+          echo "\`\`\`" >> complexity-report.md
+          uv run radon cc src/codomyrmex/ -s >> complexity-report.md || true
+          echo "\`\`\`" >> complexity-report.md
+          echo "" >> complexity-report.md
+          echo "## Maintainability Index" >> complexity-report.md
+          echo "\`\`\`" >> complexity-report.md
+          uv run radon mi src/codomyrmex/ -s >> complexity-report.md || true
+          echo "\`\`\`" >> complexity-report.md
+
+      - name: Run Lizard complexity analysis
+        run: |
+          echo "" >> complexity-report.md
+          echo "## Lizard Complexity Analysis" >> complexity-report.md
+          echo "\`\`\`" >> complexity-report.md
+          uv run lizard src/codomyrmex/ >> complexity-report.md || true
+          echo "\`\`\`" >> complexity-report.md
+
+      - name: Upload complexity analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: complexity-analysis
+          path: complexity-report.md
+
+  test-matrix:
+    name: Test Suite
+    runs-on: ${{ matrix.os }}
+    needs: lint-and-format
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        exclude:
+          # Reduce matrix size by excluding some combinations
+          - os: macos-latest
+            python-version: "3.10"
+          - os: windows-latest
+            python-version: "3.10"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV (Unix)
+        if: runner.os != 'Windows'
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Install UV (Windows)
+        if: runner.os == 'Windows'
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: |
+          mkdir -p src/codomyrmex/output
+
+      - name: Run unit tests
+        run: |
+          uv run pytest testing/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=xml --cov-report=term-missing --cov-fail-under=70 --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
+
+      - name: Run integration tests
+        run: |
+          uv run pytest testing/integration/ -v --tb=short --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml || true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.os }}-${{ matrix.python-version }}
+          path: |
+            junit-*.xml
+            coverage.xml
+
+      - name: Upload coverage to Codecov
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  comprehensive-tests:
+    name: Comprehensive Module Tests
+    runs-on: ubuntu-latest
+    needs: [test-matrix]
+    if: github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'comprehensive-tests')
+    strategy:
+      matrix:
+        test-suite:
+          - "git_operations"
+          - "static_analysis"
+          - "code_execution_sandbox"
+          - "environment_setup"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: |
+          mkdir -p src/codomyrmex/output
+
+      - name: Run comprehensive tests for ${{ matrix.test-suite }}
+        run: |
+          uv run pytest testing/unit/test_${{ matrix.test-suite }}_comprehensive.py -v --tb=short --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml || true
+
+      - name: Upload comprehensive test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: comprehensive-test-results-${{ matrix.test-suite }}
+          path: junit-comprehensive-${{ matrix.test-suite }}.xml
+
+  build-package:
+    name: Build Package
+    runs-on: ubuntu-latest
+    needs: [test-matrix, security-scan]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Build package
+        run: |
+          uv build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: distribution-packages
+          path: dist/
+
+      - name: Test package installation
+        run: |
+          # Test installation from built wheel
+          pip install dist/*.whl
+          python -c "import codomyrmex; print('Package installed successfully')"
+
+  validate-dependencies:
+    name: Dependency Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Check dependency consistency
+        run: |
+          uv sync --all-extras --dev
+          # Check for dependency conflicts
+          uv pip check || true
+
+      - name: Generate dependency tree
+        run: |
+          uv tree > dependency-tree.txt
+
+      - name: Upload dependency information
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-analysis
+          path: |
+            dependency-tree.txt
+            uv.lock
+
+  final-status:
+    name: CI Status
+    runs-on: ubuntu-latest
+    needs: [lint-and-format, security-scan, complexity-analysis, test-matrix, build-package, validate-dependencies]
+    if: always()
+    steps:
+      - name: Check CI Status
+        run: |
+          if [[ "${{ needs.lint-and-format.result }}" == "success" && \
+                "${{ needs.security-scan.result }}" == "success" && \
+                "${{ needs.complexity-analysis.result }}" == "success" && \
+                "${{ needs.test-matrix.result }}" == "success" && \
+                "${{ needs.build-package.result }}" == "success" && \
+                "${{ needs.validate-dependencies.result }}" == "success" ]]; then
+            echo "✅ All CI checks passed!"
+            exit 0
+          else
+            echo "❌ Some CI checks failed!"
+            echo "Lint and Format: ${{ needs.lint-and-format.result }}"
+            echo "Security Scan: ${{ needs.security-scan.result }}"
+            echo "Complexity Analysis: ${{ needs.complexity-analysis.result }}"
+            echo "Test Matrix: ${{ needs.test-matrix.result }}"
+            echo "Build Package: ${{ needs.build-package.result }}"
+            echo "Validate Dependencies: ${{ needs.validate-dependencies.result }}"
+            exit 1
+          fi
+

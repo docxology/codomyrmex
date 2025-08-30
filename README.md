@@ -42,7 +42,7 @@ python example_usage.py
 Or try individual modules:
 ```python
 # Example: Use data visualization
-from codomyrmex.code.data_visualization import create_line_plot
+from codomyrmex.data_visualization import create_line_plot
 import numpy as np
 
 x = np.linspace(0, 10, 100)
@@ -91,25 +91,119 @@ create_line_plot(x, y, title="Sample Plot", output_path="plot.png")
 | [`model_context_protocol/`](./model_context_protocol/) | Defines the schema and protocols for interacting with Large Language Models (LLMs).                |
 | [`environment_setup/`](./environment_setup/) | Provides scripts and documentation for setting up local and CI/CD development environments.          |
 
+## 🚀 Quick Start & Examples
+
+### **Hands-On Learning**
+- **[🎮 Interactive Examples](examples/README.md)** - Executable demonstrations of all capabilities
+- **[⚡ Quick Start Guide](docs/getting-started/quickstart.md)** - Get running in 5 minutes
+- **[📖 Installation Guide](docs/getting-started/installation.md)** - Complete setup instructions
+
+### **Try It Now**
+```bash
+# Run interactive example selector
+cd examples
+./select-example.sh
+
+# Or try a specific demo
+cd examples/basic
+./data-visualization-demo.sh
+```
+
 ## 📚 Documentation & Resources
 
-### **Complete Documentation Suite**
-- **[📖 Full Documentation](src/codomyrmex/documentation/README.md)** - Comprehensive guides, tutorials, and API references
-- **[🏗️ Architecture Overview](src/codomyrmex/documentation/docs/project/architecture.md)** - System design and data flow
-- **[🧪 Testing Strategy](src/codomyrmex/documentation/docs/project/TESTING_STRATEGY.md)** - Quality assurance approach
-- **[🤝 Contributing Guide](src/codomyrmex/documentation/docs/project/contributing.md)** - How to contribute effectively
-- **[🔧 Module Interdependencies](MODULE_RELATIONSHIPS.md)** - How modules work together
-- **[🚀 Quick Start Guide](QUICKSTART.md)** - Get running in 3 minutes
-- **[🔍 Troubleshooting Guide](TROUBLESHOOTING.md)** - Common issues and solutions
+### **📖 Complete Documentation Hub: [docs/](docs/)**
+
+#### **User Journey Map**
+
+```mermaid
+graph TD
+    Start["New User<br/>Discovers Codomyrmex"]
+    
+    ReadMain["Read Main README<br/>Overview & Quick Start"]
+    Install["Install Codomyrmex<br/>docs/getting-started/installation.md"]
+    QuickStart["Try Quick Start<br/>docs/getting-started/quickstart.md"]
+    
+    Decision{What's your<br/>primary goal?}
+    
+    UseModules["Use Existing Modules"]
+    Develop["Contribute/Develop"]
+    Integrate["Integrate with AI/APIs"]
+    
+    %% Use Modules Path
+    ModuleOverview["Module System Overview<br/>docs/modules/overview.md"]
+    APIReference["API Reference<br/>docs/reference/api.md"]
+    Examples["Try Examples<br/>examples/"]
+    
+    %% Development Path
+    DevSetup["Development Setup<br/>docs/development/environment-setup.md"]
+    Architecture["System Architecture<br/>docs/project/architecture.md"]
+    Contributing["Contributing Guide<br/>docs/project/contributing.md"]
+    CreateModule["Create New Module<br/>docs/getting-started/tutorials/creating-a-module.md"]
+    
+    %% Integration Path
+    CLIRef["CLI Reference<br/>docs/reference/cli.md"]
+    MCPTools["MCP Tools<br/>src/codomyrmex/*/MCP_TOOL_SPECIFICATION.md"]
+    
+    %% Advanced Usage
+    Advanced["Advanced Usage<br/>Module Combinations"]
+    Community["Community<br/>Contribution"]
+    
+    Start --> ReadMain
+    ReadMain --> Install
+    Install --> QuickStart
+    QuickStart --> Decision
+    
+    Decision --> UseModules
+    Decision --> Develop
+    Decision --> Integrate
+    
+    UseModules --> ModuleOverview
+    ModuleOverview --> APIReference
+    APIReference --> Examples
+    Examples --> Advanced
+    
+    Develop --> DevSetup
+    DevSetup --> Architecture
+    Architecture --> Contributing
+    Contributing --> CreateModule
+    CreateModule --> Community
+    
+    Integrate --> CLIRef
+    CLIRef --> MCPTools
+    MCPTools --> Advanced
+    
+    Advanced --> Community
+```
+
+#### **🚀 Getting Started**
+- **[Installation Guide](docs/getting-started/installation.md)** - Complete setup instructions
+- **[Quick Start](docs/getting-started/quickstart.md)** - Get running in 5 minutes
+- **[Module Creation Tutorial](docs/getting-started/tutorials/creating-a-module.md)** - Build your own module
+
+#### **🏗️ System Understanding**
+- **[Architecture Overview](docs/project/architecture.md)** - System design and data flow
+- **[Module System](docs/modules/overview.md)** - Understanding the modular architecture
+- **[Module Relationships](docs/modules/relationships.md)** - How modules work together
+
+#### **🔧 Development**
+- **[Contributing Guide](docs/project/contributing.md)** - How to contribute effectively
+- **[Development Setup](docs/development/environment-setup.md)** - Development environment
+- **[Documentation Guidelines](docs/development/documentation.md)** - Writing and maintaining docs
+
+#### **📚 Reference**
+- **[Complete API Reference](docs/reference/api-complete.md)** - **ACCURATE** API with real function signatures
+- **[API Index](docs/reference/api.md)** - Quick API overview with source links  
+- **[CLI Reference](docs/reference/cli.md)** - Complete command-line documentation
+- **[Troubleshooting Guide](docs/reference/troubleshooting.md)** - Common issues and solutions
 
 ### **Module-Specific Documentation**
 | Module | Documentation | API Reference | Tutorials |
 |--------|---------------|---------------|-----------|
-| **AI Code Editing** | [📚 Docs](src/codomyrmex/documentation/docs/modules/ai_code_editing/) | [🔌 API](src/codomyrmex/documentation/docs/modules/ai_code_editing/api_specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/ai_code_editing/docs/tutorials/) |
-| **Data Visualization** | [📚 Docs](src/codomyrmex/documentation/docs/modules/data_visualization/) | [🔌 API](src/codomyrmex/documentation/docs/modules/data_visualization/api_specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/data_visualization/docs/tutorials/) |
-| **Code Execution** | [📚 Docs](src/codomyrmex/documentation/docs/modules/code_execution_sandbox/) | [🔌 API](src/codomyrmex/documentation/docs/modules/code_execution_sandbox/api_specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/code_execution_sandbox/docs/tutorials/) |
-| **Pattern Matching** | [📚 Docs](src/codomyrmex/documentation/docs/modules/pattern_matching/) | [🔌 API](src/codomyrmex/documentation/docs/modules/pattern_matching/pattern-matching-api-specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/pattern_matching/docs/tutorials/) |
-| **Static Analysis** | [📚 Docs](src/codomyrmex/documentation/docs/modules/static_analysis/) | [🔌 API](src/codomyrmex/documentation/docs/modules/static_analysis/api_specification.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/modules/static_analysis/docs/tutorials/) |
+| **AI Code Editing** | [📚 Docs](src/codomyrmex/ai_code_editing/README.md) | [🔌 API](src/codomyrmex/ai_code_editing/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/ai_code_editing/docs/tutorials/) |
+| **Data Visualization** | [📚 Docs](src/codomyrmex/data_visualization/README.md) | [🔌 API](src/codomyrmex/data_visualization/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/data_visualization/docs/tutorials/) |
+| **Code Execution** | [📚 Docs](src/codomyrmex/code_execution_sandbox/README.md) | [🔌 API](src/codomyrmex/code_execution_sandbox/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/code_execution_sandbox/docs/tutorials/) |
+| **Pattern Matching** | [📚 Docs](src/codomyrmex/pattern_matching/README.md) | [🔌 API](src/codomyrmex/pattern_matching/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/pattern_matching/docs/tutorials/) |
+| **Static Analysis** | [📚 Docs](src/codomyrmex/static_analysis/README.md) | [🔌 API](src/codomyrmex/static_analysis/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/static_analysis/docs/tutorials/) |
 
 ## Getting Started: Development Environment Setup
 
@@ -180,15 +274,15 @@ This section outlines the general steps to set up the development environment fo
 
 6.  **Setup for the `documentation` Module (Docusaurus):**
     The project documentation website is built using Docusaurus.
-    -   Navigate to the `documentation` directory: `cd documentation`
+    -   Navigate to the documentation module: `cd src/codomyrmex/documentation`
     -   Install Node.js dependencies: `npm install` (or `yarn install`)
-    -   Refer to `documentation/README.md` for commands to run the dev server or build the site.
+    -   Refer to `src/codomyrmex/documentation/README.md` for commands to run the dev server or build the site.
 
 7.  **Helper Scripts (Optional from `environment_setup` module):**
-    The [`environment_setup/scripts/`](./environment_setup/scripts/) directory contains helper scripts:
-    -   `setup_dev_env.sh`: Automates several initial setup steps like Python version check, virtual environment creation, and dependency installation. Run it from the project root: `bash environment_setup/scripts/setup_dev_env.sh`.
-    -   `install_hooks.sh`: Sets up Git hooks (e.g., pre-commit) by symlinking them from `scripts/git-hooks/` to your local `.git/hooks/` directory. Run it from the project root: `bash environment_setup/scripts/install_hooks.sh`. Customize the hooks in `scripts/git-hooks/` as needed.
-    For more details on these scripts and other environment checks, see the [`environment_setup/README.md`](./environment_setup/README.md).
+    The [`src/codomyrmex/environment_setup/scripts/`](./src/codomyrmex/environment_setup/scripts/) directory contains helper scripts:
+    -   `setup_dev_env.sh`: Automates several initial setup steps like Python version check, virtual environment creation, and dependency installation. Run it from the project root: `bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh`.
+    -   `install_hooks.sh`: Sets up Git hooks (e.g., pre-commit) by symlinking them from `scripts/git-hooks/` to your local `.git/hooks/` directory. Run it from the project root: `bash src/codomyrmex/environment_setup/scripts/install_hooks.sh`. Customize the hooks in `scripts/git-hooks/` as needed.
+    For more details on these scripts and other environment checks, see the [`src/codomyrmex/environment_setup/README.md`](./src/codomyrmex/environment_setup/README.md).
 
 8.  **Running Linters and Tests (General Project):**
     To ensure code quality and correctness across the project:

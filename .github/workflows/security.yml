@@ -1,0 +1,561 @@
+name: Security Scanning and Dependency Management
+
+on:
+  schedule:
+    # Run security scans daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'pyproject.toml'
+      - 'requirements.txt'
+      - 'uv.lock'
+      - '.github/workflows/security.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'pyproject.toml'
+      - 'requirements.txt'
+      - 'uv.lock'
+      - '.github/workflows/security.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_VERSION: "0.4.18"
+
+jobs:
+  dependency-scan:
+    name: Dependency Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Generate dependency tree
+        run: |
+          echo "📋 Generating dependency tree..."
+          uv tree > dependency-tree.txt
+          
+          echo "## Current Dependencies" >> security-report.md
+          echo '```' >> security-report.md
+          cat dependency-tree.txt >> security-report.md
+          echo '```' >> security-report.md
+
+      - name: Run pip-audit for vulnerability scanning
+        continue-on-error: true
+        run: |
+          echo "🔍 Running pip-audit for vulnerability scanning..."
+          pip install pip-audit
+          
+          # Generate vulnerability report
+          pip-audit --format=json --output=vulnerability-report.json || true
+          pip-audit --format=markdown --output=vulnerability-report.md || true
+          
+          # Add to security report
+          echo "" >> security-report.md
+          echo "## Vulnerability Scan Results" >> security-report.md
+          if [ -f "vulnerability-report.md" ]; then
+            cat vulnerability-report.md >> security-report.md
+          else
+            echo "No vulnerabilities found or scan failed" >> security-report.md
+          fi
+
+      - name: Run Safety vulnerability scanner
+        continue-on-error: true
+        run: |
+          echo "🛡️  Running Safety vulnerability scanner..."
+          pip install safety
+          
+          # Generate safety report
+          safety check --json --output safety-report.json || true
+          safety check --output safety-report.txt || true
+          
+          # Add to security report
+          echo "" >> security-report.md
+          echo "## Safety Scan Results" >> security-report.md
+          echo '```' >> security-report.md
+          if [ -f "safety-report.txt" ]; then
+            head -50 safety-report.txt >> security-report.md
+          else
+            echo "Safety scan completed - check artifacts for full results" >> security-report.md
+          fi
+          echo '```' >> security-report.md
+
+      - name: Upload security artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-scan-results
+          path: |
+            dependency-tree.txt
+            vulnerability-report.json
+            vulnerability-report.md
+            safety-report.json
+            safety-report.txt
+            security-report.md
+
+  bandit-scan:
+    name: Static Security Analysis (Bandit)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Run Bandit security scan
+        run: |
+          echo "🔒 Running Bandit security analysis..."
+          
+          # Run Bandit with different output formats
+          uv run bandit -r src/codomyrmex/ -f json -o bandit-report.json || true
+          uv run bandit -r src/codomyrmex/ -f txt -o bandit-report.txt || true
+          uv run bandit -r src/codomyrmex/ -f xml -o bandit-report.xml || true
+          
+          # Create human-readable summary
+          echo "# Bandit Security Analysis Report" > bandit-summary.md
+          echo "" >> bandit-summary.md
+          echo "Generated on: $(date)" >> bandit-summary.md
+          echo "" >> bandit-summary.md
+          
+          if [ -f "bandit-report.txt" ]; then
+            echo "## Summary" >> bandit-summary.md
+            echo '```' >> bandit-summary.md
+            head -20 bandit-report.txt >> bandit-summary.md
+            echo '```' >> bandit-summary.md
+            
+            # Extract key metrics
+            echo "" >> bandit-summary.md
+            echo "## Key Metrics" >> bandit-summary.md
+            grep -i "total lines of code" bandit-report.txt >> bandit-summary.md || true
+            grep -i "total issues" bandit-report.txt >> bandit-summary.md || true
+          fi
+
+      - name: Upload Bandit results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        continue-on-error: true
+        with:
+          sarif_file: bandit-results.sarif
+        env:
+          # Convert Bandit XML to SARIF format (requires additional tooling)
+          BANDIT_XML_FILE: bandit-report.xml
+
+      - name: Upload Bandit artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-scan-results
+          path: |
+            bandit-report.json
+            bandit-report.txt
+            bandit-report.xml
+            bandit-summary.md
+
+  semgrep-scan:
+    name: Static Security Analysis (Semgrep)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/python
+          generateSarif: "1"
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+  codeql-analysis:
+    name: CodeQL Security Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['python']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  license-scan:
+    name: License Compliance Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Install license analysis tools
+        run: |
+          pip install pip-licenses licensecheck
+
+      - name: Generate license report
+        run: |
+          echo "📄 Generating license compliance report..."
+          
+          # Generate pip-licenses report
+          pip-licenses --format=markdown --output-file=licenses-pip.md || true
+          pip-licenses --format=json --output-file=licenses.json || true
+          
+          # Create comprehensive license report
+          echo "# License Compliance Report" > license-report.md
+          echo "" >> license-report.md
+          echo "Generated on: $(date)" >> license-report.md
+          echo "" >> license-report.md
+          echo "## Dependencies and Their Licenses" >> license-report.md
+          
+          if [ -f "licenses-pip.md" ]; then
+            cat licenses-pip.md >> license-report.md
+          fi
+          
+          echo "" >> license-report.md
+          echo "## License Summary" >> license-report.md
+          
+          # Count licenses by type
+          if [ -f "licenses.json" ]; then
+            echo "License distribution:" >> license-report.md
+            echo '```' >> license-report.md
+            echo "Processing license data..." >> license-report.md
+            echo '```' >> license-report.md
+          fi
+
+      - name: Check for problematic licenses
+        run: |
+          echo "🔍 Checking for potentially problematic licenses..."
+          
+          # Define problematic licenses
+          PROBLEMATIC_LICENSES=("GPL" "AGPL" "LGPL" "Copyleft")
+          
+          if [ -f "licenses.json" ]; then
+            for license in "${PROBLEMATIC_LICENSES[@]}"; do
+              if grep -i "$license" licenses.json > /dev/null; then
+                echo "⚠️  WARNING: Found potentially problematic license: $license"
+                grep -i "$license" licenses.json || true
+              fi
+            done
+          fi
+
+      - name: Upload license reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-scan-results
+          path: |
+            licenses.json
+            licenses-pip.md
+            license-report.md
+
+  secret-scan:
+    name: Secret Detection
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: main
+          head: HEAD
+          extra_args: --debug --only-verified
+
+  dependency-update:
+    name: Automated Dependency Updates
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Check for dependency updates
+        id: check_updates
+        run: |
+          echo "🔄 Checking for dependency updates..."
+          
+          # Backup current lock file
+          cp uv.lock uv.lock.backup
+          
+          # Update dependencies
+          uv sync --upgrade
+          
+          # Check if there are changes
+          if ! diff -q uv.lock uv.lock.backup > /dev/null; then
+            echo "updates_available=true" >> $GITHUB_OUTPUT
+            echo "📦 Dependencies have been updated"
+            
+            # Generate update summary
+            echo "# Dependency Updates" > dependency-updates.md
+            echo "" >> dependency-updates.md
+            echo "The following dependencies have been updated:" >> dependency-updates.md
+            echo "" >> dependency-updates.md
+            echo '```' >> dependency-updates.md
+            # This would need more sophisticated diffing for a proper summary
+            echo "Lock file updated - check diff for details" >> dependency-updates.md
+            echo '```' >> dependency-updates.md
+          else
+            echo "updates_available=false" >> $GITHUB_OUTPUT
+            echo "📦 No dependency updates available"
+          fi
+
+      - name: Run tests with updated dependencies
+        if: steps.check_updates.outputs.updates_available == 'true'
+        run: |
+          echo "🧪 Running tests with updated dependencies..."
+          uv run pytest testing/unit/ -v --tb=short --maxfail=5
+
+      - name: Create Pull Request
+        if: steps.check_updates.outputs.updates_available == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update dependencies"
+          title: "🔄 Automated dependency updates"
+          body: |
+            ## Automated Dependency Updates
+            
+            This PR contains automated updates to project dependencies.
+            
+            ### Changes
+            - Updated `uv.lock` with latest compatible versions
+            - All tests have been run with the updated dependencies
+            
+            ### Review Checklist
+            - [ ] Review the dependency changes
+            - [ ] Ensure all tests pass
+            - [ ] Check for any breaking changes in updated packages
+            - [ ] Verify security scan results
+            
+            This PR was automatically created by the security workflow.
+          branch: automated-dependency-updates
+          base: main
+          labels: |
+            dependencies
+            automated
+            security
+
+  security-report:
+    name: Generate Security Report
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, bandit-scan, license-scan]
+    if: always()
+    steps:
+      - name: Download all security artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./security-artifacts
+
+      - name: Generate comprehensive security report
+        run: |
+          echo "# 🔒 Comprehensive Security Report" > comprehensive-security-report.md
+          echo "" >> comprehensive-security-report.md
+          echo "Generated on: $(date)" >> comprehensive-security-report.md
+          echo "Repository: ${{ github.repository }}" >> comprehensive-security-report.md
+          echo "Commit: ${{ github.sha }}" >> comprehensive-security-report.md
+          echo "" >> comprehensive-security-report.md
+          
+          echo "## Summary" >> comprehensive-security-report.md
+          echo "" >> comprehensive-security-report.md
+          
+          # Dependency scan results
+          if [ -f "security-artifacts/security-scan-results/security-report.md" ]; then
+            echo "### Dependency Security" >> comprehensive-security-report.md
+            cat security-artifacts/security-scan-results/security-report.md >> comprehensive-security-report.md
+            echo "" >> comprehensive-security-report.md
+          fi
+          
+          # Bandit results
+          if [ -f "security-artifacts/bandit-scan-results/bandit-summary.md" ]; then
+            echo "### Static Security Analysis (Bandit)" >> comprehensive-security-report.md
+            cat security-artifacts/bandit-scan-results/bandit-summary.md >> comprehensive-security-report.md
+            echo "" >> comprehensive-security-report.md
+          fi
+          
+          # License results
+          if [ -f "security-artifacts/license-scan-results/license-report.md" ]; then
+            echo "### License Compliance" >> comprehensive-security-report.md
+            cat security-artifacts/license-scan-results/license-report.md >> comprehensive-security-report.md
+            echo "" >> comprehensive-security-report.md
+          fi
+          
+          echo "## Recommendations" >> comprehensive-security-report.md
+          echo "" >> comprehensive-security-report.md
+          echo "1. Review all HIGH and MEDIUM severity vulnerabilities" >> comprehensive-security-report.md
+          echo "2. Update dependencies with known security issues" >> comprehensive-security-report.md
+          echo "3. Address any Bandit security warnings" >> comprehensive-security-report.md
+          echo "4. Ensure license compliance for all dependencies" >> comprehensive-security-report.md
+          echo "5. Review and rotate any exposed secrets" >> comprehensive-security-report.md
+
+      - name: Upload comprehensive security report
+        uses: actions/upload-artifact@v4
+        with:
+          name: comprehensive-security-report
+          path: comprehensive-security-report.md
+
+      - name: Post security summary to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            if (fs.existsSync('comprehensive-security-report.md')) {
+              const report = fs.readFileSync('comprehensive-security-report.md', 'utf8');
+              
+              // Truncate if too long for PR comment
+              const maxLength = 65000;
+              const summary = report.length > maxLength 
+                ? report.substring(0, maxLength) + '\n\n... (truncated, see artifacts for full report)'
+                : report;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## 🔒 Security Scan Results\n\n${summary}`
+              });
+            }
+
+  security-status:
+    name: Security Status
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, bandit-scan, semgrep-scan, codeql-analysis, license-scan, secret-scan]
+    if: always()
+    steps:
+      - name: Generate Security Status Summary
+        run: |
+          echo "# 🛡️  Security Workflow Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository**: ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.dependency-scan.result }}" == "success" ]]; then
+            echo "✅ **Dependency Scan**: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Dependency Scan**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.bandit-scan.result }}" == "success" ]]; then
+            echo "✅ **Bandit Security Analysis**: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Bandit Security Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.semgrep-scan.result }}" == "success" ]]; then
+            echo "✅ **Semgrep Analysis**: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Semgrep Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.codeql-analysis.result }}" == "success" ]]; then
+            echo "✅ **CodeQL Analysis**: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **CodeQL Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.license-scan.result }}" == "success" ]]; then
+            echo "✅ **License Compliance**: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **License Compliance**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.secret-scan.result }}" == "success" ]]; then
+            echo "✅ **Secret Detection**: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Secret Detection**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi

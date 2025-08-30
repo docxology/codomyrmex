@@ -1,4 +1,16 @@
+# ⚠️ MOVED: Quick Start Guide
+
+**This file has been moved to improve documentation organization.**
+
+**👉 New Location: [docs/getting-started/quickstart.md](docs/getting-started/quickstart.md)**
+
+This file will be removed in a future version. Please update any bookmarks or references.
+
+---
+
 # 🚀 Codomyrmex Quick Start Guide
+
+**Note**: This content has moved to [docs/getting-started/quickstart.md](docs/getting-started/quickstart.md)
 
 Get up and running with Codomyrmex in **3 minutes** or less!
 

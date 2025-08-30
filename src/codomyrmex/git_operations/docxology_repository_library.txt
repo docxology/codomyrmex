@@ -1,0 +1,157 @@
+# Docxology Repository Library - REAL GITHUB REPOSITORIES
+# Generated from GitHub API: https://api.github.com/users/docxology/repos
+# Format: TYPE|OWNER|REPO_NAME|URL|DESCRIPTION|LOCAL_PATH_SUGGESTION
+
+# =============================================================================
+# DOCXOLOGY ORIGINAL REPOSITORIES (Development/Contribution) - 30 repositories
+# =============================================================================
+
+# Core Projects
+OWN|docxology|docxology|https://github.com/docxology/docxology.git|Main docxology repository|docxology/docxology
+OWN|docxology|codomyrmex|https://github.com/docxology/codomyrmex.git|Codomyrmex project|docxology/codomyrmex
+OWN|docxology|cognitive|https://github.com/docxology/cognitive.git|Cognitive systems|docxology/cognitive
+OWN|docxology|cognitive-engine|https://github.com/docxology/cognitive-engine.git|Cognitive engine implementation|docxology/cognitive-engine
+OWN|docxology|identity|https://github.com/docxology/identity.git|Identity management system|docxology/identity
+
+# Active Inference & AI Projects
+OWN|docxology|ActiveInferAnts|https://github.com/docxology/ActiveInferAnts.git|Active InferAnts|docxology/ActiveInferAnts
+OWN|docxology|AgenticMesh|https://github.com/docxology/AgenticMesh.git|Active Inference & Agentic Mesh|docxology/AgenticMesh
+OWN|docxology|ant-pheromone|https://github.com/docxology/ant-pheromone.git|Ant pheromone simulation|docxology/ant-pheromone
+OWN|docxology|Autonomous-Drone-Navigation-in-AirSim-With-Active-Inference|https://github.com/docxology/Autonomous-Drone-Navigation-in-AirSim-With-Active-Inference.git|Autonomous drone navigation with Active Inference|docxology/Autonomous-Drone-Navigation-in-AirSim-With-Active-Inference
+OWN|docxology|MetaInformAnt|https://github.com/docxology/MetaInformAnt.git|Integration for Ants and Beyond|docxology/MetaInformAnt
+OWN|docxology|Markov_Blanket_Detection|https://github.com/docxology/Markov_Blanket_Detection.git|Markov blanket detection algorithms|docxology/Markov_Blanket_Detection
+
+# Research & Analysis
+OWN|docxology|FORMINDEX|https://github.com/docxology/FORMINDEX.git|FORMIS analysis|docxology/FORMINDEX
+OWN|docxology|GrowthModel|https://github.com/docxology/GrowthModel.git|Growth modeling system|docxology/GrowthModel
+OWN|docxology|lean_niche|https://github.com/docxology/lean_niche.git|Lean niche analysis|docxology/lean_niche
+
+# Utilities & Tools
+OWN|docxology|cascadia|https://github.com/docxology/cascadia.git|Cascadia project|docxology/cascadia
+OWN|docxology|flick|https://github.com/docxology/flick.git|Flick utility|docxology/flick
+OWN|docxology|fuller-obsidian|https://github.com/docxology/fuller-obsidian.git|Fuller Obsidian integration|docxology/fuller-obsidian
+OWN|docxology|infra-calc|https://github.com/docxology/infra-calc.git|Infrastructure calculator|docxology/infra-calc
+OWN|docxology|ivm-xyz|https://github.com/docxology/ivm-xyz.git|Package for working with 3D and 4D geometries|docxology/ivm-xyz
+OWN|docxology|mdkv|https://github.com/docxology/mdkv.git|MKV-like format and methods for Markdown|docxology/mdkv
+
+# Additional Original Projects
+OWN|docxology|Nockma|https://github.com/docxology/Nockma.git|Nockma implementation|docxology/Nockma
+OWN|docxology|obsidian-ai-research-assistant|https://github.com/docxology/obsidian-ai-research-assistant.git|AI research assistant for Obsidian|docxology/obsidian-ai-research-assistant
+OWN|docxology|obsidian-textgenerator-plugin|https://github.com/docxology/obsidian-textgenerator-plugin.git|Text generator plugin for Obsidian|docxology/obsidian-textgenerator-plugin
+OWN|docxology|OntoUML-Lightweight-Editor|https://github.com/docxology/OntoUML-Lightweight-Editor.git|Lightweight OntoUML editor|docxology/OntoUML-Lightweight-Editor
+OWN|docxology|OpenAI-Assistants-API-Course|https://github.com/docxology/OpenAI-Assistants-API-Course.git|OpenAI Assistants API course materials|docxology/OpenAI-Assistants-API-Course
+OWN|docxology|OpenCog-Unity3D-Game|https://github.com/docxology/OpenCog-Unity3D-Game.git|OpenCog Unity3D game integration|docxology/OpenCog-Unity3D-Game
+OWN|docxology|pymdeus|https://github.com/docxology/pymdeus.git|Python Markdown extension utilities|docxology/pymdeus
+OWN|docxology|RxInfer-Workshop|https://github.com/docxology/RxInfer-Workshop.git|RxInfer workshop materials|docxology/RxInfer-Workshop
+OWN|docxology|ScienceCommunicator|https://github.com/docxology/ScienceCommunicator.git|Science communication tools|docxology/ScienceCommunicator
+OWN|docxology|Tensegrity|https://github.com/docxology/Tensegrity.git|Tensegrity structure analysis|docxology/Tensegrity
+OWN|docxology|textbook|https://github.com/docxology/textbook.git|Textbook project|docxology/textbook
+
+# =============================================================================
+# INTERESTING FORKED REPOSITORIES (For Contribution/Study) - Key Forks
+# =============================================================================
+
+# Active Inference & AI Forks
+FORK|docxology|ActiveACO|https://github.com/docxology/ActiveACO.git|Augmenting Ant Colony Optimization with Active Inference|forks/ActiveACO
+FORK|docxology|ActiveInferAnts_Fork|https://github.com/docxology/ActiveInferAnts_Fork.git|Active Inference models of/for Ants|forks/ActiveInferAnts_Fork
+FORK|docxology|ActiveInference.jl|https://github.com/docxology/ActiveInference.jl.git|A Julia Package for Active Inference|forks/ActiveInference.jl
+FORK|docxology|aif-fep-db|https://github.com/docxology/aif-fep-db.git|Database of publications related to active inference and the free energy principle|forks/aif-fep-db
+FORK|docxology|AIF_for_CC|https://github.com/docxology/AIF_for_CC.git|Active Inference for Cognitive Control|forks/AIF_for_CC
+
+# Agent & AI Tool Forks
+FORK|docxology|agentic-cursorrules|https://github.com/docxology/agentic-cursorrules.git|Managing multiple AI agents in Cursor through strict file-tree partitioning|forks/agentic-cursorrules
+FORK|docxology|AgentLaboratory|https://github.com/docxology/AgentLaboratory.git|End-to-end autonomous research workflow|forks/AgentLaboratory
+FORK|docxology|Auto-GPT|https://github.com/docxology/Auto-GPT.git|Experimental open-source attempt to make GPT-4 fully autonomous|forks/Auto-GPT
+FORK|docxology|claude-squad|https://github.com/docxology/claude-squad.git|Manage multiple AI agents like Claude Code and Aider|forks/claude-squad
+FORK|docxology|claude-task-master|https://github.com/docxology/claude-task-master.git|AI-powered task-management system for Cursor, Lovable, Windsurf|forks/claude-task-master
+FORK|docxology|eliza|https://github.com/docxology/eliza.git|Autonomous agents for everyone|forks/eliza
+FORK|docxology|fabric|https://github.com/docxology/fabric.git|Open-source framework for augmenting humans using AI|forks/fabric
+FORK|docxology|gpt-engineer|https://github.com/docxology/gpt-engineer.git|Specify what you want it to build, the AI asks for clarification, and then builds it|forks/gpt-engineer
+FORK|docxology|gpt-researcher|https://github.com/docxology/gpt-researcher.git|GPT based autonomous agent that does online comprehensive research|forks/gpt-researcher
+FORK|docxology|GPTeam|https://github.com/docxology/GPTeam.git|GPTeam uses GPT-4 to create multiple agents who collaborate|forks/GPTeam
+FORK|docxology|maestro|https://github.com/docxology/maestro.git|Framework for Claude Opus to intelligently orchestrate subagents|forks/maestro
+
+# Development & Productivity Tools
+FORK|docxology|buzz|https://github.com/docxology/buzz.git|Buzz transcribes and translates audio offline using OpenAI's Whisper|forks/buzz
+FORK|docxology|firecrawl|https://github.com/docxology/firecrawl.git|Turn entire websites into LLM-ready markdown or structured data|forks/firecrawl
+FORK|docxology|foam|https://github.com/docxology/foam.git|Personal knowledge management and sharing system for VSCode|forks/foam
+FORK|docxology|KnowledgeBase|https://github.com/docxology/KnowledgeBase.git|Never forget anything again! AI and intelligent tooling for local knowledge base|forks/KnowledgeBase
+FORK|docxology|memvid|https://github.com/docxology/memvid.git|Video-based AI memory library with lightning-fast semantic search|forks/memvid
+
+# Scientific & Mathematical Tools
+FORK|docxology|cadCAD|https://github.com/docxology/cadCAD.git|Design, simulate, validate, and operate within complex systems|forks/cadCAD
+FORK|docxology|manim|https://github.com/docxology/manim.git|Community-maintained Python framework for creating mathematical animations|forks/manim
+FORK|docxology|iheartla|https://github.com/docxology/iheartla.git|Compilable markdown for linear algebra|forks/iheartla
+
+# Research & Learning Resources
+FORK|docxology|formal-conjectures|https://github.com/docxology/formal-conjectures.git|Collection of formalized statements of conjectures in Lean|forks/formal-conjectures
+FORK|docxology|Journal-Utilities|https://github.com/docxology/Journal-Utilities.git|Utilities for creating contents for the Active Inference Journal|forks/Journal-Utilities
+FORK|docxology|Mr.-Ranedeer-AI-Tutor|https://github.com/docxology/Mr.-Ranedeer-AI-Tutor.git|GPT-4 AI Tutor Prompt for customizable personalized learning|forks/Mr.-Ranedeer-AI-Tutor
+
+# =============================================================================
+# EXTERNAL REPOSITORIES (Usage Only) - Essential Tools & Libraries
+# =============================================================================
+
+# AI/ML Libraries
+USE|openai|openai-python|https://github.com/openai/openai-python.git|Official OpenAI Python library|external/openai-python
+USE|anthropic-ai|anthropic-sdk-python|https://github.com/anthropic-ai/anthropic-sdk-python.git|Anthropic Claude SDK|external/anthropic-sdk-python
+USE|huggingface|transformers|https://github.com/huggingface/transformers.git|Transformers library for NLP|external/transformers
+USE|langchain-ai|langchain|https://github.com/langchain-ai/langchain.git|LangChain framework|external/langchain
+
+# Development Tools
+USE|microsoft|vscode|https://github.com/microsoft/vscode.git|Visual Studio Code|external/vscode
+USE|git|git|https://github.com/git/git.git|Git source code|external/git
+USE|python|cpython|https://github.com/python/cpython.git|Python source code|external/cpython
+
+# Web Frameworks
+USE|fastapi|fastapi|https://github.com/fastapi/fastapi.git|FastAPI web framework|external/fastapi
+USE|pallets|flask|https://github.com/pallets/flask.git|Flask web framework|external/flask
+USE|django|django|https://github.com/django/django.git|Django web framework|external/django
+
+# Data Science
+USE|pandas-dev|pandas|https://github.com/pandas-dev/pandas.git|Pandas data analysis library|external/pandas
+USE|numpy|numpy|https://github.com/numpy/numpy.git|NumPy numerical computing|external/numpy
+USE|matplotlib|matplotlib|https://github.com/matplotlib/matplotlib.git|Matplotlib plotting library|external/matplotlib
+USE|scikit-learn|scikit-learn|https://github.com/scikit-learn/scikit-learn.git|Scikit-learn ML library|external/scikit-learn
+
+# Testing and Quality
+USE|pytest-dev|pytest|https://github.com/pytest-dev/pytest.git|Pytest testing framework|external/pytest
+USE|PyCQA|black|https://github.com/PyCQA/black.git|Black code formatter|external/black
+USE|PyCQA|flake8|https://github.com/PyCQA/flake8.git|Flake8 linter|external/flake8
+
+# Documentation Tools
+USE|mkdocs|mkdocs|https://github.com/mkdocs/mkdocs.git|MkDocs documentation generator|external/mkdocs
+USE|sphinx-doc|sphinx|https://github.com/sphinx-doc/sphinx.git|Sphinx documentation|external/sphinx
+
+# Research and Reference
+USE|papers-we-love|papers-we-love|https://github.com/papers-we-love/papers-we-love.git|Computer science papers|research/papers-we-love
+USE|donnemartin|system-design-primer|https://github.com/donnemartin/system-design-primer.git|System design guide|research/system-design-primer
+USE|sindresorhus|awesome|https://github.com/sindresorhus/awesome.git|Awesome lists|reference/awesome
+USE|vinta|awesome-python|https://github.com/vinta/awesome-python.git|Awesome Python resources|reference/awesome-python
+
+# =============================================================================
+# CONFIGURATION NOTES
+# =============================================================================
+
+# Repository Types:
+# - OWN: Your original repositories for development, commits, PRs, issues
+# - FORK: Your forked repositories for potential contributions
+# - USE: External repositories for reference/usage, typically read-only
+#
+# Local Path Suggestions:
+# - docxology/*: Your original projects
+# - forks/*: Your forked repositories
+# - external/*: External libraries and tools
+# - research/*: Research and reference materials
+# - reference/*: Documentation and awesome lists
+#
+# Total Repositories: ~80 (30 original + ~25 key forks + ~25 external)
+#
+# Usage with Git Operations:
+# - Use clone_repository() for initial setup
+# - Use pull_changes() for updates on USE repositories
+# - Use full Git workflow (branch, commit, push) for OWN repositories
+# - Use fork workflow for FORK repositories (upstream sync, PR creation)
+#
+# Generated: $(date)
+# Source: GitHub API for user 'docxology'

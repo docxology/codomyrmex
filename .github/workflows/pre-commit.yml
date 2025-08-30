@@ -1,0 +1,394 @@
+name: Pre-commit Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_VERSION: "0.4.18"
+
+jobs:
+  pre-commit:
+    name: Pre-commit Hooks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Cache pre-commit hooks
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ env.PYTHON_VERSION }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-${{ env.PYTHON_VERSION }}-
+
+      - name: Install pre-commit
+        run: |
+          pip install pre-commit
+
+      - name: Install pre-commit hooks
+        run: |
+          if [ -f ".pre-commit-config.yaml" ]; then
+            pre-commit install
+            echo "✅ Pre-commit hooks installed"
+          else
+            echo "⚠️  No .pre-commit-config.yaml found, creating basic configuration..."
+            cat > .pre-commit-config.yaml << 'EOF'
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: pretty-format-json
+        args: ['--autofix']
+      - id: check-added-large-files
+      - id: check-docstring-first
+
+  - repo: https://github.com/psf/black
+    rev: '23.12.1'
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: 'v0.1.9'
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.8.0'
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-requests]
+        args: [--ignore-missing-imports]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: '1.7.5'
+    hooks:
+      - id: bandit
+        args: ['-c', 'pyproject.toml']
+
+  - repo: https://github.com/python-poetry/poetry
+    rev: '1.7.1'
+    hooks:
+      - id: poetry-check
+
+  - repo: local
+    hooks:
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
+        args: [testing/unit/, --tb=short, --maxfail=1, -q]
+EOL
+            pre-commit install
+            echo "✅ Basic pre-commit configuration created and hooks installed"
+          fi
+
+      - name: Run pre-commit on all files
+        run: |
+          echo "🔍 Running pre-commit hooks on all files..."
+          pre-commit run --all-files --show-diff-on-failure
+
+  commit-message-check:
+    name: Commit Message Validation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        run: |
+          echo "📝 Validating commit messages..."
+          
+          # Get commits in this PR
+          commits=$(git log --format="%H %s" origin/main..HEAD)
+          
+          if [ -z "$commits" ]; then
+            echo "No commits to validate"
+            exit 0
+          fi
+          
+          # Conventional commit pattern
+          # Type(scope): description
+          # where type can be: feat, fix, docs, style, refactor, test, chore, ci, build, perf
+          pattern="^(feat|fix|docs|style|refactor|test|chore|ci|build|perf)(\(.+\))?: .{1,72}$"
+          
+          invalid_commits=()
+          
+          echo "$commits" | while IFS= read -r line; do
+            commit_hash=$(echo "$line" | cut -d' ' -f1)
+            commit_msg=$(echo "$line" | cut -d' ' -f2-)
+            
+            if ! echo "$commit_msg" | grep -qE "$pattern"; then
+              echo "❌ Invalid commit message: $commit_msg"
+              echo "   Commit: $commit_hash"
+              echo "   Expected format: type(scope): description"
+              echo "   Valid types: feat, fix, docs, style, refactor, test, chore, ci, build, perf"
+              invalid_commits+=("$commit_hash")
+            else
+              echo "✅ Valid commit message: $commit_msg"
+            fi
+          done
+          
+          if [ ${#invalid_commits[@]} -gt 0 ]; then
+            echo ""
+            echo "❌ Found ${#invalid_commits[@]} invalid commit message(s)"
+            echo ""
+            echo "Please fix the commit messages to follow the conventional commit format:"
+            echo "  type(scope): description"
+            echo ""
+            echo "Examples:"
+            echo "  feat: add new authentication module"
+            echo "  fix(auth): resolve token validation issue"
+            echo "  docs: update API documentation"
+            echo "  test: add unit tests for user service"
+            echo ""
+            exit 1
+          else
+            echo ""
+            echo "✅ All commit messages are valid!"
+          fi
+
+  file-changes-check:
+    name: File Changes Analysis
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Analyze file changes
+        run: |
+          echo "📊 Analyzing file changes in this PR..."
+          
+          # Get changed files
+          changed_files=$(git diff --name-only origin/main..HEAD)
+          
+          if [ -z "$changed_files" ]; then
+            echo "No files changed"
+            exit 0
+          fi
+          
+          echo "Changed files:"
+          echo "$changed_files"
+          echo ""
+          
+          # Categorize changes
+          source_files=$(echo "$changed_files" | grep -E '\.(py|js|ts|jsx|tsx)$' || true)
+          test_files=$(echo "$changed_files" | grep -E 'test.*\.(py|js|ts)$|.*test\.(py|js|ts)$' || true)
+          config_files=$(echo "$changed_files" | grep -E '\.(yml|yaml|json|toml|cfg|ini|conf)$' || true)
+          doc_files=$(echo "$changed_files" | grep -E '\.(md|rst|txt)$' || true)
+          
+          echo "## Change Analysis" >> change-analysis.md
+          echo "" >> change-analysis.md
+          
+          if [ -n "$source_files" ]; then
+            echo "### Source Code Changes" >> change-analysis.md
+            echo "$source_files" | while read -r file; do
+              echo "- $file" >> change-analysis.md
+            done
+            echo "" >> change-analysis.md
+          fi
+          
+          if [ -n "$test_files" ]; then
+            echo "### Test Changes" >> change-analysis.md
+            echo "$test_files" | while read -r file; do
+              echo "- $file" >> change-analysis.md
+            done
+            echo "" >> change-analysis.md
+          fi
+          
+          if [ -n "$config_files" ]; then
+            echo "### Configuration Changes" >> change-analysis.md
+            echo "$config_files" | while read -r file; do
+              echo "- $file" >> change-analysis.md
+            done
+            echo "" >> change-analysis.md
+          fi
+          
+          if [ -n "$doc_files" ]; then
+            echo "### Documentation Changes" >> change-analysis.md
+            echo "$doc_files" | while read -r file; do
+              echo "- $file" >> change-analysis.md
+            done
+            echo "" >> change-analysis.md
+          fi
+          
+          # Check for important patterns
+          echo "### Analysis" >> change-analysis.md
+          echo "" >> change-analysis.md
+          
+          if echo "$changed_files" | grep -q "pyproject.toml"; then
+            echo "⚠️  **Dependencies changed** - Review dependency updates carefully" >> change-analysis.md
+          fi
+          
+          if echo "$changed_files" | grep -q "\.github/workflows/"; then
+            echo "🔧 **Workflow changes detected** - Test workflows thoroughly" >> change-analysis.md
+          fi
+          
+          if [ -n "$source_files" ] && [ -z "$test_files" ]; then
+            echo "⚠️  **Source code changed without test updates** - Consider adding tests" >> change-analysis.md
+          fi
+          
+          if echo "$changed_files" | grep -q "requirements\.txt"; then
+            echo "📦 **Requirements changed** - Ensure compatibility" >> change-analysis.md
+          fi
+
+      - name: Comment PR with analysis
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            if (fs.existsSync('change-analysis.md')) {
+              const analysis = fs.readFileSync('change-analysis.md', 'utf8');
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## 📊 File Changes Analysis\n\n${analysis}`
+              });
+            }
+
+  size-check:
+    name: PR Size Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR size
+        run: |
+          echo "📏 Checking PR size..."
+          
+          # Get PR stats
+          additions=$(git diff --numstat origin/main..HEAD | awk '{sum += $1} END {print sum}')
+          deletions=$(git diff --numstat origin/main..HEAD | awk '{sum += $2} END {print sum}')
+          changed_files=$(git diff --name-only origin/main..HEAD | wc -l)
+          
+          echo "PR Statistics:"
+          echo "- Files changed: $changed_files"
+          echo "- Lines added: $additions"
+          echo "- Lines deleted: $deletions"
+          echo "- Total changes: $((additions + deletions))"
+          
+          # Set size labels
+          total_changes=$((additions + deletions))
+          
+          if [ $total_changes -lt 10 ]; then
+            size_label="size/XS"
+          elif [ $total_changes -lt 100 ]; then
+            size_label="size/S"
+          elif [ $total_changes -lt 500 ]; then
+            size_label="size/M"
+          elif [ $total_changes -lt 1000 ]; then
+            size_label="size/L"
+          else
+            size_label="size/XL"
+          fi
+          
+          echo "PR Size: $size_label"
+          echo "size_label=$size_label" >> $GITHUB_ENV
+          
+          # Warning for large PRs
+          if [ $total_changes -gt 1000 ]; then
+            echo ""
+            echo "⚠️  **Large PR Warning**"
+            echo "This PR is quite large ($total_changes changes). Consider:"
+            echo "- Breaking it into smaller, focused PRs"
+            echo "- Ensuring comprehensive testing"
+            echo "- Requesting thorough review"
+          fi
+
+  quality-gates:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    needs: [pre-commit, commit-message-check, file-changes-check, size-check]
+    if: always()
+    steps:
+      - name: Check quality gates
+        run: |
+          echo "🚪 Checking quality gates..."
+          
+          # Check if all required checks passed
+          if [[ "${{ needs.pre-commit.result }}" != "success" ]]; then
+            echo "❌ Pre-commit checks failed"
+            exit 1
+          fi
+          
+          if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ needs.commit-message-check.result }}" != "success" ]]; then
+            echo "❌ Commit message validation failed"
+            exit 1
+          fi
+          
+          echo "✅ All quality gates passed!"
+
+      - name: Quality summary
+        run: |
+          echo "# 🏆 Pre-commit Quality Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.pre-commit.result }}" == "success" ]]; then
+            echo "✅ **Pre-commit Hooks**: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Pre-commit Hooks**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            if [[ "${{ needs.commit-message-check.result }}" == "success" ]]; then
+              echo "✅ **Commit Messages**: Valid" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **Commit Messages**: Invalid" >> $GITHUB_STEP_SUMMARY
+            fi
+            
+            if [[ "${{ needs.file-changes-check.result }}" == "success" ]]; then
+              echo "✅ **File Changes**: Analyzed" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **File Changes**: Analysis failed" >> $GITHUB_STEP_SUMMARY
+            fi
+            
+            if [[ "${{ needs.size-check.result }}" == "success" ]]; then
+              echo "✅ **PR Size**: Checked" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **PR Size**: Check failed" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi

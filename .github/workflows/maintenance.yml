@@ -1,0 +1,441 @@
+name: Repository Maintenance
+
+on:
+  schedule:
+    # Run weekly on Sundays at 6 AM UTC
+    - cron: '0 6 * * 0'
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Maintenance task to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - 'all'
+          - 'stale-issues'
+          - 'cleanup'
+          - 'metrics'
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  stale-issues:
+    name: Handle Stale Issues and PRs
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'stale-issues'
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Close stale issues and PRs
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # Issue configuration
+          stale-issue-message: |
+            👋 This issue has been marked as stale because it hasn't had any activity for 60 days.
+            
+            If this issue is still relevant, please:
+            - Add a comment to keep it open
+            - Add the `keep-open` label
+            - Provide additional context or updates
+            
+            This issue will be automatically closed in 7 days if no further activity occurs.
+          
+          close-issue-message: |
+            🔒 This issue has been automatically closed due to inactivity.
+            
+            If you believe this issue should remain open, please:
+            - Reopen the issue
+            - Provide updated context
+            - Add the `keep-open` label to prevent future auto-closure
+            
+            Thank you for your contribution to the Codomyrmex project!
+          
+          # PR configuration
+          stale-pr-message: |
+            👋 This pull request has been marked as stale because it hasn't had any activity for 30 days.
+            
+            If this PR is still relevant, please:
+            - Add a comment to keep it open
+            - Add the `keep-open` label
+            - Rebase on the latest main branch
+            - Address any review comments
+            
+            This PR will be automatically closed in 7 days if no further activity occurs.
+          
+          close-pr-message: |
+            🔒 This pull request has been automatically closed due to inactivity.
+            
+            If you'd like to continue working on this:
+            - Reopen the PR
+            - Rebase on the latest main branch
+            - Add the `keep-open` label to prevent future auto-closure
+            
+            Thank you for your contribution to the Codomyrmex project!
+          
+          # Timing configuration
+          days-before-stale: 60
+          days-before-close: 7
+          days-before-pr-stale: 30
+          days-before-pr-close: 7
+          
+          # Label configuration
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+          exempt-issue-labels: 'keep-open,pinned,security,help-wanted,good-first-issue'
+          exempt-pr-labels: 'keep-open,pinned,security,work-in-progress,wip'
+          
+          # Operation limits
+          operations-per-run: 30
+          remove-stale-when-updated: true
+          
+          # Enable debug output
+          debug-only: false
+
+  cleanup-artifacts:
+    name: Cleanup Old Artifacts
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'cleanup'
+    permissions:
+      actions: write
+    steps:
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 30
+          keep_minimum_runs: 10
+
+  generate-metrics:
+    name: Generate Repository Metrics
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all' || github.event.inputs.task == 'metrics'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate repository metrics
+        run: |
+          echo "📊 Generating repository metrics..."
+          
+          # Basic repository statistics
+          echo "# 📊 Repository Metrics Report" > metrics-report.md
+          echo "" >> metrics-report.md
+          echo "Generated on: $(date)" >> metrics-report.md
+          echo "Repository: ${{ github.repository }}" >> metrics-report.md
+          echo "" >> metrics-report.md
+          
+          # Git statistics
+          echo "## Git Statistics" >> metrics-report.md
+          echo "" >> metrics-report.md
+          echo "- **Total commits**: $(git rev-list --all --count)" >> metrics-report.md
+          echo "- **Total branches**: $(git branch -r | wc -l)" >> metrics-report.md
+          echo "- **Contributors**: $(git log --format='%aN' | sort | uniq | wc -l)" >> metrics-report.md
+          echo "- **First commit**: $(git log --reverse --format='%aD' | head -1)" >> metrics-report.md
+          echo "- **Last commit**: $(git log -1 --format='%aD')" >> metrics-report.md
+          echo "" >> metrics-report.md
+          
+          # Code statistics
+          echo "## Code Statistics" >> metrics-report.md
+          echo "" >> metrics-report.md
+          echo "### Python Files" >> metrics-report.md
+          py_files=$(find . -name "*.py" -not -path "./venv/*" -not -path "./.venv/*" -not -path "*/__pycache__/*" | wc -l)
+          py_lines=$(find . -name "*.py" -not -path "./venv/*" -not -path "./.venv/*" -not -path "*/__pycache__/*" -exec cat {} \; | wc -l)
+          echo "- **Python files**: $py_files" >> metrics-report.md
+          echo "- **Lines of Python code**: $py_lines" >> metrics-report.md
+          echo "" >> metrics-report.md
+          
+          echo "### Test Files" >> metrics-report.md
+          test_files=$(find . -name "test_*.py" -o -name "*_test.py" | wc -l)
+          test_lines=$(find . -name "test_*.py" -o -name "*_test.py" -exec cat {} \; | wc -l 2>/dev/null || echo "0")
+          echo "- **Test files**: $test_files" >> metrics-report.md
+          echo "- **Lines of test code**: $test_lines" >> metrics-report.md
+          echo "" >> metrics-report.md
+          
+          echo "### Documentation Files" >> metrics-report.md
+          doc_files=$(find . -name "*.md" -o -name "*.rst" | wc -l)
+          doc_lines=$(find . -name "*.md" -o -name "*.rst" -exec cat {} \; | wc -l)
+          echo "- **Documentation files**: $doc_files" >> metrics-report.md
+          echo "- **Lines of documentation**: $doc_lines" >> metrics-report.md
+          echo "" >> metrics-report.md
+          
+          # Module statistics
+          echo "## Module Statistics" >> metrics-report.md
+          echo "" >> metrics-report.md
+          if [ -d "src/codomyrmex" ]; then
+            modules=$(find src/codomyrmex -maxdepth 1 -type d -not -path "src/codomyrmex" -not -name "__pycache__" -not -name "output" | wc -l)
+            echo "- **Total modules**: $modules" >> metrics-report.md
+            echo "- **Modules with tests**: $(find src/codomyrmex -name "tests" -type d | wc -l)" >> metrics-report.md
+            echo "- **Modules with documentation**: $(find src/codomyrmex -name "README.md" | wc -l)" >> metrics-report.md
+          fi
+          echo "" >> metrics-report.md
+          
+          # Recent activity
+          echo "## Recent Activity (Last 30 Days)" >> metrics-report.md
+          echo "" >> metrics-report.md
+          commits_30d=$(git log --since="30 days ago" --oneline | wc -l)
+          echo "- **Commits**: $commits_30d" >> metrics-report.md
+          
+          contributors_30d=$(git log --since="30 days ago" --format='%aN' | sort | uniq | wc -l)
+          echo "- **Active contributors**: $contributors_30d" >> metrics-report.md
+          echo "" >> metrics-report.md
+          
+          # Top contributors
+          echo "## Top Contributors (All Time)" >> metrics-report.md
+          echo "" >> metrics-report.md
+          git log --format='%aN' | sort | uniq -c | sort -nr | head -10 | while read -r count name; do
+            echo "- **$name**: $count commits" >> metrics-report.md
+          done
+          echo "" >> metrics-report.md
+          
+          # File type distribution
+          echo "## File Type Distribution" >> metrics-report.md
+          echo "" >> metrics-report.md
+          echo "| Extension | Count | Description |" >> metrics-report.md
+          echo "|-----------|-------|-------------|" >> metrics-report.md
+          
+          for ext in py md json yml yaml toml txt sh js ts; do
+            count=$(find . -name "*.$ext" -not -path "./venv/*" -not -path "./.venv/*" -not -path "*/__pycache__/*" | wc -l)
+            if [ $count -gt 0 ]; then
+              case $ext in
+                py) desc="Python source files" ;;
+                md) desc="Markdown documentation" ;;
+                json) desc="JSON configuration/data" ;;
+                yml|yaml) desc="YAML configuration" ;;
+                toml) desc="TOML configuration" ;;
+                txt) desc="Text files" ;;
+                sh) desc="Shell scripts" ;;
+                js) desc="JavaScript files" ;;
+                ts) desc="TypeScript files" ;;
+                *) desc="Other" ;;
+              esac
+              echo "| .$ext | $count | $desc |" >> metrics-report.md
+            fi
+          done
+          
+          echo "" >> metrics-report.md
+          echo "---" >> metrics-report.md
+          echo "*Report generated by GitHub Actions on $(date)*" >> metrics-report.md
+
+      - name: Upload metrics report
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-metrics
+          path: metrics-report.md
+
+  health-check:
+    name: Repository Health Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.task == 'all'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check repository health
+        run: |
+          echo "🏥 Performing repository health check..."
+          
+          echo "# 🏥 Repository Health Check" > health-report.md
+          echo "" >> health-report.md
+          echo "Generated on: $(date)" >> health-report.md
+          echo "" >> health-report.md
+          
+          # Check for essential files
+          echo "## Essential Files Check" >> health-report.md
+          echo "" >> health-report.md
+          
+          essential_files=("README.md" "LICENSE" "pyproject.toml" ".gitignore" "CONTRIBUTING.md" "CODE_OF_CONDUCT.md")
+          
+          for file in "${essential_files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✅ $file" >> health-report.md
+            else
+              echo "❌ $file (missing)" >> health-report.md
+            fi
+          done
+          echo "" >> health-report.md
+          
+          # Check GitHub configuration
+          echo "## GitHub Configuration" >> health-report.md
+          echo "" >> health-report.md
+          
+          if [ -d ".github" ]; then
+            echo "✅ .github directory exists" >> health-report.md
+            
+            if [ -d ".github/workflows" ]; then
+              workflow_count=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | wc -l)
+              echo "✅ GitHub Actions workflows ($workflow_count files)" >> health-report.md
+            else
+              echo "❌ No GitHub Actions workflows" >> health-report.md
+            fi
+            
+            if [ -f ".github/ISSUE_TEMPLATE.md" ] || [ -d ".github/ISSUE_TEMPLATE" ]; then
+              echo "✅ Issue templates configured" >> health-report.md
+            else
+              echo "⚠️  No issue templates" >> health-report.md
+            fi
+            
+            if [ -f ".github/PULL_REQUEST_TEMPLATE.md" ]; then
+              echo "✅ PR template configured" >> health-report.md
+            else
+              echo "⚠️  No PR template" >> health-report.md
+            fi
+          else
+            echo "❌ .github directory missing" >> health-report.md
+          fi
+          echo "" >> health-report.md
+          
+          # Check project structure
+          echo "## Project Structure" >> health-report.md
+          echo "" >> health-report.md
+          
+          if [ -d "src" ]; then
+            echo "✅ Source directory (src/)" >> health-report.md
+          elif [ -d "lib" ]; then
+            echo "✅ Library directory (lib/)" >> health-report.md
+          else
+            echo "⚠️  No standard source directory" >> health-report.md
+          fi
+          
+          if [ -d "testing" ] || [ -d "tests" ] || find . -name "test_*.py" | head -1 | grep -q .; then
+            echo "✅ Test structure exists" >> health-report.md
+          else
+            echo "❌ No test structure found" >> health-report.md
+          fi
+          
+          if [ -f "pyproject.toml" ] || [ -f "setup.py" ] || [ -f "setup.cfg" ]; then
+            echo "✅ Python package configuration" >> health-report.md
+          else
+            echo "❌ No Python package configuration" >> health-report.md
+          fi
+          echo "" >> health-report.md
+          
+          # Check dependencies
+          echo "## Dependencies Check" >> health-report.md
+          echo "" >> health-report.md
+          
+          if [ -f "requirements.txt" ]; then
+            req_count=$(wc -l < requirements.txt)
+            echo "✅ requirements.txt ($req_count dependencies)" >> health-report.md
+          fi
+          
+          if [ -f "pyproject.toml" ]; then
+            echo "✅ pyproject.toml configuration" >> health-report.md
+          fi
+          
+          if [ -f "uv.lock" ]; then
+            echo "✅ uv.lock (dependency lock file)" >> health-report.md
+          elif [ -f "poetry.lock" ]; then
+            echo "✅ poetry.lock (dependency lock file)" >> health-report.md
+          elif [ -f "Pipfile.lock" ]; then
+            echo "✅ Pipfile.lock (dependency lock file)" >> health-report.md
+          else
+            echo "⚠️  No dependency lock file" >> health-report.md
+          fi
+          echo "" >> health-report.md
+          
+          # Security checks
+          echo "## Security Configuration" >> health-report.md
+          echo "" >> health-report.md
+          
+          if [ -f "SECURITY.md" ]; then
+            echo "✅ Security policy (SECURITY.md)" >> health-report.md
+          else
+            echo "⚠️  No security policy" >> health-report.md
+          fi
+          
+          if grep -q "bandit" pyproject.toml 2>/dev/null || [ -f ".bandit" ]; then
+            echo "✅ Bandit security scanner configured" >> health-report.md
+          else
+            echo "⚠️  No Bandit configuration" >> health-report.md
+          fi
+          echo "" >> health-report.md
+          
+          # Documentation check
+          echo "## Documentation" >> health-report.md
+          echo "" >> health-report.md
+          
+          doc_files=$(find . -name "*.md" | wc -l)
+          echo "📄 Total Markdown files: $doc_files" >> health-report.md
+          
+          if [ -d "docs" ] || [ -d "documentation" ]; then
+            echo "✅ Documentation directory exists" >> health-report.md
+          else
+            echo "⚠️  No dedicated documentation directory" >> health-report.md
+          fi
+          
+          echo "" >> health-report.md
+          echo "## Recommendations" >> health-report.md
+          echo "" >> health-report.md
+          echo "Based on this health check, consider:" >> health-report.md
+          echo "1. Ensuring all essential files are present and up-to-date" >> health-report.md
+          echo "2. Adding missing GitHub configuration files (templates, workflows)" >> health-report.md
+          echo "3. Implementing comprehensive testing if not already present" >> health-report.md
+          echo "4. Setting up security scanning and policies" >> health-report.md
+          echo "5. Maintaining clear documentation and contributing guidelines" >> health-report.md
+
+      - name: Upload health check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-health-check
+          path: health-report.md
+
+  maintenance-summary:
+    name: Maintenance Summary
+    runs-on: ubuntu-latest
+    needs: [stale-issues, cleanup-artifacts, generate-metrics, health-check]
+    if: always()
+    steps:
+      - name: Generate maintenance summary
+        run: |
+          echo "# 🔧 Maintenance Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Run Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Tasks Completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.stale-issues.result }}" == "success" ]]; then
+            echo "✅ **Stale Issues/PRs**: Processed" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.stale-issues.result }}" == "skipped" ]]; then
+            echo "⏭️  **Stale Issues/PRs**: Skipped" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Stale Issues/PRs**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.cleanup-artifacts.result }}" == "success" ]]; then
+            echo "✅ **Artifact Cleanup**: Completed" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.cleanup-artifacts.result }}" == "skipped" ]]; then
+            echo "⏭️  **Artifact Cleanup**: Skipped" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Artifact Cleanup**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.generate-metrics.result }}" == "success" ]]; then
+            echo "✅ **Repository Metrics**: Generated" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.generate-metrics.result }}" == "skipped" ]]; then
+            echo "⏭️  **Repository Metrics**: Skipped" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Repository Metrics**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.health-check.result }}" == "success" ]]; then
+            echo "✅ **Health Check**: Completed" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.health-check.result }}" == "skipped" ]]; then
+            echo "⏭️  **Health Check**: Skipped" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Health Check**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📋 **Check the artifacts for detailed reports**" >> $GITHUB_STEP_SUMMARY
+

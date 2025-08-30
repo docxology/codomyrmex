@@ -1,0 +1,203 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! 🚀 Your ideas help make Codomyrmex better.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checks
+      description: Please verify the following before submitting
+      options:
+        - label: I have searched for existing feature requests that might be similar
+          required: true
+        - label: I have read the [Contributing Guidelines](../../CONTRIBUTING.md)
+          required: true
+        - label: I have checked the [project roadmap](../../README.md) to see if this is already planned
+          required: false
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? Is your feature request related to a problem?
+      placeholder: I'm always frustrated when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to see
+      placeholder: I would like to have...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you've considered
+      placeholder: I've also considered...
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Affected Module(s)
+      description: Which Codomyrmex module(s) should this feature be added to?
+      multiple: true
+      options:
+        - ai_code_editing
+        - build_synthesis
+        - code_execution_sandbox
+        - data_visualization
+        - documentation
+        - environment_setup
+        - git_operations
+        - logging_monitoring
+        - model_context_protocol
+        - pattern_matching
+        - static_analysis
+        - system_discovery
+        - terminal_interface
+        - New module (specify in description)
+        - Core framework
+        - CLI interface
+        - Other (specify in description)
+
+  - type: dropdown
+    id: feature_type
+    attributes:
+      label: Feature Type
+      description: What type of feature is this?
+      options:
+        - New functionality
+        - Enhancement to existing feature
+        - Performance improvement
+        - Developer experience improvement
+        - Documentation improvement
+        - Integration with external service
+        - New API/MCP tool
+        - CLI enhancement
+        - Other (specify in description)
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_cases
+    attributes:
+      label: Use Cases
+      description: Describe specific use cases where this feature would be valuable
+      placeholder: |
+        1. As a developer, I want to... so that I can...
+        2. When working with..., this feature would help by...
+        3. In the context of..., users could benefit from...
+    validations:
+      required: true
+
+  - type: textarea
+    id: api_design
+    attributes:
+      label: API Design / Interface
+      description: If applicable, describe how you envision the API or interface
+      render: python
+      placeholder: |
+        # Example API usage
+        from codomyrmex.your_module import new_feature
+        
+        result = new_feature.do_something(param="value")
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Ideas
+      description: If you have ideas about how this could be implemented, share them
+      placeholder: |
+        - Could use library X for...
+        - Implementation approach might be...
+        - Consider these architectural patterns...
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Low (nice to have)
+        - Medium (would be helpful)
+        - High (important for my workflow)
+        - Critical (blocking my work)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Estimated Complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - Low (minor changes)
+        - Medium (moderate development)
+        - High (significant development)
+        - Very High (major architectural changes)
+        - Unknown
+
+  - type: checkboxes
+    id: breaking_changes
+    attributes:
+      label: Breaking Changes
+      description: Would this feature require breaking changes?
+      options:
+        - label: This feature would require breaking changes to existing APIs
+        - label: This feature is backwards compatible
+        - label: I'm not sure about compatibility impact
+
+  - type: textarea
+    id: documentation
+    attributes:
+      label: Documentation Requirements
+      description: What documentation would be needed for this feature?
+      placeholder: |
+        - API documentation
+        - Usage examples
+        - Tutorial
+        - Migration guide (if breaking changes)
+        - Other...
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: Testing Considerations
+      description: What testing would be needed for this feature?
+      placeholder: |
+        - Unit tests for...
+        - Integration tests for...
+        - Performance tests
+        - Edge cases to consider...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, mockups, or examples
+      placeholder: Any additional information, links to related issues, mockups, etc.
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Are you willing to help implement this feature?
+      options:
+        - label: I would like to implement this feature
+        - label: I can help with design/planning
+        - label: I can help with testing
+        - label: I can help with documentation
+        - label: I can provide feedback during development
+

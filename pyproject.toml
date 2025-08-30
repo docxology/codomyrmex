@@ -109,6 +109,7 @@ dev-dependencies = [
     "mypy>=1.0.0",
     "ruff>=0.1.0",
     "pre-commit>=3.0.0",
+    "pyyaml>=6.0.2",
 ]
 
 [tool.uv.sources]

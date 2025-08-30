@@ -1,0 +1,120 @@
+# Codomyrmex Repository Library
+# Format: TYPE|OWNER|REPO_NAME|URL|DESCRIPTION|LOCAL_PATH_SUGGESTION
+# Types: OWN (for development/contributions), USE (for usage only), FORK (forked for contributions)
+
+# =============================================================================
+# DOCXOLOGY REPOSITORIES (Development/Contribution)
+# =============================================================================
+
+# Core Docxology Projects
+OWN|docxology|docxology|https://github.com/docxology/docxology.git|Main docxology framework and tools|docxology/docxology
+OWN|docxology|docxology-cli|https://github.com/docxology/docxology-cli.git|Command-line interface for docxology|docxology/docxology-cli
+OWN|docxology|docxology-core|https://github.com/docxology/docxology-core.git|Core docxology libraries|docxology/docxology-core
+OWN|docxology|docxology-web|https://github.com/docxology/docxology-web.git|Web interface for docxology|docxology/docxology-web
+OWN|docxology|docxology-api|https://github.com/docxology/docxology-api.git|API server for docxology|docxology/docxology-api
+
+# Documentation and Examples
+OWN|docxology|docxology-docs|https://github.com/docxology/docxology-docs.git|Documentation and guides|docxology/docxology-docs
+OWN|docxology|docxology-examples|https://github.com/docxology/docxology-examples.git|Example projects and templates|docxology/docxology-examples
+OWN|docxology|docxology-templates|https://github.com/docxology/docxology-templates.git|Project templates|docxology/docxology-templates
+
+# Specialized Tools
+OWN|docxology|docxology-parser|https://github.com/docxology/docxology-parser.git|Document parsing utilities|docxology/docxology-parser
+OWN|docxology|docxology-analyzer|https://github.com/docxology/docxology-analyzer.git|Document analysis tools|docxology/docxology-analyzer
+OWN|docxology|docxology-generator|https://github.com/docxology/docxology-generator.git|Document generation tools|docxology/docxology-generator
+
+# =============================================================================
+# EXTERNAL REPOSITORIES (Usage Only)
+# =============================================================================
+
+# AI/ML Libraries
+USE|openai|openai-python|https://github.com/openai/openai-python.git|Official OpenAI Python library|external/openai-python
+USE|anthropic-ai|anthropic-sdk-python|https://github.com/anthropic-ai/anthropic-sdk-python.git|Anthropic Claude SDK|external/anthropic-sdk-python
+USE|huggingface|transformers|https://github.com/huggingface/transformers.git|Transformers library for NLP|external/transformers
+USE|langchain-ai|langchain|https://github.com/langchain-ai/langchain.git|LangChain framework|external/langchain
+
+# Development Tools
+USE|microsoft|vscode|https://github.com/microsoft/vscode.git|Visual Studio Code|external/vscode
+USE|git|git|https://github.com/git/git.git|Git source code|external/git
+USE|python|cpython|https://github.com/python/cpython.git|Python source code|external/cpython
+USE|nodejs|node|https://github.com/nodejs/node.git|Node.js source code|external/nodejs
+
+# Web Frameworks
+USE|fastapi|fastapi|https://github.com/fastapi/fastapi.git|FastAPI web framework|external/fastapi
+USE|pallets|flask|https://github.com/pallets/flask.git|Flask web framework|external/flask
+USE|django|django|https://github.com/django/django.git|Django web framework|external/django
+USE|vercel|next.js|https://github.com/vercel/next.js.git|Next.js React framework|external/nextjs
+
+# Data Science
+USE|pandas-dev|pandas|https://github.com/pandas-dev/pandas.git|Pandas data analysis library|external/pandas
+USE|numpy|numpy|https://github.com/numpy/numpy.git|NumPy numerical computing|external/numpy
+USE|matplotlib|matplotlib|https://github.com/matplotlib/matplotlib.git|Matplotlib plotting library|external/matplotlib
+USE|scikit-learn|scikit-learn|https://github.com/scikit-learn/scikit-learn.git|Scikit-learn ML library|external/scikit-learn
+
+# DevOps and Infrastructure
+USE|docker|docker|https://github.com/docker/docker.git|Docker containerization|external/docker
+USE|kubernetes|kubernetes|https://github.com/kubernetes/kubernetes.git|Kubernetes orchestration|external/kubernetes
+USE|terraform-providers|terraform-provider-aws|https://github.com/terraform-providers/terraform-provider-aws.git|Terraform AWS provider|external/terraform-aws
+USE|ansible|ansible|https://github.com/ansible/ansible.git|Ansible automation|external/ansible
+
+# Testing and Quality
+USE|pytest-dev|pytest|https://github.com/pytest-dev/pytest.git|Pytest testing framework|external/pytest
+USE|PyCQA|black|https://github.com/PyCQA/black.git|Black code formatter|external/black
+USE|PyCQA|flake8|https://github.com/PyCQA/flake8.git|Flake8 linter|external/flake8
+USE|microsoft|playwright-python|https://github.com/microsoft/playwright-python.git|Playwright testing|external/playwright
+
+# Documentation Tools
+USE|mkdocs|mkdocs|https://github.com/mkdocs/mkdocs.git|MkDocs documentation generator|external/mkdocs
+USE|sphinx-doc|sphinx|https://github.com/sphinx-doc/sphinx.git|Sphinx documentation|external/sphinx
+USE|gitiles|gitiles|https://github.com/google/gitiles.git|Git repository browser|external/gitiles
+
+# =============================================================================
+# POTENTIAL FORK CANDIDATES (For Contribution)
+# =============================================================================
+
+# Popular Open Source Projects (consider forking if contributing)
+FORK|microsoft|TypeScript|https://github.com/microsoft/TypeScript.git|TypeScript language|forks/TypeScript
+FORK|facebook|react|https://github.com/facebook/react.git|React JavaScript library|forks/react
+FORK|vuejs|vue|https://github.com/vuejs/vue.git|Vue.js framework|forks/vue
+FORK|angular|angular|https://github.com/angular/angular.git|Angular framework|forks/angular
+
+# Developer Tools
+FORK|prettier|prettier|https://github.com/prettier/prettier.git|Code formatter|forks/prettier
+FORK|eslint|eslint|https://github.com/eslint/eslint.git|JavaScript linter|forks/eslint
+FORK|webpack|webpack|https://github.com/webpack/webpack.git|Module bundler|forks/webpack
+
+# =============================================================================
+# RESEARCH AND REFERENCE REPOSITORIES
+# =============================================================================
+
+# Academic and Research
+USE|papers-we-love|papers-we-love|https://github.com/papers-we-love/papers-we-love.git|Computer science papers|research/papers-we-love
+USE|donnemartin|system-design-primer|https://github.com/donnemartin/system-design-primer.git|System design guide|research/system-design-primer
+USE|jwasham|coding-interview-university|https://github.com/jwasham/coding-interview-university.git|Coding interview prep|research/coding-interview-university
+
+# Awesome Lists
+USE|sindresorhus|awesome|https://github.com/sindresorhus/awesome.git|Awesome lists|reference/awesome
+USE|vinta|awesome-python|https://github.com/vinta/awesome-python.git|Awesome Python resources|reference/awesome-python
+USE|enaqx|awesome-react|https://github.com/enaqx/awesome-react.git|Awesome React resources|reference/awesome-react
+
+# =============================================================================
+# CONFIGURATION NOTES
+# =============================================================================
+
+# Repository Types:
+# - OWN: Repositories you own/maintain, expect to make commits, PRs, issues
+# - USE: External repositories for reference/usage, read-only typically
+# - FORK: Repositories you might fork for contributions
+#
+# Local Path Suggestions:
+# - docxology/*: Your own docxology projects
+# - external/*: External libraries and tools
+# - forks/*: Forked repositories for contribution
+# - research/*: Research and reference materials
+# - reference/*: Documentation and awesome lists
+#
+# Usage with Git Operations:
+# - Use clone_repository() for initial setup
+# - Use pull_changes() for updates on USE repositories
+# - Use full Git workflow (branch, commit, push) for OWN repositories
+# - Use fork workflow for FORK repositories

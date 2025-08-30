@@ -1,0 +1,181 @@
+name: 🐛 Bug Report
+description: Create a report to help us improve
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! 🙏
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checks
+      description: Please verify the following before submitting
+      options:
+        - label: I have searched for existing issues that might be related to this bug
+          required: true
+        - label: I have read the [Contributing Guidelines](../../CONTRIBUTING.md)
+          required: true
+        - label: I have checked the [documentation](https://codomyrmex.readthedocs.io/) for relevant information
+          required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the bug
+      placeholder: |
+        1. Import module '...'
+        2. Call function '...'
+        3. Pass parameters '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: A clear description of what you expected to happen
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened instead
+      placeholder: What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Sample
+      description: Minimal code sample that reproduces the issue
+      render: python
+      placeholder: |
+        # Minimal code sample
+        import codomyrmex
+        # Your code here...
+
+  - type: textarea
+    id: traceback
+    attributes:
+      label: Error Output / Traceback
+      description: If applicable, paste the full error message or traceback
+      render: text
+      placeholder: Paste the full traceback here...
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Affected Module(s)
+      description: Which Codomyrmex module(s) are affected?
+      multiple: true
+      options:
+        - ai_code_editing
+        - build_synthesis
+        - code_execution_sandbox
+        - data_visualization
+        - documentation
+        - environment_setup
+        - git_operations
+        - logging_monitoring
+        - model_context_protocol
+        - pattern_matching
+        - static_analysis
+        - system_discovery
+        - terminal_interface
+        - Other (specify in description)
+
+  - type: input
+    id: version
+    attributes:
+      label: Codomyrmex Version
+      description: What version of Codomyrmex are you using?
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python Version
+      description: What version of Python are you using?
+      placeholder: "3.11.5"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - Linux (Ubuntu/Debian)
+        - Linux (CentOS/RHEL)
+        - Linux (Arch)
+        - Linux (Other)
+        - macOS
+        - Windows 10
+        - Windows 11
+        - Other (specify in description)
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: Additional environment details (virtual environment, container, etc.)
+      placeholder: |
+        - Virtual environment: venv/conda/poetry
+        - Container: Docker/Podman
+        - IDE: VSCode/PyCharm/etc.
+        - Other relevant details...
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Bug Severity
+      description: How severe is this bug?
+      options:
+        - Low (minor inconvenience)
+        - Medium (affects functionality)
+        - High (breaks core features)
+        - Critical (data loss, security issue)
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any additional information that might help...
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Are you willing to help fix this bug?
+      options:
+        - label: I would like to work on fixing this bug
+        - label: I can provide more information if needed
+        - label: I can test proposed fixes
+

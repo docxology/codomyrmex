@@ -1,0 +1,30 @@
+{
+  "test_session": {
+    "timestamp": "20250830_151501",
+    "total_tests": 1,
+    "output_directory": "@output/01_github_ops_test_results",
+    "github_integration": true,
+    "git_available": true
+  },
+  "repositories_created": 0,
+  "test_results": [
+    {
+      "test_name": "end_to_end_development_workflow",
+      "timestamp": "2025-08-30T15:15:03.288661",
+      "success": false,
+      "result": {
+        "error": "Failed to create repository: 401 - Bad credentials",
+        "completed_steps": [
+          "\u274c Error: Failed to create repository: 401 - Bad credentials"
+        ]
+      },
+      "github_token_available": true
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0
+  },
+  "created_repositories": []
+}

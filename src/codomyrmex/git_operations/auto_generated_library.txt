@@ -1,0 +1,183 @@
+# Docxology Repository Library - REAL GITHUB REPOSITORIES
+# Generated from GitHub API: https://api.github.com/users/docxology/repos
+# Generated on: 2025-08-29 07:29:02
+# Format: TYPE|OWNER|REPO_NAME|URL|DESCRIPTION|LOCAL_PATH_SUGGESTION
+
+# =============================================================================
+# DOCXOLOGY ORIGINAL REPOSITORIES (Development/Contribution) - 30 repositories
+# =============================================================================
+
+OWN|docxology|ActiveInferAnts|https://github.com/docxology/ActiveInferAnts.git|Active InferAnts|docxology/ActiveInferAnts
+OWN|docxology|AgenticMesh|https://github.com/docxology/AgenticMesh.git|Active Inference & Agentic Mesh|docxology/AgenticMesh
+OWN|docxology|ant-pheromone|https://github.com/docxology/ant-pheromone.git|No description|docxology/ant-pheromone
+OWN|docxology|Autonomous-Drone-Navigation-in-AirSim-With-Active-Inference|https://github.com/docxology/Autonomous-Drone-Navigation-in-AirSim-With-Active-Inference.git|No description|docxology/Autonomous-Drone-Navigation-in-AirSim-With-Active-Inference
+OWN|docxology|cascadia|https://github.com/docxology/cascadia.git|No description|docxology/cascadia
+OWN|docxology|codomyrmex|https://github.com/docxology/codomyrmex.git|No description|docxology/codomyrmex
+OWN|docxology|cognitive|https://github.com/docxology/cognitive.git|No description|docxology/cognitive
+OWN|docxology|cognitive-engine|https://github.com/docxology/cognitive-engine.git|No description|docxology/cognitive-engine
+OWN|docxology|docxology|https://github.com/docxology/docxology.git|No description|docxology/docxology
+OWN|docxology|flick|https://github.com/docxology/flick.git|No description|docxology/flick
+OWN|docxology|FORMINDEX|https://github.com/docxology/FORMINDEX.git|FORMIS analysis|docxology/FORMINDEX
+OWN|docxology|fuller-obsidian|https://github.com/docxology/fuller-obsidian.git|No description|docxology/fuller-obsidian
+OWN|docxology|GrowthModel|https://github.com/docxology/GrowthModel.git|No description|docxology/GrowthModel
+OWN|docxology|identity|https://github.com/docxology/identity.git|No description|docxology/identity
+OWN|docxology|infra-calc|https://github.com/docxology/infra-calc.git|No description|docxology/infra-calc
+OWN|docxology|ivm-xyz|https://github.com/docxology/ivm-xyz.git|package for working with 3D and 4D geometries. |docxology/ivm-xyz
+OWN|docxology|lean_niche|https://github.com/docxology/lean_niche.git|No description|docxology/lean_niche
+OWN|docxology|Markov_Blanket_Detection|https://github.com/docxology/Markov_Blanket_Detection.git|No description|docxology/Markov_Blanket_Detection
+OWN|docxology|mdkv|https://github.com/docxology/mdkv.git|MKV-like format and methods for Markdown|docxology/mdkv
+OWN|docxology|MetaInformAnt|https://github.com/docxology/MetaInformAnt.git|Integration for Ants and Beyond|docxology/MetaInformAnt
+OWN|docxology|obsidian-construction-from-text|https://github.com/docxology/obsidian-construction-from-text.git|No description|docxology/obsidian-construction-from-text
+OWN|docxology|opentir|https://github.com/docxology/opentir.git|No description|docxology/opentir
+OWN|docxology|p3if|https://github.com/docxology/p3if.git|The Properties, Processes, and Perspectives Inter-Framework (P3IF): Multiplexing interdisciplinary requirements frameworks to manage information risk and foster cognitive security|docxology/p3if
+OWN|docxology|qr_live_protocol|https://github.com/docxology/qr_live_protocol.git|No description|docxology/qr_live_protocol
+OWN|docxology|QuadCraft|https://github.com/docxology/QuadCraft.git|MineCraft with Tetrahedra (Quadray coordinates)|docxology/QuadCraft
+OWN|docxology|QuadMath|https://github.com/docxology/QuadMath.git|No description|docxology/QuadMath
+OWN|docxology|README|https://github.com/docxology/README.git|No description|docxology/README
+OWN|docxology|service|https://github.com/docxology/service.git|No description|docxology/service
+OWN|docxology|template|https://github.com/docxology/template.git|No description|docxology/template
+OWN|docxology|ultralink-docx|https://github.com/docxology/ultralink-docx.git|No description|docxology/ultralink-docx
+
+# =============================================================================
+# INTERESTING FORKED REPOSITORIES (For Contribution/Study) - 71 repositories
+# =============================================================================
+
+FORK|docxology|ActiveACO|https://github.com/docxology/ActiveACO.git|Augmenting Ant Colony Optimization with Active Inference|forks/ActiveACO
+FORK|docxology|ActiveInferAnts_Fork|https://github.com/docxology/ActiveInferAnts_Fork.git|Active Inference models of/for Ants|forks/ActiveInferAnts_Fork
+FORK|docxology|ActiveInference.jl|https://github.com/docxology/ActiveInference.jl.git|A Julia Package for Active Inference|forks/ActiveInference.jl
+FORK|docxology|agentic-cursorrules|https://github.com/docxology/agentic-cursorrules.git|A practical approach to managing multiple AI agents in Cursor through strict file-tree partitioning and domain boundaries.|forks/agentic-cursorrules
+FORK|docxology|AgentLaboratory|https://github.com/docxology/AgentLaboratory.git|Agent Laboratory is an end-to-end autonomous research workflow meant to assist you as the human researcher toward implementing your research ideas|forks/AgentLaboratory
+FORK|docxology|aif-fep-db|https://github.com/docxology/aif-fep-db.git|A database of publications related to active inference and the free energy principle|forks/aif-fep-db
+FORK|docxology|AIF_for_CC|https://github.com/docxology/AIF_for_CC.git|No description|forks/AIF_for_CC
+FORK|docxology|Auto-GPT|https://github.com/docxology/Auto-GPT.git|An experimental open-source attempt to make GPT-4 fully autonomous.|forks/Auto-GPT
+FORK|docxology|blackarch|https://github.com/docxology/blackarch.git|An ArchLinux based distribution for penetration testers and security researchers.|forks/blackarch
+FORK|docxology|buzz|https://github.com/docxology/buzz.git|Buzz transcribes and translates audio offline on your personal computer. Powered by OpenAI's Whisper.|forks/buzz
+FORK|docxology|cadCAD|https://github.com/docxology/cadCAD.git|Design, simulate, validate, and operate within complex systems|forks/cadCAD
+FORK|docxology|cadcad-ri|https://github.com/docxology/cadcad-ri.git|The Reference Implementation|forks/cadcad-ri
+FORK|docxology|Classes|https://github.com/docxology/Classes.git|This repository contains codes and materials of each meeting.|forks/Classes
+FORK|docxology|claude-squad|https://github.com/docxology/claude-squad.git|Manage multiple AI agents like Claude Code and Aider. 10x your productivity|forks/claude-squad
+FORK|docxology|claude-task-master|https://github.com/docxology/claude-task-master.git|An AI-powered task-management system you can drop into Cursor, Lovable, Windsurf, Roo, and others.|forks/claude-task-master
+FORK|docxology|Crypto-OpSec-SelfGuard-RoadMap|https://github.com/docxology/Crypto-OpSec-SelfGuard-RoadMap.git|Here we collect and discuss the best DeFi, Blockchain and crypto-related OpSec researches and data terminals - contributions are welcome.|forks/Crypto-OpSec-SelfGuard-RoadMap
+FORK|docxology|Devon|https://github.com/docxology/Devon.git|Devon: An open-source pair programmer|forks/Devon
+FORK|docxology|eliza|https://github.com/docxology/eliza.git|Autonomous agents for everyone|forks/eliza
+FORK|docxology|eshkol|https://github.com/docxology/eshkol.git|High-Performance LISP-like language for Scientific Computing and AI written in C|forks/eshkol
+FORK|docxology|fabric|https://github.com/docxology/fabric.git|fabric is an open-source framework for augmenting humans using AI. It provides a modular framework for solving specific problems using a crowdsourced set of AI prompts that can be used anywhere.|forks/fabric
+FORK|docxology|firecrawl|https://github.com/docxology/firecrawl.git|🔥 Turn entire websites into LLM-ready markdown or structured data. Scrape, crawl and extract with a single API.|forks/firecrawl
+FORK|docxology|foam|https://github.com/docxology/foam.git|A personal knowledge management and sharing system for VSCode|forks/foam
+FORK|docxology|foundation|https://github.com/docxology/foundation.git|The Foundation repository contains the initial guidance documents, recommendations, and resources needed to build a psychosecurity-first operation.|forks/foundation
+FORK|docxology|fractiverse-ontology|https://github.com/docxology/fractiverse-ontology.git|A unified ontological framework|forks/fractiverse-ontology
+FORK|docxology|G.A.T.E-Research|https://github.com/docxology/G.A.T.E-Research.git|a research study dedicated about the G.A.T.E program and its occult connections|forks/G.A.T.E-Research
+FORK|docxology|gaia-hub|https://github.com/docxology/gaia-hub.git|Digital Gaia's Global Sustainability Information and Collaboration Hub|forks/gaia-hub
+FORK|docxology|gitdiagram|https://github.com/docxology/gitdiagram.git|Replace 'hub' with 'diagram' in any GitHub url to instantly visualize the codebase as an interactive diagram|forks/gitdiagram
+FORK|docxology|gpt-author|https://github.com/docxology/gpt-author.git|No description|forks/gpt-author
+FORK|docxology|gpt-engineer|https://github.com/docxology/gpt-engineer.git|Specify what you want it to build, the AI asks for clarification, and then builds it.|forks/gpt-engineer
+FORK|docxology|gpt-prompt-engineer|https://github.com/docxology/gpt-prompt-engineer.git|No description|forks/gpt-prompt-engineer
+FORK|docxology|gpt-researcher|https://github.com/docxology/gpt-researcher.git|GPT based autonomous agent that does online comprehensive research on any given topic|forks/gpt-researcher
+FORK|docxology|gpt4all|https://github.com/docxology/gpt4all.git|gpt4all: an ecosystem of open-source chatbots trained on a massive collections of clean assistant data including code, stories and dialogue|forks/gpt4all
+FORK|docxology|GPTeam|https://github.com/docxology/GPTeam.git|GPTeam uses GPT-4 to create multiple agents who collaborate to achieve predefined goals.|forks/GPTeam
+FORK|docxology|h4cker|https://github.com/docxology/h4cker.git|This repository is primarily maintained by Omar Santos and includes thousands of resources related to ethical hacking  / penetration testing, digital forensics and incident response (DFIR), vulnerability research, exploit development, reverse engineering, and more.|forks/h4cker
+FORK|docxology|haiku.rag|https://github.com/docxology/haiku.rag.git|Retrieval Augmented Generation based on SQLite|forks/haiku.rag
+FORK|docxology|hongos|https://github.com/docxology/hongos.git|Autonomous AI Video Generation Tool|forks/hongos
+FORK|docxology|InterBrain|https://github.com/docxology/InterBrain.git|MVP for ProjectLiminality's vision for a collective intelligence protocol|forks/InterBrain
+FORK|docxology|IntroductionToAlgebraicEvaluation|https://github.com/docxology/IntroductionToAlgebraicEvaluation.git|A collection of essays and code on algebraic methods to evaluate noisy judges on unlabeled test data.|forks/IntroductionToAlgebraicEvaluation
+FORK|docxology|Journal-Utilities|https://github.com/docxology/Journal-Utilities.git|Utilities and Documentation for creating contents for the Active Inference Journal|forks/Journal-Utilities
+FORK|docxology|karma_system|https://github.com/docxology/karma_system.git|Umbrella repo for the sym-cog-robotics project of the Active Inference Institute|forks/karma_system
+FORK|docxology|kilocode|https://github.com/docxology/kilocode.git|Open Source AI coding assistant for planning, building, and fixing code. We're a superset of Roo, Cline, and our own features. Follow us: kilocode.ai/social|forks/kilocode
+FORK|docxology|KnowledgeBase|https://github.com/docxology/KnowledgeBase.git|never forget anything again! combine AI and intelligent tooling for a local knowledge base to track catalogue, annotate, and plan for you!|forks/KnowledgeBase
+FORK|docxology|KnowSelf|https://github.com/docxology/KnowSelf.git|Agentic Knowledgeable Self-awareness|forks/KnowSelf
+FORK|docxology|LAIF|https://github.com/docxology/LAIF.git|Experiments with deriving epistemics aware message passing algos|forks/LAIF
+FORK|docxology|maestro|https://github.com/docxology/maestro.git|A framework for Claude Opus to intelligently orchestrate subagents.|forks/maestro
+FORK|docxology|manim|https://github.com/docxology/manim.git|A community-maintained Python framework for creating mathematical animations. |forks/manim
+FORK|docxology|memvid|https://github.com/docxology/memvid.git|Video-based AI memory library. Store millions of text chunks in MP4 files with lightning-fast semantic search. No database needed.|forks/memvid
+FORK|docxology|metta-1|https://github.com/docxology/metta-1.git|A reinforcement learning codebase focusing on the emergence of cooperation and alignment in multi-agent AI systems.|forks/metta-1
+FORK|docxology|mindgraph|https://github.com/docxology/mindgraph.git|proof of concept prototype for generating and querying against a large knowledge graph with ai|forks/mindgraph
+FORK|docxology|Mr.-Ranedeer-AI-Tutor|https://github.com/docxology/Mr.-Ranedeer-AI-Tutor.git|A GPT-4 AI Tutor Prompt for customizable personalized learning experiences.|forks/Mr.-Ranedeer-AI-Tutor
+FORK|docxology|navi|https://github.com/docxology/navi.git|An interactive cheatsheet tool for the command-line|forks/navi
+FORK|docxology|nockchain|https://github.com/docxology/nockchain.git|Nockchain protocol monorepo|forks/nockchain
+FORK|docxology|obsidian-scientific-research-vault|https://github.com/docxology/obsidian-scientific-research-vault.git|An already-configured Obsidian vault for scientific research|forks/obsidian-scientific-research-vault
+FORK|docxology|open-source-mentorship|https://github.com/docxology/open-source-mentorship.git|Inspiring the next generation of open source contributors and maintainers|forks/open-source-mentorship
+FORK|docxology|perplexityai|https://github.com/docxology/perplexityai.git|A python api to use perplexity.ai|forks/perplexityai
+FORK|docxology|plandex|https://github.com/docxology/plandex.git|An AI coding engine for complex tasks|forks/plandex
+FORK|docxology|polis|https://github.com/docxology/polis.git|:milky_way: Open Source AI for large scale open ended feedback|forks/polis
+FORK|docxology|pymdp|https://github.com/docxology/pymdp.git|A Python implementation of active inference for Markov Decision Processes|forks/pymdp
+FORK|docxology|pyreason|https://github.com/docxology/pyreason.git|An explainable inference software supporting annotated, real valued, graph based and temporal logic |forks/pyreason
+FORK|docxology|ragapp|https://github.com/docxology/ragapp.git|The easiest way to use Agentic RAG in any enterprise|forks/ragapp
+FORK|docxology|RamiGPT|https://github.com/docxology/RamiGPT.git|Autonomous Privilege Escalation using OpenAI|forks/RamiGPT
+FORK|docxology|rchain|https://github.com/docxology/rchain.git|No description|forks/rchain
+FORK|docxology|RxInfer.jl|https://github.com/docxology/RxInfer.jl.git|Julia package for automated Bayesian inference on a factor graph with reactive message passing|forks/RxInfer.jl
+FORK|docxology|RxInferExamples.jl|https://github.com/docxology/RxInferExamples.jl.git|This repository contains examples for RxInfer.jl|forks/RxInferExamples.jl
+FORK|docxology|sirji|https://github.com/docxology/sirji.git|Inspired by Devin, Sirji is an open-source AI software development agent.|forks/sirji
+FORK|docxology|smolagents|https://github.com/docxology/smolagents.git|🤗 smolagents: a barebones library for agents. Agents write python code to call tools and orchestrate other agents.|forks/smolagents
+FORK|docxology|SWE-agent|https://github.com/docxology/SWE-agent.git|SWE-agent: Agent Computer Interfaces Enable Software Engineering Language Models|forks/SWE-agent
+FORK|docxology|urtext_sublime|https://github.com/docxology/urtext_sublime.git|Urtext is a headless plaintext framework for writing and information management. For desktop use (PC/Mac/Linux) Urtext is implemented in Sublime Text.|forks/urtext_sublime
+FORK|docxology|web3privacy|https://github.com/docxology/web3privacy.git|Web3privacy now is a research project aimed at building a culture of privacy industry in web3: the most extensive database of privacy-enhancing solutions, the framework for PEDApps ideation, use-cases database & many more. Feel free to collaborate.|forks/web3privacy
+FORK|docxology|xai-gpt-agent-toolkit|https://github.com/docxology/xai-gpt-agent-toolkit.git|Xircuits toolkit for creating and experimenting with BabyAGI/AutoGPT-style agents|forks/xai-gpt-agent-toolkit
+FORK|docxology|yt-transcriber|https://github.com/docxology/yt-transcriber.git|TUI app- Give it a YouTube URL and you get a transcription with possible speaker identification and optional summary or translation, all thanks to open-source AI tooling and my lack of enough free time to watch content-sparse YouTube videos|forks/yt-transcriber
+
+# =============================================================================
+# EXTERNAL REPOSITORIES (Usage Only) - Essential Tools & Libraries
+# =============================================================================
+
+# AI/ML Libraries
+USE|openai|openai-python|https://github.com/openai/openai-python.git|Official OpenAI Python library|external/openai-python
+USE|anthropic-ai|anthropic-sdk-python|https://github.com/anthropic-ai/anthropic-sdk-python.git|Anthropic Claude SDK|external/anthropic-sdk-python
+USE|huggingface|transformers|https://github.com/huggingface/transformers.git|Transformers library for NLP|external/transformers
+USE|langchain-ai|langchain|https://github.com/langchain-ai/langchain.git|LangChain framework|external/langchain
+
+# Development Tools
+USE|microsoft|vscode|https://github.com/microsoft/vscode.git|Visual Studio Code|external/vscode
+USE|git|git|https://github.com/git/git.git|Git source code|external/git
+USE|python|cpython|https://github.com/python/cpython.git|Python source code|external/cpython
+
+# Web Frameworks
+USE|fastapi|fastapi|https://github.com/fastapi/fastapi.git|FastAPI web framework|external/fastapi
+USE|pallets|flask|https://github.com/pallets/flask.git|Flask web framework|external/flask
+USE|django|django|https://github.com/django/django.git|Django web framework|external/django
+
+# Data Science
+USE|pandas-dev|pandas|https://github.com/pandas-dev/pandas.git|Pandas data analysis library|external/pandas
+USE|numpy|numpy|https://github.com/numpy/numpy.git|NumPy numerical computing|external/numpy
+USE|matplotlib|matplotlib|https://github.com/matplotlib/matplotlib.git|Matplotlib plotting library|external/matplotlib
+USE|scikit-learn|scikit-learn|https://github.com/scikit-learn/scikit-learn.git|Scikit-learn ML library|external/scikit-learn
+
+# Testing and Quality
+USE|pytest-dev|pytest|https://github.com/pytest-dev/pytest.git|Pytest testing framework|external/pytest
+USE|PyCQA|black|https://github.com/PyCQA/black.git|Black code formatter|external/black
+USE|PyCQA|flake8|https://github.com/PyCQA/flake8.git|Flake8 linter|external/flake8
+
+# Documentation Tools
+USE|mkdocs|mkdocs|https://github.com/mkdocs/mkdocs.git|MkDocs documentation generator|external/mkdocs
+USE|sphinx-doc|sphinx|https://github.com/sphinx-doc/sphinx.git|Sphinx documentation|external/sphinx
+
+# Research and Reference
+USE|papers-we-love|papers-we-love|https://github.com/papers-we-love/papers-we-love.git|Computer science papers|research/papers-we-love
+USE|donnemartin|system-design-primer|https://github.com/donnemartin/system-design-primer.git|System design guide|research/system-design-primer
+USE|sindresorhus|awesome|https://github.com/sindresorhus/awesome.git|Awesome lists|reference/awesome
+USE|vinta|awesome-python|https://github.com/vinta/awesome-python.git|Awesome Python resources|reference/awesome-python
+
+# =============================================================================
+# CONFIGURATION NOTES
+# =============================================================================
+
+# Repository Types:
+# - OWN: Your original repositories for development, commits, PRs, issues
+# - FORK: Your forked repositories for potential contributions
+# - USE: External repositories for reference/usage, typically read-only
+#
+# Local Path Suggestions:
+# - {self.username}/*: Your original projects
+# - forks/*: Your forked repositories
+# - external/*: External libraries and tools
+# - research/*: Research and reference materials
+# - reference/*: Documentation and awesome lists
+#
+# Total Repositories: {len(categories['own']) + len(categories['interesting_forks']) + 23}
+# - Original: {len(categories['own'])}
+# - Interesting Forks: {len(categories['interesting_forks'])}
+# - External Tools: 23
+#
+# Usage with Git Operations:
+# - Use clone_repository() for initial setup
+# - Use pull_changes() for updates on USE repositories
+# - Use full Git workflow (branch, commit, push) for OWN repositories
+# - Use fork workflow for FORK repositories (upstream sync, PR creation)

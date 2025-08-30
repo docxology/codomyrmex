@@ -45,6 +45,14 @@ Stash Operations:
 - stash_changes
 - apply_stash
 - list_stashes
+
+GitHub API Operations:
+- create_github_repository
+- delete_github_repository
+- create_pull_request
+- get_pull_requests
+- get_pull_request
+- get_repository_info
 """
 
 from .git_manager import (
@@ -79,6 +87,17 @@ from .git_manager import (
     list_stashes,
 )
 
+from .github_api import (
+    # GitHub API operations
+    create_github_repository,
+    delete_github_repository,
+    create_pull_request,
+    get_pull_requests,
+    get_pull_request,
+    get_repository_info,
+    GitHubAPIError,
+)
+
 __all__ = [
     # Core operations
     'check_git_availability',
@@ -109,4 +128,12 @@ __all__ = [
     'stash_changes',
     'apply_stash',
     'list_stashes',
+    # GitHub API operations
+    'create_github_repository',
+    'delete_github_repository',
+    'create_pull_request',
+    'get_pull_requests',
+    'get_pull_request',
+    'get_repository_info',
+    'GitHubAPIError',
 ] 

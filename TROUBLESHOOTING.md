@@ -1,4 +1,16 @@
+# ⚠️ MOVED: Troubleshooting Guide
+
+**This file has been moved to improve documentation organization.**
+
+**👉 New Location: [docs/reference/troubleshooting.md](docs/reference/troubleshooting.md)**
+
+This file will be removed in a future version. Please update any bookmarks or references.
+
+---
+
 # 🔍 Codomyrmex Troubleshooting Guide
+
+**Note**: This content has moved to [docs/reference/troubleshooting.md](docs/reference/troubleshooting.md)
 
 Comprehensive solutions for common Codomyrmex issues and problems.
 

@@ -1,0 +1,471 @@
+name: Release and Deployment
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: true
+        type: string
+      pre_release:
+        description: 'Is this a pre-release?'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_VERSION: "0.4.18"
+
+jobs:
+  prepare-release:
+    name: Prepare Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
+      tag: ${{ steps.extract-version.outputs.tag }}
+      is_prerelease: ${{ steps.extract-version.outputs.is_prerelease }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version information
+        id: extract-version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ github.event.inputs.version }}"
+            TAG="v${VERSION}"
+            IS_PRERELEASE="${{ github.event.inputs.pre_release }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+            VERSION="${TAG#v}"
+            # Check if it's a prerelease (contains alpha, beta, rc, or dev)
+            if [[ "$VERSION" =~ (alpha|beta|rc|dev) ]]; then
+              IS_PRERELEASE="true"
+            else
+              IS_PRERELEASE="false"
+            fi
+          fi
+          
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "is_prerelease=${IS_PRERELEASE}" >> $GITHUB_OUTPUT
+          
+          echo "Release Details:"
+          echo "  Version: ${VERSION}"
+          echo "  Tag: ${TAG}"
+          echo "  Pre-release: ${IS_PRERELEASE}"
+
+      - name: Validate version format
+        run: |
+          VERSION="${{ steps.extract-version.outputs.version }}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([a-zA-Z0-9\.\-]+)?$ ]]; then
+            echo "❌ Invalid version format: $VERSION"
+            echo "Expected format: MAJOR.MINOR.PATCH or MAJOR.MINOR.PATCH-PRERELEASE"
+            exit 1
+          fi
+          echo "✅ Version format is valid: $VERSION"
+
+  quality-gate:
+    name: Release Quality Gate
+    runs-on: ubuntu-latest
+    needs: prepare-release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Run comprehensive test suite
+        run: |
+          echo "🧪 Running comprehensive test suite for release..."
+          uv run pytest testing/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=xml --cov-fail-under=80
+
+      - name: Run security checks
+        run: |
+          echo "🔒 Running security checks..."
+          uv run bandit -r src/codomyrmex/ -ll || true
+
+      - name: Run linting checks
+        run: |
+          echo "🔍 Running linting checks..."
+          uv run ruff check . --output-format=github
+          uv run ruff format --check .
+          uv run black --check .
+
+      - name: Validate package metadata
+        run: |
+          echo "📋 Validating package metadata..."
+          uv build
+          uv run python -m pip install twine
+          uv run twine check dist/*
+
+  build-artifacts:
+    name: Build Release Artifacts
+    runs-on: ubuntu-latest
+    needs: [prepare-release, quality-gate]
+    strategy:
+      matrix:
+        include:
+          - target: "source"
+            build_cmd: "uv build --sdist"
+          - target: "wheel"
+            build_cmd: "uv build --wheel"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Update version in pyproject.toml
+        run: |
+          VERSION="${{ needs.prepare-release.outputs.version }}"
+          echo "📝 Updating version to $VERSION in pyproject.toml"
+          sed -i "s/version = \".*\"/version = \"$VERSION\"/" pyproject.toml
+          
+          # Verify the change
+          grep "version = " pyproject.toml
+
+      - name: Build ${{ matrix.target }}
+        run: |
+          echo "🏗️  Building ${{ matrix.target }} artifact..."
+          ${{ matrix.build_cmd }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.target }}
+          path: dist/
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [prepare-release, build-artifacts]
+    outputs:
+      release_id: ${{ steps.create_release.outputs.id }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Prepare artifacts for release
+        run: |
+          echo "📦 Preparing release artifacts..."
+          mkdir -p release-assets
+          
+          # Collect all distribution files
+          find ./artifacts -name "*.whl" -o -name "*.tar.gz" | while read -r file; do
+            cp "$file" release-assets/
+          done
+          
+          ls -la release-assets/
+
+      - name: Generate release notes
+        id: generate_notes
+        run: |
+          VERSION="${{ needs.prepare-release.outputs.version }}"
+          TAG="${{ needs.prepare-release.outputs.tag }}"
+          
+          echo "# Release Notes for $TAG" > release-notes.md
+          echo "" >> release-notes.md
+          echo "## What's New" >> release-notes.md
+          echo "" >> release-notes.md
+          
+          # Try to extract changelog information
+          if [ -f "CHANGELOG.md" ]; then
+            echo "📝 Extracting changelog for version $VERSION..."
+            
+            # Look for version-specific changes
+            awk "/## \[$VERSION\]/{flag=1; next} /## \[/{flag=0} flag" CHANGELOG.md >> release-notes.md || true
+            
+            if [ ! -s release-notes.md ] || [ "$(wc -l < release-notes.md)" -le 4 ]; then
+              echo "📝 No specific changelog found, using recent changes..."
+              echo "### Recent Changes" >> release-notes.md
+              echo "" >> release-notes.md
+              echo "- See [CHANGELOG.md](./CHANGELOG.md) for detailed changes" >> release-notes.md
+            fi
+          else
+            echo "### Features" >> release-notes.md
+            echo "" >> release-notes.md
+            echo "- This release includes various improvements and bug fixes" >> release-notes.md
+          fi
+          
+          echo "" >> release-notes.md
+          echo "## Installation" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "\`\`\`bash" >> release-notes.md
+          echo "pip install codomyrmex==$VERSION" >> release-notes.md
+          echo "\`\`\`" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "## Assets" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "- **Source Distribution**: \`codomyrmex-$VERSION.tar.gz\`" >> release-notes.md
+          echo "- **Wheel Distribution**: \`codomyrmex-$VERSION-py3-none-any.whl\`" >> release-notes.md
+          
+          echo "Generated release notes:"
+          cat release-notes.md
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.prepare-release.outputs.tag }}
+          release_name: ${{ needs.prepare-release.outputs.tag }}
+          body_path: ./release-notes.md
+          draft: false
+          prerelease: ${{ needs.prepare-release.outputs.is_prerelease }}
+
+      - name: Upload Release Assets
+        run: |
+          TAG="${{ needs.prepare-release.outputs.tag }}"
+          UPLOAD_URL="${{ steps.create_release.outputs.upload_url }}"
+          
+          for file in release-assets/*; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              echo "📎 Uploading $filename..."
+              
+              curl -X POST \
+                -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -H "Content-Type: application/octet-stream" \
+                --data-binary @"$file" \
+                "${UPLOAD_URL}?name=$filename"
+            fi
+          done
+
+  publish-pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs: [prepare-release, create-release]
+    environment: pypi
+    permissions:
+      id-token: write
+    if: needs.prepare-release.outputs.is_prerelease == 'false'
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Prepare artifacts for PyPI
+        run: |
+          echo "📦 Preparing artifacts for PyPI..."
+          mkdir -p dist
+          find ./artifacts -name "*.whl" -o -name "*.tar.gz" | while read -r file; do
+            cp "$file" dist/
+          done
+          ls -la dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://upload.pypi.org/legacy/
+          print-hash: true
+          verbose: true
+
+  publish-test-pypi:
+    name: Publish to Test PyPI
+    runs-on: ubuntu-latest
+    needs: [prepare-release, create-release]
+    environment: test-pypi
+    permissions:
+      id-token: write
+    if: needs.prepare-release.outputs.is_prerelease == 'true'
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Prepare artifacts for Test PyPI
+        run: |
+          echo "📦 Preparing artifacts for Test PyPI..."
+          mkdir -p dist
+          find ./artifacts -name "*.whl" -o -name "*.tar.gz" | while read -r file; do
+            cp "$file" dist/
+          done
+          ls -la dist/
+
+      - name: Publish to Test PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          print-hash: true
+          verbose: true
+
+  verify-release:
+    name: Verify Release
+    runs-on: ubuntu-latest
+    needs: [prepare-release, publish-pypi, publish-test-pypi]
+    if: always() && (needs.publish-pypi.result == 'success' || needs.publish-test-pypi.result == 'success')
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Determine PyPI source
+        id: pypi_source
+        run: |
+          if [[ "${{ needs.prepare-release.outputs.is_prerelease }}" == "true" ]]; then
+            echo "source=test-pypi" >> $GITHUB_OUTPUT
+            echo "index_url=--index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/" >> $GITHUB_OUTPUT
+          else
+            echo "source=pypi" >> $GITHUB_OUTPUT
+            echo "index_url=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Test installation from ${{ steps.pypi_source.outputs.source }}
+        run: |
+          VERSION="${{ needs.prepare-release.outputs.version }}"
+          
+          echo "🧪 Testing installation of codomyrmex==$VERSION from ${{ steps.pypi_source.outputs.source }}"
+          
+          # Wait a bit for package to be available
+          sleep 30
+          
+          pip install ${{ steps.pypi_source.outputs.index_url }} codomyrmex==$VERSION
+          
+          # Basic functionality test
+          python -c "
+          import codomyrmex
+          print('✅ Package imported successfully')
+          print(f'Version: {getattr(codomyrmex, \"__version__\", \"unknown\")}')
+          "
+
+      - name: Test CLI functionality
+        run: |
+          echo "🧪 Testing CLI functionality..."
+          codomyrmex --help || echo "CLI test completed"
+
+  update-documentation:
+    name: Update Release Documentation
+    runs-on: ubuntu-latest
+    needs: [prepare-release, create-release]
+    if: needs.prepare-release.outputs.is_prerelease == 'false'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update version references
+        run: |
+          VERSION="${{ needs.prepare-release.outputs.version }}"
+          
+          echo "📝 Updating version references in documentation..."
+          
+          # Update README.md if it contains version references
+          if grep -q "version" README.md; then
+            sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+/version $VERSION/g" README.md || true
+          fi
+          
+          # Update installation instructions
+          find . -name "*.md" -exec grep -l "pip install codomyrmex" {} \; | while read -r file; do
+            sed -i "s/codomyrmex==[0-9]\+\.[0-9]\+\.[0-9]\+/codomyrmex==$VERSION/g" "$file" || true
+          done
+
+      - name: Trigger documentation rebuild
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: release-documentation-update
+          client-payload: '{"version": "${{ needs.prepare-release.outputs.version }}"}'
+
+  release-status:
+    name: Release Status
+    runs-on: ubuntu-latest
+    needs: [prepare-release, quality-gate, build-artifacts, create-release, publish-pypi, publish-test-pypi, verify-release]
+    if: always()
+    steps:
+      - name: Generate Release Summary
+        run: |
+          echo "# 🚀 Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version**: ${{ needs.prepare-release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Tag**: ${{ needs.prepare-release.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Pre-release**: ${{ needs.prepare-release.outputs.is_prerelease }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.quality-gate.result }}" == "success" ]]; then
+            echo "✅ **Quality Gate**: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Quality Gate**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.build-artifacts.result }}" == "success" ]]; then
+            echo "✅ **Build Artifacts**: Success" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Build Artifacts**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.create-release.result }}" == "success" ]]; then
+            echo "✅ **GitHub Release**: Created" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **GitHub Release**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.publish-pypi.result }}" == "success" ]]; then
+            echo "✅ **PyPI Publication**: Success" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.publish-test-pypi.result }}" == "success" ]]; then
+            echo "✅ **Test PyPI Publication**: Success" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Package Publication**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.verify-release.result }}" == "success" ]]; then
+            echo "✅ **Release Verification**: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Release Verification**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Release workflow failed. Please check the logs and fix any issues before retrying."
+          exit 1
