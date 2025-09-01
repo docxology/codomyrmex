@@ -53,6 +53,14 @@ GitHub API Operations:
 - get_pull_requests
 - get_pull_request
 - get_repository_info
+
+Visualization Integration:
+- create_git_analysis_report
+- visualize_git_branches
+- visualize_commit_activity
+- create_git_workflow_diagram
+- analyze_repository_structure
+- get_repository_metadata
 """
 
 from .git_manager import (
@@ -98,6 +106,20 @@ from .github_api import (
     GitHubAPIError,
 )
 
+try:
+    from .visualization_integration import (
+        # Visualization integration
+        create_git_analysis_report,
+        visualize_git_branches,
+        visualize_commit_activity,
+        create_git_workflow_diagram,
+        analyze_repository_structure,
+        get_repository_metadata,
+    )
+    VISUALIZATION_INTEGRATION_AVAILABLE = True
+except ImportError:
+    VISUALIZATION_INTEGRATION_AVAILABLE = False
+
 __all__ = [
     # Core operations
     'check_git_availability',
@@ -136,4 +158,16 @@ __all__ = [
     'get_pull_request',
     'get_repository_info',
     'GitHubAPIError',
-] 
+]
+
+# Add visualization functions if available
+if VISUALIZATION_INTEGRATION_AVAILABLE:
+    __all__.extend([
+        # Visualization integration
+        'create_git_analysis_report',
+        'visualize_git_branches',
+        'visualize_commit_activity',
+        'create_git_workflow_diagram',
+        'analyze_repository_structure',
+        'get_repository_metadata',
+    ]) 

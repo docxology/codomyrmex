@@ -14,17 +14,17 @@ CHANGED_DOC_FILES=$(git diff --cached --name-only | grep -E '\.(md|rst|txt)$' | 
 if [ -n "$CHANGED_DOC_FILES" ]; then
     echo "Documentation files changed. Running validation..."
 
-    # Check if we're in a virtual environment or if Python is available
-    if command -v python3 &> /dev/null; then
+    # Check if uv and Python are available
+    if command -v uv &> /dev/null && command -v python3 &> /dev/null; then
         cd "$PROJECT_ROOT/src/codomyrmex/documentation"
 
         # Aggregate docs if needed
         echo "Aggregating documentation..."
-        python3 documentation_website.py aggregate_docs
+        uv run python3 documentation_website.py aggregate_docs
 
         # Validate documentation
         echo "Validating documentation versions..."
-        if ! python3 documentation_website.py validate_docs; then
+        if ! uv run python3 documentation_website.py validate_docs; then
             echo "❌ Documentation validation failed!"
             echo "Please fix the issues above before committing."
             exit 1
@@ -32,7 +32,7 @@ if [ -n "$CHANGED_DOC_FILES" ]; then
 
         # Run comprehensive quality check
         echo "Running comprehensive documentation quality check..."
-        if ! python3 scripts/validate_docs_quality.py; then
+        if ! uv run python3 scripts/validate_docs_quality.py; then
             echo "❌ Documentation quality check failed!"
             echo "Please fix the issues above before committing."
             exit 1
@@ -49,7 +49,7 @@ if [ -n "$CHANGED_DOC_FILES" ]; then
 
         echo "✅ All documentation validation checks passed!"
     else
-        echo "⚠️  Python3 not found. Skipping documentation validation."
+        echo "⚠️  uv or Python3 not found. Skipping documentation validation."
         echo "Please ensure Python3 is installed and run validation manually."
     fi
 else

@@ -1,9 +1,0 @@
-{
-  "test_name": "pr_errors",
-  "timestamp": "2025-08-30T15:15:04.327637",
-  "success": true,
-  "result": {
-    "error_handling": "passed"
-  },
-  "github_token_available": true
-}

@@ -21,6 +21,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expanded documentation and usage examples for all visualizations.
 - `matplotlib` added to `requirements.txt`.
 - Comprehensive `README.md`, `API_SPECIFICATION.md`, and `USAGE_EXAMPLES.md`.
+- **NEW: Git Visualization Capabilities**:
+  - `mermaid_generator.py` module for Mermaid diagram generation
+  - `git_visualizer.py` module for comprehensive Git repository analysis
+  - `MermaidDiagramGenerator` class with support for gitgraph, flowchart, timeline, and structure diagrams
+  - `GitVisualizer` class for PNG and Mermaid Git visualizations
+  - `visualize_git_repository()` comprehensive repository analysis function
+  - `create_git_tree_png()` for PNG Git branch tree visualizations
+  - `create_git_tree_mermaid()` for Mermaid Git branch diagrams
+  - `create_git_branch_diagram()` for gitgraph diagrams
+  - `create_git_workflow_diagram()` for workflow flowcharts
+  - `create_repository_structure_diagram()` for directory structure graphs
+  - `create_commit_timeline_diagram()` for commit history timelines
+  - Integration with `git_operations` module for live Git data
+  - Support for both sample data and real Git repository analysis
+  - Comprehensive test coverage with unit and integration tests
 
 ### Changed
 - 

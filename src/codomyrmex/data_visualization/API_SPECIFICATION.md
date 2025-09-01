@@ -157,6 +157,89 @@ The module may also contain utility functions, for example in `plot_utils.py` (n
 
 *Note: The utility functions listed above are conceptual and may not be directly exposed as part of the primary API. The core plotting functions (`create_line_plot`, etc.) will internally use necessary utilities for saving, showing, and logging.*
 
+## Git Visualization Functions
+
+The module now includes specialized functions for visualizing Git repositories and operations. These functions integrate with the `git_operations` module when available.
+
+### Function: `visualize_git_repository()`
+
+- **Description**: Creates a comprehensive Git repository analysis with multiple visualization outputs.
+- **Path**: `from codomyrmex.data_visualization import visualize_git_repository`
+- **Parameters/Arguments**:
+    - `repository_path` (str): Path to the Git repository to analyze.
+    - `output_dir` (str, optional): Directory to save all output files. Default: `"./git_analysis"`.
+    - `report_name` (str, optional): Base name for output files. Default: repository name.
+- **Returns/Response**: Dictionary with status information and file paths for created visualizations.
+
+### Function: `create_git_tree_png()`
+
+- **Description**: Creates a PNG visualization of Git branch tree structure.
+- **Path**: `from codomyrmex.data_visualization import create_git_tree_png`
+- **Parameters/Arguments**:
+    - `repository_path` (str, optional): Path to Git repository. If None, uses sample data.
+    - `branches` (list of dict, optional): Branch information dictionaries.
+    - `commits` (list of dict, optional): Commit information dictionaries.
+    - `output_path` (str, optional): File path to save PNG. Default: `"git_tree.png"`.
+    - `title` (str, optional): Plot title. Default: `"Git Tree Visualization"`.
+- **Returns/Response**: Boolean indicating success.
+
+### Function: `create_git_tree_mermaid()`
+
+- **Description**: Creates a Mermaid diagram of Git branch tree structure.
+- **Path**: `from codomyrmex.data_visualization import create_git_tree_mermaid`
+- **Parameters/Arguments**:
+    - `repository_path` (str, optional): Path to Git repository. If None, uses sample data.
+    - `branches` (list of dict, optional): Branch information dictionaries.
+    - `commits` (list of dict, optional): Commit information dictionaries.
+    - `output_path` (str, optional): File path to save Mermaid file. Default: `"git_tree.mmd"`.
+    - `title` (str, optional): Diagram title. Default: `"Git Tree Diagram"`.
+- **Returns/Response**: String containing Mermaid diagram content.
+
+## Mermaid Diagram Functions
+
+The module includes comprehensive Mermaid diagram generation capabilities for various Git-related visualizations.
+
+### Function: `create_git_branch_diagram()`
+
+- **Description**: Creates a Mermaid gitgraph diagram showing branch structure and commits.
+- **Path**: `from codomyrmex.data_visualization import create_git_branch_diagram`
+- **Parameters/Arguments**:
+    - `branches` (list of dict, optional): Branch information with names and creation dates.
+    - `commits` (list of dict, optional): Commit information with hashes, messages, and dates.
+    - `title` (str, optional): Diagram title. Default: `"Git Branch Diagram"`.
+    - `output_path` (str, optional): File path to save Mermaid file. Default: None.
+- **Returns/Response**: String containing Mermaid gitgraph content.
+
+### Function: `create_git_workflow_diagram()`
+
+- **Description**: Creates a Mermaid flowchart diagram showing Git workflow steps.
+- **Path**: `from codomyrmex.data_visualization import create_git_workflow_diagram`
+- **Parameters/Arguments**:
+    - `workflow_steps` (list of dict, optional): Workflow step information with names, types, and descriptions.
+    - `title` (str, optional): Diagram title. Default: `"Git Workflow"`.
+    - `output_path` (str, optional): File path to save Mermaid file. Default: None.
+- **Returns/Response**: String containing Mermaid flowchart content.
+
+### Function: `create_repository_structure_diagram()`
+
+- **Description**: Creates a Mermaid graph diagram showing repository directory structure.
+- **Path**: `from codomyrmex.data_visualization import create_repository_structure_diagram`
+- **Parameters/Arguments**:
+    - `repo_structure` (dict, optional): Dictionary representing directory structure.
+    - `title` (str, optional): Diagram title. Default: `"Repository Structure"`.
+    - `output_path` (str, optional): File path to save Mermaid file. Default: None.
+- **Returns/Response**: String containing Mermaid graph content.
+
+### Function: `create_commit_timeline_diagram()`
+
+- **Description**: Creates a Mermaid timeline diagram showing commit history over time.
+- **Path**: `from codomyrmex.data_visualization import create_commit_timeline_diagram`
+- **Parameters/Arguments**:
+    - `commits` (list of dict, optional): Commit information with dates and messages.
+    - `title` (str, optional): Diagram title. Default: `"Commit Timeline"`.
+    - `output_path` (str, optional): File path to save Mermaid file. Default: None.
+- **Returns/Response**: String containing Mermaid timeline content.
+
 ## Logging
 
 All plotting functions use the `logging_monitoring` module for logging. Ensure `setup_logging()` is called before using these functions.
