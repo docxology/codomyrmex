@@ -24,6 +24,14 @@ Each example is a **self-contained orchestrator script** that:
 | **[ai-code-editing-demo.sh](basic/ai-code-editing-demo.sh)** | AI-powered code generation | ~4 min | API keys |
 | **[pattern-matching-demo.sh](basic/pattern-matching-demo.sh)** | Code pattern analysis and recognition | ~3 min | None |
 
+### **📋 Core Scripts**
+*Main demonstration and usage scripts*
+
+| Script | Description | Usage |
+|--------|-------------|-------|
+| **[example_usage.py](example_usage.py)** | Complete module demonstration | `python examples/example_usage.py` |
+| **[demo_orchestrator.py](demo_orchestrator.py)** | Interactive system discovery demo | `python examples/demo_orchestrator.py` |
+
 ### **🔗 Integration Examples** (`integration/`)
 *Multiple modules working together - shows the power of integration*
 

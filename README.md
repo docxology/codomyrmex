@@ -36,7 +36,7 @@ codomyrmex check    # Verify environment setup
 ### 4. Start Using Modules
 ```bash
 # Run the example script to see everything working
-python example_usage.py
+python examples/example_usage.py
 ```
 
 Or try individual modules:

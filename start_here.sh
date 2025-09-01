@@ -143,10 +143,10 @@ run_quick_demo() {
     echo -e "\n${CYAN}🏃 Running Codomyrmex Quick Demo...${NC}"
     PYTHON_CMD=$(get_python_cmd)
 
-    if [[ -f "example_usage.py" ]]; then
-        $PYTHON_CMD example_usage.py
+    if [[ -f "examples/example_usage.py" ]]; then
+        $PYTHON_CMD examples/example_usage.py
     else
-        echo -e "${YELLOW}⚠️  example_usage.py not found. Running basic demo...${NC}"
+        echo -e "${YELLOW}⚠️  examples/example_usage.py not found. Running basic demo...${NC}"
         $PYTHON_CMD -c "
 import sys
 sys.path.insert(0, 'src')
