@@ -31,7 +31,8 @@ concurrency:
 
 env:
   PYTHON_VERSION: "3.11"
-  NODE_VERSION: "18"
+  UV_VERSION: "0.5.7"
+  NODE_VERSION: "20"
 
 jobs:
   validate-documentation:
@@ -62,7 +63,7 @@ jobs:
       - name: Install UV
         uses: astral-sh/setup-uv@v3
         with:
-          version: "0.4.18"
+          version: ${{ env.UV_VERSION }}
 
       - name: Set up Python
         run: uv python install ${{ env.PYTHON_VERSION }}
@@ -132,7 +133,7 @@ jobs:
       - name: Install UV
         uses: astral-sh/setup-uv@v3
         with:
-          version: "0.4.18"
+          version: ${{ env.UV_VERSION }}
 
       - name: Set up Python
         run: uv python install ${{ env.PYTHON_VERSION }}

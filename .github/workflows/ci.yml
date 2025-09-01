@@ -13,7 +13,8 @@ concurrency:
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.4.18"
+  UV_VERSION: "0.5.7"  # Updated to latest version
+  NODE_VERSION: "20"
 
 jobs:
   lint-and-format:
@@ -35,11 +36,17 @@ jobs:
         run: |
           uv sync --all-extras --dev
 
-      - name: Cache pre-commit hooks
+      - name: Cache dependencies and tools
         uses: actions/cache@v4
         with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-${{ env.PYTHON_VERSION }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          path: |
+            ~/.cache/pre-commit
+            ~/.cache/uv
+            ~/.cache/pip
+          key: ${{ runner.os }}-deps-${{ env.PYTHON_VERSION }}-${{ hashFiles('uv.lock', 'pyproject.toml', 'requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-${{ env.PYTHON_VERSION }}-
+            ${{ runner.os }}-deps-
 
       - name: Run Ruff linting
         run: |
@@ -188,7 +195,14 @@ jobs:
 
       - name: Run unit tests
         run: |
-          uv run pytest testing/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=xml --cov-report=term-missing --cov-fail-under=70 --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
+          uv run pytest testing/unit/ -v --tb=short \
+            --cov=src/codomyrmex \
+            --cov-report=xml \
+            --cov-report=html \
+            --cov-report=term-missing \
+            --cov-fail-under=70 \
+            --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml \
+            --cov-report=json
 
       - name: Run integration tests
         run: |
@@ -202,6 +216,9 @@ jobs:
           path: |
             junit-*.xml
             coverage.xml
+            coverage.json
+            htmlcov/
+          retention-days: 30
 
       - name: Upload coverage to Codecov
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
@@ -326,30 +343,112 @@ jobs:
             dependency-tree.txt
             uv.lock
 
+  test-summary:
+    name: Test Results Summary
+    runs-on: ubuntu-latest
+    needs: [test-matrix, comprehensive-tests]
+    if: always()
+    steps:
+      - name: Download all test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./test-results
+          pattern: test-results-*
+
+      - name: Generate test summary
+        run: |
+          echo "# 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Matrix Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Process test results
+          total_tests=0
+          failed_tests=0
+          
+          for dir in test-results/*/; do
+            if [ -d "$dir" ]; then
+              echo "📊 Processing: $(basename "$dir")" >> $GITHUB_STEP_SUMMARY
+              
+              # Count XML files for test metrics
+              xml_files=$(find "$dir" -name "*.xml" | wc -l)
+              if [ $xml_files -gt 0 ]; then
+                echo "  - Test files: $xml_files" >> $GITHUB_STEP_SUMMARY
+              fi
+            fi
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Coverage Information" >> $GITHUB_STEP_SUMMARY
+          echo "- Coverage reports available in artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- HTML coverage reports generated for detailed analysis" >> $GITHUB_STEP_SUMMARY
+
   final-status:
     name: CI Status
     runs-on: ubuntu-latest
-    needs: [lint-and-format, security-scan, complexity-analysis, test-matrix, build-package, validate-dependencies]
+    needs: [lint-and-format, security-scan, complexity-analysis, test-matrix, build-package, validate-dependencies, test-summary]
     if: always()
     steps:
       - name: Check CI Status
         run: |
-          if [[ "${{ needs.lint-and-format.result }}" == "success" && \
-                "${{ needs.security-scan.result }}" == "success" && \
-                "${{ needs.complexity-analysis.result }}" == "success" && \
-                "${{ needs.test-matrix.result }}" == "success" && \
-                "${{ needs.build-package.result }}" == "success" && \
-                "${{ needs.validate-dependencies.result }}" == "success" ]]; then
+          echo "# 🚀 CI Pipeline Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Status Overview" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          all_passed=true
+          
+          if [[ "${{ needs.lint-and-format.result }}" == "success" ]]; then
+            echo "✅ **Code Quality**: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Code Quality**: Failed" >> $GITHUB_STEP_SUMMARY
+            all_passed=false
+          fi
+          
+          if [[ "${{ needs.security-scan.result }}" == "success" ]]; then
+            echo "✅ **Security Scan**: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Security Scan**: Failed" >> $GITHUB_STEP_SUMMARY
+            all_passed=false
+          fi
+          
+          if [[ "${{ needs.complexity-analysis.result }}" == "success" ]]; then
+            echo "✅ **Complexity Analysis**: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Complexity Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
+            all_passed=false
+          fi
+          
+          if [[ "${{ needs.test-matrix.result }}" == "success" ]]; then
+            echo "✅ **Test Matrix**: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Test Matrix**: Failed" >> $GITHUB_STEP_SUMMARY
+            all_passed=false
+          fi
+          
+          if [[ "${{ needs.build-package.result }}" == "success" ]]; then
+            echo "✅ **Package Build**: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Package Build**: Failed" >> $GITHUB_STEP_SUMMARY
+            all_passed=false
+          fi
+          
+          if [[ "${{ needs.validate-dependencies.result }}" == "success" ]]; then
+            echo "✅ **Dependencies**: Validated" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Dependencies**: Failed" >> $GITHUB_STEP_SUMMARY
+            all_passed=false
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "$all_passed" == "true" ]]; then
+            echo "🎉 **Overall Result: SUCCESS** - All CI checks passed!" >> $GITHUB_STEP_SUMMARY
             echo "✅ All CI checks passed!"
             exit 0
           else
+            echo "❌ **Overall Result: FAILURE** - Some CI checks failed!" >> $GITHUB_STEP_SUMMARY
             echo "❌ Some CI checks failed!"
-            echo "Lint and Format: ${{ needs.lint-and-format.result }}"
-            echo "Security Scan: ${{ needs.security-scan.result }}"
-            echo "Complexity Analysis: ${{ needs.complexity-analysis.result }}"
-            echo "Test Matrix: ${{ needs.test-matrix.result }}"
-            echo "Build Package: ${{ needs.build-package.result }}"
-            echo "Validate Dependencies: ${{ needs.validate-dependencies.result }}"
             exit 1
           fi
 

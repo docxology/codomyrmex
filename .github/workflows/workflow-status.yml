@@ -1,0 +1,295 @@
+name: Workflow Status Dashboard
+
+on:
+  workflow_run:
+    workflows: 
+      - "Continuous Integration"
+      - "Pre-commit Checks"
+      - "Security Scanning and Dependency Management"
+      - "Documentation Build and Deploy"
+      - "Performance Benchmarks"
+      - "Repository Maintenance"
+    types:
+      - completed
+  schedule:
+    # Update dashboard daily at 9 AM UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: workflow-status
+  cancel-in-progress: false
+
+jobs:
+  update-status:
+    name: Update Workflow Status Dashboard
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get workflow runs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workflows = [
+              'Continuous Integration',
+              'Pre-commit Checks', 
+              'Security Scanning and Dependency Management',
+              'Documentation Build and Deploy',
+              'Performance Benchmarks',
+              'Repository Maintenance'
+            ];
+            
+            let statusData = {
+              updated: new Date().toISOString(),
+              workflows: {}
+            };
+            
+            for (const workflowName of workflows) {
+              try {
+                const workflowRuns = await github.rest.actions.listWorkflowRuns({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: `${workflowName.toLowerCase().replace(/ /g, '-')}.yml`,
+                  per_page: 5
+                });
+                
+                const latestRun = workflowRuns.data.workflow_runs[0];
+                
+                statusData.workflows[workflowName] = {
+                  status: latestRun?.conclusion || 'unknown',
+                  url: latestRun?.html_url || '',
+                  updatedAt: latestRun?.updated_at || '',
+                  runId: latestRun?.id || 0,
+                  event: latestRun?.event || '',
+                  branch: latestRun?.head_branch || ''
+                };
+              } catch (error) {
+                console.log(`Could not fetch workflow runs for ${workflowName}: ${error.message}`);
+                statusData.workflows[workflowName] = {
+                  status: 'unknown',
+                  url: '',
+                  updatedAt: '',
+                  runId: 0,
+                  event: '',
+                  branch: ''
+                };
+              }
+            }
+            
+            // Save status data as JSON
+            const fs = require('fs');
+            fs.writeFileSync('workflow-status.json', JSON.stringify(statusData, null, 2));
+
+      - name: Generate status README
+        run: |
+          echo "# 🚀 Codomyrmex Workflow Status Dashboard" > workflow-status.md
+          echo "" >> workflow-status.md
+          echo "*Last updated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')*" >> workflow-status.md
+          echo "" >> workflow-status.md
+          echo "## Current Status Overview" >> workflow-status.md
+          echo "" >> workflow-status.md
+          
+          # Process JSON with Python for better formatting
+          python3 << 'EOF'
+          import json
+          from datetime import datetime
+          
+          with open('workflow-status.json', 'r') as f:
+              data = json.load(f)
+          
+          def get_status_emoji(status):
+              if status == 'success':
+                  return '✅'
+              elif status == 'failure':
+                  return '❌'
+              elif status == 'cancelled':
+                  return '⏹️'
+              elif status in ['in_progress', 'queued']:
+                  return '🔄'
+              else:
+                  return '❓'
+          
+          print("| Workflow | Status | Last Run | Branch | Event |")
+          print("|----------|--------|----------|---------|-------|")
+          
+          for name, info in data['workflows'].items():
+              emoji = get_status_emoji(info['status'])
+              status = info['status'].title()
+              
+              # Format date
+              if info['updatedAt']:
+                  try:
+                      date_obj = datetime.fromisoformat(info['updatedAt'].replace('Z', '+00:00'))
+                      date_str = date_obj.strftime('%Y-%m-%d %H:%M')
+                  except:
+                      date_str = info['updatedAt'][:16]
+              else:
+                  date_str = 'N/A'
+              
+              url = info['url'] if info['url'] else '#'
+              branch = info['branch'] if info['branch'] else 'N/A'
+              event = info['event'] if info['event'] else 'N/A'
+              
+              print(f"| [{name}]({url}) | {emoji} {status} | {date_str} | {branch} | {event} |")
+          EOF
+          
+          python3 -c "
+          import json
+          from datetime import datetime
+          
+          with open('workflow-status.json', 'r') as f:
+              data = json.load(f)
+          
+          def get_status_emoji(status):
+              if status == 'success':
+                  return '✅'
+              elif status == 'failure':
+                  return '❌'
+              elif status == 'cancelled':
+                  return '⏹️'
+              elif status in ['in_progress', 'queued']:
+                  return '🔄'
+              else:
+                  return '❓'
+          
+          print()
+          print('| Workflow | Status | Last Run | Branch | Event |')
+          print('|----------|--------|----------|---------|-------|')
+          
+          for name, info in data['workflows'].items():
+              emoji = get_status_emoji(info['status'])
+              status = info['status'].title()
+              
+              # Format date
+              if info['updatedAt']:
+                  try:
+                      date_obj = datetime.fromisoformat(info['updatedAt'].replace('Z', '+00:00'))
+                      date_str = date_obj.strftime('%Y-%m-%d %H:%M')
+                  except:
+                      date_str = info['updatedAt'][:16]
+              else:
+                  date_str = 'N/A'
+              
+              url = info['url'] if info['url'] else '#'
+              branch = info['branch'] if info['branch'] else 'N/A'
+              event = info['event'] if info['event'] else 'N/A'
+              
+              print(f'| [{name}]({url}) | {emoji} {status} | {date_str} | {branch} | {event} |')
+          " >> workflow-status.md
+          
+          echo "" >> workflow-status.md
+          echo "## Quick Actions" >> workflow-status.md
+          echo "" >> workflow-status.md
+          echo "- 🔄 [Trigger CI](../../actions/workflows/ci.yml)" >> workflow-status.md
+          echo "- 🔒 [Run Security Scan](../../actions/workflows/security.yml)" >> workflow-status.md
+          echo "- 📚 [Build Documentation](../../actions/workflows/documentation.yml)" >> workflow-status.md
+          echo "- 🏃‍♂️ [Run Benchmarks](../../actions/workflows/benchmarks.yml)" >> workflow-status.md
+          echo "- 🔧 [Repository Maintenance](../../actions/workflows/maintenance.yml)" >> workflow-status.md
+          echo "" >> workflow-status.md
+          echo "## Workflow Health Metrics" >> workflow-status.md
+          echo "" >> workflow-status.md
+          
+          # Calculate success rates
+          python3 -c "
+          import json
+          
+          with open('workflow-status.json', 'r') as f:
+              data = json.load(f)
+          
+          total = len(data['workflows'])
+          successful = sum(1 for w in data['workflows'].values() if w['status'] == 'success')
+          failed = sum(1 for w in data['workflows'].values() if w['status'] == 'failure')
+          other = total - successful - failed
+          
+          success_rate = (successful / total * 100) if total > 0 else 0
+          
+          print(f'- **Total Workflows**: {total}')
+          print(f'- **Currently Successful**: {successful} ({success_rate:.1f}%)')
+          print(f'- **Currently Failed**: {failed}')
+          print(f'- **Other States**: {other}')
+          " >> workflow-status.md
+          
+          echo "" >> workflow-status.md
+          echo "---" >> workflow-status.md
+          echo "*This dashboard is automatically updated by the [Workflow Status Dashboard](../../actions/workflows/workflow-status.yml) workflow.*" >> workflow-status.md
+
+      - name: Upload status artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-status-report
+          path: |
+            workflow-status.json
+            workflow-status.md
+          retention-days: 30
+
+      - name: Generate status summary
+        run: |
+          echo "# 📊 Workflow Status Dashboard Updated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Update Time**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Show current status in summary
+          python3 -c "
+          import json
+          
+          with open('workflow-status.json', 'r') as f:
+              data = json.load(f)
+          
+          def get_status_emoji(status):
+              if status == 'success':
+                  return '✅'
+              elif status == 'failure':
+                  return '❌'
+              elif status == 'cancelled':
+                  return '⏹️'
+              elif status in ['in_progress', 'queued']:
+                  return '🔄'
+              else:
+                  return '❓'
+          
+          print('## Current Workflow Status')
+          print()
+          
+          for name, info in data['workflows'].items():
+              emoji = get_status_emoji(info['status'])
+              status = info['status'].title()
+              print(f'{emoji} **{name}**: {status}')
+          
+          print()
+          total = len(data['workflows'])
+          successful = sum(1 for w in data['workflows'].values() if w['status'] == 'success')
+          success_rate = (successful / total * 100) if total > 0 else 0
+          print(f'**Overall Health**: {successful}/{total} workflows successful ({success_rate:.1f}%)')
+          " >> $GITHUB_STEP_SUMMARY
+
+      - name: Post status to issue (if failures detected)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('workflow-status.json', 'utf8'));
+            
+            // Check for any failed workflows
+            const failures = Object.entries(data.workflows)
+              .filter(([name, info]) => info.status === 'failure')
+              .map(([name, info]) => ({ name, url: info.url }));
+            
+            if (failures.length > 0) {
+              console.log(`Found ${failures.length} failed workflows`);
+              
+              // You could create an issue or send notifications here
+              // For now, just log the failures
+              failures.forEach(failure => {
+                console.log(`❌ ${failure.name}: ${failure.url}`);
+              });
+            } else {
+              console.log('✅ All workflows are healthy!');
+            }

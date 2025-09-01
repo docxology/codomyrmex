@@ -1,0 +1,338 @@
+name: Workflow Coordinator
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      workflows:
+        description: 'Workflows to run (comma-separated: ci,security,docs,benchmarks,all)'
+        required: false
+        default: 'all'
+        type: string
+      skip_tests:
+        description: 'Skip test execution for faster feedback'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_VERSION: "0.5.7"
+  NODE_VERSION: "20"
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      source: ${{ steps.changes.outputs.source }}
+      tests: ${{ steps.changes.outputs.tests }}
+      docs: ${{ steps.changes.outputs.docs }}
+      workflows: ${{ steps.changes.outputs.workflows }}
+      dependencies: ${{ steps.changes.outputs.dependencies }}
+      security: ${{ steps.changes.outputs.security }}
+      all-files: ${{ steps.changes.outputs.all-files }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect file changes
+        id: changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            source:
+              - 'src/**/*.py'
+              - 'pyproject.toml'
+              - 'setup.py'
+            tests:
+              - 'testing/**'
+              - 'tests/**'
+              - '**/test_*.py'
+              - '**/*_test.py'
+            docs:
+              - 'src/**/README.md'
+              - 'src/**/docs/**'
+              - 'src/**/CHANGELOG.md'
+              - 'src/**/API_SPECIFICATION.md'
+              - 'src/**/MCP_TOOL_SPECIFICATION.md'
+              - 'src/**/USAGE_EXAMPLES.md'
+              - 'src/codomyrmex/documentation/**'
+              - 'docs/**'
+              - '*.md'
+            workflows:
+              - '.github/workflows/**'
+              - '.github/**'
+            dependencies:
+              - 'requirements.txt'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - 'poetry.lock'
+              - 'Pipfile.lock'
+            security:
+              - 'pyproject.toml'
+              - 'requirements.txt'
+              - '.bandit'
+              - '.github/workflows/security.yml'
+            all-files:
+              - '**'
+
+  coordinate-ci:
+    name: Trigger CI Workflow
+    needs: changes
+    if: |
+      needs.changes.outputs.source == 'true' ||
+      needs.changes.outputs.tests == 'true' ||
+      needs.changes.outputs.dependencies == 'true' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
+  coordinate-security:
+    name: Trigger Security Workflow
+    needs: changes
+    if: |
+      needs.changes.outputs.source == 'true' ||
+      needs.changes.outputs.security == 'true' ||
+      needs.changes.outputs.dependencies == 'true' ||
+      github.event_name == 'schedule' ||
+      contains(github.event.inputs.workflows, 'security') ||
+      contains(github.event.inputs.workflows, 'all')
+    uses: ./.github/workflows/security.yml
+    secrets: inherit
+
+  coordinate-docs:
+    name: Trigger Documentation Workflow
+    needs: changes
+    if: |
+      needs.changes.outputs.docs == 'true' ||
+      contains(github.event.inputs.workflows, 'docs') ||
+      contains(github.event.inputs.workflows, 'all')
+    uses: ./.github/workflows/documentation.yml
+    secrets: inherit
+
+  coordinate-benchmarks:
+    name: Trigger Benchmarks
+    needs: changes
+    if: |
+      (needs.changes.outputs.source == 'true' && github.ref == 'refs/heads/main') ||
+      github.event_name == 'schedule' ||
+      contains(github.event.inputs.workflows, 'benchmarks') ||
+      contains(github.event.inputs.workflows, 'all')
+    uses: ./.github/workflows/benchmarks.yml
+    secrets: inherit
+
+  smart-testing:
+    name: Smart Testing Strategy
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.source == 'true' || needs.changes.outputs.tests == 'true'
+    outputs:
+      test-strategy: ${{ steps.strategy.outputs.strategy }}
+      affected-modules: ${{ steps.strategy.outputs.modules }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Analyze changed files
+        id: strategy
+        run: |
+          echo "🧠 Analyzing changes for smart testing strategy..."
+          
+          # Get list of changed Python files
+          changed_files=$(git diff --name-only origin/main...HEAD | grep '\.py$' || true)
+          
+          if [ -z "$changed_files" ]; then
+            echo "strategy=minimal" >> $GITHUB_OUTPUT
+            echo "modules=[]" >> $GITHUB_OUTPUT
+            echo "No Python files changed, using minimal testing"
+            exit 0
+          fi
+          
+          # Determine affected modules
+          affected_modules=()
+          for file in $changed_files; do
+            if [[ $file == src/codomyrmex/* ]]; then
+              module=$(echo $file | cut -d'/' -f3)
+              if [[ ! " ${affected_modules[@]} " =~ " ${module} " ]]; then
+                affected_modules+=("$module")
+              fi
+            fi
+          done
+          
+          # Determine test strategy based on changes
+          total_changes=$(echo "$changed_files" | wc -l)
+          
+          if [ $total_changes -gt 50 ]; then
+            strategy="comprehensive"
+          elif [ $total_changes -gt 20 ]; then
+            strategy="extended"
+          elif [ ${#affected_modules[@]} -gt 3 ]; then
+            strategy="cross-module"
+          else
+            strategy="targeted"
+          fi
+          
+          echo "strategy=$strategy" >> $GITHUB_OUTPUT
+          echo "modules=$(printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
+          
+          echo "Test strategy: $strategy"
+          echo "Affected modules: ${affected_modules[*]}"
+          echo "Total changed files: $total_changes"
+
+      - name: Generate testing recommendations
+        run: |
+          echo "# 🧪 Smart Testing Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Strategy**: ${{ steps.strategy.outputs.strategy }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Affected Modules**: ${{ steps.strategy.outputs.modules }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          strategy="${{ steps.strategy.outputs.strategy }}"
+          case $strategy in
+            "minimal")
+              echo "- ⚡ **Minimal Testing**: Only basic smoke tests" >> $GITHUB_STEP_SUMMARY
+              echo "- No Python code changes detected" >> $GITHUB_STEP_SUMMARY
+              ;;
+            "targeted")
+              echo "- 🎯 **Targeted Testing**: Focus on changed modules" >> $GITHUB_STEP_SUMMARY
+              echo "- Run unit tests for affected modules only" >> $GITHUB_STEP_SUMMARY
+              ;;
+            "cross-module")
+              echo "- 🔄 **Cross-Module Testing**: Multiple modules affected" >> $GITHUB_STEP_SUMMARY
+              echo "- Run integration tests for module interactions" >> $GITHUB_STEP_SUMMARY
+              ;;
+            "extended")
+              echo "- 📈 **Extended Testing**: Significant changes detected" >> $GITHUB_STEP_SUMMARY
+              echo "- Run comprehensive test suite with coverage" >> $GITHUB_STEP_SUMMARY
+              ;;
+            "comprehensive")
+              echo "- 🌟 **Comprehensive Testing**: Major changes detected" >> $GITHUB_STEP_SUMMARY
+              echo "- Full test matrix across all environments" >> $GITHUB_STEP_SUMMARY
+              ;;
+          esac
+
+  coordination-summary:
+    name: Coordination Summary
+    runs-on: ubuntu-latest
+    needs: [changes, coordinate-ci, coordinate-security, coordinate-docs, coordinate-benchmarks, smart-testing]
+    if: always()
+    steps:
+      - name: Generate coordination summary
+        run: |
+          echo "# 🎯 Workflow Coordination Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Changes Detected" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.changes.outputs.source }}" == "true" ]]; then
+            echo "✅ **Source Code**: Changed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚪ **Source Code**: No changes" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.changes.outputs.tests }}" == "true" ]]; then
+            echo "✅ **Tests**: Changed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚪ **Tests**: No changes" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.changes.outputs.docs }}" == "true" ]]; then
+            echo "✅ **Documentation**: Changed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚪ **Documentation**: No changes" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.changes.outputs.dependencies }}" == "true" ]]; then
+            echo "✅ **Dependencies**: Changed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚪ **Dependencies**: No changes" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.changes.outputs.workflows }}" == "true" ]]; then
+            echo "✅ **Workflows**: Changed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚪ **Workflows**: No changes" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Triggered Workflows" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.coordinate-ci.result }}" != "skipped" ]]; then
+            if [[ "${{ needs.coordinate-ci.result }}" == "success" ]]; then
+              echo "✅ **CI Pipeline**: Completed successfully" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **CI Pipeline**: Failed or in progress" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⏭️ **CI Pipeline**: Skipped (no relevant changes)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.coordinate-security.result }}" != "skipped" ]]; then
+            if [[ "${{ needs.coordinate-security.result }}" == "success" ]]; then
+              echo "✅ **Security Scan**: Completed successfully" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **Security Scan**: Failed or in progress" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⏭️ **Security Scan**: Skipped (no relevant changes)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.coordinate-docs.result }}" != "skipped" ]]; then
+            if [[ "${{ needs.coordinate-docs.result }}" == "success" ]]; then
+              echo "✅ **Documentation**: Built successfully" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **Documentation**: Failed or in progress" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⏭️ **Documentation**: Skipped (no doc changes)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.coordinate-benchmarks.result }}" != "skipped" ]]; then
+            if [[ "${{ needs.coordinate-benchmarks.result }}" == "success" ]]; then
+              echo "✅ **Benchmarks**: Completed successfully" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **Benchmarks**: Failed or in progress" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⏭️ **Benchmarks**: Skipped (not main branch or scheduled)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Optimization Benefits" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚀 **Smart Triggering**: Only run workflows when relevant changes detected" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚡ **Parallel Execution**: Workflows run concurrently when possible" >> $GITHUB_STEP_SUMMARY
+          echo "- 🎯 **Targeted Testing**: Focus testing on changed components" >> $GITHUB_STEP_SUMMARY
+          echo "- 💰 **Cost Optimization**: Reduce unnecessary workflow runs" >> $GITHUB_STEP_SUMMARY
+
+      - name: Report any failures
+        if: |
+          needs.coordinate-ci.result == 'failure' ||
+          needs.coordinate-security.result == 'failure' ||
+          needs.coordinate-docs.result == 'failure' ||
+          needs.coordinate-benchmarks.result == 'failure'
+        run: |
+          echo "❌ Some coordinated workflows failed!"
+          echo "CI Result: ${{ needs.coordinate-ci.result }}"
+          echo "Security Result: ${{ needs.coordinate-security.result }}"  
+          echo "Docs Result: ${{ needs.coordinate-docs.result }}"
+          echo "Benchmarks Result: ${{ needs.coordinate-benchmarks.result }}"
+          exit 1

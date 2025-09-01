@@ -12,7 +12,7 @@ concurrency:
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.4.18"
+  UV_VERSION: "0.5.7"
 
 jobs:
   pre-commit:
@@ -44,7 +44,7 @@ jobs:
 
       - name: Install pre-commit
         run: |
-          pip install pre-commit
+          uv run pip install pre-commit
 
       - name: Install pre-commit hooks
         run: |
