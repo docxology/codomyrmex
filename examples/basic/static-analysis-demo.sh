@@ -28,13 +28,37 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 OUTPUT_DIR="$PROJECT_ROOT/examples/output/static-analysis"
 DEMO_START_TIME=$(date +%s)
 
+# Parse command line arguments
+INTERACTIVE=true
+for arg in "$@"; do
+    case $arg in
+        --non-interactive)
+            INTERACTIVE=false
+            ;;
+        --help)
+            echo "Usage: $0 [--non-interactive] [--help]"
+            echo "  --non-interactive  Run without user prompts"
+            echo "  --help            Show this help message"
+            exit 0
+            ;;
+    esac
+done
+
 # Helper functions
 log_info() { echo -e "${CYAN}ℹ️  $1${NC}"; }
 log_success() { echo -e "${GREEN}✅ $1${NC}"; }
 log_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
 log_error() { echo -e "${RED}❌ $1${NC}"; }
 log_step() { echo -e "\n${BLUE}🔹 $1${NC}"; }
-pause_for_user() { echo -e "${YELLOW}💡 $1${NC}"; read -p "Press Enter to continue..."; }
+pause_for_user() {
+    echo -e "${YELLOW}💡 $1${NC}"
+    if [ "$INTERACTIVE" = true ]; then
+        read -p "Press Enter to continue..."
+    else
+        echo -e "${CYAN}[Non-interactive mode: Continuing automatically...]${NC}"
+        sleep 1
+    fi
+}
 
 show_header() {
     echo -e "${CYAN}"
@@ -911,15 +935,20 @@ show_summary() {
 
 cleanup_option() {
     echo ""
-    read -p "🧹 Would you like to clean up the generated files? (y/N): " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        log_info "Cleaning up generated files..."
-        cd "$OUTPUT_DIR"
-        rm -f *.py *.json *.png
-        log_success "Cleanup completed!"
+    if [ "$INTERACTIVE" = true ]; then
+        read -p "🧹 Would you like to clean up the generated files? (y/N): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            log_info "Cleaning up generated files..."
+            cd "$OUTPUT_DIR"
+            rm -f *.py *.json *.png
+            log_success "Cleanup completed!"
+        else
+            log_info "Files preserved for your exploration"
+        fi
     else
-        log_info "Files preserved for your exploration"
+        log_info "Non-interactive mode: Files preserved for your exploration"
+        log_info "Generated files located in: $OUTPUT_DIR"
     fi
 }
 

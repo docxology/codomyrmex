@@ -1,7 +1,11 @@
 import logging
 import os
 import sys
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    DOTENV_AVAILABLE = True
+except ImportError:
+    DOTENV_AVAILABLE = False
 import json
 from datetime import datetime
 
@@ -57,7 +61,8 @@ def setup_logging():
         logging.getLogger(__name__).debug("Logging already configured. Skipping.")
         return
 
-    load_dotenv()  # Load .env file from current dir or parent dirs
+    if DOTENV_AVAILABLE:
+        load_dotenv()  # Load .env file from current dir or parent dirs
 
     log_level_str = os.getenv('CODOMYRMEX_LOG_LEVEL', 'INFO').upper()
     log_file = os.getenv('CODOMYRMEX_LOG_FILE')

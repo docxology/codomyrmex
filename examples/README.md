@@ -18,11 +18,11 @@ Each example is a **self-contained orchestrator script** that:
 
 | Example | Description | Duration | Prerequisites |
 |---------|-------------|----------|---------------|
-| **[data-visualization-demo.sh](basic/data-visualization-demo.sh)** | Create charts, plots, and visualizations | ~3 min | None |
-| **[static-analysis-demo.sh](basic/static-analysis-demo.sh)** | Code quality analysis and linting | ~2 min | Sample Python code |
-| **[code-execution-demo.sh](basic/code-execution-demo.sh)** | Safe code execution in sandbox | ~2 min | Docker (optional) |
-| **[ai-code-editing-demo.sh](basic/ai-code-editing-demo.sh)** | AI-powered code generation | ~4 min | API keys |
-| **[pattern-matching-demo.sh](basic/pattern-matching-demo.sh)** | Code pattern analysis and recognition | ~3 min | None |
+| **[data-visualization-demo.sh](basic/data-visualization-demo.sh)** ✅ | Create charts, plots, and visualizations | ~3 min | None |
+| **[static-analysis-demo.sh](basic/static-analysis-demo.sh)** ✅ | Code quality analysis and linting | ~2 min | Sample Python code |
+| **code-execution-demo.sh** 🚧 | Safe code execution in sandbox | ~2 min | Docker |
+| **ai-code-editing-demo.sh** 🚧 | AI-powered code generation | ~4 min | API keys |
+| **pattern-matching-demo.sh** 🚧 | Code pattern analysis and recognition | ~3 min | None |
 
 ### **📋 Core Scripts**
 *Main demonstration and usage scripts*
@@ -37,55 +37,109 @@ Each example is a **self-contained orchestrator script** that:
 
 | Example | Description | Duration | Prerequisites |
 |---------|-------------|----------|---------------|
-| **[ai-enhanced-analysis.sh](integration/ai-enhanced-analysis.sh)** | AI + Static Analysis + Visualization | ~5 min | API keys |
-| **[setup-fabric-demo.sh](setup-fabric-demo.sh)** | Complete Fabric AI framework integration | ~8 min | Git, Go (API keys optional) |
-| **[code-quality-pipeline.sh](integration/code-quality-pipeline.sh)** | Analysis → Testing → Reporting | ~4 min | Sample project |
-| **[data-analysis-workflow.sh](integration/data-analysis-workflow.sh)** | Data processing + Visualization + AI insights | ~6 min | Sample data |
-| **[documentation-generator.sh](integration/documentation-generator.sh)** | Code analysis + Documentation generation | ~5 min | Sample project |
+| **[ai-enhanced-analysis.sh](integration/ai-enhanced-analysis.sh)** ✅ | AI + Static Analysis + Visualization | ~5 min | API keys |
+| **[setup-fabric-demo.sh](setup-fabric-demo.sh)** ✅ | Complete Fabric AI framework integration | ~8 min | Git, Go (API keys optional) |
+| **[code-quality-pipeline.sh](integration/code-quality-pipeline.sh)** ✅ | Static analysis + Data visualization pipeline | ~4 min | Sample project |
+| **[ai-development-assistant.sh](integration/ai-development-assistant.sh)** ✅ | AI code generation + Sandbox testing + Refinement | ~6 min | API keys |
+| **[environment-health-monitor.sh](integration/environment-health-monitor.sh)** ✅ | Environment + Git + System health assessment | ~3 min | None |
+| **[development-workflow-orchestrator.sh](integration/development-workflow-orchestrator.sh)** ✅ | Complete AI-enhanced development lifecycle | ~8 min | API keys recommended |
 
-### **🚀 Complete Workflows** (`workflows/`)
-*End-to-end processes - production-ready demonstrations*
+### **🎲 Utility Scripts**
+*Helper scripts for running and managing examples*
 
-| Example | Description | Duration | Prerequisites |
-|---------|-------------|----------|---------------|
-| **[new-project-setup.sh](workflows/new-project-setup.sh)** | Complete new project initialization | ~8 min | None |
-| **[code-review-automation.sh](workflows/code-review-automation.sh)** | Automated code review process | ~6 min | Git repository |
-| **[performance-analysis.sh](workflows/performance-analysis.sh)** | Code performance analysis and optimization | ~7 min | Sample code |
-| **[ai-development-cycle.sh](workflows/ai-development-cycle.sh)** | AI-enhanced development workflow | ~10 min | API keys |
+| Script | Description | Usage |
+|--------|-------------|-------|
+| **[run-all-basic.sh](run-all-basic.sh)** ✅ | Run all basic examples in sequence | `./run-all-basic.sh` |
+| **[select-example.sh](select-example.sh)** ✅ | Interactive example selector | `./select-example.sh` |
+| **[check-example-prerequisites.sh](check-example-prerequisites.sh)** ✅ | Verify environment setup for examples | `./check-example-prerequisites.sh` |
+| **[git_visualization_comprehensive_demo.py](git_visualization_comprehensive_demo.py)** ✅ | Git operations + visualization demo | `python git_visualization_comprehensive_demo.py` |
 
-### **🎓 Learning Examples** (`learning/`)
-*Educational demonstrations - understand concepts step by step*
+### **🔮 Status Legend**
+- ✅ **Available** - Ready to run, fully functional
+- 🚧 **Planned** - In development, will be added soon  
+- 🔄 **Updating** - Exists but being improved
 
-| Example | Description | Duration | Prerequisites |
-|---------|-------------|----------|---------------|
-| **[module-system-tour.sh](learning/module-system-tour.sh)** | Interactive tour of all modules | ~15 min | None |
-| **[building-your-first-module.sh](learning/building-your-first-module.sh)** | Create a module from scratch | ~20 min | Development setup |
-| **[integration-patterns.sh](learning/integration-patterns.sh)** | Learn module integration patterns | ~12 min | Basic understanding |
+*Note: Focus on the ✅ examples for reliable demonstrations. 🚧 examples are planned improvements.*
+
+## 🎯 Featured Orchestrator Examples
+
+**All orchestrator examples are fully functional thin orchestrators!** ✅
+
+### **🔍 Code Quality Pipeline** - `integration/code-quality-pipeline.sh` ✅
+**Comprehensive code quality analysis with visualization**
+- Static analysis using multiple tools with graceful fallbacks
+- File metrics collection and analysis
+- Quality visualization charts and dashboards
+- Comprehensive quality reporting with recommendations
+- **Modules**: static_analysis + data_visualization + logging_monitoring
+- **Status**: ✅ **Working** (no prerequisites)
+- **Usage**: `./integration/code-quality-pipeline.sh --non-interactive`
+
+### **🏥 Environment Health Monitor** - `integration/environment-health-monitor.sh` ✅
+**Comprehensive development environment assessment**
+- Python environment validation and dependency checking
+- Git repository health assessment and analysis
+- System performance metrics and monitoring
+- Health scoring with actionable recommendations
+- **Modules**: environment_setup + git_operations + logging_monitoring + system_discovery
+- **Status**: ✅ **Working** (no prerequisites)
+- **Usage**: `./integration/environment-health-monitor.sh`
+
+### **🤖 AI Development Assistant** - `integration/ai-development-assistant.sh` ⚠️
+**Complete AI-powered development workflow**
+- Interactive task selection and AI code generation
+- Secure code execution in sandbox environment
+- Iterative refinement based on execution feedback
+- Session tracking and comprehensive reporting
+- **Modules**: ai_code_editing + code_execution_sandbox + logging_monitoring
+- **Status**: ⚠️ **Requires API Keys + Docker**
+- **Usage**: `./integration/ai-development-assistant.sh --non-interactive`
+
+### **🚀 Development Workflow Orchestrator** - `integration/development-workflow-orchestrator.sh` ⚠️
+**Complete AI-enhanced development lifecycle demonstration**
+- Full project generation with AI assistance
+- Multi-phase development process automation
+- Code quality analysis and secure testing
+- Development metrics dashboards and visualization
+- Git integration with documentation and reporting
+- **Modules**: ALL modules working together in harmony
+- **Status**: ⚠️ **Requires API Keys + Docker + Git**
+- **Usage**: `./integration/development-workflow-orchestrator.sh --non-interactive`
 
 ## 🚀 Quick Start
 
-### **Run Your First Example**
+### **🎯 Recommended Workflow - Start Here!**
 ```bash
-# 1. Ensure Codomyrmex is installed
-codomyrmex check
-
-# 2. Choose and run an example
-cd examples/basic
-./data-visualization-demo.sh
-```
-
-### **Run All Basic Examples**
-```bash
-# Run the example orchestrator
+# 1. Check your environment and prerequisites
 cd examples
-./run-all-basic.sh
+./check-example-prerequisites.sh
+
+# 2. Test all working examples automatically
+./test-all-examples.sh
+
+# 3. Run individual examples interactively
+./basic/data-visualization-demo.sh            # 📊 Charts and plots
+./basic/static-analysis-demo.sh               # 🔍 Code quality analysis  
+./integration/environment-health-monitor.sh   # 🏥 Environment assessment
+./integration/code-quality-pipeline.sh        # 🔗 Multi-module workflow
 ```
 
-### **Interactive Example Selection**
+### **🤖 For Non-Interactive/Automated Use**
 ```bash
-# Launch the example selector
-cd examples  
-./select-example.sh
+# Perfect for CI/CD pipelines and automated testing
+./basic/data-visualization-demo.sh --non-interactive
+./integration/code-quality-pipeline.sh --non-interactive --target=src/
+```
+
+### **📋 For AI-Enhanced Workflows** (Optional - Requires API Keys)
+```bash
+# 1. Set up API keys first
+cp .env.example .env  # Add your OpenAI/Anthropic API keys
+docker info          # Ensure Docker is running
+
+# 2. Run AI-powered orchestrators
+./integration/ai-development-assistant.sh
+./integration/development-workflow-orchestrator.sh
 ```
 
 ## 📋 Usage Patterns

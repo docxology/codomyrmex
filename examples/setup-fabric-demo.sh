@@ -30,13 +30,43 @@ OUTPUT_DIR="$PROJECT_ROOT/examples/output/fabric-integration"
 FABRIC_DIR="$OUTPUT_DIR/fabric"
 DEMO_START_TIME=$(date +%s)
 
+# Parse command line arguments
+INTERACTIVE=true
+TEST_MODE=false
+for arg in "$@"; do
+    case $arg in
+        --non-interactive)
+            INTERACTIVE=false
+            ;;
+        --test-mode)
+            TEST_MODE=true
+            INTERACTIVE=false
+            ;;
+        --help)
+            echo "Usage: $0 [--non-interactive] [--test-mode] [--help]"
+            echo "  --non-interactive  Run without user prompts"
+            echo "  --test-mode        Quick validation run (skips network operations)"
+            echo "  --help            Show this help message"
+            exit 0
+            ;;
+    esac
+done
+
 # Helper functions
 log_info() { echo -e "${CYAN}ℹ️  $1${NC}"; }
 log_success() { echo -e "${GREEN}✅ $1${NC}"; }
 log_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
 log_error() { echo -e "${RED}❌ $1${NC}"; }
 log_step() { echo -e "\n${BLUE}🔹 $1${NC}"; }
-pause_for_user() { echo -e "${YELLOW}💡 $1${NC}"; read -p "Press Enter to continue..."; }
+pause_for_user() {
+    echo -e "${YELLOW}💡 $1${NC}"
+    if [ "$INTERACTIVE" = true ]; then
+        read -p "Press Enter to continue..."
+    else
+        echo -e "${CYAN}[Non-interactive mode: Continuing automatically...]${NC}"
+        sleep 1
+    fi
+}
 
 show_header() {
     echo -e "${CYAN}"
@@ -1075,16 +1105,22 @@ show_comprehensive_summary() {
 
 cleanup_option() {
     echo ""
-    read -p "🧹 Would you like to clean up the generated files? (y/N): " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        log_info "Cleaning up generated files (keeping Fabric repository)..."
-        cd "$OUTPUT_DIR"
-        # Remove generated files but keep the Fabric repo
-        find . -name "*.py" -o -name "*.json" -o -name "*.png" -o -name "*template*" | xargs rm -f
-        log_success "Cleanup completed! Fabric repository preserved."
+    if [ "$INTERACTIVE" = true ]; then
+        read -p "🧹 Would you like to clean up the generated files? (y/N): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            log_info "Cleaning up generated files (keeping Fabric repository)..."
+            cd "$OUTPUT_DIR"
+            # Remove generated files but keep the Fabric repo
+            find . -name "*.py" -o -name "*.json" -o -name "*.png" -o -name "*template*" | xargs rm -f
+            log_success "Cleanup completed! Fabric repository preserved."
+        else
+            log_info "Files preserved for your exploration"
+            echo -e "${CYAN}💡 Tip: The integration is ready to use. Try running the orchestrator scripts!${NC}"
+        fi
     else
-        log_info "Files preserved for your exploration"
+        log_info "Non-interactive mode: Files preserved for your exploration"
+        log_info "Generated files located in: $OUTPUT_DIR"
         echo -e "${CYAN}💡 Tip: The integration is ready to use. Try running the orchestrator scripts!${NC}"
     fi
 }
@@ -1114,6 +1150,34 @@ main() {
     log_info "This demo sets up complete integration between Fabric AI framework and Codomyrmex"
     log_info "We'll clone Fabric, install it, and create orchestrator examples"
     log_info "Duration: ~8-10 minutes | Output: examples/output/fabric-integration/"
+    
+    # Test mode: validate and exit quickly
+    if [ "$TEST_MODE" = true ]; then
+        log_info "🧪 Test mode: Validating script without network operations..."
+        
+        # Basic validation checks
+        if ! command -v git &> /dev/null; then
+            log_error "Git not available"
+            exit 1
+        fi
+        
+        if ! command -v python3 &> /dev/null; then
+            log_error "Python3 not available" 
+            exit 1
+        fi
+        
+        # Check if we can create output directory
+        mkdir -p "$OUTPUT_DIR" 2>/dev/null || {
+            log_error "Cannot create output directory: $OUTPUT_DIR"
+            exit 1
+        }
+        
+        log_success "✅ Script validation passed - all prerequisites available"
+        log_info "📁 Would create output in: $OUTPUT_DIR"
+        log_info "🔧 Would clone Fabric repository and set up integration"
+        log_info "⚠️  Skipping network operations in test mode"
+        exit 0
+    fi
     
     pause_for_user "Ready to start the Fabric integration setup?"
     
