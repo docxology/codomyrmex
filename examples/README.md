@@ -11,6 +11,19 @@ Each example is a **self-contained orchestrator script** that:
 - ✅ **Shows results** with clear output and explanations
 - ✅ **Guides you** through each step with interactive prompts
 
+## 🚀 Advanced Orchestrators Guide
+
+**NEW!** Check out our comprehensive **[Advanced Orchestrators Guide](ADVANCED_ORCHESTRATORS_GUIDE.md)** for detailed documentation on sophisticated multi-module integration patterns, including:
+
+- 🎨 **Advanced Data Visualization Suite** - Multi-dimensional analysis with interactive dashboards
+- 🤖 **AI-Powered Development Workflows** - Complete intelligent development automation  
+- 📊 **Comprehensive Analysis Pipelines** - Multi-tool security and quality assessment
+- 🎓 **Interactive Learning Orchestrators** - Guided tutorials for mastering integration patterns
+- ⚡ **Performance Benchmarking Suites** - System analysis and optimization workflows
+- 🌍 **Complete Ecosystem Orchestrator** - The ultimate demonstration of ALL modules working together
+
+The guide includes usage patterns, best practices, troubleshooting, and real-world integration examples.
+
 ## 📁 Example Categories
 
 ### **🔰 Basic Examples** (`basic/`)
@@ -19,6 +32,7 @@ Each example is a **self-contained orchestrator script** that:
 | Example | Description | Duration | Prerequisites |
 |---------|-------------|----------|---------------|
 | **[data-visualization-demo.sh](basic/data-visualization-demo.sh)** ✅ | Create charts, plots, and visualizations | ~3 min | None |
+| **[advanced_data_visualization_demo.sh](basic/advanced_data_visualization_demo.sh)** ✅ | Advanced multi-dimensional visualization suite | ~8 min | None |
 | **[static-analysis-demo.sh](basic/static-analysis-demo.sh)** ✅ | Code quality analysis and linting | ~2 min | Sample Python code |
 | **code-execution-demo.sh** 🚧 | Safe code execution in sandbox | ~2 min | Docker |
 | **ai-code-editing-demo.sh** 🚧 | AI-powered code generation | ~4 min | API keys |
@@ -43,6 +57,17 @@ Each example is a **self-contained orchestrator script** that:
 | **[ai-development-assistant.sh](integration/ai-development-assistant.sh)** ✅ | AI code generation + Sandbox testing + Refinement | ~6 min | API keys |
 | **[environment-health-monitor.sh](integration/environment-health-monitor.sh)** ✅ | Environment + Git + System health assessment | ~3 min | None |
 | **[development-workflow-orchestrator.sh](integration/development-workflow-orchestrator.sh)** ✅ | Complete AI-enhanced development lifecycle | ~8 min | API keys recommended |
+
+### **🚀 Advanced Integration Examples** (`integration/`)
+*Sophisticated multi-module orchestration - demonstrates complete ecosystem integration*
+
+| Example | Description | Duration | Prerequisites |
+|---------|-------------|----------|---------------|
+| **[ai_driven_development_workflow.sh](integration/ai_driven_development_workflow.sh)** ✅ | Complete AI-powered development pipeline | ~12 min | API keys optional |
+| **[comprehensive_analysis_pipeline.sh](integration/comprehensive_analysis_pipeline.sh)** ✅ | Multi-tool analysis with security assessment | ~10 min | None |
+| **[interactive_learning_orchestrator.sh](integration/interactive_learning_orchestrator.sh)** ✅ | Interactive tutorial for module integration | ~15 min | None |
+| **[performance_benchmarking_orchestrator.sh](integration/performance_benchmarking_orchestrator.sh)** ✅ | Performance analysis and system benchmarking | ~8 min | None |
+| **[complete_ecosystem_orchestrator.sh](integration/complete_ecosystem_orchestrator.sh)** ✅ | Ultimate demonstration - ALL modules working together | ~30 min | API keys recommended |
 
 ### **🎲 Utility Scripts**
 *Helper scripts for running and managing examples*
@@ -117,11 +142,18 @@ cd examples
 # 2. Test all working examples automatically
 ./test-all-examples.sh
 
-# 3. Run individual examples interactively
-./basic/data-visualization-demo.sh            # 📊 Charts and plots
-./basic/static-analysis-demo.sh               # 🔍 Code quality analysis  
-./integration/environment-health-monitor.sh   # 🏥 Environment assessment
-./integration/code-quality-pipeline.sh        # 🔗 Multi-module workflow
+# 3. Start with basic examples
+./basic/data-visualization-demo.sh              # 📊 Charts and plots
+./basic/advanced_data_visualization_demo.sh     # 🎨 Advanced visualization suite
+./basic/static-analysis-demo.sh                 # 🔍 Code quality analysis  
+
+# 4. Explore integration examples  
+./integration/environment-health-monitor.sh     # 🏥 Environment assessment
+./integration/code-quality-pipeline.sh          # 🔗 Multi-module workflow
+./integration/interactive_learning_orchestrator.sh  # 🎓 Learn integration patterns
+
+# 5. Experience advanced orchestration
+./integration/complete_ecosystem_orchestrator.sh --demo  # 🌍 Ultimate demonstration
 ```
 
 ### **🤖 For Non-Interactive/Automated Use**

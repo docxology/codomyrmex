@@ -206,6 +206,7 @@ echo ""
 # Test basic examples
 echo -e "${WHITE}📦 Basic Examples${NC}"
 run_test "data-visualization-demo" "$SCRIPT_DIR/basic/data-visualization-demo.sh" "basic" "false" "false"
+run_test "advanced-data-visualization-demo" "$SCRIPT_DIR/basic/advanced_data_visualization_demo.sh" "basic" "false" "false"
 run_test "static-analysis-demo" "$SCRIPT_DIR/basic/static-analysis-demo.sh" "basic" "false" "false"
 
 echo ""
@@ -217,6 +218,14 @@ run_test "code-quality-pipeline" "$SCRIPT_DIR/integration/code-quality-pipeline.
 run_test "ai-enhanced-analysis" "$SCRIPT_DIR/integration/ai-enhanced-analysis.sh" "integration" "true" "false"
 run_test "ai-development-assistant" "$SCRIPT_DIR/integration/ai-development-assistant.sh" "integration" "true" "true"
 run_test "development-workflow-orchestrator" "$SCRIPT_DIR/integration/development-workflow-orchestrator.sh" "integration" "true" "true"
+
+# Test advanced integration examples
+echo -e "${WHITE}🚀 Advanced Integration Examples${NC}"
+run_test "ai-driven-development-workflow" "$SCRIPT_DIR/integration/ai_driven_development_workflow.sh" "integration" "true" "false"
+run_test "comprehensive-analysis-pipeline" "$SCRIPT_DIR/integration/comprehensive_analysis_pipeline.sh" "integration" "false" "false"
+run_test "interactive-learning-orchestrator" "$SCRIPT_DIR/integration/interactive_learning_orchestrator.sh" "integration" "false" "false"
+run_test "performance-benchmarking-orchestrator" "$SCRIPT_DIR/integration/performance_benchmarking_orchestrator.sh" "integration" "false" "false"
+run_test "complete-ecosystem-orchestrator" "$SCRIPT_DIR/integration/complete_ecosystem_orchestrator.sh" "integration" "true" "true"
 
 echo ""
 
