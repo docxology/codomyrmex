@@ -104,9 +104,10 @@ show_menu() {
     echo -e "${GREEN}8)${NC} 📋 ${CYAN}Export Inventory${NC} - Generate complete system inventory report"
     echo -e "${GREEN}9)${NC} 🌐 ${CYAN}Git Repository Status${NC} - Check all Git repos and dependencies"
     echo -e "${GREEN}A)${NC} 🚀 ${CYAN}Install/Update Codomyrmex${NC} - Run UV-optimized installation script"
+    echo -e "${GREEN}B)${NC} 🤖 ${CYAN}LLM API Configuration${NC} - Configure AI/LLM API keys and settings"
     echo -e "${GREEN}0)${NC} 🚪 ${CYAN}Exit${NC} - Return to the outside world"
     echo ""
-    echo -e "${PURPLE}Choose your path (0-9, A):${NC} "
+    echo -e "${PURPLE}Choose your path (0-9, A, B):${NC} "
 }
 
 # Run system discovery
@@ -269,6 +270,173 @@ run_installation() {
     fi
 }
 
+# LLM API Configuration
+configure_llm_apis() {
+    echo -e "\n${CYAN}🤖 LLM API Configuration${NC}"
+    PYTHON_CMD=$(get_python_cmd)
+    
+    # Check current API key status
+    echo -e "${YELLOW}Checking current API key status...${NC}"
+    $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.ai_code_editing import validate_api_keys, get_supported_providers
+
+print('\\nCurrent API Key Status:')
+providers = get_supported_providers()
+api_status = validate_api_keys()
+
+for provider in providers:
+    status = '✅ Available' if api_status[provider] else '❌ Missing'
+    print(f'  {provider.upper()}: {status}')
+
+print('\\nSupported Providers:', ', '.join(providers))
+"
+    
+    echo -e "\n${GREEN}API Key Configuration Options:${NC}"
+    echo -e "${GREEN}1)${NC} Set OpenAI API Key"
+    echo -e "${GREEN}2)${NC} Set Anthropic API Key"
+    echo -e "${GREEN}3)${NC} Set Google API Key"
+    echo -e "${GREEN}4)${NC} Set all API keys interactively"
+    echo -e "${GREEN}5)${NC} Test API connections"
+    echo -e "${GREEN}6)${NC} Show API usage examples"
+    echo -e "${GREEN}0)${NC} Return to main menu"
+    echo ""
+    read -p "Choose option (0-6): " api_choice
+    
+    case $api_choice in
+        1)
+            echo -e "\n${YELLOW}Setting OpenAI API Key...${NC}"
+            read -p "Enter your OpenAI API key: " openai_key
+            if [[ -n "$openai_key" ]]; then
+                export OPENAI_API_KEY="$openai_key"
+                echo "export OPENAI_API_KEY=\"$openai_key\"" >> ~/.bashrc
+                echo "export OPENAI_API_KEY=\"$openai_key\"" >> ~/.zshrc
+                echo -e "${GREEN}✅ OpenAI API key set successfully${NC}"
+            else
+                echo -e "${RED}❌ No API key provided${NC}"
+            fi
+            ;;
+        2)
+            echo -e "\n${YELLOW}Setting Anthropic API Key...${NC}"
+            read -p "Enter your Anthropic API key: " anthropic_key
+            if [[ -n "$anthropic_key" ]]; then
+                export ANTHROPIC_API_KEY="$anthropic_key"
+                echo "export ANTHROPIC_API_KEY=\"$anthropic_key\"" >> ~/.bashrc
+                echo "export ANTHROPIC_API_KEY=\"$anthropic_key\"" >> ~/.zshrc
+                echo -e "${GREEN}✅ Anthropic API key set successfully${NC}"
+            else
+                echo -e "${RED}❌ No API key provided${NC}"
+            fi
+            ;;
+        3)
+            echo -e "\n${YELLOW}Setting Google API Key...${NC}"
+            read -p "Enter your Google API key: " google_key
+            if [[ -n "$google_key" ]]; then
+                export GOOGLE_API_KEY="$google_key"
+                echo "export GOOGLE_API_KEY=\"$google_key\"" >> ~/.bashrc
+                echo "export GOOGLE_API_KEY=\"$google_key\"" >> ~/.zshrc
+                echo -e "${GREEN}✅ Google API key set successfully${NC}"
+            else
+                echo -e "${RED}❌ No API key provided${NC}"
+            fi
+            ;;
+        4)
+            echo -e "\n${YELLOW}Setting all API keys...${NC}"
+            read -p "Enter your OpenAI API key (or press Enter to skip): " openai_key
+            read -p "Enter your Anthropic API key (or press Enter to skip): " anthropic_key
+            read -p "Enter your Google API key (or press Enter to skip): " google_key
+            
+            if [[ -n "$openai_key" ]]; then
+                export OPENAI_API_KEY="$openai_key"
+                echo "export OPENAI_API_KEY=\"$openai_key\"" >> ~/.bashrc
+                echo "export OPENAI_API_KEY=\"$openai_key\"" >> ~/.zshrc
+                echo -e "${GREEN}✅ OpenAI API key set${NC}"
+            fi
+            
+            if [[ -n "$anthropic_key" ]]; then
+                export ANTHROPIC_API_KEY="$anthropic_key"
+                echo "export ANTHROPIC_API_KEY=\"$anthropic_key\"" >> ~/.bashrc
+                echo "export ANTHROPIC_API_KEY=\"$anthropic_key\"" >> ~/.zshrc
+                echo -e "${GREEN}✅ Anthropic API key set${NC}"
+            fi
+            
+            if [[ -n "$google_key" ]]; then
+                export GOOGLE_API_KEY="$google_key"
+                echo "export GOOGLE_API_KEY=\"$google_key\"" >> ~/.bashrc
+                echo "export GOOGLE_API_KEY=\"$google_key\"" >> ~/.zshrc
+                echo -e "${GREEN}✅ Google API key set${NC}"
+            fi
+            ;;
+        5)
+            echo -e "\n${YELLOW}Testing API connections...${NC}"
+            $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.ai_code_editing import validate_api_keys, get_llm_client
+
+api_status = validate_api_keys()
+print('\\nTesting API connections...')
+
+for provider, available in api_status.items():
+    if available:
+        try:
+            client, model = get_llm_client(provider)
+            print(f'✅ {provider.upper()}: Connection successful (model: {model})')
+        except Exception as e:
+            print(f'❌ {provider.upper()}: Connection failed - {e}')
+    else:
+        print(f'⚠️  {provider.upper()}: No API key configured')
+"
+            ;;
+        6)
+            echo -e "\n${YELLOW}API Usage Examples:${NC}"
+            $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.ai_code_editing import generate_code_snippet, get_supported_languages, get_available_models
+
+print('\\nExample: Generate Python code')
+print('=' * 50)
+try:
+    result = generate_code_snippet(
+        prompt='Create a function that calculates fibonacci numbers',
+        language='python',
+        provider='openai'
+    )
+    print('Generated code:')
+    print(result['generated_code'])
+    print(f'\\nExecution time: {result[\"execution_time\"]:.2f}s')
+    print(f'Tokens used: {result.get(\"tokens_used\", \"N/A\")}')
+except Exception as e:
+    print(f'Error: {e}')
+    print('\\nMake sure you have set up your API keys first!')
+
+print('\\n\\nSupported Languages:')
+languages = get_supported_languages()
+for i, lang in enumerate(languages[:10]):  # Show first 10
+    print(f'  {lang.value}')
+if len(languages) > 10:
+    print(f'  ... and {len(languages) - 10} more')
+
+print('\\n\\nAvailable Models:')
+for provider in ['openai', 'anthropic', 'google']:
+    models = get_available_models(provider)
+    print(f'{provider.upper()}: {', '.join(models)}')
+"
+            ;;
+        0)
+            return
+            ;;
+        *)
+            echo -e "${RED}Invalid choice${NC}"
+            ;;
+    esac
+    
+    echo -e "\n${PURPLE}Press Enter to continue...${NC}"
+    read
+}
+
 # Main execution loop
 main() {
     show_banner
@@ -291,13 +459,14 @@ main() {
             8) export_inventory ;;
             9) check_git_status ;;
             A|a) run_installation ;;
+            B|b) configure_llm_apis ;;
             0) 
                 echo -e "\n${CYAN}🐜 Thank you for exploring the Codomyrmex nest!${NC}"
                 echo -e "${YELLOW}Until next time, happy foraging! 🌟${NC}\n"
                 exit 0
                 ;;
             *) 
-                echo -e "${RED}Invalid choice. Please select 0-9 or A.${NC}"
+                echo -e "${RED}Invalid choice. Please select 0-9, A, or B.${NC}"
                 sleep 1
                 ;;
         esac
