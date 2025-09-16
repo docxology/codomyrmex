@@ -88,12 +88,17 @@ class WorkflowManager:
         
         # Set up logging
         self.logger = logging.getLogger(__name__)
+        
+        # Load existing workflows
+        self._load_workflows()
     
     @monitor_performance("workflow_create")
     def create_workflow(self, name: str, steps: List[WorkflowStep], save: bool = True) -> bool:
         """Create a new workflow."""
         try:
             self.workflows[name] = steps
+            if save:
+                self._save_workflow(name, steps)
             self.logger.info(f"Created workflow: {name} ({len(steps)} steps)")
             return True
         except Exception as e:
@@ -209,6 +214,66 @@ class WorkflowManager:
         }
         
         return summary
+    
+    def _save_workflow(self, name: str, steps: List[WorkflowStep]):
+        """Save a workflow to disk."""
+        try:
+            workflow_file = self.config_dir / f"{name}.json"
+            workflow_data = {
+                'name': name,
+                'steps': [
+                    {
+                        'name': step.name,
+                        'module': step.module,
+                        'action': step.action,
+                        'parameters': step.parameters,
+                        'dependencies': step.dependencies,
+                        'timeout': step.timeout,
+                        'retry_count': step.retry_count,
+                        'max_retries': step.max_retries
+                    }
+                    for step in steps
+                ]
+            }
+            
+            with open(workflow_file, 'w') as f:
+                json.dump(workflow_data, f, indent=2)
+            
+            self.logger.debug(f"Saved workflow: {name}")
+        except Exception as e:
+            self.logger.error(f"Failed to save workflow {name}: {e}")
+    
+    def _load_workflows(self):
+        """Load workflows from disk."""
+        try:
+            if not self.config_dir.exists():
+                return
+            
+            for workflow_file in self.config_dir.glob("*.json"):
+                try:
+                    with open(workflow_file, 'r') as f:
+                        workflow_data = json.load(f)
+                    
+                    steps = [
+                        WorkflowStep(
+                            name=step_data['name'],
+                            module=step_data['module'],
+                            action=step_data['action'],
+                            parameters=step_data.get('parameters', {}),
+                            dependencies=step_data.get('dependencies', []),
+                            timeout=step_data.get('timeout'),
+                            retry_count=step_data.get('retry_count', 0),
+                            max_retries=step_data.get('max_retries', 3)
+                        )
+                        for step_data in workflow_data.get('steps', [])
+                    ]
+                    
+                    self.workflows[workflow_data['name']] = steps
+                    self.logger.debug(f"Loaded workflow: {workflow_data['name']}")
+                except Exception as e:
+                    self.logger.error(f"Failed to load workflow from {workflow_file}: {e}")
+        except Exception as e:
+            self.logger.error(f"Failed to load workflows: {e}")
 
 
 # Global workflow manager instance

@@ -33,6 +33,9 @@ except ImportError:
             logger.setLevel(logging.INFO)
         return logger
 
+# Get module logger
+logger = get_logger(__name__)
+
 # Import performance monitoring
 try:
     from performance import monitor_performance, performance_context
@@ -53,9 +56,6 @@ except ImportError:
             return self
         def __exit__(self, *args):
             pass
-
-# Get module logger
-logger = get_logger(__name__)
 
 # Import environment setup utilities if available
 try:
