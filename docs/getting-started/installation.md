@@ -4,26 +4,39 @@ This guide will get you up and running with Codomyrmex quickly and reliably.
 
 ## 🎯 Quick Start (Recommended)
 
-### **Option 1: Automated Setup (Fastest)**
+### **Option 1: UV-Optimized Setup (Fastest & Most Reliable)**
 ```bash
-# Clone and setup everything automatically
+# Clone and setup everything automatically with uv
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
+./install_with_uv.sh
 ```
 
-### **Option 2: Manual Setup**
+### **Option 2: Manual UV Setup**
+```bash
+# 1. Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 2. Clone the repository
+git clone https://github.com/codomyrmex/codomyrmex.git
+cd codomyrmex
+
+# 3. Create virtual environment and install
+uv venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -e .
+
+# 4. Verify installation
+codomyrmex check
+```
+
+### **Option 3: Traditional pip Setup (Alternative)**
 ```bash
 # 1. Clone the repository
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
 
-# 2. Create virtual environment (choose uv or pip)
-# Using uv (recommended - faster)
-uv venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# OR using pip (traditional)
+# 2. Create virtual environment
 python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 

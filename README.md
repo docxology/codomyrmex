@@ -6,15 +6,33 @@
 
 **Codomyrmex is now functional!** Here's how to get started in under 5 minutes:
 
-### 1. Automated Setup
+### 1. UV-Optimized Setup (Recommended)
 ```bash
-# Clone and setup everything automatically
+# Clone and setup everything automatically with uv
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
+./src/codomyrmex/environment_setup/scripts/install_with_uv.sh
 ```
 
-### 2. Manual Setup (Alternative)
+### 2. Manual UV Setup
+```bash
+# Install uv if not already installed
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone repository
+git clone https://github.com/codomyrmex/codomyrmex.git
+cd codomyrmex
+
+# Create virtual environment and install
+uv venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -e .
+
+# Check setup
+python -c "from codomyrmex.environment_setup import env_checker; env_checker.check_environment()"
+```
+
+### 3. Traditional pip Setup (Alternative)
 ```bash
 # Create virtual environment
 python3 -m venv .venv
@@ -24,16 +42,16 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -e .
 
 # Check setup
-codomyrmex check
+python -c "from codomyrmex.environment_setup import env_checker; env_checker.check_environment()"
 ```
 
-### 3. Verify Installation
+### 4. Verify Installation
 ```bash
-codomyrmex info     # See project overview
-codomyrmex check    # Verify environment setup
+python -c "import codomyrmex; print('Codomyrmex installed successfully!')"
+python -c "from codomyrmex.environment_setup import env_checker; env_checker.check_environment()"
 ```
 
-### 4. Start Using Modules
+### 5. Start Using Modules
 ```bash
 # Run the example script to see everything working
 python examples/example_usage.py
@@ -51,11 +69,13 @@ create_line_plot(x, y, title="Sample Plot", output_path="plot.png")
 ```
 
 **✅ What's Working Now:**
+- **🎯 Project Orchestration** - Comprehensive workflow management system
+- **📊 Performance Monitoring** - Real-time performance tracking across all modules
 - Environment setup and dependency management (latest versions)
 - Logging and monitoring system
 - Data visualization (plots, charts, graphs)
 - Static analysis tools (pylint, flake8, bandit)
-- CLI interface for quick checks
+- **🚀 Enhanced CLI interface** with orchestration capabilities
 - Modular architecture with proper imports
 - AI/LLM integration (OpenAI, Anthropic, Google)
 - Code execution capabilities
@@ -73,6 +93,7 @@ create_line_plot(x, y, title="Sample Plot", output_path="plot.png")
 
 | Module                                       | Description                                                                 | Key Tools/Technologies                                         | Directory Path                               |
 | :------------------------------------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------- | :------------------------------------------- |
+| **🎯 Project Orchestration**                | **NEW!** Coordinates workflows across modules with performance monitoring.  | AsyncIO, Performance Monitor, Multi-module Integration         | [`project_orchestration/`](./src/codomyrmex/project_orchestration/) |
 | **Build & Code Synthesis**                   | Manages build processes and AI-powered code generation.                     | build2, OpenAI Codex                                           | [`build_synthesis/`](./build_synthesis/)     |
 | **Documentation Website**                  | Generates rich, versioned documentation.                                    | Docusaurus, Material for MkDocs, Sphinx, Read the Docs         | [`documentation/`](./documentation/)         |
 | **Static Analysis & Code Checking**        | Centralizes linting, security scanning, and quality metrics.                | analysis-tools.dev, SonarQube, ESLint, CodeQL                  | [`static_analysis/`](./static_analysis/)     |
@@ -108,6 +129,69 @@ cd examples
 cd examples/basic
 ./data-visualization-demo.sh
 ```
+
+## 🎯 Project Orchestration & Workflow Management
+
+**NEW:** Codomyrmex now includes a comprehensive Project Orchestration system that coordinates workflows across all modules with advanced performance monitoring.
+
+### **🌟 Key Features**
+
+- **🔄 Multi-Module Workflows** - Chain operations across AI editing, static analysis, data visualization, and Git operations
+- **📊 Performance Monitoring** - Real-time tracking of execution times, memory usage, and resource utilization
+- **⚡ Asynchronous Execution** - Efficient parallel processing of workflow steps
+- **🎯 Dependency Management** - Automatic dependency resolution between workflow steps
+- **📋 Comprehensive Reporting** - Detailed execution reports with performance metrics
+
+### **🚀 Enhanced CLI Interface**
+
+The Codomyrmex CLI has been significantly enhanced with orchestration capabilities:
+
+```bash
+# Check system status with performance monitoring
+codomyrmex status --performance
+
+# List available workflows
+codomyrmex workflow list
+
+# Execute a comprehensive analysis workflow
+codomyrmex workflow run ai-analysis --params='{"code_path": "./src", "output_path": "./analysis"}'
+
+# Run AI-powered code improvements
+codomyrmex ai generate "Create unit tests for this function" --language python
+
+# Perform static analysis with visualization
+codomyrmex analyze code ./src --output ./reports
+
+# Interactive shell for advanced operations
+codomyrmex shell
+```
+
+### **📈 Performance Integration**
+
+Performance monitoring is now integrated across all modules:
+
+- **AI Code Editing** - Tracks LLM response times and token usage
+- **Static Analysis** - Monitors code parsing and analysis duration
+- **Data Visualization** - Records chart generation and rendering times
+- **Git Operations** - Tracks repository operations and network requests
+- **Orchestration Engine** - Overall workflow coordination metrics
+
+### **🎮 Try the Orchestration Demo**
+
+```bash
+# Run the comprehensive workflow demonstration
+cd examples/orchestration
+python comprehensive_workflow_demo.py --create-sample-project --verbose
+
+# This will:
+# 1. Create a sample project with intentional code issues
+# 2. Run comprehensive analysis workflows
+# 3. Generate AI-powered improvement suggestions
+# 4. Create visualizations and reports
+# 5. Show performance metrics across all operations
+```
+
+See the **[🎯 Orchestration Examples](examples/orchestration/README.md)** for detailed usage patterns and advanced workflows.
 
 ## 📚 Documentation & Resources
 

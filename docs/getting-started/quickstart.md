@@ -4,15 +4,33 @@ Get up and running with Codomyrmex in **5 minutes or less**!
 
 ## ⚡ Lightning-Fast Setup
 
-### **Option 1: Automated Setup (Recommended)**
+### **Option 1: UV-Optimized Setup (Recommended)**
 ```bash
-# Clone and setup everything automatically
+# Clone and setup everything automatically with uv
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
+./install_with_uv.sh
 ```
 
-### **Option 2: Manual Setup**
+### **Option 2: Manual UV Setup**
+```bash
+# 1. Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 2. Clone and setup virtual environment
+git clone https://github.com/codomyrmex/codomyrmex.git
+cd codomyrmex
+uv venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# 3. Install dependencies
+uv pip install -e .
+
+# 4. Verify installation
+codomyrmex check
+```
+
+### **Option 3: Traditional pip Setup (Alternative)**
 ```bash
 # 1. Clone and setup virtual environment
 git clone https://github.com/codomyrmex/codomyrmex.git

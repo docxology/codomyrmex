@@ -7,6 +7,8 @@ This module contains functions for generating and refactoring code using LLMs.
 import os
 import sys
 import json
+import time
+import random
 from typing import Dict, Any, Optional, Tuple, Union
 
 # Add project root to Python path to allow sibling module imports if needed
@@ -31,6 +33,27 @@ except ImportError:
             logger.setLevel(logging.INFO)
         return logger
 
+# Import performance monitoring
+try:
+    from performance import monitor_performance, performance_context
+    PERFORMANCE_MONITORING_AVAILABLE = True
+except ImportError:
+    logger.warning("Performance monitoring not available - decorators will be no-op")
+    PERFORMANCE_MONITORING_AVAILABLE = False
+    # Create no-op decorators
+    def monitor_performance(*args, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+    
+    class performance_context:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+
 # Get module logger
 logger = get_logger(__name__)
 
@@ -45,10 +68,16 @@ except ImportError:
 DEFAULT_LLM_PROVIDER = "openai"
 DEFAULT_LLM_MODEL = {
     "openai": "gpt-3.5-turbo",
-    "anthropic": "claude-instant-1"
+    "anthropic": "claude-instant-1",
+    "google": "gemini-pro"
 }
 
+# Retry configuration for API calls
+MAX_RETRIES = 3
+RETRY_DELAY = 1.0  # seconds
+
 # LLM client initialization
+@monitor_performance("llm_client_initialization")
 def get_llm_client(provider: str, model_name: Optional[str] = None) -> Tuple[Any, str]:
     """
     Initialize and return an LLM client based on the specified provider.
@@ -96,9 +125,25 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> Tuple[Any
         except ImportError:
             raise ImportError("Anthropic Python package not installed. Install with: pip install anthropic")
     
+    elif provider == "google":
+        try:
+            import google.generativeai as genai
+            # Check for API key
+            api_key = os.environ.get("GOOGLE_API_KEY")
+            if not api_key:
+                raise ValueError("GOOGLE_API_KEY environment variable not set")
+            
+            genai.configure(api_key=api_key)
+            model = model_name or DEFAULT_LLM_MODEL["google"]
+            return genai, model
+            
+        except ImportError:
+            raise ImportError("Google Generative AI package not installed. Install with: pip install google-generativeai")
+    
     else:
-        raise ValueError(f"Unsupported LLM provider: {provider}")
+        raise ValueError(f"Unsupported LLM provider: {provider}. Supported providers: openai, anthropic, google")
 
+@monitor_performance("ai_code_generation")
 def generate_code_snippet(
     prompt: str,
     language: str,
@@ -148,33 +193,80 @@ def generate_code_snippet(
         else:
             full_prompt = f"Generate {language} code for the following task:\n\n{prompt}\n\nRespond with ONLY the code and nothing else."
         
-        # Handle different providers
-        if llm_provider == "openai":
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": system_message},
-                    {"role": "user", "content": full_prompt}
-                ],
-                temperature=0.2,  # Lower temperature for more deterministic code generation
-            )
-            generated_code = response.choices[0].message.content.strip()
-            
-        elif llm_provider == "anthropic":
-            response = client.messages.create(
-                model=model,
-                system=system_message,
-                messages=[{"role": "user", "content": full_prompt}],
-                max_tokens=2000,
-                temperature=0.2,
-            )
-            generated_code = response.content[0].text.strip()
+        # Handle different providers with retry logic
+        generated_code = None
+        last_error = None
         
-        else:
+        for attempt in range(MAX_RETRIES):
+            try:
+                if llm_provider == "openai":
+                    response = client.chat.completions.create(
+                        model=model,
+                        messages=[
+                            {"role": "system", "content": system_message},
+                            {"role": "user", "content": full_prompt}
+                        ],
+                        temperature=0.2,  # Lower temperature for more deterministic code generation
+                    )
+                    generated_code = response.choices[0].message.content.strip()
+                    
+                elif llm_provider == "anthropic":
+                    response = client.messages.create(
+                        model=model,
+                        system=system_message,
+                        messages=[{"role": "user", "content": full_prompt}],
+                        max_tokens=2000,
+                        temperature=0.2,
+                    )
+                    generated_code = response.content[0].text.strip()
+                
+                elif llm_provider == "google":
+                    # Configure generation parameters
+                    generation_config = {
+                        "temperature": 0.2,
+                        "top_p": 0.8,
+                        "top_k": 40,
+                        "max_output_tokens": 2000,
+                    }
+                    
+                    # Create the model
+                    model_instance = client.GenerativeModel(model, generation_config=generation_config)
+                    
+                    # Create the prompt
+                    google_prompt = f"{system_message}\n\n{full_prompt}"
+                    
+                    # Generate content
+                    response = model_instance.generate_content(google_prompt)
+                    generated_code = response.text.strip()
+                
+                else:
+                    return {
+                        "status": "failure",
+                        "generated_code": None, 
+                        "error_message": f"Unsupported LLM provider: {llm_provider}"
+                    }
+                
+                # If we get here, the request was successful
+                break
+                
+            except Exception as e:
+                last_error = e
+                logger.warning(f"Attempt {attempt + 1} failed: {str(e)}")
+                
+                if attempt < MAX_RETRIES - 1:
+                    # Exponential backoff with jitter
+                    delay = RETRY_DELAY * (2 ** attempt) + random.uniform(0, 1)
+                    logger.info(f"Retrying in {delay:.2f} seconds...")
+                    time.sleep(delay)
+                else:
+                    logger.error(f"All {MAX_RETRIES} attempts failed")
+        
+        # Check if we got a successful response
+        if generated_code is None:
             return {
                 "status": "failure",
-                "generated_code": None, 
-                "error_message": f"Unsupported LLM provider: {llm_provider}"
+                "generated_code": None,
+                "error_message": f"Failed to generate code after {MAX_RETRIES} attempts. Last error: {str(last_error)}"
             }
         
         # Clean up the response to extract just code
@@ -212,6 +304,7 @@ def generate_code_snippet(
             "error_message": f"Code generation failed: {str(e)}"
         }
 
+@monitor_performance("ai_code_refactoring")
 def refactor_code_snippet(
     code_snippet: str,
     refactoring_instruction: str,
@@ -260,34 +353,82 @@ def refactor_code_snippet(
         
         full_prompt = f"Refactor the following {language} code according to this instruction: {refactoring_instruction}\n\n```{language}\n{code_snippet}\n```\n\nRespond with the refactored code followed by a brief explanation of changes made. If no changes are needed, explain why."
         
-        # Handle different providers
-        if llm_provider == "openai":
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": system_message},
-                    {"role": "user", "content": full_prompt}
-                ],
-                temperature=0.2,
-            )
-            full_response = response.choices[0].message.content.strip()
-            
-        elif llm_provider == "anthropic":
-            response = client.messages.create(
-                model=model,
-                system=system_message,
-                messages=[{"role": "user", "content": full_prompt}],
-                max_tokens=2000,
-                temperature=0.2,
-            )
-            full_response = response.content[0].text.strip()
-            
-        else:
+        # Handle different providers with retry logic
+        full_response = None
+        last_error = None
+        
+        for attempt in range(MAX_RETRIES):
+            try:
+                if llm_provider == "openai":
+                    response = client.chat.completions.create(
+                        model=model,
+                        messages=[
+                            {"role": "system", "content": system_message},
+                            {"role": "user", "content": full_prompt}
+                        ],
+                        temperature=0.2,
+                    )
+                    full_response = response.choices[0].message.content.strip()
+                    
+                elif llm_provider == "anthropic":
+                    response = client.messages.create(
+                        model=model,
+                        system=system_message,
+                        messages=[{"role": "user", "content": full_prompt}],
+                        max_tokens=2000,
+                        temperature=0.2,
+                    )
+                    full_response = response.content[0].text.strip()
+                
+                elif llm_provider == "google":
+                    # Configure generation parameters
+                    generation_config = {
+                        "temperature": 0.2,
+                        "top_p": 0.8,
+                        "top_k": 40,
+                        "max_output_tokens": 2000,
+                    }
+                    
+                    # Create the model
+                    model_instance = client.GenerativeModel(model, generation_config=generation_config)
+                    
+                    # Create the prompt
+                    google_prompt = f"{system_message}\n\n{full_prompt}"
+                    
+                    # Generate content
+                    response = model_instance.generate_content(google_prompt)
+                    full_response = response.text.strip()
+                
+                else:
+                    return {
+                        "status": "failure",
+                        "refactored_code": None,
+                        "explanation": None,
+                        "error_message": f"Unsupported LLM provider: {llm_provider}"
+                    }
+                
+                # If we get here, the request was successful
+                break
+                
+            except Exception as e:
+                last_error = e
+                logger.warning(f"Refactoring attempt {attempt + 1} failed: {str(e)}")
+                
+                if attempt < MAX_RETRIES - 1:
+                    # Exponential backoff with jitter
+                    delay = RETRY_DELAY * (2 ** attempt) + random.uniform(0, 1)
+                    logger.info(f"Retrying in {delay:.2f} seconds...")
+                    time.sleep(delay)
+                else:
+                    logger.error(f"All {MAX_RETRIES} refactoring attempts failed")
+        
+        # Check if we got a successful response
+        if full_response is None:
             return {
                 "status": "failure",
                 "refactored_code": None,
                 "explanation": None,
-                "error_message": f"Unsupported LLM provider: {llm_provider}"
+                "error_message": f"Failed to refactor code after {MAX_RETRIES} attempts. Last error: {str(last_error)}"
             }
         
         # Parse the response to extract refactored code and explanation

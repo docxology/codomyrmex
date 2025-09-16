@@ -33,6 +33,28 @@ except ImportError:
 # Recommend: At application startup, call environment_setup.env_checker.ensure_dependencies_installed()
 # and logging_monitoring.setup_logging() to ensure dependencies and logging are configured.
 
+# Import performance monitoring
+try:
+    from codomyrmex.performance import monitor_performance, performance_context
+    PERFORMANCE_MONITORING_AVAILABLE = True
+except ImportError:
+    logger.warning("Performance monitoring not available - decorators will be no-op")
+    PERFORMANCE_MONITORING_AVAILABLE = False
+    # Create no-op decorators
+    def monitor_performance(*args, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+    
+    class performance_context:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+
+@monitor_performance("data_viz_create_heatmap")
 def create_heatmap(
     data: list,
     x_labels: list = None,

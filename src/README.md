@@ -21,6 +21,7 @@ src/
 │   ├── static_analysis/          # Code quality and security analysis
 │   ├── system_discovery/         # System introspection tools
 │   ├── terminal_interface/       # CLI and terminal utilities
+│   ├── performance/              # Performance optimization utilities
 │   └── output/                   # Generated artifacts and outputs
 └── template/            # Project templates and boilerplate code
 ```
@@ -55,11 +56,12 @@ src/
 - **Data Visualization**: Rich plotting with Matplotlib, Seaborn, Plotly
 - **Static Analysis**: Code quality, security scanning, and metrics
 - **Git Operations**: Advanced repository management and workflow automation
+- **System Discovery**: Comprehensive system introspection and capability mapping
 
 ### 📚 Documentation & Monitoring
 - **Documentation Website**: Docusaurus-powered documentation generation
 - **Structured Logging**: Multi-language logging with SLF4J, Loguru, and more
-- **System Discovery**: Intelligent system introspection
+- **Performance Optimization**: Lazy loading, caching, and performance monitoring
 
 ## Getting Started
 

@@ -112,11 +112,13 @@ dev-dependencies = [
     "pyyaml>=6.0.2",
 ]
 
-[tool.uv.sources]
-codomyrmex = { workspace = true }
-
 [project.scripts]
-codomyrmex = "codomyrmex_cli:main"
+codomyrmex = "codomyrmex.cli:main"
+
+# uv-specific optimizations
+[tool.uv.sources]
+# Use local workspace for development
+codomyrmex = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["testing", "src"]

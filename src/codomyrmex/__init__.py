@@ -16,5 +16,8 @@ __all__ = [
     "logging_monitoring",
     "model_context_protocol",
     "pattern_matching",
+    "performance",
     "static_analysis",
+    "system_discovery",
+    "terminal_interface",
 ]

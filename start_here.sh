@@ -103,9 +103,10 @@ show_menu() {
     echo -e "${GREEN}7)${NC} 🎮 ${CYAN}Interactive Shell${NC} - Enter interactive exploration mode"
     echo -e "${GREEN}8)${NC} 📋 ${CYAN}Export Inventory${NC} - Generate complete system inventory report"
     echo -e "${GREEN}9)${NC} 🌐 ${CYAN}Git Repository Status${NC} - Check all Git repos and dependencies"
+    echo -e "${GREEN}A)${NC} 🚀 ${CYAN}Install/Update Codomyrmex${NC} - Run UV-optimized installation script"
     echo -e "${GREEN}0)${NC} 🚪 ${CYAN}Exit${NC} - Return to the outside world"
     echo ""
-    echo -e "${PURPLE}Choose your path (0-9):${NC} "
+    echo -e "${PURPLE}Choose your path (0-9, A):${NC} "
 }
 
 # Run system discovery
@@ -253,6 +254,21 @@ discovery.check_git_repositories()
 "
 }
 
+# Run installation script
+run_installation() {
+    echo -e "\n${CYAN}🚀 Running Codomyrmex Installation...${NC}"
+    
+    INSTALL_SCRIPT="src/codomyrmex/environment_setup/scripts/install_with_uv.sh"
+    
+    if [[ -f "$INSTALL_SCRIPT" ]]; then
+        echo -e "${GREEN}Running UV-optimized installation script...${NC}"
+        bash "$INSTALL_SCRIPT"
+    else
+        echo -e "${RED}❌ Installation script not found at: $INSTALL_SCRIPT${NC}"
+        echo -e "${YELLOW}Please ensure the script exists and try again.${NC}"
+    fi
+}
+
 # Main execution loop
 main() {
     show_banner
@@ -274,13 +290,14 @@ main() {
             7) run_interactive_shell ;;
             8) export_inventory ;;
             9) check_git_status ;;
+            A|a) run_installation ;;
             0) 
                 echo -e "\n${CYAN}🐜 Thank you for exploring the Codomyrmex nest!${NC}"
                 echo -e "${YELLOW}Until next time, happy foraging! 🌟${NC}\n"
                 exit 0
                 ;;
             *) 
-                echo -e "${RED}Invalid choice. Please select 0-9.${NC}"
+                echo -e "${RED}Invalid choice. Please select 0-9 or A.${NC}"
                 sleep 1
                 ;;
         esac

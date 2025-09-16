@@ -18,6 +18,167 @@ codomyrmex --help
 
 ## 🔧 Core Commands
 
+### **🎯 NEW: Orchestration Commands**
+
+The following commands are part of the new Project Orchestration system:
+
+### **`codomyrmex status`**
+**NEW!** Display comprehensive system status with performance monitoring.
+
+```bash
+codomyrmex status [OPTIONS]
+
+Options:
+  --performance, -p    Enable performance monitoring display
+  --modules, -m        Show detailed module status
+  --resources, -r      Display resource usage information
+  --json              Output in JSON format
+
+Examples:
+  codomyrmex status                    # Basic system status
+  codomyrmex status --performance      # Status with performance metrics
+  codomyrmex status --resources        # Include resource usage
+```
+
+### **`codomyrmex workflow`**
+**NEW!** Manage and execute multi-module workflows.
+
+```bash
+codomyrmex workflow <action> [OPTIONS]
+
+Actions:
+  list                List all available workflows
+  run <name>          Execute a specific workflow
+  create <name>       Create a new workflow (interactive)
+
+Options for 'run':
+  --params, -p <json>  JSON parameters for the workflow
+  --async, -a          Run workflow asynchronously
+  --timeout, -t <sec>  Set workflow timeout in seconds
+
+Options for 'create':
+  --template <name>    Base workflow on existing template
+  --interactive, -i    Use interactive creation mode
+
+Examples:
+  codomyrmex workflow list                                    # List workflows
+  codomyrmex workflow run ai-analysis --params='{"path": "./src"}'  # Run workflow
+  codomyrmex workflow create code-review --template basic     # Create workflow
+```
+
+### **`codomyrmex ai`**
+**NEW!** AI-powered code operations.
+
+```bash
+codomyrmex ai <action> [OPTIONS]
+
+Actions:
+  generate <prompt>           Generate code from natural language
+  refactor <file> <instruction>  Refactor existing code
+
+Options for 'generate':
+  --language, -l <lang>      Programming language (default: python)
+  --provider <provider>      AI provider (openai, anthropic, google)
+  --output, -o <file>        Save output to file
+
+Options for 'refactor':
+  --backup, -b              Create backup before refactoring
+  --interactive, -i          Interactive refactoring mode
+
+Examples:
+  codomyrmex ai generate "Create a REST API endpoint for user management" --language python
+  codomyrmex ai refactor main.py "Add error handling and logging"
+```
+
+### **`codomyrmex analyze`**
+**NEW!** Code analysis operations.
+
+```bash
+codomyrmex analyze <target> <path> [OPTIONS]
+
+Targets:
+  code                 Static code analysis
+  git                  Git repository analysis
+
+Options:
+  --output, -o <dir>   Output directory for reports
+  --format <format>    Report format (json, html, markdown)
+  --include <types>    Analysis types to include
+  --exclude <types>    Analysis types to exclude
+
+Examples:
+  codomyrmex analyze code ./src --output ./reports    # Analyze code
+  codomyrmex analyze git --repo ./project             # Analyze git history
+```
+
+### **`codomyrmex build`**
+**NEW!** Build and synthesis operations.
+
+```bash
+codomyrmex build <action> [OPTIONS]
+
+Actions:
+  project             Build entire project
+
+Options:
+  --config, -c <file>  Build configuration file
+  --output, -o <dir>   Output directory
+  --parallel, -j <n>   Number of parallel jobs
+
+Examples:
+  codomyrmex build project --config build.json       # Build with config
+```
+
+### **`codomyrmex module`**
+**NEW!** Module-specific operations.
+
+```bash
+codomyrmex module <action> <name> [OPTIONS]
+
+Actions:
+  test                Run module tests
+  demo                Run module demonstration
+
+Options:
+  --verbose, -v       Verbose output
+  --coverage          Generate coverage report (for tests)
+
+Examples:
+  codomyrmex module test data_visualization           # Test module
+  codomyrmex module demo ai_code_editing              # Run demo
+```
+
+### **`codomyrmex shell`**
+**NEW!** Launch interactive shell with all modules loaded.
+
+```bash
+codomyrmex shell [OPTIONS]
+
+Options:
+  --performance, -p    Enable performance monitoring
+  --preload <modules>  Preload specific modules
+
+Examples:
+  codomyrmex shell                          # Basic interactive shell
+  codomyrmex shell --performance            # Shell with perf monitoring
+```
+
+### **Global Options**
+
+All commands support these global options:
+
+```bash
+Global Options:
+  --verbose, -v        Enable verbose output
+  --performance, -p    Enable performance monitoring
+  --help, -h          Show help message
+  --version           Show version information
+
+Examples:
+  codomyrmex --verbose status              # Verbose system status
+  codomyrmex --performance workflow run ai-analysis  # With perf monitoring
+```
+
 ### **`codomyrmex check`**
 Verifies system setup and module health.
 

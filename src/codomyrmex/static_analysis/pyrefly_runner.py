@@ -31,11 +31,33 @@ except ImportError:
 
 logger = get_logger(__name__)
 
+# Import performance monitoring
+try:
+    from codomyrmex.performance import monitor_performance, performance_context
+    PERFORMANCE_MONITORING_AVAILABLE = True
+except ImportError:
+    logger.warning("Performance monitoring not available - decorators will be no-op")
+    PERFORMANCE_MONITORING_AVAILABLE = False
+    # Create no-op decorators
+    def monitor_performance(*args, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+    
+    class performance_context:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+
 # Regex to attempt to parse Pyrefly errors, this is a guess and might need refinement
 # Example: <path>:<line>:<col> <Error Code> <description>
 # or path:line:col: <message type>: <message>
 PYREFLY_ERROR_PATTERN = re.compile(r"([^:]+):(\d+):(\d+):\s*(.*)") # Adjusted to be more flexible with error codes/types
 
+@monitor_performance("static_analysis_parse_output")
 def parse_pyrefly_output(output: str, project_root: str) -> list:
     """
     Parses the raw output from Pyrefly to extract structured error information.
@@ -84,6 +106,7 @@ def parse_pyrefly_output(output: str, project_root: str) -> list:
     logger.info(f"Parsed {len(issues)} issues from Pyrefly output.")
     return issues
 
+@monitor_performance("static_analysis_run_pyrefly")
 def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict:
     """
     Runs Pyrefly static type checker on the given paths and returns the analysis results.

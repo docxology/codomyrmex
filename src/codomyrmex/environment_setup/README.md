@@ -15,6 +15,7 @@ This module is dedicated to ensuring a smooth and consistent setup experience fo
     - `check_and_setup_env_vars(repo_root_path: str)`: Checks for a `.env` file in the specified repository root. If missing, it guides the user on creating one with the necessary API key placeholders (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`).
 - **Setup Instructions & Documentation**: This `README.md` file for the `environment_setup` module itself.
 - **Helper Scripts**: Located in `environment_setup/scripts/`:
+    - `install_with_uv.sh`: UV-optimized installation script for fast, reliable setup
     - `setup_dev_env.sh`: Automates common setup tasks for the general project environment.
     - `install_hooks.sh`: Installs project-defined Git hooks.
 - **Virtual Environment Guidance**: Reinforces the use of virtual environments (e.g., Python's `venv`) for the overall project.

@@ -39,6 +39,27 @@ except ImportError:
 
 logger = get_logger(__name__)
 
+# Import performance monitoring
+try:
+    from codomyrmex.performance import monitor_performance, performance_context
+    PERFORMANCE_MONITORING_AVAILABLE = True
+except ImportError:
+    logger.warning("Performance monitoring not available - decorators will be no-op")
+    PERFORMANCE_MONITORING_AVAILABLE = False
+    # Create no-op decorators
+    def monitor_performance(*args, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+    
+    class performance_context:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+
 def check_git_availability() -> bool:
     """Check if Git is available on the system."""
     try:
@@ -63,6 +84,7 @@ def is_git_repository(path: str = None) -> bool:
     except Exception:
         return False
 
+@monitor_performance("git_initialize_repository")
 def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
     """Initialize a new Git repository at the specified path."""
     try:
@@ -104,6 +126,7 @@ def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
         logger.error(f"Unexpected error initializing repository: {e}")
         return False
 
+@monitor_performance("git_clone_repository")
 def clone_repository(url: str, destination: str, branch: str = None) -> bool:
     """Clone a Git repository to the specified destination."""
     try:

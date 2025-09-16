@@ -1,0 +1,64 @@
+{
+  "name": "data_pipeline",
+  "type": "data_pipeline",
+  "description": "Data processing and analysis pipeline",
+  "version": "1.0",
+  "directory_structure": [
+    "pipelines/",
+    "data/raw/",
+    "data/processed/",
+    "data/output/",
+    "notebooks/",
+    "config/",
+    "tests/",
+    ".codomyrmex/"
+  ],
+  "template_files": {},
+  "workflows": [
+    "data-processing",
+    "visualization"
+  ],
+  "required_modules": [
+    "data_visualization",
+    "code_execution_sandbox"
+  ],
+  "optional_modules": [
+    "ai_code_editing",
+    "pattern_matching",
+    "performance"
+  ],
+  "default_config": {
+    "data": {
+      "input_formats": [
+        "csv",
+        "json",
+        "parquet"
+      ],
+      "output_formats": [
+        "csv",
+        "json"
+      ],
+      "validation": true
+    },
+    "processing": {
+      "parallel": true,
+      "batch_size": 1000,
+      "memory_limit": "8GB"
+    },
+    "visualization": {
+      "charts": [
+        "line",
+        "bar",
+        "scatter",
+        "heatmap"
+      ],
+      "export_formats": [
+        "png",
+        "svg",
+        "html"
+      ]
+    }
+  },
+  "author": "",
+  "created_at": "2025-09-16T13:22:09.907601+00:00"
+}

@@ -15,22 +15,25 @@ print(codomyrmex.__version__)  # 0.1.0
 
 ## Module Status Matrix
 
-| Module | Status | API Stability | Tests | Documentation | MCP Tools | Key Features |
-|--------|--------|---------------|-------|---------------|-----------|--------------|
-| **[ai_code_editing/](./ai_code_editing/)** | ✅ Active | 🔄 Evolving | ✅ Complete | ✅ Complete | ✅ 2 tools | OpenAI, Anthropic, Google LLM integration |
-| **[build_synthesis/](./build_synthesis/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | ✅ 2 tools | Build automation, code synthesis |
-| **[code_execution_sandbox/](./code_execution_sandbox/)** | ✅ Active | 🔄 Evolving | ✅ Complete | ✅ Complete | ✅ 1 tool | Secure Docker-based execution |
-| **[data_visualization/](./data_visualization/)** | ✅ Active | ✅ Stable | ✅ Complete | ✅ Complete | ❌ None | Matplotlib, Seaborn, Plotly plots |
-| **[documentation/](./documentation/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | ❌ None | Docusaurus website generation |
-| **[environment_setup/](./environment_setup/)** | ✅ Active | ✅ Stable | ✅ Complete | ✅ Complete | ❌ None | Dev environment automation |
-| **[git_operations/](./git_operations/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | 🔧 WIP | Advanced Git workflows |
-| **[logging_monitoring/](./logging_monitoring/)** | ✅ Active | ✅ Stable | ✅ Complete | ✅ Complete | ❌ None | Structured multi-language logging |
-| **[model_context_protocol/](./model_context_protocol/)** | ✅ Active | ✅ Stable | ✅ Complete | ✅ Complete | ❌ Schema | MCP framework implementation |
-| **[module_template/](./module_template/)** | ✅ Active | ✅ Stable | ⚠️ Template | ✅ Complete | ❌ Template | New module scaffolding |
-| **[pattern_matching/](./pattern_matching/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | 🔧 WIP | Advanced pattern matching |
-| **[static_analysis/](./static_analysis/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | 🔧 WIP | Code quality, security analysis |
+|| Module | Status | API Stability | Tests | Documentation | MCP Tools | Key Features |
+||--------|--------|---------------|-------|---------------|-----------|--------------|
+|| **[ai_code_editing/](./ai_code_editing/)** | ✅ Active | 🔄 Evolving | ✅ Complete | ✅ Complete | ✅ 2 tools | OpenAI, Anthropic, Google LLM integration |
+|| **[build_synthesis/](./build_synthesis/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | ✅ 2 tools | Build automation, code synthesis |
+|| **[code_execution_sandbox/](./code_execution_sandbox/)** | ✅ Active | 🔄 Evolving | ✅ Complete | ✅ Complete | ✅ 1 tool | Secure Docker-based execution |
+|| **[data_visualization/](./data_visualization/)** | ✅ Active | ✅ Stable | ✅ Complete | ✅ Complete | ❌ None | Matplotlib, Seaborn, Plotly plots |
+|| **[documentation/](./documentation/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | ❌ None | Docusaurus website generation |
+|| **[environment_setup/](./environment_setup/)** | ✅ Active | ✅ Stable | ✅ Complete | ✅ Complete | ❌ None | Dev environment automation |
+|| **[git_operations/](./git_operations/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | 🔧 WIP | Advanced Git workflows |
+|| **[logging_monitoring/](./logging_monitoring/)** | ✅ Active | ✅ Stable | ✅ Complete | ✅ Complete | ❌ None | Structured multi-language logging |
+|| **[model_context_protocol/](./model_context_protocol/)** | ✅ Active | ✅ Stable | ✅ Complete | ✅ Complete | ❌ Schema | MCP framework implementation |
+|| **[module_template/](./module_template/)** | ✅ Active | ✅ Stable | ⚠️ Template | ✅ Complete | ❌ Template | New module scaffolding |
+|| **[pattern_matching/](./pattern_matching/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | 🔧 WIP | Advanced pattern matching |
+|| **[static_analysis/](./static_analysis/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ✅ Complete | 🔧 WIP | Code quality, security analysis |
+|| **[system_discovery/](./system_discovery/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ⚠️ Partial | ❌ None | System introspection and capability mapping |
+|| **[terminal_interface/](./terminal_interface/)** | ✅ Active | 🔄 Evolving | ⚠️ Partial | ⚠️ Partial | ❌ None | CLI and terminal utilities |
+|| **[performance/](./performance/)** | ✅ Active | ✅ Stable | ✅ Complete | ⚠️ Partial | ❌ None | Performance optimization utilities |
 
-**Note**: Additional modules `system_discovery` and `terminal_interface` are in development but not yet included in the main package exports. See individual module directories for current development status.
+**Note**: All modules are now included in the main package exports. See individual module directories for current development status.
 
 ### Status Legend
 - ✅ **Active**: Production-ready, fully functional
@@ -86,6 +89,11 @@ print(codomyrmex.__version__)  # 0.1.0
 - **Purpose**: Sophisticated pattern matching and code analysis
 - **Key Features**: AST analysis, regex patterns, custom matching logic
 
+#### [system_discovery/](./system_discovery/) - System Introspection
+- **Purpose**: Comprehensive system discovery and capability mapping
+- **Key Features**: Module scanning, function discovery, capability analysis
+- **Integration**: Works with all modules to provide system-wide insights
+
 ### 🔧 Development Tools
 #### [git_operations/](./git_operations/) - Advanced Git Workflows
 - **Purpose**: Automated Git workflows and repository management
@@ -102,18 +110,20 @@ print(codomyrmex.__version__)  # 0.1.0
 - **Key Features**: Docusaurus integration, versioned docs, API documentation
 - **Output**: Complete documentation website
 
+#### [terminal_interface/](./terminal_interface/) - CLI and Terminal Utilities
+- **Purpose**: Command-line interfaces and terminal utilities
+- **Key Features**: Interactive shell, terminal utilities, CLI helpers
+- **Integration**: Provides CLI access to all module functionality
+
 ### 📝 Templates & Standards
 #### [module_template/](./module_template/) - Module Scaffolding
 - **Purpose**: Standardized template for creating new modules
 - **Key Features**: Complete file structure, documentation templates, test frameworks
 
-#### [terminal_interface/](./terminal_interface/) - CLI Tools ⚠️ Under Development
-- **Purpose**: Command-line interfaces and terminal utilities
-- **Status**: Early development phase
-
-#### [system_discovery/](./system_discovery/) - System Introspection ⚠️ Under Development
-- **Purpose**: Dynamic system and environment discovery
-- **Status**: Experimental phase
+#### [performance/](./performance/) - Performance Optimization
+- **Purpose**: Performance optimization utilities and monitoring
+- **Key Features**: Lazy loading, caching, performance monitoring
+- **Integration**: Used by all modules to improve performance
 
 ## Module Integration Patterns
 
@@ -308,19 +318,22 @@ output/
 ### **🌟 Module Quick Access**
 Jump directly to any module's documentation:
 
-| Module | README | API | MCP Tools | Examples |
-|--------|--------|-----|-----------|----------|
-| **[ai_code_editing](./ai_code_editing/)** | [📚](./ai_code_editing/README.md) | [🔌](./ai_code_editing/API_SPECIFICATION.md) | [🤖](./ai_code_editing/MCP_TOOL_SPECIFICATION.md) | [💡](./ai_code_editing/USAGE_EXAMPLES.md) |
-| **[data_visualization](./data_visualization/)** | [📚](./data_visualization/README.md) | [🔌](./data_visualization/API_SPECIFICATION.md) | ❌ | [💡](./data_visualization/USAGE_EXAMPLES.md) |
-| **[code_execution_sandbox](./code_execution_sandbox/)** | [📚](./code_execution_sandbox/README.md) | [🔌](./code_execution_sandbox/API_SPECIFICATION.md) | [🤖](./code_execution_sandbox/MCP_TOOL_SPECIFICATION.md) | [💡](./code_execution_sandbox/USAGE_EXAMPLES.md) |
-| **[static_analysis](./static_analysis/)** | [📚](./static_analysis/README.md) | [🔌](./static_analysis/API_SPECIFICATION.md) | [🤖](./static_analysis/MCP_TOOL_SPECIFICATION.md) | [💡](./static_analysis/USAGE_EXAMPLES.md) |
-| **[build_synthesis](./build_synthesis/)** | [📚](./build_synthesis/README.md) | [🔌](./build_synthesis/API_SPECIFICATION.md) | [🤖](./build_synthesis/MCP_TOOL_SPECIFICATION.md) | [💡](./build_synthesis/USAGE_EXAMPLES.md) |
-| **[pattern_matching](./pattern_matching/)** | [📚](./pattern_matching/README.md) | [🔌](./pattern_matching/API_SPECIFICATION.md) | [🤖](./pattern_matching/MCP_TOOL_SPECIFICATION.md) | [💡](./pattern_matching/USAGE_EXAMPLES.md) |
-| **[git_operations](./git_operations/)** | [📚](./git_operations/README.md) | [🔌](./git_operations/API_SPECIFICATION.md) | [🤖](./git_operations/MCP_TOOL_SPECIFICATION.md) | [💡](./git_operations/USAGE_EXAMPLES.md) |
-| **[documentation](./documentation/)** | [📚](./documentation/README.md) | [🔌](./documentation/API_SPECIFICATION.md) | ❌ | [💡](./documentation/USAGE_EXAMPLES.md) |
-| **[logging_monitoring](./logging_monitoring/)** | [📚](./logging_monitoring/README.md) | [🔌](./logging_monitoring/API_SPECIFICATION.md) | ❌ | [💡](./logging_monitoring/USAGE_EXAMPLES.md) |
-| **[environment_setup](./environment_setup/)** | [📚](./environment_setup/README.md) | [🔌](./environment_setup/API_SPECIFICATION.md) | ❌ | [💡](./environment_setup/USAGE_EXAMPLES.md) |
-| **[model_context_protocol](./model_context_protocol/)** | [📚](./model_context_protocol/README.md) | [🔌](./model_context_protocol/API_SPECIFICATION.md) | 📋 Schema | [💡](./model_context_protocol/USAGE_EXAMPLES.md) |
+|| Module | README | API | MCP Tools | Examples |
+||--------|--------|-----|-----------|----------|
+|| **[ai_code_editing](./ai_code_editing/)** | [📚](./ai_code_editing/README.md) | [🔌](./ai_code_editing/API_SPECIFICATION.md) | [🤖](./ai_code_editing/MCP_TOOL_SPECIFICATION.md) | [💡](./ai_code_editing/USAGE_EXAMPLES.md) |
+|| **[data_visualization](./data_visualization/)** | [📚](./data_visualization/README.md) | [🔌](./data_visualization/API_SPECIFICATION.md) | ❌ | [💡](./data_visualization/USAGE_EXAMPLES.md) |
+|| **[code_execution_sandbox](./code_execution_sandbox/)** | [📚](./code_execution_sandbox/README.md) | [🔌](./code_execution_sandbox/API_SPECIFICATION.md) | [🤖](./code_execution_sandbox/MCP_TOOL_SPECIFICATION.md) | [💡](./code_execution_sandbox/USAGE_EXAMPLES.md) |
+|| **[static_analysis](./static_analysis/)** | [📚](./static_analysis/README.md) | [🔌](./static_analysis/API_SPECIFICATION.md) | [🤖](./static_analysis/MCP_TOOL_SPECIFICATION.md) | [💡](./static_analysis/USAGE_EXAMPLES.md) |
+|| **[build_synthesis](./build_synthesis/)** | [📚](./build_synthesis/README.md) | [🔌](./build_synthesis/API_SPECIFICATION.md) | [🤖](./build_synthesis/MCP_TOOL_SPECIFICATION.md) | [💡](./build_synthesis/USAGE_EXAMPLES.md) |
+|| **[pattern_matching](./pattern_matching/)** | [📚](./pattern_matching/README.md) | [🔌](./pattern_matching/API_SPECIFICATION.md) | [🤖](./pattern_matching/MCP_TOOL_SPECIFICATION.md) | [💡](./pattern_matching/USAGE_EXAMPLES.md) |
+|| **[git_operations](./git_operations/)** | [📚](./git_operations/README.md) | [🔌](./git_operations/API_SPECIFICATION.md) | [🤖](./git_operations/MCP_TOOL_SPECIFICATION.md) | [💡](./git_operations/USAGE_EXAMPLES.md) |
+|| **[documentation](./documentation/)** | [📚](./documentation/README.md) | [🔌](./documentation/API_SPECIFICATION.md) | ❌ | [💡](./documentation/USAGE_EXAMPLES.md) |
+|| **[logging_monitoring](./logging_monitoring/)** | [📚](./logging_monitoring/README.md) | [🔌](./logging_monitoring/API_SPECIFICATION.md) | ❌ | [💡](./logging_monitoring/USAGE_EXAMPLES.md) |
+|| **[environment_setup](./environment_setup/)** | [📚](./environment_setup/README.md) | [🔌](./environment_setup/API_SPECIFICATION.md) | ❌ | [💡](./environment_setup/USAGE_EXAMPLES.md) |
+|| **[model_context_protocol](./model_context_protocol/)** | [📚](./model_context_protocol/README.md) | [🔌](./model_context_protocol/API_SPECIFICATION.md) | 📋 Schema | [💡](./model_context_protocol/USAGE_EXAMPLES.md) |
+|| **[system_discovery](./system_discovery/)** | [📚](./system_discovery/README.md) | [🔌](./system_discovery/API_SPECIFICATION.md) | ❌ | [💡](./system_discovery/USAGE_EXAMPLES.md) |
+|| **[terminal_interface](./terminal_interface/)** | [📚](./terminal_interface/README.md) | [🔌](./terminal_interface/API_SPECIFICATION.md) | ❌ | [💡](./terminal_interface/USAGE_EXAMPLES.md) |
+|| **[performance](./performance/)** | [📚](./performance/README.md) | [🔌](./performance/API_SPECIFICATION.md) | ❌ | [💡](./performance/USAGE_EXAMPLES.md) |
 
 ---
 
