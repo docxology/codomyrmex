@@ -72,118 +72,159 @@ class ResourceLimits:
 
 
 @dataclass
+class ResourceUsage:
+    """Represents usage statistics for a resource (compatibility type expected by tests)."""
+    resource_id: str
+    current_usage: float = 0.0
+    peak_usage: float = 0.0
+    average_usage: float = 0.0
+    last_updated: float = field(default_factory=lambda: time.time())
+
+
+@dataclass
 class Resource:
-    """Represents a system resource that can be allocated to tasks."""
+    """Represents a system resource that can be allocated to tasks.
+
+    This class provides a backward-compatible constructor that accepts
+    both `resource_type` (tests) and `type` (internal code) and supports
+    simple numeric `capacity` or dict-based capacity mappings.
+    """
     id: str
     name: str
     type: ResourceType
     description: str = ""
-    
-    # Availability
     status: ResourceStatus = ResourceStatus.AVAILABLE
-    capacity: Dict[str, Any] = field(default_factory=dict)  # Total capacity
-    allocated: Dict[str, Any] = field(default_factory=dict)  # Currently allocated
-    
-    # Limits and constraints
+    capacity: Dict[str, Any] = field(default_factory=dict)
+    allocated: Dict[str, Any] = field(default_factory=dict)
     limits: ResourceLimits = field(default_factory=ResourceLimits)
-    
-    # Usage tracking
     total_allocations: int = 0
     total_usage_time: float = 0.0
     current_users: Set[str] = field(default_factory=set)
-    
-    # Configuration
     metadata: Dict[str, Any] = field(default_factory=dict)
     tags: List[str] = field(default_factory=list)
-    
-    # Lifecycle
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    
+
+    def __init__(self, id: str, name: str, resource_type: Optional[ResourceType] = None,
+                 type: Optional[ResourceType] = None, capacity: Optional[Any] = None,
+                 unit: Optional[str] = None, description: str = "", status: ResourceStatus = ResourceStatus.AVAILABLE,
+                 metadata: Optional[Dict[str, Any]] = None, **kwargs):
+        # Accept resource_type (test usage) or type (internal usage)
+        rt = resource_type or type
+        if rt is None:
+            raise ValueError("Resource requires a resource_type/type")
+
+        # Normalize capacity: allow numeric -> {'units': value} or dict
+        if capacity is None:
+            cap = {}
+        elif isinstance(capacity, dict):
+            cap = capacity
+        else:
+            key = unit or 'units'
+            cap = {key: float(capacity)}
+
+        # Assign fields
+        self.id = id
+        self.name = name
+        self.type = rt
+        self.description = description
+        self.status = status
+        self.capacity = cap
+        self.allocated = {}
+        self.limits = kwargs.get('limits', ResourceLimits())
+        self.total_allocations = 0
+        self.total_usage_time = 0.0
+        self.current_users = set()
+        self.metadata = metadata or {}
+        self.tags = kwargs.get('tags', [])
+        self.created_at = kwargs.get('created_at', datetime.now(timezone.utc))
+        self.updated_at = kwargs.get('updated_at', datetime.now(timezone.utc))
+
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for serialization."""
-        data = asdict(self)
-        data['type'] = self.type.value
-        data['status'] = self.status.value
-        data['current_users'] = list(self.current_users)
-        data['created_at'] = self.created_at.isoformat()
-        data['updated_at'] = self.updated_at.isoformat()
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'type': self.type.value,
+            'description': self.description,
+            'status': self.status.value,
+            'capacity': self.capacity,
+            'allocated': self.allocated,
+            'limits': asdict(self.limits) if isinstance(self.limits, ResourceLimits) else self.limits,
+            'total_allocations': self.total_allocations,
+            'total_usage_time': self.total_usage_time,
+            'current_users': list(self.current_users),
+            'metadata': self.metadata,
+            'tags': self.tags,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
         return data
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Resource':
-        """Create from dictionary."""
-        data = data.copy()
-        if 'type' in data:
-            data['type'] = ResourceType(data['type'])
-        if 'status' in data:
-            data['status'] = ResourceStatus(data['status'])
-        if 'current_users' in data:
-            data['current_users'] = set(data['current_users'])
-        if 'created_at' in data:
-            data['created_at'] = datetime.fromisoformat(data['created_at'])
-        if 'updated_at' in data:
-            data['updated_at'] = datetime.fromisoformat(data['updated_at'])
-        if 'limits' in data and isinstance(data['limits'], dict):
-            data['limits'] = ResourceLimits(**data['limits'])
-        return cls(**data)
-    
+        rt = ResourceType(data.get('type')) if 'type' in data else ResourceType(data.get('resource_type'))
+        inst = cls(
+            id=data.get('id'),
+            name=data.get('name'),
+            resource_type=rt,
+            capacity=data.get('capacity') or {},
+            description=data.get('description', ''),
+            status=ResourceStatus(data.get('status')) if data.get('status') else ResourceStatus.AVAILABLE,
+            metadata=data.get('metadata', {})
+        )
+        # Restore timestamps if present
+        try:
+            if 'created_at' in data:
+                inst.created_at = datetime.fromisoformat(data['created_at'])
+            if 'updated_at' in data:
+                inst.updated_at = datetime.fromisoformat(data['updated_at'])
+        except Exception:
+            pass
+        return inst
+
     def is_available(self) -> bool:
-        """Check if resource is available for allocation."""
         return self.status == ResourceStatus.AVAILABLE
-    
+
     def can_allocate(self, requested: Dict[str, Any], user_id: str) -> bool:
-        """Check if resource can satisfy allocation request."""
         if not self.is_available():
             return False
-        
-        # Check concurrent user limit
-        if (self.limits.max_concurrent_users and 
-            len(self.current_users) >= self.limits.max_concurrent_users and 
-            user_id not in self.current_users):
+        # concurrent users
+        if (self.limits.max_concurrent_users and len(self.current_users) >= self.limits.max_concurrent_users
+                and user_id not in self.current_users):
             return False
-        
-        # Check capacity constraints
         for key, amount in requested.items():
             if key in self.capacity:
                 available = self.capacity[key] - self.allocated.get(key, 0)
                 if amount > available:
                     return False
-        
         return True
-    
+
     def allocate(self, requested: Dict[str, Any], user_id: str) -> bool:
-        """Allocate resource capacity to a user."""
         if not self.can_allocate(requested, user_id):
             return False
-        
-        # Update allocations
         for key, amount in requested.items():
             self.allocated[key] = self.allocated.get(key, 0) + amount
-        
         self.current_users.add(user_id)
         self.total_allocations += 1
         self.updated_at = datetime.now(timezone.utc)
-        
         return True
-    
+
     def deallocate(self, released: Dict[str, Any], user_id: str):
-        """Release resource capacity from a user."""
-        # Update allocations
         for key, amount in released.items():
             if key in self.allocated:
                 self.allocated[key] = max(0, self.allocated[key] - amount)
-        
         self.current_users.discard(user_id)
         self.updated_at = datetime.now(timezone.utc)
-    
+
     def get_utilization(self) -> Dict[str, float]:
-        """Get current resource utilization percentages."""
         utilization = {}
         for key, capacity in self.capacity.items():
-            if capacity > 0:
-                used = self.allocated.get(key, 0)
-                utilization[key] = (used / capacity) * 100.0
+            try:
+                if capacity and capacity > 0:
+                    used = self.allocated.get(key, 0)
+                    utilization[key] = (used / capacity) * 100.0
+            except Exception:
+                utilization[key] = 0.0
         return utilization
 
 

@@ -656,7 +656,88 @@ print("Sandbox execution complete! ✅")
         """Handle Ctrl+D gracefully."""
         print()  # New line after ^D
         return self.do_quit(arg)
-    
+
+    def do_shell(self, arg):
+        """
+        Execute shell commands.
+
+        Usage: shell <command>
+        """
+        if not arg.strip():
+            print("❌ Please provide a command to execute.")
+            return
+
+        try:
+            import subprocess
+            result = subprocess.run(arg, shell=True, capture_output=True, text=True)
+            if result.stdout:
+                print(result.stdout)
+            if result.stderr:
+                print(f"Error: {result.stderr}")
+            if result.returncode != 0:
+                print(f"Command exited with code: {result.returncode}")
+        except Exception as e:
+            print(f"❌ Error executing command: {e}")
+
+    def do_stats(self, arg):
+        """
+        Show session statistics.
+
+        Usage: stats
+        """
+        stats = {
+            'Commands Run': self.session_data['commands_run'],
+            'Modules Explored': len(self.session_data['modules_explored']),
+            'Discoveries Made': len(self.session_data['discoveries_made']),
+            'Demos Run': self.session_data['demos_run']
+        }
+
+        print("📊 Session Statistics:")
+        for key, value in stats.items():
+            print(f"  {key}: {value}")
+
+    def do_clear(self, arg):
+        """
+        Clear the terminal screen.
+
+        Usage: clear
+        """
+        try:
+            os.system('clear' if os.name == 'posix' else 'cls')
+        except Exception as e:
+            print(f"❌ Could not clear screen: {e}")
+
+    def do_history(self, arg):
+        """
+        Show command history.
+
+        Usage: history
+        """
+        # Note: cmd module doesn't store history by default
+        # This is a simplified implementation
+        print("📜 Command History:")
+        print("  (History tracking not implemented in this version)")
+        print("  Commands executed this session: {}".format(self.session_data['commands_run']))
+
+    def complete_explore(self, text, line, begidx, endidx):
+        """
+        Tab completion for explore command.
+        """
+        if not self.discovery:
+            return []
+
+        # Get available modules for completion
+        try:
+            modules = self.discovery.discover_modules()
+            module_names = [module.get('name', '') for module in modules if 'name' in module]
+            if text:
+                return [name for name in module_names if name.startswith(text)]
+            else:
+                return module_names
+        except Exception as e:
+            logger.error(f"Error in tab completion: {e}")
+            return []
+
     def run(self):
         """Run the interactive shell."""
         try:

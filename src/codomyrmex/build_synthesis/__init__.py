@@ -47,6 +47,7 @@ from .build_manager import (
     create_static_build_target,
     get_available_build_types,
     get_available_environments,
+    trigger_build,
     BuildTarget,
     BuildStep,
     BuildResult,
@@ -71,6 +72,7 @@ __all__ = [
     'create_static_build_target',
     'get_available_build_types',
     'get_available_environments',
+    'trigger_build',
     # Data structures
     'BuildTarget',
     'BuildStep',

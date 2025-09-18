@@ -44,12 +44,18 @@ from .static_analyzer import (
     Language,
 )
 
+# Alias for backward compatibility
+def analyze_codebase(*args, **kwargs):
+    """Alias for analyze_project for backward compatibility."""
+    return analyze_project(*args, **kwargs)
+
 __all__ = [
     'parse_pyrefly_output',
     'run_pyrefly_analysis',
     'StaticAnalyzer',
     'analyze_file',
     'analyze_project',
+    'analyze_codebase',  # Alias for backward compatibility
     'get_available_tools',
     'AnalysisResult',
     'AnalysisSummary',

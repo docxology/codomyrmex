@@ -6,13 +6,19 @@ execution times, memory usage, and other performance metrics.
 """
 
 import time
-import psutil
 import functools
 from typing import Any, Callable, Dict, List, Optional, Union
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
+
+try:
+    import psutil
+    HAS_PSUTIL = True
+except ImportError:
+    psutil = None
+    HAS_PSUTIL = False
 
 
 @dataclass
@@ -43,14 +49,18 @@ class PerformanceMonitor:
         """
         self.log_file = Path(log_file) if log_file else None
         self.metrics: List[PerformanceMetrics] = []
-        self._process = psutil.Process()
+        self._process = psutil.Process() if HAS_PSUTIL else None
     
     def _get_memory_usage(self) -> float:
         """Get current memory usage in MB."""
+        if not HAS_PSUTIL:
+            return 0.0
         return self._process.memory_info().rss / 1024 / 1024
-    
+
     def _get_cpu_percent(self) -> float:
         """Get current CPU usage percentage."""
+        if not HAS_PSUTIL:
+            return 0.0
         return self._process.cpu_percent()
     
     def record_metrics(self, 

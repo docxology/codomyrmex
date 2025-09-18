@@ -81,8 +81,16 @@ class CacheManager:
         """Get a value from the cache."""
         # Check memory cache first
         if key in self._memory_cache:
-            value, timestamp = self._memory_cache[key]
-            if not self._is_expired(timestamp, self.default_ttl):
+            cached_item = self._memory_cache[key]
+
+            # Handle both old format (value, timestamp) and new format (value, timestamp, ttl)
+            if len(cached_item) == 3:
+                value, timestamp, ttl = cached_item
+            else:
+                value, timestamp = cached_item
+                ttl = self.default_ttl
+
+            if not self._is_expired(timestamp, ttl):
                 # Update access time for LRU
                 self._access_times[key] = time.time()
                 return value
@@ -97,11 +105,17 @@ class CacheManager:
             try:
                 with open(cache_file, 'rb') as f:
                     cached_data = pickle.load(f)
-                
-                value, timestamp = cached_data
-                if not self._is_expired(timestamp, self.default_ttl):
+
+                # Handle both old format (value, timestamp) and new format (value, timestamp, ttl)
+                if len(cached_data) == 3:
+                    value, timestamp, ttl = cached_data
+                else:
+                    value, timestamp = cached_data
+                    ttl = self.default_ttl
+
+                if not self._is_expired(timestamp, ttl):
                     # Load into memory cache
-                    self._memory_cache[key] = (value, timestamp)
+                    self._memory_cache[key] = (value, timestamp, ttl)
                     self._access_times[key] = time.time()
                     return value
                 else:
@@ -117,9 +131,9 @@ class CacheManager:
         """Set a value in the cache."""
         ttl = ttl or self.default_ttl
         timestamp = time.time()
-        
-        # Store in memory cache
-        self._memory_cache[key] = (value, timestamp)
+
+        # Store in memory cache (value, timestamp, ttl)
+        self._memory_cache[key] = (value, timestamp, ttl)
         self._access_times[key] = time.time()
         
         # Evict if we exceed the memory limit
@@ -130,7 +144,7 @@ class CacheManager:
         cache_file = self.cache_dir / f"{key}.pkl"
         try:
             with open(cache_file, 'wb') as f:
-                pickle.dump((value, timestamp), f)
+                pickle.dump((value, timestamp, ttl), f)
         except (OSError, pickle.PickleError):
             # If we can't write to disk, that's okay - we still have it in memory
             pass

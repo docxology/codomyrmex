@@ -1,20 +1,21 @@
-# Template Directory
+# Codomyrmex Template System
 
-This directory serves as a placeholder for project templates and boilerplate code. Currently, the primary template system is located within the main Codomyrmex package at `../codomyrmex/module_template/`.
+This directory serves as the central hub for all project templates and boilerplate code used in the Codomyrmex ecosystem.
 
 ## Template System Overview
 
-The Codomyrmex project uses a comprehensive template system to ensure consistency across modules and maintain high code quality standards. 
+The Codomyrmex project maintains a comprehensive template system to ensure consistency across modules, maintain high code quality standards, and accelerate development workflows.
 
 ### Primary Template Location
-**Main Template System**: [`../codomyrmex/module_template/`](../codomyrmex/module_template/)
+**Main Module Template**: [`../codomyrmex/module_template/`](../codomyrmex/module_template/)
 
-This contains the complete scaffolding for creating new Codomyrmex modules, including:
-- Standardized file structure
-- Documentation templates
-- Test framework setup
-- API specification templates
-- MCP tool specification templates
+The primary template system is located within the main Codomyrmex package and contains complete scaffolding for creating new Codomyrmex modules:
+
+- **Standardized file structure** with consistent naming conventions
+- **Documentation templates** for README, API specs, and usage examples
+- **Test framework setup** with unit and integration test templates
+- **API specification templates** with MCP tool definitions
+- **Configuration templates** for environment and build settings
 
 ## Available Templates
 

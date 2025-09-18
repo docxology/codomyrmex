@@ -10,6 +10,11 @@ project_root = Path(__file__).parent.parent
 code_path = project_root / "src"
 if str(code_path) not in sys.path:
     sys.path.insert(0, str(code_path))
+# Also add the package root (src/codomyrmex) so tests that import modules
+# using the package-local names (e.g. `ai_code_editing`) will resolve.
+package_root = code_path / "codomyrmex"
+if str(package_root) not in sys.path:
+    sys.path.insert(0, str(package_root))
 
 @pytest.fixture
 def project_root():

@@ -316,4 +316,39 @@ cd ../integration && ./ai-enhanced-analysis.sh
 
 **🎉 Congratulations!** You've successfully set up Codomyrmex and tried the core features. You're ready to explore the powerful modular toolkit for code analysis, generation, and workflow automation.
 
+## 🤖 Configure AI Features (Optional)
+
+Codomyrmex includes powerful AI capabilities that are completely optional. Here's how to enable them:
+
+### **Add API Keys**
+```bash
+# Create .env file with your AI provider keys
+cat > .env << EOF
+# AI Provider API Keys (optional - only needed for AI features)
+OPENAI_API_KEY="sk-your-openai-key-here"
+ANTHROPIC_API_KEY="sk-ant-your-anthropic-key-here"
+GOOGLE_API_KEY="AIzaSy-your-google-key-here"
+
+# Logging Configuration (optional)
+LOG_LEVEL="INFO"
+EOF
+```
+
+### **Test AI Features**
+```python
+# Test AI code generation
+from codomyrmex.ai_code_editing import generate_code_snippet
+
+result = generate_code_snippet(
+    prompt="Create a function to calculate fibonacci numbers",
+    language="python"
+)
+
+if result["status"] == "success":
+    print("🤖 AI Generated Code:")
+    print(result["generated_code"])
+```
+
+> **💡 Tip**: AI features work with OpenAI, Anthropic, and Google models. You only need one provider to get started!
+
 **Happy coding! 🐜✨**

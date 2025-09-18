@@ -56,10 +56,25 @@ class OrchestrationMode(Enum):
     RESOURCE_AWARE = "resource_aware"  # Execute based on resource availability
 
 
+class SessionStatus(Enum):
+    """Standard session lifecycle statuses."""
+    PENDING = "pending"
+    ACTIVE = "active"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+    FAILED = "failed"
+
+
 @dataclass
-class OrchestrationContext:
-    """Context for orchestration execution."""
+class OrchestrationSession:
+    """Represents an orchestration session (public-facing dataclass used in tests).
+
+    This dataclass mirrors the previous internal context representation but
+    provides the `SessionStatus` typed `status` expected by tests and public API.
+    """
     session_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    name: str = ""
+    description: str = ""
     user_id: str = "system"
     mode: OrchestrationMode = OrchestrationMode.RESOURCE_AWARE
     max_parallel_tasks: int = 4
@@ -67,16 +82,19 @@ class OrchestrationContext:
     timeout_seconds: Optional[int] = None
     resource_requirements: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     # Execution tracking
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     started_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
-    status: str = "initialized"
-    
+    status: SessionStatus = SessionStatus.PENDING
+
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""
         data = {
             'session_id': self.session_id,
+            'name': self.name,
+            'description': self.description,
             'user_id': self.user_id,
             'mode': self.mode.value,
             'max_parallel_tasks': self.max_parallel_tasks,
@@ -84,13 +102,42 @@ class OrchestrationContext:
             'timeout_seconds': self.timeout_seconds,
             'resource_requirements': self.resource_requirements,
             'metadata': self.metadata,
-            'status': self.status
+            'status': self.status.value,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'started_at': self.started_at.isoformat() if self.started_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            'completed_at': self.completed_at.isoformat() if self.completed_at else None
         }
-        if self.started_at:
-            data['started_at'] = self.started_at.isoformat()
-        if self.completed_at:
-            data['completed_at'] = self.completed_at.isoformat()
         return data
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'OrchestrationSession':
+        sess = cls(
+            session_id=data.get('session_id', str(uuid.uuid4())),
+            name=data.get('name', ''),
+            description=data.get('description', ''),
+            user_id=data.get('user_id', 'system'),
+            mode=OrchestrationMode(data.get('mode')) if data.get('mode') else OrchestrationMode.RESOURCE_AWARE,
+            max_parallel_tasks=data.get('max_parallel_tasks', 4),
+            max_parallel_workflows=data.get('max_parallel_workflows', 2),
+            timeout_seconds=data.get('timeout_seconds'),
+            resource_requirements=data.get('resource_requirements', {}),
+            metadata=data.get('metadata', {})
+        )
+        if data.get('created_at'):
+            try:
+                sess.created_at = datetime.fromisoformat(data['created_at'])
+            except Exception:
+                pass
+        if data.get('status'):
+            try:
+                sess.status = SessionStatus(data['status'])
+            except Exception:
+                sess.status = SessionStatus.PENDING
+        return sess
+
+# Backwards compatibility: alias the older internal name to the new dataclass
+OrchestrationContext = OrchestrationSession
 
 
 class OrchestrationEngine:
@@ -217,8 +264,48 @@ class OrchestrationEngine:
                         'error': 'Failed to allocate required resources'
                     }
             
-            # Execute workflow
-            result = self.workflow_manager.execute_workflow(workflow_name, **params)
+            # Execute workflow (async)
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    # If loop is already running, we need to handle differently
+                    # For now, create a new thread with its own event loop
+                    import concurrent.futures
+                    import threading
+
+                    def run_async():
+                        new_loop = asyncio.new_event_loop()
+                        asyncio.set_event_loop(new_loop)
+                        try:
+                            return new_loop.run_until_complete(
+                                self.workflow_manager.execute_workflow(workflow_name, **params)
+                            )
+                        finally:
+                            new_loop.close()
+
+                    with concurrent.futures.ThreadPoolExecutor() as executor:
+                        future = executor.submit(run_async)
+                        workflow_result = future.result(timeout=300)  # 5 minute timeout
+                else:
+                    workflow_result = loop.run_until_complete(
+                        self.workflow_manager.execute_workflow(workflow_name, **params)
+                    )
+            except Exception as e:
+                logger.error(f"Async workflow execution failed: {e}")
+                return {
+                    'success': False,
+                    'error': f'Workflow execution failed: {e}'
+                }
+
+            # Convert WorkflowExecution to dict format
+            result = {
+                'success': workflow_result.success,
+                'result': workflow_result.result,
+                'error': workflow_result.error,
+                'execution_time': workflow_result.execution_time,
+                'steps_executed': len(workflow_result.step_results) if workflow_result.step_results else 0
+            }
             
             # Update context
             context.status = "completed" if result['success'] else "failed"

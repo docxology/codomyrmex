@@ -1,0 +1,23 @@
+# Security Audit Module Dependencies
+
+# Core security and cryptography
+cryptography>=41.0.0
+pyOpenSSL>=23.0.0
+
+# Security scanning tools
+bandit>=1.7.0
+safety>=2.3.0
+
+# HTTP client for external services
+requests>=2.31.0
+
+# Data processing
+Jinja2>=3.1.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Optional: Additional security tools
+# semgrep>=1.0.0
+# pip-audit>=2.0.0

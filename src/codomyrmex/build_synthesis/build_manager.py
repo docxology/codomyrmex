@@ -777,3 +777,41 @@ def get_available_build_types() -> List[BuildType]:
 def get_available_environments() -> List[BuildEnvironment]:
     """Get list of available build environments."""
     return list(BuildEnvironment)
+
+
+def trigger_build(target_name: str = None, environment: str = "development", config_path: str = None) -> bool:
+    """
+    Trigger a build process for the specified target or all targets.
+
+    Args:
+        target_name: Name of the build target to execute (None for all targets)
+        environment: Build environment (development, production, staging)
+        config_path: Path to build configuration file
+
+    Returns:
+        bool: True if build succeeded, False otherwise
+    """
+    try:
+        # Initialize build manager
+        manager = BuildManager(config_path=config_path)
+
+        # Convert environment string to enum
+        try:
+            build_env = BuildEnvironment[environment.upper()]
+        except KeyError:
+            logger.error(f"Invalid environment: {environment}")
+            return False
+
+        # Execute build
+        if target_name:
+            logger.info(f"Triggering build for target: {target_name} in {environment} environment")
+            result = manager.build_target(target_name, build_env)
+            return result.status == BuildStatus.SUCCESS
+        else:
+            logger.info(f"Triggering build for all targets in {environment} environment")
+            results = manager.build_all_targets(build_env)
+            return all(result.status == BuildStatus.SUCCESS for result in results)
+
+    except Exception as e:
+        logger.error(f"Build failed: {e}")
+        return False

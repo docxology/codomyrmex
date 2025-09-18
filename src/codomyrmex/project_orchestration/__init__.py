@@ -26,11 +26,30 @@ Integration:
 - Provides MCP tools for AI-driven orchestration
 """
 
-from .workflow_manager import WorkflowManager, WorkflowStep, WorkflowStatus, WorkflowExecution
-from .task_orchestrator import TaskOrchestrator, Task, TaskStatus, TaskResult
-from .project_manager import ProjectManager, Project, ProjectTemplate
-from .resource_manager import ResourceManager, Resource, ResourceType
-from .orchestration_engine import OrchestrationEngine
+from .workflow_manager import (
+    WorkflowManager,
+    WorkflowStep,
+    WorkflowStatus,
+    WorkflowExecution,
+)
+from .task_orchestrator import (
+    TaskOrchestrator,
+    Task,
+    TaskStatus,
+    TaskPriority,
+    TaskResult,
+    TaskResource,
+)
+from .project_manager import ProjectManager, Project, ProjectTemplate, ProjectStatus, ProjectType
+from .resource_manager import (
+    ResourceManager,
+    Resource,
+    ResourceType,
+    ResourceStatus,
+    ResourceAllocation,
+    ResourceUsage,
+)
+from .orchestration_engine import OrchestrationEngine, OrchestrationSession, SessionStatus, OrchestrationContext
 from .mcp_tools import get_mcp_tools, get_mcp_tool_definitions, execute_mcp_tool
 
 __version__ = "0.1.0"
@@ -47,6 +66,12 @@ __all__ = [
     'WorkflowStep',
     'WorkflowStatus',
     'WorkflowExecution',
+    # Task & scheduling
+    'Task',
+    'TaskStatus',
+    'TaskPriority',
+    'TaskResult',
+    'TaskResource',
     'Task',
     'TaskStatus', 
     'TaskResult',
@@ -54,6 +79,13 @@ __all__ = [
     'ProjectTemplate',
     'Resource',
     'ResourceType',
+    'ResourceStatus',
+    'ResourceAllocation',
+    'ResourceUsage',
+    # Sessions & engine
+    'OrchestrationSession',
+    'SessionStatus',
+    'OrchestrationContext',
     
     # MCP tools
     'get_mcp_tools',

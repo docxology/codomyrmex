@@ -601,8 +601,11 @@ Examples:
             print(f"❌ Unknown command: {args.command}")
             success = False
 
-    # Exit with appropriate code
-    sys.exit(0 if success else 1)
+    # Return success status (exit with code only if not running tests)
+    if __name__ != '__main__':
+        return success  # Return for testing
+    else:
+        sys.exit(0 if success else 1)  # Exit for normal execution
 
 
 # Helper functions for command handling
