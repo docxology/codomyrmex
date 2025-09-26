@@ -1,0 +1,4 @@
+[TODO]
+
+[COMPLETED]
+create_physical_management | tasks:create_physical_management_module | Write a new module for physical object management, called "physical_management", with all documentation, source code, and tests optimized for Codomyrmex and streamlined with existing modules.

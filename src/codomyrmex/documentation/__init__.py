@@ -34,6 +34,8 @@ from .documentation_website import (
     assess_site,
 )
 
+from .quality_assessment import DocumentationQualityAnalyzer, generate_quality_report
+from .consistency_checker import DocumentationConsistencyChecker
 __all__ = [
     'check_doc_environment',
     'run_command_stream_output',
@@ -45,4 +47,7 @@ __all__ = [
     'aggregate_docs',
     'validate_doc_versions',
     'assess_site',
-] 
+
+    "DocumentationQualityAnalyzer",
+    "generate_quality_report",
+    "DocumentationConsistencyChecker",] 

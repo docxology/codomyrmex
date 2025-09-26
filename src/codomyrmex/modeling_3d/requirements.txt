@@ -1,0 +1,30 @@
+# 3D Modeling and Rendering Module Requirements
+
+# Core dependencies
+numpy>=1.21.0
+scipy>=1.7.0
+
+# Graphics and rendering
+pyopengl>=3.1.0
+moderngl>=5.6.0
+pygame>=2.0.0  # For window management and input
+
+# Image processing
+pillow>=8.0.0
+
+# Math and geometry
+pyrr>=0.10.3
+trimesh>=3.9.0  # For 3D mesh operations
+
+# AR/VR support (optional)
+pyarfoundation>=0.1.0  # iOS AR
+pyvr>=0.1.0  # VR support
+
+# Testing
+pytest>=6.0.0
+pytest-cov>=2.10.0
+
+# Development
+black>=21.0.0
+isort>=5.9.0
+mypy>=0.910

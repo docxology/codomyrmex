@@ -617,7 +617,7 @@ def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
         result = generate_code_snippet(
             prompt=prompt,
             language=language,
-            llm_provider=provider
+            provider=provider
         )
         
         if result['status'] == 'success':

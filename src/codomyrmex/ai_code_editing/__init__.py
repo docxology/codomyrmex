@@ -50,6 +50,18 @@ from .ai_code_helpers import (
     CodeComplexity,
     CodeStyle,
 )
+from .droid import (
+    DroidMode,
+    DroidStatus,
+    DroidConfig,
+    DroidMetrics,
+    DroidController,
+    create_default_controller,
+    load_config_from_file,
+    save_config_to_file,
+    TodoManager,
+    TodoItem,
+)
 
 __all__ = [
     'generate_code_snippet',
@@ -70,4 +82,14 @@ __all__ = [
     'CodeLanguage',
     'CodeComplexity',
     'CodeStyle',
+    'DroidMode',
+    'DroidStatus',
+    'DroidConfig',
+    'DroidMetrics',
+    'DroidController',
+    'create_default_controller',
+    'load_config_from_file',
+    'save_config_to_file',
+    'TodoManager',
+    'TodoItem',
 ] 
