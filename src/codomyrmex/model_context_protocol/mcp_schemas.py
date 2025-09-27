@@ -1,61 +1,117 @@
 from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, Field, validator
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
+
 
 class MCPErrorDetail(BaseModel):
     """Standard structure for detailed error information in MCP responses."""
-    error_type: str = Field(..., description="A unique code or type for the error (e.g., ValidationError, FileNotFoundError).")
-    error_message: str = Field(..., description="A descriptive message explaining the error.")
-    error_details: Optional[Union[Dict[str, Any], str]] = Field(None, description="Optional structured details or a string containing more info about the error.")
+
+    error_type: str = Field(
+        ...,
+        description="A unique code or type for the error (e.g., ValidationError, FileNotFoundError).",
+    )
+    error_message: str = Field(
+        ..., description="A descriptive message explaining the error."
+    )
+    error_details: Optional[Union[Dict[str, Any], str]] = Field(
+        None,
+        description="Optional structured details or a string containing more info about the error.",
+    )
+
 
 class MCPToolCall(BaseModel):
     """Represents a call to an MCP tool."""
+
     tool_name: str = Field(..., description="The unique invocation name of the tool.")
-    arguments: Dict[str, Any] = Field(..., description="An object containing the arguments for the tool. The schema for this object is defined by the specific tool being called.")
+    arguments: Dict[str, Any] = Field(
+        ...,
+        description="An object containing the arguments for the tool. The schema for this object is defined by the specific tool being called.",
+    )
 
     class Config:
-        extra = 'allow' # Allow arbitrary arguments, tool-specific validation happens elsewhere
+        """Config.
+
+            A class for handling config operations.
+            """
+        extra = "allow"  # Allow arbitrary arguments, tool-specific validation happens elsewhere
+
 
 class MCPToolResult(BaseModel):
     """Represents the result of an MCP tool execution."""
-    status: str = Field(..., description="The outcome of the tool execution (e.g., success, failure, no_change_needed).")
-    data: Optional[Dict[str, Any]] = Field(None, description="The output data from the tool if successful. Schema is tool-specific.")
-    error: Optional[MCPErrorDetail] = Field(None, description="Details of the error if execution failed.")
-    explanation: Optional[str] = Field(None, description="Optional human-readable explanation of the result.")
 
-    @validator('error', always=True)
+    status: str = Field(
+        ...,
+        description="The outcome of the tool execution (e.g., success, failure, no_change_needed).",
+    )
+    data: Optional[Dict[str, Any]] = Field(
+        None,
+        description="The output data from the tool if successful. Schema is tool-specific.",
+    )
+    error: Optional[MCPErrorDetail] = Field(
+        None, description="Details of the error if execution failed."
+    )
+    explanation: Optional[str] = Field(
+        None, description="Optional human-readable explanation of the result."
+    )
+
+    @validator("error", always=True)
     def check_error_if_failed(cls, v, values):
-        status = values.get('status')
-        if status and 'fail' in status.lower() and v is None:
-            raise ValueError("'error' field must be populated if status indicates failure.")
-        if status and 'success' in status.lower() and v is not None:
+        """Check Error If Failed.
+
+            Args:        cls: Parameter for the operation.        v: Parameter for the operation.        values: Value to be processed.
+
+            Returns:        The result of the operation.
+            """
+        status = values.get("status")
+        if status and "fail" in status.lower() and v is None:
+            raise ValueError(
+                "'error' field must be populated if status indicates failure."
+            )
+        if status and "success" in status.lower() and v is not None:
             # Allowing error to be populated even on success, for warnings or partial failures not yet fully specified.
             # Consider making this stricter if pure success should never have an error object.
             pass
         return v
 
-    @validator('data', always=True)
+    @validator("data", always=True)
     def check_data_if_success(cls, v, values):
-        status = values.get('status')
-        if status and 'success' in status.lower() and v is None:
+        """Check Data If Success.
+
+            Args:        cls: Parameter for the operation.        v: Parameter for the operation.        values: Value to be processed.
+
+            Returns:        The result of the operation.
+            """
+        status = values.get("status")
+        if status and "success" in status.lower() and v is None:
             # Data can be None even on success if the tool has no specific data output (e.g. a tool that only has side effects)
-            pass 
-        if status and 'fail' in status.lower() and v is not None:
-            raise ValueError("'data' field should be null or omitted if status indicates failure.")
+            pass
+        if status and "fail" in status.lower() and v is not None:
+            raise ValueError(
+                "'data' field should be null or omitted if status indicates failure."
+            )
         return v
 
     class Config:
-        extra = 'allow' # Allow additional fields in data, specific validation is per-tool
+        """Config.
+
+            A class for handling config operations.
+            """
+        extra = (
+            "allow"  # Allow additional fields in data, specific validation is per-tool
+        )
+
 
 # Example Usage (for testing or demonstration)
 if __name__ == "__main__":
     # Example Tool Call
     tool_call_data = {
         "tool_name": "example.do_something",
-        "arguments": {
-            "param1": "value1",
-            "param2": 123
-        }
+        "arguments": {"param1": "value1", "param2": 123},
     }
     mcp_call = MCPToolCall(**tool_call_data)
     print(f"MCP Call: {mcp_call.model_dump_json(indent=2)}")
@@ -63,11 +119,8 @@ if __name__ == "__main__":
     # Example Successful Tool Result
     success_result_data = {
         "status": "success",
-        "data": {
-            "output_value": "Task completed successfully.",
-            "items_processed": 10
-        },
-        "explanation": "The example tool processed 10 items and finished."
+        "data": {"output_value": "Task completed successfully.", "items_processed": 10},
+        "explanation": "The example tool processed 10 items and finished.",
     }
     mcp_success_result = MCPToolResult(**success_result_data)
     print(f"MCP Success Result: {mcp_success_result.model_dump_json(indent=2)}")
@@ -78,10 +131,8 @@ if __name__ == "__main__":
         "error": {
             "error_type": "ResourceUnavailable",
             "error_message": "The required resource could not be accessed.",
-            "error_details": {
-                "resource_id": "res_abc123"
-            }
-        }
+            "error_details": {"resource_id": "res_abc123"},
+        },
     }
     mcp_failure_result = MCPToolResult(**failure_result_data)
     print(f"MCP Failure Result: {mcp_failure_result.model_dump_json(indent=2)}")
@@ -89,7 +140,7 @@ if __name__ == "__main__":
     # Example Failure Tool Result (validation error)
     invalid_failure_data = {
         "status": "failure",
-        "data": {"some": "data"} # Data should be null on failure
+        "data": {"some": "data"},  # Data should be null on failure
     }
     try:
         MCPToolResult(**invalid_failure_data)
@@ -97,10 +148,12 @@ if __name__ == "__main__":
         print(f"Validation Error for invalid failure data: {e}")
 
     invalid_success_data = {
-        "status": "failure", # Error must be populated
-        "error": None
+        "status": "failure",  # Error must be populated
+        "error": None,
     }
     try:
         MCPToolResult(**invalid_success_data)
     except ValueError as e:
-        print(f"Validation Error for invalid success data (missing error on failure): {e}") 
+        print(
+            f"Validation Error for invalid success data (missing error on failure): {e}"
+        )

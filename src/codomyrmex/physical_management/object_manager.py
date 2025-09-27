@@ -11,12 +11,14 @@ import threading
 import weakref
 from pathlib import Path
 from collections import defaultdict
+from codomyrmex.exceptions import CodomyrmexError
 
 logger = logging.getLogger(__name__)
 
 
 class ObjectType(Enum):
     """Types of physical objects."""
+
     SENSOR = "sensor"
     ACTUATOR = "actuator"
     DEVICE = "device"
@@ -27,6 +29,7 @@ class ObjectType(Enum):
 
 class ObjectStatus(Enum):
     """Status of physical objects."""
+
     ACTIVE = "active"
     INACTIVE = "inactive"
     MAINTENANCE = "maintenance"
@@ -39,6 +42,7 @@ class ObjectStatus(Enum):
 
 class MaterialType(Enum):
     """Types of materials for physical objects."""
+
     METAL = "metal"
     PLASTIC = "plastic"
     WOOD = "wood"
@@ -52,6 +56,7 @@ class MaterialType(Enum):
 
 class EventType(Enum):
     """Types of events for object lifecycle."""
+
     CREATED = "created"
     MOVED = "moved"
     STATUS_CHANGED = "status_changed"
@@ -65,6 +70,7 @@ class EventType(Enum):
 @dataclass
 class MaterialProperties:
     """Material properties for physics calculations."""
+
     density: float  # kg/m³
     elasticity: float  # Young's modulus in Pa
     thermal_conductivity: float  # W/(m⋅K)
@@ -72,7 +78,7 @@ class MaterialProperties:
     melting_point: float  # K
     friction_coefficient: float = 0.5
     restitution: float = 0.5  # Coefficient of restitution
-    
+
     @classmethod
     def from_material_type(cls, material_type: MaterialType) -> "MaterialProperties":
         """Create material properties from material type."""
@@ -93,6 +99,7 @@ class MaterialProperties:
 @dataclass
 class ObjectEvent:
     """Event in object lifecycle."""
+
     event_type: EventType
     object_id: str
     timestamp: float = field(default_factory=time.time)
@@ -100,18 +107,25 @@ class ObjectEvent:
     source: Optional[str] = None
 
 
-@dataclass 
+@dataclass
 class SpatialIndex:
     """Spatial indexing for efficient object queries."""
+
     grid_size: float = 10.0
     _grid: Dict[Tuple[int, int, int], Set[str]] = field(default_factory=dict)
     _object_locations: Dict[str, Tuple[int, int, int]] = field(default_factory=dict)
-    _object_coordinates: Dict[str, Tuple[float, float, float]] = field(default_factory=dict)
-    
+    _object_coordinates: Dict[str, Tuple[float, float, float]] = field(
+        default_factory=dict
+    )
+
     def add_object(self, object_id: str, x: float, y: float, z: float) -> None:
         """Add object to spatial index."""
-        grid_key = (int(x // self.grid_size), int(y // self.grid_size), int(z // self.grid_size))
-        
+        grid_key = (
+            int(x // self.grid_size),
+            int(y // self.grid_size),
+            int(z // self.grid_size),
+        )
+
         # Remove from old location if exists
         if object_id in self._object_locations:
             old_key = self._object_locations[object_id]
@@ -119,14 +133,14 @@ class SpatialIndex:
                 self._grid[old_key].discard(object_id)
                 if not self._grid[old_key]:
                     del self._grid[old_key]
-        
+
         # Add to new location
         if grid_key not in self._grid:
             self._grid[grid_key] = set()
         self._grid[grid_key].add(object_id)
         self._object_locations[object_id] = grid_key
         self._object_coordinates[object_id] = (x, y, z)
-    
+
     def remove_object(self, object_id: str) -> None:
         """Remove object from spatial index."""
         if object_id in self._object_locations:
@@ -136,13 +150,17 @@ class SpatialIndex:
                 self._grid[grid_key].discard(object_id)
                 if not self._grid[grid_key]:
                     del self._grid[grid_key]
-    
+
     def get_nearby_cells(self, x: float, y: float, z: float, radius: float) -> Set[str]:
         """Get object IDs within the specified radius, using spatial indexing for efficiency."""
         nearby_objects = set()
         grid_radius = int(math.ceil(radius / self.grid_size))
-        center_x, center_y, center_z = int(x // self.grid_size), int(y // self.grid_size), int(z // self.grid_size)
-        
+        center_x, center_y, center_z = (
+            int(x // self.grid_size),
+            int(y // self.grid_size),
+            int(z // self.grid_size),
+        )
+
         for dx in range(-grid_radius, grid_radius + 1):
             for dy in range(-grid_radius, grid_radius + 1):
                 for dz in range(-grid_radius, grid_radius + 1):
@@ -152,16 +170,19 @@ class SpatialIndex:
                         for obj_id in self._grid[grid_key]:
                             if obj_id in self._object_coordinates:
                                 ox, oy, oz = self._object_coordinates[obj_id]
-                                distance = math.sqrt((ox - x) ** 2 + (oy - y) ** 2 + (oz - z) ** 2)
+                                distance = math.sqrt(
+                                    (ox - x) ** 2 + (oy - y) ** 2 + (oz - z) ** 2
+                                )
                                 if distance <= radius:
                                     nearby_objects.add(obj_id)
-        
+
         return nearby_objects
 
 
 @dataclass
 class PhysicalObject:
     """Represents a physical object in the system."""
+
     id: str
     name: str
     object_type: ObjectType
@@ -170,7 +191,7 @@ class PhysicalObject:
     status: ObjectStatus = ObjectStatus.ACTIVE
     created_at: float = field(default_factory=time.time)
     last_updated: float = field(default_factory=time.time)
-    
+
     # New advanced properties
     material: MaterialType = MaterialType.UNKNOWN
     material_properties: Optional[MaterialProperties] = None
@@ -180,12 +201,14 @@ class PhysicalObject:
     connections: Set[str] = field(default_factory=set)  # Connected object IDs
     tags: Set[str] = field(default_factory=set)  # Tags for categorization
     metadata: Dict[str, Any] = field(default_factory=dict)  # Extended metadata
-    
+
     def __post_init__(self):
         """Initialize material properties if not provided."""
         if self.material_properties is None:
-            self.material_properties = MaterialProperties.from_material_type(self.material)
-    
+            self.material_properties = MaterialProperties.from_material_type(
+                self.material
+            )
+
     @property
     def density(self) -> float:
         """Calculate density from mass and volume."""
@@ -200,27 +223,29 @@ class PhysicalObject:
         """Update object status."""
         self.status = status
         self.last_updated = time.time()
-    
+
     def distance_to(self, other_object: "PhysicalObject") -> float:
         """Calculate distance to another object."""
         x1, y1, z1 = self.location
         x2, y2, z2 = other_object.location
-        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
-    
+        return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
+
     def distance_to_point(self, x: float, y: float, z: float) -> float:
         """Calculate distance to a point."""
         x1, y1, z1 = self.location
-        return math.sqrt((x - x1)**2 + (y - y1)**2 + (z - z1)**2)
-    
-    def is_within_range(self, x: float, y: float, z: float, max_distance: float) -> bool:
+        return math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
+
+    def is_within_range(
+        self, x: float, y: float, z: float, max_distance: float
+    ) -> bool:
         """Check if object is within range of a point."""
         return self.distance_to_point(x, y, z) <= max_distance
-    
+
     def add_property(self, key: str, value: Any) -> None:
         """Add or update a property."""
         self.properties[key] = value
         self.last_updated = time.time()
-    
+
     def remove_property(self, key: str) -> Optional[Any]:
         """Remove a property and return its value."""
         if key in self.properties:
@@ -228,12 +253,12 @@ class PhysicalObject:
             self.last_updated = time.time()
             return value
         return None
-    
+
     def add_tag(self, tag: str) -> None:
         """Add a tag to the object."""
         self.tags.add(tag)
         self.last_updated = time.time()
-    
+
     def remove_tag(self, tag: str) -> bool:
         """Remove a tag from the object."""
         if tag in self.tags:
@@ -241,16 +266,16 @@ class PhysicalObject:
             self.last_updated = time.time()
             return True
         return False
-    
+
     def has_tag(self, tag: str) -> bool:
         """Check if object has a specific tag."""
         return tag in self.tags
-    
+
     def connect_to(self, other_object_id: str) -> None:
         """Create a connection to another object."""
         self.connections.add(other_object_id)
         self.last_updated = time.time()
-    
+
     def disconnect_from(self, other_object_id: str) -> bool:
         """Remove connection to another object."""
         if other_object_id in self.connections:
@@ -258,26 +283,30 @@ class PhysicalObject:
             self.last_updated = time.time()
             return True
         return False
-    
+
     def is_connected_to(self, other_object_id: str) -> bool:
         """Check if connected to another object."""
         return other_object_id in self.connections
-    
+
     def update_temperature(self, new_temperature: float) -> None:
         """Update object temperature."""
         self.temperature = new_temperature
         self.last_updated = time.time()
-    
+
     def calculate_thermal_energy(self) -> float:
         """Calculate thermal energy based on mass, specific heat, and temperature."""
         if self.material_properties:
-            return self.mass * self.material_properties.specific_heat * (self.temperature - 273.15)
+            return (
+                self.mass
+                * self.material_properties.specific_heat
+                * (self.temperature - 273.15)
+            )
         return 0.0
-    
+
     def get_age(self) -> float:
         """Get age of object in seconds."""
         return time.time() - self.created_at
-    
+
     def time_since_update(self) -> float:
         """Get time since last update in seconds."""
         return time.time() - self.last_updated
@@ -299,7 +328,7 @@ class PhysicalObject:
             "temperature": self.temperature,
             "connections": list(self.connections),
             "tags": list(self.tags),
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
 
 
@@ -307,10 +336,18 @@ class ObjectRegistry:
     """Registry for managing physical objects."""
 
     def __init__(self, spatial_grid_size: float = 10.0):
+        """  Init  .
+
+            Args:        spatial_grid_size: Unique identifier.
+            """
         self.objects: Dict[str, PhysicalObject] = {}
-        self._location_index: Dict[Tuple[int, int, int], Set[str]] = {}  # Legacy grid-based index
+        self._location_index: Dict[Tuple[int, int, int], Set[str]] = (
+            {}
+        )  # Legacy grid-based index
         self.spatial_index = SpatialIndex(grid_size=spatial_grid_size)
-        self.event_handlers: Dict[EventType, List[Callable[[ObjectEvent], None]]] = defaultdict(list)
+        self.event_handlers: Dict[EventType, List[Callable[[ObjectEvent], None]]] = (
+            defaultdict(list)
+        )
         self.event_history: List[ObjectEvent] = []
         self.max_event_history = 10000
         self._lock = threading.RLock()  # Thread safety
@@ -321,14 +358,19 @@ class ObjectRegistry:
             self.objects[obj.id] = obj
             self._update_location_index(obj)
             self.spatial_index.add_object(obj.id, *obj.location)
-            
+
             # Emit created event
-            self._emit_event(ObjectEvent(
-                event_type=EventType.CREATED,
-                object_id=obj.id,
-                data={"object_type": obj.object_type.value, "location": obj.location}
-            ))
-            
+            self._emit_event(
+                ObjectEvent(
+                    event_type=EventType.CREATED,
+                    object_id=obj.id,
+                    data={
+                        "object_type": obj.object_type.value,
+                        "location": obj.location,
+                    },
+                )
+            )
+
             logger.info(f"Registered physical object: {obj.id}")
 
     def unregister_object(self, object_id: str) -> Optional[PhysicalObject]:
@@ -348,7 +390,9 @@ class ObjectRegistry:
         """Get all objects of a specific type."""
         return [obj for obj in self.objects.values() if obj.object_type == object_type]
 
-    def get_objects_in_area(self, x: float, y: float, z: float, radius: float) -> List[PhysicalObject]:
+    def get_objects_in_area(
+        self, x: float, y: float, z: float, radius: float
+    ) -> List[PhysicalObject]:
         """Get objects within a spherical area."""
         nearby_objects = []
         center_x, center_y, center_z = int(x), int(y), int(z)
@@ -361,65 +405,79 @@ class ObjectRegistry:
                     if grid_key in self._location_index:
                         for obj_id in self._location_index[grid_key]:
                             obj = self.objects[obj_id]
-                            distance = ((obj.location[0] - x) ** 2 +
-                                      (obj.location[1] - y) ** 2 +
-                                      (obj.location[2] - z) ** 2) ** 0.5
+                            distance = (
+                                (obj.location[0] - x) ** 2
+                                + (obj.location[1] - y) ** 2
+                                + (obj.location[2] - z) ** 2
+                            ) ** 0.5
                             if distance <= radius:
                                 nearby_objects.append(obj)
 
         return nearby_objects
-    
+
     def get_objects_by_status(self, status: ObjectStatus) -> List[PhysicalObject]:
         """Get all objects with a specific status."""
         return [obj for obj in self.objects.values() if obj.status == status]
-    
-    def get_objects_by_property(self, property_key: str, property_value: Any) -> List[PhysicalObject]:
+
+    def get_objects_by_property(
+        self, property_key: str, property_value: Any
+    ) -> List[PhysicalObject]:
         """Get objects with a specific property value."""
-        return [obj for obj in self.objects.values() 
-                if property_key in obj.properties and obj.properties[property_key] == property_value]
-    
-    def find_nearest_object(self, x: float, y: float, z: float, object_type: Optional[ObjectType] = None) -> Optional[PhysicalObject]:
+        return [
+            obj
+            for obj in self.objects.values()
+            if property_key in obj.properties
+            and obj.properties[property_key] == property_value
+        ]
+
+    def find_nearest_object(
+        self, x: float, y: float, z: float, object_type: Optional[ObjectType] = None
+    ) -> Optional[PhysicalObject]:
         """Find the nearest object to a point, optionally filtered by type."""
-        min_distance = float('inf')
+        min_distance = float("inf")
         nearest_object = None
-        
+
         for obj in self.objects.values():
             if object_type is None or obj.object_type == object_type:
                 distance = obj.distance_to_point(x, y, z)
                 if distance < min_distance:
                     min_distance = distance
                     nearest_object = obj
-        
+
         return nearest_object
-    
-    def check_collisions(self, collision_distance: float = 1.0) -> List[Tuple[PhysicalObject, PhysicalObject]]:
+
+    def check_collisions(
+        self, collision_distance: float = 1.0
+    ) -> List[Tuple[PhysicalObject, PhysicalObject]]:
         """Find all object pairs that are within collision distance."""
         collisions = []
         objects_list = list(self.objects.values())
-        
+
         for i, obj1 in enumerate(objects_list):
-            for obj2 in objects_list[i+1:]:
+            for obj2 in objects_list[i + 1 :]:
                 if obj1.distance_to(obj2) <= collision_distance:
                     collisions.append((obj1, obj2))
-        
+
         return collisions
-    
-    def group_objects_by_distance(self, max_group_distance: float = 5.0) -> List[List[PhysicalObject]]:
+
+    def group_objects_by_distance(
+        self, max_group_distance: float = 5.0
+    ) -> List[List[PhysicalObject]]:
         """Group objects that are close to each other."""
         ungrouped = list(self.objects.values())
         groups = []
-        
+
         while ungrouped:
             # Start a new group with any remaining object
             current_obj = ungrouped.pop(0)
             current_group = [current_obj]
-            
+
             # Find all objects within distance of any object in current group
             changed = True
             while changed:
                 changed = False
                 to_remove = []
-                
+
                 for i, obj in enumerate(ungrouped):
                     for group_obj in current_group:
                         if obj.distance_to(group_obj) <= max_group_distance:
@@ -427,36 +485,40 @@ class ObjectRegistry:
                             to_remove.append(i)
                             changed = True
                             break
-                
+
                 # Remove from ungrouped list (in reverse order to maintain indices)
                 for i in reversed(to_remove):
                     ungrouped.pop(i)
-            
+
             groups.append(current_group)
-        
+
         return groups
-    
+
     def _emit_event(self, event: ObjectEvent) -> None:
         """Emit an event to registered handlers."""
         self.event_history.append(event)
-        
+
         # Limit event history size
         if len(self.event_history) > self.max_event_history:
-            self.event_history = self.event_history[-self.max_event_history:]
-        
+            self.event_history = self.event_history[-self.max_event_history :]
+
         # Call event handlers
         for handler in self.event_handlers[event.event_type]:
             try:
                 handler(event)
             except Exception as e:
                 logger.error(f"Error in event handler: {e}")
-    
-    def add_event_handler(self, event_type: EventType, handler: Callable[[ObjectEvent], None]) -> None:
+
+    def add_event_handler(
+        self, event_type: EventType, handler: Callable[[ObjectEvent], None]
+    ) -> None:
         """Add an event handler for a specific event type."""
         with self._lock:
             self.event_handlers[event_type].append(handler)
-    
-    def remove_event_handler(self, event_type: EventType, handler: Callable[[ObjectEvent], None]) -> bool:
+
+    def remove_event_handler(
+        self, event_type: EventType, handler: Callable[[ObjectEvent], None]
+    ) -> bool:
         """Remove an event handler."""
         with self._lock:
             try:
@@ -464,28 +526,33 @@ class ObjectRegistry:
                 return True
             except ValueError:
                 return False
-    
-    def get_events(self, event_type: Optional[EventType] = None, 
-                   object_id: Optional[str] = None,
-                   since: Optional[float] = None) -> List[ObjectEvent]:
+
+    def get_events(
+        self,
+        event_type: Optional[EventType] = None,
+        object_id: Optional[str] = None,
+        since: Optional[float] = None,
+    ) -> List[ObjectEvent]:
         """Get events filtered by type, object ID, and/or timestamp."""
         events = self.event_history
-        
+
         if event_type:
             events = [e for e in events if e.event_type == event_type]
-        
+
         if object_id:
             events = [e for e in events if e.object_id == object_id]
-        
+
         if since:
             events = [e for e in events if e.timestamp >= since]
-        
+
         return events
-    
-    def get_objects_by_tags(self, tags: Set[str], match_all: bool = True) -> List[PhysicalObject]:
+
+    def get_objects_by_tags(
+        self, tags: Set[str], match_all: bool = True
+    ) -> List[PhysicalObject]:
         """Get objects that have specific tags."""
         matching_objects = []
-        
+
         for obj in self.objects.values():
             if match_all:
                 if tags.issubset(obj.tags):
@@ -493,94 +560,113 @@ class ObjectRegistry:
             else:
                 if obj.tags.intersection(tags):
                     matching_objects.append(obj)
-        
+
         return matching_objects
-    
+
     def get_network_topology(self) -> Dict[str, List[str]]:
         """Get network topology of connected objects."""
         topology = {}
-        
+
         for obj_id, obj in self.objects.items():
             topology[obj_id] = list(obj.connections)
-        
+
         return topology
-    
-    def find_path_through_network(self, start_id: str, end_id: str, max_hops: int = 10) -> Optional[List[str]]:
+
+    def find_path_through_network(
+        self, start_id: str, end_id: str, max_hops: int = 10
+    ) -> Optional[List[str]]:
         """Find path between objects through network connections (BFS)."""
         if start_id not in self.objects or end_id not in self.objects:
             return None
-        
+
         if start_id == end_id:
             return [start_id]
-        
+
         visited = set()
         queue = [(start_id, [start_id])]
-        
+
         while queue:
             current_id, path = queue.pop(0)
-            
+
             if len(path) > max_hops:
                 continue
-            
+
             if current_id in visited:
                 continue
-            
+
             visited.add(current_id)
             current_obj = self.objects[current_id]
-            
+
             for connected_id in current_obj.connections:
                 if connected_id == end_id:
                     return path + [connected_id]
-                
+
                 if connected_id not in visited and connected_id in self.objects:
                     queue.append((connected_id, path + [connected_id]))
-        
+
         return None
-    
+
     def analyze_network_metrics(self) -> Dict[str, Any]:
         """Analyze network topology metrics."""
         total_objects = len(self.objects)
         total_connections = sum(len(obj.connections) for obj in self.objects.values())
-        
+
         # Calculate clustering coefficient and other metrics
         clustering_coefficients = []
         degrees = []
-        
+
         for obj in self.objects.values():
             degree = len(obj.connections)
             degrees.append(degree)
-            
+
             if degree < 2:
                 clustering_coefficients.append(0.0)
                 continue
-            
+
             # Count triangles
             triangles = 0
             possible_triangles = degree * (degree - 1) // 2
-            
+
             connections_list = list(obj.connections)
             for i, conn1 in enumerate(connections_list):
-                for conn2 in connections_list[i+1:]:
-                    if (conn1 in self.objects and conn2 in self.objects and
-                        conn2 in self.objects[conn1].connections):
+                for conn2 in connections_list[i + 1 :]:
+                    if (
+                        conn1 in self.objects
+                        and conn2 in self.objects
+                        and conn2 in self.objects[conn1].connections
+                    ):
                         triangles += 1
-            
-            clustering_coeff = triangles / possible_triangles if possible_triangles > 0 else 0.0
+
+            clustering_coeff = (
+                triangles / possible_triangles if possible_triangles > 0 else 0.0
+            )
             clustering_coefficients.append(clustering_coeff)
-        
+
         return {
             "total_objects": total_objects,
             "total_connections": total_connections // 2,  # Assuming bidirectional
             "average_degree": sum(degrees) / len(degrees) if degrees else 0,
             "max_degree": max(degrees) if degrees else 0,
             "min_degree": min(degrees) if degrees else 0,
-            "average_clustering": sum(clustering_coefficients) / len(clustering_coefficients) if clustering_coefficients else 0,
-            "density": (total_connections / 2) / (total_objects * (total_objects - 1) / 2) if total_objects > 1 else 0
+            "average_clustering": (
+                sum(clustering_coefficients) / len(clustering_coefficients)
+                if clustering_coefficients
+                else 0
+            ),
+            "density": (
+                (total_connections / 2) / (total_objects * (total_objects - 1) / 2)
+                if total_objects > 1
+                else 0
+            ),
         }
 
     def _update_location_index(self, obj: PhysicalObject) -> None:
         """Update the location index for an object."""
-        grid_x, grid_y, grid_z = int(obj.location[0]), int(obj.location[1]), int(obj.location[2])
+        grid_x, grid_y, grid_z = (
+            int(obj.location[0]),
+            int(obj.location[1]),
+            int(obj.location[2]),
+        )
         grid_key = (grid_x, grid_y, grid_z)
 
         if grid_key not in self._location_index:
@@ -589,7 +675,11 @@ class ObjectRegistry:
 
     def _remove_from_location_index(self, obj: PhysicalObject) -> None:
         """Remove an object from the location index."""
-        grid_x, grid_y, grid_z = int(obj.location[0]), int(obj.location[1]), int(obj.location[2])
+        grid_x, grid_y, grid_z = (
+            int(obj.location[0]),
+            int(obj.location[1]),
+            int(obj.location[2]),
+        )
         grid_key = (grid_x, grid_y, grid_z)
 
         if grid_key in self._location_index:
@@ -603,8 +693,8 @@ class ObjectRegistry:
             "objects": [obj.to_dict() for obj in self.objects.values()],
             "metadata": {
                 "total_objects": len(self.objects),
-                "exported_at": time.time()
-            }
+                "exported_at": time.time(),
+            },
         }
 
         Path(file_path).write_text(json.dumps(data, indent=2))
@@ -625,7 +715,7 @@ class ObjectRegistry:
                 properties=obj_data.get("properties", {}),
                 status=ObjectStatus(obj_data["status"]),
                 created_at=obj_data["created_at"],
-                last_updated=obj_data["last_updated"]
+                last_updated=obj_data["last_updated"],
             )
             self.register_object(obj)
 
@@ -637,10 +727,20 @@ class PhysicalObjectManager:
         self.registry = ObjectRegistry()
         self._active_simulations = set()
 
-    def create_object(self, object_id: str, name: str, object_type: ObjectType,
-                     x: float, y: float, z: float, material: MaterialType = MaterialType.UNKNOWN,
-                     mass: float = 1.0, volume: float = 1.0, temperature: float = 293.15,
-                     **properties) -> PhysicalObject:
+    def create_object(
+        self,
+        object_id: str,
+        name: str,
+        object_type: ObjectType,
+        x: float,
+        y: float,
+        z: float,
+        material: MaterialType = MaterialType.UNKNOWN,
+        mass: float = 1.0,
+        volume: float = 1.0,
+        temperature: float = 293.15,
+        **properties,
+    ) -> PhysicalObject:
         """Create a new physical object."""
         obj = PhysicalObject(
             id=object_id,
@@ -651,7 +751,7 @@ class PhysicalObjectManager:
             material=material,
             mass=mass,
             volume=volume,
-            temperature=temperature
+            temperature=temperature,
         )
         self.registry.register_object(obj)
         return obj
@@ -661,7 +761,9 @@ class PhysicalObjectManager:
         obj = self.registry.get_object(object_id)
         return obj.status if obj else None
 
-    def update_object_location(self, object_id: str, x: float, y: float, z: float) -> bool:
+    def update_object_location(
+        self, object_id: str, x: float, y: float, z: float
+    ) -> bool:
         """Update an object's location."""
         obj = self.registry.get_object(object_id)
         if obj:
@@ -670,7 +772,9 @@ class PhysicalObjectManager:
             return True
         return False
 
-    def get_nearby_objects(self, x: float, y: float, z: float, radius: float) -> List[PhysicalObject]:
+    def get_nearby_objects(
+        self, x: float, y: float, z: float, radius: float
+    ) -> List[PhysicalObject]:
         """Get objects near a location."""
         return self.registry.get_objects_in_area(x, y, z, radius)
 
@@ -690,7 +794,9 @@ class PhysicalObjectManager:
         """Get statistics about managed objects."""
         objects_by_type = {}
         for obj_type in ObjectType:
-            objects_by_type[obj_type.value] = len(self.registry.get_objects_by_type(obj_type))
+            objects_by_type[obj_type.value] = len(
+                self.registry.get_objects_by_type(obj_type)
+            )
 
         objects_by_status = {}
         for obj in self.registry.objects.values():
@@ -701,10 +807,12 @@ class PhysicalObjectManager:
             "total_objects": len(self.registry.objects),
             "objects_by_type": objects_by_type,
             "objects_by_status": objects_by_status,
-            "active_simulations": len(self._active_simulations)
+            "active_simulations": len(self._active_simulations),
         }
-    
-    def batch_update_status(self, object_ids: List[str], new_status: ObjectStatus) -> int:
+
+    def batch_update_status(
+        self, object_ids: List[str], new_status: ObjectStatus
+    ) -> int:
         """Update status for multiple objects. Returns number of objects updated."""
         updated_count = 0
         for obj_id in object_ids:
@@ -713,7 +821,7 @@ class PhysicalObjectManager:
                 obj.update_status(new_status)
                 updated_count += 1
         return updated_count
-    
+
     def batch_move_objects(self, moves: Dict[str, Tuple[float, float, float]]) -> int:
         """Move multiple objects. Returns number of objects moved."""
         moved_count = 0
@@ -721,93 +829,106 @@ class PhysicalObjectManager:
             if self.update_object_location(obj_id, x, y, z):
                 moved_count += 1
         return moved_count
-    
-    def find_path_between_objects(self, start_object_id: str, end_object_id: str, 
-                                 max_steps: int = 10) -> Optional[List[PhysicalObject]]:
+
+    def find_path_between_objects(
+        self, start_object_id: str, end_object_id: str, max_steps: int = 10
+    ) -> Optional[List[PhysicalObject]]:
         """Find a path between two objects using nearby objects as waypoints."""
         start_obj = self.registry.get_object(start_object_id)
         end_obj = self.registry.get_object(end_object_id)
-        
+
         if not start_obj or not end_obj:
             return None
-        
+
         # Simple greedy pathfinding
         path = [start_obj]
         current = start_obj
-        
+
         for _ in range(max_steps):
             if current.distance_to(end_obj) <= 1.0:  # Close enough
                 path.append(end_obj)
                 return path
-            
+
             # Find next waypoint - nearest object that's closer to destination
             nearby = self.get_nearby_objects(*current.location, 5.0)
             best_next = None
-            best_distance_to_end = float('inf')
-            
+            best_distance_to_end = float("inf")
+
             for obj in nearby:
                 if obj.id not in [p.id for p in path]:  # Avoid cycles
                     distance_to_end = obj.distance_to(end_obj)
                     if distance_to_end < best_distance_to_end:
                         best_distance_to_end = distance_to_end
                         best_next = obj
-            
+
             if best_next:
                 path.append(best_next)
                 current = best_next
             else:
                 break
-        
+
         return None  # No path found
-    
-    def calculate_center_of_mass(self, object_ids: Optional[List[str]] = None) -> Tuple[float, float, float]:
+
+    def calculate_center_of_mass(
+        self, object_ids: Optional[List[str]] = None
+    ) -> Tuple[float, float, float]:
         """Calculate center of mass for specified objects or all objects."""
         if object_ids is None:
             objects = list(self.registry.objects.values())
         else:
             objects = [self.registry.get_object(obj_id) for obj_id in object_ids]
             objects = [obj for obj in objects if obj is not None]
-        
+
         if not objects:
             return (0.0, 0.0, 0.0)
-        
+
         total_x = sum(obj.location[0] for obj in objects)
         total_y = sum(obj.location[1] for obj in objects)
         total_z = sum(obj.location[2] for obj in objects)
         count = len(objects)
-        
+
         return (total_x / count, total_y / count, total_z / count)
-    
-    def detect_object_clusters(self, cluster_radius: float = 3.0, 
-                              min_cluster_size: int = 2) -> List[List[PhysicalObject]]:
+
+    def detect_object_clusters(
+        self, cluster_radius: float = 3.0, min_cluster_size: int = 2
+    ) -> List[List[PhysicalObject]]:
         """Detect clusters of objects within a specified radius."""
         groups = self.registry.group_objects_by_distance(cluster_radius)
         return [group for group in groups if len(group) >= min_cluster_size]
-    
-    def get_boundary_box(self, object_ids: Optional[List[str]] = None) -> Dict[str, Tuple[float, float]]:
+
+    def get_boundary_box(
+        self, object_ids: Optional[List[str]] = None
+    ) -> Dict[str, Tuple[float, float]]:
         """Get the bounding box containing all or specified objects."""
         if object_ids is None:
             objects = list(self.registry.objects.values())
         else:
             objects = [self.registry.get_object(obj_id) for obj_id in object_ids]
             objects = [obj for obj in objects if obj is not None]
-        
+
         if not objects:
             return {"x": (0.0, 0.0), "y": (0.0, 0.0), "z": (0.0, 0.0)}
-        
+
         x_coords = [obj.location[0] for obj in objects]
         y_coords = [obj.location[1] for obj in objects]
         z_coords = [obj.location[2] for obj in objects]
-        
+
         return {
             "x": (min(x_coords), max(x_coords)),
             "y": (min(y_coords), max(y_coords)),
-            "z": (min(z_coords), max(z_coords))
+            "z": (min(z_coords), max(z_coords)),
         }
 
 
 __all__ = [
-    "ObjectType", "ObjectStatus", "MaterialType", "EventType", 
-    "PhysicalObject", "ObjectRegistry", "PhysicalObjectManager",
-    "MaterialProperties", "ObjectEvent", "SpatialIndex"
+    "ObjectType",
+    "ObjectStatus",
+    "MaterialType",
+    "EventType",
+    "PhysicalObject",
+    "ObjectRegistry",
+    "PhysicalObjectManager",
+    "MaterialProperties",
+    "ObjectEvent",
+    "SpatialIndex",
 ]

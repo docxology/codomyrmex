@@ -13,15 +13,20 @@ import os
 from datetime import datetime
 from typing import List, Dict, Optional
 from pathlib import Path
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class GitHubLibraryGenerator:
     """Generator for repository library from GitHub API."""
-    
+
     def __init__(self, username: str, token: Optional[str] = None):
         """
         Initialize the generator.
-        
+
         Args:
             username: GitHub username
             token: Optional GitHub personal access token for private repos
@@ -29,106 +34,120 @@ class GitHubLibraryGenerator:
         self.username = username
         self.token = token
         self.headers = {}
-        
+
         if token:
-            self.headers['Authorization'] = f'token {token}'
-            self.headers['Accept'] = 'application/vnd.github.v3+json'
-    
+            self.headers["Authorization"] = f"token {token}"
+            self.headers["Accept"] = "application/vnd.github.v3+json"
+
     def fetch_repositories(self) -> List[Dict]:
         """
         Fetch all repositories for the user.
-        
+
         Returns:
             List of repository dictionaries
         """
         repos = []
         page = 1
         per_page = 100
-        
+
         while True:
             url = f"https://api.github.com/users/{self.username}/repos"
             params = {
-                'per_page': per_page,
-                'page': page,
-                'sort': 'updated',
-                'direction': 'desc'
+                "per_page": per_page,
+                "page": page,
+                "sort": "updated",
+                "direction": "desc",
             }
-            
+
             try:
                 response = requests.get(url, headers=self.headers, params=params)
                 response.raise_for_status()
-                
+
                 page_repos = response.json()
                 if not page_repos:
                     break
-                
+
                 repos.extend(page_repos)
                 page += 1
-                
+
                 print(f"Fetched page {page-1}: {len(page_repos)} repositories")
-                
+
             except requests.RequestException as e:
                 print(f"Error fetching repositories: {e}")
                 break
-        
+
         print(f"Total repositories fetched: {len(repos)}")
         return repos
-    
+
     def categorize_repositories(self, repos: List[Dict]) -> Dict[str, List[Dict]]:
         """
         Categorize repositories into OWN, FORK, and interesting categories.
-        
+
         Args:
             repos: List of repository dictionaries
-            
+
         Returns:
             Dictionary with categorized repositories
         """
-        categories = {
-            'own': [],
-            'interesting_forks': [],
-            'other_forks': []
-        }
-        
+        categories = {"own": [], "interesting_forks": [], "other_forks": []}
+
         # Keywords for interesting forks
         interesting_keywords = [
-            'active', 'inference', 'ai', 'gpt', 'claude', 'agent', 'fabric',
-            'cadcad', 'manim', 'foam', 'buzz', 'firecrawl', 'eliza', 'auto-gpt',
-            'langchain', 'openai', 'anthropic', 'research', 'knowledge', 'memory'
+            "active",
+            "inference",
+            "ai",
+            "gpt",
+            "claude",
+            "agent",
+            "fabric",
+            "cadcad",
+            "manim",
+            "foam",
+            "buzz",
+            "firecrawl",
+            "eliza",
+            "auto-gpt",
+            "langchain",
+            "openai",
+            "anthropic",
+            "research",
+            "knowledge",
+            "memory",
         ]
-        
+
         for repo in repos:
-            if not repo['fork']:
-                categories['own'].append(repo)
+            if not repo["fork"]:
+                categories["own"].append(repo)
             else:
                 # Check if fork is interesting
-                name_lower = repo['name'].lower()
-                desc_lower = (repo['description'] or '').lower()
-                
-                is_interesting = (
-                    repo['stargazers_count'] > 100 or
-                    any(keyword in name_lower or keyword in desc_lower 
-                        for keyword in interesting_keywords)
+                name_lower = repo["name"].lower()
+                desc_lower = (repo["description"] or "").lower()
+
+                is_interesting = repo["stargazers_count"] > 100 or any(
+                    keyword in name_lower or keyword in desc_lower
+                    for keyword in interesting_keywords
                 )
-                
+
                 if is_interesting:
-                    categories['interesting_forks'].append(repo)
+                    categories["interesting_forks"].append(repo)
                 else:
-                    categories['other_forks'].append(repo)
-        
-        print(f"Categorized: {len(categories['own'])} own, "
-              f"{len(categories['interesting_forks'])} interesting forks, "
-              f"{len(categories['other_forks'])} other forks")
-        
+                    categories["other_forks"].append(repo)
+
+        print(
+            f"Categorized: {len(categories['own'])} own, "
+            f"{len(categories['interesting_forks'])} interesting forks, "
+            f"{len(categories['other_forks'])} other forks"
+        )
+
         return categories
-    
+
     def generate_library_content(self, categories: Dict[str, List[Dict]]) -> str:
         """
         Generate the repository library file content.
-        
+
         Args:
             categories: Categorized repositories
-            
+
         Returns:
             Library file content as string
         """
@@ -142,32 +161,34 @@ class GitHubLibraryGenerator:
 # =============================================================================
 
 """
-        
+
         # Add original repositories
-        for repo in sorted(categories['own'], key=lambda x: x['name'].lower()):
-            name = repo['name']
-            desc = repo['description'] or 'No description'
-            url = repo['clone_url']
+        for repo in sorted(categories["own"], key=lambda x: x["name"].lower()):
+            name = repo["name"]
+            desc = repo["description"] or "No description"
+            url = repo["clone_url"]
             path = f"{self.username}/{name}"
-            
+
             content += f"OWN|{self.username}|{name}|{url}|{desc}|{path}\n"
-        
+
         content += f"""
 # =============================================================================
 # INTERESTING FORKED REPOSITORIES (For Contribution/Study) - {len(categories['interesting_forks'])} repositories
 # =============================================================================
 
 """
-        
+
         # Add interesting forks
-        for repo in sorted(categories['interesting_forks'], key=lambda x: x['name'].lower()):
-            name = repo['name']
-            desc = repo['description'] or 'No description'
-            url = repo['clone_url']
+        for repo in sorted(
+            categories["interesting_forks"], key=lambda x: x["name"].lower()
+        ):
+            name = repo["name"]
+            desc = repo["description"] or "No description"
+            url = repo["clone_url"]
             path = f"forks/{name}"
-            
+
             content += f"FORK|{self.username}|{name}|{url}|{desc}|{path}\n"
-        
+
         content += """
 # =============================================================================
 # EXTERNAL REPOSITORIES (Usage Only) - Essential Tools & Libraries
@@ -237,68 +258,70 @@ USE|vinta|awesome-python|https://github.com/vinta/awesome-python.git|Awesome Pyt
 # - Use full Git workflow (branch, commit, push) for OWN repositories
 # - Use fork workflow for FORK repositories (upstream sync, PR creation)
 """
-        
+
         return content
-    
+
     def generate_library(self, output_file: Optional[str] = None) -> str:
         """
         Generate the complete repository library.
-        
+
         Args:
             output_file: Optional output file path
-            
+
         Returns:
             Generated library content
         """
         print(f"Generating repository library for GitHub user: {self.username}")
-        
+
         # Fetch repositories
         repos = self.fetch_repositories()
         if not repos:
             print("No repositories found!")
             return ""
-        
+
         # Categorize repositories
         categories = self.categorize_repositories(repos)
-        
+
         # Generate content
         content = self.generate_library_content(categories)
-        
+
         # Write to file if specified
         if output_file:
-            with open(output_file, 'w') as f:
+            with open(output_file, "w") as f:
                 f.write(content)
             print(f"Repository library written to: {output_file}")
-        
+
         return content
-    
+
     def update_existing_library(self, library_file: str) -> bool:
         """
         Update an existing library file with fresh GitHub data.
-        
+
         Args:
             library_file: Path to existing library file
-            
+
         Returns:
             True if successful, False otherwise
         """
         try:
             # Generate new content
             new_content = self.generate_library()
-            
+
             # Backup existing file
-            backup_file = f"{library_file}.backup.{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            backup_file = (
+                f"{library_file}.backup.{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            )
             if os.path.exists(library_file):
                 os.rename(library_file, backup_file)
                 print(f"Backed up existing library to: {backup_file}")
-            
+
             # Write new content
-            with open(library_file, 'w') as f:
+            with open(library_file, "w") as f:
                 f.write(new_content)
-            
+
             print(f"Updated repository library: {library_file}")
             return True
-            
+
         except Exception as e:
             print(f"Error updating library: {e}")
             return False
@@ -307,7 +330,7 @@ USE|vinta|awesome-python|https://github.com/vinta/awesome-python.git|Awesome Pyt
 def main():
     """Main function for command-line usage."""
     import argparse
-    
+
     parser = argparse.ArgumentParser(
         description="Generate repository library from GitHub API",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -317,19 +340,19 @@ Examples:
   %(prog)s docxology -o my_repos.txt                    # Save to specific file
   %(prog)s docxology -t YOUR_TOKEN                      # Use personal access token
   %(prog)s docxology --update existing_library.txt      # Update existing library
-        """
+        """,
     )
-    
-    parser.add_argument('username', help='GitHub username')
-    parser.add_argument('-o', '--output', help='Output file path')
-    parser.add_argument('-t', '--token', help='GitHub personal access token')
-    parser.add_argument('--update', help='Update existing library file')
-    
+
+    parser.add_argument("username", help="GitHub username")
+    parser.add_argument("-o", "--output", help="Output file path")
+    parser.add_argument("-t", "--token", help="GitHub personal access token")
+    parser.add_argument("--update", help="Update existing library file")
+
     args = parser.parse_args()
-    
+
     # Initialize generator
     generator = GitHubLibraryGenerator(args.username, args.token)
-    
+
     if args.update:
         # Update existing library
         success = generator.update_existing_library(args.update)
@@ -337,12 +360,12 @@ Examples:
     else:
         # Generate new library
         content = generator.generate_library(args.output)
-        
+
         if not args.output:
             # Print to stdout if no output file specified
-            print("\n" + "="*80)
+            print("\n" + "=" * 80)
             print("GENERATED REPOSITORY LIBRARY:")
-            print("="*80)
+            print("=" * 80)
             print(content)
 
 

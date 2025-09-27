@@ -1,6 +1,10 @@
 """Comprehensive examples for the Physical Management module."""
 
 from codomyrmex.physical_management import (
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     PhysicalObjectManager, ObjectType, ObjectStatus, PhysicsSimulator,
     Vector3D, ForceField, SensorManager, SensorType, SensorReading
 )
@@ -65,7 +69,7 @@ def physics_simulation_example():
         if i % 30 == 0:  # Print every 0.5 seconds
             ball1_state = sim.get_object_state("ball1")
             ball2_state = sim.get_object_state("ball2")
-            print(f"t={i/60".1f"}s: Ball1 at {ball1_state['position']}, Ball2 at {ball2_state['position']}")
+            print(f"t={i/60:.1f}s: Ball1 at {ball1_state['position']}, Ball2 at {ball2_state['position']}")
 
     return sim
 

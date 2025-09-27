@@ -7,6 +7,11 @@ checking for naming conventions, formatting standards, and content alignment.
 from typing import Dict, List, Set, Tuple
 from pathlib import Path
 import re
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class DocumentationConsistencyChecker:
@@ -206,4 +211,4 @@ class DocumentationConsistencyChecker:
 
 def generate_quality_tests() -> str:
     """Generate tests for the quality assessment modules."""
-    return Tests for documentation quality assessment modules.
+    return "Tests for documentation quality assessment modules."

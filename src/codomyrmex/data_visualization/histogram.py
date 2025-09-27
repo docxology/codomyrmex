@@ -4,10 +4,12 @@ Generates histograms.
 - Uses logging_monitoring for logging.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
+
 import matplotlib.pyplot as plt
 from .plot_utils import save_plot, get_codomyrmex_logger
 
 logger = get_codomyrmex_logger(__name__)
+
 
 def create_histogram(
     data: list,
@@ -17,8 +19,8 @@ def create_histogram(
     y_label: str = "Frequency",
     output_path: str = None,
     show_plot: bool = False,
-    hist_color: str = 'cornflowerblue',
-    edge_color: str = 'black'
+    hist_color: str = "cornflowerblue",
+    edge_color: str = "black",
 ):
     """
     Generates a histogram.
@@ -34,8 +36,8 @@ def create_histogram(
     ax.set_title(title)
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
-    ax.grid(True, axis='y')
-    
+    ax.grid(True, axis="y")
+
     plt.tight_layout()
 
     if output_path:
@@ -47,9 +49,11 @@ def create_histogram(
         plt.close(fig)
     logger.info(f"Histogram '{title}' generated successfully.")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from pathlib import Path
     import random
+
     output_dir = Path(__file__).parent.parent / "output" / "data_visualization_examples"
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -65,13 +69,13 @@ if __name__ == '__main__':
         y_label="Frequency",
         output_path=str(output_dir / "basic_histogram.png"),
         show_plot=False,
-        hist_color='darkorange',
-        edge_color='black'
+        hist_color="darkorange",
+        edge_color="black",
     )
     logger.info(f"Histogram example saved to {output_dir / 'basic_histogram.png'}")
 
     logger.info(f"--- Example: Histogram with Fewer Bins ---")
-    sample_data_2 = [random.randint(1,10) for _ in range(200)]
+    sample_data_2 = [random.randint(1, 10) for _ in range(200)]
     create_histogram(
         data=sample_data_2,
         bins=5,
@@ -80,12 +84,20 @@ if __name__ == '__main__':
         y_label="Count",
         output_path=str(output_dir / "integer_histogram_fewer_bins.png"),
         show_plot=False,
-        hist_color='#FFC300', # A specific hex color
-        edge_color='#581845'  # Darker edge color
+        hist_color="#FFC300",  # A specific hex color
+        edge_color="#581845",  # Darker edge color
     )
-    logger.info(f"Histogram example saved to {output_dir / 'integer_histogram_fewer_bins.png'}")
+    logger.info(
+        f"Histogram example saved to {output_dir / 'integer_histogram_fewer_bins.png'}"
+    )
 
     import logging
-    if not get_codomyrmex_logger('').hasHandlers():
-        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        logger.info("Basic logging configured for direct script execution of histogram.py.") 
+
+    if not get_codomyrmex_logger("").hasHandlers():
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        )
+        logger.info(
+            "Basic logging configured for direct script execution of histogram.py."
+        )

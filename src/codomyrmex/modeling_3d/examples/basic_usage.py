@@ -1,8 +1,14 @@
 """Basic usage examples for the 3D Modeling module."""
 
 from codomyrmex.modeling_3d import (
-    Scene3D, Object3D, Camera3D, Light3D, Material3D,
-    RenderPipeline, Vector3D, Quaternion
+    Scene3D,
+    Object3D,
+    Camera3D,
+    Light3D,
+    Material3D,
+    RenderPipeline,
+    Vector3D,
+    Quaternion,
 )
 
 

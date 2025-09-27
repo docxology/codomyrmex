@@ -9,6 +9,7 @@ import numpy as np
 @dataclass
 class Vector3D:
     """3D vector representation."""
+
     x: float = 0.0
     y: float = 0.0
     z: float = 0.0
@@ -23,6 +24,7 @@ class Vector3D:
 @dataclass
 class Quaternion:
     """Quaternion for 3D rotations."""
+
     w: float = 1.0
     x: float = 0.0
     y: float = 0.0
@@ -33,6 +35,8 @@ class Scene3D:
     """Main 3D scene container."""
 
     def __init__(self):
+        """  Init  .
+            """
         self.objects: List["Object3D"] = []
         self.cameras: List["Camera3D"] = []
         self.lights: List["Light3D"] = []
@@ -54,6 +58,10 @@ class Object3D:
     """3D object with transform and geometry."""
 
     def __init__(self, name: str = "Object"):
+        """  Init  .
+
+            Args:        name: Name identifier.
+            """
         self.name = name
         self.position = Vector3D()
         self.rotation = Quaternion()
@@ -75,6 +83,10 @@ class Camera3D:
     """3D camera for viewing the scene."""
 
     def __init__(self, name: str = "Camera"):
+        """  Init  .
+
+            Args:        name: Name identifier.
+            """
         self.name = name
         self.position = Vector3D(0.0, 0.0, 10.0)
         self.target = Vector3D(0.0, 0.0, 0.0)
@@ -88,6 +100,10 @@ class Light3D:
     """3D light source."""
 
     def __init__(self, name: str = "Light"):
+        """  Init  .
+
+            Args:        name: Name identifier.
+            """
         self.name = name
         self.position = Vector3D(0.0, 0.0, 0.0)
         self.color = Vector3D(1.0, 1.0, 1.0)
@@ -99,6 +115,10 @@ class Material3D:
     """Material properties for 3D objects."""
 
     def __init__(self, name: str = "Material"):
+        """  Init  .
+
+            Args:        name: Name identifier.
+            """
         self.name = name
         self.diffuse_color = Vector3D(0.8, 0.8, 0.8)
         self.specular_color = Vector3D(1.0, 1.0, 1.0)

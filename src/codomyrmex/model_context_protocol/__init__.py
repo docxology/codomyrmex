@@ -16,13 +16,14 @@ Available classes:
 """
 
 from .mcp_schemas import (
+from ..exceptions import CodomyrmexError
     MCPErrorDetail,
     MCPToolCall,
     MCPToolResult,
 )
 
 __all__ = [
-    'MCPErrorDetail',
-    'MCPToolCall',
-    'MCPToolResult',
-] 
+    "MCPErrorDetail",
+    "MCPToolCall",
+    "MCPToolResult",
+]

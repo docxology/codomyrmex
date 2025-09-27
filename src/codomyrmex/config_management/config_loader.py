@@ -14,23 +14,67 @@ from datetime import datetime, timezone
 from pathlib import Path
 import jsonschema
 
-# Add project root to Python path
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
-
+# Use proper relative imports
 try:
-    from logging_monitoring.logger_config import get_logger
+    from ..logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
-    import logging
-    logger = logging.getLogger(__name__)
+    try:
+        from codomyrmex.logging_monitoring.logger_config import get_logger
+
+    except ImportError:
+        import logging
+
+        logger = logging.getLogger(__name__)
+
+# Import exceptions
+try:
+    from ..exceptions import (
+        ConfigurationError,
+        FileOperationError,
+        ValidationError,
+        create_error_context,
+    )
+except ImportError:
+    try:
+        from codomyrmex.exceptions import (
+            ConfigurationError,
+            FileOperationError,
+            ValidationError,
+            create_error_context,
+        )
+    except ImportError:
+        # Fallback to standard exceptions
+        class ConfigurationError(Exception):
+            """Configurationerror.
+
+                A class for handling configurationerror operations.
+                """
+            pass
+
+        class FileOperationError(Exception):
+            """Fileoperationerror.
+
+                A class for handling fileoperationerror operations.
+                """
+            pass
+
+        class ValidationError(Exception):
+            """Validationerror.
+
+                A class for handling validationerror operations.
+                """
+            pass
+
+        def create_error_context(**kwargs):
+            return kwargs
 
 
 @dataclass
 class ConfigSchema:
     """JSON schema for configuration validation."""
+
     schema: Dict[str, Any]
     version: str = "draft7"
     title: str = ""
@@ -70,6 +114,7 @@ class ConfigSchema:
 @dataclass
 class Configuration:
     """Configuration object with validation and metadata."""
+
     data: Dict[str, Any]
     source: str
     loaded_at: datetime
@@ -89,7 +134,7 @@ class Configuration:
 
     def get_value(self, key: str, default: Any = None) -> Any:
         """Get configuration value by key."""
-        keys = key.split('.')
+        keys = key.split(".")
         value = self.data
 
         for k in keys:
@@ -102,7 +147,7 @@ class Configuration:
 
     def set_value(self, key: str, value: Any):
         """Set configuration value by key."""
-        keys = key.split('.')
+        keys = key.split(".")
         config = self.data
 
         # Navigate to the parent of the target key
@@ -122,7 +167,7 @@ class Configuration:
             "loaded_at": self.loaded_at.isoformat(),
             "environment": self.environment,
             "version": self.version,
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
 
 
@@ -154,8 +199,12 @@ class ConfigurationManager:
         # Create config directory if it doesn't exist
         os.makedirs(self.config_dir, exist_ok=True)
 
-    def load_configuration(self, name: str, sources: Optional[List[str]] = None,
-                          schema_path: Optional[str] = None) -> Configuration:
+    def load_configuration(
+        self,
+        name: str,
+        sources: Optional[List[str]] = None,
+        schema_path: Optional[str] = None,
+    ) -> Configuration:
         """
         Load configuration from multiple sources.
 
@@ -182,7 +231,7 @@ class ConfigurationManager:
                 f"{name}.json",
                 f"environments/{self.environment}/{name}.yaml",
                 f"environments/{self.environment}/{name}.yml",
-                f"environments/{self.environment}/{name}.json"
+                f"environments/{self.environment}/{name}.json",
             ]
 
         # Load and merge configurations
@@ -206,13 +255,15 @@ class ConfigurationManager:
             data=merged_config,
             source=", ".join(source_list),
             environment=self.environment,
-            schema=schema
+            schema=schema,
         )
 
         # Validate configuration
         validation_errors = config.validate()
         if validation_errors:
-            logger.warning(f"Configuration validation errors for {name}: {validation_errors}")
+            logger.warning(
+                f"Configuration validation errors for {name}: {validation_errors}"
+            )
 
         self.configurations[name] = config
         logger.info(f"Configuration loaded: {name} from {config.source}")
@@ -248,8 +299,8 @@ class ConfigurationManager:
             return None
 
         try:
-            with open(file_path, 'r') as f:
-                if file_path.endswith('.yaml') or file_path.endswith('.yml'):
+            with open(file_path, "r") as f:
+                if file_path.endswith(".yaml") or file_path.endswith(".yml"):
                     return yaml.safe_load(f)
                 else:
                     return json.load(f)
@@ -262,11 +313,12 @@ class ConfigurationManager:
         """Load configuration from URL."""
         try:
             import requests
+
             response = requests.get(url, timeout=30)
             response.raise_for_status()
 
-            content_type = response.headers.get('content-type', '')
-            if 'yaml' in content_type:
+            content_type = response.headers.get("content-type", "")
+            if "yaml" in content_type:
                 return yaml.safe_load(response.text)
             else:
                 return response.json()
@@ -282,7 +334,7 @@ class ConfigurationManager:
 
         for key, value in os.environ.items():
             if key.startswith(prefix):
-                config_key = key[len(prefix):].lower()
+                config_key = key[len(prefix) :].lower()
                 env_config[config_key] = value
 
         return env_config
@@ -290,8 +342,8 @@ class ConfigurationManager:
     def _load_schema(self, schema_path: str) -> Optional[ConfigSchema]:
         """Load JSON schema for configuration validation."""
         try:
-            with open(schema_path, 'r') as f:
-                if schema_path.endswith('.yaml') or schema_path.endswith('.yml'):
+            with open(schema_path, "r") as f:
+                if schema_path.endswith(".yaml") or schema_path.endswith(".yml"):
                     schema_data = yaml.safe_load(f)
                 else:
                     schema_data = json.load(f)
@@ -299,14 +351,16 @@ class ConfigurationManager:
             return ConfigSchema(
                 schema=schema_data,
                 title=schema_data.get("title", ""),
-                description=schema_data.get("description", "")
+                description=schema_data.get("description", ""),
             )
 
         except Exception as e:
             logger.error(f"Failed to load schema {schema_path}: {e}")
             return None
 
-    def save_configuration(self, name: str, output_path: str, format: str = "yaml") -> bool:
+    def save_configuration(
+        self, name: str, output_path: str, format: str = "yaml"
+    ) -> bool:
         """
         Save configuration to file.
 
@@ -327,7 +381,7 @@ class ConfigurationManager:
         try:
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-            with open(output_path, 'w') as f:
+            with open(output_path, "w") as f:
                 if format.lower() == "yaml":
                     yaml.dump(config.data, f, default_flow_style=False)
                 else:
@@ -411,8 +465,8 @@ class ConfigurationManager:
             # Generate template from schema
             template = self._generate_template_from_schema(schema.schema)
 
-            with open(output_path, 'w') as f:
-                if output_path.endswith('.yaml') or output_path.endswith('.yml'):
+            with open(output_path, "w") as f:
+                if output_path.endswith(".yaml") or output_path.endswith(".yml"):
                     yaml.dump(template, f, default_flow_style=False)
                 else:
                     json.dump(template, f, indent=2)
@@ -457,8 +511,9 @@ class ConfigurationManager:
 
 
 # Convenience functions
-def load_configuration(name: str, sources: Optional[List[str]] = None,
-                      schema_path: Optional[str] = None) -> Configuration:
+def load_configuration(
+    name: str, sources: Optional[List[str]] = None, schema_path: Optional[str] = None
+) -> Configuration:
     """
     Convenience function to load configuration.
 

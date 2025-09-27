@@ -2,6 +2,10 @@
 
 from typing import Optional, Dict, Any
 from .engine_3d import Vector3D, Quaternion
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class ARSession:
@@ -29,6 +33,8 @@ class VRRenderer:
     """Virtual Reality renderer."""
 
     def __init__(self):
+        """  Init  .
+            """
         self.left_eye_texture = None
         self.right_eye_texture = None
         self.head_pose = (Vector3D(), Quaternion())
@@ -54,5 +60,5 @@ class XRInterface:
         return {
             "camera_pose": self.ar_session.get_camera_pose(),
             "virtual_objects": [],
-            "real_world_geometry": []
+            "real_world_geometry": [],
         }

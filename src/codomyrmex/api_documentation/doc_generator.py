@@ -13,24 +13,29 @@ from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+    pass
+#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 @dataclass
 class APIEndpoint:
     """Represents a single API endpoint."""
+
     path: str
     method: str
     summary: str
@@ -54,13 +59,14 @@ class APIEndpoint:
             "responses": self.responses,
             "tags": self.tags,
             "deprecated": self.deprecated,
-            "security": self.security
+            "security": self.security,
         }
 
 
 @dataclass
 class APIDocumentation:
     """Complete API documentation structure."""
+
     title: str
     version: str
     description: str
@@ -86,16 +92,16 @@ class APIDocumentation:
                 "version": self.version,
                 "description": self.description,
                 "contact": self.contact_info,
-                "license": self.license_info
+                "license": self.license_info,
             },
             "servers": [{"url": self.base_url}],
             "paths": self._build_paths(),
             "components": {
                 "schemas": self.schemas,
-                "securitySchemes": self.security_schemes
+                "securitySchemes": self.security_schemes,
             },
             "tags": self.tags,
-            "security": list(self.security_schemes.keys())
+            "security": list(self.security_schemes.keys()),
         }
 
     def _build_paths(self) -> Dict[str, Any]:
@@ -134,8 +140,9 @@ class APIDocumentationGenerator:
         self.discovered_endpoints: List[APIEndpoint] = []
         self.documentation: Optional[APIDocumentation] = None
 
-    def generate_documentation(self, title: str, version: str,
-                             base_url: str = "http://localhost:8000") -> APIDocumentation:
+    def generate_documentation(
+        self, title: str, version: str, base_url: str = "http://localhost:8000"
+    ) -> APIDocumentation:
         """
         Generate comprehensive API documentation.
 
@@ -158,7 +165,7 @@ class APIDocumentationGenerator:
             version=version,
             description=f"Auto-generated API documentation for {title}",
             base_url=base_url,
-            endpoints=self.discovered_endpoints
+            endpoints=self.discovered_endpoints,
         )
 
         # Extract schemas and security info
@@ -166,7 +173,9 @@ class APIDocumentationGenerator:
         self._extract_security_schemes()
         self._generate_tags()
 
-        logger.info(f"Generated documentation with {len(self.discovered_endpoints)} endpoints")
+        logger.info(
+            f"Generated documentation with {len(self.discovered_endpoints)} endpoints"
+        )
         return self.documentation
 
     def _discover_endpoints(self) -> List[APIEndpoint]:
@@ -185,7 +194,7 @@ class APIDocumentationGenerator:
 
         for root, dirs, files in os.walk(directory):
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     file_path = os.path.join(root, file)
                     endpoints.extend(self._scan_python_file(file_path))
 
@@ -196,7 +205,7 @@ class APIDocumentationGenerator:
         endpoints = []
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Parse AST to find API-related code
@@ -213,8 +222,9 @@ class APIDocumentationGenerator:
 
         return endpoints
 
-    def _extract_endpoint_from_function(self, node: ast.FunctionDef,
-                                      content: str) -> Optional[APIEndpoint]:
+    def _extract_endpoint_from_function(
+        self, node: ast.FunctionDef, content: str
+    ) -> Optional[APIEndpoint]:
         """Extract API endpoint information from function."""
         # Look for common API patterns
         decorators = []
@@ -223,7 +233,15 @@ class APIDocumentationGenerator:
         for decorator in node.decorator_list:
             if isinstance(decorator, ast.Call):
                 decorator_name = self._get_decorator_name(decorator)
-                if decorator_name in ['app.route', 'route', '@get', '@post', '@put', '@delete', '@patch']:
+                if decorator_name in [
+                    "app.route",
+                    "route",
+                    "@get",
+                    "@post",
+                    "@put",
+                    "@delete",
+                    "@patch",
+                ]:
                     decorators.append(decorator)
 
         if not decorators:
@@ -241,20 +259,20 @@ class APIDocumentationGenerator:
 
         # Create endpoint
         endpoint = APIEndpoint(
-            path=endpoint_info.get('path', f"/{node.name}"),
-            method=endpoint_info.get('method', 'GET'),
-            summary=node.name.replace('_', ' ').title(),
+            path=endpoint_info.get("path", f"/{node.name}"),
+            method=endpoint_info.get("method", "GET"),
+            summary=node.name.replace("_", " ").title(),
             description=description,
-            parameters=parameters
+            parameters=parameters,
         )
 
         return endpoint
 
     def _get_decorator_name(self, decorator: ast.Call) -> str:
         """Get decorator name from AST node."""
-        if hasattr(decorator.func, 'id'):
+        if hasattr(decorator.func, "id"):
             return decorator.func.id
-        elif hasattr(decorator.func, 'attr'):
+        elif hasattr(decorator.func, "attr"):
             return decorator.func.attr
         return ""
 
@@ -265,45 +283,45 @@ class APIDocumentationGenerator:
         # Extract path (first argument)
         if decorator.args:
             if isinstance(decorator.args[0], ast.Str):
-                info['path'] = decorator.args[0].s
+                info["path"] = decorator.args[0].s
 
         # Extract method from decorator name or keyword arguments
         decorator_name = self._get_decorator_name(decorator)
 
-        if 'get' in decorator_name.lower():
-            info['method'] = 'GET'
-        elif 'post' in decorator_name.lower():
-            info['method'] = 'POST'
-        elif 'put' in decorator_name.lower():
-            info['method'] = 'PUT'
-        elif 'delete' in decorator_name.lower():
-            info['method'] = 'DELETE'
-        elif 'patch' in decorator_name.lower():
-            info['method'] = 'PATCH'
+        if "get" in decorator_name.lower():
+            info["method"] = "GET"
+        elif "post" in decorator_name.lower():
+            info["method"] = "POST"
+        elif "put" in decorator_name.lower():
+            info["method"] = "PUT"
+        elif "delete" in decorator_name.lower():
+            info["method"] = "DELETE"
+        elif "patch" in decorator_name.lower():
+            info["method"] = "PATCH"
         else:
-            info['method'] = 'GET'
+            info["method"] = "GET"
 
         # Check keyword arguments
         for kwarg in decorator.keywords:
-            if kwarg.arg == 'methods' and isinstance(kwarg.value, ast.List):
+            if kwarg.arg == "methods" and isinstance(kwarg.value, ast.List):
                 if kwarg.value.elts and isinstance(kwarg.value.elts[0], ast.Str):
-                    info['method'] = kwarg.value.elts[0].s.upper()
+                    info["method"] = kwarg.value.elts[0].s.upper()
 
         return info
 
-    def _extract_function_parameters(self, node: ast.FunctionDef) -> List[Dict[str, Any]]:
+    def _extract_function_parameters(
+        self, node: ast.FunctionDef
+    ) -> List[Dict[str, Any]]:
         """Extract function parameters for API documentation."""
         parameters = []
 
         for arg in node.args.args:
-            if arg.arg != 'self':  # Skip self parameter
+            if arg.arg != "self":  # Skip self parameter
                 param = {
                     "name": arg.arg,
                     "in": "query",  # Default to query parameter
                     "required": True,
-                    "schema": {
-                        "type": "string"  # Default type
-                    }
+                    "schema": {"type": "string"},  # Default type
                 }
                 parameters.append(param)
 
@@ -322,17 +340,17 @@ class APIDocumentationGenerator:
                 "properties": {
                     "error": {"type": "string"},
                     "message": {"type": "string"},
-                    "code": {"type": "integer"}
-                }
+                    "code": {"type": "integer"},
+                },
             },
             "Success": {
                 "type": "object",
                 "properties": {
                     "success": {"type": "boolean"},
                     "data": {"type": "object"},
-                    "message": {"type": "string"}
-                }
-            }
+                    "message": {"type": "string"},
+                },
+            },
         }
 
     def _extract_security_schemes(self):
@@ -342,16 +360,8 @@ class APIDocumentationGenerator:
 
         # Common security schemes
         self.documentation.security_schemes = {
-            "BearerAuth": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
-            },
-            "ApiKeyAuth": {
-                "type": "apiKey",
-                "in": "header",
-                "name": "X-API-Key"
-            }
+            "BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"},
+            "ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"},
         }
 
     def _generate_tags(self):
@@ -363,13 +373,13 @@ class APIDocumentationGenerator:
 
         for endpoint in self.documentation.endpoints:
             # Generate tags based on path
-            path_parts = endpoint.path.strip('/').split('/')
+            path_parts = endpoint.path.strip("/").split("/")
             if path_parts:
                 tag_name = path_parts[0].title()
                 if tag_name not in tags_dict:
                     tags_dict[tag_name] = {
                         "name": tag_name,
-                        "description": f"Endpoints for {tag_name.lower()}"
+                        "description": f"Endpoints for {tag_name.lower()}",
                     }
 
         self.documentation.tags = list(tags_dict.values())
@@ -393,12 +403,13 @@ class APIDocumentationGenerator:
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
             if format.lower() == "json":
-                with open(output_path, 'w') as f:
+                with open(output_path, "w") as f:
                     json.dump(self.documentation.to_dict(), f, indent=2)
 
             elif format.lower() == "yaml":
                 import yaml
-                with open(output_path, 'w') as f:
+
+                with open(output_path, "w") as f:
                     yaml.dump(self.documentation.to_dict(), f, default_flow_style=False)
 
             else:
@@ -431,10 +442,18 @@ class APIDocumentationGenerator:
 
         # Validate endpoints
         for endpoint in self.documentation.endpoints:
-            if not endpoint.path.startswith('/'):
+            if not endpoint.path.startswith("/"):
                 issues.append(f"Endpoint path should start with '/': {endpoint.path}")
 
-            if endpoint.method not in ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD']:
+            if endpoint.method not in [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH",
+                "OPTIONS",
+                "HEAD",
+            ]:
                 issues.append(f"Invalid HTTP method: {endpoint.method}")
 
         # Check for duplicate paths
@@ -447,8 +466,12 @@ class APIDocumentationGenerator:
 
 
 # Convenience functions
-def generate_api_docs(title: str, version: str, source_paths: Optional[List[str]] = None,
-                     base_url: str = "http://localhost:8000") -> APIDocumentation:
+def generate_api_docs(
+    title: str,
+    version: str,
+    source_paths: Optional[List[str]] = None,
+    base_url: str = "http://localhost:8000",
+) -> APIDocumentation:
     """
     Convenience function to generate API documentation.
 

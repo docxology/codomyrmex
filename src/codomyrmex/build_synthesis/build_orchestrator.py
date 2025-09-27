@@ -12,45 +12,61 @@ import subprocess
 import logging
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+    pass
+#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 except ImportError:
     # Fallback for environments where logging_monitoring might not be discoverable
     import logging
-    print("Warning: Could not import Codomyrmex logging. Using standard Python logging.", file=sys.stderr)
+
+    print(
+        "Warning: Could not import Codomyrmex logging. Using standard Python logging.",
+        file=sys.stderr,
+    )
+
     def setup_logging():
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        )
+
     def get_logger(name):
         _logger = logging.getLogger(name)
         if not _logger.handlers:
             _handler = logging.StreamHandler(sys.stdout)
-            _formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+            _formatter = logging.Formatter(
+                "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+            )
             _handler.setFormatter(_formatter)
             _logger.addHandler(_handler)
             _logger.setLevel(logging.INFO)
         return _logger
 
+
 logger = get_logger(__name__)
+
 
 def check_build_environment():
     """Check if the build environment is properly configured."""
     logger.info("Checking build environment...")
 
     # Check for common build tools
-    tools = ['make', 'cmake', 'ninja', 'gcc', 'python3']
+    tools = ["make", "cmake", "ninja", "gcc", "python3"]
     available_tools = []
 
     for tool in tools:
         try:
-            result = subprocess.run([tool, '--version'],
-                                  capture_output=True, text=True, check=False)
+            result = subprocess.run(
+                [tool, "--version"], capture_output=True, text=True, check=False
+            )
             if result.returncode == 0:
                 available_tools.append(tool)
                 logger.info(f"  ✅ {tool} is available")
@@ -60,11 +76,16 @@ def check_build_environment():
             logger.warning(f"  ❌ {tool} not found")
 
     if available_tools:
-        logger.info(f"Build environment check passed. Available tools: {', '.join(available_tools)}")
+        logger.info(
+            f"Build environment check passed. Available tools: {', '.join(available_tools)}"
+        )
         return True
     else:
-        logger.error("No build tools found. Please install build tools for your platform.")
+        logger.error(
+            "No build tools found. Please install build tools for your platform."
+        )
         return False
+
 
 def run_build_command(command: List[str], cwd: str = None) -> Tuple[bool, str, str]:
     """
@@ -87,7 +108,7 @@ def run_build_command(command: List[str], cwd: str = None) -> Tuple[bool, str, s
             cwd=cwd,
             capture_output=True,
             text=True,
-            timeout=300  # 5 minute timeout
+            timeout=300,  # 5 minute timeout
         )
 
         success = result.returncode == 0
@@ -107,7 +128,10 @@ def run_build_command(command: List[str], cwd: str = None) -> Tuple[bool, str, s
         logger.error(error_msg)
         return False, "", error_msg
 
-def synthesize_build_artifact(source_path: str, output_path: str, artifact_type: str = "executable") -> bool:
+
+def synthesize_build_artifact(
+    source_path: str, output_path: str, artifact_type: str = "executable"
+) -> bool:
     """
     Synthesize a build artifact from source code.
 
@@ -148,6 +172,7 @@ def synthesize_build_artifact(source_path: str, output_path: str, artifact_type:
 
     return success
 
+
 def _create_python_executable(source_path: Path, output_path: Path) -> bool:
     """Create a Python executable wrapper."""
     try:
@@ -155,22 +180,23 @@ def _create_python_executable(source_path: Path, output_path: Path) -> bool:
         wrapper_content = f"""#!/usr/bin/env python3
 import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__))
+# sys.path.insert(0, os.path.dirname(__file__))  # Removed sys.path manipulation
 from {source_path.stem} import main
 if __name__ == "__main__":
     main()
 """
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             f.write(wrapper_content)
 
         # Make executable on Unix-like systems
-        if os.name != 'nt':
+        if os.name != "nt":
             os.chmod(output_path, 0o755)
 
         return True
     except Exception as e:
         logger.error(f"Failed to create Python executable: {e}")
         return False
+
 
 def _create_python_package(source_path: Path, output_path: Path) -> bool:
     """Create a Python package distributable."""
@@ -179,17 +205,20 @@ def _create_python_package(source_path: Path, output_path: Path) -> bool:
         # For now, just copy the source
         if source_path.is_dir():
             import shutil
+
             if output_path.exists():
                 shutil.rmtree(output_path)
             shutil.copytree(source_path, output_path)
         else:
             import shutil
+
             shutil.copy2(source_path, output_path)
 
         return True
     except Exception as e:
         logger.error(f"Failed to create Python package: {e}")
         return False
+
 
 def validate_build_output(output_path: str) -> Dict[str, any]:
     """
@@ -209,7 +238,7 @@ def validate_build_output(output_path: str) -> Dict[str, any]:
         "is_file": output_path.is_file(),
         "is_executable": False,
         "size_bytes": 0,
-        "errors": []
+        "errors": [],
     }
 
     if not output_path.exists():
@@ -220,23 +249,30 @@ def validate_build_output(output_path: str) -> Dict[str, any]:
 
     if output_path.is_file():
         # Check if executable
-        if os.name != 'nt':  # Unix-like systems
+        if os.name != "nt":  # Unix-like systems
             validation_results["is_executable"] = os.access(output_path, os.X_OK)
         else:  # Windows
-            validation_results["is_executable"] = output_path.suffix in ['.exe', '.bat', '.cmd']
+            validation_results["is_executable"] = output_path.suffix in [
+                ".exe",
+                ".bat",
+                ".cmd",
+            ]
 
         # Basic validation for Python files
-        if output_path.suffix == '.py':
+        if output_path.suffix == ".py":
             try:
-                with open(output_path, 'r') as f:
+                with open(output_path, "r") as f:
                     content = f.read()
-                    if 'import' not in content and 'def ' not in content:
-                        validation_results["errors"].append("File appears to be empty or malformed")
+                    if "import" not in content and "def " not in content:
+                        validation_results["errors"].append(
+                            "File appears to be empty or malformed"
+                        )
             except Exception as e:
                 validation_results["errors"].append(f"Cannot read file: {e}")
 
     logger.info(f"Validation completed. Errors: {len(validation_results['errors'])}")
     return validation_results
+
 
 def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]:
     """
@@ -250,12 +286,7 @@ def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]:
     """
     logger.info("Starting build pipeline orchestration")
 
-    results = {
-        "stages": [],
-        "overall_success": False,
-        "artifacts": [],
-        "errors": []
-    }
+    results = {"stages": [], "overall_success": False, "artifacts": [], "errors": []}
 
     try:
         # Stage 1: Environment check
@@ -271,29 +302,41 @@ def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]:
         if "dependencies" in build_config:
             logger.info("Stage 2: Dependency installation")
             dep_success = _install_build_dependencies(build_config["dependencies"])
-            results["stages"].append({"name": "dependency_installation", "success": dep_success})
+            results["stages"].append(
+                {"name": "dependency_installation", "success": dep_success}
+            )
         else:
-            results["stages"].append({"name": "dependency_installation", "success": True, "skipped": True})
+            results["stages"].append(
+                {"name": "dependency_installation", "success": True, "skipped": True}
+            )
 
         # Stage 3: Build execution
         if "build_commands" in build_config:
             logger.info("Stage 3: Build execution")
             build_success = True
             for i, cmd in enumerate(build_config["build_commands"]):
-                cmd_success, stdout, stderr = run_build_command(cmd, build_config.get("working_directory"))
-                results["stages"].append({
-                    "name": f"build_command_{i}",
-                    "success": cmd_success,
-                    "command": cmd,
-                    "stdout": stdout,
-                    "stderr": stderr
-                })
+                cmd_success, stdout, stderr = run_build_command(
+                    cmd, build_config.get("working_directory")
+                )
+                results["stages"].append(
+                    {
+                        "name": f"build_command_{i}",
+                        "success": cmd_success,
+                        "command": cmd,
+                        "stdout": stdout,
+                        "stderr": stderr,
+                    }
+                )
                 if not cmd_success:
                     build_success = False
                     results["errors"].append(f"Build command {i} failed: {stderr}")
-            results["stages"].append({"name": "build_execution", "success": build_success})
+            results["stages"].append(
+                {"name": "build_execution", "success": build_success}
+            )
         else:
-            results["stages"].append({"name": "build_execution", "success": True, "skipped": True})
+            results["stages"].append(
+                {"name": "build_execution", "success": True, "skipped": True}
+            )
 
         # Stage 4: Artifact synthesis
         if "artifacts" in build_config:
@@ -303,16 +346,20 @@ def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]:
                 art_success = synthesize_build_artifact(
                     artifact["source"],
                     artifact["output"],
-                    artifact.get("type", "executable")
+                    artifact.get("type", "executable"),
                 )
-                results["artifacts"].append({
-                    "source": artifact["source"],
-                    "output": artifact["output"],
-                    "success": art_success
-                })
+                results["artifacts"].append(
+                    {
+                        "source": artifact["source"],
+                        "output": artifact["output"],
+                        "success": art_success,
+                    }
+                )
                 if not art_success:
                     artifact_success = False
-            results["stages"].append({"name": "artifact_synthesis", "success": artifact_success})
+            results["stages"].append(
+                {"name": "artifact_synthesis", "success": artifact_success}
+            )
 
         # Stage 5: Validation
         if results["artifacts"]:
@@ -325,10 +372,16 @@ def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]:
                     if validation["errors"]:
                         validation_success = False
                         results["errors"].extend(validation["errors"])
-            results["stages"].append({"name": "validation", "success": validation_success})
+            results["stages"].append(
+                {"name": "validation", "success": validation_success}
+            )
 
         # Determine overall success
-        results["overall_success"] = all(stage["success"] for stage in results["stages"] if not stage.get("skipped", False))
+        results["overall_success"] = all(
+            stage["success"]
+            for stage in results["stages"]
+            if not stage.get("skipped", False)
+        )
 
         if results["overall_success"]:
             logger.info("Build pipeline completed successfully")
@@ -340,6 +393,7 @@ def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]:
         logger.error(f"Build pipeline orchestration error: {e}")
 
     return results
+
 
 def _install_build_dependencies(dependencies: List[str]) -> bool:
     """Install build dependencies."""
@@ -360,6 +414,7 @@ def _install_build_dependencies(dependencies: List[str]) -> bool:
         logger.error(f"Dependency installation failed: {e}")
         return False
 
+
 if __name__ == "__main__":
     # Ensure logging is set up when script is run directly
     setup_logging()
@@ -368,16 +423,14 @@ if __name__ == "__main__":
     # Example usage
     example_config = {
         "dependencies": ["setuptools"],
-        "build_commands": [
-            ["python", "-c", "print('Building...')"]
-        ],
+        "build_commands": [["python", "-c", "print('Building...')"]],
         "artifacts": [
             {
                 "source": "example.py",
                 "output": "example_executable.py",
-                "type": "executable"
+                "type": "executable",
             }
-        ]
+        ],
     }
 
     results = orchestrate_build_pipeline(example_config)

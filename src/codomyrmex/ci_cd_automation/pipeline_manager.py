@@ -17,23 +17,28 @@ from enum import Enum
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import subprocess
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+    pass
+#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 class PipelineStatus(Enum):
     """Pipeline execution status."""
+
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
@@ -44,6 +49,7 @@ class PipelineStatus(Enum):
 
 class StageStatus(Enum):
     """Pipeline stage status."""
+
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
@@ -54,6 +60,7 @@ class StageStatus(Enum):
 
 class JobStatus(Enum):
     """Job execution status."""
+
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
@@ -65,6 +72,7 @@ class JobStatus(Enum):
 @dataclass
 class PipelineJob:
     """Individual job within a pipeline stage."""
+
     name: str
     commands: List[str]
     environment: Dict[str, str] = field(default_factory=dict)
@@ -94,13 +102,14 @@ class PipelineJob:
             "start_time": self.start_time.isoformat() if self.start_time else None,
             "end_time": self.end_time.isoformat() if self.end_time else None,
             "output": self.output,
-            "error": self.error
+            "error": self.error,
         }
 
 
 @dataclass
 class PipelineStage:
     """Pipeline stage containing multiple jobs."""
+
     name: str
     jobs: List[PipelineJob] = field(default_factory=list)
     dependencies: List[str] = field(default_factory=list)
@@ -122,13 +131,14 @@ class PipelineStage:
             "parallel": self.parallel,
             "status": self.status.value,
             "start_time": self.start_time.isoformat() if self.start_time else None,
-            "end_time": self.end_time.isoformat() if self.end_time else None
+            "end_time": self.end_time.isoformat() if self.end_time else None,
         }
 
 
 @dataclass
 class Pipeline:
     """Complete CI/CD pipeline definition."""
+
     name: str
     description: str = ""
     stages: List[PipelineStage] = field(default_factory=list)
@@ -158,7 +168,7 @@ class Pipeline:
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "started_at": self.started_at.isoformat() if self.started_at else None,
             "finished_at": self.finished_at.isoformat() if self.finished_at else None,
-            "duration": self.duration
+            "duration": self.duration,
         }
 
 
@@ -202,8 +212,8 @@ class PipelineManager:
             Pipeline: Created pipeline object
         """
         try:
-            with open(config_path, 'r') as f:
-                if config_path.endswith('.yaml') or config_path.endswith('.yml'):
+            with open(config_path, "r") as f:
+                if config_path.endswith(".yaml") or config_path.endswith(".yml"):
                     config = yaml.safe_load(f)
                 else:
                     config = json.load(f)
@@ -225,7 +235,7 @@ class PipelineManager:
             description=config.get("description", ""),
             variables=config.get("variables", {}),
             triggers=config.get("triggers", {}),
-            timeout=config.get("timeout", 7200)
+            timeout=config.get("timeout", 7200),
         )
 
         # Parse stages
@@ -235,7 +245,7 @@ class PipelineManager:
                 dependencies=stage_config.get("dependencies", []),
                 environment=stage_config.get("environment", {}),
                 allow_failure=stage_config.get("allow_failure", False),
-                parallel=stage_config.get("parallel", True)
+                parallel=stage_config.get("parallel", True),
             )
 
             # Parse jobs
@@ -248,7 +258,7 @@ class PipelineManager:
                     dependencies=job_config.get("dependencies", []),
                     timeout=job_config.get("timeout", 3600),
                     retry_count=job_config.get("retry_count", 0),
-                    allow_failure=job_config.get("allow_failure", False)
+                    allow_failure=job_config.get("allow_failure", False),
                 )
                 stage.jobs.append(job)
 
@@ -256,8 +266,9 @@ class PipelineManager:
 
         return pipeline
 
-    async def run_pipeline_async(self, pipeline_name: str,
-                               variables: Optional[Dict[str, str]] = None) -> Pipeline:
+    async def run_pipeline_async(
+        self, pipeline_name: str, variables: Optional[Dict[str, str]] = None
+    ) -> Pipeline:
         """
         Run a pipeline asynchronously.
 
@@ -289,27 +300,34 @@ class PipelineManager:
 
             # Calculate final status
             pipeline.finished_at = datetime.now(timezone.utc)
-            pipeline.duration = (pipeline.finished_at - pipeline.started_at).total_seconds()
+            pipeline.duration = (
+                pipeline.finished_at - pipeline.started_at
+            ).total_seconds()
 
             if any(stage.status == StageStatus.FAILURE for stage in pipeline.stages):
                 pipeline.status = PipelineStatus.FAILURE
             else:
                 pipeline.status = PipelineStatus.SUCCESS
 
-            logger.info(f"Pipeline {pipeline_name} completed with status: {pipeline.status.value}")
+            logger.info(
+                f"Pipeline {pipeline_name} completed with status: {pipeline.status.value}"
+            )
 
         except Exception as e:
             pipeline.status = PipelineStatus.FAILURE
             pipeline.finished_at = datetime.now(timezone.utc)
             if pipeline.started_at:
-                pipeline.duration = (pipeline.finished_at - pipeline.started_at).total_seconds()
+                pipeline.duration = (
+                    pipeline.finished_at - pipeline.started_at
+                ).total_seconds()
 
             logger.error(f"Pipeline {pipeline_name} failed: {e}")
 
         return pipeline
 
-    def run_pipeline(self, pipeline_name: str,
-                    variables: Optional[Dict[str, str]] = None) -> Pipeline:
+    def run_pipeline(
+        self, pipeline_name: str, variables: Optional[Dict[str, str]] = None
+    ) -> Pipeline:
         """
         Run a pipeline synchronously.
 
@@ -356,7 +374,9 @@ class PipelineManager:
         for stage in pipeline.stages:
             # Check if all dependencies are satisfied
             if not all(dep in executed_stages for dep in stage.dependencies):
-                logger.warning(f"Skipping stage {stage.name} due to unsatisfied dependencies")
+                logger.warning(
+                    f"Skipping stage {stage.name} due to unsatisfied dependencies"
+                )
                 stage.status = StageStatus.SKIPPED
                 continue
 
@@ -374,7 +394,9 @@ class PipelineManager:
         try:
             if stage.parallel:
                 # Execute jobs in parallel
-                await self._execute_jobs_parallel(stage.jobs, {**global_vars, **stage.environment})
+                await self._execute_jobs_parallel(
+                    stage.jobs, {**global_vars, **stage.environment}
+                )
             else:
                 # Execute jobs sequentially
                 for job in stage.jobs:
@@ -393,7 +415,9 @@ class PipelineManager:
 
         stage.end_time = datetime.now(timezone.utc)
 
-    async def _execute_jobs_parallel(self, jobs: List[PipelineJob], env_vars: Dict[str, str]):
+    async def _execute_jobs_parallel(
+        self, jobs: List[PipelineJob], env_vars: Dict[str, str]
+    ):
         """Execute jobs in parallel."""
         tasks = []
         for job in jobs:
@@ -416,7 +440,9 @@ class PipelineManager:
                 resolved_cmd = self._substitute_variables(cmd, env_vars)
 
                 # Execute command
-                result = await self._run_command_async(resolved_cmd, job.timeout, env_vars)
+                result = await self._run_command_async(
+                    resolved_cmd, job.timeout, env_vars
+                )
 
                 job.output += result.get("stdout", "")
                 if result.get("stderr"):
@@ -442,9 +468,11 @@ class PipelineManager:
 
         job.end_time = datetime.now(timezone.utc)
 
-    async def _run_command_async(self, command: str, timeout: int,
-                               env_vars: Dict[str, str]) -> Dict[str, Any]:
+    async def _run_command_async(
+        self, command: str, timeout: int, env_vars: Dict[str, str]
+    ) -> Dict[str, Any]:
         """Run a command asynchronously."""
+
         def run_cmd():
             try:
                 env = os.environ.copy()
@@ -456,27 +484,23 @@ class PipelineManager:
                     capture_output=True,
                     text=True,
                     timeout=timeout,
-                    env=env
+                    env=env,
                 )
 
                 return {
                     "returncode": result.returncode,
                     "stdout": result.stdout,
-                    "stderr": result.stderr
+                    "stderr": result.stderr,
                 }
 
             except subprocess.TimeoutExpired:
                 return {
                     "returncode": -1,
                     "stdout": "",
-                    "stderr": f"Command timed out after {timeout} seconds"
+                    "stderr": f"Command timed out after {timeout} seconds",
                 }
             except Exception as e:
-                return {
-                    "returncode": -1,
-                    "stdout": "",
-                    "stderr": str(e)
-                }
+                return {"returncode": -1, "stdout": "", "stderr": str(e)}
 
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(self.executor, run_cmd)
@@ -526,7 +550,7 @@ class PipelineManager:
             "variables": pipeline.variables,
             "triggers": pipeline.triggers,
             "timeout": pipeline.timeout,
-            "stages": []
+            "stages": [],
         }
 
         for stage in pipeline.stages:
@@ -536,7 +560,7 @@ class PipelineManager:
                 "environment": stage.environment,
                 "allow_failure": stage.allow_failure,
                 "parallel": stage.parallel,
-                "jobs": []
+                "jobs": [],
             }
 
             for job in stage.jobs:
@@ -548,15 +572,15 @@ class PipelineManager:
                     "dependencies": job.dependencies,
                     "timeout": job.timeout,
                     "retry_count": job.retry_count,
-                    "allow_failure": job.allow_failure
+                    "allow_failure": job.allow_failure,
                 }
                 stage_config["jobs"].append(job_config)
 
             config["stages"].append(stage_config)
 
         # Save to file
-        with open(output_path, 'w') as f:
-            if output_path.endswith('.yaml') or output_path.endswith('.yml'):
+        with open(output_path, "w") as f:
+            if output_path.endswith(".yaml") or output_path.endswith(".yml"):
                 yaml.dump(config, f, default_flow_style=False)
             else:
                 json.dump(config, f, indent=2)
@@ -579,8 +603,11 @@ def create_pipeline(config_path: str) -> Pipeline:
     return manager.create_pipeline(config_path)
 
 
-def run_pipeline(pipeline_name: str, config_path: Optional[str] = None,
-                variables: Optional[Dict[str, str]] = None) -> Pipeline:
+def run_pipeline(
+    pipeline_name: str,
+    config_path: Optional[str] = None,
+    variables: Optional[Dict[str, str]] = None,
+) -> Pipeline:
     """
     Convenience function to run a pipeline.
 

@@ -9,23 +9,30 @@ import os
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1] / 'docs' / 'modules'
+ROOT = Path(__file__).resolve().parents[1] / "docs" / "modules"
+
 
 def scan_modules(root: Path):
+    """Scan Modules.
+
+        Args:        root: Parameter for the operation.
+
+        Returns:        The result of the operation.
+        """
     modules = {}
     for module_dir in sorted([p for p in root.iterdir() if p.is_dir()]):
         docs = []
-        for md in sorted(module_dir.rglob('*.md')):
+        for md in sorted(module_dir.rglob("*.md")):
             rel = md.relative_to(root)
-            docs.append(str(rel).replace('\\', '/'))
+            docs.append(str(rel).replace("\\", "/"))
         modules[module_dir.name] = docs
     return modules
+
 
 def main():
     modules = scan_modules(ROOT)
     print(json.dumps(modules, indent=2))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
-
-

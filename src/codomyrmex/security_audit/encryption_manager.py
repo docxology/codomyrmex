@@ -18,24 +18,29 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 import secrets
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+    pass
+#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 @dataclass
 class EncryptionResult:
     """Result of an encryption or decryption operation."""
+
     success: bool
     data: Optional[bytes] = None
     error: Optional[str] = None
@@ -91,7 +96,7 @@ class EncryptionManager:
         if os.path.exists(self.key_file):
             # Load existing key
             try:
-                with open(self.key_file, 'rb') as f:
+                with open(self.key_file, "rb") as f:
                     key = f.read()
                 self._fernet = Fernet(key)
                 logger.info("Loaded existing encryption key")
@@ -108,7 +113,7 @@ class EncryptionManager:
             # Save key securely
             try:
                 os.makedirs(os.path.dirname(self.key_file), exist_ok=True)
-                with open(self.key_file, 'wb') as f:
+                with open(self.key_file, "wb") as f:
                     f.write(key)
                 # Set restrictive permissions
                 os.chmod(self.key_file, 0o600)
@@ -126,12 +131,12 @@ class EncryptionManager:
         # Generate salt if not exists
         salt_file = self.key_file + ".salt"
         if os.path.exists(salt_file):
-            with open(salt_file, 'rb') as f:
+            with open(salt_file, "rb") as f:
                 self._salt = f.read()
         else:
             self._salt = os.urandom(16)
             try:
-                with open(salt_file, 'wb') as f:
+                with open(salt_file, "wb") as f:
                     f.write(self._salt)
                 os.chmod(salt_file, 0o600)
             except Exception as e:
@@ -144,14 +149,16 @@ class EncryptionManager:
             length=32,
             salt=self._salt,
             iterations=100000,
-            backend=default_backend()
+            backend=default_backend(),
         )
 
         key = base64.urlsafe_b64encode(kdf.derive(self.password.encode()))
         self._fernet = Fernet(key)
         logger.info("Initialized password-based encryption")
 
-    def encrypt_data(self, data: Union[str, bytes], metadata: Optional[Dict[str, Any]] = None) -> EncryptionResult:
+    def encrypt_data(
+        self, data: Union[str, bytes], metadata: Optional[Dict[str, Any]] = None
+    ) -> EncryptionResult:
         """
         Encrypt data using configured encryption method.
 
@@ -168,7 +175,7 @@ class EncryptionManager:
 
             # Convert string to bytes if needed
             if isinstance(data, str):
-                data = data.encode('utf-8')
+                data = data.encode("utf-8")
 
             # Encrypt data
             encrypted_data = self._fernet.encrypt(data)
@@ -178,24 +185,19 @@ class EncryptionManager:
                 "encryption_timestamp": datetime.now(timezone.utc).isoformat(),
                 "data_size": len(data),
                 "encrypted_size": len(encrypted_data),
-                "encryption_method": "Fernet_AES256"
+                "encryption_method": "Fernet_AES256",
             }
 
             if metadata:
                 full_metadata.update(metadata)
 
             return EncryptionResult(
-                success=True,
-                data=encrypted_data,
-                metadata=full_metadata
+                success=True, data=encrypted_data, metadata=full_metadata
             )
 
         except Exception as e:
             logger.error(f"Encryption failed: {e}")
-            return EncryptionResult(
-                success=False,
-                error=str(e)
-            )
+            return EncryptionResult(success=False, error=str(e))
 
     def decrypt_data(self, encrypted_data: bytes) -> EncryptionResult:
         """
@@ -214,20 +216,18 @@ class EncryptionManager:
             # Decrypt data
             decrypted_data = self._fernet.decrypt(encrypted_data)
 
-            return EncryptionResult(
-                success=True,
-                data=decrypted_data
-            )
+            return EncryptionResult(success=True, data=decrypted_data)
 
         except Exception as e:
             logger.error(f"Decryption failed: {e}")
-            return EncryptionResult(
-                success=False,
-                error=str(e)
-            )
+            return EncryptionResult(success=False, error=str(e))
 
-    def encrypt_file(self, input_file: str, output_file: Optional[str] = None,
-                    metadata: Optional[Dict[str, Any]] = None) -> EncryptionResult:
+    def encrypt_file(
+        self,
+        input_file: str,
+        output_file: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> EncryptionResult:
         """
         Encrypt a file.
 
@@ -244,7 +244,7 @@ class EncryptionManager:
                 raise FileNotFoundError(f"Input file not found: {input_file}")
 
             # Read input file
-            with open(input_file, 'rb') as f:
+            with open(input_file, "rb") as f:
                 data = f.read()
 
             # Encrypt data
@@ -254,10 +254,10 @@ class EncryptionManager:
 
             # Determine output file path
             if not output_file:
-                output_file = input_file + '.encrypted'
+                output_file = input_file + ".encrypted"
 
             # Write encrypted data
-            with open(output_file, 'wb') as f:
+            with open(output_file, "wb") as f:
                 f.write(result.data)
 
             # Set restrictive permissions
@@ -268,12 +268,11 @@ class EncryptionManager:
 
         except Exception as e:
             logger.error(f"File encryption failed: {e}")
-            return EncryptionResult(
-                success=False,
-                error=str(e)
-            )
+            return EncryptionResult(success=False, error=str(e))
 
-    def decrypt_file(self, input_file: str, output_file: Optional[str] = None) -> EncryptionResult:
+    def decrypt_file(
+        self, input_file: str, output_file: Optional[str] = None
+    ) -> EncryptionResult:
         """
         Decrypt a file.
 
@@ -289,7 +288,7 @@ class EncryptionManager:
                 raise FileNotFoundError(f"Input file not found: {input_file}")
 
             # Read encrypted file
-            with open(input_file, 'rb') as f:
+            with open(input_file, "rb") as f:
                 encrypted_data = f.read()
 
             # Decrypt data
@@ -299,13 +298,13 @@ class EncryptionManager:
 
             # Determine output file path
             if not output_file:
-                if input_file.endswith('.encrypted'):
+                if input_file.endswith(".encrypted"):
                     output_file = input_file[:-10]  # Remove .encrypted extension
                 else:
-                    output_file = input_file + '.decrypted'
+                    output_file = input_file + ".decrypted"
 
             # Write decrypted data
-            with open(output_file, 'wb') as f:
+            with open(output_file, "wb") as f:
                 f.write(result.data)
 
             logger.info(f"File decrypted: {input_file} -> {output_file}")
@@ -313,10 +312,7 @@ class EncryptionManager:
 
         except Exception as e:
             logger.error(f"File decryption failed: {e}")
-            return EncryptionResult(
-                success=False,
-                error=str(e)
-            )
+            return EncryptionResult(success=False, error=str(e))
 
     def rotate_key(self, new_password: Optional[str] = None) -> bool:
         """
@@ -340,7 +336,7 @@ class EncryptionManager:
                 self._fernet = Fernet(new_key)
 
                 # Save new key
-                with open(self.key_file, 'wb') as f:
+                with open(self.key_file, "wb") as f:
                     f.write(new_key)
                 os.chmod(self.key_file, 0o600)
 
@@ -357,7 +353,7 @@ class EncryptionManager:
             "key_file": self.key_file,
             "using_password": self.password is not None,
             "salt_available": self._salt is not None,
-            "encryption_initialized": self._fernet is not None
+            "encryption_initialized": self._fernet is not None,
         }
 
         if self._salt:
@@ -376,8 +372,10 @@ class EncryptionManager:
         Returns:
             str: Secure random password
         """
-        alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*"
-        return ''.join(secrets.choice(alphabet) for _ in range(length))
+        alphabet = (
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*"
+        )
+        return "".join(secrets.choice(alphabet) for _ in range(length))
 
     @staticmethod
     def hash_password(password: str, salt: Optional[bytes] = None) -> Dict[str, str]:
@@ -399,7 +397,7 @@ class EncryptionManager:
             length=32,
             salt=salt,
             iterations=100000,
-            backend=default_backend()
+            backend=default_backend(),
         )
 
         hash_bytes = kdf.derive(password.encode())
@@ -409,7 +407,7 @@ class EncryptionManager:
             "hash": hash_str,
             "salt": base64.b64encode(salt).decode(),
             "iterations": 100000,
-            "algorithm": "PBKDF2_SHA256"
+            "algorithm": "PBKDF2_SHA256",
         }
 
     @staticmethod
@@ -433,7 +431,7 @@ class EncryptionManager:
                 length=32,
                 salt=salt,
                 iterations=hash_data.get("iterations", 100000),
-                backend=default_backend()
+                backend=default_backend(),
             )
 
             computed_hash = kdf.derive(password.encode())
@@ -445,8 +443,11 @@ class EncryptionManager:
 
 
 # Convenience functions
-def encrypt_sensitive_data(data: Union[str, bytes], key_file: Optional[str] = None,
-                          password: Optional[str] = None) -> EncryptionResult:
+def encrypt_sensitive_data(
+    data: Union[str, bytes],
+    key_file: Optional[str] = None,
+    password: Optional[str] = None,
+) -> EncryptionResult:
     """
     Convenience function to encrypt sensitive data.
 
@@ -462,8 +463,11 @@ def encrypt_sensitive_data(data: Union[str, bytes], key_file: Optional[str] = No
     return manager.encrypt_data(data)
 
 
-def decrypt_sensitive_data(encrypted_data: bytes, key_file: Optional[str] = None,
-                          password: Optional[str] = None) -> EncryptionResult:
+def decrypt_sensitive_data(
+    encrypted_data: bytes,
+    key_file: Optional[str] = None,
+    password: Optional[str] = None,
+) -> EncryptionResult:
     """
     Convenience function to decrypt sensitive data.
 

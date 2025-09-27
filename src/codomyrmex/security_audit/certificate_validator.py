@@ -16,24 +16,29 @@ from urllib.parse import urlparse
 import OpenSSL
 from OpenSSL import crypto
 import requests
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+    pass
+#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 @dataclass
 class SSLValidationResult:
     """Result of SSL certificate validation."""
+
     hostname: str
     port: int
     valid: bool
@@ -76,7 +81,9 @@ class CertificateValidator:
         self.timeout = timeout
         self.validation_cache: Dict[str, SSLValidationResult] = {}
 
-    def validate_ssl_certificate(self, hostname: str, port: int = 443) -> SSLValidationResult:
+    def validate_ssl_certificate(
+        self, hostname: str, port: int = 443
+    ) -> SSLValidationResult:
         """
         Validate SSL certificate for a hostname and port.
 
@@ -93,16 +100,15 @@ class CertificateValidator:
         if cache_key in self.validation_cache:
             cached_result = self.validation_cache[cache_key]
             # Cache for 1 hour
-            if (datetime.now(timezone.utc) - cached_result.validation_timestamp).seconds < 3600:
+            if (
+                datetime.now(timezone.utc) - cached_result.validation_timestamp
+            ).seconds < 3600:
                 return cached_result
 
         logger.info(f"Validating SSL certificate for {hostname}:{port}")
 
         result = SSLValidationResult(
-            hostname=hostname,
-            port=port,
-            valid=False,
-            certificate_info={}
+            hostname=hostname, port=port, valid=False, certificate_info={}
         )
 
         try:
@@ -112,15 +118,16 @@ class CertificateValidator:
             context.verify_mode = ssl.CERT_REQUIRED
 
             # Connect and get certificate
-            with socket.create_connection((hostname, port), timeout=self.timeout) as sock:
+            with socket.create_connection(
+                (hostname, port), timeout=self.timeout
+            ) as sock:
                 with context.wrap_socket(sock, server_hostname=hostname) as ssl_sock:
                     certificate = ssl_sock.getpeercert(binary_form=True)
                     certificate_der = ssl_sock.getpeercert(binary_form=True)
 
                     # Parse certificate
                     x509 = OpenSSL.crypto.load_certificate(
-                        OpenSSL.crypto.FILETYPE_ASN1,
-                        certificate_der
+                        OpenSSL.crypto.FILETYPE_ASN1, certificate_der
                     )
 
                     # Extract certificate information
@@ -157,7 +164,9 @@ class CertificateValidator:
         # Cache result
         self.validation_cache[cache_key] = result
 
-        logger.info(f"SSL validation completed for {hostname}:{port} - Valid: {result.valid}")
+        logger.info(
+            f"SSL validation completed for {hostname}:{port} - Valid: {result.valid}"
+        )
         return result
 
     def _extract_certificate_info(self, x509_cert) -> Dict[str, Any]:
@@ -171,7 +180,7 @@ class CertificateValidator:
                 "organizational_unit": subject.OU,
                 "country": subject.C,
                 "state": subject.ST,
-                "locality": subject.L
+                "locality": subject.L,
             }
 
             # Issuer information
@@ -180,7 +189,7 @@ class CertificateValidator:
                 "common_name": issuer.CN,
                 "organization": issuer.O,
                 "organizational_unit": issuer.OU,
-                "country": issuer.C
+                "country": issuer.C,
             }
 
             # Certificate details
@@ -193,7 +202,7 @@ class CertificateValidator:
                 "subject": subject_info,
                 "issuer": issuer_info,
                 "subject_str": str(subject),
-                "issuer_str": str(issuer)
+                "issuer_str": str(issuer),
             }
 
             # Public key information
@@ -204,11 +213,13 @@ class CertificateValidator:
             extensions = []
             for i in range(x509_cert.get_extension_count()):
                 ext = x509_cert.get_extension(i)
-                extensions.append({
-                    "name": ext.get_short_name().decode(),
-                    "value": str(ext),
-                    "critical": ext.get_critical()
-                })
+                extensions.append(
+                    {
+                        "name": ext.get_short_name().decode(),
+                        "value": str(ext),
+                        "critical": ext.get_critical(),
+                    }
+                )
             cert_info["extensions"] = extensions
 
             return cert_info
@@ -230,7 +241,7 @@ class CertificateValidator:
                 san_extension = None
                 for i in range(x509_cert.get_extension_count()):
                     ext = x509_cert.get_extension(i)
-                    if ext.get_short_name() == b'subjectAltName':
+                    if ext.get_short_name() == b"subjectAltName":
                         san_extension = ext
                         break
 
@@ -240,7 +251,9 @@ class CertificateValidator:
                         errors.append(f"Hostname '{hostname}' not in certificate SAN")
                         valid = False
                 else:
-                    errors.append(f"Hostname '{hostname}' does not match certificate CN '{common_name}'")
+                    errors.append(
+                        f"Hostname '{hostname}' does not match certificate CN '{common_name}'"
+                    )
                     valid = False
 
             # Check expiration
@@ -263,10 +276,7 @@ class CertificateValidator:
             errors.append(f"Certificate validation error: {str(e)}")
             valid = False
 
-        return {
-            "valid": valid,
-            "errors": errors
-        }
+        return {"valid": valid, "errors": errors}
 
     def _check_expiration(self, x509_cert) -> Optional[int]:
         """Check certificate expiration and return days until expiry."""
@@ -282,7 +292,9 @@ class CertificateValidator:
 
         return None
 
-    def validate_certificate_chain(self, hostname: str, port: int = 443) -> Dict[str, Any]:
+    def validate_certificate_chain(
+        self, hostname: str, port: int = 443
+    ) -> Dict[str, Any]:
         """
         Validate the complete certificate chain.
 
@@ -299,13 +311,15 @@ class CertificateValidator:
             "chain_valid": False,
             "chain_length": 0,
             "certificates": [],
-            "errors": []
+            "errors": [],
         }
 
         try:
             # Get certificate chain
             context = ssl.create_default_context()
-            with socket.create_connection((hostname, port), timeout=self.timeout) as sock:
+            with socket.create_connection(
+                (hostname, port), timeout=self.timeout
+            ) as sock:
                 with context.wrap_socket(sock, server_hostname=hostname) as ssl_sock:
                     # Get peer certificate chain
                     cert_chain = ssl_sock.getpeercertchain(binary_form=True)
@@ -316,8 +330,7 @@ class CertificateValidator:
                     for i, cert_der in enumerate(cert_chain):
                         try:
                             x509 = OpenSSL.crypto.load_certificate(
-                                OpenSSL.crypto.FILETYPE_ASN1,
-                                cert_der
+                                OpenSSL.crypto.FILETYPE_ASN1, cert_der
                             )
 
                             cert_info = self._extract_certificate_info(x509)
@@ -325,7 +338,9 @@ class CertificateValidator:
                             result["certificates"].append(cert_info)
 
                         except Exception as e:
-                            result["errors"].append(f"Certificate {i} parsing error: {str(e)}")
+                            result["errors"].append(
+                                f"Certificate {i} parsing error: {str(e)}"
+                            )
 
                     # Basic chain validation
                     if len(cert_chain) >= 1:
@@ -349,21 +364,24 @@ class CertificateValidator:
         result = {
             "hostname": hostname,
             "transparency_checks": [],
-            "overall_status": "unknown"
+            "overall_status": "unknown",
         }
 
         # Certificate Transparency checks would require integration with CT logs
         # This is a placeholder implementation
-        result["transparency_checks"].append({
-            "check": "CT Log Inclusion",
-            "status": "not_implemented",
-            "description": "Certificate Transparency log inclusion check"
-        })
+        result["transparency_checks"].append(
+            {
+                "check": "CT Log Inclusion",
+                "status": "not_implemented",
+                "description": "Certificate Transparency log inclusion check",
+            }
+        )
 
         return result
 
-    def monitor_certificate_expiration(self, hostnames: List[str],
-                                     alert_threshold_days: int = 30) -> List[Dict[str, Any]]:
+    def monitor_certificate_expiration(
+        self, hostnames: List[str], alert_threshold_days: int = 30
+    ) -> List[Dict[str, Any]]:
         """
         Monitor certificate expiration for multiple hostnames.
 
@@ -382,23 +400,29 @@ class CertificateValidator:
 
                 if result.expiration_days is not None:
                     if result.expiration_days <= alert_threshold_days:
-                        alerts.append({
-                            "hostname": hostname,
-                            "days_until_expiry": result.expiration_days,
-                            "severity": "critical" if result.expiration_days <= 7 else "warning",
-                            "message": f"Certificate expires in {result.expiration_days} days"
-                        })
+                        alerts.append(
+                            {
+                                "hostname": hostname,
+                                "days_until_expiry": result.expiration_days,
+                                "severity": (
+                                    "critical"
+                                    if result.expiration_days <= 7
+                                    else "warning"
+                                ),
+                                "message": f"Certificate expires in {result.expiration_days} days",
+                            }
+                        )
 
             except Exception as e:
-                alerts.append({
-                    "hostname": hostname,
-                    "error": str(e),
-                    "severity": "error"
-                })
+                alerts.append(
+                    {"hostname": hostname, "error": str(e), "severity": "error"}
+                )
 
         return alerts
 
-    def get_certificate_security_score(self, result: SSLValidationResult) -> Dict[str, Any]:
+    def get_certificate_security_score(
+        self, result: SSLValidationResult
+    ) -> Dict[str, Any]:
         """
         Calculate security score for a certificate.
 
@@ -423,7 +447,10 @@ class CertificateValidator:
         # Check signature algorithm
         if result.signature_algorithm:
             weak_algorithms = ["md5", "sha1"]
-            if any(alg.lower() in result.signature_algorithm.lower() for alg in weak_algorithms):
+            if any(
+                alg.lower() in result.signature_algorithm.lower()
+                for alg in weak_algorithms
+            ):
                 score -= 40
                 recommendations.append("Replace weak signature algorithm (MD5/SHA1)")
 
@@ -444,7 +471,7 @@ class CertificateValidator:
         return {
             "security_score": max(0, score),
             "grade": self._score_to_grade(score),
-            "recommendations": recommendations
+            "recommendations": recommendations,
         }
 
     def _score_to_grade(self, score: int) -> str:
@@ -462,7 +489,9 @@ class CertificateValidator:
 
 
 # Convenience functions
-def validate_ssl_certificates(hostnames: List[str], port: int = 443) -> List[SSLValidationResult]:
+def validate_ssl_certificates(
+    hostnames: List[str], port: int = 443
+) -> List[SSLValidationResult]:
     """
     Convenience function to validate SSL certificates for multiple hostnames.
 
