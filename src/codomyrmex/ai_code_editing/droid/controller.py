@@ -20,10 +20,13 @@ except ImportError:  # pragma: no cover
         logger = logging.getLogger(name)
         if not logger.handlers:
             handler = logging.StreamHandler()
-            handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
+            handler.setFormatter(
+                logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
+            )
             logger.addHandler(handler)
             logger.setLevel(logging.INFO)
         return logger
+
 
 try:
     from performance import monitor_performance, performance_context
@@ -51,6 +54,7 @@ logger = get_logger(__name__)
 
 class DroidMode(Enum):
     """Operating modes for the droid controller."""
+
     DEVELOPMENT = "development"
     PRODUCTION = "production"
     TEST = "test"
@@ -59,6 +63,7 @@ class DroidMode(Enum):
 
 class DroidStatus(Enum):
     """Lifecycle status values for the droid controller."""
+
     STOPPED = "stopped"
     IDLE = "idle"
     RUNNING = "running"
@@ -72,6 +77,7 @@ def _to_bool(value: str) -> bool:
 @dataclass(frozen=True)
 class DroidConfig:
     """Immutable configuration for the droid controller."""
+
     identifier: str = "droid"
     mode: DroidMode = DroidMode.DEVELOPMENT
     llm_provider: str = "openai"
@@ -98,11 +104,19 @@ class DroidConfig:
 
     @property
     def allowed(self) -> Optional[frozenset[str]]:
-        return frozenset(self.allowed_operations) if self.allowed_operations is not None else None
+        return (
+            frozenset(self.allowed_operations)
+            if self.allowed_operations is not None
+            else None
+        )
 
     @property
     def blocked(self) -> Optional[frozenset[str]]:
-        return frozenset(self.blocked_operations) if self.blocked_operations is not None else None
+        return (
+            frozenset(self.blocked_operations)
+            if self.blocked_operations is not None
+            else None
+        )
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "DroidConfig":
@@ -143,8 +157,14 @@ class DroidConfig:
         set_if_present("RETRY_BACKOFF_SECONDS", float)
         set_if_present("HEARTBEAT_INTERVAL_SECONDS", float)
         set_if_present("LOG_LEVEL", str)
-        set_if_present("ALLOWED_OPERATIONS", lambda v: [i.strip() for i in v.split(",") if i.strip()])
-        set_if_present("BLOCKED_OPERATIONS", lambda v: [i.strip() for i in v.split(",") if i.strip()])
+        set_if_present(
+            "ALLOWED_OPERATIONS",
+            lambda v: [i.strip() for i in v.split(",") if i.strip()],
+        )
+        set_if_present(
+            "BLOCKED_OPERATIONS",
+            lambda v: [i.strip() for i in v.split(",") if i.strip()],
+        )
 
         config = cls(**mapping)
         config.validate()
@@ -168,6 +188,7 @@ class DroidConfig:
 @dataclass
 class DroidMetrics:
     """Runtime metrics tracked for droid sessions."""
+
     sessions_started: int = 0
     sessions_completed: int = 0
     tasks_executed: int = 0
@@ -191,6 +212,7 @@ class DroidMetrics:
 
 class DroidController:
     """Thread-safe controller coordinating droid operations."""
+
     def __init__(self, config: DroidConfig):
         config.validate()
         self._config = config
@@ -254,10 +276,16 @@ class DroidController:
     def record_heartbeat(self) -> None:
         with self._lock:
             self._metrics.last_heartbeat_epoch = time.time()
-            logger.debug("droid heartbeat", extra={"timestamp": self._metrics.last_heartbeat_epoch})
+            logger.debug(
+                "droid heartbeat",
+                extra={"timestamp": self._metrics.last_heartbeat_epoch},
+            )
 
     def _check_operation_permissions(self, operation_id: str) -> None:
-        if self._config.allowed is not None and operation_id not in self._config.allowed:
+        if (
+            self._config.allowed is not None
+            and operation_id not in self._config.allowed
+        ):
             raise PermissionError(f"operation '{operation_id}' is not allowed")
         if self._config.blocked is not None and operation_id in self._config.blocked:
             raise PermissionError(f"operation '{operation_id}' is blocked")
@@ -273,7 +301,9 @@ class DroidController:
         self._active_tasks = max(0, self._active_tasks - 1)
         if self._status == DroidStatus.ERROR:
             return
-        self._status = DroidStatus.IDLE if self._active_tasks == 0 else DroidStatus.RUNNING
+        self._status = (
+            DroidStatus.IDLE if self._active_tasks == 0 else DroidStatus.RUNNING
+        )
         self._last_status_change = time.time()
 
     def _transition_to_error(self) -> None:
@@ -281,7 +311,9 @@ class DroidController:
         self._last_status_change = time.time()
 
     @monitor_performance("droid_execute_task")
-    def execute_task(self, operation_id: str, handler: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
+    def execute_task(
+        self, operation_id: str, handler: Callable[..., Any], *args: Any, **kwargs: Any
+    ) -> Any:
         with self._lock:
             if self._status == DroidStatus.STOPPED:
                 raise RuntimeError("droid is stopped")

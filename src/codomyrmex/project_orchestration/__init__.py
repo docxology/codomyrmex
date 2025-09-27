@@ -40,7 +40,13 @@ from .task_orchestrator import (
     TaskResult,
     TaskResource,
 )
-from .project_manager import ProjectManager, Project, ProjectTemplate, ProjectStatus, ProjectType
+from .project_manager import (
+    ProjectManager,
+    Project,
+    ProjectTemplate,
+    ProjectStatus,
+    ProjectType,
+)
 from .resource_manager import (
     ResourceManager,
     Resource,
@@ -49,49 +55,53 @@ from .resource_manager import (
     ResourceAllocation,
     ResourceUsage,
 )
-from .orchestration_engine import OrchestrationEngine, OrchestrationSession, SessionStatus, OrchestrationContext
+from .orchestration_engine import (
+    OrchestrationEngine,
+    OrchestrationSession,
+    SessionStatus,
+    OrchestrationContext,
+)
 from .mcp_tools import get_mcp_tools, get_mcp_tool_definitions, execute_mcp_tool
 
 __version__ = "0.1.0"
 
 __all__ = [
     # Core classes
-    'WorkflowManager',
-    'TaskOrchestrator', 
-    'ProjectManager',
-    'ResourceManager',
-    'OrchestrationEngine',
-    
+    "WorkflowManager",
+    "TaskOrchestrator",
+    "ProjectManager",
+    "ResourceManager",
+    "OrchestrationEngine",
     # Data classes
-    'WorkflowStep',
-    'WorkflowStatus',
-    'WorkflowExecution',
+    "WorkflowStep",
+    "WorkflowStatus",
+    "WorkflowExecution",
     # Task & scheduling
-    'Task',
-    'TaskStatus',
-    'TaskPriority',
-    'TaskResult',
-    'TaskResource',
-    'Task',
-    'TaskStatus', 
-    'TaskResult',
-    'Project',
-    'ProjectTemplate',
-    'Resource',
-    'ResourceType',
-    'ResourceStatus',
-    'ResourceAllocation',
-    'ResourceUsage',
+    "Task",
+    "TaskStatus",
+    "TaskPriority",
+    "TaskResult",
+    "TaskResource",
+    "Task",
+    "TaskStatus",
+    "TaskResult",
+    "Project",
+    "ProjectTemplate",
+    "Resource",
+    "ResourceType",
+    "ResourceStatus",
+    "ResourceAllocation",
+    "ResourceUsage",
     # Sessions & engine
-    'OrchestrationSession',
-    'SessionStatus',
-    'OrchestrationContext',
-    
+    "OrchestrationSession",
+    "SessionStatus",
+    "OrchestrationContext",
     # MCP tools
-    'get_mcp_tools',
-    'get_mcp_tool_definitions',
-    'execute_mcp_tool',
+    "get_mcp_tools",
+    "get_mcp_tool_definitions",
+    "execute_mcp_tool",
 ]
+
 
 # Module-level convenience functions
 def create_workflow_steps(name: str, steps: list) -> bool:
@@ -99,13 +109,16 @@ def create_workflow_steps(name: str, steps: list) -> bool:
     wf_manager = get_workflow_manager()
     return wf_manager.create_workflow(name, steps)
 
+
 def create_task(name: str, module: str, action: str, **kwargs) -> Task:
     """Create a new task instance."""
     return Task(name=name, module=module, action=action, parameters=kwargs)
 
+
 def create_project(name: str, description: str = "", template: str = None) -> Project:
     """Create a new project instance."""
     return Project(name=name, description=description, template=template)
+
 
 # Initialize default managers (lazy initialization)
 _workflow_manager = None
@@ -114,12 +127,14 @@ _project_manager = None
 _resource_manager = None
 _orchestration_engine = None
 
+
 def get_workflow_manager() -> WorkflowManager:
     """Get the default workflow manager instance."""
     global _workflow_manager
     if _workflow_manager is None:
         _workflow_manager = WorkflowManager()
     return _workflow_manager
+
 
 def get_task_orchestrator() -> TaskOrchestrator:
     """Get the default task orchestrator instance."""
@@ -128,12 +143,14 @@ def get_task_orchestrator() -> TaskOrchestrator:
         _task_orchestrator = TaskOrchestrator()
     return _task_orchestrator
 
+
 def get_project_manager() -> ProjectManager:
     """Get the default project manager instance."""
     global _project_manager
     if _project_manager is None:
         _project_manager = ProjectManager()
     return _project_manager
+
 
 def get_resource_manager() -> ResourceManager:
     """Get the default resource manager instance."""
@@ -142,6 +159,7 @@ def get_resource_manager() -> ResourceManager:
         _resource_manager = ResourceManager()
     return _resource_manager
 
+
 def get_orchestration_engine() -> OrchestrationEngine:
     """Get the default orchestration engine instance."""
     global _orchestration_engine
@@ -149,11 +167,13 @@ def get_orchestration_engine() -> OrchestrationEngine:
         _orchestration_engine = OrchestrationEngine()
     return _orchestration_engine
 
+
 # Quick workflow execution function
 def execute_workflow(name: str, **params):
     """Execute a workflow with given parameters."""
     manager = get_workflow_manager()
     return manager.execute_workflow(name, **params)
+
 
 # Quick task execution function
 def execute_task(task: Task):

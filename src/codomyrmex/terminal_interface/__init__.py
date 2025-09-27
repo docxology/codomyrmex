@@ -9,10 +9,6 @@ accessible ways.
 from .interactive_shell import InteractiveShell
 from .terminal_utils import TerminalFormatter, CommandRunner
 
-__all__ = [
-    'InteractiveShell',
-    'TerminalFormatter', 
-    'CommandRunner'
-]
+__all__ = ["InteractiveShell", "TerminalFormatter", "CommandRunner"]
 
 __version__ = "0.1.0"

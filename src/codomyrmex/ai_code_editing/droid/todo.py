@@ -40,7 +40,9 @@ class TodoManager:
         bucket = None
         skipped_lines = []
 
-        for line_num, line in enumerate(self.todo_path.read_text(encoding="utf-8").splitlines(), 1):
+        for line_num, line in enumerate(
+            self.todo_path.read_text(encoding="utf-8").splitlines(), 1
+        ):
             stripped = line.strip()
             if not stripped or stripped.startswith("#"):
                 continue
@@ -57,15 +59,21 @@ class TodoManager:
                 bucket.append(TodoItem.parse(stripped))
             except ValueError as e:
                 skipped_lines.append((line_num, stripped, str(e)))
-                print(f"⚠️  Warning: Skipping malformed TODO entry on line {line_num}: {e}")
+                print(
+                    f"⚠️  Warning: Skipping malformed TODO entry on line {line_num}: {e}"
+                )
                 continue
 
         if skipped_lines:
-            print(f"ℹ️  Skipped {len(skipped_lines)} malformed TODO entries. Please fix the format.")
+            print(
+                f"ℹ️  Skipped {len(skipped_lines)} malformed TODO entries. Please fix the format."
+            )
 
         return todo_items, completed_items
 
-    def save(self, todo_items: Sequence[TodoItem], completed_items: Sequence[TodoItem]) -> None:
+    def save(
+        self, todo_items: Sequence[TodoItem], completed_items: Sequence[TodoItem]
+    ) -> None:
         lines = [TODO_HEADER]
         lines.extend(item.serialise() for item in todo_items)
         lines.append("")
@@ -73,7 +81,12 @@ class TodoManager:
         lines.extend(item.serialise() for item in completed_items)
         self.todo_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-    def rotate(self, processed: Iterable[TodoItem], remaining: Sequence[TodoItem], completed: Sequence[TodoItem]) -> None:
+    def rotate(
+        self,
+        processed: Iterable[TodoItem],
+        remaining: Sequence[TodoItem],
+        completed: Sequence[TodoItem],
+    ) -> None:
         processed_list = list(processed)
         self.save(list(remaining), list(completed) + processed_list)
 

@@ -14,21 +14,24 @@ from datetime import datetime, timezone
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 @dataclass
 class APISchema:
     """API schema definition."""
+
     name: str
     schema_type: str
     properties: Dict[str, Any] = field(default_factory=dict)
@@ -37,10 +40,7 @@ class APISchema:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert schema to OpenAPI format."""
-        schema = {
-            "type": self.schema_type,
-            "properties": self.properties
-        }
+        schema = {"type": self.schema_type, "properties": self.properties}
 
         if self.required:
             schema["required"] = self.required
@@ -67,8 +67,13 @@ class OpenAPIGenerator:
         """Initialize the OpenAPI generator."""
         self.openapi_version = "3.0.3"
 
-    def generate_spec(self, title: str, version: str, endpoints: List[Any],
-                     base_url: str = "http://localhost:8000") -> Dict[str, Any]:
+    def generate_spec(
+        self,
+        title: str,
+        version: str,
+        endpoints: List[Any],
+        base_url: str = "http://localhost:8000",
+    ) -> Dict[str, Any]:
         """
         Generate OpenAPI 3.0 specification.
 
@@ -86,42 +91,43 @@ class OpenAPIGenerator:
             "info": {
                 "title": title,
                 "version": version,
-                "description": f"Auto-generated OpenAPI specification for {title}"
+                "description": f"Auto-generated OpenAPI specification for {title}",
             },
             "servers": [{"url": base_url}],
             "paths": {},
-            "components": {
-                "schemas": {},
-                "securitySchemes": {}
-            }
+            "components": {"schemas": {}, "securitySchemes": {}},
         }
 
         # Process endpoints
         for endpoint in endpoints:
-            endpoint_dict = endpoint.to_dict() if hasattr(endpoint, 'to_dict') else endpoint
+            endpoint_dict = (
+                endpoint.to_dict() if hasattr(endpoint, "to_dict") else endpoint
+            )
 
-            path = endpoint_dict.get('path', '/')
-            method = endpoint_dict.get('method', 'GET').lower()
+            path = endpoint_dict.get("path", "/")
+            method = endpoint_dict.get("method", "GET").lower()
 
             if path not in spec["paths"]:
                 spec["paths"][path] = {}
 
             spec["paths"][path][method] = {
-                "summary": endpoint_dict.get('summary', ''),
-                "description": endpoint_dict.get('description', ''),
-                "parameters": endpoint_dict.get('parameters', []),
-                "responses": endpoint_dict.get('responses', {
-                    "200": {"description": "Success"}
-                })
+                "summary": endpoint_dict.get("summary", ""),
+                "description": endpoint_dict.get("description", ""),
+                "parameters": endpoint_dict.get("parameters", []),
+                "responses": endpoint_dict.get(
+                    "responses", {"200": {"description": "Success"}}
+                ),
             }
 
             # Add request body if present
-            if 'requestBody' in endpoint_dict and endpoint_dict['requestBody']:
-                spec["paths"][path][method]["requestBody"] = endpoint_dict['requestBody']
+            if "requestBody" in endpoint_dict and endpoint_dict["requestBody"]:
+                spec["paths"][path][method]["requestBody"] = endpoint_dict[
+                    "requestBody"
+                ]
 
             # Add security if present
-            if endpoint_dict.get('security'):
-                spec["paths"][path][method]["security"] = endpoint_dict['security']
+            if endpoint_dict.get("security"):
+                spec["paths"][path][method]["security"] = endpoint_dict["security"]
 
         # Add default schemas
         spec["components"]["schemas"] = self._get_default_schemas()
@@ -137,58 +143,29 @@ class OpenAPIGenerator:
             "Error": {
                 "type": "object",
                 "properties": {
-                    "error": {
-                        "type": "string",
-                        "description": "Error type"
-                    },
-                    "message": {
-                        "type": "string",
-                        "description": "Error message"
-                    },
-                    "code": {
-                        "type": "integer",
-                        "description": "Error code"
-                    }
+                    "error": {"type": "string", "description": "Error type"},
+                    "message": {"type": "string", "description": "Error message"},
+                    "code": {"type": "integer", "description": "Error code"},
                 },
-                "required": ["error", "message"]
+                "required": ["error", "message"],
             },
             "Success": {
                 "type": "object",
                 "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "description": "Success status"
-                    },
-                    "data": {
-                        "type": "object",
-                        "description": "Response data"
-                    },
-                    "message": {
-                        "type": "string",
-                        "description": "Success message"
-                    }
+                    "success": {"type": "boolean", "description": "Success status"},
+                    "data": {"type": "object", "description": "Response data"},
+                    "message": {"type": "string", "description": "Success message"},
                 },
-                "required": ["success"]
-            }
+                "required": ["success"],
+            },
         }
 
     def _get_default_security_schemes(self) -> Dict[str, Any]:
         """Get default security schemes."""
         return {
-            "BearerAuth": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
-            },
-            "ApiKeyAuth": {
-                "type": "apiKey",
-                "in": "header",
-                "name": "X-API-Key"
-            },
-            "BasicAuth": {
-                "type": "http",
-                "scheme": "basic"
-            }
+            "BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"},
+            "ApiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"},
+            "BasicAuth": {"type": "http", "scheme": "basic"},
         }
 
     def validate_spec(self, spec: Dict[str, Any]) -> List[str]:
@@ -223,7 +200,7 @@ class OpenAPIGenerator:
         # Validate paths
         if "paths" in spec and isinstance(spec["paths"], dict):
             for path, methods in spec["paths"].items():
-                if not path.startswith('/'):
+                if not path.startswith("/"):
                     errors.append(f"Path must start with '/': {path}")
 
                 if not isinstance(methods, dict):
@@ -231,7 +208,15 @@ class OpenAPIGenerator:
                     continue
 
                 for method, operation in methods.items():
-                    if method.lower() not in ['get', 'post', 'put', 'delete', 'patch', 'options', 'head']:
+                    if method.lower() not in [
+                        "get",
+                        "post",
+                        "put",
+                        "delete",
+                        "patch",
+                        "options",
+                        "head",
+                    ]:
                         errors.append(f"Invalid HTTP method: {method}")
 
                     if not isinstance(operation, dict):
@@ -239,11 +224,15 @@ class OpenAPIGenerator:
                         continue
 
                     if "responses" not in operation:
-                        errors.append(f"Missing responses in operation: {path} {method}")
+                        errors.append(
+                            f"Missing responses in operation: {path} {method}"
+                        )
 
         return errors
 
-    def export_spec(self, spec: Dict[str, Any], output_path: str, format: str = "json") -> bool:
+    def export_spec(
+        self, spec: Dict[str, Any], output_path: str, format: str = "json"
+    ) -> bool:
         """
         Export OpenAPI specification to file.
 
@@ -259,12 +248,13 @@ class OpenAPIGenerator:
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
             if format.lower() == "json":
-                with open(output_path, 'w') as f:
+                with open(output_path, "w") as f:
                     json.dump(spec, f, indent=2)
 
             elif format.lower() == "yaml":
                 import yaml
-                with open(output_path, 'w') as f:
+
+                with open(output_path, "w") as f:
                     yaml.dump(spec, f, default_flow_style=False)
 
             else:
@@ -292,7 +282,7 @@ class OpenAPIGenerator:
         try:
             html_content = self._generate_html_content(spec)
 
-            with open(output_path, 'w') as f:
+            with open(output_path, "w") as f:
                 f.write(html_content)
 
             logger.info(f"HTML documentation generated: {output_path}")
@@ -348,14 +338,14 @@ class OpenAPIGenerator:
 """
 
                 # Parameters
-                parameters = operation.get('parameters', [])
+                parameters = operation.get("parameters", [])
                 if parameters:
                     html += '<div class="parameters"><strong>Parameters:</strong>'
                     for param in parameters:
                         html += f'<div class="parameter">{param.get("name", "")}: {param.get("description", "")}</div>'
-                    html += '</div>'
+                    html += "</div>"
 
-                html += '</div>'
+                html += "</div>"
 
         html += """
 </body>
@@ -365,8 +355,12 @@ class OpenAPIGenerator:
 
 
 # Convenience functions
-def generate_openapi_spec(title: str, version: str, endpoints: List[Any],
-                         base_url: str = "http://localhost:8000") -> Dict[str, Any]:
+def generate_openapi_spec(
+    title: str,
+    version: str,
+    endpoints: List[Any],
+    base_url: str = "http://localhost:8000",
+) -> Dict[str, Any]:
     """
     Convenience function to generate OpenAPI specification.
 

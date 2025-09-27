@@ -54,5 +54,5 @@ class XRInterface:
         return {
             "camera_pose": self.ar_session.get_camera_pose(),
             "virtual_objects": [],
-            "real_world_geometry": []
+            "real_world_geometry": [],
         }

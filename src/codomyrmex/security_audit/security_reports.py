@@ -15,21 +15,24 @@ import jinja2
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 @dataclass
 class SecurityReport:
     """Comprehensive security assessment report."""
+
     report_id: str
     title: str
     generated_at: datetime
@@ -55,7 +58,7 @@ class SecurityReport:
             "recommendations": self.recommendations,
             "compliance_status": self.compliance_status,
             "metrics": self.metrics,
-            "appendices": self.appendices
+            "appendices": self.appendices,
         }
 
 
@@ -78,7 +81,9 @@ class SecurityReportGenerator:
         Args:
             template_dir: Directory containing report templates
         """
-        self.template_dir = template_dir or os.path.join(os.path.dirname(__file__), "templates")
+        self.template_dir = template_dir or os.path.join(
+            os.path.dirname(__file__), "templates"
+        )
         self.templates: Dict[str, jinja2.Template] = {}
 
         # Initialize Jinja2 environment
@@ -94,13 +99,13 @@ class SecurityReportGenerator:
             loader=template_loader,
             autoescape=True,
             trim_blocks=True,
-            lstrip_blocks=True
+            lstrip_blocks=True,
         )
 
         # Add custom filters
-        self.jinja_env.filters['format_datetime'] = self._format_datetime_filter
-        self.jinja_env.filters['severity_color'] = self._severity_color_filter
-        self.jinja_env.filters['risk_level'] = self._risk_level_filter
+        self.jinja_env.filters["format_datetime"] = self._format_datetime_filter
+        self.jinja_env.filters["severity_color"] = self._severity_color_filter
+        self.jinja_env.filters["risk_level"] = self._risk_level_filter
 
     def _load_templates(self):
         """Load report templates."""
@@ -168,7 +173,6 @@ class SecurityReportGenerator:
 </body>
 </html>
             """,
-
             "compliance_report.html": """
 <!DOCTYPE html>
 <html>
@@ -207,14 +211,14 @@ class SecurityReportGenerator:
     </table>
 </body>
 </html>
-            """
+            """,
         }
 
         # Write templates to files
         for template_name, template_content in templates.items():
             template_path = os.path.join(self.template_dir, template_name)
             try:
-                with open(template_path, 'w') as f:
+                with open(template_path, "w") as f:
                     f.write(template_content)
             except Exception as e:
                 logger.warning(f"Failed to create template {template_name}: {e}")
@@ -232,7 +236,7 @@ class SecurityReportGenerator:
             "HIGH": "#fd7e14",
             "MEDIUM": "#ffc107",
             "LOW": "#28a745",
-            "INFO": "#6c757d"
+            "INFO": "#6c757d",
         }
         return colors.get(severity.upper(), "#6c757d")
 
@@ -245,9 +249,12 @@ class SecurityReportGenerator:
         else:
             return "low"
 
-    def generate_comprehensive_report(self, vulnerability_data: Dict[str, Any],
-                                    compliance_data: Dict[str, Any],
-                                    monitoring_data: Dict[str, Any]) -> SecurityReport:
+    def generate_comprehensive_report(
+        self,
+        vulnerability_data: Dict[str, Any],
+        compliance_data: Dict[str, Any],
+        monitoring_data: Dict[str, Any],
+    ) -> SecurityReport:
         """
         Generate a comprehensive security report from various data sources.
 
@@ -259,7 +266,9 @@ class SecurityReportGenerator:
         Returns:
             SecurityReport: Comprehensive security report
         """
-        report_id = f"security_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}"
+        report_id = (
+            f"security_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}"
+        )
 
         # Analyze vulnerability data
         vulnerability_analysis = self._analyze_vulnerabilities(vulnerability_data)
@@ -272,9 +281,7 @@ class SecurityReportGenerator:
 
         # Calculate overall risk assessment
         overall_risk = self._calculate_overall_risk(
-            vulnerability_analysis,
-            compliance_analysis,
-            monitoring_analysis
+            vulnerability_analysis, compliance_analysis, monitoring_analysis
         )
 
         # Generate executive summary
@@ -282,14 +289,12 @@ class SecurityReportGenerator:
             vulnerability_analysis,
             compliance_analysis,
             monitoring_analysis,
-            overall_risk
+            overall_risk,
         )
 
         # Generate recommendations
         recommendations = self._generate_recommendations(
-            vulnerability_analysis,
-            compliance_analysis,
-            monitoring_analysis
+            vulnerability_analysis, compliance_analysis, monitoring_analysis
         )
 
         # Create report
@@ -300,10 +305,14 @@ class SecurityReportGenerator:
             target_system=vulnerability_data.get("target", "Unknown System"),
             executive_summary=executive_summary,
             risk_assessment=overall_risk,
-            findings=self._compile_findings(vulnerability_analysis, compliance_analysis, monitoring_analysis),
+            findings=self._compile_findings(
+                vulnerability_analysis, compliance_analysis, monitoring_analysis
+            ),
             recommendations=recommendations,
             compliance_status=compliance_analysis,
-            metrics=self._calculate_metrics(vulnerability_analysis, compliance_analysis, monitoring_analysis)
+            metrics=self._calculate_metrics(
+                vulnerability_analysis, compliance_analysis, monitoring_analysis
+            ),
         )
 
         return report
@@ -319,7 +328,7 @@ class SecurityReportGenerator:
             "medium_count": 0,
             "low_count": 0,
             "severity_breakdown": {},
-            "top_vulnerabilities": []
+            "top_vulnerabilities": [],
         }
 
         for vuln in vulnerabilities:
@@ -332,8 +341,10 @@ class SecurityReportGenerator:
 
         # Sort top vulnerabilities by severity
         severity_order = {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3, "INFO": 4}
-        sorted_vulns = sorted(vulnerabilities,
-                            key=lambda x: severity_order.get(x.get("severity", "UNKNOWN").upper(), 5))
+        sorted_vulns = sorted(
+            vulnerabilities,
+            key=lambda x: severity_order.get(x.get("severity", "UNKNOWN").upper(), 5),
+        )
         analysis["top_vulnerabilities"] = sorted_vulns[:10]
 
         return analysis
@@ -348,7 +359,7 @@ class SecurityReportGenerator:
             "non_compliant_count": 0,
             "not_checked_count": 0,
             "compliance_percentage": 0.0,
-            "standards_coverage": {}
+            "standards_coverage": {},
         }
 
         for check in compliance_checks:
@@ -385,7 +396,7 @@ class SecurityReportGenerator:
             "events_by_type": {},
             "events_by_severity": {},
             "recent_events": [],
-            "anomalies_detected": 0
+            "anomalies_detected": 0,
         }
 
         for event in events:
@@ -407,8 +418,9 @@ class SecurityReportGenerator:
 
         return analysis
 
-    def _calculate_overall_risk(self, vuln_analysis: Dict, compliance_analysis: Dict,
-                               monitoring_analysis: Dict) -> Dict[str, Any]:
+    def _calculate_overall_risk(
+        self, vuln_analysis: Dict, compliance_analysis: Dict, monitoring_analysis: Dict
+    ) -> Dict[str, Any]:
         """Calculate overall risk assessment."""
         # Risk scoring algorithm
         risk_score = 0
@@ -417,11 +429,15 @@ class SecurityReportGenerator:
         vuln_risk = 0
         if vuln_analysis["total_vulnerabilities"] > 0:
             vuln_risk = (
-                vuln_analysis["critical_count"] * 10 +
-                vuln_analysis["high_count"] * 7 +
-                vuln_analysis["medium_count"] * 4 +
-                vuln_analysis["low_count"] * 1
-            ) / vuln_analysis["total_vulnerabilities"] * 10
+                (
+                    vuln_analysis["critical_count"] * 10
+                    + vuln_analysis["high_count"] * 7
+                    + vuln_analysis["medium_count"] * 4
+                    + vuln_analysis["low_count"] * 1
+                )
+                / vuln_analysis["total_vulnerabilities"]
+                * 10
+            )
         risk_score += vuln_risk * 0.4
 
         # Compliance risk (30% weight)
@@ -455,17 +471,26 @@ class SecurityReportGenerator:
             "components": {
                 "vulnerability_risk": round(vuln_risk, 1),
                 "compliance_risk": round(compliance_risk, 1),
-                "monitoring_risk": round(monitoring_risk, 1)
-            }
+                "monitoring_risk": round(monitoring_risk, 1),
+            },
         }
 
-    def _generate_executive_summary(self, vuln_analysis: Dict, compliance_analysis: Dict,
-                                  monitoring_analysis: Dict, risk_assessment: Dict) -> str:
+    def _generate_executive_summary(
+        self,
+        vuln_analysis: Dict,
+        compliance_analysis: Dict,
+        monitoring_analysis: Dict,
+        risk_assessment: Dict,
+    ) -> str:
         """Generate executive summary."""
-        summary = f"This security assessment evaluated the target system and identified "
+        summary = (
+            f"This security assessment evaluated the target system and identified "
+        )
 
         if vuln_analysis["total_vulnerabilities"] > 0:
-            summary += f"{vuln_analysis['total_vulnerabilities']} security vulnerabilities, "
+            summary += (
+                f"{vuln_analysis['total_vulnerabilities']} security vulnerabilities, "
+            )
         else:
             summary += "no security vulnerabilities, "
 
@@ -476,98 +501,121 @@ class SecurityReportGenerator:
         summary += f"The overall risk assessment indicates a {risk_assessment['level']} risk level "
         summary += f"with a security score of {risk_assessment['score']}/100. "
 
-        summary += risk_assessment['description'] + "."
+        summary += risk_assessment["description"] + "."
 
         return summary
 
-    def _generate_recommendations(self, vuln_analysis: Dict, compliance_analysis: Dict,
-                                monitoring_analysis: Dict) -> List[str]:
+    def _generate_recommendations(
+        self, vuln_analysis: Dict, compliance_analysis: Dict, monitoring_analysis: Dict
+    ) -> List[str]:
         """Generate security recommendations."""
         recommendations = []
 
         # Vulnerability recommendations
         if vuln_analysis["critical_count"] > 0:
-            recommendations.append("🚨 CRITICAL: Address critical vulnerabilities immediately")
+            recommendations.append(
+                "🚨 CRITICAL: Address critical vulnerabilities immediately"
+            )
         if vuln_analysis["high_count"] > 0:
-            recommendations.append("⚠️ HIGH: Review and fix high-severity vulnerabilities within 30 days")
+            recommendations.append(
+                "⚠️ HIGH: Review and fix high-severity vulnerabilities within 30 days"
+            )
 
         # Compliance recommendations
         if compliance_analysis.get("compliance_percentage", 0) < 80:
-            recommendations.append("📋 COMPLIANCE: Improve compliance with security standards")
+            recommendations.append(
+                "📋 COMPLIANCE: Improve compliance with security standards"
+            )
 
         # Monitoring recommendations
         if monitoring_analysis.get("total_events", 0) > 100:
-            recommendations.append("🔍 MONITORING: Review security monitoring alerts and reduce false positives")
+            recommendations.append(
+                "🔍 MONITORING: Review security monitoring alerts and reduce false positives"
+            )
 
         # General recommendations
-        recommendations.extend([
-            "🔒 Implement regular security scans and vulnerability assessments",
-            "📚 Provide security awareness training for development team",
-            "🔧 Establish secure coding practices and code review processes",
-            "📊 Implement security metrics and KPIs for continuous monitoring"
-        ])
+        recommendations.extend(
+            [
+                "🔒 Implement regular security scans and vulnerability assessments",
+                "📚 Provide security awareness training for development team",
+                "🔧 Establish secure coding practices and code review processes",
+                "📊 Implement security metrics and KPIs for continuous monitoring",
+            ]
+        )
 
         return recommendations
 
-    def _compile_findings(self, vuln_analysis: Dict, compliance_analysis: Dict,
-                         monitoring_analysis: Dict) -> List[Dict[str, Any]]:
+    def _compile_findings(
+        self, vuln_analysis: Dict, compliance_analysis: Dict, monitoring_analysis: Dict
+    ) -> List[Dict[str, Any]]:
         """Compile all security findings."""
         findings = []
 
         # Vulnerability findings
         for vuln in vuln_analysis.get("top_vulnerabilities", []):
-            findings.append({
-                "title": vuln.get("description", "Security Vulnerability"),
-                "severity": vuln.get("severity", "UNKNOWN"),
-                "category": "vulnerability",
-                "description": vuln.get("description", ""),
-                "impact": f"Affects {vuln.get('package', 'unknown package')}"
-            })
+            findings.append(
+                {
+                    "title": vuln.get("description", "Security Vulnerability"),
+                    "severity": vuln.get("severity", "UNKNOWN"),
+                    "category": "vulnerability",
+                    "description": vuln.get("description", ""),
+                    "impact": f"Affects {vuln.get('package', 'unknown package')}",
+                }
+            )
 
         # Compliance findings
         if compliance_analysis.get("compliance_percentage", 100) < 100:
-            findings.append({
-                "title": "Compliance Issues",
-                "severity": "MEDIUM",
-                "category": "compliance",
-                "description": f"System is {compliance_analysis.get('compliance_percentage', 0)}% compliant",
-                "impact": "May affect regulatory compliance and security posture"
-            })
+            findings.append(
+                {
+                    "title": "Compliance Issues",
+                    "severity": "MEDIUM",
+                    "category": "compliance",
+                    "description": f"System is {compliance_analysis.get('compliance_percentage', 0)}% compliant",
+                    "impact": "May affect regulatory compliance and security posture",
+                }
+            )
 
         # Monitoring findings
         if monitoring_analysis.get("total_events", 0) > 50:
-            findings.append({
-                "title": "High Security Event Volume",
-                "severity": "MEDIUM",
-                "category": "monitoring",
-                "description": f"Detected {monitoring_analysis.get('total_events', 0)} security events",
-                "impact": "May indicate security issues or monitoring configuration problems"
-            })
+            findings.append(
+                {
+                    "title": "High Security Event Volume",
+                    "severity": "MEDIUM",
+                    "category": "monitoring",
+                    "description": f"Detected {monitoring_analysis.get('total_events', 0)} security events",
+                    "impact": "May indicate security issues or monitoring configuration problems",
+                }
+            )
 
         return findings
 
-    def _calculate_metrics(self, vuln_analysis: Dict, compliance_analysis: Dict,
-                          monitoring_analysis: Dict) -> Dict[str, Any]:
+    def _calculate_metrics(
+        self, vuln_analysis: Dict, compliance_analysis: Dict, monitoring_analysis: Dict
+    ) -> Dict[str, Any]:
         """Calculate security metrics."""
         return {
             "vulnerability_metrics": {
                 "total_vulnerabilities": vuln_analysis["total_vulnerabilities"],
                 "severity_distribution": vuln_analysis["severity_breakdown"],
-                "fix_rate": 0.0  # Would need historical data
+                "fix_rate": 0.0,  # Would need historical data
             },
             "compliance_metrics": {
-                "overall_compliance": compliance_analysis.get("compliance_percentage", 0),
-                "standards_coverage": compliance_analysis.get("standards_coverage", {})
+                "overall_compliance": compliance_analysis.get(
+                    "compliance_percentage", 0
+                ),
+                "standards_coverage": compliance_analysis.get("standards_coverage", {}),
             },
             "monitoring_metrics": {
                 "total_events": monitoring_analysis.get("total_events", 0),
-                "events_per_day": monitoring_analysis.get("total_events", 0) // 30,  # Rough estimate
-                "alert_effectiveness": 0.0  # Would need alert response data
-            }
+                "events_per_day": monitoring_analysis.get("total_events", 0)
+                // 30,  # Rough estimate
+                "alert_effectiveness": 0.0,  # Would need alert response data
+            },
         }
 
-    def export_report(self, report: SecurityReport, output_path: str,
-                     format: str = "json") -> bool:
+    def export_report(
+        self, report: SecurityReport, output_path: str, format: str = "json"
+    ) -> bool:
         """
         Export security report to file.
 
@@ -583,12 +631,12 @@ class SecurityReportGenerator:
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
             if format.lower() == "json":
-                with open(output_path, 'w') as f:
+                with open(output_path, "w") as f:
                     json.dump(report.to_dict(), f, indent=2, default=str)
 
             elif format.lower() == "html":
                 html_content = self._generate_html_report(report)
-                with open(output_path, 'w') as f:
+                with open(output_path, "w") as f:
                     f.write(html_content)
 
             else:
@@ -613,10 +661,12 @@ class SecurityReportGenerator:
 
 
 # Convenience functions
-def generate_security_report(vulnerability_data: Dict[str, Any],
-                           compliance_data: Dict[str, Any],
-                           monitoring_data: Dict[str, Any],
-                           output_path: Optional[str] = None) -> SecurityReport:
+def generate_security_report(
+    vulnerability_data: Dict[str, Any],
+    compliance_data: Dict[str, Any],
+    monitoring_data: Dict[str, Any],
+    output_path: Optional[str] = None,
+) -> SecurityReport:
     """
     Convenience function to generate a comprehensive security report.
 
@@ -632,9 +682,7 @@ def generate_security_report(vulnerability_data: Dict[str, Any],
     generator = SecurityReportGenerator()
 
     report = generator.generate_comprehensive_report(
-        vulnerability_data,
-        compliance_data,
-        monitoring_data
+        vulnerability_data, compliance_data, monitoring_data
     )
 
     if output_path:

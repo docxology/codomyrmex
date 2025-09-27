@@ -16,20 +16,23 @@ import pymysql
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 class DatabaseType(Enum):
     """Supported database types."""
+
     SQLITE = "sqlite"
     POSTGRESQL = "postgresql"
     MYSQL = "mysql"
@@ -40,6 +43,7 @@ class DatabaseType(Enum):
 @dataclass
 class DatabaseConnection:
     """Database connection configuration and management."""
+
     name: str
     db_type: DatabaseType
     host: str
@@ -94,7 +98,7 @@ class DatabaseConnection:
                     database=self.database,
                     user=self.username,
                     password=self.password,
-                    connect_timeout=self.connection_timeout
+                    connect_timeout=self.connection_timeout,
                 )
                 logger.info(f"Connected to PostgreSQL database: {self.database}")
 
@@ -105,7 +109,7 @@ class DatabaseConnection:
                     database=self.database,
                     user=self.username,
                     password=self.password,
-                    connect_timeout=self.connection_timeout
+                    connect_timeout=self.connection_timeout,
                 )
                 logger.info(f"Connected to MySQL database: {self.database}")
 
@@ -129,7 +133,9 @@ class DatabaseConnection:
         except Exception as e:
             logger.error(f"Error disconnecting from database {self.name}: {e}")
 
-    def execute_query(self, query: str, params: Optional[tuple] = None) -> List[Dict[str, Any]]:
+    def execute_query(
+        self, query: str, params: Optional[tuple] = None
+    ) -> List[Dict[str, Any]]:
         """
         Execute a database query.
 
@@ -151,7 +157,7 @@ class DatabaseConnection:
             else:
                 cursor.execute(query)
 
-            if query.strip().upper().startswith(('SELECT', 'SHOW', 'DESCRIBE')):
+            if query.strip().upper().startswith(("SELECT", "SHOW", "DESCRIBE")):
                 columns = [desc[0] for desc in cursor.description]
                 results = []
                 for row in cursor.fetchall():
@@ -177,7 +183,7 @@ class DatabaseConnection:
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "last_used": self.last_used.isoformat() if self.last_used else None,
             "connection_count": self.connection_count,
-            "is_connected": self._connection is not None
+            "is_connected": self._connection is not None,
         }
 
         # Get database-specific information
@@ -204,7 +210,7 @@ class DatabaseConnection:
             "database": self.name,
             "status": "unknown",
             "response_time": None,
-            "error": None
+            "error": None,
         }
 
         try:
@@ -275,8 +281,9 @@ class DatabaseManager:
         for connection in self.connections.values():
             connection.disconnect()
 
-    def execute_query(self, connection_name: str, query: str,
-                     params: Optional[tuple] = None) -> List[Dict[str, Any]]:
+    def execute_query(
+        self, connection_name: str, query: str, params: Optional[tuple] = None
+    ) -> List[Dict[str, Any]]:
         """
         Execute a query on a specific database connection.
 
@@ -305,7 +312,7 @@ class DatabaseManager:
                 health_status[name] = {
                     "database": name,
                     "status": "error",
-                    "error": str(e)
+                    "error": str(e),
                 }
 
         return health_status
@@ -317,7 +324,7 @@ class DatabaseManager:
             "active_connections": 0,
             "total_queries": 0,
             "databases_by_type": {},
-            "health_summary": {"healthy": 0, "unhealthy": 0, "unknown": 0}
+            "health_summary": {"healthy": 0, "unhealthy": 0, "unknown": 0},
         }
 
         health_checks = self.health_check_all()
@@ -370,7 +377,7 @@ class DatabaseManager:
                     port=connection.port,
                     database="postgres",
                     username=connection.username,
-                    password=connection.password
+                    password=connection.password,
                 )
                 postgres_conn.connect()
                 postgres_conn.execute_query(f"CREATE DATABASE {database_name};")
@@ -385,7 +392,7 @@ class DatabaseManager:
                     port=connection.port,
                     database="",
                     username=connection.username,
-                    password=connection.password
+                    password=connection.password,
                 )
                 mysql_conn.connect()
                 mysql_conn.execute_query(f"CREATE DATABASE {database_name};")
@@ -422,7 +429,7 @@ class DatabaseManager:
                     port=connection.port,
                     database="postgres",
                     username=connection.username,
-                    password=connection.password
+                    password=connection.password,
                 )
                 postgres_conn.connect()
                 postgres_conn.execute_query(f"DROP DATABASE IF EXISTS {database_name};")
@@ -436,7 +443,7 @@ class DatabaseManager:
                     port=connection.port,
                     database="",
                     username=connection.username,
-                    password=connection.password
+                    password=connection.password,
                 )
                 mysql_conn.connect()
                 mysql_conn.execute_query(f"DROP DATABASE IF EXISTS {database_name};")

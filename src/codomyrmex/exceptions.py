@@ -365,7 +365,9 @@ class APIError(CodomyrmexError):
 class TimeoutError(CodomyrmexError):
     """Raised when operations timeout."""
 
-    def __init__(self, message: str, timeout_seconds: Optional[float] = None, **kwargs: Any) -> None:
+    def __init__(
+        self, message: str, timeout_seconds: Optional[float] = None, **kwargs: Any
+    ) -> None:
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
             self.context["timeout_seconds"] = timeout_seconds

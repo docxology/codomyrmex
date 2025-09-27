@@ -9,6 +9,7 @@ import numpy as np
 @dataclass
 class Vector3D:
     """3D vector for physics calculations."""
+
     x: float = 0.0
     y: float = 0.0
     z: float = 0.0
@@ -37,6 +38,7 @@ class Vector3D:
 @dataclass
 class ForceField:
     """Represents a force field affecting objects."""
+
     position: Vector3D
     strength: float
     falloff: float = 2.0  # Inverse square falloff
@@ -50,7 +52,7 @@ class ForceField:
             return Vector3D(0, 0, 0)
 
         # Inverse square law
-        force_magnitude = self.strength / (distance ** self.falloff)
+        force_magnitude = self.strength / (distance**self.falloff)
         force_direction = direction.normalize()
 
         return force_direction * force_magnitude
@@ -59,6 +61,7 @@ class ForceField:
 @dataclass
 class Constraint:
     """Physical constraint between objects."""
+
     object1_id: str
     object2_id: str
     constraint_type: str
@@ -82,8 +85,9 @@ class PhysicsSimulator:
         """Add a constraint to the simulation."""
         self.constraints.append(constraint)
 
-    def register_object(self, object_id: str, mass: float, position: Vector3D,
-                       velocity: Vector3D = None) -> None:
+    def register_object(
+        self, object_id: str, mass: float, position: Vector3D, velocity: Vector3D = None
+    ) -> None:
         """Register an object for physics simulation."""
         if velocity is None:
             velocity = Vector3D(0, 0, 0)
@@ -93,7 +97,7 @@ class PhysicsSimulator:
             "position": position,
             "velocity": velocity,
             "acceleration": Vector3D(0, 0, 0),
-            "force": Vector3D(0, 0, 0)
+            "force": Vector3D(0, 0, 0),
         }
 
     def update_physics(self, delta_time: float) -> None:
@@ -112,7 +116,7 @@ class PhysicsSimulator:
         # Reset forces to zero
         for obj_data in self.objects.values():
             obj_data["force"] = Vector3D(0, 0, 0)
-            
+
         for obj_id, obj_data in self.objects.items():
             total_force = Vector3D(0, 0, 0)
 
@@ -125,10 +129,10 @@ class PhysicsSimulator:
                 total_force += field_force
 
             obj_data["force"] = total_force
-        
+
         # Apply spring forces
         self._apply_spring_constraints()
-        
+
         # Calculate accelerations
         for obj_data in self.objects.values():
             obj_data["acceleration"] = obj_data["force"] * (1.0 / obj_data["mass"])
@@ -137,7 +141,11 @@ class PhysicsSimulator:
         """Apply constraints between objects."""
         # Apply other constraints (not springs, as they're force-based)
         for constraint in self.constraints:
-            if constraint.constraint_type != "spring" and constraint.object1_id in self.objects and constraint.object2_id in self.objects:
+            if (
+                constraint.constraint_type != "spring"
+                and constraint.object1_id in self.objects
+                and constraint.object2_id in self.objects
+            ):
                 obj1 = self.objects[constraint.object1_id]
                 obj2 = self.objects[constraint.object2_id]
 
@@ -148,7 +156,9 @@ class PhysicsSimulator:
 
                     if current_distance != target_distance:
                         direction = (obj2["position"] - obj1["position"]).normalize()
-                        correction = direction * (target_distance - current_distance) * 0.5
+                        correction = (
+                            direction * (target_distance - current_distance) * 0.5
+                        )
 
                         obj1["position"] += correction
                         obj2["position"] -= correction
@@ -185,84 +195,100 @@ class PhysicsSimulator:
         """Get simulation statistics."""
         total_kinetic = self.calculate_total_kinetic_energy()
         total_potential = self.calculate_total_potential_energy()
-        
+
         return {
             "total_objects": len(self.objects),
             "force_fields": len(self.force_fields),
             "constraints": len(self.constraints),
-            "total_force": sum(obj["force"].magnitude() for obj in self.objects.values()),
-            "average_velocity": sum(obj["velocity"].magnitude() for obj in self.objects.values()) / len(self.objects) if self.objects else 0,
+            "total_force": sum(
+                obj["force"].magnitude() for obj in self.objects.values()
+            ),
+            "average_velocity": (
+                sum(obj["velocity"].magnitude() for obj in self.objects.values())
+                / len(self.objects)
+                if self.objects
+                else 0
+            ),
             "total_kinetic_energy": total_kinetic,
             "total_potential_energy": total_potential,
-            "total_energy": total_kinetic + total_potential
+            "total_energy": total_kinetic + total_potential,
         }
-    
+
     def calculate_kinetic_energy(self, object_id: str) -> float:
         """Calculate kinetic energy of a specific object."""
         if object_id not in self.objects:
             return 0.0
-        
+
         obj = self.objects[object_id]
         velocity_magnitude = obj["velocity"].magnitude()
-        return 0.5 * obj["mass"] * velocity_magnitude ** 2
-    
+        return 0.5 * obj["mass"] * velocity_magnitude**2
+
     def calculate_potential_energy(self, object_id: str) -> float:
         """Calculate gravitational potential energy of a specific object."""
         if object_id not in self.objects:
             return 0.0
-        
+
         obj = self.objects[object_id]
         # Use height above reference point (y = 0) for gravitational potential energy
         height = obj["position"].y
         return obj["mass"] * abs(self.gravity.y) * height
-    
+
     def calculate_total_kinetic_energy(self) -> float:
         """Calculate total kinetic energy of all objects."""
-        return sum(self.calculate_kinetic_energy(obj_id) for obj_id in self.objects.keys())
-    
+        return sum(
+            self.calculate_kinetic_energy(obj_id) for obj_id in self.objects.keys()
+        )
+
     def calculate_total_potential_energy(self) -> float:
         """Calculate total potential energy of all objects."""
         total_pe = 0.0
-        
+
         # Gravitational potential energy
         for obj_id in self.objects.keys():
             total_pe += self.calculate_potential_energy(obj_id)
-        
+
         # Force field potential energy
         for obj_id, obj_data in self.objects.items():
             for force_field in self.force_fields:
                 distance = (obj_data["position"] - force_field.position).magnitude()
                 if distance > 0:
                     # Approximate potential energy for force fields
-                    total_pe += -force_field.strength / (distance ** (force_field.falloff - 1))
-        
+                    total_pe += -force_field.strength / (
+                        distance ** (force_field.falloff - 1)
+                    )
+
         return total_pe
-    
+
     def apply_impulse(self, object_id: str, impulse: Vector3D) -> bool:
         """Apply an impulse (sudden change in momentum) to an object."""
         if object_id not in self.objects:
             return False
-        
+
         obj = self.objects[object_id]
         # Change velocity by impulse/mass
         velocity_change = impulse * (1.0 / obj["mass"])
         obj["velocity"] += velocity_change
         return True
-    
+
     def set_object_velocity(self, object_id: str, velocity: Vector3D) -> bool:
         """Set the velocity of an object."""
         if object_id in self.objects:
             self.objects[object_id]["velocity"] = velocity
             return True
         return False
-    
-    def add_spring_constraint(self, object1_id: str, object2_id: str, 
-                             rest_length: float, spring_constant: float, 
-                             damping: float = 0.1) -> bool:
+
+    def add_spring_constraint(
+        self,
+        object1_id: str,
+        object2_id: str,
+        rest_length: float,
+        spring_constant: float,
+        damping: float = 0.1,
+    ) -> bool:
         """Add a spring constraint between two objects."""
         if object1_id not in self.objects or object2_id not in self.objects:
             return False
-        
+
         constraint = Constraint(
             object1_id=object1_id,
             object2_id=object2_id,
@@ -270,83 +296,90 @@ class PhysicsSimulator:
             parameters={
                 "rest_length": rest_length,
                 "spring_constant": spring_constant,
-                "damping": damping
-            }
+                "damping": damping,
+            },
         )
         self.add_constraint(constraint)
         return True
-    
+
     def _apply_spring_constraints(self) -> None:
         """Apply spring constraints (called from _apply_constraints)."""
         for constraint in self.constraints:
             if constraint.constraint_type == "spring":
-                if constraint.object1_id in self.objects and constraint.object2_id in self.objects:
+                if (
+                    constraint.object1_id in self.objects
+                    and constraint.object2_id in self.objects
+                ):
                     obj1 = self.objects[constraint.object1_id]
                     obj2 = self.objects[constraint.object2_id]
-                    
+
                     # Spring parameters
                     rest_length = constraint.parameters.get("rest_length", 1.0)
                     k = constraint.parameters.get("spring_constant", 1.0)
                     damping = constraint.parameters.get("damping", 0.1)
-                    
+
                     # Calculate spring force
                     direction = obj2["position"] - obj1["position"]
                     current_length = direction.magnitude()
-                    
+
                     if current_length > 0:
                         spring_force_magnitude = k * (current_length - rest_length)
                         spring_direction = direction.normalize()
                         spring_force = spring_direction * spring_force_magnitude
-                        
+
                         # Add damping force
                         relative_velocity = obj2["velocity"] - obj1["velocity"]
-                        damping_force = spring_direction * (damping * 
-                                      (relative_velocity.x * spring_direction.x +
-                                       relative_velocity.y * spring_direction.y +
-                                       relative_velocity.z * spring_direction.z))
-                        
+                        damping_force = spring_direction * (
+                            damping
+                            * (
+                                relative_velocity.x * spring_direction.x
+                                + relative_velocity.y * spring_direction.y
+                                + relative_velocity.z * spring_direction.z
+                            )
+                        )
+
                         total_force = spring_force + damping_force
-                        
+
                         # Apply forces (Newton's 3rd law)
                         obj1["force"] += total_force
                         obj2["force"] -= total_force
-    
+
     def detect_collisions(self, collision_radius: float = 0.5) -> List[Tuple[str, str]]:
         """Detect collisions between objects."""
         collisions = []
         object_ids = list(self.objects.keys())
-        
+
         for i, obj1_id in enumerate(object_ids):
-            for obj2_id in object_ids[i+1:]:
+            for obj2_id in object_ids[i + 1 :]:
                 obj1 = self.objects[obj1_id]
                 obj2 = self.objects[obj2_id]
-                
+
                 distance = (obj1["position"] - obj2["position"]).magnitude()
                 if distance <= collision_radius * 2:
                     collisions.append((obj1_id, obj2_id))
-        
+
         return collisions
-    
+
     def handle_elastic_collision(self, obj1_id: str, obj2_id: str) -> bool:
         """Handle elastic collision between two objects."""
         if obj1_id not in self.objects or obj2_id not in self.objects:
             return False
-        
+
         obj1 = self.objects[obj1_id]
         obj2 = self.objects[obj2_id]
-        
+
         m1, m2 = obj1["mass"], obj2["mass"]
         v1, v2 = obj1["velocity"], obj2["velocity"]
-        
+
         # 1D elastic collision formulas (simplified)
         total_mass = m1 + m2
-        
+
         new_v1 = v1 * ((m1 - m2) / total_mass) + v2 * (2 * m2 / total_mass)
         new_v2 = v1 * (2 * m1 / total_mass) + v2 * ((m2 - m1) / total_mass)
-        
+
         obj1["velocity"] = new_v1
         obj2["velocity"] = new_v2
-        
+
         return True
 
 

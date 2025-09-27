@@ -16,21 +16,24 @@ from pathlib import Path
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 @dataclass
 class ContainerConfig:
     """Docker container configuration."""
+
     image_name: str
     tag: str = "latest"
     dockerfile_path: Optional[str] = None
@@ -87,8 +90,12 @@ class DockerManager:
             logger.error(f"Failed to initialize Docker client: {e}")
             self.client = None
 
-    def build_image(self, config: ContainerConfig, push: bool = False,
-                   registry_auth: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
+    def build_image(
+        self,
+        config: ContainerConfig,
+        push: bool = False,
+        registry_auth: Optional[Dict[str, str]] = None,
+    ) -> Dict[str, Any]:
         """
         Build a Docker image from configuration.
 
@@ -128,20 +135,22 @@ class DockerManager:
             # Collect build logs
             logs = []
             for log_line in build_logs:
-                if 'stream' in log_line:
-                    logs.append(log_line['stream'].strip())
+                if "stream" in log_line:
+                    logs.append(log_line["stream"].strip())
 
             result = {
                 "success": True,
                 "image_id": image.id,
                 "image_tags": image.tags,
                 "build_logs": logs,
-                "build_time": datetime.now(timezone.utc).isoformat()
+                "build_time": datetime.now(timezone.utc).isoformat(),
             }
 
             # Push if requested
             if push and registry_auth:
-                push_result = self.push_image(config.get_full_image_name(), registry_auth)
+                push_result = self.push_image(
+                    config.get_full_image_name(), registry_auth
+                )
                 result["push_result"] = push_result
 
             logger.info(f"Successfully built image: {config.get_full_image_name()}")
@@ -151,7 +160,9 @@ class DockerManager:
             logger.error(f"Failed to build image {config.get_full_image_name()}: {e}")
             return {"success": False, "error": str(e)}
 
-    def push_image(self, image_name: str, auth_config: Dict[str, str]) -> Dict[str, Any]:
+    def push_image(
+        self, image_name: str, auth_config: Dict[str, str]
+    ) -> Dict[str, Any]:
         """
         Push a Docker image to registry.
 
@@ -173,23 +184,25 @@ class DockerManager:
 
             # Parse push logs
             logs = []
-            if hasattr(push_logs, '__iter__'):
+            if hasattr(push_logs, "__iter__"):
                 for log_line in push_logs:
-                    if isinstance(log_line, dict) and 'status' in log_line:
-                        logs.append(log_line['status'])
+                    if isinstance(log_line, dict) and "status" in log_line:
+                        logs.append(log_line["status"])
 
             return {
                 "success": True,
                 "image": image_name,
                 "push_logs": logs,
-                "push_time": datetime.now(timezone.utc).isoformat()
+                "push_time": datetime.now(timezone.utc).isoformat(),
             }
 
         except Exception as e:
             logger.error(f"Failed to push image {image_name}: {e}")
             return {"success": False, "error": str(e)}
 
-    def run_container(self, config: ContainerConfig, detach: bool = True) -> Dict[str, Any]:
+    def run_container(
+        self, config: ContainerConfig, detach: bool = True
+    ) -> Dict[str, Any]:
         """
         Run a Docker container.
 
@@ -245,7 +258,7 @@ class DockerManager:
                 "container_id": container.id,
                 "container_name": container.name,
                 "status": container.status,
-                "start_time": datetime.now(timezone.utc).isoformat()
+                "start_time": datetime.now(timezone.utc).isoformat(),
             }
 
         except Exception as e:
@@ -267,14 +280,23 @@ class DockerManager:
 
         try:
             containers = self.client.containers.list(all=show_all)
-            return [{
-                "id": container.id,
-                "name": container.name,
-                "image": container.image.tags[0] if container.image.tags else container.image.id,
-                "status": container.status,
-                "created": container.attrs.get("Created", ""),
-                "ports": container.attrs.get("NetworkSettings", {}).get("Ports", {})
-            } for container in containers]
+            return [
+                {
+                    "id": container.id,
+                    "name": container.name,
+                    "image": (
+                        container.image.tags[0]
+                        if container.image.tags
+                        else container.image.id
+                    ),
+                    "status": container.status,
+                    "created": container.attrs.get("Created", ""),
+                    "ports": container.attrs.get("NetworkSettings", {}).get(
+                        "Ports", {}
+                    ),
+                }
+                for container in containers
+            ]
 
         except Exception as e:
             logger.error(f"Failed to list containers: {e}")
@@ -300,14 +322,16 @@ class DockerManager:
             return {
                 "success": True,
                 "container_id": container_id,
-                "stop_time": datetime.now(timezone.utc).isoformat()
+                "stop_time": datetime.now(timezone.utc).isoformat(),
             }
 
         except Exception as e:
             logger.error(f"Failed to stop container {container_id}: {e}")
             return {"success": False, "error": str(e)}
 
-    def remove_container(self, container_id: str, force: bool = False) -> Dict[str, Any]:
+    def remove_container(
+        self, container_id: str, force: bool = False
+    ) -> Dict[str, Any]:
         """
         Remove a Docker container.
 
@@ -328,7 +352,7 @@ class DockerManager:
             return {
                 "success": True,
                 "container_id": container_id,
-                "removal_time": datetime.now(timezone.utc).isoformat()
+                "removal_time": datetime.now(timezone.utc).isoformat(),
             }
 
         except Exception as e:
@@ -351,13 +375,13 @@ class DockerManager:
 
         try:
             container = self.client.containers.get(container_id)
-            logs = container.logs(tail=tail).decode('utf-8').split('\n')
+            logs = container.logs(tail=tail).decode("utf-8").split("\n")
 
             return {
                 "success": True,
                 "container_id": container_id,
                 "logs": logs,
-                "log_count": len(logs)
+                "log_count": len(logs),
             }
 
         except Exception as e:
@@ -387,7 +411,7 @@ class DockerManager:
                 "cpu_usage": stats.get("cpu_stats", {}).get("cpu_usage", {}),
                 "memory_usage": stats.get("memory_stats", {}),
                 "network_stats": stats.get("networks", {}),
-                "timestamp": datetime.now(timezone.utc).isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             }
 
         except Exception as e:
@@ -416,7 +440,7 @@ class DockerManager:
                 "network_id": network.id,
                 "network_name": name,
                 "driver": driver,
-                "creation_time": datetime.now(timezone.utc).isoformat()
+                "creation_time": datetime.now(timezone.utc).isoformat(),
             }
 
         except Exception as e:
@@ -435,12 +459,15 @@ class DockerManager:
 
         try:
             images = self.client.images.list()
-            return [{
-                "id": image.id,
-                "tags": image.tags,
-                "size": image.attrs.get("Size", 0),
-                "created": image.attrs.get("Created", "")
-            } for image in images]
+            return [
+                {
+                    "id": image.id,
+                    "tags": image.tags,
+                    "size": image.attrs.get("Size", 0),
+                    "created": image.attrs.get("Created", ""),
+                }
+                for image in images
+            ]
 
         except Exception as e:
             logger.error(f"Failed to list images: {e}")
@@ -466,7 +493,7 @@ class DockerManager:
             return {
                 "success": True,
                 "image": image_name,
-                "removal_time": datetime.now(timezone.utc).isoformat()
+                "removal_time": datetime.now(timezone.utc).isoformat(),
             }
 
         except Exception as e:
@@ -497,7 +524,7 @@ class DockerManager:
                 "storage_driver": info.get("Driver", ""),
                 "architecture": info.get("Architecture", ""),
                 "os": info.get("OSType", ""),
-                "kernel_version": info.get("KernelVersion", "")
+                "kernel_version": info.get("KernelVersion", ""),
             }
 
         except Exception as e:
@@ -506,8 +533,11 @@ class DockerManager:
 
 
 # Convenience functions
-def build_containers(config: ContainerConfig, push: bool = False,
-                    registry_auth: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
+def build_containers(
+    config: ContainerConfig,
+    push: bool = False,
+    registry_auth: Optional[Dict[str, str]] = None,
+) -> Dict[str, Any]:
     """
     Convenience function to build containers.
 

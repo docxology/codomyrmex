@@ -19,20 +19,23 @@ import re
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 class SecurityEventType(Enum):
     """Types of security events."""
+
     AUTHENTICATION_FAILURE = "authentication_failure"
     AUTHORIZATION_FAILURE = "authorization_failure"
     SUSPICIOUS_ACTIVITY = "suspicious_activity"
@@ -48,6 +51,7 @@ class SecurityEventType(Enum):
 
 class AlertLevel(Enum):
     """Alert severity levels."""
+
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
@@ -57,6 +61,7 @@ class AlertLevel(Enum):
 @dataclass
 class SecurityEvent:
     """Represents a security event."""
+
     event_id: str
     event_type: SecurityEventType
     timestamp: datetime
@@ -80,13 +85,14 @@ class SecurityEvent:
             "action": self.action,
             "severity": self.severity.value,
             "details": self.details,
-            "raw_log": self.raw_log
+            "raw_log": self.raw_log,
         }
 
 
 @dataclass
 class AlertRule:
     """Represents an alert rule for security monitoring."""
+
     rule_id: str
     name: str
     description: str
@@ -117,7 +123,9 @@ class SecurityMonitor:
         Args:
             config_path: Path to monitor configuration file
         """
-        self.config_path = config_path or os.path.join(os.getcwd(), "security_monitor_config.json")
+        self.config_path = config_path or os.path.join(
+            os.getcwd(), "security_monitor_config.json"
+        )
         self.config = self._load_config()
 
         self.events: List[SecurityEvent] = []
@@ -142,12 +150,12 @@ class SecurityMonitor:
             "alert_cooldown": 300,  # 5 minutes
             "enable_auto_response": False,
             "threat_intelligence_enabled": True,
-            "log_rotation_days": 30
+            "log_rotation_days": 30,
         }
 
         if os.path.exists(self.config_path):
             try:
-                with open(self.config_path, 'r') as f:
+                with open(self.config_path, "r") as f:
                     user_config = json.load(f)
                 default_config.update(user_config)
             except Exception as e:
@@ -164,15 +172,17 @@ class SecurityMonitor:
                 description="Multiple authentication failures from same IP",
                 event_type=SecurityEventType.AUTHENTICATION_FAILURE,
                 conditions={"count_threshold": 5, "time_window": 300},
-                alert_level=AlertLevel.HIGH
+                alert_level=AlertLevel.HIGH,
             ),
             AlertRule(
                 rule_id="suspicious_file_access",
                 name="Suspicious File Access",
                 description="Access to sensitive system files",
                 event_type=SecurityEventType.DATA_ACCESS_VIOLATION,
-                conditions={"sensitive_files": ["/etc/passwd", "/etc/shadow", "/root/.ssh/"]},
-                alert_level=AlertLevel.CRITICAL
+                conditions={
+                    "sensitive_files": ["/etc/passwd", "/etc/shadow", "/root/.ssh/"]
+                },
+                alert_level=AlertLevel.CRITICAL,
             ),
             AlertRule(
                 rule_id="config_change",
@@ -180,7 +190,7 @@ class SecurityMonitor:
                 description="Unauthorized configuration file modification",
                 event_type=SecurityEventType.CONFIGURATION_CHANGE,
                 conditions={"config_files": ["*.conf", "*.yaml", "*.json"]},
-                alert_level=AlertLevel.MEDIUM
+                alert_level=AlertLevel.MEDIUM,
             ),
             AlertRule(
                 rule_id="sql_injection",
@@ -188,8 +198,8 @@ class SecurityMonitor:
                 description="Potential SQL injection attack detected",
                 event_type=SecurityEventType.SQL_INJECTION_ATTEMPT,
                 conditions={"patterns": ["UNION SELECT", "OR 1=1", "DROP TABLE"]},
-                alert_level=AlertLevel.HIGH
-            )
+                alert_level=AlertLevel.HIGH,
+            ),
         ]
 
         for rule in default_rules:
@@ -204,7 +214,9 @@ class SecurityMonitor:
         logger.info("Starting security monitoring system")
         self.monitoring_active = True
 
-        self.monitor_thread = threading.Thread(target=self._monitoring_loop, daemon=True)
+        self.monitor_thread = threading.Thread(
+            target=self._monitoring_loop, daemon=True
+        )
         self.monitor_thread.start()
 
     def stop_monitoring(self):
@@ -255,7 +267,7 @@ class SecurityMonitor:
         for log_file in log_files:
             if os.path.exists(log_file):
                 try:
-                    with open(log_file, 'r') as f:
+                    with open(log_file, "r") as f:
                         # Read new lines since last check
                         lines = f.readlines()
                         for line in lines[-100:]:  # Check last 100 lines
@@ -297,17 +309,17 @@ class SecurityMonitor:
             SecurityEventType.AUTHENTICATION_FAILURE: [
                 r"authentication failure.*user=(\w+)",
                 r"Failed password.*user=(\w+)",
-                r"Invalid user.*from (\d+\.\d+\.\d+\.\d+)"
+                r"Invalid user.*from (\d+\.\d+\.\d+\.\d+)",
             ],
             SecurityEventType.SUSPICIOUS_ACTIVITY: [
                 r"Possible break-in attempt",
                 r"Suspicious activity detected",
-                r"Anomalous behavior"
+                r"Anomalous behavior",
             ],
             SecurityEventType.DATA_ACCESS_VIOLATION: [
                 r"Access denied.*file=(\S+)",
-                r"Permission denied.*(\S+)"
-            ]
+                r"Permission denied.*(\S+)",
+            ],
         }
 
         for event_type, regex_patterns in patterns.items():
@@ -319,7 +331,7 @@ class SecurityMonitor:
                         event_type=event_type,
                         timestamp=datetime.now(timezone.utc),
                         raw_log=line,
-                        details={"source": source, "pattern": pattern}
+                        details={"source": source, "pattern": pattern},
                     )
 
                     # Extract additional information
@@ -361,7 +373,9 @@ class SecurityMonitor:
             if self._rule_conditions_met(rule, event):
                 # Check cooldown period
                 if rule.last_triggered:
-                    time_since_last = (datetime.now(timezone.utc) - rule.last_triggered).total_seconds()
+                    time_since_last = (
+                        datetime.now(timezone.utc) - rule.last_triggered
+                    ).total_seconds()
                     if time_since_last < rule.cooldown_period:
                         continue
 
@@ -454,18 +468,22 @@ class SecurityMonitor:
             "total_events": len(self.events),
             "active_alerts": len(self.active_alerts),
             "events_by_type": {},
-            "alerts_by_severity": {}
+            "alerts_by_severity": {},
         }
 
         # Count events by type
         for event in self.events:
             event_type = event.event_type.value
-            summary["events_by_type"][event_type] = summary["events_by_type"].get(event_type, 0) + 1
+            summary["events_by_type"][event_type] = (
+                summary["events_by_type"].get(event_type, 0) + 1
+            )
 
         # Count alerts by severity
         for alert in self.active_alerts.values():
             severity = alert.severity.value
-            summary["alerts_by_severity"][severity] = summary["alerts_by_severity"].get(severity, 0) + 1
+            summary["alerts_by_severity"][severity] = (
+                summary["alerts_by_severity"].get(severity, 0) + 1
+            )
 
         return summary
 

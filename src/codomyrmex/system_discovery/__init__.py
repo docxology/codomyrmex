@@ -10,10 +10,6 @@ from .discovery_engine import SystemDiscovery
 from .status_reporter import StatusReporter
 from .capability_scanner import CapabilityScanner
 
-__all__ = [
-    'SystemDiscovery',
-    'StatusReporter', 
-    'CapabilityScanner'
-]
+__all__ = ["SystemDiscovery", "StatusReporter", "CapabilityScanner"]
 
 __version__ = "0.1.0"

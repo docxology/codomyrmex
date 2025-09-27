@@ -9,6 +9,7 @@ import numpy as np
 @dataclass
 class Vector3D:
     """3D vector representation."""
+
     x: float = 0.0
     y: float = 0.0
     z: float = 0.0
@@ -23,6 +24,7 @@ class Vector3D:
 @dataclass
 class Quaternion:
     """Quaternion for 3D rotations."""
+
     w: float = 1.0
     x: float = 0.0
     y: float = 0.0

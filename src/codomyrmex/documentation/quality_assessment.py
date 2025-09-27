@@ -205,7 +205,7 @@ def generate_quality_report(project_path: Path) -> str:
 
             for metric, score in analysis.items():
                 if isinstance(score, float):
-                    report_lines.append(f"- {metric.replace('_', ' ').title()}: {score".1f"}/100")
+                    report_lines.append(f"- {metric.replace('_', ' ').title()}: {score:.1f}/100")
 
             file_score = analysis.get("overall_score", 0)
             total_score += file_score
@@ -214,7 +214,7 @@ def generate_quality_report(project_path: Path) -> str:
 
     if file_count > 0:
         average_score = total_score / file_count
-        report_lines.append(f"## Overall Average Score: {average_score".1f"}/100")
+        report_lines.append(f"## Overall Average Score: {average_score:.1f}/100")
 
         if average_score >= 80:
             report_lines.append("🎉 Excellent documentation quality!")

@@ -2,8 +2,14 @@
 
 import pytest
 from codomyrmex.modeling_3d import (
-    Scene3D, Object3D, Camera3D, Light3D, Material3D,
-    Vector3D, Quaternion, RenderPipeline
+    Scene3D,
+    Object3D,
+    Camera3D,
+    Light3D,
+    Material3D,
+    Vector3D,
+    Quaternion,
+    RenderPipeline,
 )
 
 

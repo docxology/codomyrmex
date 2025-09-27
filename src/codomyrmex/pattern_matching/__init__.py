@@ -42,17 +42,17 @@ from .run_codomyrmex_analysis import (
 )
 
 __all__ = [
-    'get_embedding_function',
-    'analyze_repository_path',
-    'run_full_analysis',
-    'print_once',
-    '_perform_repository_index',
-    '_perform_dependency_analysis',
-    '_perform_text_search',
-    '_perform_code_summarization',
-    '_perform_docstring_indexing',
-    '_perform_symbol_extraction',
-    '_perform_symbol_usage_analysis',
-    '_perform_text_search_context_extraction',
-    '_perform_chunking_examples',
-] 
+    "get_embedding_function",
+    "analyze_repository_path",
+    "run_full_analysis",
+    "print_once",
+    "_perform_repository_index",
+    "_perform_dependency_analysis",
+    "_perform_text_search",
+    "_perform_code_summarization",
+    "_perform_docstring_indexing",
+    "_perform_symbol_extraction",
+    "_perform_symbol_usage_analysis",
+    "_perform_text_search_context_extraction",
+    "_perform_chunking_examples",
+]

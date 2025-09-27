@@ -7,28 +7,40 @@ It acts as the primary entry point for accessing visualization capabilities.
 - Uses `logging_monitoring` for logging (ensure `setup_logging()` is called in your main app).
 - Relies on `environment_setup` for environment and dependency checks.
 """
+
 import matplotlib.pyplot as plt
 import os
-import logging # Import standard logging, will be configured by the main app
+import logging  # Import standard logging, will be configured by the main app
 import numpy as np
 from .line_plot import create_line_plot
 from .scatter_plot import create_scatter_plot
 from .bar_chart import create_bar_chart
 from .histogram import create_histogram
 from .pie_chart import create_pie_chart
-from .plot_utils import get_codomyrmex_logger, save_plot, apply_common_aesthetics, DEFAULT_FIGURE_SIZE
+from .plot_utils import (
+    get_codomyrmex_logger,
+    save_plot,
+    apply_common_aesthetics,
+    DEFAULT_FIGURE_SIZE,
+)
 
 # Attempt to import Codomyrmex logging utilities
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     # Fallback to standard logging if Codomyrmex specific logging is not available
     # This might happen if the module is used in isolation or before full project setup.
     logger = logging.getLogger(__name__)
-    if not logger.hasHandlers(): # Avoid duplicate handlers if already configured
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    logger.info("Codomyrmex logging_monitoring module not found or not yet configured. Using standard Python logging for data_visualization.")
+    if not logger.hasHandlers():  # Avoid duplicate handlers if already configured
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        )
+    logger.info(
+        "Codomyrmex logging_monitoring module not found or not yet configured. Using standard Python logging for data_visualization."
+    )
 
 # Recommend: At application startup, call environment_setup.env_checker.ensure_dependencies_installed()
 # and logging_monitoring.setup_logging() to ensure dependencies and logging are configured.
@@ -36,23 +48,29 @@ except ImportError:
 # Import performance monitoring
 try:
     from codomyrmex.performance import monitor_performance, performance_context
+
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     logger.warning("Performance monitoring not available - decorators will be no-op")
     PERFORMANCE_MONITORING_AVAILABLE = False
+
     # Create no-op decorators
     def monitor_performance(*args, **kwargs):
         def decorator(func):
             return func
+
         return decorator
-    
+
     class performance_context:
         def __init__(self, *args, **kwargs):
             pass
+
         def __enter__(self):
             return self
+
         def __exit__(self, *args):
             pass
+
 
 @monitor_performance("data_viz_create_heatmap")
 def create_heatmap(
@@ -68,7 +86,7 @@ def create_heatmap(
     show_plot: bool = False,
     annot: bool = False,
     fmt: str = ".2f",
-    figure_size: tuple = DEFAULT_FIGURE_SIZE
+    figure_size: tuple = DEFAULT_FIGURE_SIZE,
 ):
     """
     Generates a heatmap from a 2D data array.
@@ -76,7 +94,9 @@ def create_heatmap(
     """
     logger.debug(f"Generating heatmap titled '{title}'")
     if not data or not isinstance(data, list) or not isinstance(data[0], list):
-        logger.warning("Invalid or empty 2D data provided for heatmap. No plot generated.")
+        logger.warning(
+            "Invalid or empty 2D data provided for heatmap. No plot generated."
+        )
         return None
 
     fig, ax = plt.subplots(figsize=figure_size)
@@ -103,25 +123,32 @@ def create_heatmap(
     if annot:
         # Ensure data is numpy array for easier handling of values
         np_data = np.array(data)
-        for i in range(np_data.shape[0]): # y
-            for j in range(np_data.shape[1]): # x
+        for i in range(np_data.shape[0]):  # y
+            for j in range(np_data.shape[1]):  # x
                 text_color = "black" if im.norm(np_data[i, j]) > 0.5 else "white"
-                ax.text(j, i, format(np_data[i, j], fmt),
-                       ha="center", va="center", color=text_color)
+                ax.text(
+                    j,
+                    i,
+                    format(np_data[i, j], fmt),
+                    ha="center",
+                    va="center",
+                    color=text_color,
+                )
 
-    plt.tight_layout() # Adjust layout
+    plt.tight_layout()  # Adjust layout
 
     if output_path:
-        save_plot(fig, output_path) # Uses save_plot from .plot_utils
+        save_plot(fig, output_path)  # Uses save_plot from .plot_utils
 
     if show_plot:
         logger.debug(f"Displaying heatmap: {title}")
         plt.show()
     else:
-        plt.close(fig) # Close the figure to free memory if not shown
-    
+        plt.close(fig)  # Close the figure to free memory if not shown
+
     logger.info(f"Heatmap '{title}' generated successfully.")
     return fig
+
 
 # This section is for direct testing of plotter.py
 # Ensure logging is set up if running this file directly for testing
@@ -131,21 +158,26 @@ if __name__ == "__main__":
     # Configure basic logging if running standalone for testing
     # This is a simplified setup; for proper project logging,
     # the main application should call logging_monitoring.setup_logging().
-    if not logger.hasHandlers() or all(isinstance(h, logging.NullHandler) for h in logger.handlers):
+    if not logger.hasHandlers() or all(
+        isinstance(h, logging.NullHandler) for h in logger.handlers
+    ):
         # If the logger (either codomyrmex or fallback) still has no effective handlers, set up a basic one.
         # This check avoids reconfiguring if the fallback logging.basicConfig already ran or if
         # a parent logger is already configured.
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        )
         logger.info("Configured basic logging for direct plotter.py execution.")
-    
+
     logger.info("Running plotter.py directly for testing purposes...")
 
     # Test Data
     x_simple = [1, 2, 3, 4, 5]
     y_simple = [2, 3, 5, 7, 6]
     y_multiple = [[1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [2, 2, 2, 2, 2]]
-    line_labels_multiple = ['Ascending', 'Descending', 'Constant']
-    categories_simple = ['A', 'B', 'C', 'D', 'E']
+    line_labels_multiple = ["Ascending", "Descending", "Constant"]
+    categories_simple = ["A", "B", "C", "D", "E"]
     values_simple = [10, 24, 15, 30, 22]
     histogram_data_simple = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5]
 
@@ -155,33 +187,44 @@ if __name__ == "__main__":
     logger.info(f"Test outputs will be saved in ./{test_output_dir}")
 
     # Test Bar Chart
-    create_bar_chart(categories_simple, values_simple, 
-                     title="Test Vertical Bar Chart", 
-                     output_path=os.path.join(test_output_dir, "bar_chart_vertical.png"))
-    create_bar_chart(categories_simple, values_simple, 
-                     title="Test Horizontal Bar Chart", 
-                     horizontal=True, 
-                     output_path=os.path.join(test_output_dir, "bar_chart_horizontal.png"))
+    create_bar_chart(
+        categories_simple,
+        values_simple,
+        title="Test Vertical Bar Chart",
+        output_path=os.path.join(test_output_dir, "bar_chart_vertical.png"),
+    )
+    create_bar_chart(
+        categories_simple,
+        values_simple,
+        title="Test Horizontal Bar Chart",
+        horizontal=True,
+        output_path=os.path.join(test_output_dir, "bar_chart_horizontal.png"),
+    )
 
     # Test Pie Chart
-    pie_labels = ['Frogs', 'Hogs', 'Dogs', 'Logs']
+    pie_labels = ["Frogs", "Hogs", "Dogs", "Logs"]
     pie_sizes = [15, 30, 45, 10]
     pie_explode = (0, 0.1, 0, 0)  # explode the 2nd slice (Hogs)
-    create_pie_chart(pie_labels, pie_sizes, 
-                     title="Test Pie Chart", 
-                     explode=pie_explode,
-                     output_path=os.path.join(test_output_dir, "pie_chart.png"))
+    create_pie_chart(
+        pie_labels,
+        pie_sizes,
+        title="Test Pie Chart",
+        explode=pie_explode,
+        output_path=os.path.join(test_output_dir, "pie_chart.png"),
+    )
 
-    logger.info(f"Completed direct testing of plotter.py. Check the '{test_output_dir}' directory for output images.")
+    logger.info(
+        f"Completed direct testing of plotter.py. Check the '{test_output_dir}' directory for output images."
+    )
     # To see plots during testing, you can set show_plot=True, but ensure your environment supports GUI.
     # create_scatter_plot(x_simple, y_simple, title="Test Show Scatter Plot", show_plot=True)
 
 __all__ = [
-    'create_line_plot',
-    'create_scatter_plot',
-    'create_bar_chart',
-    'create_histogram',
-    'create_pie_chart',
-    'create_heatmap',
-    'save_plot',
-] 
+    "create_line_plot",
+    "create_scatter_plot",
+    "create_bar_chart",
+    "create_histogram",
+    "create_pie_chart",
+    "create_heatmap",
+    "save_plot",
+]

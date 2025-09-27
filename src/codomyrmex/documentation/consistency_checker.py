@@ -206,4 +206,4 @@ class DocumentationConsistencyChecker:
 
 def generate_quality_tests() -> str:
     """Generate tests for the quality assessment modules."""
-    return Tests for documentation quality assessment modules.
+    return "Tests for documentation quality assessment modules."

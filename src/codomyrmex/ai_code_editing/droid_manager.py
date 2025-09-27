@@ -16,14 +16,22 @@ from typing import Any, Dict, List, Optional, Tuple
 # Import core droid components
 try:
     # Try relative imports first (when used as module)
-    from .droid.controller import DroidController, DroidConfig, create_default_controller
+    from .droid.controller import (
+        DroidController,
+        DroidConfig,
+        create_default_controller,
+    )
     from .droid.todo import TodoManager, TodoItem
     from .droid.run_todo_droid import run_todos, resolve_handler
     from .droid.tasks import logger
 except ImportError:
     try:
         # Try absolute imports (when run directly)
-        from droid.controller import DroidController, DroidConfig, create_default_controller
+        from droid.controller import (
+            DroidController,
+            DroidConfig,
+            create_default_controller,
+        )
         from droid.todo import TodoManager, TodoItem
         from droid.run_todo_droid import run_todos, resolve_handler
         from droid.tasks import logger
@@ -59,7 +67,7 @@ class DroidSystemManager:
             "total_tasks_executed": 0,
             "total_tasks_failed": 0,
             "last_execution_time": None,
-            "uptime_seconds": 0
+            "uptime_seconds": 0,
         }
 
         print("🤖 Codomyrmex Droid System Manager initialized")
@@ -74,15 +82,17 @@ class DroidSystemManager:
                 "uptime_seconds": time.time() - self.start_time,
                 "droid_dir": str(self.droid_dir),
                 "controller_active": self.controller is not None,
-                "config_loaded": self.config_file.exists()
+                "config_loaded": self.config_file.exists(),
             },
             "todo_stats": {
                 "total_todos": len(todo_items),
                 "completed_todos": len(completed_items),
-                "completion_rate": len(completed_items) / max(len(todo_items) + len(completed_items), 1) * 100
+                "completion_rate": len(completed_items)
+                / max(len(todo_items) + len(completed_items), 1)
+                * 100,
             },
             "session_stats": self.session_stats.copy(),
-            "controller_metrics": self.controller.metrics if self.controller else {}
+            "controller_metrics": self.controller.metrics if self.controller else {},
         }
 
         return status
@@ -134,4 +144,3 @@ __all__ = [
     "get_droid_manager",
     "show_droid_status",
 ]
-

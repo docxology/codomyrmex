@@ -9,8 +9,9 @@ import sys
 from pathlib import Path
 
 project_root = Path(__file__).resolve().parents[2]
-source_root = project_root / 'code'
-dest_root = project_root / 'code' / 'documentation' / 'docs' / 'modules'
+source_root = project_root / "code"
+dest_root = project_root / "code" / "documentation" / "docs" / "modules"
+
 
 def main():
     problems = []
@@ -20,7 +21,7 @@ def main():
 
     for module_dir in sorted(p for p in source_root.iterdir() if p.is_dir()):
         name = module_dir.name
-        src_docs = list(module_dir.rglob('*.md'))
+        src_docs = list(module_dir.rglob("*.md"))
         if not src_docs:
             continue
         dest_module = dest_root / name
@@ -36,7 +37,9 @@ def main():
             else:
                 # shallow compare
                 if not filecmp.cmp(src, dest_file, shallow=False):
-                    problems.append(f"Module {name}: {rel} differs from aggregated copy")
+                    problems.append(
+                        f"Module {name}: {rel} differs from aggregated copy"
+                    )
 
     if problems:
         print("Stale aggregation detected:\n" + "\n".join(problems))
@@ -44,7 +47,6 @@ def main():
     print("Aggregation is up to date.")
     return 0
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sys.exit(main())
-
-

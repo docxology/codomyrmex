@@ -26,7 +26,10 @@ from ai_code_editing.droid import (  # noqa: E402
     save_config_to_file,
 )
 
-from ai_code_editing.droid.run_todo_droid import run_todos, CODOMYRMEX_ENHANCED_PROMPT  # noqa: E402
+from ai_code_editing.droid.run_todo_droid import (
+    run_todos,
+    CODOMYRMEX_ENHANCED_PROMPT,
+)  # noqa: E402
 from ai_code_editing.droid.tasks import (  # noqa: E402
     confirm_logging_integrations,
     ensure_documentation_exists,
@@ -36,12 +39,16 @@ from ai_code_editing.droid.tasks import (  # noqa: E402
 
 class TestDroidConfig(unittest.TestCase):
     def test_from_env(self) -> None:
-        with mock.patch.dict(os.environ, {
-            "DROID_IDENTIFIER": "factory-droid",
-            "DROID_MODE": "production",
-            "DROID_MAX_PARALLEL_TASKS": "2",
-            "DROID_ALLOWED_OPERATIONS": "op1,op2",
-        }, clear=True):
+        with mock.patch.dict(
+            os.environ,
+            {
+                "DROID_IDENTIFIER": "factory-droid",
+                "DROID_MODE": "production",
+                "DROID_MAX_PARALLEL_TASKS": "2",
+                "DROID_ALLOWED_OPERATIONS": "op1,op2",
+            },
+            clear=True,
+        ):
             config = DroidConfig.from_env()
         self.assertEqual(config.identifier, "factory-droid")
         self.assertEqual(config.mode, DroidMode.PRODUCTION)
@@ -99,15 +106,17 @@ class TestTodoManager(unittest.TestCase):
     def setUp(self) -> None:
         self.tempdir = tempfile.TemporaryDirectory()
         self.todo_path = Path(self.tempdir.name) / "todo.txt"
-        content = "\n".join([
-            "[TODO]",
-            "task1 | module:callable | First task",
-            "task2 | module:callable | Second task",
-            "",
-            "[COMPLETED]",
-            "task0 | module:callable | Completed task",
-            "",
-        ])
+        content = "\n".join(
+            [
+                "[TODO]",
+                "task1 | module:callable | First task",
+                "task2 | module:callable | Second task",
+                "",
+                "[COMPLETED]",
+                "task0 | module:callable | Completed task",
+                "",
+            ]
+        )
         self.todo_path.write_text(content, encoding="utf-8")
         self.manager = TodoManager(self.todo_path)
 
@@ -134,14 +143,19 @@ class TestRunTodos(unittest.TestCase):
     def setUp(self) -> None:
         self.tempdir = tempfile.TemporaryDirectory()
         self.todo_path = Path(self.tempdir.name) / "todo.txt"
-        self.todo_path.write_text("\n".join([
-            "[TODO]",
-            "op_doc | codomyrmex.ai_code_editing.droid.tasks:ensure_documentation_exists | docs",
-            "op_log | codomyrmex.ai_code_editing.droid.tasks:confirm_logging_integrations | logs",
-            "",
-            "[COMPLETED]",
-            "",
-        ]), encoding="utf-8")
+        self.todo_path.write_text(
+            "\n".join(
+                [
+                    "[TODO]",
+                    "op_doc | codomyrmex.ai_code_editing.droid.tasks:ensure_documentation_exists | docs",
+                    "op_log | codomyrmex.ai_code_editing.droid.tasks:confirm_logging_integrations | logs",
+                    "",
+                    "[COMPLETED]",
+                    "",
+                ]
+            ),
+            encoding="utf-8",
+        )
         self.controller = create_default_controller()
         self.manager = TodoManager(self.todo_path)
 

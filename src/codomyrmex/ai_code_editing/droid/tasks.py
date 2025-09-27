@@ -56,10 +56,15 @@ def verify_real_methods(*, prompt: str, description: str) -> str:
 
 
 __all__ = [
-    "ensure_documentation_exists",
+    "ensure_documentation_exists", 
     "confirm_logging_integrations",
     "verify_real_methods",
 ]
+
+
+# TODO: The following code appears to be misplaced and needs to be moved to appropriate functions
+def create_3d_module_documentation(module_path, docs_content, files_created, logger, description):
+    """Create documentation for 3D module."""
     (module_path / "docs" / "architecture.md").write_text(docs_content)
     files_created.append("docs/architecture.md")
 

@@ -36,18 +36,19 @@ from .documentation_website import (
 
 from .quality_assessment import DocumentationQualityAnalyzer, generate_quality_report
 from .consistency_checker import DocumentationConsistencyChecker
-__all__ = [
-    'check_doc_environment',
-    'run_command_stream_output',
-    'install_dependencies',
-    'start_dev_server',
-    'build_static_site',
-    'serve_static_site',
-    'print_assessment_checklist',
-    'aggregate_docs',
-    'validate_doc_versions',
-    'assess_site',
 
+__all__ = [
+    "check_doc_environment",
+    "run_command_stream_output",
+    "install_dependencies",
+    "start_dev_server",
+    "build_static_site",
+    "serve_static_site",
+    "print_assessment_checklist",
+    "aggregate_docs",
+    "validate_doc_versions",
+    "assess_site",
     "DocumentationQualityAnalyzer",
     "generate_quality_report",
-    "DocumentationConsistencyChecker",] 
+    "DocumentationConsistencyChecker",
+]

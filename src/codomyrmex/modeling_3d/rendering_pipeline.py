@@ -49,21 +49,27 @@ class RenderPipeline:
 
     def _calculate_view_matrix(self, camera: Camera3D) -> List[List[float]]:
         """Calculate view matrix from camera."""
-        return [[1.0, 0.0, 0.0, 0.0],
-                [0.0, 1.0, 0.0, 0.0],
-                [0.0, 0.0, 1.0, 0.0],
-                [0.0, 0.0, 0.0, 1.0]]
+        return [
+            [1.0, 0.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ]
 
     def _calculate_projection_matrix(self, camera: Camera3D) -> List[List[float]]:
         """Calculate projection matrix from camera."""
         fov_rad = camera.fov * 3.14159 / 180.0
         aspect = 16.0 / 9.0  # Assume 16:9 aspect ratio
-        return [[1.0, 0.0, 0.0, 0.0],
-                [0.0, 1.0, 0.0, 0.0],
-                [0.0, 0.0, 1.0, 0.0],
-                [0.0, 0.0, 0.0, 1.0]]
+        return [
+            [1.0, 0.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ]
 
-    def _render_object(self, obj: Object3D, view_matrix, proj_matrix, lights: List[Light3D]) -> None:
+    def _render_object(
+        self, obj: Object3D, view_matrix, proj_matrix, lights: List[Light3D]
+    ) -> None:
         """Render a single 3D object."""
         # Setup material and textures
         if obj.material:

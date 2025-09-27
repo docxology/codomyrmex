@@ -21,20 +21,23 @@ import shutil
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 try:
     from logging_monitoring.logger_config import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 class DeploymentStatus(Enum):
     """Deployment execution status."""
+
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
@@ -45,6 +48,7 @@ class DeploymentStatus(Enum):
 
 class EnvironmentType(Enum):
     """Types of deployment environments."""
+
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
@@ -54,6 +58,7 @@ class EnvironmentType(Enum):
 @dataclass
 class Environment:
     """Deployment environment configuration."""
+
     name: str
     type: EnvironmentType
     host: str
@@ -81,13 +86,14 @@ class Environment:
             "variables": self.variables,
             "pre_deploy_hooks": self.pre_deploy_hooks,
             "post_deploy_hooks": self.post_deploy_hooks,
-            "health_checks": self.health_checks
+            "health_checks": self.health_checks,
         }
 
 
 @dataclass
 class Deployment:
     """Deployment configuration and status."""
+
     name: str
     version: str
     environment: Environment
@@ -123,7 +129,7 @@ class Deployment:
             "finished_at": self.finished_at.isoformat() if self.finished_at else None,
             "duration": self.duration,
             "logs": self.logs,
-            "metrics": self.metrics
+            "metrics": self.metrics,
         }
 
 
@@ -147,7 +153,9 @@ class DeploymentOrchestrator:
         Args:
             config_path: Path to deployment configuration file
         """
-        self.config_path = config_path or os.path.join(os.getcwd(), "deployment_config.yaml")
+        self.config_path = config_path or os.path.join(
+            os.getcwd(), "deployment_config.yaml"
+        )
         self.environments: Dict[str, Environment] = {}
         self.deployments: Dict[str, Deployment] = {}
         self.docker_client = None
@@ -163,8 +171,10 @@ class DeploymentOrchestrator:
         """Load deployment configuration."""
         if os.path.exists(self.config_path):
             try:
-                with open(self.config_path, 'r') as f:
-                    if self.config_path.endswith('.yaml') or self.config_path.endswith('.yml'):
+                with open(self.config_path, "r") as f:
+                    if self.config_path.endswith(".yaml") or self.config_path.endswith(
+                        ".yml"
+                    ):
                         config = yaml.safe_load(f)
                     else:
                         config = json.load(f)
@@ -183,7 +193,7 @@ class DeploymentOrchestrator:
                         variables=env_config.get("variables", {}),
                         pre_deploy_hooks=env_config.get("pre_deploy_hooks", []),
                         post_deploy_hooks=env_config.get("post_deploy_hooks", []),
-                        health_checks=env_config.get("health_checks", [])
+                        health_checks=env_config.get("health_checks", []),
                     )
                     self.environments[env.name] = env
 
@@ -205,8 +215,14 @@ class DeploymentOrchestrator:
         except Exception as e:
             logger.warning(f"Failed to initialize Kubernetes client: {e}")
 
-    def create_deployment(self, name: str, version: str, environment_name: str,
-                         artifacts: List[str], **kwargs) -> Deployment:
+    def create_deployment(
+        self,
+        name: str,
+        version: str,
+        environment_name: str,
+        artifacts: List[str],
+        **kwargs,
+    ) -> Deployment:
         """
         Create a new deployment.
 
@@ -232,7 +248,7 @@ class DeploymentOrchestrator:
             artifacts=artifacts,
             strategy=kwargs.get("strategy", "rolling"),
             timeout=kwargs.get("timeout", 1800),
-            rollback_on_failure=kwargs.get("rollback_on_failure", True)
+            rollback_on_failure=kwargs.get("rollback_on_failure", True),
         )
 
         self.deployments[name] = deployment
@@ -307,22 +323,28 @@ class DeploymentOrchestrator:
         # Update timing
         deployment.finished_at = datetime.now(timezone.utc)
         if deployment.started_at:
-            deployment.duration = (deployment.finished_at - deployment.started_at).total_seconds()
+            deployment.duration = (
+                deployment.finished_at - deployment.started_at
+            ).total_seconds()
 
         return deployment
 
     def _deploy_to_development(self, deployment: Deployment):
         """Deploy to development environment (typically local Docker)."""
-        logger.info(f"Deploying to development environment: {deployment.environment.name}")
+        logger.info(
+            f"Deploying to development environment: {deployment.environment.name}"
+        )
 
         # Use Docker for development deployments
         if self.docker_client and deployment.artifacts:
             for artifact in deployment.artifacts:
-                if artifact.endswith('.tar.gz') or artifact.endswith('.zip'):
+                if artifact.endswith(".tar.gz") or artifact.endswith(".zip"):
                     # Build and run Docker image
                     image_tag = f"{deployment.name}:{deployment.version}"
                     self._build_docker_image(artifact, image_tag)
-                    self._run_docker_container(image_tag, deployment.environment.variables)
+                    self._run_docker_container(
+                        image_tag, deployment.environment.variables
+                    )
 
     def _deploy_to_staging(self, deployment: Deployment):
         """Deploy to staging environment."""
@@ -334,17 +356,23 @@ class DeploymentOrchestrator:
 
     def _deploy_to_production(self, deployment: Deployment):
         """Deploy to production environment."""
-        logger.info(f"Deploying to production environment: {deployment.environment.name}")
+        logger.info(
+            f"Deploying to production environment: {deployment.environment.name}"
+        )
 
         # Use Kubernetes for production deployments
         if self.k8s_client and deployment.artifacts:
             for artifact in deployment.artifacts:
-                if artifact.endswith('.yaml') or artifact.endswith('.yml'):
-                    self._deploy_to_kubernetes(artifact, deployment.environment.variables)
+                if artifact.endswith(".yaml") or artifact.endswith(".yml"):
+                    self._deploy_to_kubernetes(
+                        artifact, deployment.environment.variables
+                    )
 
     def _deploy_traditional(self, deployment: Deployment):
         """Traditional deployment via SSH/rsync."""
-        logger.info(f"Deploying via traditional method to: {deployment.environment.name}")
+        logger.info(
+            f"Deploying via traditional method to: {deployment.environment.name}"
+        )
 
         # Use rsync/ssh for traditional deployments
         for artifact in deployment.artifacts:
@@ -354,15 +382,15 @@ class DeploymentOrchestrator:
         """Build Docker image from artifact."""
         try:
             # Extract artifact if it's an archive
-            if artifact_path.endswith('.tar.gz'):
-                extract_dir = f"/tmp/{os.path.basename(artifact_path).replace('.tar.gz', '')}"
+            if artifact_path.endswith(".tar.gz"):
+                extract_dir = (
+                    f"/tmp/{os.path.basename(artifact_path).replace('.tar.gz', '')}"
+                )
                 shutil.unpack_archive(artifact_path, extract_dir)
 
                 # Build Docker image
                 self.docker_client.images.build(
-                    path=extract_dir,
-                    tag=image_tag,
-                    rm=True
+                    path=extract_dir, tag=image_tag, rm=True
                 )
 
                 logger.info(f"Built Docker image: {image_tag}")
@@ -382,7 +410,7 @@ class DeploymentOrchestrator:
                 image_tag,
                 environment=environment_vars,
                 detach=True,
-                ports={'8000/tcp': 8000}  # Example port mapping
+                ports={"8000/tcp": 8000},  # Example port mapping
             )
 
             logger.info(f"Started Docker container: {container.id}")
@@ -401,7 +429,7 @@ class DeploymentOrchestrator:
                 ["docker-compose", "up", "-d", "--build"],
                 capture_output=True,
                 text=True,
-                env=env
+                env=env,
             )
 
             if result.returncode != 0:
@@ -413,11 +441,13 @@ class DeploymentOrchestrator:
             logger.error(f"Docker Compose deployment failed: {e}")
             raise
 
-    def _deploy_to_kubernetes(self, manifest_path: str, environment_vars: Dict[str, str]):
+    def _deploy_to_kubernetes(
+        self, manifest_path: str, environment_vars: Dict[str, str]
+    ):
         """Deploy to Kubernetes."""
         try:
             # Substitute environment variables in manifest
-            with open(manifest_path, 'r') as f:
+            with open(manifest_path, "r") as f:
                 manifest = f.read()
 
             for key, value in environment_vars.items():
@@ -426,14 +456,17 @@ class DeploymentOrchestrator:
 
             # Apply manifest
             import tempfile
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".yaml", delete=False
+            ) as f:
                 f.write(manifest)
                 temp_manifest = f.name
 
             result = subprocess.run(
                 ["kubectl", "apply", "-f", temp_manifest],
                 capture_output=True,
-                text=True
+                text=True,
             )
 
             if result.returncode != 0:
@@ -454,11 +487,19 @@ class DeploymentOrchestrator:
             # Use rsync to deploy artifacts
             remote_path = f"{environment.user}@{environment.host}:{environment.variables.get('deploy_path', '/opt/app')}"
 
-            result = subprocess.run([
-                "rsync", "-avz", "--delete",
-                "-e", f"ssh -i {environment.key_path}" if environment.key_path else "ssh",
-                artifact_path, remote_path
-            ], capture_output=True, text=True)
+            result = subprocess.run(
+                [
+                    "rsync",
+                    "-avz",
+                    "--delete",
+                    "-e",
+                    f"ssh -i {environment.key_path}" if environment.key_path else "ssh",
+                    artifact_path,
+                    remote_path,
+                ],
+                capture_output=True,
+                text=True,
+            )
 
             if result.returncode != 0:
                 raise Exception(f"SSH deployment failed: {result.stderr}")
@@ -481,11 +522,7 @@ class DeploymentOrchestrator:
             try:
                 logger.info(f"Executing {hook_type} hook: {hook}")
                 result = subprocess.run(
-                    hook,
-                    shell=True,
-                    capture_output=True,
-                    text=True,
-                    cwd=os.getcwd()
+                    hook, shell=True, capture_output=True, text=True, cwd=os.getcwd()
                 )
 
                 if result.returncode != 0:
@@ -528,6 +565,7 @@ class DeploymentOrchestrator:
         """Check HTTP endpoint health."""
         try:
             import requests
+
             response = requests.get(endpoint, timeout=timeout)
             return response.status_code == 200
         except Exception:
@@ -537,6 +575,7 @@ class DeploymentOrchestrator:
         """Check TCP endpoint health."""
         try:
             import socket
+
             host, port = endpoint.split(":")
             sock = socket.create_connection((host, int(port)), timeout=timeout)
             sock.close()
@@ -555,7 +594,9 @@ class DeploymentOrchestrator:
             elif deployment.strategy == "blue_green":
                 self._rollback_blue_green(deployment)
             else:
-                logger.warning(f"Rollback not implemented for strategy: {deployment.strategy}")
+                logger.warning(
+                    f"Rollback not implemented for strategy: {deployment.strategy}"
+                )
 
         except Exception as e:
             logger.error(f"Rollback failed: {e}")

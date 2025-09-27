@@ -32,23 +32,31 @@ from typing import Callable, Iterable
 # Handle both module and direct execution imports
 try:
     # When run as module
-    from .controller import DroidController, DroidConfig, create_default_controller, load_config_from_file
+    from .controller import (
+        DroidController,
+        DroidConfig,
+        create_default_controller,
+        load_config_from_file,
+    )
     from .todo import TodoItem, TodoManager
 except ImportError:
     # When run directly as script
-    from controller import DroidController, DroidConfig, create_default_controller, load_config_from_file
+    from controller import (
+        DroidController,
+        DroidConfig,
+        create_default_controller,
+        load_config_from_file,
+    )
     from todo import TodoItem, TodoManager
 
 # Enhanced prompt with Codomyrmex-specific context and rules
 CODOMYRMEX_ENHANCED_PROMPT = (
     "You are operating within the Codomyrmex project - a revolutionary modular coding workspace "
     "that integrates AI capabilities with traditional development tools. Follow these core principles:\n\n"
-
     "🎯 **Project Context**:\n"
     "- Codomyrmex combines AI-powered code generation, static analysis, data visualization, and build orchestration\n"
     "- 15+ specialized modules work together in a unified, extensible platform\n"
     "- Built for scalability, security, and production readiness\n\n"
-
     "📋 **Core Principles** (from general.cursorrules):\n"
     "1. Understand Context: Consider broader project goals and module roles\n"
     "2. Modularity & Cohesion: Respect modular architecture, minimize cross-module impact\n"
@@ -60,7 +68,6 @@ CODOMYRMEX_ENHANCED_PROMPT = (
     "8. Efficiency: Balance efficiency with clarity and maintainability\n"
     "9. Documentation: Keep all documentation accurate and up-to-date\n"
     "10. User-Focus: Consider end-users (developers, AI agents, platform users)\n\n"
-
     "🔧 **Task-Specific Instructions**:\n"
     "- Ensure documentation is updated, logging is present, and all referenced methods exist\n"
     "- Confirm real implementations and comprehensive tests are in place\n"
@@ -71,7 +78,6 @@ CODOMYRMEX_ENHANCED_PROMPT = (
     "- Maintain security best practices throughout\n"
     "- Consider the impact of changes on other modules\n"
     "- Prioritize clarity and maintainability over premature optimization\n\n"
-
     "✅ **Completion Criteria**:\n"
     "- All functionality works as intended\n"
     "- Code follows project conventions and best practices\n"
@@ -86,7 +92,9 @@ CODOMYRMEX_ENHANCED_PROMPT = (
 
 def resolve_handler(handler_path: str) -> Callable:
     if ":" not in handler_path:
-        raise ValueError(f"Handler path must include module and attribute: {handler_path}")
+        raise ValueError(
+            f"Handler path must include module and attribute: {handler_path}"
+        )
     module_name, attribute = handler_path.split(":", 1)
 
     try:
@@ -112,6 +120,7 @@ def resolve_handler(handler_path: str) -> Callable:
 def get_todo_count_interactive() -> int:
     """Interactively prompt user for number of TODOs to process."""
     import os
+
     todo_file = os.path.join(os.path.dirname(__file__), "todo_list.txt")
     todo_items, _ = TodoManager(todo_file).load()
     available_count = len(todo_items)
@@ -126,9 +135,15 @@ def get_todo_count_interactive() -> int:
 
     while True:
         try:
-            choice = input(f"\n🔢 How many TODOs would you like to process? (1-{available_count}, or 'all'): ").strip().lower()
+            choice = (
+                input(
+                    f"\n🔢 How many TODOs would you like to process? (1-{available_count}, or 'all'): "
+                )
+                .strip()
+                .lower()
+            )
 
-            if choice == 'all':
+            if choice == "all":
                 return available_count
 
             count = int(choice)
@@ -144,7 +159,9 @@ def get_todo_count_interactive() -> int:
             sys.exit(0)
 
 
-def run_todos(controller: DroidController, manager: TodoManager, count: int) -> Iterable[TodoItem]:
+def run_todos(
+    controller: DroidController, manager: TodoManager, count: int
+) -> Iterable[TodoItem]:
     """Process TODO items sequentially with enhanced Codomyrmex-specific prompts and real-time statistics."""
     todo_items, completed_items = manager.load()
     if not todo_items:
@@ -155,7 +172,9 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
     processed: list[TodoItem] = []
 
     # Enhanced startup display
-    print(f"\n🚀 Processing {len(to_process)} TODO item(s) with Codomyrmex intelligence...")
+    print(
+        f"\n🚀 Processing {len(to_process)} TODO item(s) with Codomyrmex intelligence..."
+    )
     print("=" * 70)
 
     # Initialize timing and statistics
@@ -188,7 +207,7 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
                 item.operation_id,
                 handler,
                 prompt=CODOMYRMEX_ENHANCED_PROMPT,
-                description=item.description
+                description=item.description,
             )
 
             # Calculate task timing
@@ -202,7 +221,9 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
             eta = avg_time * remaining_tasks if remaining_tasks > 0 else 0
 
             print(f"   ✅ Completed in {task_duration:.3f}s ({item.operation_id})")
-            print(f"   📈 Stats: Avg: {avg_time:.3f}s | ETA: {eta:.1f}s ({remaining_tasks} tasks)")
+            print(
+                f"   📈 Stats: Avg: {avg_time:.3f}s | ETA: {eta:.1f}s ({remaining_tasks} tasks)"
+            )
 
             processed.append(item)
 
@@ -211,14 +232,18 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
             task_times.append(task_duration)
             task_status.append("❌")
 
-            print(f"   ❌ Failed in {task_duration:.3f}s ({item.operation_id}): {str(e)}")
+            print(
+                f"   ❌ Failed in {task_duration:.3f}s ({item.operation_id}): {str(e)}"
+            )
             print(f"   💡 Error: {type(e).__name__}")
 
         # Real-time statistics display
         if i < len(to_process):  # Don't show final stats yet
             current_time = time.time() - start_time
             success_count = len([s for s in task_status if s == "✅"])
-            success_rate = (success_count / len(task_status)) * 100 if task_status else 0
+            success_rate = (
+                (success_count / len(task_status)) * 100 if task_status else 0
+            )
 
             print("\n📊 Session Progress:")
             print(f"   ⏱️  Elapsed: {current_time:.1f}s")
@@ -234,7 +259,9 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
 
         print("\n🎉 Execution Summary:")
         print("=" * 70)
-        print(f"   ✅ Successfully processed: {success_count}/{len(to_process)} TODO(s)")
+        print(
+            f"   ✅ Successfully processed: {success_count}/{len(to_process)} TODO(s)"
+        )
         print(f"   ❌ Failed: {failure_count}/{len(to_process)} TODO(s)")
         print(f"   ⏱️  Total execution time: {total_time:.2f}s")
         print(f"   📊 Tasks per minute: {len(processed) / (total_time / 60):.1f}")
@@ -286,28 +313,45 @@ Examples:
   python run_todo_droid.py --count -1        # Process all TODOs
   python run_todo_droid.py --non-interactive # Process 1 TODO non-interactively
   python run_todo_droid.py --list            # List all TODOs without processing
-        """)
+        """,
+    )
 
-    parser.add_argument("--todo-file", default="todo_list.txt",
-                       help="Path to todo list file (default: todo_list.txt)")
-    parser.add_argument("--count", type=int, default=None,
-                       help="Number of items to process (use -1 for all, skip interactive prompt)")
-    parser.add_argument("--config", default=None,
-                       help="Optional path to config file")
-    parser.add_argument("--non-interactive", action="store_true",
-                       help="Run in non-interactive mode (process 1 TODO)")
-    parser.add_argument("--list", action="store_true",
-                       help="List all TODOs without processing")
-    parser.add_argument("--dry-run", action="store_true",
-                       help="Show what would be processed without actually doing it")
+    parser.add_argument(
+        "--todo-file",
+        default="todo_list.txt",
+        help="Path to todo list file (default: todo_list.txt)",
+    )
+    parser.add_argument(
+        "--count",
+        type=int,
+        default=None,
+        help="Number of items to process (use -1 for all, skip interactive prompt)",
+    )
+    parser.add_argument("--config", default=None, help="Optional path to config file")
+    parser.add_argument(
+        "--non-interactive",
+        action="store_true",
+        help="Run in non-interactive mode (process 1 TODO)",
+    )
+    parser.add_argument(
+        "--list", action="store_true", help="List all TODOs without processing"
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be processed without actually doing it",
+    )
 
     args = parser.parse_args()
 
     # Set the working directory to the droid folder for relative paths
     import os
     import sys
+
     droid_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(droid_dir))))
+    project_root = os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.dirname(droid_dir)))
+    )
     os.chdir(droid_dir)
 
     # Add project root to Python path for module imports
@@ -344,7 +388,9 @@ Examples:
         if args.count == -1:
             count = len(todo_items)  # Process all
         elif args.count < -1:
-            print(f"❌ Invalid count: {args.count}. Use positive numbers or -1 for all.")
+            print(
+                f"❌ Invalid count: {args.count}. Use positive numbers or -1 for all."
+            )
             return
         else:
             count = args.count

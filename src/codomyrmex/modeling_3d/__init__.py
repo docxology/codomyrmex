@@ -11,14 +11,21 @@ from .rendering_pipeline import *
 __version__ = "0.1.0"
 __all__ = [
     # Core 3D Engine
-    "Scene3D", "Object3D", "Camera3D", "Light3D", "Material3D",
-
+    "Scene3D",
+    "Object3D",
+    "Camera3D",
+    "Light3D",
+    "Material3D",
     # AR/VR/XR Support
-    "ARSession", "VRRenderer", "XRInterface",
-
+    "ARSession",
+    "VRRenderer",
+    "XRInterface",
     # Rendering Pipeline
-    "RenderPipeline", "ShaderManager", "TextureManager",
-
+    "RenderPipeline",
+    "ShaderManager",
+    "TextureManager",
     # Utilities
-    "MeshLoader", "AnimationController", "PhysicsEngine"
+    "MeshLoader",
+    "AnimationController",
+    "PhysicsEngine",
 ]

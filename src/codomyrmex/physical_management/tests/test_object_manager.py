@@ -6,9 +6,18 @@ import json
 import time
 from pathlib import Path
 from codomyrmex.physical_management import (
-    PhysicalObjectManager, ObjectType, ObjectStatus, PhysicalObject,
-    PhysicsSimulator, Vector3D, ForceField, SensorManager, SensorType, SensorReading,
-    DeviceInterface, DeviceStatus
+    PhysicalObjectManager,
+    ObjectType,
+    ObjectStatus,
+    PhysicalObject,
+    PhysicsSimulator,
+    Vector3D,
+    ForceField,
+    SensorManager,
+    SensorType,
+    SensorReading,
+    DeviceInterface,
+    DeviceStatus,
 )
 
 
@@ -67,18 +76,18 @@ class TestPhysicalObjectManager:
     def test_distance_calculations(self):
         """Test distance calculation methods."""
         manager = PhysicalObjectManager()
-        
+
         obj1 = manager.create_object("obj1", "Object 1", ObjectType.SENSOR, 0, 0, 0)
         obj2 = manager.create_object("obj2", "Object 2", ObjectType.SENSOR, 3, 4, 0)
-        
+
         # Test distance between objects
         distance = obj1.distance_to(obj2)
         assert abs(distance - 5.0) < 1e-10  # 3-4-5 triangle
-        
+
         # Test distance to point
         distance_to_point = obj1.distance_to_point(6, 8, 0)
         assert abs(distance_to_point - 10.0) < 1e-10
-        
+
         # Test within range
         assert obj1.is_within_range(0, 0, 0, 1.0)
         assert not obj1.is_within_range(10, 10, 10, 1.0)
@@ -87,14 +96,14 @@ class TestPhysicalObjectManager:
         """Test object property management."""
         manager = PhysicalObjectManager()
         obj = manager.create_object("test", "Test", ObjectType.SENSOR, 0, 0, 0)
-        
+
         # Add properties
         obj.add_property("temperature", 25.0)
         obj.add_property("status", "active")
-        
+
         assert obj.properties["temperature"] == 25.0
         assert obj.properties["status"] == "active"
-        
+
         # Remove property
         removed_value = obj.remove_property("temperature")
         assert removed_value == 25.0
@@ -103,26 +112,28 @@ class TestPhysicalObjectManager:
     def test_batch_operations(self):
         """Test batch operations on multiple objects."""
         manager = PhysicalObjectManager()
-        
+
         # Create multiple objects
         for i in range(5):
             manager.create_object(f"obj_{i}", f"Object {i}", ObjectType.SENSOR, i, i, i)
-        
+
         # Test batch status update
         object_ids = [f"obj_{i}" for i in range(3)]
-        updated_count = manager.batch_update_status(object_ids, ObjectStatus.MAINTENANCE)
+        updated_count = manager.batch_update_status(
+            object_ids, ObjectStatus.MAINTENANCE
+        )
         assert updated_count == 3
-        
+
         # Verify status changes
         for obj_id in object_ids:
             obj = manager.registry.get_object(obj_id)
             assert obj.status == ObjectStatus.MAINTENANCE
-        
+
         # Test batch move
         moves = {
             "obj_0": (10, 10, 10),
             "obj_1": (20, 20, 20),
-            "obj_nonexistent": (5, 5, 5)
+            "obj_nonexistent": (5, 5, 5),
         }
         moved_count = manager.batch_move_objects(moves)
         assert moved_count == 2  # obj_nonexistent doesn't exist
@@ -130,13 +141,13 @@ class TestPhysicalObjectManager:
     def test_pathfinding(self):
         """Test pathfinding between objects."""
         manager = PhysicalObjectManager()
-        
+
         # Create a line of objects for pathfinding
         manager.create_object("start", "Start", ObjectType.SENSOR, 0, 0, 0)
         manager.create_object("mid1", "Mid1", ObjectType.SENSOR, 2, 0, 0)
         manager.create_object("mid2", "Mid2", ObjectType.SENSOR, 4, 0, 0)
         manager.create_object("end", "End", ObjectType.SENSOR, 6, 0, 0)
-        
+
         path = manager.find_path_between_objects("start", "end")
         assert path is not None
         assert len(path) >= 2  # Should include at least start and end
@@ -144,34 +155,42 @@ class TestPhysicalObjectManager:
     def test_collision_detection(self):
         """Test collision detection."""
         manager = PhysicalObjectManager()
-        
+
         # Create objects that should collide
         manager.create_object("obj1", "Object 1", ObjectType.SENSOR, 0, 0, 0)
-        manager.create_object("obj2", "Object 2", ObjectType.SENSOR, 0.5, 0, 0)  # Very close
-        manager.create_object("obj3", "Object 3", ObjectType.SENSOR, 10, 10, 10)  # Far away
-        
+        manager.create_object(
+            "obj2", "Object 2", ObjectType.SENSOR, 0.5, 0, 0
+        )  # Very close
+        manager.create_object(
+            "obj3", "Object 3", ObjectType.SENSOR, 10, 10, 10
+        )  # Far away
+
         collisions = manager.registry.check_collisions(collision_distance=1.0)
         assert len(collisions) == 1
-        assert ("obj1", "obj2") in [(c[0].id, c[1].id) for c in collisions] or \
-               ("obj2", "obj1") in [(c[0].id, c[1].id) for c in collisions]
+        assert ("obj1", "obj2") in [(c[0].id, c[1].id) for c in collisions] or (
+            "obj2",
+            "obj1",
+        ) in [(c[0].id, c[1].id) for c in collisions]
 
     def test_clustering(self):
         """Test object clustering."""
         manager = PhysicalObjectManager()
-        
+
         # Create two clusters
         # Cluster 1: around origin
         manager.create_object("c1_1", "Cluster 1 Obj 1", ObjectType.SENSOR, 0, 0, 0)
         manager.create_object("c1_2", "Cluster 1 Obj 2", ObjectType.SENSOR, 1, 1, 0)
         manager.create_object("c1_3", "Cluster 1 Obj 3", ObjectType.SENSOR, 2, 0, 0)
-        
+
         # Cluster 2: far away
         manager.create_object("c2_1", "Cluster 2 Obj 1", ObjectType.SENSOR, 20, 20, 0)
         manager.create_object("c2_2", "Cluster 2 Obj 2", ObjectType.SENSOR, 21, 21, 0)
-        
-        clusters = manager.detect_object_clusters(cluster_radius=5.0, min_cluster_size=2)
+
+        clusters = manager.detect_object_clusters(
+            cluster_radius=5.0, min_cluster_size=2
+        )
         assert len(clusters) == 2
-        
+
         # Check cluster sizes
         cluster_sizes = [len(cluster) for cluster in clusters]
         assert 3 in cluster_sizes  # First cluster
@@ -180,12 +199,12 @@ class TestPhysicalObjectManager:
     def test_center_of_mass(self):
         """Test center of mass calculation."""
         manager = PhysicalObjectManager()
-        
+
         # Create objects at known positions
         manager.create_object("obj1", "Object 1", ObjectType.SENSOR, 0, 0, 0)
         manager.create_object("obj2", "Object 2", ObjectType.SENSOR, 4, 0, 0)
         manager.create_object("obj3", "Object 3", ObjectType.SENSOR, 2, 3, 0)
-        
+
         center = manager.calculate_center_of_mass()
         assert abs(center[0] - 2.0) < 1e-10  # (0+4+2)/3 = 2
         assert abs(center[1] - 1.0) < 1e-10  # (0+0+3)/3 = 1
@@ -194,13 +213,13 @@ class TestPhysicalObjectManager:
     def test_boundary_box(self):
         """Test boundary box calculation."""
         manager = PhysicalObjectManager()
-        
+
         manager.create_object("obj1", "Object 1", ObjectType.SENSOR, -1, -2, -3)
         manager.create_object("obj2", "Object 2", ObjectType.SENSOR, 5, 4, 3)
         manager.create_object("obj3", "Object 3", ObjectType.SENSOR, 2, 1, 0)
-        
+
         bbox = manager.get_boundary_box()
-        
+
         assert bbox["x"] == (-1, 5)
         assert bbox["y"] == (-2, 4)
         assert bbox["z"] == (-3, 3)
@@ -230,10 +249,7 @@ class TestPhysicsSimulator:
         """Test force field calculations."""
         sim = PhysicsSimulator()
 
-        force_field = ForceField(
-            position=Vector3D(0, 0, 0),
-            strength=10.0
-        )
+        force_field = ForceField(position=Vector3D(0, 0, 0), strength=10.0)
 
         object_pos = Vector3D(1, 0, 0)
         force = force_field.calculate_force(object_pos)
@@ -246,16 +262,16 @@ class TestPhysicsSimulator:
     def test_energy_calculations(self):
         """Test energy calculation methods."""
         sim = PhysicsSimulator()
-        
+
         # Register object with known mass and velocity
         position = Vector3D(0, 5, 0)
         velocity = Vector3D(3, 0, 0)
         sim.register_object("ball", mass=2.0, position=position, velocity=velocity)
-        
+
         # Test kinetic energy: KE = 0.5 * m * v^2 = 0.5 * 2 * 9 = 9
         ke = sim.calculate_kinetic_energy("ball")
         assert abs(ke - 9.0) < 1e-10
-        
+
         # Test potential energy: PE = m * g * h = 2 * 9.81 * 5 = 98.1
         pe = sim.calculate_potential_energy("ball")
         expected_pe = 2.0 * 9.81 * 5.0
@@ -264,16 +280,16 @@ class TestPhysicsSimulator:
     def test_impulse_application(self):
         """Test applying impulse to objects."""
         sim = PhysicsSimulator()
-        
+
         position = Vector3D(0, 0, 0)
         velocity = Vector3D(0, 0, 0)
         sim.register_object("ball", mass=1.0, position=position, velocity=velocity)
-        
+
         # Apply impulse
         impulse = Vector3D(5, 0, 0)
         success = sim.apply_impulse("ball", impulse)
         assert success
-        
+
         # Check velocity change
         ball = sim.get_object_state("ball")
         assert abs(ball["velocity"].x - 5.0) < 1e-10
@@ -282,23 +298,25 @@ class TestPhysicsSimulator:
     def test_spring_constraints(self):
         """Test spring constraints between objects."""
         sim = PhysicsSimulator()
-        
+
         pos1 = Vector3D(0, 0, 0)
         pos2 = Vector3D(3, 0, 0)  # 3 units apart
         sim.register_object("obj1", mass=1.0, position=pos1)
         sim.register_object("obj2", mass=1.0, position=pos2)
-        
+
         # Add spring with rest length of 2 units
-        success = sim.add_spring_constraint("obj1", "obj2", rest_length=2.0, spring_constant=1.0)
+        success = sim.add_spring_constraint(
+            "obj1", "obj2", rest_length=2.0, spring_constant=1.0
+        )
         assert success
-        
+
         # Run simulation step
         sim.update_physics(0.1)
-        
+
         # Objects should be pulled closer together
         obj1_state = sim.get_object_state("obj1")
         obj2_state = sim.get_object_state("obj2")
-        
+
         # Check that spring force was applied (objects should move towards each other)
         assert obj1_state["velocity"].x > 0  # obj1 moves towards obj2
         assert obj2_state["velocity"].x < 0  # obj2 moves towards obj1
@@ -306,15 +324,15 @@ class TestPhysicsSimulator:
     def test_collision_detection_physics(self):
         """Test collision detection in physics simulator."""
         sim = PhysicsSimulator()
-        
+
         pos1 = Vector3D(0, 0, 0)
         pos2 = Vector3D(0.3, 0, 0)  # Very close
-        pos3 = Vector3D(10, 0, 0)   # Far away
-        
+        pos3 = Vector3D(10, 0, 0)  # Far away
+
         sim.register_object("obj1", mass=1.0, position=pos1)
         sim.register_object("obj2", mass=1.0, position=pos2)
         sim.register_object("obj3", mass=1.0, position=pos3)
-        
+
         collisions = sim.detect_collisions(collision_radius=0.5)
         assert len(collisions) == 1
         assert ("obj1", "obj2") in collisions or ("obj2", "obj1") in collisions
@@ -322,23 +340,23 @@ class TestPhysicsSimulator:
     def test_elastic_collision(self):
         """Test elastic collision handling."""
         sim = PhysicsSimulator()
-        
+
         # Two objects moving towards each other
         pos1 = Vector3D(0, 0, 0)
         pos2 = Vector3D(1, 0, 0)
         vel1 = Vector3D(2, 0, 0)
         vel2 = Vector3D(-1, 0, 0)
-        
+
         sim.register_object("obj1", mass=1.0, position=pos1, velocity=vel1)
         sim.register_object("obj2", mass=2.0, position=pos2, velocity=vel2)
-        
+
         success = sim.handle_elastic_collision("obj1", "obj2")
         assert success
-        
+
         # Check that velocities changed
         obj1_state = sim.get_object_state("obj1")
         obj2_state = sim.get_object_state("obj2")
-        
+
         # Velocities should have changed from the collision
         assert obj1_state["velocity"].x != 2.0
         assert obj2_state["velocity"].x != -1.0
@@ -419,21 +437,23 @@ class TestSensorManager:
     def test_sensor_calibration(self):
         """Test sensor calibration functionality."""
         manager = SensorManager()
-        
+
         # Create calibration data: (sensor_reading, actual_value)
         reference_values = [(20.0, 22.0), (30.0, 32.5), (40.0, 43.0)]
-        
-        calibration = manager.calibrate_sensor("temp_001", reference_values, SensorType.TEMPERATURE)
-        
+
+        calibration = manager.calibrate_sensor(
+            "temp_001", reference_values, SensorType.TEMPERATURE
+        )
+
         # Check that calibration coefficients are reasonable
         assert "slope" in calibration
         assert "offset" in calibration
         assert calibration["slope"] > 0  # Should be positive slope
-        
+
         # Test applying calibration
         raw_reading = SensorReading("temp_001", SensorType.TEMPERATURE, 25.0, "°C")
         calibrated_reading = manager.apply_calibration(raw_reading)
-        
+
         # Should have calibrated metadata
         assert calibrated_reading.metadata.get("calibrated") is True
         assert "raw_value" in calibrated_reading.metadata
@@ -442,16 +462,17 @@ class TestSensorManager:
     def test_sensor_health_monitoring(self):
         """Test sensor health analysis."""
         manager = SensorManager()
-        
+
         # Add normal readings
         for i in range(10):
             reading = SensorReading(
-                "temp_001", SensorType.TEMPERATURE, 
+                "temp_001",
+                SensorType.TEMPERATURE,
                 20.0 + i * 0.1,  # Gradual increase
-                "°C"
+                "°C",
             )
             manager.add_reading(reading)
-        
+
         health = manager.get_sensor_health("temp_001")
         assert health["status"] == "healthy"
         assert health["readings_count"] == 10
@@ -460,29 +481,31 @@ class TestSensorManager:
     def test_sensor_drift_detection(self):
         """Test sensor drift detection."""
         manager = SensorManager()
-        
+
         # Add baseline readings (old values around 20)
         base_time = time.time() - 90000  # 25 hours ago
         for i in range(20):
             reading = SensorReading(
-                "temp_001", SensorType.TEMPERATURE, 
+                "temp_001",
+                SensorType.TEMPERATURE,
                 20.0 + (i % 5) * 0.1,  # Values around 20
                 "°C",
-                timestamp=base_time + i * 100
+                timestamp=base_time + i * 100,
             )
             manager.add_reading(reading)
-        
+
         # Add recent readings (new values around 25 - showing drift)
         recent_time = time.time() - 1800  # 30 minutes ago
         for i in range(20):
             reading = SensorReading(
-                "temp_001", SensorType.TEMPERATURE, 
+                "temp_001",
+                SensorType.TEMPERATURE,
                 25.0 + (i % 5) * 0.1,  # Values around 25
                 "°C",
-                timestamp=recent_time + i * 60
+                timestamp=recent_time + i * 60,
             )
             manager.add_reading(reading)
-        
+
         drift_analysis = manager.detect_sensor_drift("temp_001")
         assert drift_analysis["status"] in ["moderate_drift", "significant_drift"]
         assert drift_analysis["drift_amount"] > 0  # Positive drift
@@ -490,21 +513,21 @@ class TestSensorManager:
     def test_device_management(self):
         """Test device interface management."""
         manager = SensorManager()
-        
+
         # Create device
         device = DeviceInterface(
             device_id="device_001",
             device_type="temperature_sensor",
-            sensors=[SensorType.TEMPERATURE, SensorType.HUMIDITY]
+            sensors=[SensorType.TEMPERATURE, SensorType.HUMIDITY],
         )
-        
+
         manager.register_device(device)
         assert "device_001" in manager.devices
-        
+
         # Update device status
         success = manager.update_device_status("device_001", DeviceStatus.CONNECTED)
         assert success
-        
+
         status = manager.get_device_status("device_001")
         assert status == DeviceStatus.CONNECTED
 

@@ -1,75 +1,63 @@
 import pytest
 from pydantic import ValidationError
 
-from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult, MCPErrorDetail
+from model_context_protocol.mcp_schemas import (
+    MCPToolCall,
+    MCPToolResult,
+    MCPErrorDetail,
+)
 
 # Test data for MCPToolCall
 VALID_TOOL_CALL_DATA = {
     "tool_name": "example.do_something",
-    "arguments": {
-        "param1": "value1",
-        "param2": 123
-    }
+    "arguments": {"param1": "value1", "param2": 123},
 }
 
-INVALID_TOOL_CALL_DATA_MISSING_NAME = {
-    "arguments": {"param1": "value1"}
-}
+INVALID_TOOL_CALL_DATA_MISSING_NAME = {"arguments": {"param1": "value1"}}
 
-INVALID_TOOL_CALL_DATA_MISSING_ARGS = {
-    "tool_name": "example.do_something"
-}
+INVALID_TOOL_CALL_DATA_MISSING_ARGS = {"tool_name": "example.do_something"}
 
 # Test data for MCPErrorDetail
 VALID_ERROR_DETAIL_DATA = {
     "error_type": "ResourceUnavailable",
     "error_message": "The required resource could not be accessed.",
-    "error_details": {
-        "resource_id": "res_abc123"
-    }
+    "error_details": {"resource_id": "res_abc123"},
 }
 
 # Test data for MCPToolResult
 VALID_SUCCESS_RESULT_DATA = {
     "status": "success",
-    "data": {
-        "output_value": "Task completed successfully.",
-        "items_processed": 10
-    },
-    "explanation": "The example tool processed 10 items and finished."
+    "data": {"output_value": "Task completed successfully.", "items_processed": 10},
+    "explanation": "The example tool processed 10 items and finished.",
 }
 
 VALID_SUCCESS_RESULT_NO_DATA = {
     "status": "success",
-    "data": None, # Explicitly None
-    "explanation": "Task completed with no specific data output."
+    "data": None,  # Explicitly None
+    "explanation": "Task completed with no specific data output.",
 }
 
 VALID_SUCCESS_RESULT_OMITTED_DATA = {
     "status": "success",
     # data field omitted
-    "explanation": "Task completed with no specific data output."
+    "explanation": "Task completed with no specific data output.",
 }
 
-VALID_FAILURE_RESULT_DATA = {
-    "status": "failure",
-    "error": VALID_ERROR_DETAIL_DATA
-}
+VALID_FAILURE_RESULT_DATA = {"status": "failure", "error": VALID_ERROR_DETAIL_DATA}
 
-INVALID_FAILURE_RESULT_MISSING_ERROR = {
-    "status": "failure" # error field is missing
-}
+INVALID_FAILURE_RESULT_MISSING_ERROR = {"status": "failure"}  # error field is missing
 
 INVALID_FAILURE_RESULT_WITH_DATA = {
     "status": "failure",
-    "data": {"some_key": "some_value"}, # data should be None or omitted on failure
-    "error": VALID_ERROR_DETAIL_DATA
+    "data": {"some_key": "some_value"},  # data should be None or omitted on failure
+    "error": VALID_ERROR_DETAIL_DATA,
 }
 
 INVALID_STATUS_TYPE = {
-    "status": 123, # status should be a string
-    "error": VALID_ERROR_DETAIL_DATA
+    "status": 123,  # status should be a string
+    "error": VALID_ERROR_DETAIL_DATA,
 }
+
 
 class TestMCPErrorDetail:
     def test_valid_error_detail(self):
@@ -85,6 +73,7 @@ class TestMCPErrorDetail:
     def test_missing_error_message(self):
         with pytest.raises(ValidationError):
             MCPErrorDetail(error_type="type", error_details={})
+
 
 class TestMCPToolCall:
     def test_valid_tool_call(self):
@@ -105,6 +94,7 @@ class TestMCPToolCall:
         tool_call = MCPToolCall(**data)
         assert tool_call.arguments == {}
 
+
 class TestMCPToolResult:
     def test_valid_success_result(self):
         result = MCPToolResult(**VALID_SUCCESS_RESULT_DATA)
@@ -122,7 +112,7 @@ class TestMCPToolResult:
     def test_valid_success_result_with_omitted_data(self):
         result = MCPToolResult(**VALID_SUCCESS_RESULT_OMITTED_DATA)
         assert result.status == "success"
-        assert result.data is None # Pydantic default for Optional field is None
+        assert result.data is None  # Pydantic default for Optional field is None
         assert result.error is None
 
     def test_valid_failure_result(self):
@@ -135,14 +125,19 @@ class TestMCPToolResult:
         # This tests the custom validator: @validator('error', always=True)
         with pytest.raises(ValidationError) as excinfo:
             MCPToolResult(**INVALID_FAILURE_RESULT_MISSING_ERROR)
-        assert "'error' field must be populated if status indicates failure" in str(excinfo.value)
+        assert "'error' field must be populated if status indicates failure" in str(
+            excinfo.value
+        )
 
     def test_failure_result_should_not_have_data_field(self):
         # This tests the custom validator: @validator('data', always=True)
         with pytest.raises(ValidationError) as excinfo:
             MCPToolResult(**INVALID_FAILURE_RESULT_WITH_DATA)
-        assert "'data' field should be null or omitted if status indicates failure" in str(excinfo.value)
-    
+        assert (
+            "'data' field should be null or omitted if status indicates failure"
+            in str(excinfo.value)
+        )
+
     def test_invalid_status_type(self):
         with pytest.raises(ValidationError):
             MCPToolResult(**INVALID_STATUS_TYPE)
@@ -164,8 +159,8 @@ class TestMCPToolResult:
             "data": {
                 "output_value": "Task completed successfully.",
                 "items_processed": 10,
-                "extra_field_allowed": "yes_it_is"
-            }
+                "extra_field_allowed": "yes_it_is",
+            },
         }
         result = MCPToolResult(**data_with_extra)
         assert result.data["extra_field_allowed"] == "yes_it_is"
@@ -173,11 +168,7 @@ class TestMCPToolResult:
     def test_allow_extra_in_arguments_in_tool_call(self):
         tool_call_data_extra = {
             "tool_name": "example.do_something",
-            "arguments": {
-                "param1": "value1",
-                "param2": 123,
-                "extra_arg": True
-            }
+            "arguments": {"param1": "value1", "param2": 123, "extra_arg": True},
         }
         tool_call = MCPToolCall(**tool_call_data_extra)
-        assert tool_call.arguments["extra_arg"] is True 
+        assert tool_call.arguments["extra_arg"] is True
