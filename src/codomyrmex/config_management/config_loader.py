@@ -23,7 +23,6 @@ except ImportError:
     try:
         from codomyrmex.logging_monitoring.logger_config import get_logger
 
-        logger = get_logger(__name__)
     except ImportError:
         import logging
 
@@ -48,12 +47,24 @@ except ImportError:
     except ImportError:
         # Fallback to standard exceptions
         class ConfigurationError(Exception):
+            """Configurationerror.
+
+                A class for handling configurationerror operations.
+                """
             pass
 
         class FileOperationError(Exception):
+            """Fileoperationerror.
+
+                A class for handling fileoperationerror operations.
+                """
             pass
 
         class ValidationError(Exception):
+            """Validationerror.
+
+                A class for handling validationerror operations.
+                """
             pass
 
         def create_error_context(**kwargs):

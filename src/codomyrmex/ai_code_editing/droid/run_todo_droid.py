@@ -19,8 +19,13 @@ Usage:
 
     # Programmatic usage
     from codomyrmex.ai_code_editing.droid.run_todo_droid import run_todos
+from codomyrmex.exceptions import CodomyrmexError
     processed = list(run_todos(controller, manager, 3))
 """
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 from __future__ import annotations
 
@@ -356,7 +361,8 @@ Examples:
 
     # Add project root to Python path for module imports
     if project_root not in sys.path:
-        sys.path.insert(0, project_root)
+        pass
+#         sys.path.insert(0, project_root)  # Removed sys.path manipulation
 
     print("🤖 Codomyrmex Droid TODO Processor")
     print("=====================================")

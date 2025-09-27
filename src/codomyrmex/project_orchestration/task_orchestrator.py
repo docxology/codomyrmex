@@ -18,6 +18,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 from queue import Queue, PriorityQueue
 import uuid
+from codomyrmex.exceptions import CodomyrmexError
 
 # Import Codomyrmex modules
 try:

@@ -12,6 +12,11 @@ from datetime import datetime, timezone
 from unittest.mock import Mock, patch, MagicMock
 
 from codomyrmex.project_orchestration.task_orchestrator import (
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     TaskOrchestrator,
     Task,
     TaskStatus,

@@ -9,6 +9,7 @@ import json
 import asyncio
 from typing import Dict, Any, List, Optional, Union
 from datetime import datetime, timezone
+from codomyrmex.exceptions import CodomyrmexError
 
 # Import Codomyrmex modules
 try:
@@ -30,6 +31,10 @@ except ImportError:
 
     # Fallback classes
     class MCPToolResult:
+            """  Init  .
+
+                Args:        success: Parameter for the operation.        data: Data to process.        error: Parameter for the operation.        error_details: Parameter for the operation.        metadata: Data to process.
+                """
         def __init__(
             self,
             success: bool,
@@ -46,6 +51,10 @@ except ImportError:
 
     class MCPErrorDetail:
         def __init__(self, type: str, message: str):
+        """Mcperrordetail.
+
+            A class for handling mcperrordetail operations.
+            """
             self.type = type
             self.message = message
 

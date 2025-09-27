@@ -2,6 +2,10 @@
 
 from typing import List, Optional
 from .engine_3d import Scene3D, Camera3D, Light3D, Object3D, Vector3D
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class ShaderManager:

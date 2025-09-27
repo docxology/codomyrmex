@@ -13,6 +13,12 @@ ROOT = Path(__file__).resolve().parents[1] / "docs" / "modules"
 
 
 def scan_modules(root: Path):
+    """Scan Modules.
+
+        Args:        root: Parameter for the operation.
+
+        Returns:        The result of the operation.
+        """
     modules = {}
     for module_dir in sorted([p for p in root.iterdir() if p.is_dir()]):
         docs = []

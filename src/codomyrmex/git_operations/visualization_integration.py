@@ -14,6 +14,7 @@ from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
 
 from .git_manager import (
+from codomyrmex.exceptions import CodomyrmexError
     get_commit_history,
     get_current_branch,
     get_status,

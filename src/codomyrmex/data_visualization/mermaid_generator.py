@@ -12,6 +12,7 @@ import os
 from typing import List, Dict, Any, Optional, Union
 from pathlib import Path
 from .plot_utils import get_codomyrmex_logger
+from codomyrmex.exceptions import CodomyrmexError
 
 logger = get_codomyrmex_logger(__name__)
 

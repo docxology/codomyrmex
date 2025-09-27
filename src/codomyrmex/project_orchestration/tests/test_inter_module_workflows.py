@@ -12,9 +12,14 @@ from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 import json
 import sys
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 # Add src to path for testing
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+# sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))  # Removed sys.path manipulation
 
 # Import Codomyrmex modules (with graceful fallback for testing)
 try:

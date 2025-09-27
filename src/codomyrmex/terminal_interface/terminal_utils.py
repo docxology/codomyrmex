@@ -13,6 +13,11 @@ import shutil
 from typing import Dict, List, Any, Optional, Tuple
 from pathlib import Path
 import time
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class TerminalFormatter:

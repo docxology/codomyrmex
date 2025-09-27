@@ -11,6 +11,7 @@ import threading
 import weakref
 from pathlib import Path
 from collections import defaultdict
+from codomyrmex.exceptions import CodomyrmexError
 
 logger = logging.getLogger(__name__)
 
@@ -335,6 +336,10 @@ class ObjectRegistry:
     """Registry for managing physical objects."""
 
     def __init__(self, spatial_grid_size: float = 10.0):
+        """  Init  .
+
+            Args:        spatial_grid_size: Unique identifier.
+            """
         self.objects: Dict[str, PhysicalObject] = {}
         self._location_index: Dict[Tuple[int, int, int], Set[str]] = (
             {}

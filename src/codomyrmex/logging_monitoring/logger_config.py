@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from dotenv import load_dotenv
@@ -22,6 +23,12 @@ _logging_configured = False
 # Custom JSON Formatter
 class JsonFormatter(logging.Formatter):
     def format(self, record):
+        """Format.
+
+            Args:        record: Parameter for the operation.
+
+            Returns:        The result of the operation.
+            """
         log_entry = {
             "timestamp": datetime.utcfromtimestamp(record.created).isoformat() + "Z",
             "level": record.levelname,

@@ -13,9 +13,10 @@ import glob
 from pathlib import Path
 from typing import List, Tuple, Dict
 import hashlib
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to path for imports
-sys.path.insert(
+# sys.path.insert(  # Removed sys.path manipulation
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 )
 

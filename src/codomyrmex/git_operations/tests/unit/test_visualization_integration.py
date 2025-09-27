@@ -12,6 +12,10 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 from codomyrmex.git_operations.visualization_integration import (
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     create_git_analysis_report,
     visualize_git_branches,
     visualize_commit_activity,

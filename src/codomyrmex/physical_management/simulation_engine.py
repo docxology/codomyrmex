@@ -72,6 +72,8 @@ class PhysicsSimulator:
     """Physics simulation engine."""
 
     def __init__(self):
+        """  Init  .
+            """
         self.gravity = Vector3D(0, -9.81, 0)
         self.force_fields: List[ForceField] = []
         self.constraints: List[Constraint] = []

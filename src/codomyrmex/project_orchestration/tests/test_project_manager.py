@@ -13,6 +13,10 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
 from codomyrmex.project_orchestration.project_manager import (
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     ProjectManager,
     Project,
     ProjectTemplate,

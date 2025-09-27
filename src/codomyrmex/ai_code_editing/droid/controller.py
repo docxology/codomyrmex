@@ -10,6 +10,7 @@ from enum import Enum
 from pathlib import Path
 from threading import RLock
 from typing import Any, Callable, Dict, Iterable, Optional
+from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from logging_monitoring import get_logger
@@ -17,6 +18,12 @@ except ImportError:  # pragma: no cover
     import logging
 
     def get_logger(name: str):
+        """Get Logger.
+
+            Args:        name: Name identifier.
+
+            Returns:        The result of the operation.
+            """
         logger = logging.getLogger(name)
         if not logger.handlers:
             handler = logging.StreamHandler()
@@ -38,6 +45,10 @@ except ImportError:  # pragma: no cover
 
         return decorator
 
+        """Performance Context.
+
+            A class for handling performance_context operations.
+            """
     class performance_context:  # type: ignore
         def __init__(self, *_, **__):
             pass
@@ -93,6 +104,8 @@ class DroidConfig:
     blocked_operations: Optional[Iterable[str]] = None
 
     def validate(self) -> None:
+        """Validate.
+        """
         if self.max_parallel_tasks < 1:
             raise ValueError("max_parallel_tasks must be at least 1")
         if self.max_retry_attempts < 0:
@@ -120,6 +133,12 @@ class DroidConfig:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "DroidConfig":
+        """From Dict.
+
+            Args:        cls: Parameter for the operation.        data: Data to process.
+
+            Returns:        The result of the operation.
+            """
         payload = dict(data)
         mode = payload.get("mode")
         if isinstance(mode, str):
@@ -139,6 +158,12 @@ class DroidConfig:
 
     @classmethod
     def from_env(cls, prefix: str = "DROID_") -> "DroidConfig":
+        """From Env.
+
+            Args:        cls: Parameter for the operation.        prefix: Parameter for the operation.
+
+            Returns:        The result of the operation.
+            """
         mapping: Dict[str, Any] = {}
 
         def set_if_present(name: str, transform: Callable[[str], Any]) -> None:
@@ -171,11 +196,19 @@ class DroidConfig:
         return config
 
     def with_overrides(self, **overrides: Any) -> "DroidConfig":
+        """With Overrides.
+
+            Returns:        The result of the operation.
+            """
         candidate = replace(self, **overrides)
         candidate.validate()
         return candidate
 
     def to_dict(self) -> Dict[str, Any]:
+        """To Dict.
+
+            Returns:        The result of the operation.
+            """
         data = asdict(self)
         data["mode"] = self.mode.value
         if self.allowed is not None:
@@ -201,6 +234,8 @@ class DroidMetrics:
         return asdict(self)
 
     def reset(self) -> None:
+        """Reset.
+            """
         self.sessions_started = 0
         self.sessions_completed = 0
         self.tasks_executed = 0
@@ -214,6 +249,10 @@ class DroidController:
     """Thread-safe controller coordinating droid operations."""
 
     def __init__(self, config: DroidConfig):
+        """  Init  .
+
+            Args:        config: Configuration settings.
+            """
         config.validate()
         self._config = config
         self._status = DroidStatus.STOPPED
@@ -346,6 +385,10 @@ class DroidController:
 
 
 def create_default_controller(**overrides: Any) -> DroidController:
+    """Create Default Controller.
+
+        Returns:        The result of the operation.
+        """
     config = DroidConfig().with_overrides(**overrides) if overrides else DroidConfig()
     controller = DroidController(config)
     controller.start()
@@ -353,6 +396,10 @@ def create_default_controller(**overrides: Any) -> DroidController:
 
 
 def save_config_to_file(config: DroidConfig, path: str | os.PathLike[str]) -> None:
+    """Save Config To File.
+
+        Args:        config: Configuration settings.        path: Path to the file or directory.
+        """
     data = json.dumps(config.to_dict(), indent=2)
     Path(path).write_text(data, encoding="utf-8")
     logger.info("droid config saved", extra={"path": str(path)})

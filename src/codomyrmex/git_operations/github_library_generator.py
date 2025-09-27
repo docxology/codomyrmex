@@ -13,6 +13,11 @@ import os
 from datetime import datetime
 from typing import List, Dict, Optional
 from pathlib import Path
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class GitHubLibraryGenerator:

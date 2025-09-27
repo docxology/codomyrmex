@@ -10,6 +10,10 @@ TODO: Implement the full integration
 """
 
 from typing import Any, Optional
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class ClaudeTaskMaster:

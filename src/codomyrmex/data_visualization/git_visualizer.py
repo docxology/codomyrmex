@@ -24,6 +24,7 @@ import json
 
 # Import from data_visualization module
 from .plot_utils import (
+from codomyrmex.exceptions import CodomyrmexError
     get_codomyrmex_logger,
     save_plot,
     apply_common_aesthetics,

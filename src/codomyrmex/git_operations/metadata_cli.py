@@ -13,11 +13,16 @@ import json
 from pathlib import Path
 from typing import Optional
 from datetime import datetime, timedelta
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
-sys.path.insert(0, str(src_dir))
+# sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
 from codomyrmex.git_operations.repository_metadata import (
     RepositoryMetadataManager,

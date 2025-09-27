@@ -11,6 +11,10 @@ import time
 from unittest.mock import Mock, patch, MagicMock
 
 from codomyrmex.project_orchestration.resource_manager import (
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     ResourceManager,
     Resource,
     ResourceType,

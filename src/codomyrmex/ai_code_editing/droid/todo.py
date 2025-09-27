@@ -5,6 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, List, Sequence, Tuple
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 TODO_HEADER = "[TODO]"
 COMPLETED_HEADER = "[COMPLETED]"
@@ -12,12 +17,22 @@ COMPLETED_HEADER = "[COMPLETED]"
 
 @dataclass
 class TodoItem:
+    """Todoitem.
+
+        A class for handling todoitem operations.
+        """
     operation_id: str
     handler_path: str
     description: str
 
     @classmethod
     def parse(cls, raw: str) -> "TodoItem":
+        """Parse.
+
+            Args:        cls: Parameter for the operation.        raw: Parameter for the operation.
+
+            Returns:        The result of the operation.
+            """
         parts = [part.strip() for part in raw.split("|")]
         if len(parts) != 3:
             raise ValueError(f"Invalid TODO entry: {raw}")
@@ -28,10 +43,19 @@ class TodoItem:
 
 
 class TodoManager:
+    """Todomanager.
+
+    A class for handling todomanager operations.
+    """
+    
     def __init__(self, todo_file: str | Path):
         self.todo_path = Path(todo_file)
 
     def load(self) -> Tuple[List[TodoItem], List[TodoItem]]:
+        """Load.
+
+        Returns:        The result of the operation.
+        """
         if not self.todo_path.exists():
             return [], []
 

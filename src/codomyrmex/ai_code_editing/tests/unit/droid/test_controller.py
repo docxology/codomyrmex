@@ -6,13 +6,19 @@ import tempfile
 import unittest
 from unittest import mock
 from pathlib import Path
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 TEST_DIR = os.path.dirname(__file__)
 PACKAGE_ROOT = os.path.abspath(os.path.join(TEST_DIR, "../../.."))
 MODULE_ROOT = os.path.abspath(os.path.join(TEST_DIR, "../../../.."))
 for path in (MODULE_ROOT, PACKAGE_ROOT):
     if path not in sys.path:
-        sys.path.insert(0, path)
+        pass
+#         sys.path.insert(0, path)  # Removed sys.path manipulation
 
 from ai_code_editing.droid import (  # noqa: E402
     DroidConfig,

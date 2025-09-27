@@ -7,6 +7,7 @@ to improve startup time and runtime performance.
 
 from .lazy_loader import LazyLoader, lazy_import
 from .cache_manager import CacheManager, cached_function
+from ..exceptions import CodomyrmexError
 
 # Import PerformanceMonitor with fallback if psutil is not available
 try:

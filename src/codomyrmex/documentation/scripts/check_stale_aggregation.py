@@ -14,6 +14,10 @@ dest_root = project_root / "code" / "documentation" / "docs" / "modules"
 
 
 def main():
+    """Main.
+
+        Returns:        The result of the operation.
+        """
     problems = []
     if not dest_root.exists():
         print(f"Destination aggregated docs not found: {dest_root}")

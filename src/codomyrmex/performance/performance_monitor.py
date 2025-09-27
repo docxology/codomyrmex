@@ -12,6 +12,11 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 try:
     import psutil
@@ -223,6 +228,10 @@ def monitor_performance(
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            """Wrapper.
+
+                Returns:        The result of the operation.
+                """
             monitor_instance = monitor or _performance_monitor
             name = function_name or func.__name__
 

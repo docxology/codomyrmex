@@ -64,6 +64,7 @@ Visualization Integration:
 """
 
 from .git_manager import (
+from ..exceptions import CodomyrmexError
     # Core operations
     check_git_availability,
     is_git_repository,

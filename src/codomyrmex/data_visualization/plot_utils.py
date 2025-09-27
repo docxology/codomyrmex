@@ -9,6 +9,7 @@ import os
 import logging
 import matplotlib.pyplot as plt
 from pathlib import Path
+from codomyrmex.exceptions import CodomyrmexError
 
 
 def get_codomyrmex_logger(name: str) -> logging.Logger:

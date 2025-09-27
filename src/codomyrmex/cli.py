@@ -15,11 +15,13 @@ from typing import Optional, Dict, Any, List
 import argparse
 import asyncio
 from datetime import datetime
+from ..exceptions import CodomyrmexError
 
 # Add the src directory to Python path for development
 src_dir = Path(__file__).parent.parent
 if str(src_dir) not in sys.path:
-    sys.path.insert(0, str(src_dir))
+    pass
+#     sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
 # Import core logging
 try:
@@ -34,7 +36,6 @@ except ImportError:
             setup_logging,
         )
 
-        logger = get_logger(__name__)
     except ImportError:
         # Fallback logging
         import logging

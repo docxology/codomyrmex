@@ -4,6 +4,10 @@ import pytest
 import time
 from unittest.mock import Mock
 from codomyrmex.physical_management import (
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     PhysicalObjectManager,
     ObjectType,
     ObjectStatus,

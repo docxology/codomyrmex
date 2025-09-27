@@ -7,6 +7,7 @@ import webbrowser
 import shutil  # For checking if command exists
 import glob
 from pathlib import Path
+from codomyrmex.exceptions import CodomyrmexError
 
 # --- Determine project structure and add appropriate path to sys.path for package import ---
 _codomyrmex_dir_for_import_msg = "Unknown"
@@ -31,7 +32,8 @@ _codomyrmex_dir_for_import_msg = CODOMYRMEX_SRC_DIR
 _path_added_for_import_msg = PATH_TO_ADD_FOR_MODULE_IMPORT
 
 if PATH_TO_ADD_FOR_MODULE_IMPORT not in sys.path:
-    sys.path.insert(0, PATH_TO_ADD_FOR_MODULE_IMPORT)
+    pass
+#     sys.path.insert(0, PATH_TO_ADD_FOR_MODULE_IMPORT)  # Removed sys.path manipulation
 # --- End sys.path modification ---
 
 # Global logger variable, to be initialized by custom or fallback logging

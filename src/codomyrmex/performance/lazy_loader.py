@@ -9,6 +9,11 @@ import sys
 import importlib
 from typing import Any, Dict, Optional, Callable
 from functools import wraps
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class LazyLoader:

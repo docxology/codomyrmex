@@ -16,6 +16,7 @@ from typing import Dict, List, Any, Optional, Union, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 import uuid
+from codomyrmex.exceptions import CodomyrmexError
 
 # Import Codomyrmex modules
 try:
@@ -124,6 +125,12 @@ class OrchestrationSession:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "OrchestrationSession":
+        """From Dict.
+
+            Args:        cls: Parameter for the operation.        data: Data to process.
+
+            Returns:        The result of the operation.
+            """
         sess = cls(
             session_id=data.get("session_id", str(uuid.uuid4())),
             name=data.get("name", ""),
@@ -295,6 +302,10 @@ class OrchestrationEngine:
                     import threading
 
                     def run_async():
+                        """Run Async.
+
+                            Returns:        The result of the operation.
+                            """
                         new_loop = asyncio.new_event_loop()
                         asyncio.set_event_loop(new_loop)
                         try:

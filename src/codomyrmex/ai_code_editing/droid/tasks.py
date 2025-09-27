@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from importlib import import_module
+from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from logging_monitoring import get_logger
@@ -900,7 +901,8 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     # Add the current directory to Python path for direct imports
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
+        pass
+#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     # Define paths to check
     project_root = Path(__file__).parent.parent.parent.parent.parent
@@ -1065,7 +1067,8 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
     # Add the current directory to Python path for direct imports
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
+        pass
+#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     # Define the documentation module path
     project_root = Path(__file__).parent.parent.parent.parent.parent
@@ -1758,7 +1761,8 @@ def create_physical_management_module(*, prompt: str, description: str) -> str:
     # Add the current directory to Python path for direct imports
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
+        pass
+#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     # Define the physical management module structure
     module_name = "physical_management"
@@ -1871,7 +1875,8 @@ def refactor_todo_processing(*, prompt: str, description: str) -> str:
     # Add the current directory to Python path for direct imports
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
+        pass
+#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     # Define the droid directory
     droid_dir = Path(__file__).parent
@@ -1923,7 +1928,8 @@ def testing_and_docs(*, prompt: str, description: str) -> str:
     # Add the current directory to Python path for direct imports
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
+        pass
+#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     droid_dir = Path(__file__).parent
 
@@ -1989,7 +1995,8 @@ def prompt_engineering(*, prompt: str, description: str) -> str:
     # Add the current directory to Python path for direct imports
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
+        pass
+#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     project_root = Path(__file__).parent.parent.parent.parent.parent
     ai_code_editing_dir = project_root / "src" / "codomyrmex" / "ai_code_editing"
@@ -2047,7 +2054,8 @@ def ollama_module(*, prompt: str, description: str) -> str:
     # Add the current directory to Python path for direct imports
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
+        pass
+#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     project_root = Path(__file__).parent.parent.parent.parent.parent
     ai_code_editing_dir = project_root / "src" / "codomyrmex" / "ai_code_editing"

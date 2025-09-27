@@ -18,6 +18,7 @@ from .bar_chart import create_bar_chart
 from .histogram import create_histogram
 from .pie_chart import create_pie_chart
 from .plot_utils import (
+from codomyrmex.exceptions import CodomyrmexError
     get_codomyrmex_logger,
     save_plot,
     apply_common_aesthetics,

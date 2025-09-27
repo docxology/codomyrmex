@@ -13,11 +13,12 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, NamedTuple
 from dataclasses import dataclass
 from enum import Enum
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
-sys.path.insert(0, str(src_dir))
+# sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
 from codomyrmex.git_operations.git_manager import (
     clone_repository,

@@ -15,6 +15,7 @@ import random
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 import importlib
+from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger

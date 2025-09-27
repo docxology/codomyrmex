@@ -1,6 +1,11 @@
 from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, Field, validator
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class MCPErrorDetail(BaseModel):
@@ -29,6 +34,10 @@ class MCPToolCall(BaseModel):
     )
 
     class Config:
+        """Config.
+
+            A class for handling config operations.
+            """
         extra = "allow"  # Allow arbitrary arguments, tool-specific validation happens elsewhere
 
 
@@ -52,6 +61,12 @@ class MCPToolResult(BaseModel):
 
     @validator("error", always=True)
     def check_error_if_failed(cls, v, values):
+        """Check Error If Failed.
+
+            Args:        cls: Parameter for the operation.        v: Parameter for the operation.        values: Value to be processed.
+
+            Returns:        The result of the operation.
+            """
         status = values.get("status")
         if status and "fail" in status.lower() and v is None:
             raise ValueError(
@@ -65,6 +80,12 @@ class MCPToolResult(BaseModel):
 
     @validator("data", always=True)
     def check_data_if_success(cls, v, values):
+        """Check Data If Success.
+
+            Args:        cls: Parameter for the operation.        v: Parameter for the operation.        values: Value to be processed.
+
+            Returns:        The result of the operation.
+            """
         status = values.get("status")
         if status and "success" in status.lower() and v is None:
             # Data can be None even on success if the tool has no specific data output (e.g. a tool that only has side effects)
@@ -76,6 +97,10 @@ class MCPToolResult(BaseModel):
         return v
 
     class Config:
+        """Config.
+
+            A class for handling config operations.
+            """
         extra = (
             "allow"  # Allow additional fields in data, specific validation is per-tool
         )

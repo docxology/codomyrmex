@@ -13,6 +13,11 @@ from unittest.mock import patch, MagicMock
 import numpy as np
 
 from codomyrmex.data_visualization.git_visualizer import (
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     GitVisualizer,
     visualize_git_repository,
     create_git_tree_png,

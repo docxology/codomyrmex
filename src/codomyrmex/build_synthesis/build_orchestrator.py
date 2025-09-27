@@ -12,12 +12,14 @@ import subprocess
 import logging
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+    pass
+#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
@@ -178,7 +180,7 @@ def _create_python_executable(source_path: Path, output_path: Path) -> bool:
         wrapper_content = f"""#!/usr/bin/env python3
 import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__))
+# sys.path.insert(0, os.path.dirname(__file__))  # Removed sys.path manipulation
 from {source_path.stem} import main
 if __name__ == "__main__":
     main()

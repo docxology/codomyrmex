@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 import ast
+from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
@@ -81,7 +82,8 @@ class SystemDiscovery:
 
         # Ensure src is in Python path
         if str(self.src_path) not in sys.path:
-            sys.path.insert(0, str(self.src_path))
+            pass
+#             sys.path.insert(0, str(self.src_path))  # Removed sys.path manipulation
 
     def run_full_discovery(self) -> None:
         """Run complete system discovery and display results."""

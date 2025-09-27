@@ -2,6 +2,11 @@ import sys
 import os
 import subprocess
 from pathlib import Path
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 # Store the original script directory to correctly locate files relative to REPO_ROOT_PATH
 _script_dir = os.path.dirname(__file__)

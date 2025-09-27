@@ -7,6 +7,7 @@ import time
 import json
 import math
 import logging
+from codomyrmex.exceptions import CodomyrmexError
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +75,8 @@ class SensorManager:
     """Manages sensor data collection and device integration."""
 
     def __init__(self):
+        """  Init  .
+            """
         self.devices: Dict[str, DeviceInterface] = {}
         self.readings: List[SensorReading] = []
         self._callbacks: Dict[str, List[Callable]] = {}

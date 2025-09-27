@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Set, Tuple, Union
 from dataclasses import dataclass
 import json
+from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -92,7 +93,8 @@ class CapabilityScanner:
 
         # Ensure src is in Python path
         if str(self.src_path) not in sys.path:
-            sys.path.insert(0, str(self.src_path))
+            pass
+#             sys.path.insert(0, str(self.src_path))  # Removed sys.path manipulation
 
     def scan_all_modules(self) -> Dict[str, ModuleCapability]:
         """Scan all modules and return detailed capability information."""

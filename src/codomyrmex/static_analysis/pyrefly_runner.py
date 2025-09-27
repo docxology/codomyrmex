@@ -3,6 +3,7 @@ import json
 import re
 import os
 import sys
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -10,7 +11,8 @@ PROJECT_ROOT = os.path.abspath(
     os.path.join(SCRIPT_DIR, "..", "..")
 )  # static_analysis -> codomyrmex
 if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+    pass
+#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging

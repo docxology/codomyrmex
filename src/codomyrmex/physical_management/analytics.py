@@ -10,6 +10,7 @@ import threading
 import queue
 from collections import deque, defaultdict
 import logging
+from codomyrmex.exceptions import CodomyrmexError
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +107,10 @@ class AnalyticsWindow:
 class DataStream:
     """Real-time data stream with analytics capabilities."""
 
+        """  Init  .
+
+            Args:        stream_id: Unique identifier.        buffer_size: Parameter for the operation.        window_duration: Parameter for the operation.
+            """
     def __init__(
         self, stream_id: str, buffer_size: int = 10000, window_duration: float = 60.0
     ):
@@ -241,6 +246,8 @@ class StreamingAnalytics:
     """Central streaming analytics manager."""
 
     def __init__(self):
+        """  Init  .
+            """
         self.streams: Dict[str, DataStream] = {}
         self.processors: List[Callable[[str, DataPoint], None]] = []
         self.alerts: List[Dict[str, Any]] = []

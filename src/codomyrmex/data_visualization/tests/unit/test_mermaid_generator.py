@@ -12,6 +12,10 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 from codomyrmex.data_visualization.mermaid_generator import (
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     MermaidDiagramGenerator,
     create_git_branch_diagram,
     create_git_workflow_diagram,

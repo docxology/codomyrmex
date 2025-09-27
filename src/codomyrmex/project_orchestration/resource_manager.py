@@ -15,6 +15,7 @@ from typing import Dict, List, Any, Optional, Set, Union
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 from collections import defaultdict
+from codomyrmex.exceptions import CodomyrmexError
 
 # Import Codomyrmex modules
 try:
@@ -185,6 +186,12 @@ class Resource:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Resource":
+        """From Dict.
+
+            Args:        cls: Parameter for the operation.        data: Data to process.
+
+            Returns:        The result of the operation.
+            """
         rt = (
             ResourceType(data.get("type"))
             if "type" in data
@@ -218,6 +225,12 @@ class Resource:
 
     def can_allocate(self, requested: Dict[str, Any], user_id: str) -> bool:
         if not self.is_available():
+        """Can Allocate.
+
+            Args:        requested: Parameter for the operation.        user_id: Unique identifier.
+
+            Returns:        The result of the operation.
+            """
             return False
         # concurrent users
         if (
@@ -235,6 +248,12 @@ class Resource:
 
     def allocate(self, requested: Dict[str, Any], user_id: str) -> bool:
         if not self.can_allocate(requested, user_id):
+        """Allocate.
+
+            Args:        requested: Parameter for the operation.        user_id: Unique identifier.
+
+            Returns:        The result of the operation.
+            """
             return False
         for key, amount in requested.items():
             self.allocated[key] = self.allocated.get(key, 0) + amount
@@ -246,11 +265,19 @@ class Resource:
     def deallocate(self, released: Dict[str, Any], user_id: str):
         for key, amount in released.items():
             if key in self.allocated:
+        """Deallocate.
+
+            Args:        released: Parameter for the operation.        user_id: Unique identifier.
+            """
                 self.allocated[key] = max(0, self.allocated[key] - amount)
         self.current_users.discard(user_id)
         self.updated_at = datetime.now(timezone.utc)
 
     def get_utilization(self) -> Dict[str, float]:
+        """Get Utilization.
+
+            Returns:        The result of the operation.
+            """
         utilization = {}
         for key, capacity in self.capacity.items():
             try:

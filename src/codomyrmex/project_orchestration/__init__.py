@@ -27,6 +27,7 @@ Integration:
 """
 
 from .workflow_manager import (
+from ..exceptions import CodomyrmexError
     WorkflowManager,
     WorkflowStep,
     WorkflowStatus,

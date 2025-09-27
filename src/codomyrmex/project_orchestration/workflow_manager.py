@@ -21,6 +21,7 @@ Architecture:
 
 Usage:
     from codomyrmex.project_orchestration import get_workflow_manager
+from codomyrmex.exceptions import CodomyrmexError
 
     manager = get_workflow_manager()
 
@@ -78,6 +79,10 @@ except ImportError:
 
     class performance_context:
         def __init__(self, *args, **kwargs):
+        """Performance Context.
+
+            A class for handling performance_context operations.
+            """
             pass
 
         def __enter__(self):

@@ -15,11 +15,12 @@ from dataclasses import dataclass, asdict, field
 from enum import Enum
 import subprocess
 import requests
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
-sys.path.insert(0, str(src_dir))
+# sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
 from codomyrmex.git_operations.git_manager import (
     is_git_repository,

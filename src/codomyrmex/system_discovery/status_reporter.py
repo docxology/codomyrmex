@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 import json
 from datetime import datetime
+from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger

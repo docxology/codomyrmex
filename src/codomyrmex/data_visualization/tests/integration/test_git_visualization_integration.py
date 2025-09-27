@@ -15,6 +15,11 @@ import json
 
 # Test both modules' integration
 from codomyrmex.data_visualization import (
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
     GitVisualizer,
     create_git_tree_png,
     create_git_tree_mermaid,

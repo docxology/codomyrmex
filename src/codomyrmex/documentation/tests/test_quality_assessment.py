@@ -4,6 +4,10 @@ import pytest
 from pathlib import Path
 import tempfile
 import os
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 
 
 class TestDocumentationQualityAnalyzer:
