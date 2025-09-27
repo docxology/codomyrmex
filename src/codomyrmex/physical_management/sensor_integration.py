@@ -1,10 +1,14 @@
 """Sensor integration and device management."""
 
-from typing import Dict, List, Optional, Callable, Any
-from dataclasses import dataclass
+from typing import Dict, List, Optional, Callable, Any, Tuple
+from dataclasses import dataclass, field
 from enum import Enum
 import time
 import json
+import math
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SensorType(Enum):
@@ -181,6 +185,149 @@ class SensorManager:
             "readings_by_sensor": sensor_counts,
             "devices_by_status": device_counts,
             "last_reading": self.readings[-1].timestamp if self.readings else None
+        }
+    
+    def calibrate_sensor(self, sensor_id: str, reference_values: List[Tuple[float, float]], 
+                        sensor_type: SensorType) -> Dict[str, float]:
+        """
+        Calibrate a sensor using reference values.
+        reference_values: List of (sensor_reading, actual_value) tuples
+        Returns calibration coefficients: {'slope': float, 'offset': float}
+        """
+        if len(reference_values) < 2:
+            raise ValueError("At least 2 reference points needed for calibration")
+        
+        # Linear regression for calibration
+        x_values = [point[0] for point in reference_values]  # sensor readings
+        y_values = [point[1] for point in reference_values]  # actual values
+        
+        n = len(reference_values)
+        sum_x = sum(x_values)
+        sum_y = sum(y_values)
+        sum_xy = sum(x * y for x, y in reference_values)
+        sum_xx = sum(x * x for x in x_values)
+        
+        # Calculate slope and intercept
+        slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x)
+        offset = (sum_y - slope * sum_x) / n
+        
+        calibration = {'slope': slope, 'offset': offset}
+        
+        # Store calibration for this sensor
+        if not hasattr(self, '_calibrations'):
+            self._calibrations = {}
+        self._calibrations[sensor_id] = calibration
+        
+        logger.info(f"Calibrated sensor {sensor_id}: slope={slope:.4f}, offset={offset:.4f}")
+        return calibration
+    
+    def apply_calibration(self, reading: SensorReading) -> SensorReading:
+        """Apply calibration to a sensor reading if available."""
+        if hasattr(self, '_calibrations') and reading.sensor_id in self._calibrations:
+            cal = self._calibrations[reading.sensor_id]
+            calibrated_value = reading.value * cal['slope'] + cal['offset']
+            
+            # Create new reading with calibrated value
+            return SensorReading(
+                sensor_id=reading.sensor_id,
+                sensor_type=reading.sensor_type,
+                value=calibrated_value,
+                unit=reading.unit,
+                timestamp=reading.timestamp,
+                metadata={**reading.metadata, 'calibrated': True, 'raw_value': reading.value}
+            )
+        return reading
+    
+    def get_sensor_health(self, sensor_id: str, time_window: float = 3600) -> Dict[str, Any]:
+        """Analyze sensor health based on recent readings."""
+        current_time = time.time()
+        cutoff_time = current_time - time_window
+        
+        # Get recent readings for this sensor
+        recent_readings = [
+            r for r in self.readings 
+            if r.sensor_id == sensor_id and r.timestamp >= cutoff_time
+        ]
+        
+        if not recent_readings:
+            return {"status": "no_data", "readings_count": 0}
+        
+        values = [r.value for r in recent_readings]
+        
+        # Calculate statistics
+        mean_value = sum(values) / len(values)
+        variance = sum((v - mean_value) ** 2 for v in values) / len(values)
+        std_dev = math.sqrt(variance)
+        
+        # Check for anomalies (values beyond 3 standard deviations)
+        anomalies = [v for v in values if abs(v - mean_value) > 3 * std_dev]
+        
+        # Check reading frequency
+        time_diffs = []
+        for i in range(1, len(recent_readings)):
+            time_diffs.append(recent_readings[i].timestamp - recent_readings[i-1].timestamp)
+        
+        avg_interval = sum(time_diffs) / len(time_diffs) if time_diffs else 0
+        
+        return {
+            "status": "healthy" if len(anomalies) < len(values) * 0.1 else "degraded",
+            "readings_count": len(recent_readings),
+            "mean_value": mean_value,
+            "std_deviation": std_dev,
+            "anomalies_count": len(anomalies),
+            "average_interval": avg_interval,
+            "last_reading": recent_readings[-1].timestamp
+        }
+    
+    def detect_sensor_drift(self, sensor_id: str, baseline_period: float = 86400,
+                           comparison_period: float = 3600) -> Dict[str, Any]:
+        """Detect if a sensor has drifted from its baseline."""
+        current_time = time.time()
+        
+        # Get baseline readings (older period)
+        baseline_start = current_time - baseline_period - comparison_period
+        baseline_end = current_time - comparison_period
+        
+        baseline_readings = [
+            r for r in self.readings
+            if (r.sensor_id == sensor_id and 
+                baseline_start <= r.timestamp <= baseline_end)
+        ]
+        
+        # Get recent readings
+        recent_readings = [
+            r for r in self.readings
+            if (r.sensor_id == sensor_id and 
+                r.timestamp >= current_time - comparison_period)
+        ]
+        
+        if len(baseline_readings) < 10 or len(recent_readings) < 10:
+            return {"status": "insufficient_data"}
+        
+        baseline_mean = sum(r.value for r in baseline_readings) / len(baseline_readings)
+        recent_mean = sum(r.value for r in recent_readings) / len(recent_readings)
+        
+        drift_amount = recent_mean - baseline_mean
+        drift_percentage = (drift_amount / baseline_mean * 100) if baseline_mean != 0 else 0
+        
+        # Classify drift severity
+        if abs(drift_percentage) < 1:
+            status = "stable"
+        elif abs(drift_percentage) < 5:
+            status = "minor_drift"
+        elif abs(drift_percentage) < 15:
+            status = "moderate_drift"
+        else:
+            status = "significant_drift"
+        
+        return {
+            "status": status,
+            "drift_amount": drift_amount,
+            "drift_percentage": drift_percentage,
+            "baseline_mean": baseline_mean,
+            "recent_mean": recent_mean,
+            "baseline_readings": len(baseline_readings),
+            "recent_readings": len(recent_readings)
         }
 
 

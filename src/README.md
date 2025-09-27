@@ -26,12 +26,70 @@ src/
 └── template/            # Project templates and boilerplate code
 ```
 
-## Quick Navigation
+## Source Code Navigation
 
-### 🔥 Core Modules
+### **📊 Source Structure Visualization**
+
+```mermaid
+graph TB
+    subgraph "Source Root (src/)"
+        SrcREADME["README.md<br/>Source Overview"]
+        SrcAGENTS["AGENTS.md<br/>AI Agents at Source Level"]
+
+        subgraph "Main Package (codomyrmex/)"
+            PackageREADME["README.md<br/>Package Overview"]
+            PackageAGENTS["AGENTS.md<br/>Module AI Agents"]
+
+            subgraph "Core Modules"
+                AICodeEditing["ai_code_editing/<br/>AI Code Generation"]
+                DataViz["data_visualization/<br/>Charts & Plots"]
+                StaticAnalysis["static_analysis/<br/>Code Quality Analysis"]
+                CodeExecution["code_execution_sandbox/<br/>Secure Execution"]
+                BuildSynthesis["build_synthesis/<br/>Build Automation"]
+                PatternMatching["pattern_matching/<br/>Pattern Recognition"]
+                GitOps["git_operations/<br/>Git Workflows"]
+                Documentation["documentation/<br/>Doc Generation"]
+            end
+        end
+
+        subgraph "Supporting Infrastructure"
+            Template["template/<br/>Module Templates"]
+            Logging["logging_monitoring/<br/>Structured Logging"]
+            Environment["environment_setup/<br/>Dev Environment"]
+            ModelContext["model_context_protocol/<br/>LLM Communication"]
+            Performance["performance/<br/>Optimization Utils"]
+        end
+    end
+
+    %% Navigation relationships
+    SrcREADME --> PackageREADME
+    SrcREADME --> SrcAGENTS
+    PackageREADME --> PackageAGENTS
+    PackageREADME --> AICodeEditing
+    PackageREADME --> DataViz
+    PackageREADME --> StaticAnalysis
+    PackageREADME --> CodeExecution
+    PackageREADME --> BuildSynthesis
+    PackageREADME --> PatternMatching
+    PackageREADME --> GitOps
+    PackageREADME --> Documentation
+    PackageREADME --> Template
+    PackageREADME --> Logging
+    PackageREADME --> Environment
+    PackageREADME --> ModelContext
+    PackageREADME --> Performance
+
+    %% Module relationships
+    AICodeEditing --> CodeExecution
+    DataViz --> StaticAnalysis
+    BuildSynthesis --> GitOps
+    Documentation --> ModelContext
+```
+
+### 🔥 Core Modules Quick Access
 | Module | Description | Status | Quick Links |
 |--------|-------------|--------|-------------|
-| **[codomyrmex/](./codomyrmex/)** | Main package directory | ✅ Active | [README](./codomyrmex/README.md) \| [API Docs](./codomyrmex/__init__.py) |
+| **[codomyrmex/](./codomyrmex/)** | Main package directory | ✅ Active | [README](./codomyrmex/README.md) \| [AGENTS](./codomyrmex/AGENTS.md) |
 | **[template/](./template/)** | Project templates | 🔧 Development | [README](./template/README.md) |
 
 ### 📦 Package Information

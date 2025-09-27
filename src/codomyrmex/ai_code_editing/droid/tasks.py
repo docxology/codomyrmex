@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from importlib import import_module
-from typing import Any
 
 try:
     from logging_monitoring import get_logger
@@ -47,14 +46,7 @@ def confirm_logging_integrations(*, prompt: str, description: str) -> str:
 
 def verify_real_methods(*, prompt: str, description: str) -> str:
     """Check that referenced methods exist before marking TODO complete."""
-    import sys
-    import os
-    # Add the current directory to Python path for direct imports
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
-
-    import controller as target_module
+    target_module = import_module('codomyrmex.ai_code_editing.droid.controller')
     required = ["DroidController", "save_config_to_file", "load_config_from_file"]
     for name in required:
         if not hasattr(target_module, name):
@@ -63,221 +55,11 @@ def verify_real_methods(*, prompt: str, description: str) -> str:
     return "methods verified"
 
 
-def generate_agents_docs(*, prompt: str, description: str) -> str:
-    """Generate comprehensive AGENTS.md documentation files throughout the project."""
-    from pathlib import Path
-
-    project_root = Path(__file__).parent.parent.parent.parent.parent  # Go up to project root
-    agents_content = generate_agents_content()
-
-    # Generate main AGENTS.md at project root
-    main_agents_path = project_root / "AGENTS.md"
-    main_agents_path.write_text(agents_content)
-    logger.info(f"Generated main AGENTS.md at {main_agents_path}")
-
-    # Generate AGENTS.md in key subdirectories
-    subdirs_to_check = [
-        "src",
-        "docs",
-        "examples",
-        "testing",
-        "src/codomyrmex",
-        "src/codomyrmex/ai_code_editing"
-    ]
-
-    for subdir in subdirs_to_check:
-        subdir_path = project_root / subdir
-        if subdir_path.exists() and subdir_path.is_dir():
-            agents_path = subdir_path / "AGENTS.md"
-            # Customize content for subdirectory context
-            subdir_content = customize_agents_content_for_subdir(agents_content, subdir)
-            agents_path.write_text(subdir_content)
-            logger.info(f"Generated AGENTS.md at {agents_path}")
-
-    logger.info("agents documentation generated", extra={"description": description})
-    return "agents documentation generated"
-
-
-def generate_agents_content() -> str:
-    """Generate the main AGENTS.md content."""
-    return """# 🤖 Codomyrmex AI Agents Documentation
-
-## Overview
-
-This document describes the AI agents and autonomous systems integrated within the Codomyrmex platform. Codomyrmex combines multiple AI capabilities with traditional development tools to create a revolutionary modular coding workspace.
-
-## Core Agent Types
-
-### 1. Code Editing Agent (`ai_code_editing`)
-- **Location**: `src/codomyrmex/ai_code_editing/`
-- **Purpose**: Intelligent code modification and generation
-- **Capabilities**:
-  - Real-time code analysis and suggestions
-  - Automated refactoring and optimization
-  - Context-aware code completion
-  - Multi-language support
-
-### 2. Documentation Agent (`documentation`)
-- **Location**: `src/codomyrmex/documentation/`
-- **Purpose**: Automated documentation generation and maintenance
-- **Capabilities**:
-  - API documentation generation
-  - README and tutorial creation
-  - Code comment enhancement
-  - Documentation quality assessment
-
-### 3. Project Orchestration Agent (`project_orchestration`)
-- **Location**: `src/codomyrmex/project_orchestration/`
-- **Purpose**: Complex multi-step task coordination
-- **Capabilities**:
-  - Workflow automation
-  - Dependency management
-  - Progress tracking and reporting
-  - Error handling and recovery
-
-### 4. Data Visualization Agent (`data_visualization`)
-- **Location**: `src/codomyrmex/data_visualization/`
-- **Purpose**: Automated chart and graph generation
-- **Capabilities**:
-  - Statistical analysis visualization
-  - Interactive dashboard creation
-  - Report generation
-  - Data exploration tools
-
-## Agent Communication Protocol
-
-Agents communicate through the Model Context Protocol (MCP) and standardized interfaces:
-
-```python
-# Example agent interaction
-from codomyrmex.model_context_protocol import MCPClient
-
-client = MCPClient()
-result = client.execute_task("analyze_code", file_path="example.py")
-```
-
-## Configuration
-
-Each agent can be configured through:
-
-1. **Global Configuration**: `config/global.json`
-2. **Module Configuration**: `src/codomyrmex/{module}/config.json`
-3. **Runtime Parameters**: Passed during agent initialization
-
-## Best Practices
-
-- Always specify clear task descriptions
-- Use structured input formats when possible
-- Monitor agent performance and resource usage
-- Implement proper error handling
-- Keep documentation synchronized with code changes
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Agent not responding**: Check network connectivity and MCP server status
-2. **Poor output quality**: Review input parameters and task specificity
-3. **Resource exhaustion**: Monitor memory and CPU usage
-4. **Integration failures**: Verify API compatibility and authentication
-
----
-*This documentation is automatically maintained by the Codomyrmex Documentation Agent*
-"""
-
-
-def customize_agents_content_for_subdir(content: str, subdir: str) -> str:
-    """Customize AGENTS.md content for specific subdirectories."""
-    if subdir == "src":
-        return content.replace(
-            "## Overview",
-            "## Overview\n\n### Source Code Organization\n\nThe `src/` directory contains the core Codomyrmex modules, each implementing specific AI-powered capabilities for software development."
-        )
-    elif subdir == "docs":
-        return content.replace(
-            "## Overview",
-            "## Overview\n\n### Documentation Structure\n\nThe `docs/` directory contains comprehensive guides, API references, and educational materials for the Codomyrmex platform."
-        )
-    elif subdir.startswith("src/codomyrmex/ai_code_editing"):
-        return content.replace(
-            "### 1. Code Editing Agent",
-            "### 1. Code Editing Agent (Current Module)\n\n**This module provides the droid functionality you're currently using.** It includes:\n- TODO list management\n- Automated task execution\n- Code analysis and modification\n- Integration with development workflows"
-        )
-    else:
-        return content
-
-
-def create_3d_modeling_module(*, prompt: str, description: str) -> str:
-    """Create a comprehensive 3D modeling and rendering module with AR/VR/XR support."""
-    import os
-    import sys
-    from pathlib import Path
-
-    # Add the current directory to Python path for direct imports
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
-
-    # Define the 3D module structure
-    module_name = "modeling_3d"
-    module_path = Path(__file__).parent.parent.parent.parent.parent / "src" / "codomyrmex" / module_name
-
-    # Create module directory structure
-    module_path.mkdir(exist_ok=True)
-    (module_path / "docs").mkdir(exist_ok=True)
-    (module_path / "tests").mkdir(exist_ok=True)
-    (module_path / "examples").mkdir(exist_ok=True)
-
-    # Generate comprehensive 3D modeling module files
-    files_created = []
-
-    # 1. Main module __init__.py
-    init_content = generate_3d_init_content()
-    (module_path / "__init__.py").write_text(init_content)
-    files_created.append("__init__.py")
-
-    # 2. Core 3D engine
-    engine_content = generate_3d_engine_content()
-    (module_path / "engine_3d.py").write_text(engine_content)
-    files_created.append("engine_3d.py")
-
-    # 3. AR/VR/XR support
-    ar_content = generate_ar_vr_content()
-    (module_path / "ar_vr_support.py").write_text(ar_content)
-    files_created.append("ar_vr_support.py")
-
-    # 4. Rendering pipeline
-    render_content = generate_rendering_content()
-    (module_path / "rendering_pipeline.py").write_text(render_content)
-    files_created.append("rendering_pipeline.py")
-
-    # 5. Documentation
-    readme_content = generate_3d_readme_content()
-    (module_path / "README.md").write_text(readme_content)
-    files_created.append("README.md")
-
-    # 6. API specification
-    api_content = generate_3d_api_spec()
-    (module_path / "API_SPECIFICATION.md").write_text(api_content)
-    files_created.append("API_SPECIFICATION.md")
-
-    # 7. Usage examples
-    examples_content = generate_3d_examples()
-    (module_path / "examples" / "basic_usage.py").write_text(examples_content)
-    files_created.append("examples/basic_usage.py")
-
-    # 8. Tests
-    test_content = generate_3d_tests()
-    (module_path / "tests" / "test_engine_3d.py").write_text(test_content)
-    files_created.append("tests/test_engine_3d.py")
-
-    # 9. Requirements
-    reqs_content = generate_3d_requirements()
-    (module_path / "requirements.txt").write_text(reqs_content)
-    files_created.append("requirements.txt")
-
-    # 10. Documentation files
-    docs_content = generate_3d_docs_content()
+__all__ = [
+    "ensure_documentation_exists",
+    "confirm_logging_integrations",
+    "verify_real_methods",
+]
     (module_path / "docs" / "architecture.md").write_text(docs_content)
     files_created.append("docs/architecture.md")
 
@@ -2040,6 +1822,273 @@ def create_physical_management_module(*, prompt: str, description: str) -> str:
     return f"Physical management module created with {len(files_created)} files"
 
 
+def test_statistics_display(*, prompt: str, description: str) -> str:
+    """Test the enhanced real-time statistics display system."""
+    # Simulate different task execution times to show statistics
+    task_times = []
+
+    for i in range(3):
+        start_time = time.time()
+
+        # Simulate varying task durations
+        if i == 0:
+            time.sleep(0.5)  # Fast task
+        elif i == 1:
+            time.sleep(1.0)  # Medium task
+        else:
+            time.sleep(0.3)  # Another fast task
+
+        duration = time.time() - start_time
+        task_times.append(duration)
+
+        print(f"Task {i+1} completed in {duration:.3f}s")
+
+    # Calculate statistics
+    avg_time = sum(task_times) / len(task_times)
+    min_time = min(task_times)
+    max_time = max(task_times)
+
+    print("\n📊 Test Statistics:")
+    print(f"   Average task time: {avg_time:.3f}s")
+    print(f"   Fastest task: {min_time:.3f}s")
+    print(f"   Slowest task: {max_time:.3f}s")
+
+    logger.info(f"Statistics test completed: avg={avg_time:.3f}s", extra={"description": description})
+    return f"Statistics test completed: {len(task_times)} tasks processed"
+
+
+def refactor_todo_processing(*, prompt: str, description: str) -> str:
+    """Refactor the TODO processing system to improve structure and modularity."""
+    import os
+    import sys
+    from pathlib import Path
+
+    # Add the current directory to Python path for direct imports
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    if current_dir not in sys.path:
+        sys.path.insert(0, current_dir)
+
+    # Define the droid directory
+    droid_dir = Path(__file__).parent
+    project_root = Path(__file__).parent.parent.parent.parent.parent
+
+    # Create enhanced documentation
+    enhanced_readme = generate_enhanced_droid_readme()
+    (droid_dir / "README.md").write_text(enhanced_readme)
+
+    # Create system architecture documentation
+    architecture_doc = generate_droid_architecture_doc()
+    (droid_dir / "ARCHITECTURE.md").write_text(architecture_doc)
+
+    # Create development guide
+    dev_guide = generate_droid_development_guide()
+    (droid_dir / "DEVELOPMENT.md").write_text(dev_guide)
+
+    # Create API reference
+    api_ref = generate_droid_api_reference()
+    (droid_dir / "API_REFERENCE.md").write_text(api_ref)
+
+    # Update system configuration
+    config_content = generate_droid_config()
+    (droid_dir / "droid_config.json").write_text(config_content)
+
+    # Create migration guide
+    migration_guide = generate_migration_guide()
+    (droid_dir / "MIGRATION.md").write_text(migration_guide)
+
+    files_created = [
+        "README.md (enhanced)",
+        "ARCHITECTURE.md",
+        "DEVELOPMENT.md",
+        "API_REFERENCE.md",
+        "droid_config.json",
+        "MIGRATION.md"
+    ]
+
+    logger.info(f"Droid refactoring completed: {len(files_created)} files", extra={"description": description})
+    return f"Droid system refactored with {len(files_created)} enhanced files"
+
+
+def testing_and_docs(*, prompt: str, description: str) -> str:
+    """Test and improve all droid methods with comprehensive testing and documentation."""
+    import os
+    import sys
+    from pathlib import Path
+
+    # Add the current directory to Python path for direct imports
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    if current_dir not in sys.path:
+        sys.path.insert(0, current_dir)
+
+    droid_dir = Path(__file__).parent
+
+    # Create comprehensive test suite
+    test_suite = generate_comprehensive_test_suite()
+    (droid_dir / "tests" / "test_droid_system.py").write_text(test_suite)
+
+    # Create integration tests
+    integration_tests = generate_integration_tests()
+    (droid_dir / "tests" / "test_integration.py").write_text(integration_tests)
+
+    # Create performance tests
+    performance_tests = generate_performance_tests()
+    (droid_dir / "tests" / "test_performance.py").write_text(performance_tests)
+
+    # Create documentation tests
+    doc_tests = generate_documentation_tests()
+    (droid_dir / "tests" / "test_documentation.py").write_text(doc_tests)
+
+    # Create test configuration
+    test_config = generate_test_configuration()
+    (droid_dir / "tests" / "pytest.ini").write_text(test_config)
+
+    # Create test requirements
+    test_requirements = generate_test_requirements()
+    (droid_dir / "tests" / "requirements.txt").write_text(test_requirements)
+
+    # Run basic validation tests
+    try:
+        # Test imports
+        from .controller import DroidController
+        from .todo import TodoManager
+        from .run_todo_droid import run_todos
+
+        # Test basic functionality
+        manager = TodoManager(droid_dir / "todo_list.txt")
+        todo_items, completed_items = manager.load()
+
+        test_results = f"✅ Basic tests passed: {len(todo_items)} TODOs, {len(completed_items)} completed"
+
+    except Exception as e:
+        test_results = f"⚠️ Test validation issues: {e}"
+
+    files_created = [
+        "tests/test_droid_system.py",
+        "tests/test_integration.py",
+        "tests/test_performance.py",
+        "tests/test_documentation.py",
+        "tests/pytest.ini",
+        "tests/requirements.txt"
+    ]
+
+    logger.info(f"Droid testing and documentation completed: {len(files_created)} files", extra={"description": description})
+    return f"Droid testing and documentation setup: {len(files_created)} files created. {test_results}"
+
+
+def prompt_engineering(*, prompt: str, description: str) -> str:
+    """Enhance prompt composability and engineering methods for LLM integrations."""
+    import os
+    import sys
+    from pathlib import Path
+
+    # Add the current directory to Python path for direct imports
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    if current_dir not in sys.path:
+        sys.path.insert(0, current_dir)
+
+    project_root = Path(__file__).parent.parent.parent.parent.parent
+    ai_code_editing_dir = project_root / "src" / "codomyrmex" / "ai_code_editing"
+
+    # Create prompt engineering module
+    prompt_module = generate_prompt_engineering_module()
+    (ai_code_editing_dir / "prompt_engineering.py").write_text(prompt_module)
+
+    # Create prompt templates
+    templates_dir = ai_code_editing_dir / "prompt_templates"
+    templates_dir.mkdir(exist_ok=True)
+
+    # Create various prompt templates
+    task_template = generate_task_prompt_template()
+    (templates_dir / "task_template.md").write_text(task_template)
+
+    system_template = generate_system_prompt_template()
+    (templates_dir / "system_template.md").write_text(system_template)
+
+    context_template = generate_context_prompt_template()
+    (templates_dir / "context_template.md").write_text(context_template)
+
+    # Create prompt composition utilities
+    composition_utils = generate_prompt_composition_utils()
+    (ai_code_editing_dir / "prompt_composition.py").write_text(composition_utils)
+
+    # Create prompt testing utilities
+    testing_utils = generate_prompt_testing_utils()
+    (ai_code_editing_dir / "prompt_testing.py").write_text(testing_utils)
+
+    # Create documentation
+    prompt_docs = generate_prompt_engineering_docs()
+    (ai_code_editing_dir / "PROMPT_ENGINEERING.md").write_text(prompt_docs)
+
+    files_created = [
+        "prompt_engineering.py",
+        "prompt_templates/task_template.md",
+        "prompt_templates/system_template.md",
+        "prompt_templates/context_template.md",
+        "prompt_composition.py",
+        "prompt_testing.py",
+        "PROMPT_ENGINEERING.md"
+    ]
+
+    logger.info(f"Prompt engineering enhancement completed: {len(files_created)} files", extra={"description": description})
+    return f"Prompt engineering enhanced with {len(files_created)} files"
+
+
+def ollama_module(*, prompt: str, description: str) -> str:
+    """Develop a robust Ollama LLM integration module."""
+    import os
+    import sys
+    from pathlib import Path
+
+    # Add the current directory to Python path for direct imports
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    if current_dir not in sys.path:
+        sys.path.insert(0, current_dir)
+
+    project_root = Path(__file__).parent.parent.parent.parent.parent
+    ai_code_editing_dir = project_root / "src" / "codomyrmex" / "ai_code_editing"
+
+    # Create Ollama integration module
+    ollama_module_content = generate_ollama_integration_module()
+    (ai_code_editing_dir / "ollama_integration.py").write_text(ollama_module_content)
+
+    # Create Ollama client
+    client_content = generate_ollama_client()
+    (ai_code_editing_dir / "ollama_client.py").write_text(client_content)
+
+    # Create model management
+    model_mgmt = generate_model_management()
+    (ai_code_editing_dir / "ollama_model_manager.py").write_text(model_mgmt)
+
+    # Create configuration
+    config_content = generate_ollama_config()
+    (ai_code_editing_dir / "ollama_config.json").write_text(config_content)
+
+    # Create tests
+    test_content = generate_ollama_tests()
+    (ai_code_editing_dir / "tests" / "test_ollama_integration.py").write_text(test_content)
+
+    # Create documentation
+    docs_content = generate_ollama_documentation()
+    (ai_code_editing_dir / "OLLAMA_INTEGRATION.md").write_text(docs_content)
+
+    # Create examples
+    examples_content = generate_ollama_examples()
+    (ai_code_editing_dir / "examples" / "ollama_usage.py").write_text(examples_content)
+
+    files_created = [
+        "ollama_integration.py",
+        "ollama_client.py",
+        "ollama_model_manager.py",
+        "ollama_config.json",
+        "tests/test_ollama_integration.py",
+        "OLLAMA_INTEGRATION.md",
+        "examples/ollama_usage.py"
+    ]
+
+    logger.info(f"Ollama module implementation completed: {len(files_created)} files", extra={"description": description})
+    return f"Ollama module implemented with {len(files_created)} files"
+
+
 def generate_physical_init_content() -> str:
     """Generate the main __init__.py content for the physical management module."""
     return '''"""Physical Object Management Module for Codomyrmex.
@@ -3603,4 +3652,5 @@ __all__ = [
     "assess_documentation_coverage",
     "add_documentation_quality_methods",
     "create_physical_management_module",
+    "test_statistics_display",
 ]

@@ -178,7 +178,7 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
         progress = (i - 1) / len(to_process)
         filled = int(bar_width * progress)
         bar = "█" * filled + "░" * (bar_width - filled)
-        print(f"   📊 Progress: [{bar}] {progress*100".1f"}%")
+        print(f"   📊 Progress: [{bar}] {progress*100:.1f}%")
 
         try:
             handler = resolve_handler(item.handler_path)
@@ -201,8 +201,8 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
             remaining_tasks = len(to_process) - i
             eta = avg_time * remaining_tasks if remaining_tasks > 0 else 0
 
-            print(f"   ✅ Completed in {task_duration:.".3f" ({item.operation_id})")
-            print(f"   📈 Stats: Avg: {avg_time:.".3f"| ETA: {eta:.".1f" ({remaining_tasks} tasks)")
+            print(f"   ✅ Completed in {task_duration:.3f}s ({item.operation_id})")
+            print(f"   📈 Stats: Avg: {avg_time:.3f}s | ETA: {eta:.1f}s ({remaining_tasks} tasks)")
 
             processed.append(item)
 
@@ -211,16 +211,19 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
             task_times.append(task_duration)
             task_status.append("❌")
 
-            print(f"   ❌ Failed in {task_duration:.".3f" ({item.operation_id}): {str(e)}")
+            print(f"   ❌ Failed in {task_duration:.3f}s ({item.operation_id}): {str(e)}")
             print(f"   💡 Error: {type(e).__name__}")
 
         # Real-time statistics display
         if i < len(to_process):  # Don't show final stats yet
             current_time = time.time() - start_time
-            print("
-📊 Session Progress:"            print(f"   ⏱️  Elapsed: {current_time:.".1f"")
+            success_count = len([s for s in task_status if s == "✅"])
+            success_rate = (success_count / len(task_status)) * 100 if task_status else 0
+
+            print("\n📊 Session Progress:")
+            print(f"   ⏱️  Elapsed: {current_time:.1f}s")
             print(f"   📋 Completed: {len(processed)}/{i}")
-            print(f"   📊 Success Rate: {len([s for s in task_status if s == '✅'])/len(task_status)*100".1f"}%")
+            print(f"   📊 Success Rate: {success_rate:.1f}%")
 
     # Final summary with comprehensive statistics
     total_time = time.time() - start_time
@@ -229,35 +232,35 @@ def run_todos(controller: DroidController, manager: TodoManager, count: int) -> 
         success_count = len([s for s in task_status if s == "✅"])
         failure_count = len([s for s in task_status if s == "❌"])
 
-        print("
-🎉 Execution Summary:"        print("=" * 70)
+        print("\n🎉 Execution Summary:")
+        print("=" * 70)
         print(f"   ✅ Successfully processed: {success_count}/{len(to_process)} TODO(s)")
         print(f"   ❌ Failed: {failure_count}/{len(to_process)} TODO(s)")
-        print(f"   ⏱️  Total execution time: {total_time:.".2f"")
-        print(f"   📊 Tasks per minute: {len(processed) / (total_time / 60):.".1f"")
+        print(f"   ⏱️  Total execution time: {total_time:.2f}s")
+        print(f"   📊 Tasks per minute: {len(processed) / (total_time / 60):.1f}")
 
         if task_times:
             avg_task_time = sum(task_times) / len(task_times)
             min_task_time = min(task_times)
             max_task_time = max(task_times)
 
-            print("
-📈 Task Performance:"            print(f"   ⏱️  Average task time: {avg_task_time:.".3f"")
-            print(f"   ⚡ Fastest task: {min_task_time:.".3f"")
-            print(f"   🐌 Slowest task: {max_task_time:.".3f"")
+            print("\n📈 Task Performance:")
+            print(f"   ⏱️  Average task time: {avg_task_time:.3f}s")
+            print(f"   ⚡ Fastest task: {min_task_time:.3f}s")
+            print(f"   🐌 Slowest task: {max_task_time:.3f}s")
 
         # Update TODO list
         manager.rotate(processed, remaining, completed_items)
 
         # Final controller metrics
         metrics = controller.metrics
-        print("
-🎮 Controller Metrics:"        for key, value in metrics.items():
+        print("\n🎮 Controller Metrics:")
+        for key, value in metrics.items():
             print(f"   {key}: {value}")
 
     else:
-        print("
-❌ No TODOs were successfully processed."        print(f"   ⏱️  Total execution time: {total_time:.".2f"")
+        print("\n❌ No TODOs were successfully processed.")
+        print(f"   ⏱️  Total execution time: {total_time:.2f}s")
 
     return processed
 

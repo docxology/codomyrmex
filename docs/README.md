@@ -1,12 +1,12 @@
-# Codomyrmex Documentation
+# 📚 Codomyrmex Documentation Hub
 
-Welcome to the **Codomyrmex** project documentation! This directory contains all documentation about the Codomyrmex project itself.
+The comprehensive documentation center for the Codomyrmex platform, providing guides, API references, and educational materials for developers, contributors, and users.
 
 ## 🎯 Important Distinction
 
 This `docs/` folder contains documentation **about** Codomyrmex as a project:
 - How to use Codomyrmex
-- How to contribute to Codomyrmex  
+- How to contribute to Codomyrmex
 - Architecture and design decisions
 - Project governance and policies
 
@@ -16,153 +16,219 @@ This `docs/` folder contains documentation **about** Codomyrmex as a project:
 
 ```
 docs/
-├── README.md                 # This file - overview of documentation
-├── project/                  # Project-level documentation
-│   ├── architecture.md       # System architecture and design
-│   ├── contributing.md       # How to contribute to Codomyrmex
-│   ├── governance.md         # Project governance and policies
-│   └── roadmap.md            # Future plans and development roadmap
-├── getting-started/          # User onboarding documentation
-│   ├── installation.md       # Installation and setup guides
-│   ├── quickstart.md         # Quick start tutorial
-│   └── tutorials/            # Step-by-step tutorials
-├── modules/                  # Documentation about individual modules
-│   ├── overview.md           # Module system overview
-│   └── relationships.md      # Inter-module dependencies and data flow
-├── development/              # Developer documentation
-│   ├── environment-setup.md  # Development environment setup
-│   ├── testing.md           # Testing strategies and guidelines  
-│   ├── documentation.md     # Documentation guidelines
-│   └── release-process.md   # Release and deployment processes
-└── reference/               # Reference materials
-    ├── troubleshooting.md   # Comprehensive troubleshooting guide
-    ├── cli.md               # CLI command reference
-    └── api.md               # Complete API reference index
+├── README.md                 # This file - comprehensive documentation hub overview
+├── getting-started/          # 🚀 User onboarding and quick start
+│   ├── installation.md           # Complete setup instructions for all platforms
+│   ├── quickstart.md             # 5-minute getting started guide with examples
+│   └── tutorials/                # Step-by-step learning paths
+│       └── creating-a-module.md  # Build your own module tutorial
+├── development/              # 🔧 Developer-focused documentation
+│   ├── environment-setup.md      # Complete development environment configuration
+│   ├── documentation.md          # Standards for writing and maintaining documentation
+│   ├── testing-strategy.md       # Testing approach and best practices
+│   └── uv-usage-guide.md         # Modern Python package management
+├── modules/                  # 📦 Module system documentation
+│   ├── overview.md               # Module architecture and design principles
+│   └── relationships.md          # Inter-module dependencies and integration patterns
+├── integration/              # 🔗 External system integration
+│   ├── external-systems.md       # Third-party integrations
+│   └── fabric-ai-integration.md  # AI workflow integration
+├── project/                  # 🏗️ Project governance and contribution
+│   ├── architecture.md           # System architecture with Mermaid diagrams
+│   ├── contributing.md           # How to contribute effectively
+│   ├── documentation-reorganization-summary.md
+│   └── todo.md                   # Project roadmap and current priorities
+├── reference/                # 📖 Technical references
+│   ├── api-complete.md           # **ACCURATE** API with real function signatures
+│   ├── api.md                    # API index with source links
+│   ├── cli.md                    # Complete command-line documentation
+│   ├── changelog.md              # Project change history
+│   ├── migration-guide.md        # Upgrade instructions
+│   ├── orchestrator.md           # Workflow orchestration guide
+│   ├── performance.md            # Performance optimization guide
+│   └── troubleshooting.md        # Common issues and comprehensive solutions
+└── deployment/               # 🚀 Production deployment
+    └── production.md             # Production environment setup guide
 ```
 
-## 📊 Documentation Structure
+## 🎯 User Journey Navigation
 
-```mermaid
-graph TB
-    subgraph "Project Root"
-        MainREADME["README.md<br/>Main Overview"]
-        Security["SECURITY.md"]
-        Changelog["CHANGELOG.md"]
-        Contributing["CONTRIBUTING.md"]
-    end
-    
-    subgraph "Documentation Hub (docs/)"
-        DocsREADME["README.md<br/>Documentation Index"]
-        
-        subgraph "Getting Started"
-            Installation["installation.md"]
-            Quickstart["quickstart.md"]
-            Tutorials["tutorials/<br/>creating-a-module.md"]
-        end
-        
-        subgraph "Project Documentation"
-            Architecture["architecture.md"]
-            ContribGuide["contributing.md"]
-            DocGuide["documentation.md"]
-        end
-        
-        subgraph "Module System"
-            ModuleOverview["overview.md"]
-            ModuleRelations["relationships.md"]
-        end
-        
-        subgraph "Reference"
-            CLI["cli.md"]
-            API["api.md"]
-            Troubleshooting["troubleshooting.md"]
-        end
-        
-        subgraph "Development"
-            EnvSetup["environment-setup.md"]
-            Documentation["documentation.md"]
-        end
-    end
-    
-    subgraph "Source Documentation (src/)"
-        SrcREADME["README.md<br/>Source Overview"]
-        PackageREADME["codomyrmex/README.md<br/>Package Overview"]
-        TemplateREADME["template/README.md<br/>Template Guide"]
-        
-        subgraph "Module Docs"
-            ModuleREADMEs["Each Module<br/>Complete Documentation"]
-            APISpecs["API_SPECIFICATION.md"]
-            MCPSpecs["MCP_TOOL_SPECIFICATION.md"]
-            UsageExamples["USAGE_EXAMPLES.md"]
-        end
-    end
-    
-    %% Cross-reference relationships
-    MainREADME --> DocsREADME
-    MainREADME --> Installation
-    MainREADME --> Quickstart
-    
-    DocsREADME --> Architecture
-    DocsREADME --> ModuleOverview
-    DocsREADME --> CLI
-    
-    Architecture --> ModuleRelations
-    ModuleOverview --> PackageREADME
-    
-    ContribGuide --> EnvSetup
-    ContribGuide --> Tutorials
-    
-    API --> APISpecs
-    CLI --> MCPSpecs
-    
-    PackageREADME --> ModuleREADMEs
-    Tutorials --> TemplateREADME
+### **New Users** - Getting Started Path
+```
+Start Here
+    ↓
+📖 [Main README](../README.md) → Project overview and value proposition
+    ↓
+🚀 [Installation Guide](./getting-started/installation.md) → Complete setup
+    ↓
+⚡ [Quick Start](./getting-started/quickstart.md) → 5-minute hands-on experience
+    ↓
+💡 [Examples](../examples/README.md) → Try interactive demonstrations
+    ↓
+📚 [API Reference](./reference/api.md) → Learn the interfaces
 ```
 
-## 🚀 Quick Navigation
+### **Developers** - Development Path
+```
+🔧 [Development Setup](./development/environment-setup.md) → Environment preparation
+    ↓
+🏗️ [Architecture Overview](./project/architecture.md) → System design understanding
+    ↓
+📦 [Module System](./modules/overview.md) → Modular architecture deep dive
+    ↓
+🤝 [Contributing Guide](./project/contributing.md) → How to contribute effectively
+    ↓
+📝 [Documentation Guidelines](./development/documentation.md) → Writing and maintaining docs
+```
 
-### For Users
-- **[🏁 Getting Started](getting-started/installation.md)** - Install and set up Codomyrmex
-- **[⚡ Quick Start](getting-started/quickstart.md)** - Try Codomyrmex in 5 minutes  
-- **[📖 Tutorials](getting-started/tutorials/)** - Step-by-step guides
-- **[🔍 Troubleshooting](reference/troubleshooting.md)** - Common issues and solutions
+### **API Users** - Integration Path
+```
+🔌 [API Reference](./reference/api-complete.md) → Complete API documentation
+    ↓
+💻 [CLI Reference](./reference/cli.md) → Command-line interface guide
+    ↓
+🔗 [Integration Examples](./integration/) → External system integration
+    ↓
+🎮 [Examples](../examples/) → Working code examples
+```
 
-### For Contributors  
-- **[🤝 Contributing Guide](project/contributing.md)** - How to contribute to the project
-- **[🏗️ Architecture](project/architecture.md)** - Understanding the system design
-- **[🔧 Development Setup](development/environment-setup.md)** - Set up your dev environment
-- **[📚 Documentation Guidelines](development/documentation.md)** - Writing and maintaining docs
+## 📂 Documentation Categories
 
-### For Module Developers
-- **[📦 Module System](modules/overview.md)** - How modules work together
-- **[🔗 Module Relationships](modules/relationships.md)** - Dependencies and data flow
-- **[🎓 Module Creation Tutorial](getting-started/tutorials/creating-a-module.md)** - Build your own module
+### 🚀 **Getting Started**
+Essential guides for new users and quick onboarding:
+- **[Installation Guide](./getting-started/installation.md)** - Complete setup instructions for all platforms
+- **[Quick Start](./getting-started/quickstart.md)** - 5-minute getting started with practical examples
+- **[Module Creation Tutorial](./getting-started/tutorials/creating-a-module.md)** - Build your own module step-by-step
 
-### For API Users
-- **[🔌 Complete API Reference](reference/api-complete.md)** - **ACCURATE** API with real function signatures and examples
-- **[📖 API Index](reference/api.md)** - Quick API overview with links to complete documentation
-- **[⌨️ CLI Reference](reference/cli.md)** - Complete command-line documentation
-- **[📋 Source Navigation](../src/README.md)** - Source code organization
+### 🔧 **Development**
+Technical guides for contributors and module developers:
+- **[Development Setup](./development/environment-setup.md)** - Complete development environment configuration
+- **[Documentation Guidelines](./development/documentation.md)** - Standards for writing and maintaining documentation
+- **[Testing Strategy](./development/testing-strategy.md)** - Testing approach and best practices
+- **[UV Usage Guide](./development/uv-usage-guide.md)** - Modern Python package management
 
-## 💡 About This Documentation
+### 📦 **Module System**
+Understanding the modular architecture:
+- **[Module Overview](./modules/overview.md)** - Architecture and design principles
+- **[Module Relationships](./modules/relationships.md)** - Dependencies and integration patterns
 
-This documentation follows these principles:
+### 🔗 **Integration**
+Connecting with external systems:
+- **[External Systems](./integration/external-systems.md)** - Third-party integrations
+- **[Fabric AI Integration](./integration/fabric-ai-integration.md)** - AI workflow integration
 
-1. **Separation of Concerns**: Documentation **about** Codomyrmex is here. Documentation **generated by** Codomyrmex is elsewhere.
+### 🏗️ **Project Governance**
+Project management and contribution:
+- **[Architecture Overview](./project/architecture.md)** - System architecture with Mermaid diagrams
+- **[Contributing Guide](./project/contributing.md)** - How to contribute effectively
+- **[Project TODO](./project/todo.md)** - Roadmap and current priorities
 
-2. **User-Centric**: Organized by what users want to accomplish, not by internal code structure.
+### 📖 **Reference Documentation**
+Technical references and API documentation:
+- **[Complete API Reference](./reference/api-complete.md)** - **ACCURATE** API with real function signatures
+- **[API Index](./reference/api.md)** - Quick API overview with source links
+- **[CLI Reference](./reference/cli.md)** - Complete command-line documentation
+- **[Migration Guide](./reference/migration-guide.md)** - Upgrade instructions
+- **[Troubleshooting Guide](./reference/troubleshooting.md)** - Common issues and comprehensive solutions
 
-3. **Comprehensive but Navigable**: Complete information that's easy to find and consume.
+### 🚀 **Deployment**
+Production deployment guides:
+- **[Production Deployment](./deployment/production.md)** - Production environment setup guide
 
-4. **Living Documentation**: Kept up-to-date with the codebase and project evolution.
+## 🤖 AI Agent Integration
 
-## 🛠️ Maintaining This Documentation
+This documentation is maintained by Codomyrmex's AI agents:
 
-- Documentation lives in Markdown files for easy editing and version control
-- Follow the [Documentation Guidelines](development/documentation.md) when contributing
-- Use relative links when referencing other documentation files
-- Keep the structure flat and intuitive - avoid deep nesting
+### Documentation Agent (`src/codomyrmex/documentation/`)
+- **Location**: `src/codomyrmex/documentation/`
+- **Purpose**: Automated documentation generation and maintenance
+- **Capabilities**:
+  - API documentation generation
+  - README and tutorial creation
+  - Code comment enhancement
+  - Documentation quality assessment
+
+### Code Editing Agent (`src/codomyrmex/ai_code_editing/`)
+- **Location**: `src/codomyrmex/ai_code_editing/`
+- **Purpose**: Intelligent documentation improvement
+- **Capabilities**:
+  - Documentation structure optimization
+  - Cross-reference generation
+  - Example code enhancement
+
+## 📋 Documentation Standards
+
+### Philosophy
+- **"Show, don't tell"** - Code examples demonstrate capabilities
+- **Understated descriptions** - Let functionality speak for itself
+- **Comprehensive cross-linking** - Every level has navigation to related content
+- **Real implementations** - No mock examples, all code works
+
+### Structure Requirements
+Every documentation level must include:
+- **README.md** - Overview and navigation for that level
+- **AGENTS.md** - AI agent context and capabilities at that level
+- **Cross-links** - Navigation to parent, child, and related content
+- **Navigation diagrams** - Visual representation of content relationships
+
+## 🔍 Search and Discovery
+
+### Quick Access by Need
+| Need | Primary Resource | Alternative |
+|------|------------------|-------------|
+| **Installation Help** | [Installation Guide](./getting-started/installation.md) | [Quick Start](./getting-started/quickstart.md) |
+| **API Reference** | [API Reference](./reference/api-complete.md) | [API Index](./reference/api.md) |
+| **Development Setup** | [Dev Setup](./development/environment-setup.md) | [Contributing](./project/contributing.md) |
+| **Troubleshooting** | [Troubleshooting](./reference/troubleshooting.md) | [Examples](../examples/) |
+| **Module Development** | [Module Tutorial](./getting-started/tutorials/creating-a-module.md) | [Module Overview](./modules/overview.md) |
+
+### Navigation Patterns
+- **Parent → Child**: Each level links to sub-levels
+- **Child → Parent**: Sub-levels link back to parent context
+- **Sibling Navigation**: Related content at same level
+- **Cross-Category**: Links between different documentation areas
+
+## 🔗 Cross-References & Navigation
+
+### **📚 Documentation Hierarchy**
+```
+📖 [Main README](../README.md) ← Project overview and user journey
+    ↓
+📚 [This Documentation Hub](./README.md) ← Current level overview
+    ├── 🚀 [Getting Started](./getting-started/) ← User onboarding
+    ├── 🔧 [Development](./development/) ← Developer guides
+    ├── 📦 [Modules](./modules/) ← Module system
+    ├── 🔗 [Integration](./integration/) ← External systems
+    ├── 🏗️ [Project](./project/) ← Governance
+    ├── 📖 [Reference](./reference/) ← Technical docs
+    └── 🚀 [Deployment](./deployment/) ← Production
+```
+
+### **🌐 External Documentation**
+- **[GitHub Repository](https://github.com/codomyrmex/codomyrmex)** - Source code and issue tracking
+- **[PyPI Package](https://pypi.org/project/codomyrmex/)** - Package installation and metadata
+- **[Documentation Website](https://codomyrmex.dev/)** - Web-based documentation (planned)
+
+### **📂 Source Code Navigation**
+- **[Source Overview](../src/README.md)** - Source code structure and navigation
+- **[Package Documentation](../src/codomyrmex/README.md)** - Module status and integration patterns
+- **[Individual Module APIs](../src/codomyrmex/*/API_SPECIFICATION.md)** - Module-specific APIs
+
+## 🤝 Contributing to Documentation
+
+### How to Help
+1. **Report Issues** - Use [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues) for documentation problems
+2. **Suggest Improvements** - [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions) for enhancement ideas
+3. **Submit PRs** - Follow [Contributing Guide](./project/contributing.md) for documentation updates
+4. **Review Changes** - Help maintain quality through [Documentation Guidelines](./development/documentation.md)
+
+### Documentation Maintenance
+- **AI Agent Updates** - Automated maintenance by Codomyrmex agents
+- **Community Contributions** - Human-reviewed improvements
+- **Regular Reviews** - Periodic quality assessments
+- **Cross-Level Consistency** - Maintained navigation patterns
 
 ---
 
-**Need help?** Check out our [Contributing Guide](project/contributing.md) or [open an issue](https://github.com/codomyrmex/codomyrmex/issues).
+**📝 Documentation Status**: ✅ **Verified & Current** | *Last reviewed: January 2025* | *Maintained by: Codomyrmex Documentation Team* | *Version: v0.1.0*
 
