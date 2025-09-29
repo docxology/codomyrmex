@@ -119,23 +119,19 @@ def ensure_dependencies_installed():
             )
             print("   Visit: https://github.com/astral-sh/uv", file=sys.stderr)
 
-        print("\n[OPTION 2] Using pip (traditional method):", file=sys.stderr)
+        print("\n[INSTRUCTION] Install the missing dependencies with uv:", file=sys.stderr)
         print(
             "1. Create and activate a virtual environment in the project root (e.g., 'codomyrmex/').",
             file=sys.stderr,
         )
-        print("   Example: python -m venv .venv", file=sys.stderr)
+        print("   Example: uv venv .venv", file=sys.stderr)
         print("            source .venv/bin/activate  (Linux/macOS)", file=sys.stderr)
         print("            .venv\\Scripts\\activate    (Windows)", file=sys.stderr)
         print(
-            f"2. Install/update dependencies from '{requirements_path}':",
+            f"2. Install or update dependencies using uv (ensure '{requirements_path}' lists the required packages):",
             file=sys.stderr,
         )
-        print(f'   pip install -r "{requirements_path}"', file=sys.stderr)
-        print(
-            f"   (Ensure 'cased-kit' and 'python-dotenv' are listed in {requirements_path})",
-            file=sys.stderr,
-        )
+        print(f'   uv pip install -r "{requirements_path}"', file=sys.stderr)
 
         print(
             "\nFor detailed setup instructions, please refer to: '{readme_path}'",
@@ -149,7 +145,7 @@ def ensure_dependencies_installed():
         if is_uv_environment():
             print("[INFO] Running in uv-managed environment.")
         elif os.environ.get("VIRTUAL_ENV"):
-            print("[INFO] Running in pip-managed virtual environment.")
+            print("[INFO] Running in a virtual environment (non-uv).")
         else:
             print("[INFO] Running in system Python environment.")
 

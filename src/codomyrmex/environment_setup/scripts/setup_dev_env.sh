@@ -13,7 +13,6 @@ VENV_DIR=".venv"
 REQUIREMENTS_FILE="requirements.txt"
 PYPROJECT_FILE="pyproject.toml"
 ENV_CHECKER_SCRIPT="src/codomyrmex/environment_setup/env_checker.py"
-USE_UV=false
 
 # --- Helper Functions ---
 echo_info() {
@@ -39,10 +38,8 @@ check_uv() {
     if command -v "uv" &> /dev/null; then
         echo_info "uv is available on your system."
         return 0
-    else
-        echo_warn "uv is not available. You can install it from https://github.com/astral-sh/uv"
-        return 1
     fi
+    echo_error "uv is required for this setup. Install it from https://github.com/astral-sh/uv and re-run the script."
 }
 
 setup_uv_environment() {
@@ -70,13 +67,11 @@ setup_uv_environment() {
     echo_info "Installing/Updating Python dependencies using uv..."
     if [ -f "$PYPROJECT_FILE" ]; then
         uv pip install -e .
+    elif [ -f "$REQUIREMENTS_FILE" ]; then
+        echo_warn "pyproject.toml not found. Installing from $REQUIREMENTS_FILE via uv."
+        uv pip install -r "$REQUIREMENTS_FILE"
     else
-        echo_warn "pyproject.toml not found. Falling back to requirements.txt"
-        if [ -f "$REQUIREMENTS_FILE" ]; then
-            uv pip install -r "$REQUIREMENTS_FILE"
-        else
-            echo_error "Neither pyproject.toml nor requirements.txt found."
-        fi
+        echo_error "Neither pyproject.toml nor requirements.txt found."
     fi
     echo_info "Python dependencies installation attempt complete."
 }
@@ -109,13 +104,9 @@ echo_info "Starting Codomyrmex Development Environment Setup..."
 check_command "git"
 check_python_version # This also sets PYTHON_CMD
 
-# Check if uv is available (use it by default if available)
-if check_uv; then
-    USE_UV=true
-    echo_info "Using uv for faster environment setup..."
-else
-    echo_info "uv not available, using pip..."
-fi
+# Ensure uv is available
+check_uv
+echo_info "Using uv for environment setup..."
 
 # 1. Ensure we are in the project root (rudimentary check)
 if ([ ! -f "$REQUIREMENTS_FILE" ] && [ ! -f "$PYPROJECT_FILE" ]) || [ ! -d "src/codomyrmex/environment_setup" ]; then
@@ -124,43 +115,7 @@ fi
 echo_info "Running in project root: $(pwd)"
 
 # 2. Setup Python Environment
-if [ "$USE_UV" = true ]; then
-    setup_uv_environment
-else
-    # Traditional pip venv setup
-    if [ ! -d "$VENV_DIR" ]; then
-        echo_info "Creating Python virtual environment in '$VENV_DIR'..."
-        "$PYTHON_CMD" -m venv "$VENV_DIR"
-        echo_info "Virtual environment created."
-    else
-        echo_info "Virtual environment '$VENV_DIR' already exists."
-    fi
-
-    # 3. Activate Virtual Environment
-    echo_info "Activating pip virtual environment..."
-    source "$VENV_DIR/bin/activate"
-
-    # Check if activation worked
-    if [ -z "$VIRTUAL_ENV" ] || [ "$(basename "$VIRTUAL_ENV")" != "$VENV_DIR" ]; then
-        echo_warn "Virtual environment activation failed. Please activate manually and re-run if installation steps fail."
-        # No exit here, allow to proceed if user wants to install globally or has it activated in a way script can't detect
-    fi
-
-    # 4. Install/Update Python Dependencies
-    echo_info "Installing/Updating Python dependencies from '$REQUIREMENTS_FILE'..."
-    if [ -f "$VENV_DIR/bin/pip" ]; then
-        "$VENV_DIR/bin/pip" install -r "$REQUIREMENTS_FILE"
-    elif [ -f "$VENV_DIR/Scripts/pip.exe" ]; then
-        "$VENV_DIR/Scripts/pip.exe" install -r "$REQUIREMENTS_FILE"
-    else
-        # Fallback if pip path in venv is not standard or venv not active
-        echo_warn "Could not find pip in the virtual environment. Attempting to use 'pip' command."
-        echo_warn "Ensure your virtual environment is active for correct package installation."
-        check_command "pip"
-        pip install -r "$REQUIREMENTS_FILE"
-    fi
-    echo_info "Python dependencies installation attempt complete."
-fi
+setup_uv_environment
 
 # 5. Run Environment Checker Script
 if [ -f "$ENV_CHECKER_SCRIPT" ]; then

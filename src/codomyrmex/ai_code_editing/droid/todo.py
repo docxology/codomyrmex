@@ -17,29 +17,43 @@ COMPLETED_HEADER = "[COMPLETED]"
 
 @dataclass
 class TodoItem:
-    """Todoitem.
+    """Structured TODO item.
 
-        A class for handling todoitem operations.
-        """
-    operation_id: str
-    handler_path: str
+    Supports both the new 3-column format and legacy handler-based format.
+    New format columns:
+      task_name | task_description | outcomes
+    Legacy format columns:
+      operation_id | handler_path | description
+    """
+    task_name: str
     description: str
+    outcomes: str
+    handler_path: str | None = None
 
     @classmethod
     def parse(cls, raw: str) -> "TodoItem":
-        """Parse.
+        """Parse a single TODO line into a TodoItem.
 
-            Args:        cls: Parameter for the operation.        raw: Parameter for the operation.
-
-            Returns:        The result of the operation.
-            """
+        Accepts either:
+        - New format:   task_name | task_description | outcomes
+        - Legacy format:operation_id | handler_path | description
+        """
         parts = [part.strip() for part in raw.split("|")]
         if len(parts) != 3:
             raise ValueError(f"Invalid TODO entry: {raw}")
-        return cls(operation_id=parts[0], handler_path=parts[1], description=parts[2])
+
+        # Legacy format if the middle column looks like a module:function
+        if ":" in parts[1] and "/" not in parts[1]:
+            operation_id, handler_path, description = parts
+            return cls(task_name=operation_id, description=description, outcomes="", handler_path=handler_path)
+
+        # New format
+        task_name, description, outcomes = parts
+        return cls(task_name=task_name, description=description, outcomes=outcomes, handler_path=None)
 
     def serialise(self) -> str:
-        return f"{self.operation_id} | {self.handler_path} | {self.description}"
+        """Serialise in the new 3-column format."""
+        return f"{self.task_name} | {self.description} | {self.outcomes}"
 
 
 class TodoManager:

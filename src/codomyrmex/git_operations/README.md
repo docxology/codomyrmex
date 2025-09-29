@@ -60,9 +60,9 @@ Using this module typically involves importing its functions into other Python s
 
 This module is an integral part of the Codomyrmex project. Its availability is ensured by cloning the Codomyrmex repository and setting up the Python environment as described in the main project `README.md` or `environment_setup/README.md`.
 
-If this module has specific Python dependencies not covered by the root `requirements.txt`, they should be listed in `git_operations/requirements.txt` and installed:
+If this module has specific Python dependencies not covered by the root configuration, they should be listed in `git_operations/requirements.txt` and installed:
 ```bash
-pip install -r git_operations/requirements.txt
+uv pip install -r src/codomyrmex/git_operations/requirements.txt
 ```
 
 ### Configuration
@@ -102,9 +102,9 @@ The `git_operations` module is expected to be organized as follows:
 - **Testing**:
     1.  **Install Dependencies**: Ensure all project and module-specific development dependencies are installed (including testing frameworks like `pytest`).
         ```bash
-        pip install -r requirements.txt # Project root
-        pip install -r git_operations/requirements.txt # Module specific
-        pip install pytest pytest-mock # Example test dependencies
+        uv pip install -e .
+        uv pip install -r src/codomyrmex/git_operations/requirements.txt
+        uv pip install pytest pytest-mock
         ```
     2.  **Run Tests**: Execute tests using a test runner like `pytest`. Tests should cover various Git commands and repository states.
         ```bash

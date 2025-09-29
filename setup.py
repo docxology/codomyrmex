@@ -4,12 +4,20 @@ This file is maintained for compatibility but pyproject.toml is the primary conf
 For uv users, this file is not used as uv reads from pyproject.toml directly.
 """
 
+from pathlib import Path
 from setuptools import setup, find_packages
 
-# Read dependencies from requirements.txt for backward compatibility
+
 def read_requirements():
-    with open("requirements.txt", "r") as f:
-        return [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    """Return a list of requirements if a legacy requirements.txt is present."""
+    requirements_path = Path("requirements.txt")
+    if requirements_path.is_file():
+        return [
+            line.strip()
+            for line in requirements_path.read_text().splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        ]
+    return []
 
 setup(
     name="codomyrmex",

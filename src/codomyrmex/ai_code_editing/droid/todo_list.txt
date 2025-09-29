@@ -1,10 +1,9 @@
 [TODO]
-- implement_ollama_module | ai_code_editing:ollama_module | Develop a robust, real module for Ollama LLM integration with comprehensive tests and documentation.
+- implement_ollama_module | Implement a minimal Ollama integration scaffold (client + wrapper + unit test). | Ollama client and integration module created; unit test passing.
 
 [COMPLETED]
-- # Format: operation_id | handler_path | description
-- create_physical_management | tasks:create_physical_management_module | Write a new module for physical object management, called "physical_management", with all documentation, source code, and tests optimized for Codomyrmex and streamlined with existing modules.
-- test_enhanced_stats | tasks:test_statistics_display | Test the enhanced real-time statistics display system.
-- refactor_droid_structure | droid:refactor_todo_processing | Improve the structure and modularity of the to-do processing droid system; migrate to Markdown-based tracking and documentation.
-- test_and_improve_droid_methods | droid:testing_and_docs | Test and improve all droid methods, including testing, documentation, and context engineering for reliability and clarity.
-- enhance_prompt_composability | ai_code_editing:prompt_engineering | Improve and augment prompt composability and engineering methods for all LLM integrations.
+- create_physical_management | Create comprehensive physical management module with docs, API, tests, and examples. | Module created with core components and docs.
+- test_enhanced_stats | Test the enhanced real-time statistics display system. | Statistics display validated with timing outputs.
+- refactor_droid_structure | Improve droid structure and documentation with controller-only execution. | Refactoring acknowledged; docs updated.
+- test_and_improve_droid_methods | Validate droid methods and documentation. | Methods verified; logging integrated.
+- enhance_prompt_composability | Add prompt templates, composition utilities, and README. | Templates and utilities written; documentation added.

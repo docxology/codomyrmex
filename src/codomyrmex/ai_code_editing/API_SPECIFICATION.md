@@ -6,87 +6,73 @@ This API specification documents the programmatic interfaces for the AI Code Edi
 
 ## Functions
 
-### Function: `generate_code_snippet()`
+### Function: `generate_code_snippet(prompt: str, language: str, provider: str = "openai", model_name: Optional[str] = None, context: Optional[str] = None, max_length: Optional[int] = None, temperature: float = 0.7, **kwargs) -> dict`
 
-- **Description**: Generates code based on a natural language prompt and optional context.
-- **Method**: N/A (Python function)
-- **Path**: N/A
-- **Parameters/Arguments**:
-    - `prompt` (string): Natural language description of the code to be generated.
-    - `language` (string): Target programming language (e.g., "python", "javascript").
-    - `context_code` (string, optional): Existing code snippet to provide context for generation.
-    - `llm_provider` (string, optional): LLM provider to use (e.g., "openai", "anthropic"). Default: "openai".
-    - `model_name` (string, optional): Specific model from the provider. If omitted, a default model is used.
-- **Returns/Response**:
-    - **Success**:
-        ```python
-        {
-          "status": "success",
-          "generated_code": "def max_value(numbers):\n    return max(numbers)",
-          "error_message": None
+- **Description**: Generate code in the requested language using the configured LLM provider.
+- **Parameters**:
+    - `prompt`: Natural language description of the desired code.
+    - `language`: Target programming language.
+    - `provider`: LLM provider identifier (`"openai"`, `"anthropic"`, or `"google"`).
+    - `model_name`: Optional model override.
+    - `context`: Optional supplemental context appended to the prompt.
+    - `max_length`: Optional token limit for the response (provider specific).
+    - `temperature`: Sampling temperature passed to the provider.
+    - `**kwargs`: Provider specific overrides forwarded to the underlying SDK.
+- **Return Value**:
+    ```python
+    {
+        "generated_code": <str>,
+        "language": <str>,
+        "provider": <str>,
+        "model": <str>,
+        "execution_time": <float>,
+        "tokens_used": <int | None>,
+        "metadata": {
+            "prompt": <str>,
+            "context": <str | None>,
+            "temperature": <float>,
+            "max_length": <int | None>
         }
-        ```
-    - **Failure**:
-        ```python
-        {
-          "status": "failure",
-          "generated_code": None,
-          "error_message": "LLM API request failed: Rate limit exceeded"
-        }
-        ```
+    }
+    ```
+- **Errors**: Raises `ValueError` for invalid input and `RuntimeError` when provider calls fail.
 
-### Function: `refactor_code_snippet()`
+### Function: `refactor_code_snippet(code: str, refactoring_type: str, language: str, provider: str = "openai", model_name: Optional[str] = None, context: Optional[str] = None, preserve_functionality: bool = True, **kwargs) -> dict`
 
-- **Description**: Refactors existing code according to natural language instructions.
-- **Method**: N/A (Python function)
-- **Path**: N/A
-- **Parameters/Arguments**:
-    - `code_snippet` (string): The existing code to be refactored.
-    - `refactoring_instruction` (string): Natural language instruction describing the desired refactoring.
-    - `language` (string): The programming language of the code snippet.
-    - `llm_provider` (string, optional): LLM provider to use. Default: "openai".
-    - `model_name` (string, optional): Specific model to use. If omitted, a default model is used.
-- **Returns/Response**:
-    - **Success**:
-        ```python
-        {
-          "status": "success",
-          "refactored_code": "def max_value(numbers: list) -> int:\n    if not numbers:\n        raise ValueError(\"List cannot be empty\")\n    return max(numbers)",
-          "explanation": "Added type hints and error handling for empty lists",
-          "error_message": None
+- **Description**: Refactor existing code according to the requested refactoring type.
+- **Parameters**:
+    - `code`: Source code to refactor.
+    - `refactoring_type`: High level instruction such as `"optimize"`, `"simplify"`, or `"add_error_handling"`.
+    - `language`: Programming language of the code snippet.
+    - `provider`: LLM provider identifier.
+    - `model_name`: Optional model override.
+    - `context`: Additional context for the LLM.
+    - `preserve_functionality`: When `True`, instructs the LLM to maintain behavior.
+    - `**kwargs`: Provider specific overrides forwarded to the SDK.
+- **Return Value**:
+    ```python
+    {
+        "original_code": <str>,
+        "refactored_code": <str>,
+        "refactoring_type": <str>,
+        "language": <str>,
+        "provider": <str>,
+        "model": <str>,
+        "execution_time": <float>,
+        "tokens_used": <int | None>,
+        "metadata": {
+            "context": <str | None>,
+            "preserve_functionality": <bool>
         }
-        ```
-    - **No Change**:
-        ```python
-        {
-          "status": "no_change_needed",
-          "refactored_code": "def max_value(numbers): ...",
-          "explanation": "The code is already optimal for the given requirements",
-          "error_message": None
-        }
-        ```
-    - **Failure**:
-        ```python
-        {
-          "status": "failure",
-          "refactored_code": None,
-          "explanation": None,
-          "error_message": "LLM could not understand the refactoring instruction"
-        }
-        ```
+    }
+    ```
+- **Errors**: Raises `ValueError` for invalid input and `RuntimeError` when provider calls fail.
 
-### Helper Function: `get_llm_client()`
+### Helper Function: `get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple`
 
-- **Description**: Helper function to initialize and return an LLM client.
-- **Method**: N/A (Internal Python function)
-- **Path**: N/A
-- **Parameters/Arguments**:
-    - `provider` (string): The LLM provider to use.
-    - `model_name` (string, optional): Specific model to use. If omitted, a default model is used.
-- **Returns/Response**: Tuple of (client, model_name)
-- **Exceptions**:
-    - `ImportError`: If the required client library is not installed.
-    - `ValueError`: If the provider is not supported or configuration is invalid.
+- **Description**: Initialize and return the provider client together with the resolved model name.
+- **Returns**: A tuple `(client, resolved_model_name)` ready for requests.
+- **Raises**: `ImportError` when provider SDKs are missing, `ValueError` for unsupported providers or missing API keys.
 
 ## Data Models
 

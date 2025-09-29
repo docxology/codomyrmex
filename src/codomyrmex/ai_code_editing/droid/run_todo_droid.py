@@ -383,13 +383,18 @@ Examples:
             print("No TODO items found.")
         else:
             for i, item in enumerate(todo_items, 1):
-                print(f"{i}. [{item.operation_id}] {item.description}")
-                print(f"   Handler: {item.handler_path}")
+                print(f"{i}. [{item.task_name}] {item.description}")
+                if item.outcomes:
+                    print(f"   → Outcomes: {item.outcomes}")
+                if item.handler_path:
+                    print(f"   Handler: {item.handler_path}")
 
         if completed_items:
             print(f"\n✅ Completed ({len(completed_items)} items):")
             for item in completed_items:
-                print(f"   [{item.operation_id}] {item.description}")
+                print(f"   [{item.task_name}] {item.description}")
+                if item.outcomes:
+                    print(f"      → Outcomes: {item.outcomes}")
 
         return
 

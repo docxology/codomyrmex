@@ -53,7 +53,7 @@ Specific instructions for triggering builds or using synthesis features will be 
     - `Docker`
     - Language-specific build tools (e.g., Python's `pip`, `setuptools`, `build`; Node.js's `npm` or `yarn`; Java's `Maven` or `Gradle`).
     - Templating engines if used for code synthesis (e.g., Jinja2 for Python).
-- **Dependencies**: This module relies on dependencies listed in `requirements.txt` (and potentially the root `requirements.txt`). Ensure these are installed.
+- **Dependencies**: This module relies on dependencies listed in `requirements.txt` (and potentially the root configuration). Ensure these are installed with `uv`.
 
 ### Installation
 
@@ -67,10 +67,10 @@ This module is a core part of the Codomyrmex project. No separate installation i
 2.  **Set up Environment**: Follow instructions in `environment_setup/README.md`.
     ```bash
     # Example commands (adapt based on environment_setup)
-    python -m venv .venv
+    uv venv .venv
     source .venv/bin/activate
-    pip install -r requirements.txt
-    pip install -r build_synthesis/requirements.txt # If it has specific deps
+    uv pip install -e .
+    uv pip install -r src/codomyrmex/build_synthesis/requirements.txt
     ```
 
 ### Configuration

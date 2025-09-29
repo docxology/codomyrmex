@@ -26,17 +26,19 @@ User Request → TODO List → Task Parser → Handler Resolution → Controller
 
 ## How to Add New Tasks
 
-### 1. Define the Task in TODO List
+### 1. Define the Task in TODO List (3-column format)
 
 Add your task to `todo_list.txt` using the following format:
 
 ```text
-# TODO Format Example: operation_id | handler_path | description
+# New Format: task_name | task_description | outcomes
 [TODO]
-your_operation_id | tasks:your_handler_function | Your detailed task description here.
+implement_ollama_module | Implement a minimal Ollama integration scaffold (client + wrapper + unit test). | Ollama client and integration module created; unit test passing.
 ```
 
-### 2. Implement the Task Handler
+Legacy entries using `operation_id | module:function | description` are still accepted for compatibility.
+
+### 2. Implement the Task Handler (Real methods only)
 
 Add your task handler function to `tasks.py`:
 
@@ -59,7 +61,7 @@ __all__ = [
 ]
 ```
 
-### 4. Execute the Task
+### 4. Execute the Task (executed via Droid Controller)
 
 Run the droid system:
 

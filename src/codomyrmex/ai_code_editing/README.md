@@ -300,11 +300,11 @@ git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
 
 # 2. Install in development mode
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 
 # 3. Install module-specific dependencies
 cd src/codomyrmex/ai_code_editing
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 # 4. Setup pre-commit hooks (recommended)
 pre-commit install

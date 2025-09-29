@@ -92,24 +92,6 @@ uv pip install -e .
 codomyrmex check
 ```
 
-### **Using pip (Traditional)**
-
-```bash
-# 1. Clone repository
-git clone https://github.com/codomyrmex/codomyrmex.git
-cd codomyrmex
-
-# 2. Create virtual environment
-uv venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-# 3. Install
-uv pip install -e .
-
-# 4. Verify installation
-codomyrmex check
-```
-
 ### **Development Installation**
 
 For contributors or developers who want to modify Codomyrmex:
@@ -295,7 +277,7 @@ python -c "import codomyrmex; print('✅ Import successful')"
 codomyrmex check
 
 # 5. Check dependencies
-pip list | grep -E "(matplotlib|numpy|pytest|docker)"
+uv pip list | grep -E "(matplotlib|numpy|pytest|docker)"
 ```
 
 ### **🚨 Common Issues & Solutions**
@@ -315,7 +297,7 @@ source .venv/bin/activate
 which python  # Should show .venv/bin/python
 
 # 4. Reinstall if needed
-pip install -e .
+uv pip install -e .
 
 # 5. Test import
 python -c "import codomyrmex; print('Success!')"
@@ -347,12 +329,11 @@ sudo apt-get install python3.11 python3.11-venv
 rm -rf .venv
 
 # Create fresh environment
-python3 -m venv .venv
+uv venv .venv
 
 # Activate and install
 source .venv/bin/activate
-pip install --upgrade pip
-pip install -e .
+uv pip install -e .
 
 # Verify
 codomyrmex check
@@ -365,13 +346,13 @@ codomyrmex check
 
 # Correct approach:
 source .venv/bin/activate
-pip install package_name
+uv pip install package_name
 
 # If you accidentally used sudo:
 sudo rm -rf .venv
-python3 -m venv .venv
+uv venv .venv
 source .venv/bin/activate
-pip install -e .
+uv pip install -e .
 ```
 
 #### **❌ "No module named 'codomyrmex'" After Installation**
@@ -380,14 +361,14 @@ pip install -e .
 # Solution: Check installation and Python path
 
 # 1. Check installation location
-pip show codomyrmex
+uv pip show codomyrmex
 
 # 2. Verify PYTHONPATH includes the right directories
 echo $PYTHONPATH
 
 # 3. Try reinstalling
-pip uninstall codomyrmex
-pip install -e .
+uv pip uninstall codomyrmex
+uv pip install -e .
 
 # 4. Test in fresh shell
 source .venv/bin/activate
