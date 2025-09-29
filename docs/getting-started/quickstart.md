@@ -45,6 +45,8 @@ pip install -e .
 codomyrmex check
 ```
 
+**[📦 Complete Setup Guide](setup.md)** • **[🔧 Troubleshooting](../reference/troubleshooting.md)** • **[📚 Full Documentation](../README.md)**
+
 ## 🎯 **Your First Codomyrmex Commands**
 
 After installation, let's verify everything works and explore the system:
@@ -471,10 +473,16 @@ python -c "import matplotlib; print(matplotlib.get_backend())"
 ```
 
 ### **Get Help**
-- 📚 **Full Installation Guide**: [Installation](installation.md)
+- 📚 **Complete Setup Guide**: [Setup](setup.md) - Comprehensive installation and configuration
 - 🔍 **Detailed Troubleshooting**: [Troubleshooting](../reference/troubleshooting.md)
 - 💬 **Community Support**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
+
+### **Next Steps**
+1. **🎮 [Interactive Examples](../../../examples/README.md)** - Try hands-on demonstrations
+2. **📚 [Full Documentation](../README.md)** - Complete documentation hub
+3. **🏗️ [Architecture Guide](../project/architecture.md)** - Understand system design
+4. **🤝 [Contributing Guide](../project/contributing.md)** - Join development
 
 ## 🚀 Next Steps
 

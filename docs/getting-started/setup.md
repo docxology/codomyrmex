@@ -1,23 +1,10 @@
-# ⚠️ MOVED: Codomyrmex Installation Guide
+# 🚀 Codomyrmex Setup Guide
 
-**The comprehensive installation guide has been moved to a dedicated setup documentation file for better organization.**
+This comprehensive guide covers all aspects of setting up Codomyrmex, from initial installation to advanced configuration and development environment setup.
 
-**👉 New Location: [setup.md](setup.md)**
+## 🎯 Quick Start Setup
 
-This file now serves as a redirect to the complete setup guide that includes:
-- Installation instructions for all platforms
-- Configuration and environment setup
-- Troubleshooting and common issues
-- Advanced setup options
-- Development environment configuration
-
----
-
-**[📦 Go to Complete Setup Guide](setup.md)** - Everything you need to get Codomyrmex running
-
-## 🎯 Quick Start (Recommended)
-
-### **Option 1: UV-Optimized Setup (Fastest & Most Reliable)**
+### **Option 1: UV-Optimized Setup (Recommended)**
 ```bash
 # Clone and setup everything automatically with uv
 git clone https://github.com/codomyrmex/codomyrmex.git
@@ -30,7 +17,7 @@ cd codomyrmex
 # 1. Install uv (if not already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# 2. Clone the repository
+# 2. Clone repository
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
 
@@ -43,9 +30,41 @@ uv pip install -e .
 codomyrmex check
 ```
 
-## 📋 Prerequisites
+### **Option 3: Traditional pip Setup (Alternative)**
+```bash
+# 1. Clone and setup virtual environment
+git clone https://github.com/codomyrmex/codomyrmex.git
+cd codomyrmex
+python3 -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-Before installing Codomyrmex, ensure you have:
+# 2. Install dependencies
+pip install -e .
+
+# 3. Verify installation
+codomyrmex check
+```
+
+## ✅ Installation Verification
+
+After installation, verify everything is working:
+
+```bash
+# Check system health
+codomyrmex check
+
+# View project information
+codomyrmex info
+
+# Run basic tests
+pytest testing/unit/ -x
+
+# Try interactive exploration
+./start_here.sh
+# Choose option 7: Interactive Shell
+```
+
+## 📋 Prerequisites
 
 ### **Required**
 - **Python 3.10+** (latest versions recommended for best package compatibility)
@@ -170,7 +189,7 @@ cd ../../..
 docker run --rm python:3.11-slim python -c "print('Docker works!')"
 ```
 
-## ✅ Verification & Testing
+## 🧪 Testing & Verification
 
 ### **Step 1: Basic System Check**
 ```bash
@@ -265,9 +284,9 @@ python -m black src/codomyrmex/
 python -m mypy src/codomyrmex/
 ```
 
-## 🐛 Troubleshooting Guide
+## 🚨 Troubleshooting Guide
 
-This section provides solutions for the most common installation and setup issues. If you encounter problems, work through these solutions systematically.
+This section provides solutions for the most common installation and setup issues.
 
 ### **🔍 Quick Diagnostic Commands**
 
@@ -478,10 +497,8 @@ npm install
 ```
 
 ### **🔍 Advanced Debugging**
-
-#### **Check System Dependencies**
 ```bash
-# Verify all required system packages
+# Check system dependencies
 python -c "
 import sys
 required_modules = ['matplotlib', 'numpy', 'pytest', 'docker']
@@ -492,74 +509,51 @@ for module in required_modules:
     except ImportError as e:
         print(f'❌ {module}: {e}')
 "
-
-# Check optional dependencies
-optional_modules = ['openai', 'anthropic', 'google.generativeai']
-for module in optional_modules:
-    try:
-        __import__(module)
-        print(f'✅ {module} (optional)')
-    except ImportError:
-        print(f'⚠️  {module} (optional - not installed)')
-"
 ```
 
-#### **Environment Variable Issues**
-```bash
-# Check if .env file is being loaded
-python -c "
-import os
-from pathlib import Path
+## 🚀 Advanced Setup
 
-# Check if .env exists and is readable
-env_file = Path('.env')
-if env_file.exists():
-    print('✅ .env file exists')
-    print('📄 Contents preview:')
-    with open(env_file) as f:
-        lines = f.readlines()[:3]  # Show first 3 lines
-        for line in lines:
-            if '=' in line and not line.startswith('#'):
-                key = line.split('=')[0]
-                print(f'  {key}: {os.getenv(key, \"NOT SET\")}')
-else:
-    print('⚠️  .env file not found')
-"
-```
+### **Development Environment Setup**
 
-### **🚀 Getting Additional Help**
+For contributors, see the complete development environment setup in [Development Setup Guide](environment-setup.md).
 
-If these solutions don't resolve your issue:
+### **Production Deployment**
 
-1. **Check the logs**: Look for detailed error messages
-   ```bash
-   codomyrmex check --verbose
-   ```
+For production deployment, see [Production Deployment Guide](../deployment/production.md).
 
-2. **Review the documentation**: Check module-specific guides
-   ```bash
-   # See available documentation
-   find docs/ -name "*.md" | head -10
-   ```
+### **CI/CD Integration**
 
-3. **Search existing issues**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
+For integrating with CI/CD systems, see [External Systems Integration](../integration/external-systems.md).
 
-4. **Ask the community**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
+### **Advanced Configuration**
 
-5. **Create a bug report**: Include your system info and exact error messages
+- **[📦 Module-Specific Setup](../modules/overview.md#module-specific-configuration)** - Individual module configuration
+- **[🔧 Environment Variables Reference](../reference/troubleshooting.md#environment-variable-issues)** - Complete environment configuration guide
+- **[⚙️ Module Configuration](../../../src/codomyrmex/*/README.md)** - Individual module setup instructions
 
-## 🚀 Next Steps
+## 📞 Getting Help
 
-Once installed successfully:
+### **Community Support**
+- **📖 Documentation Issues**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues) - Report documentation problems
+- **💬 General Questions**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions) - Ask questions and share ideas
+- **🐛 Bug Reports**: Use the issue tracker for bugs and feature requests
 
-1. **Try the Quick Start**: Follow the [Quick Start Guide](quickstart.md)
-2. **Explore modules**: Use the [Interactive Shell](../modules/overview.md#interactive-module-exploration)
-3. **Read tutorials**: Check out [Tutorials](tutorials/) for specific use cases
-4. **Join development**: See [Contributing Guide](../project/contributing.md)
+### **When Reporting Issues**
+Include:
+1. **System Information**: `python --version`, `uname -a`
+2. **Codomyrmex Information**: `codomyrmex check`, `pip list | grep codomyrmex`
+3. **Error Details**: Complete error messages, steps to reproduce
+4. **Environment**: Virtual environment status, API keys configured, Docker version
 
 ---
 
-**Installation complete!** You're ready to start using Codomyrmex's powerful modular toolkit for code analysis, generation, and workflow automation.
+**Setup complete!** You're ready to start using Codomyrmex's powerful modular toolkit for code analysis, generation, and workflow automation.
+
+**Next Steps:**
+1. **🎮 Try Interactive Examples**: [examples/README.md](../../../examples/README.md)
+2. **📚 Explore Documentation**: [docs/README.md](../README.md)
+3. **🏗️ Understand Architecture**: [docs/project/architecture.md](../project/architecture.md)
+4. **🤝 Join Development**: [docs/project/contributing.md](../project/contributing.md)
 
 ---
 

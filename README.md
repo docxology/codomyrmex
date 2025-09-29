@@ -13,81 +13,73 @@ Codomyrmex is a **revolutionary modular coding workspace** that seamlessly integ
 - 🔧 **Modular Design**: Mix and match 15+ specialized modules for your exact needs
 - 🚀 **Production Ready**: Built with scalability, security, and reliability in mind
 
+### 🎯 **Perfect For**
+
+- **AI-Assisted Development**: Leverage multiple LLM providers for code generation and refactoring
+- **Code Quality Assurance**: Comprehensive static analysis with security vulnerability scanning
+- **Data-Driven Insights**: Rich visualizations for code metrics and performance analysis
+- **Automated Workflows**: Intelligent build orchestration and deployment automation
+- **Team Collaboration**: Standardized development processes across distributed teams
+- **Learning & Exploration**: Interactive discovery and educational tools for developers
+
 ---
 
-## 🚀 Quick Start (5 Minutes to Awesome)
+## 🚀 Quick Start
 
-**Codomyrmex works right out of the box!** Get started with our optimized setup:
+Get up and running with Codomyrmex in minutes! **[📦 Complete Setup Guide](docs/getting-started/setup.md)**
 
-### 1. UV-Optimized Setup (Recommended)
+**[🎮 Try Interactive Examples](examples/README.md)** • **[📚 Full Documentation](docs/README.md)** • **[🤝 Contribute](docs/project/contributing.md)**
+
+### 🎯 **Current Capabilities (v0.1.0)**
+
+**✅ What's Working Now:**
+- **🤖 Advanced AI Code Editing** - 23 programming languages, 3 LLM providers, comprehensive code generation, refactoring, and analysis
+- **🔍 Comprehensive Static Analysis** - Multi-language support, 8 analysis types, 4 severity levels, security scanning, complexity analysis
+- **📊 Sophisticated Data Visualization** - 7 chart styles, 10 color palettes, 13 plot types, advanced plotting, interactive dashboards
+- **🏗️ Intelligent Build Orchestration** - 8 build types, 4 environments, dependency management, artifact synthesis, deployment automation
+- **🎯 Project Orchestration** - Comprehensive workflow management system with performance monitoring
+- **📊 Performance Monitoring** - Real-time performance tracking across all modules
+- **🔄 Cross-Module Integration** - Seamless workflows between AI, analysis, visualization, and build modules
+- **🧪 Comprehensive Testing** - Unit tests, integration tests, performance tests, stress tests
+- **🔧 Enhanced CLI Interface** - Orchestration capabilities and LLM API configuration
+- **📦 Modular Architecture** - Proper imports and extensible module system
+
+**🔄 Recent Enhancements:**
+- ✅ Advanced AI code editing with 23 languages and 3 LLM providers
+- ✅ Comprehensive static analysis with multi-language support
+- ✅ Sophisticated data visualization with advanced plotting
+- ✅ Intelligent build orchestration with dependency management
+- ✅ Cross-module integration and workflow automation
+- ✅ Comprehensive testing suite with performance monitoring
+- ✅ Enhanced CLI with LLM API configuration
+- ✅ Project orchestration with workflow management
+
+### **One-Command Setup (Recommended)**
 ```bash
-# Clone and setup everything automatically with uv
+# Clone and setup everything automatically
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-./install_with_uv.sh  # Automated setup script (create this if missing)
-# OR manual setup:
-# uv venv .venv && source .venv/bin/activate && uv pip install -e .
+./install_with_uv.sh
 ```
 
-### 2. Manual UV Setup
+### **Verify Installation**
 ```bash
-# Install uv if not already installed
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Clone repository
-git clone https://github.com/codomyrmex/codomyrmex.git
-cd codomyrmex
-
-# Create virtual environment and install
-uv venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install -e .
-
-# Check setup
-python -c "from codomyrmex.environment_setup import env_checker; env_checker.check_environment()"
-```
-
-### 4. Verify Installation
-```bash
-# Check that virtual environment is activated and Codomyrmex is available
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-python -c "import codomyrmex; print('Codomyrmex installed successfully!')"
-
-# Run system health check
+# Check system health
 codomyrmex check
 
-# Get system information
-codomyrmex info
+# Try interactive exploration
+./start_here.sh
 ```
 
-### 5. Start Using Modules
-```bash
-# Run the comprehensive example to see everything working
-python examples/example_usage.py
-```
-
-Or try individual modules:
+### **Start Building**
 ```python
-# 🎨 Create stunning visualizations
+# Create stunning visualizations
 from codomyrmex.data_visualization import create_line_plot
 import numpy as np
 
 x = np.linspace(0, 10, 100)
 y = np.sin(x)
 create_line_plot(x, y, title="Beautiful Sine Wave", output_path="sine_wave.png")
-```
-
-### 6. Try Interactive Mode
-```bash
-# Launch the interactive shell for exploration and experimentation
-./start_here.sh
-# Choose option 7: Interactive Shell
-
-# Or launch directly
-python -c "
-from codomyrmex.terminal_interface import InteractiveShell
-InteractiveShell().run()
-"
 ```
 
 ---
@@ -395,10 +387,14 @@ print(f"Workflow status: {execution.status.value}")
 - ✅ Project orchestration with workflow management
 
 **🔄 Future Enhancements:**
-- Documentation website (Docusaurus)
-- Additional visualization types
-- Advanced Git operations integration
-- Machine learning model integration
+- 📚 **Documentation Website** (Docusaurus) - Interactive web documentation
+- 📊 **Additional Visualization Types** - 3D plots, network graphs, interactive dashboards
+- 🔧 **Advanced Git Operations** - Enhanced repository management and automation
+- 🤖 **Machine Learning Model Integration** - Custom ML models for code analysis
+- 🌐 **REST API Server** - HTTP endpoints for web integration
+- 📦 **Package Distribution** - PyPI package for easy installation
+- 🔄 **Plugin System** - Extensible architecture for custom modules
+- 📈 **Advanced Analytics** - Code metrics and performance insights
 
 ## 🏗️ **Enhanced Core Modules**
 
@@ -533,7 +529,45 @@ See the **[🎯 Orchestration Examples](examples/orchestration/README.md)** for 
 
 ## 📚 Documentation & Resources
 
-### **📖 Complete Documentation Hub: [docs/](docs/)**
+### **📖 Complete Documentation Hub: [docs/README.md](docs/README.md)**
+
+The Codomyrmex documentation is organized into clear sections for different user needs:
+
+#### **🚀 Getting Started**
+- **[📦 Installation Guide](docs/getting-started/installation.md)** - Complete setup for all platforms
+- **[⚡ Quick Start](docs/getting-started/quickstart.md)** - 5-minute hands-on experience
+- **[🎓 Tutorials](docs/getting-started/tutorials/creating-a-module.md)** - Step-by-step learning paths
+
+#### **🔧 Development**
+- **[🏗️ Environment Setup](docs/development/environment-setup.md)** - Development environment configuration
+- **[📝 Documentation Guidelines](docs/development/documentation.md)** - Writing and maintaining docs
+- **[🧪 Testing Strategy](docs/development/testing-strategy.md)** - Testing approach and best practices
+- **[📦 UV Usage Guide](docs/development/uv-usage-guide.md)** - Modern Python package management
+
+#### **📦 Module System**
+- **[🏛️ Module Overview](docs/modules/overview.md)** - Architecture and design principles
+- **[🔗 Module Relationships](docs/modules/relationships.md)** - Dependencies and integration patterns
+
+#### **🔗 Integration**
+- **[🌐 External Systems](docs/integration/external-systems.md)** - Third-party integrations
+- **[🤖 Fabric AI Integration](docs/integration/fabric-ai-integration.md)** - AI workflow integration
+
+#### **🏗️ Project Governance**
+- **[🏛️ Architecture](docs/project/architecture.md)** - System design with Mermaid diagrams
+- **[🤝 Contributing Guide](docs/project/contributing.md)** - How to contribute effectively
+- **[📋 Project TODO](docs/project/todo.md)** - Roadmap and current priorities
+
+#### **📖 Reference Documentation**
+- **[🔌 Complete API Reference](docs/reference/api-complete.md)** - **ACCURATE** API with real signatures
+- **[📚 API Index](docs/reference/api.md)** - Quick API overview with source links
+- **[💻 CLI Reference](docs/reference/cli.md)** - Complete command-line documentation
+- **[🔄 Migration Guide](docs/reference/migration-guide.md)** - Version upgrade instructions
+- **[🎮 Orchestrator Guide](docs/reference/orchestrator.md)** - Workflow orchestration
+- **[⚡ Performance Guide](docs/reference/performance.md)** - Performance optimization
+- **[🔧 Troubleshooting](docs/reference/troubleshooting.md)** - Common issues and solutions
+
+#### **🚀 Deployment**
+- **[🏭 Production Deployment](docs/deployment/production.md)** - Production environment setup
 
 #### **User Journey Map**
 
@@ -542,6 +576,7 @@ graph TD
     Start["New User<br/>Discovers Codomyrmex"]
     
     ReadMain["Read Main README<br/>Overview & Quick Start"]
+    DocsHub["Browse Documentation Hub<br/>docs/README.md"]
     Install["Install Codomyrmex<br/>docs/getting-started/installation.md"]
     QuickStart["Try Quick Start<br/>docs/getting-started/quickstart.md"]
     
@@ -550,11 +585,13 @@ graph TD
     UseModules["Use Existing Modules"]
     Develop["Contribute/Develop"]
     Integrate["Integrate with AI/APIs"]
+    Deploy["Deploy to Production"]
     
     %% Use Modules Path
     ModuleOverview["Module System Overview<br/>docs/modules/overview.md"]
-    APIReference["API Reference<br/>docs/reference/api.md"]
+    APIReference["API Reference<br/>docs/reference/api-complete.md"]
     Examples["Try Examples<br/>examples/"]
+    Interactive["Interactive Exploration<br/>docs/reference/orchestrator.md"]
     
     %% Development Path
     DevSetup["Development Setup<br/>docs/development/environment-setup.md"]
@@ -564,25 +601,34 @@ graph TD
     
     %% Integration Path
     CLIRef["CLI Reference<br/>docs/reference/cli.md"]
+    IntegrationGuide["Integration Guide<br/>docs/integration/external-systems.md"]
     MCPTools["MCP Tools<br/>src/codomyrmex/*/MCP_TOOL_SPECIFICATION.md"]
+
+    %% Deployment Path
+    Production["Production Deployment<br/>docs/deployment/production.md"]
+    Performance["Performance Guide<br/>docs/reference/performance.md"]
+    Monitoring["Monitoring & Troubleshooting<br/>docs/reference/troubleshooting.md"]
     
     %% Advanced Usage
     Advanced["Advanced Usage<br/>Module Combinations"]
     Community["Community<br/>Contribution"]
     
     Start --> ReadMain
-    ReadMain --> Install
+    ReadMain --> DocsHub
+    DocsHub --> Install
     Install --> QuickStart
     QuickStart --> Decision
     
     Decision --> UseModules
     Decision --> Develop
     Decision --> Integrate
+    Decision --> Deploy
     
     UseModules --> ModuleOverview
     ModuleOverview --> APIReference
     APIReference --> Examples
-    Examples --> Advanced
+    Examples --> Interactive
+    Interactive --> Advanced
     
     Develop --> DevSetup
     DevSetup --> Architecture
@@ -591,8 +637,14 @@ graph TD
     CreateModule --> Community
     
     Integrate --> CLIRef
-    CLIRef --> MCPTools
+    CLIRef --> IntegrationGuide
+    IntegrationGuide --> MCPTools
     MCPTools --> Advanced
+
+    Deploy --> Production
+    Production --> Performance
+    Performance --> Monitoring
+    Monitoring --> Advanced
     
     Advanced --> Community
 ```
@@ -627,102 +679,52 @@ graph TD
 | **Pattern Matching** | [📚 Docs](src/codomyrmex/pattern_matching/README.md) | [🔌 API](src/codomyrmex/pattern_matching/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/pattern_matching/docs/tutorials/) |
 | **Static Analysis** | [📚 Docs](src/codomyrmex/static_analysis/README.md) | [🔌 API](src/codomyrmex/static_analysis/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/static_analysis/docs/tutorials/) |
 
-## Getting Started: Development Environment Setup
+## 📚 Complete Documentation Hub
 
-This section outlines the general steps to set up the development environment for the **entire Codomyrmex project**.
+Codomyrmex provides **comprehensive documentation** organized for different user types and use cases. **[📚 Browse Full Documentation](docs/README.md)**
 
-### Prerequisites
+### **🚀 Getting Started Path**
+- **[📦 Complete Setup Guide](docs/getting-started/setup.md)** - Installation, configuration, and troubleshooting
+- **[⚡ Quick Start](docs/getting-started/quickstart.md)** - 5-minute hands-on experience
+- **[🎓 Module Creation Tutorial](docs/getting-started/tutorials/creating-a-module.md)** - Learn by building
 
-- Python 3.10 or higher (uses latest package versions for best performance)
-- `uv` (fast Python package manager used throughout Codomyrmex)
-- `git`
-- Node.js (Version 18.0 or higher, for `documentation` module)
-- npm or yarn (for `documentation` module)
+### **🔧 Development Path**
+- **[🏗️ Environment Setup](docs/development/environment-setup.md)** - Development environment configuration
+- **[📝 Documentation Guidelines](docs/development/documentation.md)** - Writing and maintaining docs
+- **[🧪 Testing Strategy](docs/development/testing-strategy.md)** - Testing approach and best practices
+- **[📦 UV Usage Guide](docs/development/uv-usage-guide.md)** - Modern Python package management
 
-Install uv from https://github.com/astral-sh/uv if it is not already available.
+### **📦 Module System Understanding**
+- **[🏛️ Module Overview](docs/modules/overview.md)** - Architecture and design principles
+- **[🔗 Module Relationships](docs/modules/relationships.md)** - Dependencies and integration patterns
+- **[📦 Module Template](../../../src/codomyrmex/module_template/README.md)** - Template for creating modules
 
-### Setup Instructions
+### **🔗 Integration & External Systems**
+- **[🌐 External Systems](docs/integration/external-systems.md)** - Third-party integrations
+- **[🤖 Fabric AI Integration](docs/integration/fabric-ai-integration.md)** - AI workflow integration
 
-1.  **Clone the Repository (if you haven't already):**
-    ```bash
-    git clone <repository_url> # Replace <repository_url> with the actual URL
-    cd codomyrmex
-    ```
+### **🏗️ Project Governance & Architecture**
+- **[🏛️ System Architecture](docs/project/architecture.md)** - Complete system design with Mermaid diagrams
+- **[🤝 Contributing Guide](docs/project/contributing.md)** - How to contribute effectively
+- **[📋 Project TODO](docs/project/todo.md)** - Roadmap and current priorities
 
-2.  **Set up Python Environment:**
+### **📖 Technical Reference**
+- **[🔌 Complete API Reference](docs/reference/api-complete.md)** - **ACCURATE** API with real signatures
+- **[📚 API Index](docs/reference/api.md)** - Quick API overview with source links
+- **[💻 CLI Reference](docs/reference/cli.md)** - Complete command-line documentation
+- **[🔄 Migration Guide](docs/reference/migration-guide.md)** - Version upgrade instructions
+- **[🎮 Orchestrator Guide](docs/reference/orchestrator.md)** - Workflow orchestration
+- **[⚡ Performance Guide](docs/reference/performance.md)** - Performance optimization
+- **[🔧 Troubleshooting](docs/reference/troubleshooting.md)** - Common issues and solutions
 
-    **Using uv (Fast and Reliable)**
-    ```bash
-    # Install uv if you haven't already (visit https://github.com/astral-sh/uv)
-    # Create and activate virtual environment
-    uv venv .venv
-    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+### **🚀 Production & Deployment**
+- **[🏭 Production Deployment](docs/deployment/production.md)** - Production environment setup
 
-    # Install dependencies
-    uv pip install -e .
-    ```
+### **🎮 Interactive Examples & Learning**
+**[🎮 Try Interactive Examples](examples/README.md)** - Executable demonstrations of all capabilities
 
-    **Automated Setup Script**
-    ```bash
-    # Run the automated setup script (uses uv internally)
-    bash environment_setup/scripts/setup_dev_env.sh
-    ```
-
-4.  **Set Up API Keys (for LLM features):**
-    If you plan to use features interacting with Large Language Models (e.g., via `ai_code_editing` or `cased/kit`), you will need API keys for services like OpenAI, Anthropic, or Google Cloud.
-    Create a `.env` file in the project root (`codomyrmex/.env`) and add your keys:
-    ```env
-    OPENAI_API_KEY="sk-..."
-    ANTHROPIC_API_KEY="sk-ant-..."
-    GOOGLE_API_KEY="AIzaSy..."
-    # Add other environment-specific variables here
-    ```
-    The `python-dotenv` library (installed via uv) will load these variables. The `env_checker.py` script in the `environment_setup` module can help verify this setup.
-
-5.  **Graphviz (Optional for Dependency Visualization):**
-    Some modules or tools (like `cased/kit` for dependency graphs) may require Graphviz.
-    -   Install the Graphviz system package: [graphviz.org/download/](https://graphviz.org/download/).
-    -   Install the Python bindings: `uv pip install graphviz`.
-
-6.  **Setup for the `documentation` Module (Docusaurus):**
-    The project documentation website is built using Docusaurus.
-    -   Navigate to the documentation module: `cd src/codomyrmex/documentation`
-    -   Install Node.js dependencies: `npm install` (or `yarn install`)
-    -   Refer to `src/codomyrmex/documentation/README.md` for commands to run the dev server or build the site.
-
-7.  **Helper Scripts (Optional from `environment_setup` module):**
-    The [`src/codomyrmex/environment_setup/scripts/`](./src/codomyrmex/environment_setup/scripts/) directory contains helper scripts:
-    -   `setup_dev_env.sh`: Automates several initial setup steps like Python version check, virtual environment creation, and dependency installation. Run it from the project root: `bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh`.
-    -   `install_hooks.sh`: Sets up Git hooks (e.g., pre-commit) by symlinking them from `scripts/git-hooks/` to your local `.git/hooks/` directory. Run it from the project root: `bash src/codomyrmex/environment_setup/scripts/install_hooks.sh`. Customize the hooks in `scripts/git-hooks/` as needed.
-    For more details on these scripts and other environment checks, see the [`src/codomyrmex/environment_setup/README.md`](./src/codomyrmex/environment_setup/README.md).
-
-8.  **Running Linters and Tests (General Project):**
-    To ensure code quality and correctness across the project:
-    - **Linters**: Specific linting commands (e.g., for Pylint, Flake8, ESLint) might be defined per module or run via a project-wide script if available. Generally, you would run linters from the root directory or specific module directories. Example (Python):
-        ```bash
-        # From project root, linting a specific module
-        pylint ai_code_editing/
-        flake8 ai_code_editing/
-        # Or for the entire project, if configured
-        pylint **/*.py
-        flake8 .
-        ```
-    - **Tests**: The project uses `pytest` for Python tests with coverage reporting. Run tests from the project root:
-    ```bash
-    # Run all tests with coverage
-    pytest
-
-    # Run tests for a specific module
-    pytest testing/unit/test_ai_code_editing.py
-
-    # Run tests for a specific file
-    pytest testing/unit/test_ai_code_editing.py::TestAICodeEditing::test_ai_code_helpers_import
-
-    # Run with coverage report
-    pytest --cov-report=html
-    open testing/htmlcov/index.html  # View coverage report in browser
-    ```
-- Refer to individual module `README.md` files or their `tests/README.md` for module-specific testing or linting instructions.
+### **🔌 Individual Module Documentation**
+**[📚 Module-Specific Docs](../../../src/codomyrmex/*/README.md)** - Detailed documentation for each module
 
 ## Project Governance & Contribution
 
