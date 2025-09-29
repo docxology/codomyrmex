@@ -1,20 +1,15 @@
-# Codomyrmex Agents — root
+# Codomyrmex Agents — src/codomyrmex/ai_code_editing/droid/handlers
 
 ## Purpose
-Top-level overview for all Codomyrmex agents and orchestration layers.
+Task handler implementations for droid workflow operations.
 
 ## Active Components
-- `docs/` – Agent surface for `docs` components.
-- `examples/` – Agent surface for `examples` components.
-- `projects/` – Agent surface for `projects` components.
-- `src/` – Agent surface for `src` components.
-- `testing/` – Agent surface for `testing` components.
+- Task-specific handler modules for droid automation workflows.
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- All agent-exposed tasks and handlers MUST be real, executable implementations. No stubs.
 
 ## Checkpoints
 - [ ] Confirm AGENTS.md reflects the current module purpose.

@@ -11,6 +11,7 @@ Core source tree hosting agent-enabled services and utilities.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- All surfaced automation and handlers MUST be real, executable implementations. No stubs.
 
 ## Checkpoints
 - [ ] Confirm AGENTS.md reflects the current module purpose.

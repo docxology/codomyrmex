@@ -47,19 +47,6 @@ uv pip install -e .
 python -c "from codomyrmex.environment_setup import env_checker; env_checker.check_environment()"
 ```
 
-### 3. Traditional pip Setup (Alternative)
-```bash
-# Create virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -e .
-
-# Check setup
-python -c "from codomyrmex.environment_setup import env_checker; env_checker.check_environment()"
-```
-
 ### 4. Verify Installation
 ```bash
 # Check that virtual environment is activated and Codomyrmex is available
@@ -647,12 +634,12 @@ This section outlines the general steps to set up the development environment fo
 ### Prerequisites
 
 - Python 3.10 or higher (uses latest package versions for best performance)
-- `pip` (Python package installer) OR `uv` (recommended - faster and more reliable)
+- `uv` (fast Python package manager used throughout Codomyrmex)
 - `git`
 - Node.js (Version 18.0 or higher, for `documentation` module)
 - npm or yarn (for `documentation` module)
 
-**Note:** `uv` is a fast Python package manager that can replace pip and virtualenv. It's highly recommended for this project. Install it from https://github.com/astral-sh/uv
+Install uv from https://github.com/astral-sh/uv if it is not already available.
 
 ### Setup Instructions
 
@@ -664,7 +651,7 @@ This section outlines the general steps to set up the development environment fo
 
 2.  **Set up Python Environment:**
 
-    **Option A: Using uv (Recommended - Faster and More Reliable)**
+    **Using uv (Fast and Reliable)**
     ```bash
     # Install uv if you haven't already (visit https://github.com/astral-sh/uv)
     # Create and activate virtual environment
@@ -675,19 +662,9 @@ This section outlines the general steps to set up the development environment fo
     uv pip install -e .
     ```
 
-    **Option B: Using pip (Traditional Method)**
+    **Automated Setup Script**
     ```bash
-    # Create and activate virtual environment
-    python -m venv .venv
-    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-    # Install dependencies
-    pip install -r requirements.txt
-    ```
-
-    **Option C: Automated Setup Script**
-    ```bash
-    # Run the automated setup script (supports both uv and pip)
+    # Run the automated setup script (uses uv internally)
     bash environment_setup/scripts/setup_dev_env.sh
     ```
 
@@ -700,12 +677,12 @@ This section outlines the general steps to set up the development environment fo
     GOOGLE_API_KEY="AIzaSy..."
     # Add other environment-specific variables here
     ```
-    The `python-dotenv` library (installed via `requirements.txt`) will load these variables. The `env_checker.py` script in the `environment_setup` module can help verify this setup.
+    The `python-dotenv` library (installed via uv) will load these variables. The `env_checker.py` script in the `environment_setup` module can help verify this setup.
 
 5.  **Graphviz (Optional for Dependency Visualization):**
     Some modules or tools (like `cased/kit` for dependency graphs) may require Graphviz.
     -   Install the Graphviz system package: [graphviz.org/download/](https://graphviz.org/download/).
-    -   Install the Python bindings: `pip install graphviz` (ensure it's in the root `requirements.txt` if widely used).
+    -   Install the Python bindings: `uv pip install graphviz`.
 
 6.  **Setup for the `documentation` Module (Docusaurus):**
     The project documentation website is built using Docusaurus.

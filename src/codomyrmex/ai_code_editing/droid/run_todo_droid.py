@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 🤖 Codomyrmex Droid TODO Processor
 
@@ -26,12 +28,10 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
-
-from __future__ import annotations
-
 import argparse
 import importlib
 import sys
+import time
 from typing import Callable, Iterable
 
 # Handle both module and direct execution imports
@@ -110,6 +110,10 @@ def resolve_handler(handler_path: str) -> Callable:
                 # Go up one level
                 current_package = "codomyrmex.ai_code_editing"
             module = importlib.import_module(module_name, current_package)
+        elif module_name in ("droid", "tasks", "ai_code_editing"):
+            # Handle local handlers - both 'droid' and 'tasks' refer to the tasks module
+            current_package = "codomyrmex.ai_code_editing.droid"
+            module = importlib.import_module(".tasks", current_package)
         else:
             # Handle absolute imports
             module = importlib.import_module(module_name)

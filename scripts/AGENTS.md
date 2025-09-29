@@ -1,20 +1,19 @@
-# Codomyrmex Agents — root
+# Codomyrmex Agents — scripts
 
 ## Purpose
-Top-level overview for all Codomyrmex agents and orchestration layers.
+Maintenance and automation utilities for Codomyrmex project management.
 
 ## Active Components
-- `docs/` – Agent surface for `docs` components.
-- `examples/` – Agent surface for `examples` components.
-- `projects/` – Agent surface for `projects` components.
-- `src/` – Agent surface for `src` components.
-- `testing/` – Agent surface for `testing` components.
+- `add_logging.py` – Automated logging injection across modules.
+- `enhance_documentation.py` – Documentation enhancement and docstring generation.
+- `fix_imports_simple.py` – Import statement cleanup and optimization.
+- `fix_imports.py` – Advanced import management and dependency resolution.
+- `fix_syntax_errors.py` – Syntax error detection and automated repair.
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- All agent-exposed tasks and handlers MUST be real, executable implementations. No stubs.
 
 ## Checkpoints
 - [ ] Confirm AGENTS.md reflects the current module purpose.

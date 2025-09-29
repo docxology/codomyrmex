@@ -30,23 +30,6 @@ uv pip install -e .
 codomyrmex check
 ```
 
-### **Option 3: Traditional pip Setup (Alternative)**
-```bash
-# 1. Clone the repository
-git clone https://github.com/codomyrmex/codomyrmex.git
-cd codomyrmex
-
-# 2. Create virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# 3. Install Codomyrmex
-pip install -e .
-
-# 4. Verify installation
-codomyrmex check
-```
-
 ## 📋 Prerequisites
 
 Before installing Codomyrmex, ensure you have:
@@ -56,11 +39,9 @@ Before installing Codomyrmex, ensure you have:
   ```bash
   python3 --version  # Should be 3.10 or higher
   ```
-- **pip** or **uv** (package manager)
+- **uv** (package manager used across Codomyrmex)
   ```bash
-  pip --version
-  # OR install uv for faster, more reliable package management
-  curl -LsSf https://astral.sh/uv/install.sh | sh
+  uv --version || curl -LsSf https://astral.sh/uv/install.sh | sh
   ```
 - **git** (version control)
   ```bash
@@ -119,12 +100,11 @@ git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
 
 # 2. Create virtual environment
-python3 -m venv .venv
+uv venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# 3. Upgrade pip and install
-pip install --upgrade pip
-pip install -e .
+# 3. Install
+uv pip install -e .
 
 # 4. Verify installation
 codomyrmex check
@@ -143,9 +123,7 @@ cd codomyrmex
 bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
 
 # 3. Install development dependencies
-pip install -e ".[dev]"  # If using pip
-# OR
-uv pip install -e ".[dev]"  # If using uv
+uv pip install -e ".[dev]"
 
 # 4. Setup pre-commit hooks (optional but recommended)
 pre-commit install
