@@ -1,0 +1,13 @@
+{
+  "test_name": "model_listing",
+  "status": "passed",
+  "timestamp": 1759159971.509114,
+  "models_count": 6,
+  "models": [
+    "llama3.1:latest",
+    "smollm2:135m-instruct-q4_K_S",
+    "smollm:135m",
+    "gemma2:2b",
+    "moondream:latest"
+  ]
+}

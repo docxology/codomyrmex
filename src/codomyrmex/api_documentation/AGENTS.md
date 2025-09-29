@@ -1,10 +1,12 @@
 # Codomyrmex Agents — src/codomyrmex/api_documentation
 
 ## Purpose
-Container for the `src/codomyrmex/api_documentation` agent surfaces and supporting assets.
+API documentation agents generating comprehensive documentation from codebases, supporting multiple formats including OpenAPI specifications and interactive documentation websites.
 
 ## Active Components
-- Key files: __init__.py, doc_generator.py, openapi_generator.py
+- `doc_generator.py` – Core documentation generation engine that analyzes codebases and produces structured documentation
+- `openapi_generator.py` – Specialized generator for OpenAPI/Swagger specifications from Python code
+- `__init__.py` – Package initialization and public API exports
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

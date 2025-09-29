@@ -1,10 +1,11 @@
 # Codomyrmex Agents — src/codomyrmex/containerization
 
 ## Purpose
-Container for the `src/codomyrmex/containerization` agent surfaces and supporting assets.
+Containerization agents managing Docker container lifecycle, including image building, container orchestration, and deployment automation for development and production environments.
 
 ## Active Components
-- Key files: __init__.py, docker_manager.py
+- `docker_manager.py` – Docker container management system handling image building, container lifecycle, networking, and volume management
+- `__init__.py` – Package initialization and Docker utilities exports
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

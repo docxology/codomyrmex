@@ -1,10 +1,11 @@
 # Codomyrmex Agents — src/codomyrmex/database_management
 
 ## Purpose
-Container for the `src/codomyrmex/database_management` agent surfaces and supporting assets.
+Database management agents providing unified interface for multiple database systems, supporting connection pooling, query optimization, and migration management across different database backends.
 
 ## Active Components
-- Key files: __init__.py, db_manager.py
+- `db_manager.py` – Unified database management interface supporting multiple database backends (PostgreSQL, MySQL, SQLite) with connection pooling and query optimization
+- `__init__.py` – Package initialization and database connector exports
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

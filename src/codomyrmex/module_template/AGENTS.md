@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/module_template
 
 ## Purpose
-Container for the `src/codomyrmex/module_template` agent surfaces and supporting assets.
+Module template system providing standardized scaffolding for creating new Codomyrmex modules, including directory structure, documentation templates, and testing frameworks.
 
 ## Active Components
 - `docs/` – Agent surface for `docs` components.

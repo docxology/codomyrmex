@@ -1,10 +1,11 @@
 # Codomyrmex Agents — src/codomyrmex/config_management
 
 ## Purpose
-Container for the `src/codomyrmex/config_management` agent surfaces and supporting assets.
+Configuration management agents handling system settings, environment variables, and configuration files with validation, versioning, and cross-environment consistency.
 
 ## Active Components
-- Key files: __init__.py, config_loader.py
+- `config_loader.py` – Configuration loading and validation system supporting multiple file formats and environment-specific overrides
+- `__init__.py` – Package initialization and configuration management exports
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

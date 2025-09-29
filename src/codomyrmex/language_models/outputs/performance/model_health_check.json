@@ -1,0 +1,14 @@
+{
+  "test_name": "model_health_check",
+  "timestamp": 1759159971.502135,
+  "model": "llama3.1:latest",
+  "health_metrics": {
+    "connection_test": true,
+    "model_availability": true,
+    "basic_generation": true,
+    "streaming_test": false,
+    "error_handling": true
+  },
+  "health_score": 0.8,
+  "status": "degraded"
+}

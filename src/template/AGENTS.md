@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/template
 
 ## Purpose
-Container for the `src/template` agent surfaces and supporting assets.
+Project template system containing reusable project scaffolds, boilerplate code, and configuration templates for rapid project initialization across different domains and frameworks.
 
 ## Active Components
 - Key files: README.md

@@ -1951,7 +1951,7 @@ def ollama_module(*, prompt: str, description: str) -> str:
         encoding="utf-8",
     )
     (tests_dir / "test_ollama_integration.py").write_text(
-        'from codomyrmex.ai_code_editing.ollama_integration import generate_with_ollama\n\n'
+        'from codomyrmex.language_models import generate_with_ollama\n\n'
         'def test_generate_with_ollama():\n'
         "    out = generate_with_ollama('hello')\n"
         "    assert 'hello' in out\n",

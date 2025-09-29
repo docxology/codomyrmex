@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/build_synthesis
 
 ## Purpose
-Container for the `src/codomyrmex/build_synthesis` agent surfaces and supporting assets.
+Build synthesis agents orchestrating comprehensive software build pipelines, including multi-target compilation, quality gates, artifact generation, and deployment automation.
 
 ## Active Components
 - `docs/` – Agent surface for `docs` components.

@@ -1,9 +1,9 @@
 [TODO]
-- implement_ollama_module | Implement a minimal Ollama integration scaffold (client + wrapper + unit test). | Ollama client and integration module created; unit test passing.
 
 [COMPLETED]
-- create_physical_management | Create comprehensive physical management module with docs, API, tests, and examples. | Module created with core components and docs.
-- test_enhanced_stats | Test the enhanced real-time statistics display system. | Statistics display validated with timing outputs.
-- refactor_droid_structure | Improve droid structure and documentation with controller-only execution. | Refactoring acknowledged; docs updated.
-- test_and_improve_droid_methods | Validate droid methods and documentation. | Methods verified; logging integrated.
-- enhance_prompt_composability | Add prompt templates, composition utilities, and README. | Templates and utilities written; documentation added.
+create_physical_management | Create comprehensive physical management module with docs, API, tests, and examples. | Module created with core components and docs.
+test_enhanced_stats | Test the enhanced real-time statistics display system. | Statistics display validated with timing outputs.
+refactor_droid_structure | Improve droid structure and documentation with controller-only execution. | Refactoring acknowledged; docs updated.
+test_and_improve_droid_methods | Validate droid methods and documentation. | Methods verified; logging integrated.
+enhance_prompt_composability | Add prompt templates, composition utilities, and README. | Templates and utilities written; documentation added.
+implement_ollama_module | Implement a minimal Ollama integration scaffold (client + wrapper + unit test). | Ollama client and integration module created; unit test passing.

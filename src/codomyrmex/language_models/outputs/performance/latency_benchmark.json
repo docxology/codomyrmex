@@ -1,0 +1,47 @@
+{
+  "test_name": "latency_benchmark",
+  "timestamp": 1759159906.501548,
+  "model": "llama3.1:latest",
+  "results": {
+    "short": {
+      "prompt_length": 5,
+      "response_length": 34,
+      "latencies": [
+        0.7582327080017421,
+        0.4240966670040507,
+        0.26363179201143794
+      ],
+      "avg_latency": 0.48198705567241024,
+      "min_latency": 0.26363179201143794,
+      "max_latency": 0.7582327080017421
+    },
+    "medium": {
+      "prompt_length": 54,
+      "response_length": 766,
+      "latencies": [
+        2.926125125028193,
+        2.9513857499987353,
+        3.092485917004524
+      ],
+      "avg_latency": 2.989998930677151,
+      "min_latency": 2.926125125028193,
+      "max_latency": 3.092485917004524
+    },
+    "long": {
+      "prompt_length": 158,
+      "response_length": 6367,
+      "latencies": [
+        22.55455937498482,
+        20.55013154199696,
+        27.70879029101343
+      ],
+      "avg_latency": 23.604493735998403,
+      "min_latency": 20.55013154199696,
+      "max_latency": 27.70879029101343
+    }
+  },
+  "summary": {
+    "total_tests": 9,
+    "avg_latency_overall": 9.025493240782655
+  }
+}

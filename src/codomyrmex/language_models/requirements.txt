@@ -1,0 +1,19 @@
+# Requirements for the language_models module
+# Install with: uv add -r src/codomyrmex/language_models/requirements.txt
+
+# HTTP client for Ollama API requests
+requests>=2.28.0
+urllib3>=1.26.0
+
+# Async HTTP client for streaming operations
+aiohttp>=3.8.0
+
+# Type hints support (usually included with Python 3.9+)
+typing-extensions>=4.0.0; python_version < "3.9"
+
+# Optional: For enhanced SSL/TLS support
+certifi>=2022.0.0
+
+# Development dependencies for testing
+pytest>=8.0.0
+pytest-asyncio>=0.21.0

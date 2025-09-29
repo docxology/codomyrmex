@@ -1,0 +1,77 @@
+{
+  "test_name": "full_ecosystem_validation",
+  "timestamp": 1759160538.33214,
+  "total_validation_time": 7.051757333014393,
+  "validation_results": {
+    "imports": {
+      "status": "success",
+      "components": [
+        "OllamaClient",
+        "OllamaManager",
+        "LLMConfig",
+        "LLMConfigPresets",
+        "generate_with_ollama",
+        "stream_with_ollama",
+        "chat_with_ollama"
+      ],
+      "available_components": [
+        "LLMConfig",
+        "LLMConfigPresets",
+        "OllamaClient",
+        "OllamaConnectionError",
+        "OllamaError",
+        "OllamaManager",
+        "OllamaModelError",
+        "OllamaTimeoutError",
+        "chat_with_ollama",
+        "check_ollama_availability",
+        "config",
+        "create_chat_messages",
+        "generate_with_ollama",
+        "get_available_models",
+        "get_config",
+        "get_default_manager",
+        "ollama_client",
+        "ollama_integration",
+        "reset_config",
+        "set_config",
+        "stream_chat_with_ollama",
+        "stream_with_ollama"
+      ]
+    },
+    "configuration": {
+      "status": "success",
+      "directories_created": true,
+      "config_values": {
+        "model": "llama3.1:latest",
+        "temperature": 0.7,
+        "max_tokens": 1000
+      }
+    },
+    "connectivity": {
+      "status": "success",
+      "ollama_available": true,
+      "models_count": 6
+    },
+    "functionality": {
+      "status": "success",
+      "generation_works": true,
+      "chat_works": true
+    },
+    "outputs": {
+      "status": "success",
+      "total_files": 15,
+      "directories_with_files": 4
+    },
+    "cleanup": {
+      "status": "success",
+      "manager_cleanup": true
+    }
+  },
+  "overall_health": {
+    "components_passing": 6,
+    "total_components": 6,
+    "health_score": 1.0
+  },
+  "ecosystem_status": "healthy"
+}

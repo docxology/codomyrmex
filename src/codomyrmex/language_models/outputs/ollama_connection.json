@@ -1,0 +1,7 @@
+{
+  "test_name": "real_ollama_connection",
+  "status": "passed",
+  "timestamp": 1759156950.505364,
+  "base_url": "http://localhost:11434",
+  "model": "llama3.1"
+}

@@ -1,0 +1,48 @@
+{
+  "test_name": "edge_case_handling",
+  "timestamp": 1759159971.1481721,
+  "model": "llama3.1:latest",
+  "results": {
+    "empty_context": {
+      "prompt": "",
+      "prompt_length": 0,
+      "response": "",
+      "response_length": 0,
+      "response_time": 0.03556045799632557,
+      "status": "success"
+    },
+    "very_long_prompt": {
+      "prompt": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...",
+      "prompt_length": 1014,
+      "response": "The infamous \"AAAAAAAA\" spam!\n\nThis appears to be a case of copypasta, where someone has copied and pasted the letter \"A\" multiple times for no apparent reason. This can often be used as a placeholder...",
+      "response_length": 486,
+      "response_time": 2.748846499976935,
+      "status": "success"
+    },
+    "special_characters": {
+      "prompt": "What is the meaning of @#$%^&*()? Explain symbols.",
+      "prompt_length": 50,
+      "response": "The infamous \"special characters\"!\n\nThe sequence `@#$%^&*()?` consists of special characters, also known as non-alphanumeric characters or punctuation marks. Here's a breakdown of each symbol:\n\n1. `@`...",
+      "response_length": 1720,
+      "response_time": 9.152707583009033,
+      "status": "success"
+    },
+    "multilingual": {
+      "prompt": "Bonjour! ¿Cómo estás? Wie geht's? What languages do you recognize?",
+      "prompt_length": 66,
+      "response": "Bonjour! Je suis désolé, mais je ne parle que quelques phrases de français. Mais je reconnais également l'allemand (Wie geht es Ihnen?) et espagnol (¿Cómo estás?). Et bien sûr, j'ai une bonne compréhe...",
+      "response_length": 453,
+      "response_time": 3.030005832988536,
+      "status": "success"
+    },
+    "numerical": {
+      "prompt": "Calculate: 123 + 456 * 789 / 10 - 50 = ?",
+      "prompt_length": 40,
+      "response": "To evaluate this expression, we need to follow the order of operations (PEMDAS):\n\n1. Multiply 456 and 789:\n456 * 789 = 359964\n2. Divide 359964 by 10:\n359964 / 10 = 35996.4\n3. Add 123 to 35996.4:\n123 +...",
+      "response_length": 294,
+      "response_time": 2.9107580829877406,
+      "status": "success"
+    }
+  },
+  "success_rate": 1.0
+}

@@ -1,0 +1,31 @@
+{
+  "test_name": "input_length_limits",
+  "timestamp": 1759159736.841296,
+  "model": "llama3.1:latest",
+  "results": {
+    "normal": {
+      "input_length": 100,
+      "response_length": 452,
+      "response_time": 2.849528458988061,
+      "status": "success"
+    },
+    "long": {
+      "input_length": 1000,
+      "response_length": 300,
+      "response_time": 2.0699460420000833,
+      "status": "success"
+    },
+    "very_long": {
+      "input_length": 5000,
+      "response_length": 344,
+      "response_time": 3.0623038750200067,
+      "status": "success"
+    },
+    "extreme": {
+      "input_length": 10000,
+      "response_length": 518,
+      "response_time": 4.252891458017984,
+      "status": "success"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "model": "llama3.1:latest",
+  "temperature": 0.9,
+  "max_tokens": 1500,
+  "top_p": 0.95,
+  "top_k": 50,
+  "timeout": 30,
+  "base_url": "http://localhost:11434",
+  "output_root": "src/codomyrmex/language_models/outputs"
+}

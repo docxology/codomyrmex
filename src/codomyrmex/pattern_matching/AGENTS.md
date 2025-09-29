@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/pattern_matching
 
 ## Purpose
-Container for the `src/codomyrmex/pattern_matching` agent surfaces and supporting assets.
+Advanced pattern matching agents analyzing codebases for structural patterns, dependencies, and architectural relationships using sophisticated graph analysis and similarity detection algorithms.
 
 ## Active Components
 - `docs/` – Agent surface for `docs` components.

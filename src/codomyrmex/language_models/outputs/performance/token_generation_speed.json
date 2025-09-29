@@ -1,0 +1,11 @@
+{
+  "test_name": "token_generation_speed",
+  "timestamp": 1759159911.2936661,
+  "model": "llama3.1:latest",
+  "prompt": "Count from 1 to 20, explaining each number briefly.",
+  "response_length": 748,
+  "estimated_tokens": 187.0,
+  "total_time": 4.787582124990877,
+  "tokens_per_second": 39.05938219291775,
+  "chars_per_second": 156.237528771671
+}

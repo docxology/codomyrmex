@@ -38,6 +38,9 @@ class TodoItem:
         - New format:   task_name | task_description | outcomes
         - Legacy format:operation_id | handler_path | description
         """
+        # Allow optional leading list bullets
+        if raw.startswith("- "):
+            raw = raw[2:].strip()
         parts = [part.strip() for part in raw.split("|")]
         if len(parts) != 3:
             raise ValueError(f"Invalid TODO entry: {raw}")
@@ -127,6 +130,81 @@ class TodoManager:
     ) -> None:
         processed_list = list(processed)
         self.save(list(remaining), list(completed) + processed_list)
+
+    def validate(self) -> Tuple[bool, List[Tuple[int, str, str]]]:
+        """Validate the todo file; returns (is_valid, list_of_issues).
+
+        Issues are tuples of (line_number, line_text, error_message).
+        Accepts both new 3-column and legacy formats.
+        """
+        issues: List[Tuple[int, str, str]] = []
+        if not self.todo_path.exists():
+            return True, issues
+
+        try:
+            todo_items, completed_items = self.load()
+        except ValueError as e:
+            issues.append((0, "", str(e)))
+            return False, issues
+
+        # Basic checks
+        for bucket_name, items in (("TODO", todo_items), ("COMPLETED", completed_items)):
+            for idx, item in enumerate(items, 1):
+                if not item.task_name:
+                    issues.append((idx, bucket_name, "Missing task_name"))
+                if not item.description:
+                    issues.append((idx, bucket_name, "Missing description"))
+                # outcomes optional in TODO; recommended in COMPLETED
+                if bucket_name == "COMPLETED" and not item.outcomes:
+                    issues.append((idx, bucket_name, "Missing outcomes for completed item"))
+
+        return (len(issues) == 0), issues
+
+    def migrate_to_three_columns(self) -> int:
+        """Migrate legacy entries to the new 3-column format in-place.
+
+        Returns the number of lines changed.
+        """
+        if not self.todo_path.exists():
+            return 0
+
+        original_lines = self.todo_path.read_text(encoding="utf-8").splitlines()
+        changed = 0
+        output_lines: List[str] = []
+        bucket = None  # track headers
+
+        for line in original_lines:
+            stripped = line.strip()
+            if not stripped:
+                output_lines.append(line)
+                continue
+            if stripped.upper() == TODO_HEADER:
+                bucket = "TODO"
+                output_lines.append(TODO_HEADER)
+                continue
+            if stripped.upper() == COMPLETED_HEADER:
+                bucket = "COMPLETED"
+                output_lines.append(COMPLETED_HEADER)
+                continue
+            if stripped.startswith("#"):
+                # Drop old format hint comments during migration
+                continue
+
+            # Attempt parse; then always write back in new format
+            try:
+                item = TodoItem.parse(stripped)
+                # For legacy entries (with handler_path), keep outcomes empty in TODO and
+                # copy description into description field
+                new_line = item.serialise()
+                output_lines.append(new_line)
+                if new_line != stripped:
+                    changed += 1
+            except Exception:
+                # Preserve unparseable lines as-is
+                output_lines.append(line)
+
+        self.todo_path.write_text("\n".join(output_lines) + "\n", encoding="utf-8")
+        return changed
 
 
 __all__ = ["TodoManager", "TodoItem", "TODO_HEADER", "COMPLETED_HEADER"]

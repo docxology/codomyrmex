@@ -11,6 +11,9 @@ Agents coordinating multi-step project workflows and dependencies.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Workflow execution maintains dependency order and handles failures gracefully.
+- Performance monitoring provides real-time metrics without impacting workflow execution.
+- Multi-module coordination maintains data consistency across all participating modules.
 
 ## Checkpoints
 - [ ] Confirm AGENTS.md reflects the current module purpose.

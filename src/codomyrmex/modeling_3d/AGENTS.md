@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/modeling_3d
 
 ## Purpose
-Container for the `src/codomyrmex/modeling_3d` agent surfaces and supporting assets.
+3D modeling and rendering agents providing comprehensive 3D graphics capabilities, including scene management, rendering pipelines, and AR/VR support for interactive 3D applications.
 
 ## Active Components
 - `docs/` – Agent surface for `docs` components.

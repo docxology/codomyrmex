@@ -1,5 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/static_analysis
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2025
+
 ## Purpose
 Static analysis agents scanning codebases for quality and compliance.
 
@@ -11,6 +13,9 @@ Static analysis agents scanning codebases for quality and compliance.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Static analysis maintains accuracy across all supported programming languages.
+- Security scanning identifies vulnerabilities without false positives exceeding threshold.
+- Performance analysis provides actionable optimization recommendations.
 
 ## Checkpoints
 - [ ] Confirm AGENTS.md reflects the current module purpose.

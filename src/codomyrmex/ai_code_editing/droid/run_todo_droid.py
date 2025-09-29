@@ -140,7 +140,7 @@ def get_todo_count_interactive() -> int:
 
     print(f"\n📋 Found {available_count} TODO item(s) available:")
     for i, item in enumerate(todo_items, 1):
-        print(f"  {i}. {item.operation_id}: {item.description}")
+        print(f"  {i}. {item.task_name}: {item.description}")
 
     while True:
         try:
@@ -198,7 +198,7 @@ def run_todos(
         task_start_time = time.time()
 
         # Enhanced task header
-        print(f"\n⚙️  Task {i}/{len(to_process)}: {item.operation_id}")
+        print(f"\n⚙️  Task {i}/{len(to_process)}: {item.task_name}")
         print(f"   📝 {item.description}")
         print(f"   🎯 Handler: {item.handler_path}")
 
@@ -209,11 +209,40 @@ def run_todos(
         print(f"   📊 Progress: [{bar}] {progress*100:.1f}%")
 
         try:
-            handler = resolve_handler(item.handler_path)
+            # Resolve handler: use explicit path when provided, otherwise infer from task_name
+            inferred_handler = None
+            if not item.handler_path:
+                base = item.task_name.strip()
+                for prefix in ("implement_", "create_", "build_", "generate_", "add_"):
+                    if base.startswith(prefix):
+                        base = base[len(prefix):]
+                        break
+                candidate = base.strip().lower()
+                # map some common names
+                mapping = {
+                    "ollama_module": "ai_code_editing:ollama_module",
+                    "prompt_composability": "ai_code_editing:prompt_engineering",
+                    "prompt_engineering": "ai_code_editing:prompt_engineering",
+                }
+                inferred_handler = mapping.get(candidate)
+                if inferred_handler is None:
+                    # fallback to droid: or tasks: with same name
+                    for ns in ("droid", "tasks", "ai_code_editing"):
+                        try_path = f"{ns}:{candidate}"
+                        try:
+                            _ = resolve_handler(try_path)
+                            inferred_handler = try_path
+                            break
+                        except Exception:
+                            pass
+            handler_path = item.handler_path or inferred_handler
+            if not handler_path:
+                raise ValueError(f"No handler specified or inferable for task '{item.task_name}'")
+            handler = resolve_handler(handler_path)
 
             # Execute with enhanced monitoring
             result = controller.execute_task(
-                item.operation_id,
+                item.task_name,
                 handler,
                 prompt=CODOMYRMEX_ENHANCED_PROMPT,
                 description=item.description,
@@ -229,7 +258,7 @@ def run_todos(
             remaining_tasks = len(to_process) - i
             eta = avg_time * remaining_tasks if remaining_tasks > 0 else 0
 
-            print(f"   ✅ Completed in {task_duration:.3f}s ({item.operation_id})")
+            print(f"   ✅ Completed in {task_duration:.3f}s ({item.task_name})")
             print(
                 f"   📈 Stats: Avg: {avg_time:.3f}s | ETA: {eta:.1f}s ({remaining_tasks} tasks)"
             )
@@ -242,7 +271,7 @@ def run_todos(
             task_status.append("❌")
 
             print(
-                f"   ❌ Failed in {task_duration:.3f}s ({item.operation_id}): {str(e)}"
+                f"   ❌ Failed in {task_duration:.3f}s ({item.task_name}): {str(e)}"
             )
             print(f"   💡 Error: {type(e).__name__}")
 
@@ -423,7 +452,9 @@ Examples:
         print(f"🔍 Dry run: Would process {count} TODO(s)")
         print("Items to process:")
         for i, item in enumerate(todo_items[:count], 1):
-            print(f"  {i}. [{item.operation_id}] {item.description}")
+            print(f"  {i}. [{item.task_name}] {item.description}")
+            if item.outcomes:
+                print(f"     → Outcomes: {item.outcomes}")
         return
 
     controller = build_controller(args.config)
@@ -472,7 +503,7 @@ def demo_programmatic_usage():
 
     print(f"✅ Processed {len(processed)} TODO(s)")
     for item in processed:
-        print(f"   - {item.operation_id}: {item.description}")
+        print(f"   - {item.task_name}: {item.description}")
 
     return processed
 

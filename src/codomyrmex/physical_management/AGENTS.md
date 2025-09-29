@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/physical_management
 
 ## Purpose
-Container for the `src/codomyrmex/physical_management` agent surfaces and supporting assets.
+Physical system management agents controlling hardware interfaces, sensor integration, and robotic systems with real-time monitoring and control capabilities.
 
 ## Active Components
 - `docs/` – Agent surface for `docs` components.
