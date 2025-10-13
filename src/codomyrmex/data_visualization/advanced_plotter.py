@@ -820,41 +820,17 @@ class AdvancedPlotter:
         if self.current_figure is None:
             raise ValueError("No current figure to finalize")
 
-        # Set labels
-        if title or self.config.title:
-            self.current_figure.suptitle(title or self.config.title)
+        # Set title
+        self._set_plot_title(title)
 
-        axes = self.current_axes
-        if hasattr(axes, "set_xlabel"):
-            axes.set_xlabel(xlabel or self.config.xlabel)
-            axes.set_ylabel(ylabel or self.config.ylabel)
-        elif hasattr(axes, "__iter__"):
-            for ax in axes.flat:
-                if hasattr(ax, "set_xlabel"):
-                    ax.set_xlabel(xlabel or self.config.xlabel)
-                    ax.set_ylabel(ylabel or self.config.ylabel)
+        # Set labels
+        self._set_plot_labels(xlabel, ylabel)
 
         # Set legend
-        if legend is None:
-            legend = self.config.legend
-        if legend:
-            if hasattr(axes, "legend"):
-                axes.legend()
-            elif hasattr(axes, "__iter__"):
-                for ax in axes.flat:
-                    if hasattr(ax, "legend"):
-                        ax.legend()
+        self._set_plot_legend(legend)
 
         # Set grid
-        if grid is None:
-            grid = self.config.grid
-        if grid:
-            if hasattr(axes, "grid"):
-                axes.grid(True, alpha=0.3)
-            elif hasattr(axes, "__iter__"):
-                for ax in axes.flat:
-                    if hasattr(ax, "grid"):
-                        ax.grid(True, alpha=0.3)
+        self._set_plot_grid(grid)
 
         # Apply tight layout
         if self.config.tight_layout:
@@ -869,6 +845,64 @@ class AdvancedPlotter:
             plt.show()
 
         return self.current_figure
+
+    def _set_plot_title(self, title: str = None) -> None:
+        """Set the plot title."""
+        if title or self.config.title:
+            self.current_figure.suptitle(title or self.config.title)
+
+    def _set_plot_labels(self, xlabel: str = None, ylabel: str = None) -> None:
+        """Set axis labels for single or multiple axes."""
+        axes = self.current_axes
+
+        if hasattr(axes, "set_xlabel"):
+            # Single axis
+            axes.set_xlabel(xlabel or self.config.xlabel)
+            axes.set_ylabel(ylabel or self.config.ylabel)
+        elif hasattr(axes, "__iter__"):
+            # Multiple axes (subplots)
+            for ax in axes.flat:
+                if hasattr(ax, "set_xlabel"):
+                    ax.set_xlabel(xlabel or self.config.xlabel)
+                    ax.set_ylabel(ylabel or self.config.ylabel)
+
+    def _set_plot_legend(self, legend: bool = None) -> None:
+        """Set legend for single or multiple axes."""
+        if legend is None:
+            legend = self.config.legend
+
+        if not legend:
+            return
+
+        axes = self.current_axes
+
+        if hasattr(axes, "legend"):
+            # Single axis
+            axes.legend()
+        elif hasattr(axes, "__iter__"):
+            # Multiple axes (subplots)
+            for ax in axes.flat:
+                if hasattr(ax, "legend"):
+                    ax.legend()
+
+    def _set_plot_grid(self, grid: bool = None) -> None:
+        """Set grid for single or multiple axes."""
+        if grid is None:
+            grid = self.config.grid
+
+        if not grid:
+            return
+
+        axes = self.current_axes
+
+        if hasattr(axes, "grid"):
+            # Single axis
+            axes.grid(True, alpha=0.3)
+        elif hasattr(axes, "__iter__"):
+            # Multiple axes (subplots)
+            for ax in axes.flat:
+                if hasattr(ax, "grid"):
+                    ax.grid(True, alpha=0.3)
 
     @monitor_performance("save_plot")
     def save_plot(

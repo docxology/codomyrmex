@@ -13,14 +13,13 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
 from codomyrmex.project_orchestration.orchestration_engine import (
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-logger = get_logger(__name__)
-
     OrchestrationEngine,
     OrchestrationSession,
     SessionStatus,
 )
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
 from codomyrmex.project_orchestration.workflow_manager import (
     WorkflowStep,
     WorkflowStatus,

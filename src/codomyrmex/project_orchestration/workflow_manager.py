@@ -78,11 +78,11 @@ except ImportError:
         return decorator
 
     class performance_context:
-        def __init__(self, *args, **kwargs):
         """Performance Context.
 
-            A class for handling performance_context operations.
-            """
+        A class for handling performance_context operations.
+        """
+        def __init__(self, *args, **kwargs):
             pass
 
         def __enter__(self):

@@ -14,12 +14,14 @@ from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
 
 from .git_manager import (
-from codomyrmex.exceptions import CodomyrmexError
     get_commit_history,
     get_current_branch,
     get_status,
     list_stashes,
     is_git_repository,
+)
+from codomyrmex.exceptions import CodomyrmexError
+from .git_manager import (
     check_git_availability,
 )
 

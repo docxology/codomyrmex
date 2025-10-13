@@ -339,6 +339,80 @@ def build_controller(config_path: str | None) -> DroidController:
     return create_default_controller()
 
 
+def _list_todos(todo_items: list, completed_items: list) -> None:
+    """Display TODO list and exit."""
+    print("📋 TODO List:")
+    print("============")
+    if not todo_items:
+        print("No TODO items found.")
+    else:
+        for i, item in enumerate(todo_items, 1):
+            print(f"{i}. [{item.task_name}] {item.description}")
+            if item.outcomes:
+                print(f"   → Outcomes: {item.outcomes}")
+            if item.handler_path:
+                print(f"   Handler: {item.handler_path}")
+
+    if completed_items:
+        print(f"\n✅ Completed ({len(completed_items)} items):")
+        for item in completed_items:
+            print(f"   [{item.task_name}] {item.description}")
+            if item.outcomes:
+                print(f"      → Outcomes: {item.outcomes}")
+
+
+def _determine_count(args, todo_items: list) -> int | None:
+    """Determine how many TODOs to process."""
+    if args.count is not None:
+        if args.count == -1:
+            return len(todo_items)  # Process all
+        elif args.count < -1:
+            print(f"❌ Invalid count: {args.count}. Use positive numbers or -1 for all.")
+            return None
+        else:
+            return args.count
+    elif args.non_interactive or args.dry_run:
+        return 1  # Default to 1 in non-interactive or dry-run mode
+    else:
+        return get_todo_count_interactive()
+
+
+def _show_dry_run(count: int, todo_items: list) -> None:
+    """Display dry-run information."""
+    print(f"🔍 Dry run: Would process {count} TODO(s)")
+    print("Items to process:")
+    for i, item in enumerate(todo_items[:count], 1):
+        print(f"  {i}. [{item.task_name}] {item.description}")
+        if item.outcomes:
+            print(f"     → Outcomes: {item.outcomes}")
+
+
+def _process_todos(controller: DroidController, manager: TodoManager, count: int) -> None:
+    """Process TODOs and handle errors."""
+    try:
+        processed = list(run_todos(controller, manager, count))
+
+        if not processed:
+            print("❌ No TODO items were processed.")
+        else:
+            print("\n📊 Summary:")
+            print(f"   ✅ Successfully processed: {len(processed)} TODO(s)")
+            print(f"   📈 Controller metrics: {controller.metrics}")
+
+    except KeyboardInterrupt:
+        print("\n\n⚠️  Operation interrupted by user.")
+    except Exception as e:
+        print(f"\n❌ Error during TODO processing: {e}")
+    finally:
+        # Always show final metrics
+        try:
+            if controller:
+                print(f"\n📊 Final Controller Metrics: {controller.metrics}")
+        except:
+            pass
+        print("👋 Droid session completed.")
+
+
 def main() -> None:
     """Main entry point with interactive prompt and enhanced processing."""
     parser = argparse.ArgumentParser(
@@ -406,42 +480,13 @@ Examples:
 
     # Handle --list option
     if args.list:
-        print("📋 TODO List:")
-        print("============")
-        if not todo_items:
-            print("No TODO items found.")
-        else:
-            for i, item in enumerate(todo_items, 1):
-                print(f"{i}. [{item.task_name}] {item.description}")
-                if item.outcomes:
-                    print(f"   → Outcomes: {item.outcomes}")
-                if item.handler_path:
-                    print(f"   Handler: {item.handler_path}")
-
-        if completed_items:
-            print(f"\n✅ Completed ({len(completed_items)} items):")
-            for item in completed_items:
-                print(f"   [{item.task_name}] {item.description}")
-                if item.outcomes:
-                    print(f"      → Outcomes: {item.outcomes}")
-
+        _list_todos(todo_items, completed_items)
         return
 
     # Determine the count to process
-    if args.count is not None:
-        if args.count == -1:
-            count = len(todo_items)  # Process all
-        elif args.count < -1:
-            print(
-                f"❌ Invalid count: {args.count}. Use positive numbers or -1 for all."
-            )
-            return
-        else:
-            count = args.count
-    elif args.non_interactive or args.dry_run:
-        count = 1  # Default to 1 in non-interactive or dry-run mode
-    else:
-        count = get_todo_count_interactive()
+    count = _determine_count(args, todo_items)
+    if count is None:  # Invalid count
+        return
 
     if count == 0 or not todo_items:
         print("👋 No TODOs to process. Exiting.")
@@ -449,38 +494,12 @@ Examples:
 
     # Handle --dry-run option
     if args.dry_run:
-        print(f"🔍 Dry run: Would process {count} TODO(s)")
-        print("Items to process:")
-        for i, item in enumerate(todo_items[:count], 1):
-            print(f"  {i}. [{item.task_name}] {item.description}")
-            if item.outcomes:
-                print(f"     → Outcomes: {item.outcomes}")
+        _show_dry_run(count, todo_items)
         return
 
+    # Process TODOs
     controller = build_controller(args.config)
-
-    try:
-        processed = list(run_todos(controller, manager, count))
-
-        if not processed:
-            print("❌ No TODO items were processed.")
-        else:
-            print("\n📊 Summary:")
-            print(f"   ✅ Successfully processed: {len(processed)} TODO(s)")
-            print(f"   📈 Controller metrics: {controller.metrics}")
-
-    except KeyboardInterrupt:
-        print("\n\n⚠️  Operation interrupted by user.")
-    except Exception as e:
-        print(f"\n❌ Error during TODO processing: {e}")
-    finally:
-        # Always show final metrics
-        try:
-            if controller:
-                print(f"\n📊 Final Controller Metrics: {controller.metrics}")
-        except:
-            pass
-        print("👋 Droid session completed.")
+    _process_todos(controller, manager, count)
 
 
 # Example of programmatic usage

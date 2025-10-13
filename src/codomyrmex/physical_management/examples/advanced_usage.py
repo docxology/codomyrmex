@@ -3,16 +3,18 @@
 import time
 import random
 from codomyrmex.physical_management import (
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-logger = get_logger(__name__)
-
     PhysicalObjectManager,
     ObjectType,
     ObjectStatus,
     MaterialType,
     EventType,
+)
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
+from codomyrmex.physical_management import (
     PhysicsSimulator,
     Vector3D,
     ForceField,

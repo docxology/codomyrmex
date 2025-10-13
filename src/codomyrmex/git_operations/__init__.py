@@ -64,12 +64,15 @@ Visualization Integration:
 """
 
 from .git_manager import (
-from ..exceptions import CodomyrmexError
     # Core operations
     check_git_availability,
     is_git_repository,
     initialize_git_repository,
     clone_repository,
+)
+from ..exceptions import CodomyrmexError
+
+from .git_manager import (
     # Branch operations
     create_branch,
     switch_branch,

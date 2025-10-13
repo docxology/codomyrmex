@@ -107,13 +107,16 @@ class AnalyticsWindow:
 class DataStream:
     """Real-time data stream with analytics capabilities."""
 
-        """  Init  .
-
-            Args:        stream_id: Unique identifier.        buffer_size: Parameter for the operation.        window_duration: Parameter for the operation.
-            """
     def __init__(
         self, stream_id: str, buffer_size: int = 10000, window_duration: float = 60.0
     ):
+        """Initialize DataStream.
+
+        Args:
+            stream_id: Unique identifier.
+            buffer_size: Parameter for the operation.
+            window_duration: Parameter for the operation.
+        """
         self.stream_id = stream_id
         self.buffer_size = buffer_size
         self.window_duration = window_duration

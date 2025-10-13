@@ -5,13 +5,15 @@ import time
 import statistics
 from typing import List, Dict, Any
 from codomyrmex.physical_management import (
+    PhysicalObjectManager,
+    ObjectType,
+    ObjectStatus,
+)
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
-    PhysicalObjectManager,
-    ObjectType,
-    ObjectStatus,
+from codomyrmex.physical_management import (
     PhysicalObject,
     MaterialType,
     SpatialIndex,

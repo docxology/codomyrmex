@@ -16,9 +16,7 @@ import hashlib
 from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to path for imports
-# sys.path.insert(  # Removed sys.path manipulation
-    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
-)
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))  # Removed sys.path manipulation
 
 try:
     from codomyrmex.logging_monitoring import setup_logging, get_logger

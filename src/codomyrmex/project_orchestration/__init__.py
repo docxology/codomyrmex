@@ -27,12 +27,13 @@ Integration:
 """
 
 from .workflow_manager import (
-from ..exceptions import CodomyrmexError
     WorkflowManager,
     WorkflowStep,
     WorkflowStatus,
     WorkflowExecution,
 )
+from ..exceptions import CodomyrmexError
+
 from .task_orchestrator import (
     TaskOrchestrator,
     Task,

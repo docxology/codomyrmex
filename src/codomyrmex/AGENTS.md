@@ -11,6 +11,7 @@ Primary Python package bundling all Codomyrmex agents and shared tooling.
 - `build_synthesis/` – Agent surface for `build_synthesis` components.
 - `ci_cd_automation/` – Agent surface for `ci_cd_automation` components.
 - `code_execution_sandbox/` – Agent surface for `code_execution_sandbox` components.
+- `code_review/` – Agent surface for `code_review` components.
 - `config_management/` – Agent surface for `config_management` components.
 - `containerization/` – Agent surface for `containerization` components.
 - `data_visualization/` – Agent surface for `data_visualization` components.
@@ -40,7 +41,7 @@ Primary Python package bundling all Codomyrmex agents and shared tooling.
 
 ## Module Relationships
 - **AI & Intelligence**: `ai_code_editing/`, `language_models/`, `pattern_matching/`
-- **Analysis & Quality**: `static_analysis/`, `security_audit/`, `code_execution_sandbox/`
+- **Analysis & Quality**: `static_analysis/`, `security_audit/`, `code_review/`, `code_execution_sandbox/`
 - **Visualization & Reporting**: `data_visualization/`, `api_documentation/`, `documentation/`
 - **Build & Deployment**: `build_synthesis/`, `ci_cd_automation/`, `containerization/`
 - **Infrastructure**: `database_management/`, `environment_setup/`, `config_management/`

@@ -45,11 +45,8 @@ except ImportError:  # pragma: no cover
 
         return decorator
 
-        """Performance Context.
 
-            A class for handling performance_context operations.
-            """
-    class performance_context:  # type: ignore
+class performance_context:  # type: ignore
         def __init__(self, *_, **__):
             pass
 

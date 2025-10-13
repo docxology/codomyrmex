@@ -266,6 +266,98 @@ class CapabilityScanner:
 
         return functions, classes, constants, imports
 
+    def _extract_parameters(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> List[Dict[str, Any]]:
+        """Extract parameter information from function node."""
+        parameters = []
+        
+        # Extract regular parameters
+        for arg in node.args.args:
+            param_info = {
+                "name": arg.arg,
+                "annotation": ast.unparse(arg.annotation) if arg.annotation else None,
+                "default": None,
+            }
+            parameters.append(param_info)
+
+        # Add default values
+        if node.args.defaults:
+            num_defaults = len(node.args.defaults)
+            for i, default in enumerate(node.args.defaults):
+                param_index = len(parameters) - num_defaults + i
+                if param_index >= 0:
+                    try:
+                        parameters[param_index]["default"] = ast.unparse(default)
+                    except Exception:
+                        parameters[param_index]["default"] = "complex_default"
+
+        # Add *args if present
+        if node.args.vararg:
+            parameters.append({
+                "name": f"*{node.args.vararg.arg}",
+                "annotation": (
+                    ast.unparse(node.args.vararg.annotation)
+                    if node.args.vararg.annotation
+                    else None
+                ),
+                "default": None,
+            })
+
+        # Add **kwargs if present
+        if node.args.kwarg:
+            parameters.append({
+                "name": f"**{node.args.kwarg.arg}",
+                "annotation": (
+                    ast.unparse(node.args.kwarg.annotation)
+                    if node.args.kwarg.annotation
+                    else None
+                ),
+                "default": None,
+            })
+
+        return parameters
+
+    def _extract_return_annotation(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> str:
+        """Extract return type annotation from function node."""
+        if node.returns:
+            try:
+                return ast.unparse(node.returns)
+            except Exception:
+                return "complex_annotation"
+        return ""
+
+    def _build_signature(self, name: str, parameters: List[Dict[str, Any]], return_annotation: str) -> str:
+        """Build function signature string."""
+        param_strs = []
+        for param in parameters:
+            param_str = param["name"]
+            if param["annotation"]:
+                param_str += f": {param['annotation']}"
+            if param["default"]:
+                param_str += f" = {param['default']}"
+            param_strs.append(param_str)
+
+        signature = f"{name}({', '.join(param_strs)})"
+        if return_annotation:
+            signature += f" -> {return_annotation}"
+        return signature
+
+    def _extract_decorators(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> List[str]:
+        """Extract decorator information from function node."""
+        decorators = []
+        for decorator in node.decorator_list:
+            try:
+                decorators.append(ast.unparse(decorator))
+            except Exception:
+                decorators.append("complex_decorator")
+        return decorators
+
+    def _is_generator(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> bool:
+        """Check if function is a generator."""
+        return any(
+            isinstance(n, ast.Yield) or isinstance(n, ast.YieldFrom)
+            for n in ast.walk(node)
+        )
+
     def _analyze_function(
         self,
         node: Union[ast.FunctionDef, ast.AsyncFunctionDef],
@@ -279,94 +371,13 @@ class CapabilityScanner:
             docstring = ast.get_docstring(node) or "No docstring"
             line_number = node.lineno
 
-            # Analyze parameters
-            parameters = []
-            for arg in node.args.args:
-                param_info = {
-                    "name": arg.arg,
-                    "annotation": (
-                        ast.unparse(arg.annotation) if arg.annotation else None
-                    ),
-                    "default": None,
-                }
-                parameters.append(param_info)
-
-            # Add defaults
-            if node.args.defaults:
-                num_defaults = len(node.args.defaults)
-                for i, default in enumerate(node.args.defaults):
-                    param_index = len(parameters) - num_defaults + i
-                    if param_index >= 0:
-                        try:
-                            parameters[param_index]["default"] = ast.unparse(default)
-                        except Exception:
-                            parameters[param_index]["default"] = "complex_default"
-
-            # Handle *args and **kwargs
-            if node.args.vararg:
-                parameters.append(
-                    {
-                        "name": f"*{node.args.vararg.arg}",
-                        "annotation": (
-                            ast.unparse(node.args.vararg.annotation)
-                            if node.args.vararg.annotation
-                            else None
-                        ),
-                        "default": None,
-                    }
-                )
-
-            if node.args.kwarg:
-                parameters.append(
-                    {
-                        "name": f"**{node.args.kwarg.arg}",
-                        "annotation": (
-                            ast.unparse(node.args.kwarg.annotation)
-                            if node.args.kwarg.annotation
-                            else None
-                        ),
-                        "default": None,
-                    }
-                )
-
-            # Get return annotation
-            return_annotation = ""
-            if node.returns:
-                try:
-                    return_annotation = ast.unparse(node.returns)
-                except Exception:
-                    return_annotation = "complex_annotation"
-
-            # Build signature
-            param_strs = []
-            for param in parameters:
-                param_str = param["name"]
-                if param["annotation"]:
-                    param_str += f": {param['annotation']}"
-                if param["default"]:
-                    param_str += f" = {param['default']}"
-                param_strs.append(param_str)
-
-            signature = f"{name}({', '.join(param_strs)})"
-            if return_annotation:
-                signature += f" -> {return_annotation}"
-
-            # Check for decorators
-            decorators = []
-            for decorator in node.decorator_list:
-                try:
-                    decorators.append(ast.unparse(decorator))
-                except Exception:
-                    decorators.append("complex_decorator")
-
-            # Calculate complexity (simple heuristic)
+            # Extract detailed information using helper methods
+            parameters = self._extract_parameters(node)
+            return_annotation = self._extract_return_annotation(node)
+            signature = self._build_signature(name, parameters, return_annotation)
+            decorators = self._extract_decorators(node)
             complexity_score = self._calculate_complexity(node)
-
-            # Check if it's a generator
-            is_generator = any(
-                isinstance(n, ast.Yield) or isinstance(n, ast.YieldFrom)
-                for n in ast.walk(node)
-            )
+            is_generator = self._is_generator(node)
 
             return FunctionCapability(
                 name=name,

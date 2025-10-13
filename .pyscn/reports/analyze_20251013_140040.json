@@ -1,0 +1,5173 @@
+{
+  "cbo": {
+    "Classes": [
+      {
+        "Name": "CodeReviewer",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 479,
+        "EndLine": 2371,
+        "Metrics": {
+          "CouplingCount": 9,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 17,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "AnalysisResult",
+            "CodeMetrics",
+            "ComplexityReductionSuggestion",
+            "ArchitectureViolation",
+            "QualityDashboard",
+            "PyscnAnalyzer",
+            "AnalysisSummary",
+            "QualityGateResult",
+            "DeadCodeFinding"
+          ]
+        },
+        "RiskLevel": "medium",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Task",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+        "StartLine": 121,
+        "EndLine": 212,
+        "Metrics": {
+          "CouplingCount": 5,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 6,
+          "InstantiationDependencies": 5,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "TaskResource",
+            "TaskStatus",
+            "TaskResult",
+            "Any",
+            "TaskPriority"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "RepositoryMetadata",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_metadata.py",
+        "StartLine": 100,
+        "EndLine": 181,
+        "Metrics": {
+          "CouplingCount": 5,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 5,
+          "InstantiationDependencies": 10,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "LocalRepositoryInfo",
+            "AccessLevel",
+            "CloneStatus",
+            "SyncStatus",
+            "RepositoryStats"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PhysicalObject",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+        "StartLine": 183,
+        "EndLine": 332,
+        "Metrics": {
+          "CouplingCount": 5,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 6,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ObjectType",
+            "Any",
+            "ObjectStatus",
+            "MaterialType",
+            "MaterialProperties"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Resource",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/resource_manager.py",
+        "StartLine": 95,
+        "EndLine": 291,
+        "Metrics": {
+          "CouplingCount": 4,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 6,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ResourceType",
+            "ResourceStatus",
+            "Any",
+            "ResourceLimits"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PhysicsSimulator",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/simulation_engine.py",
+        "StartLine": 71,
+        "EndLine": 385,
+        "Metrics": {
+          "CouplingCount": 4,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 12,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D",
+            "ForceField",
+            "Constraint",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "BuildTarget",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+        "StartLine": 141,
+        "EndLine": 151,
+        "Metrics": {
+          "CouplingCount": 4,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 4,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any",
+            "BuildStep",
+            "BuildType",
+            "BuildEnvironment"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TaskOrchestrator",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+        "StartLine": 346,
+        "EndLine": 662,
+        "Metrics": {
+          "CouplingCount": 4,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 8,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "TaskResult",
+            "ResourceManager",
+            "TaskQueue",
+            "Task"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ObjectRegistry",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+        "StartLine": 335,
+        "EndLine": 720,
+        "Metrics": {
+          "CouplingCount": 4,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 5,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "PhysicalObject",
+            "EventType",
+            "ObjectEvent",
+            "SpatialIndex"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "AnalysisSummary",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 130,
+        "EndLine": 140,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any",
+            "SeverityLevel",
+            "Language"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "OrchestrationSession",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/orchestration_engine.py",
+        "StartLine": 79,
+        "EndLine": 160,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 4,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "OrchestrationMode",
+            "Any",
+            "SessionStatus"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SensorManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/sensor_integration.py",
+        "StartLine": 74,
+        "EndLine": 376,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 1,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SensorReading",
+            "Callable",
+            "DeviceInterface"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ResourceManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/resource_manager.py",
+        "StartLine": 313,
+        "EndLine": 789,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 13,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Resource",
+            "ResourceAllocation",
+            "ResourceType"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "CapabilityScanner",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/capability_scanner.py",
+        "StartLine": 80,
+        "EndLine": 649,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 3,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ModuleCapability",
+            "FunctionCapability",
+            "ClassCapability"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "CodeGenerationRequest",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+        "StartLine": 134,
+        "EndLine": 145,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodeLanguage",
+            "CodeComplexity",
+            "CodeStyle"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Project",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/project_manager.py",
+        "StartLine": 116,
+        "EndLine": 197,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 5,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ProjectType",
+            "ProjectStatus",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ModuleCapability",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/capability_scanner.py",
+        "StartLine": 64,
+        "EndLine": 77,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any",
+            "FunctionCapability",
+            "ClassCapability"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "AlertRule",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/security_monitor.py",
+        "StartLine": 95,
+        "EndLine": 106,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SecurityEventType",
+            "Any",
+            "AlertLevel"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SecurityEvent",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/security_monitor.py",
+        "StartLine": 64,
+        "EndLine": 91,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SecurityEventType",
+            "AlertLevel",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "MCPToolResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/mcp_schemas.py",
+        "StartLine": 44,
+        "EndLine": 106,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any",
+            "MCPErrorDetail",
+            "BaseModel"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "BaseModel"
+        ]
+      },
+      {
+        "Name": "SystemDiscovery",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/discovery_engine.py",
+        "StartLine": 65,
+        "EndLine": 843,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ModuleCapability",
+            "ModuleInfo",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "StaticAnalyzer",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/static_analyzer.py",
+        "StartLine": 159,
+        "EndLine": 1019,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 14,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "AnalysisResult",
+            "CodeMetrics",
+            "AnalysisSummary"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PipelineManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/pipeline_manager.py",
+        "StartLine": 175,
+        "EndLine": 588,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 6,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Pipeline",
+            "PipelineStage",
+            "PipelineJob"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DeviceInterface",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/sensor_integration.py",
+        "StartLine": 63,
+        "EndLine": 71,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SensorType",
+            "DeviceStatus",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "BuildManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+        "StartLine": 181,
+        "EndLine": 709,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "BuildTarget",
+            "Dependency",
+            "BuildResult"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Pipeline",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/pipeline_manager.py",
+        "StartLine": 139,
+        "EndLine": 172,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "PipelineStage",
+            "Any",
+            "PipelineStatus"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Deployment",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
+        "StartLine": 96,
+        "EndLine": 135,
+        "Metrics": {
+          "CouplingCount": 3,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Environment",
+            "DeploymentStatus",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Environment",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
+        "StartLine": 61,
+        "EndLine": 92,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "EnvironmentType",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "CodeGenerationResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+        "StartLine": 173,
+        "EndLine": 181,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodeLanguage",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "RepositoryManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_manager.py",
+        "StartLine": 78,
+        "EndLine": 505,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Repository",
+            "RepositoryType"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ProjectManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/project_manager.py",
+        "StartLine": 200,
+        "EndLine": 608,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 8,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ProjectTemplate",
+            "Project"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DeploymentOrchestrator",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
+        "StartLine": 138,
+        "EndLine": 648,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Environment",
+            "Deployment"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PipelineStage",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/pipeline_manager.py",
+        "StartLine": 110,
+        "EndLine": 135,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "PipelineJob",
+            "StageStatus"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ProjectTemplate",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/project_manager.py",
+        "StartLine": 71,
+        "EndLine": 112,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ProjectType",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "BuildResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+        "StartLine": 155,
+        "EndLine": 166,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "BuildStatus",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "APIDocumentationGenerator",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/api_documentation/doc_generator.py",
+        "StartLine": 120,
+        "EndLine": 465,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "APIEndpoint",
+            "APIDocumentation"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "APIDocumentation",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/api_documentation/doc_generator.py",
+        "StartLine": 67,
+        "EndLine": 117,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 4,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "APIEndpoint",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "WorkflowExecution",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/workflow_manager.py",
+        "StartLine": 153,
+        "EndLine": 192,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "WorkflowStatus",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SensorReading",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/sensor_integration.py",
+        "StartLine": 40,
+        "EndLine": 59,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SensorType",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "WorkflowManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/workflow_manager.py",
+        "StartLine": 195,
+        "EndLine": 835,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 3,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "WorkflowStep",
+            "WorkflowExecution"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "EncryptionManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/encryption_manager.py",
+        "StartLine": 50,
+        "EndLine": 442,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Fernet",
+            "EncryptionResult"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ObjectEvent",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+        "StartLine": 100,
+        "EndLine": 107,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any",
+            "EventType"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PhysicalObjectManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+        "StartLine": 723,
+        "EndLine": 920,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ObjectRegistry",
+            "PhysicalObject"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DroidConfig",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid/controller.py",
+        "StartLine": 86,
+        "EndLine": 215,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 3,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "DroidMode",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "OrchestrationEngine",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/orchestration_engine.py",
+        "StartLine": 167,
+        "EndLine": 672,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "OrchestrationContext",
+            "Callable"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "StreamingAnalytics",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/analytics.py",
+        "StartLine": 245,
+        "EndLine": 423,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any",
+            "DataStream"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DataStream",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/analytics.py",
+        "StartLine": 107,
+        "EndLine": 242,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "AnalyticsWindow",
+            "DataPoint"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "RenderPipeline",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/rendering_pipeline.py",
+        "StartLine": 34,
+        "EndLine": 95,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ShaderManager",
+            "TextureManager"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Object3D",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/engine_3d.py",
+        "StartLine": 57,
+        "EndLine": 79,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 10,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D",
+            "Quaternion"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "XRInterface",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/ar_vr_support.py",
+        "StartLine": 47,
+        "EndLine": 64,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ARSession",
+            "VRRenderer"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SecurityMonitor",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/security_monitor.py",
+        "StartLine": 109,
+        "EndLine": 496,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 6,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "AlertRule",
+            "SecurityEvent"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "MCPToolCall",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/mcp_schemas.py",
+        "StartLine": 27,
+        "EndLine": 41,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "BaseModel",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "BaseModel"
+        ]
+      },
+      {
+        "Name": "MCPErrorDetail",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/mcp_schemas.py",
+        "StartLine": 11,
+        "EndLine": 24,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "BaseModel",
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "BaseModel"
+        ]
+      },
+      {
+        "Name": "Configuration",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/config_loader.py",
+        "StartLine": 115,
+        "EndLine": 171,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 3,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any",
+            "ConfigSchema"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ConfigurationManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/config_loader.py",
+        "StartLine": 174,
+        "EndLine": 510,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 3,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Configuration",
+            "ConfigSchema"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TestOllamaClient",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/language_models/tests/test_ollama_client.py",
+        "StartLine": 110,
+        "EndLine": 634,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 1,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 4,
+          "DependentClasses": [
+            "RequestsConnectionError",
+            "MockContent"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PlotConfig",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/advanced_plotter.py",
+        "StartLine": 133,
+        "EndLine": 150,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ChartStyle",
+            "ColorPalette"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Dataset",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/advanced_plotter.py",
+        "StartLine": 166,
+        "EndLine": 176,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "DataPoint",
+            "PlotType"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "OllamaClient",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/language_models/ollama_client.py",
+        "StartLine": 38,
+        "EndLine": 372,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 3,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Dict",
+            "OllamaModelError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "AnalysisSummary",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/static_analyzer.py",
+        "StartLine": 134,
+        "EndLine": 143,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SeverityLevel",
+            "Language"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "RepositoryMetadataManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_metadata.py",
+        "StartLine": 184,
+        "EndLine": 535,
+        "Metrics": {
+          "CouplingCount": 2,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 2,
+          "DependentClasses": [
+            "RepositoryMetadata",
+            "get_git_status"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "APIDocumentationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 229,
+        "EndLine": 232,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "AnalyticsMetric",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/analytics.py",
+        "StartLine": 18,
+        "EndLine": 29,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "DatabaseManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/database_management/db_manager.py",
+        "StartLine": 237,
+        "EndLine": 459,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "DatabaseConnection"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DocumentationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 223,
+        "EndLine": 226,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "PerformanceError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 261,
+        "EndLine": 264,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "CapabilityScanError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 280,
+        "EndLine": 283,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "SimulationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 299,
+        "EndLine": 302,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "MemoryError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 383,
+        "EndLine": 386,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "CodeExecutionError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 140,
+        "EndLine": 157,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "SandboxError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 160,
+        "EndLine": 163,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "ContainerError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 166,
+        "EndLine": 169,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "SynthesisError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 179,
+        "EndLine": 182,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "Modeling3DError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 287,
+        "EndLine": 290,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "PhysicalManagementError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 293,
+        "EndLine": 296,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "SchemaError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 345,
+        "EndLine": 348,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "DirectoryError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 89,
+        "EndLine": 92,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "PatternMatchingError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 127,
+        "EndLine": 130,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "OrchestrationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 236,
+        "EndLine": 239,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "TerminalError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 306,
+        "EndLine": 309,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "CICDError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 326,
+        "EndLine": 329,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "ValidationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 339,
+        "EndLine": 342,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "ResourceError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 377,
+        "EndLine": 380,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "FileOperationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 78,
+        "EndLine": 86,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "AIProviderError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 96,
+        "EndLine": 99,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "BuildError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 173,
+        "EndLine": 176,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "RepositoryError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 203,
+        "EndLine": 206,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "TaskExecutionError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 254,
+        "EndLine": 257,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "SecurityAuditError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 133,
+        "EndLine": 136,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "VisualizationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 210,
+        "EndLine": 213,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "LoggingError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 267,
+        "EndLine": 270,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "DeploymentError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 332,
+        "EndLine": 335,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "NetworkError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 352,
+        "EndLine": 355,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "TimeoutError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 365,
+        "EndLine": 373,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "ConfigurationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 59,
+        "EndLine": 62,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "EnvironmentError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 65,
+        "EndLine": 68,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "CodeEditingError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 108,
+        "EndLine": 111,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "InteractiveShellError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 312,
+        "EndLine": 315,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "APIError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 358,
+        "EndLine": 361,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "DependencyError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 71,
+        "EndLine": 74,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "ModelContextError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 114,
+        "EndLine": 117,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "WorkflowError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 242,
+        "EndLine": 245,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "ProjectManagementError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 248,
+        "EndLine": 251,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "SystemDiscoveryError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 274,
+        "EndLine": 277,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "DatabaseError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 319,
+        "EndLine": 322,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "TemplateError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 390,
+        "EndLine": 393,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "CodeGenerationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 102,
+        "EndLine": 105,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "StaticAnalysisError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 121,
+        "EndLine": 124,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "GitOperationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 186,
+        "EndLine": 200,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "PlottingError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/exceptions.py",
+        "StartLine": 216,
+        "EndLine": 219,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "FabricCodomyrmexOrchestrator",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/examples/fabric-integration/fabric_orchestrator.py",
+        "StartLine": 29,
+        "EndLine": 308,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "RepositoryType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_manager.py",
+        "StartLine": 43,
+        "EndLine": 48,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "Repository",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_manager.py",
+        "StartLine": 52,
+        "EndLine": 75,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "RepositoryType"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DatabaseType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/database_management/db_manager.py",
+        "StartLine": 35,
+        "EndLine": 42,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ChartStyle",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/advanced_plotter.py",
+        "StartLine": 105,
+        "EndLine": 114,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "AccessLevel",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_metadata.py",
+        "StartLine": 36,
+        "EndLine": 42,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "CloneStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_metadata.py",
+        "StartLine": 45,
+        "EndLine": 52,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "SyncStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_metadata.py",
+        "StartLine": 55,
+        "EndLine": 62,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "PlotType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/advanced_plotter.py",
+        "StartLine": 87,
+        "EndLine": 102,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "LLMConfigPresets",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/language_models/config.py",
+        "StartLine": 253,
+        "EndLine": 292,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "LLMConfig"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "OllamaConnectionError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/language_models/ollama_client.py",
+        "StartLine": 23,
+        "EndLine": 25,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "OllamaError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "OllamaError"
+        ]
+      },
+      {
+        "Name": "OllamaTimeoutError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/language_models/ollama_client.py",
+        "StartLine": 28,
+        "EndLine": 30,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "OllamaError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "OllamaError"
+        ]
+      },
+      {
+        "Name": "OllamaModelError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/language_models/ollama_client.py",
+        "StartLine": 33,
+        "EndLine": 35,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "OllamaError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "OllamaError"
+        ]
+      },
+      {
+        "Name": "AdvancedPlotter",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/advanced_plotter.py",
+        "StartLine": 179,
+        "EndLine": 962,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 1,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "PlotConfig"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ColorPalette",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/advanced_plotter.py",
+        "StartLine": 117,
+        "EndLine": 129,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ConfigSchema",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/config_loader.py",
+        "StartLine": 75,
+        "EndLine": 111,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ToolNotFoundError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 257,
+        "EndLine": 259,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodeReviewError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodeReviewError"
+        ]
+      },
+      {
+        "Name": "QualityDashboard",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 196,
+        "EndLine": 233,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 11,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "AnalysisResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 113,
+        "EndLine": 126,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SeverityLevel"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "AnimationController",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/engine_3d.py",
+        "StartLine": 140,
+        "EndLine": 148,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Vector3D",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/engine_3d.py",
+        "StartLine": 10,
+        "EndLine": 21,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Camera3D",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/engine_3d.py",
+        "StartLine": 82,
+        "EndLine": 96,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 6,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PhysicsEngine",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/engine_3d.py",
+        "StartLine": 151,
+        "EndLine": 161,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Language",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 97,
+        "EndLine": 109,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "Light3D",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/engine_3d.py",
+        "StartLine": 99,
+        "EndLine": 111,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Material3D",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/engine_3d.py",
+        "StartLine": 114,
+        "EndLine": 126,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 4,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "MeshLoader",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/engine_3d.py",
+        "StartLine": 129,
+        "EndLine": 137,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Object3D"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TextureManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/rendering_pipeline.py",
+        "StartLine": 22,
+        "EndLine": 31,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SeverityLevel",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 88,
+        "EndLine": 94,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "LazyLoader",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/performance/lazy_loader.py",
+        "StartLine": 19,
+        "EndLine": 59,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PerformanceMetrics",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/performance/performance_monitor.py",
+        "StartLine": 31,
+        "EndLine": 39,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PerformanceMonitor",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/performance/performance_monitor.py",
+        "StartLine": 42,
+        "EndLine": 201,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "PerformanceMetrics"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DatabaseConnection",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/database_management/db_manager.py",
+        "StartLine": 46,
+        "EndLine": 234,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "DatabaseType"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "StreamingMode",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/analytics.py",
+        "StartLine": 32,
+        "EndLine": 38,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "DataPoint",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/analytics.py",
+        "StartLine": 42,
+        "EndLine": 48,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "AnalyticsWindow",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/analytics.py",
+        "StartLine": 52,
+        "EndLine": 104,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "DataPoint"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ConfigurationError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 262,
+        "EndLine": 264,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodeReviewError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodeReviewError"
+        ]
+      },
+      {
+        "Name": "QualityGateResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 237,
+        "EndLine": 244,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "AnalysisType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 74,
+        "EndLine": 85,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ObjectType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+        "StartLine": 19,
+        "EndLine": 27,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "PyscnAnalyzer",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 267,
+        "EndLine": 476,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 1,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ToolNotFoundError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PyscnError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 252,
+        "EndLine": 254,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodeReviewError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodeReviewError"
+        ]
+      },
+      {
+        "Name": "ObjectStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+        "StartLine": 30,
+        "EndLine": 40,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "MaterialType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+        "StartLine": 43,
+        "EndLine": 54,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "EventType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+        "StartLine": 57,
+        "EndLine": 67,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "CodeReviewError",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+        "StartLine": 247,
+        "EndLine": 249,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodomyrmexError"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "CodomyrmexError"
+        ]
+      },
+      {
+        "Name": "SensorType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/sensor_integration.py",
+        "StartLine": 15,
+        "EndLine": 27,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "DeviceStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/sensor_integration.py",
+        "StartLine": 30,
+        "EndLine": 36,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "PipelineJob",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/pipeline_manager.py",
+        "StartLine": 73,
+        "EndLine": 106,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "JobStatus"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "JobStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/pipeline_manager.py",
+        "StartLine": 61,
+        "EndLine": 69,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "StageStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/pipeline_manager.py",
+        "StartLine": 50,
+        "EndLine": 58,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "Vector3D",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/simulation_engine.py",
+        "StartLine": 10,
+        "EndLine": 35,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 5,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ForceField",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/simulation_engine.py",
+        "StartLine": 39,
+        "EndLine": 58,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 1,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Vector3D"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "Constraint",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/simulation_engine.py",
+        "StartLine": 62,
+        "EndLine": 68,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "PipelineStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/pipeline_manager.py",
+        "StartLine": 39,
+        "EndLine": 47,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "TestSpatialIndexPerformance",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/tests/test_performance.py",
+        "StartLine": 133,
+        "EndLine": 198,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "PerformanceMetrics"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TestObjectCreationPerformance",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/tests/test_performance.py",
+        "StartLine": 54,
+        "EndLine": 130,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "PerformanceMetrics"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "OrchestrationMode",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/orchestration_engine.py",
+        "StartLine": 59,
+        "EndLine": 65,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "SessionStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/orchestration_engine.py",
+        "StartLine": 68,
+        "EndLine": 75,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "EnvironmentType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
+        "StartLine": 51,
+        "EndLine": 57,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "DeploymentStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
+        "StartLine": 40,
+        "EndLine": 48,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "BuildType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+        "StartLine": 82,
+        "EndLine": 92,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ProjectStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/project_manager.py",
+        "StartLine": 47,
+        "EndLine": 55,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ProjectType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/project_manager.py",
+        "StartLine": 58,
+        "EndLine": 67,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "BuildStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+        "StartLine": 95,
+        "EndLine": 103,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "Dependency",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+        "StartLine": 170,
+        "EndLine": 178,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "DependencyType"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ResourceType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/resource_manager.py",
+        "StartLine": 44,
+        "EndLine": 57,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ResourceStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/resource_manager.py",
+        "StartLine": 60,
+        "EndLine": 67,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "DependencyType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+        "StartLine": 115,
+        "EndLine": 121,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ResourceAllocation",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/resource_manager.py",
+        "StartLine": 295,
+        "EndLine": 310,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "BuildEnvironment",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+        "StartLine": 106,
+        "EndLine": 112,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "APISchema",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/api_documentation/openapi_generator.py",
+        "StartLine": 34,
+        "EndLine": 53,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TaskQueue",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+        "StartLine": 274,
+        "EndLine": 343,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Task"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TaskPriority",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+        "StartLine": 67,
+        "EndLine": 73,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "APIEndpoint",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/api_documentation/doc_generator.py",
+        "StartLine": 36,
+        "EndLine": 63,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 4,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TaskStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+        "StartLine": 55,
+        "EndLine": 64,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ResourceType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+        "StartLine": 76,
+        "EndLine": 85,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "TaskResource",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+        "StartLine": 89,
+        "EndLine": 95,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ResourceType"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TaskResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+        "StartLine": 99,
+        "EndLine": 117,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "WorkflowStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/workflow_manager.py",
+        "StartLine": 95,
+        "EndLine": 102,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "WorkflowStep",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/workflow_manager.py",
+        "StartLine": 106,
+        "EndLine": 149,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DroidSystemManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid_manager.py",
+        "StartLine": 49,
+        "EndLine": 132,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "DroidController"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "TodoManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid/todo.py",
+        "StartLine": 62,
+        "EndLine": 207,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "TodoItem"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SSLValidationResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/certificate_validator.py",
+        "StartLine": 39,
+        "EndLine": 59,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "CertificateValidator",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/certificate_validator.py",
+        "StartLine": 62,
+        "EndLine": 488,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SSLValidationResult"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "EncryptionResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/encryption_manager.py",
+        "StartLine": 41,
+        "EndLine": 47,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "DroidController",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid/controller.py",
+        "StartLine": 245,
+        "EndLine": 381,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "DroidMetrics"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "AlertLevel",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/security_monitor.py",
+        "StartLine": 54,
+        "EndLine": 60,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "DroidStatus",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid/controller.py",
+        "StartLine": 72,
+        "EndLine": 78,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "DroidMode",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid/controller.py",
+        "StartLine": 63,
+        "EndLine": 69,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "CodeAnalysisRequest",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+        "StartLine": 162,
+        "EndLine": 169,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodeLanguage"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SecurityEventType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/security_monitor.py",
+        "StartLine": 38,
+        "EndLine": 51,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "SecurityReport",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/security_reports.py",
+        "StartLine": 35,
+        "EndLine": 64,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 5,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SecurityReportGenerator",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/security_reports.py",
+        "StartLine": 67,
+        "EndLine": 662,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SecurityReport"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "VulnerabilityScanner",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/vulnerability_scanner.py",
+        "StartLine": 123,
+        "EndLine": 512,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 2,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "VulnerabilityReport"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SeverityLevel",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/vulnerability_scanner.py",
+        "StartLine": 49,
+        "EndLine": 56,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ComplianceStandard",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/vulnerability_scanner.py",
+        "StartLine": 59,
+        "EndLine": 67,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "VulnerabilityReport",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/vulnerability_scanner.py",
+        "StartLine": 71,
+        "EndLine": 96,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "SecurityScanResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/vulnerability_scanner.py",
+        "StartLine": 100,
+        "EndLine": 108,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 2,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "CodeRefactoringRequest",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+        "StartLine": 149,
+        "EndLine": 158,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "CodeLanguage"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "CodeStyle",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+        "StartLine": 122,
+        "EndLine": 130,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "AnalysisType",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/static_analyzer.py",
+        "StartLine": 79,
+        "EndLine": 89,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "SeverityLevel",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/static_analyzer.py",
+        "StartLine": 92,
+        "EndLine": 98,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "Language",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/static_analyzer.py",
+        "StartLine": 101,
+        "EndLine": 113,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "AnalysisResult",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/static_analyzer.py",
+        "StartLine": 117,
+        "EndLine": 130,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "SeverityLevel"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "FunctionCapability",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/capability_scanner.py",
+        "StartLine": 31,
+        "EndLine": 44,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Any"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "ClassCapability",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/capability_scanner.py",
+        "StartLine": 48,
+        "EndLine": 60,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "FunctionCapability"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "CodeComplexity",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+        "StartLine": 113,
+        "EndLine": 119,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "CodeLanguage",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/ai_code_helpers.py",
+        "StartLine": 85,
+        "EndLine": 110,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 1,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "Enum"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": [
+          "Enum"
+        ]
+      },
+      {
+        "Name": "ModuleInfo",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/discovery_engine.py",
+        "StartLine": 50,
+        "EndLine": 62,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "ModuleCapability"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "UserManager",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/examples/output/static-analysis/good_code.py",
+        "StartLine": 42,
+        "EndLine": 117,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 1,
+          "InstantiationDependencies": 0,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "User"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      },
+      {
+        "Name": "CommandRunner",
+        "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/terminal_utils.py",
+        "StartLine": 239,
+        "EndLine": 419,
+        "Metrics": {
+          "CouplingCount": 1,
+          "InheritanceDependencies": 0,
+          "TypeHintDependencies": 0,
+          "InstantiationDependencies": 1,
+          "AttributeAccessDependencies": 0,
+          "ImportDependencies": 0,
+          "DependentClasses": [
+            "TerminalFormatter"
+          ]
+        },
+        "RiskLevel": "low",
+        "IsAbstract": false,
+        "BaseClasses": []
+      }
+    ],
+    "Summary": {
+      "TotalClasses": 222,
+      "AverageCBO": 1.472972972972973,
+      "MaxCBO": 9,
+      "MinCBO": 1,
+      "ClassesAnalyzed": 222,
+      "FilesAnalyzed": 226,
+      "LowRiskClasses": 221,
+      "MediumRiskClasses": 1,
+      "HighRiskClasses": 0,
+      "CBODistribution": {
+        "1-5": 221,
+        "6-10": 1
+      },
+      "MostCoupledClasses": [
+        {
+          "Name": "CodeReviewer",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+          "StartLine": 479,
+          "EndLine": 2371,
+          "Metrics": {
+            "CouplingCount": 9,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 2,
+            "InstantiationDependencies": 17,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "AnalysisResult",
+              "CodeMetrics",
+              "ComplexityReductionSuggestion",
+              "ArchitectureViolation",
+              "QualityDashboard",
+              "PyscnAnalyzer",
+              "AnalysisSummary",
+              "QualityGateResult",
+              "DeadCodeFinding"
+            ]
+          },
+          "RiskLevel": "medium",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "Task",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+          "StartLine": 121,
+          "EndLine": 212,
+          "Metrics": {
+            "CouplingCount": 5,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 6,
+            "InstantiationDependencies": 5,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "TaskResource",
+              "TaskStatus",
+              "TaskResult",
+              "Any",
+              "TaskPriority"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "RepositoryMetadata",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repository_metadata.py",
+          "StartLine": 100,
+          "EndLine": 181,
+          "Metrics": {
+            "CouplingCount": 5,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 5,
+            "InstantiationDependencies": 10,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "LocalRepositoryInfo",
+              "AccessLevel",
+              "CloneStatus",
+              "SyncStatus",
+              "RepositoryStats"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "PhysicalObject",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+          "StartLine": 183,
+          "EndLine": 332,
+          "Metrics": {
+            "CouplingCount": 5,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 6,
+            "InstantiationDependencies": 0,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "ObjectType",
+              "Any",
+              "ObjectStatus",
+              "MaterialType",
+              "MaterialProperties"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "Resource",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/resource_manager.py",
+          "StartLine": 95,
+          "EndLine": 291,
+          "Metrics": {
+            "CouplingCount": 4,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 6,
+            "InstantiationDependencies": 2,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "ResourceType",
+              "ResourceStatus",
+              "Any",
+              "ResourceLimits"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "PhysicsSimulator",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/simulation_engine.py",
+          "StartLine": 71,
+          "EndLine": 385,
+          "Metrics": {
+            "CouplingCount": 4,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 3,
+            "InstantiationDependencies": 12,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "Vector3D",
+              "ForceField",
+              "Constraint",
+              "Any"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "BuildTarget",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_manager.py",
+          "StartLine": 141,
+          "EndLine": 151,
+          "Metrics": {
+            "CouplingCount": 4,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 4,
+            "InstantiationDependencies": 0,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "Any",
+              "BuildStep",
+              "BuildType",
+              "BuildEnvironment"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "TaskOrchestrator",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/task_orchestrator.py",
+          "StartLine": 346,
+          "EndLine": 662,
+          "Metrics": {
+            "CouplingCount": 4,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 1,
+            "InstantiationDependencies": 8,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "TaskResult",
+              "ResourceManager",
+              "TaskQueue",
+              "Task"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "ObjectRegistry",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
+          "StartLine": 335,
+          "EndLine": 720,
+          "Metrics": {
+            "CouplingCount": 4,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 3,
+            "InstantiationDependencies": 5,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "PhysicalObject",
+              "EventType",
+              "ObjectEvent",
+              "SpatialIndex"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        },
+        {
+          "Name": "AnalysisSummary",
+          "FilePath": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/code_review.py",
+          "StartLine": 130,
+          "EndLine": 140,
+          "Metrics": {
+            "CouplingCount": 3,
+            "InheritanceDependencies": 0,
+            "TypeHintDependencies": 3,
+            "InstantiationDependencies": 0,
+            "AttributeAccessDependencies": 0,
+            "ImportDependencies": 0,
+            "DependentClasses": [
+              "Any",
+              "SeverityLevel",
+              "Language"
+            ]
+          },
+          "RiskLevel": "low",
+          "IsAbstract": false,
+          "BaseClasses": []
+        }
+      ],
+      "MostDependedUponClasses": null
+    },
+    "Warnings": [
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/demo_orchestrator.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/example_usage.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/fabric-integration/code_improvement_workflow.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/fabric-integration/content_analysis_workflow.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/fabric-integration/demo_env_setup.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/fabric-integration/setup_fabric_env.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/git_visualization_comprehensive_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/orchestration_examples.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/advanced_data_visualization/check_modules.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/data-visualization/bar_chart_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/data-visualization/generate_data.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/data-visualization/histogram_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/data-visualization/integration_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/data-visualization/line_plot_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/data-visualization/pie_chart_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/data-visualization/scatter_plot_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/static-analysis/integration_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/static-analysis/run_analysis.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/examples/output/static-analysis/visualize_results.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/scripts/add_logging.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/scripts/fix_imports.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/scripts/fix_imports_simple.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/scripts/fix_syntax_errors.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/setup.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid/run_todo_droid.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/droid/test_direct_execution.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/prompt_composition.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/tests/test_ollama_integration.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/tests/unit/test_droid_manager.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/api_documentation/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/build_orchestrator.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/cli.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/code_executor.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/demo_enhanced_review.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/test_simple.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/tests/fixtures/python/complex_function.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/tests/fixtures/python/simple_function.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/bar_chart.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/histogram.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/line_plot.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/pie_chart.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/plot_utils.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/plotter.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/scatter_plot.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/database_management/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/documentation_website.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/scripts/check_stale_aggregation.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/scripts/update_sidebars.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/git_manager.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/metadata_cli.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/repo_cli.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/language_models/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/language_models/tests/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring/tests/unit/test_logger_config.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/modeling_3d/examples/basic_usage.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/module_template/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/pattern_matching/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/performance/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/examples/advanced_usage.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/examples/basic_usage.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/tests/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/pyrefly_runner.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/testing/__init__.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/testing/conftest.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/testing/integration/test_github_functionality_demo.py] No classes found in file",
+      "[/Users/4d/Documents/GitHub/codomyrmex/testing/integration/test_real_github_repos.py] No classes found in file"
+    ],
+    "Errors": [
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/tests/performance/test_pyscn_performance.py] Parse error: syntax errors found in source code",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/__init__.py] Parse error: syntax errors found in source code",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/tests/unit/test_visualization_integration.py] Parse error: syntax errors found in source code",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/visualization_integration.py] Parse error: syntax errors found in source code",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/__init__.py] Parse error: syntax errors found in source code",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/tests/test_integration.py] Parse error: syntax errors found in source code",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/tests/test_resource_manager.py] Parse error: syntax errors found in source code",
+      "[/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/project_orchestration/tests/test_workflow_manager.py] Parse error: syntax errors found in source code"
+    ],
+    "GeneratedAt": "2025-10-13T14:00:40-07:00",
+    "Version": "1.1.1",
+    "Config": {
+      "includeBuiltins": false,
+      "includeImports": false,
+      "lowThreshold": 5,
+      "maxCBO": 0,
+      "mediumThreshold": 10,
+      "minCBO": 0,
+      "outputFormat": "json",
+      "showZeros": false,
+      "sortBy": "coupling"
+    }
+  },
+  "summary": {
+    "total_files": 0,
+    "analyzed_files": 0,
+    "skipped_files": 0,
+    "complexity_enabled": false,
+    "dead_code_enabled": false,
+    "clone_enabled": false,
+    "cbo_enabled": true,
+    "deps_enabled": false,
+    "arch_enabled": false,
+    "deps_total_modules": 0,
+    "deps_modules_in_cycles": 0,
+    "deps_max_depth": 0,
+    "deps_main_sequence_deviation": 0,
+    "arch_compliance": 0,
+    "total_functions": 0,
+    "average_complexity": 0,
+    "high_complexity_count": 0,
+    "dead_code_count": 0,
+    "critical_dead_code": 0,
+    "total_clones": 0,
+    "clone_pairs": 0,
+    "clone_groups": 0,
+    "code_duplication_percentage": 0,
+    "cbo_classes": 222,
+    "high_coupling_classes": 0,
+    "medium_coupling_classes": 1,
+    "average_coupling": 1.472972972972973,
+    "health_score": 100,
+    "grade": "A",
+    "complexity_score": 100,
+    "dead_code_score": 100,
+    "duplication_score": 100,
+    "coupling_score": 100,
+    "dependency_score": 100,
+    "architecture_score": 100
+  },
+  "generated_at": "2025-10-13T14:00:40.952262-07:00",
+  "duration_ms": 388,
+  "version": "1.1.1"
+}

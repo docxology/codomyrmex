@@ -224,14 +224,18 @@ class Resource:
         return self.status == ResourceStatus.AVAILABLE
 
     def can_allocate(self, requested: Dict[str, Any], user_id: str) -> bool:
-        if not self.is_available():
         """Can Allocate.
 
-            Args:        requested: Parameter for the operation.        user_id: Unique identifier.
+        Args:
+            requested: Parameter for the operation.
+            user_id: Unique identifier.
 
-            Returns:        The result of the operation.
-            """
+        Returns:
+            The result of the operation.
+        """
+        if not self.is_available():
             return False
+
         # concurrent users
         if (
             self.limits.max_concurrent_users
@@ -239,6 +243,7 @@ class Resource:
             and user_id not in self.current_users
         ):
             return False
+
         for key, amount in requested.items():
             if key in self.capacity:
                 available = self.capacity[key] - self.allocated.get(key, 0)
@@ -247,13 +252,16 @@ class Resource:
         return True
 
     def allocate(self, requested: Dict[str, Any], user_id: str) -> bool:
-        if not self.can_allocate(requested, user_id):
         """Allocate.
 
-            Args:        requested: Parameter for the operation.        user_id: Unique identifier.
+        Args:
+            requested: Parameter for the operation.
+            user_id: Unique identifier.
 
-            Returns:        The result of the operation.
-            """
+        Returns:
+            The result of the operation.
+        """
+        if not self.can_allocate(requested, user_id):
             return False
         for key, amount in requested.items():
             self.allocated[key] = self.allocated.get(key, 0) + amount
@@ -263,12 +271,14 @@ class Resource:
         return True
 
     def deallocate(self, released: Dict[str, Any], user_id: str):
+        """Deallocate resources and update user tracking.
+
+        Args:
+            released: Parameter for the operation.
+            user_id: Unique identifier.
+        """
         for key, amount in released.items():
             if key in self.allocated:
-        """Deallocate.
-
-            Args:        released: Parameter for the operation.        user_id: Unique identifier.
-            """
                 self.allocated[key] = max(0, self.allocated[key] - amount)
         self.current_users.discard(user_id)
         self.updated_at = datetime.now(timezone.utc)

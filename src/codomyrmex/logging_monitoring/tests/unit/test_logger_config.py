@@ -9,10 +9,10 @@ from unittest.mock import patch, MagicMock
 # Make sure the module can be imported
 # This assumes tests are run from the project root or PYTHONPATH is set up.
 from codomyrmex.logging_monitoring import (
-from codomyrmex.exceptions import CodomyrmexError
     logger_config,
 )  # Direct import for _logging_configured
 from codomyrmex.logging_monitoring import setup_logging, get_logger
+from codomyrmex.exceptions import CodomyrmexError
 
 
 # Helper to reset logging configuration for isolated tests

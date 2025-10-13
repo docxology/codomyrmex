@@ -12,10 +12,6 @@ from codomyrmex.exceptions import CodomyrmexError
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))  # Removed sys.path manipulation
 
 from code_execution_sandbox.code_executor import (
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-logger = get_logger(__name__)
-
     validate_language,
     validate_timeout,
     validate_session_id,
@@ -23,6 +19,9 @@ logger = get_logger(__name__)
     execute_code,
     SUPPORTED_LANGUAGES,
 )
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class TestValidators(unittest.TestCase):

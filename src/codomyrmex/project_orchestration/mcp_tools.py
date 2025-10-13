@@ -31,10 +31,15 @@ except ImportError:
 
     # Fallback classes
     class MCPToolResult:
-            """  Init  .
+        """MCP Tool Result.
 
-                Args:        success: Parameter for the operation.        data: Data to process.        error: Parameter for the operation.        error_details: Parameter for the operation.        metadata: Data to process.
-                """
+        Args:
+            success: Parameter for the operation.
+            data: Data to process.
+            error: Parameter for the operation.
+            error_details: Parameter for the operation.
+            metadata: Data to process.
+        """
         def __init__(
             self,
             success: bool,
@@ -50,11 +55,11 @@ except ImportError:
             self.metadata = metadata or {}
 
     class MCPErrorDetail:
-        def __init__(self, type: str, message: str):
-        """Mcperrordetail.
+        """MCPErrorDetail.
 
-            A class for handling mcperrordetail operations.
-            """
+        A class for handling MCPErrorDetail operations.
+        """
+        def __init__(self, type: str, message: str):
             self.type = type
             self.message = message
 

@@ -2,12 +2,14 @@ import pytest
 from pydantic import ValidationError
 
 from model_context_protocol.mcp_schemas import (
+    MCPToolCall,
+)
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
-    MCPToolCall,
+from model_context_protocol.mcp_schemas import (
     MCPToolResult,
     MCPErrorDetail,
 )

@@ -54,6 +54,8 @@ dependencies = [
     "bandit",
     "radon",
     "lizard",
+    # For advanced code review (pyscn - install with pipx)
+    "tomli>=2.0.0",
     # For data visualization
     "matplotlib",
     "seaborn",
