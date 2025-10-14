@@ -1,0 +1,2929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pyscn Analysis Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .score-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .grade-a { background: #4caf50; color: white; }
+        .grade-b { background: #8bc34a; color: white; }
+        .grade-c { background: #ff9800; color: white; }
+        .grade-d { background: #ff5722; color: white; }
+        .grade-f { background: #f44336; color: white; }
+        
+        .tabs {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .tab-buttons {
+            display: flex;
+            background: #f5f5f5;
+        }
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .metric-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .risk-low { color: #4caf50; }
+        .risk-medium { color: #ff9800; }
+        .risk-high { color: #f44336; }
+        
+        .severity-critical { color: #f44336; }
+        .severity-warning { color: #ff9800; }
+        .severity-info { color: #2196f3; }
+
+         
+        .score-bars {
+            margin: 20px 0;
+        }
+        .score-bar-item {
+            margin-bottom: 24px;
+        }
+        .score-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .score-label {
+            font-weight: 600;
+            color: #333;
+        }
+        .score-value {
+            font-weight: 700;
+            color: #667eea;
+        }
+        .score-bar-container {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .score-bar-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 6px;
+        }
+        .score-excellent { background: linear-gradient(90deg, #4caf50, #66bb6a); }
+        .score-good { background: linear-gradient(90deg, #8bc34a, #9ccc65); }
+        .score-fair { background: linear-gradient(90deg, #ff9800, #ffa726); }
+        .score-poor { background: linear-gradient(90deg, #f44336, #ef5350); }
+        .score-detail {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+
+         
+        .tab-header-with-score {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .score-badge-compact {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+        }
+        .score-badge-compact.score-excellent {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+        }
+        .score-badge-compact.score-good {
+            background: linear-gradient(135deg, #8bc34a, #9ccc65);
+            box-shadow: 0 2px 6px rgba(139, 195, 74, 0.4);
+        }
+        .score-badge-compact.score-fair {
+            background: linear-gradient(135deg, #ff9800, #ffa726);
+            box-shadow: 0 2px 6px rgba(255, 152, 0, 0.4);
+        }
+        .score-badge-compact.score-poor {
+            background: linear-gradient(135deg, #f44336, #ef5350);
+            box-shadow: 0 2px 6px rgba(244, 67, 54, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>pyscn Analysis Report</h1>
+            <p>Generated: 2025-10-13 16:09:16</p>
+            <div class="score-badge grade-a">
+                Health Score: 86/100 (Grade: A)
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="showTab('summary', this)">Summary</button>
+                
+                <button class="tab-button" onclick="showTab('complexity', this)">Complexity</button>
+                
+                
+                <button class="tab-button" onclick="showTab('deadcode', this)">Dead Code</button>
+                
+                
+                <button class="tab-button" onclick="showTab('clone', this)">Clone Detection</button>
+                
+                
+                <button class="tab-button" onclick="showTab('cbo', this)">Class Coupling</button>
+                
+                
+                
+                <button class="tab-button" onclick="showTab('sys-deps', this)">Dependencies</button>
+                
+                
+                <button class="tab-button" onclick="showTab('sys-arch', this)">Architecture</button>
+                
+                
+            </div>
+
+            <div id="summary" class="tab-content active">
+                <h2>Analysis Summary</h2>
+
+                <h3 style="margin-top: 20px; margin-bottom: 16px; color: #2c3e50;">Quality Scores</h3>
+                <div class="score-bars">
+                    
+                    <div class="score-bar-item">
+                        <div class="score-bar-header">
+                            <span class="score-label">Complexity</span>
+                            <span class="score-value">70/100</span>
+                        </div>
+                        <div class="score-bar-container">
+                            <div class="score-bar-fill score-good" style="width: 70%"></div>
+                        </div>
+                        <div class="score-detail">Avg: 7.3, High-risk: 3</div>
+                    </div>
+                    
+
+                    
+                    <div class="score-bar-item">
+                        <div class="score-bar-header">
+                            <span class="score-label">Dead Code</span>
+                            <span class="score-value">100/100</span>
+                        </div>
+                        <div class="score-bar-container">
+                            <div class="score-bar-fill score-excellent" style="width: 100%"></div>
+                        </div>
+                        <div class="score-detail">0 issues, 0 critical</div>
+                    </div>
+                    
+
+                    
+                    <div class="score-bar-item">
+                        <div class="score-bar-header">
+                            <span class="score-label">Duplication</span>
+                            <span class="score-value">70/100</span>
+                        </div>
+                        <div class="score-bar-container">
+                            <div class="score-bar-fill score-good" style="width: 70%"></div>
+                        </div>
+                        <div class="score-detail">4.2% duplication, 12 groups</div>
+                    </div>
+                    
+
+                    
+                    <div class="score-bar-item">
+                        <div class="score-bar-header">
+                            <span class="score-label">Coupling (CBO)</span>
+                            <span class="score-value">100/100</span>
+                        </div>
+                        <div class="score-bar-container">
+                            <div class="score-bar-fill score-excellent" style="width: 100%"></div>
+                        </div>
+                        <div class="score-detail">Avg: 1.5, High-coupling: 0/220</div>
+                    </div>
+                    
+
+                    
+                    <div class="score-bar-item">
+                        <div class="score-bar-header">
+                            <span class="score-label">Dependencies</span>
+                            <span class="score-value">92/100</span>
+                        </div>
+                        <div class="score-bar-container">
+                            <div class="score-bar-fill score-excellent" style="width: 92%"></div>
+                        </div>
+                        <div class="score-detail">No cycles, Depth: 5</div>
+                    </div>
+                    
+
+                    
+                    <div class="score-bar-item">
+                        <div class="score-bar-header">
+                            <span class="score-label">Architecture</span>
+                            <span class="score-value">87/100</span>
+                        </div>
+                        <div class="score-bar-container">
+                            <div class="score-bar-fill score-excellent" style="width: 87%"></div>
+                        </div>
+                        <div class="score-detail">92% compliant</div>
+                    </div>
+                    
+                </div>
+
+                <h3 style="margin-top: 24px; margin-bottom: 16px; color: #2c3e50;">File Statistics</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">158</div>
+                        <div class="metric-label">Total Files</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">158</div>
+                        <div class="metric-label">Analyzed Files</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">7.29</div>
+                        <div class="metric-label">Avg Complexity</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Dead Code Issues</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">1763</div>
+                        <div class="metric-label">Unique Fragments</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">4.2%</div>
+                        <div class="metric-label">Code Duplication</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-value">220</div>
+                        <div class="metric-label">Total Classes</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">High Coupling (CBO)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">1.48</div>
+                        <div class="metric-label">Avg CBO</div>
+                    </div>
+                    
+                </div>
+
+                
+                
+                
+                <h3 style="margin-top: 16px; color: #2c3e50;">Dependencies</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">158</div>
+                        <div class="metric-label">Total Modules</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">168</div>
+                        <div class="metric-label">Total Dependencies</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">5</div>
+                        <div class="metric-label">Max Depth</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-value">✅ 0</div>
+                        <div class="metric-label">Circular Dependencies</div>
+                    </div>
+                    
+                </div>
+                
+
+                
+                <h3 style="margin-top: 8px; color: #2c3e50;">Architecture</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">14</div>
+                        <div class="metric-label">Violations</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">91.7%</div>
+                        <div class="metric-label">Compliance</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">Layers Analyzed</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">168</div>
+                        <div class="metric-label">Total Rules</div>
+                    </div>
+                </div>
+                
+                
+            </div>
+
+            
+            <div id="complexity" class="tab-content">
+                <div class="tab-header-with-score">
+                    <h2 style="margin: 0;">Complexity Analysis</h2>
+                    <div class="score-badge-compact score-good">
+                        70/100
+                    </div>
+                </div>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">445</div>
+                        <div class="metric-label">Total Functions</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">7.29</div>
+                        <div class="metric-label">Average</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">22</div>
+                        <div class="metric-label">Maximum</div>
+                    </div>
+                </div>
+                
+                <h3>Top Complex Functions</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>File</th>
+                            <th>Complexity</th>
+                            <th>Nesting Depth</th>
+                            <th>Risk</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        
+                        <tr>
+                            <td>highly_complex_function</td>
+                            <td>src/codomyrmex/code_review/tests/fixtures/python/complex_function.py</td>
+                            <td>22</td>
+                            <td>13</td>
+                            <td class="risk-high">high</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>OllamaClient._generate_stream</td>
+                            <td>src/codomyrmex/language_models/ollama_client.py</td>
+                            <td>20</td>
+                            <td>7</td>
+                            <td class="risk-high">high</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>OllamaClient._chat_stream</td>
+                            <td>src/codomyrmex/language_models/ollama_client.py</td>
+                            <td>20</td>
+                            <td>7</td>
+                            <td class="risk-high">high</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>StatusReporter.check_git_status</td>
+                            <td>src/codomyrmex/system_discovery/status_reporter.py</td>
+                            <td>16</td>
+                            <td>2</td>
+                            <td class="risk-medium">medium</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>validate_doc_versions</td>
+                            <td>src/codomyrmex/documentation/documentation_website.py</td>
+                            <td>16</td>
+                            <td>4</td>
+                            <td class="risk-medium">medium</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>run_todos</td>
+                            <td>src/codomyrmex/ai_code_editing/droid/run_todo_droid.py</td>
+                            <td>16</td>
+                            <td>7</td>
+                            <td class="risk-medium">medium</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>orchestrate_build_pipeline</td>
+                            <td>src/codomyrmex/build_synthesis/build_orchestrator.py</td>
+                            <td>15</td>
+                            <td>5</td>
+                            <td class="risk-medium">medium</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>BuildManager.build_target</td>
+                            <td>src/codomyrmex/build_synthesis/build_manager.py</td>
+                            <td>15</td>
+                            <td>4</td>
+                            <td class="risk-medium">medium</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>OpenAPIGenerator.validate_spec</td>
+                            <td>src/codomyrmex/api_documentation/openapi_generator.py</td>
+                            <td>15</td>
+                            <td>4</td>
+                            <td class="risk-medium">medium</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>analyze_repository_path</td>
+                            <td>src/codomyrmex/pattern_matching/run_codomyrmex_analysis.py</td>
+                            <td>14</td>
+                            <td>3</td>
+                            <td class="risk-medium">medium</td>
+                        </tr>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </tbody>
+                </table>
+                
+                <p style="color: #666; margin-top: 10px;">Showing top 10 of 445 functions</p>
+                
+                
+            </div>
+            
+
+            
+            <div id="deadcode" class="tab-content">
+                <div class="tab-header-with-score">
+                    <h2 style="margin: 0;">Dead Code Detection</h2>
+                    <div class="score-badge-compact score-excellent">
+                        100/100
+                    </div>
+                </div>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Total Issues</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Critical</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Warnings</div>
+                    </div>
+                </div>
+                
+                
+                <p style="color: #4caf50; font-weight: bold; margin-top: 20px;">✓ No dead code detected</p>
+                
+                
+            </div>
+            
+
+            
+            <div id="clone" class="tab-content">
+                <div class="tab-header-with-score">
+                    <h2 style="margin: 0;">Clone Detection</h2>
+                    <div class="score-badge-compact score-good">
+                        70/100
+                    </div>
+                </div>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">1763</div>
+                        <div class="metric-label">Unique Fragments</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">12</div>
+                        <div class="metric-label">Clone Groups</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">1.00</div>
+                        <div class="metric-label">Avg Similarity</div>
+                    </div>
+                </div>
+                
+                
+                <h3>Clone Groups</h3>
+                <p style="color: #666; margin-bottom: 15px;">Code fragments grouped by similarity</p>
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 5 - 8 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>85-100</td>
+                                <td>16 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>104-118</td>
+                                <td>15 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>122-136</td>
+                                <td>15 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>192-206</td>
+                                <td>15 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>213-227</td>
+                                <td>15 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>231-245</td>
+                                <td>15 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>249-263</td>
+                                <td>15 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>421-435</td>
+                                <td>15 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 0 - 5 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/ai_code_editing/ai_code_helpers.py</td>
+                                <td>338-377</td>
+                                <td>40 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/ai_code_editing/ai_code_helpers.py</td>
+                                <td>468-493</td>
+                                <td>26 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/ai_code_editing/ai_code_helpers.py</td>
+                                <td>579-604</td>
+                                <td>26 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/ai_code_editing/ai_code_helpers.py</td>
+                                <td>769-794</td>
+                                <td>26 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/ai_code_editing/ai_code_helpers.py</td>
+                                <td>877-902</td>
+                                <td>26 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 4 - 5 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/code_review.py</td>
+                                <td>795-820</td>
+                                <td>26 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/code_review.py</td>
+                                <td>863-886</td>
+                                <td>24 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/static_analyzer.py</td>
+                                <td>400-429</td>
+                                <td>30 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/static_analyzer.py</td>
+                                <td>513-538</td>
+                                <td>26 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/static_analyzer.py</td>
+                                <td>651-680</td>
+                                <td>30 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 8 - 5 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/git_operations/github_api.py</td>
+                                <td>126-154</td>
+                                <td>29 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/git_operations/github_api.py</td>
+                                <td>253-290</td>
+                                <td>38 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/git_operations/github_api.py</td>
+                                <td>333-362</td>
+                                <td>30 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/git_operations/github_api.py</td>
+                                <td>399-434</td>
+                                <td>36 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/git_operations/github_api.py</td>
+                                <td>469-502</td>
+                                <td>34 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 9 - 5 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/tests/test_static_analyzer.py</td>
+                                <td>257-281</td>
+                                <td>25 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/tests/test_static_analyzer.py</td>
+                                <td>289-313</td>
+                                <td>25 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/tests/test_static_analyzer.py</td>
+                                <td>415-444</td>
+                                <td>30 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/tests/test_static_analyzer.py</td>
+                                <td>471-489</td>
+                                <td>19 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/tests/test_static_analyzer.py</td>
+                                <td>497-527</td>
+                                <td>31 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 1 - 3 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/api_documentation/doc_generator.py</td>
+                                <td>402-424</td>
+                                <td>23 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/api_documentation/openapi_generator.py</td>
+                                <td>249-271</td>
+                                <td>23 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/security_audit/security_reports.py</td>
+                                <td>632-653</td>
+                                <td>22 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 2 - 3 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/api_documentation/doc_generator.py</td>
+                                <td>405-417</td>
+                                <td>13 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/api_documentation/openapi_generator.py</td>
+                                <td>252-264</td>
+                                <td>13 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/security_audit/security_reports.py</td>
+                                <td>635-646</td>
+                                <td>12 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 3 - 3 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/cli.py</td>
+                                <td>740-750</td>
+                                <td>11 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/cli.py</td>
+                                <td>924-933</td>
+                                <td>10 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/cli.py</td>
+                                <td>960-969</td>
+                                <td>10 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 6 - 3 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>401-416</td>
+                                <td>16 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>402-416</td>
+                                <td>15 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/code_review/tests/unit/test_error_handling.py</td>
+                                <td>420-435</td>
+                                <td>16 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #333;">Group 10 - 3 clones (Type Type-1, similarity: 1.00)</h4>
+                    <table class="table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/tests/test_static_analyzer.py</td>
+                                <td>418-441</td>
+                                <td>24 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/tests/test_static_analyzer.py</td>
+                                <td>474-486</td>
+                                <td>13 lines</td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <td>src/codomyrmex/static_analysis/tests/test_static_analyzer.py</td>
+                                <td>500-524</td>
+                                <td>25 lines</td>
+                            </tr>
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                <p style="color: #666; margin-top: 10px;">Showing top 10 of 12 clone groups</p>
+                
+                
+                
+            </div>
+            
+
+            
+            <div id="cbo" class="tab-content">
+                <div class="tab-header-with-score">
+                    <h2 style="margin: 0;">Class Coupling</h2>
+                    <div class="score-badge-compact score-excellent">
+                        100/100
+                    </div>
+                </div>
+                <p style="margin-bottom: 20px; color: #666;">Coupling Between Objects (CBO) metrics</p>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">220</div>
+                        <div class="metric-label">Total Classes</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">High Risk Classes</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">1.48</div>
+                        <div class="metric-label">Average CBO</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">9</div>
+                        <div class="metric-label">Max CBO</div>
+                    </div>
+                </div>
+                
+                <h3>Most Dependent Classes</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>File</th>
+                            <th>CBO</th>
+                            <th>Risk Level</th>
+                            <th>Dependent Classes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        
+                        <tr>
+                            <td>CodeReviewer</td>
+                            <td>src/codomyrmex/code_review/code_review.py</td>
+                            <td>9</td>
+                            <td class="risk-medium">medium</td>
+                            <td>ComplexityReductionSuggestion, CodeMetrics, AnalysisSummary, QualityGateResult, DeadCodeFinding, ArchitectureViolation, QualityDashboard, AnalysisResult, PyscnAnalyzer</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>Task</td>
+                            <td>src/codomyrmex/project_orchestration/task_orchestrator.py</td>
+                            <td>5</td>
+                            <td class="risk-low">low</td>
+                            <td>TaskResource, TaskStatus, TaskResult, Any, TaskPriority</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>RepositoryMetadata</td>
+                            <td>src/codomyrmex/git_operations/repository_metadata.py</td>
+                            <td>5</td>
+                            <td class="risk-low">low</td>
+                            <td>CloneStatus, SyncStatus, RepositoryStats, LocalRepositoryInfo, AccessLevel</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>PhysicalObject</td>
+                            <td>src/codomyrmex/physical_management/object_manager.py</td>
+                            <td>5</td>
+                            <td class="risk-low">low</td>
+                            <td>MaterialType, MaterialProperties, ObjectType, Any, ObjectStatus</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>PhysicsSimulator</td>
+                            <td>src/codomyrmex/physical_management/simulation_engine.py</td>
+                            <td>4</td>
+                            <td class="risk-low">low</td>
+                            <td>Any, Vector3D, ForceField, Constraint</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>ObjectRegistry</td>
+                            <td>src/codomyrmex/physical_management/object_manager.py</td>
+                            <td>4</td>
+                            <td class="risk-low">low</td>
+                            <td>PhysicalObject, EventType, ObjectEvent, SpatialIndex</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>Resource</td>
+                            <td>src/codomyrmex/project_orchestration/resource_manager.py</td>
+                            <td>4</td>
+                            <td class="risk-low">low</td>
+                            <td>ResourceType, ResourceStatus, Any, ResourceLimits</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>BuildTarget</td>
+                            <td>src/codomyrmex/build_synthesis/build_manager.py</td>
+                            <td>4</td>
+                            <td class="risk-low">low</td>
+                            <td>BuildType, BuildEnvironment, Any, BuildStep</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>TaskOrchestrator</td>
+                            <td>src/codomyrmex/project_orchestration/task_orchestrator.py</td>
+                            <td>4</td>
+                            <td class="risk-low">low</td>
+                            <td>ResourceManager, TaskQueue, Task, TaskResult</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>Pipeline</td>
+                            <td>src/codomyrmex/ci_cd_automation/pipeline_manager.py</td>
+                            <td>3</td>
+                            <td class="risk-low">low</td>
+                            <td>PipelineStage, Any, PipelineStatus</td>
+                        </tr>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </tbody>
+                </table>
+                
+                <p style="color: #666; margin-top: 10px;">Showing top 10 of 220 classes</p>
+                
+                
+            </div>
+            
+
+            
+            
+            <div id="sys-deps" class="tab-content">
+                <div class="tab-header-with-score">
+                    <h2 style="margin: 0;">Module Dependencies</h2>
+                    <div class="score-badge-compact score-excellent">
+                        92/100
+                    </div>
+                </div>
+                <p style="margin-bottom: 20px; color: #666;">Project-wide module dependency graph metrics</p>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">158</div>
+                        <div class="metric-label">Total Modules</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">168</div>
+                        <div class="metric-label">Total Dependencies</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">5</div>
+                        <div class="metric-label">Max Depth</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-value">✅ 0</div>
+                        <div class="metric-label">Circular Dependencies</div>
+                    </div>
+                    
+                </div>
+
+                
+                <h3>Longest Dependency Chains</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Depth</th>
+                            <th>Path</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        
+                        <tr>
+                            <td>1</td>
+                            <td>6</td>
+                            <td>src.codomyrmex.project_orchestration.mcp_tools → src.codomyrmex.project_orchestration.orchestration_engine → src.codomyrmex.project_orchestration.project_manager → src.codomyrmex.project_orchestration.task_orchestrator → src.codomyrmex.performance → src.codomyrmex.exceptions</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>2</td>
+                            <td>6</td>
+                            <td>src.codomyrmex.project_orchestration.mcp_tools → src.codomyrmex.project_orchestration.orchestration_engine → src.codomyrmex.project_orchestration.project_manager → src.codomyrmex.project_orchestration.workflow_manager → src.codomyrmex.performance → src.codomyrmex.exceptions</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>3</td>
+                            <td>5</td>
+                            <td>src.codomyrmex.project_orchestration.orchestration_engine → src.codomyrmex.project_orchestration.project_manager → src.codomyrmex.project_orchestration.workflow_manager → src.codomyrmex.performance → src.codomyrmex.exceptions</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>src.codomyrmex.data_visualization.tests.unit.test_git_visualizer → src.codomyrmex.data_visualization.git_visualizer → src.codomyrmex.data_visualization.mermaid_generator → src.codomyrmex.data_visualization.plot_utils → src.codomyrmex.logging_monitoring.logger_config</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>5</td>
+                            <td>5</td>
+                            <td>src.codomyrmex.data_visualization.tests.unit.test_git_visualizer → src.codomyrmex.data_visualization.git_visualizer → src.codomyrmex.git_operations.git_manager → src.codomyrmex.performance → src.codomyrmex.exceptions</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>6</td>
+                            <td>5</td>
+                            <td>src.codomyrmex.ai_code_editing.droid_manager → src.codomyrmex.ai_code_editing.droid.run_todo_droid → src.codomyrmex.ai_code_editing.droid.controller → src.codomyrmex.performance → src.codomyrmex.exceptions</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>7</td>
+                            <td>5</td>
+                            <td>src.codomyrmex.project_orchestration.mcp_tools → src.codomyrmex.project_orchestration.orchestration_engine → src.codomyrmex.project_orchestration.project_manager → src.codomyrmex.project_orchestration.task_orchestrator → src.codomyrmex.performance</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>8</td>
+                            <td>5</td>
+                            <td>src.codomyrmex.project_orchestration.mcp_tools → src.codomyrmex.project_orchestration.orchestration_engine → src.codomyrmex.project_orchestration.project_manager → src.codomyrmex.project_orchestration.workflow_manager → src.codomyrmex.performance</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>9</td>
+                            <td>5</td>
+                            <td>src.codomyrmex.project_orchestration.mcp_tools → src.codomyrmex.project_orchestration.orchestration_engine → src.codomyrmex.project_orchestration.project_manager → src.codomyrmex.performance → src.codomyrmex.exceptions</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>10</td>
+                            <td>4</td>
+                            <td>src.codomyrmex.project_orchestration.mcp_tools → src.codomyrmex.project_orchestration.orchestration_engine → src.codomyrmex.project_orchestration.project_manager → src.codomyrmex.performance</td>
+                        </tr>
+                        
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+            
+
+            
+            <div id="sys-arch" class="tab-content">
+                <div class="tab-header-with-score">
+                    <h2 style="margin: 0;">Architecture Validation</h2>
+                    <div class="score-badge-compact score-excellent">
+                        87/100
+                    </div>
+                </div>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">Layers Analyzed</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">168</div>
+                        <div class="metric-label">Total Rules</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">14</div>
+                        <div class="metric-label">Violations</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">91.7%</div>
+                        <div class="metric-label">Compliance</div>
+                    </div>
+                </div>
+
+                
+                <h3>Top Rule Violations</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Severity</th>
+                            <th>Rule</th>
+                            <th>From</th>
+                            <th>To</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.ai_code_editing.ai_code_helpers</td>
+                            <td>src.codomyrmex.environment_setup.env_checker</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>domain !&gt; application</td>
+                            <td>src.codomyrmex.ai_code_editing.droid.controller</td>
+                            <td>src.codomyrmex.logging_monitoring</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.ai_code_editing.droid.run_todo_droid</td>
+                            <td>src.codomyrmex.ai_code_editing.droid.todo</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.ai_code_editing.droid.test_direct_execution</td>
+                            <td>src.codomyrmex.ai_code_editing.droid.todo</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.ai_code_editing.droid_manager</td>
+                            <td>src.codomyrmex.ai_code_editing.droid.todo</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.ai_code_editing.droid_manager</td>
+                            <td>src.codomyrmex.ai_code_editing.droid.tasks</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>application -&gt; {application,domain,infrastructure}</td>
+                            <td>src.codomyrmex.cli</td>
+                            <td>src.codomyrmex.git_operations</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.data_visualization.plotter</td>
+                            <td>src.codomyrmex.data_visualization.line_plot</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.data_visualization.plotter</td>
+                            <td>src.codomyrmex.data_visualization.scatter_plot</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.data_visualization.plotter</td>
+                            <td>src.codomyrmex.data_visualization.histogram</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.data_visualization.tests.integration.test_git_visualization_integration</td>
+                            <td>src.codomyrmex.git_operations</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.language_models.ollama_integration</td>
+                            <td>src.codomyrmex.language_models.config</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>domain !&gt; presentation</td>
+                            <td>src.codomyrmex.project_orchestration.mcp_tools</td>
+                            <td>src.codomyrmex.project_orchestration.resource_manager</td>
+                        </tr>
+                        
+                        
+                        
+                        <tr>
+                            <td>error</td>
+                            <td>infrastructure -&gt; {infrastructure,domain,application}</td>
+                            <td>src.codomyrmex.project_orchestration.orchestration_engine</td>
+                            <td>src.codomyrmex.project_orchestration.resource_manager</td>
+                        </tr>
+                        
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+            
+            
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName, el) {
+            
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            
+            document.getElementById(tabName).classList.add('active');
+            
+            
+            if (el) { el.classList.add('active'); }
+        }
+    </script>
+</body>
+</html>
