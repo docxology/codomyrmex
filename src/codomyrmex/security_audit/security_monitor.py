@@ -310,7 +310,7 @@ class SecurityMonitor:
         patterns = {
             SecurityEventType.AUTHENTICATION_FAILURE: [
                 r"authentication failure.*user=(\w+)",
-                r"Failed password.*user=(\w+)",
+                r"Failed password.*user (\w+)",
                 r"Invalid user.*from (\d+\.\d+\.\d+\.\d+)",
             ],
             SecurityEventType.SUSPICIOUS_ACTIVITY: [
@@ -339,7 +339,18 @@ class SecurityMonitor:
                     # Extract additional information
                     if event_type == SecurityEventType.AUTHENTICATION_FAILURE:
                         if match.groups():
-                            event.user_id = match.group(1)
+                            # Extract user ID
+                            if len(match.groups()) >= 1:
+                                event.user_id = match.group(1)
+
+                            # Extract source IP if present
+                            if len(match.groups()) >= 2:
+                                event.source_ip = match.group(2)
+                            elif "from" in line.lower():
+                                # Extract IP from "from IP" pattern
+                                ip_match = re.search(r"from (\d+\.\d+\.\d+\.\d+)", line, re.IGNORECASE)
+                                if ip_match:
+                                    event.source_ip = ip_match.group(1)
 
                     return event
 
@@ -480,9 +491,9 @@ class SecurityMonitor:
                 summary["events_by_type"].get(event_type, 0) + 1
             )
 
-        # Count alerts by severity
-        for alert in self.active_alerts.values():
-            severity = alert.severity.value
+        # Count events by severity
+        for event in self.events:
+            severity = event.severity.value
             summary["alerts_by_severity"][severity] = (
                 summary["alerts_by_severity"].get(severity, 0) + 1
             )

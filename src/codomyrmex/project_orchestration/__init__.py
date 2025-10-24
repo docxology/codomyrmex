@@ -32,7 +32,7 @@ from .workflow_manager import (
     WorkflowStatus,
     WorkflowExecution,
 )
-from ..exceptions import CodomyrmexError
+from codomyrmex.exceptions import CodomyrmexError
 
 from .task_orchestrator import (
     TaskOrchestrator,

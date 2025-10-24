@@ -70,7 +70,7 @@ from .git_manager import (
     initialize_git_repository,
     clone_repository,
 )
-from ..exceptions import CodomyrmexError
+from codomyrmex.exceptions import CodomyrmexError
 
 from .git_manager import (
     # Branch operations

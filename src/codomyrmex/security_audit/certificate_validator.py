@@ -209,15 +209,14 @@ class CertificateValidator:
             public_key = x509_cert.get_pubkey()
             cert_info["key_size"] = public_key.bits()
 
-            # Extensions
+            # Extensions using cryptography library
             extensions = []
-            for i in range(x509_cert.get_extension_count()):
-                ext = x509_cert.get_extension(i)
+            for ext in x509_cert.extensions:
                 extensions.append(
                     {
-                        "name": ext.get_short_name().decode(),
-                        "value": str(ext),
-                        "critical": ext.get_critical(),
+                        "name": ext.oid._name if hasattr(ext.oid, '_name') else str(ext.oid),
+                        "value": str(ext.value),
+                        "critical": ext.critical,
                     }
                 )
             cert_info["extensions"] = extensions
@@ -234,23 +233,29 @@ class CertificateValidator:
         valid = True
 
         try:
-            # Check hostname matching
-            common_name = x509_cert.get_subject().CN
-            if common_name != hostname:
-                # Check Subject Alternative Names
-                san_extension = None
-                for i in range(x509_cert.get_extension_count()):
-                    ext = x509_cert.get_extension(i)
-                    if ext.get_short_name() == b"subjectAltName":
-                        san_extension = ext
-                        break
+            # Check hostname matching using cryptography
+            try:
+                common_name = x509_cert.subject.get_attributes_for_oid(x509.NameOID.COMMON_NAME)[0].value
+            except Exception:
+                # Fallback to pyOpenSSL
+                common_name = x509_cert.get_subject().CN
 
-                if san_extension:
-                    san_value = str(san_extension)
-                    if hostname not in san_value:
+            if common_name != hostname:
+                # Check Subject Alternative Names using cryptography
+                san_found = False
+                try:
+                    san_extension = x509_cert.extensions.get_extension_for_class(x509.SubjectAlternativeName)
+                    san_names = [str(name.value) for name in san_extension.value]
+                    if hostname not in san_names:
                         errors.append(f"Hostname '{hostname}' not in certificate SAN")
                         valid = False
-                else:
+                    san_found = True
+                except Exception:
+                    # Could not find SAN extension - this is not necessarily an error
+                    # for certificates that don't have SAN extensions
+                    pass
+
+                if not san_found:
                     errors.append(
                         f"Hostname '{hostname}' does not match certificate CN '{common_name}'"
                     )

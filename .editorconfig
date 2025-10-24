@@ -1,0 +1,140 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 4 space indentation
+indent_style = space
+indent_size = 4
+
+# Python files
+[*.py]
+indent_size = 4
+max_line_length = 88
+
+# Python stub files
+[*.pyi]
+indent_size = 4
+max_line_length = 88
+
+# Jupyter Notebook
+[*.ipynb]
+indent_size = 4
+
+# JavaScript files
+[*.js]
+indent_size = 2
+
+# TypeScript files
+[*.ts]
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Configuration files
+[*.{ini,cfg,conf}]
+indent_size = 4
+
+# Shell scripts
+[*.sh]
+indent_size = 2
+
+# Makefiles
+[Makefile]
+indent_style = tab
+
+# Docker files
+[*.{dockerfile,Dockerfile*}]
+indent_size = 4
+
+# HTML files
+[*.html]
+indent_size = 2
+
+# CSS files
+[*.css]
+indent_size = 2
+
+# XML files
+[*.xml]
+indent_size = 2
+
+# TOML files
+[*.toml]
+indent_size = 4
+
+# RST files
+[*.rst]
+max_line_length = off
+
+# reStructuredText files
+[*.rst]
+trim_trailing_whitespace = false
+
+# Documentation specific files
+[docs/**/*.md]
+max_line_length = off
+
+# Source code specific settings
+[src/**/*.py]
+# Additional Python-specific settings can go here
+
+# Test files
+[testing/**/*.py]
+# Test file specific settings
+
+# Configuration templates
+[config/**/*.env]
+indent_size = 2
+
+# Examples
+[examples/**/*]
+# Example file settings
+
+# Scripts directory
+[scripts/**/*]
+# Script file settings
+
+# Tools directory
+[tools/**/*]
+# Tool file settings
+
+# Package configuration files
+[pyproject.toml]
+indent_size = 4
+
+[setup.py]
+indent_size = 4
+
+[setup.cfg]
+indent_size = 4
+
+# GitHub workflow files
+[.github/**/*.{yml,yaml}]
+indent_size = 2
+
+# Documentation source files
+[docs/**/*.py]
+# Documentation Python files
+
+# Template files
+[**/template/**/*]
+# Template file settings

@@ -60,7 +60,7 @@ from enum import Enum
 
 # Import performance monitoring
 try:
-    from ..performance import (
+    from codomyrmex.performance import (
         monitor_performance,
         performance_context,
         PerformanceMonitor,

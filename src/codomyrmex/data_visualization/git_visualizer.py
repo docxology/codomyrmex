@@ -34,7 +34,7 @@ from .mermaid_generator import MermaidDiagramGenerator
 
 # Import git_operations if available
 try:
-    from ..git_operations.git_manager import (
+    from codomyrmex.git_operations.git_manager import (
         get_commit_history,
         get_current_branch,
         get_status,

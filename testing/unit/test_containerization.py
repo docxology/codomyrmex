@@ -87,8 +87,9 @@ class TestDockerManager:
         mock_from_env.return_value = mock_client
 
         manager = DockerManager()
-        manager._initialize_client()
 
+        # _initialize_client is already called in constructor
+        # So docker.from_env should have been called once
         mock_from_env.assert_called_once()
         mock_client.ping.assert_called_once()
         assert manager.client == mock_client
@@ -283,8 +284,10 @@ class TestDockerManager:
         result = manager.get_container_logs("container123")
 
         assert result["success"] is True
-        assert len(result["logs"]) == 2
+        assert len(result["logs"]) == 3  # Including empty line from trailing newline
         assert result["logs"][0] == "Log line 1"
+        assert result["logs"][1] == "Log line 2"
+        assert result["logs"][2] == ""  # Empty line from trailing newline
         mock_container.logs.assert_called_once_with(tail=100)
 
     @patch('codomyrmex.containerization.docker_manager.docker.from_env')

@@ -110,6 +110,8 @@ Type 'explore' to begin your foraging adventure!
         print(random.choice(self.foraging_messages))
         print()
 
+        self.session_data["commands_run"] += 1
+
         if not self.discovery:
             print("❌ System discovery not available - running in limited mode")
             return
@@ -120,8 +122,6 @@ Type 'explore' to begin your foraging adventure!
         else:
             # General exploration
             self._explore_overview()
-
-        self.session_data["commands_run"] += 1
 
     def _explore_overview(self):
         """Show overview of all available modules."""
@@ -308,6 +308,8 @@ Type 'explore' to begin your foraging adventure!
         )
         print()
 
+        self.session_data["commands_run"] += 1
+
         if not self.discovery:
             print("❌ Discovery system not available")
             return
@@ -318,7 +320,6 @@ Type 'explore' to begin your foraging adventure!
             self._demo_all_modules()
 
         self.session_data["demos_run"] += 1
-        self.session_data["commands_run"] += 1
 
     def _demo_specific_module(self, module_name):
         """Run demo for a specific module."""
@@ -732,7 +733,7 @@ print("Sandbox execution complete! ✅")
 
     def do_clear(self, arg):
         """
-        Clear the terminal screen.
+        Clear the terminal screen and reset session data.
 
         Usage: clear
         """
@@ -740,6 +741,15 @@ print("Sandbox execution complete! ✅")
             os.system("clear" if os.name == "posix" else "cls")
         except Exception as e:
             print(f"❌ Could not clear screen: {e}")
+
+        # Reset session data
+        self.session_data = {
+            'commands_run': 0,
+            'modules_explored': set(),
+            'discoveries_made': set(),
+            'demos_run': set()
+        }
+        self.command_history = []
 
     def do_history(self, arg):
         """

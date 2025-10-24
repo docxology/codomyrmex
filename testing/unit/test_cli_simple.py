@@ -10,9 +10,17 @@ import os
 from pathlib import Path
 
 # Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+src_path = os.path.join(os.path.dirname(__file__), '..', '..', 'src')
+sys.path.insert(0, src_path)
 
-from codomyrmex.cli import check_environment, show_info, demo_data_visualization
+try:
+    from codomyrmex.cli import check_environment, show_info, demo_data_visualization
+except ImportError as e:
+    print(f"Import error: {e}")
+    print(f"Python path: {sys.path[:3]}")
+    print(f"Looking for: {src_path}")
+    print(f"CLI file exists: {os.path.exists(os.path.join(src_path, 'codomyrmex', 'cli.py'))}")
+    raise
 
 
 class TestCLIBasics:

@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Set, Union
 from dataclasses import dataclass, field, asdict
+from builtins import open
 from enum import Enum
 from collections import defaultdict
 from codomyrmex.exceptions import CodomyrmexError

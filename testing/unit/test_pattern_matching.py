@@ -304,7 +304,7 @@ class TestPatternMatching:
 
         from pattern_matching.run_codomyrmex_analysis import analyze_repository_path
 
-        with patch('kit.Repository', side_effect=Exception("Repository initialization failed")):
+        with patch('pattern_matching.run_codomyrmex_analysis.Repository', side_effect=Exception("Repository initialization failed")):
             with patch('pattern_matching.run_codomyrmex_analysis.logger') as mock_logger:
                 mock_logger_instance = MagicMock()
                 mock_logger_instance.error = MagicMock()

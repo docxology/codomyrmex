@@ -26,7 +26,7 @@ from .git_manager import (
 )
 
 try:
-    from ..data_visualization import (
+    from codomyrmex.data_visualization import (
         GitVisualizer,
         create_git_tree_png,
         create_git_tree_mermaid,
@@ -39,7 +39,7 @@ except ImportError:
     VISUALIZATION_AVAILABLE = False
 
 try:
-    from ..logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
@@ -394,7 +394,7 @@ def analyze_repository_structure(
         structure = _analyze_directory_structure(repository_path, max_depth)
 
         # Create visualization
-        from ..data_visualization import create_repository_structure_diagram
+        from codomyrmex.data_visualization import create_repository_structure_diagram
 
         content = create_repository_structure_diagram(
             repo_structure=structure, title=title, output_path=output_path

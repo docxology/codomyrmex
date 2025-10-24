@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -33,12 +33,7 @@ class MCPToolCall(BaseModel):
         description="An object containing the arguments for the tool. The schema for this object is defined by the specific tool being called.",
     )
 
-    class Config:
-        """Config.
-
-            A class for handling config operations.
-            """
-        extra = "allow"  # Allow arbitrary arguments, tool-specific validation happens elsewhere
+    model_config = ConfigDict(extra="allow")  # Allow arbitrary arguments, tool-specific validation happens elsewhere
 
 
 class MCPToolResult(BaseModel):
@@ -59,15 +54,24 @@ class MCPToolResult(BaseModel):
         None, description="Optional human-readable explanation of the result."
     )
 
-    @validator("error", always=True)
-    def check_error_if_failed(cls, v, values):
+    @field_validator("error")
+    @classmethod
+    def check_error_if_failed(cls, v, info):
         """Check Error If Failed.
 
-            Args:        cls: Parameter for the operation.        v: Parameter for the operation.        values: Value to be processed.
+            Args:
+                v: The value of the error field
+                info: Validation info containing field context
 
-            Returns:        The result of the operation.
+            Returns:
+                The validated value
             """
-        status = values.get("status")
+        if hasattr(info, 'data') and info.data.get("status"):
+            status = info.data.get("status")
+        else:
+            # Fallback for older pydantic versions
+            status = getattr(info, 'values', {}).get("status")
+
         if status and "fail" in status.lower() and v is None:
             raise ValueError(
                 "'error' field must be populated if status indicates failure."
@@ -78,15 +82,24 @@ class MCPToolResult(BaseModel):
             pass
         return v
 
-    @validator("data", always=True)
-    def check_data_if_success(cls, v, values):
+    @field_validator("data")
+    @classmethod
+    def check_data_if_success(cls, v, info):
         """Check Data If Success.
 
-            Args:        cls: Parameter for the operation.        v: Parameter for the operation.        values: Value to be processed.
+            Args:
+                v: The value of the data field
+                info: Validation info containing field context
 
-            Returns:        The result of the operation.
+            Returns:
+                The validated value
             """
-        status = values.get("status")
+        if hasattr(info, 'data') and info.data.get("status"):
+            status = info.data.get("status")
+        else:
+            # Fallback for older pydantic versions
+            status = getattr(info, 'values', {}).get("status")
+
         if status and "success" in status.lower() and v is None:
             # Data can be None even on success if the tool has no specific data output (e.g. a tool that only has side effects)
             pass
@@ -96,14 +109,7 @@ class MCPToolResult(BaseModel):
             )
         return v
 
-    class Config:
-        """Config.
-
-            A class for handling config operations.
-            """
-        extra = (
-            "allow"  # Allow additional fields in data, specific validation is per-tool
-        )
+    model_config = ConfigDict(extra="allow")  # Allow additional fields in data, specific validation is per-tool
 
 
 # Example Usage (for testing or demonstration)

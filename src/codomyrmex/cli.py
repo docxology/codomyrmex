@@ -15,7 +15,7 @@ from typing import Optional, Dict, Any, List
 import argparse
 import asyncio
 from datetime import datetime
-from ..exceptions import CodomyrmexError
+from codomyrmex.exceptions import CodomyrmexError
 
 # Add the src directory to Python path for development
 src_dir = Path(__file__).parent.parent
@@ -408,29 +408,29 @@ Examples:
   codomyrmex modules                         # List all available modules
   codomyrmex status                          # Show system status dashboard
   codomyrmex shell                           # Launch interactive shell
-  
+
   # Workflow Management
   codomyrmex workflow list                   # List available workflows
   codomyrmex workflow create my-workflow     # Create a new workflow
   codomyrmex workflow run ai-analysis        # Run a specific workflow
-  
+
   # Project Management
   codomyrmex project list                    # List available projects
   codomyrmex project create my-project       # Create a new project
   codomyrmex project create my-project --template web_application  # Create with template
-  
+
   # Orchestration System
   codomyrmex orchestration status            # Show orchestration system status
   codomyrmex orchestration health            # Check system health
-  
+
   # AI Operations
   codomyrmex ai generate "create a function" # Generate code with AI
   codomyrmex ai refactor file.py "optimize"  # Refactor code with AI
-  
+
   # Analysis Operations
   codomyrmex analyze code src/               # Analyze code quality
   codomyrmex analyze git --repo .            # Analyze git repository
-  
+
   # Build Operations
   codomyrmex build project                   # Build the project
         """,
@@ -763,9 +763,9 @@ def handle_ai_refactor(file_path: str, instruction: str) -> bool:
 def handle_code_analysis(path: str, output_dir: Optional[str]) -> bool:
     """Handle code analysis command."""
     try:
-        from codomyrmex.static_analysis import analyze_code_quality
+        from codomyrmex.static_analysis import analyze_project
 
-        result = analyze_code_quality(path)
+        result = analyze_project(path)
         print(f"Code quality analysis for: {path}")
         print(f"Quality Score: {result.get('score', 'N/A')}/10")
 

@@ -16,6 +16,12 @@ package_root = code_path / "codomyrmex"
 if str(package_root) not in sys.path:
     sys.path.insert(0, str(package_root))
 
+def pytest_configure(config):
+    """Register custom pytest markers."""
+    config.addinivalue_line("markers", "unit: Unit tests")
+    config.addinivalue_line("markers", "integration: Integration tests")
+    config.addinivalue_line("markers", "slow: Slow running tests")
+
 @pytest.fixture
 def project_root():
     """Fixture providing the project root path."""

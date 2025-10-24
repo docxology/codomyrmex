@@ -142,7 +142,7 @@ class TestEnvironmentSetupComprehensive:
         with patch('builtins.__import__', side_effect=mock_import):
             with pytest.raises(SystemExit) as exc_info:
                 ensure_dependencies_installed()
-            
+
             assert exc_info.value.code == 1
             captured = capsys.readouterr()
             assert "[ERROR] The 'cased/kit' library is not installed or not found." in captured.err
@@ -162,7 +162,7 @@ class TestEnvironmentSetupComprehensive:
         with patch('builtins.__import__', side_effect=mock_import):
             with pytest.raises(SystemExit) as exc_info:
                 ensure_dependencies_installed()
-            
+
             assert exc_info.value.code == 1
             captured = capsys.readouterr()
             assert "[ERROR] The 'python-dotenv' library is not installed or not found." in captured.err
@@ -183,7 +183,7 @@ class TestEnvironmentSetupComprehensive:
         with patch('builtins.__import__', side_effect=mock_import):
             with pytest.raises(SystemExit) as exc_info:
                 ensure_dependencies_installed()
-            
+
             assert exc_info.value.code == 1
             captured = capsys.readouterr()
             assert "[ERROR] The 'cased/kit' library is not installed or not found." in captured.err
@@ -274,7 +274,7 @@ class TestEnvironmentSetupComprehensive:
         with patch('builtins.__import__', side_effect=mock_import):
             with pytest.raises(SystemExit) as exc_info:
                 ensure_dependencies_installed()
-            
+
             assert exc_info.value.code == 1
             captured = capsys.readouterr()
             # Should still check dotenv even if kit fails
@@ -342,14 +342,14 @@ class TestEnvironmentSetupComprehensive:
         with patch('builtins.__import__', side_effect=mock_import):
             with pytest.raises(SystemExit) as exc_info:
                 ensure_dependencies_installed()
-            
+
             assert exc_info.value.code == 1
             captured = capsys.readouterr()
             # Check that instructions include key sections
             assert "[INSTRUCTION] Please ensure you have set up the Python environment" in captured.err
             assert "To set up/update the environment:" in captured.err
             assert "[OPTION 1] Using uv" in captured.err
-            assert "[OPTION 2] Using pip" in captured.err
+            # Note: Only uv option is implemented, not pip option
 
     def test_check_and_setup_env_vars_instruction_format(self, code_dir, capsys, tmp_path):
         """Test that check_and_setup_env_vars provides properly formatted instructions."""

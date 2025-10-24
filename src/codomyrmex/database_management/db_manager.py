@@ -11,8 +11,21 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 import sqlite3
-import psycopg2
-import pymysql
+
+# Optional database drivers - import conditionally
+try:
+    import psycopg2
+    POSTGRESQL_AVAILABLE = True
+except ImportError:
+    psycopg2 = None
+    POSTGRESQL_AVAILABLE = False
+
+try:
+    import pymysql
+    MYSQL_AVAILABLE = True
+except ImportError:
+    pymysql = None
+    MYSQL_AVAILABLE = False
 from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
@@ -48,9 +61,9 @@ class DatabaseConnection:
 
     name: str
     db_type: DatabaseType
-    host: str
-    port: int
     database: str
+    host: Optional[str] = None  # Not required for SQLite
+    port: int = None  # Will be set based on db_type in __post_init__
     username: Optional[str] = None
     password: Optional[str] = None
     connection_string: Optional[str] = None
@@ -68,6 +81,31 @@ class DatabaseConnection:
 
     def __post_init__(self):
         self.created_at = datetime.now(timezone.utc)
+
+        # Set default ports if not provided (not needed for SQLite)
+        if self.port is None and self.db_type != DatabaseType.SQLITE:
+            if self.db_type == DatabaseType.POSTGRESQL:
+                self.port = 5432
+            elif self.db_type == DatabaseType.MYSQL:
+                self.port = 3306
+            elif self.db_type == DatabaseType.MONGODB:
+                self.port = 27017
+            elif self.db_type == DatabaseType.REDIS:
+                self.port = 6379
+            else:
+                self.port = 0  # Unknown type
+
+        # Set default username if not provided
+        if self.username is None:
+            if self.db_type == DatabaseType.POSTGRESQL:
+                self.username = "postgres"
+            elif self.db_type == DatabaseType.MYSQL:
+                self.username = "root"
+            elif self.db_type == DatabaseType.MONGODB:
+                self.username = "admin"
+            elif self.db_type == DatabaseType.REDIS:
+                self.username = "default"
+            # SQLite doesn't need username
 
     def get_connection_string(self) -> str:
         """Generate connection string for the database."""
@@ -94,6 +132,8 @@ class DatabaseConnection:
                 logger.info(f"Connected to SQLite database: {self.database}")
 
             elif self.db_type == DatabaseType.POSTGRESQL:
+                if not POSTGRESQL_AVAILABLE:
+                    raise CodomyrmexError("PostgreSQL driver (psycopg2) not available. Install with: pip install psycopg2-binary")
                 self._connection = psycopg2.connect(
                     host=self.host,
                     port=self.port,
@@ -105,6 +145,8 @@ class DatabaseConnection:
                 logger.info(f"Connected to PostgreSQL database: {self.database}")
 
             elif self.db_type == DatabaseType.MYSQL:
+                if not MYSQL_AVAILABLE:
+                    raise CodomyrmexError("MySQL driver (pymysql) not available. Install with: pip install pymysql")
                 self._connection = pymysql.connect(
                     host=self.host,
                     port=self.port,

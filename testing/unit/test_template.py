@@ -15,18 +15,22 @@ class TestTemplate:
         assert template_dir.exists()
         assert template_dir.is_dir()
 
-    def test_template_directory_is_empty(self, code_dir):
-        """Test that template directory is empty (as expected for a template)."""
+    def test_template_directory_contains_template_files(self, code_dir):
+        """Test that template directory contains the expected template files."""
         template_dir = code_dir / "template"
 
         # List all items in the template directory
         items = list(template_dir.iterdir())
 
-        # Template directory should be empty or contain only hidden files
-        non_hidden_items = [item for item in items if not item.name.startswith('.')]
+        # Template directory should contain template files
+        non_hidden_items = [item for item in items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
 
-        # The template directory is expected to be empty
-        assert len(non_hidden_items) == 0
+        # The template directory should contain essential template files
+        expected_files = ['README.md', 'AGENTS.md']
+        actual_files = [item.name for item in non_hidden_items]
+
+        for expected_file in expected_files:
+            assert expected_file in actual_files, f"Expected template file {expected_file} not found"
 
     def test_template_module_discovery(self, code_dir):
         """Test that the template module can be discovered."""
@@ -41,16 +45,19 @@ class TestTemplate:
         assert template_path.is_dir()
 
     def test_template_as_placeholder(self, code_dir):
-        """Test that template serves as a proper placeholder directory."""
+        """Test that template serves as a proper template directory."""
         template_dir = code_dir / "template"
 
-        # Template should exist as an empty directory
+        # Template should exist as a directory with template files
         assert template_dir.exists()
         assert template_dir.is_dir()
 
-        # Should be usable as a starting point (empty means no conflicts)
+        # Should contain template files for module creation
         items = list(template_dir.iterdir())
-        assert len(items) == 0 or all(item.name.startswith('.') for item in items)
+        non_hidden_items = [item for item in items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
+
+        # Should have some template files
+        assert len(non_hidden_items) > 0
 
     def test_template_directory_structure(self, code_dir):
         """Test template directory structure."""
@@ -91,12 +98,19 @@ class TestTemplate:
         # Should be able to copy the template directory
         shutil.copytree(template_dir, target_dir)
 
-        # Copied directory should exist and be empty
+        # Copied directory should exist and contain template files
         assert target_dir.exists()
         assert target_dir.is_dir()
 
         copied_items = list(target_dir.iterdir())
-        assert len(copied_items) == 0
+        non_hidden_items = [item for item in copied_items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
+
+        # Should contain the essential template files
+        expected_files = ['README.md', 'AGENTS.md']
+        copied_files = [item.name for item in non_hidden_items]
+
+        for expected_file in expected_files:
+            assert expected_file in copied_files, f"Expected template file {expected_file} not found in copy"
 
     def test_template_module_path_resolution(self, code_dir):
         """Test template module path resolution."""
@@ -110,16 +124,19 @@ class TestTemplate:
         assert template_dir == code_dir / "template"
 
     def test_template_placeholder_behavior(self, code_dir):
-        """Test that template behaves as expected placeholder."""
+        """Test that template behaves as expected template directory."""
         template_dir = code_dir / "template"
 
-        # Should exist but be empty
+        # Should exist and contain template files
         assert template_dir.exists()
         assert template_dir.is_dir()
 
-        # Empty directory is the expected state for a template
+        # Should contain template files for module creation
         contents = list(template_dir.iterdir())
-        assert len(contents) == 0
+        non_hidden_items = [item for item in contents if not item.name.startswith('.') and not item.name.endswith('.pyc')]
+
+        # Should have template files
+        assert len(non_hidden_items) > 0
 
     def test_template_vs_other_modules(self, code_dir):
         """Test how template differs from other modules."""

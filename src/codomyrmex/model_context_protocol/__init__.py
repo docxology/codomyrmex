@@ -20,7 +20,7 @@ from .mcp_schemas import (
     MCPToolCall,
     MCPToolResult,
 )
-from ..exceptions import CodomyrmexError
+from codomyrmex.exceptions import CodomyrmexError
 
 __all__ = [
     "MCPErrorDetail",

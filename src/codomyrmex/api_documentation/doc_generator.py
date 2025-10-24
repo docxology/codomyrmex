@@ -282,7 +282,11 @@ class APIDocumentationGenerator:
 
         # Extract path (first argument)
         if decorator.args:
-            if isinstance(decorator.args[0], ast.Str):
+            # Check for modern ast.Constant first (Python 3.8+)
+            if hasattr(decorator.args[0], 'value') and isinstance(getattr(decorator.args[0], 'value', None), str):
+                info["path"] = decorator.args[0].value
+            # Fallback to legacy ast.Str (for backward compatibility)
+            elif hasattr(decorator.args[0], 's'):
                 info["path"] = decorator.args[0].s
 
         # Extract method from decorator name or keyword arguments
@@ -303,9 +307,14 @@ class APIDocumentationGenerator:
 
         # Check keyword arguments
         for kwarg in decorator.keywords:
-            if kwarg.arg == "methods" and isinstance(kwarg.value, ast.List):
-                if kwarg.value.elts and isinstance(kwarg.value.elts[0], ast.Str):
-                    info["method"] = kwarg.value.elts[0].s.upper()
+            if kwarg.arg == "methods" and hasattr(kwarg.value, 'elts'):
+                if kwarg.value.elts:
+                    # Check for modern ast.Constant first (Python 3.8+)
+                    if hasattr(kwarg.value.elts[0], 'value') and isinstance(getattr(kwarg.value.elts[0], 'value', None), str):
+                        info["method"] = kwarg.value.elts[0].value.upper()
+                    # Fallback to legacy ast.Str (for backward compatibility)
+                    elif hasattr(kwarg.value.elts[0], 's'):
+                        info["method"] = kwarg.value.elts[0].s.upper()
 
         return info
 
@@ -326,6 +335,13 @@ class APIDocumentationGenerator:
                 parameters.append(param)
 
         return parameters
+
+    def _substitute_variables(self, text: str, variables: Dict[str, str]) -> str:
+        """Substitute variables in text using ${VAR} syntax."""
+        result = text
+        for key, value in variables.items():
+            result = result.replace(f"${{{key}}}", value)
+        return result
 
     def _extract_schemas(self):
         """Extract data schemas from the codebase."""

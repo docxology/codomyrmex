@@ -8,6 +8,7 @@ import os
 import sys
 import json
 import yaml
+import requests
 from typing import Dict, List, Any, Optional, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -16,7 +17,7 @@ import jsonschema
 
 # Use proper relative imports
 try:
-    from ..logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
@@ -30,7 +31,7 @@ except ImportError:
 
 # Import exceptions
 try:
-    from ..exceptions import (
+    from codomyrmex.exceptions import (
         ConfigurationError,
         FileOperationError,
         ValidationError,
@@ -95,7 +96,9 @@ class ConfigSchema:
         try:
             # Convert draft version to format string
             if self.version.startswith("draft"):
-                format_checker = jsonschema.draft7_format_checker
+                # Use the newer format checker API
+                from jsonschema import FormatChecker
+                format_checker = FormatChecker()
             else:
                 format_checker = None
 
@@ -117,14 +120,15 @@ class Configuration:
 
     data: Dict[str, Any]
     source: str
-    loaded_at: datetime
+    loaded_at: datetime = field(init=False)
     schema: Optional[ConfigSchema] = None
     environment: str = "default"
     version: str = "1.0.0"
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.loaded_at = datetime.now(timezone.utc)
+        if not hasattr(self, 'loaded_at') or self.loaded_at is None:
+            self.loaded_at = datetime.now(timezone.utc)
 
     def validate(self) -> List[str]:
         """Validate configuration against schema."""
@@ -196,8 +200,14 @@ class ConfigurationManager:
         self.schemas: Dict[str, ConfigSchema] = {}
         self.environment = os.getenv("ENVIRONMENT", "development")
 
-        # Create config directory if it doesn't exist
-        os.makedirs(self.config_dir, exist_ok=True)
+        # Create config directory if it doesn't exist and path is writable
+        try:
+            os.makedirs(self.config_dir, exist_ok=True)
+        except (OSError, PermissionError):
+            # If we can't create the directory, use a temporary location
+            import tempfile
+            self.config_dir = tempfile.mkdtemp(prefix="codomyrmex_config_")
+            logger.warning(f"Could not create config directory {config_dir}, using temporary location: {self.config_dir}")
 
     def load_configuration(
         self,
@@ -250,10 +260,16 @@ class ConfigurationManager:
             merged_config.update(env_config)
             source_list.append("environment")
 
+        # Check if any configuration was found
+        if not merged_config and not env_config:
+            # No configuration found - raise error if specific sources were requested
+            if sources and len(sources) == 1 and sources[0] not in [f"{name}.yaml", f"{name}.yml", f"{name}.json"]:
+                raise FileNotFoundError(f"Configuration source not found: {sources[0]}")
+
         # Create configuration object
         config = Configuration(
             data=merged_config,
-            source=", ".join(source_list),
+            source=", ".join(source_list) if source_list else "no sources found",
             environment=self.environment,
             schema=schema,
         )
@@ -312,8 +328,6 @@ class ConfigurationManager:
     def _load_from_url(self, url: str) -> Optional[Dict[str, Any]]:
         """Load configuration from URL."""
         try:
-            import requests
-
             response = requests.get(url, timeout=30)
             response.raise_for_status()
 

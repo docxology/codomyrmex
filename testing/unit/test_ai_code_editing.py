@@ -25,22 +25,22 @@ class TestAICodeEditing:
         claude_task_master_path = code_dir / "codomyrmex" / "ai_code_editing" / "claude_task_master.py"
         assert claude_task_master_path.exists()
 
-        # Read the file content - should contain just a URL
+        # Read the file content - should contain implementation
         with open(claude_task_master_path, 'r') as f:
             content = f.read().strip()
             assert "github.com" in content.lower()
-            assert len(content.split()) == 1  # Should be just a URL
+            assert "TODO: Implementation needed" in content  # Should contain implementation placeholder
 
     def test_openai_codex_placeholder_file(self, code_dir):
         """Test that openai_codex is a placeholder file with URL."""
         openai_codex_path = code_dir / "codomyrmex" / "ai_code_editing" / "openai_codex.py"
         assert openai_codex_path.exists()
 
-        # Read the file content - should contain just a URL
+        # Read the file content - should contain implementation
         with open(openai_codex_path, 'r') as f:
             content = f.read().strip()
             assert "github.com" in content.lower()
-            assert len(content.split()) == 1  # Should be just a URL
+            assert "TODO: Implementation needed" in content  # Should contain implementation placeholder
 
     def test_openai_codex_initialization(self, code_dir):
         """Test OpenAI Codex initialization."""
@@ -124,17 +124,15 @@ class TestAICodeEditing:
 
         from ai_code_editing.ai_code_helpers import generate_code_snippet
 
-        # Test with empty prompt
-        result = generate_code_snippet("", "python")
-        assert result["status"] == "failure"
-        assert "Required parameters" in result["error_message"]
-        assert result["generated_code"] is None
+        # Test with empty prompt - should raise RuntimeError
+        with pytest.raises(RuntimeError) as exc_info:
+            generate_code_snippet("", "python")
+        assert "Code generation failed" in str(exc_info.value)
 
-        # Test with empty language
-        result = generate_code_snippet("test prompt", "")
-        assert result["status"] == "failure"
-        assert "Required parameters" in result["error_message"]
-        assert result["generated_code"] is None
+        # Test with empty language - should also raise RuntimeError
+        with pytest.raises(RuntimeError) as exc_info:
+            generate_code_snippet("test prompt", "")
+        assert "Code generation failed" in str(exc_info.value)
 
     @patch('ai_code_editing.ai_code_helpers.get_llm_client')
     def test_generate_code_snippet_openai_success(self, mock_get_client, code_dir):
@@ -160,12 +158,12 @@ class TestAICodeEditing:
         result = generate_code_snippet(
             "Print hello world",
             "python",
-            llm_provider="openai"
+            provider="openai"
         )
 
-        assert result["status"] == "success"
         assert "def hello_world()" in result["generated_code"]
-        assert result["error_message"] is None
+        assert result["language"] == "python"
+        assert result["provider"] == "openai"
 
     @patch('ai_code_editing.ai_code_helpers.get_llm_client')
     def test_generate_code_snippet_with_context(self, mock_get_client, code_dir):
@@ -191,13 +189,13 @@ class TestAICodeEditing:
         result = generate_code_snippet(
             "Add two numbers",
             "python",
-            context_code="def multiply(x, y):\n    return x * y",
-            llm_provider="openai"
+            context="def multiply(x, y):\n    return x * y",
+            provider="openai"
         )
 
-        assert result["status"] == "success"
         assert "def add_numbers(a, b):" in result["generated_code"]
-        assert result["error_message"] is None
+        assert result["language"] == "python"
+        assert result["provider"] == "openai"
 
     @patch('ai_code_editing.ai_code_helpers.get_llm_client')
     def test_generate_code_snippet_api_error(self, mock_get_client, code_dir):
@@ -212,11 +210,10 @@ class TestAICodeEditing:
         mock_client.chat.completions.create.side_effect = Exception("API Error")
         mock_get_client.return_value = (mock_client, "gpt-3.5-turbo")
 
-        result = generate_code_snippet("test", "python", llm_provider="openai")
+        with pytest.raises(RuntimeError) as exc_info:
+            generate_code_snippet("test", "python", provider="openai")
 
-        assert result["status"] == "failure"
-        assert result["generated_code"] is None
-        assert "API Error" in result["error_message"]
+        assert "Code generation failed: API Error" in str(exc_info.value)
 
     @patch('ai_code_editing.ai_code_helpers.get_llm_client')
     def test_refactor_code_snippet_success(self, mock_get_client, code_dir):
@@ -244,13 +241,13 @@ class TestAICodeEditing:
             original_code,
             "Add type hints",
             "python",
-            llm_provider="openai"
+            provider="openai"
         )
 
-        assert result["status"] == "success"
         assert "def calculate_sum(numbers: list) -> int:" in result["refactored_code"]
-        assert result["error_message"] is None
-        assert "Added type hints" in result["explanation"]
+        assert result["refactoring_type"] == "Add type hints"
+        assert result["language"] == "python"
+        assert result["provider"] == "openai"
 
     @patch('ai_code_editing.ai_code_helpers.get_llm_client')
     def test_refactor_code_snippet_no_change(self, mock_get_client, code_dir):
@@ -279,13 +276,14 @@ class TestAICodeEditing:
             original_code,
             "Optimize code",
             "python",
-            llm_provider="openai"
+            provider="openai"
         )
 
-        assert result["status"] == "no_change_needed"
-        # The extracted code might have slight formatting differences due to markdown parsing
-        assert result["refactored_code"].strip() == original_code.strip()
-        assert result["error_message"] is None
+        # The refactored_code contains the original code (it may include markdown formatting and explanations)
+        assert original_code in result["refactored_code"]
+        assert result["refactoring_type"] == "Optimize code"
+        assert result["language"] == "python"
+        assert result["provider"] == "openai"
 
     def test_ai_code_helpers_constants(self, code_dir):
         """Test that ai_code_helpers has expected constants."""

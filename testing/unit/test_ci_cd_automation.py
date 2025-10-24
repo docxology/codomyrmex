@@ -295,11 +295,11 @@ stages:
             stages=[PipelineStage(name="stage1", jobs=[])]
         )
 
-        with tempfile.NamedTemporaryFile(delete=False) as f:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".yaml") as f:
             output_path = f.name
 
         try:
-            self.manager.save_pipeline_config(pipeline, output_path, "yaml")
+            self.manager.save_pipeline_config(pipeline, output_path)
 
             # Verify yaml.dump was called
             mock_yaml_dump.assert_called_once()

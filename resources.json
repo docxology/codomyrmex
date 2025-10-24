@@ -1,0 +1,141 @@
+{
+  "resources": {
+    "system_cpu": {
+      "id": "system_cpu",
+      "name": "System CPU",
+      "type": "cpu",
+      "description": "System CPU cores",
+      "status": "available",
+      "capacity": {
+        "cores": 14
+      },
+      "allocated": {},
+      "limits": {
+        "max_cpu_cores": null,
+        "max_memory_gb": null,
+        "max_disk_gb": null,
+        "max_network_mbps": null,
+        "max_concurrent_users": null,
+        "max_requests_per_minute": null,
+        "timeout_seconds": null
+      },
+      "total_allocations": 0,
+      "total_usage_time": 0.0,
+      "current_users": [],
+      "metadata": {},
+      "tags": [],
+      "created_at": "2025-10-22T23:46:35.441078+00:00",
+      "updated_at": "2025-10-22T23:46:35.441080+00:00"
+    },
+    "system_memory": {
+      "id": "system_memory",
+      "name": "System Memory",
+      "type": "memory",
+      "description": "System RAM",
+      "status": "available",
+      "capacity": {
+        "gb": 24.0
+      },
+      "allocated": {},
+      "limits": {
+        "max_cpu_cores": null,
+        "max_memory_gb": null,
+        "max_disk_gb": null,
+        "max_network_mbps": null,
+        "max_concurrent_users": null,
+        "max_requests_per_minute": null,
+        "timeout_seconds": null
+      },
+      "total_allocations": 0,
+      "total_usage_time": 0.0,
+      "current_users": [],
+      "metadata": {},
+      "tags": [],
+      "created_at": "2025-10-22T23:46:35.441140+00:00",
+      "updated_at": "2025-10-22T23:46:35.441140+00:00"
+    },
+    "system_disk": {
+      "id": "system_disk",
+      "name": "System Disk",
+      "type": "disk",
+      "description": "System disk space",
+      "status": "available",
+      "capacity": {
+        "gb": 121.30064010620117
+      },
+      "allocated": {},
+      "limits": {
+        "max_cpu_cores": null,
+        "max_memory_gb": null,
+        "max_disk_gb": null,
+        "max_network_mbps": null,
+        "max_concurrent_users": null,
+        "max_requests_per_minute": null,
+        "timeout_seconds": null
+      },
+      "total_allocations": 0,
+      "total_usage_time": 0.0,
+      "current_users": [],
+      "metadata": {},
+      "tags": [],
+      "created_at": "2025-10-22T23:46:35.441169+00:00",
+      "updated_at": "2025-10-22T23:46:35.441169+00:00"
+    },
+    "system_network": {
+      "id": "system_network",
+      "name": "System Network",
+      "type": "network",
+      "description": "Network bandwidth",
+      "status": "available",
+      "capacity": {
+        "mbps": 1000
+      },
+      "allocated": {},
+      "limits": {
+        "max_cpu_cores": null,
+        "max_memory_gb": null,
+        "max_disk_gb": null,
+        "max_network_mbps": null,
+        "max_concurrent_users": null,
+        "max_requests_per_minute": null,
+        "timeout_seconds": null
+      },
+      "total_allocations": 0,
+      "total_usage_time": 0.0,
+      "current_users": [],
+      "metadata": {},
+      "tags": [],
+      "created_at": "2025-10-22T23:46:35.441193+00:00",
+      "updated_at": "2025-10-22T23:46:35.441193+00:00"
+    },
+    "openai_api": {
+      "id": "openai_api",
+      "name": "OpenAI API",
+      "type": "external_api",
+      "description": "OpenAI API quota",
+      "status": "available",
+      "capacity": {
+        "requests_per_minute": 60,
+        "tokens_per_minute": 10000
+      },
+      "allocated": {},
+      "limits": {
+        "max_cpu_cores": null,
+        "max_memory_gb": null,
+        "max_disk_gb": null,
+        "max_network_mbps": null,
+        "max_concurrent_users": null,
+        "max_requests_per_minute": null,
+        "timeout_seconds": null
+      },
+      "total_allocations": 0,
+      "total_usage_time": 0.0,
+      "current_users": [],
+      "metadata": {},
+      "tags": [],
+      "created_at": "2025-10-22T23:46:35.441213+00:00",
+      "updated_at": "2025-10-22T23:46:35.441213+00:00"
+    }
+  },
+  "updated_at": "2025-10-24T02:20:25.444114+00:00"
+}
