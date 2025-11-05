@@ -26,6 +26,7 @@ Branch Operations:
 File Operations:
 - add_files
 - commit_changes
+- amend_commit
 - get_status
 - get_diff
 - reset_changes
@@ -33,9 +34,21 @@ File Operations:
 Remote Operations:
 - push_changes
 - pull_changes
+- fetch_changes
+- add_remote
+- remove_remote
+- list_remotes
 
 History & Information:
 - get_commit_history
+- get_commit_history_filtered
+
+Config Operations:
+- get_config
+- set_config
+
+Advanced Operations:
+- cherry_pick
 
 Tag Operations:
 - create_tag
@@ -68,6 +81,7 @@ from codomyrmex.exceptions import CodomyrmexError
 from .git_manager import (
     # File operations
     add_files,
+    amend_commit,
     apply_stash,
     # Core operations
     check_git_availability,
@@ -79,6 +93,7 @@ from .git_manager import (
     create_tag,
     # History & information
     get_commit_history,
+    get_commit_history_filtered,
     get_current_branch,
     get_diff,
     get_status,
@@ -89,12 +104,21 @@ from .git_manager import (
     merge_branch,
     pull_changes,
     # Remote operations
+    add_remote,
+    fetch_changes,
+    list_remotes,
     push_changes,
+    remove_remote,
     rebase_branch,
     reset_changes,
     # Stash operations
     stash_changes,
     switch_branch,
+    # Config operations
+    get_config,
+    set_config,
+    # Advanced operations
+    cherry_pick,
 )
 from .github_api import (
     GitHubAPIError,
@@ -137,14 +161,25 @@ __all__ = [
     # File operations
     "add_files",
     "commit_changes",
+    "amend_commit",
     "get_status",
     "get_diff",
     "reset_changes",
     # Remote operations
     "push_changes",
     "pull_changes",
+    "fetch_changes",
+    "add_remote",
+    "remove_remote",
+    "list_remotes",
     # History & information
     "get_commit_history",
+    "get_commit_history_filtered",
+    # Config operations
+    "get_config",
+    "set_config",
+    # Advanced operations
+    "cherry_pick",
     # Tag operations
     "create_tag",
     "list_tags",

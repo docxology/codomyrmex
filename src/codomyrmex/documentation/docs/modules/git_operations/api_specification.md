@@ -35,14 +35,15 @@ This document specifies the Application Programming Interface (API) for the `git
 - **Returns**: True on success, False on failure.
 - **Raises**: `NotAGitRepositoryError`, `BranchCheckoutError`.
 
-### Function: `commit_changes(local_path: str, message: str, author_name: str = None, author_email: str = None, stage_all: bool = True)`
+### Function: `commit_changes(message: str, repository_path: str = None, author_name: str = None, author_email: str = None, stage_all: bool = True, file_paths: list[str] = None) -> Optional[str]`
 - **Description**: Stages changes and creates a commit.
 - **Parameters**:
-    - `local_path` (str): Path to the local Git repository.
     - `message` (str): Commit message.
+    - `repository_path` (str, optional): Path to the local Git repository (defaults to current directory).
     - `author_name` (str, optional): Override Git config for author name.
     - `author_email` (str, optional): Override Git config for author email.
     - `stage_all` (bool, optional): If True, stages all tracked, modified files (`git add -u`) before committing. Defaults to True.
+    - `file_paths` (list[str], optional): Specific files to stage and commit. If provided, `stage_all` is ignored.
 - **Returns**: SHA of the new commit on success, None on failure.
 - **Raises**: `NotAGitRepositoryError`, `CommitError`.
 

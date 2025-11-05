@@ -278,33 +278,116 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
         return False
 
 
-def commit_changes(message: str, repository_path: str = None) -> bool:
-    """Commit staged changes with the given message."""
+def commit_changes(
+    message: str,
+    repository_path: str = None,
+    author_name: str = None,
+    author_email: str = None,
+    stage_all: bool = True,
+    file_paths: list[str] = None,
+) -> Optional[str]:
+    """
+    Commit staged changes with the given message.
+    
+    Args:
+        message: Commit message
+        repository_path: Path to repository (defaults to current directory)
+        author_name: Override Git config for author name
+        author_email: Override Git config for author email
+        stage_all: If True, stages all tracked, modified files before committing (default: True)
+        file_paths: Optional list of specific files to stage and commit (if provided, stage_all is ignored)
+    
+    Returns:
+        SHA of the new commit on success, None on failure
+    """
     if repository_path is None:
         repository_path = os.getcwd()
 
     try:
         logger.info(f"Committing changes with message: {message}")
 
-        subprocess.run(
-            ["git", "commit", "-m", message],
+        # Stage files if needed
+        if file_paths:
+            # Stage specific files
+            if not add_files(file_paths, repository_path):
+                logger.error("Failed to stage files for commit")
+                return None
+        elif stage_all:
+            # Stage all tracked, modified files
+            subprocess.run(
+                ["git", "add", "-u"],
+                cwd=repository_path,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            logger.debug("Staged all tracked, modified files")
+
+        # Build commit command
+        cmd = ["git", "commit"]
+        
+        # Add author override if provided
+        if author_name and author_email:
+            cmd.extend(["--author", f"{author_name} <{author_email}>"])
+        elif author_name:
+            # If only name provided, try to get email from config or use name only
+            email_result = subprocess.run(
+                ["git", "config", "user.email"],
+                cwd=repository_path,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            email = email_result.stdout.strip() if email_result.returncode == 0 else ""
+            if email:
+                cmd.extend(["--author", f"{author_name} <{email}>"])
+            else:
+                cmd.extend(["--author", author_name])
+        elif author_email:
+            # If only email provided, try to get name from config
+            name_result = subprocess.run(
+                ["git", "config", "user.name"],
+                cwd=repository_path,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            cmd.extend(["--author", f"{name} <{author_email}>"])
+        
+        # Add commit message
+        cmd.extend(["-m", message])
+
+        # Execute commit
+        result = subprocess.run(
+            cmd,
             cwd=repository_path,
             capture_output=True,
             text=True,
             check=True,
         )
 
-        logger.info("Changes committed successfully")
-        return True
+        # Get commit SHA
+        sha_result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        
+        commit_sha = sha_result.stdout.strip()
+        logger.info(f"Changes committed successfully: {commit_sha[:8]}")
+        return commit_sha
 
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to commit changes: {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        return False
+        return None
     except Exception as e:
         logger.error(f"Unexpected error committing changes: {e}")
-        return False
+        return None
 
 
 def push_changes(
@@ -813,6 +896,433 @@ def reset_changes(
     except Exception as e:
         logger.error(f"Unexpected error resetting repository: {e}")
         return False
+
+
+def add_remote(
+    remote_name: str, url: str, repository_path: str = None
+) -> bool:
+    """Add a remote repository."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info(f"Adding remote '{remote_name}' with URL: {url}")
+
+        subprocess.run(
+            ["git", "remote", "add", remote_name, url],
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        logger.info(f"Remote '{remote_name}' added successfully")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to add remote '{remote_name}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error adding remote: {e}")
+        return False
+
+
+def remove_remote(remote_name: str, repository_path: str = None) -> bool:
+    """Remove a remote repository."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info(f"Removing remote '{remote_name}'")
+
+        subprocess.run(
+            ["git", "remote", "remove", remote_name],
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        logger.info(f"Remote '{remote_name}' removed successfully")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to remove remote '{remote_name}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error removing remote: {e}")
+        return False
+
+
+def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
+    """List all remote repositories."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.debug("Listing Git remotes")
+
+        result = subprocess.run(
+            ["git", "remote", "-v"],
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        remotes = []
+        seen_remotes = set()
+        for line in result.stdout.strip().split("\n"):
+            if line.strip():
+                parts = line.split()
+                if len(parts) >= 2:
+                    name = parts[0]
+                    url = parts[1]
+                    fetch_or_push = parts[2] if len(parts) > 2 else "fetch"
+                    
+                    if name not in seen_remotes:
+                        remotes.append({
+                            "name": name,
+                            "url": url,
+                            "fetch": url if fetch_or_push == "(fetch)" else None,
+                            "push": url if fetch_or_push == "(push)" else None,
+                        })
+                        seen_remotes.add(name)
+                    else:
+                        # Update existing remote with push URL if needed
+                        for remote in remotes:
+                            if remote["name"] == name and fetch_or_push == "(push)":
+                                remote["push"] = url
+
+        logger.debug(f"Found {len(remotes)} remotes")
+        return remotes
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to list remotes: {e}")
+        return []
+    except Exception as e:
+        logger.error(f"Unexpected error listing remotes: {e}")
+        return []
+
+
+def get_config(key: str, repository_path: str = None, global_config: bool = False) -> Optional[str]:
+    """Get a Git configuration value."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.debug(f"Getting Git config: {key}")
+
+        cmd = ["git", "config"]
+        if global_config:
+            cmd.append("--global")
+        cmd.extend(["--get", key])
+
+        result = subprocess.run(
+            cmd,
+            cwd=repository_path if not global_config else None,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        value = result.stdout.strip()
+        logger.debug(f"Config value for {key}: {value}")
+        return value
+
+    except subprocess.CalledProcessError as e:
+        logger.debug(f"Config key '{key}' not found or not set")
+        return None
+    except Exception as e:
+        logger.error(f"Unexpected error getting config: {e}")
+        return None
+
+
+def set_config(
+    key: str, value: str, repository_path: str = None, global_config: bool = False
+) -> bool:
+    """Set a Git configuration value."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info(f"Setting Git config: {key} = {value}")
+
+        cmd = ["git", "config"]
+        if global_config:
+            cmd.append("--global")
+        cmd.extend([key, value])
+
+        subprocess.run(
+            cmd,
+            cwd=repository_path if not global_config else None,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        logger.info(f"Config '{key}' set successfully")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to set config '{key}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error setting config: {e}")
+        return False
+
+
+def cherry_pick(
+    commit_sha: str, repository_path: str = None, no_commit: bool = False
+) -> bool:
+    """Cherry-pick a commit from another branch."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info(f"Cherry-picking commit: {commit_sha}")
+
+        cmd = ["git", "cherry-pick"]
+        if no_commit:
+            cmd.append("--no-commit")
+        cmd.append(commit_sha)
+
+        subprocess.run(
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        logger.info(f"Successfully cherry-picked commit {commit_sha[:8]}")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to cherry-pick commit '{commit_sha}': {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error cherry-picking commit: {e}")
+        return False
+
+
+def amend_commit(
+    message: str = None,
+    repository_path: str = None,
+    author_name: str = None,
+    author_email: str = None,
+    no_edit: bool = False,
+) -> Optional[str]:
+    """Amend the last commit."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info("Amending last commit")
+
+        cmd = ["git", "commit", "--amend"]
+        
+        if no_edit:
+            if message:
+                cmd.extend(["-m", message])
+            else:
+                cmd.append("--no-edit")
+        elif message:
+            cmd.extend(["-m", message])
+        else:
+            cmd.append("--no-edit")
+
+        # Add author override if provided
+        if author_name and author_email:
+            cmd.extend(["--author", f"{author_name} <{author_email}>"])
+        elif author_name:
+            email_result = subprocess.run(
+                ["git", "config", "user.email"],
+                cwd=repository_path,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            email = email_result.stdout.strip() if email_result.returncode == 0 else ""
+            if email:
+                cmd.extend(["--author", f"{author_name} <{email}>"])
+            else:
+                cmd.extend(["--author", author_name])
+        elif author_email:
+            name_result = subprocess.run(
+                ["git", "config", "user.name"],
+                cwd=repository_path,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            cmd.extend(["--author", f"{name} <{author_email}>"])
+
+        subprocess.run(
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        # Get amended commit SHA
+        sha_result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        
+        commit_sha = sha_result.stdout.strip()
+        logger.info(f"Successfully amended commit: {commit_sha[:8]}")
+        return commit_sha
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to amend commit: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return None
+    except Exception as e:
+        logger.error(f"Unexpected error amending commit: {e}")
+        return None
+
+
+def fetch_changes(
+    remote: str = "origin",
+    branch: str = None,
+    repository_path: str = None,
+    prune: bool = False,
+) -> bool:
+    """Fetch changes from a remote repository without merging."""
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.info(f"Fetching changes from {remote}")
+
+        cmd = ["git", "fetch"]
+        if prune:
+            cmd.append("--prune")
+        cmd.append(remote)
+        if branch:
+            cmd.append(branch)
+
+        subprocess.run(
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        logger.info(f"Successfully fetched changes from {remote}")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to fetch changes from {remote}: {e}")
+        if e.stderr:
+            logger.error(f"Git error: {e.stderr}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error fetching changes: {e}")
+        return False
+
+
+def get_commit_history_filtered(
+    limit: int = 10,
+    repository_path: str = None,
+    since: str = None,
+    until: str = None,
+    author: str = None,
+    branch: str = None,
+    file_path: str = None,
+) -> list[dict[str, str]]:
+    """
+    Get commit history with filters.
+    
+    Args:
+        limit: Maximum number of commits to return
+        repository_path: Path to repository
+        since: Show commits after this date (ISO format or relative like "2 weeks ago")
+        until: Show commits before this date (ISO format or relative)
+        author: Filter by author name or email
+        branch: Branch to show commits from
+        file_path: Show only commits affecting this file
+    
+    Returns:
+        List of commit dictionaries
+    """
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    try:
+        logger.debug(f"Getting filtered commit history (limit: {limit})")
+
+        cmd = [
+            "git",
+            "log",
+            "--oneline",
+            "-n",
+            str(limit),
+            "--pretty=format:%H|%an|%ae|%ad|%s",
+        ]
+        
+        if since:
+            cmd.extend(["--since", since])
+        if until:
+            cmd.extend(["--until", until])
+        if author:
+            cmd.extend(["--author", author])
+        if file_path:
+            cmd.append("--")
+            cmd.append(file_path)
+
+        if branch:
+            cmd.append(branch)
+
+        result = subprocess.run(
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        commits = []
+        for line in result.stdout.strip().split("\n"):
+            if line.strip():
+                parts = line.split("|", 4)
+                if len(parts) == 5:
+                    commits.append(
+                        {
+                            "hash": parts[0],
+                            "author_name": parts[1],
+                            "author_email": parts[2],
+                            "date": parts[3],
+                            "message": parts[4],
+                        }
+                    )
+
+        logger.debug(f"Retrieved {len(commits)} filtered commits")
+        return commits
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to get filtered commit history: {e}")
+        return []
+    except Exception as e:
+        logger.error(f"Unexpected error getting filtered commit history: {e}")
+        return []
 
 
 if __name__ == "__main__":

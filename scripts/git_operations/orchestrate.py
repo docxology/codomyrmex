@@ -44,17 +44,26 @@ except ImportError:
 # Import module functions
 from codomyrmex.git_operations import (
     add_files,
+    add_remote,
+    amend_commit,
     check_git_availability,
+    cherry_pick,
     clone_repository,
     commit_changes,
     create_branch,
+    fetch_changes,
+    get_config,
+    get_commit_history,
+    get_commit_history_filtered,
     get_current_branch,
     get_status,
-    get_commit_history,
     initialize_git_repository,
     is_git_repository,
-    push_changes,
+    list_remotes,
     pull_changes,
+    push_changes,
+    remove_remote,
+    set_config,
     switch_branch,
 )
 
@@ -126,23 +135,36 @@ def handle_branch(args):
 def handle_commit(args):
     """Handle commit command."""
     try:
-        files = args.files if args.files else []
+        file_paths = args.files if args.files else None
+        author_name = getattr(args, "author_name", None)
+        author_email = getattr(args, "author_email", None)
+        stage_all = getattr(args, "stage_all", True)  # Default True, set to False with --no-stage-all
         
         if getattr(args, "dry_run", False):
             print_info(f"Dry run: Would commit with message: {args.message}")
-            if files:
-                print_info(f"Files: {', '.join(files)}")
+            if file_paths:
+                print_info(f"Files: {', '.join(file_paths)}")
+            if author_name:
+                print_info(f"Author: {author_name} <{author_email or ''}>")
             return True
 
         if getattr(args, "verbose", False):
             logger.info(f"Committing with message: {args.message}")
-            if files:
-                logger.info(f"Files: {', '.join(files)}")
+            if file_paths:
+                logger.info(f"Files: {', '.join(file_paths)}")
+            if author_name:
+                logger.info(f"Author: {author_name} <{author_email or ''}>")
 
-        result = commit_changes(message=args.message, files=files)
+        result = commit_changes(
+            message=args.message,
+            file_paths=file_paths,
+            author_name=author_name,
+            author_email=author_email,
+            stage_all=stage_all,
+        )
 
         if result:
-            print_success(f"Committed changes: {args.message}")
+            print_success(f"Committed changes: {args.message} (SHA: {result[:8]})")
             return True
         else:
             print_error("Failed to commit changes")
@@ -310,7 +332,24 @@ def handle_history(args):
         if getattr(args, "verbose", False):
             logger.info(f"Getting commit history (limit: {args.limit})")
 
-        history = get_commit_history(limit=args.limit)
+        # Use filtered history if any filters are provided
+        if any([
+            getattr(args, "since", None),
+            getattr(args, "until", None),
+            getattr(args, "author", None),
+            getattr(args, "branch", None),
+            getattr(args, "file", None),
+        ]):
+            history = get_commit_history_filtered(
+                limit=args.limit,
+                since=getattr(args, "since", None),
+                until=getattr(args, "until", None),
+                author=getattr(args, "author", None),
+                branch=getattr(args, "branch", None),
+                file_path=getattr(args, "file", None),
+            )
+        else:
+            history = get_commit_history(limit=args.limit)
 
         print_section("Commit History")
         if isinstance(history, list):
@@ -347,6 +386,163 @@ def handle_check(args):
     except Exception as e:
         logger.exception("Unexpected error checking git availability")
         print_error("Unexpected error checking git availability", exception=e)
+        return False
+
+
+def handle_fetch(args):
+    """Handle fetch command."""
+    try:
+        if getattr(args, "dry_run", False):
+            print_info(f"Dry run: Would fetch from {args.remote}")
+            if args.branch:
+                print_info(f"Branch: {args.branch}")
+            return True
+
+        result = fetch_changes(
+            remote=args.remote,
+            branch=args.branch,
+            prune=getattr(args, "prune", False),
+        )
+
+        if result:
+            print_success(f"Fetched changes from {args.remote}")
+            return True
+        else:
+            print_error("Failed to fetch changes")
+            return False
+
+    except Exception as e:
+        logger.exception("Unexpected error during fetch")
+        print_error("Unexpected error during fetch", exception=e)
+        return False
+
+
+def handle_remote(args):
+    """Handle remote operations."""
+    try:
+        if args.action == "list":
+            remotes = list_remotes()
+            print_section("Git Remotes")
+            if remotes:
+                for remote in remotes:
+                    print(f"  {remote['name']}: {remote['url']}")
+            else:
+                print("  No remotes configured")
+            print_section("", separator="")
+            return True
+        elif args.action == "add":
+            if getattr(args, "dry_run", False):
+                print_info(f"Dry run: Would add remote '{args.name}' with URL: {args.url}")
+                return True
+            result = add_remote(args.name, args.url)
+            if result:
+                print_success(f"Added remote: {args.name}")
+                return True
+            else:
+                print_error("Failed to add remote")
+                return False
+        elif args.action == "remove":
+            if getattr(args, "dry_run", False):
+                print_info(f"Dry run: Would remove remote '{args.name}'")
+                return True
+            result = remove_remote(args.name)
+            if result:
+                print_success(f"Removed remote: {args.name}")
+                return True
+            else:
+                print_error("Failed to remove remote")
+                return False
+
+    except Exception as e:
+        logger.exception("Unexpected error during remote operation")
+        print_error("Unexpected error during remote operation", exception=e)
+        return False
+
+
+def handle_config(args):
+    """Handle config operations."""
+    try:
+        if args.action == "get":
+            value = get_config(args.key, global_config=getattr(args, "global", False))
+            if value:
+                print_success(f"{args.key} = {value}")
+                return True
+            else:
+                print_error(f"Config key '{args.key}' not found")
+                return False
+        elif args.action == "set":
+            if getattr(args, "dry_run", False):
+                print_info(f"Dry run: Would set {args.key} = {args.value}")
+                return True
+            result = set_config(
+                args.key, args.value, global_config=getattr(args, "global", False)
+            )
+            if result:
+                print_success(f"Set {args.key} = {args.value}")
+                return True
+            else:
+                print_error("Failed to set config")
+                return False
+
+    except Exception as e:
+        logger.exception("Unexpected error during config operation")
+        print_error("Unexpected error during config operation", exception=e)
+        return False
+
+
+def handle_cherry_pick(args):
+    """Handle cherry-pick command."""
+    try:
+        if getattr(args, "dry_run", False):
+            print_info(f"Dry run: Would cherry-pick commit: {args.commit}")
+            return True
+
+        result = cherry_pick(
+            args.commit, no_commit=getattr(args, "no_commit", False)
+        )
+
+        if result:
+            print_success(f"Cherry-picked commit: {args.commit[:8]}")
+            return True
+        else:
+            print_error("Failed to cherry-pick commit")
+            return False
+
+    except Exception as e:
+        logger.exception("Unexpected error during cherry-pick")
+        print_error("Unexpected error during cherry-pick", exception=e)
+        return False
+
+
+def handle_amend(args):
+    """Handle amend commit command."""
+    try:
+        author_name = getattr(args, "author_name", None)
+        author_email = getattr(args, "author_email", None)
+        
+        if getattr(args, "dry_run", False):
+            print_info("Dry run: Would amend last commit")
+            if args.message:
+                print_info(f"Message: {args.message}")
+            return True
+
+        result = amend_commit(
+            message=args.message,
+            author_name=author_name,
+            author_email=author_email,
+            no_edit=getattr(args, "no_edit", False),
+        )
+
+        if result:
+            print_success(f"Amended commit: {result[:8]}")
+            return True
+        else:
+            print_error("Failed to amend commit")
+            return False
+
+    except Exception as e:
+        logger.exception("Unexpected error during amend")
+        print_error("Unexpected error during amend", exception=e)
         return False
 
 
@@ -405,6 +601,9 @@ Examples:
     commit_parser = subparsers.add_parser("commit", help="Commit changes")
     commit_parser.add_argument("-m", "--message", required=True, help="Commit message")
     commit_parser.add_argument("files", nargs="*", help="Files to commit")
+    commit_parser.add_argument("--author-name", help="Override author name")
+    commit_parser.add_argument("--author-email", help="Override author email")
+    commit_parser.add_argument("--no-stage-all", action="store_false", dest="stage_all", help="Don't stage all tracked files")
 
     # Push command
     push_parser = subparsers.add_parser("push", help="Push changes")
@@ -430,6 +629,54 @@ Examples:
     # History command
     history_parser = subparsers.add_parser("history", help="Show commit history")
     history_parser.add_argument("--limit", type=int, default=10, help="Number of commits")
+    history_parser.add_argument("--since", help="Show commits after this date")
+    history_parser.add_argument("--until", help="Show commits before this date")
+    history_parser.add_argument("--author", help="Filter by author")
+    history_parser.add_argument("--branch", help="Branch to show commits from")
+    history_parser.add_argument("--file", help="Show only commits affecting this file")
+
+    # Fetch command
+    fetch_parser = subparsers.add_parser("fetch", help="Fetch changes from remote")
+    fetch_parser.add_argument("--remote", default="origin", help="Remote name")
+    fetch_parser.add_argument("--branch", help="Branch to fetch")
+    fetch_parser.add_argument("--prune", action="store_true", help="Prune remote-tracking branches")
+
+    # Remote commands
+    remote_parser = subparsers.add_parser("remote", help="Remote operations")
+    remote_subparsers = remote_parser.add_subparsers(
+        dest="action", help="Remote action", required=True
+    )
+    remote_subparsers.add_parser("list", help="List remotes")
+    remote_add = remote_subparsers.add_parser("add", help="Add remote")
+    remote_add.add_argument("name", help="Remote name")
+    remote_add.add_argument("url", help="Remote URL")
+    remote_remove = remote_subparsers.add_parser("remove", help="Remove remote")
+    remote_remove.add_argument("name", help="Remote name")
+
+    # Config commands
+    config_parser = subparsers.add_parser("config", help="Config operations")
+    config_subparsers = config_parser.add_subparsers(
+        dest="action", help="Config action", required=True
+    )
+    config_get = config_subparsers.add_parser("get", help="Get config value")
+    config_get.add_argument("key", help="Config key")
+    config_get.add_argument("--global", action="store_true", dest="global", help="Use global config")
+    config_set = config_subparsers.add_parser("set", help="Set config value")
+    config_set.add_argument("key", help="Config key")
+    config_set.add_argument("value", help="Config value")
+    config_set.add_argument("--global", action="store_true", dest="global", help="Use global config")
+
+    # Cherry-pick command
+    cherry_pick_parser = subparsers.add_parser("cherry-pick", help="Cherry-pick a commit")
+    cherry_pick_parser.add_argument("commit", help="Commit SHA to cherry-pick")
+    cherry_pick_parser.add_argument("--no-commit", action="store_true", help="Don't commit changes")
+
+    # Amend command
+    amend_parser = subparsers.add_parser("amend", help="Amend last commit")
+    amend_parser.add_argument("-m", "--message", help="New commit message")
+    amend_parser.add_argument("--author-name", help="Override author name")
+    amend_parser.add_argument("--author-email", help="Override author email")
+    amend_parser.add_argument("--no-edit", action="store_true", help="Don't edit commit message")
 
     # Check command
     subparsers.add_parser("check", help="Check git availability")
@@ -448,10 +695,15 @@ Examples:
         "add": handle_add,
         "push": handle_push,
         "pull": handle_pull,
+        "fetch": handle_fetch,
         "clone": handle_clone,
         "init": handle_init,
         "history": handle_history,
         "check": handle_check,
+        "remote": handle_remote,
+        "config": handle_config,
+        "cherry-pick": handle_cherry_pick,
+        "amend": handle_amend,
     }
 
     handler = handlers.get(args.command)
