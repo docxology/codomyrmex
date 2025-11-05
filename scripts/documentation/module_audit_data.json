@@ -1,0 +1,50 @@
+{
+  "contributing_refs": [],
+  "example_tutorial_refs": [],
+  "missing_doc_files": {
+    "ai_code_editing": [
+      "API_SPECIFICATION.md",
+      "USAGE_EXAMPLES.md"
+    ],
+    "build_synthesis": [
+      "API_SPECIFICATION.md",
+      "USAGE_EXAMPLES.md"
+    ],
+    "code_execution_sandbox": [
+      "API_SPECIFICATION.md",
+      "USAGE_EXAMPLES.md"
+    ],
+    "data_visualization": [
+      "API_SPECIFICATION.md",
+      "MCP_TOOL_SPECIFICATION.md",
+      "USAGE_EXAMPLES.md"
+    ],
+    "documentation": [
+      "API_SPECIFICATION.md",
+      "MCP_TOOL_SPECIFICATION.md",
+      "USAGE_EXAMPLES.md"
+    ],
+    "git_operations": [
+      "API_SPECIFICATION.md",
+      "USAGE_EXAMPLES.md"
+    ],
+    "logging_monitoring": [
+      "API_SPECIFICATION.md"
+    ],
+    "model_context_protocol": [
+      "API_SPECIFICATION.md"
+    ],
+    "module_template": [
+      "API_SPECIFICATION.md"
+    ],
+    "ollama_integration": [
+      "API_SPECIFICATION.md"
+    ],
+    "pattern_matching": [
+      "API_SPECIFICATION.md"
+    ],
+    "static_analysis": [
+      "API_SPECIFICATION.md"
+    ]
+  }
+}

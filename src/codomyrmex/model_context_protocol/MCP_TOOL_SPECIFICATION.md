@@ -10,7 +10,7 @@ Instead, it establishes the **standards, structure, and requirements** that deve
 
 All modules that expose tools via MCP **must** base their `MCP_TOOL_SPECIFICATION.md` file on the canonical template located at:
 
-[`template/module_template/MCP_TOOL_SPECIFICATION.md`](../../template/module_template/MCP_TOOL_SPECIFICATION.md)
+[`template/module_template/MCP_TOOL_SPECIFICATION.md`](../module_template/MCP_TOOL_SPECIFICATION.md)
 
 This template provides a detailed, commented structure covering all required sections for defining a tool. Developers should **copy this template** into their module and fill it out for each tool they expose.
 

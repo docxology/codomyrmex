@@ -13,7 +13,7 @@ The main `documentation/` module of the Codomyrmex project may compile this cont
 - [Usage Examples](../USAGE_EXAMPLES.md) (Link to usage examples)
 - [Tutorials](./tutorials/)
   - [Example Tutorial](./tutorials/example_tutorial.md)
-- [Contributing Guidelines](../CONTRIBUTING.md) (Link to contribution guide)
+- [Contributing Guidelines](../../../docs/project/contributing.md) (Link to contribution guide)
 
 ## How to Use This Documentation
 

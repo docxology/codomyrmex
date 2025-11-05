@@ -117,7 +117,7 @@ Ensure any changes to the protocol specifications, templates, or guidelines are 
 
 - [API Specification](API_SPECIFICATION.md) (For any utilities provided by *this* module)
 - [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) (The meta-specification from *this* module, dictating how *other* modules define their tools)
-- [Canonical Template for MCP Tools](../../template/module_template/MCP_TOOL_SPECIFICATION.md)
+- [Canonical Template for MCP Tools](../module_template/MCP_TOOL_SPECIFICATION.md)
 - [Usage Examples](USAGE_EXAMPLES.md) (Examples of defining tools or using protocol utilities, if any)
 - [Detailed Documentation](./docs/index.md) (For more in-depth explanations of the protocol itself)
 - [Changelog](CHANGELOG.md) (Tracking changes to the protocol specification and this module)

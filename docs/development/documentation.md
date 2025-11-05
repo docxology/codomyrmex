@@ -51,23 +51,58 @@ docs/
 
 ### **Module Documentation Pattern**
 
-Each module follows this documentation structure:
+Each module follows this standardized documentation structure:
 
 ```
 src/codomyrmex/[module]/
-├── README.md                     # Module overview
-├── API_SPECIFICATION.md          # Detailed API documentation
-├── MCP_TOOL_SPECIFICATION.md     # MCP tools (if applicable)
-├── USAGE_EXAMPLES.md             # Practical usage examples
-├── CHANGELOG.md                  # Module version history
-├── SECURITY.md                   # Security considerations
-├── requirements.txt              # Module dependencies
+├── README.md                     # ✅ REQUIRED: Module overview
+├── AGENTS.md                     # ✅ REQUIRED: Agent configuration
+├── SECURITY.md                   # ✅ REQUIRED: Security considerations
+├── API_SPECIFICATION.md          # ⚠️ Required if referenced in docs/index.md
+├── MCP_TOOL_SPECIFICATION.md     # ⚠️ Required if referenced in docs/index.md
+├── USAGE_EXAMPLES.md             # ⚠️ Required if referenced in docs/index.md
+├── CHANGELOG.md                  # Optional: Module version history
+├── requirements.txt              # Optional: Module dependencies
 ├── docs/                         # Extended documentation
-│   ├── index.md                  # Documentation index
-│   ├── technical_overview.md     # Architecture details
-│   └── tutorials/                # Module-specific tutorials
+│   ├── index.md                  # ✅ REQUIRED if docs/ exists
+│   ├── technical_overview.md     # Optional: Architecture details
+│   └── tutorials/                # Optional: Module-specific tutorials
+│       └── example_tutorial.md   # ⚠️ Required if referenced in docs/index.md
 └── tests/
-    └── README.md                 # Testing documentation
+    └── README.md                 # Optional: Testing documentation
+```
+
+#### **Required Files**
+
+All modules **MUST** have:
+- **README.md**: Module overview, features, quick start, and usage examples
+- **AGENTS.md**: Agent configuration, operating contracts, and navigation links
+- **SECURITY.md**: Security considerations and vulnerability reporting process
+
+#### **Conditionally Required Files**
+
+These files are required **if referenced** in documentation:
+- **API_SPECIFICATION.md**: Required if `docs/index.md` references it
+- **MCP_TOOL_SPECIFICATION.md**: Required if `docs/index.md` references it
+- **USAGE_EXAMPLES.md**: Required if `docs/index.md` references it
+- **docs/tutorials/example_tutorial.md**: Required if `docs/index.md` references it
+
+#### **Link Standards**
+
+All internal links must follow these conventions:
+- **Contributing Guidelines**: Always link to `../../docs/project/contributing.md` (from module root) or `../../../docs/project/contributing.md` (from `docs/` directory)
+- **Module Documentation**: Use relative paths from current file location
+- **Cross-Module References**: Use paths relative to repository root
+
+#### **Validation**
+
+Module documentation is automatically validated using:
+- `scripts/documentation/module_docs_auditor.py` - Comprehensive audit tool
+- `scripts/documentation/validate_module_docs.py` - CI/CD validation tool
+
+Run validation before committing:
+```bash
+python3 scripts/documentation/validate_module_docs.py
 ```
 
 ## ✍️ Writing Standards
@@ -183,6 +218,39 @@ print(result)
 - [ ] **User-Focused**: Addresses user needs and questions
 - [ ] **Examples**: Includes practical, working examples
 - [ ] **Maintenance**: Easy to keep up-to-date
+
+### **Module Documentation Validation**
+
+All module documentation is validated for consistency and completeness:
+
+#### **Automated Validation Tools**
+
+- **`scripts/documentation/module_docs_auditor.py`**: Comprehensive audit of all modules
+  - Scans for missing required files
+  - Identifies broken references
+  - Checks documentation structure
+  - Generates detailed reports
+
+- **`scripts/documentation/validate_module_docs.py`**: Fast validation for CI/CD
+  - Validates required files exist
+  - Checks for broken references
+  - Ensures link consistency
+  - Returns exit code for automation
+
+#### **Running Validation**
+
+```bash
+# Comprehensive audit (generates detailed report)
+python3 scripts/documentation/module_docs_auditor.py
+
+# Quick validation (for CI/CD)
+python3 scripts/documentation/validate_module_docs.py
+
+# Fix common issues
+python3 scripts/documentation/fix_contributing_refs.py
+python3 scripts/documentation/create_example_tutorials.py
+python3 scripts/documentation/create_missing_doc_files.py
+```
 
 ### **Link Validation**
 

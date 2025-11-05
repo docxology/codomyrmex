@@ -4,7 +4,7 @@
 
 The Git Operations module is designed to provide a standardized interface and a set of tools for performing common Git actions programmatically within the Codomyrmex ecosystem. This can be utilized by other modules, AI agents (if MCP tools are developed), or CI/CD processes to interact with Git repositories, manage branches, commits, and other version control tasks effectively and consistently.
 
-**Note on Scope**: This module provides *tools* for Git automation. For guidelines on project-wide Git practices, such as branching strategy, commit message conventions, and the Pull Request (PR) process, please refer to the main [Codomyrmex Contributing Guidelines](../../CONTRIBUTING.md).
+**Note on Scope**: This module provides *tools* for Git automation. For guidelines on project-wide Git practices, such as branching strategy, commit message conventions, and the Pull Request (PR) process, please refer to the main [Codomyrmex Contributing Guidelines](../../../../../docs/project/contributing.md).
 
 ## Typical Project Git Workflow Context
 

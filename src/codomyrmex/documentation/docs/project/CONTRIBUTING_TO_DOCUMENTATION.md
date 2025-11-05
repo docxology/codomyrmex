@@ -6,7 +6,7 @@ sidebar_label: 'Contributing to Documentation'
 
 Thank you for your interest in contributing to the Codomyrmex project documentation! High-quality documentation is crucial for making the project accessible, understandable, and easy to use for everyone.
 
-This guide provides conventions and best practices for writing and structuring documentation content. For instructions on how to set up the Docusaurus environment locally, build the site, or the overall contribution workflow (Git, PRs), please refer to the [main project `CONTRIBUTING.md`](../../../../CONTRIBUTING.md) and the [`documentation` module's `README.md`](../../../README.md).
+This guide provides conventions and best practices for writing and structuring documentation content. For instructions on how to set up the Docusaurus environment locally, build the site, or the overall contribution workflow (Git, PRs), please refer to the [main project `CONTRIBUTING.md`](../../../../docs/project/contributing.md) and the [`documentation` module's `README.md`](../../../README.md).
 
 ## Guiding Principles
 
