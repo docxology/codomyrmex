@@ -186,7 +186,7 @@ show_next_steps() {
     echo -e "   ${YELLOW}codomyrmex check${NC}"
     echo ""
     echo -e "3. ${GREEN}Run examples:${NC}"
-    echo -e "   ${YELLOW}python examples/example_usage.py${NC}"
+    echo -e "   ${YELLOW}python scripts/development/example_usage.py${NC}"
     echo ""
     echo -e "4. ${GREEN}Explore interactively:${NC}"
     echo -e "   ${YELLOW}./start_here.sh${NC}"

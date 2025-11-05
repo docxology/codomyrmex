@@ -73,7 +73,7 @@ Start here if you're new to Codomyrmex:
 1. **[📦 Installation Guide](getting-started/installation.md)** - Complete setup for all platforms
 2. **[⚡ Quick Start](getting-started/quickstart.md)** - 5-minute hands-on experience
 3. **[🎓 Module Creation Tutorial](getting-started/tutorials/creating-a-module.md)** - Learn by building
-4. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations
+4. **[🎮 Interactive Examples](../../scripts/examples/README.md)** - Hands-on demonstrations
 
 ### **👨‍💻 Developers - Development Path**
 For contributors and module developers:
@@ -88,7 +88,7 @@ For understanding the system design:
 1. **[🏛️ Architecture Overview](project/architecture.md)** - System design and principles
 2. **[📦 Module System](modules/overview.md)** - Understanding the modular architecture
 3. **[🔗 Module Relationships](modules/relationships.md)** - How modules work together
-4. **[📦 Module Template](../../src/codomyrmex/module_template/README.md)** - Template for creating modules
+4. **[📦 Module Template](../src/codomyrmex/module_template/README.md)** - Template for creating modules
 
 ### **🔌 Integrators - External Systems**
 For connecting with other systems:
@@ -110,7 +110,7 @@ For comprehensive learning:
 2. **[📋 Project TODO](project/todo.md)** - Current development priorities
 3. **[📝 Documentation Reorg](project/documentation-reorganization-summary.md)** - How documentation is organized
 4. **[🔌 Module APIs](reference/api.md#module-apis)** - Individual module documentation (see API reference)
-5. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations
+5. **[🎮 Interactive Examples](../../scripts/examples/README.md)** - Hands-on demonstrations
 6. **[🏛️ System Architecture](project/architecture.md)** - Complete system design understanding
 
 ## 📊 Documentation Statistics
@@ -141,7 +141,7 @@ Start Here
     ↓
 ⚡ [Quick Start](./getting-started/quickstart.md) → 5-minute hands-on experience
     ↓
-💡 [Examples](../examples/README.md) → Try interactive demonstrations
+💡 [Examples](../scripts/examples/README.md) → Try interactive demonstrations
     ↓
 📚 [API Reference](./reference/api.md) → Learn the interfaces
 ```
@@ -167,7 +167,7 @@ Start Here
     ↓
 🔗 [Integration Examples](./integration/) → External system integration
     ↓
-🎮 [Examples](../examples/) → Working code examples
+🎮 [Examples](../scripts/examples/) → Working code examples
 ```
 
 ## 📂 Documentation Categories
@@ -257,7 +257,7 @@ Every documentation level must include:
 | **Installation Help** | [Installation Guide](./getting-started/installation.md) | [Quick Start](./getting-started/quickstart.md) |
 | **API Reference** | [API Reference](./reference/api-complete.md) | [API Index](./reference/api.md) |
 | **Development Setup** | [Dev Setup](./development/environment-setup.md) | [Contributing](./project/contributing.md) |
-| **Troubleshooting** | [Troubleshooting](./reference/troubleshooting.md) | [Examples](../examples/) |
+| **Troubleshooting** | [Troubleshooting](./reference/troubleshooting.md) | [Examples](../scripts/examples/) |
 | **Module Development** | [Module Tutorial](./getting-started/tutorials/creating-a-module.md) | [Module Overview](./modules/overview.md) |
 
 ### Navigation Patterns

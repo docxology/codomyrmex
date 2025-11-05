@@ -36,6 +36,8 @@ except ImportError:
 
         return decorator
 
+from .documentation_generator import DocumentationGenerator
+
 
 
 
@@ -84,6 +86,39 @@ class ProjectTemplate:
 
     # Configuration
     default_config: dict[str, Any] = field(default_factory=dict)
+
+    # Documentation configuration
+    documentation_config: dict[str, Any] = field(default_factory=dict)
+    # documentation_config structure:
+    # {
+    #   "nested_docs": ["src/", "config/", ...],  # directories that should have README/AGENTS
+    #   "doc_templates": {  # optional template content overrides
+    #     "README": "custom template...",
+    #     "AGENTS": "custom template..."
+    #   },
+    #   "doc_variables": {  # additional variables for template substitution
+    #     "custom_var": "value"
+    #   }
+    # }
+
+    # Template generators for files that need generation vs copying
+    template_generators: dict[str, dict[str, Any]] = field(default_factory=dict)
+    # template_generators structure:
+    # {
+    #   "relative/path/to/file": {
+    #     "template": "template_name",
+    #     "variables": {...}
+    #   }
+    # }
+
+    # Documentation cross-linking configuration
+    doc_links: dict[str, Any] = field(default_factory=dict)
+    # doc_links structure:
+    # {
+    #   "enabled": true,
+    #   "parent_link": true,  # link to parent directory
+    #   "child_links": true   # link to child directories
+    # }
 
     # Metadata
     author: str = ""
@@ -215,6 +250,11 @@ class ProjectManager:
         # Load templates and projects
         self.templates: dict[str, ProjectTemplate] = {}
         self.projects: dict[str, Project] = {}
+
+        # Initialize documentation generator
+        self.doc_generator = DocumentationGenerator(
+            templates_dir=self.templates_dir / "doc_templates"
+        )
 
         self.load_templates()
         self.load_projects()
@@ -447,6 +487,46 @@ class ProjectManager:
         # Save project
         project.save()
         self.projects[name] = project
+
+        # Generate documentation if template has documentation_config
+        if template and template.documentation_config:
+            nested_docs = template.documentation_config.get("nested_docs", [])
+            doc_links = template.documentation_config.get("doc_links", {}) or template.doc_links
+
+            success = self.doc_generator.generate_all_documentation(
+                project_path=project_path,
+                project_name=project.name,
+                project_type=project.type.value,
+                description=project.description,
+                version=project.version,
+                author=project.author,
+                created_at=project.created_at.isoformat(),
+                nested_dirs=nested_docs,
+                template=template_name,
+                doc_links=doc_links,
+            )
+
+            if success:
+                logger.info(f"Generated documentation for project: {name}")
+            else:
+                logger.warning(f"Some documentation generation failed for project: {name}")
+        elif template:
+            # Generate basic documentation even without documentation_config
+            nested_docs = [d.rstrip("/") for d in template.directory_structure if d.rstrip("/") and d != ".codomyrmex"]
+            success = self.doc_generator.generate_all_documentation(
+                project_path=project_path,
+                project_name=project.name,
+                project_type=project.type.value,
+                description=project.description,
+                version=project.version,
+                author=project.author,
+                created_at=project.created_at.isoformat(),
+                nested_dirs=nested_docs,
+                template=template_name,
+                doc_links={"enabled": True, "parent_link": True, "child_links": True},
+            )
+            if success:
+                logger.info(f"Generated basic documentation for project: {name}")
 
         logger.info(f"Created project: {name} at {path}")
         return project

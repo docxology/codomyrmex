@@ -96,6 +96,10 @@ graph TD
 | **`environment_setup`** | Environment validation | Dependency checking, API key management, setup automation |
 | **`model_context_protocol`** | AI communication standard | Standardized LLM interfaces, tool specifications |
 | **`terminal_interface`** | Rich terminal interactions | Colored output, progress bars, interactive prompts |
+| **`config_management`** | Configuration management | Centralized config loading, deployment, monitoring, secret management |
+| **`database_management`** | Data persistence | Database operations, migrations, backups, performance monitoring |
+| **`language_models`** | LLM infrastructure | Language model integration, provider abstraction, model management |
+| **`performance`** | Performance monitoring | Metrics collection, benchmarking, optimization guidance |
 
 ### **⚙️ Core Functional Modules**
 *Primary capabilities that users directly interact with*
@@ -108,6 +112,9 @@ graph TD
 | **`data_visualization`** | Charts and plots | Static/interactive plots, multiple formats, customizable styling |
 | **`pattern_matching`** | Code pattern analysis | Pattern recognition, dependency analysis, code understanding |
 | **`git_operations`** | Version control automation | Git workflows, branch management, commit automation |
+| **`code_review`** | Automated code review | AI-powered review, quality analysis, improvement suggestions |
+| **`security_audit`** | Security scanning | Vulnerability detection, compliance checking, security monitoring |
+| **`ollama_integration`** | Local LLM integration | Ollama model management, execution, configuration, benchmarking |
 
 ### **🔧 Service Modules**
 *Higher-level services that orchestrate core modules*
@@ -116,6 +123,10 @@ graph TD
 |--------|---------|-------------|
 | **`build_synthesis`** | Build automation | Multi-language builds, artifact generation, deployment pipelines |
 | **`documentation`** | Documentation generation | Website generation, API docs, tutorial creation |
+| **`api_documentation`** | API documentation generation | OpenAPI/Swagger specs, code analysis, structured documentation |
+| **`ci_cd_automation`** | CI/CD pipeline management | Pipeline orchestration, deployment automation, monitoring |
+| **`containerization`** | Container management | Docker lifecycle, image building, Kubernetes orchestration |
+| **`database_management`** | Database operations | Schema management, migrations, backups, performance monitoring |
 
 ### **🎮 Application Modules**
 *User-facing applications and interfaces*
@@ -124,6 +135,24 @@ graph TD
 |--------|---------|-------------|
 | **`system_discovery`** | System exploration | Module scanning, capability discovery, health monitoring |
 | **`terminal_interface`** | Interactive exploration | Command shell, foraging interface, guided discovery |
+| **`project_orchestration`** | Workflow orchestration | Workflow management, task coordination, resource allocation |
+| **`cli`** | Command-line interface | CLI commands, scripting support, interactive shell |
+
+### **🔗 Integration Modules**
+*Standards and protocols for system integration*
+
+| Module | Purpose | Key Features |
+|--------|---------|-------------|
+| **`model_context_protocol`** | AI communication standard | Standardized LLM interfaces, tool specifications |
+| **`module_template`** | Module creation template | Template for creating new modules with standard structure |
+
+### **🚀 Advanced Modules**
+*Specialized capabilities for advanced use cases*
+
+| Module | Purpose | Key Features |
+|--------|---------|-------------|
+| **`modeling_3d`** | 3D modeling and visualization | 3D model creation, manipulation, rendering |
+| **`physical_management`** | Physical system simulation | Physical system modeling, simulation management |
 
 ## 🔄 Module Communication Patterns
 
@@ -234,7 +263,7 @@ def enhance_code_pipeline(source_code):
        raise
    ```
 
-3. **Configuration**:
+3. **Configuration** {#module-specific-configuration}:
    ```python
    import os
    from codomyrmex.environment_setup import check_and_setup_env_vars
@@ -286,7 +315,7 @@ def create_code_with_visualization():
         )
 ```
 
-### **Interactive Module Exploration**
+### **Interactive Module Exploration** {#interactive-module-exploration}
 ```bash
 # Launch the interactive shell
 python -c "

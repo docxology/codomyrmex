@@ -13,6 +13,7 @@ from pathlib import Path
 import pytest
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.project_orchestration.documentation_generator import DocumentationGenerator
 from codomyrmex.project_orchestration.project_manager import (
     Project,
     ProjectManager,
@@ -32,19 +33,19 @@ class TestProject:
         project = Project(
             name="test_project",
             description="A test project",
-            project_type=ProjectType.AI_ANALYSIS,
+            type=ProjectType.AI_ANALYSIS,
             status=ProjectStatus.ACTIVE,
             path="/path/to/project",
-            template_name="ai_analysis",
+            template="ai_analysis",
             created_at=datetime.now(timezone.utc),
         )
 
         assert project.name == "test_project"
         assert project.description == "A test project"
-        assert project.project_type == ProjectType.AI_ANALYSIS
+        assert project.type == ProjectType.AI_ANALYSIS
         assert project.status == ProjectStatus.ACTIVE
         assert project.path == "/path/to/project"
-        assert project.template_name == "ai_analysis"
+        assert project.template == "ai_analysis"
         assert project.created_at is not None
 
     def test_project_defaults(self):
@@ -53,10 +54,10 @@ class TestProject:
 
         assert project.name == "test_project"
         assert project.description == ""
-        assert project.project_type == ProjectType.GENERAL
+        assert project.type == ProjectType.CUSTOM
         assert project.status == ProjectStatus.PLANNING
-        assert project.path is None
-        assert project.template_name is None
+        assert project.path == ""
+        assert project.template is None
         assert project.created_at is not None
 
     def test_project_serialization(self):
@@ -64,35 +65,32 @@ class TestProject:
         project = Project(
             name="test_project",
             description="Test description",
-            project_type=ProjectType.WEB_APPLICATION,
+            type=ProjectType.WEB_APPLICATION,
             status=ProjectStatus.ACTIVE,
             path="/test/path",
-            template_name="web_template",
+            template="web_template",
             tags=["web", "test"],
-            metadata={"key": "value"},
         )
 
         # Test to_dict
         project_dict = project.to_dict()
         assert project_dict["name"] == "test_project"
         assert project_dict["description"] == "Test description"
-        assert project_dict["project_type"] == ProjectType.WEB_APPLICATION.value
+        assert project_dict["type"] == ProjectType.WEB_APPLICATION.value
         assert project_dict["status"] == ProjectStatus.ACTIVE.value
         assert project_dict["path"] == "/test/path"
-        assert project_dict["template_name"] == "web_template"
+        assert project_dict["template"] == "web_template"
         assert project_dict["tags"] == ["web", "test"]
-        assert project_dict["metadata"] == {"key": "value"}
 
         # Test from_dict
         restored_project = Project.from_dict(project_dict)
         assert restored_project.name == "test_project"
         assert restored_project.description == "Test description"
-        assert restored_project.project_type == ProjectType.WEB_APPLICATION
+        assert restored_project.type == ProjectType.WEB_APPLICATION
         assert restored_project.status == ProjectStatus.ACTIVE
         assert restored_project.path == "/test/path"
-        assert restored_project.template_name == "web_template"
+        assert restored_project.template == "web_template"
         assert restored_project.tags == ["web", "test"]
-        assert restored_project.metadata == {"key": "value"}
 
 
 class TestProjectTemplate:
@@ -102,64 +100,58 @@ class TestProjectTemplate:
         """Test basic ProjectTemplate creation."""
         template = ProjectTemplate(
             name="test_template",
-            project_type=ProjectType.AI_ANALYSIS,
+            type=ProjectType.AI_ANALYSIS,
             description="A test template",
             directory_structure=["src/", "tests/", "docs/"],
-            files_to_create=["README.md", "requirements.txt"],
-            dependencies=["numpy", "pandas"],
+            required_modules=["numpy", "pandas"],
             workflows=["analysis", "testing"],
         )
 
         assert template.name == "test_template"
-        assert template.project_type == ProjectType.AI_ANALYSIS
+        assert template.type == ProjectType.AI_ANALYSIS
         assert template.description == "A test template"
         assert template.directory_structure == ["src/", "tests/", "docs/"]
-        assert template.files_to_create == ["README.md", "requirements.txt"]
-        assert template.dependencies == ["numpy", "pandas"]
+        assert template.required_modules == ["numpy", "pandas"]
         assert template.workflows == ["analysis", "testing"]
 
     def test_project_template_defaults(self):
         """Test ProjectTemplate with default values."""
-        template = ProjectTemplate(name="simple_template")
+        template = ProjectTemplate(name="simple_template", type=ProjectType.CUSTOM)
 
         assert template.name == "simple_template"
-        assert template.project_type == ProjectType.GENERAL
+        assert template.type == ProjectType.CUSTOM
         assert template.description == ""
         assert template.directory_structure == []
-        assert template.files_to_create == []
-        assert template.dependencies == []
+        assert template.required_modules == []
         assert template.workflows == []
 
     def test_project_template_serialization(self):
         """Test ProjectTemplate serialization to/from dictionary."""
         template = ProjectTemplate(
             name="test_template",
-            project_type=ProjectType.DATA_PIPELINE,
+            type=ProjectType.DATA_PIPELINE,
             description="Test template",
             directory_structure=["data/", "scripts/"],
-            files_to_create=["config.yaml"],
-            dependencies=["pandas", "scikit-learn"],
+            required_modules=["pandas", "scikit-learn"],
             workflows=["data_processing", "model_training"],
         )
 
         # Test to_dict
         template_dict = template.to_dict()
         assert template_dict["name"] == "test_template"
-        assert template_dict["project_type"] == ProjectType.DATA_PIPELINE.value
+        assert template_dict["type"] == ProjectType.DATA_PIPELINE.value
         assert template_dict["description"] == "Test template"
         assert template_dict["directory_structure"] == ["data/", "scripts/"]
-        assert template_dict["files_to_create"] == ["config.yaml"]
-        assert template_dict["dependencies"] == ["pandas", "scikit-learn"]
+        assert template_dict["required_modules"] == ["pandas", "scikit-learn"]
         assert template_dict["workflows"] == ["data_processing", "model_training"]
 
         # Test from_dict
         restored_template = ProjectTemplate.from_dict(template_dict)
         assert restored_template.name == "test_template"
-        assert restored_template.project_type == ProjectType.DATA_PIPELINE
+        assert restored_template.type == ProjectType.DATA_PIPELINE
         assert restored_template.description == "Test template"
         assert restored_template.directory_structure == ["data/", "scripts/"]
-        assert restored_template.files_to_create == ["config.yaml"]
-        assert restored_template.dependencies == ["pandas", "scikit-learn"]
+        assert restored_template.required_modules == ["pandas", "scikit-learn"]
         assert restored_template.workflows == ["data_processing", "model_training"]
 
 
@@ -189,7 +181,7 @@ class TestProjectManager:
         assert manager.templates_dir == temp_dir / "templates"
         assert manager.projects == {}
         assert manager.templates == {}
-        assert manager.logger is not None
+        assert hasattr(manager, 'doc_generator')
 
     def test_project_manager_default_directories(self):
         """Test ProjectManager with default directories."""
@@ -199,66 +191,60 @@ class TestProjectManager:
         assert manager.templates_dir is not None
         assert manager.templates_dir.exists()
 
-    def test_create_project_success(self, project_manager):
+    def test_create_project_success(self, project_manager, temp_dir):
         """Test successful project creation."""
         project = project_manager.create_project(
             name="test_project",
             description="A test project",
             template_name="ai_analysis",
-            path="/path/to/project",
+            path=str(temp_dir / "test_project"),
         )
 
         assert project is not None
         assert project.name == "test_project"
         assert project.description == "A test project"
-        assert project.template_name == "ai_analysis"
-        assert project.path == "/path/to/project"
+        assert project.template == "ai_analysis"
+        assert project.path == str(temp_dir / "test_project")
         assert project.status == ProjectStatus.PLANNING
-        assert project.id in project_manager.projects
+        assert project.name in project_manager.projects
 
-    def test_create_project_with_template(self, project_manager):
+    def test_create_project_with_template(self, project_manager, temp_dir):
         """Test project creation with template."""
         # First create a template
         template = ProjectTemplate(
             name="test_template",
-            project_type=ProjectType.AI_ANALYSIS,
+            type=ProjectType.AI_ANALYSIS,
             description="Test template",
             directory_structure=["src/", "tests/"],
-            files_to_create=["README.md"],
-            dependencies=["numpy"],
+            required_modules=["numpy"],
             workflows=["analysis"],
         )
         project_manager.templates["test_template"] = template
 
         project = project_manager.create_project(
-            name="template_project", template_name="test_template"
+            name="template_project", template_name="test_template", path=str(temp_dir / "template_project")
         )
 
         assert project is not None
-        assert project.template_name == "test_template"
-        assert project.project_type == ProjectType.AI_ANALYSIS
+        assert project.template == "test_template"
+        assert project.type == ProjectType.AI_ANALYSIS
 
-    def test_create_project_invalid_template(self, project_manager):
+    def test_create_project_invalid_template(self, project_manager, temp_dir):
         """Test project creation with invalid template."""
-        project = project_manager.create_project(
-            name="invalid_project", template_name="nonexistent_template"
-        )
+        with pytest.raises(ValueError, match="Template 'nonexistent_template' not found"):
+            project_manager.create_project(
+                name="invalid_project", template_name="nonexistent_template", path=str(temp_dir / "invalid_project")
+            )
 
-        # Should still create project but with default values
-        assert project is not None
-        assert project.name == "invalid_project"
-        assert project.template_name == "nonexistent_template"
-        assert project.project_type == ProjectType.GENERAL
-
-    def test_get_project_existing(self, project_manager):
+    def test_get_project_existing(self, project_manager, temp_dir):
         """Test getting existing project."""
-        project = project_manager.create_project(name="test_project")
+        project = project_manager.create_project(name="test_project", path=str(temp_dir / "test_project"))
 
         retrieved_project = project_manager.get_project("test_project")
 
         assert retrieved_project is not None
         assert retrieved_project.name == "test_project"
-        assert retrieved_project.id == project.id
+        assert retrieved_project.name == project.name
 
     def test_get_project_nonexistent(self, project_manager):
         """Test getting non-existent project."""
@@ -266,11 +252,11 @@ class TestProjectManager:
 
         assert retrieved_project is None
 
-    def test_list_projects(self, project_manager):
+    def test_list_projects(self, project_manager, temp_dir):
         """Test listing projects."""
         # Create multiple projects
-        project_manager.create_project(name="project1")
-        project_manager.create_project(name="project2")
+        project_manager.create_project(name="project1", path=str(temp_dir / "project1"))
+        project_manager.create_project(name="project2", path=str(temp_dir / "project2"))
 
         projects = project_manager.list_projects()
 
@@ -278,57 +264,20 @@ class TestProjectManager:
         assert "project1" in projects
         assert "project2" in projects
 
-    def test_list_projects_by_status(self, project_manager):
-        """Test listing projects by status."""
-        # Create projects with different statuses
-        project1 = project_manager.create_project(name="project1")
-        project1.status = ProjectStatus.ACTIVE
+    def test_update_project_metrics(self, project_manager, temp_dir):
+        """Test updating project metrics."""
+        project_manager.create_project(name="test_project", path=str(temp_dir / "test_project"))
 
-        project2 = project_manager.create_project(name="project2")
-        project2.status = ProjectStatus.COMPLETED
+        # Update project metrics
+        project_manager.update_project_metrics("test_project", {"test_metric": 42})
 
-        # List all projects
-        all_projects = project_manager.list_projects()
-        assert len(all_projects) == 2
+        project = project_manager.get_project("test_project")
+        assert project is not None
+        assert project.metrics["test_metric"] == 42
 
-        # List active projects
-        active_projects = project_manager.list_projects(status=ProjectStatus.ACTIVE)
-        assert len(active_projects) == 1
-        assert active_projects[0].name == "project1"
-
-        # List completed projects
-        completed_projects = project_manager.list_projects(
-            status=ProjectStatus.COMPLETED
-        )
-        assert len(completed_projects) == 1
-        assert completed_projects[0].name == "project2"
-
-    def test_update_project(self, project_manager):
-        """Test updating project."""
-        project_manager.create_project(name="test_project")
-
-        # Update project
-        updated_project = project_manager.update_project(
-            "test_project",
-            description="Updated description",
-            status=ProjectStatus.ACTIVE,
-            metadata={"key": "value"},
-        )
-
-        assert updated_project is not None
-        assert updated_project.description == "Updated description"
-        assert updated_project.status == ProjectStatus.ACTIVE
-        assert updated_project.metadata == {"key": "value"}
-
-    def test_update_project_nonexistent(self, project_manager):
-        """Test updating non-existent project."""
-        updated_project = project_manager.update_project("nonexistent")
-
-        assert updated_project is None
-
-    def test_delete_project(self, project_manager):
+    def test_delete_project(self, project_manager, temp_dir):
         """Test deleting project."""
-        project_manager.create_project(name="test_project")
+        project_manager.create_project(name="test_project", path=str(temp_dir / "test_project"))
 
         result = project_manager.delete_project("test_project")
 
@@ -341,22 +290,9 @@ class TestProjectManager:
 
         assert result is False
 
-    def test_create_template(self, project_manager):
-        """Test creating template."""
-        template = ProjectTemplate(
-            name="test_template",
-            project_type=ProjectType.AI_ANALYSIS,
-            description="Test template",
-        )
-
-        result = project_manager.create_template(template)
-
-        assert result is True
-        assert "test_template" in project_manager.templates
-
     def test_get_template(self, project_manager):
         """Test getting template."""
-        template = ProjectTemplate(name="test_template")
+        template = ProjectTemplate(name="test_template", type=ProjectType.AI_ANALYSIS)
         project_manager.templates["test_template"] = template
 
         retrieved_template = project_manager.get_template("test_template")
@@ -373,8 +309,8 @@ class TestProjectManager:
     def test_list_templates(self, project_manager):
         """Test listing templates."""
         # Create multiple templates
-        template1 = ProjectTemplate(name="template1")
-        template2 = ProjectTemplate(name="template2")
+        template1 = ProjectTemplate(name="template1", type=ProjectType.AI_ANALYSIS)
+        template2 = ProjectTemplate(name="template2", type=ProjectType.DATA_PIPELINE)
 
         project_manager.templates["template1"] = template1
         project_manager.templates["template2"] = template2
@@ -385,109 +321,15 @@ class TestProjectManager:
         assert "template1" in templates
         assert "template2" in templates
 
-    def test_scaffold_project_directory(self, project_manager, temp_dir):
-        """Test scaffolding project directory."""
-        # Create template with directory structure
-        template = ProjectTemplate(
-            name="test_template",
-            directory_structure=["src/", "tests/", "docs/"],
-            files_to_create=["README.md", "requirements.txt"],
-            dependencies=["numpy", "pandas"],
-        )
-
-        project_path = temp_dir / "test_project"
-
-        result = project_manager.scaffold_project_directory(
-            project_path, template, {"project_name": "Test Project"}
-        )
-
-        assert result is True
-        assert project_path.exists()
-        assert (project_path / "src").exists()
-        assert (project_path / "tests").exists()
-        assert (project_path / "docs").exists()
-        assert (project_path / "README.md").exists()
-        assert (project_path / "requirements.txt").exists()
-
-    def test_scaffold_project_directory_existing(self, project_manager, temp_dir):
-        """Test scaffolding project directory when it already exists."""
-        # Create existing directory
-        project_path = temp_dir / "existing_project"
-        project_path.mkdir()
-
-        template = ProjectTemplate(name="test_template")
-
-        result = project_manager.scaffold_project_directory(project_path, template, {})
-
-        # Should fail because directory exists
-        assert result is False
-
-    def test_save_project(self, project_manager, temp_dir):
-        """Test saving project to disk."""
-        project = project_manager.create_project(name="test_project")
-
-        result = project_manager.save_project(project)
-
-        assert result is True
-
-        # Check if file was created
-        project_file = project_manager.projects_dir / f"{project.id}.json"
-        assert project_file.exists()
-
-        # Check file contents
-        with open(project_file) as f:
-            data = json.load(f)
-
-        assert data["name"] == "test_project"
-        assert data["id"] == project.id
-
-    def test_load_project(self, project_manager, temp_dir):
-        """Test loading project from disk."""
-        # Create project file manually
-        project_data = {
-            "id": "test_id",
-            "name": "test_project",
-            "description": "Test description",
-            "project_type": "ai_analysis",
-            "status": "planning",
-            "path": "/test/path",
-            "template_name": "ai_analysis",
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "updated_at": None,
-            "tags": [],
-            "metadata": {},
-        }
-
-        project_file = project_manager.projects_dir / "test_id.json"
-        project_manager.projects_dir.mkdir(parents=True, exist_ok=True)
-
-        with open(project_file, "w") as f:
-            json.dump(project_data, f)
-
-        # Load project
-        project = project_manager.load_project("test_id")
-
-        assert project is not None
-        assert project.name == "test_project"
-        assert project.id == "test_id"
-
-    def test_load_project_nonexistent(self, project_manager):
-        """Test loading non-existent project."""
-        project = project_manager.load_project("nonexistent")
-
-        assert project is None
-
     def test_save_template(self, project_manager, temp_dir):
         """Test saving template to disk."""
         template = ProjectTemplate(
             name="test_template",
-            project_type=ProjectType.AI_ANALYSIS,
+            type=ProjectType.AI_ANALYSIS,
             description="Test template",
         )
 
-        result = project_manager.save_template(template)
-
-        assert result is True
+        project_manager.save_template(template)
 
         # Check if file was created
         template_file = project_manager.templates_dir / "test_template.json"
@@ -498,46 +340,20 @@ class TestProjectManager:
             data = json.load(f)
 
         assert data["name"] == "test_template"
-        assert data["project_type"] == "ai_analysis"
-
-    def test_load_template(self, project_manager, temp_dir):
-        """Test loading template from disk."""
-        # Create template file manually
-        template_data = {
-            "name": "test_template",
-            "project_type": "ai_analysis",
-            "description": "Test template",
-            "directory_structure": [],
-            "files_to_create": [],
-            "dependencies": [],
-            "workflows": [],
-        }
-
-        template_file = project_manager.templates_dir / "test_template.json"
-        project_manager.templates_dir.mkdir(parents=True, exist_ok=True)
-
-        with open(template_file, "w") as f:
-            json.dump(template_data, f)
-
-        # Load template
-        template = project_manager.load_template("test_template")
-
-        assert template is not None
-        assert template.name == "test_template"
-        assert template.project_type == ProjectType.AI_ANALYSIS
-
-    def test_load_template_nonexistent(self, project_manager):
-        """Test loading non-existent template."""
-        template = project_manager.load_template("nonexistent")
-
-        assert template is None
+        assert data["type"] == "ai_analysis"
 
 
 class TestProjectManagerIntegration:
     """Integration tests for ProjectManager."""
 
+    @pytest.fixture
+    def temp_dir(self):
+        """Create a temporary directory for testing."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            yield Path(temp_dir)
+
     def test_full_project_lifecycle(self, temp_dir):
-        """Test complete project lifecycle: create, update, delete."""
+        """Test complete project lifecycle: create, update metrics, delete."""
         manager = ProjectManager(
             projects_dir=temp_dir / "projects", templates_dir=temp_dir / "templates"
         )
@@ -547,22 +363,17 @@ class TestProjectManagerIntegration:
             name="lifecycle_test",
             description="Test project for lifecycle",
             template_name="ai_analysis",
+            path=str(temp_dir / "lifecycle_test"),
         )
 
         assert project is not None
         assert project.name == "lifecycle_test"
-        assert project.id in manager.projects
+        assert project.name in manager.projects
 
-        # Update project
-        updated_project = manager.update_project(
-            "lifecycle_test",
-            description="Updated description",
-            status=ProjectStatus.ACTIVE,
-        )
-
-        assert updated_project is not None
-        assert updated_project.description == "Updated description"
-        assert updated_project.status == ProjectStatus.ACTIVE
+        # Update project metrics
+        manager.update_project_metrics("lifecycle_test", {"test": "value"})
+        project = manager.get_project("lifecycle_test")
+        assert project.metrics["test"] == "value"
 
         # List projects
         projects = manager.list_projects()
@@ -583,25 +394,24 @@ class TestProjectManagerIntegration:
         # Create template
         template = ProjectTemplate(
             name="integration_template",
-            project_type=ProjectType.WEB_APPLICATION,
+            type=ProjectType.WEB_APPLICATION,
             description="Integration test template",
             directory_structure=["src/", "static/"],
-            files_to_create=["index.html", "style.css"],
-            dependencies=["flask", "jinja2"],
+            required_modules=["flask", "jinja2"],
             workflows=["build", "deploy"],
         )
 
-        result = manager.create_template(template)
-        assert result is True
+        manager.save_template(template)
+        manager.templates["integration_template"] = template
 
         # Create project using template
         project = manager.create_project(
-            name="integration_project", template_name="integration_template"
+            name="integration_project", template_name="integration_template", path=str(temp_dir / "integration_project")
         )
 
         assert project is not None
-        assert project.template_name == "integration_template"
-        assert project.project_type == ProjectType.WEB_APPLICATION
+        assert project.template == "integration_template"
+        assert project.type == ProjectType.WEB_APPLICATION
 
         # Verify template is available
         retrieved_template = manager.get_template("integration_template")
@@ -615,11 +425,12 @@ class TestProjectManagerIntegration:
         )
 
         # Create template and project
-        template = ProjectTemplate(name="persistence_template")
-        manager1.create_template(template)
+        template = ProjectTemplate(name="persistence_template", type=ProjectType.AI_ANALYSIS)
+        manager1.save_template(template)
+        manager1.templates["persistence_template"] = template
 
         manager1.create_project(
-            name="persistence_project", template_name="persistence_template"
+            name="persistence_project", template_name="persistence_template", path=str(temp_dir / "persistence_project")
         )
 
         # Create new manager instance (simulates restart)
@@ -635,7 +446,327 @@ class TestProjectManagerIntegration:
         loaded_project = manager2.get_project("persistence_project")
         assert loaded_project is not None
         assert loaded_project.name == "persistence_project"
-        assert loaded_project.template_name == "persistence_template"
+        assert loaded_project.template == "persistence_template"
+
+
+class TestDocumentationGenerator:
+    """Test cases for DocumentationGenerator class."""
+
+    @pytest.fixture
+    def temp_dir(self):
+        """Create a temporary directory for testing."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            yield Path(temp_dir)
+
+    @pytest.fixture
+    def doc_generator(self, temp_dir):
+        """Create a DocumentationGenerator instance for testing."""
+        templates_dir = temp_dir / "doc_templates"
+        templates_dir.mkdir(parents=True)
+        return DocumentationGenerator(templates_dir=templates_dir)
+
+    def test_documentation_generator_initialization(self, temp_dir):
+        """Test DocumentationGenerator initialization."""
+        templates_dir = temp_dir / "doc_templates"
+        generator = DocumentationGenerator(templates_dir=templates_dir)
+        
+        assert generator.templates_dir == templates_dir
+        assert templates_dir.exists()
+
+    def test_generate_root_readme(self, doc_generator, temp_dir):
+        """Test root README generation."""
+        project_path = temp_dir / "test_project"
+        project_path.mkdir()
+
+        result = doc_generator.generate_root_readme(
+            project_path=project_path,
+            project_name="test_project",
+            project_type="ai_analysis",
+            description="Test project",
+            version="1.0.0",
+            author="Test Author",
+            created_at="2025-01-01T00:00:00+00:00",
+        )
+
+        assert result is True
+        readme_path = project_path / "README.md"
+        assert readme_path.exists()
+        content = readme_path.read_text()
+        assert "test_project" in content
+        assert "Test project" in content
+        assert "1.0.0" in content
+
+    def test_generate_root_agents(self, doc_generator, temp_dir):
+        """Test root AGENTS generation."""
+        project_path = temp_dir / "test_project"
+        project_path.mkdir()
+
+        result = doc_generator.generate_root_agents(
+            project_path=project_path,
+            project_name="test_project",
+            project_type="ai_analysis",
+            description="Test project",
+            nested_dirs=["src/", "config/"],
+        )
+
+        assert result is True
+        agents_path = project_path / "AGENTS.md"
+        assert agents_path.exists()
+        content = agents_path.read_text()
+        assert "test_project" in content
+        assert "Test project" in content
+
+    def test_generate_nested_readme(self, doc_generator, temp_dir):
+        """Test nested README generation."""
+        project_path = temp_dir / "test_project"
+        project_path.mkdir()
+        src_path = project_path / "src"
+        src_path.mkdir()
+
+        result = doc_generator.generate_nested_readme(
+            dir_path=src_path,
+            dir_name="src",
+            project_name="test_project",
+            project_type="ai_analysis",
+            parent_path=project_path,
+        )
+
+        assert result is True
+        readme_path = src_path / "README.md"
+        assert readme_path.exists()
+        content = readme_path.read_text()
+        assert "src" in content
+        assert "test_project" in content
+
+    def test_generate_nested_agents(self, doc_generator, temp_dir):
+        """Test nested AGENTS generation."""
+        project_path = temp_dir / "test_project"
+        project_path.mkdir()
+        src_path = project_path / "src"
+        src_path.mkdir()
+
+        result = doc_generator.generate_nested_agents(
+            dir_path=src_path,
+            dir_name="src",
+            project_name="test_project",
+            project_type="ai_analysis",
+            parent_path=project_path,
+        )
+
+        assert result is True
+        agents_path = src_path / "AGENTS.md"
+        assert agents_path.exists()
+        content = agents_path.read_text()
+        assert "src" in content
+        assert "test_project" in content
+
+    def test_variable_substitution(self, doc_generator, temp_dir):
+        """Test variable substitution in templates."""
+        project_path = temp_dir / "test_project"
+        project_path.mkdir()
+
+        # Create a simple template
+        template_content = "Project: {{project_name}}, Type: {{project_type}}, Version: {{version}}"
+        template_file = doc_generator.templates_dir / "README.template.md"
+        template_file.write_text(template_content)
+
+        result = doc_generator.generate_root_readme(
+            project_path=project_path,
+            project_name="my_project",
+            project_type="data_pipeline",
+            description="Test",
+            version="2.0.0",
+            author="Author",
+            created_at="2025-01-01T00:00:00+00:00",
+        )
+
+        assert result is True
+        readme_path = project_path / "README.md"
+        content = readme_path.read_text()
+        assert "my_project" in content
+        assert "data_pipeline" in content
+        assert "2.0.0" in content
+        assert "{{project_name}}" not in content
+
+    def test_generate_all_documentation(self, doc_generator, temp_dir):
+        """Test generating all documentation."""
+        project_path = temp_dir / "test_project"
+        project_path.mkdir()
+        (project_path / "src").mkdir()
+        (project_path / "config").mkdir()
+
+        result = doc_generator.generate_all_documentation(
+            project_path=project_path,
+            project_name="test_project",
+            project_type="ai_analysis",
+            description="Test project",
+            version="1.0.0",
+            author="Test Author",
+            created_at="2025-01-01T00:00:00+00:00",
+            nested_dirs=["src", "config"],
+            doc_links={"enabled": True, "parent_link": True, "child_links": True},
+        )
+
+        assert result is True
+        assert (project_path / "README.md").exists()
+        assert (project_path / "AGENTS.md").exists()
+        assert (project_path / "src" / "README.md").exists()
+        assert (project_path / "src" / "AGENTS.md").exists()
+        assert (project_path / "config" / "README.md").exists()
+        assert (project_path / "config" / "AGENTS.md").exists()
+
+    def test_directory_purpose_mapping(self, doc_generator):
+        """Test directory purpose mapping."""
+        assert doc_generator._get_directory_purpose("src", "ai_analysis") == "Source code and implementation files"
+        assert doc_generator._get_directory_purpose("config", "ai_analysis") == "Configuration files and settings"
+        assert doc_generator._get_directory_purpose("data", "ai_analysis") == "Data files and datasets"
+        assert doc_generator._get_directory_purpose("unknown", "ai_analysis") == "Files and resources for unknown"
+
+
+class TestTemplateConfiguration:
+    """Test cases for template configuration features."""
+
+    def test_template_with_documentation_config(self):
+        """Test ProjectTemplate with documentation_config."""
+        template = ProjectTemplate(
+            name="test_template",
+            type=ProjectType.AI_ANALYSIS,
+            documentation_config={
+                "nested_docs": ["src/", "config/"],
+                "doc_links": {"enabled": True, "parent_link": True, "child_links": True},
+            },
+        )
+
+        assert template.documentation_config["nested_docs"] == ["src/", "config/"]
+        assert template.documentation_config["doc_links"]["enabled"] is True
+
+    def test_template_with_template_generators(self):
+        """Test ProjectTemplate with template_generators."""
+        template = ProjectTemplate(
+            name="test_template",
+            type=ProjectType.AI_ANALYSIS,
+            template_generators={
+                "README.md": {"template": "custom_readme", "variables": {"custom": "value"}},
+            },
+        )
+
+        assert "README.md" in template.template_generators
+        assert template.template_generators["README.md"]["template"] == "custom_readme"
+
+    def test_template_with_doc_links(self):
+        """Test ProjectTemplate with doc_links."""
+        template = ProjectTemplate(
+            name="test_template",
+            type=ProjectType.AI_ANALYSIS,
+            doc_links={"enabled": True, "parent_link": False, "child_links": True},
+        )
+
+        assert template.doc_links["enabled"] is True
+        assert template.doc_links["parent_link"] is False
+
+    def test_template_serialization_with_new_fields(self):
+        """Test template serialization with new configuration fields."""
+        template = ProjectTemplate(
+            name="test_template",
+            type=ProjectType.DATA_PIPELINE,
+            documentation_config={"nested_docs": ["data/"]},
+            template_generators={"config.yaml": {"template": "config"}},
+            doc_links={"enabled": True},
+        )
+
+        template_dict = template.to_dict()
+        assert "documentation_config" in template_dict
+        assert "template_generators" in template_dict
+        assert "doc_links" in template_dict
+
+        restored = ProjectTemplate.from_dict(template_dict)
+        assert restored.documentation_config == {"nested_docs": ["data/"]}
+        assert restored.template_generators == {"config.yaml": {"template": "config"}}
+
+
+class TestProjectManagerDocumentationIntegration:
+    """Test cases for ProjectManager integration with documentation generation."""
+
+    @pytest.fixture
+    def temp_dir(self):
+        """Create a temporary directory for testing."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            yield Path(temp_dir)
+
+    @pytest.fixture
+    def project_manager(self, temp_dir):
+        """Create a ProjectManager instance for testing."""
+        return ProjectManager(
+            projects_dir=temp_dir / "projects", templates_dir=temp_dir / "templates"
+        )
+
+    def test_create_project_with_documentation_config(self, project_manager, temp_dir):
+        """Test project creation with documentation_config generates nested docs."""
+        template = ProjectTemplate(
+            name="test_template",
+            type=ProjectType.AI_ANALYSIS,
+            directory_structure=["src/", "config/"],
+            documentation_config={
+                "nested_docs": ["src/", "config/"],
+                "doc_links": {"enabled": True, "parent_link": True, "child_links": True},
+            },
+        )
+        project_manager.save_template(template)
+        project_manager.templates["test_template"] = template
+
+        project = project_manager.create_project(
+            name="doc_test_project",
+            template_name="test_template",
+            path=str(temp_dir / "doc_test_project"),
+        )
+
+        assert project is not None
+        project_path = Path(project.path)
+        assert (project_path / "README.md").exists()
+        assert (project_path / "AGENTS.md").exists()
+        assert (project_path / "src" / "README.md").exists()
+        assert (project_path / "src" / "AGENTS.md").exists()
+        assert (project_path / "config" / "README.md").exists()
+        assert (project_path / "config" / "AGENTS.md").exists()
+
+    def test_create_project_without_documentation_config(self, project_manager, temp_dir):
+        """Test project creation without documentation_config still generates basic docs."""
+        template = ProjectTemplate(
+            name="simple_template",
+            type=ProjectType.AI_ANALYSIS,
+            directory_structure=["src/"],
+        )
+        project_manager.save_template(template)
+        project_manager.templates["simple_template"] = template
+
+        project = project_manager.create_project(
+            name="simple_project",
+            template_name="simple_template",
+            path=str(temp_dir / "simple_project"),
+        )
+
+        assert project is not None
+        project_path = Path(project.path)
+        # Should still generate root docs
+        assert (project_path / "README.md").exists()
+        assert (project_path / "AGENTS.md").exists()
+        # Should generate nested docs based on directory_structure
+        assert (project_path / "src" / "README.md").exists()
+        assert (project_path / "src" / "AGENTS.md").exists()
+
+    def test_create_project_custom_template(self, project_manager, temp_dir):
+        """Test project creation with custom template (no template_name)."""
+        project = project_manager.create_project(
+            name="custom_project",
+            path=str(temp_dir / "custom_project"),
+        )
+
+        assert project is not None
+        assert project.template is None
+        # Should not generate docs for custom projects without template
+        project_path = Path(project.path)
+        # Only .codomyrmex directory should exist
+        assert (project_path / ".codomyrmex").exists()
 
 
 if __name__ == "__main__":

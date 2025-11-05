@@ -7,7 +7,7 @@ capabilities that integrate all other Codomyrmex modules into cohesive workflows
 Key Features:
 - Task and workflow management
 - Inter-module coordination
-- Project templates and scaffolding
+- Project templates and scaffolding with automatic documentation generation
 - Progress tracking and reporting
 - Resource management
 - Parallel execution support
@@ -18,6 +18,7 @@ Main Components:
 - TaskOrchestrator: Coordinates individual tasks and dependencies
 - ProjectManager: High-level project lifecycle management
 - ResourceManager: Manages shared resources and dependencies
+- DocumentationGenerator: Generates README.md and AGENTS.md files for projects and nested directories
 
 Integration:
 - Uses logging_monitoring for all logging
@@ -35,6 +36,7 @@ from .orchestration_engine import (
     OrchestrationSession,
     SessionStatus,
 )
+from .documentation_generator import DocumentationGenerator
 from .project_manager import (
     Project,
     ProjectManager,
@@ -74,6 +76,7 @@ __all__ = [
     "ProjectManager",
     "ResourceManager",
     "OrchestrationEngine",
+    "DocumentationGenerator",
     # Data classes
     "WorkflowStep",
     "WorkflowStatus",

@@ -478,7 +478,7 @@ def test_error_handling_comprehensive():
 - **[Module Creation Tutorial](../getting-started/tutorials/creating-a-module.md)**: Testing new modules
 - **[Performance Guide](../reference/performance.md)**: Performance optimization and testing
 - **[Development Setup](environment-setup.md)**: Development environment configuration
-- **[Examples](../../examples/README.md)**: Executable test examples
+- **[Examples](../../scripts/examples/README.md)**: Executable test examples
 
 ---
 

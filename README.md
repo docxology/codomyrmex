@@ -45,7 +45,7 @@ Codomyrmex is a **revolutionary modular coding workspace** that seamlessly integ
 
 Get up and running with Codomyrmex in minutes! **[📦 Complete Setup Guide](docs/getting-started/setup.md)**
 
-**[🎮 Try Interactive Examples](examples/README.md)** • **[📚 Full Documentation](docs/README.md)** • **[🤝 Contribute](docs/project/contributing.md)**
+**[🎮 Try Interactive Examples](scripts/examples/README.md)** • **[📚 Full Documentation](docs/README.md)** • **[🤝 Contribute](docs/project/contributing.md)**
 
 ### 🎯 **Current Capabilities (v0.1.0)**
 
@@ -377,32 +377,6 @@ execution = await workflow_manager.execute_workflow("data_analysis_pipeline")
 print(f"Workflow status: {execution.status.value}")
 ```
 
-**✅ What's Working Now:**
-- **🤖 Advanced AI Code Editing** - 23 programming languages, 3 LLM providers, comprehensive code generation, refactoring, and analysis
-- **🔍 Comprehensive Static Analysis** - Multi-language support, 8 analysis types, 4 severity levels, security scanning, complexity analysis
-- **📊 Sophisticated Data Visualization** - 7 chart styles, 10 color palettes, 13 plot types, advanced plotting, interactive dashboards
-- **🏗️ Intelligent Build Orchestration** - 8 build types, 4 environments, dependency management, artifact synthesis, deployment automation
-- **🎯 Project Orchestration** - Comprehensive workflow management system with performance monitoring
-- **📊 Performance Monitoring** - Real-time performance tracking across all modules
-- **🔄 Cross-Module Integration** - Seamless workflows between AI, analysis, visualization, and build modules
-- **🧪 Comprehensive Testing** - Unit tests, integration tests, performance tests, stress tests
-- Environment setup and dependency management (latest versions)
-- Logging and monitoring system
-- **🚀 Enhanced CLI interface** with orchestration capabilities and LLM API configuration
-- Modular architecture with proper imports
-- Code execution capabilities
-- All with latest package versions!
-
-**🔄 Recent Enhancements:**
-- ✅ Advanced AI code editing with 23 languages and 3 LLM providers
-- ✅ Comprehensive static analysis with multi-language support
-- ✅ Sophisticated data visualization with advanced plotting
-- ✅ Intelligent build orchestration with dependency management
-- ✅ Cross-module integration and workflow automation
-- ✅ Comprehensive testing suite with performance monitoring
-- ✅ Enhanced CLI with LLM API configuration
-- ✅ Project orchestration with workflow management
-
 **🔄 Future Enhancements:**
 - 📚 **Documentation Website** (Docusaurus) - Interactive web documentation
 - 📊 **Additional Visualization Types** - 3D plots, network graphs, interactive dashboards
@@ -553,27 +527,25 @@ graph TB
 
 | Directory                                    | Purpose                                                                                                |
 | :------------------------------------------- | :----------------------------------------------------------------------------------------------------- |
-| [`template/`](./template/)                   | Contains templates for modules and common file formats (e.g., README, API specs).                      |
-| [`git_operations/`](./git_operations/)       | Houses scripts, configurations, and documentation related to Git workflows and repository management.    |
-| [`model_context_protocol/`](./model_context_protocol/) | Defines the schema and protocols for interacting with Large Language Models (LLMs).                |
-| [`environment_setup/`](./environment_setup/) | Provides scripts and documentation for setting up local and CI/CD development environments.          |
+| [`src/template/`](./src/template/)           | Contains templates for modules and common file formats (e.g., README, API specs).                      |
+| [`src/codomyrmex/git_operations/`](./src/codomyrmex/git_operations/) | Git workflows and repository management module.    |
+| [`src/codomyrmex/model_context_protocol/`](./src/codomyrmex/model_context_protocol/) | Defines the schema and protocols for interacting with Large Language Models (LLMs).                |
+| [`src/codomyrmex/environment_setup/`](./src/codomyrmex/environment_setup/) | Provides scripts and documentation for setting up local and CI/CD development environments.          |
 
 ## 🚀 Quick Start & Examples
 
 ### **Hands-On Learning**
-- **[🎮 Interactive Examples](examples/README.md)** - Executable demonstrations of all capabilities
+- **[🎮 Interactive Examples](scripts/examples/README.md)** - Executable demonstrations of all capabilities
 - **[⚡ Quick Start Guide](docs/getting-started/quickstart.md)** - Get running in 5 minutes
 - **[📖 Installation Guide](docs/getting-started/installation.md)** - Complete setup instructions
 
 ### **Try It Now**
 ```bash
 # Run interactive example selector
-cd examples
-./select-example.sh
+./scripts/development/select_example.sh
 
 # Or try a specific demo
-cd examples/basic
-./data-visualization-demo.sh
+./scripts/examples/basic/data-visualization-demo.sh
 ```
 
 ## 🎯 Project Orchestration & Workflow Management
@@ -626,8 +598,7 @@ Performance monitoring is now integrated across all modules:
 
 ```bash
 # Run the comprehensive workflow demonstration
-cd examples/orchestration
-python comprehensive_workflow_demo.py --create-sample-project --verbose
+python scripts/project_orchestration/examples/comprehensive_workflow_demo.py --create-sample-project --verbose
 
 # This will:
 # 1. Create a sample project with intentional code issues
@@ -637,7 +608,7 @@ python comprehensive_workflow_demo.py --create-sample-project --verbose
 # 5. Show performance metrics across all operations
 ```
 
-See the **[🎯 Orchestration Examples](examples/orchestration/README.md)** for detailed usage patterns and advanced workflows.
+See the **[🎯 Orchestration Examples](scripts/project_orchestration/examples/README.md)** for detailed usage patterns and advanced workflows.
 
 ## 📚 Documentation & Resources
 
@@ -815,7 +786,7 @@ Codomyrmex provides **comprehensive documentation** organized for different user
 - **[🏛️ Module Overview](docs/modules/overview.md)** - Architecture and design principles
 - **[🔗 Module Relationships](docs/modules/relationships.md)** - Dependencies and integration patterns
 - **[🐙 Ollama Integration](docs/modules/ollama_integration.md)** - Local LLM integration guide
-- **[📦 Module Template](../../../src/codomyrmex/module_template/README.md)** - Template for creating modules
+- **[📦 Module Template](../src/codomyrmex/module_template/README.md)** - Template for creating modules
 
 ### **🔗 Integration & External Systems**
 - **[🌐 External Systems](docs/integration/external-systems.md)** - Third-party integrations
@@ -841,18 +812,17 @@ Codomyrmex provides **comprehensive documentation** organized for different user
 - **[🏭 Production Deployment](docs/deployment/production.md)** - Production environment setup
 
 ### **🎮 Interactive Examples & Learning**
-**[🎮 Try Interactive Examples](examples/README.md)** - Executable demonstrations of all capabilities
+**[🎮 Try Interactive Examples](scripts/examples/README.md)** - Executable demonstrations of all capabilities
 
 ### **🔌 Individual Module Documentation**
-**[📚 Module-Specific Docs](../../../src/codomyrmex/*/README.md)** - Detailed documentation for each module
+**[📚 Module-Specific Docs](../src/codomyrmex/README.md)** - Detailed documentation for each module (see individual module directories for module-specific docs)
 
 ## Project Governance & Contribution
 
 This project is governed by the following documents:
 
 - **[LICENSE](./LICENSE)**: Defines the legal terms under which the project is distributed.
-- **[CONTRIBUTING.md](./CONTRIBUTING.md)**: Outlines how to contribute to the project, including setup, PR guidelines, and issue reporting.
-- **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)**: Sets the standards for behavior within the community to ensure a welcoming and inclusive environment.
+- **[Contributing Guide](./docs/project/contributing.md)**: Outlines how to contribute to the project, including setup, PR guidelines, and issue reporting.
 
 We encourage all contributors and users to familiarize themselves with these documents.
 

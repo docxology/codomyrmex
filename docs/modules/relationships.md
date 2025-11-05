@@ -9,14 +9,31 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 | **`environment_setup`** | Environment validation & dependency management | System packages | None | All modules |
 | **`logging_monitoring`** | Centralized logging framework | None | All modules | All modules |
 | **`model_context_protocol`** | AI agent communication standard | JSON Schema | AI modules | AI modules |
-| **`ai_code_editing`** | AI-powered code generation/refactoring | OpenAI, Anthropic | logging_monitoring, environment_setup | All modules |
+| **`terminal_interface`** | Rich terminal interactions | Rich, prompt-toolkit | None | Application modules |
+| **`config_management`** | Configuration management | PyYAML, configparser | logging_monitoring | All modules |
+| **`database_management`** | Data persistence | SQLAlchemy, asyncpg | logging_monitoring | All modules |
+| **`language_models`** | LLM infrastructure | OpenAI, Anthropic | logging_monitoring, model_context_protocol | AI modules |
+| **`performance`** | Performance monitoring | psutil, cProfile | logging_monitoring | All modules |
+| **`ai_code_editing`** | AI-powered code generation/refactoring | OpenAI, Anthropic | logging_monitoring, environment_setup, language_models | All modules |
 | **`data_visualization`** | Charting and plotting utilities | matplotlib, seaborn | logging_monitoring | All modules |
-| **`static_analysis`** | Code quality and security analysis | pylint, flake8, bandit | logging_monitoring | build_synthesis |
+| **`static_analysis`** | Code quality and security analysis | pylint, flake8, bandit | logging_monitoring | build_synthesis, security_audit |
 | **`pattern_matching`** | Code analysis and pattern recognition | cased/kit | logging_monitoring, environment_setup | All modules |
 | **`code_execution_sandbox`** | Secure code execution | Docker | logging_monitoring | All modules |
+| **`code_review`** | Automated code review | AI providers | logging_monitoring, ai_code_editing, static_analysis | All modules |
+| **`security_audit`** | Security scanning | bandit, semgrep, cryptography | logging_monitoring, static_analysis | All modules |
+| **`ollama_integration`** | Local LLM integration | Ollama | logging_monitoring, model_context_protocol | AI modules |
 | **`build_synthesis`** | Build automation and scaffolding | build tools | static_analysis, logging_monitoring | All modules |
 | **`git_operations`** | Git workflow automation | GitPython | logging_monitoring | All modules |
 | **`documentation`** | Documentation generation | Docusaurus | All modules | All modules |
+| **`api_documentation`** | API documentation generation | OpenAPI, code analysis | logging_monitoring, static_analysis | All modules |
+| **`ci_cd_automation`** | CI/CD pipeline management | Docker, Kubernetes | logging_monitoring, build_synthesis, containerization | All modules |
+| **`containerization`** | Container management | Docker, Kubernetes | logging_monitoring | ci_cd_automation, build_synthesis |
+| **`project_orchestration`** | Workflow orchestration | All modules | logging_monitoring, all modules | Application modules |
+| **`system_discovery`** | System exploration | introspection | logging_monitoring | Application modules |
+| **`cli`** | Command-line interface | click, argparse | logging_monitoring, all modules | Users |
+| **`module_template`** | Module creation template | None | None | Developers |
+| **`modeling_3d`** | 3D modeling and visualization | Open3D, Trimesh | logging_monitoring | Specialized use cases |
+| **`physical_management`** | Physical system simulation | Physics engines | logging_monitoring | Specialized use cases |
 
 ## 🔄 Core Data Flow Patterns
 
@@ -324,19 +341,38 @@ graph LR
 
 ### **Dependency Matrix Table**
 
+**Key Modules Dependency Matrix** (showing core module dependencies):
+
 | Consumer Module | environment_setup | logging_monitoring | model_context_protocol | ai_code_editing | data_visualization | static_analysis | pattern_matching | code_execution_sandbox | build_synthesis | git_operations | documentation |
 |-----------------|-------------------|-------------------|-------------------------|----------------|-------------------|-----------------|------------------|------------------------|-----------------|---------------|---------------|
 | **environment_setup** | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **logging_monitoring** | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **model_context_protocol** | ❌ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **terminal_interface** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **config_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **database_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **language_models** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **performance** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **ai_code_editing** | ✅ | ✅ | ✅ | ✅ Self | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ✅ |
 | **data_visualization** | ❌ | ✅ | ❌ | ❌ | ✅ Self | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ |
 | **static_analysis** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ | ❌ | ✅ |
 | **pattern_matching** | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ✅ |
 | **code_execution_sandbox** | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ |
+| **code_review** | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **security_audit** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **ollama_integration** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **build_synthesis** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self | ✅ | ✅ |
 | **git_operations** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ Self | ✅ |
 | **documentation** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self |
+| **api_documentation** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **ci_cd_automation** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
+| **containerization** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **project_orchestration** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **system_discovery** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **cli** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **module_template** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **modeling_3d** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **physical_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 **Legend:**
 - ✅ **Required**: Module cannot function without this dependency

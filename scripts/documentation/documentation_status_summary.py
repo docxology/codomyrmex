@@ -106,7 +106,7 @@ All generated README.md files include:
 The remaining 332 directories without documentation are primarily:
 - **Cache/Build Directories**: `.mypy_cache/`, `__pycache__/`, `.venv/`, etc.
 - **System Directories**: `.git/`, `.pyscn/`, etc.
-- **Output Directories**: `examples/output/`, `language_models/outputs/`, etc.
+- **Output Directories**: `scripts/output/`, `language_models/outputs/`, etc.
 
 These directories contain generated content, temporary files, or system artifacts that don't require individual documentation files.
 

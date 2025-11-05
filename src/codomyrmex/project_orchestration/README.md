@@ -366,10 +366,10 @@ The module includes comprehensive integration tests:
 
 ```bash
 # Run integration tests
-python examples/integration_test.py
+python testing/integration/integration_test.py
 
 # Run orchestration examples
-python examples/orchestration_examples.py
+python scripts/project_orchestration/examples.py
 ```
 
 ## 📈 Monitoring and Health Checks

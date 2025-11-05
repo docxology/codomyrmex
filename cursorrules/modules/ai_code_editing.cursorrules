@@ -1,0 +1,49 @@
+# Cursor Rules for the ai_code_editing Module
+
+## 0. Preamble
+These rules are specific to the `ai_code_editing` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module focuses on integrating AI-powered assistance directly into the developer workflow. It aims to leverage tools and techniques for AI-enhanced code editing, generation, and understanding.
+-   **Key Technologies/Tools**: Integrations with services like GitHub Copilot, Tabnine, or custom models via the Model Context Protocol (MCP), Python.
+-   Refer to the module's main `README.md` for a comprehensive overview.
+
+## 2. Key Files & Structure in `ai_code_editing` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the AI Code Editing module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (REST, functions) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for this module.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to AI Code Editing.
+-   `src/` (or primary Python package folders, e.g., `ai_code_editing/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+
+## 3. Coding Standards & Practices for `ai_code_editing`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `ai_code_editing` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting.
+-   **LLM Interaction**: Prompts should be clear, context-rich, and designed to elicit accurate and helpful responses from LLMs. Consider prompt injection risks.
+-   **Context Management**: Efficiently gather and provide relevant context to AI models.
+-   **User Experience**: AI-driven suggestions and edits should be presented to the user clearly, ideally with mechanisms for acceptance, rejection, or modification.
+
+## 4. Testing in `ai_code_editing`
+-   New features (e.g., new AI-powered editing commands, prompt strategies) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests might involve mocking LLM responses to ensure deterministic behavior of the module's logic.
+-   Run existing tests to ensure no regressions. Refer to `ai_code_editing/tests/README.md`.
+
+## 5. Documentation for `ai_code_editing`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document prompt structures and context-gathering logic if complex.
+
+## 6. Specific Considerations for `ai_code_editing`
+-   **Tool Integration**: When defining MCP tools, ensure `MCP_TOOL_SPECIFICATION.md` is precise regarding inputs, outputs, and security.
+-   **API Design**: APIs defined in `API_SPECIFICATION.md` should be intuitive for client applications (e.g., editor extensions).
+-   **Extensibility**: Design components to be extensible where appropriate, allowing for new editing capabilities or strategies to be added.
+
+## 7. Final Check for `ai_code_editing`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that changes align with the goal of enhancing the developer workflow through AI.
+

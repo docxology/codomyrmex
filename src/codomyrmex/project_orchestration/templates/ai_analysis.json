@@ -51,6 +51,20 @@
       "include_visualizations": true
     }
   },
+  "documentation_config": {
+    "nested_docs": [
+      "src/",
+      "config/",
+      "data/",
+      "output/",
+      "reports/"
+    ],
+    "doc_links": {
+      "enabled": true,
+      "parent_link": true,
+      "child_links": true
+    }
+  },
   "author": "",
   "created_at": "2025-09-16T13:22:09.907080+00:00"
 }

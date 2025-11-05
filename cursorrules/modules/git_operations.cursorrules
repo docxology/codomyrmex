@@ -1,0 +1,70 @@
+# Cursor Rules for the git_operations Module
+
+## 0. Preamble
+These rules are specific to the `git_operations` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides a Python API for programmatic Git operations, abstracting direct CLI calls and promoting consistent, secure, and logged version control interactions. Aims to support automation of Git workflows within Codomyrmex.
+-   **Key Technologies/Tools**: Python, `git` CLI, potentially `GitPython` library.
+-   Refer to this module's `README.md` for a comprehensive overview of its intended scope and design.
+
+## 2. Key Files & Structure
+When working within this module, pay close attention to:
+-   `README.md`: Overview, workflow context, and development guidelines.
+-   `API_SPECIFICATION.md`: Defines the public Python API for Git functions (e.g., `get_repository_status`, `commit_changes`). This is the primary contract for users of the module.
+-   `MCP_TOOL_SPECIFICATION.md`: (Currently N/A) Would define any MCP tools for AI-driven Git operations.
+-   `SECURITY.md`: Critical security considerations for automating Git operations, especially credential handling and command execution.
+-   `USAGE_EXAMPLES.md`: Conceptual examples of how to use the Python API.
+-   `git_wrapper.py` (or `git_utils.py`): (Future implementation) Core Python functions wrapping Git commands.
+-   `repository.py` / `exceptions.py`: (Future implementation) Supporting data models and custom exceptions.
+-   `docs/technical_overview.md`: In-depth technical design of the Git interaction logic.
+-   `docs/tutorials/`: How-to guides for using the module's API for specific project workflows.
+-   `requirements.txt`: Lists specific Python dependencies (e.g., `GitPython`), though versioning is managed by the root `requirements.txt`.
+
+## 3. Coding Standards & Practices (for future implementation)
+
+### For Python API (`git_wrapper.py`, etc.):
+-   Follow Python PEP 8 guidelines.
+-   **Prioritize `GitPython`**: Use `GitPython` library for interacting with `git` CLI where possible, as it provides a more robust and Pythonic interface than raw `subprocess` calls.
+-   **Secure `subprocess` Usage**: If `subprocess` must be used directly:
+    -   Always pass commands and arguments as a list (e.g., `subprocess.run(["git", "status"], ...)`).
+    -   Never use `shell=True` with user-supplied input.
+    -   Carefully sanitize any user-provided strings that might become part of command arguments if not directly handled by `GitPython`.
+-   **Comprehensive Error Handling**: Catch exceptions from `GitPython` or `subprocess` and raise module-specific, informative exceptions (defined in `exceptions.py`) as per `API_SPECIFICATION.md`.
+-   **Structured Output**: Return structured data (e.g., custom data classes like `RepositoryStatus`, `CommitInfo`) rather than raw string output from Git commands.
+-   **Logging**: Integrate with the `logging_monitoring` module to log all significant Git operations, their parameters (excluding sensitive ones), and their success/failure status.
+-   **Clear Docstrings**: All public API functions must have comprehensive docstrings explaining parameters, return values, raised exceptions, and behavior, consistent with `API_SPECIFICATION.md`.
+-   **Idempotency where applicable**: Design functions to be idempotent if the underlying Git command supports it and it makes sense for the use case.
+
+### For Documentation (Markdown):
+-   Ensure `API_SPECIFICATION.md` is the source of truth for the Python API.
+-   Keep tutorials and usage examples aligned with the implemented API.
+-   Clearly document security implications and prerequisites (like Git authentication setup) for using the API.
+
+## 4. Testing (for future implementation)
+-   **Unit Tests (`tests/unit/`)**: 
+    -   Focus on the logic within wrapper functions (argument parsing, mapping to `GitPython` calls, processing of `GitPython` results).
+    -   Extensively mock `GitPython` library calls (e.g., `Repo` objects, `git.execute()`) to simulate various Git responses (success, errors, different repository states).
+    -   Test custom exception raising.
+-   **Integration Tests (`tests/integration/`)**: 
+    -   These tests should interact with actual (temporary, locally created) Git repositories.
+    -   Create a temporary directory, initialize a Git repo (`git init`).
+    -   Perform sequences of API calls (e.g., `checkout_branch`, `commit_changes`, `get_status`) and then assert the state of the local Git repository (e.g., by calling `git` CLI directly via `subprocess` to check current branch, log, status, or by using other API functions from the module).
+    -   Clean up temporary repositories after tests.
+    -   These tests will be slower and should be marked appropriately if needed.
+-   **Security**: Consider tests that try to misuse API functions with unusual inputs (though `GitPython` should handle much of the low-level Git command sanitization).
+
+## 5. Documentation (Meta-Documentation for this Module)
+-   Keep this module's `README.md` and `docs/technical_overview.md` accurately reflecting the design and implementation of the Git automation tools.
+
+## 6. Specific Considerations for `git_operations`
+-   **Cross-Platform Compatibility**: Be mindful of how Git behaves on different OS (Windows, Linux, macOS), especially regarding paths, line endings, and credential helpers. `GitPython` helps abstract some of this.
+-   **Security is Paramount**: Given that this module interacts with source code and potentially credentials, all design and implementation choices must prioritize security. Refer to `SECURITY.md` frequently.
+-   **User Experience for API Consumers**: Design the Python API to be intuitive and easy to use correctly.
+
+## 7. Final Check (when implementing features)
+-   Verify that API functions behave as described in `API_SPECIFICATION.md`.
+-   Ensure all operations are logged appropriately.
+-   Confirm that error handling is robust and user-friendly.
+-   Update this module's `CHANGELOG.md` for any changes to the API or significant functionality.
+

@@ -550,7 +550,7 @@ Include:
 **Setup complete!** You're ready to start using Codomyrmex's powerful modular toolkit for code analysis, generation, and workflow automation.
 
 **Next Steps:**
-1. **🎮 Try Interactive Examples**: [examples/README.md](../../examples/README.md)
+1. **🎮 Try Interactive Examples**: [scripts/examples/README.md](../../scripts/examples/README.md)
 2. **📚 Explore Documentation**: [docs/README.md](../README.md)
 3. **🏗️ Understand Architecture**: [docs/project/architecture.md](../project/architecture.md)
 4. **🤝 Join Development**: [docs/project/contributing.md](../project/contributing.md)

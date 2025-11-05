@@ -1,0 +1,61 @@
+# Cursor Rules for the logging_monitoring Module
+
+## 0. Preamble
+These rules are specific to the `logging_monitoring` module itself (implementation and maintenance of the module) and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+**Note**: For rules about *using* the logging_monitoring module in other modules, see `cross-module/logging_monitoring.cursorrules`. This file focuses on *developing and maintaining* the logging_monitoring module itself.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides a centralized and configurable logging mechanism for all Codomyrmex modules. Aims for simple, flexible, and consistent recording of application events, errors, and diagnostic information.
+-   **Key Technologies/Tools**: Python `logging` module, `python-dotenv` for environment variable configuration, JSON for structured logging.
+-   Refer to this module's `README.md` for a comprehensive overview.
+
+## 2. Key Files & Structure
+When working within this module, pay close attention to:
+-   `logger_config.py`: Core implementation of `setup_logging()` and `get_logger()`, including the `JsonFormatter`.
+-   `__init__.py`: Exports public functions from `logger_config.py`.
+-   `README.md`: High-level overview, setup, configuration, and usage examples.
+-   `API_SPECIFICATION.md`: Details for `setup_logging()` and `get_logger()`.
+-   `USAGE_EXAMPLES.md`: Practical examples of different logging configurations.
+-   `CHANGELOG.md`: All notable changes must be logged here.
+-   `SECURITY.md`: Focus on preventing sensitive data leakage through logs and secure file path handling.
+-   `requirements.txt`: Module-specific dependencies (though `python-dotenv` is likely a root dependency).
+-   `docs/`: In-depth documentation (currently minimal, but placeholder for future).
+-   `tests/`: Unit tests for `logger_config.py`.
+
+## 3. Coding Standards & Practices
+-   **Consistency**: Adhere strictly to the existing coding style, naming conventions (e.g., `CODOMYRMEX_` prefixed environment variables), and architectural patterns.
+-   **Language Specifics (Python)**:
+    -   Utilize standard Python `logging` features effectively.
+    -   Ensure `python-dotenv` is used correctly for loading configurations.
+    -   Handle potential `IOError` during log file setup gracefully.
+-   **Dependencies**:
+    -   Minimize dependencies. `python-dotenv` is essential.
+    -   Changes to dependencies must be justified and added to this module's `requirements.txt` and potentially the root `requirements.txt` if globally applicable.
+-   **Error Handling**:
+    -   The module itself should be robust to configuration errors (e.g., invalid log levels, unwritable log files), providing clear warnings to `stderr` without crashing.
+    -   The `JsonFormatter` should gracefully handle non-serializable `extra` data if this becomes an issue, though for now, it relies on input.
+-   **Idempotency**: `setup_logging()` must remain idempotent.
+
+## 4. Testing
+-   New features or bug fixes MUST be accompanied by corresponding tests in `tests/unit/test_logger_config.py`.
+-   Tests should cover various environment variable combinations, log output types (TEXT, JSON), and error conditions (e.g., invalid log file path).
+-   Mocking `os.getenv` and file system operations will be necessary.
+-   Run existing tests to ensure no regressions are introduced. Refer to `tests/README.md`.
+
+## 5. Documentation
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `USAGE_EXAMPLES.md`, and other relevant documentation files meticulously up-to-date with any changes.
+-   Ensure clear and concise code comments for complex or non-obvious logic within `logger_config.py`.
+-   Document any changes to environment variable names or behavior.
+
+## 6. Specific Considerations for `logging_monitoring`
+-   **Central Role**: This module is critical for the entire project. Changes must be backward compatible or clearly communicated with a migration path if unavoidable.
+-   **Performance**: While not a primary concern for typical logging volumes, avoid overly complex operations in the logging path, especially in the `JsonFormatter`.
+-   **Security**: Be mindful of what information is logged. Avoid logging raw sensitive data. The module itself should not introduce vulnerabilities (e.g., through insecure file handling, though standard library `FileHandler` is generally safe).
+-   **Clarity of Output**: Ensure log messages are clear, and both TEXT and JSON formats are well-structured and useful.
+
+## 7. Final Check for `logging_monitoring`
+-   Before finalizing changes, ensure all module-specific documentation (`README.md`, `API_SPECIFICATION.md`, `CHANGELOG.md`, `USAGE_EXAMPLES.md`) is updated.
+-   Verify that all unit tests for this module pass.
+-   Manually test the logging output with a simple script if significant changes are made to formatters or handlers.
+

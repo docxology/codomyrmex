@@ -28,4 +28,4 @@ Step-by-step learning path documentation coordination for Codomyrmex, providing 
 - **📦 Module System**: [../../modules/overview.md](../../modules/overview.md) - Module architecture understanding
 - **🔧 Development**: [../../development/environment-setup.md](../../development/environment-setup.md) - Development environment setup
 - **🤝 Contributing**: [../../project/contributing.md](../../project/contributing.md) - How to contribute your module
-- **🎮 Examples**: [../../../examples/README.md](../../../examples/README.md) - Working code examples
+- **🎮 Examples**: [../../../scripts/examples/README.md](../../../scripts/examples/README.md) - Working code examples

@@ -1,0 +1,50 @@
+# Cursor Rules for Using the model_context_protocol Module (Cross-Module)
+
+## 0. Preamble
+These rules apply when *using* the Model Context Protocol (MCP) in other Codomyrmex modules to define tools, consume MCP-compliant services, or integrate with AI models. They supplement `general.cursorrules` and focus on cross-module MCP usage patterns. Always adhere to `general.cursorrules` unless explicitly overridden here.
+
+**Note**: For rules about *developing and maintaining* the MCP specification and protocol implementation itself, see `modules/model_context_protocol.cursorrules`. This file focuses on *consuming* MCP across the project.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Defines the schema, protocols, and potentially client/server implementations for interacting with Large Language Models (LLMs) and other AI models within the Codomyrmex ecosystem.
+-   **Key Technologies/Tools**: Data serialization formats (JSON, Protocol Buffers), API design principles, schema definition languages (JSON Schema, OpenAPI).
+-   Refer to this module's main `README.md` for the protocol specification and design rationale.
+
+## 2. Key Files & Structure in `model_context_protocol` Module
+When working within this module, pay close attention to:
+-   `README.md`: Overview of the protocol, its purpose, and how to use it.
+-   Schema definitions (e.g., JSON schemas, `.proto` files): These are the core of the protocol.
+-   `API_SPECIFICATION.md`: If the MCP itself is exposed via a control API.
+-   `MCP_TOOL_SPECIFICATION.md`: **Crucial**: This file (or files like it) within *other* modules define how *their* tools conform to the MCP. This module defines the *rules* for those specifications.
+-   `docs/`: Detailed explanation of protocol messages, data types, interaction patterns, and versioning strategy.
+-   Example client/server implementations or SDKs (if any).
+
+## 3. Coding Standards & Practices for `model_context_protocol`
+-   **Schema Clarity**: Protocol schemas must be clear, unambiguous, and well-documented.
+-   **Versioning**: Implement a clear versioning strategy for the protocol to handle changes non-disruptively.
+-   **Extensibility**: Design the protocol to be extensible for future needs without breaking backward compatibility if possible.
+-   **Efficiency**: Consider the efficiency of data serialization and transmission if performance is critical.
+-   **Consistency**: Ensure that all tools across Codomyrmex that use MCP adhere strictly to the defined protocol.
+
+## 4. Testing in `model_context_protocol`
+-   Test schema validation thoroughly.
+-   Test serialization and deserialization of protocol messages.
+-   If client/server implementations are provided, test their conformance to the protocol.
+-   Test different versions of the protocol if versioning is implemented.
+
+## 5. Documentation for `model_context_protocol`
+-   The protocol specification in `README.md` and `docs/` must be precise and comprehensive.
+-   Provide clear examples of request and response messages for different use cases.
+-   Document the versioning strategy and how to handle updates.
+-   Guide developers of other modules on how to create `MCP_TOOL_SPECIFICATION.md` files that comply with this protocol.
+
+## 6. Specific Considerations for `model_context_protocol`
+-   **Interoperability**: The primary goal is to ensure interoperability between AI models and various Codomyrmex modules. Changes should be carefully evaluated for their impact on this.
+-   **Security**: Consider security aspects of the protocol, such as authentication/authorization for accessing MCP-enabled tools if the protocol involves a transport layer with such concerns.
+-   **Tool Definition Standards**: This module sets the standard for how `MCP_TOOL_SPECIFICATION.md` files are structured in other modules. Ensure this standard is clear and easy to follow.
+
+## 7. Final Check for `model_context_protocol`
+-   Verify that the protocol specification is complete and unambiguous.
+-   Ensure that any schema definitions are correct and validated.
+-   Confirm that documentation adequately explains how to use and implement the protocol.
+

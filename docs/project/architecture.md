@@ -35,51 +35,51 @@ graph TB
         Shell["Interactive<br/>Shell"]
         API["API Endpoints<br/>(FastAPI)"]
     end
-    
+
     subgraph "Core Services Layer"
         Discovery["System<br/>Discovery"]
-        Status["Status<br/>Reporting"]  
+        Status["Status<br/>Reporting"]
         Terminal["Interactive<br/>Terminal"]
     end
-    
+
     subgraph "Module Layer - AI & Intelligence"
         AICode["AI Code<br/>Editing"]
         MCP["Model Context<br/>Protocol"]
     end
-    
+
     subgraph "Module Layer - Analysis & Quality"
         StaticAnalysis["Static<br/>Analysis"]
         PatternMatch["Pattern<br/>Matching"]
         CodeExec["Code Execution<br/>Sandbox"]
     end
-    
+
     subgraph "Module Layer - Build & Deploy"
         Build["Build<br/>Synthesis"]
         Git["Git<br/>Operations"]
         Docs["Documentation<br/>Generation"]
     end
-    
+
     subgraph "Module Layer - Visualization"
         DataViz["Data<br/>Visualization"]
     end
-    
+
     subgraph "Foundation Layer"
         Logging["Logging &<br/>Monitoring"]
         Environment["Environment<br/>Setup"]
         TerminalInterface["Terminal<br/>Interface"]
     end
-    
+
     %% User Interface connections
     CLI --> Discovery
     Shell --> Terminal
     API --> Status
-    
+
     %% Service Layer connections
     Discovery --> AICode
     Discovery --> StaticAnalysis
     Status --> DataViz
     Terminal --> Shell
-    
+
     %% Module interconnections
     AICode --> CodeExec
     AICode --> MCP
@@ -87,7 +87,7 @@ graph TB
     PatternMatch --> AICode
     Build --> Git
     Build --> Docs
-    
+
     %% Foundation connections
     AICode --> Logging
     StaticAnalysis --> Logging
@@ -97,10 +97,10 @@ graph TB
     Build --> Logging
     Git --> Logging
     Docs --> Logging
-    
+
     Environment --> AICode
     Environment --> CodeExec
-    
+
     TerminalInterface --> Terminal
     TerminalInterface --> CLI
 ```
@@ -126,8 +126,12 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 - **`logging_monitoring`**: Centralized logging system
 - **`environment_setup`**: Environment validation and configuration
 - **`terminal_interface`**: Rich terminal interactions and formatting
+- **`config_management`**: Centralized configuration management
+- **`database_management`**: Data persistence and database operations
+- **`language_models`**: LLM infrastructure and provider abstraction
+- **`performance`**: Performance monitoring and optimization
 
-### Core Functional Modules  
+### Core Functional Modules
 **Purpose**: Primary capabilities that users directly interact with
 
 - **`ai_code_editing`**: AI-powered code generation and modification
@@ -135,9 +139,19 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 - **`code_execution_sandbox`**: Safe code execution environment
 - **`data_visualization`**: Chart and plot generation
 - **`pattern_matching`**: Code pattern analysis and recognition
+- **`git_operations`**: Git workflow automation
+- **`code_review`**: Automated code review with AI assistance
+- **`security_audit`**: Security vulnerability scanning and compliance
+- **`ollama_integration`**: Local LLM integration via Ollama
+
+### Service Modules
+**Purpose**: Higher-level services that orchestrate core modules
+
 - **`documentation`**: Documentation website generation
 - **`build_synthesis`**: Build automation and code scaffolding
-- **`git_operations`**: Git workflow automation
+- **`api_documentation`**: API documentation generation (OpenAPI/Swagger)
+- **`ci_cd_automation`**: CI/CD pipeline management and deployment
+- **`containerization`**: Docker and Kubernetes container management
 
 ### Integration Modules
 **Purpose**: Standards and protocols for system integration
@@ -145,11 +159,18 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 - **`model_context_protocol`**: Standardized AI/LLM communication
 - **`module_template`**: Template for creating new modules
 
-### System Modules
-**Purpose**: System-level operations and discovery
+### Application Modules
+**Purpose**: User-facing applications and interfaces
 
 - **`system_discovery`**: Module and capability discovery
-- **`terminal_interface`**: Interactive system exploration
+- **`project_orchestration`**: Workflow orchestration and task management
+- **`cli`**: Command-line interface for all modules
+
+### Advanced Modules
+**Purpose**: Specialized capabilities for advanced use cases
+
+- **`modeling_3d`**: 3D modeling and visualization
+- **`physical_management`**: Physical system simulation and management
 
 ## Data Flow Patterns
 
@@ -158,7 +179,7 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 User Request → System Discovery → Module Analysis → Capability Mapping → Results
 ```
 
-### 2. AI-Enhanced Development Flow  
+### 2. AI-Enhanced Development Flow
 ```
 Code Input → Pattern Analysis → AI Processing → Code Generation → Validation → Output
 ```

@@ -1,0 +1,51 @@
+# Cursor Rules for Using the logging_monitoring Module (Cross-Module)
+
+## 0. Preamble
+These rules apply when *using* the `logging_monitoring` module in other Codomyrmex modules. They supplement `general.cursorrules` and focus on cross-module logging patterns and best practices. Always adhere to `general.cursorrules` unless explicitly overridden here.
+
+**Note**: For rules about *developing and maintaining* the logging_monitoring module itself, see `modules/logging_monitoring.cursorrules`. This file focuses on *consuming* the logging_monitoring module across the project.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Supports structured logging across various languages and potentially integrates with monitoring and metrics collection systems.
+-   **Key Technologies/Tools**: Logging libraries (e.g., SLF4J + Log4j 2 for Java, Zap for Go, Loguru/standard `logging` for Python), monitoring tools (e.g., Prometheus, Grafana integrations).
+-   Refer to this module's main `README.md` for setup and usage guidance.
+
+## 2. Key Files & Structure in `logging_monitoring` Module
+When working within this module, pay close attention to:
+-   `README.md`: How to configure and use logging in other modules.
+-   `logger_config.py` (or equivalent for other languages): Centralized logging setup and configuration functions.
+-   `API_SPECIFICATION.md`: If any APIs are provided for metrics or log querying.
+-   `MCP_TOOL_SPECIFICATION.md`: If any MCP tools are related to log/monitoring control.
+-   `docs/`: Best practices for logging, guides on interpreting logs, monitoring dashboard setups.
+-   `requirements.txt`: Dependencies like specific logging libraries.
+
+## 3. Coding Standards & Practices for `logging_monitoring`
+-   **Structured Logging**: Promote and implement structured logging (e.g., JSON format) to facilitate easier parsing and analysis.
+-   **Log Levels**: Use appropriate log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL) consistently.
+-   **Actionable Logs**: Logs should provide sufficient context to be actionable for debugging or monitoring.
+-   **Performance**: Logging should have minimal performance impact on applications. Avoid excessive logging in hot paths.
+-   **Configuration**: Logging should be configurable (e.g., log level, output destination) at runtime where possible.
+-   **Security**: Avoid logging sensitive information (PII, secrets). Provide guidance on what not to log.
+
+## 4. Testing in `logging_monitoring`
+-   Test logger configuration and initialization.
+-   Verify that logs are written in the correct format and to the expected destinations.
+-   Test different log levels and structured data output.
+-   If monitoring integration exists, test metrics reporting.
+
+## 5. Documentation for `logging_monitoring`
+-   Clearly document how other modules should obtain and use loggers.
+-   Provide examples of good logging practices.
+-   Explain log formats and how to configure logging backends (console, file, external systems).
+-   Document any metrics exposed and how to interpret them.
+
+## 6. Specific Considerations for `logging_monitoring`
+-   **Cross-Language Support**: If Codomyrmex is polyglot, strive for consistent logging approaches or provide clear guidance for each language stack.
+-   **Integration with Monitoring Tools**: If integrating with tools like Prometheus/Grafana, ensure metrics are well-defined and dashboards are useful.
+-   **Centralized Logging**: Consider patterns for shipping logs to a centralized logging system (e.g., ELK stack, Splunk) if applicable at project scale.
+
+## 7. Final Check for `logging_monitoring`
+-   Ensure logging configurations are robust and provide useful output.
+-   Verify that documentation clearly guides developers on using the logging framework.
+-   Confirm that no sensitive data is inadvertently logged by default configurations.
+

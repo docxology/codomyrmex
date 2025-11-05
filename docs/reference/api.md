@@ -8,7 +8,7 @@ This comprehensive API reference provides detailed documentation for all Codomyr
 
 Codomyrmex provides **4 distinct API layers** to accommodate different integration needs:
 
-### **1. 🐍 Python Module APIs**
+### **1. 🐍 Python Module APIs** {#module-apis}
 - **Direct imports** and function calls from Python code
 - **Type-safe interfaces** with comprehensive documentation
 - **Modular design** - import only what you need

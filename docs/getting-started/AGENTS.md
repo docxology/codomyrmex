@@ -29,5 +29,5 @@ User onboarding and quick start documentation coordination for Codomyrmex, provi
 - **⚡ Quick Start**: [quickstart.md](quickstart.md) - 5-minute hands-on experience
 - **🎓 Module Creation Tutorial**: [tutorials/creating-a-module.md](tutorials/creating-a-module.md) - Learn by building
 - **🔌 API Reference**: [../reference/api-complete.md](../reference/api-complete.md) - Complete API documentation
-- **🎮 Interactive Examples**: [../../examples/README.md](../../examples/README.md) - Hands-on demonstrations
+- **🎮 Interactive Examples**: [../../scripts/examples/README.md](../../scripts/examples/README.md) - Hands-on demonstrations
 - **🔧 Troubleshooting**: [../reference/troubleshooting.md](../reference/troubleshooting.md) - Common setup issues

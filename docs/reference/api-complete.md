@@ -93,7 +93,7 @@ def apply_common_aesthetics(ax, title: str = None, x_label: str = None, y_label:
 
 ## 🔍 Static Analysis API
 
-### **Pyrefly Analysis** 
+### **Pyrefly Analysis**
 **Source**: `src/codomyrmex/static_analysis/pyrefly_runner.py`
 
 ```python
@@ -135,12 +135,12 @@ issues = parse_pyrefly_output(
 
 ```python
 def execute_code(
-    code: str,
     language: str,
+    code: str,
+    stdin: Optional[str] = None,
     timeout: Optional[int] = None,
     session_id: Optional[str] = None,
-    stdin: Optional[str] = None
-) -> Dict[str, Any]
+) -> dict[str, Any]
 ```
 
 **Usage Example**:
@@ -149,8 +149,8 @@ from codomyrmex.code_execution_sandbox.code_executor import execute_code
 
 # Execute Python code
 result = execute_code(
-    code="print('Hello, World!')\nprint(2 + 2)",
     language="python",
+    code="print('Hello, World!')\nprint(2 + 2)",
     timeout=30
 )
 
@@ -181,7 +181,7 @@ def cleanup_temp_files(temp_dir: str) -> None
 
 ```python
 def is_uv_available() -> bool
-def is_uv_environment() -> bool  
+def is_uv_environment() -> bool
 def ensure_dependencies_installed() -> None
 def check_and_setup_env_vars(repo_root_path: str) -> None
 ```
@@ -189,7 +189,7 @@ def check_and_setup_env_vars(repo_root_path: str) -> None
 **Usage Example**:
 ```python
 from codomyrmex.environment_setup.env_checker import (
-    is_uv_available, 
+    is_uv_available,
     ensure_dependencies_installed
 )
 
@@ -223,7 +223,7 @@ def rebase_branch(target_branch: str, repository_path: str = None, interactive: 
 
 **File Operations**:
 ```python
-def add_files(file_paths: List[str], repository_path: str = None) -> bool
+def add_files(file_paths: list[str], repository_path: str = None) -> bool
 def commit_changes(message: str, repository_path: str = None) -> bool
 def push_changes(remote: str = "origin", branch: str = None, repository_path: str = None) -> bool
 def pull_changes(remote: str = "origin", branch: str = None, repository_path: str = None) -> bool
@@ -231,18 +231,18 @@ def pull_changes(remote: str = "origin", branch: str = None, repository_path: st
 
 **Status and History**:
 ```python
-def get_status(repository_path: str = None) -> Dict[str, any]
-def get_commit_history(limit: int = 10, repository_path: str = None) -> List[Dict[str, str]]
+def get_status(repository_path: str = None) -> dict[str, any]
+def get_commit_history(limit: int = 10, repository_path: str = None) -> list[dict[str, str]]
 def get_diff(file_path: str = None, staged: bool = False, repository_path: str = None) -> str
 ```
 
 **Tag and Stash Operations**:
 ```python
 def create_tag(tag_name: str, message: str = None, repository_path: str = None) -> bool
-def list_tags(repository_path: str = None) -> List[str]
+def list_tags(repository_path: str = None) -> list[str]
 def stash_changes(message: str = None, repository_path: str = None) -> bool
 def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool
-def list_stashes(repository_path: str = None) -> List[Dict[str, str]]
+def list_stashes(repository_path: str = None) -> list[dict[str, str]]
 def reset_changes(mode: str = "mixed", target: str = "HEAD", repository_path: str = None) -> bool
 ```
 
@@ -272,11 +272,11 @@ success = clone_repository(
 if success:
     # Create and switch to new branch
     create_branch("feature-branch", "./local-repo")
-    
+
     # Add files and commit
     add_files(["src/new_file.py"], "./local-repo")
     commit_changes("Add new feature", "./local-repo")
-    
+
     # Push changes
     push_changes("origin", "feature-branch", "./local-repo")
 ```
@@ -286,17 +286,17 @@ if success:
 
 ```python
 class Repository:
-    def __init__(self, name: str, url: str, description: str = "", 
+    def __init__(self, name: str, url: str, description: str = "",
                  local_path: str = "", repository_type: RepositoryType = RepositoryType.UNKNOWN)
 
 class RepositoryManager:
     def __init__(self, library_file_path: str, local_base_path: str = "./repositories")
-    def list_repositories(self) -> List[Repository]
+    def list_repositories(self) -> list[Repository]
     def get_repository(self, name: str) -> Optional[Repository]
-    def search_repositories(self, query: str) -> List[Repository]
+    def search_repositories(self, query: str) -> list[Repository]
     def clone_repository(self, name: str) -> bool
     def update_repository(self, name: str) -> bool
-    def get_repository_status(self, name: str) -> Dict[str, Any]
+    def get_repository_status(self, name: str) -> dict[str, Any]
 ```
 
 ## 📋 Pattern Matching API
@@ -305,7 +305,7 @@ class RepositoryManager:
 **Source**: `src/codomyrmex/pattern_matching/run_codomyrmex_analysis.py`
 
 ```python
-def analyze_repository_path(path_to_analyze: str, relative_output_dir_name: str, 
+def analyze_repository_path(path_to_analyze: str, relative_output_dir_name: str,
                            config: dict, module_pbar_desc: str) -> dict
 
 def run_full_analysis() -> None
@@ -341,10 +341,10 @@ result = analyze_repository_path(
 
 ```python
 def check_build_environment() -> dict
-def run_build_command(command: List[str], cwd: str = None) -> Tuple[bool, str, str]
+def run_build_command(command: list[str], cwd: str = None) -> Tuple[bool, str, str]
 def synthesize_build_artifact(source_path: str, output_path: str, artifact_type: str = "executable") -> bool
-def validate_build_output(output_path: str) -> Dict[str, any]
-def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]
+def validate_build_output(output_path: str) -> dict[str, any]
+def orchestrate_build_pipeline(build_config: dict[str, any]) -> dict[str, any]
 ```
 
 **Usage Example**:
@@ -486,7 +486,7 @@ class ModuleCapability:
 class ModuleInfo:
     name: str
     version: str
-    capabilities: List[ModuleCapability]
+    capabilities: list[ModuleCapability]
 
 class SystemDiscovery:
     # System introspection and capability discovery
@@ -503,10 +503,10 @@ All APIs documented above are tested using **real implementations**, never mocks
 def test_create_line_plot_real():
     """Test actual line plot creation with real matplotlib."""
     from codomyrmex.data_visualization.line_plot import create_line_plot
-    
+
     x_data = [1, 2, 3, 4, 5]
     y_data = [2, 4, 6, 8, 10]
-    
+
     # Test with real data, real function
     fig = create_line_plot(
         x_data=x_data,
@@ -514,22 +514,22 @@ def test_create_line_plot_real():
         title="Real Test Plot",
         output_path="test_output.png"
     )
-    
+
     assert fig is not None
     assert Path("test_output.png").exists()
 ```
 
-### **Static Analysis Testing** 
+### **Static Analysis Testing**
 ```python
 # From testing/unit/test_static_analysis_comprehensive.py
 def test_parse_pyrefly_real():
     """Test real Pyrefly output parsing."""
     from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
-    
+
     # Real Pyrefly error format
     output = "src/file.py:10:5: error: Undefined variable 'x'"
     result = parse_pyrefly_output(output, "/project/root")
-    
+
     assert len(result) == 1
     assert result[0]["file_path"] == "src/file.py"
     assert result[0]["line_number"] == 10
@@ -542,14 +542,14 @@ def test_parse_pyrefly_real():
 def test_execute_code_real():
     """Test real code execution."""
     from codomyrmex.code_execution_sandbox.code_executor import execute_code
-    
+
     # Real code execution test
     result = execute_code(
-        code="print('Hello from test')",
         language="python",
+        code="print('Hello from test')",
         timeout=10
     )
-    
+
     assert result['success'] == True
     assert "Hello from test" in result['output']
 ```
@@ -561,7 +561,7 @@ def test_execute_code_real():
 - Complete function signatures from source code
 - Real usage examples from module `__main__` sections
 
-### **Test Files** 
+### **Test Files**
 - All APIs covered by tests in `testing/unit/`
 - Real implementation testing (no mocks for core functionality)
 - Comprehensive test coverage following TDD principles

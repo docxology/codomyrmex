@@ -25,6 +25,7 @@ docs/modules/
 ### Active Components
 - **overview.md** - Module system architecture, design principles, and organizational structure
 - **relationships.md** - Inter-module dependencies, data flow patterns, and integration relationships
+- **ollama_integration.md** - Comprehensive Ollama local LLM integration documentation
 
 ## Operating Contracts
 

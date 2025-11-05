@@ -128,7 +128,7 @@ for name, info in modules.items():
 pip install -e .
 ```
 
-### **Configuration Issues**
+### **Configuration Issues** {#environment-variable-issues}
 
 #### Issue: API keys not being recognized
 ```bash
@@ -164,7 +164,7 @@ newgrp docker  # Or logout/login
 docker run --rm python:3.11-slim python -c "print('Docker works!')"
 ```
 
-### **Performance Issues**
+### **Performance Issues** {#performance-issues}
 
 #### Issue: Slow module discovery or analysis
 ```bash
@@ -466,6 +466,180 @@ except Exception as e:
     print(f'❌ Module error: {e}')
     import traceback
     traceback.print_exc()
+"
+```
+
+## 🔗 Integration Issues {#integration-issues}
+
+### **External System Integration Problems**
+
+#### Issue: API authentication failures with external systems
+```bash
+# Check API credentials
+python -c "
+import os
+print('API Keys configured:')
+for key in ['EXTERNAL_API_KEY', 'DATABASE_URL', 'CLOUD_CREDENTIALS']:
+    value = os.getenv(key, 'Not set')
+    print(f'  {key}: {\"Set\" if value != \"Not set\" else \"Not set\"}')
+"
+
+# Test API connectivity
+python -c "
+import requests
+try:
+    response = requests.get('https://api.example.com/health', timeout=5)
+    print(f'API Status: {response.status_code}')
+except Exception as e:
+    print(f'API Error: {e}')
+"
+```
+
+#### Issue: Database connection problems
+```bash
+# Test database connection
+python -c "
+from sqlalchemy import create_engine
+import os
+db_url = os.getenv('DATABASE_URL', 'postgresql://user:pass@localhost/db')
+try:
+    engine = create_engine(db_url)
+    with engine.connect() as conn:
+        print('✅ Database connection successful')
+except Exception as e:
+    print(f'❌ Database error: {e}')
+"
+```
+
+#### Issue: Webhook delivery failures
+```bash
+# Check webhook configuration
+python -c "
+import os
+webhook_url = os.getenv('WEBHOOK_URL', '')
+print(f'Webhook URL configured: {webhook_url != \"\"}')
+print(f'Webhook URL: {webhook_url[:50]}...' if webhook_url else 'Not set')
+"
+
+# Test webhook delivery
+python -c "
+import requests
+import json
+webhook_url = os.getenv('WEBHOOK_URL')
+if webhook_url:
+    try:
+        response = requests.post(webhook_url, json={'test': True}, timeout=10)
+        print(f'Webhook Status: {response.status_code}')
+    except Exception as e:
+        print(f'Webhook Error: {e}')
+else:
+    print('Webhook URL not configured')
+"
+```
+
+## 🚀 Production Issues {#production-issues}
+
+### **Deployment Problems**
+
+#### Issue: Application fails to start in production
+```bash
+# Check environment variables
+python -c "
+import os
+required_vars = ['DATABASE_URL', 'API_KEY', 'ENVIRONMENT']
+for var in required_vars:
+    value = os.getenv(var, 'Not set')
+    print(f'{var}: {\"✅ Set\" if value != \"Not set\" else \"❌ Not set\"}')
+"
+
+# Check application health
+python -c "
+import sys; sys.path.insert(0, 'src')
+from codomyrmex.environment_setup import validate_environment
+status = validate_environment()
+print(f'Environment Status: {status}')
+"
+```
+
+#### Issue: High resource usage in production
+```bash
+# Monitor resource usage
+python -c "
+import psutil
+import os
+process = psutil.Process(os.getpid())
+print(f'CPU: {process.cpu_percent()}%')
+print(f'Memory: {process.memory_info().rss / 1024 / 1024:.2f} MB')
+print(f'Open Files: {len(process.open_files())}')
+"
+```
+
+#### Issue: Production database migrations failing
+```bash
+# Check database connection
+python -c "
+from sqlalchemy import create_engine, text
+import os
+db_url = os.getenv('DATABASE_URL')
+if db_url:
+    engine = create_engine(db_url)
+    with engine.connect() as conn:
+        result = conn.execute(text('SELECT version()'))
+        print(f'Database Version: {result.fetchone()[0]}')
+"
+```
+
+## 🔒 Security Issues {#security-issues}
+
+### **Security Configuration Problems**
+
+#### Issue: API keys exposed in logs
+```bash
+# Check logging configuration
+python -c "
+import logging
+logger = logging.getLogger()
+print(f'Log Level: {logging.getLevelName(logger.level)}')
+print('Check log formatters for sensitive data exposure')
+"
+
+# Review environment variable handling
+python -c "
+import os
+sensitive_keys = [key for key in os.environ.keys() if any(x in key.upper() for x in ['KEY', 'SECRET', 'PASSWORD', 'TOKEN'])]
+print(f'Sensitive environment variables found: {len(sensitive_keys)}')
+print('Review these variables for proper handling:')
+for key in sensitive_keys[:5]:
+    print(f'  {key}')
+"
+```
+
+#### Issue: SSL/TLS certificate validation failures
+```bash
+# Test SSL connectivity
+python -c "
+import ssl
+import socket
+try:
+    context = ssl.create_default_context()
+    with socket.create_connection(('github.com', 443)) as sock:
+        with context.wrap_socket(sock, server_hostname='github.com') as ssock:
+            print(f'SSL Connection: ✅ Success')
+            print(f'Certificate: {ssock.getpeercert()[\"subject\"]}')
+except Exception as e:
+    print(f'SSL Error: {e}')
+"
+```
+
+#### Issue: Unauthorized access attempts
+```bash
+# Check authentication configuration
+python -c "
+import os
+auth_method = os.getenv('AUTH_METHOD', 'none')
+print(f'Auth Method: {auth_method}')
+if auth_method == 'none':
+    print('⚠️  Warning: No authentication configured')
 "
 ```
 

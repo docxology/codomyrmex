@@ -251,7 +251,7 @@ scan_results = run_security_scan(code)
 
 | User Type | Primary Resources | Next Steps |
 |-----------|------------------|------------|
-| **New Users** | [Installation](../docs/getting-started/installation.md) → [Quick Start](../docs/getting-started/quickstart.md) → [Examples](../examples/README.md) | Try interactive examples |
+| **New Users** | [Installation](../docs/getting-started/installation.md) → [Quick Start](../docs/getting-started/quickstart.md) → [Examples](../scripts/examples/README.md) | Try interactive examples |
 | **API Users** | [API Reference](../docs/reference/api.md) → [CLI Reference](../docs/reference/cli.md) → [Package Overview](./codomyrmex/README.md) | Explore module APIs |
 | **Contributors** | [Contributing](../docs/project/contributing.md) → [Development Setup](../docs/development/environment-setup.md) → [Architecture](../docs/project/architecture.md) | Start contributing |
 | **Module Developers** | [Module Tutorial](../docs/getting-started/tutorials/creating-a-module.md) → [Template Guide](./template/README.md) → [Module Overview](../docs/modules/overview.md) | Create new modules |
