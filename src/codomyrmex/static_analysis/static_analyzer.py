@@ -5,20 +5,18 @@ This module provides advanced static analysis capabilities including code qualit
 security analysis, performance analysis, and maintainability assessment.
 """
 
-import os
-import sys
-import json
 import ast
-import subprocess
-import tempfile
-import re
+import json
 import math
-from typing import Dict, List, Any, Optional, Tuple, Union, Set
+import os
+import re
+import subprocess
+import sys
+import time
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-import time
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Optional
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -28,23 +26,7 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 # Import logger setup
-try:
-    from logging_monitoring import setup_logging, get_logger
-except ImportError:
-    import logging
-
-    def get_logger(name):
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
-        return logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Get module logger
 logger = get_logger(__name__)
@@ -135,9 +117,9 @@ class AnalysisSummary:
     """Summary of analysis results for a file or project."""
 
     total_issues: int
-    by_severity: Dict[SeverityLevel, int] = field(default_factory=dict)
-    by_category: Dict[str, int] = field(default_factory=dict)
-    by_rule: Dict[str, int] = field(default_factory=dict)
+    by_severity: dict[SeverityLevel, int] = field(default_factory=dict)
+    by_category: dict[str, int] = field(default_factory=dict)
+    by_rule: dict[str, int] = field(default_factory=dict)
     files_analyzed: int = 0
     analysis_time: float = 0.0
     language: Optional[Language] = None
@@ -167,11 +149,11 @@ class StaticAnalyzer:
             project_root: Root directory of the project to analyze
         """
         self.project_root = project_root or os.getcwd()
-        self.results: List[AnalysisResult] = []
-        self.metrics: Dict[str, CodeMetrics] = {}
+        self.results: list[AnalysisResult] = []
+        self.metrics: dict[str, CodeMetrics] = {}
         self.tools_available = self._check_tools_availability()
 
-    def _check_tools_availability(self) -> Dict[str, bool]:
+    def _check_tools_availability(self) -> dict[str, bool]:
         """Check which analysis tools are available."""
         tools = {
             "pylint": False,
@@ -186,13 +168,20 @@ class StaticAnalyzer:
             "vulture": False,
             "safety": False,
             "semgrep": False,
+            "pyrefly": False,
         }
 
         for tool in tools:
             try:
-                subprocess.run(
-                    [tool, "--version"], capture_output=True, check=True, timeout=5
-                )
+                if tool == "pyrefly":
+                    # Pyrefly uses 'pyrefly check --version' or just 'pyrefly --version'
+                    subprocess.run(
+                        ["pyrefly", "--version"], capture_output=True, check=True, timeout=5
+                    )
+                else:
+                    subprocess.run(
+                        [tool, "--version"], capture_output=True, check=True, timeout=5
+                    )
                 tools[tool] = True
             except (
                 subprocess.CalledProcessError,
@@ -205,8 +194,8 @@ class StaticAnalyzer:
 
     @monitor_performance("analyze_file")
     def analyze_file(
-        self, file_path: str, analysis_types: List[AnalysisType] = None
-    ) -> List[AnalysisResult]:
+        self, file_path: str, analysis_types: list[AnalysisType] = None
+    ) -> list[AnalysisResult]:
         """
         Analyze a single file for various issues.
 
@@ -268,8 +257,8 @@ class StaticAnalyzer:
         return language_map.get(extension, Language.PYTHON)
 
     def _analyze_python_file(
-        self, file_path: str, analysis_types: List[AnalysisType]
-    ) -> List[AnalysisResult]:
+        self, file_path: str, analysis_types: list[AnalysisType]
+    ) -> list[AnalysisResult]:
         """Analyze a Python file."""
         results = []
 
@@ -301,9 +290,13 @@ class StaticAnalyzer:
         if AnalysisType.SECURITY in analysis_types and self.tools_available["safety"]:
             results.extend(self._run_safety(file_path))
 
+        # Pyrefly type checking
+        if AnalysisType.QUALITY in analysis_types and self.tools_available["pyrefly"]:
+            results.extend(self._run_pyrefly(file_path))
+
         return results
 
-    def _run_pylint(self, file_path: str) -> List[AnalysisResult]:
+    def _run_pylint(self, file_path: str) -> list[AnalysisResult]:
         """Run pylint analysis on a file."""
         results = []
 
@@ -344,7 +337,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_flake8(self, file_path: str) -> List[AnalysisResult]:
+    def _run_flake8(self, file_path: str) -> list[AnalysisResult]:
         """Run flake8 analysis on a file."""
         results = []
 
@@ -393,7 +386,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_mypy(self, file_path: str) -> List[AnalysisResult]:
+    def _run_mypy(self, file_path: str) -> list[AnalysisResult]:
         """Run mypy type checking on a file."""
         results = []
 
@@ -430,7 +423,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_bandit(self, file_path: str) -> List[AnalysisResult]:
+    def _run_bandit(self, file_path: str) -> list[AnalysisResult]:
         """Run bandit security analysis on a file."""
         results = []
 
@@ -469,7 +462,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_radon(self, file_path: str) -> List[AnalysisResult]:
+    def _run_radon(self, file_path: str) -> list[AnalysisResult]:
         """Run radon complexity analysis on a file."""
         results = []
 
@@ -506,7 +499,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_vulture(self, file_path: str) -> List[AnalysisResult]:
+    def _run_vulture(self, file_path: str) -> list[AnalysisResult]:
         """Run vulture dead code analysis on a file."""
         results = []
 
@@ -539,7 +532,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_safety(self, file_path: str) -> List[AnalysisResult]:
+    def _run_safety(self, file_path: str) -> list[AnalysisResult]:
         """Run safety dependency analysis."""
         results = []
 
@@ -573,13 +566,59 @@ class StaticAnalyzer:
 
         return results
 
-    def _find_requirements_files(self) -> List[str]:
+    def _run_pyrefly(self, file_path: str) -> list[AnalysisResult]:
+        """Run Pyrefly type checking on a file."""
+        results = []
+
+        try:
+            # Import pyrefly_runner here to avoid circular imports
+            from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+
+            # Run Pyrefly analysis on the file
+            pyrefly_result = run_pyrefly_analysis(
+                target_paths=[file_path],
+                project_root=self.project_root
+            )
+
+            # Convert Pyrefly results to AnalysisResult format
+            if pyrefly_result.get("issues"):
+                severity_map = {
+                    "error": SeverityLevel.ERROR,
+                    "warning": SeverityLevel.WARNING,
+                    "info": SeverityLevel.INFO,
+                }
+
+                for issue in pyrefly_result["issues"]:
+                    results.append(
+                        AnalysisResult(
+                            file_path=issue.get("file_path", file_path),
+                            line_number=issue.get("line_number", 0),
+                            column_number=issue.get("column_number", 0),
+                            severity=severity_map.get(
+                                issue.get("severity", "error"), SeverityLevel.ERROR
+                            ),
+                            message=issue.get("message", ""),
+                            rule_id=issue.get("code", "PYREFLY_ERROR"),
+                            category="type_checking",
+                        )
+                    )
+
+            # Log any errors from Pyrefly execution
+            if pyrefly_result.get("error"):
+                logger.warning(f"Pyrefly reported error for {file_path}: {pyrefly_result['error']}")
+
+        except (ImportError, subprocess.SubprocessError, FileNotFoundError, Exception) as e:
+            logger.error(f"Error running Pyrefly on {file_path}: {e}")
+
+        return results
+
+    def _find_requirements_files(self) -> list[str]:
         """Find requirements files in the project."""
         req_files = []
         req_patterns = ["requirements*.txt", "Pipfile", "pyproject.toml", "setup.py"]
 
         for pattern in req_patterns:
-            for root, dirs, files in os.walk(self.project_root):
+            for root, _dirs, files in os.walk(self.project_root):
                 for file in files:
                     if file == pattern or file.startswith("requirements"):
                         req_files.append(os.path.join(root, file))
@@ -587,8 +626,8 @@ class StaticAnalyzer:
         return req_files
 
     def _analyze_javascript_file(
-        self, file_path: str, analysis_types: List[AnalysisType]
-    ) -> List[AnalysisResult]:
+        self, file_path: str, analysis_types: list[AnalysisType]
+    ) -> list[AnalysisResult]:
         """Analyze a JavaScript/TypeScript file."""
         results = []
 
@@ -606,7 +645,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_eslint(self, file_path: str) -> List[AnalysisResult]:
+    def _run_eslint(self, file_path: str) -> list[AnalysisResult]:
         """Run ESLint analysis on a JavaScript/TypeScript file."""
         results = []
 
@@ -644,7 +683,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_typescript_compiler(self, file_path: str) -> List[AnalysisResult]:
+    def _run_typescript_compiler(self, file_path: str) -> list[AnalysisResult]:
         """Run TypeScript compiler analysis."""
         results = []
 
@@ -682,8 +721,8 @@ class StaticAnalyzer:
         return results
 
     def _analyze_java_file(
-        self, file_path: str, analysis_types: List[AnalysisType]
-    ) -> List[AnalysisResult]:
+        self, file_path: str, analysis_types: list[AnalysisType]
+    ) -> list[AnalysisResult]:
         """Analyze a Java file."""
         results = []
 
@@ -695,7 +734,7 @@ class StaticAnalyzer:
 
         return results
 
-    def _run_spotbugs(self, file_path: str) -> List[AnalysisResult]:
+    def _run_spotbugs(self, file_path: str) -> list[AnalysisResult]:
         """Run SpotBugs analysis on a Java file."""
         results = []
 
@@ -736,9 +775,9 @@ class StaticAnalyzer:
     @monitor_performance("analyze_project")
     def analyze_project(
         self,
-        target_paths: List[str] = None,
-        analysis_types: List[AnalysisType] = None,
-        exclude_patterns: List[str] = None,
+        target_paths: list[str] = None,
+        analysis_types: list[AnalysisType] = None,
+        exclude_patterns: list[str] = None,
     ) -> AnalysisSummary:
         """
         Analyze an entire project.
@@ -846,7 +885,7 @@ class StaticAnalyzer:
     def calculate_metrics(self, file_path: str) -> CodeMetrics:
         """Calculate code quality metrics for a file."""
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # Basic metrics
@@ -933,15 +972,15 @@ class StaticAnalyzer:
         duplicated_lines = sum(count - 1 for count in line_counts.values() if count > 1)
         return (duplicated_lines / len(lines)) * 100
 
-    def get_results_by_severity(self, severity: SeverityLevel) -> List[AnalysisResult]:
+    def get_results_by_severity(self, severity: SeverityLevel) -> list[AnalysisResult]:
         """Get results filtered by severity."""
         return [result for result in self.results if result.severity == severity]
 
-    def get_results_by_category(self, category: str) -> List[AnalysisResult]:
+    def get_results_by_category(self, category: str) -> list[AnalysisResult]:
         """Get results filtered by category."""
         return [result for result in self.results if result.category == category]
 
-    def get_results_by_file(self, file_path: str) -> List[AnalysisResult]:
+    def get_results_by_file(self, file_path: str) -> list[AnalysisResult]:
         """Get results for a specific file."""
         return [result for result in self.results if result.file_path == file_path]
 
@@ -1021,8 +1060,8 @@ class StaticAnalyzer:
 
 # Convenience functions
 def analyze_file(
-    file_path: str, analysis_types: List[AnalysisType] = None
-) -> List[AnalysisResult]:
+    file_path: str, analysis_types: list[AnalysisType] = None
+) -> list[AnalysisResult]:
     """Analyze a single file."""
     analyzer = StaticAnalyzer()
     return analyzer.analyze_file(file_path, analysis_types)
@@ -1030,15 +1069,15 @@ def analyze_file(
 
 def analyze_project(
     project_root: str,
-    target_paths: List[str] = None,
-    analysis_types: List[AnalysisType] = None,
+    target_paths: list[str] = None,
+    analysis_types: list[AnalysisType] = None,
 ) -> AnalysisSummary:
     """Analyze an entire project."""
     analyzer = StaticAnalyzer(project_root)
     return analyzer.analyze_project(target_paths, analysis_types)
 
 
-def get_available_tools() -> Dict[str, bool]:
+def get_available_tools() -> dict[str, bool]:
     """Get list of available analysis tools."""
     analyzer = StaticAnalyzer()
     return analyzer.tools_available

@@ -43,14 +43,28 @@ No related modules specified
 
 ## Usage Examples
 
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.docs.getting-started import ModuleClass
+Quick start examples:
 
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
+```bash
+# Install and verify
+git clone https://github.com/codomyrmex/codomyrmex.git
+cd codomyrmex
+uv venv .venv && source .venv/bin/activate
+uv pip install -e .
+codomyrmex check
 ```
+
+```python
+# First steps with Codomyrmex
+from codomyrmex.data_visualization import create_line_plot
+import numpy as np
+
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+create_line_plot(x, y, title="My First Plot", output_path="plot.png")
+```
+
+See [Quick Start Guide](quickstart.md) for more examples and [Installation Guide](installation.md) for complete setup.
 
 ## Quality Assurance
 

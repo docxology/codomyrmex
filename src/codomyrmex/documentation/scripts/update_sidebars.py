@@ -5,7 +5,6 @@ This script scans src/codomyrmex/documentation/docs/modules and emits a JSON-lik
 structure fragment that can be manually merged into sidebars.js or used to
 automate sidebar updates.
 """
-import os
 import json
 from pathlib import Path
 

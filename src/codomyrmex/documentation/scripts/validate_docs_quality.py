@@ -6,28 +6,18 @@ This script performs comprehensive validation of documentation quality
 to prevent errors from accumulating across versions.
 """
 
+import hashlib
 import os
 import re
 import sys
-import glob
 from pathlib import Path
-from typing import List, Tuple, Dict
-import hashlib
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to path for imports
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))  # Removed sys.path manipulation
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
-try:
-    from codomyrmex.logging_monitoring import setup_logging, get_logger
-
-    setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+setup_logging()
+logger = get_logger(__name__)
 
 
 class DocumentationValidator:
@@ -49,7 +39,7 @@ class DocumentationValidator:
 
         self.optional_files = ["MCP_TOOL_SPECIFICATION.md", "SECURITY.md"]
 
-    def validate_module_structure(self) -> List[str]:
+    def validate_module_structure(self) -> list[str]:
         """Validate that all modules have proper documentation structure."""
         issues = []
 
@@ -93,7 +83,7 @@ class DocumentationValidator:
 
         return issues
 
-    def validate_version_consistency(self) -> List[str]:
+    def validate_version_consistency(self) -> list[str]:
         """Validate version consistency between source and aggregated docs."""
         issues = []
 
@@ -133,7 +123,7 @@ class DocumentationValidator:
 
         return issues
 
-    def validate_changelog_format(self) -> List[str]:
+    def validate_changelog_format(self) -> list[str]:
         """Validate CHANGELOG.md format consistency."""
         issues = []
 
@@ -143,7 +133,7 @@ class DocumentationValidator:
             module_name = changelog_file.parent.name
 
             try:
-                with open(changelog_file, "r") as f:
+                with open(changelog_file) as f:
                     content = f.read()
 
                 lines = content.split("\n")
@@ -172,19 +162,19 @@ class DocumentationValidator:
 
         return issues
 
-    def validate_cross_references(self) -> List[str]:
+    def validate_cross_references(self) -> list[str]:
         """Validate internal cross-references in documentation."""
         issues = []
 
         for md_file in self.src_dir.glob("**/*.md"):
             try:
-                with open(md_file, "r") as f:
+                with open(md_file) as f:
                     content = f.read()
 
                 # Find relative links
                 relative_links = re.findall(r"\[([^\]]+)\]\(([^)]+)\)", content)
 
-                for link_text, link_path in relative_links:
+                for _link_text, link_path in relative_links:
                     if not link_path.startswith(("http://", "https://", "#")):
                         # This is a relative link - check if target exists
                         full_path = md_file.parent / link_path
@@ -198,7 +188,7 @@ class DocumentationValidator:
 
         return issues
 
-    def validate_aggregated_docs_freshness(self) -> List[str]:
+    def validate_aggregated_docs_freshness(self) -> list[str]:
         """Validate that aggregated docs are not stale."""
         issues = []
 
@@ -235,7 +225,7 @@ class DocumentationValidator:
                 hash_md5.update(chunk)
         return hash_md5.hexdigest()
 
-    def run_full_validation(self) -> Tuple[bool, Dict[str, List[str]]]:
+    def run_full_validation(self) -> tuple[bool, dict[str, list[str]]]:
         """Run all validation checks."""
         logger.info("Starting comprehensive documentation validation...")
 

@@ -40,14 +40,19 @@ No related modules specified
 
 ## Usage Examples
 
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.docs.deployment import ModuleClass
+Production deployment examples:
 
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
+```bash
+# Docker production deployment
+docker build -f Dockerfile.prod -t codomyrmex:latest .
+docker-compose -f docker-compose.prod.yml up -d
+
+# Kubernetes deployment
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/deployment.yaml
 ```
+
+See [Production Deployment Guide](production.md) for complete deployment instructions, infrastructure setup, and monitoring configuration.
 
 ## Quality Assurance
 

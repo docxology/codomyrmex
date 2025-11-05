@@ -6,17 +6,12 @@ task orchestration, and resource management components. It provides a unified
 interface for complex multi-module workflows.
 """
 
-import os
-import json
-import asyncio
 import threading
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Union, Callable
-from dataclasses import dataclass, field
-from enum import Enum
 import uuid
-from codomyrmex.exceptions import CodomyrmexError
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any, Callable, Optional, Union
 
 # Import Codomyrmex modules
 try:
@@ -29,7 +24,7 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 try:
-    from codomyrmex.performance import monitor_performance, PerformanceMonitor
+    from codomyrmex.performance import PerformanceMonitor, monitor_performance
 
     PERFORMANCE_AVAILABLE = True
 except ImportError:
@@ -43,17 +38,17 @@ except ImportError:
 
 
 try:
-    from codomyrmex.model_context_protocol import MCPToolResult, MCPErrorDetail
+    from codomyrmex.model_context_protocol import MCPErrorDetail, MCPToolResult
 
     MCP_AVAILABLE = True
 except ImportError:
     MCP_AVAILABLE = False
 
 # Import orchestration components
-from .workflow_manager import WorkflowManager, WorkflowStatus
-from .task_orchestrator import TaskOrchestrator, Task, TaskStatus
-from .project_manager import ProjectManager, Project, ProjectStatus
-from .resource_manager import ResourceManager, Resource, ResourceType
+from .project_manager import ProjectManager
+from .resource_manager import ResourceManager
+from .task_orchestrator import Task, TaskOrchestrator, TaskStatus
+from .workflow_manager import WorkflowManager
 
 
 class OrchestrationMode(Enum):
@@ -91,8 +86,8 @@ class OrchestrationSession:
     max_parallel_tasks: int = 4
     max_parallel_workflows: int = 2
     timeout_seconds: Optional[int] = None
-    resource_requirements: Dict[str, Any] = field(default_factory=dict)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    resource_requirements: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     # Execution tracking
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
@@ -101,7 +96,7 @@ class OrchestrationSession:
     completed_at: Optional[datetime] = None
     status: SessionStatus = SessionStatus.PENDING
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         data = {
             "session_id": self.session_id,
             "name": self.name,
@@ -124,7 +119,7 @@ class OrchestrationSession:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "OrchestrationSession":
+    def from_dict(cls, data: dict[str, Any]) -> "OrchestrationSession":
         """From Dict.
 
             Args:        cls: Parameter for the operation.        data: Data to process.
@@ -167,7 +162,7 @@ OrchestrationContext = OrchestrationSession
 class OrchestrationEngine:
     """Main orchestration engine coordinating all components."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """Initialize the orchestration engine."""
         self.config = config or {}
 
@@ -192,11 +187,11 @@ class OrchestrationEngine:
         )
 
         # Active sessions
-        self.active_sessions: Dict[str, OrchestrationContext] = {}
+        self.active_sessions: dict[str, OrchestrationContext] = {}
         self.session_lock = threading.RLock()
 
         # Event handlers
-        self.event_handlers: Dict[str, List[Callable]] = {}
+        self.event_handlers: dict[str, list[Callable]] = {}
 
         # Start task orchestrator
         self.task_orchestrator.start_execution()
@@ -209,7 +204,7 @@ class OrchestrationEngine:
             self.event_handlers[event] = []
         self.event_handlers[event].append(handler)
 
-    def emit_event(self, event: str, data: Dict[str, Any]):
+    def emit_event(self, event: str, data: dict[str, Any]):
         """Emit an event to registered handlers."""
         if event in self.event_handlers:
             for handler in self.event_handlers[event]:
@@ -266,7 +261,7 @@ class OrchestrationEngine:
     @monitor_performance(function_name="execute_workflow")
     def execute_workflow(
         self, workflow_name: str, session_id: Optional[str] = None, **params
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Execute a workflow with orchestration."""
         if not session_id:
             session_id = self.create_session()
@@ -299,7 +294,6 @@ class OrchestrationEngine:
                     # If loop is already running, we need to handle differently
                     # For now, create a new thread with its own event loop
                     import concurrent.futures
-                    import threading
 
                     def run_async():
                         """Run Async.
@@ -370,8 +364,8 @@ class OrchestrationEngine:
 
     @monitor_performance(function_name="execute_task")
     def execute_task(
-        self, task: Union[Task, Dict[str, Any]], session_id: Optional[str] = None
-    ) -> Dict[str, Any]:
+        self, task: Union[Task, dict[str, Any]], session_id: Optional[str] = None
+    ) -> dict[str, Any]:
         """Execute a single task with orchestration."""
         if not session_id:
             session_id = self.create_session()
@@ -420,7 +414,7 @@ class OrchestrationEngine:
         workflow_name: str,
         session_id: Optional[str] = None,
         **params,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Execute a workflow for a specific project."""
         if not session_id:
             session_id = self.create_session()
@@ -449,8 +443,8 @@ class OrchestrationEngine:
             return {"success": False, "error": str(e)}
 
     def execute_complex_workflow(
-        self, workflow_definition: Dict[str, Any], session_id: Optional[str] = None
-    ) -> Dict[str, Any]:
+        self, workflow_definition: dict[str, Any], session_id: Optional[str] = None
+    ) -> dict[str, Any]:
         """Execute a complex workflow with multiple interdependent steps."""
         if not session_id:
             session_id = self.create_session()
@@ -463,7 +457,7 @@ class OrchestrationEngine:
             # Parse workflow definition
             steps = workflow_definition.get("steps", [])
             dependencies = workflow_definition.get("dependencies", {})
-            parallel_groups = workflow_definition.get("parallel_groups", [])
+            workflow_definition.get("parallel_groups", [])
 
             # Create tasks from steps
             tasks = {}
@@ -502,7 +496,7 @@ class OrchestrationEngine:
             logger.error(f"Complex workflow execution failed: {e}")
             return {"success": False, "error": str(e)}
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status(self) -> dict[str, Any]:
         """Get comprehensive system status."""
         status = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -533,11 +527,11 @@ class OrchestrationEngine:
         workflow_name: str,
         template_name: str = "ai_analysis",
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Create a project and execute a workflow for it."""
         try:
             # Create project
-            project = self.project_manager.create_project(
+            self.project_manager.create_project(
                 name=project_name, template_name=template_name, **kwargs
             )
 
@@ -562,7 +556,7 @@ class OrchestrationEngine:
             logger.error(f"Failed to create project and execute workflow: {e}")
             return {"success": False, "error": str(e)}
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """Perform comprehensive health check."""
         health = {
             "overall_status": "healthy",
@@ -618,7 +612,7 @@ class OrchestrationEngine:
 
         return health
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """Get comprehensive metrics."""
         metrics = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -668,7 +662,8 @@ class OrchestrationEngine:
         """Cleanup on deletion."""
         try:
             self.shutdown()
-        except:
+        except (AttributeError, RuntimeError, OSError):
+            # Ignore errors during cleanup - object may be partially destroyed
             pass
 
 

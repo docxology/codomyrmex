@@ -1,9 +1,8 @@
 """Physical simulation engine for object interactions."""
 
-from typing import Dict, List, Optional, Tuple, Any
-from dataclasses import dataclass, field
 import math
-import numpy as np
+from dataclasses import dataclass, field
+from typing import Any, Optional
 
 
 @dataclass
@@ -65,7 +64,7 @@ class Constraint:
     object1_id: str
     object2_id: str
     constraint_type: str
-    parameters: Dict[str, Any] = field(default_factory=dict)
+    parameters: dict[str, Any] = field(default_factory=dict)
 
 
 class PhysicsSimulator:
@@ -75,9 +74,9 @@ class PhysicsSimulator:
         """  Init  .
             """
         self.gravity = Vector3D(0, -9.81, 0)
-        self.force_fields: List[ForceField] = []
-        self.constraints: List[Constraint] = []
-        self.objects: Dict[str, Dict[str, Any]] = {}
+        self.force_fields: list[ForceField] = []
+        self.constraints: list[Constraint] = []
+        self.objects: dict[str, dict[str, Any]] = {}
 
     def add_force_field(self, force_field: ForceField) -> None:
         """Add a force field to the simulation."""
@@ -119,7 +118,7 @@ class PhysicsSimulator:
         for obj_data in self.objects.values():
             obj_data["force"] = Vector3D(0, 0, 0)
 
-        for obj_id, obj_data in self.objects.items():
+        for _obj_id, obj_data in self.objects.items():
             total_force = Vector3D(0, 0, 0)
 
             # Add gravity
@@ -182,7 +181,7 @@ class PhysicsSimulator:
             obj_data["velocity"] = velocity
             obj_data["position"] = position
 
-    def get_object_state(self, object_id: str) -> Optional[Dict[str, Any]]:
+    def get_object_state(self, object_id: str) -> Optional[dict[str, Any]]:
         """Get the current state of an object."""
         return self.objects.get(object_id)
 
@@ -193,7 +192,7 @@ class PhysicsSimulator:
             return True
         return False
 
-    def get_simulation_stats(self) -> Dict[str, Any]:
+    def get_simulation_stats(self) -> dict[str, Any]:
         """Get simulation statistics."""
         total_kinetic = self.calculate_total_kinetic_energy()
         total_potential = self.calculate_total_potential_energy()
@@ -346,7 +345,7 @@ class PhysicsSimulator:
                         obj1["force"] += total_force
                         obj2["force"] -= total_force
 
-    def detect_collisions(self, collision_radius: float = 0.5) -> List[Tuple[str, str]]:
+    def detect_collisions(self, collision_radius: float = 0.5) -> list[tuple[str, str]]:
         """Detect collisions between objects."""
         collisions = []
         object_ids = list(self.objects.keys())

@@ -5,24 +5,23 @@ These tests simulate real-world usage scenarios and complete workflows
 from analysis to reporting.
 """
 
-import os
-import sys
-import unittest
-import tempfile
-import shutil
 import json
-from pathlib import Path
+import os
+import shutil
+import sys
+import tempfile
+import unittest
 
 # Add the src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 from codomyrmex.code_review import (
+    AnalysisSummary,
     CodeReviewer,
+    QualityGateResult,
     analyze_project,
     check_quality_gates,
     generate_report,
-    QualityGateResult,
-    AnalysisSummary
 )
 
 
@@ -251,7 +250,7 @@ exclude_patterns = ["__pycache__", ".git", "tests"]
         self.assertGreaterEqual(summary.files_analyzed, 0)
         self.assertIsInstance(summary.analysis_time, float)
 
-        print(f"\nComplete Workflow Results:")
+        print("\nComplete Workflow Results:")
         print(f"  Files analyzed: {summary.files_analyzed}")
         print(f"  Total issues: {summary.total_issues}")
         print(f"  Analysis time: {summary.analysis_time:.2f}s")
@@ -275,7 +274,7 @@ exclude_patterns = ["__pycache__", ".git", "tests"]
         # Should return quality gate result
         self.assertIsInstance(result, QualityGateResult)
 
-        print(f"\nQuality Gates Results:")
+        print("\nQuality Gates Results:")
         print(f"  Passed: {result.passed}")
         print(f"  Total checks: {result.total_checks}")
         print(f"  Passed checks: {result.passed_checks}")
@@ -303,14 +302,14 @@ exclude_patterns = ["__pycache__", ".git", "tests"]
             # Verify report file exists and has content
             self.assertTrue(os.path.exists(report_path))
 
-            with open(report_path, 'r') as f:
+            with open(report_path) as f:
                 content = f.read()
 
             self.assertIn("<!DOCTYPE html>", content)
             self.assertIn("Code Review Report", content)
             self.assertIn("Total Issues", content)
 
-            print(f"\nReport Generation:")
+            print("\nReport Generation:")
             print(f"  Report created: {report_path}")
             print(f"  File size: {os.path.getsize(report_path)} bytes")
 
@@ -328,7 +327,7 @@ exclude_patterns = ["__pycache__", ".git", "tests"]
             self.assertTrue(os.path.exists(json_path))
 
             # Verify JSON structure
-            with open(json_path, 'r') as f:
+            with open(json_path) as f:
                 data = json.load(f)
 
             self.assertIn("summary", data)
@@ -336,7 +335,7 @@ exclude_patterns = ["__pycache__", ".git", "tests"]
             self.assertIn("total_issues", data["summary"])
             self.assertIn("files_analyzed", data["summary"])
 
-            print(f"\nJSON Export:")
+            print("\nJSON Export:")
             print(f"  JSON created: {json_path}")
             print(f"  Issues exported: {len(data['results'])}")
 
@@ -351,14 +350,14 @@ exclude_patterns = ["__pycache__", ".git", "tests"]
         self.assertEqual(reviewer.config["max_complexity"], 15)  # Default value
         self.assertEqual(reviewer.config["output_format"], "html")  # Default value
 
-        print(f"\nConfiguration:")
+        print("\nConfiguration:")
         print(f"  Config file: {config_path}")
         print(f"  Max complexity: {reviewer.config['max_complexity']}")
         print(f"  Output format: {reviewer.config['output_format']}")
 
     def test_real_world_scenario(self):
         """Test a realistic development workflow scenario."""
-        print(f"\nReal-world Scenario Test:")
+        print("\nReal-world Scenario Test:")
         print(f"  Project: {os.path.basename(self.test_dir)}")
         print(f"  Location: {self.test_dir}")
 
@@ -389,13 +388,13 @@ exclude_patterns = ["__pycache__", ".git", "tests"]
         passed_steps = sum(1 for result in results.values() if result == "✅ PASSED")
         total_steps = len(steps)
 
-        print(f"\nOverall Results:")
+        print("\nOverall Results:")
         print(f"  {passed_steps}/{total_steps} steps passed")
 
         if passed_steps == total_steps:
-            print(f"  🎉 All workflow steps completed successfully!")
+            print("  🎉 All workflow steps completed successfully!")
         else:
-            print(f"  ⚠️  Some workflow steps failed")
+            print("  ⚠️  Some workflow steps failed")
             for step, result in results.items():
                 if result != "✅ PASSED":
                     print(f"    {step}: {result}")

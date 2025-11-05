@@ -29,5 +29,5 @@ Developer-focused documentation coordination for Codomyrmex, providing comprehen
 - **📝 Documentation Guidelines**: [documentation.md](documentation.md) - Standards for writing and maintaining docs
 - **🧪 Testing Strategy**: [testing-strategy.md](testing-strategy.md) - Testing approach and best practices
 - **📦 UV Usage Guide**: [uv-usage-guide.md](uv-usage-guide.md) - Modern Python package management
-- **🤝 Contributing Guide**: [../../project/contributing.md](../../project/contributing.md) - How to contribute effectively
-- **🏛️ Architecture**: [../../project/architecture.md](../../project/architecture.md) - System design for development considerations
+- **🤝 Contributing Guide**: [../project/contributing.md](../project/contributing.md) - How to contribute effectively
+- **🏛️ Architecture**: [../project/architecture.md](../project/architecture.md) - System design for development considerations

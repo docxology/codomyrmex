@@ -7,15 +7,11 @@ for building, documenting, analyzing, executing, and visualizing code.
 Now with comprehensive orchestration and project management capabilities.
 """
 
-import sys
-import os
-import json
-from pathlib import Path
-from typing import Optional, Dict, Any, List
 import argparse
-import asyncio
-from datetime import datetime
-from codomyrmex.exceptions import CodomyrmexError
+import json
+import sys
+from pathlib import Path
+from typing import Optional
 
 # Add the src directory to Python path for development
 src_dir = Path(__file__).parent.parent
@@ -37,19 +33,19 @@ except ImportError:
         )
 
     except ImportError:
-        # Fallback logging
+        # Fallback logging - should not happen in normal operation
+        # This is a fallback for edge cases, but we should always use get_logger
         import logging
-
         logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
 
 # Import terminal interface for better UX
 try:
-    from codomyrmex.terminal_interface.terminal_utils import (
-        TerminalFormatter,
-        CommandRunner,
-    )
     from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
+    from codomyrmex.terminal_interface.terminal_utils import (
+        CommandRunner,
+        TerminalFormatter,
+    )
 
     TERMINAL_INTERFACE_AVAILABLE = True
 except ImportError:
@@ -299,7 +295,7 @@ def list_workflows():
     except ImportError:
         print("❌ Project orchestration module not available")
         return False
-    except Exception as e:
+    except (AttributeError, KeyError, TypeError, ValueError) as e:
         print(f"❌ Error listing workflows: {str(e)}")
         return False
 
@@ -327,7 +323,7 @@ def run_workflow(workflow_name: str, **kwargs):
     except ImportError:
         print("❌ Project orchestration module not available")
         return False
-    except Exception as e:
+    except (AttributeError, KeyError, TypeError, ValueError, RuntimeError) as e:
         print(f"❌ Error running workflow: {str(e)}")
         return False
 
@@ -344,10 +340,10 @@ def show_system_status():
 
     # Check environment
     print("\n📋 Environment Check:")
-    env_ok = check_environment()
+    check_environment()
 
     # Check modules
-    print(f"\n📦 Module Status:")
+    print("\n📦 Module Status:")
     modules = [
         "ai_code_editing",
         "data_visualization",
@@ -375,7 +371,7 @@ def show_system_status():
 
         reporter = StatusReporter()
 
-        print(f"\n🔍 System Discovery:")
+        print("\n🔍 System Discovery:")
         report = reporter.generate_comprehensive_report()
 
         for category, status in report.items():
@@ -390,9 +386,10 @@ def show_system_status():
         try:
             monitor = PerformanceMonitor()
             stats = monitor.get_stats()
-            print(f"\n⚡ Performance Stats:")
+            print("\n⚡ Performance Stats:")
             print(f"  📊 Monitored functions: {len(stats.get('functions', []))}")
-        except Exception:
+        except (AttributeError, KeyError, TypeError):
+            # Performance monitor may not be available or stats may be incomplete
             pass
 
 
@@ -446,17 +443,17 @@ Examples:
     )
 
     # Environment commands
-    check_parser = subparsers.add_parser("check", help="Check environment setup")
+    subparsers.add_parser("check", help="Check environment setup")
 
-    info_parser = subparsers.add_parser("info", help="Show project information")
+    subparsers.add_parser("info", help="Show project information")
 
-    modules_parser = subparsers.add_parser("modules", help="List available modules")
+    subparsers.add_parser("modules", help="List available modules")
 
-    status_parser = subparsers.add_parser(
+    subparsers.add_parser(
         "status", help="Show comprehensive system status"
     )
 
-    shell_parser = subparsers.add_parser("shell", help="Launch interactive shell")
+    subparsers.add_parser("shell", help="Launch interactive shell")
 
     # Workflow commands
     workflow_parser = subparsers.add_parser("workflow", help="Workflow management")
@@ -464,7 +461,7 @@ Examples:
         dest="workflow_action", help="Workflow actions"
     )
 
-    wf_list_parser = workflow_subparsers.add_parser(
+    workflow_subparsers.add_parser(
         "list", help="List available workflows"
     )
 
@@ -499,7 +496,7 @@ Examples:
     proj_create_parser.add_argument("--description", help="Project description")
     proj_create_parser.add_argument("--path", help="Project directory path")
 
-    proj_list_parser = project_subparsers.add_parser(
+    project_subparsers.add_parser(
         "list", help="List available projects"
     )
 
@@ -511,10 +508,10 @@ Examples:
         dest="orchestration_action", help="Orchestration actions"
     )
 
-    orch_status_parser = orchestration_subparsers.add_parser(
+    orchestration_subparsers.add_parser(
         "status", help="Show orchestration system status"
     )
-    orch_health_parser = orchestration_subparsers.add_parser(
+    orchestration_subparsers.add_parser(
         "health", help="Check orchestration system health"
     )
 
@@ -588,9 +585,7 @@ Examples:
 
     # Set verbose logging
     if args.verbose:
-        import logging
-
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(10)  # DEBUG level
         logger.debug("Verbose mode enabled")
 
     # Route commands
@@ -712,7 +707,7 @@ def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
     except ImportError:
         print("❌ AI code editing module not available")
         return False
-    except Exception as e:
+    except (ValueError, TypeError, AttributeError, RuntimeError) as e:
         print(f"❌ Error generating code: {str(e)}")
         return False
 
@@ -723,7 +718,7 @@ def handle_ai_refactor(file_path: str, instruction: str) -> bool:
         from codomyrmex.ai_code_editing import refactor_code_snippet
 
         # Read the file
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             code = f.read()
 
         # Determine language from file extension
@@ -755,7 +750,7 @@ def handle_ai_refactor(file_path: str, instruction: str) -> bool:
     except FileNotFoundError:
         print(f"❌ File not found: {file_path}")
         return False
-    except Exception as e:
+    except (ValueError, TypeError, AttributeError, RuntimeError, OSError) as e:
         print(f"❌ Error refactoring code: {str(e)}")
         return False
 
@@ -781,7 +776,7 @@ def handle_code_analysis(path: str, output_dir: Optional[str]) -> bool:
     except ImportError:
         print("❌ Static analysis module not available")
         return False
-    except Exception as e:
+    except (ValueError, TypeError, AttributeError, RuntimeError, OSError, FileNotFoundError) as e:
         print(f"❌ Error analyzing code: {str(e)}")
         return False
 
@@ -817,7 +812,7 @@ def handle_project_build(config_file: Optional[str]) -> bool:
 
         build_config = {}
         if config_file and Path(config_file).exists():
-            with open(config_file, "r") as f:
+            with open(config_file) as f:
                 build_config = json.load(f)
 
         result = orchestrate_build_pipeline(build_config)
@@ -886,8 +881,9 @@ def handle_module_demo(module_name: str) -> bool:
 def demo_data_visualization() -> bool:
     """Demo data visualization capabilities."""
     try:
-        from codomyrmex.data_visualization import create_line_plot, create_bar_chart
         import numpy as np
+
+        from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
         # Generate sample data
         x = list(range(10))
@@ -979,7 +975,7 @@ for i in range(8):
 def demo_git_operations() -> bool:
     """Demo git operations."""
     try:
-        from codomyrmex.git_operations import get_status, get_current_branch
+        from codomyrmex.git_operations import get_current_branch, get_status
 
         status = get_status()
         branch = get_current_branch()
@@ -1003,7 +999,7 @@ def demo_git_operations() -> bool:
 def handle_workflow_create(name: str, template: Optional[str] = None) -> bool:
     """Handle workflow creation command."""
     try:
-        from codomyrmex.project_orchestration import get_workflow_manager, WorkflowStep
+        from codomyrmex.project_orchestration import WorkflowStep, get_workflow_manager
 
         manager = get_workflow_manager()
 

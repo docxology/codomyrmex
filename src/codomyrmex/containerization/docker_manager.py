@@ -6,14 +6,11 @@ Provides comprehensive Docker container management and orchestration.
 
 import os
 import sys
-import json
-import docker
-import tempfile
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Optional
+
+import docker
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,14 +19,9 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-
-    logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -40,13 +32,13 @@ class ContainerConfig:
     tag: str = "latest"
     dockerfile_path: Optional[str] = None
     build_context: str = "."
-    build_args: Dict[str, str] = field(default_factory=dict)
-    environment: Dict[str, str] = field(default_factory=dict)
-    ports: Dict[str, str] = field(default_factory=dict)
-    volumes: Dict[str, str] = field(default_factory=dict)
-    networks: List[str] = field(default_factory=list)
+    build_args: dict[str, str] = field(default_factory=dict)
+    environment: dict[str, str] = field(default_factory=dict)
+    ports: dict[str, str] = field(default_factory=dict)
+    volumes: dict[str, str] = field(default_factory=dict)
+    networks: list[str] = field(default_factory=list)
     restart_policy: str = "no"
-    labels: Dict[str, str] = field(default_factory=dict)
+    labels: dict[str, str] = field(default_factory=dict)
 
     def get_full_image_name(self) -> str:
         """Get the full image name with tag."""
@@ -96,8 +88,8 @@ class DockerManager:
         self,
         config: ContainerConfig,
         push: bool = False,
-        registry_auth: Optional[Dict[str, str]] = None,
-    ) -> Dict[str, Any]:
+        registry_auth: Optional[dict[str, str]] = None,
+    ) -> dict[str, Any]:
         """
         Build a Docker image from configuration.
 
@@ -163,8 +155,8 @@ class DockerManager:
             return {"success": False, "error": str(e)}
 
     def push_image(
-        self, image_name: str, auth_config: Dict[str, str]
-    ) -> Dict[str, Any]:
+        self, image_name: str, auth_config: dict[str, str]
+    ) -> dict[str, Any]:
         """
         Push a Docker image to registry.
 
@@ -204,7 +196,7 @@ class DockerManager:
 
     def run_container(
         self, config: ContainerConfig, detach: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Run a Docker container.
 
@@ -267,7 +259,7 @@ class DockerManager:
             logger.error(f"Failed to run container {config.get_full_image_name()}: {e}")
             return {"success": False, "error": str(e)}
 
-    def list_containers(self, show_all: bool = False) -> List[Dict[str, Any]]:
+    def list_containers(self, show_all: bool = False) -> list[dict[str, Any]]:
         """
         List Docker containers.
 
@@ -304,7 +296,7 @@ class DockerManager:
             logger.error(f"Failed to list containers: {e}")
             return []
 
-    def stop_container(self, container_id: str) -> Dict[str, Any]:
+    def stop_container(self, container_id: str) -> dict[str, Any]:
         """
         Stop a Docker container.
 
@@ -333,7 +325,7 @@ class DockerManager:
 
     def remove_container(
         self, container_id: str, force: bool = False
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Remove a Docker container.
 
@@ -361,7 +353,7 @@ class DockerManager:
             logger.error(f"Failed to remove container {container_id}: {e}")
             return {"success": False, "error": str(e)}
 
-    def get_container_logs(self, container_id: str, tail: int = 100) -> Dict[str, Any]:
+    def get_container_logs(self, container_id: str, tail: int = 100) -> dict[str, Any]:
         """
         Get logs from a Docker container.
 
@@ -390,7 +382,7 @@ class DockerManager:
             logger.error(f"Failed to get logs for container {container_id}: {e}")
             return {"success": False, "error": str(e)}
 
-    def get_container_stats(self, container_id: str) -> Dict[str, Any]:
+    def get_container_stats(self, container_id: str) -> dict[str, Any]:
         """
         Get statistics for a Docker container.
 
@@ -420,7 +412,7 @@ class DockerManager:
             logger.error(f"Failed to get stats for container {container_id}: {e}")
             return {"success": False, "error": str(e)}
 
-    def create_network(self, name: str, driver: str = "bridge") -> Dict[str, Any]:
+    def create_network(self, name: str, driver: str = "bridge") -> dict[str, Any]:
         """
         Create a Docker network.
 
@@ -449,7 +441,7 @@ class DockerManager:
             logger.error(f"Failed to create network {name}: {e}")
             return {"success": False, "error": str(e)}
 
-    def list_images(self) -> List[Dict[str, Any]]:
+    def list_images(self) -> list[dict[str, Any]]:
         """
         List Docker images.
 
@@ -475,7 +467,7 @@ class DockerManager:
             logger.error(f"Failed to list images: {e}")
             return []
 
-    def remove_image(self, image_name: str, force: bool = False) -> Dict[str, Any]:
+    def remove_image(self, image_name: str, force: bool = False) -> dict[str, Any]:
         """
         Remove a Docker image.
 
@@ -502,7 +494,7 @@ class DockerManager:
             logger.error(f"Failed to remove image {image_name}: {e}")
             return {"success": False, "error": str(e)}
 
-    def get_docker_info(self) -> Dict[str, Any]:
+    def get_docker_info(self) -> dict[str, Any]:
         """
         Get Docker system information.
 
@@ -538,8 +530,8 @@ class DockerManager:
 def build_containers(
     config: ContainerConfig,
     push: bool = False,
-    registry_auth: Optional[Dict[str, str]] = None,
-) -> Dict[str, Any]:
+    registry_auth: Optional[dict[str, str]] = None,
+) -> dict[str, Any]:
     """
     Convenience function to build containers.
 

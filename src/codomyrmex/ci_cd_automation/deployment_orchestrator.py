@@ -5,20 +5,19 @@ Provides comprehensive deployment orchestration, environment management,
 and release coordination capabilities.
 """
 
-import os
-import sys
 import json
-import yaml
-import docker
-import kubernetes
-from typing import Dict, List, Any, Optional
+import os
+import shutil
+import subprocess
+import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from pathlib import Path
-import subprocess
-import shutil
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Optional
+
+import docker
+import kubernetes
+import yaml
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -27,14 +26,9 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-
-    logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class DeploymentStatus(Enum):
@@ -69,12 +63,12 @@ class Environment:
     key_path: Optional[str] = None
     docker_registry: Optional[str] = None
     kubernetes_context: Optional[str] = None
-    variables: Dict[str, str] = field(default_factory=dict)
-    pre_deploy_hooks: List[str] = field(default_factory=list)
-    post_deploy_hooks: List[str] = field(default_factory=list)
-    health_checks: List[Dict[str, Any]] = field(default_factory=list)
+    variables: dict[str, str] = field(default_factory=dict)
+    pre_deploy_hooks: list[str] = field(default_factory=list)
+    post_deploy_hooks: list[str] = field(default_factory=list)
+    health_checks: list[dict[str, Any]] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert environment to dictionary format."""
         return {
             "name": self.name,
@@ -99,7 +93,7 @@ class Deployment:
     name: str
     version: str
     environment: Environment
-    artifacts: List[str]
+    artifacts: list[str]
     strategy: str = "rolling"  # rolling, blue_green, canary
     timeout: int = 1800  # 30 minutes
     rollback_on_failure: bool = True
@@ -108,14 +102,14 @@ class Deployment:
     started_at: Optional[datetime] = None
     finished_at: Optional[datetime] = None
     duration: float = 0.0
-    logs: List[str] = field(default_factory=list)
-    metrics: Dict[str, Any] = field(default_factory=dict)
+    logs: list[str] = field(default_factory=list)
+    metrics: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert deployment to dictionary format."""
         return {
             "name": self.name,
@@ -158,8 +152,8 @@ class DeploymentOrchestrator:
         self.config_path = config_path or os.path.join(
             os.getcwd(), "deployment_config.yaml"
         )
-        self.environments: Dict[str, Environment] = {}
-        self.deployments: Dict[str, Deployment] = {}
+        self.environments: dict[str, Environment] = {}
+        self.deployments: dict[str, Deployment] = {}
         self.docker_client = None
         self.k8s_client = None
 
@@ -173,7 +167,7 @@ class DeploymentOrchestrator:
         """Load deployment configuration."""
         if os.path.exists(self.config_path):
             try:
-                with open(self.config_path, "r") as f:
+                with open(self.config_path) as f:
                     if self.config_path.endswith(".yaml") or self.config_path.endswith(
                         ".yml"
                     ):
@@ -222,7 +216,7 @@ class DeploymentOrchestrator:
         name: str,
         version: str,
         environment_name: str,
-        artifacts: List[str],
+        artifacts: list[str],
         **kwargs,
     ) -> Deployment:
         """
@@ -405,7 +399,7 @@ class DeploymentOrchestrator:
             logger.error(f"Failed to build Docker image: {e}")
             raise
 
-    def _run_docker_container(self, image_tag: str, environment_vars: Dict[str, str]):
+    def _run_docker_container(self, image_tag: str, environment_vars: dict[str, str]):
         """Run Docker container."""
         try:
             container = self.docker_client.containers.run(
@@ -421,7 +415,7 @@ class DeploymentOrchestrator:
             logger.error(f"Failed to run Docker container: {e}")
             raise
 
-    def _run_docker_compose(self, environment_vars: Dict[str, str]):
+    def _run_docker_compose(self, environment_vars: dict[str, str]):
         """Run Docker Compose deployment."""
         try:
             env = os.environ.copy()
@@ -444,12 +438,12 @@ class DeploymentOrchestrator:
             raise
 
     def _deploy_to_kubernetes(
-        self, manifest_path: str, environment_vars: Dict[str, str]
+        self, manifest_path: str, environment_vars: dict[str, str]
     ):
         """Deploy to Kubernetes."""
         try:
             # Substitute environment variables in manifest
-            with open(manifest_path, "r") as f:
+            with open(manifest_path) as f:
                 manifest = f.read()
 
             for key, value in environment_vars.items():
@@ -570,7 +564,8 @@ class DeploymentOrchestrator:
 
             response = requests.get(endpoint, timeout=timeout)
             return response.status_code == 200
-        except Exception:
+        except (requests.RequestException, requests.Timeout, requests.ConnectionError, ValueError) as e:
+            logger.debug(f"HTTP health check failed for {endpoint}: {e}")
             return False
 
     def _check_tcp_health(self, endpoint: str, timeout: int) -> bool:
@@ -582,7 +577,8 @@ class DeploymentOrchestrator:
             sock = socket.create_connection((host, int(port)), timeout=timeout)
             sock.close()
             return True
-        except Exception:
+        except (socket.error, OSError, ValueError, TimeoutError) as e:
+            logger.debug(f"TCP health check failed for {endpoint}: {e}")
             return False
 
     def _rollback_deployment(self, deployment: Deployment):
@@ -622,7 +618,7 @@ class DeploymentOrchestrator:
         """Get current status of a deployment."""
         return self.deployments.get(deployment_name)
 
-    def list_deployments(self) -> List[Deployment]:
+    def list_deployments(self) -> list[Deployment]:
         """List all deployments."""
         return list(self.deployments.values())
 

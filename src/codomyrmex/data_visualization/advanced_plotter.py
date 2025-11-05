@@ -7,20 +7,16 @@ interactive visualizations, dashboard generation, and data analysis charts.
 
 import os
 import sys
-import json
+import warnings
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Optional, Union
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 import seaborn as sns
-from typing import Dict, List, Any, Optional, Tuple, Union, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-import time
-from datetime import datetime, timedelta
-import warnings
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -30,23 +26,7 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 # Import logger setup
-try:
-    from logging_monitoring import setup_logging, get_logger
-except ImportError:
-    import logging
-
-    def get_logger(name):
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
-        return logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Get module logger
 logger = get_logger(__name__)
@@ -136,7 +116,7 @@ class PlotConfig:
     title: str = ""
     xlabel: str = ""
     ylabel: str = ""
-    figsize: Tuple[int, int] = (10, 6)
+    figsize: tuple[int, int] = (10, 6)
     dpi: int = 100
     style: ChartStyle = ChartStyle.DEFAULT
     palette: ColorPalette = ColorPalette.DEFAULT
@@ -167,7 +147,7 @@ class Dataset:
     """Dataset for plotting."""
 
     name: str
-    data: List[DataPoint]
+    data: list[DataPoint]
     plot_type: PlotType
     color: Optional[str] = None
     label: Optional[str] = None
@@ -208,7 +188,7 @@ class AdvancedPlotter:
         else:
             sns.set_style("whitegrid")
 
-    def _get_color_palette(self, n_colors: int) -> List[str]:
+    def _get_color_palette(self, n_colors: int) -> list[str]:
         """Get color palette for plotting."""
         if self.config.palette == ColorPalette.VIRIDIS:
             return sns.color_palette("viridis", n_colors)
@@ -233,8 +213,8 @@ class AdvancedPlotter:
 
     @monitor_performance("create_figure")
     def create_figure(
-        self, subplots: Tuple[int, int] = (1, 1), **kwargs
-    ) -> Tuple[plt.Figure, Union[plt.Axes, np.ndarray]]:
+        self, subplots: tuple[int, int] = (1, 1), **kwargs
+    ) -> tuple[plt.Figure, Union[plt.Axes, np.ndarray]]:
         """
         Create a new figure and axes.
 
@@ -267,8 +247,8 @@ class AdvancedPlotter:
     @monitor_performance("plot_line")
     def plot_line(
         self,
-        x_data: List[Union[float, int, str, datetime]],
-        y_data: List[Union[float, int, str, datetime]],
+        x_data: list[Union[float, int, str, datetime]],
+        y_data: list[Union[float, int, str, datetime]],
         label: str = "",
         color: str = None,
         linewidth: float = 2.0,
@@ -323,11 +303,11 @@ class AdvancedPlotter:
     @monitor_performance("plot_scatter")
     def plot_scatter(
         self,
-        x_data: List[Union[float, int, str, datetime]],
-        y_data: List[Union[float, int, str, datetime]],
+        x_data: list[Union[float, int, str, datetime]],
+        y_data: list[Union[float, int, str, datetime]],
         label: str = "",
         color: str = None,
-        size: Union[float, List[float]] = 50,
+        size: Union[float, list[float]] = 50,
         alpha: float = 0.7,
         marker: str = "o",
         **kwargs,
@@ -373,10 +353,10 @@ class AdvancedPlotter:
     @monitor_performance("plot_bar")
     def plot_bar(
         self,
-        x_data: List[Union[str, int, float]],
-        y_data: List[Union[float, int]],
+        x_data: list[Union[str, int, float]],
+        y_data: list[Union[float, int]],
         label: str = "",
-        color: Union[str, List[str]] = None,
+        color: Union[str, list[str]] = None,
         alpha: float = 0.8,
         width: float = 0.8,
         orientation: str = "vertical",
@@ -433,8 +413,8 @@ class AdvancedPlotter:
     @monitor_performance("plot_histogram")
     def plot_histogram(
         self,
-        data: List[Union[float, int]],
-        bins: Union[int, List[float]] = 30,
+        data: list[Union[float, int]],
+        bins: Union[int, list[float]] = 30,
         label: str = "",
         color: str = None,
         alpha: float = 0.7,
@@ -483,9 +463,9 @@ class AdvancedPlotter:
     @monitor_performance("plot_heatmap")
     def plot_heatmap(
         self,
-        data: Union[List[List[float]], np.ndarray, pd.DataFrame],
-        x_labels: List[str] = None,
-        y_labels: List[str] = None,
+        data: Union[list[list[float]], np.ndarray, pd.DataFrame],
+        x_labels: list[str] = None,
+        y_labels: list[str] = None,
         cmap: str = "viridis",
         annot: bool = False,
         fmt: str = ".2f",
@@ -537,13 +517,13 @@ class AdvancedPlotter:
     @monitor_performance("plot_box")
     def plot_box(
         self,
-        data: Union[List[Union[float, int]], Dict[str, List[Union[float, int]]]],
-        labels: List[str] = None,
-        color: Union[str, List[str]] = None,
+        data: Union[list[Union[float, int]], dict[str, list[Union[float, int]]]],
+        labels: list[str] = None,
+        color: Union[str, list[str]] = None,
         notch: bool = False,
         patch_artist: bool = True,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Create a box plot.
 
@@ -589,12 +569,12 @@ class AdvancedPlotter:
     @monitor_performance("plot_violin")
     def plot_violin(
         self,
-        data: Union[List[Union[float, int]], Dict[str, List[Union[float, int]]]],
-        labels: List[str] = None,
-        color: Union[str, List[str]] = None,
+        data: Union[list[Union[float, int]], dict[str, list[Union[float, int]]]],
+        labels: list[str] = None,
+        color: Union[str, list[str]] = None,
         alpha: float = 0.7,
         **kwargs,
-    ) -> List[plt.Polygon]:
+    ) -> list[plt.Polygon]:
         """
         Create a violin plot.
 
@@ -707,8 +687,8 @@ class AdvancedPlotter:
     @monitor_performance("create_dashboard")
     def create_dashboard(
         self,
-        datasets: List[Dataset],
-        layout: Tuple[int, int] = (2, 2),
+        datasets: list[Dataset],
+        layout: tuple[int, int] = (2, 2),
         title: str = "Dashboard",
         **kwargs,
     ) -> plt.Figure:
@@ -964,8 +944,8 @@ class AdvancedPlotter:
 
 # Convenience functions
 def create_advanced_line_plot(
-    x_data: List[Union[float, int, str, datetime]],
-    y_data: List[Union[float, int, str, datetime]],
+    x_data: list[Union[float, int, str, datetime]],
+    y_data: list[Union[float, int, str, datetime]],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -979,8 +959,8 @@ def create_advanced_line_plot(
 
 
 def create_advanced_scatter_plot(
-    x_data: List[Union[float, int, str, datetime]],
-    y_data: List[Union[float, int, str, datetime]],
+    x_data: list[Union[float, int, str, datetime]],
+    y_data: list[Union[float, int, str, datetime]],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -994,8 +974,8 @@ def create_advanced_scatter_plot(
 
 
 def create_advanced_bar_chart(
-    x_data: List[Union[str, int, float]],
-    y_data: List[Union[float, int]],
+    x_data: list[Union[str, int, float]],
+    y_data: list[Union[float, int]],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -1009,7 +989,7 @@ def create_advanced_bar_chart(
 
 
 def create_advanced_histogram(
-    data: List[Union[float, int]],
+    data: list[Union[float, int]],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -1023,7 +1003,7 @@ def create_advanced_histogram(
 
 
 def create_advanced_heatmap(
-    data: Union[List[List[float]], np.ndarray, pd.DataFrame],
+    data: Union[list[list[float]], np.ndarray, pd.DataFrame],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -1037,9 +1017,9 @@ def create_advanced_heatmap(
 
 
 def create_advanced_dashboard(
-    datasets: List[Dataset],
+    datasets: list[Dataset],
     title: str = "Dashboard",
-    layout: Tuple[int, int] = (2, 2),
+    layout: tuple[int, int] = (2, 2),
     config: PlotConfig = None,
     **kwargs,
 ) -> plt.Figure:
@@ -1048,16 +1028,16 @@ def create_advanced_dashboard(
     return plotter.create_dashboard(datasets, layout, title, **kwargs)
 
 
-def get_available_styles() -> List[ChartStyle]:
+def get_available_styles() -> list[ChartStyle]:
     """Get list of available chart styles."""
     return list(ChartStyle)
 
 
-def get_available_palettes() -> List[ColorPalette]:
+def get_available_palettes() -> list[ColorPalette]:
     """Get list of available color palettes."""
     return list(ColorPalette)
 
 
-def get_available_plot_types() -> List[PlotType]:
+def get_available_plot_types() -> list[PlotType]:
     """Get list of available plot types."""
     return list(PlotType)

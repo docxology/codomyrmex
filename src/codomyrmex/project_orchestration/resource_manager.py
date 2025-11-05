@@ -5,18 +5,15 @@ This module provides resource allocation, dependency management, and coordinatio
 for tasks and workflows across the Codomyrmex ecosystem.
 """
 
-import os
 import json
+import os
 import threading
 import time
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Set, Union
-from dataclasses import dataclass, field, asdict
-from builtins import open
-from enum import Enum
 from collections import defaultdict
-from codomyrmex.exceptions import CodomyrmexError
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any, Optional
 
 # Import Codomyrmex modules
 try:
@@ -106,14 +103,14 @@ class Resource:
     type: ResourceType
     description: str = ""
     status: ResourceStatus = ResourceStatus.AVAILABLE
-    capacity: Dict[str, Any] = field(default_factory=dict)
-    allocated: Dict[str, Any] = field(default_factory=dict)
+    capacity: dict[str, Any] = field(default_factory=dict)
+    allocated: dict[str, Any] = field(default_factory=dict)
     limits: ResourceLimits = field(default_factory=ResourceLimits)
     total_allocations: int = 0
     total_usage_time: float = 0.0
-    current_users: Set[str] = field(default_factory=set)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    tags: List[str] = field(default_factory=list)
+    current_users: set[str] = field(default_factory=set)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -127,7 +124,7 @@ class Resource:
         unit: Optional[str] = None,
         description: str = "",
         status: ResourceStatus = ResourceStatus.AVAILABLE,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Optional[dict[str, Any]] = None,
         **kwargs,
     ):
         # Accept resource_type (test usage) or type (internal usage)
@@ -161,7 +158,7 @@ class Resource:
         self.created_at = kwargs.get("created_at", datetime.now(timezone.utc))
         self.updated_at = kwargs.get("updated_at", datetime.now(timezone.utc))
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         data = {
             "id": self.id,
             "name": self.name,
@@ -186,7 +183,7 @@ class Resource:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Resource":
+    def from_dict(cls, data: dict[str, Any]) -> "Resource":
         """From Dict.
 
             Args:        cls: Parameter for the operation.        data: Data to process.
@@ -224,7 +221,7 @@ class Resource:
     def is_available(self) -> bool:
         return self.status == ResourceStatus.AVAILABLE
 
-    def can_allocate(self, requested: Dict[str, Any], user_id: str) -> bool:
+    def can_allocate(self, requested: dict[str, Any], user_id: str) -> bool:
         """Can Allocate.
 
         Args:
@@ -252,7 +249,7 @@ class Resource:
                     return False
         return True
 
-    def allocate(self, requested: Dict[str, Any], user_id: str) -> bool:
+    def allocate(self, requested: dict[str, Any], user_id: str) -> bool:
         """Allocate.
 
         Args:
@@ -271,7 +268,7 @@ class Resource:
         self.updated_at = datetime.now(timezone.utc)
         return True
 
-    def deallocate(self, released: Dict[str, Any], user_id: str):
+    def deallocate(self, released: dict[str, Any], user_id: str):
         """Deallocate resources and update user tracking.
 
         Args:
@@ -284,7 +281,7 @@ class Resource:
         self.current_users.discard(user_id)
         self.updated_at = datetime.now(timezone.utc)
 
-    def get_utilization(self) -> Dict[str, float]:
+    def get_utilization(self) -> dict[str, float]:
         """Get Utilization.
 
             Returns:        The result of the operation.
@@ -307,10 +304,10 @@ class ResourceAllocation:
     id: str
     resource_id: str
     user_id: str  # Task ID or user ID
-    allocated: Dict[str, Any]
+    allocated: dict[str, Any]
     allocated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     expires_at: Optional[datetime] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def is_expired(self) -> bool:
         """Check if allocation has expired."""
@@ -327,14 +324,14 @@ class ResourceManager:
         self.config_file = config_file or "resources.json"
 
         # Resource storage
-        self.resources: Dict[str, Resource] = {}
-        self.allocations: Dict[str, ResourceAllocation] = {}
+        self.resources: dict[str, Resource] = {}
+        self.allocations: dict[str, ResourceAllocation] = {}
 
         # Thread safety
         self.lock = threading.RLock()
 
         # Resource pools by type
-        self.resource_pools: Dict[ResourceType, List[str]] = defaultdict(list)
+        self.resource_pools: dict[ResourceType, list[str]] = defaultdict(list)
 
         # Load configuration and initialize default resources
         self.load_resources()
@@ -471,7 +468,7 @@ class ResourceManager:
         self,
         resource_type: Optional[ResourceType] = None,
         status: Optional[ResourceStatus] = None,
-    ) -> List[Resource]:
+    ) -> list[Resource]:
         """List resources, optionally filtered by type and status."""
         with self.lock:
             resources = list(self.resources.values())
@@ -488,9 +485,9 @@ class ResourceManager:
     def allocate_resources(
         self,
         user_id: str,
-        requirements: Dict[str, Dict[str, Any]],
+        requirements: dict[str, dict[str, Any]],
         timeout: Optional[int] = None,
-    ) -> Optional[Dict[str, str]]:
+    ) -> Optional[dict[str, str]]:
         """
         Allocate resources to a user based on requirements.
 
@@ -576,13 +573,13 @@ class ResourceManager:
             self._rollback_allocations(allocated_resources, user_id)
             return None
 
-    def _rollback_allocations(self, allocated_resources: List[tuple], user_id: str):
+    def _rollback_allocations(self, allocated_resources: list[tuple], user_id: str):
         """Rollback partial allocations on failure."""
         for resource, allocation in allocated_resources:
             resource.deallocate(allocation, user_id)
 
     def deallocate_resources(
-        self, user_id: str, allocation_ids: Optional[List[str]] = None
+        self, user_id: str, allocation_ids: Optional[list[str]] = None
     ) -> bool:
         """
         Deallocate resources for a user.
@@ -619,7 +616,7 @@ class ResourceManager:
             logger.info(f"Deallocated {released_count} resources for {user_id}")
             return released_count > 0
 
-    def get_resource_usage(self, resource_id: Optional[str] = None) -> Dict[str, Any]:
+    def get_resource_usage(self, resource_id: Optional[str] = None) -> dict[str, Any]:
         """Get resource usage statistics."""
         with self.lock:
             if resource_id:
@@ -667,7 +664,7 @@ class ResourceManager:
 
                 return usage
 
-    def get_user_allocations(self, user_id: str) -> List[Dict[str, Any]]:
+    def get_user_allocations(self, user_id: str) -> list[dict[str, Any]]:
         """Get all allocations for a specific user."""
         with self.lock:
             user_allocations = []
@@ -745,7 +742,7 @@ class ResourceManager:
             return
 
         try:
-            with open(self.config_file, "r") as f:
+            with open(self.config_file) as f:
                 config = json.load(f)
 
             for resource_data in config.get("resources", {}).values():
@@ -756,7 +753,7 @@ class ResourceManager:
         except Exception as e:
             logger.error(f"Failed to load resources: {e}")
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """Perform health check on all resources."""
         with self.lock:
             health = {

@@ -4,9 +4,9 @@ This module provides tools for assessing documentation quality,
 consistency, and technical accuracy across the Codomyrmex platform.
 """
 
-from typing import Dict, List, Optional, Tuple
-from pathlib import Path
 import re
+from pathlib import Path
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -25,7 +25,7 @@ class DocumentationQualityAnalyzer:
             "structure": 0
         }
 
-    def analyze_file(self, file_path: Path) -> Dict[str, float]:
+    def analyze_file(self, file_path: Path) -> dict[str, float]:
         """Analyze a single documentation file."""
         if not file_path.exists():
             return {"error": "File not found"}

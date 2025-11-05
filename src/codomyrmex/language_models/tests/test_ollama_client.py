@@ -2,25 +2,23 @@
 
 import asyncio
 import json
-import os
-import pytest
 import subprocess
 import time
-from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
-from requests.exceptions import Timeout, ConnectionError as RequestsConnectionError
+from unittest.mock import Mock, patch
 
-from codomyrmex.language_models.ollama_client import (
-    OllamaClient,
-    OllamaError,
-    OllamaConnectionError,
-    OllamaTimeoutError,
-    OllamaModelError,
-)
-
+import pytest
+from requests.exceptions import ConnectionError as RequestsConnectionError
+from requests.exceptions import Timeout
 
 # Test configuration and utilities
 from codomyrmex.language_models.config import get_config
+from codomyrmex.language_models.ollama_client import (
+    OllamaClient,
+    OllamaConnectionError,
+    OllamaError,
+    OllamaModelError,
+    OllamaTimeoutError,
+)
 
 # Get configuration
 config = get_config()
@@ -38,7 +36,7 @@ def is_ollama_available() -> bool:
         import requests
         response = requests.get("http://localhost:11434/api/version", timeout=5)
         return response.status_code == 200
-    except:
+    except (requests.RequestException, ConnectionError, TimeoutError):
         return False
 
 def get_available_models() -> list:
@@ -286,7 +284,7 @@ class TestOllamaClient:
         mock_post.return_value = mock_response
 
         options = {"temperature": 0.8, "top_p": 0.9}
-        result = client.generate("Test prompt", options=options)
+        client.generate("Test prompt", options=options)
 
         # Check that options are included in payload
         call_args = mock_post.call_args[1]["json"]
@@ -343,7 +341,7 @@ class TestOllamaClient:
         client._generate_stream = mock_generate_stream_timeout
 
         async def test_stream():
-            async for chunk in client.generate("Test prompt", stream=True):
+            async for _chunk in client.generate("Test prompt", stream=True):
                 pass
 
         with pytest.raises(OllamaTimeoutError, match="Generation request timed out"):
@@ -511,7 +509,7 @@ class TestOllamaClient:
         async def collect_chunks():
             async for chunk in real_client.generate(prompt, model=TEST_MODEL, stream=True):
                 chunks.append(chunk)
-        
+
         import asyncio
         asyncio.run(collect_chunks())
 

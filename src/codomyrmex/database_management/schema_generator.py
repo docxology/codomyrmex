@@ -11,7 +11,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -23,9 +23,9 @@ logger = get_logger(__name__)
 class SchemaTable:
     """Database table schema definition."""
     name: str
-    columns: List[Dict[str, Any]] = field(default_factory=list)
-    indexes: List[Dict[str, Any]] = field(default_factory=list)
-    constraints: List[str] = field(default_factory=list)
+    columns: list[dict[str, Any]] = field(default_factory=list)
+    indexes: list[dict[str, Any]] = field(default_factory=list)
+    constraints: list[str] = field(default_factory=list)
     description: str = ""
 
 
@@ -37,7 +37,7 @@ class SchemaMigration:
     description: str
     up_sql: str
     down_sql: str
-    dependencies: List[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
 
 
@@ -55,8 +55,8 @@ class SchemaGenerator:
         self.migrations_dir = self.workspace_dir / "schema_migrations"
         self._ensure_directories()
 
-        self._tables: Dict[str, SchemaTable] = {}
-        self._migrations: Dict[str, SchemaMigration] = {}
+        self._tables: dict[str, SchemaTable] = {}
+        self._migrations: dict[str, SchemaMigration] = {}
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
@@ -91,7 +91,7 @@ class SchemaGenerator:
         logger.info(f"Created table schema: {table.name}")
         return table_id
 
-    def generate_migration(self, name: str, description: str, changes: Dict[str, Any]) -> SchemaMigration:
+    def generate_migration(self, name: str, description: str, changes: dict[str, Any]) -> SchemaMigration:
         """Generate a schema migration.
 
         Args:
@@ -134,13 +134,13 @@ class SchemaGenerator:
         logger.info(f"Generated migration: {migration_id}")
         return migration
 
-    def _generate_sql_from_changes(self, changes: Dict[str, Any], direction: str) -> str:
+    def _generate_sql_from_changes(self, changes: dict[str, Any], direction: str) -> str:
         """Generate SQL from schema changes."""
         # This would generate actual SQL based on the changes
         # For now, return a placeholder
         return f"-- {direction.capitalize()} migration SQL for changes: {changes}"
 
-    def apply_migration(self, migration_id: str) -> Dict[str, Any]:
+    def apply_migration(self, migration_id: str) -> dict[str, Any]:
         """Apply a schema migration.
 
         Args:
@@ -165,7 +165,7 @@ class SchemaGenerator:
         logger.info(f"Applied migration: {migration_id}")
         return result
 
-    def rollback_migration(self, migration_id: str) -> Dict[str, Any]:
+    def rollback_migration(self, migration_id: str) -> dict[str, Any]:
         """Rollback a schema migration.
 
         Args:
@@ -190,7 +190,7 @@ class SchemaGenerator:
         logger.info(f"Rolled back migration: {migration_id}")
         return result
 
-    def list_migrations(self) -> List[Dict[str, Any]]:
+    def list_migrations(self) -> list[dict[str, Any]]:
         """List all migrations.
 
         Returns:
@@ -198,7 +198,7 @@ class SchemaGenerator:
         """
         migrations = []
 
-        for migration_id, migration in self._migrations.items():
+        for _migration_id, migration in self._migrations.items():
             migrations.append({
                 "id": migration.id,
                 "name": migration.name,
@@ -209,7 +209,7 @@ class SchemaGenerator:
 
         return migrations
 
-    def get_schema_drift_report(self, current_schema: Dict[str, Any], target_schema: Dict[str, Any]) -> Dict[str, Any]:
+    def get_schema_drift_report(self, current_schema: dict[str, Any], target_schema: dict[str, Any]) -> dict[str, Any]:
         """Generate schema drift report.
 
         Args:
@@ -236,12 +236,12 @@ class SchemaDefinition:
     """Database schema definition."""
     name: str
     version: str
-    tables: List[SchemaTable] = field(default_factory=list)
-    indexes: List[Dict[str, Any]] = field(default_factory=list)
-    constraints: List[str] = field(default_factory=list)
+    tables: list[SchemaTable] = field(default_factory=list)
+    indexes: list[dict[str, Any]] = field(default_factory=list)
+    constraints: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert schema to dictionary."""
         return {
             "name": self.name,
@@ -262,7 +262,7 @@ class SchemaDefinition:
         }
 
 
-def generate_schema(models: List[Any], output_dir: str) -> Dict[str, Any]:
+def generate_schema(models: list[Any], output_dir: str) -> dict[str, Any]:
     """Generate database schema from models.
 
     Args:
@@ -275,7 +275,7 @@ def generate_schema(models: List[Any], output_dir: str) -> Dict[str, Any]:
     return generate_schema_from_models(models, output_dir)
 
 
-def generate_schema_from_models(models: List[Any], output_dir: str) -> Dict[str, Any]:
+def generate_schema_from_models(models: list[Any], output_dir: str) -> dict[str, Any]:
     """Generate database schema from model definitions.
 
     Args:
@@ -285,7 +285,7 @@ def generate_schema_from_models(models: List[Any], output_dir: str) -> Dict[str,
     Returns:
         Generated schema information
     """
-    generator = SchemaGenerator()
+    SchemaGenerator()
 
     # In a real implementation, this would introspect models and generate schema
     # For now, return a basic result

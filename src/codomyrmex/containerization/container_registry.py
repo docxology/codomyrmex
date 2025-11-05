@@ -6,12 +6,9 @@ This module provides container registry management, image storage,
 and distribution capabilities.
 """
 
-import json
-import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -27,9 +24,9 @@ class ContainerImage:
     registry_url: str
     size_mb: float
     created_at: datetime
-    layers: List[str] = field(default_factory=list)
-    labels: Dict[str, str] = field(default_factory=dict)
-    vulnerabilities: List[Dict[str, Any]] = field(default_factory=list)
+    layers: list[str] = field(default_factory=list)
+    labels: dict[str, str] = field(default_factory=dict)
+    vulnerabilities: list[dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass
@@ -53,7 +50,7 @@ class ContainerRegistry:
         """
         self.registry_url = registry_url
         self.credentials = credentials
-        self._images: Dict[str, ContainerImage] = {}
+        self._images: dict[str, ContainerImage] = {}
 
         logger.info(f"Container registry initialized: {registry_url} (stub implementation)")
 
@@ -106,7 +103,7 @@ class ContainerRegistry:
 
         return local_path
 
-    def list_images(self, repository: Optional[str] = None) -> List[Dict[str, Any]]:
+    def list_images(self, repository: Optional[str] = None) -> list[dict[str, Any]]:
         """List images in the registry.
 
         Args:
@@ -117,7 +114,7 @@ class ContainerRegistry:
         """
         images = []
 
-        for image_id, image in self._images.items():
+        for _image_id, image in self._images.items():
             if repository and not image.name.startswith(repository):
                 continue
 
@@ -151,7 +148,7 @@ class ContainerRegistry:
 
         return False
 
-    def get_image_info(self, image_name: str, image_tag: str) -> Optional[Dict[str, Any]]:
+    def get_image_info(self, image_name: str, image_tag: str) -> Optional[dict[str, Any]]:
         """Get detailed information about an image.
 
         Args:

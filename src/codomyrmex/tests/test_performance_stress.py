@@ -5,17 +5,16 @@ This module tests the performance characteristics and stress limits of
 various Codomyrmex modules under different load conditions.
 """
 
-import pytest
 import os
 import sys
-import time
 import tempfile
-import threading
-import multiprocessing
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-from typing import List, Dict, Any
-import numpy as np
+import time
+from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import Mock, patch
+
+import numpy as np
+import pytest
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -32,40 +31,22 @@ if PROJECT_ROOT not in sys.path:
 from ai_code_editing import (
     generate_code_snippet,
     refactor_code_snippet,
-    analyze_code_quality,
-    CodeLanguage,
-    CodeComplexity,
-    CodeStyle,
 )
-from static_analysis import (
-    StaticAnalyzer,
-    analyze_file,
-    analyze_project,
-    AnalysisType,
-    SeverityLevel,
-    Language,
+from build_synthesis import (
+    BuildManager,
+    create_python_build_target,
 )
 from data_visualization import (
     AdvancedPlotter,
     create_advanced_line_plot,
     create_advanced_scatter_plot,
-    PlotType,
-    ChartStyle,
-    ColorPalette,
-    PlotConfig,
-)
-from build_synthesis import (
-    BuildManager,
-    create_python_build_target,
-    BuildType,
-    BuildStatus,
-    BuildEnvironment,
 )
 from project_orchestration import (
-    WorkflowManager,
     WorkflowStep,
-    WorkflowExecution,
-    WorkflowStatus,
+)
+from static_analysis import (
+    AnalysisType,
+    StaticAnalyzer,
 )
 
 
@@ -425,8 +406,9 @@ class TestMemoryUsage:
 
     def test_ai_code_editing_memory_usage(self):
         """Test memory usage of AI code editing operations."""
-        import psutil
         import gc
+
+        import psutil
 
         process = psutil.Process()
         initial_memory = process.memory_info().rss
@@ -460,8 +442,9 @@ class TestMemoryUsage:
 
     def test_static_analysis_memory_usage(self):
         """Test memory usage of static analysis operations."""
-        import psutil
         import gc
+
+        import psutil
 
         process = psutil.Process()
         initial_memory = process.memory_info().rss
@@ -475,7 +458,7 @@ class TestMemoryUsage:
             analyzer = StaticAnalyzer(temp_dir)
 
             # Analyze all files
-            summary = analyzer.analyze_project([temp_dir])
+            analyzer.analyze_project([temp_dir])
 
             peak_memory = process.memory_info().rss
             memory_increase = peak_memory - initial_memory
@@ -555,8 +538,9 @@ class TestStressLimits:
 
     def test_memory_stress_large_datasets(self):
         """Test memory stress with large datasets."""
-        import psutil
         import gc
+
+        import psutil
 
         process = psutil.Process()
         initial_memory = process.memory_info().rss
@@ -565,7 +549,7 @@ class TestStressLimits:
         large_x = np.random.normal(0, 1, 1000000)  # 1 million points
         large_y = np.random.normal(0, 1, 1000000)
 
-        plotter = AdvancedPlotter()
+        AdvancedPlotter()
 
         start_time = time.time()
         fig = create_advanced_scatter_plot(

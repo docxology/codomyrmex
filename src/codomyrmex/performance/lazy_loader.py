@@ -5,11 +5,10 @@ This module provides lazy loading capabilities to improve startup time
 by deferring module imports until they are actually needed.
 """
 
-import sys
 import importlib
-from typing import Any, Dict, Optional, Callable
 from functools import wraps
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Callable, Optional
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -79,7 +78,7 @@ def lazy_import(module_name: str, package: Optional[str] = None) -> LazyLoader:
 
 
 # Global registry of lazy loaders
-_lazy_loaders: Dict[str, LazyLoader] = {}
+_lazy_loaders: dict[str, LazyLoader] = {}
 
 
 def get_lazy_loader(module_name: str, package: Optional[str] = None) -> LazyLoader:

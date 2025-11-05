@@ -29,5 +29,5 @@ Project governance, contribution, and roadmap documentation coordination for Cod
 - **🤝 Contributing Guide**: [contributing.md](contributing.md) - How to contribute effectively
 - **📋 Project TODO**: [todo.md](todo.md) - Roadmap and current priorities
 - **📝 Documentation Reorg**: [documentation-reorganization-summary.md](documentation-reorganization-summary.md) - Documentation restructuring summary
-- **🔧 Development**: [../../development/environment-setup.md](../../development/environment-setup.md) - Development environment setup
-- **🧪 Testing Strategy**: [../../development/testing-strategy.md](../../development/testing-strategy.md) - Testing approach and best practices
+- **🔧 Development**: [../development/environment-setup.md](../development/environment-setup.md) - Development environment setup
+- **🧪 Testing Strategy**: [../development/testing-strategy.md](../development/testing-strategy.md) - Testing approach and best practices

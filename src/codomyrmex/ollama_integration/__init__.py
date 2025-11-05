@@ -6,10 +6,10 @@ enabling flexible model management, execution, and output handling within
 the Codomyrmex ecosystem.
 """
 
-from .ollama_manager import OllamaManager
-from .model_runner import ModelRunner
-from .output_manager import OutputManager
 from .config_manager import ConfigManager
+from .model_runner import ModelRunner
+from .ollama_manager import OllamaManager
+from .output_manager import OutputManager
 
 __all__ = [
     'OllamaManager',

@@ -1,8 +1,8 @@
 """Configuration management for Language Models module."""
 
 import os
-from typing import Dict, Optional, Union
 from pathlib import Path
+from typing import Optional, Union
 
 
 class LLMConfig:
@@ -99,8 +99,8 @@ class LLMConfig:
     def _ensure_directories(self):
         """Create output directories if they don't exist."""
         for directory in [
-            self.test_results_dir, 
-            self.llm_outputs_dir, 
+            self.test_results_dir,
+            self.llm_outputs_dir,
             self.reports_dir,
             self.config_dir,
             self.logs_dir,
@@ -110,7 +110,7 @@ class LLMConfig:
         ]:
             directory.mkdir(parents=True, exist_ok=True)
 
-    def get_generation_options(self) -> Dict:
+    def get_generation_options(self) -> dict:
         """
         Get generation options for LLM requests.
 
@@ -124,7 +124,7 @@ class LLMConfig:
             "num_predict": self.max_tokens,
         }
 
-    def get_client_kwargs(self) -> Dict:
+    def get_client_kwargs(self) -> dict:
         """
         Get client initialization parameters.
 
@@ -137,7 +137,7 @@ class LLMConfig:
             "timeout": self.timeout,
         }
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """
         Convert configuration to dictionary.
 
@@ -198,7 +198,7 @@ class LLMConfig:
         """
         import json
 
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding='utf-8') as f:
             config_dict = json.load(f)
 
         return cls(**config_dict)

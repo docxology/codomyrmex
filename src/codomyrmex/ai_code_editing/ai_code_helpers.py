@@ -6,13 +6,13 @@ This module contains functions for generating and refactoring code using LLMs.
 
 import os
 import sys
-import json
 import time
-import random
-from typing import Dict, Any, Optional, Tuple, Union, List, Callable
 from dataclasses import dataclass
 from enum import Enum
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Optional
+
+# Import logger setup (must be at top level)
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Add project root to Python path to allow sibling module imports if needed
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,32 +21,13 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-# Import logger setup
-try:
-    from logging_monitoring import setup_logging, get_logger
-except ImportError:
-    # Fallback if logging module isn't available
-    import logging
-
-    def get_logger(name):
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
-        return logger
-
 
 # Get module logger
 logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-    from performance import monitor_performance, performance_context
+    from performance import monitor_performance
 
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
@@ -139,8 +120,8 @@ class CodeGenerationRequest:
     complexity: CodeComplexity = CodeComplexity.INTERMEDIATE
     style: CodeStyle = CodeStyle.CLEAN
     context: Optional[str] = None
-    requirements: Optional[List[str]] = None
-    examples: Optional[List[str]] = None
+    requirements: Optional[list[str]] = None
+    examples: Optional[list[str]] = None
     max_length: Optional[int] = None
     temperature: float = 0.7
 
@@ -175,7 +156,7 @@ class CodeGenerationResult:
 
     generated_code: str
     language: CodeLanguage
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     execution_time: float
     tokens_used: Optional[int] = None
     confidence_score: Optional[float] = None
@@ -196,7 +177,7 @@ RETRY_DELAY = 1.0  # seconds
 
 # LLM client initialization
 @monitor_performance("llm_client_initialization")
-def get_llm_client(provider: str, model_name: Optional[str] = None) -> Tuple[Any, str]:
+def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any, str]:
     """
     Initialize and return an LLM client based on the specified provider.
 
@@ -283,7 +264,7 @@ def generate_code_snippet(
     max_length: Optional[int] = None,
     temperature: float = 0.7,
     **kwargs,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Generate a code snippet using an LLM.
 
@@ -399,8 +380,12 @@ def generate_code_snippet(
         )
         return result
 
-    except Exception as e:
+    except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error generating code snippet: {e}")
+        raise RuntimeError(f"Code generation failed: {e}")
+    except Exception as e:
+        # Final fallback for unexpected API errors or network issues
+        logger.error(f"Unexpected error generating code snippet: {e}", exc_info=True)
         raise RuntimeError(f"Code generation failed: {e}")
 
 
@@ -414,7 +399,7 @@ def refactor_code_snippet(
     context: Optional[str] = None,
     preserve_functionality: bool = True,
     **kwargs,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Refactor existing code using an LLM.
 
@@ -515,8 +500,12 @@ def refactor_code_snippet(
         )
         return result
 
-    except Exception as e:
+    except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error refactoring code: {e}")
+        raise RuntimeError(f"Code refactoring failed: {e}")
+    except Exception as e:
+        # Final fallback for unexpected API errors or network issues
+        logger.error(f"Unexpected error refactoring code: {e}", exc_info=True)
         raise RuntimeError(f"Code refactoring failed: {e}")
 
 
@@ -529,7 +518,7 @@ def analyze_code_quality(
     model_name: Optional[str] = None,
     context: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Analyze code quality using an LLM.
 
@@ -625,19 +614,23 @@ def analyze_code_quality(
         )
         return result
 
-    except Exception as e:
+    except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error analyzing code: {e}")
+        raise RuntimeError(f"Code analysis failed: {e}")
+    except Exception as e:
+        # Final fallback for unexpected API errors or network issues
+        logger.error(f"Unexpected error analyzing code: {e}", exc_info=True)
         raise RuntimeError(f"Code analysis failed: {e}")
 
 
 @monitor_performance("ai_code_generation_batch")
 def generate_code_batch(
-    requests: List[CodeGenerationRequest],
+    requests: list[CodeGenerationRequest],
     provider: str = DEFAULT_LLM_PROVIDER,
     model_name: Optional[str] = None,
     parallel: bool = False,
     **kwargs,
-) -> List[CodeGenerationResult]:
+) -> list[CodeGenerationResult]:
     """
     Generate multiple code snippets in batch.
 
@@ -690,9 +683,19 @@ def generate_code_batch(
                 )
                 results.append(code_result)
 
-            except Exception as e:
+            except (RuntimeError, ValueError, ImportError) as e:
                 logger.error(f"Error processing request: {e}")
                 # Add error result
+                error_result = CodeGenerationResult(
+                    generated_code="",
+                    language=request.language,
+                    metadata={"error": str(e)},
+                    execution_time=0.0,
+                )
+                results.append(error_result)
+            except Exception as e:
+                # Final fallback for unexpected errors
+                logger.error(f"Unexpected error processing request: {e}", exc_info=True)
                 error_result = CodeGenerationResult(
                     generated_code="",
                     language=request.language,
@@ -713,7 +716,7 @@ def compare_code_versions(
     model_name: Optional[str] = None,
     context: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Compare two versions of code and provide analysis.
 
@@ -815,8 +818,12 @@ Please analyze:
         )
         return result
 
-    except Exception as e:
+    except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error comparing code versions: {e}")
+        raise RuntimeError(f"Code comparison failed: {e}")
+    except Exception as e:
+        # Final fallback for unexpected API errors or network issues
+        logger.error(f"Unexpected error comparing code versions: {e}", exc_info=True)
         raise RuntimeError(f"Code comparison failed: {e}")
 
 
@@ -829,7 +836,7 @@ def generate_code_documentation(
     model_name: Optional[str] = None,
     context: Optional[str] = None,
     **kwargs,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Generate documentation for code using an LLM.
 
@@ -923,22 +930,26 @@ def generate_code_documentation(
         )
         return result
 
-    except Exception as e:
+    except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error generating documentation: {e}")
+        raise RuntimeError(f"Documentation generation failed: {e}")
+    except Exception as e:
+        # Final fallback for unexpected API errors or network issues
+        logger.error(f"Unexpected error generating documentation: {e}", exc_info=True)
         raise RuntimeError(f"Documentation generation failed: {e}")
 
 
-def get_supported_languages() -> List[CodeLanguage]:
+def get_supported_languages() -> list[CodeLanguage]:
     """Get list of supported programming languages."""
     return list(CodeLanguage)
 
 
-def get_supported_providers() -> List[str]:
+def get_supported_providers() -> list[str]:
     """Get list of supported LLM providers."""
     return ["openai", "anthropic", "google"]
 
 
-def get_available_models(provider: str) -> List[str]:
+def get_available_models(provider: str) -> list[str]:
     """Get list of available models for a provider."""
     models = {
         "openai": ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo"],
@@ -948,7 +959,7 @@ def get_available_models(provider: str) -> List[str]:
     return models.get(provider.lower(), [])
 
 
-def validate_api_keys() -> Dict[str, bool]:
+def validate_api_keys() -> dict[str, bool]:
     """Validate API keys for all supported providers."""
     validation_results = {}
 

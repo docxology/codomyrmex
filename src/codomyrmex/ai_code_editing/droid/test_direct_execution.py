@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Test script to verify direct execution works."""
 
-from todo import TodoManager
 import os
+
+from todo import TodoManager
 
 # Get the directory of this test script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +15,7 @@ print(f"TODO file path: {todo_file}")
 manager = TodoManager(todo_file)
 todo_items, completed_items = manager.load()
 
-print(f"✅ Direct execution test successful!")
+print("✅ Direct execution test successful!")
 print(f"📋 TODO items: {len(todo_items)}")
 print(f"✅ Completed items: {len(completed_items)}")
 

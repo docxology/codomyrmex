@@ -2,32 +2,29 @@
 
 import asyncio
 import json
-import os
-import pytest
 import subprocess
 import time
-from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
-from codomyrmex.language_models.ollama_integration import (
-    OllamaManager,
-    generate_with_ollama,
-    stream_with_ollama,
-    chat_with_ollama,
-    stream_chat_with_ollama,
-    check_ollama_availability,
-    get_available_models,
-    create_chat_messages,
-    get_default_manager,
-)
-from codomyrmex.language_models.ollama_client import (
-    OllamaError,
-    OllamaConnectionError,
-    OllamaModelError,
-)
+import pytest
 
 # Test configuration and utilities
 from codomyrmex.language_models.config import get_config
+from codomyrmex.language_models.ollama_client import (
+    OllamaConnectionError,
+    OllamaError,
+)
+from codomyrmex.language_models.ollama_integration import (
+    OllamaManager,
+    chat_with_ollama,
+    check_ollama_availability,
+    create_chat_messages,
+    generate_with_ollama,
+    get_available_models,
+    get_default_manager,
+    stream_chat_with_ollama,
+    stream_with_ollama,
+)
 
 # Get configuration
 config = get_config()
@@ -41,7 +38,7 @@ def is_ollama_available() -> bool:
         import requests
         response = requests.get(f"{config.base_url}/api/version", timeout=5)
         return response.status_code == 200
-    except:
+    except (requests.RequestException, ConnectionError, TimeoutError):
         return False
 
 def download_model_if_missing(model_name: str) -> bool:
@@ -57,7 +54,7 @@ def download_model_if_missing(model_name: str) -> bool:
             available_models = [model.get("name", "") for model in data.get("models", [])]
             if model_name in available_models:
                 return True
-    except:
+    except (requests.RequestException, ConnectionError, TimeoutError, KeyError):
         pass
 
     try:
@@ -165,7 +162,7 @@ class TestOllamaManager:
 
         manager.set_default_options(temperature=0.8)
         override_options = {"temperature": 0.5, "top_k": 40}
-        result = manager.generate("Test prompt", options=override_options)
+        manager.generate("Test prompt", options=override_options)
 
         # Check that override options take precedence
         call_kwargs = mock_client.generate.call_args[1]
@@ -383,7 +380,7 @@ class TestConvenienceFunctions:
         mock_get_manager.return_value = mock_manager
 
         options = {"temperature": 0.8}
-        result = generate_with_ollama("Test prompt", options=options)
+        generate_with_ollama("Test prompt", options=options)
 
         mock_manager.generate.assert_called_once_with("Test prompt", options=options)
 

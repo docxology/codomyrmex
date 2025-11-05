@@ -6,14 +6,12 @@ This module provides configuration deployment, environment management,
 and configuration synchronization across multiple environments.
 """
 
-import asyncio
 import json
-import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -44,8 +42,8 @@ class Environment:
     name: str
     type: EnvironmentType
     config_path: str
-    variables: Dict[str, str] = field(default_factory=dict)
-    secrets: Dict[str, str] = field(default_factory=dict)
+    variables: dict[str, str] = field(default_factory=dict)
+    secrets: dict[str, str] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
 
 
@@ -58,9 +56,9 @@ class ConfigDeployment:
     status: DeploymentStatus
     deployed_at: datetime
     deployed_by: str
-    config_files: List[str]
-    changes: Dict[str, Any]
-    rollback_info: Optional[Dict[str, Any]] = None
+    config_files: list[str]
+    changes: dict[str, Any]
+    rollback_info: Optional[dict[str, Any]] = None
 
 
 class ConfigurationDeployer:
@@ -77,8 +75,8 @@ class ConfigurationDeployer:
         self.environments_dir = self.workspace_dir / "environments"
         self._ensure_directories()
 
-        self._environments: Dict[str, Environment] = {}
-        self._deployments: Dict[str, ConfigDeployment] = {}
+        self._environments: dict[str, Environment] = {}
+        self._deployments: dict[str, ConfigDeployment] = {}
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
@@ -90,7 +88,7 @@ class ConfigurationDeployer:
         name: str,
         env_type: EnvironmentType,
         config_path: str,
-        variables: Optional[Dict[str, str]] = None
+        variables: Optional[dict[str, str]] = None
     ) -> Environment:
         """Create a deployment environment.
 
@@ -129,7 +127,7 @@ class ConfigurationDeployer:
     def deploy_configuration(
         self,
         environment_name: str,
-        config_files: List[str],
+        config_files: list[str],
         deployed_by: str = "system"
     ) -> ConfigDeployment:
         """Deploy configuration to an environment.
@@ -190,7 +188,7 @@ class ConfigurationDeployer:
 
         return deployment
 
-    def _analyze_config_changes(self, config_files: List[str]) -> Dict[str, Any]:
+    def _analyze_config_changes(self, config_files: list[str]) -> dict[str, Any]:
         """Analyze changes in configuration files."""
         changes = {
             "files_modified": len(config_files),
@@ -229,7 +227,7 @@ class ConfigurationDeployer:
 
                 logger.debug(f"Deployed {config_file} to {target_path}")
 
-    def _apply_environment_variables(self, content: str, variables: Dict[str, str]) -> str:
+    def _apply_environment_variables(self, content: str, variables: dict[str, str]) -> str:
         """Apply environment variables to configuration content."""
         for key, value in variables.items():
             placeholder = f"${{{key}}}"
@@ -302,7 +300,7 @@ class ConfigurationDeployer:
         """
         return self._deployments.get(deployment_id)
 
-    def list_deployments(self, environment: Optional[str] = None) -> List[ConfigDeployment]:
+    def list_deployments(self, environment: Optional[str] = None) -> list[ConfigDeployment]:
         """List configuration deployments.
 
         Args:
@@ -332,7 +330,7 @@ class ConfigurationDeployer:
         """
         return self._environments.get(environment_name)
 
-    def list_environments(self) -> List[Environment]:
+    def list_environments(self) -> list[Environment]:
         """List all configured environments.
 
         Returns:
@@ -343,7 +341,7 @@ class ConfigurationDeployer:
 
 def deploy_configuration(
     environment_name: str,
-    config_files: List[str],
+    config_files: list[str],
     deployed_by: str = "system"
 ) -> ConfigDeployment:
     """Deploy configuration to an environment.

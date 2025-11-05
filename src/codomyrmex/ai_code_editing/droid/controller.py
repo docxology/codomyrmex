@@ -5,34 +5,16 @@ from __future__ import annotations
 import json
 import os
 import time
-from dataclasses import asdict, dataclass, field, replace
+from collections.abc import Iterable
+from dataclasses import asdict, dataclass, replace
 from enum import Enum
 from pathlib import Path
 from threading import RLock
-from typing import Any, Callable, Dict, Iterable, Optional
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Callable
 
-try:
-    from logging_monitoring import get_logger
-except ImportError:  # pragma: no cover
-    import logging
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    def get_logger(name: str):
-        """Get Logger.
-
-            Args:        name: Name identifier.
-
-            Returns:        The result of the operation.
-            """
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            handler.setFormatter(
-                logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
-            )
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
-        return logger
+logger = get_logger(__name__)
 
 
 try:
@@ -97,8 +79,8 @@ class DroidConfig:
     retry_backoff_seconds: float = 1.0
     heartbeat_interval_seconds: float = 30.0
     log_level: str = "INFO"
-    allowed_operations: Optional[Iterable[str]] = None
-    blocked_operations: Optional[Iterable[str]] = None
+    allowed_operations: Iterable[str] | None = None
+    blocked_operations: Iterable[str] | None = None
 
     def validate(self) -> None:
         """Validate.
@@ -113,7 +95,7 @@ class DroidConfig:
             raise ValueError("heartbeat_interval_seconds must be greater than 0")
 
     @property
-    def allowed(self) -> Optional[frozenset[str]]:
+    def allowed(self) -> frozenset[str] | None:
         return (
             frozenset(self.allowed_operations)
             if self.allowed_operations is not None
@@ -121,7 +103,7 @@ class DroidConfig:
         )
 
     @property
-    def blocked(self) -> Optional[frozenset[str]]:
+    def blocked(self) -> frozenset[str] | None:
         return (
             frozenset(self.blocked_operations)
             if self.blocked_operations is not None
@@ -129,7 +111,7 @@ class DroidConfig:
         )
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "DroidConfig":
+    def from_dict(cls, data: dict[str, Any]) -> DroidConfig:
         """From Dict.
 
             Args:        cls: Parameter for the operation.        data: Data to process.
@@ -145,23 +127,23 @@ class DroidConfig:
         return config
 
     @classmethod
-    def from_json(cls, raw: str) -> "DroidConfig":
+    def from_json(cls, raw: str) -> DroidConfig:
         return cls.from_dict(json.loads(raw))
 
     @classmethod
-    def from_file(cls, path: str | os.PathLike[str]) -> "DroidConfig":
-        with open(path, "r", encoding="utf-8") as handle:
+    def from_file(cls, path: str | os.PathLike[str]) -> DroidConfig:
+        with open(path, encoding="utf-8") as handle:
             return cls.from_json(handle.read())
 
     @classmethod
-    def from_env(cls, prefix: str = "DROID_") -> "DroidConfig":
+    def from_env(cls, prefix: str = "DROID_") -> DroidConfig:
         """From Env.
 
             Args:        cls: Parameter for the operation.        prefix: Parameter for the operation.
 
             Returns:        The result of the operation.
             """
-        mapping: Dict[str, Any] = {}
+        mapping: dict[str, Any] = {}
 
         def set_if_present(name: str, transform: Callable[[str], Any]) -> None:
             value = os.getenv(f"{prefix}{name}")
@@ -192,7 +174,7 @@ class DroidConfig:
         config.validate()
         return config
 
-    def with_overrides(self, **overrides: Any) -> "DroidConfig":
+    def with_overrides(self, **overrides: Any) -> DroidConfig:
         """With Overrides.
 
             Returns:        The result of the operation.
@@ -201,7 +183,7 @@ class DroidConfig:
         candidate.validate()
         return candidate
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """To Dict.
 
             Returns:        The result of the operation.
@@ -223,11 +205,11 @@ class DroidMetrics:
     sessions_completed: int = 0
     tasks_executed: int = 0
     tasks_failed: int = 0
-    last_error: Optional[str] = None
-    last_task: Optional[str] = None
-    last_heartbeat_epoch: Optional[float] = None
+    last_error: str | None = None
+    last_task: str | None = None
+    last_heartbeat_epoch: float | None = None
 
-    def snapshot(self) -> Dict[str, Any]:
+    def snapshot(self) -> dict[str, Any]:
         return asdict(self)
 
     def reset(self) -> None:
@@ -267,7 +249,7 @@ class DroidController:
         return self._status
 
     @property
-    def metrics(self) -> Dict[str, Any]:
+    def metrics(self) -> dict[str, Any]:
         return self._metrics.snapshot()
 
     @property

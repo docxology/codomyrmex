@@ -1,25 +1,23 @@
 """Test suite for Physical Management module."""
 
-import pytest
-import tempfile
-import json
 import time
-from pathlib import Path
+
+import pytest
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.physical_management import (
-    PhysicalObjectManager,
-    ObjectType,
-    ObjectStatus,
-    PhysicalObject,
-    PhysicsSimulator,
-    Vector3D,
-    ForceField,
-    SensorManager,
-    SensorType,
-    SensorReading,
     DeviceInterface,
     DeviceStatus,
+    ForceField,
+    ObjectStatus,
+    ObjectType,
+    PhysicalObjectManager,
+    PhysicsSimulator,
+    SensorManager,
+    SensorReading,
+    SensorType,
+    Vector3D,
 )
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -50,7 +48,7 @@ class TestPhysicalObjectManager:
         """Test updating object location."""
         manager = PhysicalObjectManager()
 
-        obj = manager.create_object(
+        manager.create_object(
             "test_001", "Test Object", ObjectType.SENSOR, 0, 0, 0
         )
 
@@ -250,7 +248,7 @@ class TestPhysicsSimulator:
 
     def test_force_field_calculation(self):
         """Test force field calculations."""
-        sim = PhysicsSimulator()
+        PhysicsSimulator()
 
         force_field = ForceField(position=Vector3D(0, 0, 0), strength=10.0)
 
@@ -544,11 +542,11 @@ class TestIntegration:
         manager = PhysicalObjectManager()
 
         # Create objects
-        sensor = manager.create_object(
+        manager.create_object(
             "sensor_001", "Temperature Sensor", ObjectType.SENSOR, 0, 0, 0
         )
 
-        actuator = manager.create_object(
+        manager.create_object(
             "actuator_001", "Heater", ObjectType.ACTUATOR, 1, 0, 0
         )
 

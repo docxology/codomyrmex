@@ -28,7 +28,7 @@ Technical reference documentation coordination for Codomyrmex, maintaining compr
 - [x] Maintain consistent AGENTS.md structure with parent documentation coordination agents.
 
 ## Navigation Links
-- **📚 Documentation Hub**: [../../README.md](../../README.md) - Central documentation overview and navigation
+- **📚 Documentation Hub**: [../README.md](../README.md) - Central documentation overview and navigation
 - **🔌 Complete API Reference**: [api-complete.md](api-complete.md) - **ACCURATE** API with real signatures
 - **📚 API Index**: [api.md](api.md) - Quick API overview with source links
 - **💻 CLI Reference**: [cli.md](cli.md) - Complete command-line documentation
@@ -36,5 +36,5 @@ Technical reference documentation coordination for Codomyrmex, maintaining compr
 - **🎮 Orchestrator Guide**: [orchestrator.md](orchestrator.md) - Workflow orchestration
 - **⚡ Performance Guide**: [performance.md](performance.md) - Performance optimization
 - **🔧 Troubleshooting**: [troubleshooting.md](troubleshooting.md) - Common issues and solutions
-- **🏗️ Architecture**: [../../project/architecture.md](../../project/architecture.md) - System design context
-- **📦 Module APIs**: [../../../src/codomyrmex/*/API_SPECIFICATION.md](../../../src/codomyrmex/*/API_SPECIFICATION.md) - Individual module APIs
+- **🏗️ Architecture**: [../project/architecture.md](../project/architecture.md) - System design context
+- **📦 Module APIs**: Each module has its own `API_SPECIFICATION.md` file in its directory (e.g., `src/codomyrmex/data_visualization/API_SPECIFICATION.md`)

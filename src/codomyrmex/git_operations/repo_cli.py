@@ -7,11 +7,8 @@ making it easy to clone, update, and manage GitHub repositories.
 """
 
 import argparse
-import sys
-import os
 from pathlib import Path
-from typing import Optional
-from codomyrmex.exceptions import CodomyrmexError
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -98,7 +95,7 @@ def cmd_clone(manager: RepositoryManager, args) -> None:
 
         owner_filter = args.owner if args.owner else None
 
-        print(f"Bulk cloning repositories...")
+        print("Bulk cloning repositories...")
         if repo_type:
             print(f"  Type filter: {repo_type.value}")
         if owner_filter:
@@ -145,7 +142,7 @@ def cmd_update(manager: RepositoryManager, args) -> None:
 
         owner_filter = args.owner if args.owner else None
 
-        print(f"Bulk updating repositories...")
+        print("Bulk updating repositories...")
         if repo_type:
             print(f"  Type filter: {repo_type.value}")
         if owner_filter:

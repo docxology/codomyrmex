@@ -7,13 +7,10 @@ including status tracking, permissions, versions, and comprehensive reporting.
 """
 
 import argparse
-import sys
-import os
 import json
+from datetime import datetime
 from pathlib import Path
-from typing import Optional
-from datetime import datetime, timedelta
-from codomyrmex.exceptions import CodomyrmexError
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -24,13 +21,11 @@ current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
 # sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
-from codomyrmex.git_operations.repository_metadata import (
-    RepositoryMetadataManager,
-    AccessLevel,
-    CloneStatus,
-    SyncStatus,
-)
 from codomyrmex.git_operations.repository_manager import RepositoryManager
+from codomyrmex.git_operations.repository_metadata import (
+    CloneStatus,
+    RepositoryMetadataManager,
+)
 
 
 def cmd_update_metadata(manager: RepositoryMetadataManager, args) -> None:
@@ -351,7 +346,7 @@ def cmd_cleanup(manager: RepositoryMetadataManager, args) -> None:
         if removed_count > 0:
             manager.save_metadata()
 
-    print(f"\n📊 Cleanup Summary:")
+    print("\n📊 Cleanup Summary:")
     print(f"   Total repositories: {total_count}")
     print(f"   Removed: {removed_count}")
     print(f"   Remaining: {total_count - removed_count}")

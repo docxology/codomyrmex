@@ -6,13 +6,11 @@ including TODO list management, task execution, statistics tracking, and system 
 
 from __future__ import annotations
 
-import json
-import os
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -23,23 +21,15 @@ try:
     # Try relative imports first (when used as module)
     from .droid.controller import (
         DroidController,
-        DroidConfig,
-        create_default_controller,
     )
-    from .droid.todo import TodoManager, TodoItem
-    from .droid.run_todo_droid import run_todos, resolve_handler
-    from .droid.tasks import logger
+    from .droid.todo import TodoManager
 except ImportError:
     try:
         # Try absolute imports (when run directly)
         from droid.controller import (
             DroidController,
-            DroidConfig,
-            create_default_controller,
         )
-        from droid.todo import TodoManager, TodoItem
-        from droid.run_todo_droid import run_todos, resolve_handler
-        from droid.tasks import logger
+        from droid.todo import TodoManager
     except ImportError as e:
         print(f"❌ Failed to import droid components: {e}")
         print("💡 Make sure you're running from the correct directory")
@@ -49,7 +39,7 @@ except ImportError:
 class DroidSystemManager:
     """Enhanced manager for the Codomyrmex droid system."""
 
-    def __init__(self, droid_dir: Optional[str | Path] = None):
+    def __init__(self, droid_dir: str | Path | None = None):
         """Initialize the droid system manager."""
         if droid_dir is None:
             current_file = Path(__file__)
@@ -62,7 +52,7 @@ class DroidSystemManager:
         self.config_file = droid_dir / "droid_config.json"
 
         # Initialize components
-        self.controller: Optional[DroidController] = None
+        self.controller: DroidController | None = None
         self.todo_manager = TodoManager(self.todo_file)
 
         # System state
@@ -78,7 +68,7 @@ class DroidSystemManager:
         print("🤖 Codomyrmex Droid System Manager initialized")
         print(f"📁 Droid directory: {self.droid_dir}")
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status(self) -> dict[str, Any]:
         """Get comprehensive system status."""
         todo_items, completed_items = self.todo_manager.load()
 
@@ -133,12 +123,12 @@ class DroidSystemManager:
 
 
 # Convenience functions
-def get_droid_manager(droid_dir: Optional[str | Path] = None) -> DroidSystemManager:
+def get_droid_manager(droid_dir: str | Path | None = None) -> DroidSystemManager:
     """Get a droid system manager instance."""
     return DroidSystemManager(droid_dir)
 
 
-def show_droid_status(droid_dir: Optional[str | Path] = None) -> None:
+def show_droid_status(droid_dir: str | Path | None = None) -> None:
     """Show droid system status."""
     manager = DroidSystemManager(droid_dir)
     manager.display_system_status()

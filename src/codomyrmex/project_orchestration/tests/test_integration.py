@@ -5,33 +5,30 @@ This module contains integration tests that verify the interaction between
 different components of the project orchestration system.
 """
 
-import pytest
 import asyncio
 import tempfile
 import time
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
 
+import pytest
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.project_orchestration import (
     get_workflow_manager,
 )
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 from codomyrmex.project_orchestration import (
-    get_task_orchestrator,
-    get_project_manager,
-    get_resource_manager,
-    get_orchestration_engine,
-    WorkflowStep,
-    Task,
-    TaskPriority,
-    Project,
-    ProjectType,
     Resource,
     ResourceType,
+    Task,
+    TaskPriority,
+    WorkflowStep,
+    get_orchestration_engine,
+    get_project_manager,
+    get_resource_manager,
+    get_task_orchestrator,
 )
 
 
@@ -48,7 +45,7 @@ class TestWorkflowTaskIntegration:
         """Test that workflow execution creates and manages tasks."""
         # Get managers
         workflow_manager = get_workflow_manager()
-        task_orchestrator = get_task_orchestrator()
+        get_task_orchestrator()
 
         # Create workflow with multiple steps
         steps = [

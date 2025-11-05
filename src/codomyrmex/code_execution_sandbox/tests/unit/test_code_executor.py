@@ -2,23 +2,20 @@
 Unit tests for the code_executor module.
 """
 
-import os
-import sys
 import unittest
-from unittest.mock import patch, MagicMock
-from codomyrmex.exceptions import CodomyrmexError
+from unittest.mock import MagicMock, patch
 
 # Add the parent directory to the sys.path to allow importing from the parent directory
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))  # Removed sys.path manipulation
-
 from code_execution_sandbox.code_executor import (
-    validate_language,
-    validate_timeout,
-    validate_session_id,
+    SUPPORTED_LANGUAGES,
     check_docker_available,
     execute_code,
-    SUPPORTED_LANGUAGES,
+    validate_language,
+    validate_session_id,
+    validate_timeout,
 )
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)

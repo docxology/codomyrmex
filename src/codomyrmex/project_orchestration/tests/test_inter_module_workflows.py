@@ -6,13 +6,11 @@ Codomyrmex modules together to create comprehensive analysis pipelines.
 """
 
 import os
+import sys
 import tempfile
 import unittest
-from unittest.mock import Mock, patch, MagicMock
-from pathlib import Path
-import json
-import sys
-from codomyrmex.exceptions import CodomyrmexError
+from unittest.mock import Mock
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -23,13 +21,13 @@ logger = get_logger(__name__)
 
 # Import Codomyrmex modules (with graceful fallback for testing)
 try:
-    from codomyrmex.static_analysis import StaticAnalyzer
-    from codomyrmex.data_visualization import DataVisualizer
-    from codomyrmex.git_operations import GitOperationsManager
     from codomyrmex.ai_code_editing import AICodeHelper
-    from codomyrmex.documentation import DocumentationGenerator
     from codomyrmex.build_synthesis import BuildManager
+    from codomyrmex.data_visualization import DataVisualizer
+    from codomyrmex.documentation import DocumentationGenerator
+    from codomyrmex.git_operations import GitOperationsManager
     from codomyrmex.logging_monitoring import LoggingManager
+    from codomyrmex.static_analysis import StaticAnalyzer
 
     MODULES_AVAILABLE = True
 except ImportError as e:
@@ -72,16 +70,16 @@ from typing import List, Dict
 
 class Calculator:
     """A simple calculator class."""
-    
+
     def __init__(self):
         self.history = []
-    
+
     def add(self, a: float, b: float) -> float:
         """Add two numbers."""
         result = a + b
         self.history.append(f"{a} + {b} = {result}")
         return result
-    
+
     def divide(self, a: float, b: float) -> float:
         """Divide two numbers."""
         if b == 0:
@@ -89,7 +87,7 @@ class Calculator:
         result = a / b
         self.history.append(f"{a} / {b} = {result}")
         return result
-    
+
     def get_history(self) -> List[str]:
         """Get calculation history."""
         return self.history.copy()
@@ -99,14 +97,14 @@ def process_data(data: Dict) -> Dict:
     """Process input data."""
     if not isinstance(data, dict):
         raise TypeError("Data must be a dictionary")
-    
+
     result = {}
     for key, value in data.items():
         if isinstance(value, (int, float)):
             result[key] = value * 2
         else:
             result[key] = str(value).upper()
-    
+
     return result
 
 
@@ -164,20 +162,20 @@ from main import Calculator, process_data
 
 class TestCalculator(unittest.TestCase):
     """Test the Calculator class."""
-    
+
     def setUp(self):
         self.calc = Calculator()
-    
+
     def test_add(self):
         """Test addition."""
         result = self.calc.add(2, 3)
         self.assertEqual(result, 5)
-    
+
     def test_divide(self):
         """Test division."""
         result = self.calc.divide(10, 2)
         self.assertEqual(result, 5)
-    
+
     def test_divide_by_zero(self):
         """Test division by zero raises error."""
         with self.assertRaises(ValueError):
@@ -186,14 +184,14 @@ class TestCalculator(unittest.TestCase):
 
 class TestProcessData(unittest.TestCase):
     """Test the process_data function."""
-    
+
     def test_process_data_valid(self):
         """Test processing valid data."""
         data = {"count": 5, "name": "test"}
         result = process_data(data)
         expected = {"count": 10, "name": "TEST"}
         self.assertEqual(result, expected)
-    
+
     def test_process_data_invalid_type(self):
         """Test processing invalid data type."""
         with self.assertRaises(TypeError):
@@ -225,7 +223,7 @@ This is a sample Python project for testing Codomyrmex workflows.
 ## Features
 
 - Calculator class with basic operations
-- Data processing utilities  
+- Data processing utilities
 - Configuration management
 - Unit tests
 
@@ -424,11 +422,11 @@ python -m pytest test_main.py
         print("   🤖 Step 4: AI Code Recommendations")
         ai_prompt = f"""
         Based on the following code analysis results, provide specific improvement recommendations:
-        
+
         Code Quality Score: {analysis_result['overall_score']}/10
         Issues Found: {len(analysis_result['issues'])}
         Security Score: {analysis_result['security_score']}/10
-        
+
         Key Issues:
         {chr(10).join([f"- {issue['message']}" for issue in analysis_result['issues']])}
         """
@@ -541,13 +539,13 @@ python -m pytest test_main.py
             print("   📝 Step 3: Generate Release Documentation")
             release_notes_prompt = f"""
             Generate release notes based on the following build information:
-            
+
             Build Status: {'Success' if build_result['success'] else 'Failed'}
             Test Results: {build_result['test_results']['tests_passed']}/{build_result['test_results']['tests_run']} tests passed
             Code Coverage: {build_result['test_results']['coverage']:.1%}
             Build Time: {build_result['build_time']:.1f} seconds
             Quality Score: {quality_check['overall_score']}/10
-            
+
             Include:
             - Summary of changes
             - Test results
@@ -666,24 +664,24 @@ python -m pytest test_main.py
         print("   🧠 Step 2: AI Improvement Suggestions")
         improvement_prompt = f"""
         Analyze this Python codebase and suggest specific improvements:
-        
+
         Current Quality Score: {initial_analysis['overall_score']}/10
         Security Score: {initial_analysis['security_score']}/10
-        
+
         Issues Found:
         {chr(10).join([f"- {issue['severity'].upper()}: {issue['message']}" for issue in initial_analysis['issues']])}
-        
+
         Code Metrics:
         - Lines of Code: {initial_analysis['metrics']['lines_of_code']}
         - Cyclomatic Complexity: {initial_analysis['metrics']['cyclomatic_complexity']}
         - Maintainability Index: {initial_analysis['metrics']['maintainability_index']}
-        
+
         Provide:
         1. Specific code improvements
         2. Security enhancements
         3. Performance optimizations
         4. Code refactoring suggestions
-        
+
         Format as actionable Python code changes.
         """
 
@@ -801,7 +799,7 @@ python -m pytest test_main.py
         }
         workflow_results["improvement_report"] = improvement_report
 
-        print(f"      ✅ Improvement report generated")
+        print("      ✅ Improvement report generated")
         print(
             f"      📈 Quality improvement: +{improvement_report['improvements']['quality_score_improvement']:.1f}"
         )
@@ -813,7 +811,7 @@ python -m pytest test_main.py
         )
 
         # Final Summary
-        print(f"\n   🎉 AI-Driven Improvement Workflow Completed!")
+        print("\n   🎉 AI-Driven Improvement Workflow Completed!")
         print(f"      Original Score: {initial_analysis['overall_score']:.1f}/10")
         print(f"      Improved Score: {improved_analysis['overall_score']:.1f}/10")
         print(
@@ -1032,18 +1030,18 @@ python -m pytest test_main.py
 
         insights_prompt = f"""
         Generate data-driven insights based on this project analysis:
-        
+
         Project Metrics:
         - Code Quality Score: {project_metrics['code_quality']['overall_score']}/10
         - Lines of Code: {project_metrics['code_quality']['lines_of_code']:,}
         - Test Coverage: {project_metrics['project_health']['test_coverage']:.1%}
         - Active Contributors: {project_metrics['development_activity']['active_contributors']}
-        
+
         Development Patterns:
         - Daily Commit Rate: {development_patterns['commit_frequency']['daily_average']:.1f}
         - Growth Rate: {development_patterns['code_growth']['growth_rate']:.1%}/month
         - Quality Trend: {development_patterns['quality_trends']['quality_score_trend']}
-        
+
         Provide:
         1. Key strengths of the project
         2. Areas for improvement
@@ -1119,12 +1117,12 @@ python -m pytest test_main.py
         print(f"      ⚠️ Risk Level: {executive_summary['key_findings']['risk_level']}")
 
         # Final Summary
-        print(f"\n   🎉 Data-Driven Analysis Completed!")
-        print(f"      Metrics Collected: ✅")
-        print(f"      Patterns Analyzed: ✅")
+        print("\n   🎉 Data-Driven Analysis Completed!")
+        print("      Metrics Collected: ✅")
+        print("      Patterns Analyzed: ✅")
         print(f"      Visualizations Created: {len(visualizations)}")
-        print(f"      Insights Generated: ✅")
-        print(f"      Executive Summary: ✅")
+        print("      Insights Generated: ✅")
+        print("      Executive Summary: ✅")
 
         # Assertions
         self.assertIn("project_metrics", workflow_results)
@@ -1320,7 +1318,7 @@ class WorkflowIntegrationTest(unittest.TestCase):
 
                 # Simulate recovery - continue with next steps
                 if step_name == "step_2":
-                    print(f"      ✅ Workflow continuing with recovered data")
+                    print("      ✅ Workflow continuing with recovered data")
                     workflow_failed = False
                 else:
                     workflow_failed = True
@@ -1331,7 +1329,7 @@ class WorkflowIntegrationTest(unittest.TestCase):
         successful_steps = len([r for r in results if r["success"]])
         total_steps = len(results)
 
-        print(f"\n   📊 Workflow Summary:")
+        print("\n   📊 Workflow Summary:")
         print(f"      Total steps: {total_steps}")
         print(f"      Successful: {successful_steps}")
         print(f"      Failed: {total_steps - successful_steps}")
@@ -1388,12 +1386,12 @@ def run_comprehensive_workflow_tests():
     )
 
     if result.failures:
-        print(f"\n❌ Failures:")
+        print("\n❌ Failures:")
         for test, traceback in result.failures:
             print(f"   - {test}: {traceback.split(chr(10))[-2]}")
 
     if result.errors:
-        print(f"\n🚫 Errors:")
+        print("\n🚫 Errors:")
         for test, traceback in result.errors:
             print(f"   - {test}: {traceback.split(chr(10))[-2]}")
 

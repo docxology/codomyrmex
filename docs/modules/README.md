@@ -41,14 +41,21 @@ No related modules specified
 
 ## Usage Examples
 
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.docs.modules import ModuleClass
+To understand and use the Codomyrmex module system:
 
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
+```python
+# Example: Using Codomyrmex modules programmatically
+from codomyrmex.data_visualization import create_line_plot
+from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.static_analysis import run_pyrefly_analysis
+
+# Modules work independently and can be composed
+result = run_pyrefly_analysis(["src/"], ".")
+code = generate_code_snippet("Create a function", "python")
+create_line_plot(x_data, y_data, title="Analysis Results")
 ```
+
+See [Module Overview](overview.md) for detailed examples and [Module Relationships](relationships.md) for integration patterns.
 
 ## Quality Assurance
 

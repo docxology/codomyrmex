@@ -6,14 +6,13 @@ This module provides GitHub API integration for repository creation,
 pull request management, and other GitHub-specific operations.
 """
 
+import json
 import os
 import sys
-import requests
-import json
-import logging
-from typing import Dict, List, Optional, Union
 from datetime import datetime
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Optional
+
+import requests
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,24 +21,7 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
-except ImportError:
-    # Fallback for environments where logging_monitoring might not be discoverable
-    import logging
-
-    def get_logger(name):
-        _logger = logging.getLogger(name)
-        if not _logger.handlers:
-            _handler = logging.StreamHandler(sys.stdout)
-            _formatter = logging.Formatter(
-                "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-            )
-            _handler.setFormatter(_formatter)
-            _logger.addHandler(_handler)
-            _logger.setLevel(logging.INFO)
-        return _logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -50,7 +32,7 @@ class GitHubAPIError(Exception):
     pass
 
 
-def _get_github_headers(token: str) -> Dict[str, str]:
+def _get_github_headers(token: str) -> dict[str, str]:
     """Get GitHub API headers with authentication."""
     return {
         "Authorization": f"token {token}",
@@ -80,7 +62,7 @@ def create_github_repository(
     auto_init: bool = True,
     gitignore_template: str = "Python",
     license_template: str = "mit",
-) -> Dict:
+) -> dict:
     """
     Create a new GitHub repository.
 
@@ -147,7 +129,7 @@ def create_github_repository(
                 try:
                     error_data = response.json()
                     error_msg += f" - {error_data.get('message', response.text)}"
-                except:
+                except (ValueError, json.JSONDecodeError):
                     error_msg += f" - {response.text}"
 
             logger.error(error_msg)
@@ -195,7 +177,7 @@ def delete_github_repository(
                 try:
                     error_data = response.json()
                     error_msg += f" - {error_data.get('message', response.text)}"
-                except:
+                except (ValueError, json.JSONDecodeError):
                     error_msg += f" - {response.text}"
 
             logger.error(error_msg)
@@ -215,7 +197,7 @@ def create_pull_request(
     title: str,
     body: str = "",
     github_token: Optional[str] = None,
-) -> Dict:
+) -> dict:
     """
     Create a pull request.
 
@@ -283,7 +265,7 @@ def create_pull_request(
                 try:
                     error_data = response.json()
                     error_msg += f" - {error_data.get('message', response.text)}"
-                except:
+                except (ValueError, json.JSONDecodeError):
                     error_msg += f" - {response.text}"
 
             logger.error(error_msg)
@@ -300,7 +282,7 @@ def get_pull_requests(
     repo_name: str,
     state: str = "open",
     github_token: Optional[str] = None,
-) -> List[Dict]:
+) -> list[dict]:
     """
     Get pull requests for a repository.
 
@@ -355,7 +337,7 @@ def get_pull_requests(
                 try:
                     error_data = response.json()
                     error_msg += f" - {error_data.get('message', response.text)}"
-                except:
+                except (ValueError, json.JSONDecodeError):
                     error_msg += f" - {response.text}"
 
             logger.error(error_msg)
@@ -369,7 +351,7 @@ def get_pull_requests(
 
 def get_pull_request(
     repo_owner: str, repo_name: str, pr_number: int, github_token: Optional[str] = None
-) -> Dict:
+) -> dict:
     """
     Get a specific pull request.
 
@@ -427,7 +409,7 @@ def get_pull_request(
                 try:
                     error_data = response.json()
                     error_msg += f" - {error_data.get('message', response.text)}"
-                except:
+                except (ValueError, json.JSONDecodeError):
                     error_msg += f" - {response.text}"
 
             logger.error(error_msg)
@@ -441,7 +423,7 @@ def get_pull_request(
 
 def get_repository_info(
     repo_owner: str, repo_name: str, github_token: Optional[str] = None
-) -> Dict:
+) -> dict:
     """
     Get detailed repository information.
 
@@ -495,7 +477,7 @@ def get_repository_info(
                 try:
                     error_data = response.json()
                     error_msg += f" - {error_data.get('message', response.text)}"
-                except:
+                except (ValueError, json.JSONDecodeError):
                     error_msg += f" - {response.text}"
 
             logger.error(error_msg)

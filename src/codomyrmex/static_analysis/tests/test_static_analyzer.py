@@ -5,14 +5,14 @@ This module tests all static analysis functions including file analysis,
 project analysis, metrics calculation, and result processing.
 """
 
-import pytest
+import json
 import os
 import sys
 import tempfile
-import json
-from unittest.mock import Mock, patch, MagicMock
-from typing import Dict, List, Any
-from codomyrmex.exceptions import CodomyrmexError
+from unittest.mock import Mock, patch
+
+import pytest
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -26,16 +26,16 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 from static_analysis.static_analyzer import (
+    AnalysisResult,
+    AnalysisSummary,
+    AnalysisType,
+    CodeMetrics,
+    Language,
+    SeverityLevel,
     StaticAnalyzer,
     analyze_file,
     analyze_project,
     get_available_tools,
-    AnalysisResult,
-    AnalysisSummary,
-    CodeMetrics,
-    AnalysisType,
-    SeverityLevel,
-    Language,
 )
 
 
@@ -686,7 +686,7 @@ class TestExportFunctionality:
             assert os.path.exists(temp_file)
 
             # Verify JSON content
-            with open(temp_file, "r") as f:
+            with open(temp_file) as f:
                 data = json.load(f)
 
             assert len(data) == 2
@@ -720,7 +720,7 @@ class TestExportFunctionality:
             assert os.path.exists(temp_file)
 
             # Verify CSV content
-            with open(temp_file, "r") as f:
+            with open(temp_file) as f:
                 content = f.read()
 
             assert "file1.py" in content

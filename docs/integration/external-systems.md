@@ -1175,13 +1175,12 @@ async def monitored_analysis_workflow(codebase_path: str):
 
 ### **Integration Resources**
 
--   **[Production Deployment](../deployment/production.md)**: Production integration patterns
--   **[Security Best Practices](../deployment/security.md)**: Secure integration guidelines
+-   **[Production Deployment](../deployment/production.md)**: Production integration patterns and security configuration
 -   **[Performance Optimization](../reference/performance.md)**: Integration performance tuning
 
 ### **Development Integration**
 
--   **[CI/CD Pipeline](../development/ci-cd.md)**: Complete pipeline integration
+-   **[Development Setup](../development/environment-setup.md)**: Development environment setup
 -   **[Testing Strategy](../development/testing-strategy.md)**: Integration testing patterns
 -   **[API Reference](../reference/api.md)**: Complete API documentation for integration
 

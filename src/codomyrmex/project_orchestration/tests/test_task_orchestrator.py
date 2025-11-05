@@ -5,28 +5,26 @@ This module contains extensive unit tests for the TaskOrchestrator class,
 covering all public methods, error conditions, and edge cases.
 """
 
-import pytest
 import time
-import threading
 from datetime import datetime, timezone
-from unittest.mock import Mock, patch, MagicMock
 
+import pytest
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.project_orchestration.task_orchestrator import (
-    TaskOrchestrator,
     Task,
-    TaskStatus,
+    TaskOrchestrator,
     TaskPriority,
     TaskResult,
+    TaskStatus,
 )
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 from codomyrmex.project_orchestration.task_orchestrator import (
-    TaskResource,
-    ResourceType,
     ResourceManager,
+    ResourceType,
     TaskQueue,
+    TaskResource,
 )
 
 

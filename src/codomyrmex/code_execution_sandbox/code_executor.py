@@ -6,17 +6,14 @@ programming languages. It uses Docker containers to isolate code execution and e
 strict resource limits to prevent abuse.
 """
 
-import os
-import sys
-import time
-import subprocess
-import tempfile
 import json
-import uuid
+import os
 import shutil
-from typing import Dict, Any, Optional, List, Tuple
-import logging
-from codomyrmex.exceptions import CodomyrmexError
+import subprocess
+import sys
+import tempfile
+import time
+from typing import Any, Optional
 
 # Add project root to Python path to allow sibling module imports
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,24 +23,7 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 # Import logger setup
-try:
-    from logging_monitoring import setup_logging, get_logger
-except ImportError:
-    # Fallback if logging module isn't available
-    import logging
-
-    def get_logger(name):
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
-        return logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Get module logger
 logger = get_logger(__name__)
@@ -130,8 +110,7 @@ def check_docker_available() -> bool:
     try:
         result = subprocess.run(
             ["docker", "--version"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             timeout=5,
         )
         return result.returncode == 0
@@ -170,7 +149,7 @@ def validate_session_id(session_id: Optional[str]) -> Optional[str]:
     return session_id
 
 
-def prepare_code_file(code: str, language: str) -> Tuple[str, str]:
+def prepare_code_file(code: str, language: str) -> tuple[str, str]:
     """
     Prepare a temporary file containing the code to execute.
 
@@ -227,7 +206,7 @@ def run_code_in_docker(
     stdin_file: Optional[str] = None,
     timeout: int = DEFAULT_TIMEOUT,
     session_id: Optional[str] = None,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Execute code in a Docker container with security constraints.
 
@@ -320,8 +299,7 @@ def run_code_in_docker(
                     if container_id:
                         subprocess.run(
                             ["docker", "kill", container_id],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
+                            capture_output=True,
                         )
             except subprocess.SubprocessError:
                 pass  # Ignore errors in cleanup
@@ -361,7 +339,7 @@ def cleanup_temp_files(temp_dir: str) -> None:
     """Safely clean up temporary directory and files."""
     try:
         shutil.rmtree(temp_dir)
-    except (OSError, IOError) as e:
+    except OSError as e:
         logger.warning(f"Failed to clean up temporary directory {temp_dir}: {str(e)}")
 
 
@@ -371,7 +349,7 @@ def execute_code(
     stdin: Optional[str] = None,
     timeout: Optional[int] = None,
     session_id: Optional[str] = None,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Execute a code snippet in a sandboxed environment.
 

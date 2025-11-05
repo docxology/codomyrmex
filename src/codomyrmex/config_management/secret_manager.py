@@ -6,17 +6,12 @@ This module provides secure secret management, encryption, and key rotation
 capabilities for configuration management.
 """
 
-import os
-import json
-import base64
-import hashlib
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
+
 from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -46,9 +41,9 @@ class SecretManager:
                 f.write(self.key)
 
         self.fernet = Fernet(self.key)
-        self._secrets: Dict[str, Dict[str, Any]] = {}
+        self._secrets: dict[str, dict[str, Any]] = {}
 
-    def store_secret(self, name: str, value: str, metadata: Optional[Dict[str, Any]] = None) -> str:
+    def store_secret(self, name: str, value: str, metadata: Optional[dict[str, Any]] = None) -> str:
         """Store a secret securely.
 
         Args:
@@ -104,7 +99,7 @@ class SecretManager:
                 return self.fernet.decrypt(encrypted_value.encode()).decode()
         return None
 
-    def list_secrets(self) -> List[Dict[str, Any]]:
+    def list_secrets(self) -> list[dict[str, Any]]:
         """List all stored secrets (without values).
 
         Returns:
@@ -194,7 +189,7 @@ def manage_secrets(operation: str, **kwargs) -> Any:
         raise CodomyrmexError(f"Unknown secret operation: {operation}")
 
 
-def encrypt_configuration(config: Dict[str, Any], secret_keys: List[str]) -> Dict[str, Any]:
+def encrypt_configuration(config: dict[str, Any], secret_keys: list[str]) -> dict[str, Any]:
     """Encrypt sensitive configuration values.
 
     Args:

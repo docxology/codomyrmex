@@ -52,18 +52,18 @@ import asyncio
 import json
 import logging
 import time
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
+from typing import Any, Optional
 
 # Import performance monitoring
 try:
     from codomyrmex.performance import (
+        PerformanceMonitor,
         monitor_performance,
         performance_context,
-        PerformanceMonitor,
     )
 
     PERFORMANCE_MONITORING_AVAILABLE = True
@@ -142,8 +142,8 @@ class WorkflowStep:
     name: str
     module: str
     action: str
-    parameters: Dict[str, Any] = field(default_factory=dict)
-    dependencies: List[str] = field(default_factory=list)
+    parameters: dict[str, Any] = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)
     timeout: Optional[int] = None
     retry_count: int = 0
     max_retries: int = 3
@@ -187,9 +187,9 @@ class WorkflowExecution:
     status: WorkflowStatus = WorkflowStatus.PENDING
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
-    results: Dict[str, Any] = field(default_factory=dict)
-    errors: List[str] = field(default_factory=list)
-    performance_metrics: Dict[str, Any] = field(default_factory=dict)
+    results: dict[str, Any] = field(default_factory=dict)
+    errors: list[str] = field(default_factory=list)
+    performance_metrics: dict[str, Any] = field(default_factory=dict)
 
 
 class WorkflowManager:
@@ -270,8 +270,8 @@ class WorkflowManager:
         self.config_dir.mkdir(parents=True, exist_ok=True)
 
         # Workflow storage
-        self.workflows: Dict[str, List[WorkflowStep]] = {}
-        self.executions: Dict[str, WorkflowExecution] = {}
+        self.workflows: dict[str, list[WorkflowStep]] = {}
+        self.executions: dict[str, WorkflowExecution] = {}
 
         # Performance monitoring
         self.enable_performance_monitoring = (
@@ -289,7 +289,7 @@ class WorkflowManager:
 
     @monitor_performance("workflow_create")
     def create_workflow(
-        self, name: str, steps: List[WorkflowStep], save: bool = True
+        self, name: str, steps: list[WorkflowStep], save: bool = True
     ) -> bool:
         """
         Create a new workflow with the specified steps.
@@ -366,7 +366,7 @@ class WorkflowManager:
             return False
 
     @monitor_performance("workflow_list")
-    def list_workflows(self) -> Dict[str, Dict[str, Any]]:
+    def list_workflows(self) -> dict[str, dict[str, Any]]:
         """
         List all available workflows with comprehensive metadata.
 
@@ -400,7 +400,7 @@ class WorkflowManager:
         workflow_info = {}
         for name, steps in self.workflows.items():
             # Calculate metadata
-            modules = list(set(step.module for step in steps))
+            modules = list({step.module for step in steps})
             estimated_duration = sum(step.timeout or 60 for step in steps)
             has_dependencies = any(step.dependencies for step in steps)
 
@@ -417,7 +417,7 @@ class WorkflowManager:
     async def execute_workflow(
         self,
         name: str,
-        parameters: Optional[Dict[str, Any]] = None,
+        parameters: Optional[dict[str, Any]] = None,
         timeout: Optional[int] = None,
     ) -> WorkflowExecution:
         """
@@ -544,9 +544,9 @@ class WorkflowManager:
     async def _execute_step(
         self,
         step: WorkflowStep,
-        parameters: Dict[str, Any],
+        parameters: dict[str, Any],
         execution: WorkflowExecution,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Execute a single workflow step with monitoring and error handling.
 
@@ -568,8 +568,8 @@ class WorkflowManager:
                 - output (Any): Step output data (if available)
 
         Note:
-            - This method currently simulates module execution
-            - Real implementation would dynamically import and call module functions
+            - This method dynamically imports and calls module functions
+            - Supports both synchronous and asynchronous module functions
             - Parameter substitution uses {{variable}} syntax
             - Performance metrics are collected if monitoring is enabled
             - Timeout handling is implemented at the step level
@@ -582,16 +582,53 @@ class WorkflowManager:
             # Merge global parameters with step parameters
             merged_params = {**parameters, **step.parameters}
 
-            # TODO: Implement actual module execution
-            # This would involve:
+            # Implement actual module execution
             # 1. Dynamic import of the specified module
             # 2. Parameter substitution in step parameters
             # 3. Function call with merged parameters
             # 4. Result capture and error handling
 
-            # Simulate module execution for now
             start_time = time.time()
-            await asyncio.sleep(0.5)  # Simulate processing time
+
+            try:
+                # Dynamic module import
+                module_name = f"codomyrmex.{step.module}"
+                try:
+                    module = __import__(module_name, fromlist=[step.action], level=0)
+                    action_func = getattr(module, step.action, None)
+
+                    if action_func is None:
+                        raise AttributeError(f"Action '{step.action}' not found in module '{module_name}'")
+
+                    # Check if function is async
+                    if asyncio.iscoroutinefunction(action_func):
+                        result_output = await action_func(**merged_params)
+                    else:
+                        # Run synchronous function in executor to avoid blocking
+                        loop = asyncio.get_event_loop()
+                        result_output = await loop.run_in_executor(None, lambda: action_func(**merged_params))
+
+                except ImportError as e:
+                    self.logger.error(f"Failed to import module '{module_name}': {e}")
+                    raise
+                except AttributeError as e:
+                    self.logger.error(f"Failed to get action '{step.action}' from module '{module_name}': {e}")
+                    raise
+                except Exception as e:
+                    self.logger.error(f"Error executing {step.module}.{step.action}: {e}")
+                    raise
+
+            except Exception as e:
+                # If module execution fails, log and return error
+                execution_time = time.time() - start_time
+                self.logger.error(f"Step {step.name} execution failed: {e}")
+                return {
+                    "success": False,
+                    "execution_time": execution_time,
+                    "error": str(e),
+                    "error_type": type(e).__name__,
+                }
+
             execution_time = time.time() - start_time
 
             # Record step performance
@@ -618,7 +655,7 @@ class WorkflowManager:
                 "success": True,
                 "execution_time": execution_time,
                 "message": f"Step {step.name} completed successfully",
-                "output": f"Simulated output from {step.module}.{step.action}",
+                "output": result_output,
                 "parameters_used": merged_params,
             }
 
@@ -634,7 +671,7 @@ class WorkflowManager:
     @monitor_performance("workflow_get_performance_summary")
     def get_performance_summary(
         self, workflow_name: Optional[str] = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Get comprehensive performance summary for workflows.
 
@@ -698,7 +735,7 @@ class WorkflowManager:
         # Calculate module usage statistics
         module_usage = {}
         for execution in executions:
-            for step_name, metrics in execution.performance_metrics.items():
+            for _step_name, metrics in execution.performance_metrics.items():
                 module = metrics.get("module", "unknown")
                 if module not in module_usage:
                     module_usage[module] = {"count": 0, "total_time": 0.0}
@@ -716,7 +753,7 @@ class WorkflowManager:
 
         return summary
 
-    def _save_workflow(self, name: str, steps: List[WorkflowStep]) -> None:
+    def _save_workflow(self, name: str, steps: list[WorkflowStep]) -> None:
         """
         Save a workflow definition to disk in JSON format.
 
@@ -790,7 +827,7 @@ class WorkflowManager:
             loaded_count = 0
             for workflow_file in self.config_dir.glob("*.json"):
                 try:
-                    with open(workflow_file, "r") as f:
+                    with open(workflow_file) as f:
                         workflow_data = json.load(f)
 
                     # Validate required fields

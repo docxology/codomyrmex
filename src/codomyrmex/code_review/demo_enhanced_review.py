@@ -9,21 +9,11 @@ and automated refactoring suggestions.
 
 import os
 import sys
-import json
-from pathlib import Path
 
 # Add the src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from codomyrmex.code_review import (
-    CodeReviewer,
-    ComplexityReductionSuggestion,
-    DeadCodeFinding,
-    ArchitectureViolation,
-    analyze_project,
-    check_quality_gates,
-    generate_report
-)
+from codomyrmex.code_review import CodeReviewer
 
 
 def main():
@@ -42,7 +32,7 @@ def main():
     print("-" * 50)
 
     summary = reviewer.analyze_project(target_paths=["."])
-    print(f"📈 Analysis Results:")
+    print("📈 Analysis Results:")
     print(f"   • Files analyzed: {summary.files_analyzed}")
     print(f"   • Total issues: {summary.total_issues}")
     print(f"   • Analysis time: {summary.analysis_time:.2f}s")
@@ -120,7 +110,7 @@ def main():
     print(f"🗑️  Dead Code Removals: {len(plan['dead_code_removals'])}")
     print(f"🏗️  Architecture Improvements: {len(plan['architecture_improvements'])}")
 
-    print(f"\n📈 Expected Benefits:")
+    print("\n📈 Expected Benefits:")
     for benefit in plan['expected_benefits']:
         print(f"   • {benefit}")
 
@@ -135,7 +125,7 @@ def main():
     print(f"💽 I/O optimizations: {len(optimizations['io_optimizations'])}")
     print(f"🗄️  Caching opportunities: {len(optimizations['caching_opportunities'])}")
 
-    print(f"\n🚀 Sample Memory Optimizations:")
+    print("\n🚀 Sample Memory Optimizations:")
     for opt in optimizations['memory_optimizations'][:2]:
         print(f"   • {opt}")
 
@@ -161,10 +151,10 @@ def main():
     print("-" * 50)
 
     print("📊 ANALYSIS SUMMARY:")
-    print(f"   • Health Score: 82% (Grade: B)")
-    print(f"   • Complexity: 70/100 (5 high-risk functions)")
-    print(f"   • Dead Code: 80/100 (12 issues, 11 critical)")
-    print(f"   • Architecture: 87/100 (88% compliant)")
+    print("   • Health Score: 82% (Grade: B)")
+    print("   • Complexity: 70/100 (5 high-risk functions)")
+    print("   • Dead Code: 80/100 (12 issues, 11 critical)")
+    print("   • Architecture: 87/100 (88% compliant)")
 
     print("\n🎯 IMMEDIATE ACTIONS:")
     print("   1. 🔴 Fix critical dead code (11 issues)")

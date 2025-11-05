@@ -7,17 +7,15 @@ modules, methods, classes, and functions to create a complete map of the
 Codomyrmex ecosystem capabilities.
 """
 
-import os
-import sys
+import ast
 import importlib
 import inspect
 import json
 import subprocess
+import sys
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
-import ast
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Optional
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
@@ -43,7 +41,7 @@ class ModuleCapability:
     file_path: str
     line_number: int
     is_public: bool
-    dependencies: List[str]
+    dependencies: list[str]
 
 
 @dataclass
@@ -54,8 +52,8 @@ class ModuleInfo:
     path: str
     description: str
     version: str
-    capabilities: List[ModuleCapability]
-    dependencies: List[str]
+    capabilities: list[ModuleCapability]
+    dependencies: list[str]
     is_importable: bool
     has_tests: bool
     has_docs: bool
@@ -77,8 +75,8 @@ class SystemDiscovery:
         self.codomyrmex_path = self.src_path / "codomyrmex"
         self.testing_path = self.project_root / "testing"
 
-        self.modules: Dict[str, ModuleInfo] = {}
-        self.system_status: Dict[str, Any] = {}
+        self.modules: dict[str, ModuleInfo] = {}
+        self.system_status: dict[str, Any] = {}
 
         # Ensure src is in Python path
         if str(self.src_path) not in sys.path:
@@ -179,7 +177,7 @@ class SystemDiscovery:
 
     def _discover_module_capabilities(
         self, module: Any, module_path: Path
-    ) -> List[ModuleCapability]:
+    ) -> list[ModuleCapability]:
         """Discover capabilities by inspecting the imported module."""
         capabilities = []
 
@@ -199,7 +197,7 @@ class SystemDiscovery:
 
     def _static_analysis_capabilities(
         self, module_path: Path
-    ) -> List[ModuleCapability]:
+    ) -> list[ModuleCapability]:
         """Discover capabilities using static analysis when import fails."""
         capabilities = []
 
@@ -210,7 +208,7 @@ class SystemDiscovery:
                     continue
 
                 try:
-                    with open(py_file, "r", encoding="utf-8") as f:
+                    with open(py_file, encoding="utf-8") as f:
                         content = f.read()
 
                     tree = ast.parse(content)
@@ -352,7 +350,7 @@ class SystemDiscovery:
         readme_path = module_path / "README.md"
         if readme_path.exists():
             try:
-                with open(readme_path, "r", encoding="utf-8") as f:
+                with open(readme_path, encoding="utf-8") as f:
                     lines = f.readlines()
                     for line in lines:
                         if line.strip() and not line.startswith("#"):
@@ -364,7 +362,7 @@ class SystemDiscovery:
         init_path = module_path / "__init__.py"
         if init_path.exists():
             try:
-                with open(init_path, "r", encoding="utf-8") as f:
+                with open(init_path, encoding="utf-8") as f:
                     tree = ast.parse(f.read())
                     docstring = ast.get_docstring(tree)
                     if docstring:
@@ -380,7 +378,7 @@ class SystemDiscovery:
         init_path = module_path / "__init__.py"
         if init_path.exists():
             try:
-                with open(init_path, "r", encoding="utf-8") as f:
+                with open(init_path, encoding="utf-8") as f:
                     content = f.read()
                     if "__version__" in content:
                         tree = ast.parse(content)
@@ -398,7 +396,7 @@ class SystemDiscovery:
 
         return "unknown"
 
-    def _get_module_dependencies(self, module_path: Path) -> List[str]:
+    def _get_module_dependencies(self, module_path: Path) -> list[str]:
         """Extract module dependencies from requirements.txt or imports."""
         dependencies = []
 
@@ -406,7 +404,7 @@ class SystemDiscovery:
         req_path = module_path / "requirements.txt"
         if req_path.exists():
             try:
-                with open(req_path, "r", encoding="utf-8") as f:
+                with open(req_path, encoding="utf-8") as f:
                     for line in f:
                         line = line.strip()
                         if line and not line.startswith("#"):
@@ -460,7 +458,7 @@ class SystemDiscovery:
 
     def _display_discovery_results(self) -> None:
         """Display the results of module discovery."""
-        print(f"\n📊 Discovery Results:")
+        print("\n📊 Discovery Results:")
         print(f"   Found {len(self.modules)} modules")
 
         importable_count = sum(1 for m in self.modules.values() if m.is_importable)
@@ -471,7 +469,7 @@ class SystemDiscovery:
         print(f"   🧪 {tested_count} have tests")
         print(f"   📚 {documented_count} have documentation")
 
-        print(f"\n📦 Module Summary:")
+        print("\n📦 Module Summary:")
         for name, info in self.modules.items():
             status_icons = []
             if info.is_importable:
@@ -493,7 +491,7 @@ class SystemDiscovery:
 
     def _display_capability_summary(self) -> None:
         """Display summary of discovered capabilities."""
-        print(f"\n🔧 Capability Summary:")
+        print("\n🔧 Capability Summary:")
 
         all_capabilities = []
         for module_info in self.modules.values():
@@ -518,7 +516,7 @@ class SystemDiscovery:
         print("=" * 60)
 
         # Python environment
-        print(f"\n🐍 Python Environment:")
+        print("\n🐍 Python Environment:")
         print(f"   Version: {sys.version.split()[0]}")
         print(f"   Executable: {sys.executable}")
         print(
@@ -526,7 +524,7 @@ class SystemDiscovery:
         )
 
         # Project structure
-        print(f"\n📂 Project Structure:")
+        print("\n📂 Project Structure:")
         print(f"   Root: {self.project_root}")
         print(f"   Source exists: {'✅' if self.src_path.exists() else '❌'}")
         print(f"   Tests exist: {'✅' if self.testing_path.exists() else '❌'}")
@@ -542,7 +540,7 @@ class SystemDiscovery:
 
     def _check_core_dependencies(self) -> None:
         """Check core dependencies status."""
-        print(f"\n📦 Core Dependencies:")
+        print("\n📦 Core Dependencies:")
 
         # Map package names to their actual import names
         dep_mapping = {
@@ -568,7 +566,7 @@ class SystemDiscovery:
 
     def _check_git_status(self) -> None:
         """Check git repository status."""
-        print(f"\n🌐 Git Repository:")
+        print("\n🌐 Git Repository:")
 
         try:
             # Check if we're in a git repo
@@ -624,10 +622,11 @@ class SystemDiscovery:
             "data_visualization" in self.modules
             and self.modules["data_visualization"].is_importable
         ):
-            print(f"\n📊 Testing Data Visualization...")
+            print("\n📊 Testing Data Visualization...")
             try:
-                from codomyrmex.data_visualization import create_line_plot
                 import numpy as np
+
+                from codomyrmex.data_visualization import create_line_plot
 
                 x = np.linspace(0, 4 * np.pi, 100)
                 y = np.sin(x)
@@ -651,7 +650,7 @@ class SystemDiscovery:
             "logging_monitoring" in self.modules
             and self.modules["logging_monitoring"].is_importable
         ):
-            print(f"\n📋 Testing Logging System...")
+            print("\n📋 Testing Logging System...")
             try:
                 from codomyrmex.logging_monitoring import get_logger
 
@@ -667,7 +666,7 @@ class SystemDiscovery:
             "code_execution_sandbox" in self.modules
             and self.modules["code_execution_sandbox"].is_importable
         ):
-            print(f"\n🏃 Testing Code Execution...")
+            print("\n🏃 Testing Code Execution...")
             try:
                 from codomyrmex.code_execution_sandbox import execute_code
 
@@ -680,7 +679,7 @@ class SystemDiscovery:
                     )
                     successful_demos += 1
                 else:
-                    print(f"   ⚠️  Code execution returned non-zero exit code")
+                    print("   ⚠️  Code execution returned non-zero exit code")
             except Exception as e:
                 print(f"   ❌ Code execution demo failed: {e}")
 
@@ -728,7 +727,7 @@ class SystemDiscovery:
         except Exception as e:
             print(f"   ❌ Failed to export inventory: {e}")
 
-    def _get_system_status_dict(self) -> Dict[str, Any]:
+    def _get_system_status_dict(self) -> dict[str, Any]:
         """Get system status as a dictionary."""
         status = {
             "python": {
@@ -805,18 +804,18 @@ class SystemDiscovery:
         print("=" * 60)
 
         # Main repository
-        print(f"\n📂 Main Repository:")
+        print("\n📂 Main Repository:")
         self._check_git_status()
 
         # Check for submodules or related repositories
-        print(f"\n📦 Dependencies & Related Repositories:")
+        print("\n📦 Dependencies & Related Repositories:")
 
         # Look for any git submodules
         gitmodules_path = self.project_root / ".gitmodules"
         if gitmodules_path.exists():
             print("   📁 Git submodules found:")
             try:
-                with open(gitmodules_path, "r") as f:
+                with open(gitmodules_path) as f:
                     content = f.read()
                     print(f"      {content}")
             except Exception as e:

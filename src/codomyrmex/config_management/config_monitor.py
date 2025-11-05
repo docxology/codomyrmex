@@ -6,14 +6,13 @@ This module provides configuration monitoring, change tracking, drift detection,
 and compliance auditing for configuration management.
 """
 
-import asyncio
 import hashlib
 import json
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Set
+from typing import Any, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -30,7 +29,7 @@ class ConfigChange:
     timestamp: datetime
     previous_hash: Optional[str] = None
     current_hash: Optional[str] = None
-    changes: Dict[str, Any] = field(default_factory=dict)
+    changes: dict[str, Any] = field(default_factory=dict)
     source: str = "unknown"  # Who made the change
 
 
@@ -41,9 +40,9 @@ class ConfigAudit:
     timestamp: datetime
     environment: str
     compliance_status: str
-    issues_found: List[str]
-    recommendations: List[str]
-    audit_scope: Dict[str, Any]
+    issues_found: list[str]
+    recommendations: list[str]
+    audit_scope: dict[str, Any]
 
 
 @dataclass
@@ -52,7 +51,7 @@ class ConfigSnapshot:
     snapshot_id: str
     timestamp: datetime
     environment: str
-    config_hashes: Dict[str, str]
+    config_hashes: dict[str, str]
     total_files: int
 
 
@@ -71,9 +70,9 @@ class ConfigurationMonitor:
         self.audits_dir = self.workspace_dir / "config_audits"
         self._ensure_directories()
 
-        self._changes: List[ConfigChange] = []
-        self._snapshots: Dict[str, ConfigSnapshot] = {}
-        self._audits: List[ConfigAudit] = []
+        self._changes: list[ConfigChange] = []
+        self._snapshots: dict[str, ConfigSnapshot] = {}
+        self._audits: list[ConfigAudit] = []
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
@@ -99,7 +98,7 @@ class ConfigurationMonitor:
 
         return hashlib.sha256(content).hexdigest()
 
-    def detect_config_changes(self, config_paths: List[str]) -> List[ConfigChange]:
+    def detect_config_changes(self, config_paths: list[str]) -> list[ConfigChange]:
         """Detect changes in configuration files.
 
         Args:
@@ -172,7 +171,7 @@ class ConfigurationMonitor:
         # For now, return None (assume all files are new)
         return None
 
-    def create_snapshot(self, environment: str, config_paths: List[str]) -> ConfigSnapshot:
+    def create_snapshot(self, environment: str, config_paths: list[str]) -> ConfigSnapshot:
         """Create a snapshot of configuration files for drift detection.
 
         Args:
@@ -212,7 +211,7 @@ class ConfigurationMonitor:
         logger.info(f"Created configuration snapshot: {snapshot_id} ({len(config_paths)} files)")
         return snapshot
 
-    def detect_drift(self, snapshot_id: str, current_paths: List[str]) -> Dict[str, Any]:
+    def detect_drift(self, snapshot_id: str, current_paths: list[str]) -> dict[str, Any]:
         """Detect configuration drift against a snapshot.
 
         Args:
@@ -276,8 +275,8 @@ class ConfigurationMonitor:
     def audit_configuration(
         self,
         environment: str,
-        config_paths: List[str],
-        compliance_rules: Optional[Dict[str, Any]] = None
+        config_paths: list[str],
+        compliance_rules: Optional[dict[str, Any]] = None
     ) -> ConfigAudit:
         """Audit configuration for compliance and best practices.
 
@@ -380,7 +379,7 @@ class ConfigurationMonitor:
         # For now, just check if it's not empty
         return bool(content.strip())
 
-    def get_recent_changes(self, hours: int = 24) -> List[ConfigChange]:
+    def get_recent_changes(self, hours: int = 24) -> list[ConfigChange]:
         """Get configuration changes from the last N hours.
 
         Args:
@@ -396,7 +395,7 @@ class ConfigurationMonitor:
             if change.timestamp >= cutoff_time
         ]
 
-    def get_audit_history(self, environment: Optional[str] = None) -> List[ConfigAudit]:
+    def get_audit_history(self, environment: Optional[str] = None) -> list[ConfigAudit]:
         """Get audit history.
 
         Args:
@@ -415,7 +414,7 @@ class ConfigurationMonitor:
 
         return audits
 
-    def get_monitoring_summary(self) -> Dict[str, Any]:
+    def get_monitoring_summary(self) -> dict[str, Any]:
         """Get monitoring summary.
 
         Returns:
@@ -434,10 +433,10 @@ class ConfigurationMonitor:
 
 
 def monitor_config_changes(
-    config_paths: List[str],
+    config_paths: list[str],
     interval_seconds: int = 300,  # 5 minutes
     workspace_dir: Optional[str] = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Monitor configuration changes continuously.
 
     Args:

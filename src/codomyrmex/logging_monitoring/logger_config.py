@@ -1,7 +1,6 @@
 import logging
 import os
 import sys
-from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from dotenv import load_dotenv
@@ -151,7 +150,7 @@ def setup_logging():
             file_handler = logging.FileHandler(log_file, mode="a")  # 'a' for append
             file_handler.setFormatter(formatter)
             handlers.append(file_handler)
-        except IOError as e:
+        except OSError as e:
             print(
                 f"Warning: Could not open log file '{log_file}': {e}. Logging to console only.",
                 file=sys.stderr,

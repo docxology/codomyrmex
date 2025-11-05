@@ -4,9 +4,9 @@ import os
 import sys
 import tempfile
 import unittest
-from unittest import mock
 from pathlib import Path
-from codomyrmex.exceptions import CodomyrmexError
+from unittest import mock
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -22,24 +22,20 @@ for path in (MODULE_ROOT, PACKAGE_ROOT):
 
 from ai_code_editing.droid import (  # noqa: E402
     DroidConfig,
-    DroidController,
     DroidMode,
     DroidStatus,
-    TodoManager,
     TodoItem,
+    TodoManager,
     create_default_controller,
     load_config_from_file,
     save_config_to_file,
 )
-
 from ai_code_editing.droid.run_todo_droid import (
-    run_todos,
     CODOMYRMEX_ENHANCED_PROMPT,
+    run_todos,
 )  # noqa: E402
 from ai_code_editing.droid.tasks import (  # noqa: E402
-    confirm_logging_integrations,
     ensure_documentation_exists,
-    verify_real_methods,
 )
 
 

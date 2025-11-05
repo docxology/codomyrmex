@@ -2,13 +2,13 @@
 
 **The project changelog has been moved to the root directory for better visibility.**
 
-**👉 New Location: [/CHANGELOG.md](../../CHANGELOG.md)**
+**👉 Note**: The project changelog is maintained at the module level. Each module has its own `CHANGELOG.md` file (e.g., `src/codomyrmex/ai_code_editing/CHANGELOG.md`).
 
-This allows the changelog to be easily found by contributors and follows standard open-source conventions where changelog files are typically at the project root alongside README.md, LICENSE, etc.
+This allows module-specific changelogs to be easily found by contributors and follows modular architecture principles where each module maintains its own version history.
 
 ---
 
-**For the complete project changelog, see: [/CHANGELOG.md](../../CHANGELOG.md)**
+**For module-specific changelogs, see individual module directories** (e.g., `src/codomyrmex/*/CHANGELOG.md`)
 
 ## Module-Specific Changelogs
 

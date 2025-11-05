@@ -1,10 +1,16 @@
 """Comprehensive examples for the Physical Management module."""
 
-from codomyrmex.physical_management import (
-    PhysicalObjectManager, ObjectType, ObjectStatus, PhysicsSimulator,
-    Vector3D, ForceField, SensorManager, SensorType, SensorReading
-)
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.physical_management import (
+    ForceField,
+    ObjectType,
+    PhysicalObjectManager,
+    PhysicsSimulator,
+    SensorManager,
+    SensorReading,
+    SensorType,
+    Vector3D,
+)
 
 logger = get_logger(__name__)
 

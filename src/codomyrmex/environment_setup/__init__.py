@@ -17,10 +17,10 @@ Available functions:
 """
 
 from .env_checker import (
+    check_and_setup_env_vars,
+    ensure_dependencies_installed,
     is_uv_available,
     is_uv_environment,
-    ensure_dependencies_installed,
-    check_and_setup_env_vars,
 )
 
 __all__ = [

@@ -6,9 +6,9 @@ for the Codomyrmex ecosystem. It scans all modules, discovers capabilities,
 reports on system status, and provides interactive exploration tools.
 """
 
+from .capability_scanner import CapabilityScanner
 from .discovery_engine import SystemDiscovery
 from .status_reporter import StatusReporter
-from .capability_scanner import CapabilityScanner
 
 __all__ = ["SystemDiscovery", "StatusReporter", "CapabilityScanner"]
 

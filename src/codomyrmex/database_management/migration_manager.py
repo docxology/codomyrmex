@@ -11,7 +11,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -26,7 +26,7 @@ class Migration:
     name: str
     description: str
     sql: str
-    dependencies: List[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
     applied_at: Optional[datetime] = None
     status: str = "pending"  # "pending", "applied", "failed"
@@ -56,8 +56,8 @@ class MigrationManager:
         self.migration_history_dir = self.workspace_dir / "migration_history"
         self._ensure_directories()
 
-        self._migrations: Dict[str, Migration] = {}
-        self._applied_migrations: Dict[str, MigrationResult] = {}
+        self._migrations: dict[str, Migration] = {}
+        self._applied_migrations: dict[str, MigrationResult] = {}
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
@@ -204,7 +204,7 @@ class MigrationManager:
 
         return result
 
-    def get_migration_status(self, migration_id: str) -> Optional[Dict[str, Any]]:
+    def get_migration_status(self, migration_id: str) -> Optional[dict[str, Any]]:
         """Get status of a migration.
 
         Args:
@@ -227,7 +227,7 @@ class MigrationManager:
             "dependencies": migration.dependencies
         }
 
-    def list_migrations(self) -> List[Dict[str, Any]]:
+    def list_migrations(self) -> list[dict[str, Any]]:
         """List all migrations.
 
         Returns:
@@ -235,7 +235,7 @@ class MigrationManager:
         """
         migrations = []
 
-        for migration_id, migration in self._migrations.items():
+        for _migration_id, migration in self._migrations.items():
             migrations.append({
                 "id": migration.id,
                 "name": migration.name,
@@ -250,7 +250,7 @@ class MigrationManager:
 
         return migrations
 
-    def get_applied_migrations(self) -> List[Dict[str, Any]]:
+    def get_applied_migrations(self) -> list[dict[str, Any]]:
         """Get list of applied migrations.
 
         Returns:
@@ -274,7 +274,7 @@ def run_migrations(
     migration_dir: str,
     database_url: str,
     direction: str = "up"
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run database migrations.
 
     Args:
@@ -285,7 +285,7 @@ def run_migrations(
     Returns:
         Migration execution results
     """
-    manager = MigrationManager()
+    MigrationManager()
 
     # In a real implementation, this would:
     # 1. Load migrations from directory

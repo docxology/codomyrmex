@@ -6,14 +6,13 @@ This module provides comprehensive pipeline monitoring, health checks,
 and reporting capabilities for CI/CD pipelines.
 """
 
-import asyncio
 import json
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -58,10 +57,10 @@ class PipelineReport:
     jobs_passed: int
     jobs_failed: int
     jobs_skipped: int
-    artifacts_created: List[str]
-    metrics: Dict[str, Any]
-    errors: List[str]
-    warnings: List[str]
+    artifacts_created: list[str]
+    metrics: dict[str, Any]
+    errors: list[str]
+    warnings: list[str]
 
 
 class PipelineMonitor:
@@ -79,8 +78,8 @@ class PipelineMonitor:
         self._ensure_directories()
 
         # In-memory metrics storage
-        self._active_metrics: Dict[str, PipelineMetrics] = {}
-        self._reports: Dict[str, PipelineReport] = {}
+        self._active_metrics: dict[str, PipelineMetrics] = {}
+        self._reports: dict[str, PipelineReport] = {}
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
@@ -237,7 +236,7 @@ class PipelineMonitor:
         logger.info(f"Generated {report_type.value} report for execution {execution_id}")
         return report
 
-    def get_pipeline_health(self, pipeline_name: str) -> Dict[str, Any]:
+    def get_pipeline_health(self, pipeline_name: str) -> dict[str, Any]:
         """Get health status of a pipeline.
 
         Args:
@@ -259,7 +258,7 @@ class PipelineMonitor:
             "recent_failures": []
         }
 
-    def get_metrics_summary(self, days: int = 7) -> Dict[str, Any]:
+    def get_metrics_summary(self, days: int = 7) -> dict[str, Any]:
         """Get summary of pipeline metrics over time.
 
         Args:
@@ -287,7 +286,7 @@ class PipelineMonitor:
         }
 
 
-def monitor_pipeline_health(pipeline_name: str, workspace_dir: Optional[str] = None) -> Dict[str, Any]:
+def monitor_pipeline_health(pipeline_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
     """Monitor pipeline health and return status.
 
     Args:
@@ -303,9 +302,9 @@ def monitor_pipeline_health(pipeline_name: str, workspace_dir: Optional[str] = N
 
 def generate_pipeline_reports(
     execution_id: str,
-    report_types: List[ReportType],
+    report_types: list[ReportType],
     workspace_dir: Optional[str] = None
-) -> Dict[str, PipelineReport]:
+) -> dict[str, PipelineReport]:
     """Generate multiple types of pipeline reports.
 
     Args:

@@ -6,7 +6,8 @@ Generates histograms.
 """
 
 import matplotlib.pyplot as plt
-from .plot_utils import save_plot, get_codomyrmex_logger
+
+from .plot_utils import get_codomyrmex_logger, save_plot
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -51,13 +52,13 @@ def create_histogram(
 
 
 if __name__ == "__main__":
-    from pathlib import Path
     import random
+    from pathlib import Path
 
     output_dir = Path(__file__).parent.parent / "output" / "data_visualization_examples"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    logger.info(f"--- Example: Basic Histogram ---")
+    logger.info("--- Example: Basic Histogram ---")
     # Generate some sample data (e.g., normal distribution)
     random.seed(42)
     sample_data = [random.gauss(0, 1) for _ in range(1000)]
@@ -74,7 +75,7 @@ if __name__ == "__main__":
     )
     logger.info(f"Histogram example saved to {output_dir / 'basic_histogram.png'}")
 
-    logger.info(f"--- Example: Histogram with Fewer Bins ---")
+    logger.info("--- Example: Histogram with Fewer Bins ---")
     sample_data_2 = [random.randint(1, 10) for _ in range(200)]
     create_histogram(
         data=sample_data_2,

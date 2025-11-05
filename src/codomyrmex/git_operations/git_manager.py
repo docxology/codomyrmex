@@ -7,12 +7,9 @@ common Git actions programmatically within the Codomyrmex ecosystem.
 """
 
 import os
-import sys
 import subprocess
-import logging
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-from codomyrmex.exceptions import CodomyrmexError
+import sys
+from typing import Optional
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,35 +18,7 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-except ImportError:
-    # Fallback for environments where logging_monitoring might not be discoverable
-    import logging
-
-    print(
-        "Warning: Could not import Codomyrmex logging. Using standard Python logging.",
-        file=sys.stderr,
-    )
-
-    def setup_logging():
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        )
-
-    def get_logger(name):
-        _logger = logging.getLogger(name)
-        if not _logger.handlers:
-            _handler = logging.StreamHandler(sys.stdout)
-            _formatter = logging.Formatter(
-                "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-            )
-            _handler.setFormatter(_formatter)
-            _logger.addHandler(_handler)
-            _logger.setLevel(logging.INFO)
-        return _logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 logger = get_logger(__name__)
 
@@ -183,7 +152,7 @@ def clone_repository(url: str, destination: str, branch: str = None) -> bool:
             cmd.extend(["-b", branch])
         cmd.extend([url, destination])
 
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        subprocess.run(cmd, capture_output=True, text=True, check=True)
 
         logger.info("Repository cloned successfully")
         return True
@@ -207,7 +176,7 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.info(f"Creating new branch '{branch_name}' in {repository_path}")
 
         # Create and switch to new branch
-        result = subprocess.run(
+        subprocess.run(
             ["git", "checkout", "-b", branch_name],
             cwd=repository_path,
             capture_output=True,
@@ -236,7 +205,7 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
     try:
         logger.info(f"Switching to branch '{branch_name}' in {repository_path}")
 
-        result = subprocess.run(
+        subprocess.run(
             ["git", "checkout", branch_name],
             cwd=repository_path,
             capture_output=True,
@@ -283,7 +252,7 @@ def get_current_branch(repository_path: str = None) -> Optional[str]:
         return None
 
 
-def add_files(file_paths: List[str], repository_path: str = None) -> bool:
+def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     """Add files to the Git staging area."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -292,7 +261,7 @@ def add_files(file_paths: List[str], repository_path: str = None) -> bool:
         logger.info(f"Adding files to staging area: {file_paths}")
 
         cmd = ["git", "add"] + file_paths
-        result = subprocess.run(
+        subprocess.run(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
@@ -317,7 +286,7 @@ def commit_changes(message: str, repository_path: str = None) -> bool:
     try:
         logger.info(f"Committing changes with message: {message}")
 
-        result = subprocess.run(
+        subprocess.run(
             ["git", "commit", "-m", message],
             cwd=repository_path,
             capture_output=True,
@@ -354,7 +323,7 @@ def push_changes(
     try:
         logger.info(f"Pushing changes to {remote}/{branch}")
 
-        result = subprocess.run(
+        subprocess.run(
             ["git", "push", remote, branch],
             cwd=repository_path,
             capture_output=True,
@@ -391,7 +360,7 @@ def pull_changes(
     try:
         logger.info(f"Pulling changes from {remote}/{branch}")
 
-        result = subprocess.run(
+        subprocess.run(
             ["git", "pull", remote, branch],
             cwd=repository_path,
             capture_output=True,
@@ -412,7 +381,7 @@ def pull_changes(
         return False
 
 
-def get_status(repository_path: str = None) -> Dict[str, any]:
+def get_status(repository_path: str = None) -> dict[str, any]:
     """Get the current Git repository status."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -489,7 +458,7 @@ def get_status(repository_path: str = None) -> Dict[str, any]:
 
 def get_commit_history(
     limit: int = 10, repository_path: str = None
-) -> List[Dict[str, str]]:
+) -> list[dict[str, str]]:
     """Get recent commit history."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -570,7 +539,7 @@ def merge_branch(
             cmd.extend(["-s", strategy])
         cmd.append(source_branch)
 
-        result = subprocess.run(
+        subprocess.run(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
@@ -605,7 +574,7 @@ def rebase_branch(
             cmd.append("-i")
         cmd.append(target_branch)
 
-        result = subprocess.run(
+        subprocess.run(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
@@ -636,7 +605,7 @@ def create_tag(tag_name: str, message: str = None, repository_path: str = None) 
         else:
             cmd.append(tag_name)
 
-        result = subprocess.run(
+        subprocess.run(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
@@ -653,7 +622,7 @@ def create_tag(tag_name: str, message: str = None, repository_path: str = None) 
         return False
 
 
-def list_tags(repository_path: str = None) -> List[str]:
+def list_tags(repository_path: str = None) -> list[str]:
     """List all Git tags."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -693,7 +662,7 @@ def stash_changes(message: str = None, repository_path: str = None) -> bool:
         if message:
             cmd.extend(["push", "-m", message])
 
-        result = subprocess.run(
+        subprocess.run(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
@@ -722,7 +691,7 @@ def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
         if stash_ref:
             cmd.append(stash_ref)
 
-        result = subprocess.run(
+        subprocess.run(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
@@ -739,7 +708,7 @@ def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
         return False
 
 
-def list_stashes(repository_path: str = None) -> List[Dict[str, str]]:
+def list_stashes(repository_path: str = None) -> list[dict[str, str]]:
     """List all stashes."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -829,11 +798,11 @@ def reset_changes(
         )
 
         cmd = ["git", "reset", f"--{mode}", target]
-        result = subprocess.run(
+        subprocess.run(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
-        logger.info(f"Repository reset successfully")
+        logger.info("Repository reset successfully")
         return True
 
     except subprocess.CalledProcessError as e:

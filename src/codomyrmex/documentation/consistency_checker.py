@@ -4,10 +4,8 @@ This module ensures documentation consistency across the Codomyrmex platform,
 checking for naming conventions, formatting standards, and content alignment.
 """
 
-from typing import Dict, List, Set, Tuple
 from pathlib import Path
-import re
-from codomyrmex.exceptions import CodomyrmexError
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -28,7 +26,7 @@ class DocumentationConsistencyChecker:
             "Installation", "Usage", "API Reference", "Examples"
         ]
 
-    def check_project_consistency(self, project_path: Path) -> Dict[str, List[str]]:
+    def check_project_consistency(self, project_path: Path) -> dict[str, list[str]]:
         """Check consistency across the entire project."""
         issues = {
             "naming": [],
@@ -54,7 +52,7 @@ class DocumentationConsistencyChecker:
 
         return issues
 
-    def _check_naming_conventions(self, md_files: List[Path]) -> List[str]:
+    def _check_naming_conventions(self, md_files: list[Path]) -> list[str]:
         """Check file and header naming conventions."""
         issues = []
 
@@ -79,7 +77,7 @@ class DocumentationConsistencyChecker:
 
         return issues
 
-    def _check_formatting_consistency(self, md_files: List[Path]) -> List[str]:
+    def _check_formatting_consistency(self, md_files: list[Path]) -> list[str]:
         """Check formatting consistency."""
         issues = []
 
@@ -109,7 +107,7 @@ class DocumentationConsistencyChecker:
 
         return issues
 
-    def _check_content_consistency(self, md_files: List[Path]) -> List[str]:
+    def _check_content_consistency(self, md_files: list[Path]) -> list[str]:
         """Check content consistency."""
         issues = []
 
@@ -140,7 +138,7 @@ class DocumentationConsistencyChecker:
 
         return issues
 
-    def _check_structural_consistency(self, md_files: List[Path]) -> List[str]:
+    def _check_structural_consistency(self, md_files: list[Path]) -> list[str]:
         """Check structural consistency."""
         issues = []
 

@@ -5,14 +5,14 @@ Provides advanced model execution capabilities with various parameters,
 streaming support, and integration options.
 """
 
-import json
-import time
 import asyncio
-from typing import Dict, List, Optional, Any, Callable, Union
-from dataclasses import dataclass, asdict
+import time
+from dataclasses import dataclass
+from typing import Any, Callable, Optional
 
 from codomyrmex.logging_monitoring import get_logger
-from .ollama_manager import OllamaManager, ModelExecutionResult
+
+from .ollama_manager import ModelExecutionResult, OllamaManager
 
 
 @dataclass
@@ -150,10 +150,10 @@ class ModelRunner:
     def run_batch(
         self,
         model_name: str,
-        prompts: List[str],
+        prompts: list[str],
         options: Optional[ExecutionOptions] = None,
         max_concurrent: int = 3
-    ) -> List[ModelExecutionResult]:
+    ) -> list[ModelExecutionResult]:
         """
         Run multiple prompts in batch with concurrency control.
 
@@ -210,7 +210,7 @@ class ModelRunner:
     def run_conversation(
         self,
         model_name: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         options: Optional[ExecutionOptions] = None
     ) -> ModelExecutionResult:
         """
@@ -229,7 +229,7 @@ class ModelRunner:
 
         return self.run_with_options(model_name, conversation_prompt, options)
 
-    def _format_conversation(self, messages: List[Dict[str, str]]) -> str:
+    def _format_conversation(self, messages: list[dict[str, str]]) -> str:
         """Format conversation messages into a single prompt."""
         formatted = []
         for msg in messages:
@@ -249,7 +249,7 @@ class ModelRunner:
         self,
         model_name: str,
         prompt: str,
-        context_docs: List[str],
+        context_docs: list[str],
         options: Optional[ExecutionOptions] = None
     ) -> ModelExecutionResult:
         """
@@ -281,9 +281,9 @@ class ModelRunner:
     def benchmark_model(
         self,
         model_name: str,
-        test_prompts: List[str],
+        test_prompts: list[str],
         options: Optional[ExecutionOptions] = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Benchmark a model with multiple test prompts.
 
@@ -338,10 +338,10 @@ class ModelRunner:
 
     def create_model_comparison(
         self,
-        model_names: List[str],
+        model_names: list[str],
         test_prompt: str,
         options: Optional[ExecutionOptions] = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Compare multiple models on the same prompt.
 
@@ -380,7 +380,7 @@ class ModelRunner:
             'summary': self._create_comparison_summary(comparison_results)
         }
 
-    def _create_comparison_summary(self, results: Dict[str, Dict]) -> Dict[str, Any]:
+    def _create_comparison_summary(self, results: dict[str, dict]) -> dict[str, Any]:
         """Create summary statistics for model comparison."""
         successful_results = {name: data for name, data in results.items() if data['success']}
 

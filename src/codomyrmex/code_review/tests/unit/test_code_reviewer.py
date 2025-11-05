@@ -5,26 +5,25 @@ Tests the core functionality of the code review module including
 pyscn integration and analysis capabilities.
 """
 
+import json
 import os
+import sys
 import tempfile
 import unittest
-import json
-from unittest.mock import Mock, patch, MagicMock
-import sys
-from pathlib import Path
+from unittest.mock import Mock, patch
 
 # Add the src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 from codomyrmex.code_review import (
-    CodeReviewer,
-    PyscnAnalyzer,
-    AnalysisType,
-    SeverityLevel,
-    Language,
     AnalysisResult,
     AnalysisSummary,
+    AnalysisType,
+    CodeReviewer,
+    Language,
+    PyscnAnalyzer,
     QualityGateResult,
+    SeverityLevel,
     ToolNotFoundError,
 )
 
@@ -264,7 +263,7 @@ class TestCodeReviewer(unittest.TestCase):
         self.assertTrue(os.path.exists(output_file))
 
         # Check file content
-        with open(output_file, 'r') as f:
+        with open(output_file) as f:
             content = f.read()
             self.assertIn("<!DOCTYPE html>", content)
             self.assertIn("Code Review Report", content)
@@ -278,7 +277,7 @@ class TestCodeReviewer(unittest.TestCase):
         self.assertTrue(os.path.exists(output_file))
 
         # Check file content
-        with open(output_file, 'r') as f:
+        with open(output_file) as f:
             content = f.read()
             self.assertIn('"summary"', content)
             self.assertIn('"results"', content)

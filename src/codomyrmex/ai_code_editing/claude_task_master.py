@@ -10,6 +10,7 @@ TODO: Implement the full integration
 """
 
 from typing import Any, Optional
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -21,7 +22,7 @@ class ClaudeTaskMaster:
 
     def __init__(self, api_key: Optional[str] = None):
         """Initialize Claude Task Master integration.
-        
+
         Args:
             api_key: Optional API key for Claude integration
         """
@@ -29,10 +30,10 @@ class ClaudeTaskMaster:
 
     def execute_task(self, task: str) -> dict[str, Any]:
         """Execute a task using Claude Task Master.
-        
+
         Args:
             task: Task description to execute
-            
+
         Returns:
             dict: Task execution results
         """

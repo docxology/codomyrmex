@@ -9,10 +9,10 @@ particularly focused on Git operations and workflow visualization.
 """
 
 import os
-from typing import List, Dict, Any, Optional, Union
 from pathlib import Path
+from typing import Any
+
 from .plot_utils import get_codomyrmex_logger
-from codomyrmex.exceptions import CodomyrmexError
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -36,8 +36,8 @@ class MermaidDiagramGenerator:
 
     def create_git_branch_diagram(
         self,
-        branches: List[Dict[str, Any]],
-        commits: List[Dict[str, Any]],
+        branches: list[dict[str, Any]],
+        commits: list[dict[str, Any]],
         title: str = "Git Branch Diagram",
         output_path: str = None,
     ) -> str:
@@ -55,21 +55,21 @@ class MermaidDiagramGenerator:
         """
         logger.debug(f"Creating Git branch diagram: {title}")
 
-        mermaid_content = f"""gitGraph
+        mermaid_content = """gitGraph
     commit id: "Initial"
     branch develop
     checkout develop
     commit id: "Feature start"
-    
+
     branch feature/auth
     checkout feature/auth
     commit id: "Add auth logic"
     commit id: "Add tests"
-    
+
     checkout develop
     merge feature/auth
     commit id: "Merge feature"
-    
+
     checkout main
     merge develop
     commit id: "Release v1.0"
@@ -88,7 +88,7 @@ class MermaidDiagramGenerator:
 
     def create_git_workflow_diagram(
         self,
-        workflow_steps: List[Dict[str, Any]],
+        workflow_steps: list[dict[str, Any]],
         title: str = "Git Workflow",
         output_path: str = None,
     ) -> str:
@@ -105,17 +105,17 @@ class MermaidDiagramGenerator:
         """
         logger.debug(f"Creating Git workflow diagram: {title}")
 
-        flowchart_content = [f"flowchart TD"]
-        flowchart_content.append(f"    Start([Start]) --> Clone[git clone]")
-        flowchart_content.append(f"    Clone --> Branch[git checkout -b feature]")
-        flowchart_content.append(f"    Branch --> Code[Write Code]")
-        flowchart_content.append(f"    Code --> Add[git add .]")
-        flowchart_content.append(f"    Add --> Commit[git commit -m 'message']")
-        flowchart_content.append(f"    Commit --> Push[git push origin feature]")
-        flowchart_content.append(f"    Push --> PR[Create Pull Request]")
-        flowchart_content.append(f"    PR --> Review[Code Review]")
-        flowchart_content.append(f"    Review --> Merge[Merge to main]")
-        flowchart_content.append(f"    Merge --> End([End])")
+        flowchart_content = ["flowchart TD"]
+        flowchart_content.append("    Start([Start]) --> Clone[git clone]")
+        flowchart_content.append("    Clone --> Branch[git checkout -b feature]")
+        flowchart_content.append("    Branch --> Code[Write Code]")
+        flowchart_content.append("    Code --> Add[git add .]")
+        flowchart_content.append("    Add --> Commit[git commit -m 'message']")
+        flowchart_content.append("    Commit --> Push[git push origin feature]")
+        flowchart_content.append("    Push --> PR[Create Pull Request]")
+        flowchart_content.append("    PR --> Review[Code Review]")
+        flowchart_content.append("    Review --> Merge[Merge to main]")
+        flowchart_content.append("    Merge --> End([End])")
 
         if workflow_steps:
             # Build custom workflow from provided data
@@ -131,7 +131,7 @@ class MermaidDiagramGenerator:
 
     def create_repository_structure_diagram(
         self,
-        repo_structure: Dict[str, Any],
+        repo_structure: dict[str, Any],
         title: str = "Repository Structure",
         output_path: str = None,
     ) -> str:
@@ -148,15 +148,15 @@ class MermaidDiagramGenerator:
         """
         logger.debug(f"Creating repository structure diagram: {title}")
 
-        graph_content = [f"graph TD"]
-        graph_content.append(f"    Root[📁 Repository Root] --> SRC[📁 src/]")
-        graph_content.append(f"    Root --> Tests[📁 tests/]")
-        graph_content.append(f"    Root --> Docs[📁 docs/]")
-        graph_content.append(f"    Root --> Config[⚙️ config files]")
-        graph_content.append(f"    SRC --> Modules[📁 modules/]")
-        graph_content.append(f"    SRC --> Utils[📁 utils/]")
-        graph_content.append(f"    Tests --> Unit[📁 unit/]")
-        graph_content.append(f"    Tests --> Integration[📁 integration/]")
+        graph_content = ["graph TD"]
+        graph_content.append("    Root[📁 Repository Root] --> SRC[📁 src/]")
+        graph_content.append("    Root --> Tests[📁 tests/]")
+        graph_content.append("    Root --> Docs[📁 docs/]")
+        graph_content.append("    Root --> Config[⚙️ config files]")
+        graph_content.append("    SRC --> Modules[📁 modules/]")
+        graph_content.append("    SRC --> Utils[📁 utils/]")
+        graph_content.append("    Tests --> Unit[📁 unit/]")
+        graph_content.append("    Tests --> Integration[📁 integration/]")
 
         if repo_structure:
             # Build custom structure from provided data
@@ -172,7 +172,7 @@ class MermaidDiagramGenerator:
 
     def create_commit_timeline_diagram(
         self,
-        commits: List[Dict[str, Any]],
+        commits: list[dict[str, Any]],
         title: str = "Commit Timeline",
         output_path: str = None,
     ) -> str:
@@ -189,14 +189,14 @@ class MermaidDiagramGenerator:
         """
         logger.debug(f"Creating commit timeline diagram: {title}")
 
-        timeline_content = [f"timeline"]
+        timeline_content = ["timeline"]
         timeline_content.append(f"    title {title}")
-        timeline_content.append(f"    2024-01-01 : Initial commit")
-        timeline_content.append(f"    2024-01-05 : Add authentication")
-        timeline_content.append(f"    2024-01-10 : Add database layer")
-        timeline_content.append(f"    2024-01-15 : Add API endpoints")
-        timeline_content.append(f"    2024-01-20 : Add tests")
-        timeline_content.append(f"    2024-01-25 : Release v1.0.0")
+        timeline_content.append("    2024-01-01 : Initial commit")
+        timeline_content.append("    2024-01-05 : Add authentication")
+        timeline_content.append("    2024-01-10 : Add database layer")
+        timeline_content.append("    2024-01-15 : Add API endpoints")
+        timeline_content.append("    2024-01-20 : Add tests")
+        timeline_content.append("    2024-01-25 : Release v1.0.0")
 
         if commits:
             # Build custom timeline from provided commit data
@@ -211,16 +211,16 @@ class MermaidDiagramGenerator:
         return mermaid_content
 
     def _build_gitgraph_from_data(
-        self, branches: List[Dict[str, Any]], commits: List[Dict[str, Any]], title: str
+        self, branches: list[dict[str, Any]], commits: list[dict[str, Any]], title: str
     ) -> str:
         """Build gitgraph from branch and commit data."""
-        lines = [f"gitGraph"]
+        lines = ["gitGraph"]
 
         # Sort branches by creation order
         branches_sorted = sorted(branches, key=lambda x: x.get("created_at", ""))
 
         # Add initial commit
-        lines.append(f'    commit id: "Initial"')
+        lines.append('    commit id: "Initial"')
 
         for branch in branches_sorted:
             branch_name = branch.get("name", "unknown")
@@ -232,21 +232,21 @@ class MermaidDiagramGenerator:
                 branch_commits = [c for c in commits if c.get("branch") == branch_name]
                 for commit in branch_commits[:3]:  # Limit to 3 commits per branch
                     commit_msg = commit.get("message", "Commit")[:20]
-                    commit_id = commit.get("hash", "unknown")[:7]
+                    commit.get("hash", "unknown")[:7]
                     lines.append(f'    commit id: "{commit_msg}"')
 
                 # Merge back if specified
                 if branch.get("merged", False):
-                    lines.append(f"    checkout main")
+                    lines.append("    checkout main")
                     lines.append(f"    merge {branch_name}")
 
         return "\n".join(lines)
 
     def _build_workflow_from_data(
-        self, workflow_steps: List[Dict[str, Any]], title: str
-    ) -> List[str]:
+        self, workflow_steps: list[dict[str, Any]], title: str
+    ) -> list[str]:
         """Build workflow flowchart from step data."""
-        lines = [f"flowchart TD"]
+        lines = ["flowchart TD"]
 
         prev_step = "Start([Start])"
 
@@ -269,13 +269,13 @@ class MermaidDiagramGenerator:
         return lines
 
     def _build_structure_from_data(
-        self, repo_structure: Dict[str, Any], title: str
-    ) -> List[str]:
+        self, repo_structure: dict[str, Any], title: str
+    ) -> list[str]:
         """Build structure graph from repository data."""
-        lines = [f"graph TD"]
+        lines = ["graph TD"]
 
         def add_structure_nodes(
-            parent_id: str, parent_name: str, structure: Dict[str, Any], level: int = 0
+            parent_id: str, parent_name: str, structure: dict[str, Any], level: int = 0
         ):
             """Recursively add nodes for directory structure."""
             if isinstance(structure, dict):
@@ -299,10 +299,10 @@ class MermaidDiagramGenerator:
         return lines
 
     def _build_timeline_from_commits(
-        self, commits: List[Dict[str, Any]], title: str
-    ) -> List[str]:
+        self, commits: list[dict[str, Any]], title: str
+    ) -> list[str]:
         """Build timeline from commit data."""
-        lines = [f"timeline"]
+        lines = ["timeline"]
         lines.append(f"    title {title}")
 
         # Sort commits by date
@@ -393,8 +393,8 @@ class MermaidDiagramGenerator:
 
 # Convenience functions for easy import
 def create_git_branch_diagram(
-    branches: List[Dict[str, Any]] = None,
-    commits: List[Dict[str, Any]] = None,
+    branches: list[dict[str, Any]] = None,
+    commits: list[dict[str, Any]] = None,
     title: str = "Git Branch Diagram",
     output_path: str = None,
 ) -> str:
@@ -404,7 +404,7 @@ def create_git_branch_diagram(
 
 
 def create_git_workflow_diagram(
-    workflow_steps: List[Dict[str, Any]] = None,
+    workflow_steps: list[dict[str, Any]] = None,
     title: str = "Git Workflow",
     output_path: str = None,
 ) -> str:
@@ -414,7 +414,7 @@ def create_git_workflow_diagram(
 
 
 def create_repository_structure_diagram(
-    repo_structure: Dict[str, Any] = None,
+    repo_structure: dict[str, Any] = None,
     title: str = "Repository Structure",
     output_path: str = None,
 ) -> str:
@@ -426,7 +426,7 @@ def create_repository_structure_diagram(
 
 
 def create_commit_timeline_diagram(
-    commits: List[Dict[str, Any]] = None,
+    commits: list[dict[str, Any]] = None,
     title: str = "Commit Timeline",
     output_path: str = None,
 ) -> str:
@@ -438,7 +438,6 @@ def create_commit_timeline_diagram(
 if __name__ == "__main__":
     # Test the Mermaid generator
     from pathlib import Path
-    import json
 
     output_dir = Path(__file__).parent.parent / "output" / "mermaid_examples"
     output_dir.mkdir(parents=True, exist_ok=True)

@@ -1,9 +1,8 @@
-import subprocess
 import json
-import re
 import os
+import re
+import subprocess
 import sys
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -76,12 +75,17 @@ except ImportError:
             pass
 
 
-# Regex to attempt to parse Pyrefly errors, this is a guess and might need refinement
-# Example: <path>:<line>:<col> <Error Code> <description>
-# or path:line:col: <message type>: <message>
+# Regex patterns to parse Pyrefly errors in various formats
+# Format 1: path:line:col: error: message [error_code]
+# Format 2: path:line:col: message
+# Format 3: path:line:col: error_code: message
 PYREFLY_ERROR_PATTERN = re.compile(
-    r"([^:]+):(\d+):(\d+):\s*(.*)"
-)  # Adjusted to be more flexible with error codes/types
+    r"([^:]+):(\d+):(\d+):\s*(?:error|warning|info|note)?:?\s*(.+?)(?:\s*\[([^\]]+)\])?$"
+)
+# Alternative pattern for format without error prefix
+PYREFLY_ERROR_PATTERN_ALT = re.compile(
+    r"([^:]+):(\d+):(\d+):\s*(.+)$"
+)
 
 
 @monitor_performance("static_analysis_parse_output")
@@ -95,11 +99,37 @@ def parse_pyrefly_output(output: str, project_root: str) -> list:
     logger.debug(f"Raw output for parsing:\\n{output}")
 
     for line in output.splitlines():
-        match = PYREFLY_ERROR_PATTERN.match(
-            line.strip()
-        )  # Ensure leading/trailing whitespace is removed
+        line = line.strip()
+        if not line:
+            continue
+
+        # Try primary pattern first (with error prefix)
+        match = PYREFLY_ERROR_PATTERN.match(line)
+        if not match:
+            # Try alternative pattern
+            match = PYREFLY_ERROR_PATTERN_ALT.match(line)
+
         if match:
-            raw_file_path, line_num, col_num, message = match.groups()
+            groups = match.groups()
+            raw_file_path = groups[0]
+            line_num = groups[1]
+            col_num = groups[2]
+
+            # Extract message and error code
+            if len(groups) >= 4:
+                message = groups[3] if groups[3] else ""
+                error_code = groups[4] if len(groups) > 4 and groups[4] else None
+            else:
+                message = ""
+                error_code = None
+
+            # Determine severity from message or use default
+            severity = "error"
+            if "warning" in line.lower():
+                severity = "warning"
+            elif "info" in line.lower() or "note" in line.lower():
+                severity = "info"
+
             # Attempt to make file path relative to project_root
             try:
                 # If raw_file_path is already absolute and within project_root, relpath is fine.
@@ -121,9 +151,9 @@ def parse_pyrefly_output(output: str, project_root: str) -> list:
                 else:
                     file_path = os.path.relpath(abs_raw_path, project_root)
 
-            except ValueError:
+            except (ValueError, OSError) as e:
                 logger.warning(
-                    f"Could not create relative path for {raw_file_path.strip()} against {project_root}. Using original path."
+                    f"Could not create relative path for {raw_file_path.strip()} against {project_root}: {e}. Using original path."
                 )
                 file_path = raw_file_path.strip()  # Keep original if relpath fails
 
@@ -131,14 +161,14 @@ def parse_pyrefly_output(output: str, project_root: str) -> list:
                 "file_path": file_path,
                 "line_number": int(line_num),
                 "column_number": int(col_num),
-                "code": "PYREFLY_ERROR",  # Generic code for now, actual error codes might be in message
+                "code": error_code or "PYREFLY_ERROR",  # Use extracted error code or generic
                 "message": message.strip(),
-                "severity": "error",  # Pyrefly errors are typically type errors
+                "severity": severity,
             }
             issues.append(issue)
             logger.debug(f"Parsed issue: {issue}")
-        elif line.strip():  # Log lines that don't match, if they are not empty
-            logger.debug(f"Non-matching line in Pyrefly output: '{line.strip()}'")
+        elif line and not line.startswith("---"):  # Log lines that don't match, ignore separator lines
+            logger.debug(f"Non-matching line in Pyrefly output: '{line}'")
     logger.info(f"Parsed {len(issues)} issues from Pyrefly output.")
     return issues
 

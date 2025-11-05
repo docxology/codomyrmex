@@ -4,20 +4,18 @@ Pipeline Manager for Codomyrmex CI/CD Automation Module.
 Provides comprehensive pipeline orchestration, management, and execution capabilities.
 """
 
-import os
-import sys
-import json
-import yaml
 import asyncio
-import threading
-from typing import Dict, List, Any, Optional, Callable
+import json
+import os
+import subprocess
+import sys
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import subprocess
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Optional
+
+import yaml
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,14 +24,9 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-
-    logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class PipelineStatus(Enum):
@@ -74,10 +67,10 @@ class PipelineJob:
     """Individual job within a pipeline stage."""
 
     name: str
-    commands: List[str]
-    environment: Dict[str, str] = field(default_factory=dict)
-    artifacts: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
+    commands: list[str]
+    environment: dict[str, str] = field(default_factory=dict)
+    artifacts: list[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
     timeout: int = 3600  # 1 hour
     retry_count: int = 0
     allow_failure: bool = False
@@ -87,7 +80,7 @@ class PipelineJob:
     output: str = ""
     error: str = ""
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert job to dictionary format."""
         return {
             "name": self.name,
@@ -111,16 +104,16 @@ class PipelineStage:
     """Pipeline stage containing multiple jobs."""
 
     name: str
-    jobs: List[PipelineJob] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
-    environment: Dict[str, str] = field(default_factory=dict)
+    jobs: list[PipelineJob] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
+    environment: dict[str, str] = field(default_factory=dict)
     allow_failure: bool = False
     parallel: bool = True
     status: StageStatus = StageStatus.PENDING
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert stage to dictionary format."""
         return {
             "name": self.name,
@@ -141,9 +134,9 @@ class Pipeline:
 
     name: str
     description: str = ""
-    stages: List[PipelineStage] = field(default_factory=list)
-    variables: Dict[str, str] = field(default_factory=dict)
-    triggers: Dict[str, Any] = field(default_factory=dict)
+    stages: list[PipelineStage] = field(default_factory=list)
+    variables: dict[str, str] = field(default_factory=dict)
+    triggers: dict[str, Any] = field(default_factory=dict)
     timeout: int = 7200  # 2 hours
     status: PipelineStatus = PipelineStatus.PENDING
     created_at: Optional[datetime] = None
@@ -155,7 +148,7 @@ class Pipeline:
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert pipeline to dictionary format."""
         return {
             "name": self.name,
@@ -193,8 +186,8 @@ class PipelineManager:
             workspace_dir: Directory for pipeline workspaces and artifacts
         """
         self.workspace_dir = workspace_dir or os.path.join(os.getcwd(), ".pipelines")
-        self.pipelines: Dict[str, Pipeline] = {}
-        self.active_executions: Dict[str, asyncio.Task] = {}
+        self.pipelines: dict[str, Pipeline] = {}
+        self.active_executions: dict[str, asyncio.Task] = {}
         self.executor = ThreadPoolExecutor(max_workers=10)
 
         # Create workspace directory
@@ -212,7 +205,7 @@ class PipelineManager:
             Pipeline: Created pipeline object
         """
         try:
-            with open(config_path, "r") as f:
+            with open(config_path) as f:
                 if config_path.endswith(".yaml") or config_path.endswith(".yml"):
                     config = yaml.safe_load(f)
                 else:
@@ -228,7 +221,7 @@ class PipelineManager:
             logger.error(f"Failed to create pipeline from {config_path}: {e}")
             raise
 
-    def _parse_pipeline_config(self, config: Dict[str, Any]) -> Pipeline:
+    def _parse_pipeline_config(self, config: dict[str, Any]) -> Pipeline:
         """Parse pipeline configuration into Pipeline object."""
         pipeline = Pipeline(
             name=config.get("name", "unnamed_pipeline"),
@@ -267,7 +260,7 @@ class PipelineManager:
         return pipeline
 
     async def run_pipeline_async(
-        self, pipeline_name: str, variables: Optional[Dict[str, str]] = None
+        self, pipeline_name: str, variables: Optional[dict[str, str]] = None
     ) -> Pipeline:
         """
         Run a pipeline asynchronously.
@@ -326,7 +319,7 @@ class PipelineManager:
         return pipeline
 
     def run_pipeline(
-        self, pipeline_name: str, variables: Optional[Dict[str, str]] = None
+        self, pipeline_name: str, variables: Optional[dict[str, str]] = None
     ) -> Pipeline:
         """
         Run a pipeline synchronously.
@@ -384,7 +377,7 @@ class PipelineManager:
             await self._execute_stage(stage, pipeline.variables)
             executed_stages.add(stage.name)
 
-    async def _execute_stage(self, stage: PipelineStage, global_vars: Dict[str, str]):
+    async def _execute_stage(self, stage: PipelineStage, global_vars: dict[str, str]):
         """Execute a pipeline stage."""
         stage.status = StageStatus.RUNNING
         stage.start_time = datetime.now(timezone.utc)
@@ -416,7 +409,7 @@ class PipelineManager:
         stage.end_time = datetime.now(timezone.utc)
 
     async def _execute_jobs_parallel(
-        self, jobs: List[PipelineJob], env_vars: Dict[str, str]
+        self, jobs: list[PipelineJob], env_vars: dict[str, str]
     ):
         """Execute jobs in parallel."""
         tasks = []
@@ -426,7 +419,7 @@ class PipelineManager:
 
         await asyncio.gather(*tasks, return_exceptions=True)
 
-    async def _execute_job(self, job: PipelineJob, env_vars: Dict[str, str]):
+    async def _execute_job(self, job: PipelineJob, env_vars: dict[str, str]):
         """Execute a single job."""
         job.status = JobStatus.RUNNING
         job.start_time = datetime.now(timezone.utc)
@@ -469,8 +462,8 @@ class PipelineManager:
         job.end_time = datetime.now(timezone.utc)
 
     async def _run_command_async(
-        self, command: str, timeout: int, env_vars: Dict[str, str]
-    ) -> Dict[str, Any]:
+        self, command: str, timeout: int, env_vars: dict[str, str]
+    ) -> dict[str, Any]:
         """Run a command asynchronously."""
 
         def run_cmd():
@@ -505,7 +498,7 @@ class PipelineManager:
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(self.executor, run_cmd)
 
-    def _substitute_variables(self, text: str, variables: Dict[str, str]) -> str:
+    def _substitute_variables(self, text: str, variables: dict[str, str]) -> str:
         """Substitute variables in text."""
         for key, value in variables.items():
             text = text.replace(f"${{{key}}}", value)
@@ -516,7 +509,7 @@ class PipelineManager:
         """Get current status of a pipeline."""
         return self.pipelines.get(pipeline_name)
 
-    def list_pipelines(self) -> List[Pipeline]:
+    def list_pipelines(self) -> list[Pipeline]:
         """List all configured pipelines."""
         return list(self.pipelines.values())
 
@@ -606,7 +599,7 @@ def create_pipeline(config_path: str) -> Pipeline:
 def run_pipeline(
     pipeline_name: str,
     config_path: Optional[str] = None,
-    variables: Optional[Dict[str, str]] = None,
+    variables: Optional[dict[str, str]] = None,
 ) -> Pipeline:
     """
     Convenience function to run a pipeline.

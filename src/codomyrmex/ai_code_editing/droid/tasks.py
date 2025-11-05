@@ -4,22 +4,8 @@ from __future__ import annotations
 
 import time
 from importlib import import_module
-from codomyrmex.exceptions import CodomyrmexError
 
-try:
-    from logging_monitoring import get_logger
-except ImportError:  # pragma: no cover
-    import logging
-
-    def get_logger(name: str):
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
-        return logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -58,7 +44,7 @@ def verify_real_methods(*, prompt: str, description: str) -> str:
 
 
 __all__ = [
-    "ensure_documentation_exists", 
+    "ensure_documentation_exists",
     "confirm_logging_integrations",
     "verify_real_methods",
 ]
@@ -895,7 +881,6 @@ Input Data → Scene Setup → Transform Objects → Lighting → Rendering → 
 
 def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     """Assess documentation coverage for README, AGENTS.md, and technical accuracy."""
-    import os
     import sys
     from pathlib import Path
 
@@ -1061,7 +1046,6 @@ if __name__ == "__main__":
 
 def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
     """Add methods for documentation consistency and quality assessment."""
-    import os
     import sys
     from pathlib import Path
 
@@ -1686,10 +1670,9 @@ def generate_quality_tests() -> str:
     """Generate tests for the quality assessment modules."""
     return '''"""Tests for documentation quality assessment modules."""
 
-import pytest
-from pathlib import Path
-import tempfile
 import os
+import tempfile
+from pathlib import Path
 
 
 class TestDocumentationQualityAnalyzer:
@@ -1697,7 +1680,9 @@ class TestDocumentationQualityAnalyzer:
 
     def test_analyzer_creation(self):
         """Test creating a quality analyzer."""
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality_assessment import (
+            DocumentationQualityAnalyzer,
+        )
 
         analyzer = DocumentationQualityAnalyzer()
         assert analyzer is not None
@@ -1705,7 +1690,9 @@ class TestDocumentationQualityAnalyzer:
 
     def test_file_analysis(self):
         """Test analyzing a documentation file."""
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality_assessment import (
+            DocumentationQualityAnalyzer,
+        )
 
         analyzer = DocumentationQualityAnalyzer()
 
@@ -1728,7 +1715,9 @@ class TestDocumentationConsistencyChecker:
 
     def test_checker_creation(self):
         """Test creating a consistency checker."""
-        from codomyrmex.documentation.consistency_checker import DocumentationConsistencyChecker
+        from codomyrmex.documentation.consistency_checker import (
+            DocumentationConsistencyChecker,
+        )
 
         checker = DocumentationConsistencyChecker()
         assert checker is not None
@@ -1736,7 +1725,9 @@ class TestDocumentationConsistencyChecker:
 
     def test_consistency_check(self):
         """Test checking project consistency."""
-        from codomyrmex.documentation.consistency_checker import DocumentationConsistencyChecker
+        from codomyrmex.documentation.consistency_checker import (
+            DocumentationConsistencyChecker,
+        )
 
         checker = DocumentationConsistencyChecker()
 
@@ -1755,7 +1746,6 @@ class TestDocumentationConsistencyChecker:
 
 def create_physical_management_module(*, prompt: str, description: str) -> str:
     """Create a comprehensive physical object management module for Codomyrmex."""
-    import os
     import sys
     from pathlib import Path
 

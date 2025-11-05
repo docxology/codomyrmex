@@ -1,17 +1,15 @@
 """Core physical object management system."""
 
-from typing import Dict, List, Optional, Set, Tuple, Any, Callable
+import json
+import logging
+import math
+import threading
+import time
+from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
-import json
-import time
-import math
-import logging
-import threading
-import weakref
 from pathlib import Path
-from collections import defaultdict
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Callable, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +101,7 @@ class ObjectEvent:
     event_type: EventType
     object_id: str
     timestamp: float = field(default_factory=time.time)
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
     source: Optional[str] = None
 
 
@@ -112,9 +110,9 @@ class SpatialIndex:
     """Spatial indexing for efficient object queries."""
 
     grid_size: float = 10.0
-    _grid: Dict[Tuple[int, int, int], Set[str]] = field(default_factory=dict)
-    _object_locations: Dict[str, Tuple[int, int, int]] = field(default_factory=dict)
-    _object_coordinates: Dict[str, Tuple[float, float, float]] = field(
+    _grid: dict[tuple[int, int, int], set[str]] = field(default_factory=dict)
+    _object_locations: dict[str, tuple[int, int, int]] = field(default_factory=dict)
+    _object_coordinates: dict[str, tuple[float, float, float]] = field(
         default_factory=dict
     )
 
@@ -151,7 +149,7 @@ class SpatialIndex:
                 if not self._grid[grid_key]:
                     del self._grid[grid_key]
 
-    def get_nearby_cells(self, x: float, y: float, z: float, radius: float) -> Set[str]:
+    def get_nearby_cells(self, x: float, y: float, z: float, radius: float) -> set[str]:
         """Get object IDs within the specified radius, using spatial indexing for efficiency."""
         nearby_objects = set()
         grid_radius = int(math.ceil(radius / self.grid_size))
@@ -186,8 +184,8 @@ class PhysicalObject:
     id: str
     name: str
     object_type: ObjectType
-    location: Tuple[float, float, float]  # x, y, z coordinates
-    properties: Dict[str, Any] = field(default_factory=dict)
+    location: tuple[float, float, float]  # x, y, z coordinates
+    properties: dict[str, Any] = field(default_factory=dict)
     status: ObjectStatus = ObjectStatus.ACTIVE
     created_at: float = field(default_factory=time.time)
     last_updated: float = field(default_factory=time.time)
@@ -198,9 +196,9 @@ class PhysicalObject:
     mass: float = 1.0  # kg
     volume: float = 1.0  # m³
     temperature: float = 293.15  # K (20°C)
-    connections: Set[str] = field(default_factory=set)  # Connected object IDs
-    tags: Set[str] = field(default_factory=set)  # Tags for categorization
-    metadata: Dict[str, Any] = field(default_factory=dict)  # Extended metadata
+    connections: set[str] = field(default_factory=set)  # Connected object IDs
+    tags: set[str] = field(default_factory=set)  # Tags for categorization
+    metadata: dict[str, Any] = field(default_factory=dict)  # Extended metadata
 
     def __post_init__(self):
         """Initialize material properties if not provided."""
@@ -311,7 +309,7 @@ class PhysicalObject:
         """Get time since last update in seconds."""
         return time.time() - self.last_updated
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "id": self.id,
@@ -340,15 +338,15 @@ class ObjectRegistry:
 
             Args:        spatial_grid_size: Unique identifier.
             """
-        self.objects: Dict[str, PhysicalObject] = {}
-        self._location_index: Dict[Tuple[int, int, int], Set[str]] = (
+        self.objects: dict[str, PhysicalObject] = {}
+        self._location_index: dict[tuple[int, int, int], set[str]] = (
             {}
         )  # Legacy grid-based index
         self.spatial_index = SpatialIndex(grid_size=spatial_grid_size)
-        self.event_handlers: Dict[EventType, List[Callable[[ObjectEvent], None]]] = (
+        self.event_handlers: dict[EventType, list[Callable[[ObjectEvent], None]]] = (
             defaultdict(list)
         )
-        self.event_history: List[ObjectEvent] = []
+        self.event_history: list[ObjectEvent] = []
         self.max_event_history = 10000
         self._lock = threading.RLock()  # Thread safety
 
@@ -386,13 +384,13 @@ class ObjectRegistry:
         """Get a physical object by ID."""
         return self.objects.get(object_id)
 
-    def get_objects_by_type(self, object_type: ObjectType) -> List[PhysicalObject]:
+    def get_objects_by_type(self, object_type: ObjectType) -> list[PhysicalObject]:
         """Get all objects of a specific type."""
         return [obj for obj in self.objects.values() if obj.object_type == object_type]
 
     def get_objects_in_area(
         self, x: float, y: float, z: float, radius: float
-    ) -> List[PhysicalObject]:
+    ) -> list[PhysicalObject]:
         """Get objects within a spherical area."""
         nearby_objects = []
         center_x, center_y, center_z = int(x), int(y), int(z)
@@ -415,13 +413,13 @@ class ObjectRegistry:
 
         return nearby_objects
 
-    def get_objects_by_status(self, status: ObjectStatus) -> List[PhysicalObject]:
+    def get_objects_by_status(self, status: ObjectStatus) -> list[PhysicalObject]:
         """Get all objects with a specific status."""
         return [obj for obj in self.objects.values() if obj.status == status]
 
     def get_objects_by_property(
         self, property_key: str, property_value: Any
-    ) -> List[PhysicalObject]:
+    ) -> list[PhysicalObject]:
         """Get objects with a specific property value."""
         return [
             obj
@@ -448,7 +446,7 @@ class ObjectRegistry:
 
     def check_collisions(
         self, collision_distance: float = 1.0
-    ) -> List[Tuple[PhysicalObject, PhysicalObject]]:
+    ) -> list[tuple[PhysicalObject, PhysicalObject]]:
         """Find all object pairs that are within collision distance."""
         collisions = []
         objects_list = list(self.objects.values())
@@ -462,7 +460,7 @@ class ObjectRegistry:
 
     def group_objects_by_distance(
         self, max_group_distance: float = 5.0
-    ) -> List[List[PhysicalObject]]:
+    ) -> list[list[PhysicalObject]]:
         """Group objects that are close to each other."""
         ungrouped = list(self.objects.values())
         groups = []
@@ -532,7 +530,7 @@ class ObjectRegistry:
         event_type: Optional[EventType] = None,
         object_id: Optional[str] = None,
         since: Optional[float] = None,
-    ) -> List[ObjectEvent]:
+    ) -> list[ObjectEvent]:
         """Get events filtered by type, object ID, and/or timestamp."""
         events = self.event_history
 
@@ -548,8 +546,8 @@ class ObjectRegistry:
         return events
 
     def get_objects_by_tags(
-        self, tags: Set[str], match_all: bool = True
-    ) -> List[PhysicalObject]:
+        self, tags: set[str], match_all: bool = True
+    ) -> list[PhysicalObject]:
         """Get objects that have specific tags."""
         matching_objects = []
 
@@ -563,7 +561,7 @@ class ObjectRegistry:
 
         return matching_objects
 
-    def get_network_topology(self) -> Dict[str, List[str]]:
+    def get_network_topology(self) -> dict[str, list[str]]:
         """Get network topology of connected objects."""
         topology = {}
 
@@ -574,7 +572,7 @@ class ObjectRegistry:
 
     def find_path_through_network(
         self, start_id: str, end_id: str, max_hops: int = 10
-    ) -> Optional[List[str]]:
+    ) -> Optional[list[str]]:
         """Find path between objects through network connections (BFS)."""
         if start_id not in self.objects or end_id not in self.objects:
             return None
@@ -606,7 +604,7 @@ class ObjectRegistry:
 
         return None
 
-    def analyze_network_metrics(self) -> Dict[str, Any]:
+    def analyze_network_metrics(self) -> dict[str, Any]:
         """Analyze network topology metrics."""
         total_objects = len(self.objects)
         total_connections = sum(len(obj.connections) for obj in self.objects.values())
@@ -774,11 +772,11 @@ class PhysicalObjectManager:
 
     def get_nearby_objects(
         self, x: float, y: float, z: float, radius: float
-    ) -> List[PhysicalObject]:
+    ) -> list[PhysicalObject]:
         """Get objects near a location."""
         return self.registry.get_objects_in_area(x, y, z, radius)
 
-    def get_objects_by_type(self, object_type: ObjectType) -> List[PhysicalObject]:
+    def get_objects_by_type(self, object_type: ObjectType) -> list[PhysicalObject]:
         """Get all objects of a specific type."""
         return self.registry.get_objects_by_type(object_type)
 
@@ -790,7 +788,7 @@ class PhysicalObjectManager:
         """Load state from file."""
         self.registry.load_from_file(file_path)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get statistics about managed objects."""
         objects_by_type = {}
         for obj_type in ObjectType:
@@ -811,7 +809,7 @@ class PhysicalObjectManager:
         }
 
     def batch_update_status(
-        self, object_ids: List[str], new_status: ObjectStatus
+        self, object_ids: list[str], new_status: ObjectStatus
     ) -> int:
         """Update status for multiple objects. Returns number of objects updated."""
         updated_count = 0
@@ -822,7 +820,7 @@ class PhysicalObjectManager:
                 updated_count += 1
         return updated_count
 
-    def batch_move_objects(self, moves: Dict[str, Tuple[float, float, float]]) -> int:
+    def batch_move_objects(self, moves: dict[str, tuple[float, float, float]]) -> int:
         """Move multiple objects. Returns number of objects moved."""
         moved_count = 0
         for obj_id, (x, y, z) in moves.items():
@@ -832,7 +830,7 @@ class PhysicalObjectManager:
 
     def find_path_between_objects(
         self, start_object_id: str, end_object_id: str, max_steps: int = 10
-    ) -> Optional[List[PhysicalObject]]:
+    ) -> Optional[list[PhysicalObject]]:
         """Find a path between two objects using nearby objects as waypoints."""
         start_obj = self.registry.get_object(start_object_id)
         end_obj = self.registry.get_object(end_object_id)
@@ -870,8 +868,8 @@ class PhysicalObjectManager:
         return None  # No path found
 
     def calculate_center_of_mass(
-        self, object_ids: Optional[List[str]] = None
-    ) -> Tuple[float, float, float]:
+        self, object_ids: Optional[list[str]] = None
+    ) -> tuple[float, float, float]:
         """Calculate center of mass for specified objects or all objects."""
         if object_ids is None:
             objects = list(self.registry.objects.values())
@@ -891,14 +889,14 @@ class PhysicalObjectManager:
 
     def detect_object_clusters(
         self, cluster_radius: float = 3.0, min_cluster_size: int = 2
-    ) -> List[List[PhysicalObject]]:
+    ) -> list[list[PhysicalObject]]:
         """Detect clusters of objects within a specified radius."""
         groups = self.registry.group_objects_by_distance(cluster_radius)
         return [group for group in groups if len(group) >= min_cluster_size]
 
     def get_boundary_box(
-        self, object_ids: Optional[List[str]] = None
-    ) -> Dict[str, Tuple[float, float]]:
+        self, object_ids: Optional[list[str]] = None
+    ) -> dict[str, tuple[float, float]]:
         """Get the bounding box containing all or specified objects."""
         if object_ids is None:
             objects = list(self.registry.objects.values())

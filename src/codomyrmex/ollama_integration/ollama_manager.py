@@ -6,13 +6,10 @@ with the Codomyrmex ecosystem.
 """
 
 import asyncio
-import json
 import subprocess
 import time
-import threading
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
+from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -40,7 +37,7 @@ class ModelExecutionResult:
     tokens_used: Optional[int] = None
     success: bool = True
     error_message: Optional[str] = None
-    metadata: Optional[Dict[str, Any]] = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 class OllamaManager:
@@ -73,7 +70,7 @@ class OllamaManager:
         self._initialize_sub_managers()
 
         # Model cache
-        self._models_cache: Optional[List[OllamaModel]] = None
+        self._models_cache: Optional[list[OllamaModel]] = None
         self._cache_timestamp: Optional[float] = None
         self._cache_ttl = 30  # Cache for 30 seconds
 
@@ -133,8 +130,8 @@ class OllamaManager:
     def _initialize_sub_managers(self):
         """Initialize output and configuration managers."""
         try:
-            from .output_manager import OutputManager
             from .config_manager import ConfigManager
+            from .output_manager import OutputManager
 
             self.output_manager = OutputManager()
             self.config_manager = ConfigManager()
@@ -145,7 +142,7 @@ class OllamaManager:
             self.logger.warning(f"Could not initialize some sub-managers: {e}")
             # Continue without sub-managers - core functionality still works
 
-    def list_models(self, force_refresh: bool = False) -> List[OllamaModel]:
+    def list_models(self, force_refresh: bool = False) -> list[OllamaModel]:
         """
         List all available Ollama models.
 
@@ -231,10 +228,10 @@ class OllamaManager:
                 return int(float(size_str[:-2]) * 1024)
             else:
                 return int(size_str)
-        except:
+        except (ValueError, IndexError, TypeError):
             return 0
 
-    def _get_model_info(self, model_name: str) -> Optional[Dict[str, Any]]:
+    def _get_model_info(self, model_name: str) -> Optional[dict[str, Any]]:
         """Get detailed information about a specific model."""
         try:
             result = subprocess.run(
@@ -316,7 +313,7 @@ class OllamaManager:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[Dict[str, Any]] = None,
+        options: Optional[dict[str, Any]] = None,
         save_output: bool = True,
         output_dir: Optional[str] = None
     ) -> ModelExecutionResult:
@@ -421,7 +418,7 @@ class OllamaManager:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[Dict[str, Any]] = None
+        options: Optional[dict[str, Any]] = None
     ) -> asyncio.Future[ModelExecutionResult]:
         """
         Run a model asynchronously.
@@ -443,7 +440,7 @@ class OllamaManager:
             options
         )
 
-    def get_model_stats(self) -> Dict[str, Any]:
+    def get_model_stats(self) -> dict[str, Any]:
         """Get statistics about available models."""
         models = self.list_models()
 

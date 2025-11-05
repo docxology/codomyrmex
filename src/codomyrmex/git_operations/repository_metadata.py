@@ -7,15 +7,13 @@ clone status, permissions, versions, dates, and other structured information.
 
 import json
 import os
-import sys
-from datetime import datetime, timezone, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta, timezone
 from enum import Enum
-import subprocess
+from pathlib import Path
+from typing import Any, Optional
+
 import requests
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
@@ -23,9 +21,11 @@ src_dir = current_dir.parent.parent.parent / "src"
 # sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
 from codomyrmex.git_operations.git_manager import (
-    is_git_repository,
-    get_current_branch,
     get_commit_history,
+    get_current_branch,
+    is_git_repository,
+)
+from codomyrmex.git_operations.git_manager import (
     get_status as get_git_status,
 )
 from codomyrmex.logging_monitoring import get_logger
@@ -74,7 +74,7 @@ class RepositoryStats:
     issues: int = 0
     pull_requests: int = 0
     size_kb: int = 0
-    languages: Dict[str, int] = field(default_factory=dict)
+    languages: dict[str, int] = field(default_factory=dict)
     last_activity: Optional[str] = None
 
 
@@ -87,9 +87,9 @@ class LocalRepositoryInfo:
     is_git_repo: bool = False
     current_branch: str = ""
     uncommitted_changes: bool = False
-    untracked_files: List[str] = field(default_factory=list)
-    modified_files: List[str] = field(default_factory=list)
-    staged_files: List[str] = field(default_factory=list)
+    untracked_files: list[str] = field(default_factory=list)
+    modified_files: list[str] = field(default_factory=list)
+    staged_files: list[str] = field(default_factory=list)
     last_commit_hash: str = ""
     last_commit_date: Optional[str] = None
     last_commit_message: str = ""
@@ -129,7 +129,7 @@ class RepositoryMetadata:
     current_local_branch: str = ""
     latest_remote_commit: str = ""
     latest_local_commit: str = ""
-    version_tags: List[str] = field(default_factory=list)
+    version_tags: list[str] = field(default_factory=list)
     latest_release: str = ""
 
     # Statistics
@@ -147,12 +147,12 @@ class RepositoryMetadata:
     )
 
     # Custom Fields
-    tags: List[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
     notes: str = ""
     priority: int = 0  # 0=normal, 1=high, 2=critical
     category: str = ""
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         data = asdict(self)
         # Convert enums to strings
@@ -162,7 +162,7 @@ class RepositoryMetadata:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "RepositoryMetadata":
+    def from_dict(cls, data: dict[str, Any]) -> "RepositoryMetadata":
         """Create from dictionary (JSON deserialization)."""
         # Convert enum strings back to enums
         if "access_level" in data:
@@ -201,7 +201,7 @@ class RepositoryMetadataManager:
 
         self.metadata_file = Path(metadata_file)
         self.github_token = github_token
-        self.metadata: Dict[str, RepositoryMetadata] = {}
+        self.metadata: dict[str, RepositoryMetadata] = {}
 
         # GitHub API headers
         self.github_headers = {}
@@ -217,7 +217,7 @@ class RepositoryMetadataManager:
         """Load metadata from JSON file."""
         if self.metadata_file.exists():
             try:
-                with open(self.metadata_file, "r") as f:
+                with open(self.metadata_file) as f:
                     data = json.load(f)
 
                 self.metadata = {}
@@ -267,7 +267,7 @@ class RepositoryMetadataManager:
         metadata.last_metadata_update = datetime.now(timezone.utc).isoformat()
         self.metadata[metadata.full_name] = metadata
 
-    def fetch_github_metadata(self, owner: str, repo: str) -> Optional[Dict[str, Any]]:
+    def fetch_github_metadata(self, owner: str, repo: str) -> Optional[dict[str, Any]]:
         """Fetch repository metadata from GitHub API."""
         url = f"https://api.github.com/repos/{owner}/{repo}"
 
@@ -281,7 +281,7 @@ class RepositoryMetadataManager:
             return None
 
     def determine_access_level(
-        self, github_data: Dict[str, Any], owner: str
+        self, github_data: dict[str, Any], owner: str
     ) -> AccessLevel:
         """Determine access level based on GitHub data."""
         if not github_data:
@@ -424,8 +424,8 @@ class RepositoryMetadataManager:
         return metadata
 
     def bulk_update_metadata(
-        self, repositories: List[Dict[str, str]], base_path: str = ""
-    ) -> Dict[str, bool]:
+        self, repositories: list[dict[str, str]], base_path: str = ""
+    ) -> dict[str, bool]:
         """Bulk update metadata for multiple repositories."""
         results = {}
 
@@ -461,7 +461,7 @@ class RepositoryMetadataManager:
 
     def get_repositories_by_status(
         self, clone_status: CloneStatus
-    ) -> List[RepositoryMetadata]:
+    ) -> list[RepositoryMetadata]:
         """Get repositories filtered by clone status."""
         return [
             metadata
@@ -471,7 +471,7 @@ class RepositoryMetadataManager:
 
     def get_repositories_by_access(
         self, access_level: AccessLevel
-    ) -> List[RepositoryMetadata]:
+    ) -> list[RepositoryMetadata]:
         """Get repositories filtered by access level."""
         return [
             metadata
@@ -479,7 +479,7 @@ class RepositoryMetadataManager:
             if metadata.access_level == access_level
         ]
 
-    def get_outdated_repositories(self, days: int = 30) -> List[RepositoryMetadata]:
+    def get_outdated_repositories(self, days: int = 30) -> list[RepositoryMetadata]:
         """Get repositories that haven't been synced in specified days."""
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=days)
         outdated = []
@@ -499,7 +499,7 @@ class RepositoryMetadataManager:
 
         return outdated
 
-    def generate_metadata_report(self) -> Dict[str, Any]:
+    def generate_metadata_report(self) -> dict[str, Any]:
         """Generate comprehensive metadata report."""
         total_repos = len(self.metadata)
 

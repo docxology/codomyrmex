@@ -5,15 +5,13 @@ This module tests integration between different Codomyrmex modules to ensure
 they work together correctly and provide end-to-end functionality.
 """
 
-import pytest
 import os
 import sys
 import tempfile
-import json
-import asyncio
-from unittest.mock import Mock, patch, MagicMock
-from typing import Dict, List, Any
-from codomyrmex.exceptions import CodomyrmexError
+from unittest.mock import Mock, patch
+
+import pytest
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -28,48 +26,33 @@ if PROJECT_ROOT not in sys.path:
 
 # Import all modules for integration testing
 from ai_code_editing import (
+    analyze_code_quality,
     generate_code_snippet,
     refactor_code_snippet,
-    analyze_code_quality,
-    CodeLanguage,
-    CodeComplexity,
-    CodeStyle,
-    CodeGenerationRequest,
-)
-from static_analysis import (
-    StaticAnalyzer,
-    analyze_file,
-    analyze_project,
-    AnalysisType,
-    SeverityLevel,
-    Language,
-)
-from data_visualization import (
-    AdvancedPlotter,
-    create_advanced_line_plot,
-    create_advanced_scatter_plot,
-    PlotType,
-    ChartStyle,
-    ColorPalette,
-    PlotConfig,
-    DataPoint,
-    Dataset,
 )
 from build_synthesis import (
     BuildManager,
-    create_python_build_target,
-    create_docker_build_target,
-    BuildType,
     BuildStatus,
-    BuildEnvironment,
-    DependencyType,
+    create_docker_build_target,
+    create_python_build_target,
+)
+from data_visualization import (
+    AdvancedPlotter,
+    ChartStyle,
+    ColorPalette,
+    DataPoint,
+    Dataset,
+    PlotConfig,
+    PlotType,
+    create_advanced_line_plot,
 )
 from project_orchestration import (
-    WorkflowManager,
     WorkflowStep,
-    WorkflowExecution,
-    WorkflowStatus,
     get_workflow_manager,
+)
+from static_analysis import (
+    AnalysisType,
+    StaticAnalyzer,
 )
 
 
@@ -461,7 +444,7 @@ import numpy as np
 def create_sample_plot():
     x = np.linspace(0, 10, 100)
     y = np.sin(x)
-    
+
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, 'b-', linewidth=2, label='sin(x)')
     plt.xlabel('x')
@@ -495,7 +478,7 @@ if __name__ == '__main__':
             y = np.sin(x)
 
             # Create visualization using our advanced plotter
-            plotter = AdvancedPlotter()
+            AdvancedPlotter()
             fig = create_advanced_line_plot(
                 x_data=x.tolist(),
                 y_data=y.tolist(),
@@ -690,7 +673,7 @@ def calculate_statistics(data):
                 )
 
                 # Step 6: Create visualization of workflow
-                plotter = AdvancedPlotter()
+                AdvancedPlotter()
 
                 # Create workflow visualization data
                 workflow_data = {
@@ -726,7 +709,7 @@ def calculate_statistics(data):
         data = np.random.normal(100, 15, 1000)
 
         # Step 1: Analyze data with static analysis (if applicable)
-        analyzer = StaticAnalyzer()
+        StaticAnalyzer()
 
         # Step 2: Create visualizations
         plotter = AdvancedPlotter()

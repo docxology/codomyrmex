@@ -6,17 +6,25 @@ to ensure it meets the required performance targets.
 """
 
 import os
+import shutil
 import sys
-import unittest
 import tempfile
 import time
-import shutil
-from pathlib import Path
+import unittest
 
 # Add the src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
-from codomyrmex.code_review import PyscnAnalyzer, CodeReviewer
+from codomyrmex.code_review import CodeReviewer, PyscnAnalyzer
+
+
+def _pyscn_available() -> bool:
+    """Check if pyscn is available."""
+    try:
+        import pyscn
+        return True
+    except ImportError:
+        return False
 
 
 class TestPyscnPerformance(unittest.TestCase):
@@ -89,7 +97,7 @@ class TestPyscnPerformance(unittest.TestCase):
 
         # Measure analysis time
         start_time = time.time()
-        results = analyzer.analyze_complexity(self.large_file)
+        analyzer.analyze_complexity(self.large_file)
         end_time = time.time()
 
         analysis_time = end_time - start_time
@@ -101,7 +109,7 @@ class TestPyscnPerformance(unittest.TestCase):
         file_size = os.path.getsize(self.large_file)
         lines_per_sec = file_size / analysis_time
 
-        print(f"\nComplexity Analysis Performance:")
+        print("\nComplexity Analysis Performance:")
         print(f"  File size: {file_size} bytes")
         print(f"  Analysis time: {analysis_time:.2f} seconds")
         print(f"  Performance: {lines_per_sec:.0f} bytes/sec")
@@ -125,7 +133,7 @@ class TestPyscnPerformance(unittest.TestCase):
 
         analysis_time = end_time - start_time
 
-        print(f"\nDead Code Detection Performance:")
+        print("\nDead Code Detection Performance:")
         print(f"  Analysis time: {analysis_time:.2f} seconds")
         print(f"  Dead code findings: {len(results)}")
 
@@ -149,7 +157,7 @@ class TestPyscnPerformance(unittest.TestCase):
 
         analysis_time = end_time - start_time
 
-        print(f"\nClone Detection Performance:")
+        print("\nClone Detection Performance:")
         print(f"  Files analyzed: {len(files)}")
         print(f"  Analysis time: {analysis_time:.2f} seconds")
         print(f"  Clone groups found: {len(results)}")
@@ -171,7 +179,7 @@ class TestPyscnPerformance(unittest.TestCase):
 
         analysis_time = end_time - start_time
 
-        print(f"\nFull Workflow Performance:")
+        print("\nFull Workflow Performance:")
         print(f"  Files analyzed: {summary.files_analyzed}")
         print(f"  Total issues: {summary.total_issues}")
         print(f"  Analysis time: {analysis_time:.2f} seconds")
@@ -186,8 +194,9 @@ class TestPyscnPerformance(unittest.TestCase):
     @unittest.skipUnless(_pyscn_available(), "Pyscn not available")
     def test_memory_usage(self):
         """Test memory usage during analysis."""
-        import psutil
         import os
+
+        import psutil
 
         if not os.path.exists(self.large_file):
             self.skipTest("Large test file not available")
@@ -196,12 +205,12 @@ class TestPyscnPerformance(unittest.TestCase):
         initial_memory = process.memory_info().rss / 1024 / 1024  # MB
 
         analyzer = PyscnAnalyzer()
-        results = analyzer.analyze_complexity(self.large_file)
+        analyzer.analyze_complexity(self.large_file)
 
         final_memory = process.memory_info().rss / 1024 / 1024  # MB
         memory_used = final_memory - initial_memory
 
-        print(f"\nMemory Usage:")
+        print("\nMemory Usage:")
         print(f"  Initial memory: {initial_memory:.1f} MB")
         print(f"  Final memory: {final_memory:.1f} MB")
         print(f"  Memory used: {memory_used:.1f} MB")

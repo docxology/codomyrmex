@@ -26,6 +26,6 @@ To use:
 
 # This file makes the 'logging_monitoring' directory a Python package.
 
-from .logger_config import setup_logging, get_logger
+from .logger_config import get_logger, setup_logging
 
 __all__ = ["setup_logging", "get_logger"]

@@ -8,14 +8,13 @@ functionality.
 """
 
 import ast
-import inspect
 import importlib
-import sys
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Set, Tuple, Union
-from dataclasses import dataclass
+import inspect
 import json
-from codomyrmex.exceptions import CodomyrmexError
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Optional, Union
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -34,13 +33,13 @@ class FunctionCapability:
     name: str
     signature: str
     docstring: str
-    parameters: List[Dict[str, Any]]
+    parameters: list[dict[str, Any]]
     return_annotation: str
     file_path: str
     line_number: int
     is_async: bool
     is_generator: bool
-    decorators: List[str]
+    decorators: list[str]
     complexity_score: int
 
 
@@ -50,14 +49,14 @@ class ClassCapability:
 
     name: str
     docstring: str
-    methods: List[FunctionCapability]
-    properties: List[str]
-    class_variables: List[str]
-    inheritance: List[str]
+    methods: list[FunctionCapability]
+    properties: list[str]
+    class_variables: list[str]
+    inheritance: list[str]
     file_path: str
     line_number: int
     is_abstract: bool
-    decorators: List[str]
+    decorators: list[str]
 
 
 @dataclass
@@ -67,11 +66,11 @@ class ModuleCapability:
     name: str
     path: str
     docstring: str
-    functions: List[FunctionCapability]
-    classes: List[ClassCapability]
-    constants: Dict[str, Any]
-    imports: List[str]
-    exports: List[str]
+    functions: list[FunctionCapability]
+    classes: list[ClassCapability]
+    constants: dict[str, Any]
+    imports: list[str]
+    exports: list[str]
     file_count: int
     line_count: int
     last_modified: str
@@ -96,7 +95,7 @@ class CapabilityScanner:
             pass
 #             sys.path.insert(0, str(self.src_path))  # Removed sys.path manipulation
 
-    def scan_all_modules(self) -> Dict[str, ModuleCapability]:
+    def scan_all_modules(self) -> dict[str, ModuleCapability]:
         """Scan all modules and return detailed capability information."""
         capabilities = {}
 
@@ -149,7 +148,7 @@ class CapabilityScanner:
                     continue
 
                 try:
-                    with open(py_file, "r", encoding="utf-8") as f:
+                    with open(py_file, encoding="utf-8") as f:
                         content = f.read()
 
                     # Count lines
@@ -212,8 +211,8 @@ class CapabilityScanner:
 
     def _analyze_ast(
         self, tree: ast.AST, file_path: Path
-    ) -> Tuple[
-        List[FunctionCapability], List[ClassCapability], Dict[str, Any], Set[str]
+    ) -> tuple[
+        list[FunctionCapability], list[ClassCapability], dict[str, Any], set[str]
     ]:
         """Analyze AST and extract capabilities."""
         functions = []
@@ -266,10 +265,10 @@ class CapabilityScanner:
 
         return functions, classes, constants, imports
 
-    def _extract_parameters(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> List[Dict[str, Any]]:
+    def _extract_parameters(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> list[dict[str, Any]]:
         """Extract parameter information from function node."""
         parameters = []
-        
+
         # Extract regular parameters
         for arg in node.args.args:
             param_info = {
@@ -325,7 +324,7 @@ class CapabilityScanner:
                 return "complex_annotation"
         return ""
 
-    def _build_signature(self, name: str, parameters: List[Dict[str, Any]], return_annotation: str) -> str:
+    def _build_signature(self, name: str, parameters: list[dict[str, Any]], return_annotation: str) -> str:
         """Build function signature string."""
         param_strs = []
         for param in parameters:
@@ -341,7 +340,7 @@ class CapabilityScanner:
             signature += f" -> {return_annotation}"
         return signature
 
-    def _extract_decorators(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> List[str]:
+    def _extract_decorators(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> list[str]:
         """Extract decorator information from function node."""
         decorators = []
         for decorator in node.decorator_list:
@@ -495,7 +494,7 @@ class CapabilityScanner:
         init_path = module_path / "__init__.py"
         if init_path.exists():
             try:
-                with open(init_path, "r", encoding="utf-8") as f:
+                with open(init_path, encoding="utf-8") as f:
                     tree = ast.parse(f.read())
                     docstring = ast.get_docstring(tree)
                     return docstring or "No docstring"
@@ -525,8 +524,8 @@ class CapabilityScanner:
         return "unknown"
 
     def analyze_capability_relationships(
-        self, capabilities: Dict[str, ModuleCapability]
-    ) -> Dict[str, Any]:
+        self, capabilities: dict[str, ModuleCapability]
+    ) -> dict[str, Any]:
         """Analyze relationships between capabilities."""
         relationships = {
             "function_calls": {},  # Which functions call which
@@ -582,7 +581,7 @@ class CapabilityScanner:
         return relationships
 
     def export_capabilities_report(
-        self, capabilities: Dict[str, ModuleCapability], filename: Optional[str] = None
+        self, capabilities: dict[str, ModuleCapability], filename: Optional[str] = None
     ) -> str:
         """Export detailed capabilities report to JSON."""
         if filename is None:

@@ -1,16 +1,14 @@
 """Advanced analytics and data streaming for physical management."""
 
-from typing import Dict, List, Optional, Callable, Any, Iterator, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-import time
 import json
+import logging
 import statistics
 import threading
-import queue
-from collections import deque, defaultdict
-import logging
-from codomyrmex.exceptions import CodomyrmexError
+import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +43,7 @@ class DataPoint:
     timestamp: float
     value: float
     source_id: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -55,7 +53,7 @@ class AnalyticsWindow:
     start_time: float
     end_time: float
     duration: float
-    data_points: List[DataPoint] = field(default_factory=list)
+    data_points: list[DataPoint] = field(default_factory=list)
 
     def add_point(self, point: DataPoint) -> None:
         """Add a data point to the window."""
@@ -66,7 +64,7 @@ class AnalyticsWindow:
         """Check if window is complete (past end time)."""
         return time.time() > self.end_time
 
-    def calculate_metrics(self) -> Dict[AnalyticsMetric, float]:
+    def calculate_metrics(self) -> dict[AnalyticsMetric, float]:
         """Calculate analytics metrics for the window."""
         if not self.data_points:
             return {}
@@ -122,9 +120,9 @@ class DataStream:
         self.window_duration = window_duration
 
         self.data_buffer = deque(maxlen=buffer_size)
-        self.subscribers: List[Callable[[DataPoint], None]] = []
-        self.windows: List[AnalyticsWindow] = []
-        self.completed_windows: List[AnalyticsWindow] = []
+        self.subscribers: list[Callable[[DataPoint], None]] = []
+        self.windows: list[AnalyticsWindow] = []
+        self.completed_windows: list[AnalyticsWindow] = []
         self.max_completed_windows = 1000
 
         self._lock = threading.RLock()
@@ -134,7 +132,7 @@ class DataStream:
         self._create_new_window()
 
     def add_data_point(
-        self, value: float, source_id: str, metadata: Optional[Dict[str, Any]] = None
+        self, value: float, source_id: str, metadata: Optional[dict[str, Any]] = None
     ) -> None:
         """Add a new data point to the stream."""
         point = DataPoint(
@@ -188,13 +186,13 @@ class DataStream:
         except ValueError:
             return False
 
-    def get_recent_data(self, duration: float) -> List[DataPoint]:
+    def get_recent_data(self, duration: float) -> list[DataPoint]:
         """Get data points from the last N seconds."""
         cutoff_time = time.time() - duration
         with self._lock:
             return [p for p in self.data_buffer if p.timestamp >= cutoff_time]
 
-    def get_current_metrics(self) -> Dict[AnalyticsMetric, float]:
+    def get_current_metrics(self) -> dict[AnalyticsMetric, float]:
         """Get current window metrics."""
         with self._lock:
             if self.windows:
@@ -203,13 +201,13 @@ class DataStream:
 
     def get_historical_metrics(
         self, num_windows: int = 10
-    ) -> List[Dict[AnalyticsMetric, float]]:
+    ) -> list[dict[AnalyticsMetric, float]]:
         """Get metrics from completed windows."""
         with self._lock:
             recent_windows = self.completed_windows[-num_windows:]
             return [window.calculate_metrics() for window in recent_windows]
 
-    def get_stream_statistics(self) -> Dict[str, Any]:
+    def get_stream_statistics(self) -> dict[str, Any]:
         """Get overall stream statistics."""
         with self._lock:
             return {
@@ -251,9 +249,9 @@ class StreamingAnalytics:
     def __init__(self):
         """  Init  .
             """
-        self.streams: Dict[str, DataStream] = {}
-        self.processors: List[Callable[[str, DataPoint], None]] = []
-        self.alerts: List[Dict[str, Any]] = []
+        self.streams: dict[str, DataStream] = {}
+        self.processors: list[Callable[[str, DataPoint], None]] = []
+        self.alerts: list[dict[str, Any]] = []
         self.max_alerts = 1000
         self._lock = threading.RLock()
 
@@ -290,7 +288,7 @@ class StreamingAnalytics:
         stream_id: str,
         value: float,
         source_id: str,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> bool:
         """Add data to a stream."""
         stream = self.get_stream(stream_id)
@@ -331,7 +329,7 @@ class StreamingAnalytics:
             if len(self.alerts) > self.max_alerts:
                 self.alerts = self.alerts[-self.max_alerts :]
 
-    def check_alerts(self, stream_id: str, point: DataPoint) -> List[Dict[str, Any]]:
+    def check_alerts(self, stream_id: str, point: DataPoint) -> list[dict[str, Any]]:
         """Check alert conditions for a data point."""
         triggered_alerts = []
 
@@ -359,7 +357,7 @@ class StreamingAnalytics:
 
         return triggered_alerts
 
-    def get_analytics_summary(self) -> Dict[str, Any]:
+    def get_analytics_summary(self) -> dict[str, Any]:
         """Get summary of all analytics."""
         with self._lock:
             summary = {
@@ -433,7 +431,7 @@ class PredictiveAnalytics:
         self.min_data_points = min_data_points
 
     def predict_linear_trend(
-        self, data_points: List[DataPoint], future_seconds: float
+        self, data_points: list[DataPoint], future_seconds: float
     ) -> Optional[float]:
         """Predict future value using linear regression."""
         if len(data_points) < self.min_data_points:
@@ -469,8 +467,8 @@ class PredictiveAnalytics:
             return None
 
     def detect_anomalies(
-        self, data_points: List[DataPoint], std_dev_threshold: float = 3.0
-    ) -> List[DataPoint]:
+        self, data_points: list[DataPoint], std_dev_threshold: float = 3.0
+    ) -> list[DataPoint]:
         """Detect anomalies using standard deviation method."""
         if len(data_points) < self.min_data_points:
             return []
@@ -496,7 +494,7 @@ class PredictiveAnalytics:
             return []
 
     def calculate_correlation(
-        self, stream1_data: List[DataPoint], stream2_data: List[DataPoint]
+        self, stream1_data: list[DataPoint], stream2_data: list[DataPoint]
     ) -> Optional[float]:
         """Calculate correlation between two data streams."""
         if (

@@ -1,24 +1,24 @@
 """Performance and benchmarking tests for Physical Management module."""
 
-import pytest
-import time
 import statistics
-from typing import List, Dict, Any
-from codomyrmex.physical_management import (
-    PhysicalObjectManager,
-    ObjectType,
-    ObjectStatus,
-)
+import time
+
+import pytest
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.physical_management import (
+    ObjectType,
+    PhysicalObjectManager,
+)
 
 logger = get_logger(__name__)
 
 from codomyrmex.physical_management import (
-    PhysicalObject,
-    MaterialType,
-    SpatialIndex,
-    ObjectRegistry,
     EventType,
+    MaterialType,
+    ObjectRegistry,
+    PhysicalObject,
+    SpatialIndex,
 )
 
 
@@ -26,14 +26,14 @@ class PerformanceMetrics:
     """Helper class for collecting performance metrics."""
 
     def __init__(self):
-        self.execution_times: List[float] = []
-        self.memory_usage: List[int] = []
+        self.execution_times: list[float] = []
+        self.memory_usage: list[int] = []
 
     def add_timing(self, execution_time: float):
         """Add execution time measurement."""
         self.execution_times.append(execution_time)
 
-    def get_statistics(self) -> Dict[str, float]:
+    def get_statistics(self) -> dict[str, float]:
         """Get timing statistics."""
         if not self.execution_times:
             return {}
@@ -57,7 +57,7 @@ class TestObjectCreationPerformance:
     def test_bulk_object_creation_performance(self):
         """Test performance of creating many objects."""
         manager = PhysicalObjectManager()
-        metrics = PerformanceMetrics()
+        PerformanceMetrics()
 
         # Test creating 1000 objects
         num_objects = 1000
@@ -136,7 +136,7 @@ class TestSpatialIndexPerformance:
     def test_spatial_index_insertion_performance(self):
         """Test performance of spatial index insertions."""
         index = SpatialIndex(grid_size=10.0)
-        metrics = PerformanceMetrics()
+        PerformanceMetrics()
 
         num_objects = 50000
 
@@ -182,7 +182,7 @@ class TestSpatialIndexPerformance:
             x = (i * 37) % 500
             y = (i * 41) % 500
             z = (i * 43) % 50
-            nearby = index.get_nearby_cells(x, y, z, query_radius)
+            index.get_nearby_cells(x, y, z, query_radius)
         end_time = time.time()
 
         total_time = end_time - start_time
@@ -226,7 +226,7 @@ class TestDistanceCalculationPerformance:
         for i in range(num_calculations):
             obj1 = objects[i % len(objects)]
             obj2 = objects[(i + 1) % len(objects)]
-            distance = obj1.distance_to(obj2)
+            obj1.distance_to(obj2)
         end_time = time.time()
 
         total_time = end_time - start_time
@@ -309,7 +309,7 @@ class TestNetworkAnalysisPerformance:
 
         # Test network topology generation
         start_time = time.time()
-        topology = registry.get_network_topology()
+        registry.get_network_topology()
         end_time = time.time()
 
         topology_time = end_time - start_time
@@ -493,7 +493,7 @@ class TestStressTests:
         # Nearby object queries
         start_time = time.time()
         for i in range(100):
-            nearby = manager.get_nearby_objects(x=i * 10, y=i * 10, z=0, radius=50)
+            manager.get_nearby_objects(x=i * 10, y=i * 10, z=0, radius=50)
         query_time = time.time() - start_time
 
         print(f"100 spatial queries completed in {query_time:.3f}s")

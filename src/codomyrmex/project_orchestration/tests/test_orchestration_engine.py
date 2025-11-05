@@ -5,39 +5,32 @@ This module contains extensive unit tests for the OrchestrationEngine class,
 covering all public methods, error conditions, and edge cases.
 """
 
-import pytest
-import asyncio
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
 
+import pytest
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.project_orchestration.orchestration_engine import (
     OrchestrationEngine,
     OrchestrationSession,
     SessionStatus,
 )
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
-from codomyrmex.project_orchestration.workflow_manager import (
-    WorkflowStep,
-    WorkflowStatus,
-)
-from codomyrmex.project_orchestration.task_orchestrator import (
-    Task,
-    TaskStatus,
-    TaskPriority,
-)
 from codomyrmex.project_orchestration.project_manager import (
     Project,
-    ProjectStatus,
-    ProjectType,
 )
 from codomyrmex.project_orchestration.resource_manager import (
     Resource,
     ResourceType,
-    ResourceStatus,
+)
+from codomyrmex.project_orchestration.task_orchestrator import (
+    Task,
+)
+from codomyrmex.project_orchestration.workflow_manager import (
+    WorkflowStep,
 )
 
 
@@ -262,7 +255,7 @@ class TestOrchestrationEngine:
     def test_get_system_status(self, orchestration_engine):
         """Test getting system status."""
         # Create some test data
-        session = orchestration_engine.create_session(name="Test Session")
+        orchestration_engine.create_session(name="Test Session")
 
         # Add some workflows
         steps = [WorkflowStep(name="step1", module="module1", action="action1")]
@@ -501,8 +494,8 @@ class TestOrchestrationEngine:
     def test_shutdown(self, orchestration_engine):
         """Test orchestration engine shutdown."""
         # Create some sessions
-        session1 = orchestration_engine.create_session(name="Session 1")
-        session2 = orchestration_engine.create_session(name="Session 2")
+        orchestration_engine.create_session(name="Session 1")
+        orchestration_engine.create_session(name="Session 2")
 
         # Shutdown engine
         orchestration_engine.shutdown()
@@ -623,11 +616,11 @@ class TestOrchestrationEngineIntegration:
         engine.add_task_to_session(session2.session_id, task2)
 
         # Create different projects in each session
-        project1 = engine.create_project_in_session(
+        engine.create_project_in_session(
             session1.session_id, "project1", "Project 1"
         )
 
-        project2 = engine.create_project_in_session(
+        engine.create_project_in_session(
             session2.session_id, "project2", "Project 2"
         )
 

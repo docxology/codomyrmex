@@ -1,9 +1,7 @@
 """Core 3D Engine for modeling and rendering."""
 
-from typing import List, Optional, Tuple, Dict, Any
 from dataclasses import dataclass
-import math
-import numpy as np
+from typing import Any, Optional
 
 
 @dataclass
@@ -37,9 +35,9 @@ class Scene3D:
     def __init__(self):
         """  Init  .
             """
-        self.objects: List["Object3D"] = []
-        self.cameras: List["Camera3D"] = []
-        self.lights: List["Light3D"] = []
+        self.objects: list[Object3D] = []
+        self.cameras: list[Camera3D] = []
+        self.lights: list[Light3D] = []
 
     def add_object(self, obj: "Object3D") -> None:
         """Add an object to the scene."""
@@ -66,9 +64,9 @@ class Object3D:
         self.position = Vector3D()
         self.rotation = Quaternion()
         self.scale = Vector3D(1.0, 1.0, 1.0)
-        self.vertices: List[Vector3D] = []
-        self.faces: List[List[int]] = []
-        self.material: Optional["Material3D"] = None
+        self.vertices: list[Vector3D] = []
+        self.faces: list[list[int]] = []
+        self.material: Optional[Material3D] = None
 
     def set_position(self, x: float, y: float, z: float) -> None:
         """Set object position."""
@@ -141,7 +139,7 @@ class AnimationController:
     """Controller for 3D animations."""
 
     def __init__(self):
-        self.animations: Dict[str, Any] = {}
+        self.animations: dict[str, Any] = {}
 
     def play_animation(self, name: str) -> None:
         """Play a specific animation."""
@@ -154,7 +152,7 @@ class PhysicsEngine:
     def __init__(self):
         self.gravity = Vector3D(0.0, -9.81, 0.0)
 
-    def update_physics(self, objects: List[Object3D], delta_time: float) -> None:
+    def update_physics(self, objects: list[Object3D], delta_time: float) -> None:
         """Update physics simulation."""
         for obj in objects:
             # Apply gravity

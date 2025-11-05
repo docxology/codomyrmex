@@ -7,7 +7,7 @@ accessible ways.
 """
 
 from .interactive_shell import InteractiveShell
-from .terminal_utils import TerminalFormatter, CommandRunner
+from .terminal_utils import CommandRunner, TerminalFormatter
 
 __all__ = ["InteractiveShell", "TerminalFormatter", "CommandRunner"]
 

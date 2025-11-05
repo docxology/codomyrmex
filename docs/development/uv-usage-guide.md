@@ -143,7 +143,7 @@ uv run bandit -r src/codomyrmex/
 # Traditional pip workflow
 time pip install -e .  # ~30-60 seconds
 
-# UV workflow  
+# UV workflow
 time uv pip install -e .  # ~2-5 seconds
 ```
 
@@ -373,7 +373,7 @@ uv run python -c "from codomyrmex.performance import PerformanceMonitor"
 - [UV Documentation](https://docs.astral.sh/uv/)
 - [UV GitHub Repository](https://github.com/astral-sh/uv)
 - [Python Packaging User Guide](https://packaging.python.org/)
-- [Codomyrmex Development Guide](development/environment-setup.md)
+- [Codomyrmex Development Guide](environment-setup.md)
 
 ---
 

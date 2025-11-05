@@ -3,19 +3,17 @@ Unit tests for the ai_code_helpers module.
 """
 
 import os
-import sys
 import unittest
-from unittest.mock import patch, MagicMock
-from codomyrmex.exceptions import CodomyrmexError
+from unittest.mock import MagicMock, patch
 
 # Add the parent directory to the sys.path to allow importing from the parent directory
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))  # Removed sys.path manipulation
-
 from ai_code_editing.ai_code_helpers import (
-    get_llm_client,
     generate_code_snippet,
+    get_llm_client,
     refactor_code_snippet,
 )
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -71,7 +69,7 @@ class TestGenerateCodeSnippet(unittest.TestCase):
         # Mock the OpenAI client
         mock_client = MagicMock()
         mock_response = MagicMock()
-        mock_message = MagicMock()
+        MagicMock()
         mock_choice = MagicMock()
 
         mock_choice.message.content = "def max_value(numbers):\n    return max(numbers)"
@@ -240,7 +238,7 @@ class TestRefactorCodeSnippet(unittest.TestCase):
         # Mock the OpenAI client
         mock_client = MagicMock()
         mock_response = MagicMock()
-        mock_message = MagicMock()
+        MagicMock()
         mock_choice = MagicMock()
 
         mock_choice.message.content = "```python\ndef max_value(numbers: list) -> int:\n    return max(numbers)\n```\nAdded type hints to the function."
@@ -271,7 +269,7 @@ class TestRefactorCodeSnippet(unittest.TestCase):
         # Mock the client response where code doesn't change
         mock_client = MagicMock()
         mock_response = MagicMock()
-        mock_message = MagicMock()
+        MagicMock()
         mock_choice = MagicMock()
 
         original_code = "def max_value(numbers):\n    return max(numbers)"

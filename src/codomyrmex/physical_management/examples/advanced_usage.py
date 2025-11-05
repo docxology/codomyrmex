@@ -1,29 +1,27 @@
 """Advanced usage examples for Physical Management module."""
 
-import time
 import random
-from codomyrmex.physical_management import (
-    PhysicalObjectManager,
-    ObjectType,
-    ObjectStatus,
-    MaterialType,
-    EventType,
-)
-from codomyrmex.exceptions import CodomyrmexError
+import time
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.physical_management import (
+    EventType,
+    MaterialType,
+    ObjectType,
+    PhysicalObjectManager,
+)
 
 logger = get_logger(__name__)
 
 from codomyrmex.physical_management import (
-    PhysicsSimulator,
-    Vector3D,
     ForceField,
-    SensorManager,
-    SensorType,
-    SensorReading,
-    StreamingAnalytics,
-    DataStream,
+    PhysicsSimulator,
     PredictiveAnalytics,
+    SensorManager,
+    SensorReading,
+    SensorType,
+    StreamingAnalytics,
+    Vector3D,
 )
 
 
@@ -124,10 +122,10 @@ def example_iot_sensor_network():
     temp_stream = analytics.create_stream(
         "temperature", buffer_size=5000, window_duration=30.0
     )
-    humidity_stream = analytics.create_stream(
+    analytics.create_stream(
         "humidity", buffer_size=5000, window_duration=30.0
     )
-    pressure_stream = analytics.create_stream(
+    analytics.create_stream(
         "pressure", buffer_size=5000, window_duration=30.0
     )
 
@@ -146,16 +144,16 @@ def example_iot_sensor_network():
         base_humidity = 60.0 - minute * 0.3  # Gradually decreasing humidity
         base_pressure = 1013.25 + random.uniform(-2, 2)
 
-        for second in range(60):  # One reading per second
+        for _second in range(60):  # One reading per second
             # Add some noise
             temp = base_temp + random.uniform(-1, 1)
             humidity = base_humidity + random.uniform(-2, 2)
             pressure = base_pressure + random.uniform(-0.5, 0.5)
 
             # Add to streams
-            analytics.add_data("temperature", temp, f"sensor_001")
-            analytics.add_data("humidity", humidity, f"sensor_002")
-            analytics.add_data("pressure", pressure, f"sensor_003")
+            analytics.add_data("temperature", temp, "sensor_001")
+            analytics.add_data("humidity", humidity, "sensor_002")
+            analytics.add_data("pressure", pressure, "sensor_003")
 
             # Also add to sensor manager for calibration/health monitoring
             sensor_manager.add_reading(
@@ -177,7 +175,7 @@ def example_iot_sensor_network():
     # Get current metrics for temperature stream
     temp_metrics = temp_stream.get_current_metrics()
     if temp_metrics:
-        print(f"Current temperature metrics:")
+        print("Current temperature metrics:")
         for metric, value in temp_metrics.items():
             print(f"  {metric.value}: {value:.2f}")
 
@@ -256,8 +254,8 @@ def example_physics_simulation_network():
     # Run simulation and collect data
     analytics = StreamingAnalytics()
     energy_stream = analytics.create_stream("total_energy", window_duration=10.0)
-    kinetic_stream = analytics.create_stream("kinetic_energy", window_duration=10.0)
-    potential_stream = analytics.create_stream("potential_energy", window_duration=10.0)
+    analytics.create_stream("kinetic_energy", window_duration=10.0)
+    analytics.create_stream("potential_energy", window_duration=10.0)
 
     simulation_time = 0.0
     dt = 0.016  # 60 FPS
@@ -510,7 +508,7 @@ def example_autonomous_vehicle_fleet():
     fleet_stats = manager.get_statistics()
     network_stats = manager.registry.analyze_network_metrics()
 
-    print(f"Fleet statistics:")
+    print("Fleet statistics:")
     print(f"  Total objects: {fleet_stats['total_objects']}")
     print(f"  Network density: {network_stats['density']:.3f}")
     print(f"  Average connections: {network_stats['average_degree']:.1f}")

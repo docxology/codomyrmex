@@ -5,21 +5,21 @@ This module contains extensive unit tests for the ProjectManager class,
 covering all public methods, error conditions, and edge cases.
 """
 
-import pytest
-import tempfile
 import json
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
 
+import pytest
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.project_orchestration.project_manager import (
-    ProjectManager,
     Project,
-    ProjectTemplate,
+    ProjectManager,
     ProjectStatus,
+    ProjectTemplate,
     ProjectType,
 )
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -269,8 +269,8 @@ class TestProjectManager:
     def test_list_projects(self, project_manager):
         """Test listing projects."""
         # Create multiple projects
-        project1 = project_manager.create_project(name="project1")
-        project2 = project_manager.create_project(name="project2")
+        project_manager.create_project(name="project1")
+        project_manager.create_project(name="project2")
 
         projects = project_manager.list_projects()
 
@@ -305,7 +305,7 @@ class TestProjectManager:
 
     def test_update_project(self, project_manager):
         """Test updating project."""
-        project = project_manager.create_project(name="test_project")
+        project_manager.create_project(name="test_project")
 
         # Update project
         updated_project = project_manager.update_project(
@@ -328,7 +328,7 @@ class TestProjectManager:
 
     def test_delete_project(self, project_manager):
         """Test deleting project."""
-        project = project_manager.create_project(name="test_project")
+        project_manager.create_project(name="test_project")
 
         result = project_manager.delete_project("test_project")
 
@@ -435,7 +435,7 @@ class TestProjectManager:
         assert project_file.exists()
 
         # Check file contents
-        with open(project_file, "r") as f:
+        with open(project_file) as f:
             data = json.load(f)
 
         assert data["name"] == "test_project"
@@ -494,7 +494,7 @@ class TestProjectManager:
         assert template_file.exists()
 
         # Check file contents
-        with open(template_file, "r") as f:
+        with open(template_file) as f:
             data = json.load(f)
 
         assert data["name"] == "test_template"
@@ -618,7 +618,7 @@ class TestProjectManagerIntegration:
         template = ProjectTemplate(name="persistence_template")
         manager1.create_template(template)
 
-        project = manager1.create_project(
+        manager1.create_project(
             name="persistence_project", template_name="persistence_template"
         )
 

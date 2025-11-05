@@ -1,8 +1,10 @@
 """Augmented Reality, Virtual Reality, and Extended Reality support."""
 
-from typing import Optional, Dict, Any
-from .engine_3d import Vector3D, Quaternion
+from typing import Any
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+from .engine_3d import Quaternion, Vector3D
 
 logger = get_logger(__name__)
 
@@ -55,7 +57,7 @@ class XRInterface:
         """Initialize XR systems."""
         return self.ar_session.start_session()
 
-    def get_mixed_reality_frame(self) -> Dict[str, Any]:
+    def get_mixed_reality_frame(self) -> dict[str, Any]:
         """Get frame data combining real and virtual content."""
         return {
             "camera_pose": self.ar_session.get_camera_pose(),

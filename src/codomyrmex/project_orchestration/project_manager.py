@@ -5,16 +5,13 @@ This module provides high-level project lifecycle management, including project
 templates, scaffolding, and coordination of complex multi-module workflows.
 """
 
-import os
 import json
 import shutil
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Union
-from dataclasses import dataclass, field, asdict
 from enum import Enum
-import tempfile
-from codomyrmex.exceptions import CodomyrmexError
+from pathlib import Path
+from typing import Any, Optional
 
 # Import Codomyrmex modules
 try:
@@ -40,8 +37,6 @@ except ImportError:
         return decorator
 
 
-from .workflow_manager import WorkflowManager
-from .task_orchestrator import TaskOrchestrator, Task
 
 
 class ProjectStatus(Enum):
@@ -77,24 +72,24 @@ class ProjectTemplate:
     version: str = "1.0"
 
     # Template structure
-    directory_structure: List[str] = field(default_factory=list)
-    template_files: Dict[str, str] = field(default_factory=dict)  # src -> dest mapping
+    directory_structure: list[str] = field(default_factory=list)
+    template_files: dict[str, str] = field(default_factory=dict)  # src -> dest mapping
 
     # Default workflows
-    workflows: List[str] = field(default_factory=list)
+    workflows: list[str] = field(default_factory=list)
 
     # Required modules and dependencies
-    required_modules: List[str] = field(default_factory=list)
-    optional_modules: List[str] = field(default_factory=list)
+    required_modules: list[str] = field(default_factory=list)
+    optional_modules: list[str] = field(default_factory=list)
 
     # Configuration
-    default_config: Dict[str, Any] = field(default_factory=dict)
+    default_config: dict[str, Any] = field(default_factory=dict)
 
     # Metadata
     author: str = ""
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for serialization."""
         data = asdict(self)
         data["type"] = self.type.value
@@ -102,7 +97,7 @@ class ProjectTemplate:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ProjectTemplate":
+    def from_dict(cls, data: dict[str, Any]) -> "ProjectTemplate":
         """Create from dictionary."""
         data = data.copy()
         if "type" in data:
@@ -127,26 +122,26 @@ class Project:
     template: Optional[str] = None
 
     # Configuration
-    config: Dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
 
     # Workflows and tasks
-    workflows: List[str] = field(default_factory=list)  # Workflow names
-    active_workflows: List[str] = field(default_factory=list)
+    workflows: list[str] = field(default_factory=list)  # Workflow names
+    active_workflows: list[str] = field(default_factory=list)
 
     # Dependencies
-    required_modules: List[str] = field(default_factory=list)
+    required_modules: list[str] = field(default_factory=list)
 
     # Metadata
     author: str = ""
-    tags: List[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     # Progress tracking
-    milestones: Dict[str, Any] = field(default_factory=dict)
-    metrics: Dict[str, Any] = field(default_factory=dict)
+    milestones: dict[str, Any] = field(default_factory=dict)
+    metrics: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for serialization."""
         data = asdict(self)
         data["type"] = self.type.value
@@ -156,7 +151,7 @@ class Project:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Project":
+    def from_dict(cls, data: dict[str, Any]) -> "Project":
         """Create from dictionary."""
         data = data.copy()
         if "type" in data:
@@ -189,7 +184,7 @@ class Project:
             return None
 
         try:
-            with open(project_file, "r") as f:
+            with open(project_file) as f:
                 data = json.load(f)
             return cls.from_dict(data)
         except Exception as e:
@@ -218,8 +213,8 @@ class ProjectManager:
         self.templates_dir.mkdir(parents=True, exist_ok=True)
 
         # Load templates and projects
-        self.templates: Dict[str, ProjectTemplate] = {}
-        self.projects: Dict[str, Project] = {}
+        self.templates: dict[str, ProjectTemplate] = {}
+        self.projects: dict[str, Project] = {}
 
         self.load_templates()
         self.load_projects()
@@ -233,7 +228,7 @@ class ProjectManager:
         # Load from templates directory
         for template_file in self.templates_dir.glob("*.json"):
             try:
-                with open(template_file, "r") as f:
+                with open(template_file) as f:
                     data = json.load(f)
                 template = ProjectTemplate.from_dict(data)
                 self.templates[template.name] = template
@@ -370,7 +365,7 @@ class ProjectManager:
                     self.projects[project.name] = project
                     logger.debug(f"Loaded project: {project.name}")
 
-    def list_templates(self) -> List[str]:
+    def list_templates(self) -> list[str]:
         """List available project templates."""
         return list(self.templates.keys())
 
@@ -378,7 +373,7 @@ class ProjectManager:
         """Get a template by name."""
         return self.templates.get(name)
 
-    def list_projects(self) -> List[str]:
+    def list_projects(self) -> list[str]:
         """List available projects."""
         return list(self.projects.keys())
 
@@ -507,7 +502,7 @@ class ProjectManager:
 
     def execute_project_workflow(
         self, project_name: str, workflow_name: str, **params
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Execute a workflow for a project."""
         project = self.get_project(project_name)
         if not project:
@@ -534,7 +529,7 @@ class ProjectManager:
 
         return workflow_manager.execute_workflow(workflow_name, **project_params)
 
-    def get_project_status(self, name: str) -> Optional[Dict[str, Any]]:
+    def get_project_status(self, name: str) -> Optional[dict[str, Any]]:
         """Get detailed project status."""
         project = self.get_project(name)
         if not project:
@@ -555,7 +550,7 @@ class ProjectManager:
             "metrics": project.metrics,
         }
 
-    def update_project_metrics(self, name: str, metrics: Dict[str, Any]):
+    def update_project_metrics(self, name: str, metrics: dict[str, Any]):
         """Update project metrics."""
         project = self.get_project(name)
         if project:
@@ -564,7 +559,7 @@ class ProjectManager:
             project.save()
 
     def add_project_milestone(
-        self, name: str, milestone_name: str, milestone_data: Dict[str, Any]
+        self, name: str, milestone_name: str, milestone_data: dict[str, Any]
     ):
         """Add a milestone to a project."""
         project = self.get_project(name)
@@ -574,7 +569,7 @@ class ProjectManager:
             project.updated_at = datetime.now(timezone.utc)
             project.save()
 
-    def get_projects_summary(self) -> Dict[str, Any]:
+    def get_projects_summary(self) -> dict[str, Any]:
         """Get summary of all projects."""
         summary = {
             "total_projects": len(self.projects),

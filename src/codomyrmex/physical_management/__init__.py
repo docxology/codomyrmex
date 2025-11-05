@@ -5,10 +5,10 @@ and sensor integration capabilities for the Codomyrmex platform, enabling
 advanced physical computing and IoT device management.
 """
 
-from .object_manager import *
-from .simulation_engine import *
-from .sensor_integration import *
 from .analytics import *
+from .object_manager import *
+from .sensor_integration import *
+from .simulation_engine import *
 
 __version__ = "0.2.0"
 __all__ = [

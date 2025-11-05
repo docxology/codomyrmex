@@ -41,14 +41,22 @@ No related modules specified
 
 ## Usage Examples
 
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.docs.integration import ModuleClass
+Integration examples:
 
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
+```python
+# PostgreSQL integration
+from codomyrmex.integration.database import CodomyrmexDatabase
+import asyncio
+
+async def main():
+    db = CodomyrmexDatabase("postgresql://user:pass@localhost/db")
+    await db.initialize()
+    job_id = await db.store_job('analysis', {'path': 'src/'})
+
+asyncio.run(main())
 ```
+
+See [External Systems Integration](external-systems.md) for database, cloud, and CI/CD integration patterns, and [Fabric AI Integration](fabric-ai-integration.md) for AI workflow integration.
 
 ## Quality Assurance
 

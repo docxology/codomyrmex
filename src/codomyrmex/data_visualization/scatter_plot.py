@@ -6,7 +6,8 @@ Generates scatter plots.
 """
 
 import matplotlib.pyplot as plt
-from .plot_utils import save_plot, get_codomyrmex_logger
+
+from .plot_utils import get_codomyrmex_logger, save_plot
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     output_dir = Path(__file__).parent.parent / "output" / "data_visualization_examples"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    logger.info(f"--- Example: Basic Scatter Plot ---")
+    logger.info("--- Example: Basic Scatter Plot ---")
     sample_x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     sample_y = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]  # Prime numbers
     create_scatter_plot(
@@ -79,7 +80,7 @@ if __name__ == "__main__":
         f"Scatter plot example saved to {output_dir / 'basic_scatter_plot.png'}"
     )
 
-    logger.info(f"--- Example: Scatter Plot with Different Dot Size ---")
+    logger.info("--- Example: Scatter Plot with Different Dot Size ---")
     sample_x_2 = [i * 0.5 for i in range(20)]
     sample_y_2 = [x**2 for x in sample_x_2]
     create_scatter_plot(

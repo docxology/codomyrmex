@@ -6,7 +6,7 @@ This tutorial walks you through creating a new module for Codomyrmex from scratc
 
 Our `text_analysis` module will provide:
 - Word count and character analysis
-- Sentiment analysis capabilities  
+- Sentiment analysis capabilities
 - Text readability metrics
 - Integration with other Codomyrmex modules
 
@@ -98,38 +98,38 @@ class TextAnalysisResult:
 class TextAnalyzer:
     """
     Main text analysis class providing various text metrics and analysis.
-    
+
     This class integrates with Codomyrmex logging and follows the standard
     module patterns for error handling and configuration.
     """
-    
+
     def __init__(self, enable_sentiment: bool = True):
         """Initialize the text analyzer.
-        
+
         Args:
             enable_sentiment: Whether to enable sentiment analysis (requires additional deps)
         """
         self.enable_sentiment = enable_sentiment
         logger.info("TextAnalyzer initialized with sentiment analysis: %s", enable_sentiment)
-    
+
     def analyze_text(self, text: str) -> TextAnalysisResult:
         """
         Perform comprehensive analysis of the provided text.
-        
+
         Args:
             text: The text content to analyze
-            
+
         Returns:
             TextAnalysisResult containing all analysis metrics
-            
+
         Raises:
             ValueError: If text is empty or None
         """
         if not text or not text.strip():
             raise ValueError("Text cannot be empty or None")
-        
+
         logger.debug("Analyzing text of length: %d", len(text))
-        
+
         try:
             # Basic text metrics
             word_count = self._count_words(text)
@@ -137,7 +137,7 @@ class TextAnalyzer:
             character_count_no_spaces = len(text.replace(' ', ''))
             sentence_count = self._count_sentences(text)
             paragraph_count = self._count_paragraphs(text)
-            
+
             # Derived metrics
             avg_words_per_sentence = (
                 word_count / sentence_count if sentence_count > 0 else 0.0
@@ -145,13 +145,13 @@ class TextAnalyzer:
             readability_score = self._calculate_readability(
                 word_count, sentence_count, character_count_no_spaces
             )
-            
+
             # Sentiment analysis (if enabled)
             sentiment = None
             sentiment_score = None
             if self.enable_sentiment:
                 sentiment, sentiment_score = self._analyze_sentiment(text)
-            
+
             result = TextAnalysisResult(
                 word_count=word_count,
                 character_count=character_count,
@@ -163,36 +163,36 @@ class TextAnalyzer:
                 sentiment=sentiment,
                 sentiment_score=sentiment_score
             )
-            
-            logger.info("Text analysis completed: %d words, %d sentences", 
+
+            logger.info("Text analysis completed: %d words, %d sentences",
                        word_count, sentence_count)
             return result
-            
+
         except Exception as e:
             logger.error("Error during text analysis: %s", e, exc_info=True)
             raise
-    
+
     def analyze_file(self, file_path: str) -> TextAnalysisResult:
         """
         Analyze text content from a file.
-        
+
         Args:
             file_path: Path to the text file
-            
+
         Returns:
             TextAnalysisResult containing analysis metrics
-            
+
         Raises:
             FileNotFoundError: If file doesn't exist
             IOError: If file cannot be read
         """
         path = Path(file_path)
-        
+
         if not path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
-        
+
         logger.info("Analyzing file: %s", file_path)
-        
+
         try:
             with path.open('r', encoding='utf-8') as f:
                 content = f.read()
@@ -200,54 +200,54 @@ class TextAnalyzer:
         except Exception as e:
             logger.error("Error reading file %s: %s", file_path, e)
             raise IOError(f"Cannot read file {file_path}: {e}")
-    
+
     def _count_words(self, text: str) -> int:
         """Count words in text."""
         words = re.findall(r'\b\w+\b', text.lower())
         return len(words)
-    
+
     def _count_sentences(self, text: str) -> int:
         """Count sentences in text."""
         sentences = re.split(r'[.!?]+', text)
         return len([s for s in sentences if s.strip()])
-    
+
     def _count_paragraphs(self, text: str) -> int:
         """Count paragraphs in text."""
         paragraphs = re.split(r'\n\s*\n', text.strip())
         return len([p for p in paragraphs if p.strip()])
-    
+
     def _calculate_readability(self, words: int, sentences: int, characters: int) -> float:
         """
         Calculate readability score (simplified Flesch Reading Ease).
-        
+
         Returns score between 0-100 where higher = more readable.
         """
         if sentences == 0 or words == 0:
             return 0.0
-        
+
         avg_sentence_length = words / sentences
         avg_word_length = characters / words
-        
+
         # Simplified readability score
         score = 206.835 - (1.015 * avg_sentence_length) - (84.6 * avg_word_length)
         return max(0.0, min(100.0, score))
-    
+
     def _analyze_sentiment(self, text: str) -> tuple[Optional[str], Optional[float]]:
         """
         Perform basic sentiment analysis.
-        
+
         In a real implementation, this would use a proper sentiment analysis library.
         For this tutorial, we'll use a simple approach.
         """
         # Simple sentiment word lists (in real implementation, use proper libraries)
         positive_words = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'love', 'like']
         negative_words = ['bad', 'terrible', 'awful', 'hate', 'dislike', 'horrible']
-        
+
         words = re.findall(r'\b\w+\b', text.lower())
-        
+
         positive_count = sum(1 for word in words if word in positive_words)
         negative_count = sum(1 for word in words if word in negative_words)
-        
+
         if positive_count > negative_count:
             return "positive", 0.6 + (positive_count - negative_count) * 0.1
         elif negative_count > positive_count:
@@ -260,11 +260,11 @@ class TextAnalyzer:
 def analyze_text(text: str, enable_sentiment: bool = True) -> TextAnalysisResult:
     """
     Convenience function to analyze text directly.
-    
+
     Args:
         text: Text content to analyze
         enable_sentiment: Whether to include sentiment analysis
-        
+
     Returns:
         TextAnalysisResult with analysis metrics
     """
@@ -275,11 +275,11 @@ def analyze_text(text: str, enable_sentiment: bool = True) -> TextAnalysisResult
 def analyze_file(file_path: str, enable_sentiment: bool = True) -> TextAnalysisResult:
     """
     Convenience function to analyze text from a file.
-    
+
     Args:
         file_path: Path to text file
         enable_sentiment: Whether to include sentiment analysis
-        
+
     Returns:
         TextAnalysisResult with analysis metrics
     """
@@ -436,7 +436,7 @@ Analyze text content comprehensively.
 **Raises:**
 - `ValueError`: If text is empty or None
 
-##### analyze_file(file_path: str) -> TextAnalysisResult  
+##### analyze_file(file_path: str) -> TextAnalysisResult
 
 Analyze text from a file.
 
@@ -456,7 +456,7 @@ Data class containing analysis results.
 
 **Attributes:**
 - `word_count` (int): Number of words
-- `character_count` (int): Total character count including spaces  
+- `character_count` (int): Total character count including spaces
 - `character_count_no_spaces` (int): Character count excluding spaces
 - `sentence_count` (int): Number of sentences
 - `paragraph_count` (int): Number of paragraphs
@@ -558,7 +558,7 @@ import os
 from unittest.mock import patch, MagicMock
 
 from codomyrmex.text_analysis.text_analyzer import (
-    TextAnalyzer, 
+    TextAnalyzer,
     TextAnalysisResult,
     analyze_text,
     analyze_file
@@ -567,7 +567,7 @@ from codomyrmex.text_analysis.text_analyzer import (
 
 class TestTextAnalyzer:
     """Test suite for TextAnalyzer class"""
-    
+
     def setup_method(self):
         """Setup for each test method"""
         self.analyzer = TextAnalyzer(enable_sentiment=True)
@@ -576,19 +576,19 @@ class TestTextAnalyzer:
             "It contains multiple sentences and words. "
             "The text should provide good test coverage."
         )
-    
+
     def test_analyzer_initialization(self):
         """Test TextAnalyzer initialization"""
         analyzer = TextAnalyzer(enable_sentiment=False)
         assert analyzer.enable_sentiment is False
-        
+
         analyzer = TextAnalyzer(enable_sentiment=True)
         assert analyzer.enable_sentiment is True
-    
+
     def test_analyze_text_basic_metrics(self):
         """Test basic text analysis metrics"""
         result = self.analyzer.analyze_text(self.sample_text)
-        
+
         assert isinstance(result, TextAnalysisResult)
         assert result.word_count == 16  # Count words in sample text
         assert result.character_count == len(self.sample_text)
@@ -597,85 +597,85 @@ class TestTextAnalyzer:
         assert result.paragraph_count == 1
         assert result.average_words_per_sentence > 0
         assert 0 <= result.readability_score <= 100
-    
+
     def test_analyze_text_with_sentiment(self):
         """Test sentiment analysis functionality"""
         positive_text = "This is amazing and wonderful! I love it!"
         result = self.analyzer.analyze_text(positive_text)
-        
+
         assert result.sentiment == "positive"
         assert result.sentiment_score > 0
-    
+
     def test_analyze_text_negative_sentiment(self):
         """Test negative sentiment detection"""
         negative_text = "This is terrible and awful! I hate it!"
         result = self.analyzer.analyze_text(negative_text)
-        
+
         assert result.sentiment == "negative"
         assert result.sentiment_score < 0
-    
+
     def test_analyze_text_neutral_sentiment(self):
         """Test neutral sentiment detection"""
         neutral_text = "The weather today is cloudy."
         result = self.analyzer.analyze_text(neutral_text)
-        
+
         assert result.sentiment == "neutral"
         assert result.sentiment_score == 0.0
-    
+
     def test_analyze_text_without_sentiment(self):
         """Test analysis with sentiment disabled"""
         analyzer = TextAnalyzer(enable_sentiment=False)
         result = analyzer.analyze_text(self.sample_text)
-        
+
         assert result.sentiment is None
         assert result.sentiment_score is None
-    
+
     def test_analyze_empty_text(self):
         """Test analysis of empty text"""
         with pytest.raises(ValueError):
             self.analyzer.analyze_text("")
-        
+
         with pytest.raises(ValueError):
             self.analyzer.analyze_text("   ")  # Only whitespace
-        
+
         with pytest.raises(ValueError):
             self.analyzer.analyze_text(None)
-    
+
     def test_analyze_file_success(self):
         """Test successful file analysis"""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
             f.write(self.sample_text)
             temp_path = f.name
-        
+
         try:
             result = self.analyzer.analyze_file(temp_path)
             assert isinstance(result, TextAnalysisResult)
             assert result.word_count > 0
         finally:
             os.unlink(temp_path)
-    
+
     def test_analyze_file_not_found(self):
         """Test file analysis with non-existent file"""
         with pytest.raises(FileNotFoundError):
             self.analyzer.analyze_file("/path/that/does/not/exist.txt")
-    
+
     def test_analyze_file_read_error(self):
         """Test file analysis with read permission issues"""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
             f.write(self.sample_text)
             temp_path = f.name
-        
+
         try:
             # Change permissions to make file unreadable
             os.chmod(temp_path, 0o000)
-            
+
             with pytest.raises(IOError):
                 self.analyzer.analyze_file(temp_path)
         finally:
             # Restore permissions and clean up
             os.chmod(temp_path, 0o644)
             os.unlink(temp_path)
-    
+
     def test_word_counting_accuracy(self):
         """Test word counting accuracy with various text formats"""
         test_cases = [
@@ -685,11 +685,11 @@ class TestTextAnalyzer:
             ("Hyphenated-words count as two", 5),
             ("123 numbers count too", 4),
         ]
-        
+
         for text, expected_words in test_cases:
             result = self.analyzer.analyze_text(text)
             assert result.word_count == expected_words, f"Failed for: {text}"
-    
+
     def test_sentence_counting_accuracy(self):
         """Test sentence counting with various punctuation"""
         test_cases = [
@@ -699,28 +699,28 @@ class TestTextAnalyzer:
             ("No punctuation", 1),
             ("Multiple... dots... should... work.", 4),
         ]
-        
+
         for text, expected_sentences in test_cases:
             result = self.analyzer.analyze_text(text)
             assert result.sentence_count == expected_sentences, f"Failed for: {text}"
-    
+
     def test_paragraph_counting_accuracy(self):
         """Test paragraph counting with various formatting"""
         single_paragraph = "This is one paragraph."
         two_paragraphs = "First paragraph.\n\nSecond paragraph."
         three_paragraphs = "First.\n\nSecond.\n\nThird."
-        
+
         assert self.analyzer.analyze_text(single_paragraph).paragraph_count == 1
         assert self.analyzer.analyze_text(two_paragraphs).paragraph_count == 2
         assert self.analyzer.analyze_text(three_paragraphs).paragraph_count == 3
-    
+
     def test_readability_score_bounds(self):
         """Test readability score stays within bounds"""
         # Very simple text should have high readability
         simple_text = "Cat. Dog. Run. Jump."
         simple_result = self.analyzer.analyze_text(simple_text)
         assert simple_result.readability_score >= 0
-        
+
         # Complex text should have lower readability
         complex_text = (
             "The implementation of sophisticated algorithmic approaches "
@@ -733,31 +733,31 @@ class TestTextAnalyzer:
 
 class TestConvenienceFunctions:
     """Test suite for module-level convenience functions"""
-    
+
     def test_analyze_text_function(self):
         """Test the analyze_text convenience function"""
         text = "Test text for analysis."
         result = analyze_text(text)
-        
+
         assert isinstance(result, TextAnalysisResult)
         assert result.word_count == 4
-    
+
     def test_analyze_text_function_no_sentiment(self):
         """Test analyze_text with sentiment disabled"""
         text = "Test text for analysis."
         result = analyze_text(text, enable_sentiment=False)
-        
+
         assert result.sentiment is None
         assert result.sentiment_score is None
-    
+
     def test_analyze_file_function(self):
         """Test the analyze_file convenience function"""
         text_content = "Test file content for analysis."
-        
+
         with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
             f.write(text_content)
             temp_path = f.name
-        
+
         try:
             result = analyze_file(temp_path)
             assert isinstance(result, TextAnalysisResult)
@@ -768,74 +768,74 @@ class TestConvenienceFunctions:
 
 class TestIntegrationWithCodomyrmex:
     """Test integration with other Codomyrmex modules"""
-    
+
     @patch('codomyrmex.text_analysis.text_analyzer.get_logger')
     def test_logging_integration(self, mock_get_logger):
         """Test integration with Codomyrmex logging system"""
         mock_logger = MagicMock()
         mock_get_logger.return_value = mock_logger
-        
+
         analyzer = TextAnalyzer()
         analyzer.analyze_text("Test logging integration.")
-        
+
         # Verify logger was obtained and used
         mock_get_logger.assert_called()
         mock_logger.debug.assert_called()
         mock_logger.info.assert_called()
-    
+
     def test_error_logging(self):
         """Test that errors are properly logged"""
         with patch('codomyrmex.text_analysis.text_analyzer.logger') as mock_logger:
             analyzer = TextAnalyzer()
-            
+
             try:
                 analyzer.analyze_text("")  # This should raise ValueError
             except ValueError:
                 pass  # Expected
-            
+
             # Verify error was logged
             mock_logger.error.assert_called()
 
 
 class TestEdgeCases:
     """Test edge cases and unusual inputs"""
-    
+
     def test_very_long_text(self):
         """Test analysis of very long text"""
         # Create a long text (10,000 words)
         long_text = "word " * 10000
-        
+
         analyzer = TextAnalyzer()
         result = analyzer.analyze_text(long_text)
-        
+
         assert result.word_count == 10000
         assert result.character_count > 0
-    
+
     def test_unicode_text(self):
         """Test analysis of text with Unicode characters"""
         unicode_text = "Hello 世界! This contains émojis 🌟 and àccénts."
-        
+
         analyzer = TextAnalyzer()
         result = analyzer.analyze_text(unicode_text)
-        
+
         assert result.word_count > 0
         assert result.character_count > 0
-    
+
     def test_only_punctuation(self):
         """Test text with only punctuation"""
         punct_text = "!@#$%^&*(),.?;:"
-        
+
         analyzer = TextAnalyzer()
         result = analyzer.analyze_text(punct_text)
-        
+
         assert result.word_count == 0
         assert result.character_count > 0
-    
+
     def test_single_character(self):
         """Test analysis of single character"""
         analyzer = TextAnalyzer()
         result = analyzer.analyze_text("a")
-        
+
         assert result.word_count == 1
         assert result.character_count == 1
         assert result.sentence_count == 1
@@ -871,7 +871,7 @@ __author__ = "Codomyrmex Contributors"
 # Public API
 __all__ = [
     "TextAnalyzer",
-    "TextAnalysisResult", 
+    "TextAnalysisResult",
     "analyze_text",
     "analyze_file"
 ]
@@ -1123,19 +1123,19 @@ from codomyrmex.text_analysis import analyze_text, TextAnalyzer
 
 class TestTextAnalysisIntegration:
     """Integration tests for text analysis module"""
-    
+
     def test_module_import(self):
         """Test that module imports correctly"""
         from codomyrmex.text_analysis import TextAnalyzer, analyze_text
         assert TextAnalyzer is not None
         assert analyze_text is not None
-    
+
     def test_basic_functionality(self):
         """Test basic module functionality"""
         result = analyze_text("This is a test sentence.")
         assert result.word_count == 5
         assert result.sentence_count == 1
-    
+
     def test_logging_integration(self):
         """Test integration with Codomyrmex logging"""
         # This test ensures the module uses Codomyrmex logging
@@ -1206,7 +1206,7 @@ You've successfully created a complete Codomyrmex module! Your `text_analysis` m
 
 - ✅ Comprehensive text analysis capabilities
 - ✅ Full integration with the Codomyrmex ecosystem
-- ✅ Professional documentation and examples  
+- ✅ Professional documentation and examples
 - ✅ Robust test coverage
 - ✅ Integration with other modules
 - ✅ Following all Codomyrmex conventions

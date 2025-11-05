@@ -25,7 +25,7 @@ External system integration and AI workflow documentation coordination for Codom
 - **📚 Documentation Hub**: [../../README.md](../../README.md) - Central documentation overview and navigation
 - **🌐 External Systems**: [external-systems.md](external-systems.md) - Third-party integrations
 - **🤖 Fabric AI Integration**: [fabric-ai-integration.md](fabric-ai-integration.md) - AI workflow integration
-- **🔌 API Reference**: [../../reference/api-complete.md](../../reference/api-complete.md) - Integration APIs
-- **🏭 Production Deployment**: [../../deployment/production.md](../../deployment/production.md) - Production integration patterns
-- **⚡ Performance**: [../../reference/performance.md](../../reference/performance.md) - Integration performance optimization
-- **🔧 Troubleshooting**: [../../reference/troubleshooting.md](../../reference/troubleshooting.md) - Integration issue resolution
+- **🔌 API Reference**: [../reference/api-complete.md](../reference/api-complete.md) - Integration APIs
+- **🏭 Production Deployment**: [../deployment/production.md](../deployment/production.md) - Production integration patterns
+- **⚡ Performance**: [../reference/performance.md](../reference/performance.md) - Integration performance optimization
+- **🔧 Troubleshooting**: [../reference/troubleshooting.md](../reference/troubleshooting.md) - Integration issue resolution

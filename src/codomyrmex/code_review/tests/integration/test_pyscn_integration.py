@@ -6,22 +6,20 @@ pyscn integration with real Python code.
 """
 
 import os
-import sys
-import unittest
-import tempfile
 import shutil
-from pathlib import Path
+import sys
+import tempfile
+import unittest
 from unittest.mock import patch
 
 # Add the src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 from codomyrmex.code_review import (
-    PyscnAnalyzer,
     CodeReviewer,
+    PyscnAnalyzer,
+    SeverityLevel,
     ToolNotFoundError,
-    AnalysisType,
-    SeverityLevel
 )
 
 
@@ -223,7 +221,7 @@ class TestPyscnIntegration(unittest.TestCase):
             self.assertTrue(os.path.exists(report_path))
 
             # Check file content
-            with open(report_path, 'r') as f:
+            with open(report_path) as f:
                 content = f.read()
                 self.assertIn("<!DOCTYPE html>", content)
                 self.assertIn("Code Review Report", content)

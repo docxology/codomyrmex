@@ -659,6 +659,7 @@ The Codomyrmex documentation is organized into clear sections for different user
 #### **📦 Module System**
 - **[🏛️ Module Overview](docs/modules/overview.md)** - Architecture and design principles
 - **[🔗 Module Relationships](docs/modules/relationships.md)** - Dependencies and integration patterns
+- **[🐙 Ollama Integration](docs/modules/ollama_integration.md)** - Local LLM integration guide
 
 #### **🔗 Integration**
 - **[🌐 External Systems](docs/integration/external-systems.md)** - Third-party integrations
@@ -668,6 +669,7 @@ The Codomyrmex documentation is organized into clear sections for different user
 - **[🏛️ Architecture](docs/project/architecture.md)** - System design with Mermaid diagrams
 - **[🤝 Contributing Guide](docs/project/contributing.md)** - How to contribute effectively
 - **[📋 Project TODO](docs/project/todo.md)** - Roadmap and current priorities
+- **[📝 Documentation Reorganization](docs/project/documentation-reorganization-summary.md)** - Documentation structure overview
 
 #### **📖 Reference Documentation**
 - **[🔌 Complete API Reference](docs/reference/api-complete.md)** - **ACCURATE** API with real signatures
@@ -677,6 +679,7 @@ The Codomyrmex documentation is organized into clear sections for different user
 - **[🎮 Orchestrator Guide](docs/reference/orchestrator.md)** - Workflow orchestration
 - **[⚡ Performance Guide](docs/reference/performance.md)** - Performance optimization
 - **[🔧 Troubleshooting](docs/reference/troubleshooting.md)** - Common issues and solutions
+- **[📋 Changelog](docs/reference/changelog.md)** - Version history and changes
 
 #### **🚀 Deployment**
 - **[🏭 Production Deployment](docs/deployment/production.md)** - Production environment setup
@@ -686,31 +689,31 @@ The Codomyrmex documentation is organized into clear sections for different user
 ```mermaid
 graph TD
     Start["New User<br/>Discovers Codomyrmex"]
-    
+
     ReadMain["Read Main README<br/>Overview & Quick Start"]
     DocsHub["Browse Documentation Hub<br/>docs/README.md"]
     Install["Install Codomyrmex<br/>docs/getting-started/installation.md"]
     QuickStart["Try Quick Start<br/>docs/getting-started/quickstart.md"]
-    
+
     Decision{What's your<br/>primary goal?}
-    
+
     UseModules["Use Existing Modules"]
     Develop["Contribute/Develop"]
     Integrate["Integrate with AI/APIs"]
     Deploy["Deploy to Production"]
-    
+
     %% Use Modules Path
     ModuleOverview["Module System Overview<br/>docs/modules/overview.md"]
     APIReference["API Reference<br/>docs/reference/api-complete.md"]
     Examples["Try Examples<br/>examples/"]
     Interactive["Interactive Exploration<br/>docs/reference/orchestrator.md"]
-    
+
     %% Development Path
     DevSetup["Development Setup<br/>docs/development/environment-setup.md"]
     Architecture["System Architecture<br/>docs/project/architecture.md"]
     Contributing["Contributing Guide<br/>docs/project/contributing.md"]
     CreateModule["Create New Module<br/>docs/getting-started/tutorials/creating-a-module.md"]
-    
+
     %% Integration Path
     CLIRef["CLI Reference<br/>docs/reference/cli.md"]
     IntegrationGuide["Integration Guide<br/>docs/integration/external-systems.md"]
@@ -720,34 +723,34 @@ graph TD
     Production["Production Deployment<br/>docs/deployment/production.md"]
     Performance["Performance Guide<br/>docs/reference/performance.md"]
     Monitoring["Monitoring & Troubleshooting<br/>docs/reference/troubleshooting.md"]
-    
+
     %% Advanced Usage
     Advanced["Advanced Usage<br/>Module Combinations"]
     Community["Community<br/>Contribution"]
-    
+
     Start --> ReadMain
     ReadMain --> DocsHub
     DocsHub --> Install
     Install --> QuickStart
     QuickStart --> Decision
-    
+
     Decision --> UseModules
     Decision --> Develop
     Decision --> Integrate
     Decision --> Deploy
-    
+
     UseModules --> ModuleOverview
     ModuleOverview --> APIReference
     APIReference --> Examples
     Examples --> Interactive
     Interactive --> Advanced
-    
+
     Develop --> DevSetup
     DevSetup --> Architecture
     Architecture --> Contributing
     Contributing --> CreateModule
     CreateModule --> Community
-    
+
     Integrate --> CLIRef
     CLIRef --> IntegrationGuide
     IntegrationGuide --> MCPTools
@@ -757,7 +760,7 @@ graph TD
     Production --> Performance
     Performance --> Monitoring
     Monitoring --> Advanced
-    
+
     Advanced --> Community
 ```
 
@@ -770,6 +773,7 @@ graph TD
 - **[Architecture Overview](docs/project/architecture.md)** - System design and data flow
 - **[Module System](docs/modules/overview.md)** - Understanding the modular architecture
 - **[Module Relationships](docs/modules/relationships.md)** - How modules work together
+- **[Ollama Integration](docs/modules/ollama_integration.md)** - Local LLM integration guide
 
 #### **🔧 Development**
 - **[Contributing Guide](docs/project/contributing.md)** - How to contribute effectively
@@ -778,9 +782,10 @@ graph TD
 
 #### **📚 Reference**
 - **[Complete API Reference](docs/reference/api-complete.md)** - **ACCURATE** API with real function signatures
-- **[API Index](docs/reference/api.md)** - Quick API overview with source links  
+- **[API Index](docs/reference/api.md)** - Quick API overview with source links
 - **[CLI Reference](docs/reference/cli.md)** - Complete command-line documentation
 - **[Troubleshooting Guide](docs/reference/troubleshooting.md)** - Common issues and solutions
+- **[Changelog](docs/reference/changelog.md)** - Version history and changes
 
 ### **Module-Specific Documentation**
 | Module | Documentation | API Reference | Tutorials |
@@ -809,6 +814,7 @@ Codomyrmex provides **comprehensive documentation** organized for different user
 ### **📦 Module System Understanding**
 - **[🏛️ Module Overview](docs/modules/overview.md)** - Architecture and design principles
 - **[🔗 Module Relationships](docs/modules/relationships.md)** - Dependencies and integration patterns
+- **[🐙 Ollama Integration](docs/modules/ollama_integration.md)** - Local LLM integration guide
 - **[📦 Module Template](../../../src/codomyrmex/module_template/README.md)** - Template for creating modules
 
 ### **🔗 Integration & External Systems**
@@ -819,6 +825,7 @@ Codomyrmex provides **comprehensive documentation** organized for different user
 - **[🏛️ System Architecture](docs/project/architecture.md)** - Complete system design with Mermaid diagrams
 - **[🤝 Contributing Guide](docs/project/contributing.md)** - How to contribute effectively
 - **[📋 Project TODO](docs/project/todo.md)** - Roadmap and current priorities
+- **[📝 Documentation Reorganization](docs/project/documentation-reorganization-summary.md)** - Documentation structure overview
 
 ### **📖 Technical Reference**
 - **[🔌 Complete API Reference](docs/reference/api-complete.md)** - **ACCURATE** API with real signatures
@@ -828,6 +835,7 @@ Codomyrmex provides **comprehensive documentation** organized for different user
 - **[🎮 Orchestrator Guide](docs/reference/orchestrator.md)** - Workflow orchestration
 - **[⚡ Performance Guide](docs/reference/performance.md)** - Performance optimization
 - **[🔧 Troubleshooting](docs/reference/troubleshooting.md)** - Common issues and solutions
+- **[📋 Changelog](docs/reference/changelog.md)** - Version history and changes
 
 ### **🚀 Production & Deployment**
 - **[🏭 Production Deployment](docs/deployment/production.md)** - Production environment setup

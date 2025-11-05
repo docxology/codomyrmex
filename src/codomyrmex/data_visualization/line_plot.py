@@ -5,13 +5,15 @@ Contains the create_line_plot function for generating line plots.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-import matplotlib.pyplot as plt
 import os
+
+import matplotlib.pyplot as plt
+
 from .plot_utils import (
+    DEFAULT_FIGURE_SIZE,
+    apply_common_aesthetics,
     get_codomyrmex_logger,
     save_plot,
-    apply_common_aesthetics,
-    DEFAULT_FIGURE_SIZE,
 )
 
 logger = get_codomyrmex_logger(__name__)

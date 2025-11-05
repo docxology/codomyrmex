@@ -6,7 +6,8 @@ Generates pie charts.
 """
 
 import matplotlib.pyplot as plt
-from .plot_utils import save_plot, get_codomyrmex_logger
+
+from .plot_utils import get_codomyrmex_logger, save_plot
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -81,7 +82,7 @@ if __name__ == "__main__":
     output_dir = Path(__file__).parent.parent / "output" / "data_visualization_examples"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    logger.info(f"--- Example: Basic Pie Chart ---")
+    logger.info("--- Example: Basic Pie Chart ---")
     pie_labels = ["Frogs", "Hogs", "Dogs", "Logs"]
     pie_sizes = [15, 30, 45, 10]
     create_pie_chart(
@@ -93,7 +94,7 @@ if __name__ == "__main__":
     )
     logger.info(f"Pie chart example saved to {output_dir / 'basic_pie_chart.png'}")
 
-    logger.info(f"--- Example: Pie Chart with Exploded Slice ---")
+    logger.info("--- Example: Pie Chart with Exploded Slice ---")
     pie_explode = [0, 0.1, 0, 0]  # Explode the 2nd slice (Hogs)
     create_pie_chart(
         labels=pie_labels,

@@ -21,9 +21,9 @@ Production deployment and operations documentation coordination for Codomyrmex, 
 - [x] Maintain consistent AGENTS.md structure with parent documentation coordination agents.
 
 ## Navigation Links
-- **📚 Documentation Hub**: [../../README.md](../../README.md) - Central documentation overview and navigation
+- **📚 Documentation Hub**: [../README.md](../README.md) - Central documentation overview and navigation
 - **🚀 Deployment Overview**: [production.md](production.md) - Complete production deployment guide
-- **⚡ Performance Guide**: [../../reference/performance.md](../../reference/performance.md) - Performance optimization strategies
-- **🔧 Troubleshooting**: [../../reference/troubleshooting.md](../../reference/troubleshooting.md) - Production issue resolution
-- **🏗️ Architecture**: [../../project/architecture.md](../../project/architecture.md) - System design for deployment considerations
-- **🔗 Integration**: [../../integration/external-systems.md](../../integration/external-systems.md) - External system integration for production
+- **⚡ Performance Guide**: [../reference/performance.md](../reference/performance.md) - Performance optimization strategies
+- **🔧 Troubleshooting**: [../reference/troubleshooting.md](../reference/troubleshooting.md) - Production issue resolution
+- **🏗️ Architecture**: [../project/architecture.md](../project/architecture.md) - System design for deployment considerations
+- **🔗 Integration**: [../integration/external-systems.md](../integration/external-systems.md) - External system integration for production

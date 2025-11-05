@@ -4,19 +4,16 @@ Security Monitor for Codomyrmex Security Audit Module.
 Provides real-time security monitoring, alerting, and audit logging capabilities.
 """
 
-import os
-import sys
 import json
+import os
+import re
+import sys
 import threading
 import time
-from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from pathlib import Path
-import hashlib
-import re
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Callable, Optional
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +23,7 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
-    from logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
@@ -72,10 +69,10 @@ class SecurityEvent:
     resource: Optional[str] = None
     action: Optional[str] = None
     severity: AlertLevel = AlertLevel.MEDIUM
-    details: Dict[str, Any] = field(default_factory=dict)
+    details: dict[str, Any] = field(default_factory=dict)
     raw_log: Optional[str] = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert event to dictionary format."""
         return {
             "event_id": self.event_id,
@@ -99,7 +96,7 @@ class AlertRule:
     name: str
     description: str
     event_type: SecurityEventType
-    conditions: Dict[str, Any]
+    conditions: dict[str, Any]
     alert_level: AlertLevel
     enabled: bool = True
     cooldown_period: int = 300  # seconds
@@ -130,20 +127,20 @@ class SecurityMonitor:
         )
         self.config = self._load_config()
 
-        self.events: List[SecurityEvent] = []
-        self.alert_rules: Dict[str, AlertRule] = {}
-        self.active_alerts: Dict[str, SecurityEvent] = {}
+        self.events: list[SecurityEvent] = []
+        self.alert_rules: dict[str, AlertRule] = {}
+        self.active_alerts: dict[str, SecurityEvent] = {}
 
         self.monitoring_active = False
         self.monitor_thread: Optional[threading.Thread] = None
 
         # Alert callbacks
-        self.alert_callbacks: List[Callable[[SecurityEvent], None]] = []
+        self.alert_callbacks: list[Callable[[SecurityEvent], None]] = []
 
         # Load default alert rules
         self._load_default_alert_rules()
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self) -> dict[str, Any]:
         """Load monitor configuration."""
         default_config = {
             "log_files": ["/var/log/auth.log", "/var/log/security.log"],
@@ -157,10 +154,10 @@ class SecurityMonitor:
 
         if os.path.exists(self.config_path):
             try:
-                with open(self.config_path, "r") as f:
+                with open(self.config_path) as f:
                     user_config = json.load(f)
                 default_config.update(user_config)
-            except Exception as e:
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, KeyError) as e:
                 logger.warning(f"Failed to load monitor config: {e}")
 
         return default_config
@@ -256,7 +253,10 @@ class SecurityMonitor:
                 # Sleep before next iteration
                 time.sleep(self.config.get("monitoring_interval", 10))
 
-            except Exception as e:
+            except (KeyboardInterrupt, SystemExit):
+                # Allow clean shutdown
+                raise
+            except (OSError, RuntimeError, AttributeError) as e:
                 logger.error(f"Error in monitoring loop: {e}")
                 time.sleep(30)  # Wait longer on error
 
@@ -269,7 +269,7 @@ class SecurityMonitor:
         for log_file in log_files:
             if os.path.exists(log_file):
                 try:
-                    with open(log_file, "r") as f:
+                    with open(log_file) as f:
                         # Read new lines since last check
                         lines = f.readlines()
                         for line in lines[-100:]:  # Check last 100 lines
@@ -277,7 +277,7 @@ class SecurityMonitor:
                             if event:
                                 self.events.append(event)
 
-                except Exception as e:
+                except (FileNotFoundError, PermissionError, OSError, UnicodeDecodeError) as e:
                     logger.error(f"Error reading log file {log_file}: {e}")
 
     def _collect_application_logs(self):
@@ -287,7 +287,7 @@ class SecurityMonitor:
             # Check for security-related log entries
             # This is a placeholder for actual implementation
             pass
-        except Exception as e:
+        except (OSError, RuntimeError, AttributeError) as e:
             logger.error(f"Error collecting application logs: {e}")
 
     def _check_system_integrity(self):
@@ -298,7 +298,7 @@ class SecurityMonitor:
         try:
             # This is a placeholder for actual system integrity checks
             pass
-        except Exception as e:
+        except (OSError, RuntimeError) as e:
             logger.error(f"Error checking system integrity: {e}")
 
     def _parse_log_line(self, line: str, source: str) -> Optional[SecurityEvent]:
@@ -423,7 +423,7 @@ class SecurityMonitor:
         for callback in self.alert_callbacks:
             try:
                 callback(event)
-            except Exception as e:
+            except (TypeError, AttributeError, RuntimeError) as e:
                 logger.error(f"Error in alert callback: {e}")
 
     def _check_threat_intelligence(self):
@@ -444,7 +444,7 @@ class SecurityMonitor:
     def _cleanup_old_events(self):
         """Clean up old events and alerts."""
         # Remove events older than configured retention period
-        retention_days = self.config.get("log_rotation_days", 30)
+        self.config.get("log_rotation_days", 30)
         cutoff_date = datetime.now(timezone.utc)  # Would be adjusted for retention_days
 
         # Remove old active alerts
@@ -471,11 +471,11 @@ class SecurityMonitor:
         """Add a callback function for alerts."""
         self.alert_callbacks.append(callback)
 
-    def get_active_alerts(self) -> List[SecurityEvent]:
+    def get_active_alerts(self) -> list[SecurityEvent]:
         """Get list of currently active alerts."""
         return list(self.active_alerts.values())
 
-    def get_events_summary(self) -> Dict[str, Any]:
+    def get_events_summary(self) -> dict[str, Any]:
         """Get summary of security events."""
         summary = {
             "total_events": len(self.events),
@@ -523,7 +523,7 @@ def monitor_security_events(config_path: Optional[str] = None) -> SecurityMonito
     return monitor
 
 
-def audit_access_logs(log_files: Optional[List[str]] = None) -> List[SecurityEvent]:
+def audit_access_logs(log_files: Optional[list[str]] = None) -> list[SecurityEvent]:
     """
     Convenience function to audit access logs for security events.
 

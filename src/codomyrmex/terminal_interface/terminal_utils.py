@@ -7,13 +7,12 @@ output, and running commands with beautiful presentation.
 """
 
 import os
-import sys
-import subprocess
 import shutil
-from typing import Dict, List, Any, Optional, Tuple
+import subprocess
+import sys
 from pathlib import Path
-import time
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Optional
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -151,7 +150,7 @@ class TerminalFormatter:
         return self.color(result, "BRIGHT_CYAN")
 
     def table(
-        self, headers: List[str], rows: List[List[str]], max_width: int = 80
+        self, headers: list[str], rows: list[list[str]], max_width: int = 80
     ) -> str:
         """Create a formatted table."""
         if not headers or not rows:
@@ -247,11 +246,11 @@ class CommandRunner:
 
     def run_command(
         self,
-        command: List[str],
+        command: list[str],
         cwd: Optional[Path] = None,
         show_output: bool = True,
         timeout: Optional[int] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Run a command and return formatted results.
 
@@ -319,7 +318,7 @@ class CommandRunner:
 
             if show_output:
                 if success:
-                    print(self.formatter.success(f"Command completed successfully"))
+                    print(self.formatter.success("Command completed successfully"))
                 else:
                     print(
                         self.formatter.error(
@@ -360,10 +359,10 @@ class CommandRunner:
     def run_python_module(
         self,
         module: str,
-        args: List[str] = None,
+        args: list[str] = None,
         cwd: Optional[Path] = None,
         show_output: bool = True,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Run a Python module with formatting."""
         command = [sys.executable, "-m", module]
         if args:
@@ -375,7 +374,7 @@ class CommandRunner:
         """Check if a command-line tool is available."""
         return shutil.which(tool) is not None
 
-    def get_system_info(self) -> Dict[str, str]:
+    def get_system_info(self) -> dict[str, str]:
         """Get system information for diagnostics."""
         info = {
             "python_version": sys.version,

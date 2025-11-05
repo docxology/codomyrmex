@@ -1,7 +1,7 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-from codomyrmex.exceptions import CodomyrmexError
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -18,7 +18,7 @@ class MCPErrorDetail(BaseModel):
     error_message: str = Field(
         ..., description="A descriptive message explaining the error."
     )
-    error_details: Optional[Union[Dict[str, Any], str]] = Field(
+    error_details: Optional[Union[dict[str, Any], str]] = Field(
         None,
         description="Optional structured details or a string containing more info about the error.",
     )
@@ -28,7 +28,7 @@ class MCPToolCall(BaseModel):
     """Represents a call to an MCP tool."""
 
     tool_name: str = Field(..., description="The unique invocation name of the tool.")
-    arguments: Dict[str, Any] = Field(
+    arguments: dict[str, Any] = Field(
         ...,
         description="An object containing the arguments for the tool. The schema for this object is defined by the specific tool being called.",
     )
@@ -43,7 +43,7 @@ class MCPToolResult(BaseModel):
         ...,
         description="The outcome of the tool execution (e.g., success, failure, no_change_needed).",
     )
-    data: Optional[Dict[str, Any]] = Field(
+    data: Optional[dict[str, Any]] = Field(
         None,
         description="The output data from the tool if successful. Schema is tool-specific.",
     )

@@ -73,7 +73,7 @@ Start here if you're new to Codomyrmex:
 1. **[📦 Installation Guide](getting-started/installation.md)** - Complete setup for all platforms
 2. **[⚡ Quick Start](getting-started/quickstart.md)** - 5-minute hands-on experience
 3. **[🎓 Module Creation Tutorial](getting-started/tutorials/creating-a-module.md)** - Learn by building
-4. **[🎮 Interactive Examples](../../../examples/README.md)** - Hands-on demonstrations
+4. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations
 
 ### **👨‍💻 Developers - Development Path**
 For contributors and module developers:
@@ -81,14 +81,14 @@ For contributors and module developers:
 2. **[📝 Documentation Guidelines](development/documentation.md)** - Writing and maintaining docs
 3. **[🧪 Testing Strategy](development/testing-strategy.md)** - Testing approach and best practices
 4. **[📦 UV Usage Guide](development/uv-usage-guide.md)** - Modern Python package management
-5. **[🤝 Contributing Guide](../project/contributing.md)** - How to contribute effectively
+5. **[🤝 Contributing Guide](project/contributing.md)** - How to contribute effectively
 
 ### **🏗️ Architects - System Understanding**
 For understanding the system design:
-1. **[🏛️ Architecture Overview](../project/architecture.md)** - System design and principles
+1. **[🏛️ Architecture Overview](project/architecture.md)** - System design and principles
 2. **[📦 Module System](modules/overview.md)** - Understanding the modular architecture
 3. **[🔗 Module Relationships](modules/relationships.md)** - How modules work together
-4. **[📦 Module Template](../../../src/codomyrmex/module_template/README.md)** - Template for creating modules
+4. **[📦 Module Template](../../src/codomyrmex/module_template/README.md)** - Template for creating modules
 
 ### **🔌 Integrators - External Systems**
 For connecting with other systems:
@@ -107,11 +107,11 @@ For production deployment:
 ### **🎓 Learners - Educational Path**
 For comprehensive learning:
 1. **[🎮 Orchestrator Guide](reference/orchestrator.md)** - System exploration and discovery
-2. **[📋 Project TODO](../project/todo.md)** - Current development priorities
-3. **[📝 Documentation Reorg](../project/documentation-reorganization-summary.md)** - How documentation is organized
-4. **[🔌 Module APIs](../../../src/codomyrmex/*/API_SPECIFICATION.md)** - Individual module documentation
-5. **[🎮 Interactive Examples](../../../examples/README.md)** - Hands-on demonstrations
-6. **[🏛️ System Architecture](../project/architecture.md)** - Complete system design understanding
+2. **[📋 Project TODO](project/todo.md)** - Current development priorities
+3. **[📝 Documentation Reorg](project/documentation-reorganization-summary.md)** - How documentation is organized
+4. **[🔌 Module APIs](reference/api.md#module-apis)** - Individual module documentation (see API reference)
+5. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations
+6. **[🏛️ System Architecture](project/architecture.md)** - Complete system design understanding
 
 ## 📊 Documentation Statistics
 
@@ -290,7 +290,7 @@ Every documentation level must include:
 ### **📂 Source Code Navigation**
 - **[Source Overview](../src/README.md)** - Source code structure and navigation
 - **[Package Documentation](../src/codomyrmex/README.md)** - Module status and integration patterns
-- **[Individual Module APIs](../src/codomyrmex/*/API_SPECIFICATION.md)** - Module-specific APIs
+- **[Individual Module APIs](reference/api.md#module-apis)** - Module-specific APIs (see API reference)
 
 ## 🤝 Contributing to Documentation
 

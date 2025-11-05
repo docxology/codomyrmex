@@ -1,8 +1,7 @@
-import sys
 import os
 import subprocess
-from pathlib import Path
-from codomyrmex.exceptions import CodomyrmexError
+import sys
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -88,8 +87,8 @@ def ensure_dependencies_installed():
             os.path.join(_script_dir, "..")
         )  # Use _script_dir
         requirements_path = os.path.join(workspace_root, "requirements.txt")
-        pyproject_path = os.path.join(workspace_root, "pyproject.toml")
-        readme_path = os.path.join(workspace_root, "environment_setup", "README.md")
+        os.path.join(workspace_root, "pyproject.toml")
+        os.path.join(workspace_root, "environment_setup", "README.md")
 
         print(
             "[INSTRUCTION] Please ensure you have set up the Python environment and installed all dependencies.",

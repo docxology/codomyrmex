@@ -47,13 +47,20 @@ No related modules specified
 
 ## Usage Examples
 
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.docs.reference import ModuleClass
+This directory contains reference documentation. For code examples, see:
 
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
+- **[Complete API Reference](api-complete.md)** - Real function signatures and examples
+- **[CLI Reference](cli.md)** - Command-line usage examples
+- **[Troubleshooting Guide](troubleshooting.md)** - Solutions with code examples
+
+Example API usage:
+```python
+from codomyrmex.data_visualization import create_bar_chart
+from codomyrmex.code_execution_sandbox import execute_code
+
+# See api-complete.md for full API details
+result = execute_code("python", "print('Hello')")
+create_bar_chart(categories, values, title="Results")
 ```
 
 ## Quality Assurance

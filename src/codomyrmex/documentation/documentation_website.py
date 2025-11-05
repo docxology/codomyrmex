@@ -1,13 +1,12 @@
-import os
-import sys
-import logging  # Keep standard logging import for fallback and basicConfig structure
-import subprocess
 import argparse
-import webbrowser
-import shutil  # For checking if command exists
 import glob
-from pathlib import Path
-from codomyrmex.exceptions import CodomyrmexError
+
+# Standard logging import kept for compatibility with basicConfig structure
+import os
+import shutil  # For checking if command exists
+import subprocess
+import sys
+import webbrowser
 
 # --- Determine project structure and add appropriate path to sys.path for package import ---
 _codomyrmex_dir_for_import_msg = "Unknown"
@@ -40,7 +39,7 @@ if PATH_TO_ADD_FOR_MODULE_IMPORT not in sys.path:
 logger = None
 
 try:
-    from codomyrmex.logging_monitoring import setup_logging, get_logger
+    from codomyrmex.logging_monitoring import get_logger, setup_logging
 
     # Call setup_logging() which reads .env from the project root and configures handlers.
     # This should be called once, early in the application.
@@ -340,7 +339,7 @@ def serve_static_site(package_manager="npm"):
         return True
     except FileNotFoundError:
         logger.error(
-            f"Error: Command for serving (e.g., 'npx', 'yarn', or 'docusaurus') not found. Is Docusaurus installed and in PATH?"
+            "Error: Command for serving (e.g., 'npx', 'yarn', or 'docusaurus') not found. Is Docusaurus installed and in PATH?"
         )
         return False
     except KeyboardInterrupt:
@@ -481,9 +480,9 @@ def validate_doc_versions():
 
         if os.path.exists(src_changelog) and os.path.exists(dest_changelog):
             try:
-                with open(src_changelog, "r") as f:
+                with open(src_changelog) as f:
                     src_content = f.read()
-                with open(dest_changelog, "r") as f:
+                with open(dest_changelog) as f:
                     dest_content = f.read()
 
                 if src_content != dest_content:
@@ -530,7 +529,7 @@ def assess_site():
     """Guides user through assessing the site by opening browser and printing checklist."""
     logger.info(f"Attempting to open {EFFECTIVE_DOCS_URL} in your web browser.")
     logger.info(
-        f"Ensure a local server (dev or static) is running and accessible at this URL."
+        "Ensure a local server (dev or static) is running and accessible at this URL."
     )
     try:
         if not webbrowser.open(EFFECTIVE_DOCS_URL):

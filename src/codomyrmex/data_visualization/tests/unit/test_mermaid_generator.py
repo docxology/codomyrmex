@@ -5,18 +5,18 @@ Tests all Mermaid diagram generation functions with various inputs.
 """
 
 import os
-import pytest
-import tempfile
 import shutil
-from pathlib import Path
-from unittest.mock import patch, MagicMock
+import tempfile
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 from codomyrmex.data_visualization.mermaid_generator import (
     MermaidDiagramGenerator,
+    create_commit_timeline_diagram,
     create_git_branch_diagram,
     create_git_workflow_diagram,
     create_repository_structure_diagram,
-    create_commit_timeline_diagram,
 )
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -95,7 +95,7 @@ class TestMermaidDiagramGenerator:
         assert os.path.exists(output_path)
 
         # Verify file content
-        with open(output_path, "r") as f:
+        with open(output_path) as f:
             content = f.read()
             assert content == result
             assert "gitGraph" in content
@@ -190,7 +190,7 @@ class TestMermaidDiagramGenerator:
         assert result is True
         assert os.path.exists(nested_path)
 
-        with open(nested_path, "r") as f:
+        with open(nested_path) as f:
             assert f.read() == content
 
     def test_save_mermaid_content_handles_errors(self):
@@ -308,7 +308,7 @@ class TestMermaidConvenienceFunctions:
         assert isinstance(result, str)
         assert os.path.exists(output_path)
 
-        with open(output_path, "r") as f:
+        with open(output_path) as f:
             content = f.read()
             assert content == result
 

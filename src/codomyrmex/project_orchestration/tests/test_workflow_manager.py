@@ -7,19 +7,18 @@ covering all public methods, error conditions, and edge cases.
 
 import asyncio
 import json
-import pytest
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
 
+import pytest
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.project_orchestration.workflow_manager import (
+    WorkflowExecution,
     WorkflowManager,
     WorkflowStep,
-    WorkflowExecution,
 )
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 from codomyrmex.project_orchestration.workflow_manager import (
@@ -210,7 +209,7 @@ class TestWorkflowManager:
         assert workflow_file.exists()
 
         # Check file contents
-        with open(workflow_file, "r") as f:
+        with open(workflow_file) as f:
             data = json.load(f)
 
         assert data["name"] == "test_workflow"
@@ -286,7 +285,7 @@ class TestWorkflowManager:
 
         assert execution.status == WorkflowStatus.COMPLETED
         # Check that parameters were passed to steps
-        for step_name, result in execution.results.items():
+        for _step_name, result in execution.results.items():
             assert "parameters_used" in result
             assert "global_param" in result["parameters_used"]
 

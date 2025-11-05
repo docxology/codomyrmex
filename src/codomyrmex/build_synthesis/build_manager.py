@@ -5,23 +5,19 @@ This module provides comprehensive build orchestration, dependency management,
 artifact synthesis, and deployment automation capabilities.
 """
 
-import os
-import sys
 import json
-import yaml
-import subprocess
-import tempfile
+import os
+import shlex
 import shutil
-from typing import Dict, List, Any, Optional, Tuple, Union, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-import time
-from datetime import datetime, timedelta
-import hashlib
+import subprocess
+import sys
 import tarfile
-import zipfile
-from codomyrmex.exceptions import CodomyrmexError
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Optional
+
+import yaml
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,23 +27,7 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 # Import logger setup
-try:
-    from logging_monitoring import setup_logging, get_logger
-except ImportError:
-    import logging
-
-    def get_logger(name):
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
-        return logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Get module logger
 logger = get_logger(__name__)
@@ -128,8 +108,8 @@ class BuildStep:
     name: str
     command: str
     working_dir: Optional[str] = None
-    environment: Dict[str, str] = field(default_factory=dict)
-    dependencies: List[str] = field(default_factory=list)
+    environment: dict[str, str] = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)
     timeout: int = 300  # seconds
     retry_count: int = 0
     required: bool = True
@@ -145,10 +125,10 @@ class BuildTarget:
     build_type: BuildType
     source_path: str
     output_path: str
-    dependencies: List[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
     environment: BuildEnvironment = BuildEnvironment.DEVELOPMENT
-    config: Dict[str, Any] = field(default_factory=dict)
-    steps: List[BuildStep] = field(default_factory=list)
+    config: dict[str, Any] = field(default_factory=dict)
+    steps: list[BuildStep] = field(default_factory=list)
 
 
 @dataclass
@@ -162,8 +142,8 @@ class BuildResult:
     duration: Optional[float] = None
     output: str = ""
     error: str = ""
-    artifacts: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    artifacts: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -191,12 +171,12 @@ class BuildManager:
         """
         self.project_root = project_root or os.getcwd()
         self.config_path = config_path or os.path.join(self.project_root, "build.yaml")
-        self.targets: Dict[str, BuildTarget] = {}
-        self.dependencies: Dict[str, Dependency] = {}
-        self.results: List[BuildResult] = []
+        self.targets: dict[str, BuildTarget] = {}
+        self.dependencies: dict[str, Dependency] = {}
+        self.results: list[BuildResult] = []
         self.config = self._load_config()
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self) -> dict[str, Any]:
         """Load build configuration from file."""
         if not os.path.exists(self.config_path):
             logger.warning(
@@ -205,18 +185,21 @@ class BuildManager:
             return self._get_default_config()
 
         try:
-            with open(self.config_path, "r") as f:
+            with open(self.config_path) as f:
                 if self.config_path.endswith(".yaml") or self.config_path.endswith(
                     ".yml"
                 ):
                     return yaml.safe_load(f)
                 else:
                     return json.load(f)
-        except Exception as e:
-            logger.error(f"Error loading build config: {e}")
+        except (FileNotFoundError, PermissionError, OSError) as e:
+            logger.error(f"Error accessing build config file: {e}")
+            return self._get_default_config()
+        except (yaml.YAMLError, json.JSONDecodeError) as e:
+            logger.error(f"Error parsing build config: {e}")
             return self._get_default_config()
 
-    def _get_default_config(self) -> Dict[str, Any]:
+    def _get_default_config(self) -> dict[str, Any]:
         """Get default build configuration."""
         return {
             "build_dir": "build",
@@ -246,7 +229,7 @@ class BuildManager:
             self.targets[target.name] = target
             logger.info(f"Added build target: {target.name}")
             return True
-        except Exception as e:
+        except (TypeError, AttributeError, KeyError) as e:
             logger.error(f"Error adding build target {target.name}: {e}")
             return False
 
@@ -265,12 +248,12 @@ class BuildManager:
             self.dependencies[dependency.name] = dependency
             logger.info(f"Added dependency: {dependency.name}")
             return True
-        except Exception as e:
+        except (TypeError, AttributeError, KeyError) as e:
             logger.error(f"Error adding dependency {dependency.name}: {e}")
             return False
 
     @monitor_performance("check_dependencies")
-    def check_dependencies(self) -> Dict[str, bool]:
+    def check_dependencies(self) -> dict[str, bool]:
         """
         Check if all dependencies are available.
 
@@ -282,9 +265,11 @@ class BuildManager:
         for name, dep in self.dependencies.items():
             try:
                 if dep.check_command:
+                    # Use shlex.split to safely parse command string without shell=True
+                    cmd_parts = shlex.split(dep.check_command) if isinstance(dep.check_command, str) else dep.check_command
                     result = subprocess.run(
-                        dep.check_command,
-                        shell=True,
+                        cmd_parts,
+                        shell=False,
                         capture_output=True,
                         text=True,
                         timeout=30,
@@ -307,14 +292,14 @@ class BuildManager:
                     else:
                         results[name] = True  # Assume available for other sources
 
-            except Exception as e:
+            except (subprocess.SubprocessError, FileNotFoundError, ValueError, OSError) as e:
                 logger.error(f"Error checking dependency {name}: {e}")
                 results[name] = False
 
         return results
 
     @monitor_performance("install_dependencies")
-    def install_dependencies(self, force: bool = False) -> Dict[str, bool]:
+    def install_dependencies(self, force: bool = False) -> dict[str, bool]:
         """
         Install missing dependencies.
 
@@ -333,9 +318,11 @@ class BuildManager:
                     continue
 
                 if dep.install_command:
+                    # Use shlex.split to safely parse command string without shell=True
+                    cmd_parts = shlex.split(dep.install_command) if isinstance(dep.install_command, str) else dep.install_command
                     result = subprocess.run(
-                        dep.install_command,
-                        shell=True,
+                        cmd_parts,
+                        shell=False,
                         capture_output=True,
                         text=True,
                         timeout=300,  # 5 minutes
@@ -368,7 +355,7 @@ class BuildManager:
                     else:
                         results[name] = True  # Assume installed for other sources
 
-            except Exception as e:
+            except (subprocess.SubprocessError, FileNotFoundError, ValueError, OSError) as e:
                 logger.error(f"Error installing dependency {name}: {e}")
                 results[name] = False
 
@@ -378,12 +365,14 @@ class BuildManager:
         """Check if a dependency is already installed."""
         try:
             if dep.check_command:
+                # Use shlex.split to safely parse command string without shell=True
+                cmd_parts = shlex.split(dep.check_command) if isinstance(dep.check_command, str) else dep.check_command
                 result = subprocess.run(
-                    dep.check_command, shell=True, capture_output=True, timeout=30
+                    cmd_parts, shell=False, capture_output=True, timeout=30
                 )
                 return result.returncode == 0
             return True
-        except Exception:
+        except (subprocess.SubprocessError, FileNotFoundError, ValueError, OSError):
             return False
 
     @monitor_performance("build_target")
@@ -454,8 +443,13 @@ class BuildManager:
             if result.status == BuildStatus.RUNNING:
                 result.status = BuildStatus.SUCCESS
 
-        except Exception as e:
+        except (OSError, subprocess.SubprocessError, ValueError, KeyError) as e:
             logger.error(f"Error building target {target_name}: {e}")
+            result.status = BuildStatus.FAILED
+            result.error = str(e)
+        except Exception as e:
+            # Final fallback for unexpected errors
+            logger.error(f"Unexpected error building target {target_name}: {e}", exc_info=True)
             result.status = BuildStatus.FAILED
             result.error = str(e)
 
@@ -474,11 +468,13 @@ class BuildManager:
             return True
 
         try:
+            # Use shlex.split to safely parse command string without shell=True
+            cmd_parts = shlex.split(step.condition) if isinstance(step.condition, str) else step.condition
             result = subprocess.run(
-                step.condition, shell=True, capture_output=True, text=True, timeout=30
+                cmd_parts, shell=False, capture_output=True, text=True, timeout=30
             )
             return result.returncode == 0
-        except Exception as e:
+        except (subprocess.SubprocessError, FileNotFoundError, ValueError, OSError) as e:
             logger.error(f"Error checking step condition: {e}")
             return True  # Run by default if condition check fails
 
@@ -499,9 +495,11 @@ class BuildManager:
                 working_dir = os.path.join(self.project_root, working_dir)
 
             # Execute command
+            # Use shlex.split to safely parse command string without shell=True
+            cmd_parts = shlex.split(step.command) if isinstance(step.command, str) else step.command
             result = subprocess.run(
-                step.command,
-                shell=True,
+                cmd_parts,
+                shell=False,
                 cwd=working_dir,
                 env=env,
                 capture_output=True,
@@ -520,14 +518,14 @@ class BuildManager:
         except subprocess.TimeoutExpired:
             logger.error(f"Step timed out: {step.name}")
             return False
-        except Exception as e:
+        except (subprocess.SubprocessError, FileNotFoundError, ValueError, OSError) as e:
             logger.error(f"Error executing step {step.name}: {e}")
             return False
 
     @monitor_performance("build_all_targets")
     def build_all_targets(
         self, environment: BuildEnvironment = None
-    ) -> List[BuildResult]:
+    ) -> list[BuildResult]:
         """
         Build all targets.
 
@@ -543,8 +541,20 @@ class BuildManager:
             try:
                 result = self.build_target(target_name, environment)
                 results.append(result)
-            except Exception as e:
+            except (ValueError, KeyError, OSError) as e:
                 logger.error(f"Error building target {target_name}: {e}")
+                results.append(
+                    BuildResult(
+                        target_name=target_name,
+                        status=BuildStatus.FAILED,
+                        start_time=datetime.now(),
+                        end_time=datetime.now(),
+                        error=str(e),
+                    )
+                )
+            except Exception as e:
+                # Final fallback for unexpected errors
+                logger.error(f"Unexpected error building target {target_name}: {e}", exc_info=True)
                 results.append(
                     BuildResult(
                         target_name=target_name,
@@ -574,7 +584,7 @@ class BuildManager:
             )
 
             if target_name and target_name in self.targets:
-                target = self.targets[target_name]
+                self.targets[target_name]
                 target_build_dir = os.path.join(build_dir, target_name)
                 if os.path.exists(target_build_dir):
                     shutil.rmtree(target_build_dir)
@@ -585,7 +595,7 @@ class BuildManager:
                     logger.info("Cleaned all build directories")
 
             return True
-        except Exception as e:
+        except (OSError, PermissionError, shutil.Error) as e:
             logger.error(f"Error cleaning build: {e}")
             return False
 
@@ -604,7 +614,7 @@ class BuildManager:
         if target_name not in self.targets:
             raise ValueError(f"Build target '{target_name}' not found")
 
-        target = self.targets[target_name]
+        self.targets[target_name]
 
         if not output_path:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -627,11 +637,11 @@ class BuildManager:
             logger.info(f"Packaged artifacts to: {output_path}")
             return output_path
 
-        except Exception as e:
+        except (OSError, PermissionError, tarfile.TarError, ValueError) as e:
             logger.error(f"Error packaging artifacts: {e}")
             raise
 
-    def get_build_summary(self) -> Dict[str, Any]:
+    def get_build_summary(self) -> dict[str, Any]:
         """Get summary of all builds."""
         if not self.results:
             return {"total_builds": 0, "successful": 0, "failed": 0}
@@ -711,7 +721,7 @@ class BuildManager:
 
 # Convenience functions
 def create_python_build_target(
-    name: str, source_path: str, output_path: str = None, dependencies: List[str] = None
+    name: str, source_path: str, output_path: str = None, dependencies: list[str] = None
 ) -> BuildTarget:
     """Create a Python build target."""
     if output_path is None:
@@ -799,12 +809,12 @@ def create_static_build_target(
     )
 
 
-def get_available_build_types() -> List[BuildType]:
+def get_available_build_types() -> list[BuildType]:
     """Get list of available build types."""
     return list(BuildType)
 
 
-def get_available_environments() -> List[BuildEnvironment]:
+def get_available_environments() -> list[BuildEnvironment]:
     """Get list of available build environments."""
     return list(BuildEnvironment)
 

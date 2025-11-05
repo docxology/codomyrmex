@@ -5,14 +5,14 @@ This module provides performance monitoring capabilities to track
 execution times, memory usage, and other performance metrics.
 """
 
-import time
 import functools
-from typing import Any, Callable, Dict, List, Optional, Union
+import json
+import time
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
-import json
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Callable, Optional, Union
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -36,7 +36,7 @@ class PerformanceMetrics:
     memory_usage_mb: float
     cpu_percent: float
     timestamp: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class PerformanceMonitor:
@@ -55,7 +55,7 @@ class PerformanceMonitor:
             log_file: Optional file to log performance metrics to.
         """
         self.log_file = Path(log_file) if log_file else None
-        self.metrics: List[PerformanceMetrics] = []
+        self.metrics: list[PerformanceMetrics] = []
         self._process = psutil.Process() if HAS_PSUTIL else None
 
     def _get_memory_usage(self) -> float:
@@ -76,7 +76,7 @@ class PerformanceMonitor:
         execution_time: float,
         memory_usage_mb: Optional[float] = None,
         cpu_percent: Optional[float] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> None:
         """
         Record performance metrics.
@@ -128,7 +128,7 @@ class PerformanceMonitor:
             # If we can't write to the log file, that's okay
             pass
 
-    def get_stats(self, function_name: Optional[str] = None) -> Dict[str, Any]:
+    def get_stats(self, function_name: Optional[str] = None) -> dict[str, Any]:
         """
         Get performance statistics.
 
@@ -251,7 +251,7 @@ def monitor_performance(
 
                 # Calculate metrics
                 execution_time = end_time - start_time
-                memory_delta = end_memory - start_memory
+                end_memory - start_memory
                 cpu_avg = (start_cpu + end_cpu) / 2
 
                 # Record metrics
@@ -317,7 +317,7 @@ def performance_context(name: str, monitor: Optional[PerformanceMonitor] = None)
         end_cpu = monitor_instance._get_cpu_percent()
 
         execution_time = end_time - start_time
-        memory_delta = end_memory - start_memory
+        end_memory - start_memory
         cpu_avg = (start_cpu + end_cpu) / 2
 
         monitor_instance.record_metrics(
@@ -329,7 +329,7 @@ def performance_context(name: str, monitor: Optional[PerformanceMonitor] = None)
         )
 
 
-def get_performance_stats(function_name: Optional[str] = None) -> Dict[str, Any]:
+def get_performance_stats(function_name: Optional[str] = None) -> dict[str, Any]:
     """Get performance statistics from the global monitor."""
     return _performance_monitor.get_stats(function_name)
 

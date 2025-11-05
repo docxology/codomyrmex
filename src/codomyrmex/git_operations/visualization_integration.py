@@ -10,27 +10,24 @@ with data_visualization capabilities, specifically for Git-related visualization
 """
 
 import os
-from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
+from typing import Any
 
 from .git_manager import (
+    check_git_availability,
     get_commit_history,
     get_current_branch,
     get_status,
-    list_stashes,
     is_git_repository,
-)
-from codomyrmex.exceptions import CodomyrmexError
-from .git_manager import (
-    check_git_availability,
+    list_stashes,
 )
 
 try:
     from codomyrmex.data_visualization import (
         GitVisualizer,
-        create_git_tree_png,
-        create_git_tree_mermaid,
         create_git_branch_diagram,
+        create_git_tree_mermaid,
+        create_git_tree_png,
         create_git_workflow_diagram,
     )
 
@@ -38,14 +35,9 @@ try:
 except ImportError:
     VISUALIZATION_AVAILABLE = False
 
-try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-
-    logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def create_git_analysis_report(
@@ -54,7 +46,7 @@ def create_git_analysis_report(
     report_name: str = None,
     include_png: bool = True,
     include_mermaid: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Create a comprehensive Git analysis report with visualizations.
 
@@ -126,7 +118,7 @@ def visualize_git_branches(
     format_type: str = "png",
     title: str = None,
     max_commits: int = 20,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Create a Git branch visualization.
 
@@ -200,7 +192,7 @@ def visualize_commit_activity(
     output_path: str = None,
     days_back: int = 30,
     title: str = None,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Create a commit activity visualization.
 
@@ -256,7 +248,7 @@ def create_git_workflow_diagram(
     workflow_type: str = "feature_branch",
     output_path: str = "./git_workflow.mmd",
     title: str = "Git Workflow",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Create a Git workflow diagram.
 
@@ -360,7 +352,7 @@ def create_git_workflow_diagram(
 
 def analyze_repository_structure(
     repository_path: str, output_path: str = None, title: str = None, max_depth: int = 3
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Analyze and visualize repository structure.
 
@@ -414,7 +406,7 @@ def analyze_repository_structure(
         return {"error": str(e)}
 
 
-def get_repository_metadata(repository_path: str) -> Dict[str, Any]:
+def get_repository_metadata(repository_path: str) -> dict[str, Any]:
     """
     Get comprehensive repository metadata for visualization.
 
@@ -468,12 +460,11 @@ def get_repository_metadata(repository_path: str) -> Dict[str, Any]:
         return {"error": str(e)}
 
 
-def _analyze_directory_structure(path: str, max_depth: int = 3) -> Dict[str, Any]:
+def _analyze_directory_structure(path: str, max_depth: int = 3) -> dict[str, Any]:
     """Analyze directory structure up to max_depth."""
-    structure = {}
     path_obj = Path(path)
 
-    def scan_directory(current_path: Path, current_depth: int = 0) -> Dict[str, Any]:
+    def scan_directory(current_path: Path, current_depth: int = 0) -> dict[str, Any]:
         if current_depth >= max_depth:
             return {}
 
@@ -496,12 +487,12 @@ def _analyze_directory_structure(path: str, max_depth: int = 3) -> Dict[str, Any
     return scan_directory(path_obj)
 
 
-def _get_structure_stats(structure: Dict[str, Any]) -> Dict[str, int]:
+def _get_structure_stats(structure: dict[str, Any]) -> dict[str, int]:
     """Get statistics from directory structure."""
     stats = {"directories": 0, "files": 0}
 
-    def count_items(items: Dict[str, Any]):
-        for name, content in items.items():
+    def count_items(items: dict[str, Any]):
+        for _name, content in items.items():
             if isinstance(content, dict):
                 stats["directories"] += 1
                 count_items(content)
@@ -513,8 +504,8 @@ def _get_structure_stats(structure: Dict[str, Any]) -> Dict[str, int]:
 
 
 def _get_created_files(
-    output_dir: str, report_name: str, results: Dict[str, bool]
-) -> List[str]:
+    output_dir: str, report_name: str, results: dict[str, bool]
+) -> list[str]:
     """Get list of successfully created files."""
     files = []
 

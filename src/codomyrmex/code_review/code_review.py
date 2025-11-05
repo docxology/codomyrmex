@@ -5,20 +5,19 @@ This module provides advanced static analysis capabilities including pyscn integ
 for high-performance code quality assessment, security scanning, and maintainability analysis.
 """
 
-import os
-import sys
 import json
-import ast
-import subprocess
-import tempfile
+import os
 import re
-import math
-from typing import Dict, List, Any, Optional, Tuple, Union, Set
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-import time
-import shutil
+from typing import Any, Optional
+
 from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path for imports
@@ -28,24 +27,8 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 # Import logger setup
-try:
-    from logging_monitoring import setup_logging, get_logger
-except ImportError:
-    import logging
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    def get_logger(name):
-        logger = logging.getLogger(name)
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
-        return logger
-
-# Get module logger
 logger = get_logger(__name__)
 
 # Import performance monitoring
@@ -131,13 +114,13 @@ class AnalysisSummary:
     """Summary of analysis results for a file or project."""
 
     total_issues: int
-    by_severity: Dict[SeverityLevel, int] = field(default_factory=dict)
-    by_category: Dict[str, int] = field(default_factory=dict)
-    by_rule: Dict[str, int] = field(default_factory=dict)
+    by_severity: dict[SeverityLevel, int] = field(default_factory=dict)
+    by_category: dict[str, int] = field(default_factory=dict)
+    by_rule: dict[str, int] = field(default_factory=dict)
     files_analyzed: int = 0
     analysis_time: float = 0.0
     language: Optional[Language] = None
-    pyscn_metrics: Optional[Dict[str, Any]] = None
+    pyscn_metrics: Optional[dict[str, Any]] = None
 
 
 @dataclass
@@ -162,7 +145,7 @@ class ComplexityReductionSuggestion:
     current_complexity: int
     suggested_refactoring: str
     estimated_effort: str  # "low", "medium", "high"
-    benefits: List[str]
+    benefits: list[str]
     code_example: Optional[str] = None
 
 
@@ -189,7 +172,7 @@ class ArchitectureViolation:
     description: str
     severity: str
     suggestion: str
-    affected_modules: List[str] = field(default_factory=list)
+    affected_modules: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -212,21 +195,21 @@ class QualityDashboard:
     performance_score: float
 
     # Detailed metrics
-    complexity_metrics: Dict[str, Any]
-    dead_code_metrics: Dict[str, Any]
-    duplication_metrics: Dict[str, Any]
-    coupling_metrics: Dict[str, Any]
-    architecture_metrics: Dict[str, Any]
+    complexity_metrics: dict[str, Any]
+    dead_code_metrics: dict[str, Any]
+    duplication_metrics: dict[str, Any]
+    coupling_metrics: dict[str, Any]
+    architecture_metrics: dict[str, Any]
 
     # Top issues
-    top_complexity_issues: List[Dict[str, Any]]
-    top_dead_code_issues: List[Dict[str, Any]]
-    top_duplication_issues: List[Dict[str, Any]]
+    top_complexity_issues: list[dict[str, Any]]
+    top_dead_code_issues: list[dict[str, Any]]
+    top_duplication_issues: list[dict[str, Any]]
 
     # Recommendations
-    priority_actions: List[Dict[str, Any]]
-    quick_wins: List[Dict[str, Any]]
-    long_term_improvements: List[Dict[str, Any]]
+    priority_actions: list[dict[str, Any]]
+    quick_wins: list[dict[str, Any]]
+    long_term_improvements: list[dict[str, Any]]
 
     # Trends (if historical data available)
     trend_direction: Optional[str] = None
@@ -241,7 +224,7 @@ class QualityGateResult:
     total_checks: int
     passed_checks: int
     failed_checks: int
-    failures: List[Dict[str, Any]] = field(default_factory=list)
+    failures: list[dict[str, Any]] = field(default_factory=list)
 
 
 class CodeReviewError(CodomyrmexError):
@@ -267,7 +250,7 @@ class ConfigurationError(CodeReviewError):
 class PyscnAnalyzer:
     """Specialized analyzer using pyscn for advanced static analysis."""
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] = None):
         """
         Initialize pyscn analyzer with configuration.
 
@@ -295,7 +278,7 @@ class PyscnAnalyzer:
             )
 
     @monitor_performance("pyscn_analyze_complexity")
-    def analyze_complexity(self, file_path: str) -> List[Dict[str, Any]]:
+    def analyze_complexity(self, file_path: str) -> list[dict[str, Any]]:
         """Analyze cyclomatic complexity using pyscn."""
         try:
             # Pyscn writes JSON to a file, we need to read it from there
@@ -310,7 +293,7 @@ class PyscnAnalyzer:
                     # Get the most recent file
                     latest_file = max(json_files, key=os.path.getmtime)
 
-                    with open(latest_file, 'r') as f:
+                    with open(latest_file) as f:
                         data = json.load(f)
 
                     # Pyscn returns data under "complexity" key in the main object
@@ -336,7 +319,7 @@ class PyscnAnalyzer:
             return []
 
     @monitor_performance("pyscn_detect_dead_code")
-    def detect_dead_code(self, file_path: str) -> List[Dict[str, Any]]:
+    def detect_dead_code(self, file_path: str) -> list[dict[str, Any]]:
         """Detect dead code using CFG analysis."""
         try:
             # Pyscn writes JSON to a file, we need to read it from there
@@ -351,7 +334,7 @@ class PyscnAnalyzer:
                     # Get the most recent file
                     latest_file = max(json_files, key=os.path.getmtime)
 
-                    with open(latest_file, 'r') as f:
+                    with open(latest_file) as f:
                         data = json.load(f)
 
                     # Pyscn returns data under "dead_code" key
@@ -370,7 +353,7 @@ class PyscnAnalyzer:
             return []
 
     @monitor_performance("pyscn_find_clones")
-    def find_clones(self, files: List[str], threshold: float = 0.8) -> List[Dict[str, Any]]:
+    def find_clones(self, files: list[str], threshold: float = 0.8) -> list[dict[str, Any]]:
         """Find code clones using APTED with LSH acceleration."""
         try:
             # For single file analysis, pyscn doesn't need a file list
@@ -409,7 +392,7 @@ class PyscnAnalyzer:
                     # Get the most recent file
                     latest_file = max(json_files, key=os.path.getmtime)
 
-                    with open(latest_file, 'r') as f:
+                    with open(latest_file) as f:
                         data = json.load(f)
 
                     # Pyscn returns clone data under "clones" key
@@ -423,7 +406,7 @@ class PyscnAnalyzer:
             return []
 
     @monitor_performance("pyscn_analyze_coupling")
-    def analyze_coupling(self, file_path: str) -> List[Dict[str, Any]]:
+    def analyze_coupling(self, file_path: str) -> list[dict[str, Any]]:
         """Analyze Coupling Between Objects (CBO) metrics."""
         try:
             cmd = ["pyscn", "analyze", "--select", "cbo", "--json", file_path]
@@ -460,7 +443,7 @@ class PyscnAnalyzer:
             try:
                 # Generate comprehensive report
                 cmd = ["pyscn", "analyze", "--format", "html", ".."]
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+                subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
                 report_path = "index.html"
                 if os.path.exists(report_path):
@@ -489,8 +472,8 @@ class CodeReviewer:
         """
         self.project_root = project_root or os.getcwd()
         self.config_path = config_path
-        self.results: List[AnalysisResult] = []
-        self.metrics: Dict[str, CodeMetrics] = {}
+        self.results: list[AnalysisResult] = []
+        self.metrics: dict[str, CodeMetrics] = {}
         self.pyscn_analyzer = PyscnAnalyzer()
 
         # Load configuration
@@ -499,7 +482,7 @@ class CodeReviewer:
         # Check available tools
         self.tools_available = self._check_tools_availability()
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self) -> dict[str, Any]:
         """Load configuration from file or use defaults."""
         config = {
             "analysis_types": ["quality", "security", "style"],
@@ -539,7 +522,7 @@ class CodeReviewer:
 
         return config
 
-    def _check_tools_availability(self) -> Dict[str, bool]:
+    def _check_tools_availability(self) -> dict[str, bool]:
         """Check which analysis tools are available."""
         tools = {
             "pylint": False,
@@ -606,7 +589,7 @@ class CodeReviewer:
         }
         return Path(file_path).suffix.lower() in supported_extensions
 
-    def _run_pyscn_analysis(self, file_path: str) -> List[AnalysisResult]:
+    def _run_pyscn_analysis(self, file_path: str) -> list[AnalysisResult]:
         """Run comprehensive pyscn analysis on a file."""
         results = []
 
@@ -669,7 +652,7 @@ class CodeReviewer:
 
         return results
 
-    def _run_traditional_analysis(self, file_path: str, analysis_types: List[str]) -> List[AnalysisResult]:
+    def _run_traditional_analysis(self, file_path: str, analysis_types: list[str]) -> list[AnalysisResult]:
         """Run traditional static analysis tools."""
         results = []
         language = self._detect_language(file_path)
@@ -679,7 +662,7 @@ class CodeReviewer:
 
         return results
 
-    def _analyze_python_file(self, file_path: str, analysis_types: List[str]) -> List[AnalysisResult]:
+    def _analyze_python_file(self, file_path: str, analysis_types: list[str]) -> list[AnalysisResult]:
         """Analyze a Python file using traditional tools."""
         results = []
 
@@ -705,7 +688,7 @@ class CodeReviewer:
 
         return results
 
-    def _run_pylint(self, file_path: str) -> List[AnalysisResult]:
+    def _run_pylint(self, file_path: str) -> list[AnalysisResult]:
         """Run pylint analysis on a file."""
         results = []
 
@@ -741,7 +724,7 @@ class CodeReviewer:
 
         return results
 
-    def _run_flake8(self, file_path: str) -> List[AnalysisResult]:
+    def _run_flake8(self, file_path: str) -> list[AnalysisResult]:
         """Run flake8 analysis on a file."""
         results = []
 
@@ -788,7 +771,7 @@ class CodeReviewer:
 
         return results
 
-    def _run_mypy(self, file_path: str) -> List[AnalysisResult]:
+    def _run_mypy(self, file_path: str) -> list[AnalysisResult]:
         """Run mypy type checking on a file."""
         results = []
 
@@ -821,7 +804,7 @@ class CodeReviewer:
 
         return results
 
-    def _run_bandit(self, file_path: str) -> List[AnalysisResult]:
+    def _run_bandit(self, file_path: str) -> list[AnalysisResult]:
         """Run bandit security analysis on a file."""
         results = []
 
@@ -856,7 +839,7 @@ class CodeReviewer:
 
         return results
 
-    def _run_vulture(self, file_path: str) -> List[AnalysisResult]:
+    def _run_vulture(self, file_path: str) -> list[AnalysisResult]:
         """Run vulture dead code analysis on a file."""
         results = []
 
@@ -889,8 +872,8 @@ class CodeReviewer:
 
     @monitor_performance("analyze_file")
     def analyze_file(
-        self, file_path: str, analysis_types: List[str] = None
-    ) -> List[AnalysisResult]:
+        self, file_path: str, analysis_types: list[str] = None
+    ) -> list[AnalysisResult]:
         """
         Analyze a single file for various issues.
 
@@ -918,8 +901,8 @@ class CodeReviewer:
     @monitor_performance("analyze_project")
     def analyze_project(
         self,
-        target_paths: List[str] = None,
-        analysis_types: List[str] = None,
+        target_paths: list[str] = None,
+        analysis_types: list[str] = None,
     ) -> AnalysisSummary:
         """
         Analyze an entire project.
@@ -991,7 +974,7 @@ class CodeReviewer:
 
         return summary
 
-    def check_quality_gates(self, thresholds: Dict[str, int] = None) -> QualityGateResult:
+    def check_quality_gates(self, thresholds: dict[str, int] = None) -> QualityGateResult:
         """Check if code meets quality standards."""
         if thresholds is None:
             thresholds = self.config["quality_gates"]
@@ -1091,7 +1074,7 @@ class CodeReviewer:
             <div class="summary">
                 <h2>Summary</h2>
                 <p>Total Issues: {len(self.results)}</p>
-                <p>Files Analyzed: {len(set(r.file_path for r in self.results))}</p>
+                <p>Files Analyzed: {len({r.file_path for r in self.results})}</p>
             </div>
             <h2>Issues</h2>
         """
@@ -1122,7 +1105,7 @@ class CodeReviewer:
         report_data = {
             "summary": {
                 "total_issues": len(self.results),
-                "files_analyzed": len(set(r.file_path for r in self.results)),
+                "files_analyzed": len({r.file_path for r in self.results}),
                 "analysis_time": 0,  # Would need to track this
             },
             "results": [
@@ -1155,8 +1138,8 @@ class CodeReviewer:
         # Summary
         md_content += "## Summary\n\n"
         md_content += f"- **Total Issues**: {len(self.results)}\n"
-        md_content += f"- **Files Analyzed**: {len(set(r.file_path for r in self.results))}\n"
-        md_content += f"- **Analysis Time**: N/A\n\n"
+        md_content += f"- **Files Analyzed**: {len({r.file_path for r in self.results})}\n"
+        md_content += "- **Analysis Time**: N/A\n\n"
 
         # Issues by severity
         severity_counts = {}
@@ -1191,7 +1174,7 @@ class CodeReviewer:
         self.metrics.clear()
 
     @monitor_performance("analyze_complexity_patterns")
-    def analyze_complexity_patterns(self) -> List[ComplexityReductionSuggestion]:
+    def analyze_complexity_patterns(self) -> list[ComplexityReductionSuggestion]:
         """Analyze complexity patterns and provide reduction suggestions."""
         suggestions = []
 
@@ -1211,7 +1194,7 @@ class CodeReviewer:
 
         return suggestions
 
-    def _generate_complexity_suggestion(self, func_data: Dict[str, Any]) -> Optional[ComplexityReductionSuggestion]:
+    def _generate_complexity_suggestion(self, func_data: dict[str, Any]) -> Optional[ComplexityReductionSuggestion]:
         """Generate a specific suggestion for reducing complexity."""
         function_name = func_data.get("name", "unknown")
         complexity = func_data.get("complexity", 0)
@@ -1265,7 +1248,7 @@ def complex_function(data):
         )
 
     @monitor_performance("analyze_dead_code_patterns")
-    def analyze_dead_code_patterns(self) -> List[DeadCodeFinding]:
+    def analyze_dead_code_patterns(self) -> list[DeadCodeFinding]:
         """Analyze dead code patterns and provide enhanced findings."""
         findings = []
 
@@ -1283,7 +1266,7 @@ def complex_function(data):
 
         return findings
 
-    def _enhance_dead_code_finding(self, finding: Dict[str, Any]) -> Optional[DeadCodeFinding]:
+    def _enhance_dead_code_finding(self, finding: dict[str, Any]) -> Optional[DeadCodeFinding]:
         """Enhance a dead code finding with better suggestions."""
         location = finding.get("location", {})
         file_path = location.get("file_path", "")
@@ -1340,7 +1323,7 @@ def complex_function(data):
             return "Improves code clarity and maintainability"
 
     @monitor_performance("analyze_architecture_compliance")
-    def analyze_architecture_compliance(self) -> List[ArchitectureViolation]:
+    def analyze_architecture_compliance(self) -> list[ArchitectureViolation]:
         """Analyze architecture compliance and identify violations."""
         violations = []
 
@@ -1356,7 +1339,7 @@ def complex_function(data):
 
         return violations
 
-    def _check_layering_violations(self) -> List[ArchitectureViolation]:
+    def _check_layering_violations(self) -> list[ArchitectureViolation]:
         """Check for layering violations in the architecture."""
         violations = []
 
@@ -1378,7 +1361,7 @@ def complex_function(data):
 
         return violations
 
-    def _check_circular_dependencies(self) -> List[ArchitectureViolation]:
+    def _check_circular_dependencies(self) -> list[ArchitectureViolation]:
         """Check for circular dependencies."""
         violations = []
 
@@ -1386,12 +1369,12 @@ def complex_function(data):
         # For now, return empty list
         return violations
 
-    def _check_naming_conventions(self) -> List[ArchitectureViolation]:
+    def _check_naming_conventions(self) -> list[ArchitectureViolation]:
         """Check naming convention compliance."""
         violations = []
 
         # Check for files that don't follow naming conventions
-        for root, dirs, files in os.walk(self.project_root):
+        for root, _dirs, files in os.walk(self.project_root):
             for file in files:
                 if file.endswith('.py'):
                     file_path = os.path.join(root, file)
@@ -1408,7 +1391,7 @@ def complex_function(data):
 
         return violations
 
-    def _find_files_in_layer(self, layer: str) -> List[str]:
+    def _find_files_in_layer(self, layer: str) -> list[str]:
         """Find files belonging to a specific architectural layer."""
         layer_patterns = {
             "presentation": ["ui", "interface", "view", "controller", "handler"],
@@ -1419,7 +1402,7 @@ def complex_function(data):
         matching_files = []
         patterns = layer_patterns.get(layer, [])
 
-        for root, dirs, files in os.walk(self.project_root):
+        for root, _dirs, files in os.walk(self.project_root):
             for file in files:
                 if file.endswith('.py'):
                     file_path = os.path.join(root, file)
@@ -1432,10 +1415,10 @@ def complex_function(data):
 
         return matching_files
 
-    def _file_imports_presentation_layer(self, file_path: str, presentation_files: List[str]) -> bool:
+    def _file_imports_presentation_layer(self, file_path: str, presentation_files: list[str]) -> bool:
         """Check if a file imports from presentation layer (simplified check)."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
 
             # Look for import statements that might reference presentation layer
@@ -1450,7 +1433,7 @@ def complex_function(data):
         return False
 
     @monitor_performance("generate_refactoring_plan")
-    def generate_refactoring_plan(self) -> Dict[str, Any]:
+    def generate_refactoring_plan(self) -> dict[str, Any]:
         """Generate a comprehensive refactoring plan based on analysis."""
         plan = {
             "complexity_reductions": [],
@@ -1516,7 +1499,7 @@ def complex_function(data):
 
         return plan
 
-    def _determine_priority_actions(self, complexity_suggestions, dead_code_findings, architecture_violations) -> List[Dict[str, Any]]:
+    def _determine_priority_actions(self, complexity_suggestions, dead_code_findings, architecture_violations) -> list[dict[str, Any]]:
         """Determine the highest priority refactoring actions."""
         actions = []
 
@@ -1555,7 +1538,7 @@ def complex_function(data):
         return actions
 
     @monitor_performance("optimize_performance")
-    def optimize_performance(self) -> Dict[str, Any]:
+    def optimize_performance(self) -> dict[str, Any]:
         """Generate performance optimization suggestions."""
         optimizations = {
             "memory_optimizations": [],
@@ -1576,7 +1559,7 @@ def complex_function(data):
 
         return optimizations
 
-    def _find_memory_optimizations(self) -> List[str]:
+    def _find_memory_optimizations(self) -> list[str]:
         """Find potential memory optimization opportunities."""
         suggestions = [
             "Use generators instead of lists for large datasets",
@@ -1586,7 +1569,7 @@ def complex_function(data):
         ]
         return suggestions
 
-    def _find_cpu_optimizations(self) -> List[str]:
+    def _find_cpu_optimizations(self) -> list[str]:
         """Find potential CPU optimization opportunities."""
         suggestions = [
             "Cache expensive computations",
@@ -1596,7 +1579,7 @@ def complex_function(data):
         ]
         return suggestions
 
-    def _find_io_optimizations(self) -> List[str]:
+    def _find_io_optimizations(self) -> list[str]:
         """Find potential I/O optimization opportunities."""
         suggestions = [
             "Batch file operations",
@@ -1606,7 +1589,7 @@ def complex_function(data):
         ]
         return suggestions
 
-    def _find_caching_opportunities(self) -> List[str]:
+    def _find_caching_opportunities(self) -> list[str]:
         """Find potential caching opportunities."""
         suggestions = [
             "Cache parsed configuration files",
@@ -1674,7 +1657,7 @@ def complex_function(data):
             long_term_improvements=long_term_improvements
         )
 
-    def _get_complexity_metrics(self) -> Dict[str, Any]:
+    def _get_complexity_metrics(self) -> dict[str, Any]:
         """Get comprehensive complexity metrics."""
         try:
             complexity_results = self.pyscn_analyzer.analyze_complexity(self.project_root)
@@ -1706,7 +1689,7 @@ def complex_function(data):
             logger.error(f"Error getting complexity metrics: {e}")
             return {"total_functions": 0, "average_complexity": 0, "high_risk_count": 0, "score": 0.0}
 
-    def _get_dead_code_metrics(self) -> Dict[str, Any]:
+    def _get_dead_code_metrics(self) -> dict[str, Any]:
         """Get comprehensive dead code metrics."""
         try:
             dead_code_results = self.pyscn_analyzer.detect_dead_code(self.project_root)
@@ -1735,7 +1718,7 @@ def complex_function(data):
             logger.error(f"Error getting dead code metrics: {e}")
             return {"total_findings": 0, "critical_count": 0, "warning_count": 0, "score": 0.0}
 
-    def _get_duplication_metrics(self) -> Dict[str, Any]:
+    def _get_duplication_metrics(self) -> dict[str, Any]:
         """Get comprehensive duplication metrics."""
         # This would typically use pyscn's clone detection
         # For now, return placeholder data
@@ -1745,7 +1728,7 @@ def complex_function(data):
             "score": 100.0
         }
 
-    def _get_coupling_metrics(self) -> Dict[str, Any]:
+    def _get_coupling_metrics(self) -> dict[str, Any]:
         """Get comprehensive coupling metrics."""
         try:
             coupling_results = self.pyscn_analyzer.analyze_coupling(self.project_root)
@@ -1776,7 +1759,7 @@ def complex_function(data):
             logger.error(f"Error getting coupling metrics: {e}")
             return {"total_classes": 0, "high_coupling_count": 0, "average_coupling": 0.0, "score": 0.0}
 
-    def _get_architecture_metrics(self) -> Dict[str, Any]:
+    def _get_architecture_metrics(self) -> dict[str, Any]:
         """Get comprehensive architecture metrics."""
         violations = self.analyze_architecture_compliance()
 
@@ -1857,7 +1840,7 @@ def complex_function(data):
         """Calculate performance score."""
         return 88.0  # Placeholder
 
-    def _get_top_complexity_issues(self) -> List[Dict[str, Any]]:
+    def _get_top_complexity_issues(self) -> list[dict[str, Any]]:
         """Get top complexity issues."""
         try:
             complexity_results = self.pyscn_analyzer.analyze_complexity(self.project_root)
@@ -1882,7 +1865,7 @@ def complex_function(data):
             logger.error(f"Error getting top complexity issues: {e}")
             return []
 
-    def _get_top_dead_code_issues(self) -> List[Dict[str, Any]]:
+    def _get_top_dead_code_issues(self) -> list[dict[str, Any]]:
         """Get top dead code issues."""
         try:
             dead_code_results = self.pyscn_analyzer.detect_dead_code(self.project_root)
@@ -1910,12 +1893,12 @@ def complex_function(data):
             logger.error(f"Error getting top dead code issues: {e}")
             return []
 
-    def _get_top_duplication_issues(self) -> List[Dict[str, Any]]:
+    def _get_top_duplication_issues(self) -> list[dict[str, Any]]:
         """Get top duplication issues."""
         # Placeholder for now
         return []
 
-    def _determine_priority_actions_from_dashboard(self, complexity_issues, dead_code_issues, duplication_issues) -> List[Dict[str, Any]]:
+    def _determine_priority_actions_from_dashboard(self, complexity_issues, dead_code_issues, duplication_issues) -> list[dict[str, Any]]:
         """Determine priority actions for the dashboard."""
         actions = []
 
@@ -1943,7 +1926,7 @@ def complex_function(data):
 
         return actions
 
-    def _identify_quick_wins(self, dead_code_issues) -> List[Dict[str, Any]]:
+    def _identify_quick_wins(self, dead_code_issues) -> list[dict[str, Any]]:
         """Identify quick win improvements."""
         quick_wins = []
 
@@ -1959,7 +1942,7 @@ def complex_function(data):
 
         return quick_wins
 
-    def _identify_long_term_improvements(self, complexity_data) -> List[Dict[str, Any]]:
+    def _identify_long_term_improvements(self, complexity_data) -> list[dict[str, Any]]:
         """Identify long-term architectural improvements."""
         improvements = []
 
@@ -1976,7 +1959,7 @@ def complex_function(data):
     def _count_total_files(self) -> int:
         """Count total files in project."""
         count = 0
-        for root, dirs, files in os.walk(self.project_root):
+        for _root, dirs, files in os.walk(self.project_root):
             # Skip common directories
             dirs[:] = [d for d in dirs if d not in {".git", "__pycache__", "node_modules", ".venv", "venv", ".pyscn"}]
             count += len([f for f in files if f.endswith('.py')])
@@ -1991,14 +1974,14 @@ def complex_function(data):
             for file in files:
                 if file.endswith('.py'):
                     try:
-                        with open(os.path.join(root, file), 'r', encoding='utf-8') as f:
+                        with open(os.path.join(root, file), encoding='utf-8') as f:
                             total_lines += len(f.readlines())
                     except Exception:
                         pass
         return total_lines
 
     @monitor_performance("detect_code_smells")
-    def detect_code_smells(self) -> List[Dict[str, Any]]:
+    def detect_code_smells(self) -> list[dict[str, Any]]:
         """Detect common code smells and anti-patterns."""
         code_smells = []
 
@@ -2015,7 +1998,7 @@ def complex_function(data):
 
         return code_smells
 
-    def _detect_long_methods(self) -> List[Dict[str, Any]]:
+    def _detect_long_methods(self) -> list[dict[str, Any]]:
         """Detect methods that are too long."""
         smells = []
 
@@ -2039,7 +2022,7 @@ def complex_function(data):
 
         return smells
 
-    def _detect_large_classes(self) -> List[Dict[str, Any]]:
+    def _detect_large_classes(self) -> list[dict[str, Any]]:
         """Detect classes that are too large."""
         smells = []
 
@@ -2062,26 +2045,26 @@ def complex_function(data):
 
         return smells
 
-    def _detect_feature_envy(self) -> List[Dict[str, Any]]:
+    def _detect_feature_envy(self) -> list[dict[str, Any]]:
         """Detect feature envy (methods that use more external data than local)."""
         # This would require more sophisticated AST analysis
         # For now, return placeholder
         return []
 
-    def _detect_data_clumps(self) -> List[Dict[str, Any]]:
+    def _detect_data_clumps(self) -> list[dict[str, Any]]:
         """Detect data clumps (groups of parameters that are always passed together)."""
         # This would require more sophisticated AST analysis
         # For now, return placeholder
         return []
 
-    def _detect_primitive_obsession(self) -> List[Dict[str, Any]]:
+    def _detect_primitive_obsession(self) -> list[dict[str, Any]]:
         """Detect primitive obsession (using primitives where objects would be better)."""
         # This would require more sophisticated AST analysis
         # For now, return placeholder
         return []
 
     @monitor_performance("suggest_automated_fixes")
-    def suggest_automated_fixes(self) -> Dict[str, Any]:
+    def suggest_automated_fixes(self) -> dict[str, Any]:
         """Suggest automated fixes for common issues."""
         fixes = {
             "dead_code_removal": [],
@@ -2137,7 +2120,7 @@ def complex_function(data):
         return current_name
 
     @monitor_performance("analyze_technical_debt")
-    def analyze_technical_debt(self) -> Dict[str, Any]:
+    def analyze_technical_debt(self) -> dict[str, Any]:
         """Analyze and quantify technical debt."""
         debt_analysis = {
             "total_debt_hours": 0,
@@ -2177,7 +2160,7 @@ def complex_function(data):
 
         return debt_analysis
 
-    def _get_top_technical_debt_items(self, complexity_suggestions, dead_code_findings, architecture_violations) -> List[Dict[str, Any]]:
+    def _get_top_technical_debt_items(self, complexity_suggestions, dead_code_findings, architecture_violations) -> list[dict[str, Any]]:
         """Get the top technical debt items by estimated effort."""
         debt_items = []
 
@@ -2346,7 +2329,7 @@ def complex_function(data):
                 </div>
 """
 
-        html += f"""
+        html += """
             </div>
         </div>
 
@@ -2372,7 +2355,7 @@ def complex_function(data):
 
 
 # Convenience functions
-def analyze_file(file_path: str, analysis_types: List[str] = None) -> List[AnalysisResult]:
+def analyze_file(file_path: str, analysis_types: list[str] = None) -> list[AnalysisResult]:
     """Analyze a single file."""
     reviewer = CodeReviewer()
     return reviewer.analyze_file(file_path, analysis_types)
@@ -2380,15 +2363,15 @@ def analyze_file(file_path: str, analysis_types: List[str] = None) -> List[Analy
 
 def analyze_project(
     project_root: str,
-    target_paths: List[str] = None,
-    analysis_types: List[str] = None,
+    target_paths: list[str] = None,
+    analysis_types: list[str] = None,
 ) -> AnalysisSummary:
     """Analyze an entire project."""
     reviewer = CodeReviewer(project_root)
     return reviewer.analyze_project(target_paths, analysis_types)
 
 
-def check_quality_gates(project_root: str, thresholds: Dict[str, int] = None) -> QualityGateResult:
+def check_quality_gates(project_root: str, thresholds: dict[str, int] = None) -> QualityGateResult:
     """Check if project meets quality standards."""
     reviewer = CodeReviewer(project_root)
     reviewer.analyze_project()
@@ -2399,7 +2382,7 @@ def generate_report(
     project_root: str,
     output_path: str,
     format: str = "html",
-    analysis_types: List[str] = None
+    analysis_types: list[str] = None
 ) -> bool:
     """Generate analysis report."""
     reviewer = CodeReviewer(project_root)

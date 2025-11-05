@@ -1,27 +1,25 @@
 """Test suite for advanced features in Physical Management module."""
 
-import pytest
 import time
-from unittest.mock import Mock
-from codomyrmex.physical_management import (
-    PhysicalObjectManager,
-    ObjectType,
-    ObjectStatus,
-    PhysicalObject,
-)
+
+import pytest
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.physical_management import (
+    ObjectType,
+    PhysicalObject,
+    PhysicalObjectManager,
+)
 
 logger = get_logger(__name__)
 
 from codomyrmex.physical_management import (
-    MaterialType,
-    MaterialProperties,
     EventType,
+    MaterialProperties,
+    MaterialType,
     ObjectEvent,
-    SpatialIndex,
-)
-from codomyrmex.physical_management import (
     ObjectRegistry,
+    SpatialIndex,
 )
 
 

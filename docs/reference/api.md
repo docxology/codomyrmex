@@ -511,9 +511,9 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 3. Follow [Module Creation Tutorial](../getting-started/tutorials/creating-a-module.md)
 
 ### **Integration Developers**
-1. Review [MCP Tool Specifications](../../src/codomyrmex/*/MCP_TOOL_SPECIFICATION.md)
+1. Review MCP Tool Specifications (each module has `MCP_TOOL_SPECIFICATION.md` in its directory)
 2. Examine [CLI Reference](cli.md)
-3. Check [Usage Examples](../../src/codomyrmex/*/USAGE_EXAMPLES.md)
+3. Check Usage Examples (each module has `USAGE_EXAMPLES.md` in its directory)
 
 ---
 

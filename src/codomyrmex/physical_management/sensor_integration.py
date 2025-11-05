@@ -1,13 +1,12 @@
 """Sensor integration and device management."""
 
-from typing import Dict, List, Optional, Callable, Any, Tuple
+import json
+import logging
+import math
+import time
 from dataclasses import dataclass, field
 from enum import Enum
-import time
-import json
-import math
-import logging
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Callable, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -45,9 +44,9 @@ class SensorReading:
     value: float
     unit: str
     timestamp: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "sensor_id": self.sensor_id,
@@ -65,10 +64,10 @@ class DeviceInterface:
 
     device_id: str
     device_type: str
-    sensors: List[SensorType]
+    sensors: list[SensorType]
     status: DeviceStatus = DeviceStatus.UNKNOWN
     last_seen: float = field(default_factory=time.time)
-    capabilities: Dict[str, Any] = field(default_factory=dict)
+    capabilities: dict[str, Any] = field(default_factory=dict)
 
 
 class SensorManager:
@@ -77,9 +76,9 @@ class SensorManager:
     def __init__(self):
         """  Init  .
             """
-        self.devices: Dict[str, DeviceInterface] = {}
-        self.readings: List[SensorReading] = []
-        self._callbacks: Dict[str, List[Callable]] = {}
+        self.devices: dict[str, DeviceInterface] = {}
+        self.readings: list[SensorReading] = []
+        self._callbacks: dict[str, list[Callable]] = {}
         self.max_readings = 10000  # Keep last N readings
 
     def register_device(self, device: DeviceInterface) -> None:
@@ -120,7 +119,7 @@ class SensorManager:
         sensor_type: SensorType,
         start_time: Optional[float] = None,
         end_time: Optional[float] = None,
-    ) -> List[SensorReading]:
+    ) -> list[SensorReading]:
         """Get readings for a sensor type within time range."""
         filtered_readings = []
 
@@ -185,7 +184,7 @@ class SensorManager:
         with open(file_path, "w") as f:
             json.dump(data, f, indent=2)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get sensor system statistics."""
         sensor_counts = {}
         for reading in self.readings:
@@ -208,9 +207,9 @@ class SensorManager:
     def calibrate_sensor(
         self,
         sensor_id: str,
-        reference_values: List[Tuple[float, float]],
+        reference_values: list[tuple[float, float]],
         sensor_type: SensorType,
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """
         Calibrate a sensor using reference values.
         reference_values: List of (sensor_reading, actual_value) tuples
@@ -268,7 +267,7 @@ class SensorManager:
 
     def get_sensor_health(
         self, sensor_id: str, time_window: float = 3600
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Analyze sensor health based on recent readings."""
         current_time = time.time()
         cutoff_time = current_time - time_window
@@ -317,7 +316,7 @@ class SensorManager:
         sensor_id: str,
         baseline_period: float = 86400,
         comparison_period: float = 3600,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Detect if a sensor has drifted from its baseline."""
         current_time = time.time()
 
@@ -410,7 +409,7 @@ class CoordinateSystem:
     @staticmethod
     def cartesian_to_spherical(
         x: float, y: float, z: float
-    ) -> Tuple[float, float, float]:
+    ) -> tuple[float, float, float]:
         """Convert Cartesian to spherical coordinates."""
         r = math.sqrt(x**2 + y**2 + z**2)
         theta = math.acos(z / r) if r != 0 else 0
@@ -420,7 +419,7 @@ class CoordinateSystem:
     @staticmethod
     def spherical_to_cartesian(
         r: float, theta: float, phi: float
-    ) -> Tuple[float, float, float]:
+    ) -> tuple[float, float, float]:
         """Convert spherical to Cartesian coordinates."""
         x = r * math.sin(theta) * math.cos(phi)
         y = r * math.sin(theta) * math.sin(phi)

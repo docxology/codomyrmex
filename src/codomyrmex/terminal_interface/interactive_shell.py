@@ -7,15 +7,10 @@ Codomyrmex ecosystem - like being an epistemic forager in a vast,
 structured nest.
 """
 
-import sys
-import os
 import cmd
-import json
+import os
 import random
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-import importlib
-from codomyrmex.exceptions import CodomyrmexError
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -167,7 +162,7 @@ Type 'explore' to begin your foraging adventure!
         info = self.discovery.modules[module_name]
         self.session_data["modules_explored"].add(module_name)
 
-        print(f"🏠 " + "=" * 60)
+        print("🏠 " + "=" * 60)
         print(f"   EXPLORING: {module_name.upper()}")
         print("=" * 60)
 
@@ -358,8 +353,9 @@ Type 'explore' to begin your foraging adventure!
     def _demo_data_visualization(self):
         """Demo the data visualization module."""
         try:
-            from codomyrmex.data_visualization import create_line_plot, create_bar_chart
             import numpy as np
+
+            from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
             print("   📊 Creating sample line plot...")
             x = np.linspace(0, 6.28, 100)
@@ -462,7 +458,7 @@ print("Sandbox execution complete! ✅")
             print("❌ System discovery not available")
 
         # Session stats
-        print(f"\n🎮 Your Session Stats:")
+        print("\n🎮 Your Session Stats:")
         print(f"   Commands run: {self.session_data['commands_run']}")
         print(f"   Modules explored: {len(self.session_data['modules_explored'])}")
         print(f"   Demos run: {self.session_data['demos_run']}")
@@ -495,7 +491,7 @@ print("Sandbox execution complete! ✅")
 
         info = self.discovery.modules[module_name]
 
-        print(f"🤿 " + "=" * 60)
+        print("🤿 " + "=" * 60)
         print(f"   DEEP DIVE: {module_name.upper()}")
         print("=" * 60)
 
@@ -637,27 +633,27 @@ print("Sandbox execution complete! ✅")
         print("   YOUR FORAGING SESSION")
         print("=" * 60)
 
-        print(f"📊 Session Statistics:")
+        print("📊 Session Statistics:")
         print(f"   Commands executed: {self.session_data['commands_run']}")
         print(f"   Modules explored: {len(self.session_data['modules_explored'])}")
         print(f"   Demonstrations run: {self.session_data['demos_run']}")
 
         if self.session_data["modules_explored"]:
-            print(f"\n🏠 Chambers Explored:")
+            print("\n🏠 Chambers Explored:")
             for module in sorted(self.session_data["modules_explored"]):
                 print(f"   • {module}")
 
         if self.session_data["discoveries_made"]:
-            print(f"\n💎 Discoveries Made:")
+            print("\n💎 Discoveries Made:")
             for discovery in self.session_data["discoveries_made"]:
                 print(f"   • {discovery}")
 
         # Fun foraging achievement
         if self.session_data["commands_run"] > 10:
-            print(f"\n🏆 Achievement Unlocked: Expert Forager!")
+            print("\n🏆 Achievement Unlocked: Expert Forager!")
             print("   You've been busy exploring the nest! 🐜")
         elif self.session_data["modules_explored"]:
-            print(f"\n🏆 Achievement Unlocked: Nest Explorer!")
+            print("\n🏆 Achievement Unlocked: Nest Explorer!")
             print("   You've started mapping the territory! 🗺️")
 
     def do_quit(self, arg):
@@ -669,7 +665,7 @@ print("Sandbox execution complete! ✅")
         print("\n🐜 Thank you for foraging in the Codomyrmex nest!")
 
         if self.session_data["commands_run"] > 0:
-            print(f"📊 Session summary:")
+            print("📊 Session summary:")
             print(f"   • {self.session_data['commands_run']} commands executed")
             print(f"   • {len(self.session_data['modules_explored'])} modules explored")
             print(f"   • {self.session_data['demos_run']} demos run")

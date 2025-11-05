@@ -77,7 +77,6 @@ def unreachable_code_example():
 def unused_variable_example():
     """Function with unused variables."""
     used_variable = "I am used"
-    unused_variable = "I am not used"  # This should be detected
 
     print(used_variable)
     return used_variable

@@ -84,7 +84,7 @@ This strategy aims to make the project manageable as it scales, allowing individ
 
 ## Code of Conduct
 
-All contributors are expected to read and adhere to the project's [Code of Conduct](../../CODE_OF_CONDUCT.md). Please ensure you are familiar with its contents.
+All contributors are expected to follow professional and respectful communication standards. Please ensure your contributions align with the project's values and maintain a positive collaborative environment.
 
 ## Questions?
 

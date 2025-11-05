@@ -4,16 +4,15 @@ Configuration Loader for Codomyrmex Configuration Management Module.
 Provides comprehensive configuration loading, validation, and management.
 """
 
-import os
-import sys
 import json
-import yaml
-import requests
-from typing import Dict, List, Any, Optional, Union
+import os
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
+from typing import Any, Optional
+
 import jsonschema
+import requests
+import yaml
 
 # Use proper relative imports
 try:
@@ -21,13 +20,9 @@ try:
 
     logger = get_logger(__name__)
 except ImportError:
-    try:
-        from codomyrmex.logging_monitoring.logger_config import get_logger
-
-    except ImportError:
-        import logging
-
-        logger = logging.getLogger(__name__)
+    # Fallback - should use get_logger from logging_monitoring
+    from codomyrmex.logging_monitoring.logger_config import get_logger
+    logger = get_logger(__name__)
 
 # Import exceptions
 try:
@@ -76,12 +71,12 @@ except ImportError:
 class ConfigSchema:
     """JSON schema for configuration validation."""
 
-    schema: Dict[str, Any]
+    schema: dict[str, Any]
     version: str = "draft7"
     title: str = ""
     description: str = ""
 
-    def validate(self, config: Dict[str, Any]) -> List[str]:
+    def validate(self, config: dict[str, Any]) -> list[str]:
         """
         Validate configuration against schema.
 
@@ -118,19 +113,19 @@ class ConfigSchema:
 class Configuration:
     """Configuration object with validation and metadata."""
 
-    data: Dict[str, Any]
+    data: dict[str, Any]
     source: str
     loaded_at: datetime = field(init=False)
     schema: Optional[ConfigSchema] = None
     environment: str = "default"
     version: str = "1.0.0"
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
         if not hasattr(self, 'loaded_at') or self.loaded_at is None:
             self.loaded_at = datetime.now(timezone.utc)
 
-    def validate(self) -> List[str]:
+    def validate(self) -> list[str]:
         """Validate configuration against schema."""
         if self.schema:
             return self.schema.validate(self.data)
@@ -163,7 +158,7 @@ class Configuration:
         # Set the value
         config[keys[-1]] = value
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert configuration to dictionary format."""
         return {
             "data": self.data,
@@ -196,8 +191,8 @@ class ConfigurationManager:
             config_dir: Directory containing configuration files
         """
         self.config_dir = config_dir or os.path.join(os.getcwd(), "config")
-        self.configurations: Dict[str, Configuration] = {}
-        self.schemas: Dict[str, ConfigSchema] = {}
+        self.configurations: dict[str, Configuration] = {}
+        self.schemas: dict[str, ConfigSchema] = {}
         self.environment = os.getenv("ENVIRONMENT", "development")
 
         # Create config directory if it doesn't exist and path is writable
@@ -212,7 +207,7 @@ class ConfigurationManager:
     def load_configuration(
         self,
         name: str,
-        sources: Optional[List[str]] = None,
+        sources: Optional[list[str]] = None,
         schema_path: Optional[str] = None,
     ) -> Configuration:
         """
@@ -286,7 +281,7 @@ class ConfigurationManager:
 
         return config
 
-    def _load_source(self, source: str) -> Optional[Dict[str, Any]]:
+    def _load_source(self, source: str) -> Optional[dict[str, Any]]:
         """Load configuration from a specific source."""
         # Handle different source types
         if source.startswith("env://"):
@@ -309,13 +304,13 @@ class ConfigurationManager:
             file_path = os.path.join(self.config_dir, source)
             return self._load_file(file_path)
 
-    def _load_file(self, file_path: str) -> Optional[Dict[str, Any]]:
+    def _load_file(self, file_path: str) -> Optional[dict[str, Any]]:
         """Load configuration from file."""
         if not os.path.exists(file_path):
             return None
 
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 if file_path.endswith(".yaml") or file_path.endswith(".yml"):
                     return yaml.safe_load(f)
                 else:
@@ -325,7 +320,7 @@ class ConfigurationManager:
             logger.error(f"Failed to load config file {file_path}: {e}")
             return None
 
-    def _load_from_url(self, url: str) -> Optional[Dict[str, Any]]:
+    def _load_from_url(self, url: str) -> Optional[dict[str, Any]]:
         """Load configuration from URL."""
         try:
             response = requests.get(url, timeout=30)
@@ -341,7 +336,7 @@ class ConfigurationManager:
             logger.error(f"Failed to load config from URL {url}: {e}")
             return None
 
-    def _load_environment_variables(self, config_name: str) -> Dict[str, Any]:
+    def _load_environment_variables(self, config_name: str) -> dict[str, Any]:
         """Load configuration from environment variables."""
         env_config = {}
         prefix = f"{config_name.upper()}_"
@@ -356,7 +351,7 @@ class ConfigurationManager:
     def _load_schema(self, schema_path: str) -> Optional[ConfigSchema]:
         """Load JSON schema for configuration validation."""
         try:
-            with open(schema_path, "r") as f:
+            with open(schema_path) as f:
                 if schema_path.endswith(".yaml") or schema_path.endswith(".yml"):
                     schema_data = yaml.safe_load(f)
                 else:
@@ -408,7 +403,7 @@ class ConfigurationManager:
             logger.error(f"Failed to save configuration {name}: {e}")
             return False
 
-    def validate_all_configurations(self) -> Dict[str, List[str]]:
+    def validate_all_configurations(self) -> dict[str, list[str]]:
         """
         Validate all loaded configurations.
 
@@ -444,7 +439,7 @@ class ConfigurationManager:
 
         # Reload configuration
         try:
-            new_config = self.load_configuration(name, sources)
+            self.load_configuration(name, sources)
             logger.info(f"Configuration reloaded: {name}")
             return True
 
@@ -456,7 +451,7 @@ class ConfigurationManager:
         """Get loaded configuration by name."""
         return self.configurations.get(name)
 
-    def list_configurations(self) -> List[str]:
+    def list_configurations(self) -> list[str]:
         """List all loaded configuration names."""
         return list(self.configurations.keys())
 
@@ -492,7 +487,7 @@ class ConfigurationManager:
             logger.error(f"Failed to create configuration template: {e}")
             return False
 
-    def _generate_template_from_schema(self, schema: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_template_from_schema(self, schema: dict[str, Any]) -> dict[str, Any]:
         """Generate configuration template from JSON schema."""
         template = {}
 
@@ -502,7 +497,7 @@ class ConfigurationManager:
 
         return template
 
-    def _generate_property_template(self, prop_schema: Dict[str, Any]) -> Any:
+    def _generate_property_template(self, prop_schema: dict[str, Any]) -> Any:
         """Generate template for a single property."""
         prop_type = prop_schema.get("type", "string")
         default = prop_schema.get("default")
@@ -526,7 +521,7 @@ class ConfigurationManager:
 
 # Convenience functions
 def load_configuration(
-    name: str, sources: Optional[List[str]] = None, schema_path: Optional[str] = None
+    name: str, sources: Optional[list[str]] = None, schema_path: Optional[str] = None
 ) -> Configuration:
     """
     Convenience function to load configuration.
@@ -543,7 +538,7 @@ def load_configuration(
     return manager.load_configuration(name, sources, schema_path)
 
 
-def validate_configuration(config: Configuration) -> List[str]:
+def validate_configuration(config: Configuration) -> list[str]:
     """
     Convenience function to validate configuration.
 

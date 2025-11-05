@@ -5,20 +5,19 @@ Provides secure encryption and decryption capabilities for sensitive data,
 passwords, and configuration files.
 """
 
-import os
-import sys
-import json
 import base64
 import hashlib
-from typing import Dict, List, Any, Optional, Union
+import os
+import secrets
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from typing import Any, Optional, Union
+
 from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.backends import default_backend
-import secrets
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -28,7 +27,7 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
-    from logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
@@ -44,7 +43,7 @@ class EncryptionResult:
     success: bool
     data: Optional[bytes] = None
     error: Optional[str] = None
-    metadata: Dict[str, Any] = None
+    metadata: dict[str, Any] = None
 
 
 class EncryptionManager:
@@ -87,7 +86,7 @@ class EncryptionManager:
 
             logger.info("Encryption manager initialized successfully")
 
-        except Exception as e:
+        except (OSError, PermissionError, ValueError, TypeError, AttributeError) as e:
             logger.error(f"Failed to initialize encryption: {e}")
             raise
 
@@ -101,7 +100,7 @@ class EncryptionManager:
                 self._fernet = Fernet(key)
                 logger.info("Loaded existing encryption key")
 
-            except Exception as e:
+            except (FileNotFoundError, PermissionError, ValueError, TypeError) as e:
                 logger.error(f"Failed to load encryption key: {e}")
                 raise
         else:
@@ -119,7 +118,7 @@ class EncryptionManager:
                 os.chmod(self.key_file, 0o600)
                 logger.info(f"New encryption key saved to {self.key_file}")
 
-            except Exception as e:
+            except (OSError, PermissionError, IOError) as e:
                 logger.error(f"Failed to save encryption key: {e}")
                 raise
 
@@ -139,7 +138,7 @@ class EncryptionManager:
                 with open(salt_file, "wb") as f:
                     f.write(self._salt)
                 os.chmod(salt_file, 0o600)
-            except Exception as e:
+            except (OSError, PermissionError, IOError) as e:
                 logger.error(f"Failed to save salt: {e}")
                 raise
 
@@ -157,7 +156,7 @@ class EncryptionManager:
         logger.info("Initialized password-based encryption")
 
     def encrypt_data(
-        self, data: Union[str, bytes], metadata: Optional[Dict[str, Any]] = None
+        self, data: Union[str, bytes], metadata: Optional[dict[str, Any]] = None
     ) -> EncryptionResult:
         """
         Encrypt data using configured encryption method.
@@ -226,7 +225,7 @@ class EncryptionManager:
         self,
         input_file: str,
         output_file: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ) -> EncryptionResult:
         """
         Encrypt a file.
@@ -347,7 +346,7 @@ class EncryptionManager:
             logger.error(f"Key rotation failed: {e}")
             return False
 
-    def get_key_info(self) -> Dict[str, Any]:
+    def get_key_info(self) -> dict[str, Any]:
         """Get information about current encryption key."""
         info = {
             "key_file": self.key_file,
@@ -378,7 +377,7 @@ class EncryptionManager:
         return "".join(secrets.choice(alphabet) for _ in range(length))
 
     @staticmethod
-    def hash_password(password: str, salt: Optional[bytes] = None) -> Dict[str, str]:
+    def hash_password(password: str, salt: Optional[bytes] = None) -> dict[str, str]:
         """
         Hash a password for secure storage.
 
@@ -411,7 +410,7 @@ class EncryptionManager:
         }
 
     @staticmethod
-    def verify_password(password: str, hash_data: Dict[str, str]) -> bool:
+    def verify_password(password: str, hash_data: dict[str, str]) -> bool:
         """
         Verify a password against its hash.
 

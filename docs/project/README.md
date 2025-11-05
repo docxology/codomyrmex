@@ -43,14 +43,18 @@ No related modules specified
 
 ## Usage Examples
 
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.docs.project import ModuleClass
+This directory contains project governance documentation. For contributors:
 
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
+```bash
+# Development workflow
+git checkout -b feature/my-feature
+# Make changes...
+pytest testing/ -v
+black src/ testing/
+git commit -m "feat: add new feature"
 ```
+
+See [Contributing Guide](contributing.md) for contribution guidelines, [Architecture Overview](architecture.md) for system design, and [Project TODO](todo.md) for current priorities.
 
 ## Quality Assurance
 

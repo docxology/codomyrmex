@@ -5,11 +5,8 @@ This module provides MCP tools that allow AI models to interact with the
 orchestration system, enabling AI-driven project management and task execution.
 """
 
-import json
-import asyncio
-from typing import Dict, Any, List, Optional, Union
 from datetime import datetime, timezone
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any
 
 # Import Codomyrmex modules
 try:
@@ -22,7 +19,7 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 try:
-    from codomyrmex.model_context_protocol import MCPToolResult, MCPErrorDetail
+    from codomyrmex.model_context_protocol import MCPErrorDetail, MCPToolResult
 
     MCP_AVAILABLE = True
 except ImportError:
@@ -45,8 +42,8 @@ except ImportError:
             success: bool,
             data: Any = None,
             error: str = None,
-            error_details: List = None,
-            metadata: Dict = None,
+            error_details: list = None,
+            metadata: dict = None,
         ):
             self.success = success
             self.data = data
@@ -65,16 +62,14 @@ except ImportError:
 
 
 from .orchestration_engine import get_orchestration_engine
-from .workflow_manager import get_workflow_manager, WorkflowStep
+from .project_manager import get_project_manager
+from .resource_manager import get_resource_manager
 from .task_orchestrator import (
-    get_task_orchestrator,
     Task,
     TaskPriority,
-    TaskResource,
-    ResourceType,
+    get_task_orchestrator,
 )
-from .project_manager import get_project_manager, ProjectType
-from .resource_manager import get_resource_manager
+from .workflow_manager import WorkflowStep, get_workflow_manager
 
 
 class OrchestrationMCPTools:
@@ -91,7 +86,7 @@ class OrchestrationMCPTools:
         if not MCP_AVAILABLE:
             logger.warning("MCP not available - tools will return mock results")
 
-    def get_tool_definitions(self) -> Dict[str, Dict[str, Any]]:
+    def get_tool_definitions(self) -> dict[str, dict[str, Any]]:
         """Get MCP tool definitions."""
         return {
             "execute_workflow": {
@@ -290,7 +285,7 @@ class OrchestrationMCPTools:
             },
         }
 
-    def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> MCPToolResult:
+    def execute_tool(self, tool_name: str, arguments: dict[str, Any]) -> MCPToolResult:
         """Execute an MCP tool."""
         if not MCP_AVAILABLE:
             return MCPToolResult(
@@ -342,7 +337,7 @@ class OrchestrationMCPTools:
                 error_details=[MCPErrorDetail(type=type(e).__name__, message=str(e))],
             )
 
-    def _execute_workflow_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _execute_workflow_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Execute workflow tool."""
         workflow_name = arguments["workflow_name"]
         parameters = arguments.get("parameters", {})
@@ -360,7 +355,7 @@ class OrchestrationMCPTools:
             },
         )
 
-    def _create_workflow_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _create_workflow_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Create workflow tool."""
         name = arguments["name"]
         steps_data = arguments["steps"]
@@ -391,7 +386,7 @@ class OrchestrationMCPTools:
             metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
         )
 
-    def _list_workflows_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _list_workflows_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """List workflows tool."""
         workflows = self.wf_manager.list_workflows()
 
@@ -401,7 +396,7 @@ class OrchestrationMCPTools:
             metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
         )
 
-    def _create_project_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _create_project_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Create project tool."""
         name = arguments["name"]
         template = arguments.get("template", "ai_analysis")
@@ -431,7 +426,7 @@ class OrchestrationMCPTools:
                 error_details=[MCPErrorDetail(type=type(e).__name__, message=str(e))],
             )
 
-    def _list_projects_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _list_projects_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """List projects tool."""
         projects = self.project_manager.list_projects()
         project_details = []
@@ -455,7 +450,7 @@ class OrchestrationMCPTools:
             metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
         )
 
-    def _execute_task_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _execute_task_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Execute task tool."""
         name = arguments["name"]
         module = arguments["module"]
@@ -494,7 +489,7 @@ class OrchestrationMCPTools:
             },
         )
 
-    def _get_system_status_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _get_system_status_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Get system status tool."""
         status = self.engine.get_system_status()
 
@@ -504,7 +499,7 @@ class OrchestrationMCPTools:
             metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
         )
 
-    def _get_health_status_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _get_health_status_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Get health status tool."""
         health = self.engine.health_check()
 
@@ -514,7 +509,7 @@ class OrchestrationMCPTools:
             metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
         )
 
-    def _allocate_resources_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _allocate_resources_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Allocate resources tool."""
         user_id = arguments["user_id"]
         requirements = arguments["requirements"]
@@ -531,7 +526,7 @@ class OrchestrationMCPTools:
             metadata={"timestamp": datetime.now(timezone.utc).isoformat()},
         )
 
-    def _create_complex_workflow_tool(self, arguments: Dict[str, Any]) -> MCPToolResult:
+    def _create_complex_workflow_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Create complex workflow tool."""
         name = arguments["name"]
         workflow_definition = arguments["workflow_definition"]
@@ -557,13 +552,13 @@ def get_mcp_tools() -> OrchestrationMCPTools:
     return _mcp_tools
 
 
-def get_mcp_tool_definitions() -> Dict[str, Dict[str, Any]]:
+def get_mcp_tool_definitions() -> dict[str, dict[str, Any]]:
     """Get MCP tool definitions."""
     tools = get_mcp_tools()
     return tools.get_tool_definitions()
 
 
-def execute_mcp_tool(tool_name: str, arguments: Dict[str, Any]) -> MCPToolResult:
+def execute_mcp_tool(tool_name: str, arguments: dict[str, Any]) -> MCPToolResult:
     """Execute an MCP tool."""
     tools = get_mcp_tools()
     return tools.execute_tool(tool_name, arguments)

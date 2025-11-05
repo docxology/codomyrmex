@@ -1,15 +1,14 @@
 """Test suite for 3D Modeling module."""
 
 import pytest
+
 from codomyrmex.modeling_3d import (
-    Scene3D,
-    Object3D,
     Camera3D,
     Light3D,
-    Material3D,
-    Vector3D,
-    Quaternion,
+    Object3D,
     RenderPipeline,
+    Scene3D,
+    Vector3D,
 )
 
 

@@ -6,12 +6,10 @@ This module provides container security scanning, vulnerability assessment,
 and compliance checking capabilities.
 """
 
-import json
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -29,7 +27,7 @@ class Vulnerability:
     fixed_version: Optional[str]
     description: str
     cvss_score: float
-    references: List[str] = field(default_factory=list)
+    references: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -39,7 +37,7 @@ class SecurityScanResult:
     image_name: str
     image_tag: str
     scan_timestamp: datetime
-    vulnerabilities: List[Vulnerability] = field(default_factory=list)
+    vulnerabilities: list[Vulnerability] = field(default_factory=list)
     compliance_status: str = "unknown"
     scan_duration: float = 0.0
     scanner_version: str = "1.0.0"
@@ -48,14 +46,14 @@ class SecurityScanResult:
 class ContainerSecurityScanner:
     """Container security scanning and vulnerability assessment system."""
 
-    def __init__(self, scanner_config: Optional[Dict[str, Any]] = None):
+    def __init__(self, scanner_config: Optional[dict[str, Any]] = None):
         """Initialize security scanner.
 
         Args:
             scanner_config: Scanner configuration options
         """
         self.scanner_config = scanner_config or {}
-        self._scan_results: Dict[str, SecurityScanResult] = {}
+        self._scan_results: dict[str, SecurityScanResult] = {}
 
         logger.info("Container security scanner initialized (stub implementation)")
 
@@ -123,7 +121,7 @@ class ContainerSecurityScanner:
         """
         return self._scan_results.get(scan_id)
 
-    def list_scans(self, image_name: Optional[str] = None) -> List[Dict[str, Any]]:
+    def list_scans(self, image_name: Optional[str] = None) -> list[dict[str, Any]]:
         """List security scans.
 
         Args:
@@ -154,7 +152,7 @@ class ContainerSecurityScanner:
 
         return scans
 
-    def generate_compliance_report(self, scan_id: str) -> Dict[str, Any]:
+    def generate_compliance_report(self, scan_id: str) -> dict[str, Any]:
         """Generate compliance report for a scan.
 
         Args:
@@ -200,7 +198,7 @@ class ContainerSecurityScanner:
 def scan_container_security(
     image_name: str,
     image_tag: str,
-    scanner_config: Optional[Dict[str, Any]] = None
+    scanner_config: Optional[dict[str, Any]] = None
 ) -> SecurityScanResult:
     """Scan container image for security vulnerabilities.
 

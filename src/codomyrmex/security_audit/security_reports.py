@@ -4,15 +4,14 @@ Security Reports for Codomyrmex Security Audit Module.
 Provides comprehensive security reporting and assessment generation capabilities.
 """
 
+import json
 import os
 import sys
-import json
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
+from typing import Any, Optional
+
 import jinja2
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +21,7 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
-    from logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
@@ -40,14 +39,14 @@ class SecurityReport:
     generated_at: datetime
     target_system: str
     executive_summary: str
-    risk_assessment: Dict[str, Any]
-    findings: List[Dict[str, Any]] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
-    compliance_status: Dict[str, Any] = field(default_factory=dict)
-    metrics: Dict[str, Any] = field(default_factory=dict)
-    appendices: List[Dict[str, Any]] = field(default_factory=list)
+    risk_assessment: dict[str, Any]
+    findings: list[dict[str, Any]] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
+    compliance_status: dict[str, Any] = field(default_factory=dict)
+    metrics: dict[str, Any] = field(default_factory=dict)
+    appendices: list[dict[str, Any]] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert report to dictionary format."""
         return {
             "report_id": self.report_id,
@@ -86,7 +85,7 @@ class SecurityReportGenerator:
         self.template_dir = template_dir or os.path.join(
             os.path.dirname(__file__), "templates"
         )
-        self.templates: Dict[str, jinja2.Template] = {}
+        self.templates: dict[str, jinja2.Template] = {}
 
         # Initialize Jinja2 environment
         self._setup_jinja2()
@@ -222,7 +221,7 @@ class SecurityReportGenerator:
             try:
                 with open(template_path, "w") as f:
                     f.write(template_content)
-            except Exception as e:
+            except (OSError, PermissionError, IOError) as e:
                 logger.warning(f"Failed to create template {template_name}: {e}")
 
     def _format_datetime_filter(self, dt):
@@ -253,9 +252,9 @@ class SecurityReportGenerator:
 
     def generate_comprehensive_report(
         self,
-        vulnerability_data: Dict[str, Any],
-        compliance_data: Dict[str, Any],
-        monitoring_data: Dict[str, Any],
+        vulnerability_data: dict[str, Any],
+        compliance_data: dict[str, Any],
+        monitoring_data: dict[str, Any],
     ) -> SecurityReport:
         """
         Generate a comprehensive security report from various data sources.
@@ -319,7 +318,7 @@ class SecurityReportGenerator:
 
         return report
 
-    def _analyze_vulnerabilities(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_vulnerabilities(self, data: dict[str, Any]) -> dict[str, Any]:
         """Analyze vulnerability data."""
         vulnerabilities = data.get("vulnerabilities", [])
 
@@ -351,7 +350,7 @@ class SecurityReportGenerator:
 
         return analysis
 
-    def _analyze_compliance(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_compliance(self, data: dict[str, Any]) -> dict[str, Any]:
         """Analyze compliance data."""
         compliance_checks = data.get("compliance_checks", [])
 
@@ -389,7 +388,7 @@ class SecurityReportGenerator:
 
         return analysis
 
-    def _analyze_monitoring(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_monitoring(self, data: dict[str, Any]) -> dict[str, Any]:
         """Analyze security monitoring data."""
         events = data.get("events", [])
 
@@ -415,14 +414,14 @@ class SecurityReportGenerator:
             analysis["events_by_severity"][severity] += 1
 
         # Get recent events (last 24 hours)
-        cutoff_time = datetime.now(timezone.utc)  # Would need proper timestamp parsing
+        datetime.now(timezone.utc)  # Would need proper timestamp parsing
         analysis["recent_events"] = events[:20]  # Simplified
 
         return analysis
 
     def _calculate_overall_risk(
-        self, vuln_analysis: Dict, compliance_analysis: Dict, monitoring_analysis: Dict
-    ) -> Dict[str, Any]:
+        self, vuln_analysis: dict, compliance_analysis: dict, monitoring_analysis: dict
+    ) -> dict[str, Any]:
         """Calculate overall risk assessment."""
         # Risk scoring algorithm
         risk_score = 0
@@ -479,14 +478,14 @@ class SecurityReportGenerator:
 
     def _generate_executive_summary(
         self,
-        vuln_analysis: Dict,
-        compliance_analysis: Dict,
-        monitoring_analysis: Dict,
-        risk_assessment: Dict,
+        vuln_analysis: dict,
+        compliance_analysis: dict,
+        monitoring_analysis: dict,
+        risk_assessment: dict,
     ) -> str:
         """Generate executive summary."""
         summary = (
-            f"This security assessment evaluated the target system and identified "
+            "This security assessment evaluated the target system and identified "
         )
 
         if vuln_analysis["total_vulnerabilities"] > 0:
@@ -508,8 +507,8 @@ class SecurityReportGenerator:
         return summary
 
     def _generate_recommendations(
-        self, vuln_analysis: Dict, compliance_analysis: Dict, monitoring_analysis: Dict
-    ) -> List[str]:
+        self, vuln_analysis: dict, compliance_analysis: dict, monitoring_analysis: dict
+    ) -> list[str]:
         """Generate security recommendations."""
         recommendations = []
 
@@ -548,8 +547,8 @@ class SecurityReportGenerator:
         return recommendations
 
     def _compile_findings(
-        self, vuln_analysis: Dict, compliance_analysis: Dict, monitoring_analysis: Dict
-    ) -> List[Dict[str, Any]]:
+        self, vuln_analysis: dict, compliance_analysis: dict, monitoring_analysis: dict
+    ) -> list[dict[str, Any]]:
         """Compile all security findings."""
         findings = []
 
@@ -592,8 +591,8 @@ class SecurityReportGenerator:
         return findings
 
     def _calculate_metrics(
-        self, vuln_analysis: Dict, compliance_analysis: Dict, monitoring_analysis: Dict
-    ) -> Dict[str, Any]:
+        self, vuln_analysis: dict, compliance_analysis: dict, monitoring_analysis: dict
+    ) -> dict[str, Any]:
         """Calculate security metrics."""
         return {
             "vulnerability_metrics": {
@@ -648,7 +647,7 @@ class SecurityReportGenerator:
             logger.info(f"Security report exported to {output_path}")
             return True
 
-        except Exception as e:
+        except (OSError, PermissionError, IOError, ValueError, TypeError) as e:
             logger.error(f"Failed to export security report: {e}")
             return False
 
@@ -664,9 +663,9 @@ class SecurityReportGenerator:
 
 # Convenience functions
 def generate_security_report(
-    vulnerability_data: Dict[str, Any],
-    compliance_data: Dict[str, Any],
-    monitoring_data: Dict[str, Any],
+    vulnerability_data: dict[str, Any],
+    compliance_data: dict[str, Any],
+    monitoring_data: dict[str, Any],
     output_path: Optional[str] = None,
 ) -> SecurityReport:
     """

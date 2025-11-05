@@ -28,6 +28,6 @@ User onboarding and quick start documentation coordination for Codomyrmex, provi
 - **📦 Installation Guide**: [installation.md](installation.md) - Complete setup for all platforms
 - **⚡ Quick Start**: [quickstart.md](quickstart.md) - 5-minute hands-on experience
 - **🎓 Module Creation Tutorial**: [tutorials/creating-a-module.md](tutorials/creating-a-module.md) - Learn by building
-- **🔌 API Reference**: [../../reference/api-complete.md](../../reference/api-complete.md) - Complete API documentation
-- **🎮 Interactive Examples**: [../../../examples/README.md](../../../examples/README.md) - Hands-on demonstrations
-- **🔧 Troubleshooting**: [../../reference/troubleshooting.md](../../reference/troubleshooting.md) - Common setup issues
+- **🔌 API Reference**: [../reference/api-complete.md](../reference/api-complete.md) - Complete API documentation
+- **🎮 Interactive Examples**: [../../examples/README.md](../../examples/README.md) - Hands-on demonstrations
+- **🔧 Troubleshooting**: [../reference/troubleshooting.md](../reference/troubleshooting.md) - Common setup issues

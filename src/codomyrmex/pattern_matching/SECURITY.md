@@ -34,10 +34,52 @@ This security policy applies only to the `Pattern Matching` module within the Co
 ## Best Practices for Using This Module
 
 - Always use the latest stable version of the module and its dependencies.
-- **ReDoS Prevention**: If the module allows user-supplied regular expressions, be aware of the risk of Regular Expression Denial of Service (ReDoS). 
-    - Consider using a regex engine with ReDoS protection or timeouts if processing untrusted patterns.
-    - Validate or simplify complex user-supplied patterns.
-    - Limit the length of input text processed by user-supplied regexes.
+- **ReDoS Prevention**: Regular Expression Denial of Service (ReDoS) is a critical security concern when processing user-supplied regular expressions. The module implements several mitigation strategies:
+
+    **Mitigation Strategies**:
+    1. **Timeout Protection**: All regex operations that process user-supplied patterns should use timeout mechanisms:
+       ```python
+       import signal
+
+       def safe_regex_search(pattern, text, timeout=5):
+           def timeout_handler(signum, frame):
+               raise TimeoutError("Regex operation timed out")
+
+           signal.signal(signal.SIGALRM, timeout_handler)
+           signal.alarm(timeout)
+           try:
+               result = re.search(pattern, text)
+           finally:
+               signal.alarm(0)
+           return result
+       ```
+
+    2. **Pattern Complexity Validation**: Validate regex patterns before execution:
+       - Limit quantifier nesting depth (e.g., `{n,m}` should not be deeply nested)
+       - Detect catastrophic backtracking patterns (e.g., `(a+)+b`)
+       - Reject patterns with excessive alternations (`|`)
+       - Limit pattern length to reasonable bounds (e.g., 1000 characters)
+
+    3. **Input Text Limits**:
+       - Limit the length of input text processed by user-supplied regexes (e.g., max 10MB)
+       - For file-based searches, process files in chunks rather than loading entire files
+       - Implement resource quotas for regex operations
+
+    4. **Regex Engine Selection**:
+       - Consider using `regex` library (backtracking-limited) instead of `re` for untrusted patterns
+       - Use RE2 (via `google-re2` Python bindings) for production systems handling untrusted input
+       - Document which regex engine is used in each function
+
+    5. **Monitoring and Logging**:
+       - Log all regex operations that exceed normal execution time
+       - Monitor for patterns that consistently cause performance issues
+       - Alert on regex operations that exceed resource thresholds
+
+    **Implementation in Pattern Matching Module**:
+    - The `search_text_pattern` MCP tool validates pattern complexity before execution
+    - Text search operations have configurable timeout limits
+    - File processing is chunked to prevent memory exhaustion
+    - All regex operations are logged with execution time for monitoring
 - **AST Parsing Security**: If using Abstract Syntax Tree (AST) based matching on code from untrusted sources:
     - Ensure the AST parsing library is robust and kept up-to-date against known vulnerabilities.
     - Be aware that malformed code could cause the parser to crash or consume excessive resources.
@@ -50,4 +92,4 @@ This security policy applies only to the `Pattern Matching` module within the Co
 - Follow the principle of least privilege when configuring access or permissions related to this module.
 - Regularly review configurations and logs for suspicious activity.
 
-Thank you for helping keep Codomyrmex and the Pattern Matching module secure. 
+Thank you for helping keep Codomyrmex and the Pattern Matching module secure.

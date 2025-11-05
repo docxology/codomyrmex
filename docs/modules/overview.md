@@ -28,48 +28,48 @@ graph TD
         InteractiveShell["Interactive<br/>Shell"]
         SystemDiscovery["System Discovery<br/>& Orchestration"]
     end
-    
+
     subgraph "Service Layer"
         AICodeEditing["AI Code<br/>Editing"]
         Documentation["Documentation<br/>Generation"]
         BuildSynthesis["Build<br/>Synthesis"]
         StaticAnalysis["Static Analysis<br/>& Quality"]
     end
-    
+
     subgraph "Core Layer"
         CodeExecution["Code Execution<br/>Sandbox"]
         DataVisualization["Data Visualization<br/>& Plotting"]
         PatternMatching["Pattern<br/>Matching"]
         GitOperations["Git Operations<br/>& Version Control"]
     end
-    
+
     subgraph "Foundation Layer"
         LoggingMonitoring["Logging &<br/>Monitoring"]
         EnvironmentSetup["Environment<br/>Setup"]
         ModelContextProtocol["Model Context<br/>Protocol"]
         TerminalInterface["Terminal<br/>Interface"]
     end
-    
+
     %% Dependencies flow upward (dotted lines show "depends on")
     AICodeEditing -.-> LoggingMonitoring
     AICodeEditing -.-> EnvironmentSetup
     AICodeEditing -.-> ModelContextProtocol
-    
+
     Documentation -.-> LoggingMonitoring
     Documentation -.-> BuildSynthesis
-    
+
     BuildSynthesis -.-> StaticAnalysis
     BuildSynthesis -.-> LoggingMonitoring
-    
+
     StaticAnalysis -.-> LoggingMonitoring
     StaticAnalysis -.-> PatternMatching
-    
+
     CodeExecution -.-> LoggingMonitoring
     DataVisualization -.-> LoggingMonitoring
     PatternMatching -.-> LoggingMonitoring
     PatternMatching -.-> EnvironmentSetup
     GitOperations -.-> LoggingMonitoring
-    
+
     InteractiveShell -.-> TerminalInterface
     InteractiveShell -.-> SystemDiscovery
     SystemDiscovery -.-> LoggingMonitoring
@@ -146,7 +146,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 logger.info("Code generation completed", extra={"event_type": "code_generated"})
 
-# Subscribing to events  
+# Subscribing to events
 def on_code_generated(event_data):
     # Automatically run static analysis on generated code
     pass
@@ -159,13 +159,13 @@ Modules can be chained together in processing pipelines:
 def enhance_code_pipeline(source_code):
     # 1. Analyze existing code
     analysis = pattern_matching.analyze_code(source_code)
-    
+
     # 2. Generate improvements with AI
     improvements = ai_code_editing.suggest_improvements(source_code, analysis)
-    
+
     # 3. Validate generated code
     validation = code_execution_sandbox.validate_code(improvements)
-    
+
     return validation
 ```
 
@@ -183,7 +183,7 @@ def enhance_code_pipeline(source_code):
    my_new_module/
    ├── __init__.py                 # Module initialization
    ├── README.md                   # Module overview and usage
-   ├── API_SPECIFICATION.md        # API documentation  
+   ├── API_SPECIFICATION.md        # API documentation
    ├── MCP_TOOL_SPECIFICATION.md   # AI integration specs
    ├── CHANGELOG.md               # Version history
    ├── SECURITY.md                # Security considerations
@@ -218,16 +218,16 @@ def enhance_code_pipeline(source_code):
 
 2. **Error Handling**:
    ```python
-   from codomyrmex.logging_monitoring import get_logger
-   
+   from codomyrmex.logging_monitoring.logger_config import get_logger
+
    logger = get_logger(__name__)
-   
+
    try:
        result = risky_operation()
        logger.info("Operation completed successfully")
        return result
-   except SpecificError as e:
-       logger.error(f"Known error occurred: {e}")
+   except ValueError as e:
+       logger.error(f"Validation error: {e}")
        raise
    except Exception as e:
        logger.error(f"Unexpected error: {e}", exc_info=True)
@@ -238,10 +238,10 @@ def enhance_code_pipeline(source_code):
    ```python
    import os
    from codomyrmex.environment_setup import check_and_setup_env_vars
-   
+
    # Ensure environment is configured
    check_and_setup_env_vars(project_root)
-   
+
    # Use environment variables for configuration
    API_KEY = os.getenv("MY_MODULE_API_KEY")
    DEBUG_MODE = os.getenv("MY_MODULE_DEBUG", "false").lower() == "true"
@@ -275,7 +275,7 @@ def create_code_with_visualization():
         "Create a function that calculates prime numbers up to n",
         "python"
     )
-    
+
     if code_result["status"] == "success":
         # Create visualization of the process
         create_bar_chart(

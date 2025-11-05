@@ -4,8 +4,8 @@ import asyncio
 import json
 import logging
 import time
-from typing import AsyncGenerator, Dict, List, Optional, Union
-from urllib.parse import urljoin
+from collections.abc import AsyncGenerator
+from typing import Optional, Union
 
 import aiohttp
 import requests
@@ -78,7 +78,7 @@ class OllamaClient:
 
         # Setup requests session with retry logic
         self.session = session or self._create_session()
-        self._models_cache: Optional[List[Dict]] = None
+        self._models_cache: Optional[list[dict]] = None
         self._models_cache_time: Optional[float] = None
         self._cache_ttl = 300  # 5 minutes
 
@@ -110,7 +110,7 @@ class OllamaClient:
             logger.error(f"Connection check failed: {e}")
             return False
 
-    def list_models(self, use_cache: bool = True) -> List[Dict]:
+    def list_models(self, use_cache: bool = True) -> list[dict]:
         """
         List available models.
 
@@ -168,7 +168,7 @@ class OllamaClient:
         self,
         prompt: str,
         model: Optional[str] = None,
-        options: Optional[Dict] = None,
+        options: Optional[dict] = None,
         stream: bool = False,
     ) -> Union[str, AsyncGenerator[str, None]]:
         """
@@ -202,7 +202,7 @@ class OllamaClient:
         else:
             return self._generate_sync(payload)
 
-    def _generate_sync(self, payload: Dict) -> str:
+    def _generate_sync(self, payload: dict) -> str:
         """Synchronous text generation."""
         try:
             response = self.session.post(
@@ -223,7 +223,7 @@ class OllamaClient:
         except Exception as e:
             raise OllamaError(f"Unexpected error during generation: {e}")
 
-    async def _generate_stream(self, payload: Dict) -> AsyncGenerator[str, None]:
+    async def _generate_stream(self, payload: dict) -> AsyncGenerator[str, None]:
         """Asynchronous streaming text generation."""
         timeout = aiohttp.ClientTimeout(total=self.timeout)
 
@@ -256,9 +256,9 @@ class OllamaClient:
 
     def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         model: Optional[str] = None,
-        options: Optional[Dict] = None,
+        options: Optional[dict] = None,
         stream: bool = False,
     ) -> Union[str, AsyncGenerator[str, None]]:
         """
@@ -292,7 +292,7 @@ class OllamaClient:
         else:
             return self._chat_sync(payload)
 
-    def _chat_sync(self, payload: Dict) -> str:
+    def _chat_sync(self, payload: dict) -> str:
         """Synchronous chat completion."""
         try:
             response = self.session.post(
@@ -313,7 +313,7 @@ class OllamaClient:
         except Exception as e:
             raise OllamaError(f"Unexpected error during chat: {e}")
 
-    async def _chat_stream(self, payload: Dict) -> AsyncGenerator[str, None]:
+    async def _chat_stream(self, payload: dict) -> AsyncGenerator[str, None]:
         """Asynchronous streaming chat completion."""
         timeout = aiohttp.ClientTimeout(total=self.timeout)
 
@@ -344,7 +344,7 @@ class OllamaClient:
         except Exception as e:
             raise OllamaError(f"Unexpected error during streaming chat: {e}")
 
-    def get_model_info(self, model: Optional[str] = None) -> Dict:
+    def get_model_info(self, model: Optional[str] = None) -> dict:
         """
         Get detailed information about a model.
 

@@ -5,22 +5,22 @@ This module contains extensive unit tests for the ResourceManager class,
 covering all public methods, error conditions, and edge cases.
 """
 
-import pytest
 import threading
 import time
-from unittest.mock import Mock, patch, MagicMock
 
-from codomyrmex.project_orchestration.resource_manager import (
-    ResourceManager,
-    Resource,
-)
+import pytest
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.project_orchestration.resource_manager import (
+    Resource,
+    ResourceManager,
+)
 
 logger = get_logger(__name__)
 from codomyrmex.project_orchestration.resource_manager import (
-    ResourceType,
-    ResourceStatus,
     ResourceAllocation,
+    ResourceStatus,
+    ResourceType,
     ResourceUsage,
 )
 

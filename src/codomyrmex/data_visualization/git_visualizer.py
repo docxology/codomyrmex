@@ -14,32 +14,30 @@ This module provides comprehensive Git visualization capabilities including:
 
 import os
 import sys
-from typing import List, Dict, Any, Optional, Union, Tuple
-from pathlib import Path
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import numpy as np
 from datetime import datetime, timedelta
-import json
+from pathlib import Path
+from typing import Any
+
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+
+from .mermaid_generator import MermaidDiagramGenerator
 
 # Import from data_visualization module
 from .plot_utils import (
+    apply_common_aesthetics,
     get_codomyrmex_logger,
     save_plot,
-    apply_common_aesthetics,
-    DEFAULT_FIGURE_SIZE,
 )
-from codomyrmex.exceptions import CodomyrmexError
-from .mermaid_generator import MermaidDiagramGenerator
 
 # Import git_operations if available
 try:
     from codomyrmex.git_operations.git_manager import (
+        check_git_availability,
         get_commit_history,
         get_current_branch,
         get_status,
         is_git_repository,
-        check_git_availability,
     )
 
     GIT_OPERATIONS_AVAILABLE = True
@@ -69,12 +67,12 @@ class GitVisualizer:
     def visualize_git_tree_png(
         self,
         repository_path: str = None,
-        branches: List[Dict[str, Any]] = None,
-        commits: List[Dict[str, Any]] = None,
+        branches: list[dict[str, Any]] = None,
+        commits: list[dict[str, Any]] = None,
         title: str = "Git Tree Visualization",
         output_path: str = None,
         show_plot: bool = False,
-        figure_size: Tuple[int, int] = (12, 8),
+        figure_size: tuple[int, int] = (12, 8),
         max_commits: int = 20,
     ) -> bool:
         """
@@ -239,8 +237,8 @@ class GitVisualizer:
     def visualize_git_tree_mermaid(
         self,
         repository_path: str = None,
-        branches: List[Dict[str, Any]] = None,
-        commits: List[Dict[str, Any]] = None,
+        branches: list[dict[str, Any]] = None,
+        commits: list[dict[str, Any]] = None,
         title: str = "Git Tree Diagram",
         output_path: str = None,
     ) -> str:
@@ -298,11 +296,11 @@ class GitVisualizer:
     def visualize_commit_activity_png(
         self,
         repository_path: str = None,
-        commits: List[Dict[str, Any]] = None,
+        commits: list[dict[str, Any]] = None,
         title: str = "Commit Activity",
         output_path: str = None,
         show_plot: bool = False,
-        figure_size: Tuple[int, int] = (12, 6),
+        figure_size: tuple[int, int] = (12, 6),
         days_back: int = 30,
     ) -> bool:
         """
@@ -390,7 +388,7 @@ class GitVisualizer:
                 f"Total: {total_commits} commits\nAvg: {avg_commits:.1f} commits/day",
                 transform=ax.transAxes,
                 va="top",
-                bbox=dict(boxstyle="round", facecolor="white", alpha=0.8),
+                bbox={"boxstyle": "round", "facecolor": "white", "alpha": 0.8},
             )
 
             plt.tight_layout()
@@ -412,7 +410,7 @@ class GitVisualizer:
             )
             return False
 
-    def _get_repo_data(self, repository_path: str, repo_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _get_repo_data(self, repository_path: str, repo_data: dict[str, Any]) -> dict[str, Any]:
         """Get repository data from path or use provided data."""
         if repository_path and GIT_OPERATIONS_AVAILABLE:
             repo_status = get_status(repository_path)
@@ -436,7 +434,7 @@ class GitVisualizer:
                 "total_commits": 50,
             }
 
-    def _plot_repository_status(self, ax, repo_data: Dict[str, Any]):
+    def _plot_repository_status(self, ax, repo_data: dict[str, Any]):
         """Plot repository status pie chart."""
         status = repo_data.get("status", {})
         status_data = {
@@ -454,7 +452,7 @@ class GitVisualizer:
             )
         ax.set_title("Repository Status")
 
-    def _plot_commit_timeline(self, ax, commits: List[Dict[str, Any]]):
+    def _plot_commit_timeline(self, ax, commits: list[dict[str, Any]]):
         """Plot recent commits timeline."""
         if not commits:
             return
@@ -465,7 +463,7 @@ class GitVisualizer:
                 date_str = commit.get("date", "")
                 date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
                 dates.append(date)
-            except:
+            except (ValueError, KeyError, AttributeError):
                 continue
 
         if dates:
@@ -475,7 +473,7 @@ class GitVisualizer:
             ax.set_title("Recent Commits Timeline")
             plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
 
-    def _plot_author_contributions(self, ax, commits: List[Dict[str, Any]]):
+    def _plot_author_contributions(self, ax, commits: list[dict[str, Any]]):
         """Plot top contributors bar chart."""
         author_counts = {}
         for commit in commits:
@@ -489,7 +487,7 @@ class GitVisualizer:
             ax.set_title("Top Contributors")
             ax.set_xlabel("Commits")
 
-    def _plot_branch_info(self, ax, repo_data: Dict[str, Any]):
+    def _plot_branch_info(self, ax, repo_data: dict[str, Any]):
         """Plot branch information text."""
         current_branch = repo_data.get("current_branch", "main")
         branch_info = f"Current: {current_branch}\nTotal Commits: {repo_data.get('total_commits', 0)}"
@@ -501,12 +499,12 @@ class GitVisualizer:
             ha="center",
             va="center",
             fontsize=12,
-            bbox=dict(boxstyle="round", facecolor=self.colors["main"], alpha=0.3),
+            bbox={"boxstyle": "round", "facecolor": self.colors["main"], "alpha": 0.3},
         )
         ax.set_title("Branch Info")
         ax.axis("off")
 
-    def _plot_commit_words(self, ax, commits: List[Dict[str, Any]]):
+    def _plot_commit_words(self, ax, commits: list[dict[str, Any]]):
         """Plot common commit words bar chart."""
         commit_words = {}
         for commit in commits:
@@ -523,7 +521,7 @@ class GitVisualizer:
             ax.set_title("Common Commit Words")
             ax.set_xlabel("Frequency")
 
-    def _plot_activity_heatmap(self, ax, commits: List[Dict[str, Any]]):
+    def _plot_activity_heatmap(self, ax, commits: list[dict[str, Any]]):
         """Plot weekly activity heatmap."""
         commit_dates = []
         for commit in commits:
@@ -531,7 +529,7 @@ class GitVisualizer:
                 date_str = commit.get("date", "")
                 date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
                 commit_dates.append(date)
-            except:
+            except (ValueError, KeyError, AttributeError):
                 continue
 
         if not commit_dates:
@@ -569,11 +567,11 @@ class GitVisualizer:
     def visualize_repository_summary_png(
         self,
         repository_path: str = None,
-        repo_data: Dict[str, Any] = None,
+        repo_data: dict[str, Any] = None,
         title: str = "Repository Summary",
         output_path: str = None,
         show_plot: bool = False,
-        figure_size: Tuple[int, int] = (14, 10),
+        figure_size: tuple[int, int] = (14, 10),
     ) -> bool:
         """
         Create a comprehensive PNG dashboard of repository statistics.
@@ -635,7 +633,7 @@ class GitVisualizer:
         repository_path: str,
         output_dir: str,
         report_name: str = "git_analysis_report",
-    ) -> Dict[str, bool]:
+    ) -> dict[str, bool]:
         """
         Create a comprehensive Git analysis report with both PNG and Mermaid outputs.
 
@@ -749,7 +747,7 @@ class GitVisualizer:
         else:
             return self.colors["commit"]
 
-    def _generate_sample_commits(self, days_back: int = 30) -> List[Dict[str, Any]]:
+    def _generate_sample_commits(self, days_back: int = 30) -> list[dict[str, Any]]:
         """Generate sample commit data for testing."""
         commits = []
         base_date = datetime.now()
@@ -773,7 +771,7 @@ class GitVisualizer:
 
         return commits
 
-    def _get_repository_structure(self, repository_path: str) -> Dict[str, Any]:
+    def _get_repository_structure(self, repository_path: str) -> dict[str, Any]:
         """Get basic repository directory structure."""
         structure = {}
         path = Path(repository_path)
@@ -809,19 +807,19 @@ class GitVisualizer:
         self,
         output_dir: str,
         report_name: str,
-        results: Dict[str, bool],
+        results: dict[str, bool],
         repository_path: str,
     ):
         """Create a summary report file."""
         summary_content = [
-            f"# Git Analysis Report",
-            f"",
+            "# Git Analysis Report",
+            "",
             f"**Repository:** {repository_path}",
             f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             f"**Report Name:** {report_name}",
-            f"",
-            f"## Generated Files",
-            f"",
+            "",
+            "## Generated Files",
+            "",
         ]
 
         for viz_type, success in results.items():
@@ -830,24 +828,24 @@ class GitVisualizer:
 
         summary_content.extend(
             [
-                f"",
-                f"## File Descriptions",
-                f"",
+                "",
+                "## File Descriptions",
+                "",
                 f"- **{report_name}_git_tree.png**: Git branch tree visualization",
                 f"- **{report_name}_git_tree.mmd**: Mermaid git branch diagram",
                 f"- **{report_name}_commit_activity.png**: Daily commit activity chart",
                 f"- **{report_name}_summary_dashboard.png**: Comprehensive repository dashboard",
                 f"- **{report_name}_workflow.mmd**: Git workflow diagram",
                 f"- **{report_name}_structure.mmd**: Repository structure diagram",
-                f"",
-                f"## Usage",
-                f"",
-                f"PNG files can be viewed directly or embedded in documents.",
-                f"Mermaid (.mmd) files can be rendered using:",
-                f"- Mermaid Live Editor (mermaid.live)",
-                f"- GitHub/GitLab markdown rendering",
-                f"- Mermaid CLI tools",
-                f"- VS Code Mermaid extensions",
+                "",
+                "## Usage",
+                "",
+                "PNG files can be viewed directly or embedded in documents.",
+                "Mermaid (.mmd) files can be rendered using:",
+                "- Mermaid Live Editor (mermaid.live)",
+                "- GitHub/GitLab markdown rendering",
+                "- Mermaid CLI tools",
+                "- VS Code Mermaid extensions",
             ]
         )
 
@@ -863,7 +861,7 @@ def visualize_git_repository(
     repository_path: str,
     output_dir: str = "./git_analysis",
     report_name: str = "git_report",
-) -> Dict[str, bool]:
+) -> dict[str, bool]:
     """
     Create comprehensive Git repository visualizations.
 
@@ -883,8 +881,8 @@ def visualize_git_repository(
 
 def create_git_tree_png(
     repository_path: str = None,
-    branches: List[Dict[str, Any]] = None,
-    commits: List[Dict[str, Any]] = None,
+    branches: list[dict[str, Any]] = None,
+    commits: list[dict[str, Any]] = None,
     output_path: str = "git_tree.png",
     title: str = "Git Tree Visualization",
 ) -> bool:
@@ -901,8 +899,8 @@ def create_git_tree_png(
 
 def create_git_tree_mermaid(
     repository_path: str = None,
-    branches: List[Dict[str, Any]] = None,
-    commits: List[Dict[str, Any]] = None,
+    branches: list[dict[str, Any]] = None,
+    commits: list[dict[str, Any]] = None,
     output_path: str = "git_tree.mmd",
     title: str = "Git Tree Diagram",
 ) -> str:

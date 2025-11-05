@@ -25,7 +25,7 @@ Module system architecture and design documentation coordination for Codomyrmex,
 - **📚 Documentation Hub**: [../../README.md](../../README.md) - Central documentation overview and navigation
 - **🏛️ Module Overview**: [overview.md](overview.md) - Module architecture and design principles
 - **🔗 Module Relationships**: [relationships.md](relationships.md) - Dependencies and integration patterns
-- **🏛️ Architecture**: [../../project/architecture.md](../../project/architecture.md) - System design context
-- **🔌 API Reference**: [../../reference/api-complete.md](../../reference/api-complete.md) - Module APIs
-- **📦 Module Template**: [../../../src/codomyrmex/module_template/README.md](../../../src/codomyrmex/module_template/README.md) - Template for creating new modules
-- **🎓 Module Tutorial**: [../../getting-started/tutorials/creating-a-module.md](../../getting-started/tutorials/creating-a-module.md) - Learn by building modules
+- **🏛️ Architecture**: [../project/architecture.md](../project/architecture.md) - System design context
+- **🔌 API Reference**: [../reference/api-complete.md](../reference/api-complete.md) - Module APIs
+- **📦 Module Template**: Module template is available at `src/codomyrmex/module_template/` for creating new modules
+- **🎓 Module Tutorial**: [../getting-started/tutorials/creating-a-module.md](../getting-started/tutorials/creating-a-module.md) - Learn by building modules

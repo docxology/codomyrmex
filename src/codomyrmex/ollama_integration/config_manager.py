@@ -7,11 +7,12 @@ preferences for the Codomyrmex Ollama integration.
 
 import json
 import time
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
-from dataclasses import dataclass, asdict
+from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
+
 from .model_runner import ExecutionOptions
 
 
@@ -32,7 +33,7 @@ class OllamaConfig:
 
     # Model preferences
     default_model: str = "llama3.1:latest"
-    preferred_models: List[str] = None
+    preferred_models: list[str] = None
 
     # Execution defaults
     default_options: ExecutionOptions = None
@@ -91,7 +92,7 @@ class ConfigManager:
         """
         try:
             if self.config_file.exists():
-                with open(self.config_file, 'r', encoding='utf-8') as f:
+                with open(self.config_file, encoding='utf-8') as f:
                     config_data = json.load(f)
 
                 # Filter out metadata fields that aren't part of OllamaConfig
@@ -167,7 +168,7 @@ class ConfigManager:
             self.logger.error(f"Error updating configuration: {e}")
             return False
 
-    def get_model_config(self, model_name: str) -> Optional[Dict[str, Any]]:
+    def get_model_config(self, model_name: str) -> Optional[dict[str, Any]]:
         """
         Get configuration for a specific model.
 
@@ -185,14 +186,14 @@ class ConfigManager:
 
         if model_config_file.exists():
             try:
-                with open(model_config_file, 'r', encoding='utf-8') as f:
+                with open(model_config_file, encoding='utf-8') as f:
                     return json.load(f)
             except Exception as e:
                 self.logger.warning(f"Error loading model config for {model_name}: {e}")
 
         return None
 
-    def save_model_config(self, model_name: str, config: Dict[str, Any]) -> bool:
+    def save_model_config(self, model_name: str, config: dict[str, Any]) -> bool:
         """
         Save configuration for a specific model.
 
@@ -229,7 +230,7 @@ class ConfigManager:
             self.logger.error(f"Error saving model config for {model_name}: {e}")
             return False
 
-    def get_execution_presets(self) -> Dict[str, ExecutionOptions]:
+    def get_execution_presets(self) -> dict[str, ExecutionOptions]:
         """
         Get predefined execution option presets.
 
@@ -299,7 +300,7 @@ class ConfigManager:
                             model_config_file = model_dir / "model_config.json"
                             if model_config_file.exists():
                                 try:
-                                    with open(model_config_file, 'r', encoding='utf-8') as f:
+                                    with open(model_config_file, encoding='utf-8') as f:
                                         export_data['model_configs'][model_dir.name] = json.load(f)
                                 except Exception as e:
                                     self.logger.warning(f"Error reading model config for {model_dir.name}: {e}")
@@ -331,7 +332,7 @@ class ConfigManager:
                 self.logger.error(f"Import file not found: {import_file}")
                 return False
 
-            with open(import_file, 'r', encoding='utf-8') as f:
+            with open(import_file, encoding='utf-8') as f:
                 import_data = json.load(f)
 
             # Update main configuration
@@ -368,7 +369,7 @@ class ConfigManager:
             self.logger.error(f"Error resetting configuration: {e}")
             return False
 
-    def validate_config(self) -> Dict[str, Any]:
+    def validate_config(self) -> dict[str, Any]:
         """
         Validate current configuration.
 

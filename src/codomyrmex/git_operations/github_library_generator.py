@@ -6,14 +6,13 @@ This script automatically generates a repository library file by fetching
 repositories from the GitHub API for a specified user.
 """
 
-import requests
-import json
-import sys
 import os
+import sys
 from datetime import datetime
-from typing import List, Dict, Optional
-from pathlib import Path
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Optional
+
+import requests
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -39,7 +38,7 @@ class GitHubLibraryGenerator:
             self.headers["Authorization"] = f"token {token}"
             self.headers["Accept"] = "application/vnd.github.v3+json"
 
-    def fetch_repositories(self) -> List[Dict]:
+    def fetch_repositories(self) -> list[dict]:
         """
         Fetch all repositories for the user.
 
@@ -79,7 +78,7 @@ class GitHubLibraryGenerator:
         print(f"Total repositories fetched: {len(repos)}")
         return repos
 
-    def categorize_repositories(self, repos: List[Dict]) -> Dict[str, List[Dict]]:
+    def categorize_repositories(self, repos: list[dict]) -> dict[str, list[dict]]:
         """
         Categorize repositories into OWN, FORK, and interesting categories.
 
@@ -141,7 +140,7 @@ class GitHubLibraryGenerator:
 
         return categories
 
-    def generate_library_content(self, categories: Dict[str, List[Dict]]) -> str:
+    def generate_library_content(self, categories: dict[str, list[dict]]) -> str:
         """
         Generate the repository library file content.
 

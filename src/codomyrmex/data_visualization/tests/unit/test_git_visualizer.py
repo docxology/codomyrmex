@@ -5,20 +5,18 @@ Tests Git-specific visualization functions with various inputs.
 """
 
 import os
-import pytest
-import tempfile
 import shutil
-from pathlib import Path
-from unittest.mock import patch, MagicMock
-import numpy as np
+import tempfile
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 from codomyrmex.data_visualization.git_visualizer import (
     GitVisualizer,
-    visualize_git_repository,
-    create_git_tree_png,
     create_git_tree_mermaid,
+    create_git_tree_png,
+    visualize_git_repository,
 )
-from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)

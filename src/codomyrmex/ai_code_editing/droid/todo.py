@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Sequence, Tuple
-from codomyrmex.exceptions import CodomyrmexError
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -31,7 +31,7 @@ class TodoItem:
     handler_path: str | None = None
 
     @classmethod
-    def parse(cls, raw: str) -> "TodoItem":
+    def parse(cls, raw: str) -> TodoItem:
         """Parse a single TODO line into a TodoItem.
 
         Accepts either:
@@ -64,11 +64,11 @@ class TodoManager:
 
     A class for handling todomanager operations.
     """
-    
+
     def __init__(self, todo_file: str | Path):
         self.todo_path = Path(todo_file)
 
-    def load(self) -> Tuple[List[TodoItem], List[TodoItem]]:
+    def load(self) -> tuple[list[TodoItem], list[TodoItem]]:
         """Load.
 
         Returns:        The result of the operation.
@@ -76,8 +76,8 @@ class TodoManager:
         if not self.todo_path.exists():
             return [], []
 
-        todo_items: List[TodoItem] = []
-        completed_items: List[TodoItem] = []
+        todo_items: list[TodoItem] = []
+        completed_items: list[TodoItem] = []
         bucket = None
         skipped_lines = []
 
@@ -131,13 +131,13 @@ class TodoManager:
         processed_list = list(processed)
         self.save(list(remaining), list(completed) + processed_list)
 
-    def validate(self) -> Tuple[bool, List[Tuple[int, str, str]]]:
+    def validate(self) -> tuple[bool, list[tuple[int, str, str]]]:
         """Validate the todo file; returns (is_valid, list_of_issues).
 
         Issues are tuples of (line_number, line_text, error_message).
         Accepts both new 3-column and legacy formats.
         """
-        issues: List[Tuple[int, str, str]] = []
+        issues: list[tuple[int, str, str]] = []
         if not self.todo_path.exists():
             return True, issues
 
@@ -170,8 +170,7 @@ class TodoManager:
 
         original_lines = self.todo_path.read_text(encoding="utf-8").splitlines()
         changed = 0
-        output_lines: List[str] = []
-        bucket = None  # track headers
+        output_lines: list[str] = []
 
         for line in original_lines:
             stripped = line.strip()
@@ -179,11 +178,9 @@ class TodoManager:
                 output_lines.append(line)
                 continue
             if stripped.upper() == TODO_HEADER:
-                bucket = "TODO"
                 output_lines.append(TODO_HEADER)
                 continue
             if stripped.upper() == COMPLETED_HEADER:
-                bucket = "COMPLETED"
                 output_lines.append(COMPLETED_HEADER)
                 continue
             if stripped.startswith("#"):

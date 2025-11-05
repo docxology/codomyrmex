@@ -4,16 +4,13 @@ API Documentation Generator for Codomyrmex API Documentation Module.
 Provides comprehensive API documentation generation from code analysis.
 """
 
+import ast
+import json
 import os
 import sys
-import json
-import inspect
-import ast
-from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Optional
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,14 +19,9 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-
-    logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -40,14 +32,14 @@ class APIEndpoint:
     method: str
     summary: str
     description: str = ""
-    parameters: List[Dict[str, Any]] = field(default_factory=list)
-    request_body: Optional[Dict[str, Any]] = None
-    responses: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    tags: List[str] = field(default_factory=list)
+    parameters: list[dict[str, Any]] = field(default_factory=list)
+    request_body: Optional[dict[str, Any]] = None
+    responses: dict[str, dict[str, Any]] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
     deprecated: bool = False
-    security: List[Dict[str, Any]] = field(default_factory=list)
+    security: list[dict[str, Any]] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert endpoint to dictionary format."""
         return {
             "path": self.path,
@@ -71,19 +63,19 @@ class APIDocumentation:
     version: str
     description: str
     base_url: str
-    endpoints: List[APIEndpoint] = field(default_factory=list)
-    schemas: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    security_schemes: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    tags: List[Dict[str, Any]] = field(default_factory=list)
+    endpoints: list[APIEndpoint] = field(default_factory=list)
+    schemas: dict[str, dict[str, Any]] = field(default_factory=dict)
+    security_schemes: dict[str, dict[str, Any]] = field(default_factory=dict)
+    tags: list[dict[str, Any]] = field(default_factory=list)
     generated_at: Optional[datetime] = None
-    contact_info: Dict[str, str] = field(default_factory=dict)
-    license_info: Dict[str, str] = field(default_factory=dict)
+    contact_info: dict[str, str] = field(default_factory=dict)
+    license_info: dict[str, str] = field(default_factory=dict)
 
     def __post_init__(self):
         if self.generated_at is None:
             self.generated_at = datetime.now(timezone.utc)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert documentation to dictionary format."""
         return {
             "openapi": "3.0.3",
@@ -104,7 +96,7 @@ class APIDocumentation:
             "security": list(self.security_schemes.keys()),
         }
 
-    def _build_paths(self) -> Dict[str, Any]:
+    def _build_paths(self) -> dict[str, Any]:
         """Build OpenAPI paths structure."""
         paths = {}
 
@@ -129,7 +121,7 @@ class APIDocumentationGenerator:
     - Documentation versioning
     """
 
-    def __init__(self, source_paths: Optional[List[str]] = None):
+    def __init__(self, source_paths: Optional[list[str]] = None):
         """
         Initialize the API documentation generator.
 
@@ -137,7 +129,7 @@ class APIDocumentationGenerator:
             source_paths: List of paths to scan for API endpoints
         """
         self.source_paths = source_paths or ["src"]
-        self.discovered_endpoints: List[APIEndpoint] = []
+        self.discovered_endpoints: list[APIEndpoint] = []
         self.documentation: Optional[APIDocumentation] = None
 
     def generate_documentation(
@@ -178,7 +170,7 @@ class APIDocumentationGenerator:
         )
         return self.documentation
 
-    def _discover_endpoints(self) -> List[APIEndpoint]:
+    def _discover_endpoints(self) -> list[APIEndpoint]:
         """Discover API endpoints from source code."""
         endpoints = []
 
@@ -188,11 +180,11 @@ class APIDocumentationGenerator:
 
         return endpoints
 
-    def _scan_directory(self, directory: str) -> List[APIEndpoint]:
+    def _scan_directory(self, directory: str) -> list[APIEndpoint]:
         """Scan directory for API endpoints."""
         endpoints = []
 
-        for root, dirs, files in os.walk(directory):
+        for root, _dirs, files in os.walk(directory):
             for file in files:
                 if file.endswith(".py"):
                     file_path = os.path.join(root, file)
@@ -200,12 +192,12 @@ class APIDocumentationGenerator:
 
         return endpoints
 
-    def _scan_python_file(self, file_path: str) -> List[APIEndpoint]:
+    def _scan_python_file(self, file_path: str) -> list[APIEndpoint]:
         """Scan Python file for API endpoints."""
         endpoints = []
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # Parse AST to find API-related code
@@ -276,7 +268,7 @@ class APIDocumentationGenerator:
             return decorator.func.attr
         return ""
 
-    def _parse_decorator_info(self, decorator: ast.Call) -> Dict[str, Any]:
+    def _parse_decorator_info(self, decorator: ast.Call) -> dict[str, Any]:
         """Parse decorator information."""
         info = {}
 
@@ -320,7 +312,7 @@ class APIDocumentationGenerator:
 
     def _extract_function_parameters(
         self, node: ast.FunctionDef
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Extract function parameters for API documentation."""
         parameters = []
 
@@ -336,7 +328,7 @@ class APIDocumentationGenerator:
 
         return parameters
 
-    def _substitute_variables(self, text: str, variables: Dict[str, str]) -> str:
+    def _substitute_variables(self, text: str, variables: dict[str, str]) -> str:
         """Substitute variables in text using ${VAR} syntax."""
         result = text
         for key, value in variables.items():
@@ -439,7 +431,7 @@ class APIDocumentationGenerator:
             logger.error(f"Failed to export API documentation: {e}")
             return False
 
-    def validate_documentation(self) -> List[str]:
+    def validate_documentation(self) -> list[str]:
         """
         Validate API documentation for completeness and accuracy.
 
@@ -474,7 +466,7 @@ class APIDocumentationGenerator:
 
         # Check for duplicate paths
         paths = [endpoint.path for endpoint in self.documentation.endpoints]
-        duplicates = set([x for x in paths if paths.count(x) > 1])
+        duplicates = {x for x in paths if paths.count(x) > 1}
         for duplicate in duplicates:
             issues.append(f"Duplicate endpoint path: {duplicate}")
 
@@ -485,7 +477,7 @@ class APIDocumentationGenerator:
 def generate_api_docs(
     title: str,
     version: str,
-    source_paths: Optional[List[str]] = None,
+    source_paths: Optional[list[str]] = None,
     base_url: str = "http://localhost:8000",
 ) -> APIDocumentation:
     """
@@ -504,7 +496,7 @@ def generate_api_docs(
     return generator.generate_documentation(title, version, base_url)
 
 
-def extract_api_specs(source_path: str) -> List[APIEndpoint]:
+def extract_api_specs(source_path: str) -> list[APIEndpoint]:
     """
     Convenience function to extract API specifications from source code.
 

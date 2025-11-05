@@ -1,11 +1,11 @@
 """High-level integration utilities for Ollama language models."""
 
-import asyncio
 import logging
-from typing import AsyncGenerator, Dict, List, Optional, Union
+from collections.abc import AsyncGenerator
+from typing import Optional, Union
 
 from .config import get_config
-from .ollama_client import OllamaClient, OllamaError, OllamaConnectionError, OllamaModelError
+from .ollama_client import OllamaClient, OllamaError
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ class OllamaManager:
         self,
         prompt: str,
         model: Optional[str] = None,
-        options: Optional[Dict] = None,
+        options: Optional[dict] = None,
         stream: bool = False,
     ) -> Union[str, AsyncGenerator[str, None]]:
         """
@@ -74,9 +74,9 @@ class OllamaManager:
 
     def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         model: Optional[str] = None,
-        options: Optional[Dict] = None,
+        options: Optional[dict] = None,
         stream: bool = False,
     ) -> Union[str, AsyncGenerator[str, None]]:
         """
@@ -107,7 +107,7 @@ class OllamaManager:
             logger.error(f"Chat completion failed: {e}")
             raise
 
-    def list_models(self) -> List[Dict]:
+    def list_models(self) -> list[dict]:
         """List available models."""
         try:
             return self.client.list_models()
@@ -156,7 +156,7 @@ def get_default_manager(**client_kwargs) -> OllamaManager:
 def generate_with_ollama(
     prompt: str,
     model: Optional[str] = None,
-    options: Optional[Dict] = None,
+    options: Optional[dict] = None,
     base_url: Optional[str] = None,
     timeout: Optional[int] = None,
 ) -> str:
@@ -184,7 +184,7 @@ def generate_with_ollama(
 async def stream_with_ollama(
     prompt: str,
     model: Optional[str] = None,
-    options: Optional[Dict] = None,
+    options: Optional[dict] = None,
     base_url: Optional[str] = None,
     timeout: Optional[int] = None,
 ) -> AsyncGenerator[str, None]:
@@ -211,9 +211,9 @@ async def stream_with_ollama(
 
 
 def chat_with_ollama(
-    messages: List[Dict[str, str]],
+    messages: list[dict[str, str]],
     model: Optional[str] = None,
-    options: Optional[Dict] = None,
+    options: Optional[dict] = None,
     base_url: Optional[str] = None,
     timeout: Optional[int] = None,
 ) -> str:
@@ -239,9 +239,9 @@ def chat_with_ollama(
 
 
 async def stream_chat_with_ollama(
-    messages: List[Dict[str, str]],
+    messages: list[dict[str, str]],
     model: Optional[str] = None,
-    options: Optional[Dict] = None,
+    options: Optional[dict] = None,
     base_url: Optional[str] = None,
     timeout: Optional[int] = None,
 ) -> AsyncGenerator[str, None]:
@@ -292,14 +292,15 @@ def check_ollama_availability(
     finally:
         try:
             client.close()
-        except:
+        except (AttributeError, RuntimeError):
+            # Client may already be closed or not initialized
             pass
 
 
 def get_available_models(
     base_url: Optional[str] = None,
     timeout: Optional[int] = None,
-) -> List[str]:
+) -> list[str]:
     """
     Get list of available model names.
 
@@ -322,15 +323,16 @@ def get_available_models(
     finally:
         try:
             client.close()
-        except:
+        except (AttributeError, RuntimeError):
+            # Client may already be closed or not initialized
             pass
 
 
 def create_chat_messages(
     system_prompt: Optional[str] = None,
     user_message: str = "",
-    conversation_history: Optional[List[Dict[str, str]]] = None,
-) -> List[Dict[str, str]]:
+    conversation_history: Optional[list[dict[str, str]]] = None,
+) -> list[dict[str, str]]:
     """
     Create chat message format for Ollama.
 

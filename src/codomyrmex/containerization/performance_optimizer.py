@@ -9,12 +9,11 @@ and efficiency improvements.
 import json
 import statistics
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -41,8 +40,8 @@ class OptimizationSuggestion:
     description: str
     estimated_impact: str  # "high", "medium", "low"
     implementation_effort: str  # "low", "medium", "high"
-    steps: List[str]
-    expected_savings: Dict[str, Any]
+    steps: list[str]
+    expected_savings: dict[str, Any]
 
 
 class ContainerOptimizer:
@@ -58,14 +57,14 @@ class ContainerOptimizer:
         self.optimization_data_dir = self.workspace_dir / "container_optimization"
         self._ensure_directories()
 
-        self._metrics_history: List[ContainerMetrics] = []
-        self._suggestions: List[OptimizationSuggestion] = []
+        self._metrics_history: list[ContainerMetrics] = []
+        self._suggestions: list[OptimizationSuggestion] = []
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
         self.optimization_data_dir.mkdir(parents=True, exist_ok=True)
 
-    def record_metrics(self, container_id: str, metrics: Dict[str, Any]):
+    def record_metrics(self, container_id: str, metrics: dict[str, Any]):
         """Record container performance metrics.
 
         Args:
@@ -91,7 +90,7 @@ class ContainerOptimizer:
 
         logger.debug(f"Recorded metrics for container {container_id}")
 
-    def analyze_performance(self, container_id: str, hours: int = 24) -> Dict[str, Any]:
+    def analyze_performance(self, container_id: str, hours: int = 24) -> dict[str, Any]:
         """Analyze container performance over time.
 
         Args:
@@ -132,7 +131,7 @@ class ContainerOptimizer:
 
         return analysis
 
-    def _calculate_stats(self, values: List[float]) -> Dict[str, float]:
+    def _calculate_stats(self, values: list[float]) -> dict[str, float]:
         """Calculate basic statistics for a list of values."""
         if not values:
             return {}
@@ -146,7 +145,7 @@ class ContainerOptimizer:
             "p95": statistics.quantiles(values, n=20)[18] if len(values) >= 20 else max(values)
         }
 
-    def _identify_bottlenecks(self, metrics: List[ContainerMetrics]) -> List[Dict[str, Any]]:
+    def _identify_bottlenecks(self, metrics: list[ContainerMetrics]) -> list[dict[str, Any]]:
         """Identify performance bottlenecks."""
         bottlenecks = []
 
@@ -186,7 +185,7 @@ class ContainerOptimizer:
 
         return bottlenecks
 
-    def _generate_optimization_suggestions(self, metrics: List[ContainerMetrics]) -> List[OptimizationSuggestion]:
+    def _generate_optimization_suggestions(self, metrics: list[ContainerMetrics]) -> list[OptimizationSuggestion]:
         """Generate container optimization suggestions."""
         suggestions = []
 
@@ -247,7 +246,7 @@ class ContainerOptimizer:
         self,
         container_id: str,
         target_improvement: float = 0.2
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Generate comprehensive container optimization plan.
 
         Args:
@@ -303,7 +302,7 @@ class ContainerOptimizer:
         logger.info(f"Generated optimization plan for container {container_id}")
         return optimization_plan
 
-    def _create_implementation_timeline(self, suggestions: List[OptimizationSuggestion]) -> List[Dict[str, Any]]:
+    def _create_implementation_timeline(self, suggestions: list[OptimizationSuggestion]) -> list[dict[str, Any]]:
         """Create implementation timeline for suggestions."""
         timeline = []
         current_week = 0
@@ -328,7 +327,7 @@ class ContainerOptimizer:
 
         return timeline
 
-    def get_optimization_history(self, container_id: str) -> List[Dict[str, Any]]:
+    def get_optimization_history(self, container_id: str) -> list[dict[str, Any]]:
         """Get optimization history for a container.
 
         Args:
@@ -342,7 +341,7 @@ class ContainerOptimizer:
         # Look for optimization plan files
         for plan_file in self.optimization_data_dir.glob(f"container_optimization_{container_id}_*.json"):
             try:
-                with open(plan_file, 'r') as f:
+                with open(plan_file) as f:
                     plan_data = json.load(f)
 
                 history.append({
@@ -360,9 +359,9 @@ class ContainerOptimizer:
 
 
 def optimize_containers(
-    container_config: Dict[str, Any],
+    container_config: dict[str, Any],
     workspace_dir: Optional[str] = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Optimize container performance.
 
     Args:

@@ -7,12 +7,9 @@ automating build processes and artifact generation.
 """
 
 import os
-import sys
 import subprocess
-import logging
+import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,35 +18,7 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-except ImportError:
-    # Fallback for environments where logging_monitoring might not be discoverable
-    import logging
-
-    print(
-        "Warning: Could not import Codomyrmex logging. Using standard Python logging.",
-        file=sys.stderr,
-    )
-
-    def setup_logging():
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        )
-
-    def get_logger(name):
-        _logger = logging.getLogger(name)
-        if not _logger.handlers:
-            _handler = logging.StreamHandler(sys.stdout)
-            _formatter = logging.Formatter(
-                "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-            )
-            _handler.setFormatter(_formatter)
-            _logger.addHandler(_handler)
-            _logger.setLevel(logging.INFO)
-        return _logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 logger = get_logger(__name__)
 
@@ -75,19 +44,30 @@ def check_build_environment():
         except FileNotFoundError:
             logger.warning(f"  ❌ {tool} not found")
 
+    # Build result dictionary
+    result = {
+        "python_available": "python3" in available_tools,
+        "make_available": "make" in available_tools,
+        "cmake_available": "cmake" in available_tools,
+        "ninja_available": "ninja" in available_tools,
+        "gcc_available": "gcc" in available_tools,
+        "available_tools": available_tools,
+        "all_required_available": len(available_tools) >= 1,  # At least Python should be available
+    }
+
     if available_tools:
         logger.info(
             f"Build environment check passed. Available tools: {', '.join(available_tools)}"
         )
-        return True
+        return result
     else:
         logger.error(
             "No build tools found. Please install build tools for your platform."
         )
-        return False
+        return result
 
 
-def run_build_command(command: List[str], cwd: str = None) -> Tuple[bool, str, str]:
+def run_build_command(command: list[str], cwd: str = None) -> tuple[bool, str, str]:
     """
     Run a build command and return the result.
 
@@ -220,7 +200,7 @@ def _create_python_package(source_path: Path, output_path: Path) -> bool:
         return False
 
 
-def validate_build_output(output_path: str) -> Dict[str, any]:
+def validate_build_output(output_path: str) -> dict[str, any]:
     """
     Validate that build output meets expectations.
 
@@ -261,7 +241,7 @@ def validate_build_output(output_path: str) -> Dict[str, any]:
         # Basic validation for Python files
         if output_path.suffix == ".py":
             try:
-                with open(output_path, "r") as f:
+                with open(output_path) as f:
                     content = f.read()
                     if "import" not in content and "def " not in content:
                         validation_results["errors"].append(
@@ -274,7 +254,7 @@ def validate_build_output(output_path: str) -> Dict[str, any]:
     return validation_results
 
 
-def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]:
+def orchestrate_build_pipeline(build_config: dict[str, any]) -> dict[str, any]:
     """
     Orchestrate a complete build pipeline.
 
@@ -395,7 +375,7 @@ def orchestrate_build_pipeline(build_config: Dict[str, any]) -> Dict[str, any]:
     return results
 
 
-def _install_build_dependencies(dependencies: List[str]) -> bool:
+def _install_build_dependencies(dependencies: list[str]) -> bool:
     """Install build dependencies."""
     logger.info(f"Installing {len(dependencies)} build dependencies")
 

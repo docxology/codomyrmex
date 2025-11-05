@@ -5,43 +5,42 @@ Tests the complete integration between git_operations and data_visualization mod
 for comprehensive Git repository analysis and visualization.
 """
 
-import os
-import pytest
-import tempfile
-import shutil
-from pathlib import Path
-from unittest.mock import patch, MagicMock
 import json
+import os
+import shutil
+import tempfile
+from unittest.mock import patch
+
+import pytest
 
 # Test both modules' integration
 from codomyrmex.data_visualization import (
     GitVisualizer,
-    create_git_tree_png,
-    create_git_tree_mermaid,
     create_git_branch_diagram,
+    create_git_tree_mermaid,
+    create_git_tree_png,
     create_git_workflow_diagram,
     visualize_git_repository,
 )
-from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 try:
     from codomyrmex.git_operations import (
-        initialize_git_repository,
         add_files,
         commit_changes,
         create_branch,
-        switch_branch,
-        get_status,
         get_commit_history,
+        get_status,
+        initialize_git_repository,
+        switch_branch,
     )
     from codomyrmex.git_operations.visualization_integration import (
         create_git_analysis_report,
-        visualize_git_branches,
-        visualize_commit_activity,
         get_repository_metadata,
+        visualize_commit_activity,
+        visualize_git_branches,
     )
 
     GIT_OPS_AVAILABLE = True
@@ -123,11 +122,11 @@ Authentication module.
 class AuthManager:
     def __init__(self):
         self.users = {}
-    
+
     def login(self, username, password):
         # Simple authentication logic
         return username in self.users and self.users[username] == password
-    
+
     def register(self, username, password):
         self.users[username] = password
         return True
@@ -153,7 +152,7 @@ from src.auth import AuthManager
 class TestAuthManager(unittest.TestCase):
     def setUp(self):
         self.auth = AuthManager()
-    
+
     def test_register_and_login(self):
         self.assertTrue(self.auth.register("testuser", "password123"))
         self.assertTrue(self.auth.login("testuser", "password123"))
@@ -226,7 +225,7 @@ if __name__ == "__main__":
         # Verify README was created and contains expected content
         readme_path = os.path.join(self.output_dir, "integration_test_report_README.md")
         if os.path.exists(readme_path):
-            with open(readme_path, "r") as f:
+            with open(readme_path) as f:
                 readme_content = f.read()
                 assert "Git Analysis Report" in readme_content
                 assert self.repo_dir in readme_content

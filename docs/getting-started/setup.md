@@ -515,7 +515,7 @@ for module in required_modules:
 
 ### **Development Environment Setup**
 
-For contributors, see the complete development environment setup in [Development Setup Guide](environment-setup.md).
+For contributors, see the complete development environment setup in [Development Setup Guide](../development/environment-setup.md).
 
 ### **Production Deployment**
 
@@ -529,7 +529,7 @@ For integrating with CI/CD systems, see [External Systems Integration](../integr
 
 - **[📦 Module-Specific Setup](../modules/overview.md#module-specific-configuration)** - Individual module configuration
 - **[🔧 Environment Variables Reference](../reference/troubleshooting.md#environment-variable-issues)** - Complete environment configuration guide
-- **[⚙️ Module Configuration](../../../src/codomyrmex/*/README.md)** - Individual module setup instructions
+- **[⚙️ Module Configuration](../../src/codomyrmex/README.md)** - Module system overview
 
 ## 📞 Getting Help
 
@@ -550,7 +550,7 @@ Include:
 **Setup complete!** You're ready to start using Codomyrmex's powerful modular toolkit for code analysis, generation, and workflow automation.
 
 **Next Steps:**
-1. **🎮 Try Interactive Examples**: [examples/README.md](../../../examples/README.md)
+1. **🎮 Try Interactive Examples**: [examples/README.md](../../examples/README.md)
 2. **📚 Explore Documentation**: [docs/README.md](../README.md)
 3. **🏗️ Understand Architecture**: [docs/project/architecture.md](../project/architecture.md)
 4. **🤝 Join Development**: [docs/project/contributing.md](../project/contributing.md)

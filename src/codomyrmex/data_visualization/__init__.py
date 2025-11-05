@@ -35,47 +35,44 @@ Data structures:
 - ColorPalette: Color palette options
 """
 
-from .plotter import (
-    create_line_plot,
-    create_scatter_plot,
-    create_bar_chart,
-    create_histogram,
-    create_pie_chart,
-    create_heatmap,
-)
-
 from .advanced_plotter import (
     AdvancedPlotter,
-    create_advanced_line_plot,
-    create_advanced_scatter_plot,
-    create_advanced_bar_chart,
-    create_advanced_histogram,
-    create_advanced_heatmap,
-    create_advanced_dashboard,
-    get_available_styles,
-    get_available_palettes,
-    get_available_plot_types,
-    PlotConfig,
-    DataPoint,
-    Dataset,
-    PlotType,
     ChartStyle,
     ColorPalette,
+    DataPoint,
+    Dataset,
+    PlotConfig,
+    PlotType,
+    create_advanced_bar_chart,
+    create_advanced_dashboard,
+    create_advanced_heatmap,
+    create_advanced_histogram,
+    create_advanced_line_plot,
+    create_advanced_scatter_plot,
+    get_available_palettes,
+    get_available_plot_types,
+    get_available_styles,
 )
-
+from .git_visualizer import (
+    GitVisualizer,
+    create_git_tree_mermaid,
+    create_git_tree_png,
+    visualize_git_repository,
+)
 from .mermaid_generator import (
     MermaidDiagramGenerator,
+    create_commit_timeline_diagram,
     create_git_branch_diagram,
     create_git_workflow_diagram,
     create_repository_structure_diagram,
-    create_commit_timeline_diagram,
 )
-
-from .git_visualizer import (
-    GitVisualizer,
-    visualize_git_repository,
-    create_git_tree_png,
-    create_git_tree_mermaid,
+from .plotter import (
+    create_bar_chart,
+    create_heatmap,
+    create_histogram,
+    create_line_plot,
+    create_pie_chart,
+    create_scatter_plot,
 )
 
 __all__ = [

@@ -5,13 +5,11 @@ Backup Management Module for Codomyrmex Database Management.
 This module provides database backup, restore, and recovery capabilities.
 """
 
-import json
-import shutil
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -41,7 +39,7 @@ class BackupResult:
     duration: float
     file_size_mb: float
     error_message: Optional[str] = None
-    warnings: List[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
 
 class BackupManager:
@@ -57,7 +55,7 @@ class BackupManager:
         self.backups_dir = self.workspace_dir / "database_backups"
         self._ensure_directories()
 
-        self._backups: Dict[str, Backup] = {}
+        self._backups: dict[str, Backup] = {}
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
@@ -177,7 +175,7 @@ class BackupManager:
 
         return result
 
-    def list_backups(self, database_name: Optional[str] = None) -> List[Dict[str, Any]]:
+    def list_backups(self, database_name: Optional[str] = None) -> list[dict[str, Any]]:
         """List available backups.
 
         Args:
@@ -188,7 +186,7 @@ class BackupManager:
         """
         backups = []
 
-        for backup_id, backup in self._backups.items():
+        for _backup_id, backup in self._backups.items():
             if database_name and backup.database_name != database_name:
                 continue
 
@@ -238,7 +236,7 @@ class BackupManager:
             logger.error(f"Failed to delete backup {backup_id}: {e}")
             return False
 
-    def get_backup_info(self, backup_id: str) -> Optional[Dict[str, Any]]:
+    def get_backup_info(self, backup_id: str) -> Optional[dict[str, Any]]:
         """Get detailed information about a backup.
 
         Args:

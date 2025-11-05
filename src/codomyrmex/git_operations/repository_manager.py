@@ -7,13 +7,11 @@ supporting both development repositories (for commits/PRs) and usage repositorie
 """
 
 import os
-import sys
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, NamedTuple
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-from codomyrmex.exceptions import CodomyrmexError
+from pathlib import Path
+from typing import Optional
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
@@ -22,18 +20,15 @@ src_dir = current_dir.parent.parent.parent / "src"
 
 from codomyrmex.git_operations.git_manager import (
     clone_repository,
-    pull_changes,
+    create_branch,
+    get_current_branch,
     get_status,
     is_git_repository,
-    get_current_branch,
-    create_branch,
-    switch_branch,
+    pull_changes,
 )
 from codomyrmex.git_operations.repository_metadata import (
-    RepositoryMetadataManager,
-    RepositoryMetadata,
-    AccessLevel,
     CloneStatus,
+    RepositoryMetadataManager,
 )
 from codomyrmex.logging_monitoring import get_logger
 
@@ -104,7 +99,7 @@ class RepositoryManager:
 
         self.library_file = library_file
         self.base_path = Path(base_path)
-        self.repositories: Dict[str, Repository] = {}
+        self.repositories: dict[str, Repository] = {}
 
         # Initialize metadata manager
         self.metadata_manager = RepositoryMetadataManager(
@@ -120,7 +115,7 @@ class RepositoryManager:
             return
 
         try:
-            with open(self.library_file, "r") as f:
+            with open(self.library_file) as f:
                 for line_num, line in enumerate(f, 1):
                     line = line.strip()
 
@@ -164,7 +159,7 @@ class RepositoryManager:
 
     def list_repositories(
         self, repo_type: Optional[RepositoryType] = None
-    ) -> List[Repository]:
+    ) -> list[Repository]:
         """
         List repositories, optionally filtered by type.
 
@@ -193,7 +188,7 @@ class RepositoryManager:
         """
         return self.repositories.get(full_name)
 
-    def search_repositories(self, query: str) -> List[Repository]:
+    def search_repositories(self, query: str) -> list[Repository]:
         """
         Search repositories by name, owner, or description.
 
@@ -365,7 +360,7 @@ class RepositoryManager:
 
     def get_repository_status(
         self, full_name: str, custom_path: Optional[str] = None
-    ) -> Optional[Dict]:
+    ) -> Optional[dict]:
         """
         Get the status of a local repository.
 
@@ -405,7 +400,7 @@ class RepositoryManager:
         self,
         repo_type: Optional[RepositoryType] = None,
         owner_filter: Optional[str] = None,
-    ) -> Dict[str, bool]:
+    ) -> dict[str, bool]:
         """
         Clone multiple repositories in bulk.
 
@@ -439,7 +434,7 @@ class RepositoryManager:
         self,
         repo_type: Optional[RepositoryType] = None,
         owner_filter: Optional[str] = None,
-    ) -> Dict[str, bool]:
+    ) -> dict[str, bool]:
         """
         Update multiple repositories in bulk.
 

@@ -2,28 +2,26 @@
 Python file with security issues for testing security analysis.
 """
 
-import os
-import subprocess
-import pickle
 import base64
+import os
+import pickle
 
 
 def insecure_function(user_input):
     """Function with multiple security issues."""
     # SQL injection vulnerability
-    query = f"SELECT * FROM users WHERE name = '{user_input}'"
 
     # Command injection vulnerability
     os.system(f"echo {user_input}")
 
     # Path traversal vulnerability
     file_path = f"/var/data/{user_input}"
-    with open(file_path, 'r') as f:
+    with open(file_path) as f:
         content = f.read()
 
     # Insecure deserialization
     data = base64.b64decode(user_input)
-    obj = pickle.loads(data)
+    pickle.loads(data)
 
     # Information disclosure
     print(f"Debug info: {user_input}")

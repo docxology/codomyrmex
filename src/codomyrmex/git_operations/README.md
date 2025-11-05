@@ -6,21 +6,138 @@ The Git Operations module is designed to provide a standardized interface and a 
 
 **Note on Scope**: This module provides *tools* for Git automation. For guidelines on project-wide Git practices, such as branching strategy, commit message conventions, and the Pull Request (PR) process, please refer to the main [Codomyrmex Contributing Guidelines](../../CONTRIBUTING.md).
 
-## Typical Project Git Workflow Context
+## Git Workflow Documentation
 
-While detailed Git practices are in `CONTRIBUTING.md`, understanding the typical workflow helps contextualize the tools this `git_operations` module might provide. The Codomyrmex project generally follows a common Git workflow:
+### Branching Strategy
 
-1.  **Main Branch**: The `main` (or `master`) branch represents the primary line of development, always aiming to be stable and production-ready.
-2.  **Feature Branches**: Development for new features, bug fixes, or experiments occurs on separate branches, typically named descriptively (e.g., `feature/new-auth-system`, `fix/bug-123-memory-leak`, `docs/update-readme`). These branches are usually created from the latest `main`.
-3.  **Commits**: Work is committed incrementally to feature branches with clear, conventional commit messages (see `CONTRIBUTING.md` for format).
-4.  **Pull Requests (PRs)**: Once a feature or fix is complete and tested locally, a Pull Request is opened to merge the feature branch back into `main`. PRs are reviewed by other team members.
-5.  **Merging**: After review and approval (and passing any CI checks), the feature branch is merged into `main`.
+The Codomyrmex project follows a feature branch workflow:
 
-This module could provide tools to automate or assist with parts of this workflow, such as:
--   Creating feature branches with conventional names.
--   Validating commit messages before committing.
--   Automating parts of the PR creation or merging process (with appropriate safeguards).
--   Extracting information for release notes from Git history.
+1. **Main Branch**: The `main` branch represents the primary line of development, always aiming to be stable and production-ready.
+2. **Feature Branches**: Development occurs on separate branches with descriptive names:
+   - `feature/description` - New features
+   - `fix/description` - Bug fixes
+   - `docs/description` - Documentation updates
+   - `refactor/description` - Code refactoring
+   - `test/description` - Test additions/changes
+3. **Release Branches**: For release preparation: `release/v1.x.x`
+4. **Hotfix Branches**: For critical production fixes: `hotfix/description`
+
+### Commit Conventions
+
+The project follows [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Types**:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `test`: Test additions/changes
+- `chore`: Build process or auxiliary tool changes
+
+**Example**:
+```
+feat(git_operations): Add branch validation in create_branch
+
+Add validation to ensure branch names follow naming conventions
+before creating new branches.
+
+Closes #123
+```
+
+### Pull Request Workflow
+
+1. **Create Feature Branch**: Create and switch to a feature branch from `main`
+   ```python
+   from codomyrmex.git_operations import create_branch, switch_branch
+
+   create_branch("feature/new-feature")
+   ```
+
+2. **Make Changes**: Implement changes and commit incrementally
+   ```python
+   from codomyrmex.git_operations import add_files, commit_changes
+
+   add_files(["new_file.py", "modified_file.py"])
+   commit_changes("feat: Add new feature implementation")
+   ```
+
+3. **Push Branch**: Push feature branch to remote
+   ```python
+   from codomyrmex.git_operations import push_changes
+
+   push_changes(remote="origin", branch="feature/new-feature")
+   ```
+
+4. **Create Pull Request**: Use GitHub API to create PR
+   ```python
+   from codomyrmex.git_operations import create_pull_request
+
+   create_pull_request(
+       repo="user/repo",
+       title="feat: Add new feature",
+       body="Description of changes",
+       head="feature/new-feature",
+       base="main"
+   )
+   ```
+
+5. **Review and Merge**: After review and CI checks pass, merge PR (typically via GitHub UI or API)
+
+### Typical Workflow Example
+
+```python
+from codomyrmex.git_operations import (
+    check_git_availability,
+    is_git_repository,
+    create_branch,
+    add_files,
+    commit_changes,
+    push_changes,
+    get_current_branch
+)
+
+# Verify Git is available
+if not check_git_availability():
+    print("Git is not available")
+    exit(1)
+
+# Ensure we're in a Git repository
+if not is_git_repository():
+    print("Not a Git repository")
+    exit(1)
+
+# Create feature branch
+feature_branch = "feature/new-authentication"
+if create_branch(feature_branch):
+    print(f"Created and switched to {feature_branch}")
+
+    # Make changes (create/modify files)
+    # ... code changes ...
+
+    # Stage and commit
+    add_files(["auth.py", "test_auth.py"])
+    commit_changes("feat(auth): Add new authentication system")
+
+    # Push to remote
+    if push_changes(branch=feature_branch):
+        print(f"Pushed {feature_branch} to remote")
+        print(f"Create PR from {feature_branch} to main")
+```
+
+This module provides tools to automate all parts of this workflow, including:
+- Creating feature branches with conventional names
+- Validating commit messages (can be integrated)
+- Automating PR creation
+- Extracting information for release notes from Git history
 
 ## Key Components
 
@@ -123,4 +240,4 @@ Ensure all contributions pass tests and adhere to project coding standards.
 - [Usage Examples](./USAGE_EXAMPLES.md)
 - [Detailed Documentation](./docs/index.md)
 - [Changelog](./CHANGELOG.md)
-- [Security Policy](./SECURITY.md) 
+- [Security Policy](./SECURITY.md)

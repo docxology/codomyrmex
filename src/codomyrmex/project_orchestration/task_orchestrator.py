@@ -5,20 +5,15 @@ This module provides task-level orchestration capabilities, handling individual
 task execution, dependency management, and coordination across Codomyrmex modules.
 """
 
-import os
-import json
-import time
-import asyncio
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Callable, Union, Set
-from dataclasses import dataclass, field, asdict
-from enum import Enum
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
-from queue import Queue, PriorityQueue
+import time
 import uuid
-from codomyrmex.exceptions import CodomyrmexError
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from queue import PriorityQueue
+from typing import Any, Optional
 
 # Import Codomyrmex modules
 try:
@@ -31,7 +26,7 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 try:
-    from codomyrmex.performance import monitor_performance, PerformanceMonitor
+    from codomyrmex.performance import PerformanceMonitor, monitor_performance
 
     PERFORMANCE_AVAILABLE = True
 except ImportError:
@@ -45,7 +40,7 @@ except ImportError:
 
 
 try:
-    from codomyrmex.model_context_protocol import MCPToolResult, MCPErrorDetail
+    from codomyrmex.model_context_protocol import MCPErrorDetail, MCPToolResult
 
     MCP_AVAILABLE = True
 except ImportError:
@@ -105,14 +100,14 @@ class TaskResult:
     error_type: Optional[str] = None
     execution_time: float = 0.0
     memory_usage: float = 0.0
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "TaskResult":
+    def from_dict(cls, data: dict[str, Any]) -> "TaskResult":
         """Create from dictionary."""
         return cls(**data)
 
@@ -126,12 +121,12 @@ class Task:
     description: str = ""
     module: str = ""  # Codomyrmex module name
     action: str = ""  # Module action/function name
-    parameters: Dict[str, Any] = field(default_factory=dict)
+    parameters: dict[str, Any] = field(default_factory=dict)
 
     # Dependencies and scheduling
-    dependencies: List[str] = field(default_factory=list)  # Task IDs this depends on
+    dependencies: list[str] = field(default_factory=list)  # Task IDs this depends on
     priority: TaskPriority = TaskPriority.NORMAL
-    resources: List[TaskResource] = field(default_factory=list)
+    resources: list[TaskResource] = field(default_factory=list)
 
     # Execution control
     timeout: Optional[int] = None
@@ -147,8 +142,8 @@ class Task:
     result: Optional[TaskResult] = None
 
     # Metadata
-    tags: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
         """Post-initialization setup."""
@@ -159,7 +154,7 @@ class Task:
                 else self.id
             )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for serialization."""
         data = asdict(self)
         data["priority"] = self.priority.value
@@ -175,7 +170,7 @@ class Task:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Task":
+    def from_dict(cls, data: dict[str, Any]) -> "Task":
         """Create from dictionary."""
         data = data.copy()
         if "priority" in data:
@@ -205,7 +200,7 @@ class Task:
         """Check if task can be retried."""
         return self.status == TaskStatus.FAILED and self.retry_count < self.max_retries
 
-    def is_ready(self, completed_tasks: Set[str]) -> bool:
+    def is_ready(self, completed_tasks: set[str]) -> bool:
         """Check if task is ready to execute (dependencies satisfied)."""
         return self.status == TaskStatus.PENDING and all(
             dep_id in completed_tasks for dep_id in self.dependencies
@@ -217,8 +212,8 @@ class ResourceManager:
 
     def __init__(self):
         """Initialize the resource manager."""
-        self.resource_locks: Dict[str, threading.Lock] = {}
-        self.resource_users: Dict[str, Set[str]] = {}  # resource_id -> set of task_ids
+        self.resource_locks: dict[str, threading.Lock] = {}
+        self.resource_users: dict[str, set[str]] = {}  # resource_id -> set of task_ids
         self.lock = threading.Lock()
 
     def acquire_resources(self, task: Task) -> bool:
@@ -260,7 +255,7 @@ class ResourceManager:
             logger.error(f"Error acquiring resources for task {task.id}: {e}")
             return False
 
-    def release_resources(self, task: Task, resource_keys: Optional[List[str]] = None):
+    def release_resources(self, task: Task, resource_keys: Optional[list[str]] = None):
         """Release resources used by a task."""
         if resource_keys is None:
             resource_keys = [f"{r.type.value}:{r.identifier}" for r in task.resources]
@@ -277,7 +272,7 @@ class TaskQueue:
     def __init__(self):
         """Initialize the task queue."""
         self.queue = PriorityQueue()
-        self.tasks: Dict[str, Task] = {}
+        self.tasks: dict[str, Task] = {}
         self.lock = threading.Lock()
 
     def add_task(self, task: Task):
@@ -288,7 +283,7 @@ class TaskQueue:
             priority_value = -task.priority.value
             self.queue.put((priority_value, task.created_at.timestamp(), task.id))
 
-    def get_next_ready_task(self, completed_tasks: Set[str]) -> Optional[Task]:
+    def get_next_ready_task(self, completed_tasks: set[str]) -> Optional[Task]:
         """Get the next ready task from the queue."""
         temp_tasks = []
 
@@ -337,7 +332,7 @@ class TaskQueue:
         with self.lock:
             return self.tasks.get(task_id)
 
-    def list_tasks(self) -> List[Task]:
+    def list_tasks(self) -> list[Task]:
         """List all tasks in the queue."""
         with self.lock:
             return list(self.tasks.values())
@@ -354,9 +349,9 @@ class TaskOrchestrator:
         self.task_queue = TaskQueue()
 
         # Execution tracking
-        self.completed_tasks: Set[str] = set()
-        self.running_tasks: Dict[str, threading.Thread] = {}
-        self.task_results: Dict[str, TaskResult] = {}
+        self.completed_tasks: set[str] = set()
+        self.running_tasks: dict[str, threading.Thread] = {}
+        self.task_results: dict[str, TaskResult] = {}
 
         # Control
         self.shutdown_requested = False
@@ -391,14 +386,14 @@ class TaskOrchestrator:
             metadata=kwargs.get("metadata", {}),
         )
 
-        task_id = self.add_task(task)
+        self.add_task(task)
         return task
 
     def get_task(self, task_id: str) -> Optional[Task]:
         """Get a task by ID."""
         return self.task_queue.get_task(task_id)
 
-    def list_tasks(self, status: Optional[TaskStatus] = None) -> List[Task]:
+    def list_tasks(self, status: Optional[TaskStatus] = None) -> list[Task]:
         """List tasks, optionally filtered by status."""
         tasks = self.task_queue.list_tasks()
         if status:
@@ -609,7 +604,7 @@ class TaskOrchestrator:
         """Get the result of a completed task."""
         return self.task_results.get(task_id)
 
-    def get_execution_stats(self) -> Dict[str, Any]:
+    def get_execution_stats(self) -> dict[str, Any]:
         """Get execution statistics."""
         tasks = self.list_tasks()
 

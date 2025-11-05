@@ -1,9 +1,10 @@
 """Tests for documentation quality assessment modules."""
 
-import pytest
-from pathlib import Path
 import tempfile
-import os
+from pathlib import Path
+
+import pytest
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)

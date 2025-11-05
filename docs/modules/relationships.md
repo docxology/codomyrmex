@@ -28,16 +28,16 @@ graph LR
         UserCode["User Code"]
         StaticAnalysis["Static Analysis<br/>& Testing"]
         BuildSynth["Build Synthesis<br/>& Deploy"]
-        
+
         UserCode --> StaticAnalysis
         StaticAnalysis --> BuildSynth
     end
-    
+
     subgraph "Supporting Services"
         AICode["AI Code<br/>Assistance"]
         PatternMatch["Pattern Matching<br/>& Analysis"]
         GitOps["Git Operations<br/>& Version Control"]
-        
+
         UserCode --> AICode
         StaticAnalysis --> PatternMatch
         BuildSynth --> GitOps
@@ -49,12 +49,12 @@ graph LR
 ```mermaid
 graph TD
     CodeInput["Code Input"]
-    
+
     PatternMatch["Pattern Matching<br/>Analysis"]
     AICode["AI Code<br/>Enhancement"]
     CodeExec["Code Execution<br/>Validation"]
     DataViz["Data Visualization<br/>Analysis"]
-    
+
     CodeInput --> PatternMatch
     PatternMatch --> AICode
     AICode --> CodeExec
@@ -75,7 +75,7 @@ graph TD
 - **Integration Points**:
   ```python
   # Every module imports this for setup validation
-  from environment_setup.env_checker import ensure_dependencies_installed
+  from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 
   # Called at module initialization
   ensure_dependencies_installed()
@@ -86,7 +86,7 @@ graph TD
 - **Integration Points**:
   ```python
   # Universal logging interface across all modules
-  from logging_monitoring import get_logger
+  from codomyrmex.logging_monitoring.logger_config import get_logger
   logger = get_logger(__name__)
 
   # Consistent log format across entire project
@@ -98,10 +98,10 @@ graph TD
 - **Integration Points**:
   ```python
   # AI modules implement MCP tools
-  from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult
+  from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult
 
   # Standardized request/response format
-  tool_call = MCPToolCall(tool_name="ai_code_editing.generate_code", ...)
+  tool_call = MCPToolCall(tool_name="ai_code_editing.generate_code", arguments={...})
   ```
 
 ### **🤖 AI & Intelligence Modules**
@@ -112,10 +112,10 @@ graph TD
 - **Cross-Module Usage**:
   ```python
   # Used by pattern_matching for code understanding
-  from ai_code_editing.ai_code_helpers import generate_code_snippet
+  from codomyrmex.ai_code_editing.ai_code_helpers import generate_code
 
   # Used by documentation for example generation
-  result = generate_code_snippet("Create a hello world function", "python")
+  result = generate_code("Create a hello world function", "python")
   ```
 
 #### **`pattern_matching` Integration Points**
@@ -124,10 +124,10 @@ graph TD
 - **Cross-Module Usage**:
   ```python
   # Used by static_analysis for comprehensive analysis
-  from pattern_matching.run_codomyrmex_analysis import analyze_repository_path
+  from codomyrmex.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
 
   # Comprehensive analysis workflow
-  analysis_results = analyze_repository_path(path, config)
+  analysis_results = analyze_repository_path(repo_path="./src", output_dir="./analysis")
   ```
 
 ### **🔍 Analysis & Quality Modules**
@@ -138,10 +138,10 @@ graph TD
 - **Cross-Module Usage**:
   ```python
   # Used by build_synthesis for quality gates
-  from static_analysis.pyrefly_runner import run_pyrefly_analysis
+  from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
   # Quality check before build
-  issues = run_pyrefly_analysis(target_paths, project_root)
+  issues = run_pyrefly_analysis(target_paths=["src/"], project_root=".")
   ```
 
 #### **`code_execution_sandbox` Integration Points**
@@ -150,10 +150,10 @@ graph TD
 - **Cross-Module Usage**:
   ```python
   # Used by ai_code_editing for code validation
-  from code_execution_sandbox.code_executor import execute_code
+  from codomyrmex.code_execution_sandbox.code_executor import execute_code
 
   # Test generated code before applying
-  result = execute_code("print('test')", "python")
+  result = execute_code("print('test')", language="python")
   ```
 
 ### **🏗️ Build & Deployment Modules**
@@ -164,8 +164,12 @@ graph TD
 - **Cross-Module Usage**:
   ```python
   # Orchestrates multiple modules for complete build pipeline
-  from build_synthesis.build_orchestrator import trigger_build
-  from static_analysis.pyrefly_runner import run_pyrefly_analysis
+  from codomyrmex.build_synthesis.build_orchestrator import orchestrate_build_pipeline
+  from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+
+  # Complete build workflow
+  build_config = {"target": "python_wheel", "clean": True}
+  result = orchestrate_build_pipeline(build_config)
 
   # Quality-gated build process
   analysis = run_pyrefly_analysis(paths, root)
@@ -267,49 +271,49 @@ graph LR
     subgraph "Module Compatibility & Dependencies"
         subgraph "Foundation Layer (Required by All)"
             ENV["environment_setup"]
-            LOG["logging_monitoring"] 
+            LOG["logging_monitoring"]
             MCP["model_context_protocol"]
         end
-        
+
         subgraph "AI & Intelligence Layer"
             AI["ai_code_editing"]
             PATTERN["pattern_matching"]
         end
-        
+
         subgraph "Analysis & Quality Layer"
             STATIC["static_analysis"]
             EXEC["code_execution_sandbox"]
         end
-        
+
         subgraph "Build & Deploy Layer"
             BUILD["build_synthesis"]
             GIT["git_operations"]
             DOCS["documentation"]
         end
-        
+
         subgraph "Visualization Layer"
             VIZ["data_visualization"]
         end
     end
-    
+
     %% Foundation dependencies (dotted lines)
     AI -.-> ENV
     AI -.-> LOG
     AI -.-> MCP
-    
+
     PATTERN -.-> ENV
     PATTERN -.-> LOG
-    
+
     STATIC -.-> LOG
     EXEC -.-> LOG
-    
+
     BUILD -.-> LOG
     GIT -.-> LOG
     DOCS -.-> LOG
-    
+
     VIZ -.-> LOG
-    
-    %% Functional dependencies (solid lines)  
+
+    %% Functional dependencies (solid lines)
     AI --> EXEC
     AI --> PATTERN
     STATIC --> BUILD

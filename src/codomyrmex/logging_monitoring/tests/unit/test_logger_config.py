@@ -1,18 +1,19 @@
-import pytest
+import json
 import logging
 import os
-import json
 import sys
 from io import StringIO
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
+import pytest
 
 # Make sure the module can be imported
 # This assumes tests are run from the project root or PYTHONPATH is set up.
 from codomyrmex.logging_monitoring import (
+    get_logger,
     logger_config,
+    setup_logging,
 )  # Direct import for _logging_configured
-from codomyrmex.logging_monitoring import setup_logging, get_logger
-from codomyrmex.exceptions import CodomyrmexError
 
 
 # Helper to reset logging configuration for isolated tests
@@ -184,7 +185,7 @@ def test_setup_logging_invalid_level(mock_env, captured_stderr):
         in err_output
     )
 
-    logger = get_logger("__main___test")
+    get_logger("__main___test")
     # Check that the effective level is INFO
     root_logger = logging.getLogger()
     assert root_logger.level == logging.INFO
@@ -320,7 +321,7 @@ def test_file_handler_io_error(
     mock_file_handler, mock_env, captured_stderr, captured_stdout
 ):
     """Test that an IOError when setting up FileHandler is caught and warned."""
-    mock_file_handler.side_effect = IOError("Permission denied")
+    mock_file_handler.side_effect = OSError("Permission denied")
     log_file_path = "dummy/path/test.log"
     mock_env["CODOMYRMEX_LOG_FILE"] = log_file_path
 
@@ -334,7 +335,7 @@ def test_file_handler_io_error(
         in err_output
     )
     assert (
-        f"File='Console'" in log_output
+        "File='Console'" in log_output
     )  # Check that it correctly states console only in config
 
     # Ensure only console handler is present

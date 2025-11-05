@@ -12,9 +12,8 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -55,7 +54,7 @@ class PerformanceAlert:
     threshold_value: float
     description: str
     timestamp: datetime
-    resolution_suggestions: List[str] = field(default_factory=list)
+    resolution_suggestions: list[str] = field(default_factory=list)
 
 
 class DatabasePerformanceMonitor:
@@ -71,15 +70,15 @@ class DatabasePerformanceMonitor:
         self.performance_data_dir = self.workspace_dir / "db_performance"
         self._ensure_directories()
 
-        self._query_metrics: List[QueryMetrics] = []
-        self._database_metrics: List[DatabaseMetrics] = []
-        self._alerts: List[PerformanceAlert] = []
+        self._query_metrics: list[QueryMetrics] = []
+        self._database_metrics: list[DatabaseMetrics] = []
+        self._alerts: list[PerformanceAlert] = []
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
         self.performance_data_dir.mkdir(parents=True, exist_ok=True)
 
-    def record_query_metrics(self, query_hash: str, metrics: Dict[str, Any]):
+    def record_query_metrics(self, query_hash: str, metrics: dict[str, Any]):
         """Record query performance metrics.
 
         Args:
@@ -104,7 +103,7 @@ class DatabasePerformanceMonitor:
 
         logger.debug(f"Recorded query metrics for {query_hash}")
 
-    def record_database_metrics(self, database_name: str, metrics: Dict[str, Any]):
+    def record_database_metrics(self, database_name: str, metrics: dict[str, Any]):
         """Record database performance metrics.
 
         Args:
@@ -130,7 +129,7 @@ class DatabasePerformanceMonitor:
 
         logger.debug(f"Recorded database metrics for {database_name}")
 
-    def analyze_query_performance(self, hours: int = 24) -> Dict[str, Any]:
+    def analyze_query_performance(self, hours: int = 24) -> dict[str, Any]:
         """Analyze query performance over time.
 
         Args:
@@ -197,7 +196,7 @@ class DatabasePerformanceMonitor:
 
         return analysis
 
-    def analyze_database_performance(self, database_name: str, hours: int = 24) -> Dict[str, Any]:
+    def analyze_database_performance(self, database_name: str, hours: int = 24) -> dict[str, Any]:
         """Analyze database performance over time.
 
         Args:
@@ -239,7 +238,7 @@ class DatabasePerformanceMonitor:
 
         return analysis
 
-    def _calculate_stats(self, values: List[float]) -> Dict[str, float]:
+    def _calculate_stats(self, values: list[float]) -> dict[str, float]:
         """Calculate basic statistics for a list of values."""
         if not values:
             return {}
@@ -253,7 +252,7 @@ class DatabasePerformanceMonitor:
             "p95": statistics.quantiles(values, n=20)[18] if len(values) >= 20 else max(values)
         }
 
-    def _identify_performance_issues(self, metrics: List[DatabaseMetrics]) -> List[Dict[str, Any]]:
+    def _identify_performance_issues(self, metrics: list[DatabaseMetrics]) -> list[dict[str, Any]]:
         """Identify database performance issues."""
         issues = []
 
@@ -289,7 +288,7 @@ class DatabasePerformanceMonitor:
 
         return issues
 
-    def check_alerts(self, database_name: str) -> List[PerformanceAlert]:
+    def check_alerts(self, database_name: str) -> list[PerformanceAlert]:
         """Check for performance alerts.
 
         Args:
@@ -348,7 +347,7 @@ class DatabasePerformanceMonitor:
 
         return alerts
 
-    def get_performance_report(self, database_name: str, hours: int = 24) -> Dict[str, Any]:
+    def get_performance_report(self, database_name: str, hours: int = 24) -> dict[str, Any]:
         """Generate comprehensive performance report.
 
         Args:
@@ -390,7 +389,7 @@ class DatabasePerformanceMonitor:
         logger.info(f"Generated performance report for {database_name}")
         return report
 
-    def _generate_recommendations(self, query_analysis: Dict, db_analysis: Dict, alerts: List) -> List[str]:
+    def _generate_recommendations(self, query_analysis: dict, db_analysis: dict, alerts: list) -> list[str]:
         """Generate performance recommendations."""
         recommendations = []
 
@@ -416,7 +415,7 @@ class DatabasePerformanceMonitor:
 
         return list(set(recommendations))  # Remove duplicates
 
-    def get_performance_history(self, database_name: str, days: int = 7) -> List[Dict[str, Any]]:
+    def get_performance_history(self, database_name: str, days: int = 7) -> list[dict[str, Any]]:
         """Get performance history for a database.
 
         Args:
@@ -467,7 +466,7 @@ class DatabasePerformanceMonitor:
 DatabaseMonitor = DatabasePerformanceMonitor
 
 
-def monitor_database(database_name: str, workspace_dir: Optional[str] = None) -> Dict[str, Any]:
+def monitor_database(database_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
     """Monitor database performance.
 
     Args:
@@ -481,7 +480,7 @@ def monitor_database(database_name: str, workspace_dir: Optional[str] = None) ->
     return monitor.analyze_database_performance(database_name)
 
 
-def optimize_database(database_name: str, workspace_dir: Optional[str] = None) -> Dict[str, Any]:
+def optimize_database(database_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
     """Optimize database performance.
 
     Args:

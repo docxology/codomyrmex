@@ -6,7 +6,8 @@ Generates bar charts.
 """
 
 import matplotlib.pyplot as plt
-from .plot_utils import save_plot, get_codomyrmex_logger
+
+from .plot_utils import get_codomyrmex_logger, save_plot
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -72,7 +73,7 @@ if __name__ == "__main__":
     output_dir = Path(__file__).parent.parent / "output" / "data_visualization_examples"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    logger.info(f"--- Example: Vertical Bar Chart ---")
+    logger.info("--- Example: Vertical Bar Chart ---")
     sample_categories = ["A", "B", "C", "D", "E"]
     sample_values = [10, 24, 15, 30, 22]
     create_bar_chart(
@@ -89,7 +90,7 @@ if __name__ == "__main__":
         f"Vertical bar chart example saved to {output_dir / 'vertical_bar_chart.png'}"
     )
 
-    logger.info(f"--- Example: Horizontal Bar Chart ---")
+    logger.info("--- Example: Horizontal Bar Chart ---")
     create_bar_chart(
         categories=sample_categories,
         values=sample_values,

@@ -5,14 +5,15 @@ Manages all aspects of saving model outputs, configurations, and results
 with integration into the Codomyrmex ecosystem.
 """
 
+import hashlib
 import json
 import time
-import hashlib
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
 from dataclasses import asdict
+from pathlib import Path
+from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
+
 from .ollama_manager import ModelExecutionResult
 
 
@@ -68,7 +69,7 @@ class OutputManager:
         response: str,
         execution_time: float,
         output_dir: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[dict[str, Any]] = None
     ) -> str:
         """
         Save model execution output to files.
@@ -163,7 +164,7 @@ class OutputManager:
     def save_model_config(
         self,
         model_name: str,
-        config: Dict[str, Any],
+        config: dict[str, Any],
         config_name: Optional[str] = None
     ) -> str:
         """
@@ -206,7 +207,7 @@ class OutputManager:
         self,
         model_name: str,
         config_name: Optional[str] = None
-    ) -> Optional[Dict[str, Any]]:
+    ) -> Optional[dict[str, Any]]:
         """
         Load model configuration.
 
@@ -229,7 +230,7 @@ class OutputManager:
             config_file = max(config_files, key=lambda f: f.stat().st_mtime)
 
         try:
-            with open(config_file, 'r', encoding='utf-8') as f:
+            with open(config_file, encoding='utf-8') as f:
                 config_data = json.load(f)
 
             self.logger.info(f"Loaded model config from: {config_file}")
@@ -241,7 +242,7 @@ class OutputManager:
 
     def save_batch_results(
         self,
-        results: List[ModelExecutionResult],
+        results: list[ModelExecutionResult],
         batch_name: str,
         output_dir: Optional[str] = None
     ) -> str:
@@ -285,7 +286,7 @@ class OutputManager:
 
     def save_benchmark_report(
         self,
-        benchmark_results: Dict[str, Any],
+        benchmark_results: dict[str, Any],
         model_name: str,
         output_dir: Optional[str] = None
     ) -> str:
@@ -325,7 +326,7 @@ class OutputManager:
 
     def save_model_comparison(
         self,
-        comparison_results: Dict[str, Any],
+        comparison_results: dict[str, Any],
         output_dir: Optional[str] = None
     ) -> str:
         """
@@ -364,7 +365,7 @@ class OutputManager:
         self,
         model_name: Optional[str] = None,
         output_type: str = "outputs"
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         List saved outputs of a specific type.
 
@@ -392,7 +393,7 @@ class OutputManager:
             for item in search_dir.iterdir():
                 if item.is_file() and item.suffix == '.json':
                     try:
-                        with open(item, 'r', encoding='utf-8') as f:
+                        with open(item, encoding='utf-8') as f:
                             data = json.load(f)
 
                         output_info = {
@@ -422,7 +423,7 @@ class OutputManager:
 
         return outputs
 
-    def get_output_stats(self) -> Dict[str, Any]:
+    def get_output_stats(self) -> dict[str, Any]:
         """Get statistics about saved outputs."""
         stats = {
             'total_outputs': 0,

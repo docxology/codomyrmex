@@ -1,10 +1,10 @@
+import json
 import os
 import shutil
-import json
 import sys
+from typing import Callable, Optional  # Added Optional for type hinting embed_fn
+
 from tqdm import tqdm  # Added tqdm
-from typing import List, Callable, Optional  # Added Optional for type hinting embed_fn
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path to allow sibling module imports
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -15,9 +15,9 @@ if PROJECT_ROOT not in sys.path:
 
 from dotenv import load_dotenv
 from kit import (
-    Repository,
     DocstringIndexer,
     OpenAIConfig,
+    Repository,
 )  # Summarizer is accessed via repo.get_summarizer()
 
 # Attempt to import SentenceTransformer for explicit embedding function
@@ -37,6 +37,8 @@ except ImportError:
 try:
     from environment_setup.env_checker import (
         check_and_setup_env_vars,
+    )
+    from environment_setup.env_checker import (
         ensure_dependencies_installed as ensure_core_deps_installed,
     )
 except ImportError:
@@ -48,7 +50,7 @@ except ImportError:
 
 # Import logging setup
 try:
-    from logging_monitoring import setup_logging, get_logger
+    from logging_monitoring import get_logger, setup_logging
 except ImportError:
     print(
         "[ERROR] Could not import from logging_monitoring. Please ensure the module exists and is in the Python path (PROJECT_ROOT/logging_monitoring)."
@@ -137,7 +139,7 @@ PRINTED_ONCE_KEYS = set()  # For print_once utility
 
 # --- Global Embedding Function (for DocstringIndexer) ---
 DEFAULT_EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-_embed_fn_instance: Optional[Callable[[str], List[float]]] = None
+_embed_fn_instance: Optional[Callable[[str], list[float]]] = None
 
 
 def get_embedding_function(model_name: str = DEFAULT_EMBEDDING_MODEL):
@@ -155,7 +157,8 @@ def get_embedding_function(model_name: str = DEFAULT_EMBEDDING_MODEL):
 
     try:
         st_model = SentenceTransformer(model_name)
-        _embed_fn_instance = lambda text: st_model.encode(text).tolist()
+        def _embed_fn_instance(text):
+            return st_model.encode(text).tolist()
         if logger:  # Check if logger exists
             logger.info(
                 f"Successfully initialized sentence-transformer model '{model_name}' for embeddings."
@@ -710,7 +713,7 @@ def _perform_text_search_context_extraction(
                         continue
                     query_contexts = []
                     # Potentially use tqdm here if results list can be very long
-                    for res_idx, res in enumerate(results):
+                    for _res_idx, res in enumerate(results):
                         if extracted_count >= max_contexts:
                             break
                         try:

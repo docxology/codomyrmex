@@ -2,128 +2,274 @@
 
 ## Introduction
 
-This document specifies the Application Programming Interface (API) for the `git_operations` module. The API will consist of Python functions designed to interact with Git repositories programmatically. These functions will wrap common Git commands and provide structured output, facilitating Git automation within the Codomyrmex ecosystem.
+This document specifies the Application Programming Interface (API) for the `git_operations` module. The module provides a comprehensive, production-ready interface for all Git operations within the Codomyrmex ecosystem, supporting complete Git workflows with 22+ operations covering all aspects of Git repository management.
 
-<!-- TODO: As the module is implemented (e.g., in `git_wrapper.py` or `git_utils.py`), detail each public function here. -->
+**Note**: For complete detailed API documentation with all function signatures, parameters, return types, and examples, see [COMPLETE_API_DOCUMENTATION.md](./COMPLETE_API_DOCUMENTATION.md).
 
-## Endpoints / Functions / Interfaces
+## Core Operations
 
-(Detail each Python function intended for public use from this module. Use a consistent format.)
+### `check_git_availability() -> bool`
 
-<!-- 
-  Potential function specifications for future implementation. 
-  These would be defined in, for example, `git_operations.git_wrapper` or `git_operations.git_utils`.
+- **Description**: Verifies that Git is installed and accessible on the system.
+- **Parameters**: None
+- **Returns**: `bool` - True if Git is available, False otherwise
+- **Raises**: None (returns False on errors)
 
-### Function: `get_repository_status(local_path: str) -> RepositoryStatus`
-- **Description**: Retrieves the current status of the Git repository at `local_path`.
-- **Parameters**: `local_path` (str): Path to the local Git repository.
-- **Returns**: `RepositoryStatus` object detailing current branch, changes, etc.
-- **Raises**: `NotAGitRepositoryError` if `local_path` is not a Git repository.
+### `is_git_repository(path: str = None) -> bool`
 
-### Function: `get_current_branch(local_path: str) -> str`
+- **Description**: Checks if the specified path (or current directory) is a Git repository.
+- **Parameters**:
+    - `path` (str, optional): Path to check. Defaults to current working directory.
+- **Returns**: `bool` - True if path is a Git repository, False otherwise
+- **Raises**: None (returns False on errors)
+
+### `initialize_git_repository(path: str, initial_commit: bool = True) -> bool`
+
+- **Description**: Creates a new Git repository at the specified path with optional initial commit.
+- **Parameters**:
+    - `path` (str): Directory path where the repository will be created
+    - `initial_commit` (bool, optional): Whether to create an initial commit with README.md. Defaults to True.
+- **Returns**: `bool` - True if repository was created successfully, False otherwise
+- **Raises**: None (returns False on errors)
+
+### `clone_repository(url: str, destination: str, branch: str = None) -> bool`
+
+- **Description**: Clones a remote Git repository to the specified local destination.
+- **Parameters**:
+    - `url` (str): Remote repository URL to clone
+    - `destination` (str): Local directory path for the cloned repository
+    - `branch` (str, optional): Specific branch to clone. Defaults to repository default.
+- **Returns**: `bool` - True if repository was cloned successfully, False otherwise
+- **Raises**: None (returns False on errors)
+
+## Branch Operations
+
+### `create_branch(branch_name: str, repository_path: str = None) -> bool`
+
+- **Description**: Creates a new branch and switches to it.
+- **Parameters**:
+    - `branch_name` (str): Name of the new branch to create
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if branch was created successfully, False otherwise
+
+### `switch_branch(branch_name: str, repository_path: str = None) -> bool`
+
+- **Description**: Switches to an existing branch.
+- **Parameters**:
+    - `branch_name` (str): Name of the branch to switch to
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if branch switch was successful, False otherwise
+
+### `get_current_branch(repository_path: str = None) -> Optional[str]`
+
 - **Description**: Gets the name of the currently active branch.
-- **Parameters**: `local_path` (str): Path to the local Git repository.
-- **Returns**: Name of the current branch as a string.
-- **Raises**: `NotAGitRepositoryError`.
-
-### Function: `checkout_branch(local_path: str, branch_name: str, create_new: bool = False)`
-- **Description**: Checks out an existing branch or creates and checks out a new branch.
 - **Parameters**:
-    - `local_path` (str): Path to the local Git repository.
-    - `branch_name` (str): Name of the branch to checkout or create.
-    - `create_new` (bool, optional): If True, creates `branch_name` if it doesn't exist. Defaults to False.
-- **Returns**: True on success, False on failure.
-- **Raises**: `NotAGitRepositoryError`, `BranchCheckoutError`.
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `Optional[str]` - Name of the current branch, or None on error
 
-### Function: `commit_changes(local_path: str, message: str, author_name: str = None, author_email: str = None, stage_all: bool = True)`
-- **Description**: Stages changes and creates a commit.
-- **Parameters**:
-    - `local_path` (str): Path to the local Git repository.
-    - `message` (str): Commit message.
-    - `author_name` (str, optional): Override Git config for author name.
-    - `author_email` (str, optional): Override Git config for author email.
-    - `stage_all` (bool, optional): If True, stages all tracked, modified files (`git add -u`) before committing. Defaults to True.
-- **Returns**: SHA of the new commit on success, None on failure.
-- **Raises**: `NotAGitRepositoryError`, `CommitError`.
+### `merge_branch(source_branch: str, target_branch: str, repository_path: str = None) -> bool`
 
-### Function: `push_changes(local_path: str, remote_name: str = 'origin', branch_name: str = None, set_upstream: bool = False)`
-- **Description**: Pushes local commits to a remote repository.
+- **Description**: Merges source branch into target branch.
 - **Parameters**:
-    - `local_path` (str): Path to the local Git repository.
-    - `remote_name` (str, optional): Name of the remote. Defaults to 'origin'.
-    - `branch_name` (str, optional): Name of the branch to push. Defaults to the current branch.
-    - `set_upstream` (bool, optional): If True, adds `--set-upstream` to the push command. Defaults to False.
-- **Returns**: True on success, False on failure.
-- **Raises**: `NotAGitRepositoryError`, `PushError`.
+    - `source_branch` (str): Branch to merge from
+    - `target_branch` (str): Branch to merge into
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if merge was successful, False otherwise
 
-### Function: `pull_changes(local_path: str, remote_name: str = 'origin', branch_name: str = None)`
-- **Description**: Fetches changes from a remote and merges them into the current or specified branch.
-- **Parameters**:
-    - `local_path` (str): Path to the local Git repository.
-    - `remote_name` (str, optional): Name of the remote. Defaults to 'origin'.
-    - `branch_name` (str, optional): Name of the branch to pull into. Defaults to the current branch.
-- **Returns**: True on success, False on failure.
-- **Raises**: `NotAGitRepositoryError`, `PullError`.
+### `rebase_branch(branch_name: str, base_branch: str, repository_path: str = None) -> bool`
 
-### Function: `list_branches(local_path: str, remote: bool = False) -> list[str]`
-- **Description**: Lists local or remote branches.
+- **Description**: Rebases a branch onto another branch.
 - **Parameters**:
-    - `local_path` (str): Path to the local Git repository.
-    - `remote` (bool, optional): If True, lists remote branches. Defaults to False (local branches).
-- **Returns**: A list of branch names.
-- **Raises**: `NotAGitRepositoryError`.
+    - `branch_name` (str): Branch to rebase
+    - `base_branch` (str): Branch to rebase onto
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if rebase was successful, False otherwise
 
-### Function: `get_commit_log(local_path: str, max_count: int = 10, branch: str = None) -> list[CommitInfo]`
-- **Description**: Retrieves commit history for the repository or a specific branch.
+## File Operations
+
+### `add_files(file_paths: list[str], repository_path: str = None) -> bool`
+
+- **Description**: Add files to the Git staging area.
 - **Parameters**:
-    - `local_path` (str): Path to the local Git repository.
+    - `file_paths` (list[str]): List of file paths to add
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if files were added successfully, False otherwise
+
+### `commit_changes(message: str, repository_path: str = None) -> bool`
+
+- **Description**: Commit staged changes with the given message.
+- **Parameters**:
+    - `message` (str): Commit message
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if commit was successful, False otherwise
+
+### `get_status(repository_path: str = None) -> dict[str, Any]`
+
+- **Description**: Get the current status of the repository.
+- **Parameters**:
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `dict[str, Any]` - Dictionary containing status information (branch, changes, etc.)
+
+### `get_diff(repository_path: str = None, staged: bool = False) -> str`
+
+- **Description**: Get the diff of changes in the repository.
+- **Parameters**:
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+    - `staged` (bool, optional): Whether to show staged changes. Defaults to False.
+- **Returns**: `str` - Diff output as string
+
+### `reset_changes(repository_path: str = None, mode: str = "mixed") -> bool`
+
+- **Description**: Reset changes in the repository.
+- **Parameters**:
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+    - `mode` (str, optional): Reset mode ("mixed", "soft", "hard"). Defaults to "mixed".
+- **Returns**: `bool` - True if reset was successful, False otherwise
+
+## Remote Operations
+
+### `push_changes(remote: str = "origin", branch: str = None, repository_path: str = None) -> bool`
+
+- **Description**: Push committed changes to a remote repository.
+- **Parameters**:
+    - `remote` (str, optional): Remote name. Defaults to "origin".
+    - `branch` (str, optional): Branch to push. Defaults to current branch.
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if push was successful, False otherwise
+
+### `pull_changes(remote: str = "origin", branch: str = None, repository_path: str = None) -> bool`
+
+- **Description**: Pull changes from a remote repository.
+- **Parameters**:
+    - `remote` (str, optional): Remote name. Defaults to "origin".
+    - `branch` (str, optional): Branch to pull. Defaults to current branch.
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if pull was successful, False otherwise
+
+## History & Information
+
+### `get_commit_history(repository_path: str = None, max_count: int = 10, branch: str = None) -> list[dict[str, Any]]`
+
+- **Description**: Get commit history for the repository.
+- **Parameters**:
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
     - `max_count` (int, optional): Maximum number of commits to return. Defaults to 10.
-    - `branch` (str, optional): Specific branch to get log for. Defaults to current branch.
-- **Returns**: A list of `CommitInfo` objects.
-- **Raises**: `NotAGitRepositoryError`.
+    - `branch` (str, optional): Branch to get history for. Defaults to current branch.
+- **Returns**: `list[dict[str, Any]]` - List of commit dictionaries with metadata
 
--->
+## Tag Operations
+
+### `create_tag(tag_name: str, message: str = None, repository_path: str = None) -> bool`
+
+- **Description**: Create a Git tag.
+- **Parameters**:
+    - `tag_name` (str): Name of the tag
+    - `message` (str, optional): Tag message
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if tag was created successfully, False otherwise
+
+### `list_tags(repository_path: str = None) -> list[str]`
+
+- **Description**: List all tags in the repository.
+- **Parameters**:
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `list[str]` - List of tag names
+
+## Stash Operations
+
+### `stash_changes(message: str = None, repository_path: str = None) -> bool`
+
+- **Description**: Stash uncommitted changes.
+- **Parameters**:
+    - `message` (str, optional): Stash message
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if stash was successful, False otherwise
+
+### `apply_stash(stash_ref: str = None, repository_path: str = None) -> bool`
+
+- **Description**: Apply a stash.
+- **Parameters**:
+    - `stash_ref` (str, optional): Stash reference (e.g., "stash@{0}"). Defaults to most recent.
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `bool` - True if stash was applied successfully, False otherwise
+
+### `list_stashes(repository_path: str = None) -> list[dict[str, str]]`
+
+- **Description**: List all stashes.
+- **Parameters**:
+    - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+- **Returns**: `list[dict[str, str]]` - List of stash dictionaries with metadata
+
+## GitHub API Operations
+
+The module also provides GitHub API integration through the `github_api` submodule. See `github_api.py` for functions like:
+- `create_github_repository()`
+- `create_pull_request()`
+- `get_pull_requests()`
+- `get_repository_info()`
+
+## Visualization Integration
+
+When `data_visualization` module is available, the following functions are provided:
+- `create_git_analysis_report()`
+- `visualize_git_branches()`
+- `visualize_commit_activity()`
+- `create_git_workflow_diagram()`
+
+See `visualization_integration.py` for details.
 
 ## Data Models
 
-<!-- TODO: Define any common data structures or models returned by or passed to the API functions. These are examples. -->
+### Repository Status Dictionary
+Returned by `get_status()`:
+```python
+{
+    "branch": str,           # Current branch name
+    "is_dirty": bool,        # Whether there are uncommitted changes
+    "untracked_files": list[str],
+    "modified_files": list[str],
+    "staged_files": list[str],
+    "ahead_by": int,        # Commits ahead of remote
+    "behind_by": int         # Commits behind remote
+}
+```
 
-### Model: `RepositoryStatus` (Example)
-- `current_branch` (str): Name of the current active branch.
-- `is_dirty` (bool): True if there are any uncommitted changes (staged, unstaged, or untracked).
-- `untracked_files` (list[str]): List of untracked files.
-- `modified_files` (list[str]): List of modified (but not staged) files.
-- `staged_files` (list[str]): List of files staged for commit.
-- `ahead_by` (int): Number of commits the local branch is ahead of its remote counterpart.
-- `behind_by` (int): Number of commits the local branch is behind its remote counterpart.
-
-### Model: `CommitInfo` (Example)
-- `sha` (str): Full commit hash.
-- `short_sha` (str): Short commit hash (e.g., first 7 characters).
-- `author_name` (str): Author's name.
-- `author_email` (str): Author's email.
-- `date` (str): Date of the commit (ISO 8601 format).
-- `message_subject` (str): First line of the commit message.
-- `message_body` (str, optional): Rest of the commit message.
+### Commit History Dictionary
+Returned by `get_commit_history()`:
+```python
+{
+    "sha": str,              # Full commit SHA
+    "short_sha": str,        # Short commit SHA
+    "message": str,          # Commit message
+    "author": str,           # Author name
+    "email": str,            # Author email
+    "date": str,             # Commit date (ISO format)
+    "timestamp": float       # Unix timestamp
+}
+```
 
 ## Authentication & Authorization
 
-This module, when performing operations that interact with remote Git repositories (e.g., `clone` of private repos, `fetch`, `pull`, `push`), relies on the underlying Git command-line tool's configuration for authentication. This means that the environment where scripts using this module are run must have Git credentials configured appropriately.
+- **Credential Management**: The module relies on Git's underlying credential management system (SSH agent, Git Credential Manager, OS keychain). It does not directly handle or store credentials.
+- **GitHub API**: Requires a GitHub Personal Access Token (PAT) stored in environment variables or Git credential helper.
+- **Security**: See [SECURITY.md](./SECURITY.md) for detailed security considerations.
 
-Common methods include:
--   **SSH Keys**: Using SSH URLs for remotes (e.g., `git@github.com:user/repo.git`) with an SSH key pair configured and `ssh-agent` running.
--   **HTTPS with Credential Managers**: For HTTPS URLs (e.g., `https://github.com/user/repo.git`), Git can use a platform-specific credential manager (like Git Credential Manager Core) to securely store and provide usernames/passwords or Personal Access Tokens (PATs).
--   **Personal Access Tokens (PATs)**: For HTTPS, PATs can often be used in place of passwords, especially with services like GitHub, GitLab, or Bitbucket. These can be configured via credential managers or sometimes directly in Git configuration (though direct storage in config is less secure).
--   **Environment Variables**: Some CI/CD systems or specific tools might use environment variables (e.g., `GIT_ASKPASS` scripts, or by passing tokens directly to `git` commands if supported by the wrapper functions in this module - though this requires careful handling).
+## Error Handling
 
-It is the responsibility of the user or the calling application to ensure that Git authentication is correctly set up in the execution environment. This `git_operations` module itself does not directly handle or store credentials like API keys or passwords. 
-
-Refer to Git documentation and the `environment_setup` module for guidance on setting up Git credentials securely. Functions performing remote operations may fail with `AuthenticationError` or similar exceptions if authentication is not properly configured or fails.
+All functions return `False` or `None` on failure rather than raising exceptions. Errors are logged via the `logging_monitoring` module. Check function return values and logs for error details.
 
 ## Rate Limiting
 
-N/A (Operations are local or depend on remote Git server rate limits, not imposed by this module itself).
+- **Git Operations**: No rate limiting (limited by system resources)
+- **GitHub API**: Subject to GitHub API rate limits (5,000 requests/hour for authenticated requests)
 
 ## Versioning
 
-API functions will be versioned as part of the `git_operations` module, following the overall project's semantic versioning. Changes to function signatures or core behavior will be noted in the module's `CHANGELOG.md`. 
+This API follows the Codomyrmex project versioning strategy. API stability is maintained for public functions. Internal implementations may change without notice.
+
+## Complete Documentation
+
+For comprehensive documentation with detailed examples, parameter descriptions, and usage patterns, see:
+- [COMPLETE_API_DOCUMENTATION.md](./COMPLETE_API_DOCUMENTATION.md) - Full API reference
+- [USAGE_EXAMPLES.md](./USAGE_EXAMPLES.md) - Practical usage examples
+- [SECURITY.md](./SECURITY.md) - Security considerations and best practices

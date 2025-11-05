@@ -12,17 +12,17 @@ graph TB
         Dev["Development<br/>Environment"]
         Testing["Testing &<br/>Validation"]
     end
-    
+
     subgraph "Staging"
         Staging["Staging<br/>Environment"]
         Integration["Integration<br/>Testing"]
     end
-    
+
     subgraph "Production"
         Prod["Production<br/>Environment"]
         Monitor["Monitoring &<br/>Observability"]
     end
-    
+
     Dev --> Testing
     Testing --> Staging
     Staging --> Integration
@@ -106,7 +106,7 @@ services:
       - cache
     networks:
       - codomyrmex-network
-    
+
   database:
     image: postgres:15-alpine
     restart: unless-stopped
@@ -118,7 +118,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - codomyrmex-network
-      
+
   cache:
     image: redis:7-alpine
     restart: unless-stopped
@@ -126,7 +126,7 @@ services:
       - redis_data:/data
     networks:
       - codomyrmex-network
-      
+
   reverse-proxy:
     image: nginx:alpine
     restart: unless-stopped
@@ -269,28 +269,28 @@ export MAX_FILE_SIZE_MB=50
 server {
     listen 443 ssl http2;
     server_name api.yourdomain.com;
-    
+
     ssl_certificate /etc/nginx/ssl/cert.pem;
     ssl_certificate_key /etc/nginx/ssl/key.pem;
-    
+
     # Security headers
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header X-Content-Type-Options nosniff;
     add_header X-Frame-Options DENY;
     add_header X-XSS-Protection "1; mode=block";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
-    
+
     # Rate limiting
     limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
     limit_req zone=api burst=20 nodelay;
-    
+
     location / {
         proxy_pass http://codomyrmex:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        
+
         # Timeouts
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
@@ -332,27 +332,27 @@ def health_check():
     try:
         # Check database connectivity
         db_status = check_database_connection()
-        
+
         # Check cache connectivity
         cache_status = check_redis_connection()
-        
+
         # Check API key validity
         api_status = check_api_keys()
-        
+
         # Check disk space
         disk_status = check_disk_space()
-        
+
         # Check memory usage
         memory_status = check_memory_usage()
-        
+
         all_healthy = all([
             db_status['healthy'],
-            cache_status['healthy'], 
+            cache_status['healthy'],
             api_status['healthy'],
             disk_status['healthy'],
             memory_status['healthy']
         ])
-        
+
         return jsonify({
             'status': 'healthy' if all_healthy else 'unhealthy',
             'timestamp': datetime.utcnow().isoformat(),
@@ -366,7 +366,7 @@ def health_check():
             'version': get_version(),
             'uptime': get_uptime()
         }), 200 if all_healthy else 503
-        
+
     except Exception as e:
         return jsonify({
             'status': 'error',
@@ -475,16 +475,16 @@ def cache_result(expiry=3600, key_prefix='codomyrmex'):
             # Generate cache key
             key_data = f"{func.__module__}.{func.__name__}:{args}:{kwargs}"
             cache_key = f"{key_prefix}:{hashlib.md5(key_data.encode()).hexdigest()}"
-            
+
             # Try to get from cache
             cached = redis_client.get(cache_key)
             if cached:
                 return pickle.loads(cached)
-            
+
             # Execute function and cache result
             result = func(*args, **kwargs)
             redis_client.setex(cache_key, expiry, pickle.dumps(result))
-            
+
             return result
         return wrapper
     return decorator
@@ -518,7 +518,7 @@ def async_code_enhancement(self, code, enhancement_options):
         result = enhance_code(code, **enhancement_options)
         logger.info(f"Code enhancement completed for task {self.request.id}")
         return result
-        
+
     except Exception as exc:
         logger.error(f"Code enhancement failed: {exc}")
         # Retry with exponential backoff
@@ -529,13 +529,13 @@ def batch_analysis_task(file_paths):
     """Process multiple files in batch."""
     from codomyrmex.static_analysis import analyze_file
     results = {}
-    
+
     for file_path in file_paths:
         try:
             results[file_path] = analyze_file(file_path)
         except Exception as e:
             results[file_path] = {'error': str(e)}
-    
+
     return results
 ```
 
@@ -565,30 +565,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        
+
     - name: Install dependencies
       run: |
         pip install -e .
         pip install pytest pytest-cov pytest-xdist
-        
+
     - name: Run comprehensive tests
       run: |
         pytest testing/ --cov=src/codomyrmex --cov-report=xml -n auto
-        
+
     - name: Security scan
       run: |
         pip install bandit safety
         bandit -r src/codomyrmex/
         safety check --json
-        
+
     - name: Upload coverage
       uses: codecov/codecov-action@v3
-      
+
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -596,17 +596,17 @@ jobs:
       image-tag: ${{ steps.meta.outputs.tags }}
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-      
+
     - name: Log in to Container Registry
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-        
+
     - name: Extract metadata
       id: meta
       uses: docker/metadata-action@v4
@@ -617,7 +617,7 @@ jobs:
           type=ref,event=pr
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
-          
+
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
@@ -628,7 +628,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -638,25 +638,25 @@ jobs:
       run: |
         echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig
         export KUBECONFIG=./kubeconfig
-        
+
         # Update deployment with new image
         kubectl set image deployment/codomyrmex-api \
           api=${{ needs.build.outputs.image-tag }} \
           -n codomyrmex-${{ inputs.environment || 'prod' }}
-          
+
         # Wait for rollout to complete
         kubectl rollout status deployment/codomyrmex-api \
           -n codomyrmex-${{ inputs.environment || 'prod' }} \
           --timeout=600s
-          
+
     - name: Run smoke tests
       run: |
         # Wait for service to be ready
         sleep 30
-        
+
         # Basic health check
         curl -f https://api.yourdomain.com/health
-        
+
         # API functionality test
         curl -f -X POST https://api.yourdomain.com/api/v1/analyze \
           -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
@@ -706,7 +706,7 @@ def backup_application_state():
     """Backup critical application state to S3."""
     s3_client = boto3.client('s3')
     timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
-    
+
     # Collect state information
     state = {
         'timestamp': timestamp,
@@ -716,7 +716,7 @@ def backup_application_state():
         'api_rate_limits': get_rate_limit_state(),
         'cache_keys': list_important_cache_keys()
     }
-    
+
     # Upload to S3
     backup_key = f"application-state/backup_{timestamp}.json"
     s3_client.put_object(
@@ -725,34 +725,32 @@ def backup_application_state():
         Body=json.dumps(state, indent=2),
         ServerSideEncryption='AES256'
     )
-    
+
     logger.info(f"Application state backup completed: {backup_key}")
 ```
 
 ## 🔗 Related Documentation
 
 ### **Deployment Resources**
-- **[Docker Configuration](./docker.md)**: Container setup and optimization
-- **[Kubernetes Guide](./kubernetes.md)**: Advanced Kubernetes patterns
-- **[Security Hardening](./security.md)**: Production security checklist
-- **[Monitoring Setup](./monitoring.md)**: Complete observability stack
+- **[Troubleshooting Production](../reference/troubleshooting.md#production-issues)**: Production issue resolution
+- **[Performance Guide](../reference/performance.md)**: Performance optimization strategies
+- **[Security Considerations](../reference/troubleshooting.md#security-issues)**: Security best practices
 
 ### **Operational Guides**
-- **[Performance Tuning](./performance.md)**: Optimization strategies
-- **[Troubleshooting Production](../reference/troubleshooting.md#production-issues)**: Production issue resolution
-- **[Disaster Recovery](./disaster-recovery.md)**: Complete recovery procedures
-- **[Scaling Guide](./scaling.md)**: Horizontal and vertical scaling
+- **[Troubleshooting Guide](../reference/troubleshooting.md)**: Comprehensive issue resolution
+- **[Performance Optimization](../reference/performance.md)**: Performance tuning strategies
+- **[Architecture Overview](../project/architecture.md)**: System design for deployment considerations
 
 ### **Development Integration**
-- **[CI/CD Pipeline](../development/ci-cd.md)**: Complete pipeline documentation
-- **[Testing in Production](../development/testing-strategy.md#production-testing)**: Production testing strategies
-- **[Release Management](../development/releases.md)**: Version and release management
+- **[Testing Strategy](../development/testing-strategy.md)**: Testing approach and best practices
+- **[Development Setup](../development/environment-setup.md)**: Development environment configuration
+- **[Contributing Guide](../project/contributing.md)**: How to contribute effectively
 
 ---
 
 **Production Readiness Checklist** ✅:
 - [ ] Security configuration validated
-- [ ] Monitoring and alerting configured  
+- [ ] Monitoring and alerting configured
 - [ ] Backup and recovery tested
 - [ ] Performance benchmarks established
 - [ ] CI/CD pipeline operational
@@ -760,4 +758,4 @@ def backup_application_state():
 - [ ] Incident response procedures defined
 - [ ] Team training completed
 
-**Need Help?** Refer to our [Production Support Guide](../reference/support.md) or contact the team through established channels.
+**Need Help?** Refer to our [Troubleshooting Guide](../reference/troubleshooting.md) or contact the team through established channels.

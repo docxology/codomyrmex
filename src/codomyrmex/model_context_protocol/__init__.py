@@ -15,12 +15,13 @@ Available classes:
 - MCPToolResult
 """
 
+from codomyrmex.exceptions import CodomyrmexError
+
 from .mcp_schemas import (
     MCPErrorDetail,
     MCPToolCall,
     MCPToolResult,
 )
-from codomyrmex.exceptions import CodomyrmexError
 
 __all__ = [
     "MCPErrorDetail",

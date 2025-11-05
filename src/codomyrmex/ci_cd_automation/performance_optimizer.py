@@ -6,16 +6,14 @@ This module provides performance optimization capabilities for CI/CD pipelines,
 including bottleneck identification, resource optimization, and performance tuning.
 """
 
-import asyncio
 import json
 import statistics
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -28,7 +26,7 @@ class PerformanceMetric:
     value: float
     unit: str
     timestamp: datetime
-    tags: Dict[str, str] = field(default_factory=dict)
+    tags: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -38,7 +36,7 @@ class Bottleneck:
     severity: str  # "low", "medium", "high", "critical"
     description: str
     impact: float  # Estimated time impact in seconds
-    recommendations: List[str]
+    recommendations: list[str]
     detected_at: datetime
 
 
@@ -51,7 +49,7 @@ class OptimizationSuggestion:
     estimated_impact: float  # Estimated time savings in seconds
     implementation_effort: str  # "low", "medium", "high"
     priority: int  # 1-10, higher is more important
-    steps: List[str]
+    steps: list[str]
     risk_level: str  # "low", "medium", "high"
 
 
@@ -69,15 +67,15 @@ class PipelineOptimizer:
         self._ensure_directories()
 
         # Performance data storage
-        self._metrics_history: List[PerformanceMetric] = []
-        self._bottlenecks: List[Bottleneck] = []
-        self._suggestions: List[OptimizationSuggestion] = []
+        self._metrics_history: list[PerformanceMetric] = []
+        self._bottlenecks: list[Bottleneck] = []
+        self._suggestions: list[OptimizationSuggestion] = []
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
         self.optimization_data_dir.mkdir(parents=True, exist_ok=True)
 
-    def record_metric(self, name: str, value: float, unit: str, tags: Optional[Dict[str, str]] = None):
+    def record_metric(self, name: str, value: float, unit: str, tags: Optional[dict[str, str]] = None):
         """Record a performance metric.
 
         Args:
@@ -102,7 +100,7 @@ class PipelineOptimizer:
 
         logger.debug(f"Recorded metric: {name} = {value} {unit}")
 
-    def analyze_performance(self, pipeline_name: str, time_range: int = 7) -> Dict[str, Any]:
+    def analyze_performance(self, pipeline_name: str, time_range: int = 7) -> dict[str, Any]:
         """Analyze performance metrics for a pipeline.
 
         Args:
@@ -147,7 +145,7 @@ class PipelineOptimizer:
 
         return analysis
 
-    def _calculate_stats(self, values: List[float]) -> Dict[str, float]:
+    def _calculate_stats(self, values: list[float]) -> dict[str, float]:
         """Calculate basic statistics for a list of values."""
         if not values:
             return {}
@@ -161,7 +159,7 @@ class PipelineOptimizer:
             "std_dev": statistics.stdev(values) if len(values) > 1 else 0
         }
 
-    def _analyze_trends(self, metrics: List[PerformanceMetric]) -> Dict[str, str]:
+    def _analyze_trends(self, metrics: list[PerformanceMetric]) -> dict[str, str]:
         """Analyze performance trends."""
         trends = {}
 
@@ -184,7 +182,7 @@ class PipelineOptimizer:
 
         return trends
 
-    def _identify_bottlenecks(self, metrics: List[PerformanceMetric]) -> List[Bottleneck]:
+    def _identify_bottlenecks(self, metrics: list[PerformanceMetric]) -> list[Bottleneck]:
         """Identify performance bottlenecks."""
         bottlenecks = []
 
@@ -228,7 +226,7 @@ class PipelineOptimizer:
 
         return bottlenecks
 
-    def _generate_suggestions(self, metrics: List[PerformanceMetric]) -> List[OptimizationSuggestion]:
+    def _generate_suggestions(self, metrics: list[PerformanceMetric]) -> list[OptimizationSuggestion]:
         """Generate optimization suggestions."""
         suggestions = []
 
@@ -282,7 +280,7 @@ class PipelineOptimizer:
         self,
         pipeline_name: str,
         target_improvement: float = 0.2  # 20% improvement target
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Generate comprehensive performance optimization plan.
 
         Args:
@@ -341,7 +339,7 @@ class PipelineOptimizer:
         logger.info(f"Generated optimization plan for {pipeline_name} with {len(relevant_suggestions)} suggestions")
         return optimization_plan
 
-    def _create_implementation_timeline(self, suggestions: List[OptimizationSuggestion]) -> List[Dict[str, Any]]:
+    def _create_implementation_timeline(self, suggestions: list[OptimizationSuggestion]) -> list[dict[str, Any]]:
         """Create implementation timeline for suggestions."""
         timeline = []
         current_week = 0
@@ -367,7 +365,7 @@ class PipelineOptimizer:
 
         return timeline
 
-    def get_optimization_history(self, pipeline_name: str) -> List[Dict[str, Any]]:
+    def get_optimization_history(self, pipeline_name: str) -> list[dict[str, Any]]:
         """Get optimization history for a pipeline.
 
         Args:
@@ -381,7 +379,7 @@ class PipelineOptimizer:
         # Look for optimization plan files
         for plan_file in self.optimization_data_dir.glob(f"optimization_plan_{pipeline_name}_*.json"):
             try:
-                with open(plan_file, 'r') as f:
+                with open(plan_file) as f:
                     plan_data = json.load(f)
 
                 # Extract key information
@@ -404,7 +402,7 @@ def optimize_pipeline_performance(
     pipeline_name: str,
     target_improvement: float = 0.2,
     workspace_dir: Optional[str] = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Optimize pipeline performance.
 
     Args:

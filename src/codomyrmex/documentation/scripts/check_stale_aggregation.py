@@ -4,7 +4,6 @@
 Exit code 1 if any module docs changed but aggregation was not updated.
 """
 import filecmp
-import os
 import sys
 from pathlib import Path
 

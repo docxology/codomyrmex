@@ -4,14 +4,11 @@ OpenAPI/Swagger Generator for Codomyrmex API Documentation Module.
 Provides OpenAPI 3.0 specification generation and validation.
 """
 
+import json
 import os
 import sys
-import json
-import yaml
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Optional
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -20,14 +17,9 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-
-    logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -36,11 +28,11 @@ class APISchema:
 
     name: str
     schema_type: str
-    properties: Dict[str, Any] = field(default_factory=dict)
-    required: List[str] = field(default_factory=list)
-    example: Optional[Dict[str, Any]] = None
+    properties: dict[str, Any] = field(default_factory=dict)
+    required: list[str] = field(default_factory=list)
+    example: Optional[dict[str, Any]] = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert schema to OpenAPI format."""
         schema = {"type": self.schema_type, "properties": self.properties}
 
@@ -73,9 +65,9 @@ class OpenAPIGenerator:
         self,
         title: str,
         version: str,
-        endpoints: List[Any],
+        endpoints: list[Any],
         base_url: str = "http://localhost:8000",
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Generate OpenAPI 3.0 specification.
 
@@ -139,7 +131,7 @@ class OpenAPIGenerator:
 
         return spec
 
-    def _get_default_schemas(self) -> Dict[str, Any]:
+    def _get_default_schemas(self) -> dict[str, Any]:
         """Get default OpenAPI schemas."""
         return {
             "Error": {
@@ -162,7 +154,7 @@ class OpenAPIGenerator:
             },
         }
 
-    def _get_default_security_schemes(self) -> Dict[str, Any]:
+    def _get_default_security_schemes(self) -> dict[str, Any]:
         """Get default security schemes."""
         return {
             "BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"},
@@ -170,7 +162,7 @@ class OpenAPIGenerator:
             "BasicAuth": {"type": "http", "scheme": "basic"},
         }
 
-    def validate_spec(self, spec: Dict[str, Any]) -> List[str]:
+    def validate_spec(self, spec: dict[str, Any]) -> list[str]:
         """
         Validate OpenAPI specification.
 
@@ -233,7 +225,7 @@ class OpenAPIGenerator:
         return errors
 
     def export_spec(
-        self, spec: Dict[str, Any], output_path: str, format: str = "json"
+        self, spec: dict[str, Any], output_path: str, format: str = "json"
     ) -> bool:
         """
         Export OpenAPI specification to file.
@@ -270,7 +262,7 @@ class OpenAPIGenerator:
             logger.error(f"Failed to export OpenAPI spec: {e}")
             return False
 
-    def generate_html_docs(self, spec: Dict[str, Any], output_path: str) -> bool:
+    def generate_html_docs(self, spec: dict[str, Any], output_path: str) -> bool:
         """
         Generate HTML documentation from OpenAPI spec.
 
@@ -294,7 +286,7 @@ class OpenAPIGenerator:
             logger.error(f"Failed to generate HTML docs: {e}")
             return False
 
-    def _generate_html_content(self, spec: Dict[str, Any]) -> str:
+    def _generate_html_content(self, spec: dict[str, Any]) -> str:
         """Generate HTML content for API documentation."""
         title = spec.get("info", {}).get("title", "API Documentation")
         version = spec.get("info", {}).get("version", "1.0.0")
@@ -360,9 +352,9 @@ class OpenAPIGenerator:
 def generate_openapi_spec(
     title: str,
     version: str,
-    endpoints: List[Any],
+    endpoints: list[Any],
     base_url: str = "http://localhost:8000",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Convenience function to generate OpenAPI specification.
 
@@ -379,7 +371,7 @@ def generate_openapi_spec(
     return generator.generate_spec(title, version, endpoints, base_url)
 
 
-def validate_openapi_spec(spec: Dict[str, Any]) -> List[str]:
+def validate_openapi_spec(spec: dict[str, Any]) -> list[str]:
     """
     Convenience function to validate OpenAPI specification.
 

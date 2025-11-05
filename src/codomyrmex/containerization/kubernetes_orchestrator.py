@@ -6,15 +6,11 @@ This module provides Kubernetes orchestration, deployment management,
 and container orchestration capabilities.
 """
 
-import asyncio
-import json
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -28,10 +24,10 @@ class KubernetesDeployment:
     namespace: str = "default"
     replicas: int = 1
     port: int = 80
-    environment_variables: Dict[str, str] = field(default_factory=dict)
-    volumes: List[Dict[str, Any]] = field(default_factory=list)
-    config_maps: List[str] = field(default_factory=list)
-    secrets: List[str] = field(default_factory=list)
+    environment_variables: dict[str, str] = field(default_factory=dict)
+    volumes: list[dict[str, Any]] = field(default_factory=list)
+    config_maps: list[str] = field(default_factory=list)
+    secrets: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
 
 
@@ -43,7 +39,7 @@ class KubernetesService:
     type: str = "ClusterIP"
     port: int = 80
     target_port: int = 80
-    selector: Dict[str, str] = field(default_factory=dict)
+    selector: dict[str, str] = field(default_factory=dict)
 
 
 class KubernetesOrchestrator:
@@ -56,8 +52,8 @@ class KubernetesOrchestrator:
             kubeconfig_path: Path to Kubernetes configuration file
         """
         self.kubeconfig_path = kubeconfig_path or "~/.kube/config"
-        self._deployments: Dict[str, KubernetesDeployment] = {}
-        self._services: Dict[str, KubernetesService] = {}
+        self._deployments: dict[str, KubernetesDeployment] = {}
+        self._services: dict[str, KubernetesService] = {}
 
         # In a real implementation, this would initialize the Kubernetes client
         logger.info("Kubernetes orchestrator initialized (stub implementation)")
@@ -112,7 +108,7 @@ class KubernetesOrchestrator:
         logger.info(f"Scaled deployment {deployment_name} to {replicas} replicas (stub implementation)")
         return True
 
-    def get_deployment_status(self, deployment_id: str) -> Optional[Dict[str, Any]]:
+    def get_deployment_status(self, deployment_id: str) -> Optional[dict[str, Any]]:
         """Get deployment status.
 
         Args:
@@ -136,7 +132,7 @@ class KubernetesOrchestrator:
             "created_at": deployment.created_at.isoformat()
         }
 
-    def list_deployments(self) -> List[Dict[str, Any]]:
+    def list_deployments(self) -> list[dict[str, Any]]:
         """List all deployments.
 
         Returns:
@@ -173,9 +169,9 @@ class KubernetesOrchestrator:
 
 
 def orchestrate_kubernetes(
-    deployment_config: Dict[str, Any],
+    deployment_config: dict[str, Any],
     kubeconfig_path: Optional[str] = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Orchestrate Kubernetes deployment.
 
     Args:

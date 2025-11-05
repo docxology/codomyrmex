@@ -6,15 +6,13 @@ Provides detailed status reporting capabilities for the Codomyrmex ecosystem,
 including health checks, dependency analysis, and system diagnostics.
 """
 
-import sys
-import os
-import subprocess
 import importlib
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
 import json
+import subprocess
+import sys
 from datetime import datetime
-from codomyrmex.exceptions import CodomyrmexError
+from pathlib import Path
+from typing import Any, Optional
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -61,7 +59,7 @@ class StatusReporter:
         else:
             return self.formatter.info(message)
 
-    def check_python_environment(self) -> Dict[str, Any]:
+    def check_python_environment(self) -> dict[str, Any]:
         """Check Python environment status."""
         status = {
             "version": sys.version_info,
@@ -80,7 +78,7 @@ class StatusReporter:
             hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
         )
 
-    def check_project_structure(self) -> Dict[str, Any]:
+    def check_project_structure(self) -> dict[str, Any]:
         """Check project directory structure."""
         status = {
             "project_root_exists": self.project_root.exists(),
@@ -103,7 +101,7 @@ class StatusReporter:
             (self.project_root / candidate).exists() for candidate in venv_candidates
         )
 
-    def _check_config_files(self) -> Dict[str, bool]:
+    def _check_config_files(self) -> dict[str, bool]:
         """Check for important configuration files."""
         config_files = {
             "pyproject.toml": (self.project_root / "pyproject.toml").exists(),
@@ -115,7 +113,7 @@ class StatusReporter:
         }
         return config_files
 
-    def check_dependencies(self) -> Dict[str, Any]:
+    def check_dependencies(self) -> dict[str, Any]:
         """Check core dependencies status."""
         dependencies = {
             # Core dependencies
@@ -158,7 +156,7 @@ class StatusReporter:
         except ImportError:
             return False
 
-    def check_git_status(self) -> Dict[str, Any]:
+    def check_git_status(self) -> dict[str, Any]:
         """Check git repository status."""
         status = {
             "is_git_repo": False,
@@ -262,7 +260,7 @@ class StatusReporter:
 
         return status
 
-    def check_external_tools(self) -> Dict[str, bool]:
+    def check_external_tools(self) -> dict[str, bool]:
         """Check availability of external tools."""
         tools = {
             "git": False,
@@ -283,7 +281,7 @@ class StatusReporter:
 
         return tools
 
-    def generate_comprehensive_report(self) -> Dict[str, Any]:
+    def generate_comprehensive_report(self) -> dict[str, Any]:
         """Generate comprehensive system status report."""
         report = {
             "timestamp": datetime.now().isoformat(),
@@ -322,9 +320,9 @@ class StatusReporter:
         # Summary
         self._display_summary(report)
 
-    def _display_python_status(self, env_status: Dict[str, Any]) -> None:
+    def _display_python_status(self, env_status: dict[str, Any]) -> None:
         """Display Python environment status."""
-        print(f"\n🐍 Python Environment:")
+        print("\n🐍 Python Environment:")
         print(f"   Version: {env_status['version_string']}")
         print(f"   Executable: {env_status['executable']}")
 
@@ -337,9 +335,9 @@ class StatusReporter:
 
         print(f"   Platform: {env_status['platform']}")
 
-    def _display_project_structure(self, structure: Dict[str, Any]) -> None:
+    def _display_project_structure(self, structure: dict[str, Any]) -> None:
         """Display project structure status."""
-        print(f"\n📂 Project Structure:")
+        print("\n📂 Project Structure:")
 
         status_items = [
             ("Project Root", structure["project_root_exists"]),
@@ -359,7 +357,7 @@ class StatusReporter:
             print(f"   {status} {name}")
 
         # Config files
-        print(f"\n📄 Configuration Files:")
+        print("\n📄 Configuration Files:")
         for file_name, exists in structure["config_files"].items():
             status = (
                 self.format_message("✅", "success")
@@ -368,9 +366,9 @@ class StatusReporter:
             )
             print(f"   {status} {file_name}")
 
-    def _display_dependencies_status(self, deps: Dict[str, Any]) -> None:
+    def _display_dependencies_status(self, deps: dict[str, Any]) -> None:
         """Display dependencies status."""
-        print(f"\n📦 Dependencies:")
+        print("\n📦 Dependencies:")
         print(
             f"   Available: {deps['available_count']}/{deps['total_count']} ({deps['success_rate']:.1f}%)"
         )
@@ -402,9 +400,9 @@ class StatusReporter:
                     )
                     print(f"      {status} {dep}")
 
-    def _display_git_status(self, git: Dict[str, Any]) -> None:
+    def _display_git_status(self, git: dict[str, Any]) -> None:
         """Display git status."""
-        print(f"\n🌐 Git Repository:")
+        print("\n🌐 Git Repository:")
 
         if not git["git_available"]:
             print(self.format_message("   ❌ Git not available", "error"))
@@ -433,13 +431,13 @@ class StatusReporter:
             print(f"   🌍 Remotes: {len(git['remotes'])} configured")
 
         if git["recent_commits"]:
-            print(f"   📝 Recent commits:")
+            print("   📝 Recent commits:")
             for commit in git["recent_commits"][:3]:
                 print(f"      • {commit}")
 
-    def _display_external_tools(self, tools: Dict[str, bool]) -> None:
+    def _display_external_tools(self, tools: dict[str, bool]) -> None:
         """Display external tools status."""
-        print(f"\n🔧 External Tools:")
+        print("\n🔧 External Tools:")
 
         for tool, available in tools.items():
             status = (
@@ -449,9 +447,9 @@ class StatusReporter:
             )
             print(f"   {status} {tool}")
 
-    def _display_summary(self, report: Dict[str, Any]) -> None:
+    def _display_summary(self, report: dict[str, Any]) -> None:
         """Display summary and recommendations."""
-        print(f"\n📊 Summary:")
+        print("\n📊 Summary:")
 
         # Calculate overall health score
         checks = [
@@ -494,7 +492,7 @@ class StatusReporter:
             recommendations.append("Install Docker for code execution sandbox")
 
         if recommendations:
-            print(f"\n💡 Recommendations:")
+            print("\n💡 Recommendations:")
             for i, rec in enumerate(recommendations, 1):
                 print(f"   {i}. {rec}")
 

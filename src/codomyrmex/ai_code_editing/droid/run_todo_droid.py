@@ -21,26 +21,25 @@ Usage:
 
     # Programmatic usage
     from codomyrmex.ai_code_editing.droid.run_todo_droid import run_todos
-from codomyrmex.exceptions import CodomyrmexError
+    from codomyrmex.exceptions import CodomyrmexError
     processed = list(run_todos(controller, manager, 3))
 """
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-logger = get_logger(__name__)
-
 import argparse
 import importlib
 import sys
 import time
-from typing import Callable, Iterable
+from collections.abc import Iterable
+from typing import Callable
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
 
 # Handle both module and direct execution imports
 try:
     # When run as module
     from .controller import (
         DroidController,
-        DroidConfig,
-        create_default_controller,
         load_config_from_file,
     )
     from .todo import TodoItem, TodoManager
@@ -48,7 +47,6 @@ except ImportError:
     # When run directly as script
     from controller import (
         DroidController,
-        DroidConfig,
         create_default_controller,
         load_config_from_file,
     )
@@ -241,7 +239,7 @@ def run_todos(
             handler = resolve_handler(handler_path)
 
             # Execute with enhanced monitoring
-            result = controller.execute_task(
+            controller.execute_task(
                 item.task_name,
                 handler,
                 prompt=CODOMYRMEX_ENHANCED_PROMPT,
@@ -408,7 +406,7 @@ def _process_todos(controller: DroidController, manager: TodoManager, count: int
         try:
             if controller:
                 print(f"\n📊 Final Controller Metrics: {controller.metrics}")
-        except:
+        except (AttributeError, KeyError, TypeError):
             pass
         print("👋 Droid session completed.")
 

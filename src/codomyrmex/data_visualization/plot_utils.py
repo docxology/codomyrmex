@@ -5,11 +5,8 @@ Utility functions for the Data Visualization module.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-import os
 import logging
-import matplotlib.pyplot as plt
-from pathlib import Path
-from codomyrmex.exceptions import CodomyrmexError
+import os
 
 
 def get_codomyrmex_logger(name: str) -> logging.Logger:

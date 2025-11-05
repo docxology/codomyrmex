@@ -5,6 +5,7 @@ Get up and running with Codomyrmex in **5 minutes or less**! This guide will sho
 ## ⚡ Lightning-Fast Setup
 
 ### **Option 1: UV-Optimized Setup (Recommended)**
+
 ```bash
 # Clone and setup everything automatically with uv
 git clone https://github.com/codomyrmex/codomyrmex.git
@@ -13,6 +14,7 @@ cd codomyrmex
 ```
 
 ### **Option 2: Manual UV Setup**
+
 ```bash
 # 1. Install uv (if not already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -31,6 +33,7 @@ codomyrmex check
 ```
 
 ### **Option 3: Traditional pip Setup (Alternative)**
+
 ```bash
 # 1. Clone and setup virtual environment
 git clone https://github.com/codomyrmex/codomyrmex.git
@@ -64,10 +67,6 @@ codomyrmex modules
 # 4. Check system status
 codomyrmex status
 ```
-
-## 🎨 **Hands-On Examples: Create Something Amazing**
-
-Now let's create something real! Here are step-by-step examples of Codomyrmex's most powerful features:
 
 ## 🎨 **Hands-On Examples: Create Something Amazing**
 
@@ -263,6 +262,7 @@ shell.run()
 ```
 
 **In the interactive shell, try:**
+
 ```bash
 🐜 codomyrmex> explore                    # Overview of all modules
 🐜 codomyrmex> forage visualization       # Find visualization capabilities
@@ -277,6 +277,7 @@ shell.run()
 ## 📋 **Quick Reference**
 
 ### **Essential Commands**
+
 ```bash
 # Check system status
 codomyrmex check
@@ -292,7 +293,9 @@ pytest testing/unit/ -v
 ```
 
 ### **Environment Variables**
+
 For AI features, create a `.env` file in the project root:
+
 ```bash
 # Create .env file with your API keys
 cat > .env << EOF
@@ -303,54 +306,23 @@ EOF
 ```
 
 ### **Module Quick Access**
-| Module | Import | Main Function |
-|--------|--------|---------------|
-| **Data Visualization** | `from codomyrmex.data_visualization import create_bar_chart` | `create_bar_chart()` |
-| **AI Code Editing** | `from codomyrmex.ai_code_editing import generate_code_snippet` | `generate_code_snippet()` |
-| **Code Execution** | `from codomyrmex.code_execution_sandbox import execute_code` | `execute_code()` |
-| **Static Analysis** | `from codomyrmex.static_analysis import run_pyrefly_analysis` | `run_pyrefly_analysis()` |
-| **Pattern Matching** | `from codomyrmex.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
+
+| Module                 | Import                                                            | Main Function               |
+| ---------------------- | ----------------------------------------------------------------- | --------------------------- |
+| **Data Visualization** | `from codomyrmex.data_visualization import create_bar_chart`      | `create_bar_chart()`        |
+| **AI Code Editing**    | `from codomyrmex.ai_code_editing import generate_code_snippet`    | `generate_code_snippet()`   |
+| **Code Execution**     | `from codomyrmex.code_execution_sandbox import execute_code`      | `execute_code()`            |
+| **Static Analysis**    | `from codomyrmex.static_analysis import run_pyrefly_analysis`     | `run_pyrefly_analysis()`    |
+| **Pattern Matching**   | `from codomyrmex.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
 
 ---
 
-**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: January 2025* | *Maintained by: Codomyrmex Documentation Team* | *Version: v0.1.0*
-```bash
-# Check system status
-codomyrmex check
-
-# View project information
-codomyrmex info
-
-# Run all tests
-pytest testing/unit/ -v
-
-# Launch interactive exploration
-./start_here.sh
-```
-
-### **Environment Variables**
-For AI features, create a `.env` file in the project root:
-```bash
-# Create .env file with your API keys
-cat > .env << EOF
-OPENAI_API_KEY="sk-your-openai-key"
-ANTHROPIC_API_KEY="sk-ant-your-anthropic-key"  
-GOOGLE_API_KEY="AIzaSy-your-google-key"
-EOF
-```
-
-### **Module Quick Access**
-| Module | Import | Main Function |
-|--------|--------|---------------|
-| **Data Visualization** | `from codomyrmex.data_visualization import create_bar_chart` | `create_bar_chart()` |
-| **AI Code Editing** | `from codomyrmex.ai_code_editing import generate_code_snippet` | `generate_code_snippet()` |
-| **Code Execution** | `from codomyrmex.code_execution_sandbox import execute_code` | `execute_code()` |
-| **Static Analysis** | `from codomyrmex.static_analysis import run_pyrefly_analysis` | `run_pyrefly_analysis()` |
-| **Pattern Matching** | `from codomyrmex.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
+**📝 Documentation Status**: ✅ **Verified & Signed** | _Last reviewed: January 2025_ | _Maintained by: Codomyrmex Documentation Team_ | _Version: v0.1.0_
 
 ## 🎓 Common Workflows
 
 ### **Code Quality Pipeline**
+
 ```python
 from codomyrmex.static_analysis import run_pyrefly_analysis
 from codomyrmex.code_execution_sandbox import execute_code
@@ -371,6 +343,7 @@ refactored = refactor_code_snippet(
 ```
 
 ### **Data Analysis Workflow**
+
 ```python
 from codomyrmex.data_visualization import create_histogram, create_scatter_plot
 import pandas as pd
@@ -394,6 +367,7 @@ create_scatter_plot(
 ```
 
 ### **AI-Enhanced Development**
+
 ```python
 from codomyrmex.ai_code_editing import generate_code_snippet, refactor_code_snippet
 from codomyrmex.code_execution_sandbox import execute_code
@@ -418,6 +392,7 @@ production_code = refactor_code_snippet(
 ## 🎮 Interactive Exploration
 
 ### **Launch the Interactive Shell**
+
 ```bash
 # Method 1: Use the orchestrator (recommended)
 ./start_here.sh
@@ -432,9 +407,10 @@ InteractiveShell().run()
 ```
 
 ### **Shell Commands to Try**
+
 ```bash
 🐜 codomyrmex> explore                    # Overview of all modules
-🐜 codomyrmex> forage visualization       # Find visualization capabilities  
+🐜 codomyrmex> forage visualization       # Find visualization capabilities
 🐜 codomyrmex> demo data_visualization    # Run live demo
 🐜 codomyrmex> dive ai_code_editing       # Deep dive into AI module
 🐜 codomyrmex> status                     # System health check
@@ -446,13 +422,15 @@ InteractiveShell().run()
 ### **Common Issues**
 
 #### **❌ Module not found**
+
 ```bash
 # Ensure proper installation
 pip install -e .
 # Verify you're in project root and venv is active
 ```
 
-#### **❌ Docker issues** 
+#### **❌ Docker issues**
+
 ```bash
 # Ensure Docker is running
 docker run hello-world
@@ -461,25 +439,29 @@ sudo usermod -aG docker $USER
 ```
 
 #### **❌ API key errors**
+
 ```bash
 # Add keys to .env file in project root
 echo 'OPENAI_API_KEY="your-key"' >> .env
 ```
 
 #### **❌ Plot not displaying**
+
 ```bash
 # Set show_plot=True or check matplotlib backend
 python -c "import matplotlib; print(matplotlib.get_backend())"
 ```
 
 ### **Get Help**
-- 📚 **Complete Setup Guide**: [Setup](setup.md) - Comprehensive installation and configuration
-- 🔍 **Detailed Troubleshooting**: [Troubleshooting](../reference/troubleshooting.md)
-- 💬 **Community Support**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
+
+-   📚 **Complete Setup Guide**: [Setup](setup.md) - Comprehensive installation and configuration
+-   🔍 **Detailed Troubleshooting**: [Troubleshooting](../reference/troubleshooting.md)
+-   💬 **Community Support**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
+-   🐛 **Bug Reports**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
 
 ### **Next Steps**
-1. **🎮 [Interactive Examples](../../../examples/README.md)** - Try hands-on demonstrations
+
+1. **🎮 [Interactive Examples](../../examples/README.md)** - Try hands-on demonstrations
 2. **📚 [Full Documentation](../README.md)** - Complete documentation hub
 3. **🏗️ [Architecture Guide](../project/architecture.md)** - Understand system design
 4. **🤝 [Contributing Guide](../project/contributing.md)** - Join development
@@ -487,6 +469,7 @@ python -c "import matplotlib; print(matplotlib.get_backend())"
 ## 🚀 Next Steps
 
 ### **🎮 Try Interactive Examples**
+
 ```bash
 # Launch the example selector for guided exploration
 cd examples
@@ -501,6 +484,7 @@ cd ../integration && ./ai-enhanced-analysis.sh
 ```
 
 ### **Dive Deeper**
+
 1. **🎮 [Interactive Examples](../../examples/README.md)** - Hands-on demonstrations
 2. **📖 [Module Overview](../modules/overview.md)** - Understand the module system
 3. **🎯 [Tutorials](tutorials/)** - Step-by-step guides for specific tasks
@@ -508,11 +492,13 @@ cd ../integration && ./ai-enhanced-analysis.sh
 5. **🏗️ [Architecture Guide](../project/architecture.md)** - System design and principles
 
 ### **Get Involved**
+
 1. **🤝 [Contributing Guide](../project/contributing.md)** - How to contribute to Codomyrmex
-2. **🧪 [Development Setup](../development/environment-setup.md)** - Set up development environment  
+2. **🧪 [Development Setup](../development/environment-setup.md)** - Set up development environment
 3. **🔧 [Create a Module](tutorials/creating-a-module.md)** - Build your own Codomyrmex module
 
 ### **Explore Use Cases**
+
 1. **🤖 AI-Enhanced Development** - Use AI to accelerate coding workflows
 2. **📊 Data Analysis Pipelines** - Create visualizations and process data
 3. **🔍 Code Quality Automation** - Set up automated quality checking
@@ -527,6 +513,7 @@ cd ../integration && ./ai-enhanced-analysis.sh
 Codomyrmex includes powerful AI capabilities that are completely optional. Here's how to enable them:
 
 ### **Add API Keys**
+
 ```bash
 # Create .env file with your AI provider keys
 cat > .env << EOF
@@ -541,6 +528,7 @@ EOF
 ```
 
 ### **Test AI Features**
+
 ```python
 # Test AI code generation
 from codomyrmex.ai_code_editing import generate_code_snippet

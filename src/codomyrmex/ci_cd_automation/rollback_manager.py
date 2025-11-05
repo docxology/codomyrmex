@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Callable
+from typing import Callable, Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -38,7 +38,7 @@ class RollbackStep:
     action: Callable
     timeout: int = 300  # 5 minutes default
     retry_count: int = 3
-    dependencies: List[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -46,7 +46,7 @@ class RollbackPlan:
     """Complete rollback plan for a deployment."""
     deployment_id: str
     strategy: RollbackStrategy
-    steps: List[RollbackStep]
+    steps: list[RollbackStep]
     created_at: datetime
     reason: str
     estimated_duration: int
@@ -65,8 +65,8 @@ class RollbackExecution:
     current_step: int = 0
     completed_steps: int = 0
     failed_steps: int = 0
-    errors: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
 
 class RollbackManager:
@@ -84,8 +84,8 @@ class RollbackManager:
         self._ensure_directories()
 
         # In-memory storage
-        self._active_rollbacks: Dict[str, RollbackExecution] = {}
-        self._rollback_plans: Dict[str, RollbackPlan] = {}
+        self._active_rollbacks: dict[str, RollbackExecution] = {}
+        self._rollback_plans: dict[str, RollbackPlan] = {}
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
@@ -97,7 +97,7 @@ class RollbackManager:
         deployment_id: str,
         strategy: RollbackStrategy,
         reason: str,
-        custom_steps: Optional[List[RollbackStep]] = None
+        custom_steps: Optional[list[RollbackStep]] = None
     ) -> RollbackPlan:
         """Create a rollback plan for a failed deployment.
 
@@ -142,7 +142,7 @@ class RollbackManager:
 
         return plan
 
-    def _create_default_steps(self, strategy: RollbackStrategy) -> List[RollbackStep]:
+    def _create_default_steps(self, strategy: RollbackStrategy) -> list[RollbackStep]:
         """Create default rollback steps for a strategy."""
         if strategy == RollbackStrategy.IMMEDIATE:
             return [
@@ -209,7 +209,7 @@ class RollbackManager:
                 )
             ]
 
-    def _calculate_estimated_duration(self, steps: List[RollbackStep]) -> int:
+    def _calculate_estimated_duration(self, steps: list[RollbackStep]) -> int:
         """Calculate estimated duration for rollback steps."""
         return sum(step.timeout for step in steps)
 
@@ -369,7 +369,7 @@ class RollbackManager:
         """
         return self._active_rollbacks.get(execution_id)
 
-    def list_rollback_plans(self) -> List[RollbackPlan]:
+    def list_rollback_plans(self) -> list[RollbackPlan]:
         """List all rollback plans.
 
         Returns:
@@ -417,7 +417,7 @@ def handle_rollback(
     manager = RollbackManager(workspace_dir)
 
     # Create rollback plan
-    plan = manager.create_rollback_plan(deployment_id, strategy, reason)
+    manager.create_rollback_plan(deployment_id, strategy, reason)
 
     # Execute rollback asynchronously
     # In a real implementation, this would be awaited or run in background

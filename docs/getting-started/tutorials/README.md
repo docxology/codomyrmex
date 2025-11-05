@@ -40,14 +40,24 @@ No related modules specified
 
 ## Usage Examples
 
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.docs.getting-started.tutorials import ModuleClass
+Tutorial examples:
 
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
+```bash
+# Follow the module creation tutorial
+cd docs/getting-started/tutorials
+# Read creating-a-module.md step by step
 ```
+
+```python
+# Example from module creation tutorial
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.module_template import create_module
+
+logger = get_logger(__name__)
+# Follow creating-a-module.md for complete workflow
+```
+
+See [Module Creation Tutorial](creating-a-module.md) for a complete step-by-step guide to building your own Codomyrmex module.
 
 ## Quality Assurance
 

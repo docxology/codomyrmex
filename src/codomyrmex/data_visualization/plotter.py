@@ -8,22 +8,24 @@ It acts as the primary entry point for accessing visualization capabilities.
 - Relies on `environment_setup` for environment and dependency checks.
 """
 
-import matplotlib.pyplot as plt
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
 import os
-import logging  # Import standard logging, will be configured by the main app
+
+import matplotlib.pyplot as plt
 import numpy as np
-from .line_plot import create_line_plot
-from .scatter_plot import create_scatter_plot
+
 from .bar_chart import create_bar_chart
 from .histogram import create_histogram
+from .line_plot import create_line_plot
 from .pie_chart import create_pie_chart
 from .plot_utils import (
-    get_codomyrmex_logger,
-    save_plot,
-    apply_common_aesthetics,
     DEFAULT_FIGURE_SIZE,
+    apply_common_aesthetics,
+    save_plot,
 )
-from codomyrmex.exceptions import CodomyrmexError
+from .scatter_plot import create_scatter_plot
 
 # Attempt to import Codomyrmex logging utilities
 try:

@@ -1,14 +1,13 @@
 """Basic usage examples for the 3D Modeling module."""
 
 from codomyrmex.modeling_3d import (
-    Scene3D,
-    Object3D,
     Camera3D,
     Light3D,
     Material3D,
+    Object3D,
     RenderPipeline,
+    Scene3D,
     Vector3D,
-    Quaternion,
 )
 
 
@@ -65,7 +64,7 @@ def ar_example():
 def vr_example():
     """Demonstrate VR rendering."""
 
-    from codomyrmex.modeling_3d import VRRenderer, Scene3D
+    from codomyrmex.modeling_3d import Scene3D, VRRenderer
 
     scene = Scene3D()
     vr_renderer = VRRenderer()

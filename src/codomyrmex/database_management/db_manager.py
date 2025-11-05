@@ -5,12 +5,12 @@ Provides comprehensive database connection management and administration.
 """
 
 import os
+import sqlite3
 import sys
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
-import sqlite3
+from typing import Any, Optional
 
 # Optional database drivers - import conditionally
 try:
@@ -35,14 +35,9 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-try:
-    from logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-
-    logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class DatabaseType(Enum):
@@ -179,7 +174,7 @@ class DatabaseConnection:
 
     def execute_query(
         self, query: str, params: Optional[tuple] = None
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Execute a database query.
 
@@ -216,7 +211,7 @@ class DatabaseConnection:
             self._connection.rollback()
             raise
 
-    def get_database_info(self) -> Dict[str, Any]:
+    def get_database_info(self) -> dict[str, Any]:
         """Get database information and statistics."""
         info = {
             "name": self.name,
@@ -248,7 +243,7 @@ class DatabaseConnection:
 
         return info
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """Perform database health check."""
         health = {
             "database": self.name,
@@ -290,7 +285,7 @@ class DatabaseManager:
 
     def __init__(self):
         """Initialize the database manager."""
-        self.connections: Dict[str, DatabaseConnection] = {}
+        self.connections: dict[str, DatabaseConnection] = {}
 
     def add_connection(self, connection: DatabaseConnection):
         """Add a database connection."""
@@ -308,7 +303,7 @@ class DatabaseManager:
         """Get a database connection by name."""
         return self.connections.get(name)
 
-    def list_connections(self) -> List[str]:
+    def list_connections(self) -> list[str]:
         """List all connection names."""
         return list(self.connections.keys())
 
@@ -327,7 +322,7 @@ class DatabaseManager:
 
     def execute_query(
         self, connection_name: str, query: str, params: Optional[tuple] = None
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Execute a query on a specific database connection.
 
@@ -345,7 +340,7 @@ class DatabaseManager:
 
         return connection.execute_query(query, params)
 
-    def health_check_all(self) -> Dict[str, Dict[str, Any]]:
+    def health_check_all(self) -> dict[str, dict[str, Any]]:
         """Perform health checks on all database connections."""
         health_status = {}
 
@@ -361,7 +356,7 @@ class DatabaseManager:
 
         return health_status
 
-    def get_database_stats(self) -> Dict[str, Any]:
+    def get_database_stats(self) -> dict[str, Any]:
         """Get statistics for all databases."""
         stats = {
             "total_connections": len(self.connections),

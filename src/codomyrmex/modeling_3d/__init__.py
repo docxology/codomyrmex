@@ -4,8 +4,8 @@ This module provides comprehensive 3D modeling, rendering, and AR/VR/XR capabili
 for the Codomyrmex platform, enabling advanced spatial computing and visualization.
 """
 
-from .engine_3d import *
 from .ar_vr_support import *
+from .engine_3d import *
 from .rendering_pipeline import *
 
 __version__ = "0.1.0"

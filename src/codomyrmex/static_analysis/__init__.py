@@ -30,18 +30,17 @@ from .pyrefly_runner import (
     parse_pyrefly_output,
     run_pyrefly_analysis,
 )
-
 from .static_analyzer import (
+    AnalysisResult,
+    AnalysisSummary,
+    AnalysisType,
+    CodeMetrics,
+    Language,
+    SeverityLevel,
     StaticAnalyzer,
     analyze_file,
     analyze_project,
     get_available_tools,
-    AnalysisResult,
-    AnalysisSummary,
-    CodeMetrics,
-    AnalysisType,
-    SeverityLevel,
-    Language,
 )
 
 

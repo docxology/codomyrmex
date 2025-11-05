@@ -43,14 +43,20 @@ No related modules specified
 
 ## Usage Examples
 
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.docs.development import ModuleClass
+This directory contains developer documentation. For development setup:
 
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
+```bash
+# Quick development environment setup
+bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
+
+# Run tests
+pytest testing/unit/ -v
+
+# Format code
+black src/ testing/
 ```
+
+See [Environment Setup](environment-setup.md) for complete instructions and [Testing Strategy](testing-strategy.md) for testing examples.
 
 ## Quality Assurance
 

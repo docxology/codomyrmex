@@ -23,9 +23,9 @@ Step-by-step learning path documentation coordination for Codomyrmex, providing 
 ## Navigation Links
 - **📚 Documentation Hub**: [../../../README.md](../../../README.md) - Central documentation overview and navigation
 - **🎓 Module Creation Tutorial**: [creating-a-module.md](creating-a-module.md) - Complete module building tutorial
-- **🚀 Getting Started**: [../../installation.md](../../installation.md) - Installation and setup guide
-- **⚡ Quick Start**: [../../quickstart.md](../../quickstart.md) - 5-minute hands-on experience
-- **📦 Module System**: [../../../modules/overview.md](../../../modules/overview.md) - Module architecture understanding
-- **🔧 Development**: [../../../development/environment-setup.md](../../../development/environment-setup.md) - Development environment setup
-- **🤝 Contributing**: [../../../project/contributing.md](../../../project/contributing.md) - How to contribute your module
-- **🎮 Examples**: [../../../../examples/README.md](../../../../examples/README.md) - Working code examples
+- **🚀 Getting Started**: [../installation.md](../installation.md) - Installation and setup guide
+- **⚡ Quick Start**: [../quickstart.md](../quickstart.md) - 5-minute hands-on experience
+- **📦 Module System**: [../../modules/overview.md](../../modules/overview.md) - Module architecture understanding
+- **🔧 Development**: [../../development/environment-setup.md](../../development/environment-setup.md) - Development environment setup
+- **🤝 Contributing**: [../../project/contributing.md](../../project/contributing.md) - How to contribute your module
+- **🎮 Examples**: [../../../examples/README.md](../../../examples/README.md) - Working code examples

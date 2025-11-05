@@ -9,12 +9,11 @@ import functools
 import hashlib
 import json
 import pickle
+import tempfile
 import time
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Union
-import tempfile
-import os
-from codomyrmex.exceptions import CodomyrmexError
+from typing import Any, Callable, Optional, Union
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -54,10 +53,10 @@ class CacheManager:
         self.default_ttl = default_ttl
 
         # In-memory cache: {key: (value, timestamp)}
-        self._memory_cache: Dict[str, tuple] = {}
+        self._memory_cache: dict[str, tuple] = {}
 
         # Access tracking for LRU eviction
-        self._access_times: Dict[str, float] = {}
+        self._access_times: dict[str, float] = {}
 
     def _generate_key(self, func_name: str, args: tuple, kwargs: dict) -> str:
         """Generate a cache key from function name and arguments."""
@@ -169,7 +168,7 @@ class CacheManager:
         for cache_file in self.cache_dir.glob("*.pkl"):
             cache_file.unlink(missing_ok=True)
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get cache statistics."""
         return {
             "memory_items": len(self._memory_cache),
@@ -250,6 +249,6 @@ def clear_cache() -> None:
     _cache_manager.clear()
 
 
-def get_cache_stats() -> Dict[str, Any]:
+def get_cache_stats() -> dict[str, Any]:
     """Get statistics for the global cache."""
     return _cache_manager.get_stats()
