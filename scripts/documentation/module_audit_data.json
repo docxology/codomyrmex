@@ -33,18 +33,6 @@
     ],
     "model_context_protocol": [
       "API_SPECIFICATION.md"
-    ],
-    "module_template": [
-      "API_SPECIFICATION.md"
-    ],
-    "ollama_integration": [
-      "API_SPECIFICATION.md"
-    ],
-    "pattern_matching": [
-      "API_SPECIFICATION.md"
-    ],
-    "static_analysis": [
-      "API_SPECIFICATION.md"
     ]
   }
 }

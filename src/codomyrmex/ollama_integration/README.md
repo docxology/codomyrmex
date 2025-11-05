@@ -41,7 +41,7 @@ config = ConfigManager()
 
 ## API Reference
 
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for complete API documentation.
+See [API_SPECIFICATION.md](./README.md#api-reference) for complete API documentation.
 
 ## Related Documentation
 

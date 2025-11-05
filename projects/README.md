@@ -241,3 +241,6 @@ Templates support customization through:
 - **Documentation Generator**: See `src/codomyrmex/project_orchestration/documentation_generator.py`
 - **Project Manager**: See `src/codomyrmex/project_orchestration/project_manager.py`
 - **Example Project**: See `test_project/` for a complete example with nested documentation
+- **Project Template Schema**: [Complete template schema documentation](../docs/project_orchestration/project-template-schema.md)
+- **Project Lifecycle Guide**: [Complete project lifecycle management guide](../docs/project_orchestration/project-lifecycle-guide.md)
+- **Config-Driven Operations**: [Configuration-driven project operations](../docs/project_orchestration/config-driven-operations.md)

@@ -1,0 +1,49 @@
+{
+  "name": "complex_analysis",
+  "steps": [
+    {
+      "name": "setup",
+      "module": "environment_setup",
+      "action": "check_environment",
+      "parameters": {},
+      "dependencies": [],
+      "timeout": 60,
+      "max_retries": 3
+    },
+    {
+      "name": "analyze_code",
+      "module": "static_analysis",
+      "action": "analyze_code_quality",
+      "parameters": {
+        "path": "."
+      },
+      "dependencies": ["setup"],
+      "timeout": 300,
+      "max_retries": 2
+    },
+    {
+      "name": "ai_insights",
+      "module": "ai_code_editing",
+      "action": "generate_code_insights",
+      "parameters": {
+        "analysis_data": "{{analyze_code.output}}"
+      },
+      "dependencies": ["analyze_code"],
+      "timeout": 120,
+      "max_retries": 3
+    },
+    {
+      "name": "visualize",
+      "module": "data_visualization",
+      "action": "create_bar_chart",
+      "parameters": {
+        "data": "{{ai_insights.output}}",
+        "title": "Analysis Results"
+      },
+      "dependencies": ["ai_insights"],
+      "timeout": 60,
+      "max_retries": 1
+    }
+  ]
+}
+

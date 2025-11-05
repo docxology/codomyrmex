@@ -78,7 +78,7 @@ The Model Context Protocol facilitates communication; therefore, security relies
 
 ## Security of this Module (`model_context_protocol`)
 
--   This module primarily provides specifications, templates (`template/module_template/MCP_TOOL_SPECIFICATION.md`), and potentially schema validation utilities.
+-   This module primarily provides specifications, templates (../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md), and potentially schema validation utilities.
 -   If this module provides Python-based validation utilities (e.g., using `jsonschema` as listed in its `requirements.txt`), vulnerabilities in those libraries could affect systems using these utilities. Keep these dependencies updated.
 
 Thank you for helping keep Codomyrmex and the Model Context Protocol secure. 

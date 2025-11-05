@@ -74,7 +74,7 @@ print(f"Processed result: {result}")
   - **Solution**: (How to fix it.)
 - **Output is not as expected**: 
   - Double-check your input data and configuration against the examples.
-  - Consult the [API Specification](../API_SPECIFICATION.md) for `feature_x`.
+  - Consult the [API Specification](../../API_SPECIFICATION.md) for `feature_x`.
 
 ## 6. Next Steps
 

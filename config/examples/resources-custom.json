@@ -1,0 +1,77 @@
+{
+  "resources": {
+    "custom_cpu": {
+      "id": "custom_cpu",
+      "name": "Custom CPU Resource",
+      "type": "cpu",
+      "description": "Dedicated CPU for heavy workloads",
+      "status": "available",
+      "capacity": {
+        "cores": 16
+      },
+      "allocated": {},
+      "limits": {
+        "max_cpu_cores": 16,
+        "max_concurrent_users": 4,
+        "timeout_seconds": null
+      },
+      "total_allocations": 0,
+      "total_usage_time": 0.0,
+      "current_users": [],
+      "metadata": {},
+      "tags": ["custom", "high-performance"],
+      "created_at": "2025-01-15T10:00:00+00:00",
+      "updated_at": "2025-01-15T10:00:00+00:00"
+    },
+    "custom_api": {
+      "id": "custom_api",
+      "name": "Custom API",
+      "type": "external_api",
+      "description": "Custom external API quota",
+      "status": "available",
+      "capacity": {
+        "requests_per_minute": 200,
+        "tokens_per_minute": 50000
+      },
+      "allocated": {},
+      "limits": {
+        "max_requests_per_minute": 200,
+        "timeout_seconds": 60
+      },
+      "total_allocations": 0,
+      "total_usage_time": 0.0,
+      "current_users": [],
+      "metadata": {},
+      "tags": ["api", "external"],
+      "created_at": "2025-01-15T10:00:00+00:00",
+      "updated_at": "2025-01-15T10:00:00+00:00"
+    },
+    "gpu_resource": {
+      "id": "gpu_resource",
+      "name": "GPU Resource",
+      "type": "gpu",
+      "description": "NVIDIA GPU for ML workloads",
+      "status": "available",
+      "capacity": {
+        "units": 1
+      },
+      "allocated": {},
+      "limits": {
+        "max_concurrent_users": 1,
+        "timeout_seconds": 3600
+      },
+      "total_allocations": 0,
+      "total_usage_time": 0.0,
+      "current_users": [],
+      "metadata": {
+        "model": "NVIDIA A100",
+        "memory_gb": 40
+      },
+      "tags": ["gpu", "ml"],
+      "created_at": "2025-01-15T10:00:00+00:00",
+      "updated_at": "2025-01-15T10:00:00+00:00"
+    }
+  },
+  "updated_at": "2025-01-15T10:00:00+00:00"
+}
+

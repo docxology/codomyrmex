@@ -35,25 +35,25 @@ The main coordination engine that manages all orchestration operations.
   )
   ```
 
-##### `execute_workflow(workflow_name: str, session_id: str = None, **params) -> Dict[str, Any]`
+##### `execute_workflow(workflow_name: str, session_id: Optional[str] = None, **params) -> Dict[str, Any]`
 
 - **Description**: Executes a workflow with orchestration management.
 - **Parameters**:
   - `workflow_name` (string): Name of the workflow to execute
-  - `session_id` (string, optional): Session ID for context (creates new if not provided)
-  - `**params`: Workflow-specific parameters
-- **Returns**: Dictionary with execution results
+  - `session_id` (Optional[str]): Session ID for context (creates new if not provided)
+  - `**params`: Workflow-specific parameters passed to workflow steps
+- **Returns**: Dictionary with execution results:
   ```python
   {
     "success": bool,
-    "session_id": str,
-    "executed_steps": int,
-    "failed_steps": list,
-    "results": dict,
-    "execution_time": float,
-    "error": str  # If success is False
+    "result": Any,  # WorkflowExecution result data
+    "error": Optional[str],  # Error message if success is False
+    "execution_time": Optional[float],  # Execution time in seconds
+    "steps_executed": int  # Number of steps executed
   }
   ```
+- **Raises**:
+  - `ValueError`: If session not found or workflow execution fails
 - **Example**:
   ```python
   result = engine.execute_workflow(
@@ -62,7 +62,101 @@ The main coordination engine that manages all orchestration operations.
       output_path="./analysis",
       include_visualization=True
   )
+  if result['success']:
+      print(f"Workflow completed: {result['steps_executed']} steps")
+  else:
+      print(f"Workflow failed: {result['error']}")
   ```
+
+##### `execute_task(task: Union[Task, Dict[str, Any]], session_id: Optional[str] = None) -> Dict[str, Any]`
+
+- **Description**: Execute a single task with orchestration.
+- **Parameters**:
+  - `task` (Union[Task, Dict[str, Any]]): Task object or task dictionary
+  - `session_id` (Optional[str]): Session ID (creates new if not provided)
+- **Returns**: Dictionary with execution results:
+  ```python
+  {
+    "success": bool,
+    "result": Optional[TaskResult],  # Task result as dictionary
+    "task_id": str  # Task ID
+  }
+  ```
+
+##### `execute_project_workflow(project_name: str, workflow_name: str, session_id: Optional[str] = None, **params) -> Dict[str, Any]`
+
+- **Description**: Execute a workflow for a specific project.
+- **Parameters**:
+  - `project_name` (string): Project name
+  - `workflow_name` (string): Workflow to execute
+  - `session_id` (Optional[str]): Session ID (creates new if not provided)
+  - `**params`: Workflow parameters
+- **Returns**: Execution result dictionary
+
+##### `execute_complex_workflow(workflow_definition: Dict[str, Any], session_id: Optional[str] = None) -> Dict[str, Any]`
+
+- **Description**: Execute a complex workflow with multiple interdependent steps.
+- **Parameters**:
+  - `workflow_definition` (Dict[str, Any]): Workflow definition with steps, dependencies, and parallel_groups
+  - `session_id` (Optional[str]): Session ID (creates new if not provided)
+- **Returns**: Dictionary with execution results:
+  ```python
+  {
+    "success": bool,
+    "results": Dict[str, Any],  # Results for each step
+    "execution_stats": Dict[str, Any],  # Task orchestrator execution statistics
+    "error": Optional[str]  # Error message if failed
+  }
+  ```
+
+##### `create_session(user_id: str = "system", **kwargs) -> str`
+
+- **Description**: Creates a new orchestration session for context management.
+- **Parameters**:
+  - `user_id` (string): User identifier for the session. Default: "system"
+  - `mode` (string, optional): Execution mode. One of: "sequential", "parallel", "priority", "resource_aware". Default: "resource_aware"
+  - `max_parallel_tasks` (int, optional): Maximum concurrent tasks. Default: 4
+  - `max_parallel_workflows` (int, optional): Maximum concurrent workflows. Default: 2
+  - `timeout_seconds` (int, optional): Session timeout in seconds
+  - `resource_requirements` (dict, optional): Required resources for the session
+  - `metadata` (dict, optional): Additional session metadata
+- **Returns**: Session ID (string)
+- **Example**:
+  ```python
+  engine = OrchestrationEngine()
+  session_id = engine.create_session(
+      user_id="analyst",
+      mode="resource_aware",
+      max_parallel_tasks=8,
+      resource_requirements={"cpu": {"cores": 4}, "memory": {"gb": 8}}
+  )
+  ```
+
+##### `get_session(session_id: str) -> Optional[OrchestrationSession]`
+
+- **Description**: Get a session by ID.
+- **Parameters**:
+  - `session_id` (string): Session ID
+- **Returns**: OrchestrationSession object or None if not found
+
+##### `close_session(session_id: str) -> bool`
+
+- **Description**: Close an orchestration session and cleanup resources.
+- **Parameters**:
+  - `session_id` (string): Session ID to close
+- **Returns**: bool - True if session was closed, False if not found
+
+##### `register_event_handler(event: str, handler: Callable)`
+
+- **Description**: Register an event handler for orchestration events.
+- **Parameters**:
+  - `event` (string): Event name (e.g., "workflow_completed", "session_closed")
+  - `handler` (Callable): Handler function that accepts (event: str, data: dict) arguments
+
+##### `get_metrics() -> Dict[str, Any]`
+
+- **Description**: Get comprehensive metrics for all components.
+- **Returns**: Dictionary with metrics including sessions, workflows, tasks, projects, and resources
 
 ##### `get_system_status() -> Dict[str, Any]`
 
@@ -118,64 +212,104 @@ Manages workflow definitions and execution.
 
 #### Methods
 
-##### `create_workflow(name: str, description: str = "") -> Workflow`
+##### `create_workflow(name: str, steps: List[WorkflowStep], save: bool = True) -> bool`
 
-- **Description**: Creates a new workflow instance.
+- **Description**: Creates a new workflow with the specified steps.
 - **Parameters**:
-  - `name` (string): Unique workflow name
-  - `description` (string, optional): Workflow description
-- **Returns**: Workflow object
+  - `name` (string): Unique workflow name. Must be a valid identifier.
+  - `steps` (List[WorkflowStep]): List of workflow steps to execute in order. Dependencies between steps are resolved automatically.
+  - `save` (bool, optional): Whether to persist the workflow to disk. Defaults to True.
+- **Returns**: bool - True if workflow was created successfully, False otherwise.
+- **Raises**:
+  - `ValueError`: If workflow name is empty or invalid, or if workflow has no steps.
+  - `OSError`: If workflow cannot be saved to disk (when save=True).
 - **Example**:
   ```python
+  from codomyrmex.project_orchestration import WorkflowManager, WorkflowStep
+  
   manager = WorkflowManager()
-  workflow = manager.create_workflow(
-      "custom-analysis",
-      "Custom code analysis workflow"
-  )
+  steps = [
+      WorkflowStep(
+          name="setup",
+          module="environment_setup",
+          action="check_environment"
+      ),
+      WorkflowStep(
+          name="analyze",
+          module="static_analysis",
+          action="analyze_code_quality",
+          parameters={"path": "."},
+          dependencies=["setup"]
+      )
+  ]
+  success = manager.create_workflow("custom-analysis", steps)
   ```
 
-##### `execute_workflow(name: str, **params) -> Dict[str, Any]`
+##### `async execute_workflow(name: str, parameters: Optional[Dict[str, Any]] = None, timeout: Optional[int] = None) -> WorkflowExecution`
 
-- **Description**: Executes a workflow synchronously.
+- **Description**: Executes a workflow asynchronously with performance monitoring.
 - **Parameters**:
-  - `name` (string): Workflow name to execute
-  - `**params`: Workflow parameters
-- **Returns**: Execution result dictionary
+  - `name` (string): Name of the workflow to execute.
+  - `parameters` (Optional[Dict[str, Any]]): Global parameters to pass to workflow steps. These can be referenced in step parameters using {{parameter_name}} syntax.
+  - `timeout` (Optional[int]): Maximum execution time in seconds. If None, no timeout.
+- **Returns**: WorkflowExecution object containing status, results, errors, and metrics.
+- **Raises**:
+  - `ValueError`: If workflow name is not found.
+  - `asyncio.TimeoutError`: If workflow execution exceeds the specified timeout.
 - **Example**:
   ```python
-  result = manager.execute_workflow(
-      "ai-analysis",
-      code_path="./src",
-      ai_provider="openai"
-  )
+  import asyncio
+  from codomyrmex.project_orchestration import get_workflow_manager
+  
+  async def main():
+      manager = get_workflow_manager()
+      execution = await manager.execute_workflow(
+          "ai-analysis",
+          parameters={"project_path": "/path/to/project", "output_format": "json"}
+      )
+      
+      if execution.status == WorkflowStatus.COMPLETED:
+          print("Workflow completed successfully")
+          for step_name, result in execution.results.items():
+              print(f"Step {step_name}: {result}")
+      else:
+          print(f"Workflow failed: {execution.errors}")
+  
+  asyncio.run(main())
   ```
 
-##### `list_workflows() -> List[str]`
+##### `list_workflows() -> Dict[str, Dict[str, Any]]`
 
-- **Description**: Lists all available workflow names.
-- **Returns**: List of workflow names
-
-##### `get_workflow_status(name: str) -> Optional[Dict[str, Any]]`
-
-- **Description**: Gets detailed status of a specific workflow.
-- **Parameters**:
-  - `name` (string): Workflow name
-- **Returns**: Status dictionary or None if not found
+- **Description**: List all available workflows with comprehensive metadata.
+- **Returns**: Dictionary mapping workflow names to their metadata. Each workflow metadata includes:
+  - `steps` (int): Number of steps in the workflow
+  - `modules` (List[str]): Unique list of modules used by the workflow
+  - `estimated_duration` (int): Estimated total execution time in seconds
+  - `has_dependencies` (bool): Whether the workflow has step dependencies
+  - `created_time` (Optional[str]): When the workflow was created (if available)
+- **Example**:
   ```python
-  {
-    "name": str,
-    "status": str,
-    "progress": {
-      "total_steps": int,
-      "completed_steps": int,
-      "failed_steps": int,
-      "running_steps": int
-    },
-    "start_time": str,
-    "end_time": str,
-    "error_message": str
-  }
+  workflows = manager.list_workflows()
+  for name, info in workflows.items():
+      print(f"Workflow: {name}")
+      print(f"  Steps: {info['steps']}")
+      print(f"  Modules: {', '.join(info['modules'])}")
+      print(f"  Estimated Duration: {info['estimated_duration']}s")
   ```
+
+##### `get_performance_summary(workflow_name: Optional[str] = None) -> Dict[str, Any]`
+
+- **Description**: Get comprehensive performance summary for workflows.
+- **Parameters**:
+  - `workflow_name` (Optional[str]): Specific workflow name to analyze. If None, returns summary for all workflows.
+- **Returns**: Performance summary containing:
+  - `performance_stats` (Dict): Detailed performance metrics from monitor
+  - `total_workflows_executed` (int): Total number of workflow executions
+  - `successful_executions` (int): Number of successful executions
+  - `failed_executions` (int): Number of failed executions
+  - `average_execution_time` (float): Average execution time in seconds
+  - `module_usage_stats` (Dict): Usage statistics by module
+- **Note**: Requires performance monitoring to be enabled. Returns error message if monitoring is not available.
 
 ---
 
@@ -212,23 +346,87 @@ Coordinates individual task execution with dependency management.
   )
   ```
 
+##### `add_task(task: Task) -> str`
+
+- **Description**: Add a task to the orchestrator.
+- **Parameters**:
+  - `task` (Task): Task object to add
+- **Returns**: Task ID (string)
+- **Example**:
+  ```python
+  task = Task(
+      name="analyze_code",
+      module="static_analysis",
+      action="analyze_code_quality",
+      parameters={"path": "./src"}
+  )
+  task_id = orchestrator.add_task(task)
+  ```
+
 ##### `execute_task(task: Task) -> TaskResult`
 
-- **Description**: Executes a single task synchronously.
+- **Description**: Executes a single task synchronously. This method is called internally by the execution loop.
 - **Parameters**:
   - `task` (Task): Task object to execute
-- **Returns**: TaskResult object
+- **Returns**: TaskResult object with the following structure:
   ```python
   {
     "success": bool,
-    "data": Any,
-    "error_message": str,
-    "error_type": str,
-    "execution_time": float,
-    "memory_usage": float,
-    "metadata": dict
+    "data": Any,  # Result data from the action function
+    "error_message": Optional[str],  # Error message if failed
+    "error_type": Optional[str],  # Error type/category
+    "execution_time": float,  # Execution time in seconds
+    "memory_usage": float,  # Memory usage (default: 0.0)
+    "metadata": dict  # Additional metadata
   }
   ```
+- **Raises**:
+  - Various exceptions depending on module/action execution failures
+- **Note**: This method is typically called by the internal execution loop. For external use, add tasks via `add_task()` and start execution.
+
+##### `start_execution()`
+
+- **Description**: Start the task execution engine. This starts a background thread that processes tasks.
+- **Note**: Must be called before tasks will be executed automatically.
+
+##### `stop_execution()`
+
+- **Description**: Stop the task execution engine. Waits for the execution thread to complete (with 5 second timeout).
+
+##### `wait_for_completion(timeout: Optional[float] = None) -> bool`
+
+- **Description**: Wait for all tasks to complete.
+- **Parameters**:
+  - `timeout` (Optional[float]): Maximum time to wait in seconds. If None, waits indefinitely.
+- **Returns**: bool - True if all tasks completed, False if timeout was reached.
+
+##### `cancel_task(task_id: str) -> bool`
+
+- **Description**: Cancel a task.
+- **Parameters**:
+  - `task_id` (string): ID of task to cancel
+- **Returns**: bool - True if task was cancelled, False if task not found or already completed/failed/cancelled
+
+##### `get_task(task_id: str) -> Optional[Task]`
+
+- **Description**: Get a task by ID.
+- **Parameters**:
+  - `task_id` (string): Task ID
+- **Returns**: Task object or None if not found
+
+##### `get_task_result(task_id: str) -> Optional[TaskResult]`
+
+- **Description**: Get the result of a completed task.
+- **Parameters**:
+  - `task_id` (string): Task ID
+- **Returns**: TaskResult object or None if task not found or not completed
+
+##### `list_tasks(status: Optional[TaskStatus] = None) -> List[Task]`
+
+- **Description**: List tasks, optionally filtered by status.
+- **Parameters**:
+  - `status` (Optional[TaskStatus]): Filter by task status
+- **Returns**: List of Task objects
 
 ##### `get_execution_stats() -> Dict[str, Any]`
 
@@ -323,14 +521,17 @@ System resource allocation and management.
 
 #### Methods
 
-##### `allocate_resources(user_id: str, requirements: Dict[str, Dict[str, Any]], timeout: int = None) -> Optional[Dict[str, str]]`
+##### `allocate_resources(user_id: str, requirements: Dict[str, Dict[str, Any]], timeout: Optional[int] = None) -> Optional[Dict[str, str]]`
 
 - **Description**: Allocates resources to a user based on requirements.
 - **Parameters**:
   - `user_id` (string): User/task identifier
-  - `requirements` (dict): Resource requirements mapping
-  - `timeout` (int, optional): Allocation timeout
-- **Returns**: Dictionary mapping requirement keys to allocated resource IDs, or None if failed
+  - `requirements` (dict): Resource requirements mapping resource types to required amounts. Example: `{"cpu": {"cores": 2}, "memory": {"gb": 4}}`
+  - `timeout` (Optional[int]): Allocation timeout in seconds. If specified, creates expiration time for allocations.
+- **Returns**: Dictionary mapping requirement keys to allocated resource IDs, or None if allocation failed
+- **Raises**:
+  - No exceptions raised, but returns None on failure
+- **Note**: Automatically selects best-fit resources based on utilization. Rolls back all allocations if any resource cannot be allocated.
 - **Example**:
   ```python
   manager = ResourceManager()
@@ -353,29 +554,80 @@ System resource allocation and management.
   - `allocation_ids` (list, optional): Specific allocations to release
 - **Returns**: True if successful
 
-##### `get_resource_usage(resource_id: str = None) -> Dict[str, Any]`
+##### `get_resource_usage(resource_id: Optional[str] = None) -> Dict[str, Any]`
 
 - **Description**: Gets resource usage statistics.
 - **Parameters**:
-  - `resource_id` (string, optional): Specific resource ID, or None for system-wide
-- **Returns**: Usage statistics dictionary
+  - `resource_id` (Optional[str]): Specific resource ID, or None for system-wide statistics
+- **Returns**: Usage statistics dictionary. For specific resource:
+  ```python
+  {
+    "resource_id": str,
+    "name": str,
+    "type": str,
+    "status": str,
+    "capacity": dict,
+    "allocated": dict,
+    "utilization": dict,  # Percentage utilization per capacity key
+    "current_users": int,
+    "total_allocations": int
+  }
+  ```
+  For system-wide:
+  ```python
+  {
+    "total_resources": int,
+    "total_allocations": int,
+    "resources_by_type": dict,  # Count by resource type
+    "utilization_summary": dict  # Average utilization by type
+  }
+  ```
+
+##### `list_resources(resource_type: Optional[ResourceType] = None, status: Optional[ResourceStatus] = None) -> List[Resource]`
+
+- **Description**: List resources, optionally filtered by type and status.
+- **Parameters**:
+  - `resource_type` (Optional[ResourceType]): Filter by resource type
+  - `status` (Optional[ResourceStatus]): Filter by resource status
+- **Returns**: List of Resource objects
+
+##### `add_resource(resource: Resource) -> bool`
+
+- **Description**: Add a resource to the manager.
+- **Parameters**:
+  - `resource` (Resource): Resource object to add
+- **Returns**: bool - True if added successfully, False if resource ID already exists
+
+##### `get_user_allocations(user_id: str) -> List[Dict[str, Any]]`
+
+- **Description**: Get all allocations for a specific user.
+- **Parameters**:
+  - `user_id` (string): User identifier
+- **Returns**: List of allocation dictionaries with resource details
+
+##### `health_check() -> Dict[str, Any]`
+
+- **Description**: Perform health check on all resources.
+- **Returns**: Dictionary with health status, resource health details, and issues list
 
 ---
 
 ## Data Models
 
-### Workflow Class
+### WorkflowExecution Class
+
+Workflows are stored as lists of WorkflowStep objects. During execution, a WorkflowExecution object tracks the execution state:
 
 ```python
 @dataclass
-class Workflow:
-    name: str
-    description: str = ""
-    version: str = "1.0"
-    steps: List[WorkflowStep] = field(default_factory=list)
-    status: WorkflowStatus = WorkflowStatus.DRAFT
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    # ... additional fields
+class WorkflowExecution:
+    workflow_name: str  # Name of the workflow being executed
+    status: WorkflowStatus = WorkflowStatus.PENDING  # Current execution status
+    start_time: Optional[datetime] = None  # When execution began
+    end_time: Optional[datetime] = None  # When execution completed/failed
+    results: Dict[str, Any] = field(default_factory=dict)  # Results from each completed step
+    errors: List[str] = field(default_factory=dict)  # List of error messages encountered
+    performance_metrics: Dict[str, Any] = field(default_factory=dict)  # Performance data for each step
 ```
 
 ### WorkflowStep Class
@@ -383,14 +635,14 @@ class Workflow:
 ```python
 @dataclass
 class WorkflowStep:
-    name: str
-    module: str
-    action: str
-    parameters: Dict[str, Any] = field(default_factory=dict)
-    dependencies: List[str] = field(default_factory=list)
-    conditions: Dict[str, Any] = field(default_factory=dict)
-    timeout: Optional[int] = None
-    # ... additional fields
+    name: str  # Unique identifier for this step within the workflow
+    module: str  # Codomyrmex module name (e.g., 'static_analysis')
+    action: str  # Specific action/function to call within the module
+    parameters: Dict[str, Any] = field(default_factory=dict)  # Parameters to pass to the action function
+    dependencies: List[str] = field(default_factory=list)  # List of step names that must complete before this step
+    timeout: Optional[int] = None  # Maximum execution time in seconds (None for no limit)
+    retry_count: int = 0  # Current number of retry attempts (internal use)
+    max_retries: int = 3  # Maximum number of retry attempts before marking as failed
 ```
 
 ### Task Class
@@ -398,15 +650,34 @@ class WorkflowStep:
 ```python
 @dataclass
 class Task:
-    id: str
-    name: str
-    module: str
-    action: str
-    parameters: Dict[str, Any] = field(default_factory=dict)
-    dependencies: List[str] = field(default_factory=list)
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))  # Unique task ID
+    name: str = ""  # Task name (auto-generated if not provided)
+    description: str = ""  # Task description
+    module: str = ""  # Codomyrmex module name
+    action: str = ""  # Module action/function name
+    parameters: Dict[str, Any] = field(default_factory=dict)  # Action parameters
+    
+    # Dependencies and scheduling
+    dependencies: List[str] = field(default_factory=list)  # Task IDs this depends on
     priority: TaskPriority = TaskPriority.NORMAL
+    resources: List[TaskResource] = field(default_factory=list)  # Required resources
+    
+    # Execution control
+    timeout: Optional[int] = None  # Timeout in seconds
+    max_retries: int = 3  # Maximum retry attempts
+    retry_delay: float = 1.0  # Seconds between retries
+    
+    # Status tracking
     status: TaskStatus = TaskStatus.PENDING
-    # ... additional fields
+    retry_count: int = 0
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    started_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
+    result: Optional[TaskResult] = None
+    
+    # Metadata
+    tags: List[str] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 ```
 
 ### Project Class
@@ -429,22 +700,53 @@ class Project:
 ```python
 @dataclass
 class Resource:
-    id: str
-    name: str
-    type: ResourceType
-    status: ResourceStatus = ResourceStatus.AVAILABLE
-    capacity: Dict[str, Any] = field(default_factory=dict)
-    allocated: Dict[str, Any] = field(default_factory=dict)
-    # ... additional fields
+    id: str  # Unique resource identifier
+    name: str  # Human-readable resource name
+    type: ResourceType  # Resource type
+    description: str = ""  # Resource description
+    status: ResourceStatus = ResourceStatus.AVAILABLE  # Current availability status
+    capacity: Dict[str, Any] = field(default_factory=dict)  # Resource capacity (e.g., {"cores": 8, "gb": 16})
+    allocated: Dict[str, Any] = field(default_factory=dict)  # Currently allocated amounts
+    limits: ResourceLimits = field(default_factory=ResourceLimits)  # Usage limits and quotas
+    total_allocations: int = 0  # Total number of allocations made
+    total_usage_time: float = 0.0  # Total usage time
+    current_users: Set[str] = field(default_factory=set)  # Set of current user IDs
+    metadata: Dict[str, Any] = field(default_factory=dict)  # Additional metadata
+    tags: List[str] = field(default_factory=list)  # Resource tags
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+```
+
+### TaskResource Class
+
+```python
+@dataclass
+class TaskResource:
+    type: ResourceType  # Type of resource required
+    identifier: str  # Resource ID/name
+    mode: str = "read"  # Access mode: "read", "write", or "exclusive"
+    timeout: Optional[int] = None  # Resource timeout
+```
+
+### ResourceAllocation Class
+
+```python
+@dataclass
+class ResourceAllocation:
+    id: str  # Allocation ID
+    resource_id: str  # Resource identifier
+    user_id: str  # Task ID or user ID
+    allocated: Dict[str, Any]  # Allocated amounts
+    allocated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    expires_at: Optional[datetime] = None  # Expiration time if timeout specified
+    metadata: Dict[str, Any] = field(default_factory=dict)
 ```
 
 ## Enumerations
 
 ### WorkflowStatus
-- `DRAFT`: Workflow is being designed
-- `READY`: Workflow is ready for execution
+- `PENDING`: Workflow is pending execution
 - `RUNNING`: Workflow is currently executing
-- `PAUSED`: Workflow execution is paused
 - `COMPLETED`: Workflow completed successfully
 - `FAILED`: Workflow execution failed
 - `CANCELLED`: Workflow was cancelled
@@ -481,6 +783,29 @@ class Resource:
 - `DATABASE`: Database connection
 - `EXTERNAL_API`: External API quota
 - `GPU`: GPU resources
+- `QUEUE`: Queue resources
+- `LOCK`: Lock resources
+- `SEMAPHORE`: Semaphore resources
+
+### ResourceStatus
+- `AVAILABLE`: Resource is available for allocation
+- `IN_USE`: Resource is currently in use
+- `RESERVED`: Resource is reserved
+- `MAINTENANCE`: Resource is in maintenance mode
+- `UNAVAILABLE`: Resource is unavailable
+
+### OrchestrationMode
+- `SEQUENTIAL`: Execute workflows/tasks one after another
+- `PARALLEL`: Execute workflows/tasks in parallel when possible
+- `PRIORITY`: Execute based on priority ordering
+- `RESOURCE_AWARE`: Execute based on resource availability
+
+### SessionStatus
+- `PENDING`: Session is pending
+- `ACTIVE`: Session is active
+- `COMPLETED`: Session completed successfully
+- `CANCELLED`: Session was cancelled
+- `FAILED`: Session failed
 
 ## Error Handling
 
@@ -587,9 +912,9 @@ pm.add_project_milestone(
 
 ### Custom Task Orchestration
 ```python
-from codomyrmex.project_orchestration import TaskOrchestrator, TaskPriority
+from codomyrmex.project_orchestration import TaskOrchestrator, Task, TaskPriority, TaskResource, ResourceType
 
-orchestrator = TaskOrchestrator()
+orchestrator = TaskOrchestrator(max_workers=4)
 orchestrator.start_execution()
 
 # Create dependent tasks
@@ -598,7 +923,10 @@ analysis_task = orchestrator.create_task(
     "static_analysis",
     "analyze_code_quality",
     parameters={"path": "./src"},
-    priority=TaskPriority.HIGH
+    priority=TaskPriority.HIGH,
+    resources=[
+        TaskResource(type=ResourceType.CPU, identifier="system_cpu", mode="read")
+    ]
 )
 
 visualization_task = orchestrator.create_task(
@@ -606,7 +934,7 @@ visualization_task = orchestrator.create_task(
     "data_visualization",
     "create_bar_chart",
     parameters={
-        "data": "${analyze_code.result}",
+        "data": "placeholder",  # In practice, pass actual data or reference
         "title": "Code Quality Metrics"
     },
     dependencies=[analysis_task.id],
@@ -614,11 +942,18 @@ visualization_task = orchestrator.create_task(
 )
 
 # Wait for completion
-orchestrator.wait_for_completion(timeout=300)
+completed = orchestrator.wait_for_completion(timeout=300)
 
 # Get results
-stats = orchestrator.get_execution_stats()
-print(f"Completed {stats['completed']} tasks")
+if completed:
+    analysis_result = orchestrator.get_task_result(analysis_task.id)
+    if analysis_result and analysis_result.success:
+        print(f"Analysis completed: {analysis_result.data}")
+    
+    stats = orchestrator.get_execution_stats()
+    print(f"Completed {stats['completed']} tasks")
+else:
+    print("Task execution timed out")
 ```
 
 ## Performance Considerations

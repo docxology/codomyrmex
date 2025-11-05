@@ -287,6 +287,15 @@ Source Code → Static Analysis → Testing → Build Validation → Deployment
 - **[Package Overview](../../src/codomyrmex/README.md)**: Main package structure
 - **[Module Template](../../src/template/README.md)**: Template for new modules
 
+### **Orchestration and Coordination**
+- **[Task Orchestration Guide](../project_orchestration/task-orchestration-guide.md)**: Complete task orchestration guide
+- **[Project Lifecycle Guide](../project_orchestration/project-lifecycle-guide.md)**: Project management lifecycle
+- **[Dispatch and Coordination](../project_orchestration/dispatch-coordination.md)**: Task and workflow dispatch patterns
+- **[Config-Driven Operations](../project_orchestration/config-driven-operations.md)**: Configuration-driven workflows
+- **[Workflow Configuration Schema](../project_orchestration/workflow-configuration-schema.md)**: Workflow JSON schema
+- **[Project Template Schema](../project_orchestration/project-template-schema.md)**: Project template structure
+- **[Resource Configuration](../project_orchestration/resource-configuration.md)**: Resource management
+
 ---
 
 This architecture provides a solid foundation for extensible, maintainable code analysis and development workflow automation while maintaining clear separation of concerns and supporting diverse use cases.
@@ -295,4 +304,5 @@ This architecture provides a solid foundation for extensible, maintainable code 
 1. **Explore Modules**: Review the [Module System Overview](../modules/overview.md)
 2. **Try It Out**: Follow the [Quick Start Guide](../getting-started/quickstart.md)
 3. **Get Involved**: Read the [Contributing Guide](./contributing.md)
+4. **Learn Orchestration**: Review the [Task Orchestration Guide](../project_orchestration/task-orchestration-guide.md)
 

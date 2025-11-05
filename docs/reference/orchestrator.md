@@ -210,6 +210,19 @@ start_here.sh (Main Orchestrator)
 
 ---
 
+## Related Documentation
+
+- [Task Orchestration Guide](../project_orchestration/task-orchestration-guide.md) - Complete task orchestration guide
+- [Project Lifecycle Guide](../project_orchestration/project-lifecycle-guide.md) - Project management guide
+- [Dispatch and Coordination](../project_orchestration/dispatch-coordination.md) - Dispatch patterns and coordination
+- [Config-Driven Operations](../project_orchestration/config-driven-operations.md) - Configuration-driven workflows
+- [Workflow Configuration Schema](../project_orchestration/workflow-configuration-schema.md) - Workflow JSON schema
+- [Project Template Schema](../project_orchestration/project-template-schema.md) - Project template structure
+- [Resource Configuration](../project_orchestration/resource-configuration.md) - Resource management
+- [Examples Documentation](../examples/README.md) - Complete examples guide
+
+---
+
 **Happy foraging in the Codomyrmex nest! 🐜✨**
 
 *Remember: You're not just browsing code - you're an epistemic forager exploring a vast, structured knowledge ecosystem. Every command helps you understand the territory better!*

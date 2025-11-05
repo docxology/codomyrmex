@@ -10,7 +10,7 @@ Instead, it establishes the **standards, structure, and requirements** that deve
 
 All modules that expose tools via MCP **must** base their `MCP_TOOL_SPECIFICATION.md` file on the canonical template located at:
 
-[`template/module_template/MCP_TOOL_SPECIFICATION.md`](../module_template/MCP_TOOL_SPECIFICATION.md)
+[../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md](../module_template/MCP_TOOL_SPECIFICATION.md)
 
 This template provides a detailed, commented structure covering all required sections for defining a tool. Developers should **copy this template** into their module and fill it out for each tool they expose.
 
@@ -113,4 +113,4 @@ Each module owner/development team is responsible for:
 
 ## 9. Future Enhancements
 
-As the Model Context Protocol and the Codomyrmex project evolve, the canonical template and these meta-specification guidelines may be updated. Module developers should refer back to this document and the `template/module_template/MCP_TOOL_SPECIFICATION.md` periodically for the latest standards. 
+As the Model Context Protocol and the Codomyrmex project evolve, the canonical template and these meta-specification guidelines may be updated. Module developers should refer back to this document and the ../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md periodically for the latest standards. 

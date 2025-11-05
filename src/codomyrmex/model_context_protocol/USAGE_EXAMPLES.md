@@ -4,7 +4,7 @@ This document provides practical examples related to the Model Context Protocol 
 
 ## 1. Example: Defining a Tool in a Module's `MCP_TOOL_SPECIFICATION.md`
 
-Modules that expose functionality as MCP tools must create an `MCP_TOOL_SPECIFICATION.md` file. This file describes each tool the module offers. The structure of this file MUST follow the canonical template found in `template/module_template/MCP_TOOL_SPECIFICATION.md` and the guidelines in `model_context_protocol/MCP_TOOL_SPECIFICATION.md` (the meta-specification).
+Modules that expose functionality as MCP tools must create an `MCP_TOOL_SPECIFICATION.md` file. This file describes each tool the module offers. The structure of this file MUST follow the canonical template found in ../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md and the guidelines in `model_context_protocol/MCP_TOOL_SPECIFICATION.md` (the meta-specification).
 
 Below is a snippet illustrating how a hypothetical module, `file_utility_module`, might define a tool called `read_file_content` in its own `file_utility_module/MCP_TOOL_SPECIFICATION.md`:
 

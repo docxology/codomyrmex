@@ -61,6 +61,22 @@ docs/
 │   ├── performance.md                # Performance optimization guide
 │   └── troubleshooting.md            # Common issues and comprehensive solutions
 │
+├── project_orchestration/        # 🎯 Project orchestration system
+│   ├── README.md                      # Orchestration documentation overview
+│   ├── task-orchestration-guide.md    # Complete task orchestration guide
+│   ├── project-lifecycle-guide.md     # Project lifecycle management
+│   ├── config-driven-operations.md    # Configuration-driven workflows
+│   ├── workflow-configuration-schema.md  # Workflow JSON schema
+│   ├── project-template-schema.md     # Project template structure
+│   ├── resource-configuration.md      # Resource management
+│   └── dispatch-coordination.md       # Dispatch and coordination patterns
+│
+├── examples/                     # 📚 Examples documentation
+│   ├── README.md                      # Examples overview
+│   ├── basic-examples.md              # Basic single-module examples
+│   ├── integration-examples.md        # Multi-module integration examples
+│   └── orchestration-examples.md      # Orchestration examples
+│
 └── deployment/                   # 🚀 Production deployment
     ├── AGENTS.md                     # Deployment agent coordination
     └── production.md                 # Production environment setup guide
@@ -96,6 +112,14 @@ For connecting with other systems:
 2. **[🤖 Fabric AI Integration](integration/fabric-ai-integration.md)** - AI workflow integration
 3. **[🔌 Complete API Reference](reference/api-complete.md)** - All available APIs
 4. **[💻 CLI Reference](reference/cli.md)** - Command-line interface documentation
+
+### **🎯 Orchestration Users - Workflow Management**
+For task, project, and workflow orchestration:
+1. **[Task Orchestration Guide](project_orchestration/task-orchestration-guide.md)** - Complete task orchestration
+2. **[Project Lifecycle Guide](project_orchestration/project-lifecycle-guide.md)** - Project management
+3. **[Config-Driven Operations](project_orchestration/config-driven-operations.md)** - Configuration-driven workflows
+4. **[Dispatch and Coordination](project_orchestration/dispatch-coordination.md)** - Dispatch patterns
+5. **[Examples Documentation](examples/README.md)** - Complete examples guide
 
 ### **🚀 DevOps - Production Deployment**
 For production deployment:

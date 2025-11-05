@@ -1,0 +1,39 @@
+name: Validate Documentation
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/codomyrmex/**/*.md'
+      - 'docs/**/*.md'
+      - 'README.md'
+      - 'scripts/documentation/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/codomyrmex/**/*.md'
+      - 'docs/**/*.md'
+      - 'README.md'
+      - 'scripts/documentation/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Validate Module Documentation
+      run: |
+        python3 scripts/documentation/validate_module_docs.py
+    
+    - name: Check Documentation Links
+      run: |
+        python3 scripts/documentation/comprehensive_audit.py || true
+        # Don't fail on warnings, just report
+

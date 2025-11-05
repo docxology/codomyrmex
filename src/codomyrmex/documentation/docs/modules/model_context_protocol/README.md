@@ -37,7 +37,7 @@ This `model_context_protocol` module primarily provides specifications and templ
 -   **Protocol Specification Documents**: This `README.md`, the `MCP_TOOL_SPECIFICATION.md` (meta-specification) within this module, and detailed guides in `docs/` that collectively define the MCP.
 -   **Schema Definitions**: Abstract definitions for core data structures and message formats (e.g., for tool calls and results). These are typically described using JSON Schema principles in the meta-specification.
 -   **`MCP_TOOL_SPECIFICATION.md` Meta-Specification**: The authoritative document (`./MCP_TOOL_SPECIFICATION.md`) within *this* module. It serves as a **template and a set of rules** that other Codomyrmex modules MUST follow when creating their *own* `MCP_TOOL_SPECIFICATION.md` files to describe their tools.
--   **Canonical Tool Specification Template File**: The actual template file located at `template/module_template/MCP_TOOL_SPECIFICATION.md`. This is the starting point for other modules to document their tools.
+-   **Canonical Tool Specification Template File**: The actual template file located at ../../../../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md. This is the starting point for other modules to document their tools.
 -   **Validation Logic (Conceptual/Guidance)**: While this module might not provide a universal validation library, it specifies how validation should occur (e.g., using JSON Schema) and may recommend tools or libraries (like `jsonschema`, listed in this module's `requirements.txt` for potential example validators).
 -   **Versioning Strategy Documentation**: Guidelines and best practices for versioning the MCP itself and individual tools to manage evolution and maintain compatibility.
 -   **Serialization/Deserialization Guidelines**: Recommendations or standards for how MCP messages should be serialized (e.g., to JSON) for transmission.
@@ -48,7 +48,7 @@ This module is foundational and defines how other modules interact with AI agent
 
 - **Provides:**
     - **The Model Context Protocol Standard**: A comprehensive set of rules, schema guidelines, and interaction patterns for communication between AI models/agents and tools within Codomyrmex.
-    - **The `MCP_TOOL_SPECIFICATION.md` Meta-Specification and Template**: Authoritative guidelines and the canonical template (`template/module_template/MCP_TOOL_SPECIFICATION.md`) that all other modules use to define their tool interfaces for MCP compatibility.
+    - **The `MCP_TOOL_SPECIFICATION.md` Meta-Specification and Template**: Authoritative guidelines and the canonical template (../../../../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md) that all other modules use to define their tool interfaces for MCP compatibility.
     - **Standardization Framework**: Enforces a common, consistent way for modules to expose their functionalities as tools consumable by AI agents, promoting modularity and reusability across the Codomyrmex project.
 
 - **Consumes:**
@@ -64,7 +64,7 @@ To understand, implement, or utilize the Model Context Protocol (MCP) within the
 
 1.  **Understand the Purpose**: Review the "Overview" and "Core MCP Concepts" sections of this README and the `docs/technical_overview.md` (once developed) to grasp the fundamental ideas of MCP and its role in AI agent-tool interaction.
 2.  **Review the Meta-Specification**: Carefully read the `MCP_TOOL_SPECIFICATION.md` file located in *this* module's root directory. It explains the rules, expected structure, and key principles for how other modules must define their MCP tools.
-3.  **Use the Canonical Template**: The primary resource for defining new tools in your own module is the template file located at `template/module_template/MCP_TOOL_SPECIFICATION.md`. This template **must** be copied into your module and meticulously filled out according to the meta-specification guidelines from *this* module.
+3.  **Use the Canonical Template**: The primary resource for defining new tools in your own module is the template file located at ../../../../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md. This template **must** be copied into your module and meticulously filled out according to the meta-specification guidelines from *this* module.
 4.  **Examine Existing Implementations**: Look at the `MCP_TOOL_SPECIFICATION.md` files in other Codomyrmex modules (e.g., `ai_code_editing`, `data_visualization`, `code_execution_sandbox`) to see concrete examples of how various tools are defined and documented following the MCP standard.
 5.  **Schema Definitions**: Familiarize yourself with the expected JSON structures for tool calls (input arguments) and tool responses (output schema), as outlined in the canonical template and demonstrated in existing examples.
 
@@ -86,7 +86,7 @@ No specific runtime configuration is typically required for this module, as it p
 
 ## Development of the `model_context_protocol` Module Itself
 
-Contributions to *this* module typically involve refining the protocol specifications, updating the meta-specification (`MCP_TOOL_SPECIFICATION.md` in this directory), improving the canonical tool template (`template/module_template/MCP_TOOL_SPECIFICATION.md`), or adding examples and utilities related to the protocol (e.g., schema validators, example message generators).
+Contributions to *this* module typically involve refining the protocol specifications, updating the meta-specification (`MCP_TOOL_SPECIFICATION.md` in this directory), improving the canonical tool template (../../../../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md), or adding examples and utilities related to the protocol (e.g., schema validators, example message generators).
 
 ### Code Structure
 
@@ -97,7 +97,7 @@ Contributions to *this* module typically involve refining the protocol specifica
 - `docs/`: Contains more detailed documentation about the protocol itself:
     - `technical_overview.md`: (To be developed) Will detail the design rationale, versioning strategy, and core schema elements of MCP in more depth.
     - `tutorials/`: (To be developed) Will offer tutorials on how to design, implement, and consume MCP-compliant tools.
-- `template/module_template/MCP_TOOL_SPECIFICATION.md`: The crucial canonical template for other modules.
+- ../../../../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md: The crucial canonical template for other modules.
 - `tests/`: (Placeholder) Would contain tests for any utility functions or validation logic provided by this module (e.g., testing a schema validator against example tool specs).
 
 ### Building & Testing (for this module's utilities)
@@ -117,7 +117,7 @@ Ensure any changes to the protocol specifications, templates, or guidelines are 
 
 - [API Specification](API_SPECIFICATION.md) (For any utilities provided by *this* module)
 - [MCP Tool Specification](MCP_TOOL_SPECIFICATION.md) (The meta-specification from *this* module, dictating how *other* modules define their tools)
-- [Canonical Template for MCP Tools](../../template/module_template/MCP_TOOL_SPECIFICATION.md)
+- [Canonical Template for MCP Tools](../../../module_template/MCP_TOOL_SPECIFICATION.md)
 - [Usage Examples](USAGE_EXAMPLES.md) (Examples of defining tools or using protocol utilities, if any)
 - [Detailed Documentation](./docs/index.md) (For more in-depth explanations of the protocol itself)
 - [Changelog](CHANGELOG.md) (Tracking changes to the protocol specification and this module)

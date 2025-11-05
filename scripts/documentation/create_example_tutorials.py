@@ -56,16 +56,13 @@ print(result)
 
 ## Next Steps
 
-- Review the [API Specification](../API_SPECIFICATION.md) for complete API documentation
-- Explore [Usage Examples](../USAGE_EXAMPLES.md) for more examples
-- Check the [Technical Overview](../technical_overview.md) for architecture details
+- Review the [Module README](../README.md) for complete documentation
+- Check the [Technical Overview](../technical_overview.md) for architecture details (if available)
 
 ## Related Documentation
 
-- [Module README](../README.md)
-- [API Specification](../API_SPECIFICATION.md)
-- [Usage Examples](../USAGE_EXAMPLES.md)
-- [Technical Overview](../technical_overview.md)
+- [Module README](../README.md) - Complete module documentation
+- [Technical Overview](../technical_overview.md) - Architecture details (if available)
 
 ---
 

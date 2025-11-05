@@ -1,0 +1,42 @@
+{
+  "name": "data_pipeline_workflow",
+  "steps": [
+    {
+      "name": "load_data",
+      "module": "data_visualization",
+      "action": "load_dataset",
+      "parameters": {
+        "file_path": "{{input_file}}"
+      },
+      "dependencies": [],
+      "timeout": 120,
+      "max_retries": 2
+    },
+    {
+      "name": "process_data",
+      "module": "data_visualization",
+      "action": "process_dataset",
+      "parameters": {
+        "data": "{{load_data.output}}",
+        "operations": "{{processing_operations}}"
+      },
+      "dependencies": ["load_data"],
+      "timeout": 300,
+      "max_retries": 2
+    },
+    {
+      "name": "visualize",
+      "module": "data_visualization",
+      "action": "create_chart",
+      "parameters": {
+        "data": "{{process_data.output}}",
+        "output": "{{output_path}}/visualization.png",
+        "chart_type": "{{chart_type}}"
+      },
+      "dependencies": ["process_data"],
+      "timeout": 60,
+      "max_retries": 1
+    }
+  ]
+}
+

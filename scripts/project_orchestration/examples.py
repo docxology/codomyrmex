@@ -4,6 +4,23 @@ Comprehensive Orchestration Examples for Codomyrmex
 
 This file demonstrates the full capabilities of the Codomyrmex orchestration system,
 including workflow creation, project management, task orchestration, and resource management.
+
+Configuration Files:
+- Workflow configurations can be loaded from .codomyrmex/workflows/*.json
+- Example configurations are available in config/examples/
+- Project templates are in src/codomyrmex/project_orchestration/templates/
+
+Documentation:
+- Complete examples guide: docs/examples/orchestration-examples.md
+- Task orchestration: docs/project_orchestration/task-orchestration-guide.md
+- Project lifecycle: docs/project_orchestration/project-lifecycle-guide.md
+- Config-driven operations: docs/project_orchestration/config-driven-operations.md
+
+Usage:
+    python scripts/project_orchestration/examples.py
+    # Or import and run specific examples:
+    from scripts.project_orchestration.examples import example_1_basic_workflow_creation
+    example_1_basic_workflow_creation()
 """
 
 import asyncio

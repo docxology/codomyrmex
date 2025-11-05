@@ -452,12 +452,25 @@ result = engine.execute_complex_workflow(workflow_definition)
 ## 📚 API Reference
 
 For detailed API documentation, see:
+- [Complete API Specification](API_SPECIFICATION.md) - Comprehensive API documentation with accurate signatures
 - [WorkflowManager API](workflow_manager.py)
 - [TaskOrchestrator API](task_orchestrator.py)
 - [ProjectManager API](project_manager.py)
 - [ResourceManager API](resource_manager.py)
 - [OrchestrationEngine API](orchestration_engine.py)
 - [MCP Tools API](mcp_tools.py)
+
+## 🔧 Configuration and Guides
+
+Comprehensive guides for configuration-driven operations:
+
+- [Workflow Configuration Schema](../../../docs/project_orchestration/workflow-configuration-schema.md) - JSON schema and parameter substitution
+- [Project Template Schema](../../../docs/project_orchestration/project-template-schema.md) - Template structure and variables
+- [Resource Configuration](../../../docs/project_orchestration/resource-configuration.md) - Resource setup and allocation
+- [Task Orchestration Guide](../../../docs/project_orchestration/task-orchestration-guide.md) - Complete task orchestration guide
+- [Project Lifecycle Guide](../../../docs/project_orchestration/project-lifecycle-guide.md) - Project management from creation to completion
+- [Config-Driven Operations](../../../docs/project_orchestration/config-driven-operations.md) - Configuration-driven workflows
+- [Dispatch and Coordination](../../../docs/project_orchestration/dispatch-coordination.md) - Task and workflow dispatch patterns
 
 ## 🤝 Contributing
 

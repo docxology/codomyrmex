@@ -62,3 +62,21 @@ When adding new configuration templates:
 2. Include clear documentation and comments
 3. Test configurations in the target environment
 4. Update this README with new additions
+
+## Example Configurations
+
+Example configurations are available in `config/examples/`:
+
+- `workflow-basic.json` - Basic workflow configuration example
+- `workflow-with-dependencies.json` - Workflow with step dependencies
+- `project-template-custom.json` - Custom project template example
+- `resources-custom.json` - Custom resource configuration example
+
+## Configuration Documentation
+
+For detailed configuration documentation, see:
+
+- [Workflow Configuration Schema](../docs/project_orchestration/workflow-configuration-schema.md) - Workflow JSON schema and validation
+- [Project Template Schema](../docs/project_orchestration/project-template-schema.md) - Project template structure
+- [Resource Configuration](../docs/project_orchestration/resource-configuration.md) - Resource setup and allocation
+- [Config-Driven Operations](../docs/project_orchestration/config-driven-operations.md) - Complete config-driven guide

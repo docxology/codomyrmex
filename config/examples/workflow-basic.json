@@ -1,0 +1,26 @@
+{
+  "name": "basic_analysis",
+  "steps": [
+    {
+      "name": "check_env",
+      "module": "environment_setup",
+      "action": "check_environment",
+      "parameters": {},
+      "dependencies": [],
+      "timeout": 60,
+      "max_retries": 3
+    },
+    {
+      "name": "analyze",
+      "module": "static_analysis",
+      "action": "analyze_code_quality",
+      "parameters": {
+        "path": "."
+      },
+      "dependencies": ["check_env"],
+      "timeout": 300,
+      "max_retries": 2
+    }
+  ]
+}
+
