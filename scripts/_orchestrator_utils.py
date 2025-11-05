@@ -349,3 +349,4 @@ def parse_common_args(args: Any) -> Dict[str, Any]:
         common["dry_run"] = args.dry_run
     return common
 
+

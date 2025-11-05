@@ -62,6 +62,50 @@ python3 scripts/documentation/validate_module_docs.py
 - `0` - All modules pass validation
 - `1` - Validation errors found
 
+#### `verify_api_specs.py`
+Verifies that API_SPECIFICATION.md files match actual code signatures.
+
+**Usage**:
+```bash
+python3 scripts/documentation/verify_api_specs.py
+```
+
+**Features**:
+- Compares documented function signatures with actual code
+- Detects mismatches between documentation and implementation
+- Identifies functions documented but not implemented
+- Identifies functions implemented but not documented
+- Returns exit code (0 = all match, 1 = mismatches found)
+
+**Outputs**:
+- Console report with detailed mismatches
+- Exit code suitable for CI/CD integration
+
+#### `check_completeness.py`
+Checks documentation for placeholder content and generates implementation status tracker.
+
+**Usage**:
+```bash
+python3 scripts/documentation/check_completeness.py
+```
+
+**Features**:
+- Detects placeholder content in documentation files
+- Checks for required documentation files per module
+- Generates implementation status tracker
+- Creates detailed completeness reports
+
+**Outputs**:
+- `docs/project/implementation-status.md` - Implementation status tracker
+- `docs/project/documentation-completeness.md` - Detailed completeness report
+- Console summary with statistics
+
+**Status Categories**:
+- ✅ **Complete**: All required files present, no placeholders
+- ⚠️ **Incomplete**: Missing files or has placeholder content
+- 📝 **Missing Files**: Required documentation files missing
+- 🔧 **Has Placeholders**: Contains placeholder content
+
 ### Fixer Tools
 
 #### `fix_contributing_refs.py`
@@ -152,7 +196,13 @@ python3 scripts/documentation/create_missing_doc_files.py
 python3 scripts/documentation/fix_template_paths.py
 python3 scripts/documentation/comprehensive_fix.py
 
-# 4. Validate fixes
+# 4. Verify API specifications
+python3 scripts/documentation/verify_api_specs.py
+
+# 5. Check documentation completeness
+python3 scripts/documentation/check_completeness.py
+
+# 6. Validate fixes
 python3 scripts/documentation/validate_module_docs.py
 ```
 

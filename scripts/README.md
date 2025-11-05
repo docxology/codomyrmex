@@ -43,6 +43,8 @@ scripts/
 - `check_docs_status.py` – Check documentation status across the entire repository.
 - `documentation_status_summary.py` – Generate comprehensive documentation status summaries.
 - `generate_missing_readmes.py` – Generate README.md files for directories with AGENTS.md.
+- `verify_api_specs.py` – Verify API_SPECIFICATION.md files match actual code signatures.
+- `check_completeness.py` – Check for placeholder content and generate implementation status tracker.
 
 ### 🔧 Code Quality & Maintenance (`maintenance/`)
 
@@ -50,10 +52,12 @@ scripts/
 - `fix_imports_simple.py` – Import statement cleanup and optimization.
 - `fix_imports.py` – Advanced import management and dependency resolution.
 - `fix_syntax_errors.py` – Syntax error detection and automated repair.
+- `check_dependencies.py` – CI/CD script to validate module dependency hierarchy.
 
 ### 🚀 Development Tools (`development/`)
 
 - `enhance_documentation.py` – Documentation enhancement and docstring generation.
+- `generate_coverage_report.py` – Generate comprehensive test coverage reports and dashboards.
 - `run_all_examples.sh` – Run all example scripts
 - `test_examples.sh` – Test all example scripts
 - `select_example.sh` – Interactive example selector
@@ -217,6 +221,9 @@ python scripts/maintenance/fix_imports.py
 
 # Add logging to modules
 python scripts/maintenance/add_logging.py
+
+# Check module dependencies
+python scripts/maintenance/check_dependencies.py
 ```
 
 ### Development Tools
@@ -224,6 +231,9 @@ python scripts/maintenance/add_logging.py
 ```bash
 # Enhance documentation
 python scripts/development/enhance_documentation.py
+
+# Generate coverage report
+python scripts/development/generate_coverage_report.py
 
 # Run examples
 ./scripts/development/run_all_examples.sh

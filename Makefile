@@ -14,6 +14,8 @@ help:
 	@echo "  test         - Run all tests"
 	@echo "  test-unit    - Run unit tests only"
 	@echo "  test-integration - Run integration tests only"
+	@echo "  test-coverage - Run tests with coverage report"
+	@echo "  test-coverage-html - Open HTML coverage report in browser"
 	@echo "  lint         - Run code linting"
 	@echo "  format       - Format code with black and isort"
 	@echo "  type-check   - Run type checking with mypy"
@@ -23,6 +25,7 @@ help:
 	@echo "  clean        - Clean build artifacts and caches"
 	@echo "  analyze      - Run project analysis"
 	@echo "  check-deps   - Check and validate dependencies"
+	@echo "  check-dependencies - Check module dependency hierarchy"
 	@echo "  pre-commit   - Run pre-commit hooks"
 	@echo "  ci           - Run full CI pipeline"
 	@echo "  dev          - Start development server"
@@ -45,15 +48,29 @@ setup: install
 # Testing
 test:
 	@echo "Running all tests..."
-	uv run pytest testing/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov
+	uv run pytest testing/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
 
 test-unit:
 	@echo "Running unit tests..."
-	uv run pytest testing/unit/ -v --tb=short -m unit
+	uv run pytest testing/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json
 
 test-integration:
 	@echo "Running integration tests..."
 	uv run pytest testing/integration/ -v --tb=short -m integration
+
+test-coverage:
+	@echo "Running tests with coverage report..."
+	uv run pytest testing/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
+	@echo "Coverage report generated: coverage.json and htmlcov/"
+
+test-coverage-html:
+	@echo "Opening HTML coverage report..."
+	@if [ -d "htmlcov" ]; then \
+		python3 -m http.server 8000 --directory htmlcov & \
+		echo "Coverage report available at http://localhost:8000"; \
+	else \
+		echo "No coverage report found. Run 'make test-coverage' first."; \
+	fi
 
 # Code quality
 lint:
@@ -99,6 +116,10 @@ analyze:
 check-deps:
 	@echo "Checking dependencies..."
 	uv run python tools/dependency_checker.py
+
+check-dependencies:
+	@echo "Checking module dependency hierarchy..."
+	uv run python tools/dependency_analyzer.py
 
 # Pre-commit and CI
 pre-commit:

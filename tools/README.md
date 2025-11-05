@@ -8,6 +8,7 @@ This directory contains development utilities and helper tools for the Codomyrme
 
 -   **analyze_project.py** - Comprehensive project analysis tool
 -   **dependency_checker.py** - Check and validate project dependencies
+-   **dependency_analyzer.py** - Analyze module dependencies and detect circular imports
 -   **performance_profiler.py** - Performance profiling and optimization tools
 
 ### Development Workflow Tools
@@ -28,6 +29,9 @@ python tools/analyze_project.py
 
 # Check dependencies
 python tools/dependency_checker.py
+
+# Analyze module dependencies and detect circular imports
+python tools/dependency_analyzer.py
 
 # Set up development environment
 python tools/setup_dev_env.py
