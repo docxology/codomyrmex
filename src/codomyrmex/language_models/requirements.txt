@@ -1,19 +1,36 @@
+# DEPRECATED: This file is deprecated and will be removed in a future version.
+#
+# All dependencies have been consolidated into pyproject.toml as the single source of truth.
+#
+# To install dependencies for this module:
+#   uv sync --extra language_models
+#
+# Or install all optional dependencies:
+#   uv sync --all-extras
+#
+# This file is kept temporarily for backward compatibility but should not be modified.
+# See docs/project/contributing.md for the new dependency management strategy.
+#
+# Migration completed: pyproject.toml [project.optional-dependencies.language_models]
+#
+
+# --- Legacy content (for reference only) ---
 # Requirements for the language_models module
 # Install with: uv add -r src/codomyrmex/language_models/requirements.txt
 
 # HTTP client for Ollama API requests
-requests>=2.28.0
-urllib3>=1.26.0
+# requests>=2.28.0
+# urllib3>=1.26.0
 
 # Async HTTP client for streaming operations
-aiohttp>=3.8.0
+# aiohttp>=3.8.0
 
 # Type hints support (usually included with Python 3.9+)
-typing-extensions>=4.0.0; python_version < "3.9"
+# typing-extensions>=4.0.0; python_version < "3.9"
 
 # Optional: For enhanced SSL/TLS support
-certifi>=2022.0.0
+# certifi>=2022.0.0
 
 # Development dependencies for testing
-pytest>=8.0.0
-pytest-asyncio>=0.21.0
+# pytest>=8.0.0
+# pytest-asyncio>=0.21.0

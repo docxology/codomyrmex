@@ -1,3 +1,20 @@
+# DEPRECATED: This file is deprecated and will be removed in a future version.
+#
+# All dependencies have been consolidated into pyproject.toml as the single source of truth.
+#
+# To install dependencies for this module:
+#   uv sync --extra ai_code_editing
+#
+# Or install all optional dependencies:
+#   uv sync --all-extras
+#
+# This file is kept temporarily for backward compatibility but should not be modified.
+# See docs/project/contributing.md for the new dependency management strategy.
+#
+# Migration completed: pyproject.toml [project.dependencies]
+#
+
+# --- Legacy content (for reference only) ---
 # AI Code Editing - Requirements
 
 # This module uses dependencies from the root requirements.txt file, including:
@@ -9,4 +26,4 @@
 # they should be listed here.
 
 # For token counting (if not using the root requirements)
-tiktoken>=0.5.0 
+# tiktoken>=0.5.0 

@@ -72,6 +72,11 @@ jobs:
           # Flake8 for style guide enforcement
           uv run flake8 src/codomyrmex/ || true
 
+      - name: Validate dependencies
+        run: |
+          echo "🔍 Validating dependency management..."
+          uv run python3 tools/validate_dependencies.py
+
   security-scan:
     name: Security Analysis
     runs-on: ubuntu-latest

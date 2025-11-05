@@ -60,27 +60,44 @@ We welcome contributions in various forms, including but not limited to:
 
 ## Dependency Management
 
-The Codomyrmex project employs a hybrid approach to dependency management to balance clarity, modularity, and reproducibility:
+The Codomyrmex project uses **pyproject.toml as the single source of truth** for all dependency management to ensure reproducibility, security, and maintainability.
 
-1.  **Root `requirements.txt`**:
-    *   This file, located at the project root, should list core dependencies essential for the overall project structure, development tooling (e.g., global linters, pre-commit hooks not specific to a module), or shared utilities used across multiple modules.
-    *   Dependencies listed here should be broadly applicable.
+### Current Strategy (Effective January 2025)
 
-2.  **Module-Specific `requirements.txt`**:
-    *   Each individual module (e.g., `ai_code_editing/`, `data_visualization/`) should have its own `requirements.txt` file.
-    *   This file lists dependencies required *only* for that specific module to function.
-    *   This approach keeps modules self-contained and prevents unnecessary installation of dependencies for users or developers who are only interested in a subset of modules.
+1.  **Single Source of Truth: `pyproject.toml`**:
+    *   All dependencies are defined in `pyproject.toml` with version constraints.
+    *   Core dependencies are listed in `[project.dependencies]` and are installed by default.
+    *   Module-specific optional dependencies are listed in `[project.optional-dependencies]` and can be installed per module.
 
-3.  **Version Pinning**:
-    *   **All** `requirements.txt` files (both root and module-specific) **must** use version pinning for every listed dependency.
-    *   Specify exact versions (e.g., `library_name==1.2.3`) rather than ranges or unpinned versions. This is crucial for ensuring reproducible builds and avoiding unexpected behavior due to automatic updates of transitive dependencies.
-    *   When adding or updating a dependency, determine and specify the exact version that has been tested and confirmed to work.
+2.  **Version Pinning**:
+    *   All production dependencies **must** use minimum version constraints (e.g., `package>=1.2.3`).
+    *   The `uv.lock` file pins exact versions for reproducible builds.
+    *   When adding or updating a dependency, specify a minimum version that has been tested and confirmed to work.
 
-4.  **Review and Justification**:
-    *   When adding a new dependency, consider whether it should be in the root `requirements.txt` or a module-specific one.
-    *   Be prepared to justify the inclusion of new dependencies in pull requests, especially for the root file.
+3.  **Installing Dependencies**:
+    *   **Core dependencies**: `uv sync` (installs all core dependencies)
+    *   **Module-specific dependencies**: `uv sync --extra <module-name>` (e.g., `uv sync --extra modeling_3d`)
+    *   **All optional dependencies**: `uv sync --all-extras`
+    *   **Development dependencies**: Automatically included with `uv sync --dev`
 
-This strategy aims to make the project manageable as it scales, allowing individual modules to evolve their dependencies without impacting others, while ensuring a stable and predictable environment for all contributors.
+4.  **Module-Specific `requirements.txt` Files**:
+    *   **DEPRECATED**: Module-specific `requirements.txt` files are deprecated and will be removed in a future version.
+    *   These files are kept temporarily for backward compatibility but should **not be modified**.
+    *   All new dependencies must be added to `pyproject.toml` instead.
+
+5.  **Adding New Dependencies**:
+    *   **Core dependencies** (used by multiple modules): Add to `[project.dependencies]` in `pyproject.toml`
+    *   **Module-specific dependencies**: Add to `[project.optional-dependencies.<module-name>]` in `pyproject.toml`
+    *   **Development dependencies**: Add to `[tool.uv.dev-dependencies]` in `pyproject.toml`
+    *   After adding, run `uv lock` to update the lock file
+    *   Be prepared to justify the inclusion of new dependencies in pull requests
+
+6.  **Dependency Validation**:
+    *   Pre-commit hooks validate dependency consistency
+    *   CI/CD checks for duplicate or conflicting dependencies
+    *   See `tools/dependency_consolidator.py` for dependency analysis tools
+
+This strategy ensures reproducible builds, reduces security risks from unpinned dependencies, and simplifies maintenance by having a single source of truth for all dependency information.
 
 ## Code of Conduct
 

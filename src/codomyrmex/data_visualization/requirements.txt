@@ -1,16 +1,19 @@
-# Data Visualization - Module-Specific Requirements
-
-# This module relies on the following primary Python libraries for its functionality.
-# These versions are pinned for stability and reproducibility.
-numpy==2.2.6
-matplotlib==3.10.3
-seaborn==0.13.2
-
-# This module may also utilize common libraries from the root `requirements.txt`
-# such as `python-dotenv` if configuration loading is needed directly within
-# visualization scripts or utilities specific to this module.
-
-# If this module later requires other specific dependencies not included globally
-# or in the list above, they should be added here with pinned versions.
-
-# No additional dependencies currently required 
+# DEPRECATED: This file is deprecated and will be removed in a future version.
+#
+# All dependencies have been consolidated into pyproject.toml as the single source of truth.
+# 
+# Data visualization dependencies (numpy, matplotlib, seaborn) are now in the main
+# dependencies section of pyproject.toml.
+#
+# To install dependencies:
+#   uv sync
+#
+# This file is kept temporarily for backward compatibility but should not be modified.
+# See docs/project/contributing.md for the new dependency management strategy.
+#
+# Migration completed: pyproject.toml [project.dependencies]
+#
+# --- Legacy content (for reference only) ---
+# numpy==2.2.6
+# matplotlib==3.10.3
+# seaborn==0.13.2 

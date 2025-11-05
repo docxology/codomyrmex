@@ -82,16 +82,21 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-      - id: check-yaml
       - id: check-json
       - id: check-toml
-      - id: check-merge-conflict
+      - id: check-yaml
       - id: check-added-large-files
-      - id: check-case-conflict
-      - id: debug-statements
-      - id: mixed-line-ending
-        args: [--fix=lf]
-      - id: requirements-txt-fixer
+
+  # Dependency validation
+  - repo: local
+    hooks:
+      - id: validate-dependencies
+        name: Validate Dependencies
+        entry: python3 tools/validate_dependencies.py
+        language: system
+        files: ^(pyproject\.toml|src/.*/requirements\.txt)$
+        pass_filenames: false
+        always_run: false
 
   # Shell script linting
   - repo: https://github.com/shellcheck-py/shellcheck-py

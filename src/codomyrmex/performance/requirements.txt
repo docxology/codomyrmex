@@ -1,1 +1,18 @@
-psutil>=5.9.0
+# DEPRECATED: This file is deprecated and will be removed in a future version.
+#
+# All dependencies have been consolidated into pyproject.toml as the single source of truth.
+#
+# To install dependencies for this module:
+#   uv sync --extra performance
+#
+# Or install all optional dependencies:
+#   uv sync --all-extras
+#
+# This file is kept temporarily for backward compatibility but should not be modified.
+# See docs/project/contributing.md for the new dependency management strategy.
+#
+# Migration completed: pyproject.toml [project.optional-dependencies.performance]
+#
+
+# --- Legacy content (for reference only) ---
+# psutil>=5.9.0

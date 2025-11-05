@@ -1,3 +1,20 @@
+# DEPRECATED: This file is deprecated and will be removed in a future version.
+#
+# All dependencies have been consolidated into pyproject.toml as the single source of truth.
+#
+# To install dependencies for this module:
+#   uv sync --extra static_analysis
+#
+# Or install all optional dependencies:
+#   uv sync --all-extras
+#
+# This file is kept temporarily for backward compatibility but should not be modified.
+# See docs/project/contributing.md for the new dependency management strategy.
+#
+# Migration completed: pyproject.toml [project.optional-dependencies.static_analysis]
+#
+
+# --- Legacy content (for reference only) ---
 # Static Analysis - Requirements
 
 # This module uses dependencies from the root requirements.txt file, including:
@@ -11,5 +28,5 @@
 # If this module requires additional dependencies not in the root requirements.txt,
 # they should be listed here.
 
-pyrefly>=0.16.0
+# pyrefly>=0.16.0
 # [Another Dependency]>=[Minimum Version] # e.g., another-lib>=2.1 

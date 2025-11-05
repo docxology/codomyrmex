@@ -1,3 +1,20 @@
+# DEPRECATED: This file is deprecated and will be removed in a future version.
+#
+# All dependencies have been consolidated into pyproject.toml as the single source of truth.
+#
+# To install dependencies for this module:
+#   uv sync --extra model_context_protocol
+#
+# Or install all optional dependencies:
+#   uv sync --all-extras
+#
+# This file is kept temporarily for backward compatibility but should not be modified.
+# See docs/project/contributing.md for the new dependency management strategy.
+#
+# Migration completed: pyproject.toml [project.dependencies]
+#
+
+# --- Legacy content (for reference only) ---
 # Model Context Protocol - Requirements
 
 # This file lists Python packages and dependencies required for the Model Context Protocol module.
@@ -45,8 +62,8 @@
 
 # For schema definition and validation (e.g., if using JSON Schema for MCP messages
 # and Pydantic for Python models of MCP messages)
-jsonschema==4.23.0
-pydantic==2.8.2
+# jsonschema==4.23.0
+# pydantic==2.8.2
 
 # If this module develops other specific Python dependencies (e.g., for Protocol Buffers generation/handling
 # if that format is chosen, or specific client/server libraries for an example implementation),

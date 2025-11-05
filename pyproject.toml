@@ -34,63 +34,125 @@ classifiers = [
 
 dependencies = [
     # Core toolkit for code analysis and LLM integration
-    "cased-kit",
+    "cased-kit>=1.9.0",
     # For .env file support
-    "python-dotenv",
+    "python-dotenv>=1.0.0",
     # LLM Providers
-    "openai",
-    "anthropic",
-    "google-generativeai",
+    "openai>=1.0.0",
+    "anthropic>=0.64.0",
+    "google-generativeai>=0.3.0",
     # For semantic search and embedding
-    "sentence-transformers",
-    "chromadb",
+    "sentence-transformers>=2.0.0",
+    "chromadb>=0.4.0",
     # For code execution sandbox
-    "docker",
+    "docker>=6.0.0",
     # For schema validation (used in model_context_protocol)
-    "jsonschema",
+    "jsonschema>=4.23.0",
     # For static analysis
-    "pylint",
-    "flake8",
-    "bandit",
-    "radon",
-    "lizard",
+    "pylint>=3.0.0",
+    "flake8>=6.0.0",
+    "bandit>=1.8.0",
+    "radon>=6.0.0",
+    "lizard>=1.17.0",
     # For advanced code review (pyscn - install with pipx)
     "tomli>=2.0.0",
     # For data visualization
-    "matplotlib",
-    "seaborn",
-    "numpy",
+    "matplotlib>=3.10.0",
+    "seaborn>=0.13.0",
+    "numpy>=2.2.0",
     # For git operations
-    "GitPython",
+    "GitPython>=3.1.0",
     # For specific tutorials/recipes
-    "unidiff",
-    "requests",
+    "unidiff>=0.7.0",
+    "requests>=2.31.0",
     # For dependency graph visualization (optional)
     # "graphviz",  # Also requires Graphviz system package to be installed
-    # For testing
-    "pytest",
-    "pytest-mock",
-    "pytest-cov",
+    # For testing (minimum versions, see dev-dependencies for exact)
+    "pytest>=8.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-cov>=4.0.0",
     # FastAPI - For creating API endpoints
-    "fastapi",
-    "uvicorn",
-    "pydantic",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.23.0",
+    "pydantic>=2.8.0",
     # Loguru - For logging.
-    "loguru",
+    "loguru>=0.7.0",
     # Watchdog - For monitoring file system events.
-    "watchdog",
+    "watchdog>=3.0.0",
     # Diff Match Patch - For generating and applying patches.
-    "diff-match-patch",
+    "diff-match-patch>=20230430.0",
     # Tiktoken - For tokenizing text with OpenAI models.
-    "tiktoken",
+    "tiktoken>=0.5.0",
     # For syntax highlighting (often a dependency for other tools)
-    "Pygments",
+    "Pygments>=2.15.0",
     # For progress bars
-    "tqdm",
-    # Development tools
-    "black",
-    "mypy",
-    "ruff",
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+# Module-specific optional dependencies
+# Install with: uv sync --extra <module-name>
+# Or install all: uv sync --all-extras
+
+code_review = [
+    "pathlib>=1.0.1",
+    "safety>=2.3.0",
+    "tomli>=2.0.0",
+    "typing-extensions>=4.0.0",
+    "vulture>=2.7.0",
+]
+
+language_models = [
+    "aiohttp>=3.8.0",
+    "certifi>=2022.0.0",
+    "pytest-asyncio>=0.21.0",
+    "typing-extensions>=4.0.0",
+    "urllib3>=1.26.0",
+]
+
+modeling_3d = [
+    "isort>=5.9.0",
+    "moderngl>=5.6.0",
+    "pillow>=8.0.0",
+    # NOTE: pyarfoundation and pyvr are not available in PyPI - commented out
+    # "pyarfoundation>=0.1.0",
+    "pygame>=2.0.0",
+    "pyopengl>=3.1.0",
+    "pyrr>=0.10.3",
+    # "pyvr>=0.1.0",
+    "scipy>=1.7.0",
+    "trimesh>=3.9.0",
+]
+
+performance = [
+    "psutil>=5.9.0",
+]
+
+physical_management = [
+    "aiohttp>=3.8.0",
+    "alembic>=1.7.0",
+    "dynaconf>=3.1.0",
+    "isort>=5.9.0",
+    "marshmallow>=3.0.0",
+    "mkdocs-material>=7.3.0",
+    "mkdocs>=1.2.0",
+    "pyserial>=3.5",
+    "pytest-asyncio>=0.21.0",
+    "scipy>=1.7.0",
+    "smbus2>=0.4.0",
+    "sqlalchemy>=1.4.0",
+    "websockets>=10.0",
+]
+
+security_audit = [
+    "cryptography>=41.0.0",
+    "jinja2>=3.1.0",
+    "pyopenssl>=23.0.0",
+    "safety>=2.3.0",
+]
+
+static_analysis = [
+    "pyrefly>=0.16.0",
 ]
 
 [project.urls]
@@ -104,7 +166,7 @@ packages = ["src/codomyrmex"]
 
 [tool.uv]
 dev-dependencies = [
-    "pytest>=7.0.0",
+    "pytest>=8.0.0",
     "pytest-mock>=3.10.0",
     "pytest-cov>=4.0.0",
     "black>=23.0.0",
