@@ -11,8 +11,16 @@ Database management agents providing unified interface for multiple database sys
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Database connections maintain security and connection pooling efficiency.
+- Migration management ensures data integrity and supports rollback capabilities.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Project Orchestration** (`project_orchestration/`) - Uses database for workflow state management
+- **Logging Monitoring** (`logging_monitoring/`) - Stores logs in database backends
+- **Config Management** (`config_management/`) - Manages database configuration settings
+
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation

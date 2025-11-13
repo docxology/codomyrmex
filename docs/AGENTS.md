@@ -19,13 +19,6 @@ Central documentation coordination for the Codomyrmex project, maintaining compr
 - Maintain comprehensive cross-linking between all documentation sections.
 - Ensure all AGENTS.md files are consistent and up-to-date across the documentation hierarchy.
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current module purpose and comprehensive documentation coordination role.
-- [x] Verify logging and telemetry hooks for this directory's agents are properly configured.
-- [x] Sync automation scripts and TODO entries after modifications to maintain documentation consistency.
-- [x] Ensure all documentation sections are properly linked and navigable from the main README and docs hub.
-- [x] Maintain consistent AGENTS.md structure across all documentation subdirectories.
-
 ## Navigation Links
 - **📚 Documentation Hub**: [README.md](README.md) - Central documentation overview and navigation
 - **🏠 Project Root**: [../../README.md](../../README.md) - Main project README with comprehensive overview

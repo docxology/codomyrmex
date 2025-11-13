@@ -11,8 +11,17 @@ Advanced pattern matching agents analyzing codebases for structural patterns, de
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Pattern matching maintains accuracy across large codebases.
+- Graph analysis provides comprehensive dependency and relationship mapping.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Static Analysis** (`static_analysis/`) - Uses pattern matching for code analysis
+- **AI Code Editing** (`ai_code_editing/`) - Uses patterns for code generation
+- **Project Orchestration** (`project_orchestration/`) - Uses patterns for workflow optimization
+
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
+- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation

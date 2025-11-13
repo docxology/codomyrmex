@@ -13,13 +13,6 @@ Step-by-step learning path documentation coordination for Codomyrmex, providing 
 - Maintain comprehensive cross-linking between tutorial documentation and related sections.
 - Ensure tutorials provide practical, hands-on learning experiences with working code examples.
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current tutorial documentation purpose and comprehensive learning path coverage.
-- [x] Verify logging and telemetry hooks for this directory's agents are properly configured.
-- [x] Sync automation scripts and TODO entries after modifications to maintain tutorial documentation consistency.
-- [x] Ensure tutorial documentation is properly linked and navigable from main documentation hubs.
-- [x] Maintain consistent AGENTS.md structure with parent documentation coordination agents.
-
 ## Navigation Links
 - **📚 Documentation Hub**: [../../../README.md](../../../README.md) - Central documentation overview and navigation
 - **🎓 Module Creation Tutorial**: [creating-a-module.md](creating-a-module.md) - Complete module building tutorial

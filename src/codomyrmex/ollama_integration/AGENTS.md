@@ -18,12 +18,10 @@ Comprehensive integration with Ollama local Large Language Models (LLMs), provid
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 - All agent-exposed tasks and handlers MUST be real, executable implementations. No stubs.
 
-## Integration Points
-
-### Related Modules
-- **AI Code Editing**: Uses Ollama models for code generation
-- **Model Context Protocol**: Provides MCP integration for Ollama models
-- **Language Models**: Part of the broader language model ecosystem
+## Related Modules
+- **AI Code Editing** (`../ai_code_editing/`) - Uses Ollama models for code generation
+- **Model Context Protocol** (`../model_context_protocol/`) - Provides MCP integration for Ollama models
+- **Language Models** (`../language_models/`) - Part of the broader language model ecosystem
 
 ## Navigation Links
 
@@ -32,9 +30,4 @@ Comprehensive integration with Ollama local Large Language Models (LLMs), provid
 - **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
 - **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
 
-## Checkpoints
-
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
 

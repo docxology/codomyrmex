@@ -3,7 +3,7 @@
 ## Summary
 - **Modules Audited**: 28
 - **Modules with Issues**: 28
-- **Total Issues**: 176
+- **Total Issues**: 405
 
 ## Missing Files
 ### api_documentation - Optional Files
@@ -101,8 +101,10 @@
 
 ## Broken References
 ### Broken Link
-**ai_code_editing** (1 issues):
+**ai_code_editing** (3 issues):
 - `src/codomyrmex/ai_code_editing/docs/index.md` (line 16): `../../../docs/project/contributing.md`
+- `src/codomyrmex/ai_code_editing/droid/handlers/AGENTS.md` (line 22): `../../../tests/unit/droid/AGENTS.md`
+- `src/codomyrmex/ai_code_editing/tests/unit/droid/AGENTS.md` (line 22): `../../../../droid/handlers/AGENTS.md`
 
 **build_synthesis** (1 issues):
 - `src/codomyrmex/build_synthesis/docs/index.md` (line 16): `../../../docs/project/contributing.md`
@@ -110,24 +112,26 @@
 **code_execution_sandbox** (1 issues):
 - `src/codomyrmex/code_execution_sandbox/docs/index.md` (line 16): `../../../docs/project/contributing.md`
 
-**code_review** (1 issues):
+**code_review** (3 issues):
 - `src/codomyrmex/code_review/docs/index.md` (line 12): `../../../docs/project/contributing.md`
+- `src/codomyrmex/code_review/tests/AGENTS.md` (line 34): `integration/AGENTS.md`
+- `src/codomyrmex/code_review/tests/unit/AGENTS.md` (line 29): `../integration/AGENTS.md`
 
 **data_visualization** (1 issues):
 - `src/codomyrmex/data_visualization/docs/index.md` (line 16): `../../../docs/project/contributing.md`
 
-**documentation** (43 issues):
-- `src/codomyrmex/documentation/docs/intro.md` (line 14): `./project-overview/`
-- `src/codomyrmex/documentation/docs/intro.md` (line 15): `./development-guides/environment-setup.md`
-- `src/codomyrmex/documentation/docs/intro.md` (line 16): `./project-overview/contributing.md`
+**documentation** (150 issues):
+- `src/codomyrmex/documentation/docs/AGENTS.md` (line 33): `../../../../../docs/README.md`
 - `src/codomyrmex/documentation/docs/index.md` (line 9): `./category/modules`
 - `src/codomyrmex/documentation/docs/index.md` (line 10): `./development/environment-setup`
 - `src/codomyrmex/documentation/docs/index.md` (line 11): `./project/contributing`
-- `src/codomyrmex/documentation/docs/project/CONTRIBUTING_TO_DOCUMENTATION.md` (line 9): `../../../../docs/project/contributing.md`
-- `src/codomyrmex/documentation/docs/project/CONTRIBUTING_TO_DOCUMENTATION.md` (line 115): `./other-page.md`
-- `src/codomyrmex/documentation/docs/project/CONTRIBUTING_TO_DOCUMENTATION.md` (line 116): `./subdirectory/page.md`
-- `src/codomyrmex/documentation/docs/project/CONTRIBUTING_TO_DOCUMENTATION.md` (line 117): `../parent-page.md`
-  ... and 33 more
+- `src/codomyrmex/documentation/docs/intro.md` (line 14): `./project-overview/`
+- `src/codomyrmex/documentation/docs/intro.md` (line 15): `./development-guides/environment-setup.md`
+- `src/codomyrmex/documentation/docs/intro.md` (line 16): `./project-overview/contributing.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/AGENTS.md` (line 26): `../../../../../ai_code_editing/README.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/AGENTS.md` (line 28): `../../../../../../../docs/README.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/README.md` (line 120): `CHANGELOG.md`
+  ... and 140 more
 
 **environment_setup** (1 issues):
 - `src/codomyrmex/environment_setup/docs/index.md` (line 16): `../../../docs/project/contributing.md`
@@ -160,6 +164,9 @@
 - `src/codomyrmex/physical_management/SECURITY.md` (line 28): `./CHANGELOG.md`
 - `src/codomyrmex/physical_management/docs/index.md` (line 12): `../../../docs/project/contributing.md`
 
+**project_orchestration** (1 issues):
+- `src/codomyrmex/project_orchestration/templates/AGENTS.md` (line 24): `../docs/AGENTS.md`
+
 **static_analysis** (2 issues):
 - `src/codomyrmex/static_analysis/docs/index.md` (line 16): `../../../docs/project/contributing.md`
 - `src/codomyrmex/static_analysis/docs/tutorials/example_tutorial.md` (line 86): `./advanced_feature_x_guide.md`
@@ -190,18 +197,18 @@
 - `src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
 - `src/codomyrmex/data_visualization/docs/tutorials/mcp_heatmap_tutorial.md` (line 115): `../MCP_TOOL_SPECIFICATION.md`
 
-**documentation** (29 issues):
-- `src/codomyrmex/documentation/docs/modules/model_context_protocol/README.md` (line 120): `../../../module_template/MCP_TOOL_SPECIFICATION.md`
-- `src/codomyrmex/documentation/docs/modules/model_context_protocol/mcp_tool_specification.md` (line 13): `../../../module_template/MCP_TOOL_SPECIFICATION.md`
-- `src/codomyrmex/documentation/docs/modules/git_operations/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
-- `src/codomyrmex/documentation/docs/modules/git_operations/docs/tutorials/example_tutorial.md` (line 48): `../USAGE_EXAMPLES.md`
-- `src/codomyrmex/documentation/docs/modules/git_operations/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
-- `src/codomyrmex/documentation/docs/modules/git_operations/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
-- `src/codomyrmex/documentation/docs/modules/build_synthesis/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
-- `src/codomyrmex/documentation/docs/modules/build_synthesis/docs/tutorials/example_tutorial.md` (line 48): `../USAGE_EXAMPLES.md`
-- `src/codomyrmex/documentation/docs/modules/build_synthesis/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
-- `src/codomyrmex/documentation/docs/modules/build_synthesis/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
-  ... and 19 more
+**documentation** (146 issues):
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/README.md` (line 38): `API_SPECIFICATION.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/README.md` (line 38): `MCP_TOOL_SPECIFICATION.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/README.md` (line 116): `API_SPECIFICATION.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/README.md` (line 117): `MCP_TOOL_SPECIFICATION.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/README.md` (line 118): `USAGE_EXAMPLES.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/docs/index.md` (line 12): `../API_SPECIFICATION.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/docs/index.md` (line 13): `../USAGE_EXAMPLES.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/docs/index.md` (line 21): `../API_SPECIFICATION.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/docs/index.md` (line 22): `../USAGE_EXAMPLES.md`
+- `src/codomyrmex/documentation/docs/modules/ai_code_editing/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
+  ... and 136 more
 
 **git_operations** (4 issues):
 - `src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`

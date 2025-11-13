@@ -119,7 +119,7 @@ For task, project, and workflow orchestration:
 2. **[Project Lifecycle Guide](project_orchestration/project-lifecycle-guide.md)** - Project management
 3. **[Config-Driven Operations](project_orchestration/config-driven-operations.md)** - Configuration-driven workflows
 4. **[Dispatch and Coordination](project_orchestration/dispatch-coordination.md)** - Dispatch patterns
-5. **[Examples Documentation](examples/README.md)** - Complete examples guide
+5. **[Examples Documentation](../scripts/examples/README.md)** - Complete examples guide
 
 ### **🚀 DevOps - Production Deployment**
 For production deployment:

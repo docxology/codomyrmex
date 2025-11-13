@@ -14,13 +14,6 @@ External system integration and AI workflow documentation coordination for Codom
 - Maintain comprehensive cross-linking between integration documentation and related sections.
 - Ensure integration documentation reflects current best practices and real-world integration patterns.
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current integration documentation purpose and comprehensive coverage.
-- [x] Verify logging and telemetry hooks for this directory's agents are properly configured.
-- [x] Sync automation scripts and TODO entries after modifications to maintain integration documentation consistency.
-- [x] Ensure integration documentation is properly linked and navigable from main documentation hubs.
-- [x] Maintain consistent AGENTS.md structure with parent documentation coordination agents.
-
 ## Navigation Links
 - **📚 Documentation Hub**: [../../README.md](../../README.md) - Central documentation overview and navigation
 - **🌐 External Systems**: [external-systems.md](external-systems.md) - Third-party integrations

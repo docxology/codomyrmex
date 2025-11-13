@@ -17,7 +17,14 @@ Static analysis agents scanning codebases for quality and compliance.
 - Security scanning identifies vulnerabilities without false positives exceeding threshold.
 - Performance analysis provides actionable optimization recommendations.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Code Review** (`code_review/`) - Uses static analysis for code reviews
+- **Security Audit** (`security_audit/`) - Integrates security scanning
+- **AI Code Editing** (`ai_code_editing/`) - Validates generated code
+
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
+- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation

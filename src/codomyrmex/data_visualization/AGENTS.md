@@ -17,7 +17,15 @@ Visualization agents producing analytic dashboards and plots.
 - Chart generation optimizes for performance while preserving visual quality.
 - Interactive dashboards support accessibility standards and responsive design.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Static Analysis** (`static_analysis/`) - Provides data for visualization
+- **Performance** (`performance/`) - Creates performance dashboards
+- **Project Orchestration** (`project_orchestration/`) - Coordinates visualization workflows
+
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
+- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
+- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation

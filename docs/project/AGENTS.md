@@ -16,13 +16,6 @@ Project governance, contribution, and roadmap documentation coordination for Cod
 - Maintain comprehensive cross-linking between project documentation and related sections.
 - Ensure project documentation reflects current governance and accurately represents the project roadmap.
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current project governance documentation purpose and comprehensive coverage.
-- [x] Verify logging and telemetry hooks for this directory's agents are properly configured.
-- [x] Sync automation scripts and TODO entries after modifications to maintain project documentation consistency.
-- [x] Ensure project documentation is properly linked and navigable from main documentation hubs.
-- [x] Maintain consistent AGENTS.md structure with parent documentation coordination agents.
-
 ## Navigation Links
 - **📚 Documentation Hub**: [../../README.md](../../README.md) - Central documentation overview and navigation
 - **🏛️ Architecture**: [architecture.md](architecture.md) - System design with Mermaid diagrams

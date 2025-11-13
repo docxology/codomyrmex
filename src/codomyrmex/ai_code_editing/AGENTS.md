@@ -24,7 +24,10 @@ Code editing agents, including droid automation and refactoring utilities.
 - **Code Execution** (`code_execution_sandbox/`) - Safely tests generated code snippets
 - **Project Orchestration** (`project_orchestration/`) - Coordinates AI-enhanced development workflows
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
+- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
+- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation

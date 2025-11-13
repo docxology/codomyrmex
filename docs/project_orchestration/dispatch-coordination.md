@@ -374,5 +374,5 @@ session_id = engine.create_session(mode="resource_aware")
 - [Task Orchestration Guide](./task-orchestration-guide.md)
 - [Workflow Configuration Schema](./workflow-configuration-schema.md)
 - [Resource Configuration](./resource-configuration.md)
-- [API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 

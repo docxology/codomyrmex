@@ -25,8 +25,16 @@ Comprehensive code review agents providing advanced static analysis capabilities
 - **CI/CD Integration**: GitHub Actions, pre-commit hooks, and automated quality gates.
 - **Rich Reporting**: HTML reports, JSON/CSV exports, and detailed analysis summaries.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Static Analysis** (`static_analysis/`) - Provides foundational analysis capabilities
+- **Security Audit** (`security_audit/`) - Integrates security scanning into reviews
+- **AI Code Editing** (`ai_code_editing/`) - Uses reviews to validate generated code
+
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
+- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
+- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
 

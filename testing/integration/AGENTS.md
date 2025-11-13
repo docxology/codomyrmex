@@ -10,8 +10,16 @@ Integration scenarios validating multi-agent flows.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Integration tests validate multi-module workflows and cross-component interactions.
+- Test scenarios maintain realistic conditions and comprehensive coverage of integration paths.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Unit Testing** (`../unit/`) - Provides unit test foundation
+- **Testing Suite** (`../`) - Coordinates overall testing strategy
+
+## Navigation Links
+- **📚 Testing Overview**: [../README.md](../README.md) - Testing suite documentation
+- **🧪 Unit Tests**: [../unit/AGENTS.md](../unit/AGENTS.md) - Unit test coordination
+- **🏠 Project Root**: [../../README.md](../../README.md) - Main project README
+- **📖 Documentation Hub**: [../../docs/README.md](../../docs/README.md) - Complete documentation structure
+- **🧪 Testing Strategy**: [../../docs/development/testing-strategy.md](../../docs/development/testing-strategy.md) - Testing approach and best practices

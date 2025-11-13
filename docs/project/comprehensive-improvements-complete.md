@@ -205,8 +205,8 @@ The comprehensive documentation improvements have successfully:
 ## Related Documentation
 
 - [Module Documentation Audit](module-documentation-audit.md) - Detailed audit results
-- [Documentation Standards](development/documentation.md) - Complete standards and guidelines
-- [Documentation Tools](../scripts/documentation/README.md) - Tool documentation
+- [Documentation Standards](../development/documentation.md) - Complete standards and guidelines
+- [Documentation Tools](../../scripts/documentation/README.md) - Tool documentation
 - [Standardization Summary](module-documentation-standardization-summary.md) - Implementation summary
 - [Improvements Summary](documentation-improvements-summary.md) - Detailed improvements log
 

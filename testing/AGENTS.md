@@ -17,8 +17,3 @@ Top-level testing suite coordinating integration and unit coverage.
 - **🏠 Project Root**: [../README.md](../README.md) - Main project README
 - **📖 Documentation Hub**: [../docs/README.md](../docs/README.md) - Complete documentation structure
 - **🧪 Testing Strategy**: [../docs/development/testing-strategy.md](../docs/development/testing-strategy.md) - Testing approach and best practices
-
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.

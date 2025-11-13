@@ -416,5 +416,5 @@ else:
 
 - [Dispatch and Coordination](./dispatch-coordination.md)
 - [Resource Configuration](./resource-configuration.md)
-- [API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 

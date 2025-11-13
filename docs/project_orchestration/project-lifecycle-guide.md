@@ -374,5 +374,5 @@ if result['success']:
 
 - [Project Template Schema](./project-template-schema.md)
 - [Config-Driven Operations](./config-driven-operations.md)
-- [API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 

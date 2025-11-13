@@ -11,9 +11,20 @@ No active components specified at this level.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Data files maintain organization and versioning for reproducibility.
+- Data processing maintains consistency and validation of input/output formats.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Test Project** (`../`) - Parent project directory
+- **Source Code** (`../src/`) - Processes data files
+- **Configuration** (`../config/`) - May reference data paths
+- **Reports** (`../reports/`) - Uses data for report generation
+
+## Navigation Links
+- **📚 Project Overview**: [../AGENTS.md](../AGENTS.md) - Test project coordination
+- **📦 Source Code**: [../src/AGENTS.md](../src/AGENTS.md) - Source code coordination
+- **⚙️ Configuration**: [../config/AGENTS.md](../config/AGENTS.md) - Configuration coordination
+- **📊 Reports**: [../reports/AGENTS.md](../reports/AGENTS.md) - Reports coordination
+- **🏠 Project Root**: [../../../README.md](../../../README.md) - Main project README
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
 

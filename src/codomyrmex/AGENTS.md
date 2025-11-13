@@ -49,7 +49,9 @@ Primary Python package bundling all Codomyrmex agents and shared tooling.
 - **Advanced Features**: `modeling_3d/`, `physical_management/`, `project_orchestration/`
 - **Development Support**: `module_template/`, `performance/`, `system_discovery/`, `tests/`
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Navigation Links
+- **📚 Package Overview**: [README.md](README.md) - Package documentation and module status
+- **🏠 Source Root**: [../README.md](../README.md) - Source code structure
+- **🏠 Project Root**: [../../README.md](../../README.md) - Main project README
+- **📖 Documentation Hub**: [../../docs/README.md](../../docs/README.md) - Complete documentation structure
+

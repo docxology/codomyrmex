@@ -501,5 +501,5 @@ rm.remove_resource("custom_api")
 
 - [Task Orchestration Guide](./task-orchestration-guide.md)
 - [Dispatch and Coordination](./dispatch-coordination.md)
-- [API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 

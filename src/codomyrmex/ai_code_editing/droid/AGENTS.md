@@ -19,7 +19,14 @@ Runtime coordinators, TODO runners, and task handlers powering the droid automat
 - All handlers and utilities MUST be real, executable implementations. No stubs.
 - The `run_todo_droid.py` entrypoint MUST execute tasks via the droid controller, not by direct calls.
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current module purpose.
-- [x] Verify logging and telemetry hooks for this directory's agents.
-- [x] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **AI Code Editing Module** (`../`) - Parent module directory
+- **Droid Handlers** (`handlers/`) - Task handler implementations
+- **Droid Tests** (`../tests/unit/droid/`) - Droid-specific test suite
+
+## Navigation Links
+- **📚 Module Overview**: [../README.md](../README.md) - AI code editing module documentation
+- **🤖 Droid Handlers**: [handlers/AGENTS.md](handlers/AGENTS.md) - Droid handler coordination
+- **🧪 Droid Tests**: [../tests/unit/droid/AGENTS.md](../tests/unit/droid/AGENTS.md) - Droid test coordination
+- **🏠 Package Root**: [../../../README.md](../../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../../docs/README.md](../../../../docs/README.md) - Complete documentation

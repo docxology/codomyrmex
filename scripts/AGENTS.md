@@ -98,10 +98,3 @@ Each orchestrator script corresponds to a module in `src/codomyrmex/`:
 - **📖 Documentation Hub**: [../docs/README.md](../docs/README.md) - Complete documentation structure
 - **📦 Source Code**: [../src/README.md](../src/README.md) - Source code structure
 
-## Checkpoints
-
-- [x] Confirm AGENTS.md reflects the current module purpose.
-- [x] Verify logging and telemetry hooks for this directory's agents.
-- [x] All module orchestrators created and documented.
-- [x] Orchestrators call real module functions with proper error handling.
-- [ ] Sync automation scripts or TODO entries after modifications.

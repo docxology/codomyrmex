@@ -11,8 +11,18 @@ Build synthesis agents orchestrating comprehensive software build pipelines, inc
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Build pipelines maintain quality gates and produce reliable artifacts.
+- Multi-target builds optimize for parallel execution and resource efficiency.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **CI/CD Automation** (`ci_cd_automation/`) - Uses build artifacts for deployment
+- **Git Operations** (`git_operations/`) - Manages version control for builds
+- **Project Orchestration** (`project_orchestration/`) - Coordinates build workflows
+
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
+- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
+- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation

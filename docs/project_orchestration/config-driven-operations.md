@@ -466,5 +466,5 @@ asyncio.run(main())
 - [Workflow Configuration Schema](./workflow-configuration-schema.md)
 - [Project Template Schema](./project-template-schema.md)
 - [Resource Configuration](./resource-configuration.md)
-- [API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 

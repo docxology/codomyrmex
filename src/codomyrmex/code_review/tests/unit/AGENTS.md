@@ -20,8 +20,14 @@ Unit test agents for isolated component testing of code review functionality.
 - **Edge Case Tests**: Boundary condition validation
 - **Performance Tests**: Speed and memory usage verification
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Code Review Tests** (`../`) - Parent test directory
+- **Integration Tests** (`../integration/`) - Integration test scenarios
+
+## Navigation Links
+- **📚 Tests Overview**: [../AGENTS.md](../AGENTS.md) - Test directory coordination
+- **🧪 Integration Tests**: [../integration/AGENTS.md](../integration/AGENTS.md) - Integration test coordination
+- **📚 Module Overview**: [../../README.md](../../README.md) - Code review module documentation
+- **🏠 Package Root**: [../../../../README.md](../../../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../../../docs/README.md](../../../../../docs/README.md) - Complete documentation
 

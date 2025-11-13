@@ -311,7 +311,7 @@ Each step can specify:
 
 ## Related Documentation
 
-- [API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 - [Task Orchestration Guide](./task-orchestration-guide.md)
 - [Dispatch and Coordination](./dispatch-coordination.md)
 - [Config-Driven Operations](./config-driven-operations.md)

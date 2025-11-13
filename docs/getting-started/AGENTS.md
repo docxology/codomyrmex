@@ -16,13 +16,6 @@ User onboarding and quick start documentation coordination for Codomyrmex, provi
 - Maintain comprehensive cross-linking between getting started documentation and related sections.
 - Ensure getting started documentation provides smooth user journey from discovery to productivity.
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current getting started documentation purpose and comprehensive coverage.
-- [x] Verify logging and telemetry hooks for this directory's agents are properly configured.
-- [x] Sync automation scripts and TODO entries after modifications to maintain getting started documentation consistency.
-- [x] Ensure getting started documentation is properly linked and navigable from main documentation hubs.
-- [x] Maintain consistent AGENTS.md structure with parent documentation coordination agents.
-
 ## Navigation Links
 - **📚 Documentation Hub**: [../../README.md](../../README.md) - Central documentation overview and navigation
 - **📦 Installation Guide**: [installation.md](installation.md) - Complete setup for all platforms

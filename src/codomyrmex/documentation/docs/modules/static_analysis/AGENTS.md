@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/static_analysis
 
 ## Purpose
-Container for the `src/codomyrmex/documentation/docs/modules/static_analysis` agent surfaces and supporting assets.
+Documentation for documentation functionality.
 
 ## Active Components
 - `docs/` – Agent surface for `docs` components.
@@ -10,8 +10,19 @@ Container for the `src/codomyrmex/documentation/docs/modules/static_analysis` ag
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Module documentation maintains accuracy for static analysis functionality.
+- Documentation provides comprehensive coverage of module capabilities and usage.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **Module Documentation** (`../`) - Parent module documentation directory
+- **Documentation Module** (`../../../`) - Parent documentation module
+- **Static Analysis Module** (`../../../../../static_analysis/`) - Actual module being documented
+- **Documentation** (`docs/`) - Module documentation subdirectory
+
+## Navigation Links
+- **📚 Module Docs Overview**: [../AGENTS.md](../AGENTS.md) - Module documentation coordination
+- **📖 Documentation**: [docs/AGENTS.md](docs/AGENTS.md) - Documentation coordination
+- **📚 Documentation Module**: [../../../README.md](../../../README.md) - Documentation module overview
+- **📦 Static Analysis Module**: [../../../../../static_analysis/README.md](../../../../../static_analysis/README.md) - Actual module documentation
+- **🏠 Package Root**: [../../../../../../README.md](../../../../../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../../../../../docs/README.md](../../../../../../../docs/README.md) - Complete documentation

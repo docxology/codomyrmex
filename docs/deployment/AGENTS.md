@@ -13,13 +13,6 @@ Production deployment and operations documentation coordination for Codomyrmex, 
 - Maintain comprehensive cross-linking between deployment documentation and related sections.
 - Ensure deployment documentation reflects current best practices and real-world deployment patterns.
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current deployment documentation purpose and comprehensive coverage.
-- [x] Verify logging and telemetry hooks for this directory's agents are properly configured.
-- [x] Sync automation scripts and TODO entries after modifications to maintain deployment documentation consistency.
-- [x] Ensure deployment documentation is properly linked and navigable from main documentation hubs.
-- [x] Maintain consistent AGENTS.md structure with parent documentation coordination agents.
-
 ## Navigation Links
 - **📚 Documentation Hub**: [../README.md](../README.md) - Central documentation overview and navigation
 - **🚀 Deployment Overview**: [production.md](production.md) - Complete production deployment guide

@@ -26,7 +26,7 @@ The Project Orchestration module provides comprehensive project management and t
 
 ### API Reference
 
-- **[API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)** - Complete API documentation with accurate signatures
+- **[API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)** - Complete API documentation with accurate signatures
 
 ## Quick Links
 
@@ -41,7 +41,7 @@ The Project Orchestration module provides comprehensive project management and t
 - **Understanding Dispatch?** See [Dispatch and Coordination](./dispatch-coordination.md)
 - **Creating Workflows?** See [Workflow Configuration Schema](./workflow-configuration-schema.md)
 - **Creating Templates?** See [Project Template Schema](./project-template-schema.md)
-- **API Details?** See [API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- **API Details?** See [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 
 ## Examples
 

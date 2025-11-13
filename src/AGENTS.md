@@ -16,10 +16,6 @@ Core source tree hosting agent-enabled services and utilities.
 ## Navigation Links
 - **📚 Source Overview**: [README.md](README.md) - Source code structure and navigation
 - **📦 Package Documentation**: [codomyrmex/README.md](codomyrmex/README.md) - Module status and integration patterns
-- **🏠 Project Root**: [../../README.md](../../README.md) - Main project README
-- **📖 Documentation Hub**: [../../docs/README.md](../../docs/README.md) - Complete documentation structure
+- **🏠 Project Root**: [../README.md](../README.md) - Main project README
+- **📖 Documentation Hub**: [../docs/README.md](../docs/README.md) - Complete documentation structure
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.

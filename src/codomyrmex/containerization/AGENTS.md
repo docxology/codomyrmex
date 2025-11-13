@@ -11,8 +11,16 @@ Containerization agents managing Docker container lifecycle, including image bui
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Container operations maintain security boundaries and resource limits.
+- Image building optimizes for size and security while maintaining functionality.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **CI/CD Automation** (`ci_cd_automation/`) - Uses containers for deployment pipelines
+- **Build Synthesis** (`build_synthesis/`) - Integrates container builds into build workflows
+- **Code Execution Sandbox** (`code_execution_sandbox/`) - Uses containerization for secure execution
+
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation

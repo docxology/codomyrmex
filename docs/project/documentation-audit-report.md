@@ -2,249 +2,251 @@
 Generated: comprehensive_audit.py
 ================================================================================
 ## Summary
-**Total Issues Found**: 188
+**Total Issues Found**: 391
 
 ### Issue Breakdown
-- **Broken Links**: 154
-- **Examples Migration**: 30
+- **Broken Links**: 338
+- **Examples Migration**: 49
 - **Navigation Issues**: 4
 
 ## Broken Links
-- **scripts/README.md** (line 325): `../src/codomyrmex/*/README.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/*/README.md`
+- **docs/project/documentation-audit-report.md** (line 196): `../examples/AGENTS.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/examples/AGENTS.md`
+- **docs/project/documentation-audit-report.md** (line 208): `../examples/AGENTS.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/examples/AGENTS.md`
+- **docs/project/documentation-audit-report.md** (line 220): `../examples/AGENTS.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/examples/AGENTS.md`
+- **docs/project/documentation-audit-report.md** (line 224): `examples/basic_usage.py`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/project/examples/basic_usage.py`
+- **docs/project/documentation-audit-report.md** (line 228): `examples/physics_demo.py`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/project/examples/physics_demo.py`
+- **docs/project/documentation-audit-report.md** (line 232): `examples/sensor_demo.py`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/project/examples/sensor_demo.py`
+- **docs/project/documentation-audit-report.md** (line 236): `../examples/AGENTS.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/examples/AGENTS.md`
+- **docs/project_orchestration/config-driven-operations.md** (line 469): `../src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+- **docs/project_orchestration/dispatch-coordination.md** (line 377): `../src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+- **docs/project_orchestration/project-lifecycle-guide.md** (line 377): `../src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+- **docs/project_orchestration/project-template-schema.md** (line 459): `../src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+- **docs/project_orchestration/resource-configuration.md** (line 504): `../src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+- **docs/project_orchestration/task-orchestration-guide.md** (line 419): `../src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+- **docs/project_orchestration/workflow-configuration-schema.md** (line 314): `../src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/docs/src/codomyrmex/project_orchestration/API_SPECIFICATION.md`
+- **scripts/README.md** (line 335): `../src/codomyrmex/*/README.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/*/README.md`
+- **scripts/performance/README.md** (line 28): `../../src/codomyrmex/performance/USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/performance/USAGE_EXAMPLES.md`
+- **scripts/system_discovery/README.md** (line 32): `../../src/codomyrmex/system_discovery/USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/USAGE_EXAMPLES.md`
+- **scripts/terminal_interface/README.md** (line 28): `../../src/codomyrmex/terminal_interface/USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/USAGE_EXAMPLES.md`
 - **src/codomyrmex/README.md** (line 323): `./*/API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/*/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/*/API_SPECIFICATION.md`
 - **src/codomyrmex/README.md** (line 324): `./*/MCP_TOOL_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/*/MCP_TOOL_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/*/MCP_TOOL_SPECIFICATION.md`
 - **src/codomyrmex/README.md** (line 325): `./*/USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/*/USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/*/USAGE_EXAMPLES.md`
 - **src/codomyrmex/README.md** (line 343): `./system_discovery/USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/system_discovery/USAGE_EXAMPLES.md`
 - **src/codomyrmex/README.md** (line 344): `./terminal_interface/USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/USAGE_EXAMPLES.md`
 - **src/codomyrmex/README.md** (line 345): `./performance/USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/performance/USAGE_EXAMPLES.md`
-- **src/template/README.md** (line 169): `../../CONTRIBUTING.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/CONTRIBUTING.md`
-- **src/codomyrmex/physical_management/README.md** (line 184): `examples/physics_demo.py`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/examples/physics_demo.py`
-- **src/codomyrmex/physical_management/README.md** (line 185): `examples/sensor_demo.py`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/examples/sensor_demo.py`
-- **src/codomyrmex/physical_management/SECURITY.md** (line 28): `./CHANGELOG.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/CHANGELOG.md`
-- **src/codomyrmex/git_operations/README.md** (line 7): `../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/git_operations/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/docs/USAGE_EXAMPLES.md`
-- **src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/docs/USAGE_EXAMPLES.md`
-- **src/codomyrmex/build_synthesis/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/USAGE_EXAMPLES.md`
-- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/USAGE_EXAMPLES.md`
-- **src/codomyrmex/code_review/docs/index.md** (line 12): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/model_context_protocol/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/model_context_protocol/docs/tutorials/example_tutorial.md** (line 77): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/model_context_protocol/docs/tutorials/example_tutorial.md** (line 86): `./advanced_feature_x_guide.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/docs/tutorials/advanced_feature_x_guide.md`
-- **src/codomyrmex/physical_management/docs/index.md** (line 12): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/logging_monitoring/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/logging_monitoring/docs/tutorials/example_tutorial.md** (line 189): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/code_execution_sandbox/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/docs/USAGE_EXAMPLES.md`
-- **src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/docs/USAGE_EXAMPLES.md`
-- **src/codomyrmex/data_visualization/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/USAGE_EXAMPLES.md`
-- **src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/USAGE_EXAMPLES.md`
-- **src/codomyrmex/data_visualization/docs/tutorials/mcp_heatmap_tutorial.md** (line 115): `../MCP_TOOL_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/MCP_TOOL_SPECIFICATION.md`
-- **src/codomyrmex/module_template/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/module_template/docs/tutorials/example_tutorial.md** (line 77): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/module_template/docs/API_SPECIFICATION.md`
-- **src/codomyrmex/module_template/docs/tutorials/example_tutorial.md** (line 86): `./advanced_feature_x_guide.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/module_template/docs/tutorials/advanced_feature_x_guide.md`
-- **src/codomyrmex/modeling_3d/docs/index.md** (line 11): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
-- **src/codomyrmex/environment_setup/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/performance/USAGE_EXAMPLES.md`
 - **src/codomyrmex/ai_code_editing/docs/index.md** (line 16): `../../../docs/project/contributing.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
 - **src/codomyrmex/ai_code_editing/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/docs/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/docs/API_SPECIFICATION.md`
 - **src/codomyrmex/ai_code_editing/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/docs/USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/docs/USAGE_EXAMPLES.md`
 - **src/codomyrmex/ai_code_editing/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/docs/API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/docs/API_SPECIFICATION.md`
 - **src/codomyrmex/ai_code_editing/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/docs/USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/ai_code_editing/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/ai_code_editing/droid/handlers/AGENTS.md** (line 22): `../../../tests/unit/droid/AGENTS.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/droid/AGENTS.md`
+- **src/codomyrmex/ai_code_editing/tests/unit/droid/AGENTS.md** (line 22): `../../../../droid/handlers/AGENTS.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/droid/handlers/AGENTS.md`
+- **src/codomyrmex/build_synthesis/docs/index.md** (line 16): `../../../docs/project/contributing.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/code_execution_sandbox/docs/index.md** (line 16): `../../../docs/project/contributing.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
+- **src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/code_execution_sandbox/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/code_review/docs/index.md** (line 12): `../../../docs/project/contributing.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
+- **src/codomyrmex/code_review/tests/AGENTS.md** (line 34): `integration/AGENTS.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/tests/integration/AGENTS.md`
+- **src/codomyrmex/code_review/tests/unit/AGENTS.md** (line 29): `../integration/AGENTS.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/code_review/tests/integration/AGENTS.md`
+- **src/codomyrmex/data_visualization/docs/index.md** (line 16): `../../../docs/project/contributing.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
+- **src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/data_visualization/docs/tutorials/mcp_heatmap_tutorial.md** (line 115): `../MCP_TOOL_SPECIFICATION.md`
+  - Resolved to: `/home/q/Documents/GitHub/codomyrmex/src/codomyrmex/data_visualization/docs/MCP_TOOL_SPECIFICATION.md`
 
-*... and 104 more broken links*
+*... and 288 more broken links*
 
 ## Examples Migration Issues
 Found references to old `examples/` paths that should be updated to `scripts/examples/`:
-- **src/codomyrmex/modeling_3d/README.md** (line 60):
-  ```
-  - [Usage Examples](examples/)...
-  ```
-- **src/codomyrmex/physical_management/README.md** (line 183):
-  ```
-  - [Basic Usage](examples/basic_usage.py) - Core functionality examples...
-  ```
-- **src/codomyrmex/physical_management/README.md** (line 184):
-  ```
-  - [Physics Simulation](examples/physics_demo.py) - Physics engine demonstration...
-  ```
-- **src/codomyrmex/physical_management/README.md** (line 185):
-  ```
-  - [Sensor Integration](examples/sensor_demo.py) - Device and sensor management...
-  ```
-- **src/codomyrmex/physical_management/docs/index.md** (line 18):
-  ```
-  - Explore the [Examples](../examples/) directory for usage examples....
-  ```
-- **src/codomyrmex/physical_management/docs/index.md** (line 24):
-  ```
-  - [Examples](../examples/) - Usage examples and demonstrations...
-  ```
-- **src/codomyrmex/modeling_3d/docs/index.md** (line 17):
-  ```
-  - Explore the [Examples](../examples/) directory for usage examples....
-  ```
-- **src/codomyrmex/modeling_3d/docs/index.md** (line 23):
-  ```
-  - [Examples](../examples/) - Usage examples and demonstrations...
-  ```
 - **docs/project/documentation-audit-report.md** (line 120):
   ```
-  - [Usage Examples](examples/)......
+  - Explore the [Examples](../examples/) directory for usage examples...................
   ```
 - **docs/project/documentation-audit-report.md** (line 124):
   ```
-  - [Basic Usage](examples/basic_usage.py) - Core functionality examples......
+  - [Examples](../examples/) - Usage examples and demonstrations..................
   ```
 - **docs/project/documentation-audit-report.md** (line 128):
   ```
-  - [Physics Simulation](examples/physics_demo.py) - Physics engine demonstration......
+  - Explore the [Examples](../examples/) directory for usage examples...................
   ```
 - **docs/project/documentation-audit-report.md** (line 132):
   ```
-  - [Sensor Integration](examples/sensor_demo.py) - Device and sensor management......
+  - [Examples](../examples/) - Usage examples and demonstrations..................
   ```
 - **docs/project/documentation-audit-report.md** (line 136):
   ```
-  **[🎮 Try Interactive Examples](examples/README.md)** • **[📚 Full Documentation](docs/README.md)** • ...
+  4. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations....................
   ```
 - **docs/project/documentation-audit-report.md** (line 140):
   ```
-  - **[🎮 Interactive Examples](examples/README.md)** - Executable demonstrations of all capabilities.....
+  5. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations....................
   ```
 - **docs/project/documentation-audit-report.md** (line 144):
   ```
-  **[🎮 Try Interactive Examples](examples/README.md)** - Executable demonstrations of all capabilities...
+  💡 [Examples](../examples/README.md) → Try interactive demonstrations........................
   ```
 - **docs/project/documentation-audit-report.md** (line 148):
   ```
-  4. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations.........
+  🎮 [Examples](../examples/) → Working code examples........................
   ```
 - **docs/project/documentation-audit-report.md** (line 152):
   ```
-  5. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations.........
+  | **Troubleshooting** | [Troubleshooting](../reference/troubleshooting.md) | [Examples](../examples/...
   ```
 - **docs/project/documentation-audit-report.md** (line 156):
   ```
-  💡 [Examples](../examples/README.md) → Try interactive demonstrations.........
+  - **[Examples](../../examples/README.md)**: Executable test examples........................
   ```
 - **docs/project/documentation-audit-report.md** (line 160):
   ```
-  🎮 [Examples](../examples/) → Working code examples.........
+  1. **🎮 Try Interactive Examples**: [examples/README.md](../../examples/README.md)......................
   ```
 - **docs/project/documentation-audit-report.md** (line 164):
   ```
-  | **Troubleshooting** | [Troubleshooting](./reference/troubleshooting.md) | [Examples](../examples/)...
+  1. **🎮 [Interactive Examples](../../examples/README.md)** - Try hands-on demonstrations................
   ```
 - **docs/project/documentation-audit-report.md** (line 168):
   ```
-  - [Usage Examples](examples/).........
+  1. **🎮 [Interactive Examples](../../examples/README.md)** - Hands-on demonstrations....................
   ```
 - **docs/project/documentation-audit-report.md** (line 172):
   ```
-  - [Basic Usage](examples/basic_usage.py) - Core functionality examples.........
+  - **🎮 Interactive Examples**: [../../examples/README.md](../../examples/README.md) - Hands-on demons...
   ```
 - **docs/project/documentation-audit-report.md** (line 176):
   ```
-  - [Physics Simulation](examples/physics_demo.py) - Physics engine demonstration.........
+  - **[Examples Documentation](../examples/README.md)** - Complete examples guide............
   ```
 - **docs/project/documentation-audit-report.md** (line 180):
   ```
-  - [Sensor Integration](examples/sensor_demo.py) - Device and sensor management.........
+  - **[Basic Examples](../examples/basic-examples.md)** - Single-module examples............
   ```
 - **docs/project/documentation-audit-report.md** (line 184):
   ```
-  - **[Examples](../../examples/README.md)**: Executable test examples.........
+  - **[Integration Examples](../examples/integration-examples.md)** - Multi-module workflows............
   ```
 - **docs/project/documentation-audit-report.md** (line 188):
   ```
-  1. **🎮 Try Interactive Examples**: [examples/README.md](../../examples/README.md).........
+  - **[Orchestration Examples](../examples/orchestration-examples.md)** - Task/project/workflow orches...
   ```
 - **docs/project/documentation-audit-report.md** (line 192):
   ```
-  1. **🎮 [Interactive Examples](../../examples/README.md)** - Try hands-on demonstrations.........
+  - [Examples Documentation](../examples/README.md) - Complete examples guide............
   ```
 - **docs/project/documentation-audit-report.md** (line 196):
   ```
-  1. **🎮 [Interactive Examples](../../examples/README.md)** - Hands-on demonstrations.........
+  - **🎮 Examples**: [../examples/AGENTS.md](../examples/AGENTS.md) - Example coordination............
   ```
 - **docs/project/documentation-audit-report.md** (line 200):
   ```
-  - **🎮 Interactive Examples**: [../../examples/README.md](../../examples/README.md) - Hands-on demons...
+  - **🎮 Examples**: [../../examples/AGENTS.md](../../examples/AGENTS.md) - Example coordination..........
   ```
 - **docs/project/documentation-audit-report.md** (line 204):
   ```
-  - **🎮 Examples**: [../../../examples/README.md](../../../examples/README.md) - Working code examples...
+  - [Usage Examples](examples/)............
   ```
+- **docs/project/documentation-audit-report.md** (line 208):
+  ```
+  - **🎮 Examples**: [../examples/AGENTS.md](../examples/AGENTS.md) - Example coordination............
+  ```
+- **docs/project/documentation-audit-report.md** (line 212):
+  ```
+  - Explore the [Examples](../examples/) directory for usage examples.............
+  ```
+- **docs/project/documentation-audit-report.md** (line 216):
+  ```
+  - [Examples](../examples/) - Usage examples and demonstrations............
+  ```
+- **docs/project/documentation-audit-report.md** (line 220):
+  ```
+  - **🎮 Examples**: [../examples/AGENTS.md](../examples/AGENTS.md) - Example coordination............
+  ```
+- **docs/project/documentation-audit-report.md** (line 224):
+  ```
+  - [Basic Usage](examples/basic_usage.py) - Core functionality examples............
+  ```
+- **docs/project/documentation-audit-report.md** (line 228):
+  ```
+  - [Physics Simulation](examples/physics_demo.py) - Physics engine demonstration............
+  ```
+- **docs/project/documentation-audit-report.md** (line 232):
+  ```
+  - [Sensor Integration](examples/sensor_demo.py) - Device and sensor management............
+  ```
+- **docs/project/documentation-audit-report.md** (line 236):
+  ```
+  - **🎮 Examples**: [../examples/AGENTS.md](../examples/AGENTS.md) - Example coordination............
+  ```
+
+*... and 19 more examples migration issues*
 
 ## Navigation Issues
 - **README.md**: Broken link `../src/codomyrmex/module_template/README.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/src/codomyrmex/module_template/README.md`
+  - Resolved to: `/home/q/Documents/GitHub/src/codomyrmex/module_template/README.md`
 - **README.md**: Broken link `../src/codomyrmex/README.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/src/codomyrmex/README.md`
+  - Resolved to: `/home/q/Documents/GitHub/src/codomyrmex/README.md`
 - **docs/README.md**: Broken link `../../scripts/examples/README.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/scripts/examples/README.md`
+  - Resolved to: `/home/q/Documents/GitHub/scripts/examples/README.md`
 - **docs/README.md**: Broken link `../../scripts/examples/README.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/scripts/examples/README.md`
+  - Resolved to: `/home/q/Documents/GitHub/scripts/examples/README.md`
 
 ## Recommendations
 1. Fix all broken links identified above

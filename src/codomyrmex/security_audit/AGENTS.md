@@ -24,7 +24,8 @@ Security audit agents performing comprehensive security analysis, vulnerability 
 - **Code Execution** (`code_execution_sandbox/`) - Provides secure runtime environment for testing
 - **Configuration Management** (`config_management/`) - Manages security settings and credentials
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation

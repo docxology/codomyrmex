@@ -456,5 +456,5 @@ Templates are validated when loaded:
 
 - [Project Lifecycle Guide](./project-lifecycle-guide.md)
 - [Config-Driven Operations](./config-driven-operations.md)
-- [API Specification](../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 

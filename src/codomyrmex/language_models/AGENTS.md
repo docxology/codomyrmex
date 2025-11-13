@@ -17,7 +17,13 @@ Language models integration for local LLM services, primarily Ollama. All method
 - All testing uses actual Ollama models and generates verified outputs.
 - Configuration system supports environment variables, presets, and file persistence.
 
-## Checkpoints
-- [ ] Confirm AGENTS.md reflects the current module purpose.
-- [ ] Verify logging and telemetry hooks for this directory's agents.
-- [ ] Sync automation scripts or TODO entries after modifications.
+## Related Modules
+- **AI Code Editing** (`ai_code_editing/`) - Uses language models for code generation
+- **Ollama Integration** (`ollama_integration/`) - Provides Ollama-specific integration
+- **Model Context Protocol** (`model_context_protocol/`) - Defines MCP interfaces for LLM communication
+
+## Navigation Links
+- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
+- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
+- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
+- **🦙 Ollama Integration**: [../ollama_integration/README.md](../ollama_integration/README.md) - Ollama integration module

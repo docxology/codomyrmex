@@ -20,13 +20,6 @@ Technical reference documentation coordination for Codomyrmex, maintaining compr
 - Maintain comprehensive cross-linking between reference documentation and related sections.
 - Ensure reference documentation reflects current APIs and accurately represents system capabilities.
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current reference documentation purpose and comprehensive coverage.
-- [x] Verify logging and telemetry hooks for this directory's agents are properly configured.
-- [x] Sync automation scripts and TODO entries after modifications to maintain reference documentation consistency.
-- [x] Ensure reference documentation is properly linked and navigable from main documentation hubs.
-- [x] Maintain consistent AGENTS.md structure with parent documentation coordination agents.
-
 ## Navigation Links
 - **📚 Documentation Hub**: [../README.md](../README.md) - Central documentation overview and navigation
 - **🔌 Complete API Reference**: [api-complete.md](api-complete.md) - **ACCURATE** API with real signatures
