@@ -1,87 +1,106 @@
 # testing
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: October 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2025
 
 ## Overview
 
-Top-level testing suite coordinating integration and unit coverage.
+Top-level testing suite coordinating integration and unit coverage for the Codomyrmex platform.
 
-## Core Capabilities
+## Testing Architecture
 
-### Primary Functions
-- **Modular Architecture**: Self-contained module with clear boundaries and responsibilities
-- **Agent Integration**: Seamlessly integrates with Codomyrmex agent ecosystem
-- **Comprehensive Testing**: Full test coverage with unit, integration, and performance tests
-- **Documentation**: Complete documentation with examples and API references
+Codomyrmex uses a **dual-location testing strategy**:
 
-## Architecture
+### 1. Project-Level Tests (`testing/`)
+- **`testing/unit/`** - Centralized unit tests that test modules from the project root perspective
+- **`testing/integration/`** - Integration tests verifying cross-module interactions
+- **Purpose**: Validate the entire system works together, run in CI/CD pipelines
+
+### 2. Module-Level Tests (`src/codomyrmex/{module}/tests/`)
+- Each module may contain its own `tests/` directory
+- **Purpose**: Allow modules to be developed and tested in isolation
+- **Benefit**: Enables independent module development and self-contained testing
+
+## Directory Structure
 
 ```
 testing/
+├── unit/                    # Centralized unit tests
+│   ├── test_ai_code_editing.py
+│   ├── test_data_visualization.py
+│   ├── test_git_operations.py
+│   └── ... (30+ test files)
+├── integration/             # Cross-module integration tests
+│   ├── test_documentation_accuracy.py
+│   ├── test_comprehensive_improvements.py
+│   └── ... (integration test files)
+├── conftest.py              # Shared pytest fixtures
+├── AGENTS.md                # Testing agent configuration
+└── README.md                # This file
 ```
 
 ## Key Components
 
 ### Active Components
-- `integration/` – Agent surface for `integration` components.
-- `unit/` – Agent surface for `unit` components.
+- `integration/` – Integration tests verifying cross-module interactions
+- `unit/` – Centralized unit tests for all modules
+
+## Running Tests
+
+### Run All Tests
+```bash
+# Using pytest directly
+pytest testing/ -v
+
+# Using make
+make test
+
+# Using uv
+uv run pytest testing/ -v
+```
+
+### Run Unit Tests Only
+```bash
+pytest testing/unit/ -v --tb=short
+```
+
+### Run Integration Tests Only
+```bash
+pytest testing/integration/ -v --tb=short
+```
+
+### Run Tests with Coverage
+```bash
+pytest testing/ -v --cov=src/codomyrmex --cov-report=html
+```
+
+### Run Tests for a Specific Module
+```bash
+pytest testing/unit/test_ai_code_editing.py -v
+```
+
+## Test Configuration
+
+Tests are configured via:
+- **`pytest.ini`** - Root pytest configuration
+- **`pyproject.toml`** - Additional pytest settings under `[tool.pytest.ini_options]`
+- **`conftest.py`** - Shared fixtures (provides `code_dir` fixture for all tests)
+
+## Test Markers
+
+Available pytest markers:
+- `@pytest.mark.unit` - Unit tests
+- `@pytest.mark.integration` - Integration tests
+- `@pytest.mark.slow` - Long-running tests
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-
-## Integration Points
-
-### Related Modules
-No related modules specified
-
-## Usage Examples
-
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.testing import ModuleClass
-
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
-```
-
-## Quality Assurance
-
-The module includes comprehensive testing to ensure:
-- **Reliability**: Consistent operation across different environments
-- **Performance**: Optimized execution with monitoring and metrics
-- **Security**: Secure by design with proper input validation
-- **Maintainability**: Clean code structure with comprehensive documentation
-
-## Development Guidelines
-
-### Code Structure
-- Follow project coding standards and `.cursorrules`
-- Implement comprehensive error handling
-- Include proper logging and telemetry
-- Maintain backward compatibility
-
-### Testing Requirements
-- Unit tests for all public methods
-- Integration tests for module interactions
-- Performance benchmarks where applicable
-- Security testing for sensitive operations
-
-## Contributing
-
-When contributing to this module:
-1. Follow established patterns and conventions
-2. Add comprehensive tests for new features
-3. Update documentation for API changes
-4. Ensure all tests pass before submitting
-5. Consider impact on related modules
+- All tests use real implementations (no mock-only tests for core functionality)
+- Tests maintain comprehensive coverage (target: 80%+)
+- Test files follow naming convention: `test_{module_name}.py`
+- Shared fixtures defined in `conftest.py` for consistency
 
 ## Related Documentation
 
-- **AGENTS.md**: Detailed agent configuration and purpose
-- **API Specification**: Complete API reference (if applicable)
-- **Technical Overview**: Architecture and design decisions
-- **Usage Examples**: Practical implementation examples
+- **[Testing Strategy](../docs/development/testing-strategy.md)** - Comprehensive testing approach
+- **[Contributing Guide](../docs/project/contributing.md)** - How to add new tests
+- **[AGENTS.md](AGENTS.md)** - Testing agent configuration

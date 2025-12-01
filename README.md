@@ -389,7 +389,7 @@ print(f"Workflow status: {execution.status.value}")
 
 ## 🏗️ **Enhanced Core Modules**
 
-Codomyrmex's modular architecture gives you **15 specialized modules** that you can use individually or combine into powerful workflows. Each module is self-contained with comprehensive documentation, tests, and examples.
+Codomyrmex's modular architecture gives you **28 specialized modules** that you can use individually or combine into powerful workflows. Each module is self-contained with comprehensive documentation, tests, and examples.
 
 ### **🎯 Complete Module Architecture**
 
