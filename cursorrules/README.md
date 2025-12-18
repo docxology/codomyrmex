@@ -1,249 +1,271 @@
-# Cursor Rules Organization
+# cursorrules
 
-This directory contains all `.cursorrules` files for the Codomyrmex project, organized by type and purpose.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Directory Structure
+## Overview
 
+The cursorrules directory contains the comprehensive coding standards, style guidelines, and automation rules that ensure consistent, high-quality code across the entire Codomyrmex project. These rules guide both human developers and AI agents in maintaining professional, maintainable, and reliable code.
+
+## Rule Hierarchy
+
+### Understanding Rule Priority
+
+Rules are organized hierarchically with clear precedence:
+
+1. **General Rules** (`general.cursorrules`) - Universal standards for all code
+2. **Cross-Module Rules** (`cross-module/`) - Standards for inter-module coordination
+3. **Module-Specific Rules** (`modules/`) - Standards tailored to individual modules
+4. **File-Specific Rules** (`file-specific/`) - Standards for specific file types
+
+When rules conflict, more specific rules take precedence over general ones.
+
+## Getting Started
+
+### Reading the Rules
+
+```bash
+# Start with the general rules
+cat general.cursorrules
+
+# Check module-specific rules
+cat modules/ai_code_editing.cursorrules
+
+# Review cross-module coordination
+cat cross-module/logging_monitoring.cursorrules
 ```
-cursorrules/
-├── README.md                          # This file - documentation of the cursorrules organization
-├── general.cursorrules                 # Root project-wide rules (applies to entire project)
-├── modules/                           # Module-specific rules
-│   ├── ai_code_editing.cursorrules
-│   ├── documentation.cursorrules
-│   ├── environment_setup.cursorrules
-│   ├── git_operations.cursorrules
-│   ├── logging_monitoring.cursorrules
-│   ├── model_context_protocol.cursorrules
-│   └── module_template.cursorrules
-├── cross-module/                      # Cross-cutting concerns affecting multiple modules
-│   ├── build_synthesis.cursorrules
-│   ├── code_execution_sandbox.cursorrules
-│   ├── data_visualization.cursorrules
-│   ├── logging_monitoring.cursorrules
-│   ├── model_context_protocol.cursorrules
-│   ├── output_module.cursorrules
-│   ├── pattern_matching.cursorrules
-│   ├── static_analysis.cursorrules
-│   └── template_module.cursorrules
-└── file-specific/                     # Rules for specific files or file types
-    └── README.md.cursorrules
+
+### Applying the Rules
+
+Rules are automatically enforced through:
+- **IDE Integration** - Real-time validation in development environments
+- **Pre-commit Hooks** - Automatic checking before code commits
+- **CI/CD Pipeline** - Automated validation in continuous integration
+- **Code Reviews** - Peer validation of rule compliance
+
+## Core Principles
+
+### Universal Standards
+
+**Clarity and Readability**
+- Write code that is easily understandable by human developers
+- Use descriptive names and clear structure
+- Include comprehensive documentation
+
+**Consistency**
+- Follow established patterns and conventions
+- Maintain consistent formatting and style
+- Use uniform naming conventions
+
+**Quality and Reliability**
+- Implement comprehensive error handling
+- Write thorough tests for all functionality
+- Follow security best practices
+
+## Directory Contents
+
+### Core Rule Files
+- `README.md` – This documentation
+- `general.cursorrules` – Universal coding standards and principles
+
+### Cross-Module Coordination (`cross-module/`)
+Rules for how modules interact and coordinate:
+- `build_synthesis.cursorrules` – Build system standards
+- `code_execution_sandbox.cursorrules` – Safe execution guidelines
+- `data_visualization.cursorrules` – Visualization consistency
+- `logging_monitoring.cursorrules` – Logging standards
+- `model_context_protocol.cursorrules` – MCP compliance
+
+### Module-Specific Rules (`modules/`)
+Rules tailored to individual modules:
+- `ai_code_editing.cursorrules` – AI-assisted coding standards
+- `api_documentation.cursorrules` – API documentation guidelines
+- `environment_setup.cursorrules` – Environment configuration
+- `git_operations.cursorrules` – Version control standards
+- `static_analysis.cursorrules` – Code analysis standards
+
+### File-Specific Rules (`file-specific/`)
+Standards for specific file types:
+- `README.md.cursorrules` – Documentation file standards
+- Additional file-type specific rules
+
+## Rule Categories
+
+### Code Style and Structure
+
+**Python Standards**
+- PEP 8 compliance for formatting
+- Type hints for all function parameters and return values
+- Descriptive variable and function names
+- Consistent import organization
+
+**Error Handling**
+- Comprehensive exception handling
+- Meaningful error messages
+- Appropriate logging levels
+- Graceful failure recovery
+
+**Documentation**
+- Docstrings for all public functions and classes
+- Clear code comments explaining complex logic
+- API documentation for module interfaces
+- Usage examples in documentation
+
+### Testing Standards
+
+**Test Coverage**
+- Unit tests for all functions and classes
+- Integration tests for module interactions
+- Performance benchmarks where applicable
+- Edge case and error condition testing
+
+**Test Quality**
+- Descriptive test names and assertions
+- Isolation of test cases
+- Realistic test data (no mocks)
+- Continuous validation
+
+### Security Practices
+
+**Input Validation**
+- Validate all external inputs
+- Sanitize data to prevent injection attacks
+- Use secure defaults for configurations
+
+**Authentication and Authorization**
+- Implement proper access controls
+- Secure credential management
+- Audit logging for security events
+
+## Enforcement and Validation
+
+### Automated Checking
+
+```bash
+# Run style and linting checks
+python scripts/static_analysis/lint.py
+
+# Validate rule compliance
+python scripts/static_analysis/validate_rules.py
+
+# Check documentation standards
+python scripts/documentation/validate_docs.py
 ```
 
-## Organization Rationale
+### Manual Review Process
 
-### `general.cursorrules`
-The root-level general rules that apply to the entire Codomyrmex project. All other cursorrules files supplement these general principles.
+Code changes undergo review for:
+- **Rule Compliance** - Adherence to established standards
+- **Code Quality** - Clarity, maintainability, and performance
+- **Test Coverage** - Appropriate testing for new functionality
+- **Documentation** - Complete and accurate documentation
 
-### `modules/`
-Contains rules specific to individual Codomyrmex modules. These rules apply when working *within* a specific module's directory, focusing on developing and maintaining that module itself. They supplement the general rules.
+## Contributing to Rules
 
-### `cross-module/`
-Contains rules for concerns that span multiple modules or are used across the project. These focus on *using* shared functionality across modules. Examples include:
-- Build and synthesis processes
-- Code execution sandboxes
-- Data visualization
-- Pattern matching
-- Static analysis
-- Template usage (using templates across the project)
-- Using logging_monitoring in other modules
-- Using MCP (Model Context Protocol) in other modules
+### Proposing New Rules
 
-**Important**: Some modules appear in both `modules/` and `cross-module/`:
-- **`modules/<module>.cursorrules`**: Rules for developing/maintaining the module itself
-- **`cross-module/<module>.cursorrules`**: Rules for using that module in other modules
+1. **Identify Need** - Document the problem the rule addresses
+2. **Research Solutions** - Review industry best practices
+3. **Draft Rule** - Write clear, enforceable rule with rationale
+4. **Validate Impact** - Test rule against existing codebase
+5. **Get Consensus** - Discuss with team and get approval
 
-This distinction exists for:
-- `logging_monitoring`: Module implementation vs. cross-module logging patterns
-- `model_context_protocol`: MCP specification/implementation vs. using MCP across modules
-- `template_module` vs `module_template`: Using templates vs. maintaining the template itself
+### Rule Modification Process
 
-### `file-specific/`
-Contains rules for specific files or file types that require special handling. Currently includes rules for the root `README.md` file.
+Changing existing rules requires:
+- **Impact Assessment** - Evaluate effects on existing code
+- **Migration Plan** - Plan for updating existing code
+- **Clear Communication** - Notify all contributors of changes
+- **Gradual Implementation** - Allow time for compliance
 
-## How Cursor Loads These Files
+## Common Rule Violations
 
-Cursor looks for `.cursorrules` files in specific locations:
-1. **Root level**: `general.cursorrules` (or `.cursorrules`) at the project root
-2. **Module directories**: `.cursor/.cursorrules` in module directories
+### Most Frequent Issues
 
-To maintain compatibility, we use symlinks:
-- A symlink from the root `general.cursorrules` → `cursorrules/general.cursorrules`
-- Symlinks in module directories pointing to the appropriate files in `cursorrules/modules/`
+**Style Inconsistencies**
+- Inconsistent naming conventions
+- Mixed formatting styles
+- Non-standard code organization
 
-## Adding New Cursor Rules
+**Documentation Gaps**
+- Missing docstrings
+- Incomplete API documentation
+- Unclear code comments
 
-### Adding a Module-Specific Rule
-1. Create a new file in `cursorrules/modules/<module_name>.cursorrules`
-2. Follow the structure of existing module rules
-3. Reference `general.cursorrules` in the preamble
-4. Create a symlink in the module's `.cursor/.cursorrules` if needed
+**Testing Shortcomings**
+- Insufficient test coverage
+- Mock usage instead of real data
+- Missing edge case testing
 
-### Adding a Cross-Module Rule
-1. Create a new file in `cursorrules/cross-module/<concern_name>.cursorrules`
-2. Document which modules this rule affects
-3. Reference `general.cursorrules` in the preamble
+### Quick Fixes
 
-### Adding a File-Specific Rule
-1. Create a new file in `cursorrules/file-specific/<filename>.cursorrules`
-2. Clearly document which file(s) this rule applies to
-3. Reference `general.cursorrules` in the preamble
+```bash
+# Auto-format code
+black src/ scripts/
 
-## File Naming Conventions
+# Sort imports
+isort src/ scripts/
 
-- Use lowercase with underscores: `module_name.cursorrules`
-- Match the module or concern name from the codebase
-- Keep names descriptive and consistent
+# Run tests with coverage
+pytest --cov=src/codomyrmex --cov-report=html
+```
 
-## Updating Rules
+## Navigation
 
-When updating cursorrules:
-1. Update the relevant file in the `cursorrules/` directory
-2. Ensure internal references are updated (especially path references)
-3. Update this README if the organization structure changes
-4. Test that Cursor can still find and load the rules correctly
+### Rule Reference
+- **General Standards**: [general.cursorrules](general.cursorrules) - Core coding principles
+- **Module Rules**: [modules/](modules/) - Module-specific guidelines
+- **Cross-Module**: [cross-module/](cross-module/) - Inter-module coordination
 
-## Quick Reference Table
+### Implementation
+- **Validation Tools**: [scripts/static_analysis/](../../scripts/static_analysis/) - Rule enforcement utilities
+- **Testing**: [testing/README.md](../../testing/README.md) - Testing standards and practices
 
-| Module/Concern | Module-Specific | Cross-Module | Notes |
-|----------------|----------------|--------------|-------|
-| `ai_code_editing` | ✓ | - | Module-specific only |
-| `documentation` | ✓ | - | Module-specific only |
-| `environment_setup` | ✓ | - | Module-specific only |
-| `git_operations` | ✓ | - | Module-specific only |
-| `logging_monitoring` | ✓ | ✓ | Implementation vs. usage |
-| `model_context_protocol` | ✓ | ✓ | Specification vs. consumption |
-| `module_template` | ✓ | - | Template itself |
-| `template_module` | - | ✓ | Using templates |
-| `build_synthesis` | - | ✓ | Cross-module only |
-| `code_execution_sandbox` | - | ✓ | Cross-module only |
-| `data_visualization` | - | ✓ | Cross-module only |
-| `output_module` | - | ✓ | Cross-module only |
-| `pattern_matching` | - | ✓ | Cross-module only |
-| `static_analysis` | - | ✓ | Cross-module only |
-| `README.md` | - | - | File-specific |
+### Related Documentation
+- **Project Root**: [README](../../../README.md) - Main project documentation
+- **Contributing**: [docs/project/contributing.md](../../docs/project/contributing.md)
+- **Architecture**: [docs/project/architecture.md](../../docs/project/architecture.md)
 
-## References in Rules
+## Compliance Metrics
 
-When writing cursorrules files, reference other rules using:
-- `general.cursorrules` for the root general rules
-- `modules/<module_name>.cursorrules` for module-specific rules (developing the module)
-- `cross-module/<concern_name>.cursorrules` for cross-module rules (using shared functionality)
-- Use relative paths from the `cursorrules/` directory when appropriate
+### Quality Indicators
+
+**Rule Compliance Rate**
+- Percentage of code meeting established standards
+- Trend analysis of compliance over time
+- Identification of frequently violated rules
+
+**Code Quality Scores**
+- Automated quality metrics from linting tools
+- Complexity measurements and maintainability scores
+- Technical debt tracking
+
+**Review Efficiency**
+- Time spent on style-related review comments
+- Reduction in repetitive feedback
+- Consistency in code review standards
 
 ## Troubleshooting
 
-### Finding the Right Cursorrules File
+### Rule Conflicts
 
-**Question**: "I'm working on a module, which cursorrules should I use?"
+When rules appear to conflict:
+1. Check rule hierarchy and specificity
+2. Review rule rationales for context
+3. Consult with team leads for clarification
+4. Document conflicts for rule refinement
 
-**Answer**: 
-1. Always start with `general.cursorrules` (applies to everything)
-2. If working *within* a module's directory, check `modules/<module_name>.cursorrules`
-3. If *using* a shared module (like logging or MCP), also check `cross-module/<module_name>.cursorrules`
-4. If working with a specific file type, check `file-specific/`
+### Enforcement Issues
 
-**Example**: When working in `ai_code_editing` module:
-- Use: `general.cursorrules` + `modules/ai_code_editing.cursorrules`
-- If using logging: also reference `cross-module/logging_monitoring.cursorrules`
-- If defining MCP tools: also reference `cross-module/model_context_protocol.cursorrules`
+If automated enforcement fails:
+- Verify tool versions and configurations
+- Check for false positives in validation
+- Update rules to be more enforceable
+- Consider manual review processes
 
-### Verifying Symlinks
+### Adoption Challenges
 
-To verify all symlinks are working correctly:
-
-```bash
-# Check root symlink
-ls -la general.cursorrules
-
-# Check module symlinks
-find src/codomyrmex -name ".cursorrules" -type l -exec sh -c 'echo "Checking: $1"; [ -f "$(readlink "$1")" ] && echo "✓ OK" || echo "✗ BROKEN"' _ {} \;
-```
-
-### Common Issues
-
-**Issue**: "Cursor isn't finding my cursorrules"
-- **Solution**: Ensure symlinks exist in expected locations (root and module `.cursor/` directories)
-- Verify symlink targets exist: `readlink -f <symlink>`
-
-**Issue**: "Which file should I edit for a module?"
-- **Solution**: Always edit the file in `cursorrules/` directory, not the symlink
-- The symlink will automatically point to the updated file
-
-**Issue**: "Module appears in both modules/ and cross-module/"
-- **Solution**: This is intentional. See the "Organization Rationale" section above for the distinction
-- `modules/` = developing the module itself
-- `cross-module/` = using the module in other modules
-
-## Examples
-
-### Example 1: Adding Logging to a New Module
-
-When adding logging to a new module:
-1. Reference `general.cursorrules` (always)
-2. Reference `cross-module/logging_monitoring.cursorrules` (for usage patterns)
-3. Do NOT need `modules/logging_monitoring.cursorrules` (unless modifying the logging module itself)
-
-### Example 2: Defining an MCP Tool
-
-When defining an MCP tool in a module:
-1. Reference `general.cursorrules` (always)
-2. Reference `cross-module/model_context_protocol.cursorrules` (for MCP tool definition patterns)
-3. Do NOT need `modules/model_context_protocol.cursorrules` (unless modifying the MCP specification)
-
-### Example 3: Creating a New Module from Template
-
-When creating a new module:
-1. Reference `general.cursorrules` (always)
-2. Reference `cross-module/template_module.cursorrules` (for template usage)
-3. The new module will eventually get its own `modules/<new_module>.cursorrules`
-
-## Maintenance
-
-This organization was implemented to:
-- Centralize all cursorrules in one location
-- Make it easier to find and maintain rules
-- Provide clear organization by type and purpose
-- Maintain backward compatibility with Cursor's file discovery
-- Separate concerns between module development and module usage
-
-## Modules Without Cursorrules
-
-The following modules currently do not have dedicated cursorrules files. This may be intentional if:
-- The module is new and hasn't been fully developed yet
-- The module follows standard patterns and doesn't need special rules
-- The module is a utility or helper that doesn't require specific guidance
-
-**Modules without cursorrules** (as of latest update):
-- `api_documentation`
-- `ci_cd_automation`
-- `code_review`
-- `config_management`
-- `containerization`
-- `database_management`
-- `language_models`
-- `modeling_3d`
-- `ollama_integration`
-- `performance`
-- `physical_management`
-- `project_orchestration`
-- `security_audit`
-- `system_discovery`
-- `terminal_interface`
-- `tests` (testing infrastructure, not a module)
-
-**Note**: When a module grows in complexity or develops unique patterns, consider adding a cursorrules file for it. Follow the "Adding New Cursor Rules" section above.
-
-## Validation Checklist
-
-When updating cursorrules, verify:
-- [ ] All symlinks are working (`find src/codomyrmex -name ".cursorrules" -type l`)
-- [ ] Root symlink exists (`ls -la general.cursorrules`)
-- [ ] All files reference `general.cursorrules` correctly
-- [ ] Cross-references between related files are accurate
-- [ ] Module paths in rules match actual module locations
-- [ ] README reflects current organization
-- [ ] Duplicate entries (modules in both `modules/` and `cross-module/`) have clear distinctions
-
-For questions or suggestions about the cursorrules organization, refer to the project's contributing guidelines.
-
+For teams struggling with rule adoption:
+- Provide clear examples and training
+- Start with high-impact, easy-to-adopt rules
+- Gradually introduce more complex standards
+- Recognize and celebrate compliance achievements

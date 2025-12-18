@@ -1,0 +1,53 @@
+# Cursor Rules for the api_documentation Module
+
+## 0. Preamble
+These rules are specific to the `api_documentation` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module generates API documentation from codebases, supporting multiple formats including OpenAPI specifications.
+-   **Key Technologies/Tools**: Python, code analysis, documentation generation, OpenAPI/Swagger, web frameworks (FastAPI, Flask), AST parsing.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `api_documentation` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the API Documentation module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for code analysis and documentation generation.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to API Documentation.
+-   `src/` (or primary Python package folders, e.g., `api_documentation/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `doc_generator.py`: Core documentation generation engine.
+-   `openapi_generator.py`: OpenAPI specification generator.
+
+## 3. Coding Standards & Practices for `api_documentation`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `api_documentation` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for documentation structures and API schemas.
+-   **Code Analysis**: Implement accurate code analysis for extracting API information.
+-   **Documentation Quality**: Ensure generated documentation is accurate, well-structured, and comprehensive.
+-   **Standards Compliance**: Maintain compliance with OpenAPI standards and documentation best practices.
+
+## 4. Testing in `api_documentation`
+-   New features (e.g., new framework support, documentation formats) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover code analysis, documentation generation, OpenAPI compliance, and output validation.
+-   Test with various Python frameworks and API patterns.
+-   Run existing tests to ensure no regressions. Refer to `api_documentation/tests/README.md`.
+
+## 5. Documentation for `api_documentation`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document supported frameworks, output formats, and customization options clearly.
+-   Include examples of generated documentation and integration patterns.
+
+## 6. Specific Considerations for `api_documentation`
+-   **Framework Support**: Maintain compatibility with popular Python web frameworks.
+-   **OpenAPI Compliance**: Ensure generated specifications conform to OpenAPI standards.
+-   **Code Analysis Accuracy**: Implement robust analysis for accurate API extraction.
+-   **Documentation Maintenance**: Ensure documentation stays synchronized with code changes.
+
+## 7. Final Check for `api_documentation`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that generated documentation accurately reflects code APIs.
+-   Test integration with related modules like `documentation` and `build_synthesis`.

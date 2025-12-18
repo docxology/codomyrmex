@@ -1,28 +1,25 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/data_visualization
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Documentation for documentation functionality.
+Documentation files and guides.
 
 ## Active Components
-- `docs/` – Agent surface for `docs` components.
+- `README.md` – Project file
+- `api_specification.md` – Project file
+- `changelog.md` – Project file
+- `docs/` – Directory containing docs components
+- `index.md` – Project file
+- `mcp_tool_specification.md` – Project file
+- `security.md` – Project file
+- `usage_examples.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Module documentation maintains accuracy for data visualization functionality.
-- Documentation provides comprehensive coverage of module capabilities and usage.
-
-## Related Modules
-- **Module Documentation** (`../`) - Parent module documentation directory
-- **Documentation Module** (`../../../`) - Parent documentation module
-- **Data Visualization Module** (`../../../../../data_visualization/`) - Actual module being documented
-- **Documentation** (`docs/`) - Module documentation subdirectory
 
 ## Navigation Links
-- **📚 Module Docs Overview**: [../AGENTS.md](../AGENTS.md) - Module documentation coordination
-- **📖 Documentation**: [docs/AGENTS.md](docs/AGENTS.md) - Documentation coordination
-- **📚 Documentation Module**: [../../../README.md](../../../README.md) - Documentation module overview
-- **📦 Data Visualization Module**: [../../../../../data_visualization/README.md](../../../../../data_visualization/README.md) - Actual module documentation
-- **🏠 Package Root**: [../../../../../../README.md](../../../../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../../../../docs/README.md](../../../../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

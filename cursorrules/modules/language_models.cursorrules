@@ -1,0 +1,54 @@
+# Cursor Rules for the language_models Module
+
+## 0. Preamble
+These rules are specific to the `language_models` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module integrates with local Large Language Models through Ollama, providing interfaces for LLM interactions.
+-   **Key Technologies/Tools**: Python, Ollama API, asynchronous programming, streaming responses, configuration management, environment variables.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `language_models` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Language Models module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for LLM integration and data handling.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Language Models.
+-   `src/` (or primary Python package folders, e.g., `language_models/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `ollama_client.py`: Core Ollama client with network I/O and streaming capabilities.
+-   `ollama_integration.py`: High-level integration utilities and convenience functions.
+-   `config.py`: Configuration management for LLM parameters and output organization.
+
+## 3. Coding Standards & Practices for `language_models`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `language_models` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for LLM configurations and responses.
+-   **Async Support**: Implement both synchronous and asynchronous interfaces for LLM operations.
+-   **Error Handling**: Provide comprehensive error handling for network issues, timeouts, and API failures.
+-   **Configuration**: Support flexible configuration through environment variables, presets, and file persistence.
+
+## 4. Testing in `language_models`
+-   New features (e.g., new LLM providers, streaming capabilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover LLM interactions, streaming, configuration management, and error scenarios.
+-   Use actual Ollama models for integration testing where appropriate.
+-   Run existing tests to ensure no regressions. Refer to `language_models/tests/README.md`.
+
+## 5. Documentation for `language_models`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document LLM configuration options, API usage patterns, and integration examples clearly.
+-   Include examples of LLM interactions and configuration scenarios.
+
+## 6. Specific Considerations for `language_models`
+-   **Network Reliability**: Implement robust network handling with retries and timeouts.
+-   **Streaming Support**: Ensure proper implementation of streaming responses for real-time interactions.
+-   **Configuration Management**: Provide flexible configuration options for different use cases.
+-   **Performance**: Optimize for efficient LLM interactions and resource usage.
+
+## 7. Final Check for `language_models`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that LLM integrations work correctly with actual Ollama services.
+-   Test integration with related modules like `ai_code_editing` and `model_context_protocol`.

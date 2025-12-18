@@ -1,28 +1,15 @@
-# Physical Management Orchestrator
+# physical_management
 
-Thin orchestrator script providing CLI access to the `codomyrmex.physical_management` module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Purpose
+## Overview
 
-This orchestrator provides information about physical object management and simulation capabilities.
+Automation and utility scripts.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `orchestrate.py` – File
 
-```bash
-# Show module information
-python scripts/physical_management/orchestrate.py info
-```
-
-## Commands
-
-- `info` - Show module information
-
-## Related Documentation
-
-- **[Module README](../../src/codomyrmex/physical_management/README.md)**: Complete module documentation
-- **[CLI Reference](../../docs/reference/cli.md)**: Main CLI documentation
-
-## Integration
-
-This orchestrator provides information about the physical_management module. See `src/codomyrmex/physical_management/` for complete API.
-
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)

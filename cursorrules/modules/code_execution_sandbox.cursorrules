@@ -1,0 +1,53 @@
+# Cursor Rules for the code_execution_sandbox Module
+
+## 0. Preamble
+These rules are specific to the `code_execution_sandbox` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module provides secure code execution environments and manages sandbox lifecycles.
+-   **Key Technologies/Tools**: Docker, sandboxing technologies, container security, resource management, multi-language runtime support.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `code_execution_sandbox` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Code Execution Sandbox module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for sandbox implementation and code execution.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Code Execution Sandbox.
+-   `src/` (or primary Python package folders, e.g., `code_execution_sandbox/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `code_executor.py`: Core code execution functionality with sandboxing.
+
+## 3. Coding Standards & Practices for `code_execution_sandbox`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `code_execution_sandbox` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for execution configurations and results.
+-   **Security First**: Every change must prioritize security, isolation, and safe execution practices.
+-   **Resource Management**: Implement strict resource limits and monitoring for all executions.
+-   **Error Handling**: Provide comprehensive error reporting for execution failures and sandbox issues.
+
+## 4. Testing in `code_execution_sandbox`
+-   New features (e.g., new language support, sandbox configurations) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover sandbox isolation, resource limits, execution scenarios, and security validations.
+-   Include security-specific tests to probe for potential vulnerabilities.
+-   Run existing tests to ensure no regressions. Refer to `code_execution_sandbox/tests/README.md`.
+
+## 5. Documentation for `code_execution_sandbox`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `SECURITY.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document supported languages, sandbox configurations, and security measures clearly.
+-   Include examples of code execution and sandbox usage patterns.
+
+## 6. Specific Considerations for `code_execution_sandbox`
+-   **Security Critical**: This module handles potentially untrusted code execution and must maintain robust isolation.
+-   **Sandbox Management**: Ensure proper lifecycle management of sandbox environments.
+-   **Resource Limits**: Implement and enforce strict CPU, memory, time, and network limitations.
+-   **Multi-Language Support**: Maintain compatibility with various programming language runtimes.
+
+## 7. Final Check for `code_execution_sandbox`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass, especially security-related tests.
+-   Confirm that sandbox isolation works correctly and resource limits are enforced.
+-   Test integration with related modules like `ai_code_editing` and `static_analysis`.

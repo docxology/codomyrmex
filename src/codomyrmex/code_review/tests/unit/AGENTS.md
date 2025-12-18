@@ -1,33 +1,20 @@
 # Codomyrmex Agents — src/codomyrmex/code_review/tests/unit
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Unit test agents for isolated component testing of code review functionality.
+Test files and validation suites.
 
 ## Active Components
-- `test_*.py` – Individual unit test files for each module component.
+- `README.md` – Project file
+- `test_code_reviewer.py` – Project file
+- `test_error_handling.py` – Project file
 
 ## Operating Contracts
-- Unit tests maintain isolation using dependency injection and mocking.
-- Test coverage exceeds 80% for all core functionality.
-- Performance tests validate analysis speed requirements.
-- Mock external dependencies to ensure test reliability.
-
-## Test Categories
-- **Component Tests**: Individual class and function testing
-- **Mock Tests**: External dependency simulation
-- **Edge Case Tests**: Boundary condition validation
-- **Performance Tests**: Speed and memory usage verification
-
-## Related Modules
-- **Code Review Tests** (`../`) - Parent test directory
-- **Integration Tests** (`../integration/`) - Integration test scenarios
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **📚 Tests Overview**: [../AGENTS.md](../AGENTS.md) - Test directory coordination
-- **🧪 Integration Tests**: [../integration/AGENTS.md](../integration/AGENTS.md) - Integration test coordination
-- **📚 Module Overview**: [../../README.md](../../README.md) - Code review module documentation
-- **🏠 Package Root**: [../../../../README.md](../../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../../docs/README.md](../../../../../docs/README.md) - Complete documentation
-
+- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `README.md` detailing general project setup and module-specific overview.
 - `API_SPECIFICATION.md` documenting functions from `env_checker.py`.
 - `MCP_TOOL_SPECIFICATION.md` stating N/A status for MCP tools.
-- Placeholder files for `SECURITY.md`, `USAGE_EXAMPLES.md`.
+- Created comprehensive security guidelines and usage examples for environment setup.
 - This `CHANGELOG.md` file.
 
 ### Changed

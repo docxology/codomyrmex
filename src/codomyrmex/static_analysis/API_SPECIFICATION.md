@@ -6,15 +6,51 @@
 
 ## Endpoints / Functions / Interfaces
 
-(Detail each API endpoint, function, or interface provided by this module. Use a consistent format.)
+## Functions
 
-### Endpoint/Function 1: `example_function()`
+### Function: `analyze_file(file_path: str, analysis_types: List[AnalysisType] = None, **kwargs) -> AnalysisResult`
 
-- **Description**: (What this function does.)
-- **Method**: (e.g., GET, POST, or N/A for library functions)
-- **Path**: (e.g., `/api/module/resource` or N/A)
-- **Parameters/Arguments**:
-    - `param1` (type): Description of parameter.
+- **Description**: Analyze a single file for code quality, security, and performance issues.
+- **Parameters**:
+    - `file_path`: Path to the file to analyze.
+    - `analysis_types`: List of analysis types to perform (quality, security, performance, etc.).
+    - `**kwargs`: Additional analysis options (severity_threshold, include_metrics, etc.).
+- **Return Value**: AnalysisResult object containing findings, metrics, and recommendations.
+- **Errors**: Raises `AnalysisError` for file access issues or analysis failures.
+
+### Function: `analyze_project(project_path: str, analysis_types: List[AnalysisType] = None, **kwargs) -> AnalysisSummary`
+
+- **Description**: Perform comprehensive static analysis on an entire project.
+- **Parameters**:
+    - `project_path`: Root path of the project to analyze.
+    - `analysis_types`: List of analysis types to perform across all files.
+    - `**kwargs`: Project-wide analysis options (exclude_patterns, parallel_processing, etc.).
+- **Return Value**: AnalysisSummary with aggregated results across all analyzed files.
+- **Errors**: Raises `AnalysisError` for project access issues or analysis failures.
+
+### Function: `get_available_tools() -> List[str]`
+
+- **Description**: Get list of available static analysis tools and their capabilities.
+- **Return Value**: List of available analysis tool names.
+- **Errors**: Raises `ToolError` for tool discovery issues.
+
+### Function: `run_pyrefly_analysis(target_paths: List[str], **kwargs) -> Dict`
+
+- **Description**: Run Pyrefly static analysis on specified Python code paths.
+- **Parameters**:
+    - `target_paths`: List of file or directory paths to analyze.
+    - `**kwargs`: Pyrefly-specific analysis options.
+- **Return Value**: Dictionary containing analysis results, errors, and metadata.
+- **Errors**: Raises `PyreflyError` for analysis execution failures.
+
+### Function: `parse_pyrefly_output(output: str, **kwargs) -> List[Dict]`
+
+- **Description**: Parse Pyrefly analysis output into structured data.
+- **Parameters**:
+    - `output`: Raw Pyrefly output string to parse.
+    - `**kwargs`: Parsing options (format_output, include_metadata, etc.).
+- **Return Value**: List of parsed analysis findings with standardized structure.
+- **Errors**: Raises `ParseError` for output parsing failures.
     - `param2` (type, optional): Description of parameter. Default: `value`.
 - **Request Body** (if applicable):
     ```json

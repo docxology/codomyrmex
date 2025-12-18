@@ -1,27 +1,20 @@
 # Codomyrmex Agents — src/codomyrmex/logging_monitoring/tests
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Test suite for logging and monitoring functionality, covering unit tests for individual logging components and integration tests for complete telemetry workflows, ensuring structured logging and monitoring capabilities.
+Test files and validation suites.
 
 ## Active Components
-- `integration/` – Agent surface for `integration` components.
-- `unit/` – Agent surface for `unit` components.
+- `README.md` – Project file
+- `integration/` – Directory containing integration components
+- `unit/` – Directory containing unit components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Tests maintain comprehensive coverage of logging and monitoring functionality.
-- Test execution validates structured logging and telemetry capabilities.
-
-## Related Modules
-- **Logging Monitoring Module** (`../`) - Provides the module being tested
-- **Unit Tests** (`unit/`) - Unit-level test validation
-- **Integration Tests** (`integration/`) - Integration test scenarios
 
 ## Navigation Links
-- **📚 Module Overview**: [../README.md](../README.md) - Logging monitoring module documentation
-- **🧪 Unit Tests**: [unit/AGENTS.md](unit/AGENTS.md) - Unit test coordination
-- **🧪 Integration Tests**: [integration/AGENTS.md](integration/AGENTS.md) - Integration test coordination
-- **🏠 Package Root**: [../../../README.md](../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../docs/README.md](../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [logging_monitoring](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

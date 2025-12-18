@@ -1,0 +1,55 @@
+# Cursor Rules for the config_management Module
+
+## 0. Preamble
+These rules are specific to the `config_management` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module manages system settings, environment variables, and configuration files with validation and consistency.
+-   **Key Technologies/Tools**: Python, configuration file formats (YAML, JSON, TOML), secret management, validation schemas, environment variable handling.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `config_management` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Config Management module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for configuration and secret management.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Config Management.
+-   `src/` (or primary Python package folders, e.g., `config_management/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `config_loader.py`: Core configuration loading and validation functionality.
+-   `config_deployer.py`: Configuration deployment logic.
+-   `secret_manager.py`: Secret management and encryption capabilities.
+-   `config_monitor.py`: Configuration monitoring and change detection.
+
+## 3. Coding Standards & Practices for `config_management`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `config_management` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for configuration schemas and validation.
+-   **Security**: Implement secure handling of sensitive configuration data and secrets.
+-   **Validation**: Ensure comprehensive validation of configuration data with clear error messages.
+-   **Environment Awareness**: Support environment-specific overrides and inheritance.
+
+## 4. Testing in `config_management`
+-   New features (e.g., new configuration formats, validation rules) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover various configuration scenarios, validation edge cases, and secret handling.
+-   Mock external configuration sources where appropriate to ensure deterministic test behavior.
+-   Run existing tests to ensure no regressions. Refer to `config_management/tests/README.md`.
+
+## 5. Documentation for `config_management`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document configuration formats, validation rules, and security practices clearly.
+-   Include examples of configuration files and usage patterns.
+
+## 6. Specific Considerations for `config_management`
+-   **Security First**: Configuration and secret management must prioritize security, including encryption and access controls.
+-   **Validation**: Implement comprehensive validation with helpful error messages for configuration issues.
+-   **Versioning**: Support configuration versioning and change tracking.
+-   **Multi-Format**: Support multiple configuration file formats (YAML, JSON, TOML, etc.).
+
+## 7. Final Check for `config_management`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that configurations load correctly and validation works as expected.
+-   Test integration with related modules like `environment_setup` and `security_audit`.

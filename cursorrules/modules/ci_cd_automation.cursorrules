@@ -1,0 +1,55 @@
+# Cursor Rules for the ci_cd_automation Module
+
+## 0. Preamble
+These rules are specific to the `ci_cd_automation` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module manages CI/CD pipelines, deployment orchestration, and automated software delivery within the Codomyrmex ecosystem.
+-   **Key Technologies/Tools**: Python, CI/CD platforms (GitHub Actions, Jenkins, etc.), container orchestration, deployment strategies, monitoring systems.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `ci_cd_automation` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the CI/CD Automation module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for CI/CD processes and deployments.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to CI/CD Automation.
+-   `src/` (or primary Python package folders, e.g., `ci_cd_automation/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `pipeline_manager.py`: Core pipeline management functionality.
+-   `deployment_orchestrator.py`: Deployment orchestration logic.
+-   `rollback_manager.py`: Rollback and recovery management.
+-   `pipeline_monitor.py`: Pipeline monitoring and analytics.
+
+## 3. Coding Standards & Practices for `ci_cd_automation`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `ci_cd_automation` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for pipeline configurations and deployment parameters.
+-   **Pipeline Design**: Pipeline definitions should be declarative, versionable, and support complex dependencies.
+-   **Deployment Safety**: Implement comprehensive validation, health checks, and rollback capabilities.
+-   **Monitoring Integration**: All pipeline and deployment activities should be logged and monitored.
+
+## 4. Testing in `ci_cd_automation`
+-   New features (e.g., new deployment strategies, pipeline templates) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover various pipeline scenarios, deployment strategies, and failure recovery.
+-   Mock external CI/CD systems and deployment targets to ensure deterministic test behavior.
+-   Run existing tests to ensure no regressions. Refer to `ci_cd_automation/tests/README.md`.
+
+## 5. Documentation for `ci_cd_automation`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document pipeline configurations, deployment strategies, and monitoring setup clearly.
+-   Include examples of pipeline definitions and deployment workflows.
+
+## 6. Specific Considerations for `ci_cd_automation`
+-   **Security First**: Pipeline and deployment processes must prioritize security, including secret management and access controls.
+-   **Reliability**: Implement comprehensive error handling, retries, and rollback mechanisms.
+-   **Observability**: All pipeline and deployment activities should be fully logged and monitored.
+-   **Scalability**: Design for parallel execution and resource-efficient deployment strategies.
+
+## 7. Final Check for `ci_cd_automation`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that pipelines execute correctly and deployments handle failures gracefully.
+-   Test integration with related modules like `build_synthesis` and `containerization`.

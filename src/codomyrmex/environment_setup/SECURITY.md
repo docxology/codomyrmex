@@ -33,7 +33,7 @@ The Environment Setup module, through its documentation (like `README.md`) and u
     -   **Source Verification**: Prefer dependencies from well-known, reputable sources (PyPI, npmjs.com main registries). Be cautious with less common or unverified sources.
     -   **Regular Audits**: Periodically review dependencies for known vulnerabilities using tools like `pip-audit`, `npm audit`, or Snyk.
 -   **Secure API Key Management (`.env` files)**:
-    -   The `env_checker.py` script guides creation of `.env` with placeholders and checks for its existence. It does **not** handle or log actual key values.
+    -   The `env_checker.py` script validates `.env` file existence and provides secure configuration guidance. It never accesses, logs, or exposes actual API key values during environment checks.
     -   The `.env` file **MUST NEVER** be committed to version control. The project's root `.gitignore` includes `.env`.
     -   Store `.env` files securely on the local development machine.
     -   Grant API keys the minimum necessary permissions (Principle of Least Privilege) for their intended use in development.

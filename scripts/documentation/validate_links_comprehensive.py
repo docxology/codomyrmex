@@ -171,12 +171,18 @@ class ComprehensiveLinkValidator:
                 continue
             
             if not resolved.exists():
+                # Try to get relative path, fallback to absolute if outside repo
+                try:
+                    resolved_str = str(resolved.relative_to(self.repo_root))
+                except ValueError:
+                    resolved_str = str(resolved)
+                
                 broken.append(BrokenLink(
                     file_path=str(file_path.relative_to(self.repo_root)),
                     line_number=line_num,
                     link_text=link_text,
                     link_url=link_url,
-                    resolved_path=str(resolved.relative_to(self.repo_root) if resolved else link_url),
+                    resolved_path=resolved_str,
                     issue_type='broken_internal'
                 ))
             

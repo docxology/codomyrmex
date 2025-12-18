@@ -1,26 +1,21 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/scripts
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Automation scripts for documentation, providing command-line tools and workflow automation utilities.
+Documentation files and guides.
 
 ## Active Components
-- Key files: check_stale_aggregation.py, update_sidebars.py, validate_docs_quality.py
+- `README.md` – Project file
+- `check_stale_aggregation.py` – Project file
+- `update_sidebars.py` – Project file
+- `validate_docs_quality.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Scripts provide automation for documentation maintenance, quality validation, and sidebar updates.
-- Script execution maintains reliability and comprehensive documentation management.
-
-## Related Modules
-- **Documentation Module** (`../`) - Parent module directory
-- **Tests** (`../tests/`) - Module test suite
-- **Documentation** (`../docs/`) - Module documentation
 
 ## Navigation Links
-- **📚 Module Overview**: [../README.md](../README.md) - Documentation module documentation
-- **🧪 Tests**: [../tests/AGENTS.md](../tests/AGENTS.md) - Test coordination
-- **📖 Documentation**: [../docs/AGENTS.md](../docs/AGENTS.md) - Documentation coordination
-- **🏠 Package Root**: [../../../README.md](../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../docs/README.md](../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [documentation](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

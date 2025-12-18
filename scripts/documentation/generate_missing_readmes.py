@@ -49,17 +49,17 @@ def parse_agents_file(agents_path):
         'related': related
     }
 
-def generate_readme_content(module_info, dir_path):
-    """Generate comprehensive README.md content based on AGENTS.md info."""
+def generate_readme_content(module_info, dir_path, repo_root):
+    """Generate minimal README.md content based on AGENTS.md info."""
 
     module_name = module_info['module_name']
     purpose = module_info['purpose']
-    components = module_info['components']
-    contracts = module_info['contracts']
-    related = module_info['related']
 
-    # Get relative path for examples
-    rel_path = str(dir_path.relative_to(Path("/Users/4d/Documents/GitHub/codomyrmex")))
+    # Get relative path
+    rel_path = str(dir_path.relative_to(repo_root))
+
+    # Get navigation links
+    nav_links = generate_navigation_links(dir_path, repo_root)
 
     readme_content = f"""# {module_name}
 
@@ -69,93 +69,83 @@ def generate_readme_content(module_info, dir_path):
 
 {purpose}
 
-## Core Capabilities
-
-### Primary Functions
-- **Modular Architecture**: Self-contained module with clear boundaries and responsibilities
-- **Agent Integration**: Seamlessly integrates with Codomyrmex agent ecosystem
-- **Comprehensive Testing**: Full test coverage with unit, integration, and performance tests
-- **Documentation**: Complete documentation with examples and API references
-
-## Architecture
-
-```
-{rel_path}/
-```
-
-## Key Components
-
-### Active Components
-{components}
-
-## Operating Contracts
-
-{contracts}
-
-## Integration Points
-
-### Related Modules
-{related}
-
-## Usage Examples
-
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.{rel_path.replace('/', '.')} import ModuleClass
-
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
-```
-
-## Quality Assurance
-
-The module includes comprehensive testing to ensure:
-- **Reliability**: Consistent operation across different environments
-- **Performance**: Optimized execution with monitoring and metrics
-- **Security**: Secure by design with proper input validation
-- **Maintainability**: Clean code structure with comprehensive documentation
-
-## Development Guidelines
-
-### Code Structure
-- Follow project coding standards and `.cursorrules`
-- Implement comprehensive error handling
-- Include proper logging and telemetry
-- Maintain backward compatibility
-
-### Testing Requirements
-- Unit tests for all public methods
-- Integration tests for module interactions
-- Performance benchmarks where applicable
-- Security testing for sensitive operations
-
-## Contributing
-
-When contributing to this module:
-1. Follow established patterns and conventions
-2. Add comprehensive tests for new features
-3. Update documentation for API changes
-4. Ensure all tests pass before submitting
-5. Consider impact on related modules
-
-## Related Documentation
-
-- **AGENTS.md**: Detailed agent configuration and purpose
-- **API Specification**: Complete API reference (if applicable)
-- **Technical Overview**: Architecture and design decisions
-- **Usage Examples**: Practical implementation examples
+## Directory Contents
 """
+
+    # Add directory contents if available
+    try:
+        contents = []
+        for item in sorted(dir_path.iterdir()):
+            if item.name not in ['AGENTS.md', 'README.md', '.git', '__pycache__', '.pyc']:
+                if item.is_dir():
+                    contents.append(f"- `{item.name}/` – Subdirectory")
+                else:
+                    contents.append(f"- `{item.name}` – File")
+
+        if contents:
+            readme_content += "\n".join(contents) + "\n"
+        else:
+            readme_content += "No additional files.\n"
+    except:
+        readme_content += "Directory contents.\n"
+
+    # Add navigation
+    if nav_links:
+        readme_content += "\n## Navigation\n"
+        for link_type, link_path in nav_links.items():
+            if link_type == 'parent':
+                readme_content += f"- **Parent Directory**: [{dir_path.parent.name}](../README.md)\n"
+            elif link_type == 'root':
+                readme_content += f"- **Project Root**: [README](../../../README.md)\n"
+            elif link_type == 'surface':
+                surface_name = rel_path.split('/')[0]
+                readme_content += f"- **{surface_name.title()} Hub**: [{surface_name}](../../../{surface_name}/README.md)\n"
 
     return readme_content
 
+
+def generate_navigation_links(dir_path, repo_root):
+    """Generate navigation links for a directory."""
+    nav_links = {}
+
+    # Root README (always exists)
+    nav_links['root'] = '../../../README.md'
+
+    # Parent directory link (if parent README exists)
+    parent = dir_path.parent
+    if parent != repo_root:
+        parent_readme = parent / "README.md"
+        if parent_readme.exists():
+            nav_links['parent'] = '../README.md'
+
+    # Surface hub (if surface README exists)
+    rel_path = dir_path.relative_to(repo_root)
+    if len(rel_path.parts) >= 1:
+        surface_root = rel_path.parts[0]
+        surface_readme = repo_root / surface_root / "README.md"
+        if surface_readme.exists():
+            # Calculate path to surface README
+            surface_depth = len(rel_path.parts) - 1  # Go up to surface level
+            surface_path = "../" * surface_depth + f"{surface_root}/README.md"
+            nav_links['surface'] = surface_path
+
+    return nav_links
+
 def main():
     """Main function to generate README.md files for all eligible directories."""
+    import argparse
 
-    repo_root = Path("/Users/4d/Documents/GitHub/codomyrmex")
+    parser = argparse.ArgumentParser(description="Generate README.md files for directories with AGENTS.md")
+    parser.add_argument('--repo-root', type=Path, default=Path.cwd(),
+                       help='Repository root directory')
+    parser.add_argument('--force', action='store_true',
+                       help='Overwrite existing README.md files')
+
+    args = parser.parse_args()
+    repo_root = args.repo_root.resolve()
     generated_count = 0
 
-    # Find all directories with AGENTS.md but no README.md
+    # Find all directories with AGENTS.md
     for dir_path in repo_root.rglob("*"):
         if not dir_path.is_dir():
             continue
@@ -168,8 +158,10 @@ def main():
         agents_path = dir_path / "AGENTS.md"
         readme_path = dir_path / "README.md"
 
-        # Check if we have AGENTS.md but no README.md
-        if agents_path.exists() and not readme_path.exists():
+        # Check if we should generate README.md
+        should_generate = agents_path.exists() and (not readme_path.exists() or args.force)
+
+        if should_generate:
             print(f"Generating README.md for: {rel_path}")
 
             # Parse AGENTS.md content
@@ -177,7 +169,7 @@ def main():
 
             if module_info:
                 # Generate README.md content
-                readme_content = generate_readme_content(module_info, dir_path)
+                readme_content = generate_readme_content(module_info, dir_path, repo_root)
 
                 # Write README.md file
                 with open(readme_path, 'w') as f:

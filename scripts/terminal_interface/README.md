@@ -1,38 +1,15 @@
-# Terminal Interface Orchestrator
+# terminal_interface
 
-Thin orchestrator script providing CLI access to the `codomyrmex.terminal_interface` module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Purpose
+## Overview
 
-This orchestrator provides command-line interface for interactive shell and terminal utilities.
+Automation and utility scripts.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `orchestrate.py` – File
 
-```bash
-# Launch interactive shell
-python scripts/terminal_interface/orchestrate.py shell
-
-# Test terminal formatting
-python scripts/terminal_interface/orchestrate.py format
-```
-
-## Commands
-
-- `shell` - Launch interactive Codomyrmex shell
-- `format` - Test terminal formatting capabilities
-
-## Related Documentation
-
-- **[Module README](../../src/codomyrmex/terminal_interface/README.md)**: Complete module documentation
-- **[API Specification](../../src/codomyrmex/terminal_interface/API_SPECIFICATION.md)**: Detailed API reference
-- **[Usage Examples](../../src/codomyrmex/terminal_interface/USAGE_EXAMPLES.md)**: Practical examples
-- **[CLI Reference](../../docs/reference/cli.md)**: Main CLI documentation
-
-## Integration
-
-This orchestrator calls functions from:
-- `codomyrmex.terminal_interface.InteractiveShell`
-- `codomyrmex.terminal_interface.TerminalFormatter`
-
-See `codomyrmex.cli.py` for main CLI integration.
-
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)

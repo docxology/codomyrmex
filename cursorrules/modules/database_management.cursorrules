@@ -1,0 +1,56 @@
+# Cursor Rules for the database_management Module
+
+## 0. Preamble
+These rules are specific to the `database_management` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module provides unified database management capabilities across multiple database systems.
+-   **Key Technologies/Tools**: Python, database drivers (PostgreSQL, MySQL, SQLite), connection pooling, migration tools, schema management.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `database_management` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Database Management module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for database operations and data protection.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Database Management.
+-   `src/` (or primary Python package folders, e.g., `database_management/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `db_manager.py`: Core database management interface and operations.
+-   `migration_manager.py`: Database migration and schema management.
+-   `backup_manager.py`: Database backup and recovery capabilities.
+-   `performance_monitor.py`: Database performance monitoring and optimization.
+-   `schema_generator.py`: Database schema generation and management.
+
+## 3. Coding Standards & Practices for `database_management`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `database_management` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for database schemas and query results.
+-   **Security**: Implement secure database operations with proper authentication and authorization.
+-   **Connection Management**: Ensure proper connection pooling and resource cleanup.
+-   **Migration Safety**: Implement safe migration practices with rollback capabilities.
+
+## 4. Testing in `database_management`
+-   New features (e.g., new database support, migration capabilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover database operations, connection management, migrations, and error scenarios.
+-   Use test databases and proper cleanup to ensure test isolation.
+-   Run existing tests to ensure no regressions. Refer to `database_management/tests/README.md`.
+
+## 5. Documentation for `database_management`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document supported databases, connection configurations, and migration procedures clearly.
+-   Include examples of database operations and schema management.
+
+## 6. Specific Considerations for `database_management`
+-   **Multi-Database Support**: Maintain compatibility with multiple database systems.
+-   **Data Integrity**: Ensure data consistency and integrity across operations.
+-   **Performance**: Optimize queries and connection management for performance.
+-   **Backup and Recovery**: Implement robust backup and recovery mechanisms.
+
+## 7. Final Check for `database_management`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that database operations work correctly across supported databases.
+-   Test integration with related modules like `project_orchestration` and `logging_monitoring`.

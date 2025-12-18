@@ -1,22 +1,18 @@
 # Codomyrmex Agents — docs/deployment
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Production deployment and operations documentation coordination for Codomyrmex, providing comprehensive guides for deploying modules and workflows in production environments with scalability, security, and reliability considerations.
+Documentation files and guides.
 
 ## Active Components
-- **production.md** - Complete production deployment guide with infrastructure setup, security configuration, monitoring, and performance optimization strategies
+- `README.md` – Project file
+- `production.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Maintain comprehensive cross-linking between deployment documentation and related sections.
-- Ensure deployment documentation reflects current best practices and real-world deployment patterns.
 
 ## Navigation Links
-- **📚 Documentation Hub**: [../README.md](../README.md) - Central documentation overview and navigation
-- **🚀 Deployment Overview**: [production.md](production.md) - Complete production deployment guide
-- **⚡ Performance Guide**: [../reference/performance.md](../reference/performance.md) - Performance optimization strategies
-- **🔧 Troubleshooting**: [../reference/troubleshooting.md](../reference/troubleshooting.md) - Production issue resolution
-- **🏗️ Architecture**: [../project/architecture.md](../project/architecture.md) - System design for deployment considerations
-- **🔗 Integration**: [../integration/external-systems.md](../integration/external-systems.md) - External system integration for production
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation

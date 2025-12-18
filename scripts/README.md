@@ -1,337 +1,204 @@
 # scripts
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: October 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Maintenance and automation utilities for Codomyrmex project management.
+The scripts directory contains maintenance and automation utilities that support the entire Codomyrmex development workflow. These utilities handle everything from environment setup and code quality checks to documentation generation and system maintenance.
 
-## Core Capabilities
+Scripts are organized by functionality and follow consistent patterns for execution, error handling, and logging.
 
-### Primary Functions
+## Script Categories
 
-- **Modular Architecture**: Self-contained module with clear boundaries and responsibilities
-- **Agent Integration**: Seamlessly integrates with Codomyrmex agent ecosystem
-- **Comprehensive Testing**: Full test coverage with unit, integration, and performance tests
-- **Documentation**: Complete documentation with examples and API references
+### Development Workflow
+Scripts that support day-to-day development activities:
 
-## Architecture
+**development/**
+- `setup.sh` - Environment setup and dependency installation
+- `lint.sh` - Code linting and style checking
+- `test.sh` - Test execution and coverage reporting
+- `format.sh` - Code formatting and import organization
 
-```
-scripts/
-├── examples/                  # Example demonstrations
-│   ├── basic/                # Basic single-module examples
-│   └── integration/          # Multi-module integration examples
-├── ollama_integration/        # Ollama LLM integration scripts
-├── fabric_integration/        # Fabric AI framework integration
-├── documentation/             # Documentation management utilities
-├── maintenance/               # Code maintenance and quality tools
-├── development/               # Development workflow enhancements
-├── project_orchestration/     # Project orchestration scripts
-│   └── examples/             # Orchestration workflow examples
-├── git_operations/            # Git operations scripts
-│   └── examples/             # Git visualization examples
-├── docs/                     # Documentation and guides
-└── [module_name]/            # Module-specific orchestrators (see below)
-    └── orchestrate.py         # Thin CLI orchestrator for each module
-```
+### Documentation Management
+Automated tools for documentation generation and maintenance:
 
-## Key Components
+**documentation/**
+- `generate_api_docs.py` - API documentation generation
+- `validate_links.py` - Link validation across documentation
+- `audit_completeness.py` - Documentation completeness auditing
 
-### 📚 Documentation Management (`documentation/`)
+### System Maintenance
+Utilities for system health and maintenance:
 
-- `check_docs_status.py` – Check documentation status across the entire repository.
-- `documentation_status_summary.py` – Generate comprehensive documentation status summaries.
-- `generate_missing_readmes.py` – Generate README.md files for directories with AGENTS.md.
-- `verify_api_specs.py` – Verify API_SPECIFICATION.md files match actual code signatures.
-- `check_completeness.py` – Check for placeholder content and generate implementation status tracker.
+**maintenance/**
+- `cleanup.py` - File and directory cleanup
+- `backup.py` - Database and configuration backups
+- `health_check.py` - System health monitoring
 
-### 🔧 Code Quality & Maintenance (`maintenance/`)
+### Module-Specific Automation
+Per-module utilities that handle specialized tasks:
 
-- `add_logging.py` – Automated logging injection across modules.
-- `fix_imports_simple.py` – Import statement cleanup and optimization.
-- `fix_imports.py` – Advanced import management and dependency resolution.
-- `fix_syntax_errors.py` – Syntax error detection and automated repair.
-- `check_dependencies.py` – CI/CD script to validate module dependency hierarchy.
+**ai_code_editing/**
+- `generate_code.py` - AI-assisted code generation
+- `refactor.py` - Code refactoring automation
 
-### 🚀 Development Tools (`development/`)
+**build_synthesis/**
+- `build.py` - Multi-language build orchestration
+- `package.py` - Package creation and distribution
 
-- `enhance_documentation.py` – Documentation enhancement and docstring generation.
-- `generate_coverage_report.py` – Generate comprehensive test coverage reports and dashboards.
-- `run_all_examples.sh` – Run all example scripts
-- `test_examples.sh` – Test all example scripts
-- `select_example.sh` – Interactive example selector
-- `check_prerequisites.sh` – Check prerequisites for examples
-- `example_usage.py` – Basic usage examples
-
-### 📚 Examples (`examples/`)
-
-- `basic/` – Basic single-module demonstrations
-- `integration/` – Multi-module integration orchestrators
-
-### 🐙 Ollama Integration (`ollama_integration/`)
-
-- `basic_usage.py` – Simple Ollama model execution
-- `integration_demo.py` – Comprehensive Ollama integration
-- `model_management.py` – Ollama model management
-- `orchestrate.py` – Main orchestrator
-
-### 🧬 Fabric Integration (`fabric_integration/`)
-
-- `setup_demo.sh` – Complete Fabric integration setup
-- `orchestrate.py` – Main orchestrator
-
-### 🎯 Project Orchestration (`project_orchestration/`)
-
-- `demo.py` – Orchestrator demonstration
-- `examples.py` – Orchestration examples
-- `examples/` – Comprehensive workflow demos
-
-## Module Orchestrators
-
-Each Codomyrmex module has a corresponding orchestrator script in `scripts/[module_name]/orchestrate.py` that provides CLI access to module functionality. These are thin wrappers that call actual module functions while following established patterns from `cli.py` and proper exception handling.
-
-### 🤖 AI & Intelligence
-
-- **[ai_code_editing/](./ai_code_editing/)** – AI-powered code generation, refactoring, and analysis
-  - Commands: `generate`, `refactor`, `analyze`, `validate-api-keys`, `list-providers`, `list-languages`, `list-models`
-
-- **[language_models/](./language_models/)** – Local LLM integration and Ollama management
-  - Commands: `check-availability`, `list-models`, `config`
-
-- **[model_context_protocol/](./model_context_protocol/)** – LLM interaction framework
-  - Commands: `info`, `list-tools`
-
-- **[ollama_integration/](./ollama_integration/)** – Comprehensive Ollama integration
-  - Commands: `info`
-
-- **[pattern_matching/](./pattern_matching/)** – Advanced pattern recognition and code analysis
-  - Commands: `analyze`, `full-analysis`
-
-### 📊 Analysis & Visualization
-
-- **[data_visualization/](./data_visualization/)** – Plotting and visualization tools
-  - Commands: `line-plot`, `scatter-plot`, `bar-chart`, `histogram`, `pie-chart`, `heatmap`, `git-visualize`
-
-- **[static_analysis/](./static_analysis/)** – Code quality and security analysis
-  - Commands: `analyze-file`, `analyze-project`, `list-tools`
-
-- **[code_review/](./code_review/)** – Automated code review and quality analysis
-  - Commands: `analyze-file`, `analyze-project`, `generate-report`
-
-- **[security_audit/](./security_audit/)** – Security analysis and compliance checking
-  - Commands: `scan-vulnerabilities`, `audit-code`, `check-compliance`, `generate-report`
-
-### 🛠️ Development Infrastructure
-
-- **[environment_setup/](./environment_setup/)** – Development environment management
-  - Commands: `check-dependencies`, `setup-env-vars`, `check-uv`
-
-- **[code_execution_sandbox/](./code_execution_sandbox/)** – Secure code execution
-  - Commands: `execute`
-
-- **[build_synthesis/](./build_synthesis/)** – Build automation and code synthesis
-  - Commands: `check-environment`, `build`, `trigger-build`, `list-build-types`, `list-environments`
-
-- **[git_operations/](./git_operations/)** – Git workflow automation
-  - Commands: `status`, `branch`, `add`, `commit`, `push`, `pull`, `clone`, `init`, `history`, `check`
-
-### 📚 Documentation & Management
-
-- **[documentation_module/](./documentation_module/)** – Documentation website generation (Docusaurus)
-  - Commands: `check-environment`, `build`, `dev-server`, `aggregate`, `assess`
-
-- **[api_documentation/](./api_documentation/)** – API documentation generation
-  - Commands: `generate-docs`, `extract-specs`, `generate-openapi`, `validate-openapi`
-
-- **[project_orchestration/](./project_orchestration/)** – Workflow and project management
-  - Commands: `list-workflows`, `run-workflow`, `list-projects`, `status`, `health`
-
-### 🔧 System & Operations
-
-- **[logging_monitoring/](./logging_monitoring/)** – Structured logging system
-  - Commands: `test-logging`, `info`
-
-- **[performance/](./performance/)** – Performance optimization utilities
-  - Commands: `monitor-stats`, `cache-info`
-
-- **[system_discovery/](./system_discovery/)** – System introspection and capability mapping
-  - Commands: `status`, `scan`, `discover`
-
-- **[terminal_interface/](./terminal_interface/)** – Interactive CLI and terminal utilities
-  - Commands: `shell`, `format`
-
-### 🏗️ Infrastructure & Deployment
-
-- **[ci_cd_automation/](./ci_cd_automation/)** – CI/CD pipeline management
-  - Commands: `create-pipeline`, `run-pipeline`, `monitor-health`, `generate-reports`
-
-- **[containerization/](./containerization/)** – Container management and orchestration
-  - Commands: `build`, `scan`
-
-- **[config_management/](./config_management/)** – Configuration management
-  - Commands: `load-config`, `validate-config`
-
-- **[database_management/](./database_management/)** – Database operations
-  - Commands: `backup`, `migrate`
-
-### 🎨 Advanced Features
-
-- **[modeling_3d/](./modeling_3d/)** – 3D modeling and rendering
-  - Commands: `info`
-
-- **[physical_management/](./physical_management/)** – Physical object management and simulation
-  - Commands: `info`
-
-- **[module_template/](./module_template/)** – Module scaffolding template
-  - Commands: `info`
-
-## Operating Contracts
-
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-
-## Integration Points
-
-### Related Modules
-
-No related modules specified
+**git_operations/**
+- `commit_automation.py` - Automated commit management
+- `branch_management.py` - Branch lifecycle management
 
 ## Usage Examples
 
-### Documentation Management
+### Environment Setup
 
 ```bash
-# Check documentation status
-python scripts/documentation/check_docs_status.py
+# Complete development environment setup
+./scripts/development/setup.sh
 
-# Generate documentation summary
-python scripts/documentation/documentation_status_summary.py
-
-# Generate missing README files
-python scripts/documentation/generate_missing_readmes.py
+# Quick environment validation
+./scripts/environment_setup/validate.py
 ```
 
-### Code Maintenance
+### Code Quality
 
 ```bash
-# Fix import statements
-python scripts/maintenance/fix_imports.py
+# Run full quality suite
+./scripts/development/lint.sh && ./scripts/development/test.sh
 
-# Add logging to modules
-python scripts/maintenance/add_logging.py
-
-# Check module dependencies
-python scripts/maintenance/check_dependencies.py
+# Format code only
+./scripts/development/format.sh
 ```
+
+### Documentation
+
+```bash
+# Generate API documentation
+python scripts/documentation/generate_api_docs.py
+
+# Audit documentation completeness
+python scripts/documentation/audit_completeness.py
+```
+
+### Maintenance
+
+```bash
+# System cleanup
+python scripts/maintenance/cleanup.py
+
+# Health check
+python scripts/maintenance/health_check.py
+```
+
+## Script Standards
+
+### Execution Patterns
+
+All scripts follow consistent execution patterns:
+
+1. **Argument Validation** - Check required parameters and environment
+2. **Logging Setup** - Initialize structured logging
+3. **Error Handling** - Comprehensive try/catch with informative messages
+4. **Cleanup** - Ensure proper resource cleanup on exit
+
+### Output Standards
+
+Scripts provide consistent output:
+
+- **Success Messages** - Clear indication of successful completion
+- **Error Messages** - Detailed error information with resolution steps
+- **Progress Indicators** - Status updates for long-running operations
+- **Structured Logging** - JSON-formatted logs for monitoring
+
+### File Organization
+
+Scripts are organized following these principles:
+
+- **One Purpose Per Script** - Each script has a single, clear responsibility
+- **Configuration Files** - External configuration for flexibility
+- **Shared Utilities** - Common functions in `_orchestrator_utils.py`
+- **Documentation** - Inline help and usage documentation
+
+## Directory Contents
+
+### Core Infrastructure
+- `README.md` – This documentation
+- `_orchestrator_utils.py` – Shared utilities for script coordination
 
 ### Development Tools
+- `development/` – Development workflow automation
+- `environment_setup/` – Environment validation and setup
 
-```bash
-# Enhance documentation
-python scripts/development/enhance_documentation.py
+### Content Management
+- `documentation/` – Documentation generation and maintenance
+- `docs/` – Documentation utilities
+- `examples/` – Example script management
 
-# Generate coverage report
-python scripts/development/generate_coverage_report.py
+### Module Automation
+- `ai_code_editing/` – AI-assisted development tools
+- `api_documentation/` – API documentation generation
+- `build_synthesis/` – Build orchestration
+- `ci_cd_automation/` – CI/CD pipeline management
+- `code_execution_sandbox/` – Safe execution environments
+- `code_review/` – Automated code review
+- `config_management/` – Configuration management
+- `containerization/` – Container lifecycle management
+- `data_visualization/` – Data visualization automation
+- `database_management/` – Database operations
+- `git_operations/` – Git workflow automation
+- `language_models/` – Language model management
+- `logging_monitoring/` – Logging system configuration
+- `maintenance/` – System maintenance utilities
+- `model_context_protocol/` – MCP tool management
+- `modeling_3d/` – 3D modeling utilities
+- `module_template/` – Module creation templates
+- `ollama_integration/` – Local LLM integration
+- `pattern_matching/` – Pattern analysis tools
+- `performance/` – Performance monitoring
+- `physical_management/` – Hardware management
+- `project_orchestration/` – Project workflow orchestration
+- `security_audit/` – Security scanning tools
+- `static_analysis/` – Code analysis utilities
+- `system_discovery/` – System exploration tools
+- `terminal_interface/` – Terminal interface components
+- `fabric_integration/` – Fabric AI framework integration
 
-# Run examples
-./scripts/development/run_all_examples.sh
+## Navigation
 
-# Test examples
-./scripts/development/test_examples.sh
+### Getting Started
+- **Environment Setup**: [development/setup.sh](development/setup.sh) - Complete development environment
+- **Quick Examples**: [examples/](examples/) - Usage examples and demonstrations
 
-# Check prerequisites
-./scripts/development/check_prerequisites.sh
-```
+### Advanced Usage
+- **Script Development**: [module_template/](module_template/) - Creating new scripts
+- **Maintenance**: [maintenance/](maintenance/) - System maintenance utilities
 
-### Examples
-
-```bash
-# Basic examples
-./scripts/examples/basic/data-visualization-demo.sh
-./scripts/examples/basic/static-analysis-demo.sh
-
-# Integration examples
-./scripts/examples/integration/environment-health-monitor.sh
-./scripts/examples/integration/code-quality-pipeline.sh
-```
-
-### Integration Scripts
-
-```bash
-# Ollama integration
-python scripts/ollama_integration/basic_usage.py
-python scripts/ollama_integration/integration_demo.py
-
-# Fabric integration
-./scripts/fabric_integration/setup_demo.sh
-```
-
-### Module Orchestrators
-
-```bash
-# AI code generation
-python scripts/ai_code_editing/orchestrate.py generate "create a function" --language python
-
-# Data visualization
-python scripts/data_visualization/orchestrate.py line-plot --output plot.png --title "My Plot"
-
-# Code analysis
-python scripts/static_analysis/orchestrate.py analyze-project . --output analysis.json
-
-# Git operations
-python scripts/git_operations/orchestrate.py status
-
-# Build pipeline
-python scripts/build_synthesis/orchestrate.py build --config build.json
-
-# Project orchestration
-python scripts/project_orchestration/orchestrate.py list-workflows
-```
-
-See individual module orchestrator README files for complete usage examples.
-
-## Quality Assurance
-
-The module includes comprehensive testing to ensure:
-
-- **Reliability**: Consistent operation across different environments
-- **Performance**: Optimized execution with monitoring and metrics
-- **Security**: Secure by design with proper input validation
-- **Maintainability**: Clean code structure with comprehensive documentation
-
-## Development Guidelines
-
-### Code Structure
-
-- Follow project coding standards and `.cursorrules`
-- Implement comprehensive error handling
-- Include proper logging and telemetry
-- Maintain backward compatibility
-
-### Testing Requirements
-
-- Unit tests for all public methods
-- Integration tests for module interactions
-- Performance benchmarks where applicable
-- Security testing for sensitive operations
+### Related Documentation
+- **Project Root**: [README](../../../README.md) - Main project documentation
+- **Development Guide**: [docs/development/environment-setup.md](../../../docs/development/environment-setup.md)
+- **Contributing**: [docs/project/contributing.md](../../../docs/project/contributing.md)
 
 ## Contributing
 
-When contributing to this module:
+When adding new scripts:
 
-1. Follow established patterns and conventions
-2. Add comprehensive tests for new features
-3. Update documentation for API changes
-4. Ensure all tests pass before submitting
-5. Consider impact on related modules
+1. **Follow Standards** - Adhere to established patterns and conventions
+2. **Add Documentation** - Include usage examples and help text
+3. **Write Tests** - Create comprehensive test coverage
+4. **Update This README** - Document the new script in this file
 
-## Related Documentation
+### Script Template
 
-- **[AGENTS.md](./AGENTS.md)**: Detailed agent configuration and purpose
-- **[Main Package README](../src/codomyrmex/README.md)**: Complete module documentation
-- **[CLI Reference](../docs/reference/cli.md)**: Main CLI documentation
-- **[Module Documentation](../src/codomyrmex/*/README.md)**: Individual module documentation
+Use the module template for new scripts:
 
-Each module orchestrator has its own README.md with usage examples and integration details.
+```bash
+# Copy template
+cp scripts/module_template/script_template.py scripts/new_feature/new_script.py
+
+# Customize for your needs
+# Add comprehensive documentation
+# Include error handling
+# Add logging integration
+```

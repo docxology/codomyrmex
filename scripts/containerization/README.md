@@ -1,36 +1,15 @@
-# Containerization Orchestrator
+# containerization
 
-Thin orchestrator script providing CLI access to the `codomyrmex.containerization` module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Purpose
+## Overview
 
-This orchestrator provides command-line interface for container management and security scanning.
+Automation and utility scripts.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `orchestrate.py` – File
 
-```bash
-# Build containers
-python scripts/containerization/orchestrate.py build --source .
-
-# Scan container security
-python scripts/containerization/orchestrate.py scan --container my-container
-```
-
-## Commands
-
-- `build` - Build Docker containers from source
-- `scan` - Scan container security
-
-## Related Documentation
-
-- **[Module README](../../src/codomyrmex/containerization/README.md)**: Complete module documentation
-- **[CLI Reference](../../docs/reference/cli.md)**: Main CLI documentation
-
-## Integration
-
-This orchestrator calls functions from:
-- `codomyrmex.containerization.build_containers`
-- `codomyrmex.containerization.scan_container_security`
-
-See `codomyrmex.cli.py` for main CLI integration.
-
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)

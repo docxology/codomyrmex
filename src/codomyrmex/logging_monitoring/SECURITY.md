@@ -34,7 +34,7 @@ The Logging & Monitoring module provides the `setup_logging()` and `get_logger()
 ## 4. Key Security Measures & Mitigations
 
 -   **Preventing Sensitive Data Exposure**: 
-    -   **Responsibility of Calling Code**: The `logging_monitoring` module provides the mechanism but **cannot automatically know what is sensitive**. Developers writing `logger.info(f"User {user_id} accessed {sensitive_data_object}")` are responsible for ensuring `sensitive_data_object` is not logged directly if it contains PII, secrets etc. Log representative, non-sensitive attributes instead, or use placeholders.
+    -   **Developer Responsibility**: The logging system provides secure logging mechanisms but cannot automatically detect sensitive data. Developers must ensure sensitive information like PII, API keys, passwords, and session tokens are never logged directly. Use representative identifiers or sanitized placeholders instead.
     -   **Never log raw API keys, passwords, or session tokens.**
     -   Be cautious with logging entire objects or data structures. Selectively log necessary fields.
     -   Use `DEBUG` level for highly verbose or potentially sensitive diagnostic data, and ensure `CODOMYRMEX_LOG_LEVEL` is set to `INFO` or higher in production.

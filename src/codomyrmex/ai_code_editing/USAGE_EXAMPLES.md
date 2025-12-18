@@ -216,8 +216,302 @@ complete_coding_task(
 
 ## Common Pitfalls & Troubleshooting
 
-- **Issue**: <!-- TODO: Describe a common problem users might encounter (e.g., API key not set, LLM error, unexpected output). -->
-  - **Solution**: <!-- TODO: Explain how to resolve it (e.g., check .env file, review prompt, consult LLM provider documentation). -->
+### API Key Configuration Issues
 
-- **Issue**: <!-- TODO: Add another common issue. -->
-  - **Solution**: <!-- TODO: Add solution. --> 
+**Issue**: Getting "API key not found" or "Authentication failed" errors.
+
+**Solution**:
+```bash
+# 1. Check environment variables are set
+echo $OPENAI_API_KEY
+echo $ANTHROPIC_API_KEY
+
+# 2. Verify .env file exists and contains correct keys
+cat .env | grep API_KEY
+
+# 3. Restart your Python session after setting environment variables
+# 4. Check API key format (should start with 'sk-' for OpenAI)
+```
+
+### LLM Response Errors
+
+**Issue**: Getting "LLM service unavailable" or "Rate limit exceeded" errors.
+
+**Solution**:
+```python
+# Check LLM service status
+from ai_code_editing import check_llm_availability
+
+status = check_llm_availability("openai", "gpt-3.5-turbo")
+if not status["available"]:
+    print(f"Service unavailable: {status['error']}")
+
+# For rate limits, implement exponential backoff
+import time
+from ai_code_editing import generate_code_snippet
+
+def generate_with_retry(prompt, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            result = generate_code_snippet(prompt=prompt, language="python")
+            if result["status"] == "success":
+                return result
+        except Exception as e:
+            if "rate limit" in str(e).lower():
+                wait_time = 2 ** attempt  # Exponential backoff
+                print(f"Rate limited, waiting {wait_time}s...")
+                time.sleep(wait_time)
+            else:
+                raise
+    return None
+```
+
+### Unexpected Code Generation Results
+
+**Issue**: Generated code doesn't meet requirements or contains errors.
+
+**Solution**:
+```python
+# 1. Improve prompt specificity
+detailed_prompt = """
+Create a Python function that:
+- Takes a list of integers as input
+- Returns only the even numbers
+- Includes proper error handling for non-integer inputs
+- Has comprehensive docstring with examples
+- Follows PEP 8 style guidelines
+
+Function signature: filter_even_numbers(numbers: List[int]) -> List[int]
+"""
+
+result = generate_code_snippet(
+    prompt=detailed_prompt,
+    language="python",
+    context_code="from typing import List"
+)
+
+# 2. Use refactoring to improve generated code
+if result["status"] == "success":
+    refactor_result = refactor_code_snippet(
+        code_snippet=result["generated_code"],
+        refactoring_instruction="Add comprehensive error handling and type hints",
+        language="python"
+    )
+```
+
+### Context Code Issues
+
+**Issue**: Code generation doesn't properly integrate with existing codebase.
+
+**Solution**:
+```python
+# Provide comprehensive context
+context = """
+# Existing codebase structure
+from typing import List, Dict, Optional
+import logging
+
+logger = logging.getLogger(__name__)
+
+class DataProcessor:
+    def __init__(self, config: Dict[str, any]):
+        self.config = config
+
+    def validate_input(self, data: List[Dict]) -> bool:
+        '''Validate input data structure'''
+        # Implementation here
+        pass
+"""
+
+result = generate_code_snippet(
+    prompt="Add a process_batch method to DataProcessor class that handles multiple data items",
+    language="python",
+    context_code=context
+)
+```
+
+### Performance and Timeout Issues
+
+**Issue**: Code generation takes too long or times out.
+
+**Solution**:
+```python
+# Use simpler prompts for complex tasks
+# Break down complex requirements into smaller, focused prompts
+
+# Example: Instead of one complex prompt
+complex_prompt = "Create a full web application with authentication, database, and API"
+
+# Use multiple focused prompts
+step1 = generate_code_snippet("Create User model class with authentication methods")
+step2 = generate_code_snippet("Create database connection and CRUD operations")
+step3 = generate_code_snippet("Create REST API endpoints for user management")
+
+# Combine results manually
+```
+
+### Language-Specific Issues
+
+**Issue**: Code generation doesn't follow language-specific conventions.
+
+**Solution**:
+```python
+# Be explicit about language requirements
+python_requirements = """
+Requirements:
+- Use type hints for all function parameters and return values
+- Include comprehensive docstrings with Args/Returns/Raises sections
+- Follow PEP 8 style guidelines
+- Use list/dict comprehensions where appropriate
+- Include proper exception handling
+- Add logging statements for debugging
+"""
+
+result = generate_code_snippet(
+    prompt=f"Create a data validation function\n\n{python_requirements}",
+    language="python"
+)
+```
+
+## Integration Examples
+
+### CI/CD Pipeline Integration
+
+```python
+# .github/workflows/code-review.yml
+name: AI Code Review
+
+on: [pull_request]
+
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run AI Code Review
+        run: |
+          python -c "
+          from ai_code_editing import analyze_code_quality
+          import subprocess
+
+          # Get changed files
+          result = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1'],
+                                capture_output=True, text=True)
+          changed_files = result.stdout.strip().split('\n')
+
+          for file_path in changed_files:
+              if file_path.endswith('.py'):
+                  with open(file_path, 'r') as f:
+                      code = f.read()
+
+                  analysis = analyze_code_quality(code, 'python')
+                  print(f'Quality score for {file_path}: {analysis.get(\"score\", 0)}/10')
+          "
+```
+
+### IDE Integration
+
+```python
+# VS Code extension integration
+import vscode
+
+def provide_ai_completion():
+    """Provide AI-powered code completion."""
+    # Get current context
+    editor = vscode.window.activeTextEditor
+    document = editor.document
+    position = editor.selection.active
+
+    # Get surrounding code context
+    context_start = max(0, position.line - 10)
+    context_end = min(document.lineCount, position.line + 10)
+    context_lines = []
+
+    for i in range(context_start, context_end):
+        context_lines.append(document.lineAt(i).text)
+
+    context = '\n'.join(context_lines)
+
+    # Generate completion
+    from ai_code_editing import generate_code_snippet
+
+    result = generate_code_snippet(
+        prompt=f"Complete this code intelligently: {context}",
+        language="python"
+    )
+
+    if result["status"] == "success":
+        # Insert completion
+        editor.edit(edit => {
+            edit.insert(position, result["generated_code"])
+        })
+```
+
+## Best Practices
+
+### Prompt Engineering
+
+1. **Be Specific**: Include exact function signatures, parameter types, and return values
+2. **Provide Context**: Include relevant imports, class definitions, and existing patterns
+3. **Define Constraints**: Specify language version, framework requirements, and style guidelines
+4. **Include Examples**: Show expected input/output formats
+
+### Error Handling
+
+```python
+from ai_code_editing import generate_code_snippet, refactor_code_snippet
+
+def safe_code_generation(prompt, language, max_retries=3):
+    """Safely generate code with proper error handling."""
+
+    for attempt in range(max_retries):
+        try:
+            # Generate code
+            result = generate_code_snippet(
+                prompt=prompt,
+                language=language,
+                timeout=30  # 30 second timeout
+            )
+
+            if result["status"] != "success":
+                logger.warning(f"Generation failed: {result.get('error_message', 'Unknown error')}")
+                continue
+
+            # Validate generated code
+            validation = validate_generated_code(result["generated_code"], language)
+            if not validation["valid"]:
+                logger.warning(f"Generated code validation failed: {validation['issues']}")
+                continue
+
+            # Refactor for quality
+            refactor_result = refactor_code_snippet(
+                code_snippet=result["generated_code"],
+                refactoring_instruction="Add error handling and improve code quality",
+                language=language
+            )
+
+            if refactor_result["status"] == "success":
+                return refactor_result["refactored_code"]
+
+        except Exception as e:
+            logger.error(f"Attempt {attempt + 1} failed: {e}")
+            continue
+
+    raise Exception(f"Failed to generate code after {max_retries} attempts")
+```
+
+### Performance Optimization
+
+1. **Use Appropriate Models**: GPT-4 for complex tasks, GPT-3.5-turbo for simple tasks
+2. **Batch Operations**: Generate multiple related functions together
+3. **Cache Results**: Store successful generations for similar prompts
+4. **Incremental Generation**: Build complex code in stages 

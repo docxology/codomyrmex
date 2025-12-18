@@ -1,23 +1,14 @@
 # data
 
-**Component**: test_project | **Type**: ai_analysis
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Data files and datasets.
+Test files and validation suites.
+
+## Directory Contents
+- `README.md` – File
+
+## Navigation
 - **Parent Directory**: [test_project](../README.md)
-
-## Purpose
-
-This directory contains data files and datasets for the test_project project.
-
-## Structure
-
-Files and subdirectories in this directory support the project's ai_analysis functionality.
-
-## Related Documentation
-
-- **AGENTS.md**: Agent configuration for this directory
-- **Parent README**: [../README.md](../README.md) - Project overview
-- **Parent AGENTS**: [../AGENTS.md](../AGENTS.md) - Project agents
-
+- **Project Root**: [README](../../../README.md)

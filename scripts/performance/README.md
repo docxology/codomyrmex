@@ -1,42 +1,15 @@
-# Performance Orchestrator
+# performance
 
-Thin orchestrator script providing CLI access to the `codomyrmex.performance` module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Purpose
+## Overview
 
-This orchestrator provides command-line interface for performance monitoring and optimization utilities.
+Automation and utility scripts.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `orchestrate.py` – File
 
-```bash
-# Get performance monitor statistics
-python scripts/performance/orchestrate.py monitor-stats
-
-# Get cache manager information
-python scripts/performance/orchestrate.py cache-info
-```
-
-## Commands
-
-- `monitor-stats` - Get performance monitor statistics
-- `cache-info` - Get cache manager information
-
-## Related Documentation
-
-- **[Module README](../../src/codomyrmex/performance/README.md)**: Complete module documentation
-- **[API Specification](../../src/codomyrmex/performance/API_SPECIFICATION.md)**: Detailed API reference
-- **[Usage Examples](../../src/codomyrmex/performance/USAGE_EXAMPLES.md)**: Practical examples
-- **[CLI Reference](../../docs/reference/cli.md)**: Main CLI documentation
-
-## Integration
-
-This orchestrator calls functions from:
-- `codomyrmex.performance.PerformanceMonitor`
-- `codomyrmex.performance.CacheManager`
-
-See `codomyrmex.cli.py` for main CLI integration.
-
-## Requirements
-
-- `psutil` package is required for PerformanceMonitor functionality
-
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)

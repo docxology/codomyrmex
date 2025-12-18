@@ -1,31 +1,37 @@
 # Codomyrmex Agents — src/codomyrmex/data_visualization
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Visualization agents producing analytic dashboards and plots.
+Contains components for the src system.
 
 ## Active Components
-- `docs/` – Agent surface for `docs` components.
-- `tests/` – Agent surface for `tests` components.
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `advanced_plotter.py` – Project file
+- `bar_chart.py` – Project file
+- `docs/` – Directory containing docs components
+- `git_visualizer.py` – Project file
+- `histogram.py` – Project file
+- `line_plot.py` – Project file
+- `mermaid_generator.py` – Project file
+- `pie_chart.py` – Project file
+- `plot_utils.py` – Project file
+- `plotter.py` – Project file
+- `requirements.txt` – Project file
+- `scatter_plot.py` – Project file
+- `tests/` – Directory containing tests components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- All visualization outputs maintain data integrity and accurate representation.
-- Chart generation optimizes for performance while preserving visual quality.
-- Interactive dashboards support accessibility standards and responsive design.
-
-## Related Modules
-- **Static Analysis** (`static_analysis/`) - Provides data for visualization
-- **Performance** (`performance/`) - Creates performance dashboards
-- **Project Orchestration** (`project_orchestration/`) - Coordinates visualization workflows
 
 ## Navigation Links
-- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
-- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
-- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
-- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
-- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

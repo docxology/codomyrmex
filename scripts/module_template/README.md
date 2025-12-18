@@ -1,29 +1,15 @@
-# Module Template Orchestrator
+# module_template
 
-Thin orchestrator script providing CLI access to information about the `codomyrmex.module_template` module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Purpose
+## Overview
 
-This orchestrator provides information about using the module template for creating new Codomyrmex modules.
+Automation and utility scripts.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `orchestrate.py` – File
 
-```bash
-# Show module template information
-python scripts/module_template/orchestrate.py info
-```
-
-## Commands
-
-- `info` - Show module template information
-
-## Related Documentation
-
-- **[Module Template](../../src/codomyrmex/module_template/README.md)**: Template documentation
-- **[Module Creation Tutorial](../../docs/getting-started/tutorials/creating-a-module.md)**: Step-by-step guide
-- **[CLI Reference](../../docs/reference/cli.md)**: Main CLI documentation
-
-## Integration
-
-The module_template is a template for creating new modules. See `src/codomyrmex/module_template/` for the template structure.
-
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)

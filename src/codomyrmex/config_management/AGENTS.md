@@ -1,26 +1,25 @@
 # Codomyrmex Agents — src/codomyrmex/config_management
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Configuration management agents handling system settings, environment variables, and configuration files with validation, versioning, and cross-environment consistency.
+Configuration files and templates.
 
 ## Active Components
-- `config_loader.py` – Configuration loading and validation system supporting multiple file formats and environment-specific overrides
-- `__init__.py` – Package initialization and configuration management exports
+- `API_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `__init__.py` – Project file
+- `config_deployer.py` – Project file
+- `config_loader.py` – Project file
+- `config_monitor.py` – Project file
+- `secret_manager.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Configuration validation ensures data integrity and prevents invalid settings.
-- Environment-specific overrides maintain security and consistency.
-
-## Related Modules
-- **Environment Setup** (`environment_setup/`) - Uses configuration for environment setup
-- **Project Orchestration** (`project_orchestration/`) - Manages workflow configurations
-- **Security Audit** (`security_audit/`) - Validates security-related configurations
 
 ## Navigation Links
-- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
-- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
-- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

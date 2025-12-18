@@ -1,24 +1,21 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/static/img
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Image assets for documentation, including diagrams, screenshots, and visual aids for documentation presentation.
+Documentation files and guides.
 
 ## Active Components
-- Image assets including diagrams, screenshots, and visual documentation aids.
+- `README.md` – Project file
+- `docusaurus-social-card.jpg` – Project file
+- `favicon.ico` – Project file
+- `logo.svg` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Image assets maintain organization and optimization for documentation.
-- Images maintain appropriate formats and sizes for documentation display.
-
-## Related Modules
-- **Static Assets** (`../`) - Parent static assets directory
-- **Documentation Module** (`../../`) - Parent module directory
 
 ## Navigation Links
-- **📁 Static Assets Overview**: [../AGENTS.md](../AGENTS.md) - Static assets coordination
-- **📚 Module Overview**: [../../README.md](../../README.md) - Documentation module documentation
-- **🏠 Package Root**: [../../../../README.md](../../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../../docs/README.md](../../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [static](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

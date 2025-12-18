@@ -1,0 +1,59 @@
+# Cursor Rules for the project_orchestration Module
+
+## 0. Preamble
+These rules are specific to the `project_orchestration` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module manages project coordination and task orchestration across all Codomyrmex modules.
+-   **Key Technologies/Tools**: Python, workflow management, dependency resolution, resource allocation, performance monitoring, MCP tools.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `project_orchestration` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Project Orchestration module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for workflow execution and resource management.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Project Orchestration.
+-   `src/` (or primary Python package folders, e.g., `project_orchestration/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `workflow_manager.py`: Core workflow management functionality.
+-   `orchestration_engine.py`: Orchestration engine for complex workflows.
+-   `project_manager.py`: Project lifecycle management.
+-   `task_orchestrator.py`: Task coordination and dependency management.
+-   `resource_manager.py`: Resource allocation and monitoring.
+-   `mcp_tools.py`: MCP tool implementations.
+-   `documentation_generator.py`: Documentation generation for projects.
+
+## 3. Coding Standards & Practices for `project_orchestration`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `project_orchestration` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for workflow definitions and orchestration parameters.
+-   **Workflow Design**: Implement robust workflow definitions with proper dependency management.
+-   **Error Handling**: Provide comprehensive error handling and recovery mechanisms for workflow failures.
+-   **Performance**: Optimize for efficient resource usage and workflow execution.
+
+## 4. Testing in `project_orchestration`
+-   New features (e.g., new workflow patterns, orchestration capabilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover workflow execution, dependency resolution, resource management, and error scenarios.
+-   Include integration tests that verify coordination across multiple modules.
+-   Run existing tests to ensure no regressions. Refer to `project_orchestration/tests/README.md`.
+
+## 5. Documentation for `project_orchestration`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document workflow definitions, orchestration patterns, and integration examples clearly.
+-   Include examples of complex multi-module workflows and project management.
+
+## 6. Specific Considerations for `project_orchestration`
+-   **Multi-Module Coordination**: Ensure proper coordination and data flow between modules.
+-   **Dependency Management**: Implement robust dependency resolution and execution ordering.
+-   **Resource Optimization**: Optimize resource allocation and workflow performance.
+-   **Scalability**: Support large-scale project orchestration and complex workflows.
+
+## 7. Final Check for `project_orchestration`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that workflows execute correctly and coordinate properly across modules.
+-   Test integration with all related modules in the Codomyrmex ecosystem.

@@ -1,106 +1,322 @@
 # testing
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Top-level testing suite coordinating integration and unit coverage for the Codomyrmex platform.
+The testing directory contains comprehensive test suites that validate the Codomyrmex platform's functionality, performance, and reliability. Tests follow test-driven development (TDD) principles with real data analysis and no mock methods.
 
-## Testing Architecture
+The testing framework ensures code quality through automated validation, integration testing, and performance benchmarking.
 
-Codomyrmex uses a **dual-location testing strategy**:
+## Test Organization
 
-### 1. Project-Level Tests (`testing/`)
-- **`testing/unit/`** - Centralized unit tests that test modules from the project root perspective
-- **`testing/integration/`** - Integration tests verifying cross-module interactions
-- **Purpose**: Validate the entire system works together, run in CI/CD pipelines
+### Test Types
 
-### 2. Module-Level Tests (`src/codomyrmex/{module}/tests/`)
-- Each module may contain its own `tests/` directory
-- **Purpose**: Allow modules to be developed and tested in isolation
-- **Benefit**: Enables independent module development and self-contained testing
+Tests are organized by scope and methodology:
 
-## Directory Structure
+**Unit Tests (`unit/`)**
+- Individual component testing
+- Function and class validation
+- Edge case coverage
+- Performance benchmarks per component
 
-```
-testing/
-├── unit/                    # Centralized unit tests
-│   ├── test_ai_code_editing.py
-│   ├── test_data_visualization.py
-│   ├── test_git_operations.py
-│   └── ... (30+ test files)
-├── integration/             # Cross-module integration tests
-│   ├── test_documentation_accuracy.py
-│   ├── test_comprehensive_improvements.py
-│   └── ... (integration test files)
-├── conftest.py              # Shared pytest fixtures
-├── AGENTS.md                # Testing agent configuration
-└── README.md                # This file
-```
+**Integration Tests (`integration/`)**
+- Multi-component workflow validation
+- Module interaction testing
+- End-to-end scenario coverage
+- Cross-module dependency verification
 
-## Key Components
-
-### Active Components
-- `integration/` – Integration tests verifying cross-module interactions
-- `unit/` – Centralized unit tests for all modules
+**Specialized Tests**
+- Performance benchmarking
+- Security validation
+- Documentation accuracy testing
 
 ## Running Tests
 
-### Run All Tests
+### Complete Test Suite
+
 ```bash
-# Using pytest directly
-pytest testing/ -v
+# Run all tests with coverage
+pytest --cov=src/codomyrmex --cov-report=html --cov-report=term
 
-# Using make
-make test
+# Run with verbose output
+pytest -v
 
-# Using uv
-uv run pytest testing/ -v
+# Run tests in parallel (if pytest-xdist installed)
+pytest -n auto
 ```
 
-### Run Unit Tests Only
+### Specific Test Suites
+
 ```bash
-pytest testing/unit/ -v --tb=short
+# Unit tests only
+pytest testing/unit/
+
+# Integration tests only
+pytest testing/integration/
+
+# Specific module tests
+pytest testing/unit/test_module_name.py
+pytest testing/integration/test_workflow.py
 ```
 
-### Run Integration Tests Only
+### Test Configuration
+
 ```bash
-pytest testing/integration/ -v --tb=short
+# Run with different log levels
+pytest --log-level=DEBUG
+
+# Generate coverage reports
+pytest --cov=src/codomyrmex --cov-report=html:htmlcov --cov-report=xml
+
+# Run specific test markers
+pytest -m "slow"  # Tests marked as slow
+pytest -m "not integration"  # Exclude integration tests
 ```
 
-### Run Tests with Coverage
-```bash
-pytest testing/ -v --cov=src/codomyrmex --cov-report=html
+## Test Standards
+
+### TDD Principles
+
+All tests follow test-driven development:
+
+1. **Write Tests First** - Tests define expected behavior before implementation
+2. **Real Data Only** - No mock methods; use actual data and implementations
+3. **Comprehensive Coverage** - Target ≥80% code coverage across all modules
+4. **Continuous Validation** - Tests run on every code change
+
+### Test Structure
+
+Each test follows this pattern:
+
+```python
+def test_feature_name():
+    """Test description documenting expected behavior."""
+    # Arrange - Set up test conditions
+    # Act - Execute the functionality
+    # Assert - Verify expected outcomes
 ```
 
-### Run Tests for a Specific Module
-```bash
-pytest testing/unit/test_ai_code_editing.py -v
+### Test Categories
+
+**Unit Tests**
+- Test individual functions and classes
+- Validate edge cases and error conditions
+- Include property-based testing where applicable
+- Mock external dependencies for isolation
+
+**Integration Tests**
+- Test real component interactions
+- Validate data flow between modules
+- Test error propagation and recovery
+- Include performance validation under realistic loads
+
+## Test Infrastructure
+
+### Configuration Files
+
+- `pytest.ini` - Test runner configuration and coverage settings
+- `conftest.py` - Shared fixtures, setup, and teardown utilities
+- `__init__.py` - Package initialization
+
+### Shared Fixtures
+
+Common test fixtures available across all tests:
+
+- `temp_directory` - Temporary directory for file operations
+- `mock_config` - Test configuration setup
+- `sample_data` - Realistic test data generation
+- `database_session` - Database connection for integration tests
+
+## Coverage Requirements
+
+### Coverage Targets
+
+- **Overall Coverage**: ≥80% across all modules
+- **Unit Test Coverage**: ≥85% for individual components
+- **Integration Coverage**: ≥75% for module interactions
+- **Critical Path Coverage**: 100% for user-facing workflows
+
+### Coverage Reports
+
+Generated reports include:
+- Line coverage percentages
+- Branch coverage analysis
+- Missing coverage identification
+- HTML visualization of coverage
+
+## Performance Testing
+
+### Benchmark Tests
+
+Performance tests validate system responsiveness:
+
+```python
+def test_performance_baseline(benchmark):
+    """Benchmark core functionality performance."""
+    # Test executes within performance bounds
+    result = benchmark(function_under_test, args)
+    assert result.execution_time < MAX_TIME
 ```
 
-## Test Configuration
+### Performance Metrics
 
-Tests are configured via:
-- **`pytest.ini`** - Root pytest configuration
-- **`pyproject.toml`** - Additional pytest settings under `[tool.pytest.ini_options]`
-- **`conftest.py`** - Shared fixtures (provides `code_dir` fixture for all tests)
+- Unit test execution: <100ms per test suite
+- Integration test execution: <30 seconds per test suite
+- Full test suite: <5 minutes total execution time
 
-## Test Markers
+## Test Development
 
-Available pytest markers:
-- `@pytest.mark.unit` - Unit tests
-- `@pytest.mark.integration` - Integration tests
-- `@pytest.mark.slow` - Long-running tests
+### Writing New Tests
 
-## Operating Contracts
+1. **Identify Test Scope** - Unit or integration test
+2. **Follow Naming Convention** - `test_feature_name.py`
+3. **Use Descriptive Names** - `test_user_registration_success`
+4. **Include Documentation** - Docstring explaining test purpose
+5. **Add Appropriate Markers** - `@pytest.mark.slow`, `@pytest.mark.integration`
 
-- All tests use real implementations (no mock-only tests for core functionality)
-- Tests maintain comprehensive coverage (target: 80%+)
-- Test files follow naming convention: `test_{module_name}.py`
-- Shared fixtures defined in `conftest.py` for consistency
+### Test Examples
 
-## Related Documentation
+**Unit Test Example**
+```python
+def test_validate_config_valid_input():
+    """Test configuration validation with valid input."""
+    config = {"api_key": "valid_key", "timeout": 30}
+    validator = ConfigValidator()
 
-- **[Testing Strategy](../docs/development/testing-strategy.md)** - Comprehensive testing approach
-- **[Contributing Guide](../docs/project/contributing.md)** - How to add new tests
-- **[AGENTS.md](AGENTS.md)** - Testing agent configuration
+    result = validator.validate(config)
+
+    assert result.is_valid is True
+    assert len(result.errors) == 0
+```
+
+**Integration Test Example**
+```python
+def test_user_workflow_complete():
+    """Test complete user registration and login workflow."""
+    # Register user
+    user_service.register("test@example.com", "password")
+
+    # Login user
+    session = auth_service.login("test@example.com", "password")
+
+    # Verify session
+    assert session.is_active is True
+    assert session.user.email == "test@example.com"
+```
+
+## Directory Contents
+
+### Core Test Infrastructure
+- `README.md` – This documentation
+- `__init__.py` – Test package initialization
+- `conftest.py` – Shared test configuration and fixtures
+- `run_all_git_examples.py` – Specialized test runner for git operations
+
+### Test Suites
+- `unit/` – Unit tests for individual components and modules
+- `integration/` – Integration tests for multi-component workflows
+
+### Test Reports
+Generated test outputs:
+- `htmlcov/` – HTML coverage reports
+- `coverage.xml` – XML coverage data for CI/CD
+- `.coverage` – Raw coverage data
+
+## Continuous Integration
+
+### CI/CD Integration
+
+Tests run automatically on:
+- Pull request creation
+- Code pushes to main branch
+- Scheduled nightly runs
+- Release candidate validation
+
+### Quality Gates
+
+Code must pass all quality checks:
+- All tests pass (unit + integration)
+- Coverage requirements met
+- No new linting errors
+- Performance benchmarks satisfied
+
+## Troubleshooting
+
+### Common Test Issues
+
+**Import Errors**
+- Ensure test environment matches development environment
+- Check PYTHONPATH includes src directory
+- Verify all dependencies installed
+
+**Coverage Issues**
+- Run `pytest --cov=src/codomyrmex --cov-report=html`
+- Check htmlcov/index.html for missing lines
+- Add tests for uncovered code paths
+
+**Performance Failures**
+- Identify bottleneck using profiling tools
+- Optimize slow code paths
+- Update performance benchmarks if justified
+
+### Debug Mode
+
+```bash
+# Run tests with debugging
+pytest --pdb  # Drop into debugger on failure
+pytest -s     # Don't capture output
+pytest -v     # Verbose output
+```
+
+## Navigation
+
+### Getting Started
+- **Quick Start**: Run `pytest` in project root
+- **Coverage Report**: Open `htmlcov/index.html` after test run
+
+### Advanced Usage
+- **Test Configuration**: [pytest.ini](../../../pytest.ini) - Test runner settings
+- **Shared Fixtures**: [conftest.py](conftest.py) - Available test utilities
+
+### Related Documentation
+- **Project Root**: [README](../../../README.md) - Main project documentation
+- **Testing Strategy**: [docs/development/testing-strategy.md](../../../docs/development/testing-strategy.md)
+- **Contributing**: [docs/project/contributing.md](../../../docs/project/contributing.md)
+
+## Contributing
+
+When adding tests:
+
+1. **Write Tests First** - Follow TDD principles
+2. **Use Real Data** - No mock methods or fake data
+3. **Comprehensive Coverage** - Test edge cases and error conditions
+4. **Clear Documentation** - Explain test purpose and expected behavior
+5. **Performance Aware** - Include benchmarks for performance-critical code
+
+### Test Template
+
+```python
+"""
+Test module for feature_name functionality.
+"""
+import pytest
+
+class TestFeatureName:
+    """Test suite for feature_name."""
+
+    def test_basic_functionality(self):
+        """Test basic feature operation."""
+        # Test implementation
+        pass
+
+    def test_edge_cases(self):
+        """Test edge cases and error conditions."""
+        # Test implementation
+        pass
+
+    def test_performance(self, benchmark):
+        """Test performance characteristics."""
+        # Benchmark implementation
+        pass
+```

@@ -1,43 +1,216 @@
 # Codomyrmex Agents — projects
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Workspace for composite agent-driven project scaffolds with rich template expressivity and automatic nested documentation generation.
+
+This is the projects coordination document for all project workspaces, templates, and example implementations in the Codomyrmex repository. It defines the project scaffolding system that enables rapid development of new projects using Codomyrmex modules.
+
+The projects directory serves as a workspace for project templates, example implementations, and development sandboxes that demonstrate Codomyrmex capabilities.
+
+## Project Types
+
+### Template Categories
+
+Projects are organized by purpose and complexity:
+
+| Type | Purpose | Examples |
+|------|---------|----------|
+| **Starter Projects** | Basic project scaffolding | Minimal viable projects |
+| **Example Projects** | Feature demonstrations | Module usage examples |
+| **Reference Projects** | Best practice implementations | Production-ready examples |
+| **Test Projects** | Validation and testing | Development sandboxes |
+
+### Project Structure
+
+All projects follow consistent structure:
+
+```
+project_name/
+├── src/                 # Source code
+├── tests/              # Test suites
+├── docs/               # Project documentation
+├── config/             # Configuration files
+├── scripts/            # Automation scripts
+├── AGENTS.md           # Agent coordination
+└── README.md           # Project documentation
+```
+
+## Project Templates
+
+### Template Components
+
+Projects provide reusable templates for:
+
+**Project Structure**
+- Standardized directory layouts
+- Configuration file templates
+- Documentation templates
+- Build and deployment scripts
+
+**Module Integration**
+- Module import patterns
+- Configuration examples
+- Usage demonstrations
+- Integration test templates
+
+**Development Workflow**
+- Git workflow setup
+- CI/CD pipeline templates
+- Code quality tooling
+- Testing frameworks
 
 ## Active Components
-- **Project Templates**: Rich, expressive templates with documentation configuration
-- **Documentation Generator**: Automatic generation of README.md and AGENTS.md files for projects and nested directories
-- **Template System**: Support for variable substitution, nested documentation, and template inheritance
-- **Project Manager Integration**: Seamless integration with project creation workflow
+
+### Core Project Infrastructure
+- `README.md` – Projects directory documentation
+
+### Example Projects
+- `test_project/` – Complete example project demonstrating Codomyrmex usage
+
+### Project Assets
+
+**test_project/ Structure:**
+- `src/` – Example source code and module usage
+- `config/` – Configuration examples and templates
+- `data/` – Sample data for demonstrations
+- `reports/` – Generated reports and outputs
+- `docs/` – Project documentation and guides
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-- Generate nested documentation automatically when projects are created from templates.
-- Maintain hierarchical cross-linking between parent and child directory documentation.
-- Support template variable substitution and customization.
 
-## Template Documentation Features
+### Universal Project Protocols
 
-### Automatic Documentation Generation
-- Projects created from templates automatically generate README.md and AGENTS.md files
-- Nested directories specified in template configuration receive their own documentation
-- Cross-linking between parent and child directories for easy navigation
+All projects in this directory must:
 
-### Template Expressivity
-- Variable substitution using `{{variable}}` syntax
-- Template inheritance from base templates
-- Template-specific overrides for custom behavior
-- Support for nested documentation configuration
+1. **Demonstrate Best Practices** - Projects show recommended usage patterns
+2. **Remain Current** - Projects updated to reflect latest Codomyrmex features
+3. **Include Comprehensive Tests** - Projects demonstrate testing approaches
+4. **Provide Clear Documentation** - Projects document their purpose and usage
+5. **Support Multiple Environments** - Projects work across different deployment scenarios
 
-### Documentation Structure
-Each project includes:
-- Root-level README.md and AGENTS.md
-- Nested README.md and AGENTS.md for each configured directory
-- Automatic cross-references between parent and child directories
+### Project-Specific Guidelines
 
-## Navigation Links
-- **📚 Projects Overview**: [README.md](README.md) - Projects workspace documentation
-- **🏠 Project Root**: [../README.md](../README.md) - Main project README
-- **📖 Documentation Hub**: [../docs/README.md](../docs/README.md) - Complete documentation structure
-- **🎯 Project Orchestration**: [../src/codomyrmex/project_orchestration/README.md](../src/codomyrmex/project_orchestration/README.md) - Project orchestration module
+#### Template Projects
+- Provide clear setup instructions
+- Include realistic example data
+- Demonstrate common use cases
+- Support easy customization
+
+#### Example Projects
+- Focus on specific feature demonstrations
+- Include step-by-step tutorials
+- Provide working code examples
+- Document integration patterns
+
+#### Reference Projects
+- Follow production best practices
+- Include comprehensive error handling
+- Demonstrate scaling and performance
+- Provide deployment examples
+
+## Project Development
+
+### Creating New Projects
+
+Process for developing new project templates:
+
+1. **Define Purpose** - Clear project goals and target audience
+2. **Design Structure** - Follow established project patterns
+3. **Implement Features** - Use current Codomyrmex modules and practices
+4. **Add Documentation** - Comprehensive setup and usage guides
+5. **Include Tests** - Full test coverage and validation
+6. **Validate Functionality** - Ensure project works end-to-end
+
+### Project Maintenance
+
+Regular project maintenance includes:
+- Updating to latest module versions
+- Refreshing dependencies and configurations
+- Adding new feature demonstrations
+- Updating documentation and examples
+- Performance optimization and improvements
+
+## Project Usage
+
+### Getting Started with Projects
+
+```bash
+# Clone project template
+cp -r projects/test_project my_new_project
+cd my_new_project
+
+# Customize for your needs
+# Edit configuration files
+# Add your specific requirements
+# Update documentation
+```
+
+### Project Configuration
+
+Projects support configuration through:
+- Environment-specific config files
+- Command-line parameters
+- Configuration validation
+- Secret management integration
+
+## Navigation
+
+### For Users
+- **Quick Start**: [test_project/](test_project/) - Complete working example
+- **Templates**: Browse available project templates
+- **Examples**: Feature-specific usage examples
+
+### For Agents
+- **Project Standards**: [cursorrules/general.cursorrules](../../cursorrules/general.cursorrules)
+- **Module System**: [docs/modules/overview.md](../../docs/modules/overview.md)
+- **Configuration**: [config/templates/](../../config/templates/)
+
+### For Contributors
+- **Contributing**: [docs/project/contributing.md](../../docs/project/contributing.md)
+- **Project Creation**: Guidelines for creating new project templates
+- **Template Standards**: [docs/project_orchestration/project-template-schema.md](../../docs/project_orchestration/project-template-schema.md)
+
+## Agent Coordination
+
+### Project Synchronization
+
+When projects need updates across the system:
+
+1. **Template Updates** - Modify base templates to reflect changes
+2. **Example Updates** - Update examples to demonstrate new features
+3. **Documentation Sync** - Ensure project documentation stays current
+4. **Validation Updates** - Update project validation and testing
+
+### Quality Gates
+
+Before project changes are accepted:
+
+1. **Functionality Verified** - Projects work correctly end-to-end
+2. **Documentation Complete** - All features and usage documented
+3. **Tests Pass** - Comprehensive test coverage maintained
+4. **Standards Compliance** - Follows all coding and project standards
+5. **Integration Validated** - Works with current module versions
+
+## Project Metrics
+
+### Quality Metrics
+- **Template Utilization** - How often templates are used for new projects
+- **Example Freshness** - How current examples remain with platform updates
+- **Documentation Coverage** - Percentage of features documented in projects
+- **Test Coverage** - Test coverage across all example projects
+
+### Usage Metrics
+- **Project Creation Rate** - Frequency of new projects created from templates
+- **Feature Adoption** - Which features are most commonly used in projects
+- **Customization Patterns** - Common modifications made to templates
+
+## Version History
+
+- **v0.1.0** (December 2025) - Initial project template system with comprehensive example project
+
+## Related Documentation
+
+- **[Project Orchestration](docs/project_orchestration/project-lifecycle-guide.md)** - Project development lifecycle
+- **[Module System](docs/modules/overview.md)** - Available modules for projects
+- **[Contributing Guide](docs/project/contributing.md)** - Project contribution guidelines

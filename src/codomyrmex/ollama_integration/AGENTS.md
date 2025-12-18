@@ -1,33 +1,25 @@
-# Codomyrmex Agents — ollama_integration
+# Codomyrmex Agents — src/codomyrmex/ollama_integration
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-
-Comprehensive integration with Ollama local Large Language Models (LLMs), providing model management, execution, and output handling capabilities within the Codomyrmex ecosystem.
+Contains components for the src system.
 
 ## Active Components
-
-- `config_manager.py` – Configuration management for Ollama integration
-- `model_runner.py` – Model execution and management
-- `ollama_manager.py` – Core Ollama API interaction
-- `output_manager.py` – Model output processing and handling
+- `API_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `__init__.py` – Project file
+- `config_manager.py` – Project file
+- `model_runner.py` – Project file
+- `ollama_manager.py` – Project file
+- `output_manager.py` – Project file
 
 ## Operating Contracts
-
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- All agent-exposed tasks and handlers MUST be real, executable implementations. No stubs.
-
-## Related Modules
-- **AI Code Editing** (`../ai_code_editing/`) - Uses Ollama models for code generation
-- **Model Context Protocol** (`../model_context_protocol/`) - Provides MCP integration for Ollama models
-- **Language Models** (`../language_models/`) - Part of the broader language model ecosystem
 
 ## Navigation Links
-
-- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
-- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
-- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
-
-
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

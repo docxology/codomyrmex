@@ -1,28 +1,15 @@
-# 3D Modeling Orchestrator
+# modeling_3d
 
-Thin orchestrator script providing CLI access to the `codomyrmex.modeling_3d` module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Purpose
+## Overview
 
-This orchestrator provides information about the 3D modeling and rendering capabilities.
+Automation and utility scripts.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `orchestrate.py` – File
 
-```bash
-# Show module information
-python scripts/modeling_3d/orchestrate.py info
-```
-
-## Commands
-
-- `info` - Show module information
-
-## Related Documentation
-
-- **[Module README](../../src/codomyrmex/modeling_3d/README.md)**: Complete module documentation
-- **[CLI Reference](../../docs/reference/cli.md)**: Main CLI documentation
-
-## Integration
-
-This orchestrator provides information about the modeling_3d module. See `src/codomyrmex/modeling_3d/` for complete API.
-
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)

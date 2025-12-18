@@ -1,0 +1,54 @@
+# Cursor Rules for the modeling_3d Module
+
+## 0. Preamble
+These rules are specific to the `modeling_3d` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module provides 3D modeling, rendering, and AR/VR capabilities for interactive 3D applications within the Codomyrmex ecosystem.
+-   **Key Technologies/Tools**: Python, 3D graphics libraries, AR/VR frameworks, rendering pipelines, scene management, asset loading.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `modeling_3d` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the 3D Modeling module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for 3D rendering and AR/VR operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to 3D Modeling.
+-   `src/` (or primary Python package folders, e.g., `modeling_3d/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `engine_3d.py`: Core 3D engine with scene management, objects, and cameras.
+-   `rendering_pipeline.py`: Advanced rendering with shaders and post-processing.
+-   `ar_vr_support.py`: AR/VR/XR capabilities and session management.
+
+## 3. Coding Standards & Practices for `modeling_3d`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `modeling_3d` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for 3D objects, scenes, and rendering parameters.
+-   **Performance**: Optimize for efficient 3D rendering and resource management.
+-   **Safety**: Implement safety measures for AR/VR operations and user interaction.
+-   **Compatibility**: Support multiple 3D formats and rendering backends.
+
+## 4. Testing in `modeling_3d`
+-   New features (e.g., new rendering techniques, AR/VR capabilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover 3D operations, rendering accuracy, AR/VR functionality, and performance.
+-   Mock 3D environments where appropriate to ensure deterministic test behavior.
+-   Run existing tests to ensure no regressions. Refer to `modeling_3d/tests/README.md`.
+
+## 5. Documentation for `modeling_3d`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document 3D concepts, rendering techniques, and AR/VR integration clearly.
+-   Include examples of 3D modeling, rendering, and AR/VR usage.
+
+## 6. Specific Considerations for `modeling_3d`
+-   **Performance Critical**: 3D operations require careful performance optimization.
+-   **Hardware Compatibility**: Ensure compatibility with various hardware configurations.
+-   **Safety First**: Implement safety measures for AR/VR experiences.
+-   **Resource Management**: Optimize memory usage and GPU resources.
+
+## 7. Final Check for `modeling_3d`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that 3D rendering works correctly and AR/VR functionality is safe.
+-   Test integration with related modules like `data_visualization` and `physical_management`.

@@ -1,25 +1,19 @@
 # Codomyrmex Agents — src/codomyrmex/git_operations/tests/unit
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Unit tests for git operations components, validating individual components in isolation with comprehensive coverage.
+Test files and validation suites.
 
 ## Active Components
-- Key files: test_visualization_integration.py
+- `README.md` – Project file
+- `test_visualization_integration.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Unit tests validate individual git operations components in isolation.
-- Test execution maintains fast feedback and comprehensive component coverage.
-
-## Related Modules
-- **Git Operations Tests** (`../`) - Parent test directory
-- **Integration Tests** (`../integration/`) - Integration test scenarios
 
 ## Navigation Links
-- **📚 Tests Overview**: [../AGENTS.md](../AGENTS.md) - Test directory coordination
-- **🧪 Integration Tests**: [../integration/AGENTS.md](../integration/AGENTS.md) - Integration test coordination
-- **📚 Module Overview**: [../../README.md](../../README.md) - Git operations module documentation
-- **🏠 Package Root**: [../../../../README.md](../../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../../docs/README.md](../../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

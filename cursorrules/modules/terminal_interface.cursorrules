@@ -1,0 +1,54 @@
+# Cursor Rules for the terminal_interface Module
+
+## 0. Preamble
+These rules are specific to the `terminal_interface` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module provides command-line interfaces and terminal utilities for the Codomyrmex ecosystem.
+-   **Key Technologies/Tools**: Python, terminal libraries, CLI frameworks, interactive shells, command routing, terminal formatting.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `terminal_interface` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Terminal Interface module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for terminal operations and user input handling.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Terminal Interface.
+-   `src/` (or primary Python package folders, e.g., `terminal_interface/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `interactive_shell.py`: Core interactive shell functionality.
+-   `terminal_utils.py`: Terminal utility functions for formatting and interaction.
+
+## 3. Coding Standards & Practices for `terminal_interface`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `terminal_interface` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for terminal configurations and command structures.
+-   **User Experience**: Provide intuitive and responsive terminal interfaces.
+-   **Error Handling**: Handle user input gracefully with helpful error messages.
+-   **Performance**: Optimize for responsive terminal interactions.
+
+## 4. Testing in `terminal_interface`
+-   New features (e.g., new terminal utilities, shell capabilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover terminal interactions, command routing, shell functionality, and user input handling.
+-   Mock terminal environments where appropriate to ensure deterministic test behavior.
+-   Run existing tests to ensure no regressions. Refer to `terminal_interface/tests/README.md`.
+
+## 5. Documentation for `terminal_interface`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document terminal utilities, shell features, and CLI integration patterns clearly.
+-   Include examples of terminal interface usage and customization.
+
+## 6. Specific Considerations for `terminal_interface`
+-   **Cross-Platform**: Ensure compatibility across different terminal environments and operating systems.
+-   **Accessibility**: Consider accessibility features for terminal interfaces.
+-   **Security**: Handle user input securely and prevent command injection.
+-   **Performance**: Maintain responsive terminal interactions even with complex operations.
+
+## 7. Final Check for `terminal_interface`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that terminal interfaces work correctly and provide good user experience.
+-   Test integration with all modules that provide CLI access.

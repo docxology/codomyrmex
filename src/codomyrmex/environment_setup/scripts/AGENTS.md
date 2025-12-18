@@ -1,26 +1,21 @@
 # Codomyrmex Agents — src/codomyrmex/environment_setup/scripts
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Automation scripts for environment setup, providing command-line tools and workflow automation utilities.
+Automation and utility scripts.
 
 ## Active Components
-- Automation scripts providing workflow utilities and command-line tools.
+- `README.md` – Project file
+- `install_hooks.sh` – Project file
+- `install_with_uv.sh` – Project file
+- `setup_dev_env.sh` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Scripts provide automation for environment setup and verification.
-- Script execution maintains reliability and comprehensive environment configuration.
-
-## Related Modules
-- **Environment Setup Module** (`../`) - Parent module directory
-- **Tests** (`../tests/`) - Module test suite
-- **Documentation** (`../docs/`) - Module documentation
 
 ## Navigation Links
-- **📚 Module Overview**: [../README.md](../README.md) - Environment setup module documentation
-- **🧪 Tests**: [../tests/AGENTS.md](../tests/AGENTS.md) - Test coordination
-- **📖 Documentation**: [../docs/AGENTS.md](../docs/AGENTS.md) - Documentation coordination
-- **🏠 Package Root**: [../../../README.md](../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../docs/README.md](../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [environment_setup](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

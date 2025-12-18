@@ -1,27 +1,28 @@
 # Codomyrmex Agents — src/codomyrmex/model_context_protocol
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Model Context Protocol adapters enabling agent interoperability.
+Contains components for the src system.
 
 ## Active Components
-- `docs/` – Agent surface for `docs` components.
-- `tests/` – Agent surface for `tests` components.
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `docs/` – Directory containing docs components
+- `mcp_schemas.py` – Project file
+- `requirements.txt` – Project file
+- `tests/` – Directory containing tests components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- MCP adapters maintain protocol compliance and handle errors gracefully.
-- Agent interoperability supports seamless communication across modules.
-
-## Related Modules
-- **AI Code Editing** (`ai_code_editing/`) - Uses MCP for LLM communication
-- **Language Models** (`language_models/`) - Implements MCP interfaces
-- **Ollama Integration** (`ollama_integration/`) - Provides MCP integration for Ollama
 
 ## Navigation Links
-- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
-- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
-- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
-- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

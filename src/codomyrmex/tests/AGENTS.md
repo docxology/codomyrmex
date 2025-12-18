@@ -1,25 +1,21 @@
 # Codomyrmex Agents — src/codomyrmex/tests
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Validation agents ensuring package integrity via automated testing.
+Test files and validation suites.
 
 ## Active Components
-- Key files: test_cross_module_integration.py, test_performance_stress.py
+- `README.md` – Project file
+- `__init__.py` – Project file
+- `test_cross_module_integration.py` – Project file
+- `test_performance_stress.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Package-level tests validate cross-module integration and package integrity.
-- Test execution maintains comprehensive coverage of package functionality.
-
-## Related Modules
-- **All Modules** - Tests validate functionality across all Codomyrmex modules
-- **Testing Suite** (`../../../testing/`) - Provides testing infrastructure
 
 ## Navigation Links
-- **📚 Package Overview**: [../README.md](../README.md) - Package documentation and module status
-- **🧪 Testing Suite**: [../../../testing/README.md](../../../testing/README.md) - Testing suite documentation
-- **🏠 Source Root**: [../../README.md](../../README.md) - Source code structure
-- **🏠 Project Root**: [../../../README.md](../../../README.md) - Main project README
-- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation structure
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

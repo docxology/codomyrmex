@@ -1,29 +1,30 @@
 # Codomyrmex Agents — src/codomyrmex/language_models
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Language models integration for local LLM services, primarily Ollama. All methods are functional, production-ready implementations that interact with actual LLM services.
+Contains components for the src system.
 
 ## Active Components
-- `ollama_client.py` – Core Ollama client with network I/O, streaming, and advanced features.
-- `ollama_integration.py` – High-level integration utilities and convenience functions.
-- `config.py` – Configuration management for LLM parameters and output organization.
-- `tests/` – Comprehensive test suite with functional LLM integration testing.
+- `API_SPECIFICATION.md` – Project file
+- `COMPREHENSIVE_REPORT.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `config.example.json` – Project file
+- `config.py` – Project file
+- `ollama_client.py` – Project file
+- `ollama_integration.py` – Project file
+- `outputs/` – Directory containing outputs components
+- `requirements.txt` – Project file
+- `tests/` – Directory containing tests components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- All language model integrations are functional, executable implementations that interact with actual LLM services.
-- All testing uses actual Ollama models and generates verified outputs.
-- Configuration system supports environment variables, presets, and file persistence.
-
-## Related Modules
-- **AI Code Editing** (`ai_code_editing/`) - Uses language models for code generation
-- **Ollama Integration** (`ollama_integration/`) - Provides Ollama-specific integration
-- **Model Context Protocol** (`model_context_protocol/`) - Defines MCP interfaces for LLM communication
 
 ## Navigation Links
-- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
-- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
-- **🦙 Ollama Integration**: [../ollama_integration/README.md](../ollama_integration/README.md) - Ollama integration module
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

@@ -1,27 +1,20 @@
 # Codomyrmex Agents — src/codomyrmex/model_context_protocol/tests
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Test suite for model context protocol functionality, covering unit tests for individual components and integration tests for complete workflows.
+Test files and validation suites.
 
 ## Active Components
-- `integration/` – Agent surface for `integration` components.
-- `unit/` – Agent surface for `unit` components.
+- `README.md` – Project file
+- `integration/` – Directory containing integration components
+- `unit/` – Directory containing unit components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Tests maintain comprehensive coverage of Model Context Protocol functionality.
-- Test execution validates MCP tool registration and protocol compliance.
-
-## Related Modules
-- **Model Context Protocol Module** (`../`) - Provides the module being tested
-- **Unit Tests** (`unit/`) - Unit-level test validation
-- **Integration Tests** (`integration/`) - Integration test scenarios
 
 ## Navigation Links
-- **📚 Module Overview**: [../README.md](../README.md) - Model Context Protocol module documentation
-- **🧪 Unit Tests**: [unit/AGENTS.md](unit/AGENTS.md) - Unit test coordination
-- **🧪 Integration Tests**: [integration/AGENTS.md](integration/AGENTS.md) - Integration test coordination
-- **🏠 Package Root**: [../../../README.md](../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../docs/README.md](../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [model_context_protocol](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

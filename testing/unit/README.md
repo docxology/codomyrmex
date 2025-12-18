@@ -1,86 +1,53 @@
-# testing/unit
+# unit
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: October 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Unit-level validation harnesses executed by testing agents.
+Test files and validation suites.
 
-## Core Capabilities
+## Directory Contents
+- `README.md` – File
+- `test_ai_code_editing.py` – File
+- `test_api_documentation.py` – File
+- `test_bootstrap_agents_readmes.py` – File
+- `test_build_synthesis.py` – File
+- `test_ci_cd_automation.py` – File
+- `test_cli_comprehensive.py` – File
+- `test_cli_simple.py` – File
+- `test_code_execution_sandbox.py` – File
+- `test_code_execution_sandbox_comprehensive.py` – File
+- `test_code_review.py` – File
+- `test_config_management.py` – File
+- `test_containerization.py` – File
+- `test_data_visualization.py` – File
+- `test_database_management.py` – File
+- `test_documentation.py` – File
+- `test_environment_setup.py` – File
+- `test_environment_setup_comprehensive.py` – File
+- `test_exceptions.py` – File
+- `test_git_operations.py` – File
+- `test_git_operations_advanced.py` – File
+- `test_git_operations_comprehensive.py` – File
+- `test_github_operations_comprehensive.py` – File
+- `test_language_models.py` – File
+- `test_logging_monitoring.py` – File
+- `test_model_context_protocol.py` – File
+- `test_modeling_3d.py` – File
+- `test_module_template.py` – File
+- `test_ollama_integration.py` – File
+- `test_pattern_matching.py` – File
+- `test_performance_comprehensive.py` – File
+- `test_physical_management.py` – File
+- `test_project_orchestration.py` – File
+- `test_repository_manager.py` – File
+- `test_security_audit.py` – File
+- `test_static_analysis.py` – File
+- `test_static_analysis_comprehensive.py` – File
+- `test_system_discovery_comprehensive.py` – File
+- `test_template.py` – File
+- `test_terminal_interface_comprehensive.py` – File
 
-### Primary Functions
-- **Modular Architecture**: Self-contained module with clear boundaries and responsibilities
-- **Agent Integration**: Seamlessly integrates with Codomyrmex agent ecosystem
-- **Comprehensive Testing**: Full test coverage with unit, integration, and performance tests
-- **Documentation**: Complete documentation with examples and API references
-
-## Architecture
-
-```
-testing/unit/
-```
-
-## Key Components
-
-### Active Components
-- Key files: test_ai_code_editing.py, test_api_documentation.py, test_build_synthesis.py, test_ci_cd_automation.py
-
-## Operating Contracts
-
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-
-## Integration Points
-
-### Related Modules
-No related modules specified
-
-## Usage Examples
-
-```python
-# Example usage will be documented based on specific module capabilities
-from codomyrmex.testing.unit import ModuleClass
-
-# Initialize and use the module
-module = ModuleClass()
-result = module.perform_operation()
-```
-
-## Quality Assurance
-
-The module includes comprehensive testing to ensure:
-- **Reliability**: Consistent operation across different environments
-- **Performance**: Optimized execution with monitoring and metrics
-- **Security**: Secure by design with proper input validation
-- **Maintainability**: Clean code structure with comprehensive documentation
-
-## Development Guidelines
-
-### Code Structure
-- Follow project coding standards and `.cursorrules`
-- Implement comprehensive error handling
-- Include proper logging and telemetry
-- Maintain backward compatibility
-
-### Testing Requirements
-- Unit tests for all public methods
-- Integration tests for module interactions
-- Performance benchmarks where applicable
-- Security testing for sensitive operations
-
-## Contributing
-
-When contributing to this module:
-1. Follow established patterns and conventions
-2. Add comprehensive tests for new features
-3. Update documentation for API changes
-4. Ensure all tests pass before submitting
-5. Consider impact on related modules
-
-## Related Documentation
-
-- **AGENTS.md**: Detailed agent configuration and purpose
-- **API Specification**: Complete API reference (if applicable)
-- **Technical Overview**: Architecture and design decisions
-- **Usage Examples**: Practical implementation examples
+## Navigation
+- **Parent Directory**: [testing](../README.md)
+- **Project Root**: [README](../../../README.md)

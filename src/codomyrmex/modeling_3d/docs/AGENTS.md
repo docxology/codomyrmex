@@ -1,26 +1,20 @@
 # Codomyrmex Agents — src/codomyrmex/modeling_3d/docs
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Documentation for 3D modeling functionality, including architecture documentation for 3D model structures, generation workflows, and integration patterns for 3D visualization and manipulation.
+Documentation files and guides.
 
 ## Active Components
-- Key files: architecture.md
+- `README.md` – Project file
+- `architecture.md` – Project file
+- `index.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Documentation maintains accuracy and stays synchronized with 3D modeling functionality.
-- Architecture documentation provides comprehensive understanding of 3D model structures.
-
-## Related Modules
-- **Modeling 3D Module** (`../`) - Provides the module being documented
-- **Tests** (`../tests/`) - Module test suite
-- **Examples** (`../examples/`) - Example usage scenarios
 
 ## Navigation Links
-- **📚 Module Overview**: [../README.md](../README.md) - Modeling 3D module documentation
-- **🧪 Tests**: [../tests/AGENTS.md](../tests/AGENTS.md) - Test coordination
-- **🎮 Examples**: [../examples/AGENTS.md](../examples/AGENTS.md) - Example coordination
-- **🏠 Package Root**: [../../../README.md](../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../docs/README.md](../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [modeling_3d](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

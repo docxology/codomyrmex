@@ -1,36 +1,24 @@
-# Fabric AI Integration
+# fabric_integration
 
-Integration scripts for combining Fabric AI framework with Codomyrmex.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Scripts
+## Overview
 
-- `setup_demo.sh` - Complete Fabric integration setup and demonstration
-- `orchestrate.py` - Main orchestrator for Fabric + Codomyrmex workflows
+Automation and utility scripts.
 
-## Quick Start
+## Directory Contents
+- `QUICKSTART.md` – File
+- `README.md` – File
+- `code_improvement_workflow.py` – File
+- `content_analysis_workflow.py` – File
+- `demo_env_setup.py` – File
+- `fabric_config_manager.py` – File
+- `fabric_env_template` – File
+- `fabric_orchestrator.py` – File
+- `orchestrate.py` – File
+- `setup_demo.sh` – File
+- `setup_fabric_env.py` – File
 
-```bash
-# Run setup and demo
-./scripts/fabric_integration/setup_demo.sh
-
-# Run orchestrator
-python scripts/fabric_integration/orchestrate.py
-```
-
-## Prerequisites
-
-- Git
-- Go (for Fabric binary)
-- API keys (optional - for full AI functionality)
-
-## Features
-
-- Fabric repository integration
-- Pattern-based AI processing
-- Workflow visualization with Codomyrmex
-- Configuration management
-- Custom pattern creation
-
-## Output
-
-Integration files are created in `scripts/output/fabric-integration/` at the project root.
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)

@@ -57,6 +57,7 @@ __all__ = [
     "static_analysis",
     "system_discovery",
     "terminal_interface",
+    "tools",
     # Advanced modules
     "modeling_3d",
     "physical_management",

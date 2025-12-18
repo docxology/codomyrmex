@@ -1,65 +1,24 @@
-# 3D Modeling and Rendering Module
+# modeling_3d
 
-A comprehensive 3D modeling, rendering, and AR/VR/XR module for the Codomyrmex platform.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Features
+## Overview
 
-- **Core 3D Engine**: Scene management, objects, cameras, and lighting
-- **AR/VR/XR Support**: Augmented, Virtual, and Extended Reality capabilities
-- **Rendering Pipeline**: Advanced rendering with shaders and post-processing
-- **Physics Integration**: Basic physics simulation for realistic interactions
-- **Animation System**: Keyframe and procedural animation support
-- **Asset Loading**: Support for common 3D file formats
+Contains components for the src system.
 
-## Installation
+## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `README.md` – File
+- `SECURITY.md` – File
+- `__init__.py` – File
+- `ar_vr_support.py` – File
+- `docs/` – Subdirectory
+- `engine_3d.py` – File
+- `examples/` – Subdirectory
+- `rendering_pipeline.py` – File
+- `requirements.txt` – File
+- `tests/` – Subdirectory
 
-```bash
-pip install -r requirements.txt
-```
-
-## Quick Start
-
-```python
-from codomyrmex.modeling_3d import Scene3D, Object3D, Camera3D
-
-# Create a scene
-scene = Scene3D()
-
-# Add objects
-cube = Object3D("Cube")
-scene.add_object(cube)
-
-# Setup camera
-camera = Camera3D("MainCamera")
-scene.add_camera(camera)
-
-# Render
-from codomyrmex.modeling_3d import RenderPipeline
-pipeline = RenderPipeline()
-pipeline.render_scene(scene, camera)
-```
-
-## AR/VR Usage
-
-```python
-from codomyrmex.modeling_3d import ARSession, VRRenderer
-
-# Augmented Reality
-ar_session = ARSession()
-ar_session.start_session()
-
-# Virtual Reality
-vr_renderer = VRRenderer()
-vr_renderer.render_stereo(scene)
-```
-
-## Documentation
-
-- [API Specification](API_SPECIFICATION.md)
-- [Architecture Guide](docs/architecture.md)
-- [Usage Examples](examples/)
-- [Test Suite](tests/)
-
-## Requirements
-
-See [requirements.txt](requirements.txt) for dependencies.
+## Navigation
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: [README](../../../README.md)

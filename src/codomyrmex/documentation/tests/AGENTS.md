@@ -1,27 +1,21 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/tests
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Test suite for documentation functionality, covering unit tests for individual components and integration tests for complete workflows.
+Test files and validation suites.
 
 ## Active Components
-- `integration/` – Agent surface for `integration` components.
-- `unit/` – Agent surface for `unit` components.
+- `README.md` – Project file
+- `integration/` – Directory containing integration components
+- `test_quality_assessment.py` – Project file
+- `unit/` – Directory containing unit components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Tests maintain comprehensive coverage of documentation functionality.
-- Test execution validates documentation generation, quality, and accuracy.
-
-## Related Modules
-- **Documentation Module** (`../`) - Provides the module being tested
-- **Unit Tests** (`unit/`) - Unit-level test validation
-- **Integration Tests** (`integration/`) - Integration test scenarios
 
 ## Navigation Links
-- **📚 Module Overview**: [../README.md](../README.md) - Documentation module documentation
-- **🧪 Unit Tests**: [unit/AGENTS.md](unit/AGENTS.md) - Unit test coordination
-- **🧪 Integration Tests**: [integration/AGENTS.md](integration/AGENTS.md) - Integration test coordination
-- **🏠 Package Root**: [../../../README.md](../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../docs/README.md](../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [documentation](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

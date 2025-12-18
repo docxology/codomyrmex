@@ -24,7 +24,7 @@ Searches for literal text strings or regular expression patterns within the code
 
 | Parameter Name    | Type          | Required | Description                                                                                             | Example Value                                     |
 | :---------------- | :------------ | :------- | :------------------------------------------------------------------------------------------------------ | :------------------------------------------------ |
-| `query`           | `string`      | Yes      | The literal string or regular expression pattern to search for.                                         | `"TODO: fix this"` or `"my_function\\(.*\\)"`       |
+| `query`           | `string`      | Yes      | The literal string or regular expression pattern to search for.                                         | `"TODO"` or `"def my_function"`                    |
 | `is_regex`        | `boolean`     | No       | Whether the `query` is a regular expression. Default: `false`.                                          | `true`                                            |
 | `target_paths`    | `array[string]`| No       | List of file or directory paths to search within. Default: searches entire project.                     | `["src/module_a/", "utils/helpers.py"]`          |
 | `case_sensitive`  | `boolean`     | No       | Whether the search should be case-sensitive. Default: `false`.                                          | `true`                                            |

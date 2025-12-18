@@ -1,0 +1,55 @@
+# Cursor Rules for the data_visualization Module
+
+## 0. Preamble
+These rules are specific to the `data_visualization` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module provides data visualization capabilities, including static and interactive plotting for the Codomyrmex ecosystem.
+-   **Key Technologies/Tools**: Python, Matplotlib, Seaborn, Plotly, data processing, chart generation, interactive visualizations.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `data_visualization` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Data Visualization module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for data handling and visualization security.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Data Visualization.
+-   `src/` (or primary Python package folders, e.g., `data_visualization/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `plotter.py`: Core plotting functionality.
+-   `advanced_plotter.py`: Advanced plotting capabilities.
+-   `git_visualizer.py`: Git repository visualization.
+-   `mermaid_generator.py`: Mermaid diagram generation.
+
+## 3. Coding Standards & Practices for `data_visualization`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `data_visualization` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for data structures and visualization parameters.
+-   **Chart Quality**: Ensure visualizations are clear, well-labeled, and accurately represent data.
+-   **Performance**: Optimize for efficient rendering and large dataset handling.
+-   **Accessibility**: Consider accessibility features for visualizations where appropriate.
+
+## 4. Testing in `data_visualization`
+-   New features (e.g., new chart types, visualization formats) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover various chart types, data processing, output formats, and rendering accuracy.
+-   Include visual regression testing where appropriate.
+-   Run existing tests to ensure no regressions. Refer to `data_visualization/tests/README.md`.
+
+## 5. Documentation for `data_visualization`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document supported chart types, customization options, and output formats clearly.
+-   Include examples of visualization usage and integration patterns.
+
+## 6. Specific Considerations for `data_visualization`
+-   **Multi-Format Support**: Support various output formats (PNG, SVG, HTML, interactive formats).
+-   **Library Integration**: Properly integrate with visualization libraries (Matplotlib, Plotly, etc.).
+-   **Data Privacy**: Ensure secure handling of data in visualizations.
+-   **Performance Optimization**: Optimize for large datasets and complex visualizations.
+
+## 7. Final Check for `data_visualization`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that visualizations render correctly and accurately represent data.
+-   Test integration with related modules like `git_operations` and `static_analysis`.

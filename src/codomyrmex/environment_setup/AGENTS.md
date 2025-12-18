@@ -1,29 +1,29 @@
 # Codomyrmex Agents — src/codomyrmex/environment_setup
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Setup agents verifying local and remote development environments.
+Contains components for the src system.
 
 ## Active Components
-- `docs/` – Agent surface for `docs` components.
-- `scripts/` – Agent surface for `scripts` components.
-- `tests/` – Agent surface for `tests` components.
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `docs/` – Directory containing docs components
+- `env_checker.py` – Project file
+- `requirements.txt` – Project file
+- `scripts/` – Directory containing scripts components
+- `tests/` – Directory containing tests components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Environment verification ensures all dependencies are properly installed.
-- Setup automation maintains consistency across development environments.
-
-## Related Modules
-- **Config Management** (`config_management/`) - Manages environment configuration
-- **System Discovery** (`system_discovery/`) - Discovers environment capabilities
-- **Project Orchestration** (`project_orchestration/`) - Coordinates environment setup workflows
 
 ## Navigation Links
-- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
-- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference
-- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications
-- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations
-- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

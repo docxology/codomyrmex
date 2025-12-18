@@ -1,26 +1,21 @@
 # Codomyrmex Agents — docs/development
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Developer-focused documentation coordination for Codomyrmex, providing comprehensive guides for development environment setup, documentation standards, testing strategies, and modern Python development practices.
+Documentation files and guides.
 
 ## Active Components
-- **documentation.md** - Standards and best practices for writing and maintaining Codomyrmex documentation
-- **environment-setup.md** - Complete development environment configuration and setup automation
-- **testing-strategy.md** - Testing approach, best practices, and comprehensive testing framework
-- **uv-usage-guide.md** - Modern Python package management with UV for optimal development experience
+- `README.md` – Project file
+- `documentation.md` – Project file
+- `environment-setup.md` – Project file
+- `testing-strategy.md` – Project file
+- `uv-usage-guide.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Maintain comprehensive cross-linking between development documentation and related sections.
-- Ensure development documentation reflects current best practices and real-world development patterns.
 
 ## Navigation Links
-- **📚 Documentation Hub**: [../../README.md](../../README.md) - Central documentation overview and navigation
-- **🏗️ Environment Setup**: [environment-setup.md](environment-setup.md) - Development environment configuration
-- **📝 Documentation Guidelines**: [documentation.md](documentation.md) - Standards for writing and maintaining docs
-- **🧪 Testing Strategy**: [testing-strategy.md](testing-strategy.md) - Testing approach and best practices
-- **📦 UV Usage Guide**: [uv-usage-guide.md](uv-usage-guide.md) - Modern Python package management
-- **🤝 Contributing Guide**: [../project/contributing.md](../project/contributing.md) - How to contribute effectively
-- **🏛️ Architecture**: [../project/architecture.md](../project/architecture.md) - System design for development considerations
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation

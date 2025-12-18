@@ -1,58 +1,50 @@
 # Codomyrmex Agents — src/codomyrmex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Primary Python package bundling all Codomyrmex agents and shared tooling.
+Contains components for the src system.
 
 ## Active Components
-- `ai_code_editing/` – AI-powered code generation and editing with multi-provider LLM support
-- `api_documentation/` – API documentation generation with OpenAPI/Swagger support
-- `build_synthesis/` – Build automation and code synthesis pipelines
-- `ci_cd_automation/` – CI/CD pipeline management and deployment orchestration
-- `code_execution_sandbox/` – Secure code execution in sandboxed environments
-- `code_review/` – Comprehensive code review with Pyscn integration
-- `config_management/` – Configuration management and secret handling
-- `containerization/` – Docker management and Kubernetes orchestration
-- `data_visualization/` – Rich data plotting and interactive dashboards
-- `database_management/` – Database integration and migration management
-- `documentation/` – Documentation website generation with Docusaurus
-- `environment_setup/` – Development environment validation and setup
-- `git_operations/` – Git workflow automation and repository management
-- `language_models/` – LLM provider management and model configuration
-- `logging_monitoring/` – Structured logging and performance monitoring
-- `model_context_protocol/` – MCP framework for standardized AI communication
-- `modeling_3d/` – 3D modeling and visualization with AR/VR support
-- `module_template/` – Standardized module scaffolding and templates
-- `ollama_integration/` – Local LLM integration via Ollama
-- `pattern_matching/` – Advanced code pattern analysis and recognition
-- `performance/` – Performance optimization and monitoring utilities
-- `physical_management/` – Physical system simulation and management
-- `project_orchestration/` – Project and workflow coordination
-- `security_audit/` – Security vulnerability scanning and compliance
-- `static_analysis/` – Multi-language code quality analysis
-- `system_discovery/` – System introspection and capability mapping
-- `terminal_interface/` – Interactive CLI and terminal utilities
-- `tests/` – Cross-module integration and performance tests
+- `README.md` – Project file
+- `__init__.py` – Project file
+- `ai_code_editing/` – Directory containing ai_code_editing components
+- `api_documentation/` – Directory containing api_documentation components
+- `build_synthesis/` – Directory containing build_synthesis components
+- `ci_cd_automation/` – Directory containing ci_cd_automation components
+- `cli.py` – Project file
+- `code_execution_sandbox/` – Directory containing code_execution_sandbox components
+- `code_review/` – Directory containing code_review components
+- `config_management/` – Directory containing config_management components
+- `containerization/` – Directory containing containerization components
+- `data_visualization/` – Directory containing data_visualization components
+- `database_management/` – Directory containing database_management components
+- `documentation/` – Directory containing documentation components
+- `environment_setup/` – Directory containing environment_setup components
+- `exceptions.py` – Project file
+- `git_operations/` – Directory containing git_operations components
+- `language_models/` – Directory containing language_models components
+- `logging_monitoring/` – Directory containing logging_monitoring components
+- `model_context_protocol/` – Directory containing model_context_protocol components
+- `modeling_3d/` – Directory containing modeling_3d components
+- `module_template/` – Directory containing module_template components
+- `ollama_integration/` – Directory containing ollama_integration components
+- `pattern_matching/` – Directory containing pattern_matching components
+- `performance/` – Directory containing performance components
+- `physical_management/` – Directory containing physical_management components
+- `project_orchestration/` – Directory containing project_orchestration components
+- `security_audit/` – Directory containing security_audit components
+- `static_analysis/` – Directory containing static_analysis components
+- `system_discovery/` – Directory containing system_discovery components
+- `template/` – Directory containing template components
+- `terminal_interface/` – Directory containing terminal_interface components
+- `tests/` – Directory containing tests components
+- `tools/` – Directory containing tools components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Module Relationships
-- **AI & Intelligence**: `ai_code_editing/`, `language_models/`, `ollama_integration/`, `pattern_matching/`
-- **Analysis & Quality**: `static_analysis/`, `security_audit/`, `code_review/`, `code_execution_sandbox/`, `performance/`
-- **Visualization & Reporting**: `data_visualization/`, `api_documentation/`, `documentation/`
-- **Build & Deployment**: `build_synthesis/`, `ci_cd_automation/`, `containerization/`
-- **Infrastructure**: `database_management/`, `environment_setup/`, `config_management/`
-- **System Integration**: `git_operations/`, `model_context_protocol/`, `terminal_interface/`
-- **Advanced Features**: `modeling_3d/`, `physical_management/`, `project_orchestration/`
-- **Development Support**: `module_template/`, `system_discovery/`, `logging_monitoring/`, `tests/`
-
 ## Navigation Links
-- **📚 Package Overview**: [README.md](README.md) - Package documentation and module status
-- **🏠 Source Root**: [../README.md](../README.md) - Source code structure
-- **🏠 Project Root**: [../../README.md](../../README.md) - Main project README
-- **📖 Documentation Hub**: [../../docs/README.md](../../docs/README.md) - Complete documentation structure
-
+- **📁 Parent Directory**: [src](../README.md) - Parent directory documentation

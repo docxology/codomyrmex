@@ -25,7 +25,7 @@ These functions are primarily sourced from the `env_checker.py` script.
 - **Source**: `environment_setup.env_checker.check_and_setup_env_vars`
 - **Description**: Checks for the existence of a `.env` file at the specified `repo_root_path`. 
     - If it exists, it informs the user.
-    - If it does not exist, it prints a message guiding the user to create one, including a template with common API key placeholders (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`). It then calls `sys.exit(1)`.
+    - If it does not exist, it prints detailed instructions for creating a `.env` file with API key configuration examples for OpenAI, Anthropic, and Google AI providers, then exits with status code 1 to indicate the environment is not fully configured.
     - It attempts to load the `.env` file using `dotenv.load_dotenv()` if the file exists.
 - **Method**: N/A (Python function)
 - **Path**: N/A (Importable function)

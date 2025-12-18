@@ -1,14 +1,21 @@
-# Development Scripts
+# development
 
-This directory contains scripts for development workflow enhancement and automation.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Scripts
+## Overview
 
-- **`enhance_documentation.py`** - Enhances existing documentation and generates docstrings
+Automation and utility scripts.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `check_prerequisites.sh` – File
+- `enhance_documentation.py` – File
+- `example_usage.py` – File
+- `generate_coverage_report.py` – File
+- `run_all_examples.sh` – File
+- `select_example.sh` – File
+- `test_examples.sh` – File
 
-```bash
-# Enhance documentation across modules
-python scripts/development/enhance_documentation.py
-```
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)

@@ -629,6 +629,7 @@ def generate_code_batch(
     provider: str = DEFAULT_LLM_PROVIDER,
     model_name: Optional[str] = None,
     parallel: bool = False,
+    max_workers: int = 4,
     **kwargs,
 ) -> list[CodeGenerationResult]:
     """
@@ -639,6 +640,7 @@ def generate_code_batch(
         provider: LLM provider to use
         model_name: Specific model to use (optional)
         parallel: Whether to process requests in parallel
+        max_workers: Maximum number of parallel workers (default: 4)
         **kwargs: Additional parameters for the LLM
 
     Returns:
@@ -651,60 +653,77 @@ def generate_code_batch(
     if not requests:
         raise ValueError("Requests list cannot be empty")
 
-    results = []
+    def process_request(request: CodeGenerationRequest) -> CodeGenerationResult:
+        """Process a single code generation request."""
+        try:
+            result = generate_code_snippet(
+                prompt=request.prompt,
+                language=request.language.value,
+                provider=provider,
+                model_name=model_name,
+                context=request.context,
+                max_length=request.max_length,
+                temperature=request.temperature,
+                **kwargs,
+            )
 
-    if parallel:
-        # TODO: Implement parallel processing
-        logger.warning(
-            "Parallel processing not yet implemented, falling back to sequential"
-        )
-        parallel = False
+            return CodeGenerationResult(
+                generated_code=result["generated_code"],
+                language=request.language,
+                metadata=result["metadata"],
+                execution_time=result["execution_time"],
+                tokens_used=result.get("tokens_used"),
+            )
 
-    if not parallel:
-        for request in requests:
-            try:
-                result = generate_code_snippet(
-                    prompt=request.prompt,
-                    language=request.language.value,
-                    provider=provider,
-                    model_name=model_name,
-                    context=request.context,
-                    max_length=request.max_length,
-                    temperature=request.temperature,
-                    **kwargs,
-                )
+        except (RuntimeError, ValueError, ImportError) as e:
+            logger.error(f"Error processing request: {e}")
+            return CodeGenerationResult(
+                generated_code="",
+                language=request.language,
+                metadata={"error": str(e)},
+                execution_time=0.0,
+            )
+        except Exception as e:
+            logger.error(f"Unexpected error processing request: {e}", exc_info=True)
+            return CodeGenerationResult(
+                generated_code="",
+                language=request.language,
+                metadata={"error": str(e)},
+                execution_time=0.0,
+            )
 
-                code_result = CodeGenerationResult(
-                    generated_code=result["generated_code"],
-                    language=request.language,
-                    metadata=result["metadata"],
-                    execution_time=result["execution_time"],
-                    tokens_used=result.get("tokens_used"),
-                )
-                results.append(code_result)
+    if parallel and len(requests) > 1:
+        from concurrent.futures import ThreadPoolExecutor, as_completed
 
-            except (RuntimeError, ValueError, ImportError) as e:
-                logger.error(f"Error processing request: {e}")
-                # Add error result
-                error_result = CodeGenerationResult(
-                    generated_code="",
-                    language=request.language,
-                    metadata={"error": str(e)},
-                    execution_time=0.0,
-                )
-                results.append(error_result)
-            except Exception as e:
-                # Final fallback for unexpected errors
-                logger.error(f"Unexpected error processing request: {e}", exc_info=True)
-                error_result = CodeGenerationResult(
-                    generated_code="",
-                    language=request.language,
-                    metadata={"error": str(e)},
-                    execution_time=0.0,
-                )
-                results.append(error_result)
+        logger.info(f"Processing {len(requests)} requests in parallel with {max_workers} workers")
+        results_dict: dict[int, CodeGenerationResult] = {}
 
-    return results
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Submit all tasks and track their indices
+            future_to_index = {
+                executor.submit(process_request, req): idx
+                for idx, req in enumerate(requests)
+            }
+
+            for future in as_completed(future_to_index):
+                idx = future_to_index[future]
+                try:
+                    results_dict[idx] = future.result()
+                except Exception as e:
+                    logger.error(f"Parallel execution failed for request {idx}: {e}")
+                    results_dict[idx] = CodeGenerationResult(
+                        generated_code="",
+                        language=requests[idx].language,
+                        metadata={"error": str(e)},
+                        execution_time=0.0,
+                    )
+
+        # Return results in original order
+        return [results_dict[i] for i in range(len(requests))]
+
+    else:
+        # Sequential processing
+        return [process_request(request) for request in requests]
 
 
 @monitor_performance("ai_code_comparison")

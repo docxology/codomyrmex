@@ -1,0 +1,55 @@
+# Cursor Rules for the containerization Module
+
+## 0. Preamble
+These rules are specific to the `containerization` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module manages Docker container lifecycles and orchestration across development and production environments.
+-   **Key Technologies/Tools**: Docker, Kubernetes, container security scanning, performance optimization, container registries.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `containerization` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Containerization module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for container operations and image security.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Containerization.
+-   `src/` (or primary Python package folders, e.g., `containerization/` itself if it contains Python sources directly): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+-   `docker_manager.py`: Core Docker container management functionality.
+-   `kubernetes_orchestrator.py`: Kubernetes orchestration logic.
+-   `container_registry.py`: Container registry management.
+-   `security_scanner.py`: Container security scanning capabilities.
+
+## 3. Coding Standards & Practices for `containerization`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `containerization` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for container configurations and orchestration parameters.
+-   **Container Security**: Implement security best practices for image building, vulnerability scanning, and runtime security.
+-   **Resource Management**: Ensure proper resource limits, cleanup, and monitoring for container operations.
+-   **Orchestration**: Support both Docker Compose and Kubernetes orchestration patterns.
+
+## 4. Testing in `containerization`
+-   New features (e.g., new orchestration patterns, security scanning) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover container lifecycle, orchestration scenarios, and security validations.
+-   Mock Docker/Kubernetes APIs where appropriate to ensure deterministic test behavior.
+-   Run existing tests to ensure no regressions. Refer to `containerization/tests/README.md`.
+
+## 5. Documentation for `containerization`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document container configurations, orchestration patterns, and security considerations clearly.
+-   Include examples of Dockerfiles, Kubernetes manifests, and deployment scenarios.
+
+## 6. Specific Considerations for `containerization`
+-   **Security First**: Container operations must prioritize security, including image scanning and secure configurations.
+-   **Resource Efficiency**: Optimize container images for size, security, and performance.
+-   **Multi-Platform**: Support both Docker and Kubernetes orchestration environments.
+-   **Monitoring**: Integrate with monitoring systems for container health and performance.
+
+## 7. Final Check for `containerization`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that containers build correctly and orchestration works as expected.
+-   Test integration with related modules like `ci_cd_automation` and `build_synthesis`.

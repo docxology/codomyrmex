@@ -111,15 +111,15 @@ serve-docs:
 # Analysis and maintenance
 analyze:
 	@echo "Running project analysis..."
-	uv run python tools/analyze_project.py
+	uv run python -m codomyrmex.tools.analyze_project
 
 check-deps:
 	@echo "Checking dependencies..."
-	uv run python tools/dependency_checker.py
+	uv run python -m codomyrmex.tools.dependency_checker
 
 check-dependencies:
 	@echo "Checking module dependency hierarchy..."
-	uv run python tools/dependency_analyzer.py
+	uv run python -m codomyrmex.tools.dependency_analyzer
 
 # Pre-commit and CI
 pre-commit:

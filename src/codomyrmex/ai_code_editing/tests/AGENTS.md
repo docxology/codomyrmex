@@ -1,27 +1,21 @@
 # Codomyrmex Agents — src/codomyrmex/ai_code_editing/tests
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Test suite for ai code editing functionality, covering unit tests for individual components and integration tests for complete workflows.
+Test files and validation suites.
 
 ## Active Components
-- `integration/` – Agent surface for `integration` components.
-- `unit/` – Agent surface for `unit` components.
+- `README.md` – Project file
+- `integration/` – Directory containing integration components
+- `test_ollama_integration.py` – Project file
+- `unit/` – Directory containing unit components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Tests maintain comprehensive coverage of AI code editing functionality.
-- Test execution validates code generation, refactoring, and droid automation capabilities.
-
-## Related Modules
-- **AI Code Editing Module** (`../`) - Provides the module being tested
-- **Unit Tests** (`unit/`) - Unit-level test validation
-- **Integration Tests** (`integration/`) - Integration test scenarios
 
 ## Navigation Links
-- **📚 Module Overview**: [../README.md](../README.md) - AI code editing module documentation
-- **🧪 Unit Tests**: [unit/AGENTS.md](unit/AGENTS.md) - Unit test coordination
-- **🧪 Integration Tests**: [integration/AGENTS.md](integration/AGENTS.md) - Integration test coordination
-- **🏠 Package Root**: [../../../README.md](../../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../../docs/README.md](../../../../docs/README.md) - Complete documentation
+- **📁 Parent Directory**: [ai_code_editing](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

@@ -1,25 +1,24 @@
 # Codomyrmex Agents — testing/integration
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+
 ## Purpose
-Integration scenarios validating multi-agent flows.
+Test files and validation suites.
 
 ## Active Components
-- Key files: test_documentation_accuracy.py, test_github_functionality_demo.py, test_github_operations_demo.py, test_real_github_repos.py
+- `README.md` – Project file
+- `integration_test.py` – Project file
+- `test_comprehensive_improvements.py` – Project file
+- `test_documentation_accuracy.py` – Project file
+- `test_github_functionality_demo.py` – Project file
+- `test_github_operations_demo.py` – Project file
+- `test_real_github_repos.py` – Project file
+- `verify_all_git_methods_comprehensive.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Integration tests validate multi-module workflows and cross-component interactions.
-- Test scenarios maintain realistic conditions and comprehensive coverage of integration paths.
-
-## Related Modules
-- **Unit Testing** (`../unit/`) - Provides unit test foundation
-- **Testing Suite** (`../`) - Coordinates overall testing strategy
 
 ## Navigation Links
-- **📚 Testing Overview**: [../README.md](../README.md) - Testing suite documentation
-- **🧪 Unit Tests**: [../unit/AGENTS.md](../unit/AGENTS.md) - Unit test coordination
-- **🏠 Project Root**: [../../README.md](../../README.md) - Main project README
-- **📖 Documentation Hub**: [../../docs/README.md](../../docs/README.md) - Complete documentation structure
-- **🧪 Testing Strategy**: [../../docs/development/testing-strategy.md](../../docs/development/testing-strategy.md) - Testing approach and best practices
+- **📁 Parent Directory**: [testing](../README.md) - Parent directory documentation

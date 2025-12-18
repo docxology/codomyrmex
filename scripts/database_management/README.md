@@ -1,36 +1,15 @@
-# Database Management Orchestrator
+# database_management
 
-Thin orchestrator script providing CLI access to the `codomyrmex.database_management` module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
-## Purpose
+## Overview
 
-This orchestrator provides command-line interface for database management, backup, and migration operations.
+Automation and utility scripts.
 
-## Usage
+## Directory Contents
+- `README.md` – File
+- `orchestrate.py` – File
 
-```bash
-# Backup database
-python scripts/database_management/orchestrate.py backup --database mydb --output backup.sql
-
-# Run migrations
-python scripts/database_management/orchestrate.py migrate --database mydb
-```
-
-## Commands
-
-- `backup` - Backup database
-- `migrate` - Run database migrations
-
-## Related Documentation
-
-- **[Module README](../../src/codomyrmex/database_management/README.md)**: Complete module documentation
-- **[CLI Reference](../../docs/reference/cli.md)**: Main CLI documentation
-
-## Integration
-
-This orchestrator calls functions from:
-- `codomyrmex.database_management.backup_database`
-- `codomyrmex.database_management.run_migrations`
-
-See `codomyrmex.cli.py` for main CLI integration.
-
+## Navigation
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../../README.md)
