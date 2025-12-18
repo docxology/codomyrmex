@@ -15,9 +15,72 @@
 
 > **"Transform your development workflow with AI assistance, automated analysis, and intelligent orchestration"**
 
-Codomyrmex is a **revolutionary modular coding workspace** that seamlessly integrates cutting-edge AI capabilities with traditional development tools. Built for the modern developer, it combines **AI-powered code generation**, **comprehensive static analysis**, **sophisticated data visualization**, and **intelligent build orchestration** into a unified, extensible platform.
+Codomyrmex is a **modular AI-powered coding workspace** with **27 specialized modules** you can use individually or combine into powerful workflows. Pick exactly what you need: AI code generation, static analysis, data visualization, build orchestration, security scanning, or all of them together. Each module is self-contained, production-ready, and designed to work seamlessly with the others.
+
+**🎯 Progressive Workflow Examples:**
+
+**1. Single Module** - Use any module independently:
+- `from codomyrmex.data_visualization import create_line_plot` → Visualization only
+- `from codomyrmex.ai_code_editing import generate_code` → AI generation only
+- `from codomyrmex.static_analysis import analyze_code` → Quality analysis only
+
+**2. Two-Module Workflow** - Simple integration:
+- [AI Code Editing](src/codomyrmex/ai_code_editing/) → [Static Analysis](src/codomyrmex/static_analysis/)
+- [Data Visualization](src/codomyrmex/data_visualization/) → [Documentation](src/codomyrmex/documentation/)
+- [Git Operations](src/codomyrmex/git_operations/) → [Build Synthesis](src/codomyrmex/build_synthesis/)
+
+**3. Quality Pipeline** (5 modules):
+- [Code Review](src/codomyrmex/code_review/) → [Static Analysis](src/codomyrmex/static_analysis/) → [Security Audit](src/codomyrmex/security_audit/) → [Performance](src/codomyrmex/performance/) → [Data Visualization](src/codomyrmex/data_visualization/)
+
+**4. AI Development Workflow** (7 modules):
+- [Language Models](src/codomyrmex/language_models/) → [AI Code Editing](src/codomyrmex/ai_code_editing/) → [Pattern Matching](src/codomyrmex/pattern_matching/) → [Code Review](src/codomyrmex/code_review/) → [Static Analysis](src/codomyrmex/static_analysis/) → [Code Execution Sandbox](src/codomyrmex/code_execution_sandbox/) → [Git Operations](src/codomyrmex/git_operations/)
+
+**5. CI/CD Pipeline** (10 modules):
+- [Git Operations](src/codomyrmex/git_operations/) → [Static Analysis](src/codomyrmex/static_analysis/) → [Security Audit](src/codomyrmex/security_audit/) → [Code Execution Sandbox](src/codomyrmex/code_execution_sandbox/) → [Build Synthesis](src/codomyrmex/build_synthesis/) → [Containerization](src/codomyrmex/containerization/) → [CI/CD Automation](src/codomyrmex/ci_cd_automation/) → [Performance](src/codomyrmex/performance/) → [Logging & Monitoring](src/codomyrmex/logging_monitoring/) → [Database Management](src/codomyrmex/database_management/)
+
+**6. Complete Enterprise Platform** - All 27 modules in production workflow:
+- **Setup & Discovery**: [System Discovery](src/codomyrmex/system_discovery/) → [Terminal Interface](src/codomyrmex/terminal_interface/) → [Environment Setup](src/codomyrmex/environment_setup/) → [Config Management](src/codomyrmex/config_management/) → [Logging & Monitoring](src/codomyrmex/logging_monitoring/)
+- **Source Control**: [Git Operations](src/codomyrmex/git_operations/) → [Module Template](src/codomyrmex/module_template/)
+- **AI Integration**: [Language Models](src/codomyrmex/language_models/) → [Ollama Integration](src/codomyrmex/ollama_integration/) → [Model Context Protocol](src/codomyrmex/model_context_protocol/) → [AI Code Editing](src/codomyrmex/ai_code_editing/)
+- **Analysis & Quality**: [Pattern Matching](src/codomyrmex/pattern_matching/) → [Static Analysis](src/codomyrmex/static_analysis/) → [Code Review](src/codomyrmex/code_review/) → [Security Audit](src/codomyrmex/security_audit/) → [Code Execution Sandbox](src/codomyrmex/code_execution_sandbox/) → [Performance](src/codomyrmex/performance/)
+- **Visualization & Docs**: [Data Visualization](src/codomyrmex/data_visualization/) → [API Documentation](src/codomyrmex/api_documentation/) → [Documentation](src/codomyrmex/documentation/)
+- **Infrastructure**: [Database Management](src/codomyrmex/database_management/) → [3D Modeling](src/codomyrmex/modeling_3d/) → [Physical Management](src/codomyrmex/physical_management/)
+- **Build & Deploy**: [Build Synthesis](src/codomyrmex/build_synthesis/) → [Containerization](src/codomyrmex/containerization/) → [CI/CD Automation](src/codomyrmex/ci_cd_automation/)
+- **Orchestration**: [Project Orchestration](src/codomyrmex/project_orchestration/) coordinates all modules
 
 ## ✨ **What Makes Codomyrmex Special?**
+
+### 🎯 **Modular by Design - 27 Specialized Modules**
+
+Each module is a complete, production-ready unit you can use independently:
+
+<div align="center">
+
+| 🤖 **AI & Intelligence** | 🔬 **Analysis & Quality** | 📊 **Visualization** |
+|:---:|:---:|:---:|
+| [AI Code Editing](src/codomyrmex/ai_code_editing/) | [Static Analysis](src/codomyrmex/static_analysis/) | [Data Visualization](src/codomyrmex/data_visualization/) |
+| [Language Models](src/codomyrmex/language_models/) | [Code Review](src/codomyrmex/code_review/) | [API Documentation](src/codomyrmex/api_documentation/) |
+| [Ollama Integration](src/codomyrmex/ollama_integration/) | [Security Audit](src/codomyrmex/security_audit/) | [Documentation](src/codomyrmex/documentation/) |
+| [Pattern Matching](src/codomyrmex/pattern_matching/) | [Code Execution](src/codomyrmex/code_execution_sandbox/) | |
+| | [Performance](src/codomyrmex/performance/) | |
+
+| 🏗️ **Build & Deploy** | 🛠️ **Foundation** | 🎮 **Application** |
+|:---:|:---:|:---:|
+| [Build Synthesis](src/codomyrmex/build_synthesis/) | [Logging & Monitoring](src/codomyrmex/logging_monitoring/) | [Project Orchestration](src/codomyrmex/project_orchestration/) |
+| [Git Operations](src/codomyrmex/git_operations/) | [Environment Setup](src/codomyrmex/environment_setup/) | [Terminal Interface](src/codomyrmex/terminal_interface/) |
+| [CI/CD Automation](src/codomyrmex/ci_cd_automation/) | [Model Context Protocol](src/codomyrmex/model_context_protocol/) | [System Discovery](src/codomyrmex/system_discovery/) |
+| [Containerization](src/codomyrmex/containerization/) | [Config Management](src/codomyrmex/config_management/) | |
+| | [Database Management](src/codomyrmex/database_management/) | |
+
+| 🚀 **Advanced Features** |
+|:---:|
+| [3D Modeling](src/codomyrmex/modeling_3d/) • [Physical Management](src/codomyrmex/physical_management/) • [Module Template](src/codomyrmex/module_template/) |
+
+**[📦 View Complete Module Architecture](#-complete-module-architecture)** | **[🔗 See Module Relationships](docs/modules/relationships.md)**
+
+</div>
+
+### 💡 **Flexibility in Action**
 
 <div align="center">
 
@@ -32,12 +95,25 @@ Codomyrmex is a **revolutionary modular coding workspace** that seamlessly integ
 
 ### 🎯 **Perfect For**
 
-- **🤖 AI-Assisted Development**: Leverage multiple LLM providers for code generation and refactoring
-- **🔍 Code Quality Assurance**: Comprehensive static analysis with security vulnerability scanning
-- **📊 Data-Driven Insights**: Rich visualizations for code metrics and performance analysis
-- **🏗️ Automated Workflows**: Intelligent build orchestration and deployment automation
-- **👥 Team Collaboration**: Standardized development processes across distributed teams
-- **🎓 Learning & Exploration**: Interactive discovery and educational tools for developers
+**🔧 Individual Module Usage:**
+- **[AI Code Editing](src/codomyrmex/ai_code_editing/)** - Generate code with OpenAI, Anthropic, or Google LLMs across 23+ languages
+- **[Static Analysis](src/codomyrmex/static_analysis/)** - Run Pylint, Flake8, Bandit for quality and security scanning
+- **[Data Visualization](src/codomyrmex/data_visualization/)** - Create charts with Matplotlib, Seaborn, Plotly (13+ types)
+- **[Build Synthesis](src/codomyrmex/build_synthesis/)** - Orchestrate builds with quality gates and artifact management
+- **[Git Operations](src/codomyrmex/git_operations/)** - Automate repository workflows and GitHub integration
+- **[Code Review](src/codomyrmex/code_review/)** - Analyze code with Pyscn CFG-based analysis
+- **[Security Audit](src/codomyrmex/security_audit/)** - Scan for vulnerabilities and compliance issues
+
+**🔄 Multi-Module Workflows:**
+- **AI-Assisted Development**: [AI Editing](src/codomyrmex/ai_code_editing/) → [Static Analysis](src/codomyrmex/static_analysis/) → [Code Review](src/codomyrmex/code_review/) → [Git Operations](src/codomyrmex/git_operations/)
+- **Data Pipeline**: Analysis → [Visualization](src/codomyrmex/data_visualization/) → [Documentation](src/codomyrmex/documentation/) → [API Docs](src/codomyrmex/api_documentation/)
+- **CI/CD Pipeline**: [Git Ops](src/codomyrmex/git_operations/) → [Build](src/codomyrmex/build_synthesis/) → [Security Scan](src/codomyrmex/security_audit/) → [Container Deploy](src/codomyrmex/containerization/) → [CI/CD](src/codomyrmex/ci_cd_automation/)
+- **Quality Gates**: [Code Review](src/codomyrmex/code_review/) → [Security Audit](src/codomyrmex/security_audit/) → [Performance Check](src/codomyrmex/performance/) → Deploy
+
+**🎓 Complete Platform:**
+- **Team Collaboration**: Standardized development with [Project Orchestration](src/codomyrmex/project_orchestration/)
+- **Learning & Exploration**: Interactive tools via [Terminal Interface](src/codomyrmex/terminal_interface/)
+- **Enterprise Solutions**: Full-stack capabilities from AI to deployment with monitoring
 
 ---
 
@@ -50,25 +126,47 @@ Get up and running with Codomyrmex in minutes! **[📦 Complete Setup Guide](doc
 ### 🎯 **Current Capabilities (v0.1.0)**
 
 **✅ What's Working Now:**
-- **🤖 Advanced AI Code Editing** - 23 programming languages, 3 LLM providers, comprehensive code generation, refactoring, and analysis
-- **🔍 Comprehensive Static Analysis** - Multi-language support, 8 analysis types, 4 severity levels, security scanning, complexity analysis
-- **📊 Sophisticated Data Visualization** - 7 chart styles, 10 color palettes, 13 plot types, advanced plotting, interactive dashboards
-- **🏗️ Intelligent Build Orchestration** - 8 build types, 4 environments, dependency management, artifact synthesis, deployment automation
+- **🤖 AI Code Editing** - 23 programming languages, 3 LLM providers, comprehensive code generation, refactoring, and analysis
+- **🦙 Ollama Integration** - Local LLM support with self-hosted models and offline capabilities
+- **🧠 Language Models** - Unified LLM provider management and model configuration
+- **🔍 Static Analysis** - Multi-language support, 8 analysis types, 4 severity levels, security scanning, complexity analysis
+- **👁️ Code Review** - Pyscn integration with CFG-based analysis and automated quality checks
+- **📊 Data Visualization** - 7 chart styles, 10 color palettes, 13 plot types, advanced plotting, interactive dashboards
+- **🏗️ Build Orchestration** - 8 build types, 4 environments, dependency management, artifact synthesis, deployment automation
+- **⚙️ CI/CD Automation** - Complete pipeline management with deployment orchestration and rollback capabilities
 - **🎯 Project Orchestration** - Comprehensive workflow management system with performance monitoring
-- **📊 Performance Monitoring** - Real-time performance tracking across all modules
+- **⚡ Performance Monitoring** - Real-time performance tracking with caching and optimization utilities
+- **🔒 Security Audit** - Comprehensive security scanning, vulnerability detection, and compliance checking
+- **🐳 Containerization** - Docker management, Kubernetes orchestration, and deployment pipelines
+- **🗄️ Database Management** - Multi-database support with migration management and connection pooling
+- **⚙️ Config Management** - Environment-specific configuration with secret management
+- **🔌 API Documentation** - OpenAPI/Swagger generation and interactive API explorers
+- **🎨 3D Modeling** - 3D visualization with AR/VR support and rendering pipelines
+- **⚙️ Physical Management** - Physical system simulation with sensor integration
 - **🔄 Cross-Module Integration** - Seamless workflows between AI, analysis, visualization, and build modules
 - **🧪 Comprehensive Testing** - Unit tests, integration tests, performance tests, stress tests
-- **🔧 Enhanced CLI Interface** - Orchestration capabilities and LLM API configuration
-- **📦 Modular Architecture** - Proper imports and extensible module system
+- **🔧 CLI Interface** - Orchestration capabilities and LLM API configuration
+- **📦 Modular Architecture** - 27 specialized modules with extensible design
 
 **🔄 Recent Enhancements:**
-- ✅ Advanced AI code editing with 23 languages and 3 LLM providers
-- ✅ Comprehensive static analysis with multi-language support
-- ✅ Sophisticated data visualization with advanced plotting
-- ✅ Intelligent build orchestration with dependency management
+- ✅ AI code editing with 23 languages and 3 LLM providers
+- ✅ Local LLM support via Ollama integration
+- ✅ Unified language model management
+- ✅ Code review with Pyscn integration
+- ✅ Static analysis with multi-language support
+- ✅ Data visualization with advanced plotting
+- ✅ Build orchestration with dependency management
+- ✅ CI/CD automation with pipeline management
+- ✅ Security audit with vulnerability scanning
+- ✅ Containerization with Docker and Kubernetes support
+- ✅ Database management with migration support
+- ✅ Configuration management with secrets handling
+- ✅ API documentation generation
+- ✅ 3D modeling and visualization capabilities
+- ✅ Physical system simulation
 - ✅ Cross-module integration and workflow automation
-- ✅ Comprehensive testing suite with performance monitoring
-- ✅ Enhanced CLI with LLM API configuration
+- ✅ Testing suite with performance monitoring
+- ✅ CLI with orchestration capabilities
 - ✅ Project orchestration with workflow management
 
 ### **One-Command Setup (Recommended)**
@@ -103,111 +201,170 @@ create_line_plot(x, y, title="Beautiful Sine Wave", output_path="sine_wave.png")
 
 ## 🌟 **Why Choose Codomyrmex?**
 
+### **🎯 True Modularity - Use What You Need**
+
 | Feature | Traditional Tools | Codomyrmex Advantage |
 |---------|-------------------|---------------------|
-| **🤖 AI Integration** | Manual + Separate Tools | **Unified AI workflow** with 3 LLM providers |
-| **🔍 Code Analysis** | Individual Linters | **Multi-language analysis** with security scanning |
-| **📊 Visualization** | Basic Chart Libraries | **Rich, interactive dashboards** with 13+ chart types |
-| **🏗️ Build System** | Complex Configuration | **Intelligent orchestration** with quality gates |
-| **🔧 Modularity** | Monolithic Applications | **Mix & match 15+ modules** for your exact needs |
-| **🚀 Performance** | Resource Heavy | **Optimized workflows** with performance monitoring |
+| **🔧 Architecture** | Monolithic or scattered tools | **27 independent modules** - use 1 or all |
+| **🤖 AI Integration** | Manual + Separate Tools | **4 AI modules** work standalone or together |
+| **🔍 Code Analysis** | Individual Linters | **5 analysis modules** from quality to security |
+| **📊 Visualization** | Basic Chart Libraries | **3 visualization modules** for any data need |
+| **🏗️ Build System** | Complex Configuration | **4 build/deploy modules** with smart orchestration |
+| **🚀 Performance** | Resource Heavy | Each module **optimized independently** |
+
+### **💡 Mix & Match Power**
+
+```python
+# Just need visualization? Use only that module:
+from codomyrmex.data_visualization import create_plot
+
+# Need AI + Analysis? Combine two modules:
+from codomyrmex.ai_code_editing import generate_code
+from codomyrmex.static_analysis import analyze_code
+
+# Want the full platform? Use project orchestration:
+from codomyrmex.project_orchestration import execute_workflow
+```
+
+**Every module works independently** with zero dependencies on others, yet they integrate seamlessly when you need multi-module workflows.
 
 ### **Real-World Impact:**
-- **⏱️ 10x Faster Development**: AI-assisted coding with automated analysis
-- **🔒 Enterprise Security**: Built-in security scanning and sandboxed execution
-- **📈 Better Insights**: Rich visualizations turn data into actionable insights
-- **🤝 Team Collaboration**: Standardized workflows across development teams
+- **⏱️ 10x Faster Development**: Use AI modules for code generation and analysis
+- **🔒 Enterprise Security**: [Security Audit](src/codomyrmex/security_audit/) + [Code Review](src/codomyrmex/code_review/) modules
+- **📈 Better Insights**: [Data Visualization](src/codomyrmex/data_visualization/) + [Performance](src/codomyrmex/performance/) modules
+- **🤝 Team Collaboration**: [Project Orchestration](src/codomyrmex/project_orchestration/) + [Git Operations](src/codomyrmex/git_operations/) modules
+- **🎯 Custom Workflows**: Pick your modules, define your pipeline
+
+**[📦 Browse All 27 Modules](#-module-categories--capabilities)** | **[🔗 See Integration Patterns](docs/modules/relationships.md)** | **[🎯 View Workflow Examples](scripts/examples/README.md)**
 
 
 ## 🔥 **See Codomyrmex in Action**
 
-### **AI-Powered Development Workflow**
+### **🎯 Single Module Examples**
+
 ```python
-# 1️⃣ Generate code with AI
+# 📊 Data Visualization - Use just one module
+from codomyrmex.data_visualization import create_line_plot, create_heatmap
+import numpy as np
+
+x = np.linspace(0, 10, 100)
+create_line_plot(x, np.sin(x), title="Sine Wave", output_path="sine.png")
+```
+
+```python
+# 🤖 AI Code Generation - Another standalone module
 from codomyrmex.ai_code_editing import generate_code_snippet
 
-result = generate_code_snippet(
-    prompt="Create a secure REST API endpoint with authentication",
+code = generate_code_snippet(
+    prompt="Create a REST API endpoint with authentication",
     language="python",
     provider="openai"
 )
-print("🤖 AI Generated:", result['generated_code'][:200] + "...")
+print(code['generated_code'])
+```
 
-# 2️⃣ Analyze code quality automatically
+```python
+# 🔍 Static Analysis - Independent code quality checks
 from codomyrmex.static_analysis import analyze_code_quality
 
-quality = analyze_code_quality(result['generated_code'], "python")
-print(f"🔍 Quality Score: {quality['score']}/10")
+quality = analyze_code_quality("my_code.py", "python")
+print(f"Quality Score: {quality['score']}/10")
+```
 
-# 3️⃣ Create beautiful documentation
+### **🔗 Two-Module Integration**
+
+```python
+# AI Generation + Static Analysis
+from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.static_analysis import analyze_code_quality
+
+# 1. Generate code with AI
+result = generate_code_snippet(
+    prompt="Create a secure login function",
+    language="python"
+)
+
+# 2. Analyze the generated code
+quality = analyze_code_quality(result['generated_code'], "python")
+print(f"Generated code quality: {quality['score']}/10")
+```
+
+### **🚀 Multi-Module Workflow**
+
+```python
+# Complete AI-Powered Development Pipeline
+from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.static_analysis import analyze_code_quality
+from codomyrmex.code_review import review_code
 from codomyrmex.data_visualization import create_advanced_dashboard
 
+# 1️⃣ Generate code with AI
+code = generate_code_snippet(
+    prompt="Create a secure REST API endpoint",
+    language="python",
+    provider="openai"
+)
+
+# 2️⃣ Analyze code quality
+quality = analyze_code_quality(code['generated_code'], "python")
+
+# 3️⃣ Run comprehensive code review
+review = review_code(code['generated_code'], checks=["security", "performance"])
+
+# 4️⃣ Visualize metrics
 dashboard = create_advanced_dashboard(
-    datasets=[{"name": "API Performance", "data": quality['metrics']}],
-    title="API Analysis Dashboard"
-)
-```
-
-### **Advanced Data Analysis Pipeline**
-```python
-# 📊 Transform raw data into insights
-from codomyrmex.data_visualization import create_heatmap, create_advanced_line_plot
-import pandas as pd
-
-# Load your data
-data = pd.read_csv('sales_data.csv')
-
-# Create multiple visualizations
-create_heatmap(
-    data.corr(),
-    title="Sales Correlation Matrix",
-    output_path="correlation_heatmap.png"
+    datasets=[
+        {"name": "Quality Metrics", "data": quality['metrics']},
+        {"name": "Security Findings", "data": review['security_issues']}
+    ],
+    title="Code Analysis Dashboard"
 )
 
-create_advanced_line_plot(
-    x_data=data['month'],
-    y_data=data['revenue'],
-    title="Monthly Revenue Trends",
-    output_path="revenue_trends.png"
-)
+print(f"✅ Quality: {quality['score']}/10 | Security Issues: {len(review['security_issues'])}")
 ```
 
-### **Intelligent Build Orchestration**
+### **🏗️ Full Platform Example**
+
 ```python
-# 🏗️ Automate your entire build pipeline
-from codomyrmex.build_synthesis import orchestrate_build_pipeline
-
-build_result = orchestrate_build_pipeline({
-    "type": "comprehensive",
-    "targets": ["python_package", "docker_image", "documentation"],
-    "quality_gates": ["security_scan", "unit_tests", "coverage_90"]
-})
-
-print(f"✅ Build Status: {build_result['status']}")
-print(f"📦 Artifacts: {len(build_result['artifacts'])} created")
-```
-
-### **Cross-Module Workflow Magic**
-```python
-# 🔄 Chain operations across multiple modules
+# Enterprise CI/CD Pipeline with AI and Quality Gates
 from codomyrmex.project_orchestration import execute_workflow
 
-# Create a complete development workflow
-workflow_result = execute_workflow("ai_enhanced_development", {
-    "code_generation": {
-        "prompt": "Build a web scraper for news articles",
+# Define complete workflow across 7 modules
+workflow_result = execute_workflow("enterprise_pipeline", {
+    "git_operations": {
+        "branch": "feature/new-api",
+        "auto_commit": True
+    },
+    "ai_code_editing": {
+        "prompt": "Generate API documentation",
         "language": "python"
     },
-    "analysis": {
-        "security_scan": True,
-        "performance_check": True
+    "static_analysis": {
+        "analysis_types": ["quality", "security", "complexity"],
+        "fail_threshold": 7.0
     },
-    "visualization": {
-        "create_dashboard": True,
-        "output_formats": ["png", "html"]
+    "code_review": {
+        "checks": ["security", "performance", "best_practices"]
+    },
+    "security_audit": {
+        "scan_dependencies": True,
+        "compliance_check": True
+    },
+    "build_synthesis": {
+        "targets": ["python_package", "docker_image"],
+        "quality_gates": ["tests_pass", "coverage_80"]
+    },
+    "ci_cd_automation": {
+        "deploy_on_success": True,
+        "environment": "staging"
     }
 })
+
+print(f"Pipeline Status: {workflow_result['status']}")
+print(f"Modules Executed: {', '.join(workflow_result['modules_used'])}")
 ```
+
+**[📖 More Examples](scripts/examples/README.md)** | **[🎓 Tutorials](docs/getting-started/tutorials/)** | **[🔗 Module Integration Patterns](docs/modules/relationships.md)**
 
 ## Enhanced Capabilities Examples
 
@@ -387,50 +544,60 @@ print(f"Workflow status: {execution.status.value}")
 - 🔄 **Plugin System** - Extensible architecture for custom modules
 - 📈 **Advanced Analytics** - Code metrics and performance insights
 
-## 🏗️ **Enhanced Core Modules**
+## 🏗️ **Core Modules**
 
-Codomyrmex's modular architecture gives you **28 specialized modules** that you can use individually or combine into powerful workflows. Each module is self-contained with comprehensive documentation, tests, and examples.
+Codomyrmex's modular architecture gives you **27 specialized modules** that you can use individually or combine into powerful workflows. Each module is self-contained with comprehensive documentation, tests, and examples.
 
 ### **🎯 Complete Module Architecture**
 
 ```mermaid
 graph TB
-    subgraph "🎮 Application Layer"
-        TerminalInterface["💻 Terminal Interface<br/>CLI & Interactive Shell"]
-        ProjectOrchestration["🎯 Project Orchestration<br/>Workflow Management"]
-        SystemDiscovery["🔍 System Discovery<br/>Module Introspection"]
+    subgraph applicationLayer [Application Layer]
+        TerminalInterface[Terminal Interface]
+        ProjectOrchestration[Project Orchestration]
+        SystemDiscovery[System Discovery]
     end
 
-    subgraph "🤖 AI & Intelligence Layer"
-        AICodeEditing["🤖 AI Code Editing<br/>Code Generation & Analysis"]
-        PatternMatching["🔍 Pattern Matching<br/>Code Pattern Recognition"]
+    subgraph aiLayer [AI and Intelligence Layer]
+        AICodeEditing[AI Code Editing]
+        PatternMatching[Pattern Matching]
+        LanguageModels[Language Models]
+        OllamaIntegration[Ollama Integration]
     end
 
-    subgraph "🔬 Analysis & Quality Layer"
-        StaticAnalysis["🔍 Static Analysis<br/>Code Quality & Security"]
-        CodeExecution["🏃 Code Execution Sandbox<br/>Secure Code Testing"]
-        SecurityAudit["🔒 Security Audit<br/>Vulnerability Scanning"]
+    subgraph analysisLayer [Analysis and Quality Layer]
+        StaticAnalysis[Static Analysis]
+        CodeExecution[Code Execution Sandbox]
+        SecurityAudit[Security Audit]
+        CodeReview[Code Review]
+        Performance[Performance]
     end
 
-    subgraph "📊 Visualization & Reporting Layer"
-        DataVisualization["📊 Data Visualization<br/>Charts & Dashboards"]
-        Documentation["📚 Documentation<br/>Website Generation"]
-        ApiDocumentation["🔌 API Documentation<br/>API Reference Generation"]
+    subgraph visualizationLayer [Visualization and Reporting Layer]
+        DataVisualization[Data Visualization]
+        Documentation[Documentation]
+        ApiDocumentation[API Documentation]
     end
 
-    subgraph "🏗️ Build & Deployment Layer"
-        BuildSynthesis["🏗️ Build Synthesis<br/>Build Orchestration"]
-        GitOperations["📦 Git Operations<br/>Repository Management"]
-        Containerization["🐳 Containerization<br/>Docker & Deployment"]
-        CiCdAutomation["⚙️ CI/CD Automation<br/>Pipeline Management"]
+    subgraph buildLayer [Build and Deployment Layer]
+        BuildSynthesis[Build Synthesis]
+        GitOperations[Git Operations]
+        Containerization[Containerization]
+        CiCdAutomation[CI/CD Automation]
     end
 
-    subgraph "🛠️ Foundation Layer"
-        LoggingMonitoring["📋 Logging & Monitoring<br/>Structured Logging"]
-        EnvironmentSetup["🌱 Environment Setup<br/>Dev Environment"]
-        ModelContextProtocol["🔗 Model Context Protocol<br/>AI Communication"]
-        ConfigManagement["⚙️ Config Management<br/>Configuration"]
-        DatabaseManagement["🗄️ Database Management<br/>Data Persistence"]
+    subgraph foundationLayer [Foundation Layer]
+        LoggingMonitoring[Logging and Monitoring]
+        EnvironmentSetup[Environment Setup]
+        ModelContextProtocol[Model Context Protocol]
+        ConfigManagement[Config Management]
+        DatabaseManagement[Database Management]
+    end
+
+    subgraph advancedLayer [Advanced Features Layer]
+        Modeling3D[3D Modeling]
+        PhysicalManagement[Physical Management]
+        ModuleTemplate[Module Template]
     end
 
     %% Application Layer Connections
@@ -438,27 +605,25 @@ graph TB
     ProjectOrchestration --> SystemDiscovery
 
     %% AI Layer Connections
+    AICodeEditing --> LanguageModels
     AICodeEditing --> PatternMatching
-    PatternMatching --> LoggingMonitoring
+    OllamaIntegration --> LanguageModels
+    LanguageModels --> ModelContextProtocol
 
     %% Analysis Layer Connections
     StaticAnalysis --> CodeExecution
+    CodeReview --> StaticAnalysis
     CodeExecution --> SecurityAudit
-    StaticAnalysis --> LoggingMonitoring
-    CodeExecution --> LoggingMonitoring
-    SecurityAudit --> LoggingMonitoring
+    Performance --> StaticAnalysis
 
     %% Visualization Layer Connections
     DataVisualization --> Documentation
     Documentation --> ApiDocumentation
-    DataVisualization --> LoggingMonitoring
 
     %% Build Layer Connections
     BuildSynthesis --> GitOperations
     GitOperations --> Containerization
     Containerization --> CiCdAutomation
-    BuildSynthesis --> LoggingMonitoring
-    GitOperations --> LoggingMonitoring
 
     %% Foundation Layer Connections
     LoggingMonitoring --> EnvironmentSetup
@@ -466,15 +631,18 @@ graph TB
     ModelContextProtocol --> ConfigManagement
     ConfigManagement --> DatabaseManagement
 
+    %% Advanced Layer Connections
+    Modeling3D --> DataVisualization
+    PhysicalManagement --> Modeling3D
+    ModuleTemplate --> LoggingMonitoring
+
     %% Cross-Layer Dependencies
     AICodeEditing -.-> LoggingMonitoring
-    AICodeEditing -.-> EnvironmentSetup
-    AICodeEditing -.-> ModelContextProtocol
-
     StaticAnalysis -.-> LoggingMonitoring
     DataVisualization -.-> LoggingMonitoring
     BuildSynthesis -.-> LoggingMonitoring
     ProjectOrchestration -.-> LoggingMonitoring
+    CodeReview -.-> LoggingMonitoring
 ```
 
 ### **🎯 Module Categories & Capabilities**
@@ -482,46 +650,58 @@ graph TB
 #### **🤖 AI & Intelligence Layer**
 | Module | Description | Key Features | Use Cases |
 |--------|-------------|--------------|-----------|
-| **🤖 AI Code Editing** | **AI-powered code generation, refactoring, and analysis** | OpenAI, Anthropic, Google LLMs<br>23+ programming languages<br>Code quality analysis | Generate boilerplate code<br>Refactor legacy code<br>Code review assistance |
-| **🔍 Pattern Matching** | **Advanced code analysis and pattern recognition** | Repository structure analysis<br>Dependency mapping<br>Code similarity detection | Understand legacy codebases<br>Find code duplication<br>Architecture analysis |
+| **🤖 AI Code Editing** | AI-powered code generation, refactoring, and analysis | OpenAI, Anthropic, Google LLMs<br>23+ programming languages<br>Code quality analysis | Generate boilerplate code<br>Refactor legacy code<br>Code review assistance |
+| **🔍 Pattern Matching** | Advanced code analysis and pattern recognition | Repository structure analysis<br>Dependency mapping<br>Code similarity detection | Understand legacy codebases<br>Find code duplication<br>Architecture analysis |
+| **🧠 Language Models** | LLM integration and model management | Multiple LLM provider support<br>Model configuration<br>Output management | AI-powered features<br>Custom model integration<br>LLM experimentation |
+| **🦙 Ollama Integration** | Local LLM integration via Ollama | Self-hosted models<br>Privacy-focused AI<br>Offline capabilities | Private code analysis<br>On-premise AI<br>Development without cloud dependencies |
 
 #### **🔬 Analysis & Quality Layer**
 | Module | Description | Key Features | Use Cases |
 |--------|-------------|--------------|-----------|
-| **🔍 Static Analysis** | **Multi-language code quality and security analysis** | Pylint, Flake8, Bandit<br>8 analysis types<br>Security vulnerability scanning | Code quality gates<br>Security compliance<br>Performance optimization |
-| **🏃 Code Execution Sandbox** | **Secure multi-language code execution** | Docker-based isolation<br>8+ language support<br>Resource limits and timeouts | Test code snippets safely<br>Run untrusted code<br>Dynamic analysis |
-| **🔒 Security Audit** | **Advanced security vulnerability scanning** | Comprehensive security analysis<br>Dependency vulnerability detection<br>Compliance checking | Enterprise security<br>Compliance auditing<br>Risk assessment |
+| **🔍 Static Analysis** | Multi-language code quality and security analysis | Pylint, Flake8, Bandit<br>8 analysis types<br>Security vulnerability scanning | Code quality gates<br>Security compliance<br>Performance optimization |
+| **🏃 Code Execution Sandbox** | Secure multi-language code execution | Docker-based isolation<br>8+ language support<br>Resource limits and timeouts | Test code snippets safely<br>Run untrusted code<br>Dynamic analysis |
+| **🔒 Security Audit** | Security vulnerability scanning and compliance | Comprehensive security analysis<br>Dependency vulnerability detection<br>Compliance checking | Enterprise security<br>Compliance auditing<br>Risk assessment |
+| **👁️ Code Review** | Comprehensive code review and analysis | Pyscn integration<br>Multi-language support<br>Performance optimization analysis | Automated code reviews<br>Quality assurance<br>Best practices enforcement |
+| **⚡ Performance** | Performance monitoring and optimization | Caching strategies<br>Lazy loading<br>Performance profiling | Application optimization<br>Resource monitoring<br>Bottleneck identification |
 
 #### **📊 Visualization & Reporting Layer**
 | Module | Description | Key Features | Use Cases |
 |--------|-------------|--------------|-----------|
-| **📊 Data Visualization** | **Rich plotting and interactive dashboards** | Matplotlib, Seaborn, Plotly<br>13+ chart types<br>7 color palettes<br>Interactive dashboards | Data analysis reports<br>Performance monitoring<br>Business intelligence |
-| **📚 Documentation** | **Automated documentation generation** | Docusaurus websites<br>API documentation<br>Versioned documentation | Project documentation<br>API references<br>Team knowledge base |
-| **🔌 API Documentation** | **Automated API reference generation** | OpenAPI/Swagger generation<br>Interactive API explorers<br>Real-time documentation | API documentation<br>Developer portals<br>SDK generation |
+| **📊 Data Visualization** | Rich plotting and interactive dashboards | Matplotlib, Seaborn, Plotly<br>13+ chart types<br>7 color palettes<br>Interactive dashboards | Data analysis reports<br>Performance monitoring<br>Business intelligence |
+| **📚 Documentation** | Automated documentation generation | Docusaurus websites<br>API documentation<br>Versioned documentation | Project documentation<br>API references<br>Team knowledge base |
+| **🔌 API Documentation** | Automated API reference generation | OpenAPI/Swagger generation<br>Interactive API explorers<br>Real-time documentation | API documentation<br>Developer portals<br>SDK generation |
 
 #### **🏗️ Build & Deployment Layer**
 | Module | Description | Key Features | Use Cases |
 |--------|-------------|--------------|-----------|
-| **🏗️ Build Synthesis** | **Intelligent build orchestration** | Multi-target builds<br>Quality gates<br>Artifact synthesis<br>8 build types | CI/CD pipelines<br>Release management<br>Multi-platform builds |
-| **📦 Git Operations** | **Advanced Git workflow automation** | Repository management<br>Branch automation<br>GitHub integration | Automated releases<br>Code review workflows<br>Team collaboration |
-| **🐳 Containerization** | **Docker and deployment automation** | Multi-stage builds<br>Container orchestration<br>Deployment pipelines | Cloud deployment<br>Microservices<br>DevOps automation |
-| **⚙️ CI/CD Automation** | **Complete pipeline management** | GitHub Actions integration<br>Automated testing<br>Deployment automation | Continuous integration<br>Continuous deployment<br>Quality gates |
+| **🏗️ Build Synthesis** | Intelligent build orchestration | Multi-target builds<br>Quality gates<br>Artifact synthesis<br>8 build types | CI/CD pipelines<br>Release management<br>Multi-platform builds |
+| **📦 Git Operations** | Git workflow automation and repository management | Repository management<br>Branch automation<br>GitHub integration<br>Metadata tracking | Automated releases<br>Code review workflows<br>Team collaboration |
+| **🐳 Containerization** | Docker and deployment automation | Multi-stage builds<br>Container orchestration<br>Kubernetes support | Cloud deployment<br>Microservices<br>DevOps automation |
+| **⚙️ CI/CD Automation** | Complete pipeline management | GitHub Actions integration<br>Automated testing<br>Deployment automation<br>Rollback management | Continuous integration<br>Continuous deployment<br>Quality gates |
 
 #### **🛠️ Foundation Layer**
 | Module | Description | Key Features | Use Cases |
 |--------|-------------|--------------|-----------|
-| **📋 Logging & Monitoring** | **Structured logging and performance monitoring** | JSON logging<br>Performance metrics<br>Multi-format output | Application monitoring<br>Debugging<br>Performance analysis |
-| **🌱 Environment Setup** | **Development environment management** | Dependency validation<br>Setup automation<br>Environment checking | Developer onboarding<br>CI/CD setup<br>Environment consistency |
-| **🔗 Model Context Protocol** | **Standardized AI/LLM communication** | MCP tool specifications<br>AI integration framework<br>Cross-provider compatibility | AI tool development<br>LLM integration<br>Agent communication |
-| **⚙️ Config Management** | **Advanced configuration management** | Environment-specific configs<br>Secret management<br>Configuration validation | Multi-environment deployments<br>Secure configuration<br>Compliance |
-| **🗄️ Database Management** | **Database integration and management** | Multi-database support<br>Migration management<br>Connection pooling | Data persistence<br>Analytics<br>Enterprise applications |
+| **📋 Logging & Monitoring** | Structured logging and performance monitoring | JSON logging<br>Performance metrics<br>Multi-format output | Application monitoring<br>Debugging<br>Performance analysis |
+| **🌱 Environment Setup** | Development environment management | Dependency validation<br>Setup automation<br>Environment checking | Developer onboarding<br>CI/CD setup<br>Environment consistency |
+| **🔗 Model Context Protocol** | Standardized AI/LLM communication | MCP tool specifications<br>AI integration framework<br>Cross-provider compatibility | AI tool development<br>LLM integration<br>Agent communication |
+| **⚙️ Config Management** | Configuration management and secrets | Environment-specific configs<br>Secret management<br>Configuration validation | Multi-environment deployments<br>Secure configuration<br>Compliance |
+| **🗄️ Database Management** | Database integration and management | Multi-database support<br>Migration management<br>Connection pooling | Data persistence<br>Analytics<br>Enterprise applications |
 
 #### **🎮 Application Layer**
 | Module | Description | Key Features | Use Cases |
 |--------|-------------|--------------|-----------|
-| **🎯 Project Orchestration** | **Workflow coordination and project management** | Multi-module workflows<br>Performance monitoring<br>Dependency management | Complex project workflows<br>Team coordination<br>Process automation |
-| **💻 Terminal Interface** | **Interactive CLI and exploration tools** | Rich terminal UI<br>Interactive shell<br>Command discovery | Developer productivity<br>System exploration<br>Interactive workflows |
-| **🔍 System Discovery** | **Module and capability introspection** | Runtime module discovery<br>Capability mapping<br>System health monitoring | Developer tools<br>System administration<br>Debugging support |
+| **🎯 Project Orchestration** | Workflow coordination and project management | Multi-module workflows<br>Performance monitoring<br>Dependency management | Complex project workflows<br>Team coordination<br>Process automation |
+| **💻 Terminal Interface** | Interactive CLI and exploration tools | Rich terminal UI<br>Interactive shell<br>Command discovery | Developer productivity<br>System exploration<br>Interactive workflows |
+| **🔍 System Discovery** | Module and capability introspection | Runtime module discovery<br>Capability mapping<br>System health monitoring | Developer tools<br>System administration<br>Debugging support |
+
+#### **🚀 Advanced Features Layer**
+| Module | Description | Key Features | Use Cases |
+|--------|-------------|--------------|-----------|
+| **🎨 3D Modeling** | 3D visualization and modeling capabilities | 3D engine integration<br>AR/VR support<br>Rendering pipelines | 3D visualizations<br>Immersive experiences<br>Spatial computing |
+| **⚙️ Physical Management** | Physical system simulation and management | Sensor integration<br>Simulation engine<br>Object management<br>Analytics | IoT applications<br>Robotics<br>Physical system modeling |
+| **📝 Module Template** | Standardized module scaffolding | Complete module structure<br>Documentation templates<br>Test frameworks | New module creation<br>Consistency enforcement<br>Best practices |
+
 
 ## Core Project Structure & Conventions
 
@@ -762,10 +942,33 @@ graph TD
 | Module | Documentation | API Reference | Tutorials |
 |--------|---------------|---------------|-----------|
 | **AI Code Editing** | [📚 Docs](src/codomyrmex/ai_code_editing/README.md) | [🔌 API](src/codomyrmex/ai_code_editing/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/ai_code_editing/docs/tutorials/) |
+| **API Documentation** | [📚 Docs](src/codomyrmex/api_documentation/README.md) | [🔌 API](src/codomyrmex/api_documentation/) | - |
+| **Build Synthesis** | [📚 Docs](src/codomyrmex/build_synthesis/README.md) | [🔌 API](src/codomyrmex/build_synthesis/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/build_synthesis/docs/tutorials/) |
+| **CI/CD Automation** | [📚 Docs](src/codomyrmex/ci_cd_automation/README.md) | [🔌 API](src/codomyrmex/ci_cd_automation/) | - |
+| **Code Execution Sandbox** | [📚 Docs](src/codomyrmex/code_execution_sandbox/README.md) | [🔌 API](src/codomyrmex/code_execution_sandbox/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/code_execution_sandbox/docs/tutorials/) |
+| **Code Review** | [📚 Docs](src/codomyrmex/code_review/README.md) | [🔌 API](src/codomyrmex/code_review/API_SPECIFICATION.md) | - |
+| **Config Management** | [📚 Docs](src/codomyrmex/config_management/README.md) | [🔌 API](src/codomyrmex/config_management/) | - |
+| **Containerization** | [📚 Docs](src/codomyrmex/containerization/README.md) | [🔌 API](src/codomyrmex/containerization/) | - |
 | **Data Visualization** | [📚 Docs](src/codomyrmex/data_visualization/README.md) | [🔌 API](src/codomyrmex/data_visualization/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/data_visualization/docs/tutorials/) |
-| **Code Execution** | [📚 Docs](src/codomyrmex/code_execution_sandbox/README.md) | [🔌 API](src/codomyrmex/code_execution_sandbox/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/code_execution_sandbox/docs/tutorials/) |
+| **Database Management** | [📚 Docs](src/codomyrmex/database_management/README.md) | [🔌 API](src/codomyrmex/database_management/) | - |
+| **Documentation** | [📚 Docs](src/codomyrmex/documentation/README.md) | [🔌 API](src/codomyrmex/documentation/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/documentation/docs/tutorials/) |
+| **Environment Setup** | [📚 Docs](src/codomyrmex/environment_setup/README.md) | [🔌 API](src/codomyrmex/environment_setup/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/environment_setup/docs/tutorials/) |
+| **Git Operations** | [📚 Docs](src/codomyrmex/git_operations/README.md) | [🔌 API](src/codomyrmex/git_operations/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/git_operations/docs/tutorials/) |
+| **Language Models** | [📚 Docs](src/codomyrmex/language_models/README.md) | [🔌 API](src/codomyrmex/language_models/) | - |
+| **Logging & Monitoring** | [📚 Docs](src/codomyrmex/logging_monitoring/README.md) | [🔌 API](src/codomyrmex/logging_monitoring/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/logging_monitoring/docs/tutorials/) |
+| **Model Context Protocol** | [📚 Docs](src/codomyrmex/model_context_protocol/README.md) | [🔌 API](src/codomyrmex/model_context_protocol/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/model_context_protocol/docs/tutorials/) |
+| **3D Modeling** | [📚 Docs](src/codomyrmex/modeling_3d/README.md) | [🔌 API](src/codomyrmex/modeling_3d/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/modeling_3d/docs/tutorials/) |
+| **Module Template** | [📚 Docs](src/codomyrmex/module_template/README.md) | [🔌 API](src/codomyrmex/module_template/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/module_template/docs/tutorials/) |
+| **Ollama Integration** | [📚 Docs](src/codomyrmex/ollama_integration/README.md) | [🔌 API](src/codomyrmex/ollama_integration/) | - |
 | **Pattern Matching** | [📚 Docs](src/codomyrmex/pattern_matching/README.md) | [🔌 API](src/codomyrmex/pattern_matching/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/pattern_matching/docs/tutorials/) |
+| **Performance** | [📚 Docs](src/codomyrmex/performance/README.md) | [🔌 API](src/codomyrmex/performance/API_SPECIFICATION.md) | - |
+| **Physical Management** | [📚 Docs](src/codomyrmex/physical_management/README.md) | [🔌 API](src/codomyrmex/physical_management/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/physical_management/docs/tutorials/) |
+| **Project Orchestration** | [📚 Docs](src/codomyrmex/project_orchestration/README.md) | [🔌 API](src/codomyrmex/project_orchestration/API_SPECIFICATION.md) | - |
+| **Security Audit** | [📚 Docs](src/codomyrmex/security_audit/README.md) | [🔌 API](src/codomyrmex/security_audit/) | - |
 | **Static Analysis** | [📚 Docs](src/codomyrmex/static_analysis/README.md) | [🔌 API](src/codomyrmex/static_analysis/API_SPECIFICATION.md) | [🎓 Tutorials](src/codomyrmex/static_analysis/docs/tutorials/) |
+| **System Discovery** | [📚 Docs](src/codomyrmex/system_discovery/README.md) | [🔌 API](src/codomyrmex/system_discovery/API_SPECIFICATION.md) | - |
+| **Terminal Interface** | [📚 Docs](src/codomyrmex/terminal_interface/README.md) | [🔌 API](src/codomyrmex/terminal_interface/API_SPECIFICATION.md) | - |
+
 
 ## 📚 Complete Documentation Hub
 

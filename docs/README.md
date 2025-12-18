@@ -10,7 +10,7 @@ This `docs/` folder contains documentation **about** Codomyrmex as a project:
 - Architecture and design decisions
 - Project governance and policies
 
-**Not to be confused with** `src/codomyrmex/documentation/` which is a **module** that provides documentation generation capabilities for other projects.
+The repo level `docs/` folder is **Not to be confused with** `src/codomyrmex/documentation/` which is a **module** that provides documentation generation capabilities for other project (e.g. repositories cloned using the `codomyrmex` git_operations module in `src/codomyrmex/git_operations/`).
 
 ## 📁 Documentation Structure
 

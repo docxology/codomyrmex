@@ -6,33 +6,34 @@
 Primary Python package bundling all Codomyrmex agents and shared tooling.
 
 ## Active Components
-- `ai_code_editing/` – Agent surface for `ai_code_editing` components.
-- `api_documentation/` – Agent surface for `api_documentation` components.
-- `build_synthesis/` – Agent surface for `build_synthesis` components.
-- `ci_cd_automation/` – Agent surface for `ci_cd_automation` components.
-- `code_execution_sandbox/` – Agent surface for `code_execution_sandbox` components.
-- `code_review/` – Agent surface for `code_review` components.
-- `config_management/` – Agent surface for `config_management` components.
-- `containerization/` – Agent surface for `containerization` components.
-- `data_visualization/` – Agent surface for `data_visualization` components.
-- `database_management/` – Agent surface for `database_management` components.
-- `documentation/` – Agent surface for `documentation` components.
-- `environment_setup/` – Agent surface for `environment_setup` components.
-- `git_operations/` – Agent surface for `git_operations` components.
-- `language_models/` – Agent surface for `language_models` components.
-- `logging_monitoring/` – Agent surface for `logging_monitoring` components.
-- `model_context_protocol/` – Agent surface for `model_context_protocol` components.
-- `modeling_3d/` – Agent surface for `modeling_3d` components.
-- `module_template/` – Agent surface for `module_template` components.
-- `pattern_matching/` – Agent surface for `pattern_matching` components.
-- `performance/` – Agent surface for `performance` components.
-- `physical_management/` – Agent surface for `physical_management` components.
-- `project_orchestration/` – Agent surface for `project_orchestration` components.
-- `security_audit/` – Agent surface for `security_audit` components.
-- `static_analysis/` – Agent surface for `static_analysis` components.
-- `system_discovery/` – Agent surface for `system_discovery` components.
-- `terminal_interface/` – Agent surface for `terminal_interface` components.
-- `tests/` – Agent surface for `tests` components.
+- `ai_code_editing/` – AI-powered code generation and editing with multi-provider LLM support
+- `api_documentation/` – API documentation generation with OpenAPI/Swagger support
+- `build_synthesis/` – Build automation and code synthesis pipelines
+- `ci_cd_automation/` – CI/CD pipeline management and deployment orchestration
+- `code_execution_sandbox/` – Secure code execution in sandboxed environments
+- `code_review/` – Comprehensive code review with Pyscn integration
+- `config_management/` – Configuration management and secret handling
+- `containerization/` – Docker management and Kubernetes orchestration
+- `data_visualization/` – Rich data plotting and interactive dashboards
+- `database_management/` – Database integration and migration management
+- `documentation/` – Documentation website generation with Docusaurus
+- `environment_setup/` – Development environment validation and setup
+- `git_operations/` – Git workflow automation and repository management
+- `language_models/` – LLM provider management and model configuration
+- `logging_monitoring/` – Structured logging and performance monitoring
+- `model_context_protocol/` – MCP framework for standardized AI communication
+- `modeling_3d/` – 3D modeling and visualization with AR/VR support
+- `module_template/` – Standardized module scaffolding and templates
+- `ollama_integration/` – Local LLM integration via Ollama
+- `pattern_matching/` – Advanced code pattern analysis and recognition
+- `performance/` – Performance optimization and monitoring utilities
+- `physical_management/` – Physical system simulation and management
+- `project_orchestration/` – Project and workflow coordination
+- `security_audit/` – Security vulnerability scanning and compliance
+- `static_analysis/` – Multi-language code quality analysis
+- `system_discovery/` – System introspection and capability mapping
+- `terminal_interface/` – Interactive CLI and terminal utilities
+- `tests/` – Cross-module integration and performance tests
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -40,14 +41,14 @@ Primary Python package bundling all Codomyrmex agents and shared tooling.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Module Relationships
-- **AI & Intelligence**: `ai_code_editing/`, `language_models/`, `pattern_matching/`
-- **Analysis & Quality**: `static_analysis/`, `security_audit/`, `code_review/`, `code_execution_sandbox/`
+- **AI & Intelligence**: `ai_code_editing/`, `language_models/`, `ollama_integration/`, `pattern_matching/`
+- **Analysis & Quality**: `static_analysis/`, `security_audit/`, `code_review/`, `code_execution_sandbox/`, `performance/`
 - **Visualization & Reporting**: `data_visualization/`, `api_documentation/`, `documentation/`
 - **Build & Deployment**: `build_synthesis/`, `ci_cd_automation/`, `containerization/`
 - **Infrastructure**: `database_management/`, `environment_setup/`, `config_management/`
 - **System Integration**: `git_operations/`, `model_context_protocol/`, `terminal_interface/`
 - **Advanced Features**: `modeling_3d/`, `physical_management/`, `project_orchestration/`
-- **Development Support**: `module_template/`, `performance/`, `system_discovery/`, `tests/`
+- **Development Support**: `module_template/`, `system_discovery/`, `logging_monitoring/`, `tests/`
 
 ## Navigation Links
 - **📚 Package Overview**: [README.md](README.md) - Package documentation and module status

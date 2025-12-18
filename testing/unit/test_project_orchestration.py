@@ -253,3 +253,4 @@ class TestProjectOrchestration:
         assert templates_path.exists()
         assert templates_path.is_dir()
 
+

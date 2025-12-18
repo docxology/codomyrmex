@@ -19,23 +19,15 @@ config/
 -   **production.env** - Production environment configuration
 -   **testing.env** - Testing environment configuration
 
-### Application Templates
-
--   **logging.json** - Structured logging configuration
--   **monitoring.yml** - Monitoring and alerting configuration
-
 ## Examples
 
-### Deployment Examples
+### Configuration Examples
 
 -   **docker-compose.yml** - Docker Compose setup for local development
--   **kubernetes.yml** - Kubernetes deployment manifests
--   **terraform.tf** - Infrastructure as Code for cloud deployment
-
-### CI/CD Examples
-
--   **github-actions.yml** - GitHub Actions workflow examples
--   **gitlab-ci.yml** - GitLab CI/CD pipeline examples
+-   **project-template-custom.json** - Custom project template configuration
+-   **resources-custom.json** - Custom resource allocation configuration
+-   **workflow-basic.json** - Basic workflow configuration example
+-   **workflow-with-dependencies.json** - Workflow with step dependencies
 
 ## Usage
 

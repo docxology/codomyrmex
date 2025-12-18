@@ -103,3 +103,28 @@ repos:
     rev: v0.9.0.6
     hooks:
       - id: shellcheck
+
+  # Documentation validation
+  - repo: local
+    hooks:
+      - id: validate-doc-links
+        name: Validate Documentation Links
+        entry: python3 scripts/documentation/validate_links_comprehensive.py --repo-root . --output output --fail-on-broken
+        language: system
+        files: \.md$
+        pass_filenames: false
+        always_run: false
+      
+      - id: check-placeholders
+        name: Check for Placeholder Content
+        entry: python3 -c "import sys, re; content = open(sys.argv[1]).read(); patterns = ['TODO', 'FIXME', 'placeholder', 'TBD']; found = [p for p in patterns if p in content]; sys.exit(1 if found else 0)"
+        language: system
+        files: \.md$
+        
+      - id: validate-agents-structure
+        name: Validate AGENTS.md Structure
+        entry: python3 scripts/documentation/validate_agents_structure.py --repo-root . --output output --fail-on-invalid
+        language: system
+        files: AGENTS\.md$
+        pass_filenames: false
+        always_run: false

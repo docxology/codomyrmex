@@ -1,0 +1,346 @@
+name: Documentation Quality Gate
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - 'docs/**'
+      - 'scripts/documentation/**'
+      - '.github/workflows/documentation-validation.yml'
+  push:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly full scan on Sunday
+  workflow_dispatch:
+    inputs:
+      full_validation:
+        description: 'Run full validation (including external URLs)'
+        required: false
+        default: 'true'
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_VERSION: "0.5.7"
+
+jobs:
+  validate-links:
+    name: Validate Documentation Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: mkdir -p output
+
+      - name: Run link validation
+        run: |
+          uv run python scripts/documentation/validate_links_comprehensive.py \
+            --repo-root . \
+            --output output \
+            --format both
+        continue-on-error: true
+
+      - name: Upload link validation results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: link-validation-results
+          path: |
+            output/link_validation_results.json
+            output/link_validation_results.html
+          retention-days: 30
+
+      - name: Display link validation summary
+        if: always()
+        run: |
+          if [ -f output/link_validation_results.json ]; then
+            python3 -c "
+            import json
+            with open('output/link_validation_results.json') as f:
+                data = json.load(f)
+                summary = data.get('summary', {})
+                print('\n## Link Validation Summary')
+                print(f\"- Total files: {data.get('total_files', 0)}\")
+                print(f\"- Total links: {data.get('total_links', 0)}\")
+                print(f\"- Broken links: {summary.get('broken_links_count', 0)}\")
+                print(f\"- Circular references: {summary.get('circular_references_count', 0)}\")
+            "
+          fi
+
+  check-quality:
+    name: Check Content Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: mkdir -p output
+
+      - name: Analyze content quality
+        run: |
+          uv run python scripts/documentation/analyze_content_quality.py \
+            --repo-root . \
+            --output output \
+            --format both \
+            --min-score 60
+        continue-on-error: true
+
+      - name: Upload quality results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-analysis-results
+          path: |
+            output/content_quality_report.json
+            output/content_quality_report.html
+          retention-days: 30
+
+      - name: Display quality summary
+        if: always()
+        run: |
+          if [ -f output/content_quality_report.json ]; then
+            python3 -c "
+            import json
+            with open('output/content_quality_report.json') as f:
+                data = json.load(f)
+                print('\n## Content Quality Summary')
+                print(f\"- Files analyzed: {data.get('total_files', 0)}\")
+                print(f\"- Average score: {data.get('average_score', 0):.1f}/100\")
+                print(f\"- Total placeholders: {data.get('total_placeholders', 0)}\")
+                print(f\"- Files needing attention: {len(data.get('files_needing_attention', []))}\")
+            "
+          fi
+
+  validate-structure:
+    name: Validate AGENTS.md Structure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: mkdir -p output
+
+      - name: Validate AGENTS.md structure
+        run: |
+          uv run python scripts/documentation/validate_agents_structure.py \
+            --repo-root . \
+            --output output \
+            --format both
+        continue-on-error: true
+
+      - name: Upload structure validation results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agents-structure-results
+          path: |
+            output/agents_structure_validation.json
+            output/agents_structure_validation.html
+          retention-days: 30
+
+      - name: Display structure validation summary
+        if: always()
+        run: |
+          if [ -f output/agents_structure_validation.json ]; then
+            python3 -c "
+            import json
+            with open('output/agents_structure_validation.json') as f:
+                data = json.load(f)
+                summary = data.get('summary', {})
+                print('\n## AGENTS.md Structure Summary')
+                print(f\"- Total files: {data.get('total_files', 0)}\")
+                print(f\"- Valid files: {data.get('valid_files', 0)}\")
+                print(f\"- Invalid files: {data.get('invalid_files', 0)}\")
+                print(f\"- Validation rate: {summary.get('validation_rate', '0%')}\")
+            "
+          fi
+
+  generate-dashboard:
+    name: Generate Documentation Dashboard
+    needs: [validate-links, check-quality, validate-structure]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: mkdir -p output
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Consolidate results
+        run: |
+          # Move all JSON results to output directory
+          find artifacts -name "*.json" -exec cp {} output/ \;
+          find artifacts -name "*.html" -exec cp {} output/ \;
+
+      - name: Generate dashboard
+        run: |
+          uv run python scripts/documentation/generate_dashboard.py \
+            --repo-root . \
+            --output output
+
+      - name: Upload dashboard
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-dashboard
+          path: output/documentation_dashboard.html
+          retention-days: 90
+
+      - name: Publish dashboard to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          destination_dir: documentation-quality
+          keep_files: false
+
+  enforce-quality-gate:
+    name: Enforce Quality Gates
+    needs: [validate-links, check-quality, validate-structure]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: mkdir -p output
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Consolidate results
+        run: |
+          find artifacts -name "*.json" -exec cp {} output/ \;
+
+      - name: Enforce quality gates
+        run: |
+          uv run python scripts/documentation/enforce_quality_gate.py \
+            --repo-root . \
+            --output output \
+            --min-quality-score 70 \
+            --max-broken-links 10 \
+            --max-placeholders 100 \
+            --min-agents-valid-rate 80 \
+            --allow-warnings
+
+      - name: Comment PR with results
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## 📚 Documentation Quality Check Results\n\n';
+            
+            // Add summary from each validation
+            const files = [
+              'output/link_validation_results.json',
+              'output/content_quality_report.json',
+              'output/agents_structure_validation.json'
+            ];
+            
+            for (const file of files) {
+              if (fs.existsSync(file)) {
+                const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+                if (file.includes('link_validation')) {
+                  const summary = data.summary || {};
+                  comment += '### 🔗 Link Validation\n';
+                  comment += `- Broken links: ${summary.broken_links_count || 0}\n`;
+                  comment += `- Circular references: ${summary.circular_references_count || 0}\n\n`;
+                } else if (file.includes('content_quality')) {
+                  comment += '### 📊 Content Quality\n';
+                  comment += `- Average score: ${data.average_score?.toFixed(1) || 0}/100\n`;
+                  comment += `- Total placeholders: ${data.total_placeholders || 0}\n\n`;
+                } else if (file.includes('agents_structure')) {
+                  comment += '### 🤖 AGENTS.md Structure\n';
+                  comment += `- Valid files: ${data.valid_files || 0}/${data.total_files || 0}\n`;
+                  comment += `- Invalid files: ${data.invalid_files || 0}\n\n`;
+                }
+              }
+            }
+            
+            comment += '\n[View detailed dashboard →](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              body: comment
+            });
+
