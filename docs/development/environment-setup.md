@@ -37,11 +37,11 @@ pytest testing/unit/ -x  # Run tests (stop at first failure)
 ### **Manual Development Setup**
 ```bash
 # 1. Create virtual environment
-python3 -m venv .venv
+uv venv .venv
 source .venv/bin/activate
 
 # 2. Install development dependencies
-pip install -e ".[dev]"
+uv sync --dev
 
 # 3. Install pre-commit hooks (recommended)
 pre-commit install

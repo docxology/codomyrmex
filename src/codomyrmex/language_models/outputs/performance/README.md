@@ -1,4 +1,4 @@
-# performance
+# src/codomyrmex/language_models/outputs/performance
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Contains components for the src system.
 
 ## Directory Contents
-- `README.md` – File
 - `consistency_evaluation.json` – File
 - `edge_case_handling.json` – File
 - `latency_benchmark.json` – File
@@ -16,5 +15,6 @@ Contains components for the src system.
 - `token_generation_speed.json` – File
 
 ## Navigation
-- **Parent Directory**: [outputs](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [outputs](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

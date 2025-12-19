@@ -1,4 +1,4 @@
-# templates
+# config/templates
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,10 +7,10 @@
 Configuration files and templates.
 
 ## Directory Contents
-- `README.md` – File
 - `development.env` – File
 - `production.env` – File
 
 ## Navigation
-- **Parent Directory**: [config](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [config](../README.md)
+- **Config Hub**: [config](../../../config/README.md)

@@ -3,103 +3,137 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Contains components for the src system.
+
+Core module providing comprehensive Git version control automation capabilities for the Codomyrmex platform. This module enables programmatic interaction with Git repositories, supporting common version control workflows, repository analysis, and automated Git operations.
+
+The git_operations module serves as the version control backbone, enabling automated development workflows and repository management throughout the platform.
+
+## Module Overview
+
+### Key Capabilities
+- **Repository Management**: Initialize, clone, and manage Git repositories
+- **Branch Operations**: Create, switch, merge, and delete branches
+- **Commit Automation**: Stage files, create commits, and manage commit messages
+- **Repository Analysis**: Analyze repository history, contributors, and changes
+- **Remote Operations**: Push, pull, and synchronize with remote repositories
+- **Status Monitoring**: Track repository state, changes, and conflicts
+
+### Key Features
+- Comprehensive Git command abstraction with Python API
+- Repository state analysis and reporting
+- Automated workflow support for CI/CD integration
+- Error handling and conflict resolution support
+- Integration with logging system for operation tracking
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `COMPLETE_API_DOCUMENTATION.md` – Project file
-- `COMPREHENSIVE_USAGE_EXAMPLES.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `METADATA_SYSTEM_GUIDE.md` – Project file
-- `README.md` – Project file
-- `REPOSITORY_MANAGEMENT_GUIDE.md` – Project file
-- `SECURITY.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `auto_generated_library.txt` – Project file
-- `docs/` – Directory containing docs components
-- `docxology_repository_library.txt` – Project file
-- `git_manager.py` – Project file
-- `github_api.py` – Project file
-- `github_library_generator.py` – Project file
-- `metadata_cli.py` – Project file
-- `repo_cli.py` – Project file
-- `repository_library.txt` – Project file
-- `repository_manager.py` – Project file
-- `repository_metadata.json` – Project file
-- `repository_metadata.json.backup.20250829_073637` – Project file
-- `repository_metadata.json.backup.20250918_092354` – Project file
-- `repository_metadata.json.backup.20250918_092837` – Project file
-- `repository_metadata.json.backup.20251021_114251` – Project file
-- `repository_metadata.json.backup.20251022_164759` – Project file
-- `repository_metadata.json.backup.20251022_165312` – Project file
-- `repository_metadata.json.backup.20251022_170034` – Project file
-- `repository_metadata.json.backup.20251022_170516` – Project file
-- `repository_metadata.json.backup.20251022_170811` – Project file
-- `repository_metadata.json.backup.20251022_171423` – Project file
-- `repository_metadata.json.backup.20251022_172327` – Project file
-- `repository_metadata.json.backup.20251022_172747` – Project file
-- `repository_metadata.json.backup.20251022_173107` – Project file
-- `repository_metadata.json.backup.20251022_173108` – Project file
-- `repository_metadata.json.backup.20251022_173614` – Project file
-- `repository_metadata.json.backup.20251022_191426` – Project file
-- `repository_metadata.json.backup.20251022_193001` – Project file
-- `repository_metadata.json.backup.20251022_195534` – Project file
-- `repository_metadata.json.backup.20251022_200657` – Project file
-- `repository_metadata.json.backup.20251022_200658` – Project file
-- `repository_metadata.json.backup.20251022_202256` – Project file
-- `repository_metadata.json.backup.20251022_204456` – Project file
-- `repository_metadata.json.backup.20251022_212327` – Project file
-- `repository_metadata.json.backup.20251022_212328` – Project file
-- `repository_metadata.json.backup.20251022_214705` – Project file
-- `repository_metadata.json.backup.20251022_215903` – Project file
-- `repository_metadata.json.backup.20251022_220942` – Project file
-- `repository_metadata.json.backup.20251023_071807` – Project file
-- `repository_metadata.json.backup.20251023_134835` – Project file
-- `repository_metadata.json.backup.20251023_135935` – Project file
-- `repository_metadata.json.backup.20251023_143419` – Project file
-- `repository_metadata.json.backup.20251023_143627` – Project file
-- `repository_metadata.json.backup.20251023_143628` – Project file
-- `repository_metadata.json.backup.20251023_150726` – Project file
-- `repository_metadata.json.backup.20251023_151101` – Project file
-- `repository_metadata.json.backup.20251023_151609` – Project file
-- `repository_metadata.json.backup.20251023_152652` – Project file
-- `repository_metadata.json.backup.20251023_152653` – Project file
-- `repository_metadata.json.backup.20251023_160533` – Project file
-- `repository_metadata.json.backup.20251023_160534` – Project file
-- `repository_metadata.json.backup.20251023_160949` – Project file
-- `repository_metadata.json.backup.20251023_160950` – Project file
-- `repository_metadata.json.backup.20251023_161229` – Project file
-- `repository_metadata.json.backup.20251023_161506` – Project file
-- `repository_metadata.json.backup.20251023_161732` – Project file
-- `repository_metadata.json.backup.20251023_163403` – Project file
-- `repository_metadata.json.backup.20251023_163826` – Project file
-- `repository_metadata.json.backup.20251023_185720` – Project file
-- `repository_metadata.json.backup.20251023_185956` – Project file
-- `repository_metadata.json.backup.20251023_191636` – Project file
-- `repository_metadata.json.backup.20251023_192013` – Project file
-- `repository_metadata.json.backup.20251104_124513` – Project file
-- `repository_metadata.json.backup.20251104_125716` – Project file
-- `repository_metadata.json.backup.20251104_125717` – Project file
-- `repository_metadata.json.backup.20251104_140551` – Project file
-- `repository_metadata.json.backup.20251104_154414` – Project file
-- `repository_metadata.json.backup.20251104_163636` – Project file
-- `repository_metadata.json.backup.20251104_163637` – Project file
-- `repository_metadata.json.backup.20251104_165450` – Project file
-- `repository_metadata.json.backup.20251104_171416` – Project file
-- `repository_metadata.json.backup.20251104_171417` – Project file
-- `repository_metadata.json.backup.20251105_135921` – Project file
-- `repository_metadata.py` – Project file
-- `requirements.txt` – Project file
-- `tests/` – Directory containing tests components
-- `visualization_integration.py` – Project file
+
+### Core Implementation
+- `__init__.py` – Module initialization and public API exports
+- `git_manager.py` – Main Git operations engine and repository management
+- `repository_manager.py` – Advanced repository management utilities
+
+### GitHub Integration
+- `github_api.py` – GitHub API client for remote operations
+- `github_library_generator.py` – Repository library generation tools
+
+### CLI Tools
+- `repo_cli.py` – Command-line interface for repository operations
+- `metadata_cli.py` – Metadata management command-line tools
+
+### Documentation
+- `README.md` – Module usage and overview
+- `API_SPECIFICATION.md` – Complete API documentation
+- `COMPLETE_API_DOCUMENTATION.md` – Detailed API reference
+- `USAGE_EXAMPLES.md` – Practical usage demonstrations
+- `COMPREHENSIVE_USAGE_EXAMPLES.md` – Advanced usage examples
+- `REPOSITORY_MANAGEMENT_GUIDE.md` – Repository management guide
+- `METADATA_SYSTEM_GUIDE.md` – Metadata system documentation
+- `MCP_TOOL_SPECIFICATION.md` – AI agent tool specifications
+- `SECURITY.md` – Security considerations for Git operations
+- `CHANGELOG.md` – Version history and updates
+
+### Data and Libraries
+- `repository_metadata.json` – Repository metadata storage
+- `repository_library.txt` – Repository library data
+- `auto_generated_library.txt` – Auto-generated library files
+- Various backup files for metadata preservation
+
+### Supporting Files
+- `requirements.txt` – Module dependencies (GitPython, PyGitHub, etc.)
+- `docs/` – Additional documentation
+- `tests/` – Comprehensive test suite
+- `visualization_integration.py` – Integration with visualization modules
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+### Universal Git Protocols
+
+All Git operations within the Codomyrmex platform must:
+
+1. **Repository Integrity** - Operations should preserve repository state and history
+2. **Authentication Security** - Handle credentials securely without exposure
+3. **Error Recovery** - Provide rollback mechanisms for failed operations
+4. **Performance Aware** - Optimize operations for large repositories
+5. **Audit Trail** - Log all Git operations for tracking and debugging
+
+### Module-Specific Guidelines
+
+#### Repository Operations
+- Validate repository state before performing operations
+- Handle merge conflicts with clear error reporting
+- Support both local and remote repository operations
+- Provide progress feedback for long-running operations
+
+#### Branch Management
+- Implement safe branch switching with working directory preservation
+- Support branch creation, deletion, and renaming operations
+- Handle branch merging with conflict detection and resolution
+- Track branch relationships and hierarchies
+
+#### Commit Automation
+- Generate meaningful commit messages when not provided
+- Support selective staging and partial commits
+- Validate commit contents before execution
+- Handle commit signing and verification
 
 ## Navigation Links
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+
+### Module Documentation
+- **Module Overview**: [README.md](README.md) - Complete module documentation
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
+- **Complete API Docs**: [COMPLETE_API_DOCUMENTATION.md](COMPLETE_API_DOCUMENTATION.md) - Full API reference
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
+
+### Related Modules
+- **Project Orchestration**: [../project_orchestration/](../../project_orchestration/) - Workflow automation
+- **CI/CD Automation**: [../ci_cd_automation/](../../ci_cd_automation/) - Pipeline integration
+- **Logging Monitoring**: [../logging_monitoring/](../../logging_monitoring/) - Operation logging
+
+### Platform Navigation
+- **Parent Directory**: [codomyrmex](../README.md) - Package overview
+- **Project Root**: [README](../../../README.md) - Main project documentation
+
+## Agent Coordination
+
+### Integration Points
+
+When integrating with other modules:
+
+1. **CI/CD Integration** - Provide Git operations for automated pipelines
+2. **Project Orchestration** - Support version control workflows in project management
+3. **Code Review Integration** - Enable repository analysis for review processes
+4. **Backup Coordination** - Support repository backup and recovery operations
+
+### Quality Gates
+
+Before Git operation changes are accepted:
+
+1. **Repository Safety Verified** - Operations don't corrupt repository state
+2. **Authentication Handled Securely** - Credentials managed without exposure
+3. **Error Recovery Tested** - Failed operations can be safely rolled back
+4. **Performance Validated** - Operations scale appropriately for repository size
+5. **Integration Tested** - Works correctly with dependent workflow systems
+
+## Version History
+
+- **v0.1.0** (December 2025) - Initial Git operations system with repository management and automation capabilities

@@ -1,4 +1,4 @@
-# integration
+# src/codomyrmex/code_review/tests/integration
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,9 +7,9 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
 - `test_pyscn_integration.py` – File
 
 ## Navigation
-- **Parent Directory**: [tests](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [tests](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

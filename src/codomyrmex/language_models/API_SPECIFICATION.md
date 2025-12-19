@@ -282,3 +282,4 @@ print(f"Using model: {current_config.default_model}")
 - **Streaming**: Real-time streaming for large outputs and interactive applications
 - **Concurrent Requests**: Support for multiple simultaneous LLM interactions
 - **Memory Optimization**: Efficient memory usage with model unloading when idle
+

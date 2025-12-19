@@ -16,8 +16,8 @@ python environment_setup/env_checker.py
 
 ### Expected Outcome
 
-- The script will first attempt to import essential Python dependencies (e.g., `cased`, `dotenv`). 
-    - If any are missing, it will print an error message to `stderr` instructing you to install them (usually via `pip install -r requirements.txt`) and then exit.
+- The script will first attempt to import essential Python dependencies (e.g., `cased`, `dotenv`).
+    - If any are missing, it will print an error message to `stderr` instructing you to install them (usually via `uv sync`) and then exit.
 - If dependencies are present, it will then check for the `.env` file in the project root.
     - If `.env` is found, it will print a confirmation message and attempt to load it.
     - If `.env` is missing, it will print a detailed message to `stdout` guiding you on how to create it, including a template with common API key placeholders (e.g., `OPENAI_API_KEY`), and then exit.

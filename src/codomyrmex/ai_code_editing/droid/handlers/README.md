@@ -1,4 +1,4 @@
-# handlers
+# src/codomyrmex/ai_code_editing/droid/handlers
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,8 +7,9 @@
 Contains components for the src system.
 
 ## Directory Contents
-- `README.md` – File
+No additional files.
 
 ## Navigation
-- **Parent Directory**: [droid](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [droid](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

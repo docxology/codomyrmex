@@ -573,18 +573,17 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -e .
-        pip install pytest pytest-cov pytest-xdist
+        uv sync --dev
 
     - name: Run comprehensive tests
       run: |
-        pytest testing/ --cov=src/codomyrmex --cov-report=xml -n auto
+        uv run pytest testing/ --cov=src/codomyrmex --cov-report=xml -n auto
 
     - name: Security scan
       run: |
-        pip install bandit safety
-        bandit -r src/codomyrmex/
-        safety check --json
+        uv pip install bandit safety
+        uv run bandit -r src/codomyrmex/
+        uv run safety check --json
 
     - name: Upload coverage
       uses: codecov/codecov-action@v3

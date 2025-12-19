@@ -1,6 +1,6 @@
 # 🚀 Codomyrmex Quick Start Guide
 
-Get up and running with Codomyrmex in **5 minutes or less**! This guide will show you how to install, configure, and start using Codomyrmex's powerful features immediately.
+Get up and running with Codomyrmex in **5 minutes or less**! This guide will show you how to install, configure, and start using Codomyrmex features immediately.
 
 ## ⚡ Lightning-Fast Setup
 
@@ -26,7 +26,7 @@ uv venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
 # 3. Install dependencies
-uv pip install -e .
+uv sync
 
 # 4. Verify installation
 codomyrmex check
@@ -70,7 +70,7 @@ codomyrmex status
 
 ## 🎨 **Hands-On Examples: Create Something Amazing**
 
-Now let's create something real! Here are step-by-step examples of Codomyrmex's most powerful features:
+Now let's create something! Here are step-by-step examples of Codomyrmex features:
 
 ### **1. 🎨 Create Stunning Data Visualizations**
 
@@ -254,7 +254,7 @@ Launch the interactive shell to explore all capabilities:
 # Choose option 7: Interactive Shell
 
 # Method 2: Direct launch
-python -c "
+uv run python -c "
 from codomyrmex.terminal_interface import InteractiveShell
 shell = InteractiveShell()
 shell.run()
@@ -286,7 +286,7 @@ codomyrmex check
 codomyrmex info
 
 # Run all tests
-pytest testing/unit/ -v
+uv run pytest testing/unit/ -v
 
 # Launch interactive exploration
 ./start_here.sh
@@ -399,7 +399,7 @@ production_code = refactor_code_snippet(
 # Choose option 7: Interactive Shell
 
 # Method 2: Direct launch
-python -c "
+uv run python -c "
 import sys; sys.path.insert(0, 'src')
 from codomyrmex.terminal_interface import InteractiveShell
 InteractiveShell().run()
@@ -425,7 +425,7 @@ InteractiveShell().run()
 
 ```bash
 # Ensure proper installation
-pip install -e .
+uv sync
 # Verify you're in project root and venv is active
 ```
 
@@ -449,7 +449,7 @@ echo 'OPENAI_API_KEY="your-key"' >> .env
 
 ```bash
 # Set show_plot=True or check matplotlib backend
-python -c "import matplotlib; print(matplotlib.get_backend())"
+uv run python -c "import matplotlib; print(matplotlib.get_backend())"
 ```
 
 ### **Get Help**
@@ -506,11 +506,11 @@ cd ../integration && ./ai-enhanced-analysis.sh
 
 ---
 
-**🎉 Congratulations!** You've successfully set up Codomyrmex and tried the core features. You're ready to explore the powerful modular toolkit for code analysis, generation, and workflow automation.
+**🎉 Congratulations!** You've successfully set up Codomyrmex and tried the core features. You're ready to explore the modular toolkit for code analysis, generation, and workflow automation.
 
 ## 🤖 Configure AI Features (Optional)
 
-Codomyrmex includes powerful AI capabilities that are completely optional. Here's how to enable them:
+Codomyrmex includes AI capabilities that are completely optional. Here's how to enable them:
 
 ### **Add API Keys**
 

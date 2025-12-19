@@ -22,5 +22,5 @@ Test files and validation suites.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **📁 Parent Directory**: [project_orchestration](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+- **Parent Directory: Parent Directory**: [project_orchestration](../README.md) - Parent directory documentation
+- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation

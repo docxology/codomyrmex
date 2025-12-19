@@ -1,4 +1,4 @@
-# examples
+# config/examples
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Example implementations and demonstrations.
 
 ## Directory Contents
-- `README.md` – File
 - `docker-compose.yml` – File
 - `project-template-custom.json` – File
 - `resources-custom.json` – File
@@ -15,5 +14,6 @@ Example implementations and demonstrations.
 - `workflow-with-dependencies.json` – File
 
 ## Navigation
-- **Parent Directory**: [config](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [config](../README.md)
+- **Config Hub**: [config](../../../config/README.md)

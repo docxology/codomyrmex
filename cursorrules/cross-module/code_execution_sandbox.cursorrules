@@ -1,4 +1,4 @@
-# Cursor Rules for the code_execution_sandbox Module
+# Cursor Rules for the code_execution_sandbox Module (Cross-Module)
 
 ## 0. Preamble
 These rules are specific to the `code_execution_sandbox` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.

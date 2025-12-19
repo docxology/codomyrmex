@@ -1,4 +1,4 @@
-# src
+# projects/test_project/src
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,8 +7,9 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
+No additional files.
 
 ## Navigation
-- **Parent Directory**: [test_project](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [test_project](../README.md)
+- **Projects Hub**: [projects](../../../projects/README.md)

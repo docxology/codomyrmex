@@ -184,24 +184,6 @@ codomyrmex = "codomyrmex.cli:main"
 # Use local workspace for development
 codomyrmex = { workspace = true }
 
-[tool.pytest.ini_options]
-testpaths = ["testing", "src"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = [
-    "--verbose",
-    "--tb=short",
-    "--cov=src/codomyrmex",
-    "--cov-report=term-missing",
-    "--cov-report=html:htmlcov",
-    "--cov-fail-under=80",
-]
-markers = [
-    "unit: Unit tests",
-    "integration: Integration tests",
-    "slow: Slow running tests",
-]
 
 [tool.coverage.run]
 source = ["src/codomyrmex"]

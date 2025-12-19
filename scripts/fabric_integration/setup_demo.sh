@@ -109,7 +109,7 @@ check_environment() {
     
     # Test Codomyrmex availability
     if ! python3 -c "import sys; sys.path.insert(0, '$PROJECT_ROOT/src'); import codomyrmex" 2>/dev/null; then
-        log_error "Codomyrmex not properly installed. Please run: pip install -e ."
+        log_error "Codomyrmex not properly installed. Please run: uv sync"
         exit 1
     fi
     

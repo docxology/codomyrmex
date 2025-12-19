@@ -301,17 +301,16 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -e .
-        pip install pytest pytest-cov pytest-xdist
+        uv sync --dev
 
     - name: Run unit tests
-      run: pytest testing/unit/ --cov=src/codomyrmex
+      run: uv run pytest testing/unit/ --cov=src/codomyrmex
 
     - name: Run integration tests
-      run: pytest testing/integration/
+      run: uv run pytest testing/integration/
 
     - name: Run E2E tests (critical paths only)
-      run: pytest testing/e2e/ -k "critical"
+      run: uv run pytest testing/e2e/ -k "critical"
 ```
 
 ## 🔍 Testing Each Module Type

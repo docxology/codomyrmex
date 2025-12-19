@@ -21,7 +21,7 @@ When working within this module, pay close attention to:
 -   `tests/`: Unit and integration tests for this module.
 -   `.gitignore`: Module-specific ignored files.
 -   `code_review.py`: Core code review functionality with pyscn integration.
--   `demo_enhanced_review.py`: Demonstration and testing utilities.
+-   `demo_review.py`: Demonstration and testing utilities.
 
 ## 3. Coding Standards & Practices for `code_review`
 -   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `code_review` module.

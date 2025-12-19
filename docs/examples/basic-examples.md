@@ -188,9 +188,9 @@ done
 **Solution**:
 ```bash
 # Install Codomyrmex
+uv sync
+# Or with pip
 pip install -e .
-# Or use uv
-uv pip install -e .
 ```
 
 ### Permission Denied
@@ -211,9 +211,9 @@ chmod -R 755 scripts/output/
 **Solution**:
 ```bash
 # Install dependencies
+uv sync
+# Or with pip
 pip install -r requirements.txt
-# Or use uv
-uv pip install -r requirements.txt
 ```
 
 ## Related Documentation

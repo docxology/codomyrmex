@@ -1,4 +1,4 @@
-# static_analysis
+# scripts/static_analysis
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,9 +7,9 @@
 Automation and utility scripts.
 
 ## Directory Contents
-- `README.md` – File
 - `orchestrate.py` – File
 
 ## Navigation
-- **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Scripts Hub**: [scripts](../../../scripts/README.md)

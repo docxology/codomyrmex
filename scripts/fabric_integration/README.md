@@ -1,4 +1,4 @@
-# fabric_integration
+# scripts/fabric_integration
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -8,7 +8,6 @@ Automation and utility scripts.
 
 ## Directory Contents
 - `QUICKSTART.md` – File
-- `README.md` – File
 - `code_improvement_workflow.py` – File
 - `content_analysis_workflow.py` – File
 - `demo_env_setup.py` – File
@@ -20,5 +19,6 @@ Automation and utility scripts.
 - `setup_fabric_env.py` – File
 
 ## Navigation
-- **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Scripts Hub**: [scripts](../../../scripts/README.md)

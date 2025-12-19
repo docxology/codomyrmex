@@ -1,4 +1,4 @@
-# data_visualization
+# src/codomyrmex/documentation/docs/modules/data_visualization
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Documentation files and guides.
 
 ## Directory Contents
-- `README.md` – File
 - `api_specification.md` – File
 - `changelog.md` – File
 - `docs/` – Subdirectory
@@ -17,5 +16,6 @@ Documentation files and guides.
 - `usage_examples.md` – File
 
 ## Navigation
-- **Parent Directory**: [modules](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [modules](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

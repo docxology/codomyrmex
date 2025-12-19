@@ -1,4 +1,4 @@
-# api_documentation
+# src/codomyrmex/api_documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -8,7 +8,6 @@ Documentation files and guides.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
-- `README.md` – File
 - `SECURITY.md` – File
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
@@ -16,5 +15,6 @@ Documentation files and guides.
 - `openapi_generator.py` – File
 
 ## Navigation
-- **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

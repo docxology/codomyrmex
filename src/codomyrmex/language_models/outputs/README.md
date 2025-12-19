@@ -1,4 +1,4 @@
-# outputs
+# src/codomyrmex/language_models/outputs
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Contains components for the src system.
 
 ## Directory Contents
-- `README.md` – File
 - `config.json` – File
 - `integration/` – Subdirectory
 - `llm_outputs/` – Subdirectory
@@ -18,5 +17,6 @@ Contains components for the src system.
 - `test_results/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [language_models](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [language_models](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

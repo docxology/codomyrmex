@@ -1,4 +1,4 @@
-# docs
+# src/codomyrmex/documentation/docs
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Documentation files and guides.
 
 ## Directory Contents
-- `README.md` – File
 - `development/` – Subdirectory
 - `index.md` – File
 - `intro.md` – File
@@ -17,5 +16,6 @@ Documentation files and guides.
 - `tutorials/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [documentation](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [documentation](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

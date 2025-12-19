@@ -1,4 +1,4 @@
-# tests
+# src/codomyrmex/model_context_protocol/tests
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,10 +7,10 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
 - `integration/` – Subdirectory
 - `unit/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [model_context_protocol](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [model_context_protocol](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

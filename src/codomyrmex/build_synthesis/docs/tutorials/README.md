@@ -1,4 +1,4 @@
-# tutorials
+# src/codomyrmex/build_synthesis/docs/tutorials
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Documentation files and guides.
 
 ## Directory Contents
-- `README.md` – File
 - `docker_build_tutorial.md` – File
 - `example_tutorial.md` – File
 - `python_wheel_build_tutorial.md` – File
@@ -15,5 +14,6 @@ Documentation files and guides.
 - `trigger_build_tutorial.md` – File
 
 ## Navigation
-- **Parent Directory**: [docs](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [docs](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

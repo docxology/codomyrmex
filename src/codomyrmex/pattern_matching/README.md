@@ -1,4 +1,4 @@
-# pattern_matching
+# src/codomyrmex/pattern_matching
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,10 +7,10 @@
 Contains components for the src system.
 
 ## Directory Contents
+- `.gitignore` – File
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
-- `README.md` – File
 - `SECURITY.md` – File
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
@@ -20,5 +20,6 @@ Contains components for the src system.
 - `tests/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

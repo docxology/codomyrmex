@@ -1,4 +1,4 @@
-# unit
+# src/codomyrmex/logging_monitoring/tests/unit
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,9 +7,10 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
+- `.gitkeep` – File
 - `test_logger_config.py` – File
 
 ## Navigation
-- **Parent Directory**: [tests](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [tests](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

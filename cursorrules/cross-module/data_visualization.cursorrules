@@ -1,4 +1,4 @@
-# Cursor Rules for the data_visualization Module
+# Cursor Rules for the data_visualization Module (Cross-Module)
 
 ## 0. Preamble
 These rules are specific to the `data_visualization` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.

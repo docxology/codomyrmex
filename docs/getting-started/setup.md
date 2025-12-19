@@ -1,6 +1,6 @@
 # 🚀 Codomyrmex Setup Guide
 
-This comprehensive guide covers all aspects of setting up Codomyrmex, from initial installation to advanced configuration and development environment setup.
+This guide covers all aspects of setting up Codomyrmex, from initial installation to advanced configuration and development environment setup.
 
 ## 🎯 Quick Start Setup
 
@@ -118,7 +118,7 @@ cd codomyrmex
 # 3. Create virtual environment and install
 uv venv .venv
 source .venv/bin/activate
-uv pip install -e .
+uv sync
 
 # 4. Verify installation
 codomyrmex check
@@ -137,13 +137,13 @@ cd codomyrmex
 bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
 
 # 3. Install development dependencies
-uv pip install -e ".[dev]"
+uv sync --dev
 
 # 4. Setup pre-commit hooks (optional but recommended)
 pre-commit install
 
 # 5. Run tests to verify everything works
-pytest testing/ -v
+uv run pytest testing/ -v
 ```
 
 ## ⚙️ Configuration
@@ -329,10 +329,10 @@ source .venv/bin/activate
 which python  # Should show .venv/bin/python
 
 # 4. Reinstall if needed
-uv pip install -e .
+uv sync
 
 # 5. Test import
-python -c "import codomyrmex; print('Success!')"
+uv run python -c "import codomyrmex; print('Success!')"
 ```
 
 #### **❌ Python Version Too Old**
@@ -365,7 +365,7 @@ uv venv .venv
 
 # Activate and install
 source .venv/bin/activate
-uv pip install -e .
+uv sync
 
 # Verify
 codomyrmex check
@@ -384,7 +384,7 @@ uv pip install package_name
 sudo rm -rf .venv
 uv venv .venv
 source .venv/bin/activate
-uv pip install -e .
+uv sync
 ```
 
 #### **❌ "No module named 'codomyrmex'" After Installation**
@@ -400,11 +400,11 @@ echo $PYTHONPATH
 
 # 3. Try reinstalling
 uv pip uninstall codomyrmex
-uv pip install -e .
+uv sync
 
 # 4. Test in fresh shell
 source .venv/bin/activate
-python -c "import codomyrmex; print('Fixed!')"
+uv run python -c "import codomyrmex; print('Fixed!')"
 ```
 
 ### **🔧 Module-Specific Issues**
@@ -426,7 +426,7 @@ GOOGLE_API_KEY="your-google-key-here"
 EOF
 
 # 3. Test API connectivity
-python -c "
+uv run python -c "
 import os
 from codomyrmex.ai_code_editing import validate_api_keys
 print('API Keys:', validate_api_keys())
@@ -447,7 +447,7 @@ sudo usermod -aG docker $USER
 # Logout and login again
 
 # 3. Test sandbox functionality
-python -c "
+uv run python -c "
 from codomyrmex.code_execution_sandbox import execute_code
 result = execute_code('python', 'print(\"Hello\")')
 print('Sandbox test:', result['success'])
@@ -460,13 +460,13 @@ print('Sandbox test:', result['success'])
 # Solution: Check matplotlib backend and dependencies
 
 # 1. Check matplotlib installation
-python -c "import matplotlib; print('Matplotlib version:', matplotlib.__version__)"
+uv run python -c "import matplotlib; print('Matplotlib version:', matplotlib.__version__)"
 
 # 2. Set non-interactive backend for saving files
 export MPLBACKEND=Agg
 
 # 3. Test plot creation
-python -c "
+uv run python -c "
 from codomyrmex.data_visualization import create_line_plot
 import numpy as np
 x = np.linspace(0, 10, 50)
@@ -499,7 +499,7 @@ npm install
 ### **🔍 Advanced Debugging**
 ```bash
 # Check system dependencies
-python -c "
+uv run python -c "
 import sys
 required_modules = ['matplotlib', 'numpy', 'pytest', 'docker']
 for module in required_modules:

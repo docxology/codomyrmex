@@ -1,4 +1,4 @@
-# docs
+# src/codomyrmex/code_review/docs
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,9 +7,9 @@
 Documentation files and guides.
 
 ## Directory Contents
-- `README.md` – File
 - `index.md` – File
 
 ## Navigation
-- **Parent Directory**: [code_review](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [code_review](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

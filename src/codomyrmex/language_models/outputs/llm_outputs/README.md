@@ -1,4 +1,4 @@
-# llm_outputs
+# src/codomyrmex/language_models/outputs/llm_outputs
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Contains components for the src system.
 
 ## Directory Contents
-- `README.md` – File
 - `chat_completion.md` – File
 - `manager_generation.md` – File
 - `parameter_configuration.md` – File
@@ -16,5 +15,6 @@ Contains components for the src system.
 - `text_generation_with_options.md` – File
 
 ## Navigation
-- **Parent Directory**: [outputs](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [outputs](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

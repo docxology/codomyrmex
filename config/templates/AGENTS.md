@@ -16,4 +16,4 @@ Configuration files and templates.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **📁 Parent Directory**: [config](../README.md) - Parent directory documentation
+- **Parent Directory: Parent Directory**: [config](../README.md) - Parent directory documentation

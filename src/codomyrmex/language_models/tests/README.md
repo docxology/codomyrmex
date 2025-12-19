@@ -1,4 +1,4 @@
-# tests
+# src/codomyrmex/language_models/tests
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
 - `__init__.py` – File
 - `test_benchmarks.py` – File
 - `test_comprehensive_integration.py` – File
@@ -16,5 +15,6 @@ Test files and validation suites.
 - `test_security.py` – File
 
 ## Navigation
-- **Parent Directory**: [language_models](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [language_models](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

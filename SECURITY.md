@@ -172,8 +172,16 @@ For security-related questions or concerns:
 - **Security Advisories**: [GitHub Security Advisories](https://github.com/codomyrmex/codomyrmex/security/advisories)
 - **General Issues**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues) (for non-security issues only)
 
+## Related Documentation
+
+- **[Production Deployment Guide](docs/deployment/production.md)** - Production security and deployment practices
+- **[Contributing Guide](docs/project/contributing.md)** - Security considerations for contributions
+- **[Module Security Details](src/codomyrmex/code_execution_sandbox/SECURITY.md)** - Code execution sandbox security
+- **[AI Security Details](src/codomyrmex/ai_code_editing/SECURITY.md)** - AI integration security considerations
+- **[Git Operations Security](src/codomyrmex/git_operations/SECURITY.md)** - Version control security
+
 ---
 
-**Last Updated**: Auto-generated from security review  
-**Version**: 1.0  
+**Last Updated**: Auto-generated from security review
+**Version**: 1.0
 **Scope**: All Codomyrmex modules and components

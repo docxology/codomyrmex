@@ -1,4 +1,4 @@
-# documentation
+# src/codomyrmex/documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,10 +7,12 @@
 Documentation files and guides.
 
 ## Directory Contents
+- `.cursor/` – Subdirectory
+- `.docusaurus/` – Subdirectory
+- `.gitignore` – File
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
-- `README.md` – File
 - `SECURITY.md` – File
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
@@ -32,5 +34,6 @@ Documentation files and guides.
 - `tests/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

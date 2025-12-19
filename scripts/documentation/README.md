@@ -1,4 +1,4 @@
-# documentation
+# scripts/documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Documentation files and guides.
 
 ## Directory Contents
-- `README.md` – File
 - `analyze_content_quality.py` – File
 - `auto_generate_docs.py` – File
 - `bootstrap_agents_readmes.py` – File
@@ -46,5 +45,6 @@ Documentation files and guides.
 - `verify_api_specs.py` – File
 
 ## Navigation
-- **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Scripts Hub**: [scripts](../../../scripts/README.md)

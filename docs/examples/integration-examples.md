@@ -285,10 +285,10 @@ Integration examples handle errors across modules:
 **Solution**:
 ```bash
 # Verify module installation
-python -c "import codomyrmex.static_analysis; print('OK')"
+uv run python -c "import codomyrmex.static_analysis; print('OK')"
 
 # Reinstall if needed
-pip install -e .
+uv sync
 ```
 
 ### Resource Allocation Failures

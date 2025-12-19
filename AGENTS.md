@@ -6,7 +6,7 @@
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI-enhanced development workflows. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -68,7 +68,7 @@ All agents operating within this repository must:
 
 #### src/ - Source Code
 - Follow Python best practices (PEP 8)
-- Maintain comprehensive test coverage (≥80%)
+- Maintain test coverage (≥80%)
 - Update `API_SPECIFICATION.md` when changing interfaces
 - Document MCP tools in `MCP_TOOL_SPECIFICATION.md`
 - Version changes in `CHANGELOG.md`
@@ -135,7 +135,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `module_template/` - Module creation templates and scaffolding
 - `template/` - Code generation templates
 
-See [docs/modules/overview.md](docs/modules/overview.md) for complete module documentation.
+See [docs/modules/overview.md](docs/modules/overview.md) for module documentation.
 
 ## Navigation
 
@@ -241,7 +241,7 @@ Before completing significant changes:
 
 ## Related Documentation
 
-- **[Module Overview](docs/modules/overview.md)** - Complete module system documentation
+- **[Module Overview](docs/modules/overview.md)** - Module system documentation
 - **[Architecture](docs/project/architecture.md)** - System architecture and design principles
 - **[Cursorrules](cursorrules/README.md)** - Detailed coding standards and automation rules
 - **[Contributing](docs/project/contributing.md)** - Contributing guidelines and workflow

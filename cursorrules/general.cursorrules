@@ -49,6 +49,9 @@ These are the general guiding principles for AI-assisted development across the 
 ## 7. Project-Wide Documents
 When interacting with project-wide documents like the root `README.md`, `LICENSE`, `CONTRIBUTING.md`, or `CODE_OF_CONDUCT.md`, understand their broad scope and impact. Changes should be carefully considered. Specific rules for the root `README.md` can be found in `file-specific/README.md.cursorrules`.
 
+### Documentation Standards
+All documentation should follow the guidelines in `docs/development/documentation.md` and contribute to the overall documentation architecture outlined in `docs/README.md`. For contribution guidelines, see `docs/project/contributing.md`.
+
 ## 8. Review and Finalization
 1.  **Self-Review**: Before concluding, review your changes against these general rules and any applicable module-specific rules.
 2.  **Impact Assessment**: Briefly consider the potential impact of your changes on other parts of the project.

@@ -1,4 +1,4 @@
-# integration
+# scripts/examples/integration
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Example implementations and demonstrations.
 
 ## Directory Contents
-- `README.md` – File
 - `ai-development-assistant.sh` – File
 - `ai-enhanced-analysis.sh` – File
 - `ai_driven_development_workflow.sh` – File
@@ -20,5 +19,6 @@ Example implementations and demonstrations.
 - `performance_benchmarking_orchestrator.sh` – File
 
 ## Navigation
-- **Parent Directory**: [examples](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [examples](../README.md)
+- **Scripts Hub**: [scripts](../../../scripts/README.md)

@@ -41,4 +41,4 @@ Contains components for the cursorrules system.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **📁 Parent Directory**: [cursorrules](../README.md) - Parent directory documentation
+- **Parent Directory**: [cursorrules](../README.md) - Parent directory documentation

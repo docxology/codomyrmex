@@ -37,7 +37,7 @@ cd codomyrmex
 # 3. Create virtual environment and install
 uv venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install -e .
+uv sync
 
 # 4. Verify installation
 codomyrmex check
@@ -99,7 +99,7 @@ cd codomyrmex
 # 3. Create virtual environment and install
 uv venv .venv
 source .venv/bin/activate
-uv pip install -e .
+uv sync
 
 # 4. Verify installation
 codomyrmex check
@@ -118,13 +118,13 @@ cd codomyrmex
 bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
 
 # 3. Install development dependencies
-uv pip install -e ".[dev]"
+uv sync --dev
 
 # 4. Setup pre-commit hooks (optional but recommended)
 pre-commit install
 
 # 5. Run tests to verify everything works
-pytest testing/ -v
+uv run pytest testing/ -v
 ```
 
 ## ⚙️ Configuration
@@ -192,7 +192,7 @@ codomyrmex check
 # Choose option 7: Interactive Shell
 
 # Or launch directly
-python -c "
+uv run python -c "
 from codomyrmex.terminal_interface import InteractiveShell
 InteractiveShell().run()
 "
@@ -241,13 +241,13 @@ print(f"✅ Sandbox test: {sandbox_result['success']}")
 ### **Step 4: Run Comprehensive Tests**
 ```bash
 # Run all tests with coverage reporting
-pytest testing/ --cov=src/codomyrmex --cov-report=html
+uv run pytest testing/ --cov=src/codomyrmex --cov-report=html
 
 # Run specific module tests
-pytest testing/unit/test_data_visualization.py -v
+uv run pytest testing/unit/test_data_visualization.py -v
 
 # Run integration tests
-pytest testing/integration/ -v
+uv run pytest testing/integration/ -v
 
 # Check test coverage
 open testing/htmlcov/index.html  # View coverage report
@@ -256,13 +256,13 @@ open testing/htmlcov/index.html  # View coverage report
 ### **Step 5: Code Quality Check**
 ```bash
 # Run linting on the main codebase
-python -m ruff check src/codomyrmex/
+uv run ruff check src/codomyrmex/
 
 # Format code (if needed)
-python -m black src/codomyrmex/
+uv run black src/codomyrmex/
 
 # Type checking (if configured)
-python -m mypy src/codomyrmex/
+uv run mypy src/codomyrmex/
 ```
 
 ## 🐛 Troubleshooting Guide
@@ -284,7 +284,7 @@ source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 which python
 
 # 3. Check Codomyrmex installation
-python -c "import codomyrmex; print('✅ Import successful')"
+uv run python -c "import codomyrmex; print('✅ Import successful')"
 
 # 4. Run system check
 codomyrmex check
@@ -310,10 +310,10 @@ source .venv/bin/activate
 which python  # Should show .venv/bin/python
 
 # 4. Reinstall if needed
-uv pip install -e .
+uv sync
 
 # 5. Test import
-python -c "import codomyrmex; print('Success!')"
+uv run python -c "import codomyrmex; print('Success!')"
 ```
 
 #### **❌ Python Version Too Old**
@@ -346,7 +346,7 @@ uv venv .venv
 
 # Activate and install
 source .venv/bin/activate
-uv pip install -e .
+uv sync
 
 # Verify
 codomyrmex check
@@ -365,7 +365,7 @@ uv pip install package_name
 sudo rm -rf .venv
 uv venv .venv
 source .venv/bin/activate
-uv pip install -e .
+uv sync
 ```
 
 #### **❌ "No module named 'codomyrmex'" After Installation**
@@ -381,11 +381,11 @@ echo $PYTHONPATH
 
 # 3. Try reinstalling
 uv pip uninstall codomyrmex
-uv pip install -e .
+uv sync
 
 # 4. Test in fresh shell
 source .venv/bin/activate
-python -c "import codomyrmex; print('Fixed!')"
+uv run python -c "import codomyrmex; print('Fixed!')"
 ```
 
 ### **🔧 Module-Specific Issues**
@@ -407,7 +407,7 @@ GOOGLE_API_KEY="your-google-key-here"
 EOF
 
 # 3. Test API connectivity
-python -c "
+uv run python -c "
 import os
 from codomyrmex.ai_code_editing import validate_api_keys
 print('API Keys:', validate_api_keys())
@@ -428,7 +428,7 @@ sudo usermod -aG docker $USER
 # Logout and login again
 
 # 3. Test sandbox functionality
-python -c "
+uv run python -c "
 from codomyrmex.code_execution_sandbox import execute_code
 result = execute_code('python', 'print(\"Hello\")')
 print('Sandbox test:', result['success'])
@@ -441,13 +441,13 @@ print('Sandbox test:', result['success'])
 # Solution: Check matplotlib backend and dependencies
 
 # 1. Check matplotlib installation
-python -c "import matplotlib; print('Matplotlib version:', matplotlib.__version__)"
+uv run python -c "import matplotlib; print('Matplotlib version:', matplotlib.__version__)"
 
 # 2. Set non-interactive backend for saving files
 export MPLBACKEND=Agg
 
 # 3. Test plot creation
-python -c "
+uv run python -c "
 from codomyrmex.data_visualization import create_line_plot
 import numpy as np
 x = np.linspace(0, 10, 50)
@@ -482,7 +482,7 @@ npm install
 #### **Check System Dependencies**
 ```bash
 # Verify all required system packages
-python -c "
+uv run python -c "
 import sys
 required_modules = ['matplotlib', 'numpy', 'pytest', 'docker']
 for module in required_modules:
@@ -507,7 +507,7 @@ for module in optional_modules:
 #### **Environment Variable Issues**
 ```bash
 # Check if .env file is being loaded
-python -c "
+uv run python -c "
 import os
 from pathlib import Path
 

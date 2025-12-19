@@ -1,4 +1,4 @@
-# tests
+# src/codomyrmex/project_orchestration/tests
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
 - `__init__.py` – File
 - `test_integration.py` – File
 - `test_inter_module_workflows.py` – File
@@ -18,5 +17,6 @@ Test files and validation suites.
 - `test_workflow_manager.py` – File
 
 ## Navigation
-- **Parent Directory**: [project_orchestration](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [project_orchestration](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

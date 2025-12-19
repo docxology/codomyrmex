@@ -4,10 +4,11 @@
 
 ## Overview
 
-Documentation components and guides for the Codomyrmex platform.
+This is the documentation coordination document for all guides, references, and user-facing content in the Codomyrmex repository. It defines the documentation system that serves users, contributors, and agents working with the Codomyrmex platform.
+
+**Important**: Documentation in this directory is about Codomyrmex itself (the platform), not tools that Codomyrmex provides to users.
 
 ## Directory Contents
-- `README.md` – File
 - `deployment/` – Subdirectory
 - `development/` – Subdirectory
 - `examples/` – Subdirectory
@@ -20,3 +21,4 @@ Documentation components and guides for the Codomyrmex platform.
 
 ## Navigation
 - **Project Root**: [README](../README.md)
+- **Docs Hub**: [docs/README.md](README.md)

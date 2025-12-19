@@ -16,4 +16,4 @@ Contains components for the src system.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **📁 Parent Directory**: [src](../README.md) - Parent directory documentation
+- **Parent Directory: Parent Directory**: [src](../README.md) - Parent directory documentation

@@ -1,4 +1,4 @@
-# droid
+# src/codomyrmex/ai_code_editing/tests/unit/droid
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,9 +7,9 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
 - `test_controller.py` – File
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [unit](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

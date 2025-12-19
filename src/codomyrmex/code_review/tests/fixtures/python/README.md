@@ -1,4 +1,4 @@
-# python
+# src/codomyrmex/code_review/tests/fixtures/python
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,12 +7,12 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
 - `clone_example.py` – File
 - `complex_function.py` – File
 - `security_issues.py` – File
 - `simple_function.py` – File
 
 ## Navigation
-- **Parent Directory**: [fixtures](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [fixtures](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

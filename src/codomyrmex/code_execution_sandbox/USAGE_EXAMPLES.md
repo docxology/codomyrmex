@@ -7,7 +7,7 @@ This document provides examples of how to use the Code Execution Sandbox module 
 1. Docker must be installed and running on your system.
 2. Install the required dependencies:
    ```bash
-   pip install -r code_execution_sandbox/requirements.txt
+   uv sync --extra code_execution_sandbox
    ```
 
 ## Basic Usage

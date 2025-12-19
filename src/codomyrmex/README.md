@@ -1,13 +1,14 @@
-# codomyrmex
+# src/codomyrmex
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the src system.
+Core package containing the Codomyrmex platform implementation. This directory houses all functional modules that provide the platform's capabilities, organized into a layered architecture for maintainability and extensibility.
+
+The codomyrmex package serves as the central hub for all platform functionality, with modules that can be composed together to create complex workflows and applications.
 
 ## Directory Contents
-- `README.md` – File
 - `__init__.py` – File
 - `ai_code_editing/` – Subdirectory
 - `api_documentation/` – Subdirectory
@@ -43,5 +44,6 @@ Contains components for the src system.
 - `tools/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [src](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [src](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

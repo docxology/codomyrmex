@@ -236,7 +236,7 @@ try:
             print('✅ Codomyrmex modules available (development mode)')
         except ImportError:
             print('❌ Codomyrmex not properly installed')
-            health_results['recommendations'].append('Install Codomyrmex: pip install -e . (from project root)')
+            health_results['recommendations'].append('Install Codomyrmex: uv sync (from project root)')
     
     health_results['environment_health'] = env_health
     

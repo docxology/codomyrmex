@@ -1,4 +1,4 @@
-# docs
+# src/codomyrmex/git_operations/docs
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,11 +7,11 @@
 Documentation files and guides.
 
 ## Directory Contents
-- `README.md` – File
 - `index.md` – File
 - `technical_overview.md` – File
 - `tutorials/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [git_operations](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [git_operations](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

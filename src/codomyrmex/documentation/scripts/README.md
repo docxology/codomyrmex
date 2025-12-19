@@ -1,4 +1,4 @@
-# scripts
+# src/codomyrmex/documentation/scripts
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,11 +7,11 @@
 Documentation files and guides.
 
 ## Directory Contents
-- `README.md` – File
 - `check_stale_aggregation.py` – File
 - `update_sidebars.py` – File
 - `validate_docs_quality.py` – File
 
 ## Navigation
-- **Parent Directory**: [documentation](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [documentation](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

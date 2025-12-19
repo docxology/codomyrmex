@@ -10,7 +10,7 @@ This document provides examples of how to use the AI Code Editing module within 
 
 2. Install the required dependencies:
    ```bash
-   pip install -r ai_code_editing/requirements.txt
+   uv sync --extra ai_code_editing
    ```
 
 ## Basic Code Generation

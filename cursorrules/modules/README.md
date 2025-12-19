@@ -1,4 +1,4 @@
-# modules
+# cursorrules/modules
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Contains components for the cursorrules system.
 
 ## Directory Contents
-- `README.md` – File
 - `ai_code_editing.cursorrules` – File
 - `api_documentation.cursorrules` – File
 - `build_synthesis.cursorrules` – File
@@ -37,5 +36,6 @@ Contains components for the cursorrules system.
 - `terminal_interface.cursorrules` – File
 
 ## Navigation
-- **Parent Directory**: [cursorrules](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [cursorrules](../README.md)
+- **Cursorrules Hub**: [cursorrules](../../../cursorrules/README.md)

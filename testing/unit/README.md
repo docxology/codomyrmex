@@ -1,4 +1,4 @@
-# unit
+# testing/unit
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
 - `test_ai_code_editing.py` – File
 - `test_api_documentation.py` – File
 - `test_bootstrap_agents_readmes.py` – File
@@ -49,5 +48,6 @@ Test files and validation suites.
 - `test_terminal_interface_comprehensive.py` – File
 
 ## Navigation
-- **Parent Directory**: [testing](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [testing](../README.md)
+- **Testing Hub**: [testing](../../../testing/README.md)

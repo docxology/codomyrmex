@@ -98,7 +98,7 @@ Each module has dedicated automation scripts:
 All scripts in this directory must:
 
 1. **Idempotent Operations**: Scripts should be safe to run multiple times
-2. **Error Handling**: Comprehensive error handling with informative messages
+2. **Error Handling**: Error handling with informative messages
 3. **Logging Integration**: Use centralized logging system for all operations
 4. **Configuration Management**: Respect configuration files and environment variables
 5. **Documentation**: Include usage documentation and help text
@@ -107,7 +107,7 @@ All scripts in this directory must:
 
 #### Development Scripts
 - Follow TDD practices for script development
-- Include comprehensive testing
+- Include testing
 - Handle edge cases gracefully
 - Provide clear success/failure feedback
 

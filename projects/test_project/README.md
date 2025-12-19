@@ -1,4 +1,4 @@
-# test_project
+# projects/test_project
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,12 +7,13 @@
 Test files and validation suites.
 
 ## Directory Contents
-- `README.md` – File
+- `.codomyrmex/` – Subdirectory
 - `config/` – Subdirectory
 - `data/` – Subdirectory
 - `reports/` – Subdirectory
 - `src/` – Subdirectory
 
 ## Navigation
-- **Parent Directory**: [projects](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [projects](../README.md)
+- **Projects Hub**: [projects](../../../projects/README.md)

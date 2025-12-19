@@ -436,3 +436,4 @@ Regenerate documentation as part of your development workflow:
 python -c "from codomyrmex.api_documentation import generate_api_docs; generate_api_docs('./src/api', './docs/api')"
 ```
 
+

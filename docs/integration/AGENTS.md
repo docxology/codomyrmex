@@ -16,4 +16,4 @@ Documentation files and guides.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **Parent Directory: Parent Directory**: [docs](../README.md) - Parent directory documentation

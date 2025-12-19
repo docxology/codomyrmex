@@ -1,4 +1,4 @@
-# cross-module
+# cursorrules/cross-module
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Contains components for the cursorrules system.
 
 ## Directory Contents
-- `README.md` – File
 - `build_synthesis.cursorrules` – File
 - `code_execution_sandbox.cursorrules` – File
 - `data_visualization.cursorrules` – File
@@ -19,5 +18,6 @@ Contains components for the cursorrules system.
 - `template_module.cursorrules` – File
 
 ## Navigation
-- **Parent Directory**: [cursorrules](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [cursorrules](../README.md)
+- **Cursorrules Hub**: [cursorrules](../../../cursorrules/README.md)

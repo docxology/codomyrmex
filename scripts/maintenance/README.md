@@ -1,4 +1,4 @@
-# maintenance
+# scripts/maintenance
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
@@ -7,7 +7,6 @@
 Automation and utility scripts.
 
 ## Directory Contents
-- `README.md` – File
 - `add_logging.py` – File
 - `analyze_todos.py` – File
 - `audit_error_handling.py` – File
@@ -21,5 +20,6 @@ Automation and utility scripts.
 - `security_audit.py` – File
 
 ## Navigation
-- **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Scripts Hub**: [scripts](../../../scripts/README.md)

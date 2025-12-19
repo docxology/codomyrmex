@@ -1,4 +1,4 @@
-# Cursor Rules for Using the model_context_protocol Module (Cross-Module)
+# Cursor Rules for the model_context_protocol Module (Cross-Module)
 
 ## 0. Preamble
 These rules apply when *using* the Model Context Protocol (MCP) in other Codomyrmex modules to define tools, consume MCP-compliant services, or integrate with AI models. They supplement `general.cursorrules` and focus on cross-module MCP usage patterns. Always adhere to `general.cursorrules` unless explicitly overridden here.

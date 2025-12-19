@@ -809,9 +809,9 @@ jobs:
 
     - name: Install Codomyrmex
       run: |
-        pip install codomyrmex[all]
+        uv sync --all-extras
         # Or install from source
-        # pip install -e .
+        # uv sync
 
     - name: Run Static Analysis
       if: ${{ github.event.inputs.analysis_type != 'ai-review-only' }}

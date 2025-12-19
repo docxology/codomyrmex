@@ -1,19 +1,22 @@
-# git_operations
+# src/codomyrmex/git_operations
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the src system.
+Core module providing comprehensive Git version control automation capabilities for the Codomyrmex platform. This module enables programmatic interaction with Git repositories, supporting common version control workflows, repository analysis, and automated Git operations.
+
+The git_operations module serves as the version control backbone, enabling automated development workflows and repository management throughout the platform.
 
 ## Directory Contents
+- `.cursor/` – Subdirectory
+- `.gitignore` – File
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `COMPLETE_API_DOCUMENTATION.md` – File
 - `COMPREHENSIVE_USAGE_EXAMPLES.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `METADATA_SYSTEM_GUIDE.md` – File
-- `README.md` – File
 - `REPOSITORY_MANAGEMENT_GUIDE.md` – File
 - `SECURITY.md` – File
 - `USAGE_EXAMPLES.md` – File
@@ -97,5 +100,6 @@ Contains components for the src system.
 - `visualization_integration.py` – File
 
 ## Navigation
-- **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Src Hub**: [src](../../../src/README.md)

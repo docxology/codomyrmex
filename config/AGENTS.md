@@ -24,7 +24,7 @@ The configuration system supports multiple configuration patterns:
 ### Configuration Areas
 
 **examples/**
-- Complete configuration examples for different scenarios
+- Configuration examples for different scenarios
 - Environment-specific setup demonstrations
 - Integration configuration patterns
 
@@ -139,12 +139,12 @@ Configurations undergo validation:
 
 ### For Agents
 - **Configuration Standards**: [cursorrules/general.cursorrules](../../cursorrules/general.cursorrules)
-- **Environment Setup**: [docs/development/environment-setup.md](../../docs/development/environment-setup.md)
-- **Module System**: [docs/modules/overview.md](../../docs/modules/overview.md)
+- **Environment Setup**: [docs/development/environment-setup.md](../docs/development/environment-setup.md)
+- **Module System**: [docs/modules/overview.md](../docs/modules/overview.md)
 
 ### For Contributors
-- **Configuration Guide**: [docs/project/contributing.md](../../docs/project/contributing.md)
-- **Validation**: [scripts/config_management/](../../scripts/config_management/) - Configuration validation tools
+- **Configuration Guide**: [docs/project/contributing.md](../docs/project/contributing.md)
+- **Validation**: [scripts/config_management/](../scripts/config_management/) - Configuration validation tools
 
 ## Agent Coordination
 
@@ -186,6 +186,6 @@ Before configuration changes are accepted:
 
 ## Related Documentation
 
-- **[Environment Setup](docs/development/environment-setup.md)** - Development environment configuration
-- **[Project Orchestration](docs/project_orchestration/config-driven-operations.md)** - Configuration-driven workflows
-- **[Contributing Guide](docs/project/contributing.md)** - Configuration contribution guidelines
+- **[Environment Setup](../docs/development/environment-setup.md)** - Development environment configuration
+- **[Project Orchestration](../docs/project_orchestration/config-driven-operations.md)** - Configuration-driven workflows
+- **[Contributing Guide](../docs/project/contributing.md)** - Configuration contribution guidelines

@@ -59,7 +59,7 @@ activate_venv() {
     else
         echo -e "${YELLOW}⚠️  No virtual environment found. Consider creating one:${NC}"
         PYTHON_CMD=$(get_python_cmd)
-        echo -e "${CYAN}   $PYTHON_CMD -m venv venv && source venv/bin/activate${NC}"
+        echo -e "${CYAN}   uv venv .venv && source .venv/bin/activate${NC}"
     fi
 }
 
@@ -70,19 +70,24 @@ ensure_dependencies() {
 
     if ! $PYTHON_CMD -c "import sys; sys.path.insert(0, 'src'); from codomyrmex.system_discovery import SystemDiscovery" 2>/dev/null; then
         echo -e "${YELLOW}📦 Installing dependencies...${NC}"
-        if [[ -f ".venv/bin/pip" ]]; then
+        if command -v uv &> /dev/null; then
+            uv sync || {
+                echo -e "${RED}❌ Failed to install dependencies. Please run: uv sync${NC}"
+                exit 1
+            }
+        elif [[ -f ".venv/bin/pip" ]]; then
             .venv/bin/pip install -e . || {
-                echo -e "${RED}❌ Failed to install dependencies. Please run: pip install -e .${NC}"
+                echo -e "${RED}❌ Failed to install dependencies. Please run: uv sync${NC}"
                 exit 1
             }
         elif [[ -f "venv/bin/pip" ]]; then
             venv/bin/pip install -e . || {
-                echo -e "${RED}❌ Failed to install dependencies. Please run: pip install -e .${NC}"
+                echo -e "${RED}❌ Failed to install dependencies. Please run: uv sync${NC}"
                 exit 1
             }
         else
             pip install -e . || {
-                echo -e "${RED}❌ Failed to install dependencies. Please run: pip install -e .${NC}"
+                echo -e "${RED}❌ Failed to install dependencies. Please run: uv sync${NC}"
                 exit 1
             }
         fi
@@ -163,22 +168,32 @@ discovery.run_demo_workflows()
 # Run test suite
 run_test_suite() {
     echo -e "\n${CYAN}🧪 Running Codomyrmex Test Suite...${NC}"
-    if command -v pytest &> /dev/null; then
+    if command -v uv &> /dev/null; then
+        uv run pytest testing/ -v --tb=short
+    elif command -v pytest &> /dev/null; then
         pytest testing/ -v --tb=short
     else
         echo -e "${YELLOW}⚠️  pytest not found. Installing...${NC}"
-        pip install pytest
-        pytest testing/ -v --tb=short
+        uv pip install pytest
+        uv run pytest testing/ -v --tb=short
     fi
 }
 
 # Browse documentation
 browse_documentation() {
     echo -e "\n${CYAN}📚 Codomyrmex Documentation${NC}"
-    echo -e "${YELLOW}Available documentation:${NC}"
-    find . -name "README.md" -o -name "*.md" | grep -E "(README|API_SPECIFICATION|USAGE|TUTORIAL)" | head -10
-    echo -e "\n${GREEN}To build the full documentation website:${NC}"
-    echo -e "${CYAN}cd src/codomyrmex/documentation && npm install && npm run build${NC}"
+    echo -e "${YELLOW}Available documentation sections:${NC}"
+    echo -e "${GREEN}📖 docs/README.md${NC} - Documentation overview"
+    echo -e "${GREEN}🚀 docs/getting-started/${NC} - Installation and setup guides"
+    echo -e "${GREEN}🏗️  docs/project/${NC} - Architecture and contributing guides"
+    echo -e "${GREEN}🔧 docs/development/${NC} - Development environment and testing"
+    echo -e "${GREEN}📚 docs/modules/${NC} - Module system documentation"
+    echo -e "${GREEN}📋 docs/reference/${NC} - API reference and troubleshooting"
+    echo -e ""
+    echo -e "${YELLOW}Key documentation files:${NC}"
+    find docs/ -name "README.md" -o -name "*.md" | head -10
+    echo -e "\n${GREEN}To view documentation:${NC}"
+    echo -e "${CYAN}Open docs/ directory in your editor or use: make docs${NC}"
 }
 
 # Development tools
@@ -195,16 +210,16 @@ run_dev_tools() {
     PYTHON_CMD=$(get_python_cmd)
 
     case $dev_choice in
-        1) $PYTHON_CMD -m pylint src/codomyrmex/ --disable=C0114,C0116 ;;
-        2) $PYTHON_CMD -m black src/ testing/ ;;
-        3) $PYTHON_CMD -m mypy src/codomyrmex/ ;;
-        4) $PYTHON_CMD -m bandit -r src/codomyrmex/ ;;
+        1) uv run pylint src/codomyrmex/ --disable=C0114,C0116 ;;
+        2) uv run black src/ testing/ ;;
+        3) uv run mypy src/codomyrmex/ ;;
+        4) uv run bandit -r src/codomyrmex/ ;;
         5)
             echo -e "${CYAN}Running all development tools...${NC}"
-            $PYTHON_CMD -m black src/ testing/
-            $PYTHON_CMD -m pylint src/codomyrmex/ --disable=C0114,C0116
-            $PYTHON_CMD -m mypy src/codomyrmex/
-            $PYTHON_CMD -m bandit -r src/codomyrmex/
+            uv run black src/ testing/
+            uv run pylint src/codomyrmex/ --disable=C0114,C0116
+            uv run mypy src/codomyrmex/
+            uv run bandit -r src/codomyrmex/
             ;;
         *) echo -e "${YELLOW}Invalid choice${NC}" ;;
     esac

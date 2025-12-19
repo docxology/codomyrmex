@@ -62,8 +62,8 @@ which python  # Should show .venv/bin/python
 # Don't use sudo with virtual environments
 # Instead, fix Python installation permissions or use user directory
 
-# Use --user flag for pip installations
-pip install --user -e .
+# Use uv for package management
+uv sync
 
 # Or fix permissions (macOS/Linux)
 sudo chown -R $USER:$USER /usr/local/lib/python3.*/site-packages
@@ -73,15 +73,15 @@ sudo chown -R $USER:$USER /usr/local/lib/python3.*/site-packages
 
 #### Issue: Package installation fails with "ERROR: Could not build wheels"
 ```bash
-# Update pip and build tools
-pip install --upgrade pip setuptools wheel
+# Update uv and build tools
+uv self update
 
 # Install development dependencies
 sudo apt-get install python3-dev build-essential  # Ubuntu/Debian
 xcode-select --install  # macOS
 
 # For specific packages
-pip install --no-cache-dir package_name
+uv pip install --no-cache package_name
 ```
 
 #### Issue: Conflicting package versions
@@ -91,9 +91,9 @@ pip cache purge
 
 # Use fresh virtual environment
 rm -rf .venv
-python3 -m venv .venv
+uv venv .venv
 source .venv/bin/activate
-pip install -e .
+uv sync
 ```
 
 ## 🐛 Runtime Issues
@@ -106,7 +106,7 @@ pip install -e .
 pwd  # Should end with /codomyrmex
 
 # Install in editable mode
-pip install -e .
+uv sync
 
 # Check installation
 python -c "import codomyrmex; print(codomyrmex.__file__)"
@@ -125,7 +125,7 @@ for name, info in modules.items():
     print(f'{name}: {\"✅\" if info.is_importable else \"❌\"}')"
 
 # Reinstall if needed
-pip install -e .
+uv sync
 ```
 
 ### **Configuration Issues** {#environment-variable-issues}
@@ -213,7 +213,7 @@ python -m pytest --version
 python -c "import sys; print(sys.path)"
 
 # Reinstall in editable mode
-pip install -e .
+uv sync
 ```
 
 #### Issue: Tests pass locally but fail in CI
@@ -223,7 +223,7 @@ python --version
 pytest --version
 
 # Check for missing test dependencies
-pip install -e ".[dev]"
+uv sync --dev
 
 # Run tests with same options as CI
 pytest testing/ -v --tb=short --cov=src/codomyrmex
@@ -232,7 +232,7 @@ pytest testing/ -v --tb=short --cov=src/codomyrmex
 #### Issue: Coverage reports not generating
 ```bash
 # Install coverage dependencies
-pip install pytest-cov
+uv sync
 
 # Generate HTML coverage report
 pytest --cov=src/codomyrmex --cov-report=html --cov-report=term
@@ -403,7 +403,7 @@ git commit -m "Remove generated files from tracking"
 #### Issue: Type checking errors with mypy
 ```bash
 # Install type stubs
-pip install types-requests types-PyYAML
+uv pip install types-requests types-PyYAML
 
 # Configure mypy in pyproject.toml
 [tool.mypy]
@@ -690,10 +690,9 @@ find . -name "*.pyc" -delete
 find . -name "__pycache__" -type d -exec rm -rf {} +
 
 # Fresh installation
-python3 -m venv .venv
+uv venv .venv
 source .venv/bin/activate
-pip install --upgrade pip
-pip install -e .
+uv sync
 
 # Verify installation
 codomyrmex check

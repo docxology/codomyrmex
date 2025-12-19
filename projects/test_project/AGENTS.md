@@ -18,4 +18,4 @@ Test files and validation suites.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **📁 Parent Directory**: [projects](../README.md) - Parent directory documentation
+- **Parent Directory: Parent Directory**: [projects](../README.md) - Parent directory documentation

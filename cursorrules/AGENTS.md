@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This is the coding standards coordination document for all Cursor rules, coding conventions, and automation guidelines in the Codomyrmex repository. It defines the comprehensive rule system that ensures consistent code quality, style, and development practices across the entire platform.
+This is the coding standards coordination document for all Cursor rules, coding conventions, and automation guidelines in the Codomyrmex repository. It defines the rule system that ensures consistent code quality, style, and development practices across the entire platform.
 
 The cursorrules directory contains hierarchical coding standards that guide both human developers and AI agents in maintaining high-quality, consistent code.
 
@@ -23,10 +23,11 @@ Rules are organized by scope and specificity:
 
 ### Rule Priority
 
-When rules conflict, more specific rules take precedence:
-1. File-specific rules override module rules
-2. Module-specific rules override cross-module rules
-3. Cross-module rules override general rules
+When rules conflict, more specific rules take precedence over more general rules in this hierarchy (from most specific to most general):
+1. File-specific rules (highest priority - apply to specific file types)
+2. Module-specific rules (apply to specific modules)
+3. Cross-module rules (apply across multiple modules)
+4. General rules (lowest priority - apply repository-wide)
 
 ## Rule Categories
 
@@ -82,17 +83,42 @@ File-type specific guidance:
 - `data_visualization.cursorrules` - Visualization consistency
 - `logging_monitoring.cursorrules` - Logging standards
 - `model_context_protocol.cursorrules` - MCP compliance
+- `output_module.cursorrules` - Output directory management standards
+- `pattern_matching.cursorrules` - Pattern matching coordination standards
+- `static_analysis.cursorrules` - Static analysis coordination standards
+- `template_module.cursorrules` - Template usage coordination standards
 
 **Module-Specific Rules:**
 - `ai_code_editing.cursorrules` - AI-assisted coding standards
 - `api_documentation.cursorrules` - API documentation guidelines
 - `build_synthesis.cursorrules` - Build automation standards
-- `environment_setup.cursorrules` - Environment configuration
-- `git_operations.cursorrules` - Version control standards
+- `ci_cd_automation.cursorrules` - CI/CD automation standards
+- `code_execution_sandbox.cursorrules` - Code execution sandbox standards
+- `code_review.cursorrules` - Code review standards
+- `config_management.cursorrules` - Configuration management standards
+- `containerization.cursorrules` - Containerization standards
+- `data_visualization.cursorrules` - Data visualization standards
+- `database_management.cursorrules` - Database management standards
+- `documentation.cursorrules` - Documentation generation standards
+- `environment_setup.cursorrules` - Environment setup standards
+- `git_operations.cursorrules` - Git operations standards
+- `language_models.cursorrules` - Language model integration standards
+- `logging_monitoring.cursorrules` - Logging and monitoring standards
+- `model_context_protocol.cursorrules` - Model context protocol standards
+- `modeling_3d.cursorrules` - 3D modeling standards
+- `module_template.cursorrules` - Module template standards
+- `ollama_integration.cursorrules` - Ollama integration standards
+- `pattern_matching.cursorrules` - Pattern matching standards
+- `performance.cursorrules` - Performance optimization standards
+- `physical_management.cursorrules` - Physical system management standards
+- `project_orchestration.cursorrules` - Project orchestration standards
+- `security_audit.cursorrules` - Security audit standards
+- `static_analysis.cursorrules` - Static analysis standards
+- `system_discovery.cursorrules` - System discovery standards
+- `terminal_interface.cursorrules` - Terminal interface standards
 
 **File-Specific Rules:**
 - `README.md.cursorrules` - README file standards
-- Additional file-type specific rules
 
 ## Operating Contracts
 
@@ -217,7 +243,7 @@ Before rule changes are accepted:
 
 ## Version History
 
-- **v0.1.0** (December 2025) - Initial comprehensive coding standards system with hierarchical rule organization
+- **v0.1.0** (December 2025) - Initial coding standards system with hierarchical rule organization
 
 ## Related Documentation
 
