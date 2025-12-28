@@ -35,25 +35,25 @@ except ImportError:
 
 # Attempt to import the new environment setup function
 try:
-    from environment_setup.env_checker import (
+    from codomyrmex.environment_setup.env_checker import (
         check_and_setup_env_vars,
     )
-    from environment_setup.env_checker import (
+    from codomyrmex.environment_setup.env_checker import (
         ensure_dependencies_installed as ensure_core_deps_installed,
     )
 except ImportError:
     # This initial print might be okay if logger isn't set up yet, or handle differently
     print(
-        "[ERROR] Could not import from environment_setup.env_checker. Please ensure the module exists and is in the Python path."
+        "[ERROR] Could not import from codomyrmex.environment_setup.env_checker. Please ensure the module exists and is in the Python path."
     )
     sys.exit(1)
 
 # Import logging setup
 try:
-    from logging_monitoring import get_logger, setup_logging
+    from codomyrmex.logging_monitoring import get_logger, setup_logging
 except ImportError:
     print(
-        "[ERROR] Could not import from logging_monitoring. Please ensure the module exists and is in the Python path (PROJECT_ROOT/logging_monitoring)."
+        "[ERROR] Could not import from codomyrmex.logging_monitoring. Please ensure the module exists and is in the Python path."
     )
     sys.exit(1)
 

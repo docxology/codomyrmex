@@ -26,6 +26,240 @@ The terminal_interface module serves as the user interaction foundation, ensurin
 - Error message formatting with actionable guidance
 - Unicode and emoji support for enhanced readability
 
+## Function Signatures
+
+### Terminal Formatter Class
+
+```python
+class TerminalFormatter:
+    def __init__(self, use_colors: bool = None) -> None
+```
+
+Utility class for formatting terminal output with colors and styles. Auto-detects color support if `use_colors` is None.
+
+**Methods:**
+
+```python
+def color(self, text: str, color: str, style: Optional[str] = None) -> str
+```
+
+Apply color and optional style to text using ANSI escape codes.
+
+**Parameters:**
+- `text` (str): Text to format
+- `color` (str): Color name (e.g., "RED", "BRIGHT_GREEN", "CYAN")
+- `style` (Optional[str]): Style name (e.g., "BOLD", "ITALIC", "UNDERLINE")
+
+**Returns:** `str` - Formatted text with ANSI codes
+
+```python
+def success(self, text: str) -> str
+def error(self, text: str) -> str
+def warning(self, text: str) -> str
+def info(self, text: str) -> str
+```
+
+Format message with appropriate color and emoji indicator.
+
+**Returns:** `str` - Formatted message (success=green ✅, error=red ❌, warning=yellow ⚠️, info=blue ℹ️)
+
+```python
+def header(self, text: str, char: str = "=", width: int = 60) -> str
+```
+
+Create a formatted header with border lines.
+
+**Parameters:**
+- `text` (str): Header text
+- `char` (str): Border character. Defaults to "="
+- `width` (int): Total width of header. Defaults to 60
+
+**Returns:** `str` - Formatted header with top and bottom borders
+
+```python
+def progress_bar(
+    self,
+    current: int,
+    total: int,
+    width: int = 40,
+    prefix: str = "",
+    suffix: str = ""
+) -> str
+```
+
+Create a visual progress bar with percentage.
+
+**Parameters:**
+- `current` (int): Current progress value
+- `total` (int): Total/maximum value
+- `width` (int): Width of progress bar in characters. Defaults to 40
+- `prefix` (str): Text before progress bar
+- `suffix` (str): Text after progress bar
+
+**Returns:** `str` - Formatted progress bar with percentage
+
+```python
+def table(
+    self,
+    headers: list[str],
+    rows: list[list[str]],
+    max_width: int = 80
+) -> str
+```
+
+Create a formatted table with borders using Unicode box-drawing characters.
+
+**Parameters:**
+- `headers` (list[str]): Column headers
+- `rows` (list[list[str]]): Table data rows
+- `max_width` (int): Maximum table width. Defaults to 80
+
+**Returns:** `str` - Formatted table with borders
+
+```python
+def box(
+    self,
+    content: str,
+    title: Optional[str] = None,
+    width: Optional[int] = None
+) -> str
+```
+
+Create a box around content with optional title.
+
+**Parameters:**
+- `content` (str): Content to box (can be multi-line)
+- `title` (Optional[str]): Optional box title
+- `width` (Optional[int]): Box width (auto-calculated if None)
+
+**Returns:** `str` - Boxed content with Unicode borders
+
+### Command Runner Class
+
+```python
+class CommandRunner:
+    def __init__(self, formatter: Optional[TerminalFormatter] = None) -> None
+```
+
+Utility class for running commands with formatted output.
+
+**Methods:**
+
+```python
+def run_command(
+    self,
+    command: list[str],
+    cwd: Optional[Path] = None,
+    show_output: bool = True,
+    timeout: Optional[int] = None
+) -> dict[str, Any]
+```
+
+Run a command and return formatted results.
+
+**Parameters:**
+- `command` (list[str]): Command and arguments as list
+- `cwd` (Optional[Path]): Working directory for command
+- `show_output` (bool): Whether to display output in real-time. Defaults to True
+- `timeout` (Optional[int]): Timeout in seconds
+
+**Returns:** `dict[str, Any]` with keys:
+- `returncode` (int): Exit code
+- `stdout` (str): Standard output
+- `stderr` (str): Standard error
+- `success` (bool): Whether command succeeded
+- `command` (str): Original command string
+
+```python
+def run_python_module(
+    self,
+    module: str,
+    args: list[str] = None,
+    cwd: Optional[Path] = None,
+    show_output: bool = True
+) -> dict[str, Any]
+```
+
+Run a Python module using `python -m module_name`.
+
+**Parameters:**
+- `module` (str): Module name to run
+- `args` (list[str]): Arguments to pass to module
+- `cwd` (Optional[Path]): Working directory
+- `show_output` (bool): Whether to display output
+
+**Returns:** Same format as `run_command()`
+
+```python
+def check_tool_available(self, tool: str) -> bool
+```
+
+Check if a command-line tool is available in PATH.
+
+**Parameters:**
+- `tool` (str): Tool name to check
+
+**Returns:** `bool` - True if tool is in PATH
+
+```python
+def get_system_info(self) -> dict[str, str]
+```
+
+Get system information for diagnostics.
+
+**Returns:** `dict[str, str]` with keys:
+- `python_version`: Full Python version string
+- `python_executable`: Path to Python interpreter
+- `platform`: Platform identifier
+- `cwd`: Current working directory
+- `{tool}_available`: Availability status for common tools (git, npm, docker, etc.)
+
+```python
+def run_diagnostic(self) -> None
+```
+
+Run system diagnostic and display formatted results as a table.
+
+**Side Effects**: Prints formatted diagnostic table to stdout
+
+### Interactive Shell Class
+
+```python
+class InteractiveShell(cmd.Cmd):
+    def __init__(self) -> None
+```
+
+Interactive shell for exploring the Codomyrmex ecosystem with command-line interface.
+
+**Attributes:**
+- `prompt`: Shell prompt string ("🐜 codomyrmex> ")
+- `intro`: Welcome message
+- `session_data`: Dictionary tracking session statistics
+
+**Key Commands** (implemented as `do_*` methods):
+- `explore [module_name]`: Explore modules
+- `capabilities [type]`: Show capabilities
+- `demo [module_name]`: Run demonstrations
+- `status`: Show system health
+- `forage [search_term]`: Search for capabilities
+- `dive <module_name>`: Deep dive into module
+- `session`: Show session stats
+- `quit/exit`: Exit shell
+
+### Utility Functions
+
+```python
+def create_ascii_art(text: str, style: str = "simple") -> str
+```
+
+Create ASCII art for text.
+
+**Parameters:**
+- `text` (str): Text to convert
+- `style` (str): Art style ("simple" or "block"). Defaults to "simple"
+
+**Returns:** `str` - ASCII art representation
+
 ## Active Components
 
 ### Core Implementation
@@ -83,11 +317,8 @@ All terminal interactions within the Codomyrmex platform must:
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
 - **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
 
 ### Related Modules
-- **Logging Monitoring**: [../logging_monitoring/](../../logging_monitoring/) - Log output formatting
-- **Data Visualization**: [../data_visualization/](../../data_visualization/) - Terminal-based data display
 - **CLI Integration**: Main package CLI components
 
 ### Platform Navigation

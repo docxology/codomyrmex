@@ -12,7 +12,7 @@ import time
 import tempfile
 import json
 from pathlib import Path
-from unittest.mock import patch, MagicMock, mock_open
+# Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 import sys
 import os
 

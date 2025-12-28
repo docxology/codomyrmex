@@ -49,6 +49,73 @@ The Code Execution Sandbox module provides a secure environment for executing un
 - **Parameters/Arguments**: None
 - **Returns/Response**: Boolean (True if Docker is available, False otherwise)
 
+### Function: `execute_with_limits()`
+
+- **Description**: Executes code with configurable resource limits and monitoring, providing detailed resource usage information.
+- **Method**: N/A (Python function)
+- **Path**: N/A
+- **Parameters/Arguments**:
+    - `language` (string): The programming language of the code
+    - `code` (string): The source code to be executed
+    - `limits` (ExecutionLimits): Resource limits configuration
+    - `stdin` (string, optional): Standard input to provide to the program
+    - `session_id` (string, optional): Session identifier for persistent environments
+- **Returns/Response**: Dictionary with execution results plus resource usage:
+    ```python
+    {
+      "stdout": "Hello, World!\n",
+      "stderr": "",
+      "exit_code": 0,
+      "execution_time": 0.834,
+      "status": "success",
+      "error_message": None,
+      "resource_usage": {
+        "execution_time_seconds": 0.834,
+        "memory_start_mb": 45.2,
+        "memory_peak_mb": 67.8,
+        "cpu_samples": 8,
+        "cpu_average_percent": 23.5,
+        "cpu_peak_percent": 45.2
+      },
+      "limits_applied": {
+        "time_limit_seconds": 30,
+        "memory_limit_mb": 256,
+        "cpu_limit_cores": 0.5,
+        "max_output_chars": 100000
+      }
+    }
+    ```
+
+### Function: `sandbox_process_isolation()`
+
+- **Description**: Executes code in a completely isolated subprocess environment with strict resource limits, preventing any impact on the main process.
+- **Method**: N/A (Python function)
+- **Path**: N/A
+- **Parameters/Arguments**:
+    - `language` (string): The programming language of the code
+    - `code` (string): The source code to be executed
+    - `limits` (ExecutionLimits): Resource limits configuration
+    - `stdin` (string, optional): Standard input to provide to the program
+- **Returns/Response**: Dictionary with execution results including isolation status
+
+### Class: `ExecutionLimits`
+
+- **Description**: Dataclass for configuring resource limits for code execution.
+- **Parameters/Arguments** (constructor):
+    - `time_limit` (int, optional): Maximum execution time in seconds (default: 30)
+    - `memory_limit` (int, optional): Memory limit in MB (default: 256)
+    - `cpu_limit` (float, optional): CPU cores limit (default: 0.5)
+    - `max_output_chars` (int, optional): Maximum output characters (default: 100000)
+- **Validation**: Automatically validates limits and raises ValueError for invalid configurations
+
+### Class: `ResourceMonitor`
+
+- **Description**: Monitors resource usage during code execution, tracking memory, CPU, and timing.
+- **Methods**:
+    - `start_monitoring()`: Begin resource monitoring
+    - `update_monitoring()`: Update current resource usage
+    - `get_resource_usage()`: Get comprehensive resource usage statistics
+
 ## Data Models
 
 ### Supported Languages Configuration

@@ -1,0 +1,1454 @@
+{
+  "metadata": {
+    "validation_timestamp": "2025-12-26 16:16:47",
+    "total_duration": 9.854996919631958,
+    "examples_root": "/Users/4d/Documents/GitHub/codomyrmex/examples",
+    "validation_types": [
+      "execution",
+      "config",
+      "docs",
+      "test_refs",
+      "output"
+    ],
+    "parallel_processes": 4
+  },
+  "summary": {
+    "total_modules": 34,
+    "successful_modules": 0,
+    "failed_modules": 34,
+    "success_rate": 0.0,
+    "total_issues": 110,
+    "health_score": 20.294117647058826,
+    "severity_breakdown": {
+      "critical": 0,
+      "error": 17,
+      "warning": 93,
+      "info": 0
+    },
+    "type_breakdown": {
+      "execution": 17,
+      "config": 10,
+      "docs": 29,
+      "test_refs": 29,
+      "output": 25
+    }
+  },
+  "modules": {
+    "ai_code_editing": {
+      "total": 4,
+      "critical": 0,
+      "error": 1,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.03613901138305664
+    },
+    "api_documentation": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.08185386657714844
+    },
+    "api_standardization": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.09196066856384277
+    },
+    "code_execution_sandbox": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 0.029573917388916016
+    },
+    "code_review": {
+      "total": 4,
+      "critical": 0,
+      "error": 1,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.02933502197265625
+    },
+    "containerization": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 0.16605901718139648
+    },
+    "config_management": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 0.20391607284545898
+    },
+    "database_management": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.1060328483581543
+    },
+    "build_synthesis": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.45401692390441895
+    },
+    "documentation": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.08238077163696289
+    },
+    "events": {
+      "total": 4,
+      "critical": 0,
+      "error": 1,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.030781984329223633
+    },
+    "git_operations": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 0.03053116798400879
+    },
+    "environment_setup": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 0.25313472747802734
+    },
+    "logging_monitoring": {
+      "total": 4,
+      "critical": 0,
+      "error": 1,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.0380396842956543
+    },
+    "model_context_protocol": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.25471019744873047
+    },
+    "ci_cd_automation": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 1.0143239498138428
+    },
+    "modeling_3d": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.06502914428710938
+    },
+    "multi_module/example_workflow_api": {
+      "total": 4,
+      "critical": 0,
+      "error": 1,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.12058305740356445
+    },
+    "multi_module/example_workflow_build": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.30645298957824707
+    },
+    "multi_module/example_workflow_development": {
+      "total": 4,
+      "critical": 0,
+      "error": 1,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.04947781562805176
+    },
+    "multi_module/example_workflow_monitoring": {
+      "total": 4,
+      "critical": 0,
+      "error": 1,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.06516003608703613
+    },
+    "data_visualization": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 1.372020959854126
+    },
+    "pattern_matching": {
+      "total": 4,
+      "critical": 0,
+      "error": 1,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.028809785842895508
+    },
+    "performance": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 0.07399702072143555
+    },
+    "physical_management": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.08169293403625488
+    },
+    "plugin_system": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.08311796188354492
+    },
+    "multi_module/example_workflow_analysis": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 1.0428647994995117
+    },
+    "security_audit": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 0.02722907066345215
+    },
+    "static_analysis": {
+      "total": 3,
+      "critical": 0,
+      "error": 1,
+      "warning": 2,
+      "info": 0,
+      "success": false,
+      "duration": 0.024840116500854492
+    },
+    "project_orchestration": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 0.6265180110931396
+    },
+    "language_models": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 2.0489749908447266
+    },
+    "system_discovery": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 2.5121920108795166
+    },
+    "ollama_integration": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 4.348231077194214
+    },
+    "terminal_interface": {
+      "total": 3,
+      "critical": 0,
+      "error": 0,
+      "warning": 3,
+      "info": 0,
+      "success": false,
+      "duration": 7.215482234954834
+    }
+  },
+  "issues": [
+    {
+      "module": "ai_code_editing",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/example_basic.py\", line 272\n    print(\"\n          ^\nSyntaxError: unterminated string literal (detected at line 272)\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "ai_code_editing",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/README.md",
+      "line_number": null
+    },
+    {
+      "module": "ai_code_editing",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "ai_code_editing",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/output/ai_code_editing_results.json",
+      "line_number": null
+    },
+    {
+      "module": "api_documentation",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/api_documentation/README.md",
+      "line_number": null
+    },
+    {
+      "module": "api_documentation",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/api_documentation/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "api_documentation",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/api_documentation/output/api_documentation_results.json",
+      "line_number": null
+    },
+    {
+      "module": "api_standardization",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/api_standardization/README.md",
+      "line_number": null
+    },
+    {
+      "module": "api_standardization",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/api_standardization/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "api_standardization",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/api_standardization/output/api_standardization_results.json",
+      "line_number": null
+    },
+    {
+      "module": "code_execution_sandbox",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/example_basic.py\", line 432\n    print(\".2f\"    print(\".1f\"\n                        ^\nSyntaxError: '(' was never closed\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "code_execution_sandbox",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/README.md",
+      "line_number": null
+    },
+    {
+      "module": "code_execution_sandbox",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "code_review",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py\", line 526\n    print(\".1f\"            print(\".1f\"            print(f\"   Files with issues: {metrics['files_with_issues']}\")\n          ^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax. Perhaps you forgot a comma?\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "code_review",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/README.md",
+      "line_number": null
+    },
+    {
+      "module": "code_review",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "code_review",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/output/code_review_results.json",
+      "line_number": null
+    },
+    {
+      "module": "containerization",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "Traceback (most recent call last):\n  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/containerization/example_basic.py\", line 23, in <module>\n    from codomyrmex.containerization.docker_manager import build_image, analyze_image_size\n  File \"/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/__init__.py\", line 35, in <module>\n    from .docker_manager import (\n    ...<4 lines>...\n    )\n  File \"/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/docker_mana",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/containerization/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "containerization",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/containerization/README.md",
+      "line_number": null
+    },
+    {
+      "module": "containerization",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/containerization/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "config_management",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "Traceback (most recent call last):\n  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/config_management/example_basic.py\", line 22, in <module>\n    from codomyrmex.config_management.config_loader import Configuration\n  File \"/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/__init__.py\", line 36, in <module>\n    from .config_loader import (\n    ...<5 lines>...\n    )\n  File \"/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/config_loader.py\", line 173",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/config_management/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "config_management",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/config_management/README.md",
+      "line_number": null
+    },
+    {
+      "module": "config_management",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/config_management/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "database_management",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/database_management/README.md",
+      "line_number": null
+    },
+    {
+      "module": "database_management",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/database_management/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "database_management",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/database_management/output/database_management_results.json",
+      "line_number": null
+    },
+    {
+      "module": "build_synthesis",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/build_synthesis/README.md",
+      "line_number": null
+    },
+    {
+      "module": "build_synthesis",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/build_synthesis/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "build_synthesis",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/build_synthesis/output/build_synthesis_results.json",
+      "line_number": null
+    },
+    {
+      "module": "documentation",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/documentation/README.md",
+      "line_number": null
+    },
+    {
+      "module": "documentation",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/documentation/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "documentation",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/documentation/output/documentation_results.json",
+      "line_number": null
+    },
+    {
+      "module": "events",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/events/example_basic.py\", line 172\n    event_bus = get_event_bus()\n    ^^^^^^^^^\nIndentationError: expected an indented block after 'try' statement on line 171\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/events/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "events",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/events/README.md",
+      "line_number": null
+    },
+    {
+      "module": "events",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/events/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "events",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/events/output/events_results.json",
+      "line_number": null
+    },
+    {
+      "module": "git_operations",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/git_operations/example_basic.py\", line 815\n    print(\"\\n✅ Comprehensive Git Operations example completed successfully!\")\nIndentationError: unexpected indent\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/git_operations/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "git_operations",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/git_operations/README.md",
+      "line_number": null
+    },
+    {
+      "module": "git_operations",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/git_operations/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "environment_setup",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py:5: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.\n  import pkg_resources\nTraceback (most recent call last):\n  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/environment_setup/example_basic.py\", line 38, in <module",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/environment_setup/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "environment_setup",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/environment_setup/README.md",
+      "line_number": null
+    },
+    {
+      "module": "environment_setup",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/environment_setup/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "logging_monitoring",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/logging_monitoring/example_basic.py\", line 114\n    config = load_config(Path(__file__).parent / \"config.yaml\")\n    ^^^^^^\nIndentationError: expected an indented block after 'try' statement on line 113\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/logging_monitoring/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "logging_monitoring",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/logging_monitoring/README.md",
+      "line_number": null
+    },
+    {
+      "module": "logging_monitoring",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/logging_monitoring/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "logging_monitoring",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/logging_monitoring/output/tutorial_logging_results.json",
+      "line_number": null
+    },
+    {
+      "module": "model_context_protocol",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/model_context_protocol/README.md",
+      "line_number": null
+    },
+    {
+      "module": "model_context_protocol",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/model_context_protocol/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "model_context_protocol",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/model_context_protocol/output/model_context_protocol_results.json",
+      "line_number": null
+    },
+    {
+      "module": "ci_cd_automation",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ci_cd_automation/README.md",
+      "line_number": null
+    },
+    {
+      "module": "ci_cd_automation",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ci_cd_automation/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "ci_cd_automation",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ci_cd_automation/output/ci_cd_automation_results.json",
+      "line_number": null
+    },
+    {
+      "module": "modeling_3d",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/modeling_3d/README.md",
+      "line_number": null
+    },
+    {
+      "module": "modeling_3d",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/modeling_3d/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "modeling_3d",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/modeling_3d/output/modeling_3d_results.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_api",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/example_workflow_api.py",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_api",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "YAML configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.yaml file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_api.yaml",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_api",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "JSON configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.json file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_api.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_api",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/output/workflow_build_results.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_build",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "YAML configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.yaml file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_build.yaml",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_build",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "JSON configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.json file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_build.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_build",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/output/workflow_build_results.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_development",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "Performance monitoring not available - decorators will be no-op\nCould not import from environment_setup.env_checker. Environment variables may need to be set manually.\nTraceback (most recent call last):\n  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/example_workflow_development.py\", line 25, in <module>\n    from codomyrmex.ai_code_editing.openai_codex import generate_code_snippet\nImportError: cannot import name 'generate_code_snippet' from 'codomyrmex.ai_code_editing.openai_",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/example_workflow_development.py",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_development",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "YAML configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.yaml file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_development.yaml",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_development",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "JSON configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.json file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_development.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_development",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/output/workflow_build_results.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_monitoring",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "Traceback (most recent call last):\n  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/example_workflow_monitoring.py\", line 27, in <module>\n    from codomyrmex.system_discovery.module_scanner import discover_modules\nModuleNotFoundError: No module named 'codomyrmex.system_discovery.module_scanner'\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/example_workflow_monitoring.py",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_monitoring",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "YAML configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.yaml file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_monitoring.yaml",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_monitoring",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "JSON configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.json file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_monitoring.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_monitoring",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/output/workflow_build_results.json",
+      "line_number": null
+    },
+    {
+      "module": "data_visualization",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "Performance monitoring not available - decorators will be no-op\nPerformance monitoring not available - decorators will be no-op\nPerformance monitoring not available - decorators will be no-op\nTraceback (most recent call last):\n  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/data_visualization/example_basic.py\", line 73, in <module>\n    from examples._common.config_loader import load_config\nModuleNotFoundError: No module named 'examples'\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/data_visualization/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "data_visualization",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/data_visualization/README.md",
+      "line_number": null
+    },
+    {
+      "module": "data_visualization",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/data_visualization/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "pattern_matching",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/pattern_matching/example_basic.py\", line 323\n    print(\".1f\"        print(f\"   Maximum nesting depth: {visitor.max_nesting}\")\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax. Perhaps you forgot a comma?\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/pattern_matching/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "pattern_matching",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/pattern_matching/README.md",
+      "line_number": null
+    },
+    {
+      "module": "pattern_matching",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/pattern_matching/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "pattern_matching",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/pattern_matching/output/pattern_matching_results.json",
+      "line_number": null
+    },
+    {
+      "module": "performance",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "Traceback (most recent call last):\n  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/performance/example_basic.py\", line 24, in <module>\n    from codomyrmex.performance.performance_monitor import profile_function, get_system_metrics\nImportError: cannot import name 'profile_function' from 'codomyrmex.performance.performance_monitor' (/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/performance/performance_monitor.py)\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/performance/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "performance",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/performance/README.md",
+      "line_number": null
+    },
+    {
+      "module": "performance",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/performance/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "physical_management",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/physical_management/README.md",
+      "line_number": null
+    },
+    {
+      "module": "physical_management",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/physical_management/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "physical_management",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/physical_management/output/physical_management_results.json",
+      "line_number": null
+    },
+    {
+      "module": "plugin_system",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/plugin_system/README.md",
+      "line_number": null
+    },
+    {
+      "module": "plugin_system",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/plugin_system/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "plugin_system",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/plugin_system/output/plugin_system_results.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_analysis",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "YAML configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.yaml file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_analysis.yaml",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_analysis",
+      "validation_type": "config",
+      "severity": "warning",
+      "message": "JSON configuration file not found",
+      "details": null,
+      "fix_suggestion": "Create config.json file for this module",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/config_example_workflow_analysis.json",
+      "line_number": null
+    },
+    {
+      "module": "multi_module/example_workflow_analysis",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/output/workflow_build_results.json",
+      "line_number": null
+    },
+    {
+      "module": "security_audit",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/security_audit/example_basic.py\", line 1215\n    print(\"\n          ^\nSyntaxError: unterminated string literal (detected at line 1215)\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/security_audit/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "security_audit",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/security_audit/README.md",
+      "line_number": null
+    },
+    {
+      "module": "security_audit",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/security_audit/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "static_analysis",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/static_analysis/example_basic.py\", line 251\n    print(\".2f\"\n         ^\nSyntaxError: '(' was never closed\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/static_analysis/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "static_analysis",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/static_analysis/README.md",
+      "line_number": null
+    },
+    {
+      "module": "static_analysis",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/static_analysis/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "project_orchestration",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/project_orchestration/README.md",
+      "line_number": null
+    },
+    {
+      "module": "project_orchestration",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/project_orchestration/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "project_orchestration",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/project_orchestration/output/project_orchestration_results.json",
+      "line_number": null
+    },
+    {
+      "module": "language_models",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/language_models/README.md",
+      "line_number": null
+    },
+    {
+      "module": "language_models",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/language_models/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "language_models",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/language_models/output/language_models_results.json",
+      "line_number": null
+    },
+    {
+      "module": "system_discovery",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/system_discovery/README.md",
+      "line_number": null
+    },
+    {
+      "module": "system_discovery",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/system_discovery/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "system_discovery",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/system_discovery/output/system_discovery_results.json",
+      "line_number": null
+    },
+    {
+      "module": "ollama_integration",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ollama_integration/README.md",
+      "line_number": null
+    },
+    {
+      "module": "ollama_integration",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ollama_integration/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "ollama_integration",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ollama_integration/output/ollama_integration_results.json",
+      "line_number": null
+    },
+    {
+      "module": "terminal_interface",
+      "validation_type": "docs",
+      "severity": "warning",
+      "message": "Missing documentation sections: ## Features, ## Usage",
+      "details": null,
+      "fix_suggestion": "Add the missing sections to README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/terminal_interface/README.md",
+      "line_number": null
+    },
+    {
+      "module": "terminal_interface",
+      "validation_type": "test_refs",
+      "severity": "warning",
+      "message": "No properly formatted test method references found",
+      "details": "Expected format: file::Class::method()",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/terminal_interface/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "terminal_interface",
+      "validation_type": "output",
+      "severity": "warning",
+      "message": "Results file missing required fields: status",
+      "details": null,
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/terminal_interface/output/terminal_interface_results.json",
+      "line_number": null
+    }
+  ],
+  "recommendations": [
+    "🟠 ERRORS: Fix error-level issues - these indicate broken functionality",
+    "🟡 WARNINGS: Review warning issues - these indicate potential problems",
+    "⚠️ EXECUTION: 17 modules have execution failures - fix to ensure examples work",
+    "⚙️ CONFIGURATION: 5 modules have configuration issues - validate config files",
+    "🧪 TESTING: 29 modules have test reference issues - verify test method links",
+    "🔄 NEXT STEPS: Run validation again after fixes to track progress"
+  ]
+}

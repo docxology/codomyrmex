@@ -24,6 +24,112 @@ The environment_setup module acts as a gatekeeper, preventing runtime failures d
 - Graceful error handling with actionable guidance
 - Integration with Python's dotenv library for environment management
 
+## Function Signatures
+
+### Core Functions
+
+```python
+def is_uv_available() -> bool
+```
+
+Checks if the uv package manager is available on the system by running `uv --version`.
+
+**Returns:** `bool` - True if uv is available and working, False otherwise
+
+**Implementation**: Uses `subprocess.run()` to execute uv command and checks for success
+
+```python
+def is_uv_environment() -> bool
+```
+
+Determines if the current Python environment is managed by uv by checking environment variables.
+
+**Returns:** `bool` - True if running in a uv-managed environment, False otherwise
+
+**Checks**:
+- `UV_ACTIVE` environment variable set to "1"
+- `VIRTUAL_ENV` contains "uv" in the path
+
+```python
+def ensure_dependencies_installed() -> None
+```
+
+Checks for required Python packages (cased/kit, python-dotenv) and provides installation guidance if missing.
+
+**Returns:** None (prints status messages and exits if dependencies missing)
+
+**Dependencies Checked**:
+- `kit` - cased/kit library
+- `python-dotenv` - Environment variable loading
+
+**Behavior**: Exits with `sys.exit(1)` if critical dependencies missing
+
+```python
+def check_and_setup_env_vars(repo_root_path: str) -> None
+```
+
+Validates environment configuration by checking for .env file and providing guidance for API key setup.
+
+**Parameters:**
+- `repo_root_path` (str): Path to the repository root directory
+
+**Returns:** None (prints status and setup guidance)
+
+**Checks**: Looks for `.env` file in repository root and provides template if missing
+
+### Additional Functions
+
+```python
+def validate_python_version(required: str = ">=3.10") -> bool
+```
+
+Validate that the current Python version meets the specified requirements.
+
+**Parameters:**
+- `required` (str): Version requirement string (e.g., ">=3.10", "==3.11.0"). Defaults to ">=3.10"
+
+**Returns:** `bool` - True if current Python version meets requirements, False otherwise
+
+**Dependencies**: Requires `packaging` library for version parsing
+
+```python
+def check_package_versions() -> Dict[str, str]
+```
+
+Check installed package versions using `pkg_resources.working_set`.
+
+**Returns:** `Dict[str, str]` - Dictionary mapping package names (lowercase) to their current versions
+
+```python
+def validate_environment_completeness() -> Dict[str, bool]
+```
+
+Perform comprehensive environment validation across multiple aspects.
+
+**Returns:** `Dict[str, bool]` - Dictionary with validation results:
+- `python_version`: Whether Python version meets requirements
+- `core_dependencies`: Whether kit and dotenv are installed
+- `environment_type`: Whether running in virtual environment
+- `package_manager`: Whether uv is available
+- `config_files`: Whether all required config files exist (pyproject.toml, requirements.txt, .env)
+
+```python
+def generate_environment_report() -> str
+```
+
+Generate a detailed, formatted environment status report with visual indicators.
+
+**Returns:** `str` - Multi-line formatted report string with:
+- Python version status (✓/✗)
+- Core dependencies status
+- Environment type (uv/venv/system)
+- Package manager availability
+- Configuration file status
+- Sample of installed package versions
+- Overall environment health score
+
+**Format**: Uses Unicode box-drawing characters and emoji for visual formatting
+
 ## Active Components
 
 ### Core Implementation
@@ -78,8 +184,6 @@ All environment setup within the Codomyrmex platform must:
 - **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
 
 ### Related Modules
-- **Logging Monitoring**: [../logging_monitoring/](../../logging_monitoring/) - Logging configuration
-- **Configuration Management**: [../config_management/](../../config_management/) - Configuration handling
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview

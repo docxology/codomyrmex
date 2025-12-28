@@ -1,0 +1,78 @@
+{
+  "output": {
+    "format": "json",
+    "file": "output/ollama_integration_results.json",
+    "directory": "output/ollama_integration"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/ollama_integration_example.log",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(levelname)s - %(message)s"
+  },
+  "ollama": {
+    "host": "localhost",
+    "port": 11434,
+    "timeout": 300,
+    "max_retries": 3,
+    "default_model": "llama2:7b",
+    "auto_pull_models": false,
+    "model_cache_dir": "~/.ollama/models",
+    "preferred_models": [
+      "llama2:7b",
+      "codellama:7b",
+      "mistral:7b",
+      "vicuna:7b"
+    ],
+    "max_concurrent_executions": 1,
+    "execution_timeout": 300,
+    "stream_responses": false
+  },
+  "model_runner": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": 40,
+    "repeat_penalty": 1.1,
+    "max_tokens": 2048,
+    "context_window": 4096,
+    "batch_size": 1,
+    "use_gpu": true
+  },
+  "output_manager": {
+    "supported_formats": [
+      "json",
+      "text",
+      "markdown"
+    ],
+    "default_format": "json",
+    "output_directory": "output/ollama",
+    "auto_timestamp": true,
+    "compress_large_outputs": false
+  },
+  "config_manager": {
+    "config_file": "config/ollama_config.yaml",
+    "backup_configs": true,
+    "validate_on_load": true,
+    "strict_validation": false,
+    "allow_extra_fields": true
+  },
+  "demonstration": {
+    "run_availability_check": true,
+    "demonstrate_model_management": true,
+    "test_model_execution": true,
+    "show_configuration_management": true,
+    "demonstrate_output_handling": true,
+    "sample_prompts_count": 4,
+    "execution_options_count": 4,
+    "mock_data_when_unavailable": true,
+    "measure_execution_times": true,
+    "collect_performance_metrics": true
+  },
+  "integration": {
+    "use_logging_monitoring": true,
+    "use_performance_monitoring": true,
+    "graceful_failures": true,
+    "detailed_error_reporting": true,
+    "cleanup_temp_files": true,
+    "memory_efficient_mode": false
+  }
+}

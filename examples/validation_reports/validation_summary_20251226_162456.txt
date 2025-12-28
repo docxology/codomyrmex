@@ -1,0 +1,27 @@
+
+Codomyrmex Examples Validation Summary
+======================================
+
+Generated: 2025-12-26 16:24:56
+Duration: 0.18s
+Modules Validated: 4
+Success Rate: 0.0%
+Health Score: 50.0/100
+
+Issues Summary:
+- Critical: 0
+- Error: 4
+- Warning: 0
+- Info: 0
+- Total: 4
+
+Top Issues by Module:
+- events: 1 issues (0 critical, 1 errors)
+- code_review: 1 issues (0 critical, 1 errors)
+- git_operations: 1 issues (0 critical, 1 errors)
+- ai_code_editing: 1 issues (0 critical, 1 errors)
+
+Recommendations:
+- 🟠 ERRORS: Fix error-level issues - these indicate broken functionality
+- ⚠️ EXECUTION: 4 modules have execution failures - fix to ensure examples work
+- 🔄 NEXT STEPS: Run validation again after fixes to track progress

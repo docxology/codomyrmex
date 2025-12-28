@@ -342,3 +342,306 @@ def clear_performance_metrics() -> None:
 def export_performance_metrics(file_path: Union[str, Path]) -> None:
     """Export performance metrics to a JSON file."""
     _performance_monitor.export_metrics(file_path)
+
+
+# System-wide monitoring classes and functions
+
+import threading
+
+@dataclass
+class SystemMetrics:
+    """System-wide performance metrics."""
+
+    cpu_percent: float
+    memory_percent: float
+    memory_used_mb: float
+    memory_total_mb: float
+    disk_usage_percent: float
+    disk_free_gb: float
+    network_bytes_sent: int
+    network_bytes_recv: int
+    timestamp: float = field(default_factory=time.time)
+
+
+class SystemMonitor:
+    """
+    System-wide resource monitoring.
+
+    Provides continuous monitoring of system resources including CPU, memory,
+    disk, and network usage.
+    """
+
+    def __init__(self, interval: float = 1.0, history_size: int = 100):
+        """
+        Initialize the system monitor.
+
+        Args:
+            interval: Monitoring interval in seconds
+            history_size: Maximum number of historical metrics to keep
+        """
+        self.interval = interval
+        self.history_size = history_size
+        self._monitoring = False
+        self._monitor_thread = None
+        self.metrics_history: list[SystemMetrics] = []
+        self._lock = threading.Lock()
+
+        if not HAS_PSUTIL:
+            logger.warning("psutil not available, system monitoring will be limited")
+
+    def start_monitoring(self) -> None:
+        """Start continuous system monitoring."""
+        if self._monitoring:
+            logger.warning("System monitoring already running")
+            return
+
+        self._monitoring = True
+        self._monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
+        self._monitor_thread.start()
+        logger.info(f"Started system monitoring with {self.interval}s interval")
+
+    def stop_monitoring(self) -> None:
+        """Stop continuous system monitoring."""
+        self._monitoring = False
+        if self._monitor_thread:
+            self._monitor_thread.join(timeout=2.0)
+        logger.info("Stopped system monitoring")
+
+    def get_current_metrics(self) -> SystemMetrics:
+        """
+        Get current system metrics.
+
+        Returns:
+            Current system metrics
+        """
+        if not HAS_PSUTIL:
+            return SystemMetrics(
+                cpu_percent=0.0,
+                memory_percent=0.0,
+                memory_used_mb=0.0,
+                memory_total_mb=0.0,
+                disk_usage_percent=0.0,
+                disk_free_gb=0.0,
+                network_bytes_sent=0,
+                network_bytes_recv=0
+            )
+
+        # CPU usage
+        cpu_percent = psutil.cpu_percent(interval=None)
+
+        # Memory usage
+        memory = psutil.virtual_memory()
+        memory_percent = memory.percent
+        memory_used_mb = memory.used / (1024 * 1024)
+        memory_total_mb = memory.total / (1024 * 1024)
+
+        # Disk usage (root filesystem)
+        disk = psutil.disk_usage('/')
+        disk_usage_percent = disk.percent
+        disk_free_gb = disk.free / (1024 * 1024 * 1024)
+
+        # Network usage
+        network = psutil.net_io_counters()
+        network_bytes_sent = network.bytes_sent
+        network_bytes_recv = network.bytes_recv
+
+        return SystemMetrics(
+            cpu_percent=cpu_percent,
+            memory_percent=memory_percent,
+            memory_used_mb=memory_used_mb,
+            memory_total_mb=memory_total_mb,
+            disk_usage_percent=disk_usage_percent,
+            disk_free_gb=disk_free_gb,
+            network_bytes_sent=network_bytes_sent,
+            network_bytes_recv=network_bytes_recv
+        )
+
+    def get_metrics_history(self) -> list[SystemMetrics]:
+        """
+        Get historical metrics.
+
+        Returns:
+            List of historical system metrics
+        """
+        with self._lock:
+            return self.metrics_history.copy()
+
+    def get_average_metrics(self, last_n: Optional[int] = None) -> SystemMetrics:
+        """
+        Get average metrics over the specified number of recent measurements.
+
+        Args:
+            last_n: Number of recent measurements to average (None for all)
+
+        Returns:
+            Average system metrics
+        """
+        with self._lock:
+            if not self.metrics_history:
+                return self.get_current_metrics()
+
+            metrics = self.metrics_history[-last_n:] if last_n else self.metrics_history
+
+            if not metrics:
+                return self.get_current_metrics()
+
+            # Calculate averages
+            avg_cpu = sum(m.cpu_percent for m in metrics) / len(metrics)
+            avg_memory_percent = sum(m.memory_percent for m in metrics) / len(metrics)
+            avg_memory_used = sum(m.memory_used_mb for m in metrics) / len(metrics)
+            avg_disk_percent = sum(m.disk_usage_percent for m in metrics) / len(metrics)
+            avg_disk_free = sum(m.disk_free_gb for m in metrics) / len(metrics)
+            latest_network_sent = metrics[-1].network_bytes_sent
+            latest_network_recv = metrics[-1].network_bytes_recv
+
+            return SystemMetrics(
+                cpu_percent=avg_cpu,
+                memory_percent=avg_memory_percent,
+                memory_used_mb=avg_memory_used,
+                memory_total_mb=metrics[0].memory_total_mb,  # Total doesn't change
+                disk_usage_percent=avg_disk_percent,
+                disk_free_gb=avg_disk_free,
+                network_bytes_sent=latest_network_sent,
+                network_bytes_recv=latest_network_recv,
+                timestamp=time.time()
+            )
+
+    def _monitor_loop(self) -> None:
+        """Main monitoring loop."""
+        while self._monitoring:
+            try:
+                metrics = self.get_current_metrics()
+                with self._lock:
+                    self.metrics_history.append(metrics)
+                    # Maintain history size limit
+                    if len(self.metrics_history) > self.history_size:
+                        self.metrics_history.pop(0)
+
+            except Exception as e:
+                logger.error(f"Error collecting system metrics: {e}")
+
+            time.sleep(self.interval)
+
+
+# Additional monitoring functions
+
+def monitor_system_resources(interval: float = 1.0):
+    """
+    Context manager for monitoring system resources during execution.
+
+    Args:
+        interval: Monitoring interval in seconds
+
+    Returns:
+        Context manager that yields a SystemMonitor instance
+    """
+    def _context_manager():
+        monitor = SystemMonitor(interval=interval)
+        monitor.start_monitoring()
+        try:
+            yield monitor
+        finally:
+            monitor.stop_monitoring()
+
+    return _context_manager()
+
+
+def profile_memory_usage(func: Callable) -> Callable:
+    """
+    Decorator to profile memory usage of a function.
+
+    Args:
+        func: Function to profile
+
+    Returns:
+        Decorated function that tracks memory usage
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if not HAS_PSUTIL:
+            logger.warning("psutil not available, memory profiling disabled")
+            return func(*args, **kwargs)
+
+        process = psutil.Process()
+        memory_before = process.memory_info().rss / (1024 * 1024)
+
+        start_time = time.time()
+        try:
+            result = func(*args, **kwargs)
+            return result
+        finally:
+            end_time = time.time()
+            memory_after = process.memory_info().rss / (1024 * 1024)
+            memory_delta = memory_after - memory_before
+
+            logger.info(
+                f"Memory profile for {func.__name__}: "
+                f"before={memory_before:.1f}MB, "
+                f"after={memory_after:.1f}MB, "
+                f"delta={memory_delta:+.1f}MB, "
+                f"duration={end_time - start_time:.3f}s"
+            )
+
+    return wrapper
+
+
+def get_system_metrics() -> dict[str, Any]:
+    """
+    Get comprehensive system metrics.
+
+    Returns:
+        Dictionary containing current system metrics
+    """
+    monitor = SystemMonitor()
+    metrics = monitor.get_current_metrics()
+
+    return {
+        "cpu_percent": metrics.cpu_percent,
+        "memory_percent": metrics.memory_percent,
+        "memory_used_mb": metrics.memory_used_mb,
+        "memory_total_mb": metrics.memory_total_mb,
+        "disk_usage_percent": metrics.disk_usage_percent,
+        "disk_free_gb": metrics.disk_free_gb,
+        "network_bytes_sent": metrics.network_bytes_sent,
+        "network_bytes_recv": metrics.network_bytes_recv,
+        "timestamp": metrics.timestamp
+    }
+
+
+@contextmanager
+def track_resource_usage(operation: str):
+    """
+    Context manager to track resource usage for an operation.
+
+    Args:
+        operation: Name of the operation being tracked
+    """
+    if not HAS_PSUTIL:
+        logger.warning("psutil not available, resource tracking disabled")
+        yield
+        return
+
+    monitor = SystemMonitor(interval=0.5)  # Frequent sampling
+    monitor.start_monitoring()
+
+    start_time = time.time()
+    start_metrics = monitor.get_current_metrics()
+
+    try:
+        yield
+    finally:
+        end_time = time.time()
+        end_metrics = monitor.get_current_metrics()
+
+        monitor.stop_monitoring()
+
+        duration = end_time - start_time
+        cpu_used = end_metrics.cpu_percent - start_metrics.cpu_percent
+        memory_delta = end_metrics.memory_used_mb - start_metrics.memory_used_mb
+
+        logger.info(
+            f"Resource tracking for '{operation}': "
+            f"duration={duration:.3f}s, "
+            f"cpu_delta={cpu_used:+.1f}%, "
+            f"memory_delta={memory_delta:+.1f}MB"
+        )

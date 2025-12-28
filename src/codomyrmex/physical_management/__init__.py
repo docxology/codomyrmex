@@ -1,8 +1,8 @@
 """Physical Object Management Module for Codomyrmex.
 
-This module provides comprehensive physical object management, simulation,
+This module provides physical object management, simulation,
 and sensor integration capabilities for the Codomyrmex platform, enabling
-advanced physical computing and IoT device management.
+physical computing and IoT device management.
 """
 
 from .analytics import *

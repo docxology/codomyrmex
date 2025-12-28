@@ -207,10 +207,10 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any
             model = model_name or DEFAULT_LLM_MODEL["openai"]
             return client, model
 
-        except ImportError:
+        except ImportError as e:
             raise ImportError(
                 "OpenAI Python package not installed. Install with: pip install openai"
-            )
+            ) from e
 
     elif provider == "anthropic":
         try:
@@ -225,10 +225,10 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any
             model = model_name or DEFAULT_LLM_MODEL["anthropic"]
             return client, model
 
-        except ImportError:
+        except ImportError as e:
             raise ImportError(
                 "Anthropic Python package not installed. Install with: pip install anthropic"
-            )
+            ) from e
 
     elif provider == "google":
         try:
@@ -243,10 +243,10 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any
             model = model_name or DEFAULT_LLM_MODEL["google"]
             return genai, model
 
-        except ImportError:
+        except ImportError as e:
             raise ImportError(
                 "Google Generative AI package not installed. Install with: pip install google-generativeai"
-            )
+            ) from e
 
     else:
         raise ValueError(
@@ -382,11 +382,11 @@ def generate_code_snippet(
 
     except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error generating code snippet: {e}")
-        raise RuntimeError(f"Code generation failed: {e}")
+        raise RuntimeError(f"Code generation failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error generating code snippet: {e}", exc_info=True)
-        raise RuntimeError(f"Code generation failed: {e}")
+        raise RuntimeError(f"Code generation failed: {e}") from None
 
 
 @monitor_performance("ai_code_refactoring")
@@ -502,11 +502,11 @@ def refactor_code_snippet(
 
     except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error refactoring code: {e}")
-        raise RuntimeError(f"Code refactoring failed: {e}")
+        raise RuntimeError(f"Code refactoring failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error refactoring code: {e}", exc_info=True)
-        raise RuntimeError(f"Code refactoring failed: {e}")
+        raise RuntimeError(f"Code refactoring failed: {e}") from None
 
 
 @monitor_performance("ai_code_analysis")
@@ -616,11 +616,11 @@ def analyze_code_quality(
 
     except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error analyzing code: {e}")
-        raise RuntimeError(f"Code analysis failed: {e}")
+        raise RuntimeError(f"Code analysis failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error analyzing code: {e}", exc_info=True)
-        raise RuntimeError(f"Code analysis failed: {e}")
+        raise RuntimeError(f"Code analysis failed: {e}") from None
 
 
 @monitor_performance("ai_code_generation_batch")
@@ -839,11 +839,11 @@ Please analyze:
 
     except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error comparing code versions: {e}")
-        raise RuntimeError(f"Code comparison failed: {e}")
+        raise RuntimeError(f"Code comparison failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error comparing code versions: {e}", exc_info=True)
-        raise RuntimeError(f"Code comparison failed: {e}")
+        raise RuntimeError(f"Code comparison failed: {e}") from None
 
 
 @monitor_performance("ai_code_documentation")
@@ -951,11 +951,11 @@ def generate_code_documentation(
 
     except (ValueError, ImportError, AttributeError) as e:
         logger.error(f"Error generating documentation: {e}")
-        raise RuntimeError(f"Documentation generation failed: {e}")
+        raise RuntimeError(f"Documentation generation failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error generating documentation: {e}", exc_info=True)
-        raise RuntimeError(f"Documentation generation failed: {e}")
+        raise RuntimeError(f"Documentation generation failed: {e}") from None
 
 
 def get_supported_languages() -> list[CodeLanguage]:

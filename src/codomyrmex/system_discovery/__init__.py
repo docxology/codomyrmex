@@ -1,7 +1,7 @@
 """
 Codomyrmex System Discovery Module
 
-This module provides comprehensive system discovery and orchestration capabilities
+This module provides system discovery and orchestration capabilities
 for the Codomyrmex ecosystem. It scans all modules, discovers capabilities,
 reports on system status, and provides interactive exploration tools.
 """

@@ -525,6 +525,148 @@ class DockerManager:
             logger.error(f"Failed to get Docker info: {e}")
             return {"available": False, "error": str(e)}
 
+    def optimize_container_image(self, base_image: str, requirements: List[str]) -> str:
+        """
+        Optimize container image selection based on requirements.
+
+        Args:
+            base_image: Current base image
+            requirements: List of required packages/tools
+
+        Returns:
+            Optimized base image recommendation
+        """
+        # Simple optimization logic - can be enhanced with ML models
+        optimizations = {
+            "python": {
+                "base": "python:3.9-slim",
+                "alpine": "python:3.9-alpine",
+                "conda": "continuumio/miniconda3"
+            },
+            "node": {
+                "base": "node:18-slim",
+                "alpine": "node:18-alpine"
+            },
+            "ubuntu": {
+                "minimal": "ubuntu:20.04",
+                "alpine": "alpine:latest"
+            }
+        }
+
+        # Analyze requirements for optimization hints
+        has_python = any("python" in req.lower() for req in requirements)
+        has_node = any("node" in req.lower() or "npm" in req.lower() for req in requirements)
+        needs_compilation = any(keyword in " ".join(requirements).lower()
+                               for keyword in ["gcc", "build-essential", "make"])
+
+        if has_python and not needs_compilation:
+            return optimizations["python"]["base"]
+        elif has_node:
+            return optimizations["node"]["base"]
+        elif "ubuntu" in base_image.lower() and not needs_compilation:
+            return optimizations["ubuntu"]["alpine"]
+
+        return base_image  # Return original if no optimization found
+
+    def analyze_image_size(self, image_name: str) -> Dict[str, Any]:
+        """
+        Analyze Docker image size and layer information.
+
+        Args:
+            image_name: Name of the image to analyze
+
+        Returns:
+            Dict containing size analysis
+        """
+        if not self.client:
+            return {"error": "Docker client not available"}
+
+        try:
+            image = self.client.images.get(image_name)
+            attrs = image.attrs
+
+            size_bytes = attrs.get("Size", 0)
+            virtual_size = attrs.get("VirtualSize", size_bytes)
+
+            # Analyze layers
+            layers = attrs.get("RootFS", {}).get("Layers", [])
+            layer_sizes = []
+
+            # Try to get individual layer sizes (approximate)
+            try:
+                history = attrs.get("History", [])
+                for entry in history:
+                    layer_size = entry.get("Size", 0)
+                    if layer_size > 0:
+                        layer_sizes.append(layer_size)
+            except Exception:
+                pass
+
+            analysis = {
+                "image_name": image_name,
+                "total_size_bytes": size_bytes,
+                "total_size_mb": size_bytes / (1024 * 1024),
+                "virtual_size_bytes": virtual_size,
+                "virtual_size_mb": virtual_size / (1024 * 1024),
+                "layer_count": len(layers),
+                "layer_sizes": layer_sizes,
+                "average_layer_size_mb": sum(layer_sizes) / len(layer_sizes) / (1024 * 1024) if layer_sizes else 0,
+                "largest_layer_mb": max(layer_sizes) / (1024 * 1024) if layer_sizes else 0,
+                "size_efficiency": "good" if size_bytes < 500 * 1024 * 1024 else "large"
+            }
+
+            # Add optimization suggestions
+            analysis["optimization_suggestions"] = []
+            if analysis["layer_count"] > 20:
+                analysis["optimization_suggestions"].append("Consider reducing layer count with multi-stage builds")
+            if analysis["largest_layer_mb"] > 100:
+                analysis["optimization_suggestions"].append("Large layer detected - consider separating build dependencies")
+            if analysis["total_size_mb"] > 1000:
+                analysis["optimization_suggestions"].append("Image is very large - consider using smaller base image or multi-stage build")
+
+            return analysis
+
+        except Exception as e:
+            logger.error(f"Failed to analyze image {image_name}: {e}")
+            return {"error": str(e)}
+
+    def get_image_layers(self, image_name: str) -> List[Dict[str, Any]]:
+        """
+        Get detailed information about image layers.
+
+        Args:
+            image_name: Name of the image to analyze
+
+        Returns:
+            List of layer information dictionaries
+        """
+        if not self.client:
+            return []
+
+        try:
+            image = self.client.images.get(image_name)
+            attrs = image.attrs
+
+            layers = []
+            history = attrs.get("History", [])
+
+            for i, entry in enumerate(history):
+                layer_info = {
+                    "index": i,
+                    "created": entry.get("Created", ""),
+                    "created_by": entry.get("CreatedBy", ""),
+                    "size_bytes": entry.get("Size", 0),
+                    "size_mb": entry.get("Size", 0) / (1024 * 1024),
+                    "empty": entry.get("Size", 0) == 0
+                }
+                layers.append(layer_info)
+
+            return layers
+
+        except Exception as e:
+            logger.error(f"Failed to get layers for image {image_name}: {e}")
+            return []
+
 
 # Convenience functions
 def build_containers(

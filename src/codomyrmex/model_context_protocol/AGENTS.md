@@ -24,6 +24,116 @@ The model_context_protocol module serves as the communication backbone, ensuring
 - Error detail specifications with context preservation
 - Integration patterns for AI agent development
 
+## Function Signatures
+
+### Pydantic Schema Classes
+
+```python
+class MCPErrorDetail(BaseModel):
+    """Standard structure for detailed error information in MCP responses."""
+
+    error_type: str = Field(
+        ...,
+        description="Unique code or type for the error (e.g., ValidationError, FileNotFoundError)"
+    )
+    error_message: str = Field(
+        ...,
+        description="Descriptive message explaining the error"
+    )
+    error_details: Optional[Union[dict[str, Any], str]] = Field(
+        None,
+        description="Optional structured details or string with additional error info"
+    )
+```
+
+Pydantic model for structured error reporting in MCP responses.
+
+**Fields:**
+- `error_type` (str, required): Error classification/code
+- `error_message` (str, required): Human-readable error description
+- `error_details` (Optional[Union[dict, str]]): Additional context (structured or text)
+
+**Usage**: Include in `MCPToolResult` when `status` indicates failure
+
+```python
+class MCPToolCall(BaseModel):
+    """Represents a call to an MCP tool."""
+
+    tool_name: str = Field(
+        ...,
+        description="Unique invocation name of the tool"
+    )
+    arguments: dict[str, Any] = Field(
+        ...,
+        description="Arguments for the tool (schema defined by specific tool)"
+    )
+
+    model_config = ConfigDict(extra="allow")
+```
+
+Pydantic model for tool invocation requests.
+
+**Fields:**
+- `tool_name` (str, required): Name of tool to invoke
+- `arguments` (dict[str, Any], required): Tool-specific parameters
+
+**Configuration**: Allows extra fields (`extra="allow"`) for tool-specific validation
+
+```python
+class MCPToolResult(BaseModel):
+    """Represents the result of an MCP tool execution."""
+
+    status: str = Field(
+        ...,
+        description="Outcome of tool execution (success, failure, no_change_needed)"
+    )
+    data: Optional[dict[str, Any]] = Field(
+        None,
+        description="Output data from tool if successful (tool-specific schema)"
+    )
+    error: Optional[MCPErrorDetail] = Field(
+        None,
+        description="Error details if execution failed"
+    )
+    explanation: Optional[str] = Field(
+        None,
+        description="Human-readable explanation of the result"
+    )
+
+    model_config = ConfigDict(extra="allow")
+```
+
+Pydantic model for tool execution results with validation.
+
+**Fields:**
+- `status` (str, required): Execution outcome indicator
+- `data` (Optional[dict], optional): Success data (None on failure)
+- `error` (Optional[MCPErrorDetail], optional): Error details (required on failure)
+- `explanation` (Optional[str], optional): Contextual explanation
+
+**Validation Rules**:
+- If `status` contains "fail", `error` must be populated
+- If `status` contains "fail", `data` must be None
+- If `status` contains "success", `data` may be None (for side-effect-only tools)
+
+**Validators:**
+
+```python
+@field_validator("error")
+@classmethod
+def check_error_if_failed(cls, v, info) -> Optional[MCPErrorDetail]
+```
+
+Validates that `error` is populated when status indicates failure.
+
+```python
+@field_validator("data")
+@classmethod
+def check_data_if_success(cls, v, info) -> Optional[dict[str, Any]]
+```
+
+Validates that `data` is None when status indicates failure.
+
 ## Active Components
 
 ### Core Implementation
@@ -84,9 +194,6 @@ All AI communication within the Codomyrmex platform must:
 - **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
 
 ### Related Modules
-- **AI Code Editing**: [../ai_code_editing/](../../ai_code_editing/) - AI tool implementations
-- **Language Models**: [../language_models/](../../language_models/) - LLM integrations
-- **Terminal Interface**: [../terminal_interface/](../../terminal_interface/) - User interaction
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview

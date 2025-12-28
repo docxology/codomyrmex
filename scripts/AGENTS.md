@@ -8,6 +8,345 @@ This is the scripts coordination document for all automation utilities in the Co
 
 The scripts directory contains executable utilities that automate common development tasks, module management, and system operations across the entire Codomyrmex platform.
 
+## Function Signatures
+
+### Orchestrator Utilities Functions
+
+```python
+def format_table(data: List[Dict[str, Any]], headers: List[str]) -> str
+```
+
+Format data as a table string for console output.
+
+**Parameters:**
+- `data` (List[Dict[str, Any]]): Data rows as dictionaries
+- `headers` (List[str]): Column headers
+
+**Returns:** `str` - Formatted table string
+
+```python
+def print_progress_bar(current: int, total: int, prefix: str = "Progress") -> None
+```
+
+Display a progress bar in the console.
+
+**Parameters:**
+- `current` (int): Current progress value
+- `total` (int): Total progress value
+- `prefix` (str): Progress bar prefix. Defaults to "Progress"
+
+**Returns:** None
+
+```python
+def validate_dry_run(args: argparse.Namespace) -> bool
+```
+
+Validate dry run mode from command line arguments.
+
+**Parameters:**
+- `args` (argparse.Namespace): Parsed command line arguments
+
+**Returns:** `bool` - True if dry run mode is enabled
+
+```python
+def enhanced_error_context(operation: str, context: Optional[Dict[str, Any]] = None)
+```
+
+Context manager for enhanced error reporting with operation context.
+
+**Parameters:**
+- `operation` (str): Name of the operation being performed
+- `context` (Optional[Dict[str, Any]]): Additional context information
+
+**Returns:** Context manager
+
+```python
+def create_dry_run_plan(args: argparse.Namespace, operations: List[Dict[str, Any]]) -> str
+```
+
+Create a formatted plan for dry run operations.
+
+**Parameters:**
+- `args` (argparse.Namespace): Command line arguments
+- `operations` (List[Dict[str, Any]]): List of planned operations
+
+**Returns:** `str` - Formatted plan string
+
+```python
+def add_common_arguments(parser: argparse.ArgumentParser) -> None
+```
+
+Add common command line arguments to an argument parser.
+
+**Parameters:**
+- `parser` (argparse.ArgumentParser): Argument parser to modify
+
+**Returns:** None
+
+```python
+def print_with_color(message: str, color: str = "default", **kwargs) -> None
+```
+
+Print colored output to console.
+
+**Parameters:**
+- `message` (str): Message to print
+- `color` (str): Color name ("red", "green", "yellow", "blue", "default"). Defaults to "default"
+- `**kwargs`: Additional print arguments
+
+**Returns:** None
+
+```python
+def format_output(
+    data: Any,
+    format_type: str = "text",
+    indent: int = 2
+) -> str
+```
+
+Format data for output in various formats.
+
+**Parameters:**
+- `data` (Any): Data to format
+- `format_type` (str): Output format ("text", "json", "yaml"). Defaults to "text"
+- `indent` (int): Indentation level for structured formats. Defaults to 2
+
+**Returns:** `str` - Formatted output string
+
+```python
+def validate_file_path(
+    file_path: Union[str, Path],
+    must_exist: bool = True,
+    must_be_file: bool = True,
+    readable: bool = True,
+    writable: bool = False
+) -> Path
+```
+
+Validate file path with various checks.
+
+**Parameters:**
+- `file_path` (Union[str, Path]): Path to validate
+- `must_exist` (bool): Whether file must exist. Defaults to True
+- `must_be_file` (bool): Whether path must be a file (not directory). Defaults to True
+- `readable` (bool): Whether file must be readable. Defaults to True
+- `writable` (bool): Whether file must be writable. Defaults to False
+
+**Returns:** `Path` - Validated path object
+
+```python
+def load_json_file(path: Union[str, Path]) -> Dict[str, Any]
+```
+
+Load and parse JSON file.
+
+**Parameters:**
+- `path` (Union[str, Path]): Path to JSON file
+
+**Returns:** `Dict[str, Any]` - Parsed JSON data
+
+```python
+def save_json_file(
+    data: Dict[str, Any],
+    path: Union[str, Path],
+    indent: int = 2,
+    sort_keys: bool = False
+) -> None
+```
+
+Save data to JSON file.
+
+**Parameters:**
+- `data` (Dict[str, Any]): Data to save
+- `path` (Union[str, Path]): Output file path
+- `indent` (int): JSON indentation. Defaults to 2
+- `sort_keys` (bool): Whether to sort dictionary keys. Defaults to False
+
+**Returns:** None
+
+```python
+def print_section(title: str, content: str = "", width: int = 80) -> None
+```
+
+Print a formatted section header.
+
+**Parameters:**
+- `title` (str): Section title
+- `content` (str): Optional content to display
+- `width` (int): Section width. Defaults to 80
+
+**Returns:** None
+
+```python
+def print_success(message: str, context: Optional[str] = None) -> None
+```
+
+Print success message with green color.
+
+**Parameters:**
+- `message` (str): Success message
+- `context` (Optional[str]): Additional context information
+
+**Returns:** None
+
+```python
+def print_error(
+    message: str,
+    context: Optional[str] = None,
+    exit_code: int = 1
+) -> None
+```
+
+Print error message with red color and optionally exit.
+
+**Parameters:**
+- `message` (str): Error message
+- `context` (Optional[str]): Additional context information
+- `exit_code` (int): Exit code if exiting. Defaults to 1
+
+**Returns:** None
+
+```python
+def print_warning(message: str, context: Optional[str] = None) -> None
+```
+
+Print warning message with yellow color.
+
+**Parameters:**
+- `message` (str): Warning message
+- `context` (Optional[str]): Additional context information
+
+**Returns:** None
+
+```python
+def print_info(message: str) -> None
+```
+
+Print info message.
+
+**Parameters:**
+- `message` (str): Info message
+
+**Returns:** None
+
+```python
+def handle_common_exceptions(
+    func: callable,
+    operation_name: str = "operation",
+    exit_on_error: bool = True
+) -> callable
+```
+
+Decorator to handle common exceptions with consistent error reporting.
+
+**Parameters:**
+- `func` (callable): Function to decorate
+- `operation_name` (str): Name of the operation for error messages. Defaults to "operation"
+- `exit_on_error` (bool): Whether to exit on error. Defaults to True
+
+**Returns:** `callable` - Decorated function
+
+```python
+def format_result(
+    success: bool,
+    message: str,
+    data: Optional[Any] = None,
+    duration: Optional[float] = None
+) -> Dict[str, Any]
+```
+
+Format operation result as structured dictionary.
+
+**Parameters:**
+- `success` (bool): Whether operation was successful
+- `message` (str): Result message
+- `data` (Optional[Any]): Additional result data
+- `duration` (Optional[float]): Operation duration in seconds
+
+**Returns:** `Dict[str, Any]` - Formatted result dictionary
+
+```python
+def determine_language_from_file(file_path: Union[str, Path]) -> str
+```
+
+Determine programming language from file extension.
+
+**Parameters:**
+- `file_path` (Union[str, Path]): File path to analyze
+
+**Returns:** `str` - Detected programming language
+
+```python
+def ensure_output_directory(output_path: Union[str, Path]) -> Path
+```
+
+Ensure output directory exists, creating it if necessary.
+
+**Parameters:**
+- `output_path` (Union[str, Path]): Output path (file or directory)
+
+**Returns:** `Path` - Path to output directory
+
+```python
+def parse_common_args(args: Any) -> Dict[str, Any]
+```
+
+Parse common command line arguments into configuration dictionary.
+
+**Parameters:**
+- `args` (Any): Parsed command line arguments
+
+**Returns:** `Dict[str, Any]` - Configuration dictionary
+
+## ProgressReporter Class Methods
+
+```python
+def __init__(self, total: int = 100, prefix: str = "Progress", suffix: str = "Complete")
+```
+
+Initialize progress reporter.
+
+**Parameters:**
+- `total` (int): Total number of steps. Defaults to 100
+- `prefix` (str): Progress bar prefix. Defaults to "Progress"
+- `suffix` (str): Progress bar suffix. Defaults to "Complete"
+
+```python
+def update(self, increment: int = 1, message: Optional[str] = None) -> None
+```
+
+Update progress by specified increment.
+
+**Parameters:**
+- `increment` (int): Number of steps to advance. Defaults to 1
+- `message` (Optional[str]): Optional status message
+
+**Returns:** None
+
+```python
+def complete(self) -> None
+```
+
+Mark progress as complete.
+
+**Returns:** None
+
+```python
+def get_eta(self) -> float
+```
+
+Get estimated time of arrival in seconds.
+
+**Returns:** `float` - ETA in seconds
+
+```python
+def get_progress_percentage(self) -> float
+```
+
+Get current progress as percentage.
+
+**Returns:** `float` - Progress percentage (0-100)
+
 ## Directory Structure
 
 ### Core Script Categories
@@ -125,17 +464,17 @@ All scripts in this directory must:
 ## Navigation
 
 ### For Users
-- **Quick Start**: [development/setup.sh](../../scripts/development/setup.sh) - Environment setup
-- **Examples**: [examples/](../../scripts/examples/) - Usage examples and demonstrations
-- **Maintenance**: [maintenance/](../../scripts/maintenance/) - System maintenance utilities
+- **Quick Start**: [development/](development/) - Environment setup
+- **Examples**: [examples/](examples/) - Usage examples and demonstrations
+- **Maintenance**: [maintenance/](maintenance/) - System maintenance utilities
 
 ### For Agents
 - **Coding Standards**: [cursorrules/general.cursorrules](../../../cursorrules/general.cursorrules)
-- **Script Development**: [development/README.md](../../scripts/development/README.md)
+- **Script Development**: [development/](development/)
 - **Module System**: [docs/modules/overview.md](../../../docs/modules/overview.md)
 
 ### For Contributors
-- **Script Templates**: [module_template/](../../scripts/module_template/) - Script creation templates
+- **Script Templates**: [module_template/](module_template/) - Script creation templates
 - **Testing**: [testing/unit/](../../testing/unit/) - Script testing guidelines
 - **Contributing**: [docs/project/contributing.md](../../../docs/project/contributing.md)
 

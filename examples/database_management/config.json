@@ -1,0 +1,99 @@
+{
+  "databases": {
+    "development": {
+      "type": "sqlite",
+      "database": "development.db",
+      "host": "localhost",
+      "username": "dev_user",
+      "password": "dev_pass"
+    },
+    "production": {
+      "type": "postgresql",
+      "host": "prod.example.com",
+      "port": 5432,
+      "database": "production",
+      "username": "prod_user",
+      "password": "prod_pass",
+      "ssl_mode": "require",
+      "connection_pool_size": 10
+    }
+  },
+  "schema": {
+    "target_database": "sqlite",
+    "naming_convention": "snake_case",
+    "include_foreign_keys": true,
+    "include_indexes": true,
+    "generate_migrations": true
+  },
+  "migrations": {
+    "directory": "migrations",
+    "naming_pattern": "{timestamp}_{name}.sql",
+    "auto_rollback": true,
+    "timeout": 300,
+    "dry_run": false
+  },
+  "backup": {
+    "directory": "backups",
+    "naming_pattern": "{database}_{timestamp}.backup",
+    "compression": {
+      "enabled": true,
+      "algorithm": "gzip",
+      "level": 6
+    },
+    "retention": {
+      "keep_daily": 7,
+      "keep_weekly": 4,
+      "keep_monthly": 12
+    },
+    "encryption": {
+      "enabled": false,
+      "algorithm": "aes256"
+    }
+  },
+  "monitoring": {
+    "interval": 60,
+    "metrics": [
+      "connection_count",
+      "query_count",
+      "slow_queries",
+      "table_sizes",
+      "index_usage"
+    ],
+    "thresholds": {
+      "max_connections": 100,
+      "slow_query_threshold": 5.0,
+      "max_table_size": 1000000
+    },
+    "performance": {
+      "enabled": true,
+      "query_logging": true,
+      "execution_plan_analysis": true
+    }
+  },
+  "optimization": {
+    "auto_optimize": {
+      "enabled": true,
+      "schedule": "daily",
+      "maintenance_window": "02:00-04:00"
+    },
+    "types": [
+      "vacuum",
+      "reindex",
+      "analyze",
+      "cluster"
+    ],
+    "indexes": {
+      "unused_threshold": 30,
+      "rebuild_threshold": 0.3
+    }
+  },
+  "output": {
+    "format": "json",
+    "file": "output/database_management_results.json",
+    "schema_dir": "output/schemas"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/database_management.log"
+  }
+}

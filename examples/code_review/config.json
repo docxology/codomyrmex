@@ -1,0 +1,64 @@
+{
+  "quality_gates": {
+    "max_complexity": 10,
+    "max_line_length": 100,
+    "min_test_coverage": 80,
+    "max_duplication": 5,
+    "security_violations": 0,
+    "critical_issues": 0
+  },
+  "analysis": {
+    "types": [
+      "quality",
+      "complexity",
+      "style",
+      "security",
+      "performance",
+      "maintainability"
+    ],
+    "language": "python",
+    "depth": "medium",
+    "include_patterns": [
+      "*.py",
+      "*.js",
+      "*.ts",
+      "*.java"
+    ],
+    "exclude_patterns": [
+      "*test*",
+      "*spec*",
+      "*__pycache__*",
+      "*.pyc"
+    ]
+  },
+  "output": {
+    "format": "json",
+    "file": "output/code_review_results.json",
+    "sample_code_dir": "output/sample_code"
+  },
+  "review": {
+    "generate_comments": true,
+    "severity_thresholds": {
+      "info": 10,
+      "warning": 5,
+      "error": 2,
+      "critical": 0
+    },
+    "categories": [
+      "style",
+      "complexity",
+      "security",
+      "performance",
+      "documentation"
+    ]
+  },
+  "reporting": {
+    "formats": [
+      "json",
+      "markdown"
+    ],
+    "include_details": true,
+    "include_recommendations": true,
+    "include_code_snippets": true
+  }
+}

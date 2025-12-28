@@ -8,6 +8,26 @@ Core module providing static code analysis capabilities for the Codomyrmex platf
 
 The static_analysis module serves as the foundation for code quality assurance, enabling early detection of issues and enforcement of coding standards.
 
+## Analysis Pipeline
+
+```mermaid
+graph LR
+    A[File Input] --> B[Parser]
+    B --> C[Analyzers]
+    C --> D[Results]
+    D --> E[Reports]
+
+    B --> F[AST Analysis]
+    B --> G[Security Scan]
+    B --> H[Complexity Check]
+
+    C --> I[Quality Metrics]
+    C --> J[Security Findings]
+    C --> K[Maintainability Score]
+```
+
+The static analysis pipeline processes source code through multiple stages: parsing, analysis, result aggregation, and reporting. Each analyzer focuses on specific aspects of code quality including syntax validation, security vulnerabilities, and maintainability metrics.
+
 ## Directory Contents
 - `.gitignore` – File
 - `API_SPECIFICATION.md` – File

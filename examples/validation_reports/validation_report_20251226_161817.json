@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "validation_timestamp": "2025-12-26 16:18:17",
+    "total_duration": 0.11878180503845215,
+    "examples_root": "/Users/4d/Documents/GitHub/codomyrmex/examples",
+    "validation_types": [
+      "execution"
+    ],
+    "parallel_processes": 4
+  },
+  "summary": {
+    "total_modules": 4,
+    "successful_modules": 0,
+    "failed_modules": 4,
+    "success_rate": 0.0,
+    "total_issues": 4,
+    "health_score": 50.0,
+    "severity_breakdown": {
+      "critical": 0,
+      "error": 4,
+      "warning": 0,
+      "info": 0
+    },
+    "type_breakdown": {
+      "execution": 4
+    }
+  },
+  "modules": {
+    "ai_code_editing": {
+      "total": 1,
+      "critical": 0,
+      "error": 1,
+      "warning": 0,
+      "info": 0,
+      "success": false,
+      "duration": 0.025064945220947266
+    },
+    "events": {
+      "total": 1,
+      "critical": 0,
+      "error": 1,
+      "warning": 0,
+      "info": 0,
+      "success": false,
+      "duration": 0.024324893951416016
+    },
+    "code_review": {
+      "total": 1,
+      "critical": 0,
+      "error": 1,
+      "warning": 0,
+      "info": 0,
+      "success": false,
+      "duration": 0.026220083236694336
+    },
+    "git_operations": {
+      "total": 1,
+      "critical": 0,
+      "error": 1,
+      "warning": 0,
+      "info": 0,
+      "success": false,
+      "duration": 0.025458097457885742
+    }
+  },
+  "issues": [
+    {
+      "module": "ai_code_editing",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/example_basic.py\", line 272\n    print(\"\n          ^\nSyntaxError: unterminated string literal (detected at line 272)\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "events",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/events/example_basic.py\", line 184\n    event_logger = get_event_logger()\n    ^^^^^^^^^^^^\nIndentationError: expected an indented block after 'try' statement on line 183\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/events/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "code_review",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py\", line 626\n    print_success(\".2f\"        error_cases['large_file'] = True\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax. Perhaps you forgot a comma?\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py",
+      "line_number": null
+    },
+    {
+      "module": "git_operations",
+      "validation_type": "execution",
+      "severity": "error",
+      "message": "Example execution failed with exit code 1",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/git_operations/example_basic.py\", line 820\n    print(f\"✓ Release Workflow: Completed {release_workflow.get('workflow_steps_completed', 0)} steps, implemented {release_workflow.get('features_implemented', 0)} features, created {release_workflow.get('release_tags_created', 0)} release tags\")\nIndentationError: unexpected indent\n",
+      "fix_suggestion": null,
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/git_operations/example_basic.py",
+      "line_number": null
+    }
+  ],
+  "recommendations": [
+    "🟠 ERRORS: Fix error-level issues - these indicate broken functionality",
+    "⚠️ EXECUTION: 4 modules have execution failures - fix to ensure examples work",
+    "🔄 NEXT STEPS: Run validation again after fixes to track progress"
+  ]
+}

@@ -1,14 +1,25 @@
 from __future__ import annotations
 
+import argparse
+import importlib
+import sys
+import time
+from collections.abc import Iterable
+from typing import Callable
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 """
 🤖 Codomyrmex Droid TODO Processor
 
 Run droid TODO items with configurable execution count and intelligent processing.
 
-This enhanced version provides:
+This version provides:
 - Interactive prompt for number of TODOs to process
 - Sequential processing with progress indication
-- Codomyrmex-specific enhanced prompts with project context and rules
+- Codomyrmex-specific prompts with project context and rules
 - Comprehensive error handling and metrics tracking
 - Support for both interactive and command-line usage
 
@@ -24,16 +35,6 @@ Usage:
     from codomyrmex.exceptions import CodomyrmexError
     processed = list(run_todos(controller, manager, 3))
 """
-import argparse
-import importlib
-import sys
-import time
-from collections.abc import Iterable
-from typing import Callable
-
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-logger = get_logger(__name__)
 
 # Handle both module and direct execution imports
 try:
@@ -116,7 +117,7 @@ def resolve_handler(handler_path: str) -> Callable:
             # Handle absolute imports
             module = importlib.import_module(module_name)
     except ImportError as e:
-        raise ImportError(f"Failed to import handler module '{module_name}': {e}")
+        raise ImportError(f"Failed to import handler module '{module_name}': {e}") from e
 
     handler = getattr(module, attribute, None)
     if handler is None or not callable(handler):

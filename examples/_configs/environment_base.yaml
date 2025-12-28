@@ -1,0 +1,48 @@
+# Base Environment Configuration
+# This file contains common configuration shared across all environments
+# Other environment files can extend this base configuration
+
+# Output settings - common across environments
+output:
+  format: json
+  compress: false
+
+# Logging configuration - environment-specific levels
+logging:
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  max_file_size: 10485760
+  backup_count: 5
+
+# Performance settings - baseline configuration
+performance:
+  enable_monitoring: true
+  memory_limit: 512MB
+  profiling: false
+
+# Error handling - common error handling patterns
+error_handling:
+  fail_fast: false
+  continue_on_error: true
+  log_errors: true
+
+# Testing configuration - common test settings
+testing:
+  enable_validation: true
+  generate_test_data: true
+  cleanup_after_test: true
+
+# Monitoring - baseline monitoring
+monitoring:
+  enable_metrics: true
+  metrics_interval: 60
+
+# Feature flags - common feature settings
+features:
+  basic_features: true
+  advanced_features: false
+  experimental: false
+
+# Security - baseline security settings
+security:
+  validate_inputs: true
+  sanitize_outputs: true

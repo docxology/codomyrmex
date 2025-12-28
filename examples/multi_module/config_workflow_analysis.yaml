@@ -1,0 +1,72 @@
+# Multi-Module Workflow Configuration: Analysis Pipeline
+# Integrates static analysis, security audit, visualization, logging, and events
+
+# Analysis configuration
+analysis:
+  # Target path for analysis
+  target_path: src/
+  
+  # Analysis types to run
+  types:
+    - static_analysis
+    - security_audit
+  
+  # Output settings
+  generate_report: true
+  generate_visualizations: true
+
+# Static Analysis settings
+static_analysis:
+  # Analysis depth
+  deep_scan: false
+  
+  # File patterns to include
+  include_patterns:
+    - "*.py"
+  
+  # File patterns to exclude
+  exclude_patterns:
+    - "*/tests/*"
+    - "*/__pycache__/*"
+
+# Security Audit settings
+security_audit:
+  # Scan types
+  scan_types:
+    - vulnerabilities
+    - secrets
+    - compliance
+  
+  # Severity threshold
+  min_severity: medium
+
+# Data Visualization settings
+visualization:
+  output_dir: output/workflow_analysis
+  chart_type: bar
+  format: png
+  dpi: 150
+
+# Event system settings
+events:
+  # Enable event logging
+  log_events: true
+  
+  # Event types to track
+  track_events:
+    - ANALYSIS_START
+    - ANALYSIS_COMPLETE
+    - ANALYSIS_ERROR
+
+# Output settings
+output:
+  format: json
+  file: output/workflow_analysis_results.json
+  include_details: true
+
+# Logging
+logging:
+  level: INFO
+  file: logs/workflow_analysis.log
+  format: DETAILED
+

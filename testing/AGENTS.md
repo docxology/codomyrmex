@@ -8,6 +8,113 @@ This is the testing coordination document for all test suites and validation sys
 
 The testing directory contains unit tests, integration tests, and validation frameworks that follow test-driven development (TDD) practices with real data analysis (no mock methods).
 
+## Function Signatures
+
+### Test Infrastructure Functions
+
+```python
+def project_root() -> Path
+```
+
+Get the project root directory path.
+
+**Returns:** `Path` - Absolute path to project root directory
+
+```python
+def examples_dir(project_root: Path) -> Path
+```
+
+Get the examples directory path.
+
+**Parameters:**
+- `project_root` (Path): Project root directory path
+
+**Returns:** `Path` - Path to examples directory
+
+```python
+def testing_dir(project_root: Path) -> Path
+```
+
+Get the testing directory path.
+
+**Parameters:**
+- `project_root` (Path): Project root directory path
+
+**Returns:** `Path` - Path to testing directory
+
+```python
+def temp_output_dir() -> Generator[Path, None, None]
+```
+
+Create a temporary output directory for tests.
+
+**Yields:** `Path` - Path to temporary directory (automatically cleaned up)
+
+```python
+def mock_config() -> Dict[str, Any]
+```
+
+Create mock configuration for testing.
+
+**Returns:** `Dict[str, Any]` - Mock configuration dictionary
+
+```python
+def setup_test_environment(project_root: Path) -> None
+```
+
+Set up test environment with necessary configurations.
+
+**Parameters:**
+- `project_root` (Path): Project root directory path
+
+**Returns:** None - Sets up test environment
+
+### Performance Testing Functions
+
+```python
+def setup_performance_logging() -> None
+```
+
+Set up logging for performance testing.
+
+**Returns:** None - Configures performance logging
+
+```python
+def temp_performance_dir() -> Generator[Path, None, None]
+```
+
+Create temporary directory for performance test outputs.
+
+**Yields:** `Path` - Path to temporary performance directory
+
+### Integration Testing Functions
+
+```python
+def run_ollama_integration_tests() -> None
+```
+
+Run comprehensive Ollama integration tests.
+
+**Returns:** None - Executes Ollama integration test suite
+
+### Test Utility Functions
+
+```python
+def dangerous_function() -> None
+```
+
+Test function that simulates dangerous operations for security testing.
+
+**Returns:** None - Simulates dangerous operation (for testing purposes)
+
+```python
+def main() -> None
+```
+
+Main entry point for build synthesis tests.
+
+**Returns:** None - Runs build synthesis test suite
+
 ## Test Organization
 
 ### Test Types
@@ -103,17 +210,17 @@ The testing framework uses:
 ## Navigation
 
 ### For Users
-- **Quick Start**: [README.md](../../testing/README.md) - Testing overview
+- **Quick Start**: [README.md](../testing/README.md) - Testing overview
 - **Running Tests**: See development documentation for test execution
 - **Coverage Reports**: Generated in `htmlcov/` directory
 
 ### For Agents
-- **Testing Strategy**: [docs/development/testing-strategy.md](../../../docs/development/testing-strategy.md)
-- **Test Standards**: [cursorrules/general.cursorrules](../../../cursorrules/general.cursorrules)
-- **Module System**: [docs/modules/overview.md](../../../docs/modules/overview.md)
+- **Testing Strategy**: [docs/development/testing-strategy.md](../docs/development/testing-strategy.md)
+- **Test Standards**: [cursorrules/general.cursorrules](../cursorrules/general.cursorrules)
+- **Module System**: [docs/modules/overview.md](../docs/modules/overview.md)
 
 ### For Contributors
-- **Test Development**: [docs/development/testing-strategy.md](../../../docs/development/testing-strategy.md)
+- **Test Development**: [docs/development/testing-strategy.md](../docs/development/testing-strategy.md)
 - **Code Coverage**: [pytest.ini](../../../pytest.ini) - Coverage configuration
 - **Contributing**: [docs/project/contributing.md](../../../docs/project/contributing.md)
 

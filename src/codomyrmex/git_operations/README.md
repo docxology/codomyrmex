@@ -8,6 +8,37 @@ Core module providing comprehensive Git version control automation capabilities 
 
 The git_operations module serves as the version control backbone, enabling automated development workflows and repository management throughout the platform.
 
+## Git Workflow Architecture
+
+```mermaid
+graph TD
+    A[Local Repository] --> B[Git Operations]
+    B --> C[Branch Management]
+    B --> D[Commit Operations]
+    B --> E[Remote Sync]
+
+    C --> F[Create/Switch/Merge]
+    D --> G[Stage/Commit/Push]
+    E --> H[Pull/Fetch/Sync]
+
+    A --> I[GitHub API]
+    I --> J[Repository Creation]
+    I --> K[Pull Request Management]
+    I --> L[Issue Tracking]
+
+    B --> M[Visualization]
+    I --> M
+    M --> N[Branch Diagrams]
+    M --> O[Commit Timelines]
+    M --> P[Repository Analytics]
+
+    F --> Q[Workflow Orchestration]
+    G --> Q
+    H --> Q
+```
+
+The Git operations architecture integrates local repository management with GitHub API interactions and visualization capabilities, supporting complex development workflows through programmatic automation.
+
 ## Directory Contents
 - `.cursor/` – Subdirectory
 - `.gitignore` – File

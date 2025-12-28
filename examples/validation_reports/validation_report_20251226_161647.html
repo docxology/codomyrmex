@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Codomyrmex Examples Validation Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .summary { background: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+        .metric { display: inline-block; margin: 10px; padding: 10px; background: white; border-radius: 3px; }
+        .issues { margin-top: 20px; }
+        .issue { margin: 10px 0; padding: 10px; border-left: 4px solid; }
+        .module { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .recommendations { background: #e9ecef; padding: 15px; border-radius: 5px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Codomyrmex Examples Validation Report</h1>
+    <p><strong>Generated:</strong> 2025-12-26 16:16:47</p>
+    <p><strong>Duration:</strong> 9.85s</p>
+
+    <div class="summary">
+        <h2>📊 Summary</h2>
+        <div class="metric"><strong>Modules:</strong> 34</div>
+        <div class="metric"><strong>Success Rate:</strong> 0.0%</div>
+        <div class="metric"><strong>Health Score:</strong> 20.3/100</div>
+        <div class="metric"><strong>Total Issues:</strong> 110</div>
+    </div>
+
+    <h2>🔴 Issues by Severity</h2>
+    <ul>
+        <li style="color: #dc3545"><strong>CRITICAL:</strong> 0</li>
+        <li style="color: #fd7e14"><strong>ERROR:</strong> 17</li>
+        <li style="color: #ffc107"><strong>WARNING:</strong> 93</li>
+        <li style="color: #17a2b8"><strong>INFO:</strong> 0</li>
+    </ul>
+
+    <h2>📋 Issues by Type</h2>
+    <ul>
+        <li><strong>Execution:</strong> 17</li>
+        <li><strong>Config:</strong> 10</li>
+        <li><strong>Docs:</strong> 29</li>
+        <li><strong>Test Refs:</strong> 29</li>
+        <li><strong>Output:</strong> 25</li>
+    </ul>
+
+    <div class="issues">
+        <h2>🚨 Detailed Issues</h2>
+
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>ai_code_editing</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/example_basic.py", line 272
+    print("
+          ^
+SyntaxError: unterminated string literal (detected at line 272)
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>ai_code_editing</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>ai_code_editing</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>ai_code_editing</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>api_documentation</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>api_documentation</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>api_documentation</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>api_standardization</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>api_standardization</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>api_standardization</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>code_execution_sandbox</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/example_basic.py", line 432
+    print(".2f"    print(".1f"
+                        ^
+SyntaxError: '(' was never closed
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>code_execution_sandbox</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>code_execution_sandbox</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>code_review</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py", line 526
+    print(".1f"            print(".1f"            print(f"   Files with issues: {metrics['files_with_issues']}")
+          ^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>code_review</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>code_review</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>code_review</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>containerization</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>Traceback (most recent call last):
+  File "/Users/4d/Documents/GitHub/codomyrmex/examples/containerization/example_basic.py", line 23, in <module>
+    from codomyrmex.containerization.docker_manager import build_image, analyze_image_size
+  File "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/__init__.py", line 35, in <module>
+    from .docker_manager import (
+    ...<4 lines>...
+    )
+  File "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/docker_mana</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>containerization</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>containerization</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>config_management</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>Traceback (most recent call last):
+  File "/Users/4d/Documents/GitHub/codomyrmex/examples/config_management/example_basic.py", line 22, in <module>
+    from codomyrmex.config_management.config_loader import Configuration
+  File "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/__init__.py", line 36, in <module>
+    from .config_loader import (
+    ...<5 lines>...
+    )
+  File "/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/config_loader.py", line 173</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>config_management</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>config_management</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>database_management</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>database_management</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>database_management</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>build_synthesis</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>build_synthesis</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>build_synthesis</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>documentation</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>documentation</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>documentation</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>events</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/events/example_basic.py", line 172
+    event_bus = get_event_bus()
+    ^^^^^^^^^
+IndentationError: expected an indented block after 'try' statement on line 171
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>events</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>events</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>events</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>git_operations</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/git_operations/example_basic.py", line 815
+    print("\n✅ Comprehensive Git Operations example completed successfully!")
+IndentationError: unexpected indent
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>git_operations</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>git_operations</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>environment_setup</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py:5: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Traceback (most recent call last):
+  File "/Users/4d/Documents/GitHub/codomyrmex/examples/environment_setup/example_basic.py", line 38, in <module</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>environment_setup</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>environment_setup</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>logging_monitoring</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/logging_monitoring/example_basic.py", line 114
+    config = load_config(Path(__file__).parent / "config.yaml")
+    ^^^^^^
+IndentationError: expected an indented block after 'try' statement on line 113
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>logging_monitoring</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>logging_monitoring</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>logging_monitoring</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>model_context_protocol</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Features, ## Usage
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>model_context_protocol</strong> - Test Refs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            No properly formatted test method references found
+            <br><small>Expected format: file::Class::method()</small>
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>model_context_protocol</strong> - Output
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Results file missing required fields: status
+            
+        </div>
+        <div class="issue" style="border-left-color: #ffc107">
+            <strong>ci_cd_automation</strong> - Docs
+            <span style="color: #ffc107">[WARNING]</span><br>
+            Missing documentation sections: ## Usage
+            
+        </div>
+    </div>
+
+    <div class="recommendations">
+        <h2>💡 Recommendations</h2>
+        <ul>
+            <li>🟠 ERRORS: Fix error-level issues - these indicate broken functionality</li>
+            <li>🟡 WARNINGS: Review warning issues - these indicate potential problems</li>
+            <li>⚠️ EXECUTION: 17 modules have execution failures - fix to ensure examples work</li>
+            <li>⚙️ CONFIGURATION: 5 modules have configuration issues - validate config files</li>
+            <li>🧪 TESTING: 29 modules have test reference issues - verify test method links</li>
+            <li>🔄 NEXT STEPS: Run validation again after fixes to track progress</li>
+        </ul>
+    </div>
+</body>
+</html>

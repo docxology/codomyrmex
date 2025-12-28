@@ -26,6 +26,31 @@ The code_execution_sandbox module serves as a critical security boundary, allowi
 - Integration with logging system for execution tracking
 - Error handling and recovery mechanisms
 
+## Function Signatures
+
+### Core Functions
+
+```python
+def execute_code(
+    language: str,
+    code: str,
+    stdin: Optional[str] = None,
+    timeout: Optional[int] = None,
+    session_id: Optional[str] = None,
+) -> dict[str, Any]
+```
+
+Executes code in a sandboxed Docker environment with security isolation.
+
+**Parameters:**
+- `language` (str): Programming language of the code ("python", "javascript", "bash", etc.)
+- `code` (str): Source code to execute
+- `stdin` (Optional[str]): Standard input to provide to the program
+- `timeout` (Optional[int]): Maximum execution time in seconds (default: 30)
+- `session_id` (Optional[str]): Session identifier for persistent execution environments
+
+**Returns:** Dictionary containing execution results with keys: "stdout", "stderr", "exit_code", "execution_time", "status"
+
 ## Active Components
 
 ### Core Implementation
@@ -85,9 +110,6 @@ All code execution within the Codomyrmex platform must:
 - **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
 
 ### Related Modules
-- **AI Code Editing**: [../ai_code_editing/](../../ai_code_editing/) - Code generation integration
-- **Logging Monitoring**: [../logging_monitoring/](../../logging_monitoring/) - Execution logging
-- **Security Audit**: [../security_audit/](../../security_audit/) - Security validation
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview

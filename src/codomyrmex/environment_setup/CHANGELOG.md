@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Enhanced `env_checker.py` with advanced environment validation functions:
+  - `validate_python_version()` - Validates Python version compatibility
+  - `check_package_versions()` - Retrieves installed package versions
+  - `validate_environment_completeness()` - Comprehensive environment validation
+  - `generate_environment_report()` - Generates detailed environment status reports
 - Initial `env_checker.py` script with `ensure_dependencies_installed()` and `check_and_setup_env_vars()` functions.
 - `README.md` detailing general project setup and module-specific overview.
 - `API_SPECIFICATION.md` documenting functions from `env_checker.py`.

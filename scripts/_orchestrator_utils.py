@@ -7,16 +7,290 @@ orchestrator scripts to ensure consistency and reduce code duplication.
 
 import json
 import sys
+import time
+import argparse
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Union, List
+from contextlib import contextmanager
 
 # Import logging setup
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger, LogContext
 
 logger = get_logger(__name__)
 
 # Standard output width for formatting
-OUTPUT_WIDTH = 40
+OUTPUT_WIDTH = 80
+
+
+class ProgressReporter:
+    """Progress reporting utility for long-running operations."""
+
+    def __init__(self, total: int = 100, prefix: str = "Progress", suffix: str = "Complete"):
+        """
+        Initialize progress reporter.
+
+        Args:
+            total: Total number of steps
+            prefix: Progress bar prefix
+            suffix: Progress bar suffix
+        """
+        self.total = total
+        self.prefix = prefix
+        self.suffix = suffix
+        self.current = 0
+        self.start_time = time.time()
+        self.last_update = 0
+
+    def update(self, increment: int = 1, message: Optional[str] = None) -> None:
+        """
+        Update progress.
+
+        Args:
+            increment: Number of steps to advance
+            message: Optional status message
+        """
+        self.current += increment
+        self.current = min(self.current, self.total)  # Cap at total
+
+        # Throttle updates to avoid spam
+        current_time = time.time()
+        if current_time - self.last_update < 0.1:  # Update at most every 100ms
+            return
+
+        self.last_update = current_time
+        self._display_progress(message)
+
+    def set_current(self, current: int, message: Optional[str] = None) -> None:
+        """
+        Set current progress value.
+
+        Args:
+            current: Current progress value
+            message: Optional status message
+        """
+        self.current = current
+        self._display_progress(message)
+
+    def complete(self, message: str = "Completed") -> None:
+        """Mark progress as complete."""
+        self.current = self.total
+        self._display_progress(message)
+        print()  # New line after progress bar
+
+    def _display_progress(self, message: Optional[str] = None) -> None:
+        """Display current progress."""
+        percentage = int(100 * self.current / self.total)
+        filled_length = int(OUTPUT_WIDTH * self.current // self.total)
+        bar = "█" * filled_length + "-" * (OUTPUT_WIDTH - filled_length)
+
+        elapsed = time.time() - self.start_time
+        if self.current > 0:
+            eta = elapsed * (self.total - self.current) / self.current
+            eta_str = f" ETA: {eta:.1f}s"
+        else:
+            eta_str = ""
+
+        status = f"\r{self.prefix}: [{bar}] {percentage}%{eta_str}"
+        if message:
+            status += f" - {message}"
+
+        print(status, end="", flush=True)
+
+
+def format_table(data: List[Dict[str, Any]], headers: List[str]) -> str:
+    """
+    Format data as a table.
+
+    Args:
+        data: List of dictionaries containing row data
+        headers: List of column headers
+
+    Returns:
+        Formatted table string
+    """
+    if not data:
+        return "No data to display"
+
+    # Calculate column widths
+    col_widths = {}
+    for header in headers:
+        col_widths[header] = len(header)
+
+    for row in data:
+        for header in headers:
+            value = str(row.get(header, ""))
+            col_widths[header] = max(col_widths[header], len(value))
+
+    # Create table
+    lines = []
+
+    # Header
+    header_line = " | ".join(h.ljust(col_widths[h]) for h in headers)
+    lines.append(header_line)
+    lines.append("-" * len(header_line))
+
+    # Data rows
+    for row in data:
+        row_line = " | ".join(str(row.get(h, "")).ljust(col_widths[h]) for h in headers)
+        lines.append(row_line)
+
+    return "\n".join(lines)
+
+
+def print_progress_bar(current: int, total: int, prefix: str = "Progress") -> None:
+    """
+    Print a simple progress bar.
+
+    Args:
+        current: Current progress value
+        total: Total progress value
+        prefix: Progress bar prefix
+    """
+    percentage = int(100 * current / total) if total > 0 else 100
+    bar_length = 30
+    filled_length = int(bar_length * current // total)
+    bar = "█" * filled_length + "-" * (bar_length - filled_length)
+
+    print(f"\r{prefix}: [{bar}] {percentage}%", end="", flush=True)
+    if current >= total:
+        print()  # New line when complete
+
+
+def validate_dry_run(args: argparse.Namespace) -> bool:
+    """
+    Validate and confirm dry-run mode.
+
+    Args:
+        args: Parsed command line arguments
+
+    Returns:
+        True if dry-run should proceed
+    """
+    if not getattr(args, 'dry_run', False):
+        return True
+
+    print_section("DRY RUN MODE", separator="=")
+    print("This will show what would be executed without actually running commands.")
+    print("No files will be modified, no external services will be contacted.")
+    print()
+
+    return True
+
+
+@contextmanager
+def enhanced_error_context(operation: str, context: Optional[Dict[str, Any]] = None):
+    """
+    Context manager for enhanced error reporting.
+
+    Args:
+        operation: Name of the operation being performed
+        context: Additional context information
+    """
+    correlation_id = f"op_{int(time.time() * 1000)}"
+
+    error_context = {
+        "operation": operation,
+        "correlation_id": correlation_id,
+        "timestamp": time.time()
+    }
+
+    if context:
+        error_context.update(context)
+
+    try:
+        with LogContext(**error_context):
+            yield
+    except Exception as e:
+        # Enhance error with context
+        enhanced_error = type(e)(
+            f"{str(e)} (Operation: {operation}, Correlation ID: {correlation_id})"
+        )
+        enhanced_error.__cause__ = e
+        raise enhanced_error from e
+
+
+def create_dry_run_plan(args: argparse.Namespace, operations: List[Dict[str, Any]]) -> str:
+    """
+    Create a dry-run execution plan.
+
+    Args:
+        args: Command line arguments
+        operations: List of operations that would be performed
+
+    Returns:
+        Formatted execution plan
+    """
+    lines = ["EXECUTION PLAN (DRY RUN)", "=" * 40, ""]
+
+    for i, op in enumerate(operations, 1):
+        lines.append(f"{i}. {op.get('description', 'Unknown operation')}")
+        if 'details' in op:
+            lines.append(f"   Details: {op['details']}")
+        if 'target' in op:
+            lines.append(f"   Target: {op['target']}")
+        lines.append("")
+
+    lines.append("No actual changes will be made.")
+    return "\n".join(lines)
+
+
+def add_common_arguments(parser: argparse.ArgumentParser) -> None:
+    """
+    Add common arguments to argument parser.
+
+    Args:
+        parser: Argument parser to extend
+    """
+    parser.add_argument(
+        '--dry-run',
+        action='store_true',
+        help='Show what would be executed without actually running commands'
+    )
+
+    parser.add_argument(
+        '--format',
+        choices=['json', 'text'],
+        default='text',
+        help='Output format (default: text)'
+    )
+
+    parser.add_argument(
+        '--verbose', '-v',
+        action='store_true',
+        help='Enable verbose output'
+    )
+
+    parser.add_argument(
+        '--quiet', '-q',
+        action='store_true',
+        help='Suppress non-error output'
+    )
+
+
+def print_with_color(message: str, color: str = "default", **kwargs) -> None:
+    """
+    Print message with color (if supported).
+
+    Args:
+        message: Message to print
+        color: Color name (red, green, yellow, blue, default)
+        **kwargs: Additional print arguments
+    """
+    color_codes = {
+        "red": "\033[91m",
+        "green": "\033[92m",
+        "yellow": "\033[93m",
+        "blue": "\033[94m",
+        "default": "\033[0m"
+    }
+
+    # Check if we're in a TTY and colors are supported
+    if hasattr(sys.stdout, 'isatty') and sys.stdout.isatty():
+        color_code = color_codes.get(color, color_codes["default"])
+        reset_code = color_codes["default"]
+        print(f"{color_code}{message}{reset_code}", **kwargs)
+    else:
+        print(message, **kwargs)
 
 
 def format_output(

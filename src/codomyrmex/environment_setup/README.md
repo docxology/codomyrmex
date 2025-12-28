@@ -6,7 +6,62 @@
 
 Foundation module providing environment validation and setup utilities for the Codomyrmex platform. This module ensures that development and runtime environments are properly configured with required dependencies, API keys, and environment variables before other modules initialize.
 
-The environment_setup module acts as a gatekeeper, preventing runtime failures due to missing dependencies or misconfigurations.
+## Environment Validation Flow
+
+```mermaid
+flowchart TB
+    Start[Application Startup] --> CheckUV{uv Available?}
+    
+    CheckUV -->|Yes| CheckUVEnv{In uv Environment?}
+    CheckUV -->|No| WarnUV[Warn: uv Recommended]
+    
+    CheckUVEnv -->|Yes| CheckDeps[Check Dependencies]
+    CheckUVEnv -->|No| CheckVenv{In Virtual Environment?}
+    WarnUV --> CheckVenv
+    
+    CheckVenv -->|Yes| CheckDeps
+    CheckVenv -->|No| WarnSystem[Warn: System Python]
+    
+    WarnSystem --> CheckDeps
+    
+    CheckDeps --> HasKit{kit Installed?}
+    HasKit -->|No| InstallGuide[Show Installation Guide]
+    HasKit -->|Yes| HasDotenv{python-dotenv Installed?}
+    
+    HasDotenv -->|No| InstallGuide
+    HasDotenv -->|Yes| CheckPython{Python >= 3.10?}
+    
+    CheckPython -->|No| VersionError[Python Version Error]
+    CheckPython -->|Yes| CheckEnvFile{.env File Exists?}
+    
+    CheckEnvFile -->|No| EnvGuide[Show .env Template]
+    CheckEnvFile -->|Yes| ValidateKeys[Validate API Keys]
+    
+    ValidateKeys --> CheckConfig{Config Files Present?}
+    CheckConfig -->|Missing| ConfigWarn[Warn: Missing Config]
+    CheckConfig -->|All Present| GenerateReport[Generate Environment Report]
+    
+    EnvGuide --> GenerateReport
+    ConfigWarn --> GenerateReport
+    InstallGuide --> Exit[Exit with Error]
+    VersionError --> Exit
+    
+    GenerateReport --> Success[Environment Ready]
+    
+    style Success fill:#90EE90
+    style Exit fill:#FFB6C1
+    style InstallGuide fill:#FFE4B5
+    style EnvGuide fill:#FFE4B5
+```
+
+## Key Features
+
+- **Package Manager Detection**: Identifies uv, virtual environments, or system Python
+- **Dependency Validation**: Checks for required packages (kit, python-dotenv)
+- **Python Version Validation**: Ensures Python ≥3.10
+- **Environment File Management**: Validates .env file presence and provides templates
+- **Configuration Validation**: Checks for pyproject.toml, requirements.txt
+- **Installation Guidance**: Provides clear, actionable setup instructions
 
 ## Directory Contents
 - `.cursor/` – Subdirectory

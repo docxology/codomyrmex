@@ -1,0 +1,65 @@
+{
+  "execution": {
+    "default_timeout": 10,
+    "max_memory": 100,
+    "max_cpu": 50,
+    "code_samples": [
+      {
+        "description": "Simple arithmetic calculation",
+        "code": "x = 10\ny = 20\nresult = x + y * 2\nprint(f\"Result: {result}\")",
+        "timeout": 5
+      },
+      {
+        "description": "String processing example",
+        "code": "text = \"Hello, Codomyrmex!\"\nwords = text.split()\nreversed_text = ' '.join(reversed(words))\nprint(f\"Original: {text}\")\nprint(f\"Reversed: {reversed_text}\")",
+        "timeout": 5
+      },
+      {
+        "description": "List comprehension and operations",
+        "code": "numbers = list(range(1, 11))\nsquares = [x**2 for x in numbers if x % 2 == 0]\ntotal = sum(squares)\nprint(f\"Even squares: {squares}\")\nprint(f\"Sum: {total}\")",
+        "timeout": 5
+      },
+      {
+        "description": "Error handling example",
+        "code": "try:\n    result = 10 / 2\n    print(f\"Division result: {result}\")\nexcept ZeroDivisionError as e:\n    print(f\"Error: {e}\")\nexcept Exception as e:\n    print(f\"Unexpected error: {e}\")\nfinally:\n    print(\"Execution completed\")",
+        "timeout": 5
+      },
+      {
+        "description": "Input processing example",
+        "code": "import sys\ninput_data = sys.stdin.read().strip()\nwords = input_data.split()\nword_count = len(words)\nprint(f\"Input: {input_data}\")\nprint(f\"Word count: {word_count}\")",
+        "stdin": "Hello world from Codomyrmex",
+        "timeout": 5
+      },
+      {
+        "description": "Infinite loop (timeout test)",
+        "code": "count = 0\nwhile True:\n    count += 1\n    if count % 100000 == 0:\n        print(f\"Count: {count}\")",
+        "timeout": 3
+      }
+    ]
+  },
+  "sandbox": {
+    "allow_network": false,
+    "allow_filesystem": false,
+    "restricted_modules": [
+      "os",
+      "sys",
+      "subprocess"
+    ],
+    "allowed_modules": [
+      "math",
+      "random",
+      "json",
+      "datetime"
+    ]
+  },
+  "output": {
+    "format": "json",
+    "file": "output/code_execution_sandbox_results.json",
+    "include_execution_details": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/code_execution_sandbox_example.log"
+  }
+}
+

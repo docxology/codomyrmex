@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Defined `execute_code` function and MCP tool with detailed specifications for secure code execution.
 - Outlined support for multiple languages (Python, JavaScript, Bash) via Docker-based sandboxing.
 - Specified resource limiting (memory, CPU, processes, network, filesystem) and error handling.
+- Enhanced execution capabilities with `execute_with_limits()` function for configurable resource limits
+- Added `sandbox_process_isolation()` function for complete subprocess isolation
+- Implemented `ExecutionLimits` dataclass for structured resource limit configuration
+- Added `ResourceMonitor` class for comprehensive resource usage tracking during execution
 
 ### Changed
 - 

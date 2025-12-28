@@ -7,12 +7,13 @@ from importlib import import_module
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
+from . import controller as controller_module
+
 logger = get_logger(__name__)
 
 
 def ensure_documentation_exists(*, prompt: str, description: str) -> str:
     """Validate that the controller module exposes documented interfaces."""
-    from . import controller as controller_module
 
     if "documentation" not in prompt.lower():
         raise ValueError("Shared prompt must mention documentation")
@@ -3510,8 +3511,6 @@ __all__ = [
     "ensure_documentation_exists",
     "confirm_logging_integrations",
     "verify_real_methods",
-    "generate_agents_docs",
-    "create_3d_modeling_module",
     "assess_documentation_coverage",
     "add_documentation_quality_methods",
     "create_physical_management_module",

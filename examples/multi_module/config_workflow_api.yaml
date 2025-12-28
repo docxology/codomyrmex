@@ -1,0 +1,360 @@
+# API Development Workflow Configuration
+# This configuration drives the complete API development pipeline
+# integrating multiple Codomyrmex modules
+
+# Output settings
+output:
+  format: json
+  file: output/api_workflow_results.json
+
+# Logging configuration
+logging:
+  level: INFO
+  file: logs/api_workflow.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# API Configuration
+api:
+  name: "Codomyrmex API"
+  version: "1.0.0"
+  description: "Comprehensive API for Codomyrmex platform"
+  base_path: "/api/v1"
+  host: "localhost"
+  port: 8000
+  debug: true
+
+# REST API Configuration
+rest_api:
+  title: "Codomyrmex REST API"
+  version: "1.0.0"
+  description: "RESTful API endpoints for Codomyrmex platform"
+  endpoints:
+    - path: "/users"
+      method: "GET"
+      description: "Get all users"
+    - path: "/users"
+      method: "POST"
+      description: "Create new user"
+    - path: "/logs"
+      method: "GET"
+      description: "Get API access logs"
+
+# GraphQL API Configuration
+graphql_api:
+  schema_file: "api_schema.graphql"
+  enable_introspection: true
+  enable_graphiql: true
+  queries:
+    - name: "users"
+      description: "Get all users"
+    - name: "user"
+      description: "Get user by ID"
+    - name: "apiLogs"
+      description: "Get API access logs"
+  mutations:
+    - name: "createUser"
+      description: "Create a new user"
+
+# API Versioning Configuration
+api_versioning:
+  current_version: "v1.0"
+  supported_versions:
+    - "v1.0"
+    - "v1.1"
+  migration_strategies:
+    v1.0_to_v1.1:
+      description: "Add user deletion endpoint"
+      breaking_changes: false
+
+# Database Configuration
+database:
+  type: "sqlite"
+  name: "api_database"
+  host: "localhost"
+  port: 5432
+  username: "${DB_USERNAME:api_user}"
+  password: "${DB_PASSWORD:secure_password}"
+  connection_pool:
+    min_connections: 5
+    max_connections: 20
+    timeout: 30
+
+# Database Schema Configuration
+schema:
+  name: "api_database_schema"
+  version: "1.0.0"
+  tables:
+    users:
+      columns:
+        - name: "id"
+          type: "INTEGER"
+          primary_key: true
+          auto_increment: true
+        - name: "username"
+          type: "TEXT"
+          unique: true
+          not_null: true
+        - name: "email"
+          type: "TEXT"
+          unique: true
+          not_null: true
+        - name: "created_at"
+          type: "TEXT"
+          default: "CURRENT_TIMESTAMP"
+    api_logs:
+      columns:
+        - name: "id"
+          type: "INTEGER"
+          primary_key: true
+          auto_increment: true
+        - name: "endpoint"
+          type: "TEXT"
+          not_null: true
+        - name: "method"
+          type: "TEXT"
+          not_null: true
+        - name: "user_id"
+          type: "INTEGER"
+        - name: "request_data"
+          type: "TEXT"
+        - name: "response_data"
+          type: "TEXT"
+        - name: "status_code"
+          type: "INTEGER"
+        - name: "timestamp"
+          type: "TEXT"
+          default: "CURRENT_TIMESTAMP"
+      foreign_keys:
+        - columns: ["user_id"]
+          ref_table: "users"
+          ref_columns: ["id"]
+    api_versions:
+      columns:
+        - name: "id"
+          type: "INTEGER"
+          primary_key: true
+          auto_increment: true
+        - name: "version"
+          type: "TEXT"
+          unique: true
+          not_null: true
+        - name: "is_active"
+          type: "INTEGER"
+          default: 0
+        - name: "created_at"
+          type: "TEXT"
+          default: "CURRENT_TIMESTAMP"
+
+# API Documentation Configuration
+api_documentation:
+  title: "Codomyrmex API Documentation"
+  version: "1.0.0"
+  description: "Complete API documentation for Codomyrmex platform"
+  contact:
+    name: "Codomyrmex Team"
+    email: "api@codomyrmex.com"
+    url: "https://codomyrmex.com"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+  servers:
+    - url: "https://api.codomyrmex.com/v1"
+      description: "Production server"
+    - url: "http://localhost:8000/api/v1"
+      description: "Development server"
+  security_schemes:
+    bearerAuth:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
+
+# Security Audit Configuration
+security_audit:
+  target_paths:
+    - "src/"
+    - "examples/multi_module/"
+  scan_types:
+    - "vulnerabilities"
+    - "secrets"
+    - "compliance"
+  compliance_standards:
+    - "owasp"
+    - "pci"
+    - "gdpr"
+  vulnerability_severity_threshold: "medium"
+  secrets_patterns:
+    - "password"
+    - "secret"
+    - "key"
+    - "token"
+  exclude_paths:
+    - "**/test_*"
+    - "**/__pycache__"
+    - "**/node_modules"
+
+# Event System Configuration
+events:
+  enabled: true
+  event_types:
+    - "api_request"
+    - "api_response"
+    - "api_error"
+    - "user_created"
+    - "user_deleted"
+    - "database_query"
+    - "security_alert"
+  logging:
+    enabled: true
+    level: "INFO"
+    format: "json"
+    retention_days: 30
+  handlers:
+    api_request:
+      - "log_request"
+      - "validate_request"
+    api_error:
+      - "log_error"
+      - "alert_admin"
+    security_alert:
+      - "log_security_event"
+      - "block_ip"
+
+# Configuration Management
+config_management:
+  schema_validation: true
+  environment_override: true
+  secret_injection: true
+  migration_enabled: true
+  config_sources:
+    - "config_workflow_api.yaml"
+    - "config_workflow_api.json"
+  validation_rules:
+    api:
+      required_fields:
+        - "name"
+        - "version"
+      field_types:
+        port: "integer"
+        debug: "boolean"
+    database:
+      required_fields:
+        - "type"
+        - "name"
+      field_types:
+        port: "integer"
+  migration_rules:
+    v1.0_to_v1.1:
+      add_fields:
+        api:
+          - "cors_enabled"
+      remove_fields: []
+      transform_rules: {}
+
+# Integration Testing Configuration
+integration_tests:
+  enabled: true
+  test_endpoints:
+    rest:
+      - method: "GET"
+        path: "/api/v1/users"
+        expected_status: 200
+      - method: "POST"
+        path: "/api/v1/users"
+        expected_status: 201
+        request_data:
+          username: "testuser"
+          email: "test@example.com"
+    graphql:
+      - query: "users"
+        expected_fields: ["id", "username", "email"]
+      - query: "createUser"
+        variables:
+          username: "testuser"
+          email: "test@example.com"
+        expected_fields: ["id", "username", "email"]
+  database_tests:
+    - query: "SELECT COUNT(*) FROM users"
+      expected_result: "> 0"
+    - query: "SELECT COUNT(*) FROM api_logs"
+      expected_result: ">= 0"
+  performance_tests:
+    enabled: false
+    concurrent_users: 10
+    test_duration: 60
+    endpoints:
+      - "/api/v1/users"
+      - "/api/v1/logs"
+
+# Workflow Execution Settings
+workflow:
+  phases:
+    - "api_design"
+    - "api_versioning"
+    - "database_setup"
+    - "documentation"
+    - "security_audit"
+    - "event_integration"
+    - "config_management"
+    - "integration_testing"
+    - "reporting"
+  parallel_execution: false
+  fail_fast: true
+  cleanup_on_failure: true
+  generate_reports: true
+  report_formats:
+    - "json"
+    - "html"
+    - "markdown"
+
+# Monitoring and Observability
+monitoring:
+  enabled: true
+  metrics:
+    api_requests_total: true
+    api_response_time: true
+    database_connections_active: true
+    security_alerts_total: true
+    event_processing_time: true
+  alerts:
+    api_error_rate_threshold: 0.05
+    database_connection_timeout: 30
+    security_vulnerability_threshold: 5
+  logging:
+    api_requests: true
+    database_queries: true
+    security_events: true
+    performance_metrics: true
+
+# Deployment Configuration
+deployment:
+  environments:
+    development:
+      host: "localhost"
+      port: 8000
+      debug: true
+      database_url: "sqlite:///dev.db"
+    staging:
+      host: "staging-api.codomyrmex.com"
+      port: 443
+      debug: false
+      database_url: "${STAGING_DATABASE_URL}"
+    production:
+      host: "api.codomyrmex.com"
+      port: 443
+      debug: false
+      database_url: "${PRODUCTION_DATABASE_URL}"
+  container:
+    image: "codomyrmex/api:latest"
+    ports:
+      - "8000:8000"
+    environment:
+      - "ENVIRONMENT=${ENV}"
+      - "DATABASE_URL=${DATABASE_URL}"
+    volumes:
+      - "./logs:/app/logs"
+      - "./config:/app/config"
+  health_check:
+    endpoint: "/api/v1/health"
+    interval: 30
+    timeout: 10
+    retries: 3

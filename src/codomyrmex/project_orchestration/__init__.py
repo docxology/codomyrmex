@@ -1,8 +1,8 @@
 """
 Project Orchestration Module for Codomyrmex
 
-This module provides comprehensive project management and task orchestration
-capabilities that integrate all other Codomyrmex modules into cohesive workflows.
+This module provides project management and task orchestration capabilities
+that integrate Codomyrmex modules into cohesive workflows.
 
 Key Features:
 - Task and workflow management

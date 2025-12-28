@@ -1,7 +1,7 @@
 """
 Containerization Module for Codomyrmex.
 
-The Containerization module provides comprehensive container management,
+The Containerization module provides container management,
 orchestration, and deployment capabilities for the Codomyrmex ecosystem.
 
 Integration:

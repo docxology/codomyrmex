@@ -1,7 +1,7 @@
 """
 Codomyrmex Ollama Integration Module
 
-This module provides comprehensive integration with Ollama local LLMs,
+This module provides integration with Ollama local LLMs,
 enabling flexible model management, execution, and output handling within
 the Codomyrmex ecosystem.
 """

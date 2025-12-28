@@ -1,0 +1,16 @@
+{
+  "environment": {
+    "python_version_min": "3.8",
+    "package_manager": "uv",
+    "check_env_file": true
+  },
+  "output": {
+    "format": "json",
+    "file": "output/environment_setup_results.json"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/environment_setup_example.log"
+  }
+}
+

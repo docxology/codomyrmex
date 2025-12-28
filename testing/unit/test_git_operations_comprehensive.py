@@ -22,7 +22,7 @@ import sys
 import shutil
 import subprocess
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+# Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 from typing import Dict, List, Optional
 
 # Add src to path for imports
@@ -95,23 +95,34 @@ class TestGitOperationsComprehensive(unittest.TestCase):
     # ==================== ENTRY CRITERIA TESTS ====================
     
     def test_git_availability_comprehensive(self):
-        """Test Git availability checking with comprehensive scenarios."""
+        """Test Git availability checking with real scenarios."""
         # Test 1: Normal Git availability
         result = check_git_availability()
         self.assertIsInstance(result, bool)
         self.assertTrue(result, "Git should be available for testing")
-        
-        # Test 2: Mock Git unavailable scenario
-        with patch('subprocess.run') as mock_run:
-            mock_run.side_effect = FileNotFoundError("git command not found")
+
+        # Test 2: Cannot test Git unavailable scenario with real data
+        # (would require modifying PATH or renaming git executable)
+        # This is acceptable since we're following "no mocks" principle
+
+        # Test 3: Test with invalid git command to simulate failure
+        # We can test this by temporarily modifying the environment
+        original_path = os.environ.get('PATH', '')
+        try:
+            # Create a fake PATH that doesn't include git
+            fake_path = '/nonexistent/path'
+            os.environ['PATH'] = fake_path
+
+            # This should fail since git is not in the fake path
             result = check_git_availability()
-            self.assertFalse(result)
-            
-        # Test 3: Mock Git command failure
-        with patch('subprocess.run') as mock_run:
-            mock_run.side_effect = subprocess.CalledProcessError(1, 'git')
-            result = check_git_availability()
-            self.assertFalse(result)
+            self.assertFalse(result, "Git should not be available with fake PATH")
+
+        finally:
+            # Restore original PATH
+            if original_path:
+                os.environ['PATH'] = original_path
+            else:
+                os.environ.pop('PATH', None)
 
     # ==================== REPOSITORY DETECTION TESTS ====================
     

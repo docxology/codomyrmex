@@ -4,7 +4,32 @@
 
 ## Overview
 
-Contains components for the src system.
+Core module providing pattern recognition and code analysis capabilities for the Codomyrmex platform. This module identifies patterns, structures, and relationships within codebases using advanced analysis techniques.
+
+## Pattern Analysis Workflow
+
+```mermaid
+graph LR
+    A[Code Input] --> B[AST Parsing]
+    B --> C[Pattern Recognition]
+    C --> D[Symbol Extraction]
+    D --> E[Embedding Generation]
+    E --> F[Analysis Results]
+
+    C --> G[Dependency Analysis]
+    C --> H[Structure Analysis]
+    C --> I[Usage Patterns]
+
+    E --> J[Semantic Search]
+    E --> K[Similarity Matching]
+    E --> L[Code Summarization]
+
+    F --> M[JSON Export]
+    F --> N[Visualization Data]
+    F --> O[Documentation]
+```
+
+The pattern analysis workflow processes source code through AST parsing, pattern recognition, symbol extraction, and embedding generation to produce structured analysis results for code understanding and automation.
 
 ## Directory Contents
 - `.gitignore` – File

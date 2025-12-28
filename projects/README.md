@@ -12,5 +12,5 @@ The projects directory serves as a workspace for project templates, example impl
 - `test_project/` – Subdirectory
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
-- **Projects Hub**: [projects](../../../projects/README.md)
+- **Project Root**: [README](../README.md)
+- **Projects Hub**: [projects](../projects/README.md)

@@ -48,7 +48,6 @@ The source code follows a hierarchical module organization:
 ### Package Infrastructure
 - `README.md` – Source code documentation
 - `__init__.py` – Package initialization and exports
-- `py.typed` – Type checking marker (if present)
 
 ### Core Module System
 - `codomyrmex/` – Main package with 25+ specialized modules
@@ -168,19 +167,19 @@ Package dependencies organized by purpose:
 ## Navigation
 
 ### For Users
-- **Installation**: [docs/getting-started/installation.md](../../docs/getting-started/installation.md)
-- **API Reference**: [docs/reference/api.md](../../docs/reference/api.md)
-- **Module Guide**: [docs/modules/overview.md](../../docs/modules/overview.md)
+- **Installation**: [docs/getting-started/installation.md](../docs/getting-started/installation.md)
+- **API Reference**: [../docs/reference/api.md](../docs/reference/api.md)
+- **Module Guide**: [../docs/modules/overview.md](../docs/modules/overview.md)
 
 ### For Agents
-- **Coding Standards**: [cursorrules/general.cursorrules](../../cursorrules/general.cursorrules)
-- **Module System**: [docs/modules/overview.md](../../docs/modules/overview.md)
+- **Coding Standards**: [cursorrules/general.cursorrules](../cursorrules/general.cursorrules)
+- **Module System**: [../docs/modules/overview.md](../docs/modules/overview.md)
 - **API Documentation**: Generated from source docstrings
 
 ### For Contributors
-- **Contributing**: [docs/project/contributing.md](../../docs/project/contributing.md)
-- **Development Setup**: [docs/development/environment-setup.md](../../docs/development/environment-setup.md)
-- **Testing**: [testing/README.md](../../testing/README.md)
+- **Contributing**: [../docs/project/contributing.md](../docs/project/contributing.md)
+- **Development Setup**: [docs/development/environment-setup.md](../docs/development/environment-setup.md)
+- **Testing**: [testing/README.md](../testing/README.md)
 
 ## Agent Coordination
 
@@ -223,6 +222,6 @@ Before source code changes are accepted:
 
 ## Related Documentation
 
-- **[Module System](docs/modules/overview.md)** - Detailed module architecture and relationships
-- **[API Reference](docs/reference/api.md)** - API documentation
-- **[Contributing Guide](docs/project/contributing.md)** - Development standards and workflow
+- **[Module System](../docs/modules/overview.md)** - Detailed module architecture and relationships
+- **[API Reference](../docs/reference/api.md)** - API documentation
+- **[Contributing Guide](../docs/project/contributing.md)** - Development standards and workflow

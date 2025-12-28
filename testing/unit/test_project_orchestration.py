@@ -2,7 +2,9 @@
 
 import sys
 import pytest
+import time
 from pathlib import Path
+from unittest.mock import Mock, patch
 
 
 class TestProjectOrchestration:
@@ -252,6 +254,383 @@ class TestProjectOrchestration:
         templates_path = code_dir / "codomyrmex" / "project_orchestration" / "templates"
         assert templates_path.exists()
         assert templates_path.is_dir()
+
+
+class TestWorkflowDAG:
+    """Test cases for WorkflowDAG functionality."""
+
+    def test_workflow_dag_creation(self):
+        """Test creating a basic workflow DAG."""
+        try:
+            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+        except ImportError:
+            pytest.skip("WorkflowDAG not available")
+
+        # Create a simple DAG
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run", "dependencies": []},
+            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+        ]
+
+        dag = WorkflowDAG(tasks)
+
+        assert len(dag.tasks) == 2
+        assert "task1" in dag.tasks
+        assert "task2" in dag.tasks
+        assert dag.tasks["task2"].dependencies == ["task1"]
+
+    def test_dag_validation_valid(self):
+        """Test DAG validation with valid DAG."""
+        try:
+            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+        except ImportError:
+            pytest.skip("WorkflowDAG not available")
+
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run", "dependencies": []},
+            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {"name": "task4", "module": "test", "action": "run", "dependencies": ["task2", "task3"]},
+        ]
+
+        dag = WorkflowDAG(tasks)
+        is_valid, errors = dag.validate_dag()
+
+        assert is_valid
+        assert len(errors) == 0
+
+    def test_dag_validation_cycle(self):
+        """Test DAG validation with cycle detection."""
+        try:
+            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+        except ImportError:
+            pytest.skip("WorkflowDAG not available")
+
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run", "dependencies": ["task3"]},
+            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task2"]},
+        ]
+
+        dag = WorkflowDAG(tasks)
+        is_valid, errors = dag.validate_dag()
+
+        assert not is_valid
+        assert len(errors) > 0
+        assert any("cycle" in error.lower() for error in errors)
+
+    def test_dag_execution_order(self):
+        """Test getting execution order from DAG."""
+        try:
+            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+        except ImportError:
+            pytest.skip("WorkflowDAG not available")
+
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run", "dependencies": []},
+            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {"name": "task4", "module": "test", "action": "run", "dependencies": ["task2", "task3"]},
+        ]
+
+        dag = WorkflowDAG(tasks)
+        execution_order = dag.get_execution_order()
+
+        # Should have 3 levels
+        assert len(execution_order) == 3
+
+        # Level 0: task1
+        assert execution_order[0] == ["task1"]
+
+        # Level 1: task2 and task3 (can run in parallel)
+        assert set(execution_order[1]) == {"task2", "task3"}
+
+        # Level 2: task4
+        assert execution_order[2] == ["task4"]
+
+    def test_dag_dependency_queries(self):
+        """Test dependency query methods."""
+        try:
+            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+        except ImportError:
+            pytest.skip("WorkflowDAG not available")
+
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run", "dependencies": []},
+            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task2"]},
+        ]
+
+        dag = WorkflowDAG(tasks)
+
+        # Test direct dependencies
+        deps = dag.get_task_dependencies("task3")
+        assert set(deps) == {"task1", "task2"}
+
+        # Test dependents
+        dependents = dag.get_dependent_tasks("task1")
+        assert set(dependents) == {"task2", "task3"}
+
+    def test_dag_visualization(self):
+        """Test DAG visualization generation."""
+        try:
+            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+        except ImportError:
+            pytest.skip("WorkflowDAG not available")
+
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run", "dependencies": []},
+            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+        ]
+
+        dag = WorkflowDAG(tasks)
+        mermaid_diagram = dag.visualize()
+
+        assert isinstance(mermaid_diagram, str)
+        assert "graph TD" in mermaid_diagram
+        assert "task1" in mermaid_diagram
+        assert "task2" in mermaid_diagram
+        assert "task1 --> task2" in mermaid_diagram
+
+
+class TestParallelExecutor:
+    """Test cases for ParallelExecutor functionality."""
+
+    def test_parallel_executor_creation(self):
+        """Test creating a parallel executor."""
+        try:
+            from codomyrmex.project_orchestration.parallel_executor import ParallelExecutor
+        except ImportError:
+            pytest.skip("ParallelExecutor not available")
+
+        executor = ParallelExecutor(max_workers=2)
+        assert executor.max_workers == 2
+        assert executor.default_timeout == 300.0
+
+        executor.shutdown()
+
+    def test_execute_task_group(self):
+        """Test executing a group of independent tasks."""
+        try:
+            from codomyrmex.project_orchestration.parallel_executor import ParallelExecutor
+        except ImportError:
+            pytest.skip("ParallelExecutor not available")
+
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run"},
+            {"name": "task2", "module": "test", "action": "run"},
+        ]
+
+        with ParallelExecutor(max_workers=2) as executor:
+            results = executor.execute_task_group(tasks, timeout=10)
+
+        assert len(results) == 2
+        for result in results:
+            assert result.status.name == "COMPLETED"
+            assert result.task_name in ["task1", "task2"]
+            assert result.duration > 0
+
+    def test_dependency_management(self):
+        """Test dependency checking in executor."""
+        try:
+            from codomyrmex.project_orchestration.parallel_executor import ParallelExecutor
+        except ImportError:
+            pytest.skip("ParallelExecutor not available")
+
+        executor = ParallelExecutor()
+
+        # Task with dependencies
+        task = {"name": "task1", "dependencies": ["dep1", "dep2"]}
+        completed = {"dep1"}  # Only one dependency completed
+
+        # Should not be ready
+        ready = executor.wait_for_dependencies(task, completed)
+        assert not ready
+
+        # Complete all dependencies
+        completed.add("dep2")
+        ready = executor.wait_for_dependencies(task, completed)
+        assert ready
+
+        executor.shutdown()
+
+    def test_workflow_validation_functions(self):
+        """Test workflow validation utility functions."""
+        try:
+            from codomyrmex.project_orchestration.parallel_executor import (
+                validate_workflow_dependencies,
+                get_workflow_execution_order
+            )
+        except ImportError:
+            pytest.skip("Parallel executor utilities not available")
+
+        # Test validation
+        tasks = [
+            {"name": "task1", "dependencies": []},
+            {"name": "task2", "dependencies": ["task1"]},
+        ]
+
+        errors = validate_workflow_dependencies(tasks)
+        assert len(errors) == 0
+
+        # Test invalid dependencies
+        invalid_tasks = [
+            {"name": "task1", "dependencies": ["missing_task"]},
+        ]
+
+        errors = validate_workflow_dependencies(invalid_tasks)
+        assert len(errors) > 0
+        assert "missing_task" in errors[0]
+
+        # Test execution order
+        execution_order = get_workflow_execution_order(tasks)
+        assert isinstance(execution_order, list)
+        assert len(execution_order) > 0
+
+
+class TestWorkflowManagerEnhancements:
+    """Test cases for enhanced WorkflowManager functionality."""
+
+    def test_create_workflow_dag(self):
+        """Test creating workflow DAG through manager."""
+        try:
+            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+        except ImportError:
+            pytest.skip("WorkflowManager not available")
+
+        manager = WorkflowManager()
+
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run", "dependencies": []},
+            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+        ]
+
+        dag = manager.create_workflow_dag(tasks)
+
+        assert dag is not None
+        assert len(dag.tasks) == 2
+
+    def test_validate_workflow_dependencies(self):
+        """Test workflow dependency validation through manager."""
+        try:
+            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+        except ImportError:
+            pytest.skip("WorkflowManager not available")
+
+        manager = WorkflowManager()
+
+        # Valid tasks
+        valid_tasks = [
+            {"name": "task1", "dependencies": []},
+            {"name": "task2", "dependencies": ["task1"]},
+        ]
+
+        errors = manager.validate_workflow_dependencies(valid_tasks)
+        assert len(errors) == 0
+
+        # Invalid tasks (missing dependency)
+        invalid_tasks = [
+            {"name": "task1", "dependencies": ["missing"]},
+        ]
+
+        errors = manager.validate_workflow_dependencies(invalid_tasks)
+        assert len(errors) > 0
+
+    def test_get_workflow_execution_order(self):
+        """Test getting workflow execution order through manager."""
+        try:
+            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+        except ImportError:
+            pytest.skip("WorkflowManager not available")
+
+        manager = WorkflowManager()
+
+        tasks = [
+            {"name": "task1", "module": "test", "action": "run", "dependencies": []},
+            {"name": "task2", "module": "test", "action": "run", "dependencies": ["task1"]},
+            {"name": "task3", "module": "test", "action": "run", "dependencies": ["task1"]},
+        ]
+
+        execution_order = manager.get_workflow_execution_order(tasks)
+
+        assert isinstance(execution_order, list)
+        assert len(execution_order) >= 2  # At least 2 levels
+        assert execution_order[0] == ["task1"]  # First task has no dependencies
+
+    @patch('codomyrmex.project_orchestration.parallel_executor.ParallelExecutor')
+    def test_execute_parallel_workflow(self, mock_executor_class):
+        """Test parallel workflow execution through manager."""
+        try:
+            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+        except ImportError:
+            pytest.skip("WorkflowManager not available")
+
+        # Mock the executor
+        mock_executor = Mock()
+        mock_executor.execute_tasks.return_value = {
+            "task1": Mock(status=Mock(value="completed"), result="success", error=None, duration=1.0)
+        }
+        mock_executor_class.return_value.__enter__.return_value = mock_executor
+        mock_executor_class.return_value.__exit__.return_value = None
+
+        manager = WorkflowManager()
+
+        workflow = {
+            "tasks": [
+                {"name": "task1", "module": "test", "action": "run"}
+            ],
+            "dependencies": {},
+            "max_parallel": 2
+        }
+
+        result = manager.execute_parallel_workflow(workflow)
+
+        assert result["status"] in ["completed", "partial_failure"]
+        assert "total_tasks" in result
+        assert "completed_tasks" in result
+        assert "task_results" in result
+
+    def test_workflow_dag_integration(self):
+        """Test integration between WorkflowManager and WorkflowDAG."""
+        try:
+            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+        except ImportError:
+            pytest.skip("Required modules not available")
+
+        manager = WorkflowManager()
+
+        # Create complex workflow with dependencies
+        tasks = [
+            {"name": "data_ingest", "module": "data", "action": "ingest", "dependencies": []},
+            {"name": "data_validate", "module": "data", "action": "validate", "dependencies": ["data_ingest"]},
+            {"name": "analysis", "module": "analysis", "action": "run", "dependencies": ["data_validate"]},
+            {"name": "report", "module": "reporting", "action": "generate", "dependencies": ["analysis"]},
+            {"name": "notify", "module": "notification", "action": "send", "dependencies": ["report"]},
+        ]
+
+        # Create DAG through manager
+        dag = manager.create_workflow_dag(tasks)
+
+        # Validate DAG
+        is_valid, errors = dag.validate_dag()
+        assert is_valid, f"DAG validation failed: {errors}"
+
+        # Get execution order
+        execution_order = dag.get_execution_order()
+        assert len(execution_order) == 5  # 5 levels for sequential dependencies
+
+        # Verify topological ordering
+        task_levels = {}
+        for level_idx, level_tasks in enumerate(execution_order):
+            for task in level_tasks:
+                task_levels[task] = level_idx
+
+        # Verify dependency constraints
+        assert task_levels["data_ingest"] < task_levels["data_validate"]
+        assert task_levels["data_validate"] < task_levels["analysis"]
+        assert task_levels["analysis"] < task_levels["report"]
+        assert task_levels["report"] < task_levels["notify"]
 
 
 

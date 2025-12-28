@@ -132,7 +132,7 @@ Documentation must be updated when:
 ### For Agents
 - **Module System**: [modules/overview.md](modules/overview.md) - Module architecture
 - **API Reference**: [reference/api.md](reference/api.md) - API documentation
-- **Coding Standards**: [cursorrules/general.cursorrules](../../cursorrules/general.cursorrules)
+- **Coding Standards**: [cursorrules/general.cursorrules](../cursorrules/general.cursorrules)
 
 ## Agent Coordination
 

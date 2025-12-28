@@ -35,12 +35,12 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `pyproject.toml` - Python package configuration
 - `pytest.ini` - Test configuration
 - `Makefile` - Build and automation tasks
+- `uv.lock` - Python dependency lock file
 - `start_here.sh` - Interactive entry point for exploration
 - `package.json` - Node.js package configuration
 - `uv.lock` - Python dependency lock file
 - `general.cursorrules` - General coding standards
 - `resources.json` - Resource configuration
-- `demo_plot.png` - Demonstration visualization
 - `test.db` - Test database file
 - `workflow.db` - Workflow database file
 
@@ -99,41 +99,97 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 
 **Foundation Layer**:
 - `logging_monitoring/` - Centralized logging system
+  - Key Classes: `Logger`, `LogAggregator`, `StructuredLogger`
+  - Key Functions: `get_logger(name: str) -> Logger`, `setup_logging(config: dict) -> None`
 - `environment_setup/` - Environment validation and setup
+  - Key Classes: `EnvironmentValidator`, `DependencyChecker`, `ConfigLoader`
+  - Key Functions: `validate_environment() -> bool`, `check_dependencies(requirements: list) -> dict`
 - `model_context_protocol/` - AI communication standards
+  - Key Classes: `MCPClient`, `ToolSpecification`, `ModelInterface`
+  - Key Functions: `register_tool(name: str, spec: dict) -> bool`, `call_tool(name: str, params: dict) -> Any`
 - `terminal_interface/` - Rich terminal interactions
+  - Key Classes: `TerminalUI`, `ProgressBar`, `InteractivePrompt`
+  - Key Functions: `display_table(data: list, headers: list) -> None`, `confirm_action(message: str) -> bool`
 
 **Core Layer**:
 - `ai_code_editing/` - AI-powered code assistance
+  - Key Classes: `AICodeEditor`, `CodeGenerator`, `RefactoringEngine`
+  - Key Functions: `generate_code(prompt: str, language: str) -> str`, `refactor_code(code: str, instructions: str) -> str`
 - `static_analysis/` - Code quality analysis
+  - Key Classes: `CodeAnalyzer`, `LintRunner`, `ComplexityCalculator`
+  - Key Functions: `analyze_file(filepath: str) -> dict`, `calculate_complexity(code: str) -> float`
 - `code_execution_sandbox/` - Safe code execution
+  - Key Classes: `SandboxExecutor`, `ResourceLimiter`, `ExecutionContext`
+  - Key Functions: `execute_code(code: str, language: str, timeout: int = 30) -> ExecutionResult`
 - `data_visualization/` - Charts and plots
+  - Key Classes: `PlotGenerator`, `ChartBuilder`, `DataProcessor`
+  - Key Functions: `create_plot(data: pd.DataFrame, plot_type: str) -> str`, `save_visualization(fig: Any, filepath: str) -> None`
 - `pattern_matching/` - Code pattern analysis
+  - Key Classes: `PatternMatcher`, `ASTAnalyzer`, `CodePattern`
+  - Key Functions: `find_patterns(code: str, patterns: list) -> list`, `extract_dependencies(filepath: str) -> dict`
 - `git_operations/` - Version control automation
+  - Key Classes: `GitManager`, `CommitBuilder`, `BranchManager`
+  - Key Functions: `commit_changes(message: str, files: list = None) -> str`, `create_branch(name: str) -> bool`
 - `code_review/` - Automated code review
+  - Key Classes: `CodeReviewer`, `ReviewEngine`, `CommentGenerator`
+  - Key Functions: `review_pull_request(pr_number: int, repo: str) -> ReviewResult`, `analyze_code_quality(code: str) -> dict`
 - `security_audit/` - Security scanning
+  - Key Classes: `SecurityScanner`, `VulnerabilityDetector`, `ComplianceChecker`
+  - Key Functions: `scan_codebase(path: str) -> list`, `check_vulnerabilities(dependencies: dict) -> list`
 - `ollama_integration/` - Local LLM integration
+  - Key Classes: `OllamaClient`, `ModelManager`, `InferenceEngine`
+  - Key Functions: `load_model(name: str) -> bool`, `generate_text(prompt: str, model: str) -> str`
 - `language_models/` - LLM infrastructure
+  - Key Classes: `ModelProvider`, `TokenCounter`, `EmbeddingGenerator`
+  - Key Functions: `get_completion(messages: list, model: str) -> str`, `calculate_tokens(text: str) -> int`
 - `performance/` - Performance monitoring
+  - Key Classes: `PerformanceProfiler`, `BenchmarkRunner`, `MetricsCollector`
+  - Key Functions: `profile_function(func: callable, *args, **kwargs) -> ProfileResult`, `run_benchmark(test_func: callable) -> dict`
 
 **Service Layer**:
 - `build_synthesis/` - Build automation
+  - Key Classes: `BuildOrchestrator`, `ArtifactBuilder`, `DependencyResolver`
+  - Key Functions: `build_project(config: dict) -> BuildResult`, `resolve_dependencies(requirements: list) -> dict`
 - `documentation/` - Documentation generation tools
+  - Key Classes: `DocGenerator`, `APIDocumenter`, `MarkdownRenderer`
+  - Key Functions: `generate_docs(source_path: str, output_path: str) -> None`, `extract_api_docs(code: str) -> dict`
 - `api_documentation/` - API documentation generation
+  - Key Classes: `OpenAPISpecGenerator`, `SwaggerRenderer`, `EndpointAnalyzer`
+  - Key Functions: `generate_openapi_spec(routes: list) -> dict`, `create_swagger_ui(spec: dict) -> str`
 - `ci_cd_automation/` - CI/CD pipeline management
+  - Key Classes: `PipelineBuilder`, `DeploymentManager`, `TestRunner`
+  - Key Functions: `create_pipeline(config: dict) -> Pipeline`, `deploy_to_environment(app: str, env: str) -> bool`
 - `containerization/` - Container management
+  - Key Classes: `DockerManager`, `ContainerOrchestrator`, `ImageBuilder`
+  - Key Functions: `build_image(dockerfile: str, tag: str) -> str`, `deploy_container(config: dict) -> bool`
 - `database_management/` - Database operations
+  - Key Classes: `DatabaseClient`, `SchemaManager`, `MigrationRunner`
+  - Key Functions: `execute_query(query: str, params: dict = None) -> list`, `run_migration(migration_file: str) -> bool`
 - `project_orchestration/` - Workflow orchestration
+  - Key Classes: `WorkflowEngine`, `TaskScheduler`, `DependencyGraph`
+  - Key Functions: `execute_workflow(workflow_id: str, context: dict) -> WorkflowResult`
 - `config_management/` - Configuration management
+  - Key Classes: `ConfigManager`, `SecretHandler`, `EnvironmentLoader`
+  - Key Functions: `load_config(path: str) -> dict`, `get_secret(key: str) -> str`
 
 **Specialized Layer**:
 - `modeling_3d/` - 3D modeling and visualization
+  - Key Classes: `SceneBuilder`, `MeshGenerator`, `Renderer`
+  - Key Functions: `create_scene(objects: list) -> Scene`, `render_scene(scene: Scene, camera: Camera) -> Image`
 - `physical_management/` - Physical system simulation
+  - Key Classes: `SystemMonitor`, `ResourceManager`, `PerformanceTracker`
+  - Key Functions: `get_system_info() -> dict`, `monitor_resources(interval: int) -> Iterator[dict]`
 - `system_discovery/` - System exploration and module discovery
+  - Key Classes: `ModuleScanner`, `CapabilityDetector`, `HealthChecker`
+  - Key Functions: `discover_modules() -> list`, `check_module_health(module_name: str) -> HealthStatus`
 
 **Development Layer**:
 - `module_template/` - Module creation templates and scaffolding
+  - Key Classes: `ModuleGenerator`, `TemplateRenderer`, `ScaffoldBuilder`
+  - Key Functions: `create_module(name: str, template: str) -> bool`, `generate_scaffold(config: dict) -> dict`
 - `template/` - Code generation templates
+  - Key Classes: `TemplateEngine`, `CodeTemplate`, `SnippetGenerator`
+  - Key Functions: `render_template(template_name: str, context: dict) -> str`
 
 See [docs/modules/overview.md](docs/modules/overview.md) for module documentation.
 
@@ -157,7 +213,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Documentation Guide**: [docs/development/documentation.md](docs/development/documentation.md)
 
 ## Active Components
-- `@output/` – Generated output and reports directory
+- `@output/` – Committed reports and documentation artifacts
 - `AGENTS.md` – This file: agent coordination and navigation
 - `LICENSE` – MIT License
 - `Makefile` – Build and automation tasks
@@ -166,20 +222,17 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - `.editorconfig` – Editor configuration standards
 - `.pre-commit-config.yaml` – Pre-commit hook configuration
 - `config/` – Configuration templates and examples
-- `coverage.json` – Code coverage report data
 - `cursorrules/` – Coding standards and automation rules
-- `demo_plot.png` – Demonstration visualization
 - `docs/` – Project documentation (about Codomyrmex)
 - `examples/` – Example scripts and demonstrations
 - `general.cursorrules` – General coding standards
-- `output/` – Additional output and validation results
+- `output/` – Runtime-generated outputs and working files
 - `package.json` – Node.js package configuration
 - `projects/` – Project workspace and templates
 - `pyproject.toml` – Python package configuration
 - `pytest.ini` – Test configuration
 - `resources.json` – Resource configuration
 - `scripts/` – Maintenance and automation utilities
-- `setup.py` – Python package setup script
 - `src/` – Core source modules implementing functionality
 - `start_here.sh` – Interactive entry point for exploration
 - `test.db` – Test database file

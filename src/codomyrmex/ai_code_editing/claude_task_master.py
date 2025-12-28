@@ -95,10 +95,10 @@ class ClaudeTaskMaster:
             try:
                 from anthropic import Anthropic
                 self._client = Anthropic(api_key=self.api_key)
-            except ImportError:
+            except ImportError as e:
                 raise ImportError(
                     "Anthropic package not installed. Install with: pip install anthropic"
-                )
+                ) from e
         return self._client
 
     def execute_task(
@@ -173,7 +173,7 @@ class ClaudeTaskMaster:
             raise
         except ValueError as e:
             logger.error(f"Configuration error: {e}")
-            raise RuntimeError(f"Task execution failed: {e}")
+            raise RuntimeError(f"Task execution failed: {e}") from None
         except Exception as e:
             logger.error(f"Error executing task: {e}", exc_info=True)
             return {
@@ -257,7 +257,7 @@ class ClaudeTaskMaster:
 
         except Exception as e:
             logger.error(f"Error decomposing task: {e}", exc_info=True)
-            raise RuntimeError(f"Task decomposition failed: {e}")
+            raise RuntimeError(f"Task decomposition failed: {e}") from None
 
     def analyze_task(
         self,
@@ -324,7 +324,7 @@ class ClaudeTaskMaster:
 
         except Exception as e:
             logger.error(f"Error analyzing task: {e}", exc_info=True)
-            raise RuntimeError(f"Task analysis failed: {e}")
+            raise RuntimeError(f"Task analysis failed: {e}") from None
 
     def plan_workflow(
         self,
@@ -357,7 +357,7 @@ class ClaudeTaskMaster:
 
             user_message = f"Create a workflow plan to achieve:\n\n{goal}"
             if constraints:
-                user_message += f"\n\nConstraints:\n" + "\n".join(f"- {c}" for c in constraints)
+                user_message += "\n\nConstraints:\n" + "\n".join(f"- {c}" for c in constraints)
             if context:
                 user_message += f"\n\nContext: {context}"
 
@@ -393,7 +393,7 @@ class ClaudeTaskMaster:
 
         except Exception as e:
             logger.error(f"Error planning workflow: {e}", exc_info=True)
-            raise RuntimeError(f"Workflow planning failed: {e}")
+            raise RuntimeError(f"Workflow planning failed: {e}") from None
 
     def _build_task_system_prompt(self) -> str:
         """Build system prompt for task execution."""

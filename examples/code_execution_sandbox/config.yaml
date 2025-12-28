@@ -1,0 +1,113 @@
+# Code Execution Sandbox Configuration
+# Configure safe code execution with resource limits
+
+# Execution settings
+execution:
+  # Default timeout for code execution (seconds)
+  default_timeout: 10
+
+  # Maximum memory usage (MB)
+  max_memory: 100
+
+  # Maximum CPU usage (%)
+  max_cpu: 50
+
+  # Code samples to execute
+  code_samples:
+    # Simple calculation
+    - description: "Simple arithmetic calculation"
+      code: |
+        x = 10
+        y = 20
+        result = x + y * 2
+        print(f"Result: {result}")
+      timeout: 5
+
+    # String manipulation
+    - description: "String processing example"
+      code: |
+        text = "Hello, Codomyrmex!"
+        words = text.split()
+        reversed_text = ' '.join(reversed(words))
+        print(f"Original: {text}")
+        print(f"Reversed: {reversed_text}")
+      timeout: 5
+
+    # List operations
+    - description: "List comprehension and operations"
+      code: |
+        numbers = list(range(1, 11))
+        squares = [x**2 for x in numbers if x % 2 == 0]
+        total = sum(squares)
+        print(f"Even squares: {squares}")
+        print(f"Sum: {total}")
+      timeout: 5
+
+    # Error handling
+    - description: "Error handling example"
+      code: |
+        try:
+            result = 10 / 2
+            print(f"Division result: {result}")
+        except ZeroDivisionError as e:
+            print(f"Error: {e}")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+        finally:
+            print("Execution completed")
+      timeout: 5
+
+    # Input processing (with stdin)
+    - description: "Input processing example"
+      code: |
+        import sys
+        input_data = sys.stdin.read().strip()
+        words = input_data.split()
+        word_count = len(words)
+        print(f"Input: {input_data}")
+        print(f"Word count: {word_count}")
+      stdin: "Hello world from Codomyrmex"
+      timeout: 5
+
+    # Infinite loop (should timeout)
+    - description: "Infinite loop (timeout test)"
+      code: |
+        count = 0
+        while True:
+            count += 1
+            if count % 100000 == 0:
+                print(f"Count: {count}")
+      timeout: 3
+
+# Sandbox settings
+sandbox:
+  # Enable network access
+  allow_network: false
+
+  # Enable file system access
+  allow_filesystem: false
+
+  # Restricted modules
+  restricted_modules:
+    - os
+    - sys
+    - subprocess
+
+  # Allowed modules
+  allowed_modules:
+    - math
+    - random
+    - json
+    - datetime
+
+# Output settings
+output:
+  format: json
+  file: output/code_execution_sandbox_results.json
+  include_execution_details: true
+
+# Logging
+logging:
+  level: INFO
+  file: logs/code_execution_sandbox_example.log
+

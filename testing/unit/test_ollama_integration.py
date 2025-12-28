@@ -16,7 +16,7 @@ import json
 import tempfile
 import shutil
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+# Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
 # Import Ollama integration
 try:

@@ -4,7 +4,35 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation files and guides for maintaining and generating Codomyrmex documentation.
+
+## Documentation Maintenance Workflow
+
+```mermaid
+graph LR
+    A[Documentation Scripts] --> B[Analysis Phase]
+    B --> C[Generation Phase]
+    C --> D[Validation Phase]
+    D --> E[Quality Gates]
+
+    B --> F[Content Quality<br/>Analysis]
+    B --> G[Completeness<br/>Checking]
+    B --> H[Link Validation]
+
+    C --> I[Auto Generation<br/>of Docs]
+    C --> J[Template<br/>Processing]
+    C --> K[Example Creation]
+
+    D --> L[Structure<br/>Validation]
+    D --> M[Reference<br/>Checking]
+    D --> N[Consistency<br/>Audit]
+
+    E --> O[Quality<br/>Reports]
+    E --> P[Automated<br/>Fixes]
+    E --> Q[Manual<br/>Review]
+```
+
+The documentation maintenance workflow provides comprehensive tools for analyzing, generating, and validating Codomyrmex documentation quality and completeness.
 
 ## Directory Contents
 - `analyze_content_quality.py` – File

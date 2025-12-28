@@ -1,7 +1,7 @@
 """
 CI/CD Automation Module for Codomyrmex.
 
-The CI/CD Automation module provides comprehensive continuous integration and deployment
+The CI/CD Automation module provides continuous integration and deployment
 capabilities, including pipeline management, automated testing, deployment orchestration,
 and build automation for the Codomyrmex ecosystem.
 

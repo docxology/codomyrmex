@@ -28,25 +28,27 @@ __email__ = "codomyrmex@example.com"
 __license__ = "MIT"
 
 # Import main package for easy access
-from . import codomyrmex
-from . import template
+from codomyrmex import (
+    get_module_path,
+    list_modules,
+)
 
 # Re-export key functionality from main package
 from codomyrmex import (
     get_version as get_codomyrmex_version,
-    list_modules,
-    get_module_path,
 )
 
 # Re-export common exceptions for convenience
 from codomyrmex.exceptions import (
-    CodomyrmexError,
     CodeExecutionError,
     CodeGenerationError,
+    CodomyrmexError,
     ConfigurationError,
     EnvironmentError,
     StaticAnalysisError,
 )
+
+from . import codomyrmex, template
 
 
 def get_source_version() -> str:

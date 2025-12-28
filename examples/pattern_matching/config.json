@@ -1,0 +1,89 @@
+{
+  "analysis": {
+    "types": [
+      "ast_analysis",
+      "pattern_detection",
+      "symbol_extraction",
+      "complexity_analysis",
+      "text_search"
+    ],
+    "include_patterns": [
+      "*.py",
+      "*.js",
+      "*.ts",
+      "*.java"
+    ],
+    "exclude_patterns": [
+      "*test*",
+      "*__pycache__*",
+      "*.pyc",
+      "*node_modules*"
+    ],
+    "depth": "medium"
+  },
+  "patterns": {
+    "code_patterns": [
+      "function_definitions",
+      "class_definitions",
+      "import_statements",
+      "decorators",
+      "async_functions"
+    ],
+    "ast_patterns": [
+      "control_flow_complexity",
+      "nesting_levels",
+      "function_length",
+      "variable_usage"
+    ]
+  },
+  "search": {
+    "terms": [
+      "def ",
+      "class ",
+      "import ",
+      "from ",
+      "@"
+    ],
+    "context_lines": 2,
+    "case_sensitive": false
+  },
+  "symbols": {
+    "types": [
+      "functions",
+      "classes",
+      "variables",
+      "imports"
+    ],
+    "analyze_usage": true,
+    "cross_reference": true
+  },
+  "complexity": {
+    "metrics": [
+      "cyclomatic_complexity",
+      "nesting_depth",
+      "function_length",
+      "parameter_count"
+    ],
+    "thresholds": {
+      "low": 5,
+      "medium": 10,
+      "high": 20
+    }
+  },
+  "advanced": {
+    "embeddings": true,
+    "repository_analysis": true,
+    "summarization": true,
+    "docstring_indexing": true
+  },
+  "output": {
+    "format": "json",
+    "file": "output/pattern_matching_results.json",
+    "analysis_dir": "output/analysis"
+  },
+  "embeddings": {
+    "model": "all-MiniLM-L6-v2",
+    "dimensions": 384,
+    "cache": true
+  }
+}

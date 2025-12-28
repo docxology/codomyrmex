@@ -1,7 +1,7 @@
 """
 Documentation Module for Codomyrmex.
 
-This module provides comprehensive documentation management and website generation
+This module provides documentation management and website generation
 capabilities for the Codomyrmex project.
 
 Integration:

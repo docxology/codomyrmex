@@ -163,13 +163,13 @@ Projects support configuration through:
 
 ### For Agents
 - **Project Standards**: [cursorrules/general.cursorrules](../../cursorrules/general.cursorrules)
-- **Module System**: [docs/modules/overview.md](../../docs/modules/overview.md)
+- **Module System**: [docs/modules/overview.md](../docs/modules/overview.md)
 - **Configuration**: [config/templates/](../../config/templates/)
 
 ### For Contributors
-- **Contributing**: [docs/project/contributing.md](../../docs/project/contributing.md)
+- **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)
 - **Project Creation**: Guidelines for creating new project templates
-- **Template Standards**: [docs/project_orchestration/project-template-schema.md](../../docs/project_orchestration/project-template-schema.md)
+- **Template Standards**: [docs/project_orchestration/project-template-schema.md](../docs/project_orchestration/project-template-schema.md)
 
 ## Agent Coordination
 
@@ -211,6 +211,6 @@ Before project changes are accepted:
 
 ## Related Documentation
 
-- **[Project Orchestration](docs/project_orchestration/project-lifecycle-guide.md)** - Project development lifecycle
-- **[Module System](docs/modules/overview.md)** - Available modules for projects
-- **[Contributing Guide](docs/project/contributing.md)** - Project contribution guidelines
+- **[Project Orchestration](../docs/project_orchestration/project-lifecycle-guide.md)** - Project development lifecycle
+- **[Module System](../docs/modules/overview.md)** - Available modules for projects
+- **[Contributing Guide](../docs/project/contributing.md)** - Project contribution guidelines

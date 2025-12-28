@@ -1,0 +1,66 @@
+# Performance Monitoring Configuration
+# Configure performance profiling and monitoring
+
+# Performance settings
+performance:
+  # Functions to profile
+  functions_to_profile:
+    - name: sample_function
+      args: [100]
+      kwargs: {}
+    - name: fibonacci_recursive
+      args: [20]
+      kwargs: {}
+
+  # Benchmarks to run
+  benchmarks:
+    - name: fibonacci_benchmark
+      iterations: 3
+      description: "Fibonacci recursive calculation benchmark"
+
+  # Monitoring settings
+  monitoring:
+    enable_system_metrics: true
+    enable_memory_tracking: true
+    enable_cpu_profiling: false
+
+# Profiling settings
+profiling:
+  # Memory profiling
+  memory:
+    track_peak_usage: true
+    track_allocations: false
+
+  # CPU profiling
+  cpu:
+    enable_cProfile: false
+    enable_line_profiler: false
+
+  # Sampling settings
+  sampling:
+    interval_ms: 10
+    max_samples: 1000
+
+# Benchmark settings
+benchmark:
+  # Benchmark parameters
+  iterations: 5
+  warmup_iterations: 2
+  timeout_seconds: 30
+
+  # Statistical analysis
+  calculate_statistics: true
+  percentiles: [50, 95, 99]
+
+# Output settings
+output:
+  format: json
+  file: output/performance_results.json
+  include_detailed_profiles: true
+  generate_charts: false
+
+# Logging
+logging:
+  level: INFO
+  file: logs/performance_example.log
+

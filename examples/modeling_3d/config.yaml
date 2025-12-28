@@ -1,0 +1,159 @@
+# Modeling 3D Example Configuration
+# Demonstrates configuration options for 3D scene creation and rendering
+
+# Output settings
+output:
+  format: json
+  file: output/modeling_3d_results.json
+  directory: output/modeling_3d
+
+# Logging configuration
+logging:
+  level: INFO
+  file: logs/modeling_3d_example.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Scene Configuration
+scene:
+  # Scene settings
+  name: demo_scene
+  background_color: [0.2, 0.3, 0.4]
+  ambient_light: [0.1, 0.1, 0.1]
+  fog_enabled: false
+  fog_color: [0.5, 0.5, 0.5]
+  fog_density: 0.01
+
+  # Object settings
+  default_material: default
+  cast_shadows: true
+  receive_shadows: true
+  wireframe_mode: false
+
+# Rendering Configuration
+rendering:
+  # Pipeline settings
+  renderer: opengl
+  antialiasing: true
+  shadows_enabled: true
+  reflections_enabled: false
+  post_processing: true
+
+  # Output settings
+  resolution_x: 1920
+  resolution_y: 1080
+  output_format: png
+  save_intermediate_frames: false
+
+  # Performance settings
+  max_fps: 60
+  vsync: true
+  gpu_acceleration: true
+
+# Camera Configuration
+camera:
+  # Default camera settings
+  fov: 60
+  near_clip: 0.1
+  far_clip: 1000.0
+  aspect_ratio: 1.777
+
+  # Movement settings
+  movement_speed: 5.0
+  rotation_speed: 2.0
+  zoom_speed: 10.0
+
+# Lighting Configuration
+lighting:
+  # Global lighting
+  ambient_intensity: 0.2
+  shadow_map_size: 2048
+  shadow_cascades: 4
+
+  # Light types
+  directional_lights: 1
+  point_lights: 2
+  spot_lights: 1
+
+# Material Configuration
+materials:
+  # Material library
+  library_path: materials/
+  default_diffuse: [0.8, 0.8, 0.8]
+  default_specular: [0.1, 0.1, 0.1]
+  default_shininess: 32
+
+  # Texture settings
+  texture_filtering: linear
+  mipmapping: true
+  anisotropy: 4
+
+# Mesh Configuration
+mesh:
+  # Loading settings
+  supported_formats: [obj, stl, ply, fbx, dae, gltf]
+  auto_triangulate: true
+  calculate_normals: true
+  optimize_geometry: true
+
+  # Processing options
+  merge_vertices: true
+  generate_uvs: true
+  flip_uvs: false
+
+# Animation Configuration
+animation:
+  # Animation settings
+  frame_rate: 30
+  interpolation: linear
+  loop_animations: true
+
+  # Keyframe settings
+  auto_keyframe: false
+  keyframe_reduction: true
+
+# Physics Configuration
+physics:
+  # Engine settings
+  gravity: [0, -9.81, 0]
+  fixed_timestep: 0.016
+  max_substeps: 10
+
+  # Collision settings
+  collision_margin: 0.04
+  broadphase_algorithm: dbvt
+  narrowphase_algorithm: gjk
+
+# Demonstration settings
+demonstration:
+  # Feature demonstrations
+  create_sample_scene: true
+  demonstrate_rendering: true
+  show_mesh_operations: true
+  enable_animations: true
+  run_physics_simulation: true
+
+  # Sample data
+  geometry_objects: 4
+  material_types: 4
+  light_sources: 3
+  camera_positions: 3
+
+  # Performance monitoring
+  measure_render_times: true
+  track_frame_rates: true
+  monitor_memory_usage: true
+
+# Integration settings
+integration:
+  # Codomyrmex integration
+  use_logging_monitoring: true
+  use_performance_monitoring: true
+
+  # Export options
+  export_scene_data: true
+  export_render_results: true
+  save_screenshots: true
+
+  # Error handling
+  graceful_failures: true
+  detailed_error_reporting: true

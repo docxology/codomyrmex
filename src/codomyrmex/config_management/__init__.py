@@ -1,7 +1,7 @@
 """
 Configuration Management Module for Codomyrmex.
 
-The Configuration Management module provides comprehensive configuration management,
+The Configuration Management module provides configuration management,
 validation, and deployment capabilities for the Codomyrmex ecosystem.
 
 Integration:

@@ -26,6 +26,341 @@ The ai_code_editing module serves as the primary interface for AI-driven develop
 - Structured response format with metadata
 - Integration with droid task management system
 
+## Function Signatures
+
+### Core Code Generation Functions
+
+```python
+def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any, str]
+```
+
+Initialize and return an LLM client based on the specified provider.
+
+**Parameters:**
+- `provider` (str): The LLM provider to use (e.g., "openai", "anthropic", "google")
+- `model_name` (Optional[str]): Optional specific model to use
+
+**Returns:** `tuple[Any, str]` - Tuple of (client, model_name) ready for requests
+
+**Raises:**
+- `ImportError`: If the required client library is not installed
+- `ValueError`: If the provider is not supported or configuration is invalid
+
+```python
+def generate_code_snippet(
+    prompt: str,
+    language: str,
+    provider: str = "openai",
+    model_name: Optional[str] = None,
+    context: Optional[str] = None,
+    max_length: Optional[int] = None,
+    temperature: float = 0.7,
+    **kwargs
+) -> dict[str, Any]
+```
+
+Generate a code snippet using an LLM.
+
+**Parameters:**
+- `prompt` (str): The prompt describing what code to generate
+- `language` (str): Programming language for the generated code
+- `provider` (str): LLM provider to use ("openai", "anthropic", "google")
+- `model_name` (Optional[str]): Specific model to use (optional)
+- `context` (Optional[str]): Additional context for the generation
+- `max_length` (Optional[int]): Maximum length of generated code
+- `temperature` (float): Sampling temperature (0.0 to 1.0)
+- `**kwargs`: Additional parameters for the LLM
+
+**Returns:** `dict[str, Any]` - Dictionary containing generated code and metadata
+
+**Raises:**
+- `ValueError`: If parameters are invalid
+- `RuntimeError`: If code generation fails
+
+```python
+def refactor_code_snippet(
+    code: str,
+    refactoring_type: str,
+    language: str,
+    provider: str = "openai",
+    model_name: Optional[str] = None,
+    context: Optional[str] = None,
+    preserve_functionality: bool = True,
+    **kwargs
+) -> dict[str, Any]
+```
+
+Refactor existing code using an LLM.
+
+**Parameters:**
+- `code` (str): The code to refactor
+- `refactoring_type` (str): Type of refactoring ("optimize", "simplify", "add_error_handling")
+- `language` (str): Programming language of the code
+- `provider` (str): LLM provider to use
+- `model_name` (Optional[str]): Specific model to use (optional)
+- `context` (Optional[str]): Additional context for refactoring
+- `preserve_functionality` (bool): Whether to preserve original functionality
+- `**kwargs`: Additional parameters for the LLM
+
+**Returns:** `dict[str, Any]` - Dictionary containing refactored code and metadata
+
+**Raises:**
+- `ValueError`: If parameters are invalid
+- `RuntimeError`: If refactoring fails
+
+```python
+def analyze_code_quality(
+    code: str,
+    language: str,
+    analysis_type: str = "comprehensive",
+    provider: str = "openai",
+    model_name: Optional[str] = None,
+    context: Optional[str] = None,
+    **kwargs
+) -> dict[str, Any]
+```
+
+Analyze code quality using an LLM.
+
+**Parameters:**
+- `code` (str): The code to analyze
+- `language` (str): Programming language of the code
+- `analysis_type` (str): Type of analysis ("comprehensive", "security", "performance", "maintainability")
+- `provider` (str): LLM provider to use
+- `model_name` (Optional[str]): Specific model to use (optional)
+- `context` (Optional[str]): Additional context for analysis
+- `**kwargs`: Additional parameters for the LLM
+
+**Returns:** `dict[str, Any]` - Dictionary containing analysis results and suggestions
+
+**Raises:**
+- `ValueError`: If parameters are invalid
+- `RuntimeError`: If analysis fails
+
+### Batch and Comparison Functions
+
+```python
+def generate_code_batch(
+    requests: list[CodeGenerationRequest],
+    provider: str = "openai",
+    model_name: Optional[str] = None,
+    parallel: bool = False,
+    max_workers: int = 4,
+    **kwargs
+) -> list[CodeGenerationResult]
+```
+
+Generate multiple code snippets in batch.
+
+**Parameters:**
+- `requests` (list[CodeGenerationRequest]): List of code generation requests
+- `provider` (str): LLM provider to use
+- `model_name` (Optional[str]): Specific model to use (optional)
+- `parallel` (bool): Whether to process requests in parallel
+- `max_workers` (int): Maximum number of parallel workers (default: 4)
+- `**kwargs`: Additional parameters for the LLM
+
+**Returns:** `list[CodeGenerationResult]` - List of code generation results
+
+**Raises:**
+- `ValueError`: If parameters are invalid
+- `RuntimeError`: If batch generation fails
+
+```python
+def compare_code_versions(
+    code1: str,
+    code2: str,
+    language: str,
+    provider: str = "openai",
+    model_name: Optional[str] = None,
+    context: Optional[str] = None,
+    **kwargs
+) -> dict[str, Any]
+```
+
+Compare two versions of code and provide analysis.
+
+**Parameters:**
+- `code1` (str): First version of code
+- `code2` (str): Second version of code
+- `language` (str): Programming language of the code
+- `provider` (str): LLM provider to use
+- `model_name` (Optional[str]): Specific model to use (optional)
+- `context` (Optional[str]): Additional context for comparison
+- `**kwargs`: Additional parameters for the LLM
+
+**Returns:** `dict[str, Any]` - Dictionary containing comparison analysis
+
+**Raises:**
+- `ValueError`: If parameters are invalid
+- `RuntimeError`: If comparison fails
+
+```python
+def generate_code_documentation(
+    code: str,
+    language: str,
+    doc_type: str = "comprehensive",
+    provider: str = "openai",
+    model_name: Optional[str] = None,
+    context: Optional[str] = None,
+    **kwargs
+) -> dict[str, Any]
+```
+
+Generate documentation for code using an LLM.
+
+**Parameters:**
+- `code` (str): The code to document
+- `language` (str): Programming language of the code
+- `doc_type` (str): Type of documentation ("comprehensive", "api", "inline", "readme")
+- `provider` (str): LLM provider to use
+- `model_name` (Optional[str]): Specific model to use (optional)
+- `context` (Optional[str]): Additional context for documentation
+- `**kwargs`: Additional parameters for the LLM
+
+**Returns:** `dict[str, Any]` - Dictionary containing generated documentation
+
+**Raises:**
+- `ValueError`: If parameters are invalid
+- `RuntimeError`: If documentation generation fails
+
+### Utility Functions
+
+```python
+def get_supported_languages() -> list[CodeLanguage]
+```
+
+Get list of supported programming languages.
+
+**Returns:** `list[CodeLanguage]` - List of supported programming languages
+
+```python
+def get_supported_providers() -> list[str]
+```
+
+Get list of supported LLM providers.
+
+**Returns:** `list[str]` - List of supported LLM provider names ("openai", "anthropic", "google")
+
+```python
+def get_available_models(provider: str) -> list[str]
+```
+
+Get list of available models for a provider.
+
+**Parameters:**
+- `provider` (str): Provider name
+
+**Returns:** `list[str]` - List of available model names for the provider
+
+```python
+def validate_api_keys() -> dict[str, bool]
+```
+
+Validate API keys for all supported providers.
+
+**Returns:** `dict[str, bool]` - Dictionary mapping provider names to API key availability status
+
+```python
+def setup_environment() -> bool
+```
+
+Setup environment variables and check dependencies.
+
+**Returns:** `bool` - True if setup successful and at least one provider is available, False otherwise
+
+### Data Structures
+
+```python
+class CodeLanguage(Enum)
+```
+
+Supported programming languages.
+
+**Members:**
+- `PYTHON`, `JAVASCRIPT`, `TYPESCRIPT`, `JAVA`, `CPP`, `CSHARP`, `GO`, `RUST`, `PHP`, `RUBY`, `SWIFT`, `KOTLIN`, `SCALA`, `R`, `MATLAB`, `SHELL`, `SQL`, `HTML`, `CSS`, `XML`, `YAML`, `JSON`, `MARKDOWN`
+
+```python
+class CodeComplexity(Enum)
+```
+
+Code complexity levels.
+
+**Members:**
+- `SIMPLE`, `INTERMEDIATE`, `COMPLEX`, `EXPERT`
+
+```python
+class CodeStyle(Enum)
+```
+
+Code style preferences.
+
+**Members:**
+- `CLEAN`, `VERBOSE`, `CONCISE`, `FUNCTIONAL`, `OBJECT_ORIENTED`, `PROCEDURAL`
+
+```python
+@dataclass
+class CodeGenerationRequest
+```
+
+Request structure for code generation.
+
+**Fields:**
+- `prompt` (str): Natural language description
+- `language` (CodeLanguage): Target programming language
+- `complexity` (CodeComplexity): Code complexity level (default: INTERMEDIATE)
+- `style` (CodeStyle): Code style preference (default: CLEAN)
+- `context` (Optional[str]): Additional context
+- `requirements` (Optional[list[str]]): Specific requirements
+- `examples` (Optional[list[str]]): Example code patterns
+- `max_length` (Optional[int]): Maximum code length
+- `temperature` (float): Sampling temperature (default: 0.7)
+
+```python
+@dataclass
+class CodeRefactoringRequest
+```
+
+Request structure for code refactoring.
+
+**Fields:**
+- `code` (str): Source code to refactor
+- `language` (CodeLanguage): Programming language
+- `refactoring_type` (str): Refactoring instruction
+- `context` (Optional[str]): Additional context
+- `preserve_functionality` (bool): Whether to preserve behavior (default: True)
+- `add_tests` (bool): Whether to add tests (default: False)
+- `add_documentation` (bool): Whether to add documentation (default: False)
+
+```python
+@dataclass
+class CodeAnalysisRequest
+```
+
+Request structure for code analysis.
+
+**Fields:**
+- `code` (str): Code to analyze
+- `language` (CodeLanguage): Programming language
+- `analysis_type` (str): Analysis type ("quality", "security", "performance", "maintainability")
+- `context` (Optional[str]): Additional context
+- `include_suggestions` (bool): Whether to include improvement suggestions (default: True)
+
+```python
+@dataclass
+class CodeGenerationResult
+```
+
+Result structure for code generation.
+
+**Fields:**
+- `generated_code` (str): The generated code
+- `language` (CodeLanguage): Programming language
+- `metadata` (dict[str, Any]): Additional metadata
+- `execution_time` (float): Time taken for generation
+- `tokens_used` (Optional[int]): Tokens consumed
+- `confidence_score` (Optional[float]): Confidence in generation quality
+
 ## Active Components
 
 ### Core Implementation
@@ -97,9 +432,6 @@ All AI code assistance within the Codomyrmex platform must:
 - **Prompt Engineering**: [PROMPT_ENGINEERING.md](PROMPT_ENGINEERING.md) - Prompt design guide
 
 ### Related Modules
-- **Language Models**: [../language_models/](../../language_models/) - LLM infrastructure
-- **Model Context Protocol**: [../model_context_protocol/](../../model_context_protocol/) - AI communication standards
-- **Code Review**: [../code_review/](../../code_review/) - Code analysis integration
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview

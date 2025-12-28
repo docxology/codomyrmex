@@ -1,7 +1,7 @@
 """
 Security Audit Module for Codomyrmex.
 
-The Security Audit module provides comprehensive security analysis, vulnerability scanning,
+The Security Audit module provides security analysis, vulnerability scanning,
 compliance checking, and security monitoring capabilities for the Codomyrmex ecosystem.
 
 Integration:
@@ -11,7 +11,7 @@ Integration:
 
 Available functions:
 - scan_vulnerabilities: Scan for security vulnerabilities in dependencies and code
-- audit_code_security: Perform comprehensive code security analysis
+- audit_code_security: Perform code security analysis
 - check_compliance: Verify compliance with security standards and policies
 - monitor_security_events: Real-time security monitoring and alerting
 - generate_security_report: Generate detailed security assessment reports
@@ -57,6 +57,26 @@ from .vulnerability_scanner import (
     check_compliance,
     scan_vulnerabilities,
 )
+from .secrets_detector import (
+    SecretsDetector,
+    audit_secrets_exposure,
+    scan_file_for_secrets,
+    scan_directory_for_secrets,
+)
+from .security_analyzer import (
+    SecurityAnalyzer,
+    SecurityFinding,
+    SecurityIssue,
+    analyze_file_security,
+    analyze_directory_security,
+)
+from .compliance_checker import (
+    ComplianceChecker,
+    ComplianceCheckResult,
+    ComplianceRequirement,
+    ComplianceStandard,
+    check_compliance as check_compliance_new,
+)
 
 __all__ = [
     # Core security scanning
@@ -67,6 +87,21 @@ __all__ = [
     "VulnerabilityReport",
     "SecurityScanResult",
     "ComplianceCheck",
+    # Enhanced security features
+    "SecretsDetector",
+    "audit_secrets_exposure",
+    "scan_file_for_secrets",
+    "scan_directory_for_secrets",
+    "SecurityAnalyzer",
+    "SecurityFinding",
+    "SecurityIssue",
+    "analyze_file_security",
+    "analyze_directory_security",
+    "ComplianceChecker",
+    "ComplianceCheckResult",
+    "ComplianceRequirement",
+    "ComplianceStandard",
+    "check_compliance_new",
     # Security monitoring
     "SecurityMonitor",
     "monitor_security_events",

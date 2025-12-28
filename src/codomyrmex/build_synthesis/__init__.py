@@ -1,7 +1,7 @@
 """
 Build Synthesis Module for Codomyrmex.
 
-The Build Synthesis module provides comprehensive build automation, dependency management,
+The Build Synthesis module provides build automation, dependency management,
 artifact synthesis, and deployment orchestration capabilities within the Codomyrmex ecosystem.
 
 Integration:

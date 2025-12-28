@@ -1,9 +1,8 @@
 """
 Pattern Matching Module for Codomyrmex.
 
-This module focuses on identifying specific patterns and structures within the
-Codomyrmex codebase. It extensively utilizes the `cased/kit` toolkit for
-comprehensive code analysis and pattern recognition.
+This module identifies patterns and structures within the Codomyrmex codebase.
+It utilizes the `cased/kit` toolkit for code analysis and pattern recognition.
 
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).

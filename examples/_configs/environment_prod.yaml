@@ -1,0 +1,121 @@
+# Production Environment Configuration
+# Extends the base configuration with production-specific settings
+# This configuration is optimized for production stability and performance
+
+# Inherit from base configuration
+extends: environment_base.yaml
+
+# Production-specific output settings
+output:
+  file: output/prod_results.json
+  compress: true
+
+# Production logging - minimal but comprehensive
+logging:
+  level: WARNING
+  file: logs/prod.log
+
+# Production performance - optimized for production
+performance:
+  memory_limit: 4GB
+  cpu_limit: 90
+  profiling: false
+
+# Production error handling - robust error handling
+error_handling:
+  fail_fast: true
+  continue_on_error: true
+  log_errors: true
+  raise_exceptions: false
+
+# Production testing - minimal testing in production
+testing:
+  enable_validation: true
+  mock_external_calls: true  # Use mocks in production
+  test_scenarios:
+    - "happy_path"
+    - "critical_error_recovery"
+
+# Production monitoring - comprehensive monitoring
+monitoring:
+  enable_metrics: true
+  metrics_interval: 30
+  enable_health_checks: true
+  enable_tracing: true
+  alert_thresholds:
+    max_execution_time: 120
+    error_rate_threshold: 0.01
+    memory_usage_threshold: 0.9
+    response_time_threshold: 5.0
+
+# Production features - stable, well-tested features only
+features:
+  advanced_features: true
+  experimental: false
+  production_optimizations: true
+
+# Production security - maximum security
+security:
+  validate_inputs: true
+  sanitize_outputs: true
+  audit_trail: true
+  encryption: true
+  rate_limiting: true
+
+# Production database - high-performance database
+database:
+  type: postgresql
+  host: "${PROD_DB_HOST}"
+  port: 5432
+  name: "${PROD_DB_NAME}"
+  username: "${PROD_DB_USER}"
+  password: "${PROD_DB_PASS}"
+  connection_pool:
+    min_connections: 10
+    max_connections: 50
+    timeout: 60
+  ssl_enabled: true
+  backup_schedule: "daily"
+
+# Production API - production server
+api:
+  base_url: "https://api.codomyrmex.com"
+  timeout: 15
+  retries: 2
+  rate_limit: 1000
+
+# Production file system - distributed storage
+filesystem:
+  input_dir: "/prod/input"
+  output_dir: "/prod/output"
+  temp_dir: "/prod/temp"
+  max_file_size: 5368709120  # 5GB
+  storage_class: "standard"
+  backup_retention: 365
+
+# Production-specific settings
+production:
+  load_balancer: true
+  cache_enabled: true
+  cdn_integration: true
+  backup_enabled: true
+  monitoring_dashboard: true
+  auto_scaling: true
+  disaster_recovery: true
+  compliance_mode: true
+
+# Compliance settings (production only)
+compliance:
+  gdpr_compliant: true
+  hipaa_compliant: false
+  soc2_compliant: true
+  audit_logging: true
+  data_retention_days: 2555  # 7 years
+
+# Scaling settings (production only)
+scaling:
+  min_instances: 3
+  max_instances: 20
+  scale_up_threshold: 70
+  scale_down_threshold: 30
+  cooldown_period: 300

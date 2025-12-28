@@ -1,0 +1,115 @@
+{
+  "output": {
+    "format": "json",
+    "file": "output/physical_management_results.json",
+    "directory": "output/physical_management"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/physical_management_example.log",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  },
+  "object_management": {
+    "max_objects": 1000,
+    "spatial_index_enabled": true,
+    "event_tracking_enabled": true,
+    "property_validation": true,
+    "supported_types": [
+      "robot",
+      "sensor",
+      "conveyor",
+      "container",
+      "actuator"
+    ],
+    "status_polling_interval": 5,
+    "health_check_enabled": true,
+    "performance_monitoring": true
+  },
+  "sensor_integration": {
+    "max_readings_per_sensor": 1000,
+    "reading_retention_days": 30,
+    "calibration_enabled": true,
+    "data_validation": true,
+    "sensor_types": [
+      "temperature",
+      "pressure",
+      "vibration",
+      "power",
+      "position",
+      "proximity",
+      "humidity"
+    ],
+    "real_time_processing": true,
+    "batch_processing_interval": 60,
+    "outlier_detection": true
+  },
+  "physics_simulation": {
+    "gravity_enabled": true,
+    "gravity_vector": [0, -9.81, 0],
+    "time_step": 0.016,
+    "max_simulation_time": 300,
+    "friction_coefficient": 0.3,
+    "restitution_coefficient": 0.8,
+    "air_resistance": 0.01,
+    "constraint_solver_iterations": 10,
+    "force_field_resolution": 0.1,
+    "collision_detection_enabled": true
+  },
+  "analytics": {
+    "window_size": 100,
+    "processing_interval": 1,
+    "anomaly_detection_enabled": true,
+    "predictive_modeling": true,
+    "supported_streams": [
+      "temperature",
+      "power_consumption",
+      "vibration",
+      "position",
+      "performance_metrics"
+    ],
+    "metrics_enabled": [
+      "mean",
+      "std_dev",
+      "min_max",
+      "trend_analysis",
+      "anomaly_score"
+    ]
+  },
+  "resource_management": {
+    "cpu_monitoring": true,
+    "memory_monitoring": true,
+    "disk_monitoring": true,
+    "network_monitoring": true,
+    "cpu_threshold": 80,
+    "memory_threshold": 85,
+    "disk_threshold": 90,
+    "network_threshold": 1000,
+    "auto_optimization": true,
+    "resource_pooling": true,
+    "load_balancing": true
+  },
+  "demonstration": {
+    "show_object_management": true,
+    "demonstrate_sensor_integration": true,
+    "run_physics_simulation": true,
+    "enable_analytics_processing": true,
+    "physical_objects_count": 4,
+    "sensor_readings_count": 5,
+    "simulation_steps": 10,
+    "analytics_data_points": 20,
+    "measure_execution_times": true,
+    "track_resource_usage": true,
+    "monitor_system_health": true
+  },
+  "integration": {
+    "use_logging_monitoring": true,
+    "use_performance_monitoring": true,
+    "enable_iot_integration": false,
+    "support_industry_protocols": false,
+    "export_sensor_data": true,
+    "export_simulation_results": true,
+    "export_analytics_reports": true,
+    "rest_api_enabled": false,
+    "websocket_streaming": false
+  }
+}

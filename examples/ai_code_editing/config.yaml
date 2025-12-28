@@ -1,0 +1,123 @@
+# AI Code Editing Configuration
+# This configuration demonstrates AI-powered code assistance settings including
+# provider configurations, model selection, prompt templates, and generation parameters.
+
+logging:
+  level: INFO
+  file: logs/ai_code_editing_example.log
+  output_type: TEXT
+
+output:
+  format: json
+  file: output/ai_code_editing_results.json
+
+ai_code_editing:
+  # Provider settings
+  default_provider: openai
+  fallback_providers: ["anthropic", "google"]
+
+  # Model configurations
+  models:
+    openai:
+      default: "gpt-3.5-turbo"
+      alternatives: ["gpt-4", "gpt-4-turbo"]
+    anthropic:
+      default: "claude-3-sonnet-20240229"
+      alternatives: ["claude-3-haiku-20240307", "claude-3-opus-20240229"]
+    google:
+      default: "gemini-pro"
+      alternatives: ["gemini-pro-vision"]
+
+  # Generation parameters
+  generation:
+    temperature: 0.7
+    max_tokens: 2000
+    top_p: 1.0
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+
+  # Refactoring settings
+  refactoring:
+    preserve_functionality: true
+    add_error_handling: true
+    optimize_performance: true
+    improve_readability: true
+
+  # Quality analysis settings
+  analysis:
+    check_complexity: true
+    check_security: true
+    check_best_practices: true
+    check_documentation: true
+
+# Example prompts and code for demonstration
+code_generation_examples:
+  simple_function: "Write a Python function that calculates the fibonacci sequence up to n terms with proper error handling"
+  complex_function: "Create a Python class for managing a task queue with threading support, proper synchronization, and logging"
+  web_function: "Write a Flask route handler for user authentication with JWT tokens and database integration"
+  data_function: "Create a pandas function to clean and preprocess CSV data with missing value handling"
+
+refactoring_examples:
+  original_code: |
+    def calculate_total(items):
+        total = 0
+        for item in items:
+            total = total + item
+        return total
+
+analysis_examples:
+  code_to_analyze: |
+    def process_data(data):
+        result = []
+        for item in data:
+            if item > 0:
+                result.append(item * 2)
+        return result
+
+batch_examples:
+  prompts:
+    - prompt: "Write a Python function to validate email addresses with regex"
+      language: "python"
+      temperature: 0.5
+    - prompt: "Create a JavaScript function for form validation"
+      language: "javascript"
+      temperature: 0.7
+    - prompt: "Write a SQL query to find duplicate records in a table"
+      language: "sql"
+      temperature: 0.3
+    - prompt: "Create a Bash script to backup files with compression"
+      language: "bash"
+      temperature: 0.6
+
+documentation_examples:
+  code_for_docs: |
+    def authenticate_user(username, password, db_connection):
+        """Authenticate a user with username and password."""
+        query = "SELECT * FROM users WHERE username = ? AND password = ?"
+        result = db_connection.execute(query, (username, password))
+        return result.fetchone() is not None
+
+comparison_examples:
+  code_v1: |
+    def sort_list(items):
+        return sorted(items)
+
+  code_v2: |
+    def sort_list(items):
+        """Sort a list in ascending order."""
+        if not items:
+            return []
+        return sorted(items, key=lambda x: x, reverse=False)
+
+# API key validation settings
+api_validation:
+  timeout_seconds: 10
+  retry_attempts: 2
+  check_rate_limits: true
+
+# Environment settings
+environment:
+  enable_caching: true
+  cache_ttl_seconds: 3600
+  enable_metrics: true
+  log_api_calls: false

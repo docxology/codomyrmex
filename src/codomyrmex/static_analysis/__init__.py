@@ -1,7 +1,7 @@
 """
 Static Analysis Module for Codomyrmex.
 
-The Static Analysis module provides comprehensive tools and integrations for analyzing source code
+The Static Analysis module provides tools and integrations for analyzing source code
 without executing it. Its core purpose is to enhance code quality through automated
 analysis and error detection across multiple programming languages.
 

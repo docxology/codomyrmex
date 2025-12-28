@@ -753,6 +753,161 @@ class WorkflowManager:
 
         return summary
 
+    def create_workflow_dag(self, tasks: list[dict]) -> 'WorkflowDAG':
+        """
+        Create a DAG from workflow tasks with dependency management.
+
+        Args:
+            tasks: List of task dictionaries with dependencies
+
+        Returns:
+            WorkflowDAG: Configured DAG instance
+
+        Raises:
+            ImportError: If workflow_dag module is not available
+        """
+        try:
+            from .workflow_dag import WorkflowDAG
+        except ImportError:
+            raise ImportError("WorkflowDAG functionality not available")
+
+        dag = WorkflowDAG(tasks)
+        is_valid, errors = dag.validate_dag()
+
+        if not is_valid:
+            self.logger.error(f"Invalid workflow DAG: {errors}")
+            raise ValueError(f"Invalid workflow DAG: {errors}")
+
+        self.logger.info(f"Created workflow DAG with {len(tasks)} tasks")
+        return dag
+
+    def execute_parallel_workflow(self, workflow: dict) -> dict:
+        """
+        Execute a workflow with parallel task execution and dependency management.
+
+        Args:
+            workflow: Workflow dictionary with tasks and dependencies
+
+        Returns:
+            Dict containing execution results and metadata
+        """
+        try:
+            from .parallel_executor import ParallelExecutor, validate_workflow_dependencies
+            from .workflow_dag import WorkflowDAG
+        except ImportError:
+            raise ImportError("Parallel execution functionality not available")
+
+        tasks = workflow.get("tasks", [])
+        dependencies = workflow.get("dependencies", {})
+
+        # Validate dependencies
+        validation_errors = validate_workflow_dependencies(tasks)
+        if validation_errors:
+            self.logger.error(f"Workflow validation failed: {validation_errors}")
+            return {
+                "status": "failed",
+                "error": "Validation failed",
+                "validation_errors": validation_errors
+            }
+
+        # Create execution order using DAG
+        dag = WorkflowDAG(tasks)
+        try:
+            execution_order = dag.get_execution_order()
+        except Exception as e:
+            self.logger.error(f"Failed to determine execution order: {e}")
+            return {
+                "status": "failed",
+                "error": f"Execution order determination failed: {e}"
+            }
+
+        # Execute with parallel executor
+        with ParallelExecutor(max_workers=workflow.get("max_parallel", 4)) as executor:
+            results = executor.execute_tasks(tasks, dependencies)
+
+        # Convert results to execution format
+        execution_results = {}
+        for task_name, result in results.items():
+            execution_results[task_name] = {
+                "status": result.status.value,
+                "result": result.result,
+                "error": result.error,
+                "duration": result.duration,
+                "start_time": result.start_time,
+                "end_time": result.end_time
+            }
+
+        # Calculate summary
+        completed = sum(1 for r in execution_results.values() if r["status"] == "completed")
+        failed = sum(1 for r in execution_results.values() if r["status"] == "failed")
+        total_duration = max((r.get("end_time", 0) - r.get("start_time", 0))
+                           for r in execution_results.values() if r.get("end_time"))
+
+        summary = {
+            "status": "completed" if failed == 0 else "partial_failure",
+            "total_tasks": len(tasks),
+            "completed_tasks": completed,
+            "failed_tasks": failed,
+            "total_duration": total_duration,
+            "execution_order": execution_order,
+            "task_results": execution_results
+        }
+
+        self.logger.info(f"Parallel workflow execution completed: {completed}/{len(tasks)} tasks successful")
+        return summary
+
+    def validate_workflow_dependencies(self, tasks: list[dict]) -> list[str]:
+        """
+        Validate workflow task dependencies for cycles and missing tasks.
+
+        Args:
+            tasks: List of task dictionaries
+
+        Returns:
+            List of validation error messages
+        """
+        try:
+            from .parallel_executor import validate_workflow_dependencies
+            return validate_workflow_dependencies(tasks)
+        except ImportError:
+            # Fallback validation
+            errors = []
+            task_names = {task["name"] for task in tasks}
+
+            for task in tasks:
+                task_name = task["name"]
+                dependencies = task.get("dependencies", [])
+
+                # Check for self-dependency
+                if task_name in dependencies:
+                    errors.append(f"Task '{task_name}' cannot depend on itself")
+
+                # Check for missing dependencies
+                for dep in dependencies:
+                    if dep not in task_names:
+                        errors.append(f"Task '{task_name}' depends on missing task '{dep}'")
+
+            return errors
+
+    def get_workflow_execution_order(self, tasks: list[dict]) -> list[list[str]]:
+        """
+        Get the topological execution order for workflow tasks.
+
+        Args:
+            tasks: List of task dictionaries
+
+        Returns:
+            List of lists, where each inner list contains tasks that can be
+            executed in parallel at that level
+        """
+        try:
+            from .parallel_executor import get_workflow_execution_order
+            return get_workflow_execution_order(tasks)
+        except ImportError:
+            # Fallback implementation
+            dag = self.create_workflow_dag(tasks)
+            return dag.get_execution_order()
+
     def _save_workflow(self, name: str, steps: list[WorkflowStep]) -> None:
         """
         Save a workflow definition to disk in JSON format.

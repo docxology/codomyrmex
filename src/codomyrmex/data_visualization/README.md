@@ -8,6 +8,35 @@ Core module providing comprehensive data visualization capabilities for the Codo
 
 The data_visualization module serves as the primary interface for converting data into visual insights across the entire platform.
 
+## Visualization Pipeline
+
+```mermaid
+graph LR
+    A[Data Input] --> B[Data Validation]
+    B --> C[Plotter Engine]
+    C --> D[Chart Types]
+    D --> E[Styling & Formatting]
+    E --> F[Output Formats]
+
+    D --> G[Line Plots]
+    D --> H[Bar Charts]
+    D --> I[Scatter Plots]
+    D --> J[Histograms]
+    D --> K[Heatmaps]
+
+    F --> L[PNG/SVG]
+    F --> M[Interactive Display]
+    F --> N[File Saving]
+
+    C --> O[Git Visualizer]
+    C --> P[Mermaid Generator]
+
+    O --> Q[Branch Diagrams]
+    P --> R[Documentation Diagrams]
+```
+
+The visualization pipeline processes data through validation, chart generation, styling, and multiple output formats. Specialized visualizers handle Git repository analysis and documentation diagram generation.
+
 ## Directory Contents
 - `.gitignore` – File
 - `API_SPECIFICATION.md` – File

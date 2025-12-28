@@ -153,6 +153,206 @@ graph TB
     Terminal -.-> TerminalInterface
 ```
 
+### Module Dependency Graph
+
+```mermaid
+graph TD
+    subgraph foundation ["Foundation Layer"]
+        Logging["logging_monitoring"]
+        Env["environment_setup"]
+        MCP["model_context_protocol"]
+        Terminal["terminal_interface"]
+    end
+
+    subgraph core ["Core Layer"]
+        AICode["ai_code_editing"]
+        StaticAnalysis["static_analysis"]
+        CodeExec["code_execution_sandbox"]
+        DataViz["data_visualization"]
+        PatternMatch["pattern_matching"]
+        GitOps["git_operations"]
+        CodeReview["code_review"]
+        SecurityAudit["security_audit"]
+        Ollama["ollama_integration"]
+        LangModels["language_models"]
+        Performance["performance"]
+    end
+
+    subgraph service ["Service Layer"]
+        BuildSynth["build_synthesis"]
+        Documentation["documentation"]
+        APIDoc["api_documentation"]
+        CICD["ci_cd_automation"]
+        Container["containerization"]
+        ConfigMgmt["config_management"]
+        Database["database_management"]
+        ProjectOrch["project_orchestration"]
+        PhysMgmt["physical_management"]
+    end
+
+    subgraph specialized ["Specialized Layer"]
+        SysDiscovery["system_discovery"]
+        ModuleTemplate["module_template"]
+        Modeling3D["modeling_3d"]
+    end
+
+    %% Foundation dependencies (minimal)
+    Env --> Logging
+
+    %% Core layer dependencies
+    Logging --> AICode
+    Logging --> StaticAnalysis
+    Logging --> CodeExec
+    Logging --> DataViz
+    Logging --> PatternMatch
+    Logging --> GitOps
+    Logging --> CodeReview
+    Logging --> SecurityAudit
+    Logging --> Ollama
+    Logging --> LangModels
+    Logging --> Performance
+
+    Env --> AICode
+    Env --> CodeExec
+    Env --> SecurityAudit
+    Env --> Performance
+
+    MCP --> AICode
+    MCP --> LangModels
+
+    Terminal --> AICode
+    Terminal --> CodeReview
+
+    StaticAnalysis --> CodeReview
+    PatternMatch --> CodeReview
+    SecurityAudit --> CodeReview
+
+    %% Service layer dependencies
+    Logging --> BuildSynth
+    Logging --> Documentation
+    Logging --> APIDoc
+    Logging --> CICD
+    Logging --> Container
+    Logging --> ConfigMgmt
+    Logging --> Database
+    Logging --> ProjectOrch
+    Logging --> PhysMgmt
+
+    Env --> BuildSynth
+    Env --> CICD
+    Env --> Container
+    Env --> ConfigMgmt
+    Env --> Database
+    Env --> PhysMgmt
+
+    AICode --> BuildSynth
+    AICode --> Documentation
+    AICode --> ProjectOrch
+
+    StaticAnalysis --> BuildSynth
+    StaticAnalysis --> CICD
+
+    CodeExec --> BuildSynth
+    CodeExec --> CICD
+
+    DataViz --> Documentation
+    DataViz --> APIDoc
+
+    GitOps --> BuildSynth
+    GitOps --> CICD
+    GitOps --> ProjectOrch
+
+    CodeReview --> CICD
+
+    SecurityAudit --> CICD
+    SecurityAudit --> Container
+
+    Performance --> CICD
+    Performance --> Container
+
+    BuildSynth --> ProjectOrch
+    Documentation --> ProjectOrch
+    CICD --> ProjectOrch
+    Container --> ProjectOrch
+    ConfigMgmt --> ProjectOrch
+    Database --> ProjectOrch
+
+    %% Specialized layer dependencies
+    Logging --> SysDiscovery
+    Logging --> ModuleTemplate
+    Logging --> Modeling3D
+
+    Env --> SysDiscovery
+    Env --> ModuleTemplate
+
+    SysDiscovery --> ModuleTemplate
+    DataViz --> Modeling3D
+```
+
+### Workflow Execution Architecture
+
+```mermaid
+graph TD
+    User[👤 User Request] --> Orchestrator[🎯 Project Orchestrator]
+
+    Orchestrator --> DAGBuilder[DAG Builder]
+    DAGBuilder --> WorkflowDAG[Workflow DAG]
+
+    WorkflowDAG --> ParallelExecutor[Parallel Executor]
+    ParallelExecutor --> TaskRunner1[Task Runner 1]
+    ParallelExecutor --> TaskRunner2[Task Runner 2]
+    ParallelExecutor --> TaskRunner3[Task Runner 3]
+
+    TaskRunner1 --> Module1[Codomyrmex Module]
+    TaskRunner2 --> Module2[Codomyrmex Module]
+    TaskRunner3 --> Module3[Codomyrmex Module]
+
+    Module1 --> Results1{Results}
+    Module2 --> Results2{Results}
+    Module3 --> Results3{Results}
+
+    Results1 --> Aggregator[Result Aggregator]
+    Results2 --> Aggregator
+    Results3 --> Aggregator
+
+    Aggregator --> Reporter[📊 Status Reporter]
+    Reporter --> User
+
+    %% Feedback loop for iterative workflows
+    Reporter --> Orchestrator
+```
+
+### Multi-Stage Build Architecture
+
+```mermaid
+graph TD
+    subgraph "Source Code"
+        AppCode[📁 Application Code]
+        Dependencies[📦 Dependencies]
+        ConfigFiles[⚙️ Configuration]
+    end
+
+    subgraph "Build Stages"
+        Builder["🏗️ Builder Stage<br/>- Install dependencies<br/>- Compile code<br/>- Run tests<br/>- Create artifacts"]
+        Runtime["🚀 Runtime Stage<br/>- Copy artifacts<br/>- Configure runtime<br/>- Set permissions<br/>- Define entrypoint"]
+    end
+
+    subgraph "Output"
+        OptimizedImage["📦 Optimized Image<br/>- Minimal layers<br/>- Security hardened<br/>- Cached efficiently"]
+    end
+
+    AppCode --> Builder
+    Dependencies --> Builder
+    ConfigFiles --> Builder
+    ConfigFiles --> Runtime
+
+    Builder --> Runtime
+    Runtime --> OptimizedImage
+
+    Builder -.->|"Remove build tools<br/>Clean cache"| OptimizedImage
+    Runtime -.->|"Add runtime deps<br/>Configure app"| OptimizedImage
+```
+
 ## Quick Start
 
 ### Installation
@@ -248,7 +448,7 @@ Codomyrmex follows a **layered architecture** that ensures clean separation of c
 - **Service Layer**: Orchestrates complex workflows and integrations (build, docs, CI/CD, orchestration)
 - **Application Layer**: User interfaces and system coordination (CLI, shell, API, discovery)
 
-See **[detailed architecture documentation](docs/project/architecture.md)** for comprehensive design principles and module relationships.
+See **[detailed architecture documentation](docs/project/architecture.md)** for design principles and module relationships.
 
 ## Core Modules
 
@@ -437,7 +637,7 @@ Advanced capabilities for specific domains:
 - **Infrastructure Management**: [Database operations](src/codomyrmex/database_management/) → [Configuration management](src/codomyrmex/config_management/) → [Physical monitoring](src/codomyrmex/physical_management/)
 - **Quality Assurance**: [Security scanning](src/codomyrmex/security_audit/) → [Performance benchmarking](src/codomyrmex/performance/) → [Automated testing](testing/)
 
-See **[executable examples](scripts/examples/)** for complete working demonstrations of these workflows.
+See **[executable examples](scripts/examples/)** for working demonstrations of these workflows.
 
 ## Project Structure
 
@@ -602,11 +802,266 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
 
+### Data Flow Architecture
+
+```mermaid
+graph TD
+    subgraph "Data Sources"
+        UserInput[👤 User Input<br/>Commands, Code, Config]
+        FileSystem[💾 File System<br/>Source Code, Data Files]
+        APIs[🔗 External APIs<br/>GitHub, Docker Hub, PyPI]
+        Databases[🗄️ Databases<br/>Local/Remote DBs]
+    end
+
+    subgraph "Processing Pipeline"
+        InputParser[📥 Input Parser<br/>CLI Args, Config Files]
+        ModuleOrchestrator[🎯 Module Orchestrator<br/>Workflow Coordination]
+        DataTransformers[🔄 Data Transformers<br/>Analysis, Processing]
+        OutputGenerators[📤 Output Generators<br/>Reports, Visualizations]
+    end
+
+    subgraph "Storage & Persistence"
+        LocalStorage[💿 Local Storage<br/>JSON, CSV, Images]
+        RemoteStorage[☁️ Remote Storage<br/>Cloud Services, Git]
+        CacheLayer[⚡ Cache Layer<br/>In-Memory, Redis]
+    end
+
+    subgraph "Consumption"
+        TerminalOutput[🖥️ Terminal Display<br/>Rich Text, Tables]
+        FileOutputs[📄 File Outputs<br/>Reports, Exports]
+        WebInterfaces[🌐 Web Interfaces<br/>Dashboards, APIs]
+    end
+
+    UserInput --> InputParser
+    FileSystem --> InputParser
+    APIs --> DataTransformers
+    Databases --> DataTransformers
+
+    InputParser --> ModuleOrchestrator
+    ModuleOrchestrator --> DataTransformers
+    DataTransformers --> OutputGenerators
+
+    OutputGenerators --> LocalStorage
+    OutputGenerators --> RemoteStorage
+    OutputGenerators --> CacheLayer
+
+    LocalStorage --> TerminalOutput
+    RemoteStorage --> FileOutputs
+    CacheLayer --> WebInterfaces
+
+    %% Bidirectional data flow
+    CacheLayer -.->|"Read/Write"| DataTransformers
+    LocalStorage -.->|"Read/Write"| ModuleOrchestrator
+```
+
+### Module Interaction Workflow
+
+```mermaid
+graph TD
+    subgraph "Entry Points"
+        CLI[📟 CLI Command]
+        InteractiveShell[🐚 Interactive Shell]
+        APIEndpoint[🔌 REST API]
+        ConfigFile[⚙️ Config File]
+    end
+
+    subgraph "Orchestration Layer"
+        SystemDiscovery[🔍 System Discovery<br/>Module Loading]
+        ProjectOrchestrator[🎯 Project Orchestrator<br/>Workflow Planning]
+        TaskScheduler[📅 Task Scheduler<br/>Parallel Execution]
+    end
+
+    subgraph "Core Processing Modules"
+        AICode[🤖 AI Code Editing<br/>Generation, Refactoring]
+        StaticAnalysis[🔬 Static Analysis<br/>Quality Metrics]
+        CodeExecution[⚙️ Code Execution<br/>Sandbox Testing]
+        SecurityAudit[🛡️ Security Audit<br/>Vulnerability Scanning]
+    end
+
+    subgraph "Infrastructure Modules"
+        GitOps[🔀 Git Operations<br/>Version Control]
+        BuildSynth[🏗️ Build Synthesis<br/>Multi-Language Builds]
+        ContainerMgmt[🐳 Container Management<br/>Docker, K8s]
+        DatabaseMgmt[🗄️ Database Management<br/>Migrations, Queries]
+    end
+
+    subgraph "Output & Visualization"
+        DataVisualization[📊 Data Visualization<br/>Charts, Plots]
+        Documentation[📚 Documentation<br/>API Docs, Guides]
+        Reporting[📋 Reporting<br/>Status, Metrics]
+    end
+
+    CLI --> SystemDiscovery
+    InteractiveShell --> SystemDiscovery
+    APIEndpoint --> ProjectOrchestrator
+    ConfigFile --> TaskScheduler
+
+    SystemDiscovery --> ProjectOrchestrator
+    ProjectOrchestrator --> TaskScheduler
+
+    TaskScheduler --> AICode
+    TaskScheduler --> StaticAnalysis
+    TaskScheduler --> CodeExecution
+    TaskScheduler --> SecurityAudit
+
+    AICode --> GitOps
+    StaticAnalysis --> BuildSynth
+    CodeExecution --> ContainerMgmt
+    SecurityAudit --> DatabaseMgmt
+
+    GitOps --> DataVisualization
+    BuildSynth --> Documentation
+    ContainerMgmt --> Reporting
+    DatabaseMgmt --> DataVisualization
+
+    DataVisualization --> Reporting
+    Documentation --> Reporting
+
+    %% Cross-module dependencies
+    AICode -.->|"Code Review"| StaticAnalysis
+    StaticAnalysis -.->|"Security Scan"| SecurityAudit
+    BuildSynth -.->|"Container Build"| ContainerMgmt
+    GitOps -.->|"Version Control"| BuildSynth
+```
+
+### Development Workflow Architecture
+
+```mermaid
+flowchart TD
+    subgraph "Planning Phase"
+        Requirements[📋 Requirements<br/>Analysis]
+        Design[🎨 Design<br/>Architecture]
+        Planning[📅 Planning<br/>Task Breakdown]
+    end
+
+    subgraph "Development Phase"
+        CodeGeneration[🤖 Code Generation<br/>AI-Assisted]
+        Implementation[💻 Implementation<br/>Manual Coding]
+        Testing[🧪 Testing<br/>Unit & Integration]
+        CodeReview[🔍 Code Review<br/>Automated & Manual]
+    end
+
+    subgraph "Quality Assurance"
+        StaticAnalysis[🔬 Static Analysis<br/>Linting, Metrics]
+        SecurityAudit[🛡️ Security Audit<br/>Vulnerability Checks]
+        PerformanceTesting[⚡ Performance Testing<br/>Benchmarking]
+        Documentation[📚 Documentation<br/>API Docs, Guides]
+    end
+
+    subgraph "Integration Phase"
+        BuildProcess[🏗️ Build Process<br/>Compilation, Packaging]
+        Deployment[🚀 Deployment<br/>Container, Cloud]
+        Monitoring[📊 Monitoring<br/>Logs, Metrics]
+        FeedbackLoop[🔄 Feedback Loop<br/>Issue Tracking]
+    end
+
+    Requirements --> Design
+    Design --> Planning
+    Planning --> CodeGeneration
+    Planning --> Implementation
+
+    CodeGeneration --> Testing
+    Implementation --> Testing
+    Testing --> CodeReview
+    CodeReview --> StaticAnalysis
+
+    StaticAnalysis --> SecurityAudit
+    SecurityAudit --> PerformanceTesting
+    PerformanceTesting --> Documentation
+
+    Documentation --> BuildProcess
+    BuildProcess --> Deployment
+    Deployment --> Monitoring
+    Monitoring --> FeedbackLoop
+
+    FeedbackLoop --> Requirements
+
+    %% Tool integration
+    CodeGeneration -.->|"AI Code Editing"| Testing
+    Testing -.->|"Test Runners"| CodeReview
+    StaticAnalysis -.->|"Linting Tools"| SecurityAudit
+    BuildProcess -.->|"CI/CD"| Deployment
+    Monitoring -.->|"Logging"| FeedbackLoop
+```
+
+## Dependencies Overview
+
+```mermaid
+graph TD
+    subgraph "Core Dependencies"
+        CorePy["Python ≥3.10<br/>Runtime Environment"]
+        CoreUV["uv<br/>Package Manager"]
+        CorePyTest["pytest<br/>Testing Framework"]
+    end
+
+    subgraph "AI/ML Dependencies"
+        AIDocker["Docker<br/>Container Runtime"]
+        AIModels["Ollama<br/>Local Models"]
+        AIAPI["OpenAI/Anthropic<br/>API Keys"]
+    end
+
+    subgraph "Development Dependencies"
+        DevBlack["Black<br/>Code Formatter"]
+        DevRuff["Ruff<br/>Linter"]
+        DevMyPy["MyPy<br/>Type Checker"]
+        DevPreCommit["Pre-commit<br/>Hooks"]
+    end
+
+    subgraph "Optional Dependencies"
+        OptKubernetes["Kubernetes<br/>Orchestration"]
+        OptDatabases["PostgreSQL/MySQL<br/>Database Servers"]
+        OptCloud["AWS/GCP/Azure<br/>Cloud Providers"]
+    end
+
+    CorePy --> CoreUV
+    CoreUV --> CorePyTest
+    CorePy --> DevBlack
+    CorePy --> DevRuff
+    CorePy --> DevMyPy
+    CorePy --> DevPreCommit
+
+    CorePy --> AIDocker
+    AIDocker --> AIModels
+    CorePy --> AIAPI
+
+    CorePy --> OptKubernetes
+    CorePy --> OptDatabases
+    CorePy --> OptCloud
+```
+
+## Module Maturity Levels
+
+```mermaid
+pie title Module Development Status (December 2025)
+    "Production Ready" : 12
+    "Beta" : 8
+    "Alpha" : 6
+    "Planning" : 4
+```
+
+| Maturity Level | Description | Examples |
+|----------------|-------------|----------|
+| **Production Ready** | Fully tested, documented, stable APIs | logging_monitoring, environment_setup, terminal_interface |
+| **Beta** | Core functionality complete, API stabilization | ai_code_editing, static_analysis, code_execution_sandbox |
+| **Alpha** | Basic functionality, APIs may change | modeling_3d, physical_management, system_discovery |
+| **Planning** | Requirements gathering, initial design | Future specialized modules |
+
+## Key Metrics
+
+- **Lines of Code**: ~50K+ across 30+ modules
+- **Test Coverage**: ≥80% target (currently 75%)
+- **Module Count**: 32 core modules
+- **Language Support**: Python, JavaScript, Go, Rust, Java
+- **AI Integration**: 5+ LLM providers supported
+- **Documentation**: 200+ pages across all modules
+
 ## Links
 
 - **Repository**: [github.com/codomyrmex/codomyrmex](https://github.com/codomyrmex/codomyrmex)
 - **Issues**: [github.com/codomyrmex/codomyrmex/issues](https://github.com/codomyrmex/codomyrmex/issues)
 - **Documentation**: [codomyrmex.readthedocs.io](https://codomyrmex.readthedocs.io/)
+- **PyPI**: [pypi.org/project/codomyrmex/](https://pypi.org/project/codomyrmex/)
+- **Docker Hub**: [hub.docker.com/r/codomyrmex/codomyrmex](https://hub.docker.com/r/codomyrmex/codomyrmex)
 
 ---
 

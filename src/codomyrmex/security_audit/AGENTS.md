@@ -26,6 +26,191 @@ The security_audit module serves as the security foundation, enabling proactive 
 - Compliance framework support
 - Security metrics and trend analysis
 
+## Function Signatures
+
+### Vulnerability Scanning Functions
+
+```python
+def scan_vulnerabilities(
+    target_path: str,
+    scan_type: str = "full",
+    severity_threshold: str = "medium",
+    include_dependencies: bool = True,
+    output_format: str = "json"
+) -> dict[str, Any]
+```
+
+Scan for security vulnerabilities in code and dependencies.
+
+**Parameters:**
+- `target_path` (str): Path to scan (file or directory)
+- `scan_type` (str): Type of scan ("full", "quick", "dependencies"). Defaults to "full"
+- `severity_threshold` (str): Minimum severity to report ("low", "medium", "high", "critical"). Defaults to "medium"
+- `include_dependencies` (bool): Whether to scan dependencies. Defaults to True
+- `output_format` (str): Output format ("json", "text", "html"). Defaults to "json"
+
+**Returns:** `dict[str, Any]` - Vulnerability scan results with findings, severity levels, and recommendations
+
+```python
+def audit_code_security(target_path: str) -> list[dict[str, Any]]
+```
+
+Perform security analysis on code.
+
+**Parameters:**
+- `target_path` (str): Path to code file or directory to audit
+
+**Returns:** `list[dict[str, Any]]` - List of security findings with details, severity, and remediation guidance
+
+### Security Analysis Functions
+
+```python
+def analyze_file_security(filepath: str) -> List[SecurityFinding]
+```
+
+Analyze a single file for security vulnerabilities and issues.
+
+**Parameters:**
+- `filepath` (str): Path to the file to analyze
+
+**Returns:** `List[SecurityFinding]` - List of security findings found in the file
+
+```python
+def analyze_directory_security(directory: str, recursive: bool = True) -> List[SecurityFinding]
+```
+
+Analyze all files in a directory for security issues.
+
+**Parameters:**
+- `directory` (str): Directory path to analyze
+- `recursive` (bool): Whether to analyze subdirectories. Defaults to True
+
+**Returns:** `List[SecurityFinding]` - List of security findings across all analyzed files
+
+### Secrets Detection Functions
+
+```python
+def audit_secrets_exposure(content: str, filepath: Optional[str] = None) -> List[Dict[str, Any]]
+```
+
+Audit content for exposed secrets and sensitive information.
+
+**Parameters:**
+- `content` (str): Content to audit for secrets
+- `filepath` (Optional[str]): File path for context (used in reporting)
+
+**Returns:** `List[Dict[str, Any]]` - List of detected secrets with types, locations, and severity
+
+```python
+def scan_file_for_secrets(filepath: str) -> List[Dict[str, Any]]
+```
+
+Scan a file for potential secrets and sensitive data exposure.
+
+**Parameters:**
+- `filepath` (str): Path to file to scan
+
+**Returns:** `List[Dict[str, Any]]` - List of secrets found with details
+
+### Compliance Checking Functions
+
+```python
+def check_compliance(target_path: str, standards: Optional[List[str]] = None) -> List[ComplianceCheckResult]
+```
+
+Check compliance with security standards and frameworks.
+
+**Parameters:**
+- `target_path` (str): Path to check for compliance
+- `standards` (Optional[List[str]]): List of standards to check against (e.g., ["owasp", "nist", "iso27001"]). If None, checks all supported standards
+
+**Returns:** `List[ComplianceCheckResult]` - Compliance check results with pass/fail status and recommendations
+
+### Security Monitoring Functions
+
+```python
+def monitor_security_events(config_path: Optional[str] = None) -> SecurityMonitor
+```
+
+Initialize security monitoring for real-time threat detection.
+
+**Parameters:**
+- `config_path` (Optional[str]): Path to monitoring configuration file
+
+**Returns:** `SecurityMonitor` - Configured security monitor instance
+
+```python
+def audit_access_logs(log_files: Optional[list[str]] = None) -> list[SecurityEvent]
+```
+
+Audit access logs for security incidents and suspicious activity.
+
+**Parameters:**
+- `log_files` (Optional[list[str]]): List of log files to audit. If None, uses default log locations
+
+**Returns:** `list[SecurityEvent]` - List of security events detected in logs
+
+### Encryption Functions
+
+```python
+def encrypt_sensitive_data(
+    data: Union[str, bytes],
+    key: Optional[bytes] = None,
+    algorithm: str = "AES256"
+) -> Dict[str, Any]
+```
+
+Encrypt sensitive data using secure encryption algorithms.
+
+**Parameters:**
+- `data` (Union[str, bytes]): Data to encrypt
+- `key` (Optional[bytes]): Encryption key. If None, generates a new key
+- `algorithm` (str): Encryption algorithm. Defaults to "AES256"
+
+**Returns:** `Dict[str, Any]` - Encrypted data with metadata including the encryption key (if generated)
+
+### Certificate Validation Functions
+
+```python
+def validate_ssl_certificates(
+    host: str,
+    port: int = 443,
+    timeout: float = 10.0,
+    check_chain: bool = True
+) -> Dict[str, Any]
+```
+
+Validate SSL/TLS certificates for security and trust.
+
+**Parameters:**
+- `host` (str): Hostname to validate certificate for
+- `port` (int): Port number. Defaults to 443
+- `timeout` (float): Connection timeout in seconds. Defaults to 10.0
+- `check_chain` (bool): Whether to validate the entire certificate chain. Defaults to True
+
+**Returns:** `Dict[str, Any]` - Certificate validation results including expiry, issuer, validity, and any issues
+
+### Reporting Functions
+
+```python
+def generate_security_report(
+    scan_results: List[Dict[str, Any]],
+    report_format: str = "html",
+    include_recommendations: bool = True,
+    output_path: Optional[str] = None
+) -> str
+```
+
+Generate security assessment reports.
+
+**Parameters:**
+- `scan_results` (List[Dict[str, Any]]): Security scan results to include in report
+- `report_format` (str): Report format ("html", "json", "pdf", "text"). Defaults to "html"
+- `include_recommendations` (bool): Whether to include remediation recommendations. Defaults to True
+- `output_path` (Optional[str]): Path to save report. If None, returns report content as string
+
+**Returns:** `str` - Report content or path to saved report file
+
 ## Active Components
 
 ### Core Implementation
@@ -85,12 +270,8 @@ All security auditing within the Codomyrmex platform must:
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
 - **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
 
 ### Related Modules
-- **Static Analysis**: [../static_analysis/](../../static_analysis/) - Code quality integration
-- **Code Review**: [../code_review/](../../code_review/) - Security-focused code review
-- **Logging Monitoring**: [../logging_monitoring/](../../logging_monitoring/) - Security event logging
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview

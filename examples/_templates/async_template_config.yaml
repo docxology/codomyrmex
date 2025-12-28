@@ -1,0 +1,136 @@
+# Async Template Configuration
+# This is a template configuration file for creating async examples
+# Copy this file and customize it for your specific async module
+
+# Output settings
+output:
+  format: json                    # Output format: json or text
+  file: output/async_template_results.json  # Output file path
+  compress: false                 # Whether to compress output
+
+# Logging configuration
+logging:
+  level: INFO                     # Log level: DEBUG, INFO, WARNING, ERROR
+  file: logs/async_template.log   # Log file path
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"  # Log format
+  max_file_size: 10485760         # Max log file size in bytes (10MB)
+  backup_count: 5                 # Number of backup log files
+
+# Async-specific configuration
+async:
+  max_workers: 4                  # Maximum thread pool workers
+  max_concurrent: 10              # Maximum concurrent async operations
+  concurrent_tasks: 5             # Number of concurrent tasks for examples
+  timeout: 30                     # Async operation timeout in seconds
+  retry_count: 3                  # Number of retry attempts for failed operations
+  backoff_factor: 2               # Exponential backoff factor
+  enable_concurrency: true        # Enable concurrent execution
+  semaphore_limit: 10             # Semaphore limit for resource control
+
+# Module-specific configuration
+module:
+  name: "async_template"          # Module name for identification
+  version: "1.0.0"               # Module version
+  debug: true                    # Enable debug mode
+  max_operations: 10             # Maximum operations to perform
+
+# Performance settings
+performance:
+  enable_monitoring: true        # Enable performance monitoring
+  memory_limit: 512MB           # Memory limit
+  cpu_limit: 80                 # CPU usage limit (percentage)
+  profiling: false              # Enable detailed profiling
+  track_async_metrics: true     # Track async-specific metrics
+
+# Error handling
+error_handling:
+  fail_fast: false               # Stop on first error
+  continue_on_error: true        # Continue processing after errors
+  log_errors: true              # Log all errors
+  raise_exceptions: false        # Raise exceptions or handle gracefully
+  async_error_recovery: true     # Enable async error recovery
+  timeout_handling: true         # Handle async timeouts
+
+# Environment settings
+environment:
+  temp_dir: "/tmp/async_example_temp"  # Temporary directory
+  cache_dir: "~/.cache/async_example"  # Cache directory
+  config_dir: "config"           # Configuration directory
+
+# Integration settings (for multi-module async examples)
+integration:
+  enable_events: false           # Enable event system integration
+  enable_logging: true           # Enable centralized logging
+  enable_metrics: false          # Enable metrics collection
+  async_event_loop: true         # Use async event loop
+
+# Testing settings
+testing:
+  enable_validation: true        # Enable result validation
+  mock_external_calls: false     # Mock external API calls
+  generate_test_data: true       # Generate test data automatically
+  cleanup_after_test: true       # Clean up resources after testing
+  async_testing: true            # Enable async testing features
+
+# Network settings (for async network operations)
+network:
+  timeout: 30                    # Network timeout
+  retries: 3                     # Network retry count
+  proxy: "${HTTP_PROXY}"         # Proxy settings
+  user_agent: "Codomyrmex-Async-Example/1.0"  # User agent string
+  connection_pool_size: 20       # Async connection pool size
+  max_keepalive: 10              # Max keepalive connections
+
+# Database settings (for async database operations)
+database:
+  type: sqlite                   # Database type
+  host: localhost                # Database host
+  port: 5432                     # Database port
+  name: async_example_db         # Database name
+  username: "${DB_USER:user}"    # Database username
+  password: "${DB_PASS:pass}"    # Database password
+  connection_pool:               # Async connection pool settings
+    min_connections: 5           # Minimum connections
+    max_connections: 20          # Maximum connections
+    timeout: 30                  # Connection timeout
+    max_idle_time: 300           # Max idle time
+
+# API settings (for async API operations)
+api:
+  base_url: "http://localhost:8000"  # API base URL
+  version: "v1"                   # API version
+  key: "${API_KEY}"              # API key
+  timeout: 30                    # API timeout
+  retries: 3                     # API retry count
+  async_client: true             # Use async HTTP client
+  connection_pool_size: 20       # Async connection pool size
+
+# Task management settings
+tasks:
+  max_concurrent_tasks: 10        # Maximum concurrent tasks
+  task_timeout: 60               # Individual task timeout
+  task_retry_count: 3            # Task retry count
+  task_queue_size: 100           # Task queue size
+  enable_task_monitoring: true   # Monitor task execution
+
+# Resource management
+resources:
+  semaphore_limit: 10            # Resource semaphore limit
+  cleanup_timeout: 30            # Resource cleanup timeout
+  resource_tracking: true        # Track resource usage
+  memory_monitoring: true        # Monitor memory usage in async tasks
+
+# Monitoring and observability
+monitoring:
+  enable_metrics: false          # Enable metrics collection
+  metrics_interval: 60           # Metrics collection interval
+  enable_tracing: false          # Enable request tracing
+  log_level: INFO                # Monitoring log level
+  async_monitoring: true         # Enable async-specific monitoring
+
+# Feature flags
+features:
+  advanced_async: false          # Enable advanced async features
+  experimental_async: false      # Enable experimental async features
+  concurrent_processing: true    # Enable concurrent processing
+  async_error_recovery: true     # Enable async error recovery

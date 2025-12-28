@@ -138,7 +138,7 @@ Configurations undergo validation:
 - **Templates**: [templates/](templates/) - Reusable configuration templates
 
 ### For Agents
-- **Configuration Standards**: [cursorrules/general.cursorrules](../../cursorrules/general.cursorrules)
+- **Configuration Standards**: [cursorrules/general.cursorrules](../cursorrules/general.cursorrules)
 - **Environment Setup**: [docs/development/environment-setup.md](../docs/development/environment-setup.md)
 - **Module System**: [docs/modules/overview.md](../docs/modules/overview.md)
 

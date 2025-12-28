@@ -518,6 +518,195 @@ class ConfigurationManager:
         else:
             return None
 
+    def load_config_with_validation(self, path: str, schema: Optional[Dict[str, Any]] = None) -> Optional[Configuration]:
+        """
+        Load configuration with automatic validation.
+
+        Args:
+            path: Path to configuration file
+            schema: Optional schema for validation
+
+        Returns:
+            Configuration object if valid, None if validation fails
+        """
+        try:
+            config = self.load_configuration_from_file(path)
+            if not config:
+                return None
+
+            # Validate against schema if provided
+            if schema:
+                from .config_validator import ConfigValidator
+                validator = ConfigValidator(schema)
+                result = validator.validate(config.config_data)
+
+                if not result.is_valid:
+                    logger.error(f"Configuration validation failed for {path}:")
+                    for issue in result.errors:
+                        logger.error(f"  - {issue.message}")
+                    return None
+
+                if result.warnings:
+                    logger.warning(f"Configuration validation warnings for {path}:")
+                    for issue in result.warnings:
+                        logger.warning(f"  - {issue.message}")
+
+            return config
+
+        except Exception as e:
+            logger.error(f"Failed to load and validate configuration {path}: {e}")
+            return None
+
+    def migrate_configuration(self, name: str, target_version: str) -> bool:
+        """
+        Migrate a configuration to a target version.
+
+        Args:
+            name: Configuration name
+            target_version: Target version to migrate to
+
+        Returns:
+            bool: True if migration successful
+        """
+        if name not in self.configurations:
+            logger.error(f"Configuration not found: {name}")
+            return False
+
+        config = self.configurations[name]
+
+        try:
+            from .config_migrator import migrate_config
+
+            # Assume current version is stored in config
+            current_version = config.config_data.get("version", "1.0.0")
+
+            migration_result = migrate_config(config.config_data, current_version, target_version)
+
+            if migration_result.success:
+                # Update configuration with migrated data
+                config.config_data = migration_result.migrated_config
+                config.config_data["version"] = target_version
+
+                # Save backup if needed
+                if migration_result.backup_config:
+                    backup_name = f"{name}_backup_{current_version}"
+                    self.configurations[backup_name] = Configuration(
+                        name=backup_name,
+                        config_data=migration_result.backup_config,
+                        source=f"migration_backup_{current_version}",
+                        loaded_at=datetime.now(timezone.utc)
+                    )
+
+                logger.info(f"Successfully migrated {name} from {current_version} to {target_version}")
+                return True
+            else:
+                logger.error(f"Migration failed for {name}: {migration_result.errors}")
+                return False
+
+        except Exception as e:
+            logger.error(f"Migration error for {name}: {e}")
+            return False
+
+    def validate_config_schema(self, config_data: Dict[str, Any], schema: Dict[str, Any]) -> tuple[bool, list[str]]:
+        """
+        Validate configuration data against a schema.
+
+        Args:
+            config_data: Configuration data to validate
+            schema: Schema dictionary
+
+        Returns:
+            Tuple of (is_valid, list_of_error_messages)
+        """
+        try:
+            from .config_validator import validate_config_schema
+            return validate_config_schema(config_data, schema)
+        except ImportError:
+            logger.warning("ConfigValidator not available, skipping schema validation")
+            return True, []
+
+    def get_validation_report(self, name: str) -> Optional[Dict[str, Any]]:
+        """
+        Get detailed validation report for a configuration.
+
+        Args:
+            name: Configuration name
+
+        Returns:
+            Validation report dictionary or None if config not found
+        """
+        if name not in self.configurations:
+            return None
+
+        config = self.configurations[name]
+
+        try:
+            from .config_validator import ConfigValidator, get_logging_config_schema, get_database_config_schema
+
+            # Try different schemas based on configuration content
+            schema = None
+            if "level" in config.config_data or "format" in config.config_data:
+                schema = get_logging_config_schema()
+            elif "host" in config.config_data and "database" in config.config_data:
+                schema = get_database_config_schema()
+
+            if schema:
+                validator = ConfigValidator(schema)
+                result = validator.validate(config.config_data)
+                return result.to_dict()
+            else:
+                # Basic validation without schema
+                return {
+                    "is_valid": True,
+                    "total_issues": 0,
+                    "errors": 0,
+                    "warnings": 0,
+                    "issues": [],
+                    "note": "No schema available for detailed validation"
+                }
+
+        except Exception as e:
+            logger.error(f"Error generating validation report for {name}: {e}")
+            return {
+                "is_valid": False,
+                "error": str(e)
+            }
+
+    def create_migration_backup(self, name: str) -> bool:
+        """
+        Create a backup of configuration before migration.
+
+        Args:
+            name: Configuration name
+
+        Returns:
+            bool: True if backup created successfully
+        """
+        if name not in self.configurations:
+            return False
+
+        config = self.configurations[name]
+        version = config.config_data.get("version", "unknown")
+
+        backup_name = f"{name}_backup_{version}_{int(datetime.now(timezone.utc).timestamp())}"
+
+        try:
+            # Create backup configuration
+            backup_config = Configuration(
+                name=backup_name,
+                config_data=config.config_data.copy(),
+                source=f"backup_of_{name}",
+                loaded_at=datetime.now(timezone.utc)
+            )
+
+            self.configurations[backup_name] = backup_config
+            logger.info(f"Created backup: {backup_name}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to create backup for {name}: {e}")
+            return False
+
 
 # Convenience functions
 def load_configuration(

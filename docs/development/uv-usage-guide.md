@@ -1,6 +1,6 @@
 # UV Usage Guide for Codomyrmex
 
-This guide covers the comprehensive use of `uv` (the fast Python package manager) with Codomyrmex for optimal development experience.
+This guide covers the use of `uv` (the fast Python package manager) with Codomyrmex for optimal development experience.
 
 ## 🚀 Why UV?
 

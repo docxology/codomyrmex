@@ -8,6 +8,28 @@ Core module providing secure code execution capabilities within isolated sandbox
 
 The code_execution_sandbox module serves as a critical security boundary, allowing dynamic code execution while maintaining platform integrity.
 
+## Execution Flow
+
+```mermaid
+graph LR
+    A[Code Input] --> B[Security Validation]
+    B --> C[Docker Container]
+    C --> D[Code Execution]
+    D --> E[Output Capture]
+    E --> F[Results]
+
+    D --> G[Timeout Monitor]
+    D --> H[Resource Limits]
+
+    F --> I[Cleanup]
+    I --> J[Container Removal]
+
+    B --> K[Error Handling]
+    K --> F
+```
+
+The execution flow ensures secure code execution through multiple security layers: input validation, container isolation, resource monitoring, and cleanup. Each execution is sandboxed with configurable timeouts and resource limits.
+
 ## Directory Contents
 - `.gitignore` – File
 - `API_SPECIFICATION.md` – File

@@ -1,8 +1,8 @@
 """
 Code Review Module for Codomyrmex.
 
-This module provides comprehensive static analysis capabilities including
-pyscn integration for advanced code quality assessment.
+This module provides static analysis capabilities including
+pyscn integration for code quality assessment.
 """
 
 from .code_review import (

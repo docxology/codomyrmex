@@ -1,9 +1,8 @@
 """
 Git Operations Module for Codomyrmex.
 
-The Git Operations module is designed to provide a standardized interface and a set
-of tools for performing common Git actions programmatically within the Codomyrmex
-ecosystem.
+The Git Operations module provides a standardized interface and tools for performing
+Git actions programmatically within the Codomyrmex ecosystem.
 
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).

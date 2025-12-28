@@ -203,7 +203,7 @@ Changing existing rules requires:
 - **Cross-Module**: [cross-module/](cross-module/) - Inter-module coordination
 
 ### For Contributors
-- **Contributing**: [docs/project/contributing.md](../../docs/project/contributing.md)
+- **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)
 - **Rule Development**: Guidelines for creating new standards
 - **Enforcement**: [scripts/static_analysis/](../../scripts/static_analysis/) - Rule validation tools
 
@@ -247,6 +247,6 @@ Before rule changes are accepted:
 
 ## Related Documentation
 
-- **[Contributing Guide](docs/project/contributing.md)** - Development standards and workflow
-- **[Testing Strategy](docs/development/testing-strategy.md)** - Testing standards and practices
-- **[Architecture](docs/project/architecture.md)** - System design principles
+- **[Contributing Guide](../docs/project/contributing.md)** - Development standards and workflow
+- **[Testing Strategy](../docs/development/testing-strategy.md)** - Testing standards and practices
+- **[Architecture](../docs/project/architecture.md)** - System design principles

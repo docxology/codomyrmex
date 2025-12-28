@@ -34,6 +34,54 @@ This document specifies the Application Programming Interface (API) for the Logg
     - `logging.Logger`: An instance of a Python logger, ready for use.
 - **Events Emitted**: N/A
 
+### Function 3: `log_with_context(level: str, message: str, context: Dict[str, Any])`
+
+- **Description**: Logs a message with structured context information, automatically including correlation IDs if available in the current log context.
+- **Method**: N/A (Library function)
+- **Path**: N/A (Importable function)
+- **Parameters/Arguments**:
+    - `level` (str): Log level ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")
+    - `message` (str): Log message text
+    - `context` (Dict[str, Any]): Dictionary of context information to include in the log entry
+- **Request Body**: N/A
+- **Returns/Response**: None
+- **Events Emitted**: N/A
+
+### Function 4: `create_correlation_id() -> str`
+
+- **Description**: Generates a unique correlation ID using UUID4 for request tracing and log correlation.
+- **Method**: N/A (Library function)
+- **Path**: N/A (Importable function)
+- **Parameters/Arguments**: None
+- **Request Body**: N/A
+- **Returns/Response**: `str` - UUID-based correlation ID string
+- **Events Emitted**: N/A
+
+### Class 1: `LogContext`
+
+- **Description**: Context manager for automatic correlation ID injection in logs. Manages thread-local correlation context.
+- **Method**: N/A (Python class)
+- **Parameters/Arguments** (constructor):
+    - `correlation_id` (Optional[str]): Optional correlation ID, generates one if not provided
+    - `additional_context` (Optional[Dict[str, Any]]): Additional context to include in logs
+- **Methods**:
+    - `__enter__()`: Sets up the correlation context
+    - `__exit__(exc_type, exc_val, exc_tb)`: Cleans up the correlation context
+- **Events Emitted**: N/A
+
+### Class 2: `PerformanceLogger`
+
+- **Description**: Specialized logger for performance metrics and operation timing.
+- **Method**: N/A (Python class)
+- **Parameters/Arguments** (constructor):
+    - `logger_name` (str, optional): Name for the logger instance (default: "performance")
+- **Methods**:
+    - `start_timer(operation: str, context: Optional[Dict[str, Any]] = None)`: Start timing an operation
+    - `end_timer(operation: str, context: Optional[Dict[str, Any]] = None) -> float`: End timing and return duration
+    - `time_operation(operation: str, context: Optional[Dict[str, Any]] = None)`: Context manager for timing operations
+    - `log_metric(metric_name: str, value: Any, unit: Optional[str] = None, context: Optional[Dict[str, Any]] = None)`: Log performance metrics
+- **Events Emitted**: N/A
+
 ## Data Models
 
 (No specific complex data models are exposed by this logging API beyond standard Python types and `logging.Logger` objects.)

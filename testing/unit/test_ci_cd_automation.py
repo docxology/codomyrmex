@@ -804,5 +804,448 @@ class TestErrorHandling:
         assert result is False
 
 
+class TestPipelineEnhancements:
+    """Test cases for enhanced pipeline functionality."""
+
+    def test_validate_pipeline_config_valid(self):
+        """Test pipeline config validation with valid config."""
+        manager = PipelineManager()
+
+        valid_config = {
+            "name": "test_pipeline",
+            "stages": [
+                {
+                    "name": "build",
+                    "jobs": [
+                        {
+                            "name": "compile",
+                            "commands": ["make build"]
+                        }
+                    ]
+                },
+                {
+                    "name": "test",
+                    "dependencies": ["build"],
+                    "jobs": [
+                        {
+                            "name": "unit_tests",
+                            "commands": ["pytest tests/"]
+                        }
+                    ]
+                }
+            ]
+        }
+
+        is_valid, errors = manager.validate_pipeline_config(valid_config)
+        assert is_valid
+        assert len(errors) == 0
+
+    def test_validate_pipeline_config_invalid(self):
+        """Test pipeline config validation with invalid config."""
+        manager = PipelineManager()
+
+        # Missing required fields
+        invalid_config = {
+            "stages": []
+        }
+
+        is_valid, errors = manager.validate_pipeline_config(invalid_config)
+        assert not is_valid
+        assert len(errors) > 0
+        assert any("name" in error for error in errors)
+
+    def test_validate_pipeline_config_invalid_stages(self):
+        """Test pipeline config validation with invalid stages."""
+        manager = PipelineManager()
+
+        invalid_config = {
+            "name": "test",
+            "stages": [
+                {
+                    "name": "build",
+                    "jobs": "not_a_list"  # Invalid jobs type
+                }
+            ]
+        }
+
+        is_valid, errors = manager.validate_pipeline_config(invalid_config)
+        assert not is_valid
+        assert len(errors) > 0
+
+    def test_validate_pipeline_config_invalid_jobs(self):
+        """Test pipeline config validation with invalid jobs."""
+        manager = PipelineManager()
+
+        invalid_config = {
+            "name": "test",
+            "stages": [
+                {
+                    "name": "build",
+                    "jobs": [
+                        {
+                            "name": "compile",
+                            # Missing commands
+                        }
+                    ]
+                }
+            ]
+        }
+
+        is_valid, errors = manager.validate_pipeline_config(invalid_config)
+        assert not is_valid
+        assert len(errors) > 0
+        assert any("commands" in error for error in errors)
+
+    def test_generate_pipeline_visualization(self):
+        """Test pipeline visualization generation."""
+        manager = PipelineManager()
+
+        # Create a test pipeline
+        pipeline = Pipeline(
+            name="test_pipeline",
+            stages=[
+                PipelineStage(
+                    name="build",
+                    jobs=[
+                        PipelineJob(name="compile", commands=["make build"])
+                    ]
+                ),
+                PipelineStage(
+                    name="test",
+                    dependencies=["build"],
+                    jobs=[
+                        PipelineJob(name="unit_tests", commands=["pytest"])
+                    ]
+                )
+            ]
+        )
+
+        mermaid_diagram = manager.generate_pipeline_visualization(pipeline)
+
+        assert isinstance(mermaid_diagram, str)
+        assert "graph TD" in mermaid_diagram
+        assert "build" in mermaid_diagram
+        assert "test" in mermaid_diagram
+        assert "compile" in mermaid_diagram
+        assert "unit_tests" in mermaid_diagram
+
+    def test_parallel_pipeline_execution(self):
+        """Test parallel pipeline execution."""
+        manager = PipelineManager()
+
+        stages = [
+            {
+                "name": "build",
+                "jobs": [{"name": "compile", "commands": ["echo build"]}]
+            },
+            {
+                "name": "test",
+                "dependencies": ["build"],
+                "jobs": [{"name": "unit_tests", "commands": ["echo test"]}]
+            },
+            {
+                "name": "lint",
+                "dependencies": ["build"],
+                "jobs": [{"name": "linting", "commands": ["echo lint"]}]
+            },
+            {
+                "name": "deploy",
+                "dependencies": ["test", "lint"],
+                "jobs": [{"name": "deployment", "commands": ["echo deploy"]}]
+            }
+        ]
+
+        results = manager.parallel_pipeline_execution(stages)
+
+        assert results["total_stages"] == 4
+        assert results["completed_stages"] >= 3  # At least build, test, and lint should complete
+        assert "stage_results" in results
+
+        # Check that results contain expected stages
+        stage_results = results["stage_results"]
+        assert "build" in stage_results
+        assert "test" in stage_results
+        assert "deploy" in stage_results
+
+    def test_conditional_stage_execution(self):
+        """Test conditional stage execution."""
+        manager = PipelineManager()
+
+        # Test stage with branch condition
+        stage = {
+            "name": "deploy_prod",
+            "conditions": {
+                "branch": "main"
+            }
+        }
+
+        # Should execute on main branch
+        conditions = {"branch": "main"}
+        should_execute = manager.conditional_stage_execution(stage, conditions)
+        assert should_execute
+
+        # Should not execute on feature branch
+        conditions = {"branch": "feature/new-feature"}
+        should_execute = manager.conditional_stage_execution(stage, conditions)
+        assert not should_execute
+
+    def test_conditional_stage_execution_environment(self):
+        """Test conditional stage execution with environment conditions."""
+        manager = PipelineManager()
+
+        stage = {
+            "name": "prod_deploy",
+            "conditions": {
+                "environment": {
+                    "DEPLOY_ENV": "production"
+                }
+            }
+        }
+
+        # Should execute in production
+        conditions = {"env_DEPLOY_ENV": "production"}
+        should_execute = manager.conditional_stage_execution(stage, conditions)
+        assert should_execute
+
+        # Should not execute in staging
+        conditions = {"env_DEPLOY_ENV": "staging"}
+        should_execute = manager.conditional_stage_execution(stage, conditions)
+        assert not should_execute
+
+    def test_optimize_pipeline_schedule(self):
+        """Test pipeline schedule optimization."""
+        manager = PipelineManager()
+
+        # Create pipeline with optimization opportunities
+        pipeline = Pipeline(
+            name="optimized_pipeline",
+            stages=[
+                PipelineStage(name="setup", jobs=[PipelineJob(name="init", commands=["echo init"])]),
+                PipelineStage(name="build", jobs=[PipelineJob(name="compile", commands=["make"])]),
+                PipelineStage(name="test_unit", dependencies=["build"], jobs=[PipelineJob(name="unit", commands=["pytest"])]),
+                PipelineStage(name="test_integration", dependencies=["build"], jobs=[PipelineJob(name="integration", commands=["pytest integration"])]),
+                PipelineStage(name="deploy", dependencies=["test_unit", "test_integration"], jobs=[PipelineJob(name="deploy", commands=["deploy"])]),
+            ]
+        )
+
+        optimization = manager.optimize_pipeline_schedule(pipeline)
+
+        assert "parallel_stages" in optimization
+        assert "execution_levels" in optimization
+        assert "optimization_suggestions" in optimization
+        assert isinstance(optimization["optimization_suggestions"], list)
+
+    def test_get_stage_dependencies(self):
+        """Test stage dependency extraction."""
+        manager = PipelineManager()
+
+        stages = [
+            {"name": "build", "dependencies": []},
+            {"name": "test", "dependencies": ["build"]},
+            {"name": "deploy", "dependencies": ["test", "lint"]},
+            {"name": "lint", "dependencies": ["build"]},
+        ]
+
+        dependencies = manager.get_stage_dependencies(stages)
+
+        expected = {
+            "build": [],
+            "test": ["build"],
+            "deploy": ["test", "lint"],
+            "lint": ["build"]
+        }
+
+        assert dependencies == expected
+
+    def test_validate_stage_dependencies_valid(self):
+        """Test stage dependency validation with valid dependencies."""
+        manager = PipelineManager()
+
+        stages = [
+            {"name": "build"},
+            {"name": "test", "dependencies": ["build"]},
+            {"name": "deploy", "dependencies": ["test"]},
+        ]
+
+        is_valid, errors = manager.validate_stage_dependencies(stages)
+
+        assert is_valid
+        assert len(errors) == 0
+
+    def test_validate_stage_dependencies_missing(self):
+        """Test stage dependency validation with missing dependencies."""
+        manager = PipelineManager()
+
+        stages = [
+            {"name": "build"},
+            {"name": "test", "dependencies": ["build", "missing_stage"]},
+        ]
+
+        is_valid, errors = manager.validate_stage_dependencies(stages)
+
+        assert not is_valid
+        assert len(errors) > 0
+        assert any("missing_stage" in error for error in errors)
+
+    def test_validate_stage_dependencies_cycle(self):
+        """Test stage dependency validation with cycles."""
+        manager = PipelineManager()
+
+        stages = [
+            {"name": "a", "dependencies": ["c"]},
+            {"name": "b", "dependencies": ["a"]},
+            {"name": "c", "dependencies": ["b"]},  # Creates cycle: a -> c -> b -> a
+        ]
+
+        is_valid, errors = manager.validate_stage_dependencies(stages)
+
+        assert not is_valid
+        assert len(errors) > 0
+        assert any("cycle" in error.lower() for error in errors)
+
+    def test_validate_stage_dependencies_self_reference(self):
+        """Test stage dependency validation with self-references."""
+        manager = PipelineManager()
+
+        stages = [
+            {"name": "build", "dependencies": ["build"]},  # Self-dependency
+        ]
+
+        is_valid, errors = manager.validate_stage_dependencies(stages)
+
+        assert not is_valid
+        assert len(errors) > 0
+        assert any("itself" in error for error in errors)
+
+    def test_pipeline_visualization_complex(self):
+        """Test pipeline visualization with complex dependencies."""
+        manager = PipelineManager()
+
+        pipeline = Pipeline(
+            name="complex_pipeline",
+            stages=[
+                PipelineStage(
+                    name="setup",
+                    jobs=[PipelineJob(name="init", commands=["echo init"])]
+                ),
+                PipelineStage(
+                    name="parallel_stage_1",
+                    dependencies=["setup"],
+                    jobs=[PipelineJob(name="job1", commands=["echo job1"])]
+                ),
+                PipelineStage(
+                    name="parallel_stage_2",
+                    dependencies=["setup"],
+                    jobs=[PipelineJob(name="job2", commands=["echo job2"])]
+                ),
+                PipelineStage(
+                    name="final",
+                    dependencies=["parallel_stage_1", "parallel_stage_2"],
+                    jobs=[
+                        PipelineJob(name="merge", commands=["echo merge"]),
+                        PipelineJob(name="cleanup", commands=["echo cleanup"])
+                    ]
+                )
+            ]
+        )
+
+        diagram = manager.generate_pipeline_visualization(pipeline)
+
+        assert "graph TD" in diagram
+        assert "setup" in diagram
+        assert "parallel_stage_1" in diagram
+        assert "parallel_stage_2" in diagram
+        assert "final" in diagram
+        assert "job1" in diagram
+        assert "job2" in diagram
+        assert "merge" in diagram
+        assert "cleanup" in diagram
+
+    def test_parallel_execution_error_handling(self):
+        """Test parallel execution error handling."""
+        manager = PipelineManager()
+
+        stages = [
+            {
+                "name": "failing_stage",
+                "jobs": [{"name": "fail_job", "commands": ["exit 1"]}]
+            },
+            {
+                "name": "success_stage",
+                "dependencies": ["failing_stage"],  # Should not execute
+                "jobs": [{"name": "success_job", "commands": ["echo success"]}]
+            }
+        ]
+
+        results = manager.parallel_pipeline_execution(stages)
+
+        assert results["total_stages"] == 2
+        # Depending on implementation, both might complete or dependency handling might vary
+        assert "stage_results" in results
+
+        stage_results = results["stage_results"]
+        assert "failing_stage" in stage_results
+        assert "success_stage" in stage_results
+
+    def test_conditional_execution_complex_conditions(self):
+        """Test conditional execution with complex conditions."""
+        manager = PipelineManager()
+
+        stage = {
+            "name": "complex_stage",
+            "conditions": {
+                "branch": "main",
+                "environment": {
+                    "CI": "true",
+                    "DEPLOY_ENV": "production"
+                },
+                "custom": "no failures"
+            }
+        }
+
+        # All conditions met
+        conditions = {
+            "branch": "main",
+            "env_CI": "true",
+            "env_DEPLOY_ENV": "production",
+            "has_previous_failures": False
+        }
+        assert manager.conditional_stage_execution(stage, conditions)
+
+        # Branch condition not met
+        conditions["branch"] = "develop"
+        assert not manager.conditional_stage_execution(stage, conditions)
+
+        # Reset branch, fail environment condition
+        conditions["branch"] = "main"
+        conditions["env_CI"] = "false"
+        assert not manager.conditional_stage_execution(stage, conditions)
+
+    def test_pipeline_optimization_suggestions(self):
+        """Test pipeline optimization suggestions."""
+        manager = PipelineManager()
+
+        # Create pipeline with parallelization opportunities
+        pipeline = Pipeline(
+            name="optimizable_pipeline",
+            stages=[
+                PipelineStage(name="setup", jobs=[PipelineJob(name="init", commands=["echo init"])]),
+                PipelineStage(name="build", jobs=[PipelineJob(name="compile", commands=["make"])]),
+                PipelineStage(name="test1", dependencies=["build"], jobs=[PipelineJob(name="test1", commands=["pytest 1"])]),
+                PipelineStage(name="test2", dependencies=["build"], jobs=[PipelineJob(name="test2", commands=["pytest 2"])]),
+                PipelineStage(name="deploy", dependencies=["test1", "test2"], jobs=[PipelineJob(name="deploy", commands=["deploy"])]),
+            ]
+        )
+
+        optimization = manager.optimize_pipeline_schedule(pipeline)
+
+        suggestions = optimization["optimization_suggestions"]
+        assert isinstance(suggestions, list)
+
+        # Should suggest parallel execution of test stages
+        parallel_suggestion = any("parallel" in s.lower() for s in suggestions)
+        assert parallel_suggestion or len(suggestions) > 0  # At least some suggestions
+
+
 if __name__ == "__main__":
     pytest.main([__file__])

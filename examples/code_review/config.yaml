@@ -1,0 +1,82 @@
+# Example Configuration for Code Review
+# This config demonstrates automated code review and quality analysis settings
+
+# Quality gate thresholds for automated review
+quality_gates:
+  max_complexity: 10
+  max_line_length: 100
+  min_test_coverage: 80
+  max_duplication: 5
+  security_violations: 0
+  critical_issues: 0
+
+# Analysis configuration
+analysis:
+  # Types of analysis to perform
+  types:
+    - quality
+    - complexity
+    - style
+    - security
+    - performance
+    - maintainability
+
+  # Language for analysis
+  language: python
+
+  # Analysis depth (shallow, medium, deep)
+  depth: medium
+
+  # Include/exclude patterns
+  include_patterns:
+    - "*.py"
+    - "*.js"
+    - "*.ts"
+    - "*.java"
+  exclude_patterns:
+    - "*test*"
+    - "*spec*"
+    - "*__pycache__*"
+    - "*.pyc"
+
+# Output settings for example results
+output:
+  format: json
+  file: output/code_review_results.json
+  sample_code_dir: output/sample_code
+
+# Review settings
+review:
+  # Enable comment generation
+  generate_comments: true
+
+  # Review severity thresholds
+  severity_thresholds:
+    info: 10
+    warning: 5
+    error: 2
+    critical: 0
+
+  # Review categories to include
+  categories:
+    - style
+    - complexity
+    - security
+    - performance
+    - documentation
+
+# Reporting configuration
+reporting:
+  # Report formats (json, html, markdown, pdf)
+  formats:
+    - json
+    - markdown
+
+  # Include detailed analysis
+  include_details: true
+
+  # Include recommendations
+  include_recommendations: true
+
+  # Include code snippets in reports
+  include_code_snippets: true

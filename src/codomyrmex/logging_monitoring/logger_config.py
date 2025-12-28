@@ -1,6 +1,10 @@
 import logging
 import os
 import sys
+import uuid
+import time
+from contextlib import contextmanager
+from typing import Dict, Any, Optional, Iterator
 
 try:
     from dotenv import load_dotenv
@@ -197,6 +201,162 @@ def get_logger(name: str) -> logging.Logger:
         pass  # Python's default logging will take over if not configured.
 
     return logging.getLogger(name)
+
+
+def log_with_context(level: str, message: str, context: Dict[str, Any]) -> None:
+    """Log a message with structured context information.
+
+    Args:
+        level: Log level ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")
+        message: Log message
+        context: Dictionary of context information to include in the log
+    """
+    logger = get_logger(__name__)
+
+    # Get the appropriate log method
+    log_method = getattr(logger, level.lower(), logger.info)
+
+    # Add context as extra fields
+    extra = {"context": context}
+
+    # Add correlation ID if available in context
+    if "correlation_id" not in context and hasattr(_correlation_context, "correlation_id"):
+        extra["correlation_id"] = _correlation_context.correlation_id
+
+    log_method(message, extra=extra)
+
+
+def create_correlation_id() -> str:
+    """Generate a unique correlation ID for request tracing.
+
+    Returns:
+        UUID-based correlation ID string
+    """
+    return str(uuid.uuid4())
+
+
+# Thread-local storage for correlation context
+import threading
+_correlation_context = threading.local()
+
+
+class LogContext:
+    """Context manager for automatic correlation ID injection in logs."""
+
+    def __init__(self, correlation_id: Optional[str] = None, additional_context: Optional[Dict[str, Any]] = None):
+        """Initialize log context.
+
+        Args:
+            correlation_id: Optional correlation ID, generates one if not provided
+            additional_context: Additional context to include in logs
+        """
+        self.correlation_id = correlation_id or create_correlation_id()
+        self.additional_context = additional_context or {}
+        self.previous_context = getattr(_correlation_context, 'correlation_id', None)
+
+    def __enter__(self):
+        _correlation_context.correlation_id = self.correlation_id
+        _correlation_context.additional_context = self.additional_context
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.previous_context is not None:
+            _correlation_context.correlation_id = self.previous_context
+        else:
+            # Clean up thread-local storage
+            if hasattr(_correlation_context, 'correlation_id'):
+                delattr(_correlation_context, 'correlation_id')
+            if hasattr(_correlation_context, 'additional_context'):
+                delattr(_correlation_context, 'additional_context')
+
+
+class PerformanceLogger:
+    """Specialized logger for performance metrics and timing."""
+
+    def __init__(self, logger_name: str = "performance"):
+        """Initialize performance logger.
+
+        Args:
+            logger_name: Name for the logger instance
+        """
+        self.logger = get_logger(logger_name)
+        self._timers: Dict[str, float] = {}
+
+    def start_timer(self, operation: str, context: Optional[Dict[str, Any]] = None) -> None:
+        """Start timing an operation.
+
+        Args:
+            operation: Name of the operation being timed
+            context: Additional context for the operation
+        """
+        self._timers[operation] = time.time()
+        self.logger.debug(f"Started timing operation: {operation}",
+                         extra={"operation": operation, "event": "start", "context": context or {}})
+
+    def end_timer(self, operation: str, context: Optional[Dict[str, Any]] = None) -> float:
+        """End timing an operation and log the duration.
+
+        Args:
+            operation: Name of the operation being timed
+            context: Additional context for the operation
+
+        Returns:
+            Duration in seconds
+        """
+        if operation not in self._timers:
+            self.logger.warning(f"Timer not started for operation: {operation}")
+            return 0.0
+
+        start_time = self._timers.pop(operation)
+        duration = time.time() - start_time
+
+        self.logger.info(f"Operation completed: {operation}",
+                        extra={
+                            "operation": operation,
+                            "duration_seconds": duration,
+                            "event": "end",
+                            "context": context or {}
+                        })
+
+        return duration
+
+    @contextmanager
+    def time_operation(self, operation: str, context: Optional[Dict[str, Any]] = None):
+        """Context manager for timing operations.
+
+        Args:
+            operation: Name of the operation being timed
+            context: Additional context for the operation
+
+        Yields:
+            None
+        """
+        self.start_timer(operation, context)
+        try:
+            yield
+        finally:
+            self.end_timer(operation, context)
+
+    def log_metric(self, metric_name: str, value: Any, unit: Optional[str] = None,
+                  context: Optional[Dict[str, Any]] = None) -> None:
+        """Log a performance metric.
+
+        Args:
+            metric_name: Name of the metric
+            value: Metric value
+            unit: Unit of measurement (optional)
+            context: Additional context
+        """
+        extra = {
+            "metric_name": metric_name,
+            "metric_value": value,
+            "event": "metric",
+            "context": context or {}
+        }
+        if unit:
+            extra["metric_unit"] = unit
+
+        self.logger.info(f"Metric: {metric_name} = {value}{f' {unit}' if unit else ''}", extra=extra)
 
 
 # Example of how to use it (primarily for testing this file directly):

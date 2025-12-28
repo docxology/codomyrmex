@@ -15,4 +15,4 @@ Documentation files and guides.
 ## Navigation
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [docs](../README.md)
-- **Docs Hub**: [docs](../../../docs/README.md)
+- **Docs Hub**: [docs](../README.md)

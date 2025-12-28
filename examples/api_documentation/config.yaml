@@ -1,0 +1,61 @@
+# API Documentation Example Configuration
+# Demonstrates configuration options for API documentation generation
+
+# Output settings
+output:
+  format: json
+  file: output/api_documentation_results.json
+  directory: output/api_documentation
+
+# Logging configuration
+logging:
+  level: INFO
+  file: logs/api_documentation_example.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# API Documentation settings
+api_documentation:
+  # API metadata
+  title: "Sample E-commerce API"
+  version: "1.0.0"
+  description: "A comprehensive e-commerce API for managing users and products"
+  base_url: "https://api.example.com"
+
+  # Documentation generation options
+  include_schemas: true
+  include_examples: true
+  include_security: true
+
+  # Export formats
+  export_formats:
+    - json
+    - yaml
+    - html
+
+  # OpenAPI specification settings
+  openapi:
+    version: "3.0.3"
+    include_servers: true
+    include_security_schemes: true
+    validate_spec: true
+
+# Sample data settings
+sample_data:
+  endpoints_count: 4
+  schemas_count: 4
+  include_responses: true
+  include_parameters: true
+
+# Validation settings
+validation:
+  strict_mode: false
+  check_required_fields: true
+  validate_responses: true
+  validate_schemas: true
+
+# Export settings
+export:
+  json_indent: 2
+  yaml_indent: 2
+  include_metadata: true
+  compress_output: false

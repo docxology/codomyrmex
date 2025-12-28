@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Codomyrmex Examples Validation Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .summary { background: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+        .metric { display: inline-block; margin: 10px; padding: 10px; background: white; border-radius: 3px; }
+        .issues { margin-top: 20px; }
+        .issue { margin: 10px 0; padding: 10px; border-left: 4px solid; }
+        .module { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .recommendations { background: #e9ecef; padding: 15px; border-radius: 5px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Codomyrmex Examples Validation Report</h1>
+    <p><strong>Generated:</strong> 2025-12-26 16:19:21</p>
+    <p><strong>Duration:</strong> 0.11s</p>
+
+    <div class="summary">
+        <h2>📊 Summary</h2>
+        <div class="metric"><strong>Modules:</strong> 4</div>
+        <div class="metric"><strong>Success Rate:</strong> 0.0%</div>
+        <div class="metric"><strong>Health Score:</strong> 50.0/100</div>
+        <div class="metric"><strong>Total Issues:</strong> 4</div>
+    </div>
+
+    <h2>🔴 Issues by Severity</h2>
+    <ul>
+        <li style="color: #dc3545"><strong>CRITICAL:</strong> 0</li>
+        <li style="color: #fd7e14"><strong>ERROR:</strong> 4</li>
+        <li style="color: #ffc107"><strong>WARNING:</strong> 0</li>
+        <li style="color: #17a2b8"><strong>INFO:</strong> 0</li>
+    </ul>
+
+    <h2>📋 Issues by Type</h2>
+    <ul>
+        <li><strong>Execution:</strong> 4</li>
+    </ul>
+
+    <div class="issues">
+        <h2>🚨 Detailed Issues</h2>
+
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>ai_code_editing</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/ai_code_editing/example_basic.py", line 272
+    print("
+          ^
+SyntaxError: unterminated string literal (detected at line 272)
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>events</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/events/example_basic.py", line 220
+    print("\n" + "="*60)
+IndentationError: unexpected indent
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>code_review</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py", line 999
+    print(".1f"            print(f"   CI/CD: {pr_summary['ci_cd_status']}")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+</small>
+        </div>
+        <div class="issue" style="border-left-color: #fd7e14">
+            <strong>git_operations</strong> - Execution
+            <span style="color: #fd7e14">[ERROR]</span><br>
+            Example execution failed with exit code 1
+            <br><small>  File "/Users/4d/Documents/GitHub/codomyrmex/examples/git_operations/example_basic.py", line 822
+    print("  • Advanced branching strategies with merge vs rebase workflows")
+IndentationError: unexpected indent
+</small>
+        </div>
+    </div>
+
+    <div class="recommendations">
+        <h2>💡 Recommendations</h2>
+        <ul>
+            <li>🟠 ERRORS: Fix error-level issues - these indicate broken functionality</li>
+            <li>⚠️ EXECUTION: 4 modules have execution failures - fix to ensure examples work</li>
+            <li>🔄 NEXT STEPS: Run validation again after fixes to track progress</li>
+        </ul>
+    </div>
+</body>
+</html>

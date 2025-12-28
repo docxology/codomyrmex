@@ -1,0 +1,80 @@
+# Git Operations Configuration
+# Demonstrates Git version control automation with various operations
+
+# Repository settings
+repository:
+  name: "demo_repo"
+  description: "Demonstration repository for Git operations"
+
+# Git operations configuration
+git:
+  # Initial commit settings
+  initial_commit:
+    message: "Initial commit"
+    files: ["README.md", "hello.py"]
+
+  # Branch configuration
+  branches:
+    feature_branch: "feature/add-greeting"
+    main_branch: "main"
+
+  # Commit settings
+  commits:
+    feature_commit: "Add welcome message to hello.py"
+    merge_commit: "Merge feature/add-greeting into main"
+
+# GitHub integration (optional)
+github:
+  enabled: false  # Set to true and provide token for GitHub operations
+  token: "${GITHUB_TOKEN}"  # Environment variable for GitHub token
+  organization: ""  # Optional: GitHub organization
+  repository:
+    name: "codomyrmex-git-demo"
+    description: "Demo repository created by Codomyrmex Git Operations"
+    private: false
+    auto_init: true
+
+# Output settings
+output:
+  format: json
+  file: output/git_operations_results.json
+  include_logs: true
+  include_history: true
+
+# Logging configuration
+logging:
+  level: INFO
+  file: logs/git_operations_example.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Demonstration settings
+demo:
+  # File operations
+  create_files:
+    - name: "README.md"
+      content: "# Demo Repository\n\nThis is a demonstration repository."
+    - name: "hello.py"
+      content: 'print("Hello, Git!")'
+
+  # Modification operations
+  modify_files:
+    - file: "hello.py"
+      append: '\nprint("Welcome to the demo!")'
+
+# Analysis settings
+analysis:
+  # History analysis
+  commit_limit: 10
+  include_details: true
+
+  # Status analysis
+  show_untracked: true
+  show_modified: true
+  show_staged: true
+
+# Remote operations (for demonstration)
+remote:
+  enabled: false  # Set to true for remote operations demo
+  origin_url: ""  # Remote repository URL
+  push_enabled: false
+  pull_enabled: false

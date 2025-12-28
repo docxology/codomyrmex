@@ -1,0 +1,34 @@
+# Example Configuration for Logging Monitoring
+# This config demonstrates all configurable logging options
+
+# Logging configuration
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: ${CODOMYRMEX_LOG_LEVEL:INFO}
+  
+  # Log file path (leave empty for console only)
+  file: logs/logging_monitoring_example.log
+  
+  # Output format: TEXT or JSON
+  output_type: TEXT
+  
+  # Log format (for TEXT mode)
+  # DETAILED includes module, function, and line number
+  format: DETAILED
+
+# Output settings for example results
+output:
+  format: json
+  file: output/logging_monitoring_results.json
+
+# Module-specific settings
+module:
+  # Demonstrate hierarchical logger names
+  logger_prefix: example
+  
+  # Components to create loggers for
+  components:
+    - main
+    - component1
+    - component2
+

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Option for structured JSON log output via `CODOMYRMEX_LOG_OUTPUT_TYPE` environment variable. Includes a `JsonFormatter`.
+- Enhanced logging capabilities with `log_with_context()` function for structured context logging
+- `create_correlation_id()` function for generating unique correlation IDs for request tracing
+- `LogContext` class - context manager for automatic correlation ID injection in logs
+- `PerformanceLogger` class - specialized logger for performance metrics and operation timing with timer functionality
 
 ### Changed
 - 

@@ -2,7 +2,7 @@
 
 import pytest
 import sys
-from unittest.mock import patch, MagicMock
+# Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
 
 class TestModuleTemplate:
@@ -45,8 +45,7 @@ class TestModuleTemplate:
         assert module_template is not None
         assert hasattr(module_template, '__file__')
 
-    @patch('sys.path')
-    def test_module_template_import_error_handling(self, mock_sys_path, code_dir):
+    def test_module_template_import_error_handling(self, code_dir):
         """Test error handling when module_template cannot be imported."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
@@ -57,6 +56,21 @@ class TestModuleTemplate:
 
         assert hasattr(module_template, '__file__')
         assert hasattr(module_template, '__name__')
+
+        # Test that the module can be imported with real sys.path manipulation
+        # Verify import still works after path manipulation
+        original_path = sys.path[:]
+        try:
+            # Temporarily modify path to test import resilience
+            # Keep code_dir in path to ensure module can still be found
+            sys.path = [str(code_dir)] + [p for p in original_path if p != str(code_dir)]
+            # Re-import to test path resilience
+            import importlib
+            # Get fresh reference to module
+            fresh_module = importlib.import_module('module_template')
+            assert hasattr(fresh_module, '__file__')
+        finally:
+            sys.path = original_path
 
     def test_module_template_module_discovery(self, code_dir):
         """Test that the module_template module can be discovered and imported."""

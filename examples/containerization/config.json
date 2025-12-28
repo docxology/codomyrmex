@@ -1,0 +1,66 @@
+{
+  "containerization": {
+    "images_to_analyze": [
+      {
+        "name": "python:3.9-slim"
+      },
+      {
+        "name": "node:16-alpine"
+      },
+      {
+        "name": "ubuntu:20.04"
+      }
+    ],
+    "build_configs": [
+      {
+        "base_image": "python:3.9-slim",
+        "app_files": ["app.py", "requirements.txt"],
+        "dependencies": ["python3-dev", "build-essential"],
+        "ports": [8000]
+      },
+      {
+        "base_image": "node:16-alpine",
+        "app_files": ["package.json", "app.js"],
+        "dependencies": ["git"],
+        "ports": [3000]
+      }
+    ],
+    "optimization_configs": [
+      {
+        "image": "python:3.9",
+        "target_size_mb": 100,
+        "remove_packages": ["curl", "wget"],
+        "use_multi_stage": true
+      },
+      {
+        "image": "node:16",
+        "target_size_mb": 150,
+        "compress_layers": true
+      }
+    ]
+  },
+  "docker": {
+    "build_args": {
+      "BUILDKIT": "1",
+      "DOCKER_BUILDKIT": "1"
+    },
+    "registry": {
+      "url": "docker.io",
+      "namespace": "codomyrmex"
+    },
+    "tags": [
+      "latest",
+      "dev"
+    ]
+  },
+  "output": {
+    "format": "json",
+    "file": "output/containerization_results.json",
+    "save_generated_files": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/containerization_example.log"
+  }
+}
+

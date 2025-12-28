@@ -48,6 +48,103 @@ This API specification documents the programmatic interfaces for the Security Au
 ### Function: `generate_security_report(scan_results: List, report_format: str = "html", **kwargs) -> Dict`
 
 - **Description**: Generate comprehensive security assessment reports.
+
+### Function: `audit_secrets_exposure(content: str, filepath: Optional[str] = None) -> List[Dict[str, Any]]`
+
+- **Description**: Analyze text content for potential secrets exposure using pattern matching and entropy analysis.
+- **Parameters**:
+    - `content`: Text content to analyze
+    - `filepath`: Optional file path for context
+- **Return Value**: List of potential secret exposures with confidence scores and recommendations
+- **Errors**: None (returns empty list on failure)
+
+### Function: `scan_file_for_secrets(filepath: str) -> List[Dict[str, Any]]`
+
+- **Description**: Scan a single file for potential secrets exposure.
+- **Parameters**:
+    - `filepath`: Path to file to scan
+- **Return Value**: List of potential secret exposures found in the file
+- **Errors**: Returns empty list if file cannot be read
+
+### Function: `scan_directory_for_secrets(directory: str, recursive: bool = True) -> List[Dict[str, Any]]`
+
+- **Description**: Scan a directory for potential secrets exposure.
+- **Parameters**:
+    - `directory`: Directory path to scan
+    - `recursive`: Whether to scan subdirectories (default: True)
+- **Return Value**: List of all potential secret exposures found
+- **Errors**: Returns empty list if directory cannot be accessed
+
+### Function: `analyze_file_security(filepath: str) -> List[SecurityFinding]`
+
+- **Description**: Analyze a file for security vulnerabilities using AST and pattern matching.
+- **Parameters**:
+    - `filepath`: Path to file to analyze
+- **Return Value**: List of security findings with severity, confidence, and recommendations
+- **Errors**: Returns empty list if file cannot be analyzed
+
+### Function: `analyze_directory_security(directory: str, recursive: bool = True) -> List[SecurityFinding]`
+
+- **Description**: Analyze all files in a directory for security vulnerabilities.
+- **Parameters**:
+    - `directory`: Directory path to analyze
+    - `recursive`: Whether to analyze subdirectories (default: True)
+- **Return Value**: List of all security findings across all analyzed files
+- **Errors**: Returns empty list if directory cannot be accessed
+
+### Function: `check_compliance(target_path: str, standards: Optional[List[str]] = None) -> List[ComplianceCheckResult]`
+
+- **Description**: Perform comprehensive compliance checking against multiple security standards.
+- **Parameters**:
+    - `target_path`: Path to codebase or configuration to check
+    - `standards`: List of compliance standards to check against
+- **Return Value**: List of compliance check results with status, evidence, and remediation
+- **Errors**: Returns results with error status for failed checks
+
+## Classes
+
+### Class: `SecretsDetector`
+
+- **Description**: Advanced secrets detection and analysis system.
+- **Methods**:
+    - `__init__(config_path: Optional[str] = None)`: Initialize detector with configuration
+    - `audit_secrets_exposure(content: str, filepath: Optional[str] = None) -> List[Dict[str, Any]]`: Analyze content for secrets
+    - `scan_file(filepath: str) -> List[Dict[str, Any]]`: Scan single file
+    - `scan_directory(directory: str, recursive: bool = True) -> List[Dict[str, Any]]`: Scan directory
+
+### Class: `SecurityAnalyzer`
+
+- **Description**: Advanced security analyzer using AST and pattern matching.
+- **Methods**:
+    - `__init__()`: Initialize analyzer
+    - `analyze_file(filepath: str) -> List[SecurityFinding]`: Analyze single file
+    - `analyze_directory(directory: str, recursive: bool = True) -> List[SecurityFinding]`: Analyze directory
+
+### Class: `ComplianceChecker`
+
+- **Description**: Comprehensive compliance checker against multiple security standards.
+- **Methods**:
+    - `__init__(standards: Optional[List[str]] = None)`: Initialize with compliance standards
+    - `check_compliance(target_path: str, standards: Optional[List[str]] = None) -> List[ComplianceCheckResult]`: Perform compliance checking
+
+### Class: `ExecutionLimits`
+
+- **Description**: Dataclass for configuring resource limits (belongs to code_execution_sandbox module).
+- **Attributes**:
+    - `time_limit`: Maximum execution time in seconds
+    - `memory_limit`: Memory limit in MB
+    - `cpu_limit`: CPU cores limit
+    - `max_output_chars`: Maximum output characters
+
+### Class: `ResourceMonitor`
+
+- **Description**: Monitors resource usage during execution (belongs to code_execution_sandbox module).
+- **Methods**:
+    - `start_monitoring()`: Begin monitoring
+    - `update_monitoring()`: Update usage metrics
+    - `get_resource_usage()`: Get comprehensive usage statistics
+
+## Data Models
 - **Parameters**:
     - `scan_results`: Results from security scans and audits.
     - `report_format`: Output format (html, pdf, json, xml).

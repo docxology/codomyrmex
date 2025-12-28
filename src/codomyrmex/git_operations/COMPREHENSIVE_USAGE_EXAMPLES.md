@@ -1,17 +1,17 @@
-# Git Operations - Comprehensive Usage Examples
+# Git Operations - Usage Examples
 
-This document provides practical examples of how to use all 22 Git operations in real-world scenarios, from basic repository management to advanced fractal workflows.
+This document provides practical examples of how to use all 22 Git operations in scenarios, from basic repository management to fractal workflows.
 
 ## Table of Contents
 
 1. [Basic Repository Setup](#basic-repository-setup)
 2. [Branch Management](#branch-management)
 3. [File Operations](#file-operations)
-4. [Advanced Workflows](#advanced-workflows)
+4. [Workflows](#advanced-workflows)
 5. [Remote Operations](#remote-operations)
 6. [Tag Management](#tag-management)
 7. [Stash Operations](#stash-operations)
-8. [Complete Development Scenarios](#complete-development-scenarios)
+8. [Development Scenarios](#complete-development-scenarios)
 9. [Error Handling Examples](#error-handling-examples)
 10. [Performance Optimization](#performance-optimization)
 
@@ -95,7 +95,7 @@ setup_new_project("/path/to/new/project", "MyAwesomeProject")
 from codomyrmex.git_operations import is_git_repository, get_status, get_current_branch
 
 def check_repository_info(repo_path):
-    """Get comprehensive repository information."""
+    """Get repository information."""
     
     # Check if it's a Git repository
     if not is_git_repository(repo_path):
@@ -214,7 +214,7 @@ from codomyrmex.git_operations import (
     rebase_branch, get_current_branch
 )
 
-def advanced_branch_operations(repo_path):
+def branch_operations(repo_path):
     """Demonstrate advanced branch operations."""
     
     # Create multiple feature branches
@@ -274,8 +274,8 @@ from codomyrmex.git_operations import (
     get_diff, reset_changes
 )
 
-def comprehensive_file_operations(repo_path):
-    """Demonstrate comprehensive file operations."""
+def file_operations(repo_path):
+    """Demonstrate file operations."""
     
     import os
     
@@ -351,7 +351,7 @@ def comprehensive_file_operations(repo_path):
     return True
 
 # Usage
-comprehensive_file_operations("/path/to/repo")
+file_operations("/path/to/repo")
 ```
 
 ---
@@ -520,10 +520,10 @@ from codomyrmex.git_operations import (
     add_files, commit_changes
 )
 
-def comprehensive_tagging_strategy(repo_path):
-    """Demonstrate comprehensive tagging strategy."""
-    
-    print("🏷️ Implementing comprehensive tagging strategy")
+def tagging_strategy(repo_path):
+    """Demonstrate tagging strategy."""
+
+    print("🏷️ Implementing tagging strategy")
     
     # Step 1: Create different types of tags
     tag_strategies = [

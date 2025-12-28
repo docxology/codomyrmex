@@ -8,6 +8,43 @@ Core module providing automated code review and quality assessment capabilities 
 
 The code_review module serves as the quality assurance backbone, enabling consistent and intelligent code review processes throughout the platform.
 
+## Code Review Process
+
+```mermaid
+graph LR
+    A[Code Changes] --> B[Input Processing]
+    B --> C[Automated Analysis]
+    C --> D[Quality Assessment]
+    D --> E[Quality Gates]
+    E --> F[Review Reports]
+
+    C --> G[Style Analysis]
+    C --> H[Complexity Analysis]
+    C --> I[Security Analysis]
+    C --> J[Performance Analysis]
+
+    D --> K[Severity Classification]
+    D --> L[Impact Assessment]
+    D --> M[Improvement Suggestions]
+
+    E --> N[Pass/Fail Decision]
+    E --> O[Threshold Checking]
+
+    F --> P[Detailed Findings]
+    F --> Q[Executive Summary]
+    F --> R[Actionable Recommendations]
+
+    F --> S[CI/CD Integration]
+    S --> T[Build Blocking]
+    S --> U[Notification System]
+
+    F --> V[Manual Review]
+    V --> W[Developer Feedback]
+    V --> X[Code Improvements]
+```
+
+The code review process provides comprehensive automated analysis with quality gates, detailed reporting, and integration with development workflows for continuous code quality improvement.
+
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File

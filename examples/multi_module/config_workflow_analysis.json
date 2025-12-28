@@ -1,0 +1,54 @@
+{
+  "analysis": {
+    "target_path": "src/",
+    "types": [
+      "static_analysis",
+      "security_audit"
+    ],
+    "generate_report": true,
+    "generate_visualizations": true
+  },
+  "static_analysis": {
+    "deep_scan": false,
+    "include_patterns": [
+      "*.py"
+    ],
+    "exclude_patterns": [
+      "*/tests/*",
+      "*/__pycache__/*"
+    ]
+  },
+  "security_audit": {
+    "scan_types": [
+      "vulnerabilities",
+      "secrets",
+      "compliance"
+    ],
+    "min_severity": "medium"
+  },
+  "visualization": {
+    "output_dir": "output/workflow_analysis",
+    "chart_type": "bar",
+    "format": "png",
+    "dpi": 150
+  },
+  "events": {
+    "log_events": true,
+    "track_events": [
+      "ANALYSIS_START",
+      "ANALYSIS_COMPLETE",
+      "ANALYSIS_ERROR"
+    ]
+  },
+  "output": {
+    "format": "json",
+    "file": "output/workflow_analysis_results.json",
+    "include_details": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/workflow_analysis.log",
+    "format": "DETAILED"
+  }
+}
+

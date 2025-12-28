@@ -2,18 +2,18 @@
 Generated: comprehensive_audit.py
 ================================================================================
 ## Summary
-**Total Issues Found**: 206
+**Total Issues Found**: 314
 
 ### Issue Breakdown
-- **Broken Links**: 164
-- **Examples Migration**: 42
+- **Broken Links**: 267
+- **Examples Migration**: 47
 
 ## Broken Links
-- **cursorrules/AGENTS.md** (line 224): `docs/project/contributing.md`
+- **cursorrules/AGENTS.md** (line 250): `docs/project/contributing.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/cursorrules/docs/project/contributing.md`
-- **cursorrules/AGENTS.md** (line 225): `docs/development/testing-strategy.md`
+- **cursorrules/AGENTS.md** (line 251): `docs/development/testing-strategy.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/cursorrules/docs/development/testing-strategy.md`
-- **cursorrules/AGENTS.md** (line 226): `docs/project/architecture.md`
+- **cursorrules/AGENTS.md** (line 252): `docs/project/architecture.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/cursorrules/docs/project/architecture.md`
 - **projects/AGENTS.md** (line 214): `docs/project_orchestration/project-lifecycle-guide.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/projects/docs/project_orchestration/project-lifecycle-guide.md`
@@ -27,23 +27,31 @@ Generated: comprehensive_audit.py
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/testing/docs/modules/overview.md`
 - **testing/AGENTS.md** (line 161): `docs/project/contributing.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/testing/docs/project/contributing.md`
-- **examples/AGENTS.md** (line 199): `scripts/examples/README.md`
+- **examples/README.md** (line 97): `modeling_3d/`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/examples/modeling_3d`
+- **examples/README.md** (line 98): `physical_management/`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/examples/physical_management`
+- **examples/README.md** (line 102): `language_models/`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/examples/language_models`
+- **examples/README.md** (line 119): `multi_module/example_workflow_build.py`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/example_workflow_build.py`
+- **examples/README.md** (line 120): `multi_module/example_workflow_api.py`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/examples/multi_module/example_workflow_api.py`
+- **examples/AGENTS.md** (line 475): `scripts/examples/README.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/examples/scripts/examples/README.md`
-- **examples/AGENTS.md** (line 201): `docs/modules/overview.md`
+- **examples/AGENTS.md** (line 477): `docs/modules/overview.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/examples/docs/modules/overview.md`
-- **scripts/README.md** (line 171): `development/setup.sh`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/scripts/development/setup.sh`
 - **scripts/AGENTS.md** (line 128): `../../scripts/development/setup.sh`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/scripts/development/setup.sh`
 - **scripts/AGENTS.md** (line 169): `docs/modules/overview.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/scripts/docs/modules/overview.md`
 - **scripts/AGENTS.md** (line 170): `docs/development/testing-strategy.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/scripts/docs/development/testing-strategy.md`
-- **src/AGENTS.md** (line 226): `docs/modules/overview.md`
+- **src/AGENTS.md** (line 225): `docs/modules/overview.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/modules/overview.md`
-- **src/AGENTS.md** (line 227): `docs/reference/api.md`
+- **src/AGENTS.md** (line 226): `docs/reference/api.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/reference/api.md`
-- **src/AGENTS.md** (line 228): `docs/project/contributing.md`
+- **src/AGENTS.md** (line 227): `docs/project/contributing.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
 - **src/template/AGENTS_ROOT_TEMPLATE.md** (line 19): `../docs/README.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/README.md`
@@ -53,189 +61,181 @@ Generated: comprehensive_audit.py
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/template/MCP_TOOL_SPECIFICATION.md`
 - **src/template/AGENTS_TEMPLATE.md** (line 28): `SECURITY.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/template/SECURITY.md`
-- **src/codomyrmex/language_models/AGENTS.md** (line 95): `../../ai_code_editing/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/ai_code_editing`
-- **src/codomyrmex/language_models/AGENTS.md** (line 96): `../../model_context_protocol/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/model_context_protocol`
-- **src/codomyrmex/language_models/AGENTS.md** (line 97): `../../terminal_interface/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/terminal_interface`
-- **src/codomyrmex/terminal_interface/AGENTS.md** (line 86): `USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/USAGE_EXAMPLES.md`
-- **src/codomyrmex/terminal_interface/AGENTS.md** (line 89): `../../logging_monitoring/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/logging_monitoring`
-- **src/codomyrmex/terminal_interface/AGENTS.md** (line 90): `../../data_visualization/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/data_visualization`
-- **src/codomyrmex/static_analysis/AGENTS.md** (line 81): `../../code_review/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/code_review`
-- **src/codomyrmex/static_analysis/AGENTS.md** (line 82): `../../security_audit/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/security_audit`
-- **src/codomyrmex/static_analysis/AGENTS.md** (line 83): `../../logging_monitoring/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/logging_monitoring`
-- **src/codomyrmex/ai_code_editing/AGENTS.md** (line 100): `../../language_models/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/language_models`
-- **src/codomyrmex/ai_code_editing/AGENTS.md** (line 101): `../../model_context_protocol/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/model_context_protocol`
-- **src/codomyrmex/ai_code_editing/AGENTS.md** (line 102): `../../code_review/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/code_review`
-- **src/codomyrmex/environment_setup/AGENTS.md** (line 81): `../../logging_monitoring/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/logging_monitoring`
-- **src/codomyrmex/environment_setup/AGENTS.md** (line 82): `../../config_management/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/config_management`
-- **src/codomyrmex/data_visualization/AGENTS.md** (line 101): `../../logging_monitoring/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/logging_monitoring`
-- **src/codomyrmex/data_visualization/AGENTS.md** (line 102): `../../git_operations/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/git_operations`
-- **src/codomyrmex/data_visualization/AGENTS.md** (line 103): `../../performance/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/performance`
-- **src/codomyrmex/code_execution_sandbox/AGENTS.md** (line 88): `../../ai_code_editing/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/ai_code_editing`
-- **src/codomyrmex/code_execution_sandbox/AGENTS.md** (line 89): `../../logging_monitoring/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/logging_monitoring`
-- **src/codomyrmex/code_execution_sandbox/AGENTS.md** (line 90): `../../security_audit/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/security_audit`
-- **src/codomyrmex/logging_monitoring/AGENTS.md** (line 80): `../../environment_setup/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/environment_setup`
-- **src/codomyrmex/logging_monitoring/AGENTS.md** (line 81): `../../terminal_interface/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/terminal_interface`
-- **src/codomyrmex/security_audit/AGENTS.md** (line 88): `USAGE_EXAMPLES.md`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/security_audit/USAGE_EXAMPLES.md`
-- **src/codomyrmex/security_audit/AGENTS.md** (line 91): `../../static_analysis/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/static_analysis`
-- **src/codomyrmex/security_audit/AGENTS.md** (line 92): `../../code_review/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/code_review`
-- **src/codomyrmex/security_audit/AGENTS.md** (line 93): `../../logging_monitoring/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/logging_monitoring`
+- **src/codomyrmex/plugin_system/README.md** (line 556): `../../docs/plugins/`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/plugins`
 - **src/codomyrmex/physical_management/SECURITY.md** (line 28): `./CHANGELOG.md`
   - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/CHANGELOG.md`
-- **src/codomyrmex/model_context_protocol/AGENTS.md** (line 87): `../../ai_code_editing/`
-  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/ai_code_editing`
+- **src/codomyrmex/api_standardization/AGENTS.md** (line 51): `../../documentation/`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/documentation`
+- **src/codomyrmex/api_standardization/AGENTS.md** (line 52): `../../security_audit/`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/security_audit`
+- **src/codomyrmex/events/README.md** (line 33): `API_SPECIFICATION.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/events/API_SPECIFICATION.md`
+- **src/codomyrmex/git_operations/tests/README.md** (line 16): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/src/README.md`
+- **src/codomyrmex/git_operations/docs/README.md** (line 17): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/src/README.md`
+- **src/codomyrmex/git_operations/docs/index.md** (line 16): `../../../docs/project/contributing.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
+- **src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/git_operations/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/git_operations/docs/tutorials/README.md** (line 16): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/src/README.md`
+- **src/codomyrmex/git_operations/tests/unit/README.md** (line 16): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/src/README.md`
+- **src/codomyrmex/git_operations/tests/integration/README.md** (line 15): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/src/README.md`
+- **src/codomyrmex/build_synthesis/tests/README.md** (line 16): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/src/README.md`
+- **src/codomyrmex/build_synthesis/docs/README.md** (line 17): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/src/README.md`
+- **src/codomyrmex/build_synthesis/docs/index.md** (line 16): `../../../docs/project/contributing.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/docs/project/contributing.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 47): `../API_SPECIFICATION.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 48): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 54): `../API_SPECIFICATION.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/API_SPECIFICATION.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md** (line 55): `../USAGE_EXAMPLES.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/build_synthesis/docs/USAGE_EXAMPLES.md`
+- **src/codomyrmex/build_synthesis/docs/tutorials/README.md** (line 19): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/src/README.md`
+- **src/codomyrmex/build_synthesis/tests/unit/README.md** (line 15): `../../../src/README.md`
+  - Resolved to: `/Users/4d/Documents/GitHub/codomyrmex/src/codomyrmex/src/README.md`
 
-*... and 114 more broken links*
+*... and 217 more broken links*
 
 ## Examples Migration Issues
 Found references to old `examples/` paths that should be updated to `scripts/examples/`:
 - **AGENTS.md** (line 26):
   ```
-  | **examples/** | Example scripts and demonstrations | [examples/README.md](examples/README.md) |...
+  | **examples/** | Example scripts and demonstrations | [examples/README.md](../../../examples/README.md) |...
   ```
-- **AGENTS.md** (line 199):
+- **AGENTS.md** (line 255):
   ```
-  - **Examples**: [examples/README.md](examples/README.md) - Example implementations...
-  ```
-- **config/README.md** (line 233):
-  ```
-  - **Basic Example**: [examples/workflow-basic.json](examples/workflow-basic.json) - Simple configura...
-  ```
-- **config/README.md** (line 234):
-  ```
-  - **Docker Setup**: [examples/docker-compose.yml](examples/docker-compose.yml) - Container deploymen...
+  - **Examples**: [examples/README.md](../../../examples/README.md) - Example implementations...
   ```
 - **config/AGENTS.md** (line 136):
   ```
-  - **Quick Start**: [examples/workflow-basic.json](examples/workflow-basic.json) - Basic configuratio...
+  - **Quick Start**: [../../config/examples/workflow-basic.json](../../config/examples/workflow-basic.json) - Basic configuratio...
   ```
 - **config/AGENTS.md** (line 137):
   ```
-  - **Docker Setup**: [examples/docker-compose.yml](examples/docker-compose.yml) - Container deploymen...
+  - **Docker Setup**: [../../config/examples/docker-compose.yml](../../config/examples/docker-compose.yml) - Container deploymen...
   ```
-- **scripts/README.md** (line 172):
+- **scripts/README.md** (line 389):
   ```
-  - **Quick Examples**: [examples/](examples/) - Usage examples and demonstrations...
+  - **Examples**: [examples/README.md](../../../examples/README.md)...
   ```
 - **src/codomyrmex/physical_management/docs/index.md** (line 18):
   ```
-  - Explore the [Examples](../examples/) directory for usage examples....
+  - Explore the [Examples](../../examples/) directory for usage examples....
   ```
 - **src/codomyrmex/physical_management/docs/index.md** (line 24):
   ```
-  - [Examples](../examples/) - Usage examples and demonstrations...
+  - [Examples](../../examples/) - Usage examples and demonstrations...
   ```
 - **src/codomyrmex/modeling_3d/docs/index.md** (line 17):
   ```
-  - Explore the [Examples](../examples/) directory for usage examples....
+  - Explore the [Examples](../../examples/) directory for usage examples....
   ```
 - **src/codomyrmex/modeling_3d/docs/index.md** (line 23):
   ```
-  - [Examples](../examples/) - Usage examples and demonstrations...
+  - [Examples](../../examples/) - Usage examples and demonstrations...
   ```
-- **docs/project/documentation-audit-report.md** (line 124):
+- **examples/ai_code_editing/README.md** (line 489):
   ```
-  | **examples/** | Example scripts and demonstrations | [examples/README.md](examples/README.md) |......
+  - **[Language Models](../../examples/language_models/)**...
   ```
-- **docs/project/documentation-audit-report.md** (line 128):
+- **examples/ai_code_editing/README.md** (line 490):
   ```
-  - **Examples**: [examples/README.md](examples/README.md) - Example implementations......
+  - **[Code Review](../../examples/code_review/)**...
   ```
-- **docs/project/documentation-audit-report.md** (line 132):
+- **examples/plugin_system/README.md** (line 392):
   ```
-  - **Basic Example**: [examples/workflow-basic.json](examples/workflow-basic.json) - Simple configura...
+  - **[Configuration Management](../../examples/config_management/)**...
   ```
-- **docs/project/documentation-audit-report.md** (line 136):
+- **examples/ci_cd_automation/README.md** (line 574):
   ```
-  - **Docker Setup**: [examples/docker-compose.yml](examples/docker-compose.yml) - Container deploymen...
+  - **[Project Orchestration](../../examples/project_orchestration/)**...
   ```
-- **docs/project/documentation-audit-report.md** (line 140):
+- **examples/ci_cd_automation/README.md** (line 575):
   ```
-  - **Quick Start**: [examples/workflow-basic.json](examples/workflow-basic.json) - Basic configuratio...
+  - **[Build Synthesis](../../examples/build_synthesis/)**...
   ```
-- **docs/project/documentation-audit-report.md** (line 144):
+- **examples/build_synthesis/README.md** (line 627):
   ```
-  - **Docker Setup**: [examples/docker-compose.yml](examples/docker-compose.yml) - Container deploymen...
+  - **[CI/CD Automation](../../examples/ci_cd_automation/)**...
   ```
-- **docs/project/documentation-audit-report.md** (line 148):
+- **examples/build_synthesis/README.md** (line 628):
   ```
-  - **Quick Examples**: [examples/](examples/) - Usage examples and demonstrations......
+  - **[Containerization](../../examples/containerization/)**...
   ```
-- **docs/project/documentation-audit-report.md** (line 152):
+- **docs/project/documentation-audit-report.md** (line 119):
   ```
-  - Explore the [Examples](../examples/) directory for usage examples.......
+  | **examples/** | Example scripts and demonstrations | [examples/README.md](../../../examples/README.md) |......
   ```
-- **docs/project/documentation-audit-report.md** (line 156):
+- **docs/project/documentation-audit-report.md** (line 123):
   ```
-  - [Examples](../examples/) - Usage examples and demonstrations......
+  - **Examples**: [examples/README.md](../../../examples/README.md) - Example implementations......
   ```
-- **docs/project/documentation-audit-report.md** (line 160):
+- **docs/project/documentation-audit-report.md** (line 127):
   ```
-  - Explore the [Examples](../examples/) directory for usage examples.......
+  - **Quick Start**: [../../config/examples/workflow-basic.json](../../config/examples/workflow-basic.json) - Basic configuratio...
   ```
-- **docs/project/documentation-audit-report.md** (line 164):
+- **docs/project/documentation-audit-report.md** (line 131):
   ```
-  - [Examples](../examples/) - Usage examples and demonstrations......
+  - **Docker Setup**: [../../config/examples/docker-compose.yml](../../config/examples/docker-compose.yml) - Container deploymen...
   ```
-- **docs/project/documentation-audit-report.md** (line 168):
+- **docs/project/documentation-audit-report.md** (line 135):
   ```
-  - Explore the [Examples](../examples/) directory for usage examples.........................
+  - **Examples**: [examples/README.md](../../../examples/README.md)......
   ```
-- **docs/project/documentation-audit-report.md** (line 172):
+- **docs/project/documentation-audit-report.md** (line 139):
   ```
-  - [Examples](../examples/) - Usage examples and demonstrations........................
+  - Explore the [Examples](../../examples/) directory for usage examples.......
   ```
-- **docs/project/documentation-audit-report.md** (line 176):
+- **docs/project/documentation-audit-report.md** (line 143):
   ```
-  - Explore the [Examples](../examples/) directory for usage examples.........................
+  - [Examples](../../examples/) - Usage examples and demonstrations......
   ```
-- **docs/project/documentation-audit-report.md** (line 180):
+- **docs/project/documentation-audit-report.md** (line 147):
   ```
-  - [Examples](../examples/) - Usage examples and demonstrations........................
+  - Explore the [Examples](../../examples/) directory for usage examples.......
   ```
-- **docs/project/documentation-audit-report.md** (line 184):
+- **docs/project/documentation-audit-report.md** (line 151):
   ```
-  4. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations....................
+  - [Examples](../../examples/) - Usage examples and demonstrations......
   ```
-- **docs/project/documentation-audit-report.md** (line 188):
+- **docs/project/documentation-audit-report.md** (line 155):
   ```
-  5. **[🎮 Interactive Examples](../../examples/README.md)** - Hands-on demonstrations....................
+  - **[Language Models](../../examples/language_models/)**......
   ```
-- **docs/project/documentation-audit-report.md** (line 192):
+- **docs/project/documentation-audit-report.md** (line 159):
   ```
-  💡 [Examples](../examples/README.md) → Try interactive demonstrations..............................
+  - **[Code Review](../../examples/code_review/)**......
   ```
-- **docs/project/documentation-audit-report.md** (line 196):
+- **docs/project/documentation-audit-report.md** (line 163):
   ```
-  🎮 [Examples](../examples/) → Working code examples..............................
+  - **[Configuration Management](../../examples/config_management/)**......
+  ```
+- **docs/project/documentation-audit-report.md** (line 167):
+  ```
+  - **[Project Orchestration](../../examples/project_orchestration/)**......
+  ```
+- **docs/project/documentation-audit-report.md** (line 171):
+  ```
+  - **[Build Synthesis](../../examples/build_synthesis/)**......
   ```
 
-*... and 12 more examples migration issues*
+*... and 17 more examples migration issues*
 
 ## Recommendations
 1. Fix all broken links identified above

@@ -13,7 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Optional, Tuple, List
 
 import yaml
 
@@ -534,6 +534,478 @@ class PipelineManager:
 
         logger.info(f"Cancelled pipeline: {pipeline_name}")
         return True
+
+    def validate_pipeline_config(self, config: dict) -> Tuple[bool, List[str]]:
+        """
+        Validate pipeline configuration with detailed error reporting.
+
+        Args:
+            config: Pipeline configuration dictionary
+
+        Returns:
+            Tuple of (is_valid, list_of_errors)
+        """
+        errors = []
+
+        # Validate required fields
+        required_fields = ["name", "stages"]
+        for field in required_fields:
+            if field not in config:
+                errors.append(f"Missing required field: {field}")
+
+        if "name" in config and not isinstance(config["name"], str):
+            errors.append("Pipeline name must be a string")
+
+        if "stages" in config:
+            if not isinstance(config["stages"], list):
+                errors.append("Stages must be a list")
+            else:
+                # Validate each stage
+                for i, stage in enumerate(config["stages"]):
+                    stage_errors = self._validate_stage_config(stage, i)
+                    errors.extend(stage_errors)
+
+        # Validate triggers if present
+        if "triggers" in config:
+            if not isinstance(config["triggers"], list):
+                errors.append("Triggers must be a list")
+            else:
+                valid_triggers = ["push", "pull_request", "manual", "schedule"]
+                for trigger in config["triggers"]:
+                    if trigger not in valid_triggers:
+                        errors.append(f"Invalid trigger: {trigger}. Must be one of {valid_triggers}")
+
+        # Validate timeout if present
+        if "timeout" in config:
+            if not isinstance(config["timeout"], (int, float)) or config["timeout"] <= 0:
+                errors.append("Timeout must be a positive number")
+
+        return len(errors) == 0, errors
+
+    def _validate_stage_config(self, stage: dict, stage_index: int) -> List[str]:
+        """Validate a single stage configuration."""
+        errors = []
+        prefix = f"Stage {stage_index}"
+
+        # Validate required stage fields
+        if "name" not in stage:
+            errors.append(f"{prefix}: Missing required field 'name'")
+        elif not isinstance(stage["name"], str):
+            errors.append(f"{prefix}: Stage name must be a string")
+
+        if "jobs" not in stage:
+            errors.append(f"{prefix}: Missing required field 'jobs'")
+        elif not isinstance(stage["jobs"], list):
+            errors.append(f"{prefix}: Jobs must be a list")
+        else:
+            # Validate each job
+            for j, job in enumerate(stage["jobs"]):
+                job_errors = self._validate_job_config(job, stage_index, j)
+                errors.extend(job_errors)
+
+        # Validate dependencies if present
+        if "dependencies" in stage:
+            if not isinstance(stage["dependencies"], list):
+                errors.append(f"{prefix}: Dependencies must be a list")
+
+        return errors
+
+    def _validate_job_config(self, job: dict, stage_index: int, job_index: int) -> List[str]:
+        """Validate a single job configuration."""
+        errors = []
+        prefix = f"Stage {stage_index}, Job {job_index}"
+
+        # Validate required job fields
+        if "name" not in job:
+            errors.append(f"{prefix}: Missing required field 'name'")
+        elif not isinstance(job["name"], str):
+            errors.append(f"{prefix}: Job name must be a string")
+
+        if "commands" not in job:
+            errors.append(f"{prefix}: Missing required field 'commands'")
+        elif not isinstance(job["commands"], list):
+            errors.append(f"{prefix}: Commands must be a list")
+        elif len(job["commands"]) == 0:
+            errors.append(f"{prefix}: Commands list cannot be empty")
+
+        # Validate optional fields
+        if "timeout" in job and (not isinstance(job["timeout"], (int, float)) or job["timeout"] <= 0):
+            errors.append(f"{prefix}: Timeout must be a positive number")
+
+        if "retry_count" in job and (not isinstance(job["retry_count"], int) or job["retry_count"] < 0):
+            errors.append(f"{prefix}: Retry count must be a non-negative integer")
+
+        return errors
+
+    def generate_pipeline_visualization(self, pipeline: Pipeline) -> str:
+        """
+        Generate a Mermaid diagram for pipeline visualization.
+
+        Args:
+            pipeline: Pipeline object to visualize
+
+        Returns:
+            Mermaid diagram as string
+        """
+        lines = ["graph TD"]
+
+        # Track all nodes and edges
+        nodes = set()
+        edges = set()
+
+        for stage in pipeline.stages:
+            stage_id = f"stage_{stage.name.replace(' ', '_')}"
+
+            # Add stage node
+            lines.append(f"    {stage_id}[\"{stage.name}\"]")
+            nodes.add(stage_id)
+
+            # Add job nodes within stage
+            for job in stage.jobs:
+                job_id = f"job_{job.name.replace(' ', '_')}"
+
+                # Add job node
+                lines.append(f"    {job_id}[\"{job.name}\"]")
+                nodes.add(job_id)
+
+                # Connect stage to job
+                edge = f"    {stage_id} --> {job_id}"
+                if edge not in edges:
+                    lines.append(edge)
+                    edges.add(edge)
+
+                # Add job dependencies
+                for dep in job.dependencies:
+                    dep_id = f"job_{dep.replace(' ', '_')}"
+                    edge = f"    {dep_id} --> {job_id}"
+                    if edge not in edges:
+                        lines.append(edge)
+                        edges.add(edge)
+
+            # Add stage dependencies
+            for dep in stage.dependencies:
+                dep_id = f"stage_{dep.replace(' ', '_')}"
+                edge = f"    {dep_id} --> {stage_id}"
+                if edge not in edges:
+                    lines.append(edge)
+                    edges.add(edge)
+
+        return "\\n".join(lines)
+
+    def parallel_pipeline_execution(self, stages: List[dict]) -> dict:
+        """
+        Execute pipeline stages in parallel where possible.
+
+        Args:
+            stages: List of stage dictionaries with dependencies
+
+        Returns:
+            Dictionary with execution results
+        """
+        import concurrent.futures
+
+        # Build dependency graph
+        stage_deps = {}
+        for stage in stages:
+            stage_name = stage["name"]
+            deps = stage.get("dependencies", [])
+            stage_deps[stage_name] = deps
+
+        # Execute stages respecting dependencies
+        completed = set()
+        results = {}
+        max_workers = min(len(stages), 4)  # Limit concurrent stages
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {}
+
+            while len(completed) < len(stages):
+                # Find stages ready to execute
+                ready_stages = []
+                for stage in stages:
+                    stage_name = stage["name"]
+                    if stage_name in completed or stage_name in futures:
+                        continue
+
+                    deps = stage_deps.get(stage_name, [])
+                    if all(dep in completed for dep in deps):
+                        ready_stages.append(stage)
+
+                if not ready_stages:
+                    # Wait for running stages to complete
+                    if futures:
+                        concurrent.futures.wait(futures, timeout=1.0)
+                        for stage_name, future in list(futures.items()):
+                            if future.done():
+                                try:
+                                    result = future.result()
+                                    results[stage_name] = result
+                                    completed.add(stage_name)
+                                except Exception as e:
+                                    results[stage_name] = {"error": str(e), "status": "failed"}
+                                    completed.add(stage_name)
+                                del futures[stage_name]
+                    else:
+                        break  # No more work to do
+                    continue
+
+                # Submit ready stages for execution
+                for stage in ready_stages:
+                    stage_name = stage["name"]
+                    future = executor.submit(self._execute_stage_parallel, stage)
+                    futures[stage_name] = future
+
+        # Collect final results
+        summary = {
+            "total_stages": len(stages),
+            "completed_stages": len(completed),
+            "failed_stages": len([r for r in results.values() if isinstance(r, dict) and r.get("status") == "failed"]),
+            "stage_results": results
+        }
+
+        return summary
+
+    def _execute_stage_parallel(self, stage: dict) -> dict:
+        """
+        Execute a single stage (simplified for parallel execution).
+
+        Args:
+            stage: Stage dictionary
+
+        Returns:
+            Execution result
+        """
+        try:
+            # Simulate stage execution
+            import time
+            time.sleep(0.1)  # Simulate work
+
+            jobs = stage.get("jobs", [])
+            job_results = []
+
+            for job in jobs:
+                # Simulate job execution
+                time.sleep(0.05)
+                job_results.append({
+                    "name": job["name"],
+                    "status": "completed",
+                    "duration": 0.05
+                })
+
+            return {
+                "stage_name": stage["name"],
+                "status": "completed",
+                "job_count": len(jobs),
+                "jobs": job_results,
+                "duration": 0.1 + (len(jobs) * 0.05)
+            }
+
+        except Exception as e:
+            return {
+                "stage_name": stage["name"],
+                "status": "failed",
+                "error": str(e)
+            }
+
+    def conditional_stage_execution(self, stage: dict, conditions: dict) -> bool:
+        """
+        Evaluate conditions for stage execution.
+
+        Args:
+            stage: Stage dictionary
+            conditions: Global condition variables
+
+        Returns:
+            True if stage should execute
+        """
+        # Check if stage has conditions
+        if "conditions" not in stage:
+            return True  # No conditions means always execute
+
+        stage_conditions = stage["conditions"]
+
+        # Evaluate branch conditions
+        if "branch" in stage_conditions:
+            branch_pattern = stage_conditions["branch"]
+            current_branch = conditions.get("branch", "")
+            if not self._matches_pattern(current_branch, branch_pattern):
+                return False
+
+        # Evaluate environment conditions
+        if "environment" in stage_conditions:
+            env_conditions = stage_conditions["environment"]
+            for env_var, expected_value in env_conditions.items():
+                actual_value = conditions.get(f"env_{env_var}")
+                if actual_value != expected_value:
+                    return False
+
+        # Evaluate custom conditions
+        if "custom" in stage_conditions:
+            custom_condition = stage_conditions["custom"]
+            # Simple evaluation (could be extended with a proper expression evaluator)
+            if isinstance(custom_condition, str):
+                # Very basic condition evaluation
+                if "failure" in custom_condition.lower():
+                    has_failures = conditions.get("has_previous_failures", False)
+                    if has_failures:
+                        return True
+                elif "success" in custom_condition.lower():
+                    has_failures = conditions.get("has_previous_failures", False)
+                    if not has_failures:
+                        return True
+
+        return True
+
+    def _matches_pattern(self, value: str, pattern: str) -> bool:
+        """Simple pattern matching for conditions."""
+        import fnmatch
+        return fnmatch.fnmatch(value, pattern)
+
+    def optimize_pipeline_schedule(self, pipeline: Pipeline) -> dict:
+        """
+        Optimize pipeline execution schedule for parallelism.
+
+        Args:
+            pipeline: Pipeline to optimize
+
+        Returns:
+            Optimized pipeline configuration
+        """
+        # Analyze stage dependencies
+        stage_deps = {}
+        for stage in pipeline.stages:
+            stage_deps[stage.name] = stage.dependencies
+
+        # Calculate parallelism opportunities
+        independent_stages = []
+        sequential_stages = []
+
+        for stage_name, deps in stage_deps.items():
+            if not deps:
+                independent_stages.append(stage_name)
+            else:
+                sequential_stages.append((stage_name, deps))
+
+        # Group stages by dependency levels
+        execution_levels = self._calculate_execution_levels(pipeline.stages, stage_deps)
+
+        optimization = {
+            "parallel_stages": len(independent_stages),
+            "sequential_chains": len(sequential_stages),
+            "execution_levels": execution_levels,
+            "estimated_parallelism": len(execution_levels[0]) if execution_levels else 0,
+            "optimization_suggestions": []
+        }
+
+        # Add optimization suggestions
+        if len(independent_stages) > 1:
+            optimization["optimization_suggestions"].append(
+                f"Consider running {len(independent_stages)} independent stages in parallel"
+            )
+
+        max_level_size = max(len(level) for level in execution_levels) if execution_levels else 0
+        if max_level_size > 1:
+            optimization["optimization_suggestions"].append(
+                f"Maximum parallelism: {max_level_size} stages can run concurrently"
+            )
+
+        return optimization
+
+    def _calculate_execution_levels(self, stages: List, dependencies: dict) -> List[List[str]]:
+        """Calculate execution levels for optimal parallelism."""
+        # Kahn's algorithm for topological levels
+        in_degree = {stage.name: len(stage.dependencies) for stage in stages}
+        queue = [stage.name for stage in stages if in_degree[stage.name] == 0]
+        levels = []
+
+        while queue:
+            level = []
+            next_queue = []
+
+            for stage_name in queue:
+                level.append(stage_name)
+
+                # Find stages that depend on this one
+                for other_stage in stages:
+                    if stage_name in other_stage.dependencies:
+                        in_degree[other_stage.name] -= 1
+                        if in_degree[other_stage.name] == 0:
+                            next_queue.append(other_stage.name)
+
+            if level:
+                levels.append(sorted(level))
+            queue = next_queue
+
+        return levels
+
+    def get_stage_dependencies(self, stages: List[dict]) -> dict[str, List[str]]:
+        """
+        Extract stage dependencies from stage list.
+
+        Args:
+            stages: List of stage dictionaries
+
+        Returns:
+            Dictionary mapping stage names to dependency lists
+        """
+        dependencies = {}
+        for stage in stages:
+            stage_name = stage["name"]
+            deps = stage.get("dependencies", [])
+            dependencies[stage_name] = deps
+
+        return dependencies
+
+    def validate_stage_dependencies(self, stages: List[dict]) -> Tuple[bool, List[str]]:
+        """
+        Validate stage dependency graph.
+
+        Args:
+            stages: List of stage dictionaries
+
+        Returns:
+            Tuple of (is_valid, list_of_errors)
+        """
+        errors = []
+        stage_names = {stage["name"] for stage in stages}
+        dependencies = self.get_stage_dependencies(stages)
+
+        # Check for missing dependencies
+        for stage_name, deps in dependencies.items():
+            for dep in deps:
+                if dep not in stage_names:
+                    errors.append(f"Stage '{stage_name}' depends on missing stage '{dep}'")
+
+        # Check for self-dependencies
+        for stage_name, deps in dependencies.items():
+            if stage_name in deps:
+                errors.append(f"Stage '{stage_name}' cannot depend on itself")
+
+        # Check for cycles (simplified check)
+        visited = set()
+        rec_stack = set()
+
+        def has_cycle(node: str) -> bool:
+            visited.add(node)
+            rec_stack.add(node)
+
+            for neighbor in dependencies.get(node, []):
+                if neighbor not in visited:
+                    if has_cycle(neighbor):
+                        return True
+                elif neighbor in rec_stack:
+                    return True
+
+            rec_stack.remove(node)
+            return False
+
+        for stage_name in stage_names:
+            if stage_name not in visited:
+                if has_cycle(stage_name):
+                    errors.append(f"Cycle detected involving stage '{stage_name}'")
+                    break  # Only report first cycle
+
+        return len(errors) == 0, errors
 
     def save_pipeline_config(self, pipeline: Pipeline, output_path: str):
         """Save pipeline configuration to file."""

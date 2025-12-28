@@ -2,7 +2,7 @@
 
 import pytest
 import sys
-from unittest.mock import patch, MagicMock
+# Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 import json
 
 
@@ -212,90 +212,78 @@ class TestModelContextProtocol:
         assert '"result": "ok"' in json_str
 
     def test_main_execution_example(self, capsys, code_dir):
-        """Test the example execution in mcp_schemas.py main block."""
+        """Test the example execution in mcp_schemas.py main block with real execution."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
         # Execute the main block by calling it directly
         import model_context_protocol.mcp_schemas as mcp_schemas
 
-        # Call the main function that contains the examples
-        with patch('builtins.print') as mock_print:
-            # Replicate the main block logic here
-            tool_call_data = {
-                "tool_name": "example.do_something",
-                "arguments": {
-                    "param1": "value1",
-                    "param2": 123
+        # Replicate the main block logic with real execution
+        tool_call_data = {
+            "tool_name": "example.do_something",
+            "arguments": {
+                "param1": "value1",
+                "param2": 123
+            }
+        }
+        mcp_call = mcp_schemas.MCPToolCall(**tool_call_data)
+        call_json = mcp_call.model_dump_json(indent=2)
+        assert '"tool_name": "example.do_something"' in call_json
+        assert '"param1": "value1"' in call_json
+
+        success_result_data = {
+            "status": "success",
+            "data": {
+                "output_value": "Task completed successfully.",
+                "items_processed": 10
+            },
+            "explanation": "The example tool processed 10 items and finished."
+        }
+        mcp_success_result = mcp_schemas.MCPToolResult(**success_result_data)
+        success_json = mcp_success_result.model_dump_json(indent=2)
+        assert '"status": "success"' in success_json
+        assert '"items_processed": 10' in success_json
+
+        failure_result_data = {
+            "status": "failure",
+            "error": {
+                "error_type": "ResourceUnavailable",
+                "error_message": "The required resource could not be accessed.",
+                "error_details": {
+                    "resource_id": "res_abc123"
                 }
             }
-            mcp_call = mcp_schemas.MCPToolCall(**tool_call_data)
-            mock_print(f"MCP Call: {mcp_call.model_dump_json(indent=2)}")
+        }
+        mcp_failure_result = mcp_schemas.MCPToolResult(**failure_result_data)
+        failure_json = mcp_failure_result.model_dump_json(indent=2)
+        assert '"status": "failure"' in failure_json
+        assert '"error_type": "ResourceUnavailable"' in failure_json
 
-            success_result_data = {
-                "status": "success",
-                "data": {
-                    "output_value": "Task completed successfully.",
-                    "items_processed": 10
-                },
-                "explanation": "The example tool processed 10 items and finished."
-            }
-            mcp_success_result = mcp_schemas.MCPToolResult(**success_result_data)
-            mock_print(f"MCP Success Result: {mcp_success_result.model_dump_json(indent=2)}")
-
-            failure_result_data = {
-                "status": "failure",
-                "error": {
-                    "error_type": "ResourceUnavailable",
-                    "error_message": "The required resource could not be accessed.",
-                    "error_details": {
-                        "resource_id": "res_abc123"
-                    }
-                }
-            }
-            mcp_failure_result = mcp_schemas.MCPToolResult(**failure_result_data)
-            mock_print(f"MCP Failure Result: {mcp_failure_result.model_dump_json(indent=2)}")
-
-        # Verify the print calls were made
-        assert mock_print.call_count == 3
-        calls = [str(call) for call in mock_print.call_args_list]
-        assert any("MCP Call:" in call for call in calls)
-        assert any("MCP Success Result:" in call for call in calls)
-        assert any("MCP Failure Result:" in call for call in calls)
-
-    def test_validation_error_examples(self, capsys, code_dir):
-        """Test the validation error examples in main block."""
+    def test_validation_error_examples(self, code_dir):
+        """Test the validation error examples with real validation."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
         import model_context_protocol.mcp_schemas as mcp_schemas
 
-        # Test validation errors by creating invalid data
-        with patch('builtins.print') as mock_print:
-            # Test invalid failure data (data present when status is failure)
-            invalid_failure_data = {
-                "status": "failure",
-                "data": {"some": "data"}  # Data should be null on failure
-            }
-            try:
-                mcp_schemas.MCPToolResult(**invalid_failure_data)
-            except ValueError as e:
-                mock_print(f"Validation Error for invalid failure data: {e}")
+        # Test invalid failure data (data present when status is failure)
+        invalid_failure_data = {
+            "status": "failure",
+            "data": {"some": "data"}  # Data should be null on failure
+        }
+        with pytest.raises(ValueError) as exc_info:
+            mcp_schemas.MCPToolResult(**invalid_failure_data)
+        assert "data" in str(exc_info.value).lower() or "failure" in str(exc_info.value).lower()
 
-            # Test invalid success data (error present when status is success)
-            invalid_success_data = {
-                "status": "failure",  # Error must be populated
-                "error": None
-            }
-            try:
-                mcp_schemas.MCPToolResult(**invalid_success_data)
-            except ValueError as e:
-                mock_print(f"Validation Error for invalid success data (missing error on failure): {e}")
-
-        # Verify validation error messages were captured
-        assert mock_print.call_count == 2
-        calls = [str(call) for call in mock_print.call_args_list]
-        assert any("Validation Error" in call for call in calls)
+        # Test invalid failure data (error missing when status is failure)
+        invalid_failure_no_error = {
+            "status": "failure",
+            "error": None  # Error must be populated
+        }
+        with pytest.raises(ValueError) as exc_info:
+            mcp_schemas.MCPToolResult(**invalid_failure_no_error)
+        assert "error" in str(exc_info.value).lower() or "failure" in str(exc_info.value).lower()
 
     def test_pydantic_config_extra_allow(self, code_dir):
         """Test that Pydantic models allow extra fields."""

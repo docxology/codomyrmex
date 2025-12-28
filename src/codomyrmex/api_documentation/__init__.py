@@ -1,7 +1,7 @@
 """
 API Documentation Module for Codomyrmex.
 
-The API Documentation module provides comprehensive API documentation generation,
+The API Documentation module provides API documentation generation,
 management, and publishing capabilities for the Codomyrmex ecosystem.
 
 Integration:
@@ -11,7 +11,7 @@ Integration:
 - Supports `security_audit` for API security documentation.
 
 Available functions:
-- generate_api_docs: Generate comprehensive API documentation
+- generate_api_docs: Generate API documentation
 - extract_api_specs: Extract API specifications from code
 - publish_documentation: Publish docs to various platforms
 - validate_api_docs: Validate API documentation accuracy

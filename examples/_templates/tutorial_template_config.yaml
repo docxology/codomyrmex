@@ -1,0 +1,71 @@
+# Tutorial Template Configuration
+# This is a template configuration file for tutorial examples
+
+# Tutorial settings
+tutorial:
+  # Run in interactive mode (prompts for user input)
+  interactive: true
+
+  # Enable verbose output
+  verbose: true
+
+  # Save progress between sessions
+  save_progress: false
+
+  # Maximum time allowed per step (seconds)
+  step_timeout: 300
+
+# Module-specific configuration
+module:
+  # Module name for display
+  name: "Tutorial Template"
+
+  # Enable demo mode (uses mock data)
+  demo_mode: true
+
+  # Enable advanced features
+  enable_advanced: false
+
+# Output configuration
+output:
+  # Output format (json, yaml, text)
+  format: json
+
+  # Output file path
+  file: "output/tutorial_template_results.json"
+
+  # Save intermediate results
+  save_intermediates: false
+
+# Logging configuration
+logging:
+  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  level: INFO
+
+  # Log file path
+  file: "logs/tutorial_template.log"
+
+  # Enable console logging
+  console: true
+
+  # Log format
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Performance settings
+performance:
+  # Enable performance monitoring
+  monitor_performance: false
+
+  # Performance log file
+  perf_log_file: "logs/tutorial_template_perf.log"
+
+# Error handling
+error_handling:
+  # Continue on step failures
+  continue_on_failure: true
+
+  # Maximum retry attempts per step
+  max_retries: 3
+
+  # Retry delay (seconds)
+  retry_delay: 1.0
