@@ -21,6 +21,8 @@ try:
     from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
     AI_CODE_EDITING_AVAILABLE = True
 except ImportError:
+    setup_logging = None
+    get_logger = None
     AI_CODE_EDITING_AVAILABLE = False
 
 try:
@@ -30,13 +32,13 @@ except ImportError:
     CODE_EXECUTION_AVAILABLE = False
 
 # Set up logging for tests
-if hasattr(setup_logging, '__call__'):
+if setup_logging and hasattr(setup_logging, '__call__'):
     try:
         setup_logging()
     except Exception:
         pass  # Logging setup might fail in test environment
 
-logger = get_logger(__name__)
+logger = get_logger(__name__) if get_logger else None
 
 
 class TestAICodeExecutionWorkflow:

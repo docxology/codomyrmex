@@ -138,7 +138,7 @@ def check_environment() -> Dict[str, Any]:
 
 
 def generate_report(py_version: Dict, deps: Dict, security: Dict, env: Dict) -> str:
-    """Generate a comprehensive dependency report."""
+    """Generate a dependency report."""
     report = []
     report.append("# Codomyrmex Dependency Check Report")
     report.append("=" * 50)

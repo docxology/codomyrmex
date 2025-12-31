@@ -9,10 +9,24 @@ import pytest
 import tempfile
 import os
 import json
+import pytest
 from unittest.mock import patch, MagicMock, mock_open
 from pathlib import Path
 from datetime import datetime, timezone
-from cryptography.fernet import Fernet
+
+# Import cryptography conditionally
+try:
+    from cryptography.fernet import Fernet
+    CRYPTOGRAPHY_AVAILABLE = True
+except ImportError:
+    Fernet = None
+    CRYPTOGRAPHY_AVAILABLE = False
+
+# Skip all tests if cryptography is not available
+pytestmark = pytest.mark.skipif(
+    not CRYPTOGRAPHY_AVAILABLE,
+    reason="cryptography package not available (install with: uv sync --extra security_audit)"
+)
 
 from codomyrmex.security_audit.vulnerability_scanner import (
     VulnerabilityScanner,
@@ -36,17 +50,33 @@ from codomyrmex.security_audit.security_monitor import (
     AlertRule
 )
 
-from codomyrmex.security_audit.encryption_manager import (
-    EncryptionManager,
-    encrypt_sensitive_data,
-    decrypt_sensitive_data
-)
+# Import encryption components conditionally
+try:
+    from codomyrmex.security_audit.encryption_manager import (
+        EncryptionManager,
+        encrypt_sensitive_data,
+        decrypt_sensitive_data
+    )
+    ENCRYPTION_AVAILABLE = True
+except ImportError:
+    EncryptionManager = None
+    encrypt_sensitive_data = None
+    decrypt_sensitive_data = None
+    ENCRYPTION_AVAILABLE = False
 
-from codomyrmex.security_audit.certificate_validator import (
-    CertificateValidator,
-    validate_ssl_certificates,
-    SSLValidationResult
-)
+# Import certificate validation components conditionally
+try:
+    from codomyrmex.security_audit.certificate_validator import (
+        CertificateValidator,
+        validate_ssl_certificates,
+        SSLValidationResult
+    )
+    CERT_VALIDATION_AVAILABLE = True
+except ImportError:
+    CertificateValidator = None
+    validate_ssl_certificates = None
+    SSLValidationResult = None
+    CERT_VALIDATION_AVAILABLE = False
 
 
 class TestVulnerabilityScanner:
@@ -365,6 +395,7 @@ class TestSecurityMonitor:
         assert len(event_id) > 10
 
 
+@pytest.mark.skipif(not ENCRYPTION_AVAILABLE, reason="Encryption dependencies not available")
 class TestEncryptionManager:
     """Test cases for EncryptionManager functionality."""
 
@@ -555,6 +586,7 @@ class TestEncryptionManager:
         assert isinstance(result, bool)
 
 
+@pytest.mark.skipif(not CERT_VALIDATION_AVAILABLE, reason="Certificate validation dependencies not available")
 class TestCertificateValidator:
     """Test cases for CertificateValidator functionality."""
 

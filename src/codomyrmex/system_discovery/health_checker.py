@@ -1,7 +1,7 @@
 """
 Health Checker for Codomyrmex System Discovery
 
-This module provides comprehensive health checking capabilities for all
+This module provides health checking capabilities for all
 Codomyrmex modules, including dependency validation, performance monitoring,
 and system health assessment.
 """
@@ -113,7 +113,7 @@ class HealthChecker:
 
     def perform_health_check(self, module_name: str) -> HealthCheckResult:
         """
-        Perform a comprehensive health check for a module.
+        Perform a health check for a module.
 
         Args:
             module_name: Name of the module to check

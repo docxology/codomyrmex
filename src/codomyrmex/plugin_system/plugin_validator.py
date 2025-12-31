@@ -1,7 +1,7 @@
 """
 Plugin Validator for Codomyrmex Plugin System
 
-This module provides comprehensive validation and security scanning
+This module provides validation and security scanning
 for plugins before they are loaded into the system.
 """
 
@@ -97,7 +97,7 @@ class PluginValidator:
 
     def validate_plugin(self, plugin_path: str) -> ValidationResult:
         """
-        Perform comprehensive validation of a plugin.
+        Perform validation of a plugin.
 
         Args:
             plugin_path: Path to the plugin file or directory

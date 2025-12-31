@@ -612,7 +612,7 @@ print("Sandbox execution complete! ✅")
 
         Usage: export
 
-        Creates a comprehensive JSON report of the entire system.
+        Creates a JSON report of the entire system.
         """
         print("📋 Exporting complete system inventory...")
 

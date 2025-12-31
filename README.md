@@ -43,12 +43,15 @@ graph TB
         CodeExec["Code Execution<br/>Sandbox"]
         CodeReview["Code<br/>Review"]
         SecurityAudit["Security<br/>Audit"]
+        Perf["Performance<br/>Monitoring"]
     end
 
     subgraph "Module Layer - Build & Deploy"
         Build["Build<br/>Synthesis"]
         Git["Git<br/>Operations"]
         Docs["Documentation<br/>Generation"]
+        APIDocs["API<br/>Documentation"]
+        APIStd["API<br/>Standardization"]
         CICDAuto["CI/CD<br/>Automation"]
         Container["Container<br/>Management"]
     end
@@ -62,6 +65,14 @@ graph TB
         Database["Database<br/>Management"]
         ConfigMgmt["Config<br/>Management"]
         PhysMgmt["Physical<br/>Management"]
+        Events["Event<br/>System"]
+        PluginSys["Plugin<br/>System"]
+    end
+
+    subgraph "Module Layer - Extensions"
+        ModTemplate["Module<br/>Template"]
+        Tools["Utility<br/>Tools"]
+        SysDiscovery["System<br/>Discovery"]
     end
 
     subgraph "Foundation Layer"
@@ -93,17 +104,29 @@ graph TB
     StaticAnalysis --> SecurityAudit
     PatternMatch --> AICode
     PatternMatch --> CodeReview
+    Perf --> CodeExec
+    Perf --> Build
+    Perf --> CICDAuto
     Build --> Git
     Build --> Docs
+    Build --> APIDocs
+    Build --> APIStd
     Build --> CICDAuto
     Build --> Container
     Docs --> StaticAnalysis
+    APIDocs --> APIStd
     CICDAuto --> Build
     CICDAuto --> SecurityAudit
     Container --> PhysMgmt
+    Container --> Events
     DataViz --> Modeling3D
     Database --> Build
+    Database --> Events
     ConfigMgmt --> Environment
+    Events --> PluginSys
+    PluginSys --> ModTemplate
+    SysDiscovery --> ModTemplate
+    SysDiscovery --> Tools
 
     %% Foundation connections (all modules depend on foundation)
     AICode -.-> Logging
@@ -111,9 +134,12 @@ graph TB
     CodeExec -.-> Logging
     CodeReview -.-> Logging
     SecurityAudit -.-> Logging
+    Perf -.-> Logging
     Build -.-> Logging
     Git -.-> Logging
     Docs -.-> Logging
+    APIDocs -.-> Logging
+    APIStd -.-> Logging
     CICDAuto -.-> Logging
     Container -.-> Logging
     DataViz -.-> Logging
@@ -121,6 +147,11 @@ graph TB
     Database -.-> Logging
     ConfigMgmt -.-> Logging
     PhysMgmt -.-> Logging
+    Events -.-> Logging
+    PluginSys -.-> Logging
+    ModTemplate -.-> Logging
+    Tools -.-> Logging
+    SysDiscovery -.-> Logging
     Discovery -.-> Logging
     Status -.-> Logging
     Terminal -.-> Logging
@@ -130,9 +161,12 @@ graph TB
     CodeExec -.-> Environment
     CodeReview -.-> Environment
     SecurityAudit -.-> Environment
+    Perf -.-> Environment
     Build -.-> Environment
     Git -.-> Environment
     Docs -.-> Environment
+    APIDocs -.-> Environment
+    APIStd -.-> Environment
     CICDAuto -.-> Environment
     Container -.-> Environment
     DataViz -.-> Environment
@@ -140,6 +174,11 @@ graph TB
     Database -.-> Environment
     ConfigMgmt -.-> Environment
     PhysMgmt -.-> Environment
+    Events -.-> Environment
+    PluginSys -.-> Environment
+    ModTemplate -.-> Environment
+    Tools -.-> Environment
+    SysDiscovery -.-> Environment
     Discovery -.-> Environment
     Status -.-> Environment
     Terminal -.-> Environment
@@ -151,6 +190,9 @@ graph TB
     Discovery -.-> TerminalInterface
     Status -.-> TerminalInterface
     Terminal -.-> TerminalInterface
+    Events -.-> TerminalInterface
+    PluginSys -.-> TerminalInterface
+    SysDiscovery -.-> TerminalInterface
 ```
 
 ### Module Dependency Graph
@@ -182,6 +224,7 @@ graph TD
         BuildSynth["build_synthesis"]
         Documentation["documentation"]
         APIDoc["api_documentation"]
+        APIStd["api_standardization"]
         CICD["ci_cd_automation"]
         Container["containerization"]
         ConfigMgmt["config_management"]
@@ -194,6 +237,9 @@ graph TD
         SysDiscovery["system_discovery"]
         ModuleTemplate["module_template"]
         Modeling3D["modeling_3d"]
+        Events["events"]
+        PluginSys["plugin_system"]
+        Tools["tools"]
     end
 
     %% Foundation dependencies (minimal)
@@ -281,12 +327,20 @@ graph TD
     Logging --> SysDiscovery
     Logging --> ModuleTemplate
     Logging --> Modeling3D
+    Logging --> Events
+    Logging --> PluginSys
+    Logging --> Tools
 
     Env --> SysDiscovery
     Env --> ModuleTemplate
+    Env --> Events
+    Env --> PluginSys
 
     SysDiscovery --> ModuleTemplate
+    SysDiscovery --> Tools
     DataViz --> Modeling3D
+    Events --> PluginSys
+    PluginSys --> ModuleTemplate
 ```
 
 ### Workflow Execution Architecture
@@ -608,6 +662,11 @@ Advanced capabilities for specific domains:
 | [**modeling_3d**](src/codomyrmex/modeling_3d/) | 3D modeling and visualization | Scene creation, rendering, geometric operations |
 | [**physical_management**](src/codomyrmex/physical_management/) | Physical system simulation | Hardware monitoring, resource management |
 | [**system_discovery**](src/codomyrmex/system_discovery/) | System exploration | Module discovery, capability detection, health monitoring |
+| [**module_template**](src/codomyrmex/module_template/) | Module creation templates | Scaffold generation, template management |
+| [**events**](src/codomyrmex/events/) | Event system | Message passing, pub/sub patterns, event logging |
+| [**plugin_system**](src/codomyrmex/plugin_system/) | Plugin architecture | Extension loading, plugin management, interfaces |
+| [**api_standardization**](src/codomyrmex/api_standardization/) | API standards | REST/GraphQL APIs, versioning, validation |
+| [**tools**](src/codomyrmex/tools/) | Utility tools | Development helpers, analysis utilities |
 
 ## Module Quick Reference
 
@@ -619,14 +678,15 @@ Advanced capabilities for specific domains:
 | **Build & Deploy** | [build_synthesis](src/codomyrmex/build_synthesis/) • [git_operations](src/codomyrmex/git_operations/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) |
 | **Visualization** | [data_visualization](src/codomyrmex/data_visualization/) • [modeling_3d](src/codomyrmex/modeling_3d/) |
 | **Infrastructure** | [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [physical_management](src/codomyrmex/physical_management/) |
-| **Orchestration** | [documentation](src/codomyrmex/documentation/) • [api_documentation](src/codomyrmex/api_documentation/) • [project_orchestration](src/codomyrmex/project_orchestration/) • [system_discovery](src/codomyrmex/system_discovery/) |
+| **Orchestration** | [documentation](src/codomyrmex/documentation/) • [api_documentation](src/codomyrmex/api_documentation/) • [api_standardization](src/codomyrmex/api_standardization/) • [project_orchestration](src/codomyrmex/project_orchestration/) • [system_discovery](src/codomyrmex/system_discovery/) |
 | **Execution** | [code_execution_sandbox](src/codomyrmex/code_execution_sandbox/) • [performance](src/codomyrmex/performance/) |
+| **Extensions** | [events](src/codomyrmex/events/) • [plugin_system](src/codomyrmex/plugin_system/) • [module_template](src/codomyrmex/module_template/) • [tools](src/codomyrmex/tools/) |
 
 ## Common Use Cases
 
 ### Development Workflows
 - **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/code_review/) → [Security audit](src/codomyrmex/security_audit/)
-- **AI-Assisted Development**: [AI code editing](src/codomyrmex/ai_code_editing/) with [pattern matching](src/codomyrmex/pattern_matching/) for intelligent refactoring
+- **AI-Assisted Development**: [AI code editing](src/codomyrmex/ai_code_editing/) with [pattern matching](src/codomyrmex/pattern_matching/) for code refactoring
 - **Build & Deploy**: [Build synthesis](src/codomyrmex/build_synthesis/) → [CI/CD automation](src/codomyrmex/ci_cd_automation/) → [Container management](src/codomyrmex/containerization/)
 
 ### Research & Analysis
@@ -647,7 +707,7 @@ codomyrmex/
 │   ├── ai_code_editing/     # AI-powered code assistance
 │   ├── static_analysis/     # Code quality analysis
 │   ├── logging_monitoring/  # Centralized logging
-│   └── ...                  # 30+ additional modules
+│   └── ...                  # 27 additional modules
 ├── scripts/                 # Maintenance and automation utilities
 │   ├── documentation/       # Documentation maintenance scripts
 │   ├── development/         # Development utilities
@@ -1048,9 +1108,9 @@ pie title Module Development Status (December 2025)
 
 ## Key Metrics
 
-- **Lines of Code**: ~50K+ across 30+ modules
+- **Lines of Code**: ~50K+ across 33 modules
 - **Test Coverage**: ≥80% target (currently 75%)
-- **Module Count**: 32 core modules
+- **Module Count**: 33 core modules
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

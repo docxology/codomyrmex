@@ -10,6 +10,7 @@ import tempfile
 import os
 from unittest.mock import patch, MagicMock, mock_open
 from pathlib import Path
+from typing import List
 
 from codomyrmex.containerization.docker_manager import (
     DockerManager,

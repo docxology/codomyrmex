@@ -144,12 +144,12 @@ class TestOutputValidation:
             # Check file exists and is readable
             if output_file.exists():
                 generated_files += 1
-                print("✓ Output file exists"
+                print("✓ Output file exists")
                 # Load and validate content
                 output_data = self.load_output_file(output_file)
                 if output_data is not None:
                     valid_files += 1
-                    print("✓ Output file is valid JSON"
+                    print("✓ Output file is valid JSON")
                     # Validate structure
                     structure_validation = self.validate_output_structure(output_data)
                     if structure_validation["valid"]:

@@ -20,7 +20,7 @@
 
 ### Function: `analyze_project(project_path: str, analysis_types: List[AnalysisType] = None, **kwargs) -> AnalysisSummary`
 
-- **Description**: Perform comprehensive static analysis on an entire project.
+- **Description**: Perform static analysis on an entire project.
 - **Parameters**:
     - `project_path`: Root path of the project to analyze.
     - `analysis_types`: List of analysis types to perform across all files.

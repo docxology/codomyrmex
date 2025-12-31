@@ -1,0 +1,24 @@
+{
+  "database_name": "dev_db",
+  "report_timestamp": "2025-12-30T15:56:25.666944",
+  "analysis_period_hours": 24,
+  "query_performance": {
+    "analysis_period_hours": 24,
+    "queries_analyzed": 0,
+    "message": "No query metrics found for analysis"
+  },
+  "database_performance": {
+    "database_name": "dev_db",
+    "analysis_period_hours": 24,
+    "metrics_count": 0,
+    "message": "No database metrics found for analysis"
+  },
+  "active_alerts": 0,
+  "alerts": [],
+  "recommendations": [
+    "Implement query result caching where appropriate",
+    "Monitor query performance regularly",
+    "Review database indexes for optimization opportunities",
+    "Consider connection pooling configuration"
+  ]
+}

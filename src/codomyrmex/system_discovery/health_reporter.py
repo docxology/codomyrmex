@@ -1,7 +1,7 @@
 """
 Health Reporter for Codomyrmex System Discovery
 
-This module provides comprehensive health reporting capabilities,
+This module provides health reporting capabilities,
 generating detailed reports on system and module health status.
 """
 
@@ -103,7 +103,7 @@ class HealthReporter:
 
     def generate_health_report(self, modules: List[str], include_system_metrics: bool = True) -> HealthReport:
         """
-        Generate a comprehensive health report for specified modules.
+        Generate a health report for specified modules.
 
         Args:
             modules: List of module names to check

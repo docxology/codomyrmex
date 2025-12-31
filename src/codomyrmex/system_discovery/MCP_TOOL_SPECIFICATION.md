@@ -72,7 +72,7 @@ Discovers and catalogs system capabilities, installed modules, and available res
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `scan_depth` | `string` | No | Depth of discovery scan (basic, detailed, comprehensive) | `"detailed"` |
+| `scan_depth` | `string` | No | Depth of discovery scan (basic, detailed, full) | `"detailed"` |
 | `include_modules` | `boolean` | No | Whether to scan individual modules for capabilities | `true` |
 | `include_resources` | `boolean` | No | Whether to scan system resources | `true` |
 | `output_format` | `string` | No | Output format (json, text, summary) | `"json"` |
@@ -103,7 +103,7 @@ Discovers and catalogs system capabilities, installed modules, and available res
 
 ### 1. Tool Purpose and Description
 
-Retrieves comprehensive system status including health metrics, active processes, and system utilization.
+Retrieves system status including health metrics, active processes, and system utilization.
 
 ### 2. Invocation Name
 

@@ -1,14 +1,14 @@
 """Codomyrmex - A Modular, Extensible Coding Workspace
 
-This package provides a comprehensive set of tools and modules for AI-assisted
+This package provides tools and modules for AI-assisted
 software development, code analysis, testing, and documentation. It offers
-advanced orchestration capabilities, comprehensive project management, and
+orchestration capabilities, project management, and
 seamless integration with modern development workflows.
 
 Key Features:
 - AI-powered code generation and editing
-- Comprehensive static analysis and quality checking
-- Advanced data visualization and plotting
+- Static analysis and quality checking
+- Data visualization and plotting
 - Secure code execution in sandboxed environments
 - Git operations and repository management
 - Project orchestration and workflow automation
@@ -58,7 +58,11 @@ __all__ = [
     "system_discovery",
     "terminal_interface",
     "tools",
-    # Advanced modules
+    # Specialized modules
+    "events",
+    "api_standardization",
+    "plugin_system",
+    "template",
     "modeling_3d",
     "physical_management",
 ]

@@ -45,12 +45,23 @@ from .config_monitor import (
     ConfigurationMonitor,
     monitor_config_changes,
 )
-from .secret_manager import (
-    SecretManager,
-    encrypt_configuration,
-    manage_secrets,
-)
 
+# Import secret management conditionally (requires cryptography)
+try:
+    from .secret_manager import (
+        SecretManager,
+        encrypt_configuration,
+        manage_secrets,
+    )
+    SECRET_MANAGEMENT_AVAILABLE = True
+except ImportError:
+    # cryptography not available
+    SecretManager = None
+    encrypt_configuration = None
+    manage_secrets = None
+    SECRET_MANAGEMENT_AVAILABLE = False
+
+# Build __all__ dynamically based on available components
 __all__ = [
     # Configuration management
     "ConfigurationManager",
@@ -58,10 +69,6 @@ __all__ = [
     "validate_configuration",
     "Configuration",
     "ConfigSchema",
-    # Secret management
-    "SecretManager",
-    "manage_secrets",
-    "encrypt_configuration",
     # Configuration deployment
     "ConfigurationDeployer",
     "deploy_configuration",
@@ -71,3 +78,11 @@ __all__ = [
     "monitor_config_changes",
     "ConfigAudit",
 ]
+
+# Add secret management if available
+if SECRET_MANAGEMENT_AVAILABLE:
+    __all__.extend([
+        "SecretManager",
+        "manage_secrets",
+        "encrypt_configuration",
+    ])

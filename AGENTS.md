@@ -38,7 +38,6 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `uv.lock` - Python dependency lock file
 - `start_here.sh` - Interactive entry point for exploration
 - `package.json` - Node.js package configuration
-- `uv.lock` - Python dependency lock file
 - `general.cursorrules` - General coding standards
 - `resources.json` - Resource configuration
 - `test.db` - Test database file
@@ -237,7 +236,6 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - `start_here.sh` – Interactive entry point for exploration
 - `test.db` – Test database file
 - `testing/` – Test suites (unit and integration)
-- `uv.lock` – Python dependency lock file
 - `workflow.db` – Workflow database file
 
 ## Navigation Links

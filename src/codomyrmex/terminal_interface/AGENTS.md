@@ -24,7 +24,7 @@ The terminal_interface module serves as the user interaction foundation, ensurin
 - Structured table output for data presentation
 - Input validation and sanitization
 - Error message formatting with actionable guidance
-- Unicode and emoji support for enhanced readability
+- Unicode and emoji support for readability
 
 ## Function Signatures
 

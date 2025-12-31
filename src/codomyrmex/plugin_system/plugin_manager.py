@@ -274,7 +274,7 @@ class PluginManager:
 
     def get_plugin_status(self, plugin_name: str) -> Dict[str, Any]:
         """
-        Get comprehensive status of a plugin.
+        Get status of a plugin.
 
         Args:
             plugin_name: Name of the plugin

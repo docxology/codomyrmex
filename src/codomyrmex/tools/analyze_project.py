@@ -131,7 +131,7 @@ def analyze_code_quality() -> Dict[str, Any]:
 
 
 def generate_report(structure: Dict, deps: Dict, quality: Dict) -> str:
-    """Generate a comprehensive analysis report."""
+    """Generate an analysis report."""
     report = []
     report.append("# Codomyrmex Project Analysis Report")
     report.append("=" * 50)
