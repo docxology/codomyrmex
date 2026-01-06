@@ -1,6 +1,18 @@
 # Codomyrmex Agents — [Directory Name]
 
+## Signposting
+- **Parent**: [[Parent Directory Name]](../AGENTS.md)
+- **Self**: [[Directory Name] Agents](AGENTS.md)
+- **Children**:
+    - [[Subdirectory Name]](subdirectory/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: [Date]
+
 ## Purpose
+
 [Clear description of the directory's purpose and role at this level of the hierarchy.]
 
 ## Active Components
@@ -14,13 +26,14 @@
 - All agent-exposed tasks and handlers MUST be real, executable implementations. No stubs.
 
 ## Navigation Links
-- **📚 [Directory] Overview**: [README.md](README.md) - [Directory] documentation
-- **🏠 Project Root**: [../README.md](../README.md) - Main project README
-- **📖 Documentation Hub**: [../docs/README.md](../docs/README.md) - Complete documentation structure
-- **[Additional relevant links]**
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current module purpose.
-- [x] Verify logging and telemetry hooks for this directory's agents.
-- [x] Sync automation scripts or TODO entries after modifications.
+### Directory Documentation
+- **Directory Overview**: [README.md](README.md) - Complete directory documentation
+
+### Platform Navigation
+- **Parent Directory**: [[Parent Directory Name]](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../README.md) - Main project documentation
+- **Source Root**: [src](../../README.md) - Source code documentation (if applicable)
 

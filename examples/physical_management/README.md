@@ -1,5 +1,14 @@
 # Physical Management Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 Demonstrates hardware monitoring, resource management, and physical system simulation using the Codomyrmex Physical Management module.
 
 ## Overview
@@ -193,3 +202,12 @@ The module includes comprehensive physics simulation:
 - [Module README](../../src/codomyrmex/physical_management/README.md)
 - [API Specification](../../src/codomyrmex/physical_management/API_SPECIFICATION.md)
 - [Unit Tests](../../testing/unit/test_physical_management.py)
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

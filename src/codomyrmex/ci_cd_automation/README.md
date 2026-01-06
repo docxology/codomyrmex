@@ -1,10 +1,18 @@
 # src/codomyrmex/ci_cd_automation
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the src system.
+Automates CI/CD pipelines, deployments, and rollback operations for continuous delivery workflows.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

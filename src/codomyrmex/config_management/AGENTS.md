@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/config_management
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Config Management Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -415,44 +424,14 @@ All configuration management within the Codomyrmex platform must:
 - Include change history and audit trails
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **environment_setup**: Environment-specific configuration
-- **security_audit**: Configuration security auditing
-- **static_analysis**: Configuration validation
-- **logging_monitoring**: Configuration change logging
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Environment Setup** - Provide environment-specific configuration overrides
-2. **Security Audit** - Enable security scanning of configuration files
-3. **Static Analysis** - Use schema validation for configuration checking
-4. **Logging Integration** - Log configuration changes and access
-5. **CI/CD Integration** - Deploy configurations through automated pipelines
-
-### Quality Gates
-
-Before configuration management changes are accepted:
-
-1. **Security Validated** - Sensitive data is properly encrypted and protected
-2. **Schema Compliance** - All configurations pass schema validation
-3. **Testing Complete** - Configuration loading and validation is tested
-4. **Documentation Updated** - Configuration schemas and examples are documented
-5. **Migration Planned** - Breaking changes include migration path
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial configuration management system with loading, validation, secrets, and deployment capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

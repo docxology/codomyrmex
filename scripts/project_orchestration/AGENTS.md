@@ -1,5 +1,14 @@
 # Codomyrmex Agents — scripts/project_orchestration
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [examples](examples/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -484,6 +493,8 @@ Solution: Validate dependency graph, check task definitions, resolve circular de
 5. Add support for distributed execution
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Core Orchestration Scripts
 - **Command Interface**: [orchestrate.py](orchestrate.py) - Command-line orchestration interface
@@ -492,7 +503,7 @@ Solution: Validate dependency graph, check task definitions, resolve circular de
 
 ### Example Workflows
 - **Comprehensive Demo**: [examples/comprehensive_workflow_demo.py](examples/comprehensive_workflow_demo.py) - Full workflow demonstration
-- **Examples Directory**: [examples/](examples/) - Additional workflow examples
+- **Examples Directory**: [examples/](examples) - Additional workflow examples
 
 ### Platform Navigation
 - **Scripts Directory**: [../README.md](../README.md) - Scripts overview

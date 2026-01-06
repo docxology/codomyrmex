@@ -1,5 +1,16 @@
 # src/codomyrmex/ai_code_editing
 
+## Signposting
+- **Parent**: [codomyrmex](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
+    - [droid](droid/README.md)
+    - [prompt_templates](prompt_templates/README.md)
+    - [tests](tests/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -161,6 +172,8 @@ graph TB
 - `tests/` – Subdirectory
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Src Hub**: [src](../../../src/README.md)

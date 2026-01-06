@@ -8,6 +8,12 @@ import subprocess
 import json
 from pathlib import Path
 
+try:
+    import yaml
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
+
 # Add the src directory to Python path for imports
 project_root = Path(__file__).parent.parent
 code_path = project_root / "src"
@@ -39,6 +45,69 @@ def code_dir():
 def temp_env_file(tmp_path):
     """Fixture providing a temporary .env file path."""
     return tmp_path / ".env"
+
+@pytest.fixture
+def sample_markdown_file(tmp_path):
+    """Fixture providing a sample markdown file."""
+    md_file = tmp_path / "sample.md"
+    md_file.write_text("# Sample Document\n\nThis is sample markdown content.", encoding="utf-8")
+    return md_file
+
+
+@pytest.fixture
+def sample_json_file(tmp_path):
+    """Fixture providing a sample JSON file."""
+    json_file = tmp_path / "sample.json"
+    data = {"name": "Test", "value": 42, "items": ["a", "b", "c"]}
+    json_file.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    return json_file
+
+
+@pytest.fixture
+def sample_yaml_file(tmp_path):
+    """Fixture providing a sample YAML file."""
+    yaml_file = tmp_path / "sample.yaml"
+    yaml_content = """name: Test
+value: 42
+items:
+  - a
+  - b
+  - c
+"""
+    yaml_file.write_text(yaml_content, encoding="utf-8")
+    return yaml_file
+
+
+@pytest.fixture
+def sample_yaml_file_with_yaml(tmp_path):
+    """Fixture providing a sample YAML file (requires yaml library)."""
+    if not YAML_AVAILABLE:
+        pytest.skip("YAML not available")
+    return sample_yaml_file(tmp_path)
+
+
+@pytest.fixture
+def sample_text_file(tmp_path):
+    """Fixture providing a sample text file."""
+    text_file = tmp_path / "sample.txt"
+    text_file.write_text("This is plain text content.", encoding="utf-8")
+    return text_file
+
+
+@pytest.fixture
+def sample_code_with_vulnerability(tmp_path):
+    """Fixture providing sample code with potential security issues."""
+    code_file = tmp_path / "vulnerable.py"
+    code_content = """import os
+password = "secret123"
+def login(username, pwd):
+    if pwd == password:
+        return True
+    return False
+"""
+    code_file.write_text(code_content, encoding="utf-8")
+    return code_file
+
 
 @pytest.fixture(autouse=True)
 def setup_test_environment():

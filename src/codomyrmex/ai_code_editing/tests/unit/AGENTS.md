@@ -1,9 +1,18 @@
 # Codomyrmex Agents — src/codomyrmex/ai_code_editing/tests/unit
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [droid](droid/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Test files and validation suites.
+Test files and validation suites for unit.
 
 ## Active Components
 - `README.md` – Project file
@@ -17,5 +26,5 @@ Test files and validation suites.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [tests](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
+- **Parent Directory**: [tests](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../../README.md) - Main project documentation

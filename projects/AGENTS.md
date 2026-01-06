@@ -1,5 +1,14 @@
 # Codomyrmex Agents — projects
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [test_project](test_project/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -155,16 +164,18 @@ Projects support configuration through:
 - Secret management integration
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### For Users
-- **Quick Start**: [test_project/](test_project/) - Working example
+- **Quick Start**: [test_project/](test_project) - Working example
 - **Templates**: Browse available project templates
 - **Examples**: Feature-specific usage examples
 
 ### For Agents
-- **Project Standards**: [cursorrules/general.cursorrules](../../cursorrules/general.cursorrules)
+- **Project Standards**: [cursorrules/general.cursorrules](../cursorrules/general.cursorrules)
 - **Module System**: [docs/modules/overview.md](../docs/modules/overview.md)
-- **Configuration**: [config/templates/](../../config/templates/)
+- **Configuration**: [config/templates/](../config/templates/)
 
 ### For Contributors
 - **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)

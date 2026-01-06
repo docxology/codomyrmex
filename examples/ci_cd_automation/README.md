@@ -1,5 +1,13 @@
 # CI/CD Automation Example
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Module**: `codomyrmex.ci_cd_automation` - Pipeline Management and Deployment Orchestration
 
 ## Overview
@@ -568,14 +576,23 @@ pipeline.on_event("schedule", lambda: pipeline.run_scheduled())
 
 ## Related Documentation
 
-- **[CI/CD Automation API](../src/codomyrmex/ci_cd_automation/)**
-- **[Pipeline Manager](../src/codomyrmex/ci_cd_automation/pipeline_manager.py)**
-- **[Deployment Orchestrator](../src/codomyrmex/ci_cd_automation/deployment_orchestrator.py)**
-- **[Project Orchestration](../examples/project_orchestration/)**
-- **[Build Synthesis](../examples/build_synthesis/)**
+- **[CI/CD Automation API](../../src/codomyrmex/ci_cd_automation/)**
+- **[Pipeline Manager](../../src/codomyrmex/ci_cd_automation/pipeline_manager.py)**
+- **[Deployment Orchestrator](../../src/codomyrmex/ci_cd_automation/deployment_orchestrator.py)**
+- **[Project Orchestration](../project_orchestration/)**
+- **[Build Synthesis](../build_synthesis/)**
 
 ---
 
 **Status**: Complete CI/CD automation demonstration
 **Tested Methods**: 14 core CI/CD pipeline management methods
 **Features**: Pipeline creation, validation, parallel execution, conditional logic, deployment orchestration, monitoring, and optimization
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

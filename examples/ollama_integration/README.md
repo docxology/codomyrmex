@@ -1,5 +1,13 @@
 # Ollama Integration Example
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Module**: `ollama_integration` | **Status**: ✅ Complete | **Test Coverage**: Comprehensive
 
 ## Overview
@@ -388,3 +396,12 @@ This example is verified by the comprehensive test suite in `testing/unit/test_o
 ---
 
 **Status**: ✅ Complete | **Tested Methods**: 4 | **Integration Points**: 3 | **Ollama Components**: 4
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

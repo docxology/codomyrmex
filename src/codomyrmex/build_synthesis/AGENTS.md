@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/build_synthesis
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Build Synthesis Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -326,45 +336,15 @@ All build synthesis within the Codomyrmex platform must:
 - Integrate with CI/CD systems and deployment pipelines
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **environment_setup**: Environment validation and setup
-- **containerization**: Container build and deployment
-- **ci_cd_automation**: CI/CD pipeline integration
-- **logging_monitoring**: Build logging and monitoring
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Environment Setup** - Coordinate with environment_setup for build prerequisites
-2. **Container Management** - Integrate with containerization for container builds
-3. **CI/CD Systems** - Provide build targets for ci_cd_automation pipelines
-4. **Logging Systems** - Share build logs with logging_monitoring
-5. **Artifact Storage** - Coordinate artifact storage and retrieval
-
-### Quality Gates
-
-Before build synthesis changes are accepted:
-
-1. **Build Reproducibility** - Builds produce consistent outputs
-2. **Cross-Platform Compatibility** - Builds work across supported platforms
-3. **Dependency Resolution** - All dependencies are properly resolved
-4. **Error Handling** - Build failures provide clear diagnostic information
-5. **Performance Validation** - Builds complete within acceptable time limits
-6. **Security Validation** - Builds don't introduce security vulnerabilities
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial build synthesis system with orchestration, target management, and multi-platform support
+- **Source Root**: [src](../../README.md) - Source code documentation

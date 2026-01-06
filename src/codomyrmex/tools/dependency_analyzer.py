@@ -51,7 +51,7 @@ class DependencyAnalyzer:
             # Analysis & Quality layer
             "static_analysis": {"logging_monitoring"},
             "code_execution_sandbox": {"logging_monitoring"},
-            "security_audit": {"logging_monitoring", "static_analysis"},
+            "security": {"logging_monitoring", "static_analysis"},
             # Visualization layer
             "data_visualization": {"logging_monitoring"},
             # Build & Deploy layer

@@ -1,5 +1,14 @@
 # src/codomyrmex/code_review
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
+    - [tests](tests/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview

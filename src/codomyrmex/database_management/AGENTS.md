@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/database_management
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Database Management Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -365,45 +374,14 @@ All database operations within the Codomyrmex platform must:
 - Validate schema compatibility across database systems
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **config_management**: Database configuration management
-- **security_audit**: Database security auditing
-- **performance**: Database performance monitoring integration
-- **logging_monitoring**: Database operation logging
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Configuration Management** - Coordinate with config_management for database settings
-2. **Security Integration** - Work with security_audit for database access control
-3. **Performance Integration** - Share metrics with performance monitoring
-4. **Logging Integration** - Provide database operation logs to logging_monitoring
-5. **Migration Coordination** - Integrate with application deployment workflows
-
-### Quality Gates
-
-Before database management changes are accepted:
-
-1. **Migration Testing** - All migrations tested with rollback capability
-2. **Backup Verification** - Backup and recovery procedures validated
-3. **Performance Impact** - Database operations don't degrade performance
-4. **Security Compliance** - Database access follows security policies
-5. **Data Integrity** - Operations maintain data consistency
-6. **Multi-Database Support** - Works across supported database systems
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial database management system with migration support, backup/recovery, and performance monitoring
+- **Source Root**: [src](../../README.md) - Source code documentation

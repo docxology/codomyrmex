@@ -19,7 +19,8 @@ The Logging & Monitoring module provides the `setup_logging()` and `get_logger()
     -   Logging Personally Identifiable Information (PII), financial data, health information, API keys, session tokens, passwords, or other credentials.
     -   Logging detailed debugging information that could reveal internal system architecture or vulnerabilities (e.g., full stack traces with sensitive path information in production logs accessible to unauthorized users).
 -   **Log Injection**: 
-    -   If log messages are constructed by concatenating unsanitized user-supplied input, and the log output format (especially if text-based and parsed by other tools) or terminal interprets control characters (e.g., ANSI escape codes, newline characters `\n`, carriage returns `\r` injected into a single log line to spoof other log entries).
+    -   If log messages are constructed by concatenating unsanitized user-supplied input, and the log output format (especially if text-based and parsed by other tools) or terminal interprets control characters (e.g., ANSI escape codes, newline characters `
+`, carriage returns `\r` injected into a single log line to spoof other log entries).
     -   Malicious input might attempt to forge log entries or obfuscate legitimate ones.
 -   **Insecure Log Storage/Access**: 
     -   Log files (`CODOMYRMEX_LOG_FILE`) created with overly permissive file system permissions, allowing unauthorized users to read, modify, or delete them.

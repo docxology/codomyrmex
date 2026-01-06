@@ -1,5 +1,14 @@
 # Codomyrmex Agents — scripts/examples/configs
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -254,6 +263,8 @@ All configuration templates must:
 - **User Validation**: Testing with real-world user scenarios
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Configuration Templates
 - **AI Analysis Workflow**: [workflow-ai-analysis.json](workflow-ai-analysis.json) - AI-powered analysis configuration

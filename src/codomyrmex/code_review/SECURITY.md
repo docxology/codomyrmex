@@ -347,7 +347,8 @@ def log_security_event(event_type: str, details: Dict[str, Any]):
 
     # Log to secure location
     with open("/var/log/codomyrmex-security.log", "a") as f:
-        f.write(json.dumps(log_entry) + "\n")
+        f.write(json.dumps(log_entry) + "
+")
 
     # Also log to main application log (sanitized)
     logger.info(f"Security event: {event_type}")

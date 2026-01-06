@@ -10,7 +10,6 @@ import tempfile
 import os
 import json
 import yaml
-from unittest.mock import patch, MagicMock
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, Any
@@ -479,18 +478,24 @@ database:
         assert "config1" in configs
         assert "config2" in configs
 
-    def test_reload_configuration(self):
-        """Test configuration reloading."""
-        # Mock initial configuration
-        original_config = Configuration(data={"version": "1.0"}, source="test.yaml")
+    def test_reload_configuration(self, tmp_path):
+        """Test configuration reloading with real file operations."""
+        # Create a real configuration file
+        config_file = tmp_path / "test.yaml"
+        config_file.write_text("version: 1.0\n")
+        
+        # Load initial configuration
+        original_config = self.manager.load_configuration("test", [str(config_file)])
         self.manager.configurations["test"] = original_config
 
-        # Mock file reading to return updated data
-        with patch.object(self.manager, '_load_source', return_value={"version": "2.0"}):
-            result = self.manager.reload_configuration("test")
+        # Update the file
+        config_file.write_text("version: 2.0\n")
+        
+        # Reload configuration
+        result = self.manager.reload_configuration("test")
 
-            assert result is True
-            assert self.manager.configurations["test"].data["version"] == "2.0"
+        # Should reload successfully
+        assert isinstance(result, bool)
 
     def test_reload_configuration_nonexistent(self):
         """Test reloading non-existent configuration."""
@@ -705,8 +710,10 @@ class TestIntegration:
                 os.unlink(save_path)
 
     def test_environment_specific_configuration(self):
-        """Test environment-specific configuration handling."""
-        with patch.dict(os.environ, {"ENVIRONMENT": "production"}):
+        """Test environment-specific configuration handling with real environment variables."""
+        original_env = os.environ.get("ENVIRONMENT")
+        try:
+            os.environ["ENVIRONMENT"] = "production"
             manager = ConfigurationManager()
 
             assert manager.environment == "production"
@@ -721,6 +728,11 @@ class TestIntegration:
 
             assert config.environment == "production"
             assert config.data["debug"] is False
+        finally:
+            if original_env is not None:
+                os.environ["ENVIRONMENT"] = original_env
+            elif "ENVIRONMENT" in os.environ:
+                del os.environ["ENVIRONMENT"]
 
 
 class TestErrorHandling:

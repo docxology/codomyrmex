@@ -1,0 +1,21 @@
+# Documents Module Dependencies
+
+# Core dependencies
+chardet>=5.0.0  # Encoding detection
+
+# Format support
+pyyaml>=6.0  # YAML support
+jsonschema>=4.0.0  # JSON schema validation
+
+# PDF support (optional - at least one required for PDF operations)
+pypdf>=3.0.0  # PDF reading (preferred)
+# PyPDF2>=3.0.0  # Alternative PDF reading library
+# reportlab>=4.0.0  # PDF generation (preferred)
+# fpdf>=2.0.0  # Alternative PDF generation library
+
+# Optional dependencies
+# beautifulsoup4>=4.0.0  # HTML parsing
+# python-docx>=1.0.0  # DOCX support
+# openpyxl>=3.0.0  # XLSX support
+# python-magic>=0.4.0  # MIME type detection
+

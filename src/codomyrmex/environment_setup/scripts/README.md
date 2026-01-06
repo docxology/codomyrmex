@@ -1,5 +1,13 @@
 # src/codomyrmex/environment_setup/scripts
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -12,6 +20,6 @@ Automation and utility scripts.
 - `setup_dev_env.sh` – File
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [environment_setup](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../src/README.md)

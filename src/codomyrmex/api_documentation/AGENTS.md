@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/api_documentation
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [API Documentation Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -220,43 +229,15 @@ All API documentation within the Codomyrmex platform must:
 - Verify examples work with actual API
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **static_analysis**: Code analysis for API discovery
-- **data_visualization**: API usage analytics and reporting
-- **security_audit**: API security documentation
-- **documentation**: API documentation publishing
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Code Analysis** - Use static_analysis for API endpoint discovery
-2. **Documentation Publishing** - Integrate with documentation module for website publishing
-3. **Security Integration** - Coordinate with security_audit for API security docs
-4. **Usage Analytics** - Work with data_visualization for API usage reporting
-
-### Quality Gates
-
-Before API documentation changes are accepted:
-
-1. **API Accuracy** - Generated documentation matches actual API behavior
-2. **Specification Validity** - OpenAPI specifications pass validation
-3. **Completeness Check** - All API endpoints are documented
-4. **Example Validation** - Code examples work with actual APIs
-5. **Format Compliance** - Documentation follows established standards
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial API documentation system with OpenAPI generation and automated documentation extraction
+- **Source Root**: [src](../../README.md) - Source code documentation

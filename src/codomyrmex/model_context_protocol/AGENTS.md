@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/model_context_protocol
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Model Context Protocol Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -186,40 +196,15 @@ All AI communication within the Codomyrmex platform must:
 - Maintain tool interface stability across versions
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Schema documentation
-- **Tool Specifications**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - Tool definition standards
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Schema Compliance** - Ensure all AI interactions use validated MCP schemas
-2. **Tool Registration** - Register module tools using MCP specifications
-3. **Error Propagation** - Use structured error reporting across module boundaries
-4. **Version Compatibility** - Maintain MCP compatibility across platform versions
-
-### Quality Gates
-
-Before MCP changes are accepted:
-
-1. **Schema Validation Tested** - All message schemas properly validated
-2. **Backward Compatibility Verified** - Changes don't break existing integrations
-3. **Tool Specifications Complete** - All tools fully documented with examples
-4. **Error Handling Validated** - Proper error reporting and recovery
-5. **Type Safety Confirmed** - All interfaces properly typed and validated
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial Model Context Protocol specification with Pydantic schema implementation
+- **Source Root**: [src](../../README.md) - Source code documentation

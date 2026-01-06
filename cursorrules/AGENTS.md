@@ -1,5 +1,16 @@
 # Codomyrmex Agents — cursorrules
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [cross-module](cross-module/AGENTS.md)
+    - [file-specific](file-specific/AGENTS.md)
+    - [modules](modules/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -192,6 +203,8 @@ Changing existing rules requires:
 - Gradual rollout with deprecation warnings
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### For Users
 - **Quick Reference**: [general.cursorrules](general.cursorrules) - Core coding standards
@@ -199,13 +212,13 @@ Changing existing rules requires:
 
 ### For Agents
 - **General Standards**: [general.cursorrules](general.cursorrules) - Repository-wide rules
-- **Module Standards**: [modules/](modules/) - Module-specific guidelines
-- **Cross-Module**: [cross-module/](cross-module/) - Inter-module coordination
+- **Module Standards**: [modules/](modules) - Module-specific guidelines
+- **Cross-Module**: [cross-module/](cross-module) - Inter-module coordination
 
 ### For Contributors
 - **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)
 - **Rule Development**: Guidelines for creating new standards
-- **Enforcement**: [scripts/static_analysis/](../../scripts/static_analysis/) - Rule validation tools
+- **Enforcement**: [scripts/static_analysis/](../scripts/static_analysis/) - Rule validation tools
 
 ## Agent Coordination
 

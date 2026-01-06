@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/ci_cd_automation
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [CI/CD Automation Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -374,46 +383,14 @@ All CI/CD automation within the Codomyrmex platform must:
 - Support automated performance improvements
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **build_synthesis**: Build artifact generation for pipelines
-- **security_audit**: Security scanning integration in CI/CD
-- **environment_setup**: Environment validation for deployments
-- **logging_monitoring**: Pipeline logging and monitoring
-- **containerization**: Container deployment orchestration
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Build Integration** - Use build_synthesis for artifact creation
-2. **Security Integration** - Include security_audit in pipeline stages
-3. **Environment Setup** - Coordinate with environment_setup for deployment prerequisites
-4. **Container Management** - Integrate with containerization for container deployments
-5. **Monitoring Integration** - Share pipeline metrics with logging_monitoring
-
-### Quality Gates
-
-Before CI/CD automation changes are accepted:
-
-1. **Pipeline Validation** - Pipelines execute successfully in test environments
-2. **Rollback Testing** - Rollback procedures work correctly
-3. **Security Integration** - Security checks properly integrated
-4. **Monitoring Coverage** - All pipeline activities are monitored
-5. **Documentation Accuracy** - Pipeline configurations are well-documented
-6. **Performance Verified** - Pipelines meet performance requirements
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial CI/CD automation system with pipeline management, deployment orchestration, and rollback capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

@@ -265,7 +265,7 @@ pipeline = create_pipeline("container_pipeline", [
 ### With Security Audit
 ```python
 from codomyrmex.containerization import scan_container_security
-from codomyrmex.security_audit import generate_security_report
+from codomyrmex.security.digital import generate_security_report
 
 # Scan container security as part of audit
 scan_result = scan_container_security("myapp:latest", scan_type="full")

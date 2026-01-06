@@ -235,7 +235,8 @@ if __name__ == "__main__":
         }
     }
     result_dict_failure = handle_concatenate_tool_call(example_call_data_failure)
-    print("\nFailure Result JSON:")
+    print("
+Failure Result JSON:")
     print(json.dumps(result_dict_failure, indent=2))
 
     example_call_data_missing_arg = {
@@ -249,7 +250,8 @@ if __name__ == "__main__":
     # or we would use a Pydantic model for the arguments themselves for stricter parsing.
     # The current basic validation in handle_concatenate_tool_call will raise an error because strings_arg will be None.
     result_dict_missing_arg = handle_concatenate_tool_call(example_call_data_missing_arg)
-    print("\nMissing Argument Result JSON:")
+    print("
+Missing Argument Result JSON:")
     print(json.dumps(result_dict_missing_arg, indent=2))
 
 ```
@@ -324,7 +326,8 @@ if __name__ == "__main__":
         "arguments": {}
     }
     response_dict_unknown = dispatch_mcp_tool_call(unknown_tool_call)
-    print("\nUnknown Tool Response JSON:")
+    print("
+Unknown Tool Response JSON:")
     print(json.dumps(response_dict_unknown, indent=2))
 
 ```

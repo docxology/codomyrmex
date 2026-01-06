@@ -1,5 +1,14 @@
 # Codomyrmex Agents — testing/integration
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -484,6 +493,8 @@ Solution: Validate environment configuration, check dependency versions, review 
 5. Add better reporting and diagnostic information
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Integration Test Suites
 - **Main Integration Tests**: [integration_test.py](integration_test.py) - Core integration test runner

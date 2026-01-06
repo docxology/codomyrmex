@@ -1,5 +1,13 @@
 # Code Review Example
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Complete | **Last Updated**: December 2025
 
 ## Overview
@@ -252,10 +260,19 @@ The example generates several output files:
 - **[Static Analysis](../static_analysis/)** - Code quality analysis
 - **[Security Audit](../security_audit/)** - Security vulnerability scanning
 - **[Git Operations](../git_operations/)** - Version control integration
-- **[Multi-Module Workflows](../../multi_module/)** - Integrated workflows
+- **[Multi-Module Workflows](../multi_module/)** - Integrated workflows
 
 ## Module Documentation
 
-- **[Code Review Module](../../../src/codomyrmex/code_review/)** - Complete module documentation
-- **[API Specification](../../../src/codomyrmex/code_review/API_SPECIFICATION.md)** - Detailed API reference
-- **[Usage Examples](../../../src/codomyrmex/code_review/USAGE_EXAMPLES.md)** - Additional usage patterns
+- **[Code Review Module](../../src/codomyrmex/code_review/)** - Complete module documentation
+- **[API Specification](../../src/codomyrmex/code_review/API_SPECIFICATION.md)** - Detailed API reference
+- **[Usage Examples](../../src/codomyrmex/code_review/USAGE_EXAMPLES.md)** - Additional usage patterns
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

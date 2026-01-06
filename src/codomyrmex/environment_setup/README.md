@@ -1,5 +1,15 @@
 # src/codomyrmex/environment_setup
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
+    - [scripts](scripts/README.md)
+    - [tests](tests/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview

@@ -1,5 +1,14 @@
 # Modeling 3D Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 Demonstrates 3D scene creation, rendering, and visualization using the Codomyrmex Modeling 3D module.
 
 ## Overview
@@ -248,3 +257,12 @@ The module includes a complete rendering pipeline:
 - [Module README](../../src/codomyrmex/modeling_3d/README.md)
 - [API Specification](../../src/codomyrmex/modeling_3d/API_SPECIFICATION.md)
 - [Unit Tests](../../testing/unit/test_modeling_3d.py)
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

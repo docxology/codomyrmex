@@ -375,7 +375,8 @@ class CustomReviewer(CodeReviewer):
 
         # Check for forbidden imports
         forbidden_imports = ['import os', 'from os import']
-        for i, line in enumerate(content.split('\n'), 1):
+        for i, line in enumerate(content.split('
+'), 1):
             for forbidden in forbidden_imports:
                 if forbidden in line:
                     results.append(AnalysisResult(

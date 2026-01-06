@@ -1,10 +1,18 @@
 # src/codomyrmex/ai_code_editing/droid
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [handlers](handlers/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the src system.
+The autonomous agent ("Droid") abstraction for multi-turn, tool-using LLM interactions.
 
 ## Directory Contents
 - `__init__.py` – File
@@ -17,6 +25,6 @@ Contains components for the src system.
 - `todo_list.txt` – File
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [ai_code_editing](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../src/README.md)

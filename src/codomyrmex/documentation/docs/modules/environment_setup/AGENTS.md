@@ -1,9 +1,18 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/environment_setup
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Documentation files and guides.
+Documentation files and guides for environment_setup.
 
 ## Active Components
 - `README.md` – Project file
@@ -21,5 +30,5 @@ Documentation files and guides.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
+- **Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../../../README.md) - Main project documentation

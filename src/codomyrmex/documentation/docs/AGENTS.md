@@ -1,5 +1,17 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [development](development/AGENTS.md)
+    - [modules](modules/AGENTS.md)
+    - [project](project/AGENTS.md)
+    - [tutorials](tutorials/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -21,5 +33,5 @@ Documentation files and guides.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [documentation](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
+- **Parent Directory**: [documentation](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../README.md) - Main project documentation

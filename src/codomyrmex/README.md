@@ -1,5 +1,15 @@
 # src/codomyrmex
 
+## Signposting
+- **Parent**: [src](../README.md)
+- **Children**:
+    - [ai_code_editing](ai_code_editing/README.md)
+    - [static_analysis](static_analysis/README.md)
+    - [... (20+ modules)](./)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -35,7 +45,7 @@ graph TB
         PATTERN_MATCH[pattern_matching/<br/>Code pattern analysis<br/>AST processing]
         GIT_OPS[git_operations/<br/>Version control<br/>Git workflow automation]
         CODE_REVIEW[code_review/<br/>Automated review<br/>AI-powered analysis]
-        SECURITY_AUDIT[security_audit/<br/>Security scanning<br/>Vulnerability detection]
+        SECURITY[security/<br/>Security module<br/>Physical, digital, cognitive, theory]<br/>DOCUMENTS[documents/<br/>Document I/O<br/>Multi-format support]
         OLLAMA[ollama_integration/<br/>Local LLM integration<br/>Ollama client]
         LANG_MODELS[language_models/<br/>LLM infrastructure<br/>Model management]
         PERFORMANCE[performance/<br/>Performance monitoring<br/>Benchmarking]
@@ -58,6 +68,7 @@ graph TB
         SYSTEM_DISCOVERY[system_discovery/<br/>Module discovery<br/>Health monitoring]
         MODULE_TEMPLATE[module_template/<br/>Module scaffolding<br/>Code generation]
         TEMPLATE[template/<br/>Code templates<br/>Snippet generation]
+        CEREBRUM[cerebrum/<br/>Case-based reasoning<br/>Bayesian inference]
     end
 
     INIT --> LOGGING
@@ -78,7 +89,7 @@ graph TB
     BUILD_SYNTHESIS --> GIT_OPS
     CODE_REVIEW --> STATIC_ANALYSIS
     CI_CD --> BUILD_SYNTHESIS
-    CI_CD --> SECURITY_AUDIT
+    CI_CD --> SECURITY
     CONTAINER --> PHYSICAL_MGMT
     PROJECT_ORCHESTRATION --> BUILD_SYNTHESIS
     PROJECT_ORCHESTRATION --> DOCUMENTATION
@@ -86,6 +97,9 @@ graph TB
     DATA_VIZ --> MODELING_3D
     DATABASE --> BUILD_SYNTHESIS
     CONFIG_MGMT --> ENV
+    CEREBRUM --> AI_EDITING
+    CEREBRUM --> PATTERN_MATCH
+    CEREBRUM --> DATA_VIZ
 ```
 
 ## Module Interface Standards
@@ -325,7 +339,8 @@ flowchart TD
 - `pattern_matching/` – Code pattern recognition and analysis
 - `git_operations/` – Git workflow automation and management
 - `code_review/` – Automated code review with AI assistance
-- `security_audit/` – Security vulnerability scanning and compliance
+- `security/` – Security module (physical, digital, cognitive, theory)
+- `documents/` – Document I/O operations (read/write markdown, JSON, PDF, etc.)
 - `ollama_integration/` – Local LLM integration and management
 - `language_models/` – LLM provider abstraction and management
 - `performance/` – Performance monitoring and benchmarking
@@ -407,7 +422,9 @@ def merge_configs(base: dict, overrides: dict) -> dict
 ```
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Project Root**: [README](../../README.md)
 - **Parent Directory**: [src](../README.md)
-- **Module Documentation**: [docs/modules/overview.md](../../../docs/modules/overview.md)
-- **API Reference**: [docs/reference/api.md](../../../docs/reference/api.md)
+- **Module Documentation**: [docs/modules/overview.md](../../docs/modules/overview.md)
+- **API Reference**: [docs/reference/api.md](../../docs/reference/api.md)

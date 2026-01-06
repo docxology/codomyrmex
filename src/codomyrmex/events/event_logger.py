@@ -12,12 +12,13 @@ from typing import Dict, List, Any, Optional, Callable
 from collections import defaultdict, deque
 import threading
 
-# Import logging
+import logging
+
+# Import logger config
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 from .event_bus import subscribe_to_events, EventBus, get_event_bus
@@ -52,10 +53,11 @@ class EventLogEntry:
         Returns:
             Dictionary representation
         """
+        priority_val = self.event.priority.value if hasattr(self.event.priority, 'value') else self.event.priority
         return {
             'event_id': self.event_id,
             'event_type': self.event.event_type.value,
-            'priority': self.event.priority.value,
+            'priority': priority_val,
             'timestamp': self.timestamp.isoformat(),
             'handler_count': self.handler_count,
             'processing_time': self.processing_time,

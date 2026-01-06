@@ -1,5 +1,14 @@
 # Codomyrmex Agents — docs/reference
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -189,6 +198,8 @@ All reference documentation must:
 - **Version Testing**: Compatibility testing across versions
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Reference Hierarchy
 - **Reference Overview**: [README.md](README.md) - Reference documentation index

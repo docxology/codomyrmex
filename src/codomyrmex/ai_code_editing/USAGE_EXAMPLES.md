@@ -102,9 +102,11 @@ result = refactor_code_snippet(
 if result["status"] == "success":
     print("Original code:")
     print(original_code)
-    print("\nRefactored code:")
+    print("
+Refactored code:")
     print(result["refactored_code"])
-    print("\nExplanation:")
+    print("
+Explanation:")
     print(result["explanation"])
 else:
     print(f"Error: {result['error_message']}")
@@ -188,7 +190,8 @@ def complete_coding_task(task_description, language):
         return f"Failed to generate code: {gen_result['error_message']}"
     
     initial_code = gen_result["generated_code"]
-    print("\nInitial code generated:")
+    print("
+Initial code generated:")
     print(initial_code)
     
     # Step 2: Refactor for best practices
@@ -202,7 +205,8 @@ def complete_coding_task(task_description, language):
         return f"Failed to refactor code: {refactor_result['error_message']}"
     
     final_code = refactor_result["refactored_code"]
-    print("\nFinal optimized code:")
+    print("
+Final optimized code:")
     print(final_code)
     
     return final_code
@@ -368,7 +372,9 @@ Requirements:
 """
 
 result = generate_code_snippet(
-    prompt=f"Create a data validation function\n\n{python_requirements}",
+    prompt=f"Create a data validation function
+
+{python_requirements}",
     language="python"
 )
 ```
@@ -406,7 +412,8 @@ jobs:
           # Get changed files
           result = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1'],
                                 capture_output=True, text=True)
-          changed_files = result.stdout.strip().split('\n')
+          changed_files = result.stdout.strip().split('
+')
 
           for file_path in changed_files:
               if file_path.endswith('.py'):
@@ -439,7 +446,8 @@ def provide_ai_completion():
     for i in range(context_start, context_end):
         context_lines.append(document.lineAt(i).text)
 
-    context = '\n'.join(context_lines)
+    context = '
+'.join(context_lines)
 
     # Generate completion
     from ai_code_editing import generate_code_snippet

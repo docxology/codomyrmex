@@ -359,7 +359,10 @@ def test_code_execution_real():
 
     # Test real code execution
     result = execute_code(
-        code="def add(a, b):\n    return a + b\n\nprint(add(2, 3))",
+        code="def add(a, b):
+    return a + b
+
+print(add(2, 3))",
         language="python",
         timeout=10
     )

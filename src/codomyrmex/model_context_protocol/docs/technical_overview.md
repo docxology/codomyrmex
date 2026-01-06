@@ -150,7 +150,8 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult, MCPErro
 {
   "status": "success",
   "data": {
-    "generated_code": "def sum_numbers(numbers):\n    return sum(numbers)",
+    "generated_code": "def sum_numbers(numbers):
+    return sum(numbers)",
     "language": "python",
     "lines_generated": 2
   },
@@ -463,7 +464,8 @@ See Section 3.2 for the complete JSON Schema definition.
 {
   "status": "success",
   "data": {
-    "generated_code": "def sum_numbers(numbers):\n    return sum(numbers)",
+    "generated_code": "def sum_numbers(numbers):
+    return sum(numbers)",
     "language": "python"
   },
   "explanation": "Generated Python function to sum a list of numbers.",

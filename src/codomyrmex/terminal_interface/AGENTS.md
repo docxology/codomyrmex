@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/terminal_interface
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Terminal Interface Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -313,39 +322,14 @@ All terminal interactions within the Codomyrmex platform must:
 - Update progress indicators frequently for responsiveness
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-
-### Related Modules
-- **CLI Integration**: Main package CLI components
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Output Standardization** - Ensure consistent terminal output across modules
-2. **Progress Integration** - Coordinate progress indicators for multi-module operations
-3. **Error Propagation** - Use consistent error formatting and messaging
-4. **User Experience** - Maintain consistent interaction patterns
-
-### Quality Gates
-
-Before terminal interface changes are accepted:
-
-1. **Cross-Platform Tested** - Works on supported operating systems and terminals
-2. **Accessibility Verified** - Functions correctly with different terminal settings
-3. **Color Compatibility Checked** - Gracefully handles monochrome terminals
-4. **Performance Optimized** - Output formatting doesn't significantly impact performance
-5. **User Experience Validated** - Interface is intuitive and user-friendly
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial terminal interface system with rich formatting and interactive capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

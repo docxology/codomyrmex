@@ -1,5 +1,52 @@
 # Codomyrmex Agents — src/codomyrmex
 
+## Signposting
+- **Parent**: [src](../AGENTS.md)
+- **Self**: [Package Agents](AGENTS.md)
+- **Children**:
+    - **Foundation Layer**:
+        - [Logging Monitoring Agents](logging_monitoring/AGENTS.md)
+        - [Environment Setup Agents](environment_setup/AGENTS.md)
+        - [Model Context Protocol Agents](model_context_protocol/AGENTS.md)
+        - [Terminal Interface Agents](terminal_interface/AGENTS.md)
+    - **Core Layer**:
+        - [AI Code Editing Agents](ai_code_editing/AGENTS.md)
+        - [Static Analysis Agents](static_analysis/AGENTS.md)
+        - [Code Execution Sandbox Agents](code_execution_sandbox/AGENTS.md)
+        - [Data Visualization Agents](data_visualization/AGENTS.md)
+        - [Pattern Matching Agents](pattern_matching/AGENTS.md)
+        - [Git Operations Agents](git_operations/AGENTS.md)
+        - [Code Review Agents](code_review/AGENTS.md)
+                - [Security Agents](security/AGENTS.md)
+                - [Documents Agents](documents/AGENTS.md)
+        - [Ollama Integration Agents](ollama_integration/AGENTS.md)
+        - [Language Models Agents](language_models/AGENTS.md)
+        - [Performance Agents](performance/AGENTS.md)
+    - **Service Layer**:
+        - [Build Synthesis Agents](build_synthesis/AGENTS.md)
+        - [Documentation Agents](documentation/AGENTS.md)
+        - [API Documentation Agents](api_documentation/AGENTS.md)
+        - [CI/CD Automation Agents](ci_cd_automation/AGENTS.md)
+        - [Containerization Agents](containerization/AGENTS.md)
+        - [Database Management Agents](database_management/AGENTS.md)
+        - [Config Management Agents](config_management/AGENTS.md)
+        - [Project Orchestration Agents](project_orchestration/AGENTS.md)
+    - **Specialized Layer**:
+        - [Modeling 3D Agents](modeling_3d/AGENTS.md)
+        - [Physical Management Agents](physical_management/AGENTS.md)
+        - [System Discovery Agents](system_discovery/AGENTS.md)
+        - [Module Template Agents](module_template/AGENTS.md)
+        - [Template Agents](template/AGENTS.md)
+        - [Events Agents](events/AGENTS.md)
+        - [API Standardization Agents](api_standardization/AGENTS.md)
+        - [Plugin System Agents](plugin_system/AGENTS.md)
+        - [Tools Agents](tools/AGENTS.md)
+        - [FPF Agents](fpf/AGENTS.md)
+        - [CEREBRUM Agents](cerebrum/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -72,7 +119,8 @@ Modules are organized into functional layers:
 - `performance/` – Performance monitoring and optimization
 - `physical_management/` – Hardware resource management
 - `project_orchestration/` – Workflow orchestration
-- `security_audit/` – Security scanning and compliance
+- `security/` – Security module (physical, digital, cognitive, theory)
+- `documents/` – Document I/O operations
 - `static_analysis/` – Code quality analysis
 - `system_discovery/` – System exploration and discovery
 - `template/` – Code generation templates
@@ -232,7 +280,7 @@ def generate_review_comments(issues: list) -> list
 def summarize_review(review_result: ReviewResult) -> str
 ```
 
-#### security_audit
+#### security
 
 ```python
 def scan_codebase(path: str) -> list
@@ -413,10 +461,13 @@ def customize_template(template: str, customizations: dict) -> str
 ```
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Package Documentation
 - **Package Overview**: [README.md](README.md) - Complete package documentation
 
-### Development Resources
-
-### Related Systems
+### Platform Navigation
+- **Parent Directory**: [src](../README.md) - Source code documentation
+- **Project Root**: [README](../../README.md) - Main project documentation
+- **Source Root**: [src](../README.md) - Source code documentation

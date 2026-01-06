@@ -6,7 +6,7 @@ migration, and administration capabilities for the Codomyrmex ecosystem.
 
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
-- Integrates with `security_audit` for database security and compliance.
+- Integrates with `security` for database security and compliance.
 - Works with `config_management` for database configuration management.
 - Supports `performance` for database performance monitoring.
 

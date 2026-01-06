@@ -1,5 +1,48 @@
 # Codomyrmex Agents — examples
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [_common](_common/AGENTS.md)
+    - [_configs](_configs/AGENTS.md)
+    - [_templates](_templates/AGENTS.md)
+    - [ai_code_editing](ai_code_editing/AGENTS.md)
+    - [api_documentation](api_documentation/AGENTS.md)
+    - [api_standardization](api_standardization/AGENTS.md)
+    - [build_synthesis](build_synthesis/AGENTS.md)
+    - [ci_cd_automation](ci_cd_automation/AGENTS.md)
+    - [code_execution_sandbox](code_execution_sandbox/AGENTS.md)
+    - [code_review](code_review/AGENTS.md)
+    - [config_management](config_management/AGENTS.md)
+    - [containerization](containerization/AGENTS.md)
+    - [data_visualization](data_visualization/AGENTS.md)
+    - [database_management](database_management/AGENTS.md)
+    - [documentation](documentation/AGENTS.md)
+    - [environment_setup](environment_setup/AGENTS.md)
+    - [events](events/AGENTS.md)
+    - [git_operations](git_operations/AGENTS.md)
+    - [language_models](language_models/AGENTS.md)
+    - [logging_monitoring](logging_monitoring/AGENTS.md)
+    - [model_context_protocol](model_context_protocol/AGENTS.md)
+    - [modeling_3d](modeling_3d/AGENTS.md)
+    - [multi_module](multi_module/AGENTS.md)
+    - [ollama_integration](ollama_integration/AGENTS.md)
+    - [output](output/AGENTS.md)
+    - [pattern_matching](pattern_matching/AGENTS.md)
+    - [performance](performance/AGENTS.md)
+    - [physical_management](physical_management/AGENTS.md)
+    - [plugin_system](plugin_system/AGENTS.md)
+    - [project_orchestration](project_orchestration/AGENTS.md)
+    - [security_audit](security_audit/AGENTS.md)
+    - [static_analysis](static_analysis/AGENTS.md)
+    - [system_discovery](system_discovery/AGENTS.md)
+    - [terminal_interface](terminal_interface/AGENTS.md)
+    - [validation_reports](validation_reports/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.2.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -224,6 +267,8 @@ Before example changes are accepted:
 6. **Output Generated** - Results saved to expected locations
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### For Users
 - **Quick Start**: [README.md](README.md) - Complete examples guide
@@ -416,21 +461,23 @@ Examples support configuration through:
 - Interactive prompts
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### For Users
-- **Getting Started**: [scripts/examples/basic/](../../scripts/examples/basic/) - Simple demonstrations
-- **Complete Workflows**: [scripts/examples/integration/](../../scripts/examples/integration/) - System examples
-- **Configuration**: [scripts/examples/configs/](../../scripts/examples/configs/) - Setup templates
+- **Getting Started**: [scripts/examples/basic/](../scripts/examples/basic/) - Simple demonstrations
+- **Complete Workflows**: [scripts/examples/integration/](../scripts/examples/integration/) - System examples
+- **Configuration**: [scripts/examples/configs/](../scripts/examples/configs/) - Setup templates
 
 ### For Agents
-- **Example Standards**: [cursorrules/general.cursorrules](../../cursorrules/general.cursorrules)
-- **Module Documentation**: [docs/modules/overview.md](../../docs/modules/overview.md)
-- **Script Development**: [scripts/module_template/](../../scripts/module_template/)
+- **Example Standards**: [cursorrules/general.cursorrules](../cursorrules/general.cursorrules)
+- **Module Documentation**: [docs/modules/overview.md](../docs/modules/overview.md)
+- **Script Development**: [scripts/module_template/](../scripts/module_template/)
 
 ### For Contributors
-- **Contributing**: [docs/project/contributing.md](../../docs/project/contributing.md)
+- **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)
 - **Example Guidelines**: Standards for creating new examples
-- **Template**: [scripts/module_template/](../../scripts/module_template/) - Example creation template
+- **Template**: [scripts/module_template/](../scripts/module_template/) - Example creation template
 
 ## Agent Coordination
 
@@ -472,6 +519,6 @@ Before example changes are accepted:
 
 ## Related Documentation
 
-- **[Script Examples](scripts/examples/README.md)** - Detailed example documentation
-- **[Getting Started](docs/getting-started/tutorials/)** - Tutorial-style learning
-- **[Module Documentation](docs/modules/overview.md)** - Module usage patterns
+- **[Script Examples](../scripts/examples/README.md)** - Detailed example documentation
+- **[Getting Started](../docs/getting-started/tutorials/)** - Tutorial-style learning
+- **[Module Documentation](../docs/modules/overview.md)** - Module usage patterns

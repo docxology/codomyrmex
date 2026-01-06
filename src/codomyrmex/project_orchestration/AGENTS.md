@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/project_orchestration
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Project Orchestration Agents](AGENTS.md)
+- **Children**:
+    - [templates](templates/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -218,40 +228,15 @@ All workflow orchestration within the Codomyrmex platform must:
 - Ensure proper cleanup on task completion or failure
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-- **Developer Guide**: [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) - Development and integration guide
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Workflow Integration** - Define workflows that span multiple modules
-2. **Resource Coordination** - Coordinate resource usage across module operations
-3. **Status Propagation** - Share execution status and progress information
-4. **Error Handling** - Provide consistent error handling across workflows
-
-### Quality Gates
-
-Before orchestration changes are accepted:
-
-1. **Workflow Validation Tested** - All workflow definitions properly validated
-2. **Dependency Resolution Verified** - Task dependencies resolved correctly
-3. **Resource Management Tested** - Resource allocation and cleanup work properly
-4. **Error Recovery Validated** - Failed workflows can be safely recovered or rolled back
-5. **Performance Optimized** - Orchestration overhead remains within acceptable limits
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial workflow orchestration system with task management, resource allocation, and project coordination capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

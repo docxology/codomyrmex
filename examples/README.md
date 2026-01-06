@@ -1,5 +1,47 @@
 # Codomyrmex Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [_common](_common/README.md)
+    - [_configs](_configs/README.md)
+    - [_templates](_templates/README.md)
+    - [ai_code_editing](ai_code_editing/README.md)
+    - [api_documentation](api_documentation/README.md)
+    - [api_standardization](api_standardization/README.md)
+    - [build_synthesis](build_synthesis/README.md)
+    - [ci_cd_automation](ci_cd_automation/README.md)
+    - [code_execution_sandbox](code_execution_sandbox/README.md)
+    - [code_review](code_review/README.md)
+    - [config_management](config_management/README.md)
+    - [containerization](containerization/README.md)
+    - [data_visualization](data_visualization/README.md)
+    - [database_management](database_management/README.md)
+    - [documentation](documentation/README.md)
+    - [environment_setup](environment_setup/README.md)
+    - [events](events/README.md)
+    - [git_operations](git_operations/README.md)
+    - [language_models](language_models/README.md)
+    - [logging_monitoring](logging_monitoring/README.md)
+    - [model_context_protocol](model_context_protocol/README.md)
+    - [modeling_3d](modeling_3d/README.md)
+    - [multi_module](multi_module/README.md)
+    - [ollama_integration](ollama_integration/README.md)
+    - [output](output/README.md)
+    - [pattern_matching](pattern_matching/README.md)
+    - [performance](performance/README.md)
+    - [physical_management](physical_management/README.md)
+    - [plugin_system](plugin_system/README.md)
+    - [project_orchestration](project_orchestration/README.md)
+    - [security_audit](security_audit/README.md)
+    - [static_analysis](static_analysis/README.md)
+    - [system_discovery](system_discovery/README.md)
+    - [terminal_interface](terminal_interface/README.md)
+    - [validation_reports](validation_reports/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.2.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -59,55 +101,55 @@ python example_workflow_analysis.py
 
 Core infrastructure modules used throughout Codomyrmex:
 
-- **[logging_monitoring/](logging_monitoring/)** - Centralized logging and monitoring ✅
-- **[environment_setup/](environment_setup/)** - Environment validation and setup ✅
-- **[model_context_protocol/](model_context_protocol/)** - AI communication standards ✅
-- **[terminal_interface/](terminal_interface/)** - Rich terminal UI ✅
+- **[logging_monitoring/](logging_monitoring)** - Centralized logging and monitoring ✅
+- **[environment_setup/](environment_setup)** - Environment validation and setup ✅
+- **[model_context_protocol/](model_context_protocol)** - AI communication standards ✅
+- **[terminal_interface/](terminal_interface)** - Rich terminal UI ✅
 
 ### Core Layer ✅
 
 Primary development capabilities:
 
-- **[ai_code_editing/](ai_code_editing/)** - AI-powered code generation ✅
-- **[static_analysis/](static_analysis/)** - Code quality analysis ✅
-- **[code_execution_sandbox/](code_execution_sandbox/)** - Safe code execution ✅
-- **[data_visualization/](data_visualization/)** - Charts and visualizations ✅
-- **[pattern_matching/](pattern_matching/)** - Code pattern analysis ✅
-- **[git_operations/](git_operations/)** - Version control automation ✅
-- **[code_review/](code_review/)** - Automated code review ✅
-- **[security_audit/](security_audit/)** - Security scanning ✅
+- **[ai_code_editing/](ai_code_editing)** - AI-powered code generation ✅
+- **[static_analysis/](static_analysis)** - Code quality analysis ✅
+- **[code_execution_sandbox/](code_execution_sandbox)** - Safe code execution ✅
+- **[data_visualization/](data_visualization)** - Charts and visualizations ✅
+- **[pattern_matching/](pattern_matching)** - Code pattern analysis ✅
+- **[git_operations/](git_operations)** - Version control automation ✅
+- **[code_review/](code_review)** - Automated code review ✅
+- **[security_audit/](security_audit)** - Security scanning ✅
 
 ### Service Layer ✅
 
 Higher-level orchestration and services:
 
-- **[build_synthesis/](build_synthesis/)** - Build automation ✅
-- **[documentation/](documentation/)** - Documentation generation ✅
-- **[api_documentation/](api_documentation/)** - API docs generation ✅
-- **[ci_cd_automation/](ci_cd_automation/)** - CI/CD pipelines ✅
-- **[database_management/](database_management/)** - Database operations ✅
-- **[containerization/](containerization/)** - Container management ✅
-- **[config_management/](config_management/)** - Configuration management ✅
-- **[project_orchestration/](project_orchestration/)** - Workflow orchestration ✅
+- **[build_synthesis/](build_synthesis)** - Build automation ✅
+- **[documentation/](documentation)** - Documentation generation ✅
+- **[api_documentation/](api_documentation)** - API docs generation ✅
+- **[ci_cd_automation/](ci_cd_automation)** - CI/CD pipelines ✅
+- **[database_management/](database_management)** - Database operations ✅
+- **[containerization/](containerization)** - Container management ✅
+- **[config_management/](config_management)** - Configuration management ✅
+- **[project_orchestration/](project_orchestration)** - Workflow orchestration ✅
 
 ### Specialized Layer
 
 Domain-specific capabilities:
 
-- **[modeling_3d/](modeling_3d/)** - 3D modeling and visualization ✅
-- **[physical_management/](physical_management/)** - Hardware management ✅
-- **[system_discovery/](system_discovery/)** - System exploration ✅
-- **[performance/](performance/)** - Performance monitoring ✅
-- **[ollama_integration/](ollama_integration/)** - Local LLM integration ✅
-- **[language_models/](language_models/)** - LLM infrastructure ✅
+- **[modeling_3d/](modeling_3d)** - 3D modeling and visualization ✅
+- **[physical_management/](physical_management)** - Hardware management ✅
+- **[system_discovery/](system_discovery)** - System exploration ✅
+- **[performance/](performance)** - Performance monitoring ✅
+- **[ollama_integration/](ollama_integration)** - Local LLM integration ✅
+- **[language_models/](language_models)** - LLM infrastructure ✅
 
 ### New Modules
 
 Recently added modules:
 
-- **[plugin_system/](plugin_system/)** - Plugin architecture ✅
-- **[events/](events/)** - Event-driven communication ✅
-- **[api_standardization/](api_standardization/)** - API standards ✅
+- **[plugin_system/](plugin_system)** - Plugin architecture ✅
+- **[events/](events)** - Event-driven communication ✅
+- **[api_standardization/](api_standardization)** - API standards ✅
 
 ### Multi-Module Workflows ✅
 
@@ -293,6 +335,13 @@ To add a new example:
 - **[Unit Tests](../testing/unit/)** - Test suite
 - **[Integration Tests](../testing/integration/)** - Integration tests
 - **[AGENTS.md](AGENTS.md)** - Agent coordination for examples
-- **[COMPREHENSIVE_PLAN.md](COMPREHENSIVE_PLAN.md)** - Complete implementation plan
 - **[COMPLETE_INVENTORY.md](COMPLETE_INVENTORY.md)** - Full inventory of all examples
-- **[IMPLEMENTATION_CHECKLIST.md](IMPLEMENTATION_CHECKLIST.md)** - Implementation checklist
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [Root](../README.md)
+- **Repository Root**: [../README.md](../README.md)
+- **Repository SPEC**: [../SPEC.md](../SPEC.md)

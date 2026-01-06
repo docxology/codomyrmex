@@ -9,7 +9,7 @@ This documentation provides in-depth information beyond the main `README.md` for
 - [API Specification](../API_SPECIFICATION.md) (Link to the main API spec)
 - [Usage Examples](../USAGE_EXAMPLES.md) (Link to usage examples)
 - [MCP Tool Specification](../MCP_TOOL_SPECIFICATION.md) (Link to MCP tools)
-- [Contributing Guidelines](../../../docs/project/contributing.md) (Link to contribution guide)
+- [Contributing Guidelines](../../../../docs/project/contributing.md) (Link to contribution guide)
 
 ## How to Use This Documentation
 

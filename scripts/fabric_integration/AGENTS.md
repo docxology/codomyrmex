@@ -1,5 +1,14 @@
 # Codomyrmex Agents — scripts/fabric_integration
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -422,6 +431,8 @@ Solution: Increase timeout values, break large tasks into smaller chunks, use as
 5. Add monitoring and metrics collection
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Core Integration Scripts
 - **Orchestrator**: [fabric_orchestrator.py](fabric_orchestrator.py) - Main AI orchestration engine

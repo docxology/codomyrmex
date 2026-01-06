@@ -93,7 +93,7 @@ class HealthChecker:
             "pattern_matching": self._check_pattern_matching,
             "git_operations": self._check_git_operations,
             "code_review": self._check_code_review,
-            "security_audit": self._check_security_audit,
+            "security": self._check_security_digital,
             "ollama_integration": self._check_ollama_integration,
             "language_models": self._check_language_models,
             "performance": self._check_performance,
@@ -284,12 +284,12 @@ class HealthChecker:
         except Exception as e:
             result.add_issue(f"Static analysis error: {str(e)}", "Check analysis tools installation")
 
-    def _check_security_audit(self, result: HealthCheckResult) -> None:
-        """Check security audit module health."""
+    def _check_security_digital(self, result: HealthCheckResult) -> None:
+        """Check digital security submodule health."""
         result.checks_performed.extend(["vulnerability_scanning", "secrets_detection"])
 
         try:
-            from codomyrmex.security_audit import analyze_file_security
+            from codomyrmex.security.digital import analyze_file_security
 
             # Create a test file with potential security issues
             import tempfile

@@ -1,5 +1,21 @@
 # docs
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [deployment](deployment/README.md)
+    - [development](development/README.md)
+    - [examples](examples/README.md)
+    - [getting-started](getting-started/README.md)
+    - [integration](integration/README.md)
+    - [modules](modules/README.md)
+    - [project](project/README.md)
+    - [project_orchestration](project_orchestration/README.md)
+    - [reference](reference/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -241,6 +257,8 @@ pie title Documentation Coverage (December 2025)
 - **Analytics Review**: Usage patterns and popular content analysis
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
 - **Docs Hub**: [docs/README.md](README.md)
 - **Quick Start**: [getting-started/quickstart.md](getting-started/quickstart.md)

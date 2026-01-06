@@ -1,10 +1,37 @@
 # src/codomyrmex/module_template
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
+    - [tests](tests/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Contains components for the src system.
+The `module_template` module allows developers to quickly scaffold new modules within the Codomyrmex ecosystem. By standardizing the creation process, it ensures that every new component adheres to the project's architectural guidelines, including directory structure, documentation standards, and testing setups.
+
+## Key Features
+
+- **Standardized Scaffolding**: Generates the complete folder hierarchy required for a compliant module.
+- **Documentation Bootstrapping**: Automatically creates `README.md`, `AGENTS.md`, and `SPEC.md` with appropriate templates.
+- **Boilerplate generation**: Creates initial `__init__.py`, `requirements.txt`, and test files.
+
+## Usage
+
+```python
+from codomyrmex.module_template import create_module
+
+# Create a new module named 'quantum_entangler'
+create_module(
+    name="quantum_entangler",
+    description="Handles quantum state synchronization."
+)
+```
 
 ## Directory Contents
 - `.cursor/` – Subdirectory
@@ -20,6 +47,8 @@ Contains components for the src system.
 - `tests/` – Subdirectory
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Src Hub**: [src](../../../src/README.md)

@@ -1,23 +1,32 @@
 # cursorrules/cross-module
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the cursorrules system.
+Cross-module coding rules and coordination standards for Codomyrmex. These rules define how modules interact, coordinate operations, and maintain consistency across module boundaries.
 
 ## Directory Contents
-- `build_synthesis.cursorrules` – File
-- `code_execution_sandbox.cursorrules` – File
-- `data_visualization.cursorrules` – File
-- `logging_monitoring.cursorrules` – File
-- `model_context_protocol.cursorrules` – File
-- `output_module.cursorrules` – File
-- `pattern_matching.cursorrules` – File
-- `static_analysis.cursorrules` – File
-- `template_module.cursorrules` – File
+- `build_synthesis.cursorrules` – Build synthesis module rules
+- `code_execution_sandbox.cursorrules` – Code execution sandbox rules
+- `data_visualization.cursorrules` – Data visualization module rules
+- `logging_monitoring.cursorrules` – Logging and monitoring rules
+- `model_context_protocol.cursorrules` – MCP coordination rules
+- `output_module.cursorrules` – Output module rules
+- `pattern_matching.cursorrules` – Pattern matching rules
+- `static_analysis.cursorrules` – Static analysis rules
+- `template_module.cursorrules` – Template module rules
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cursorrules](../README.md)
-- **Cursorrules Hub**: [cursorrules](../../../cursorrules/README.md)
+- **Repository Root**: [../../README.md](../../README.md)

@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/module_template
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Template Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -348,41 +358,15 @@ When creating new modules:
 6. **Validate Before Commit** - Run validation checks before committing
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
-### Template Documentation
-- **Template Guide**: [docs/index.md](docs/index.md) - Complete template documentation
-- **Technical Overview**: [docs/technical_overview.md](docs/technical_overview.md) - Technical implementation details
-- **Tutorial**: [docs/tutorials/example_tutorial.md](docs/tutorials/example_tutorial.md) - Step-by-step tutorial
-
-### Related Modules
-- **All Modules**: This module provides templates for creating all other modules
-- **system_discovery**: Can discover and validate newly created modules
+### Module Documentation
+- **Module Overview**: [README.md](README.md) - Complete module documentation
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Module Discovery** - Newly created modules are automatically discoverable
-2. **Configuration Management** - Templates include configuration setup
-3. **Testing Integration** - Templates include test structure for CI/CD
-4. **Documentation Integration** - Templates integrate with documentation system
-
-### Quality Gates
-
-Before template usage:
-
-1. **Template Completeness** - All required files and structure included
-2. **Code Quality** - Template code follows platform standards
-3. **Documentation Accuracy** - Templates produce accurate documentation
-4. **Security Compliance** - Templates include security best practices
-5. **Testing Coverage** - Templates enable testing
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial module template system with scaffolding for creating new Codomyrmex modules
+- **Source Root**: [src](../../README.md) - Source code documentation

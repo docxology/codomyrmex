@@ -1,5 +1,13 @@
 # examples/language_models/examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -44,3 +52,12 @@ max_tokens: 1000
 - Local models via Ollama
 - Azure OpenAI
 - Google Vertex AI
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [language_models](../README.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)

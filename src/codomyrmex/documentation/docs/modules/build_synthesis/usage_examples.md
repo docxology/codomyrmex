@@ -1,16 +1,17 @@
 # Build Synthesis - Usage Examples
 
+# Build Synthesis - Usage Examples
+
 ## Example 1: Basic Usage - Triggering a Build via MCP
 
-<!-- TODO: Provide a simple, clear example of how to use a core feature. This example focuses on the `trigger_build` MCP tool. -->
+This example demonstrates how to trigger a build for a specific component using the `trigger_build` MCP tool. This is the primary way to generate distribution artifacts (wheels, etc.) for Codomyrmex modules.
 
 ```json
-// Hypothetical MCP client request to trigger a build
 {
   "tool_name": "trigger_build",
   "arguments": {
-    "target_component": "my_python_module", // <!-- TODO: Replace with a realistic target component name -->
-    "build_profile": "debug",
+    "target_component": "ai_code_editing",
+    "build_profile": "release",
     "clean_build": true
   }
 }
@@ -18,73 +19,72 @@
 
 ### Expected Outcome
 
-<!-- TODO: Describe what the user should expect. 
-This would be an MCP tool response. Show an example JSON response. -->
+The tool will return an MCP JSON response indicating the status and the location of the generated artifacts.
+
 ```json
-// Example MCP tool response
 {
-  "status": "success", // or "failure"
-  "artifact_paths": ["./output/builds/my_python_module/my_python_module.whl"], // <!-- TODO: Adjust path -->
-  "log_output": "Build started for my_python_module... Build completed successfully.",
+  "status": "success",
+  "artifact_paths": ["./src/codomyrmex/ai_code_editing/dist/codomyrmex_ai_code_editing-0.1.0-py3-none-any.whl"],
+  "log_output": "Build started for ai_code_editing... Running build scripts... Build completed successfully.",
   "error_message": null
 }
 ```
 
 ## Example 2: Advanced Scenario - Synthesizing a New Module via MCP
 
-<!-- TODO: Illustrate a more complex use case, focusing on the `synthesize_code_component` MCP tool. -->
+The `synthesize_code_component` tool allows for the rapid creation of new, standardized Codomyrmex modules based on a high-level specification.
 
 ```json
-// Hypothetical MCP client request to synthesize a new Codomyrmex module
 {
   "tool_name": "synthesize_code_component",
   "arguments": {
     "component_type": "codomyrmex_module",
-    "component_name": "NewDataProcessor",
-    "output_directory": "./codomyrmex/", // <!-- TODO: Adjust base path if needed -->
+    "component_name": "SecurityScanner",
+    "output_directory": "./src/codomyrmex/",
     "specification": {
-      "description": "A new module for processing specific data formats.",
-      "initial_functions": ["process_data", "validate_schema"],
-      "dependencies": ["pandas", "jsonschema"]
+      "description": "A module for identifying potential security vulnerabilities in Python code.",
+      "initial_functions": ["scan_file", "report_vulnerabilities"],
+      "dependencies": ["bandit", "safety"]
     }
   }
 }
 ```
 
-### Configuration (if any)
+### Configuration
 
-<!-- TODO: Detail any specific configuration needed for this example beyond the MCP call itself. 
-E.g., existence of base `output_directory`, specific templates the tool might use. -->
-- Ensure the `output_directory` (e.g., `./codomyrmex/`) is writable.
-- The `synthesize_code_component` tool might rely on module templates located in `template/module_template/`.
+- Ensure the `output_directory` is within the `src/codomyrmex/` namespace to follow project standards.
+- The tool uses the centralized module template located in `src/codomyrmex/module_template/`.
 
 ### Expected Outcome
 
-<!-- TODO: Describe the result. Show an example JSON response for the MCP tool. -->
+Successful synthesis will create a full directory structure with localized documentation and initial code skeletons.
+
 ```json
-// Example MCP tool response
 {
   "status": "success",
   "generated_files": [
-    "./codomyrmex/new_data_processor/__init__.py",
-    "./codomyrmex/new_data_processor/README.md",
-    "./codomyrmex/new_data_processor/requirements.txt",
-    "./codomyrmex/new_data_processor/src/new_data_processor.py"
-    // ... other standard module files
+    "./src/codomyrmex/security_scanner/__init__.py",
+    "./src/codomyrmex/security_scanner/README.md",
+    "./src/codomyrmex/security_scanner/SPEC.md",
+    "./src/codomyrmex/security_scanner/AGENTS.md",
+    "./src/codomyrmex/security_scanner/requirements.txt",
+    "./src/codomyrmex/security_scanner/src/security_scanner.py"
   ],
-  "log_output": "Successfully synthesized module NewDataProcessor.",
+  "log_output": "Successfully synthesized module SecurityScanner from template.",
   "error_message": null
 }
 ```
-Files for the `NewDataProcessor` module would be created in the `codomyrmex/new_data_processor/` directory, based on the project's standard module template.
 
 ## Common Pitfalls & Troubleshooting
 
-- **Issue**: Build failure (`trigger_build` returns `"status": "failure"`).
-  - **Solution**: Check the `log_output` and `error_message` in the MCP response. Examine build logs if available at `artifact_paths`. Ensure all dependencies for the `target_component` are correctly installed and build scripts are valid.
-- **Issue**: Code synthesis fails (`synthesize_code_component` returns `"status": "failure"`).
-  - **Solution**: Verify the `component_type` is supported. Check `output_directory` permissions. Ensure the `specification` is valid for the chosen component type. Review logs for more details.
-- **Issue**: Incorrect artifacts or synthesized code structure.
-  - **Solution**: Review the build scripts for the target component. For synthesis, check the underlying templates and the input `specification` for correctness.
+- **Issue**: **Build Failure** (`trigger_build` returns `"status": "failure"`)
+  - **Solution**: Check the `error_message` in the MCP response. Ensure the `target_component` directory exists and contains a valid `setup.py` or `pyproject.toml`.
 
-<!-- TODO: Add other common issues specific to build and synthesis tasks. --> 
+- **Issue**: **Synthesis Failure** (`synthesize_code_component` returns `"status": "failure"`)
+  - **Solution**: Verify `component_type` is one of the supported types (e.g., `codomyrmex_module`). Ensure the `output_directory` is writable.
+
+- **Issue**: **Missing Dependencies** in synthesized modules.
+  - **Solution**: Add any missing third-party packages to the `specification` arguments under `dependencies` and re-run synthesis, or manually update the generated `requirements.txt`.
+
+- **Issue**: **Signposting Drift**
+  - **Solution**: After synthesis, it is recommended to run `scripts/documentation/doc_scaffolder.py` to ensure all parent/child links are correctly populated in the new directory.

@@ -1,5 +1,19 @@
 # Codomyrmex Agents — testing
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [examples](examples/AGENTS.md)
+    - [fixtures](fixtures/AGENTS.md)
+    - [integration](integration/AGENTS.md)
+    - [output](output/AGENTS.md)
+    - [performance](performance/AGENTS.md)
+    - [unit](unit/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -208,6 +222,8 @@ The testing framework uses:
 - **conftest.py** for shared fixtures and setup
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### For Users
 - **Quick Start**: [README.md](../testing/README.md) - Testing overview
@@ -221,8 +237,8 @@ The testing framework uses:
 
 ### For Contributors
 - **Test Development**: [docs/development/testing-strategy.md](../docs/development/testing-strategy.md)
-- **Code Coverage**: [pytest.ini](../../../pytest.ini) - Coverage configuration
-- **Contributing**: [docs/project/contributing.md](../../../docs/project/contributing.md)
+- **Code Coverage**: [pytest.ini](../pytest.ini) - Coverage configuration
+- **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)
 
 ## Agent Coordination
 
@@ -263,6 +279,6 @@ Before merging test changes:
 
 ## Related Documentation
 
-- **[Testing Strategy](docs/development/testing-strategy.md)** - Testing approach
-- **[Module System](docs/modules/overview.md)** - Module architecture and relationships
-- **[Contributing Guide](docs/project/contributing.md)** - Testing requirements and workflow
+- **[Testing Strategy](../docs/development/testing-strategy.md)** - Testing approach
+- **[Module System](../docs/modules/overview.md)** - Module architecture and relationships
+- **[Contributing Guide](../docs/project/contributing.md)** - Testing requirements and workflow

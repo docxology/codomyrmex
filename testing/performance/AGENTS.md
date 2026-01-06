@@ -1,5 +1,14 @@
 # testing/performance - Performance Testing Suite
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -60,6 +69,8 @@ This directory contains performance testing suites for measuring and validating 
 3. **Historical Tracking**: Maintain historical performance data for trend analysis
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Testing Root**: [../README.md](../README.md) - Testing suite documentation
 - **Testing Agents**: [../AGENTS.md](../AGENTS.md) - Test coordination

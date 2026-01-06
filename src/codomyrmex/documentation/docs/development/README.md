@@ -1,18 +1,26 @@
 # src/codomyrmex/documentation/docs/development
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Documentation files and guides.
+Development documentation for the Codomyrmex platform. This directory provides comprehensive guides for setting up development environments, running tests, and contributing to the project.
 
-## Directory Contents
-- `DocumentationMaintenance.md` – File
-- `documentation-pipeline.md` – File
-- `environment-setup.md` – File
-- `testing_strategy.md` – File
+## Key Resources
+
+- **tutorials/**: Getting started guides and environment setup walkthroughs.
+- **AGENTS.md**: Coordination protocols for development and build automation agents.
+- **SPEC.md**: Technical specifications for the development workflows and quality gates.
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [docs](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../README.md)

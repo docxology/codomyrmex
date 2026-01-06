@@ -1,5 +1,14 @@
 # Codomyrmex Agents — projects/test_project/src
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -213,6 +222,8 @@ Code must be updated when:
 - **Integration Testing**: End-to-end functionality testing
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Source Hierarchy
 - **Source Overview**: [README.md](README.md) - Source code documentation and development guide

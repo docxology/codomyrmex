@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/ai_code_editing
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [AI Agents](AGENTS.md)
+- **Children**:
+    - [Droid Agents](droid/AGENTS.md)
+    - [Template Agents](prompt_templates/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -424,19 +434,18 @@ All AI code assistance within the Codomyrmex platform must:
 - Handle provider-specific parameter differences
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-- **Prompt Engineering**: [PROMPT_ENGINEERING.md](PROMPT_ENGINEERING.md) - Prompt design guide
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
+- **Source Root**: [src](../../README.md) - Source code documentation
 ## Agent Coordination
 
 ### Integration Points

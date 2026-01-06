@@ -283,7 +283,7 @@ Source Code → Static Analysis → Testing → Build Validation → Deployment
 - **[Troubleshooting Guide](../reference/troubleshooting.md)**: Common architecture-related issues
 
 ### **Source Code Navigation**
-- **[Source Overview](../../src/README.md)**: Source code organization
+- **[Source Overview](../../README.md)**: Source code organization
 - **[Package Overview](../../src/codomyrmex/README.md)**: Main package structure
 - **[Module Template](../../src/template/README.md)**: Template for new modules
 

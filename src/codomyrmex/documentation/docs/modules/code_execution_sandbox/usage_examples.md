@@ -36,11 +36,13 @@ result = execute_code(
 print(f"Status: {result['status']}")
 print(f"Exit Code: {result['exit_code']}")
 print(f"Execution Time: {result['execution_time']} seconds")
-print("\nOutput:")
+print("
+Output:")
 print(result['stdout'])
 
 if result['stderr']:
-    print("\nErrors:")
+    print("
+Errors:")
     print(result['stderr'])
 ```
 
@@ -82,7 +84,8 @@ result = execute_code(
 )
 
 print(f"Status: {result['status']}")
-print(f"Output:\n{result['stdout']}")
+print(f"Output:
+{result['stdout']}")
 ```
 
 Expected output:
@@ -115,7 +118,8 @@ print(f"Exit Code: {result['exit_code']}")
 print(f"Execution Time: {result['execution_time']} seconds")
 
 if result['stderr']:
-    print("\nErrors:")
+    print("
+Errors:")
     print(result['stderr'])
 ```
 
@@ -154,7 +158,8 @@ result = execute_code(
 
 print(f"Status: {result['status']}")
 print(f"Error Message: {result['error_message']}")
-print(f"Partial Output:\n{result['stdout']}")
+print(f"Partial Output:
+{result['stdout']}")
 ```
 
 Expected output:
@@ -190,7 +195,8 @@ result = execute_code(
 )
 
 print(f"Status: {result['status']}")
-print(f"Output:\n{result['stdout']}")
+print(f"Output:
+{result['stdout']}")
 ```
 
 ## Advanced Usage
@@ -218,7 +224,9 @@ The `execute_code` tool is designed to be called via the Model Context Protocol.
   "tool_name": "execute_code",
   "arguments": {
     "language": "python",
-    "code": "print('Hello from MCP in Python!')\nx = 10 + 20\nprint(f'The result is: {x}')",
+    "code": "print('Hello from MCP in Python!')
+x = 10 + 20
+print(f'The result is: {x}')",
     "timeout": 15
   }
 }
@@ -227,7 +235,9 @@ The `execute_code` tool is designed to be called via the Model Context Protocol.
 **Expected Response (example):**
 ```json
 {
-  "stdout": "Hello from MCP in Python!\nThe result is: 30\n",
+  "stdout": "Hello from MCP in Python!
+The result is: 30
+",
   "stderr": "",
   "exit_code": 0,
   "execution_time": 0.08,
@@ -254,7 +264,8 @@ The `execute_code` tool is designed to be called via the Model Context Protocol.
 **Expected Response (example):**
 ```json
 {
-  "stdout": "JS received: Test input for JS\n",
+  "stdout": "JS received: Test input for JS
+",
   "stderr": "",
   "exit_code": 0,
   "execution_time": 0.15,
@@ -271,7 +282,10 @@ The `execute_code` tool is designed to be called via the Model Context Protocol.
   "tool_name": "execute_code",
   "arguments": {
     "language": "bash",
-    "code": "#!/bin/bash\necho \"Hello from Bash via MCP!\"\nwhoami\ndate",
+    "code": "#!/bin/bash
+echo \"Hello from Bash via MCP!\"
+whoami
+date",
     "timeout": 5
   }
 }
@@ -280,7 +294,10 @@ The `execute_code` tool is designed to be called via the Model Context Protocol.
 **Expected Response (example):**
 ```json
 {
-  "stdout": "Hello from Bash via MCP!\nsandbox_user\n<current date and time>\n",
+  "stdout": "Hello from Bash via MCP!
+sandbox_user
+<current date and time>
+",
   "stderr": "",
   "exit_code": 0,
   "execution_time": 0.05,
@@ -298,7 +315,8 @@ The `execute_code` tool is designed to be called via the Model Context Protocol.
   "tool_name": "execute_code",
   "arguments": {
     "language": "python",
-    "code": "import time\nwhile True: time.sleep(0.1)",
+    "code": "import time
+while True: time.sleep(0.1)",
     "timeout": 2
   }
 }
@@ -324,7 +342,8 @@ The `execute_code` tool is designed to be called via the Model Context Protocol.
   "tool_name": "execute_code",
   "arguments": {
     "language": "python",
-    "code": "print('About to error...')\nresult = 1 / 0",
+    "code": "print('About to error...')
+result = 1 / 0",
     "timeout": 5
   }
 }
@@ -333,8 +352,13 @@ The `execute_code` tool is designed to be called via the Model Context Protocol.
 **Expected Response (example):**
 ```json
 {
-  "stdout": "About to error...\n",
-  "stderr": "Traceback (most recent call last):\n  File \"/sandbox/code.py\", line 2, in <module>\n    result = 1 / 0\nZeroDivisionError: division by zero\n",
+  "stdout": "About to error...
+",
+  "stderr": "Traceback (most recent call last):
+  File \"/sandbox/code.py\", line 2, in <module>
+    result = 1 / 0
+ZeroDivisionError: division by zero
+",
   "exit_code": 1,
   "execution_time": 0.07,
   "status": "execution_error",

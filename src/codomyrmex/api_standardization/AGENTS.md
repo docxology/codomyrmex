@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/api_standardization
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [API Standardization Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -556,221 +565,14 @@ All API development within the Codomyrmex platform must:
 - Deprecate versions with appropriate timelines
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API reference
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Responsibilities
-
-### API Development Agent
-**Role**: Implement and maintain API endpoints using standardized frameworks.
-
-**Responsibilities**:
-- Create REST API endpoints using `RESTAPI` and `APIRouter` classes
-- Implement GraphQL schemas with proper type definitions
-- Ensure API endpoints follow REST/GraphQL best practices
-- Add appropriate error handling and status codes
-- Write comprehensive API documentation
-
-**Key Interfaces**:
-```python
-# REST API creation
-api = RESTAPI("My API", "1.0.0", "API description")
-@api.router.get("/endpoint")
-def handler(request): return APIResponse.success(data)
-
-# GraphQL schema creation
-schema = GraphQLSchema()
-user_type = GraphQLObjectType("User")
-schema.add_type(user_type)
-```
-
-### Version Management Agent
-**Role**: Handle API versioning and backward compatibility.
-
-**Responsibilities**:
-- Define API versions using `APIVersion` and `APIVersionManager`
-- Implement data migration functions between versions
-- Mark deprecated versions and plan removal timelines
-- Update version compatibility rules
-- Communicate breaking changes to API consumers
-
-**Key Interfaces**:
-```python
-version_manager = APIVersionManager("1.0.0")
-version_manager.register_version(APIVersion("2.0.0", VersionFormat.SEMVER, datetime.now()))
-version_manager.add_migration_rule("1.0.0", "2.0.0", migration_function)
-```
-
-### Documentation Agent
-**Role**: Generate and maintain API documentation.
-
-**Responsibilities**:
-- Use `OpenAPIGenerator` to create OpenAPI specifications
-- Ensure all endpoints are properly documented
-- Generate API client libraries from specifications
-- Host API documentation and keep it current
-- Validate documentation accuracy against implementation
-
-**Key Interfaces**:
-```python
-generator = OpenAPIGenerator("API Title", "1.0.0")
-generator.add_rest_api(rest_api)
-generator.add_graphql_api(graphql_api)
-spec = generator.generate_spec()
-spec.save_to_file("openapi.json")
-```
-
-### Testing Agent
-**Role**: Ensure API quality through comprehensive testing.
-
-**Responsibilities**:
-- Write unit tests for all API endpoints
-- Create integration tests for API workflows
-- Test API versioning and migration
-- Validate OpenAPI specification generation
-- Performance test API endpoints
-- Test error conditions and edge cases
-
-**Key Testing Areas**:
-- Request/response handling
-- Schema validation
-- Version compatibility
-- Documentation accuracy
-- Error handling
-
-## Coordination Protocols
-
-### API Design Reviews
-1. **Endpoint Design**: All new endpoints must be reviewed for REST/GraphQL compliance
-2. **Version Planning**: Major version changes require cross-team coordination
-3. **Documentation**: OpenAPI specs must be validated before deployment
-
-### Version Release Process
-1. **Version Definition**: Create `APIVersion` with release notes
-2. **Migration Planning**: Define migration paths for breaking changes
-3. **Testing**: Full test suite must pass for new versions
-4. **Documentation**: Update API documentation with version changes
-5. **Communication**: Notify API consumers of changes
-
-### Breaking Change Protocol
-1. **Assessment**: Evaluate impact of breaking changes
-2. **Migration Path**: Provide clear migration instructions
-3. **Deprecation Period**: Allow minimum 6 months for version migration
-4. **Communication**: Send advance notice to all API consumers
-
-## Quality Gates
-
-### Pre-Commit Checks
-- All endpoints must have proper error handling
-- OpenAPI specification must validate without errors
-- API tests must pass with >90% coverage
-- No deprecated versions without migration paths
-
-### Pre-Release Checks
-- API documentation is current and accurate
-- Version compatibility is maintained
-- Performance benchmarks are met
-- Security audit passes
-
-### Post-Release Monitoring
-- Monitor API error rates and performance
-- Track version adoption and migration progress
-- Collect user feedback on API changes
-- Plan future improvements based on usage patterns
-
-## Communication Channels
-
-### Internal Coordination
-- **API Design Discussions**: Use `#api-design` channel for endpoint design reviews
-- **Version Planning**: Coordinate major versions through architecture review meetings
-- **Breaking Changes**: All breaking changes require approval from architecture team
-
-### External Communication
-- **API Changelog**: Maintain public changelog for API consumers
-- **Deprecation Notices**: Send advance notice for deprecated features
-- **Migration Guides**: Provide detailed migration documentation
-- **Support Channels**: Monitor API consumer support requests
-
-## Tool Integration
-
-### Development Tools
-- **API Testing**: Use provided test framework for endpoint validation
-- **Documentation**: Auto-generate docs from OpenAPI specifications
-- **Version Control**: Tag releases with semantic versions
-- **CI/CD**: Automated testing and deployment pipelines
-
-### Monitoring Tools
-- **API Metrics**: Track request rates, error rates, and performance
-- **Version Usage**: Monitor which API versions are being used
-- **Documentation Analytics**: Track documentation usage and feedback
-
-## Dependencies
-
-### Required Modules
-- **Logging Monitoring**: For request logging and error tracking
-- **Security Audit**: For API security validation
-- **Performance**: For API performance monitoring
-
-### Optional Integrations
-- **Containerization**: For API containerization and deployment
-- **Database Management**: For API data persistence
-- **Authentication**: For API access control
-
-## Error Handling
-
-### API Errors
-- **4xx Errors**: Client errors with clear error messages
-- **5xx Errors**: Server errors logged with full context
-- **GraphQL Errors**: Structured error responses
-- **Version Errors**: Clear messages for unsupported versions
-
-### Recovery Procedures
-- **Circuit Breakers**: Implement for external service calls
-- **Graceful Degradation**: Continue operating with reduced functionality
-- **Rollback Plans**: Quick rollback procedures for failed deployments
-
-## Performance Targets
-
-### Response Times
-- **REST API**: <100ms for simple requests, <500ms for complex operations
-- **GraphQL**: <200ms for typical queries, configurable complexity limits
-- **OpenAPI Generation**: <5 seconds for typical API specifications
-
-### Throughput
-- **Requests/second**: Support 1000+ concurrent requests
-- **Error Rate**: Maintain <1% error rate under normal load
-- **Availability**: 99.9% uptime target
-
-## Security Requirements
-
-### Authentication & Authorization
-- **API Keys**: Secure key management and rotation
-- **OAuth/JWT**: Support for industry-standard authentication
-- **Role-Based Access**: Granular permission control
-
-### Data Protection
-- **Input Validation**: Comprehensive validation of all inputs
-- **Output Sanitization**: Prevent data leakage in responses
-- **Rate Limiting**: Prevent abuse and DoS attacks
-- **Audit Logging**: Complete audit trail of API access
-
-## Future Evolution
-
-### Planned Enhancements
-- **Real-time APIs**: WebSocket support for real-time features
-- **API Federation**: Combine multiple APIs into unified interfaces
-- **Advanced Caching**: Intelligent response caching strategies
-- **AI Integration**: AI-powered API optimization and monitoring
-
-### Community Engagement
-- **Feedback Collection**: Gather API consumer feedback regularly
-- **Feature Requests**: Prioritize based on user needs
-- **Standards Compliance**: Stay current with API industry standards
+- **Source Root**: [src](../../README.md) - Source code documentation

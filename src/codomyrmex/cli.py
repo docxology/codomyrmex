@@ -570,6 +570,60 @@ Examples:
     build_project_parser = build_subparsers.add_parser("project", help="Build project")
     build_project_parser.add_argument("--config", help="Build configuration file")
 
+    # FPF commands
+    fpf_parser = subparsers.add_parser("fpf", help="First Principles Framework operations")
+    fpf_subparsers = fpf_parser.add_subparsers(dest="fpf_action", help="FPF actions")
+
+    fpf_fetch_parser = fpf_subparsers.add_parser("fetch", help="Fetch latest FPF spec from GitHub")
+    fpf_fetch_parser.add_argument("--repo", default="ailev/FPF", help="GitHub repository")
+    fpf_fetch_parser.add_argument("--branch", default="main", help="Branch name")
+    fpf_fetch_parser.add_argument("--output", help="Output file path")
+
+    fpf_parse_parser = fpf_subparsers.add_parser("parse", help="Parse local FPF-Spec.md")
+    fpf_parse_parser.add_argument("file", help="Path to FPF-Spec.md file")
+    fpf_parse_parser.add_argument("--output", help="Output JSON file path")
+
+    fpf_export_parser = fpf_subparsers.add_parser("export", help="Export FPF to JSON")
+    fpf_export_parser.add_argument("file", help="Path to FPF-Spec.md file")
+    fpf_export_parser.add_argument("--output", required=True, help="Output JSON file path")
+    fpf_export_parser.add_argument("--format", default="json", choices=["json"], help="Export format")
+
+    fpf_search_parser = fpf_subparsers.add_parser("search", help="Search FPF patterns")
+    fpf_search_parser.add_argument("query", help="Search query")
+    fpf_search_parser.add_argument("--file", help="Path to FPF-Spec.md file")
+    fpf_search_parser.add_argument("--status", help="Filter by status")
+    fpf_search_parser.add_argument("--part", help="Filter by part (A, B, C, etc.)")
+
+    fpf_visualize_parser = fpf_subparsers.add_parser("visualize", help="Generate visualizations")
+    fpf_visualize_parser.add_argument("file", help="Path to FPF-Spec.md file")
+    fpf_visualize_parser.add_argument("--type", choices=["hierarchy", "dependencies", "shared-terms", "concept-map", "part-hierarchy", "status-distribution"], default="hierarchy", help="Visualization type")
+    fpf_visualize_parser.add_argument("--output", required=True, help="Output file path")
+    fpf_visualize_parser.add_argument("--format", choices=["mermaid", "png"], default="mermaid", help="Output format")
+    fpf_visualize_parser.add_argument("--layout", choices=["hierarchical", "spring", "circular"], default="hierarchical", help="Layout type (for dependency/concept-map)")
+    fpf_visualize_parser.add_argument("--chart-type", choices=["bar", "pie"], default="bar", help="Chart type (for status-distribution)")
+
+    fpf_context_parser = fpf_subparsers.add_parser("context", help="Build context for prompt engineering")
+    fpf_context_parser.add_argument("file", help="Path to FPF-Spec.md file")
+    fpf_context_parser.add_argument("--pattern", help="Pattern ID to build context for")
+    fpf_context_parser.add_argument("--output", help="Output file path")
+    fpf_context_parser.add_argument("--depth", type=int, default=1, help="Relationship depth")
+
+    fpf_export_section_parser = fpf_subparsers.add_parser("export-section", help="Export a section (part/pattern)")
+    fpf_export_section_parser.add_argument("file", help="Path to FPF-Spec.md file")
+    fpf_export_section_parser.add_argument("--part", help="Part identifier to export (A, B, C, etc.)")
+    fpf_export_section_parser.add_argument("--pattern", help="Pattern ID to export")
+    fpf_export_section_parser.add_argument("--output", required=True, help="Output JSON file path")
+    fpf_export_section_parser.add_argument("--include-dependencies", action="store_true", help="Include dependent patterns")
+
+    fpf_analyze_parser = fpf_subparsers.add_parser("analyze", help="Analyze FPF specification")
+    fpf_analyze_parser.add_argument("file", help="Path to FPF-Spec.md file")
+    fpf_analyze_parser.add_argument("--output", help="Output JSON file path")
+
+    fpf_report_parser = fpf_subparsers.add_parser("report", help="Generate comprehensive report")
+    fpf_report_parser.add_argument("file", help="Path to FPF-Spec.md file")
+    fpf_report_parser.add_argument("--output", required=True, help="Output HTML file path")
+    fpf_report_parser.add_argument("--include-analysis", action="store_true", default=True, help="Include analysis sections")
+
     # Parse arguments
     args = parser.parse_args()
 
@@ -669,6 +723,31 @@ Examples:
             success = handle_module_test(args.module_name)
         elif args.module_action == "demo":
             success = handle_module_demo(args.module_name)
+
+    elif args.command == "fpf":
+        if args.fpf_action == "fetch":
+            success = handle_fpf_fetch(args.repo, args.branch, args.output)
+        elif args.fpf_action == "parse":
+            success = handle_fpf_parse(args.file, args.output)
+        elif args.fpf_action == "export":
+            success = handle_fpf_export(args.file, args.output, args.format)
+        elif args.fpf_action == "search":
+            filters = {}
+            if args.status:
+                filters["status"] = args.status
+            if args.part:
+                filters["part"] = args.part
+            success = handle_fpf_search(args.query, args.file, filters)
+        elif args.fpf_action == "visualize":
+            success = handle_fpf_visualize(args.file, args.type, args.output, args.format, args.layout, args.chart_type)
+        elif args.fpf_action == "context":
+            success = handle_fpf_context(args.file, args.pattern, args.output, args.depth)
+        elif args.fpf_action == "export-section":
+            success = handle_fpf_export_section(args.file, args.part, args.pattern, args.output, args.include_dependencies)
+        elif args.fpf_action == "analyze":
+            success = handle_fpf_analyze(args.file, args.output)
+        elif args.fpf_action == "report":
+            success = handle_fpf_report(args.file, args.output, args.include_analysis)
 
     else:
         if args.command is None:
@@ -1257,6 +1336,243 @@ def handle_orchestration_health() -> bool:
         return False
     except Exception as e:
         print(f"❌ Error checking orchestration health: {str(e)}")
+        return False
+
+
+def handle_fpf_fetch(repo: str, branch: str, output: Optional[str]) -> bool:
+    """Handle FPF fetch command."""
+    try:
+        from codomyrmex.fpf import FPFFetcher
+
+        fetcher = FPFFetcher()
+        content = fetcher.fetch_latest(repo, branch)
+
+        if output:
+            Path(output).write_text(content, encoding="utf-8")
+            print(f"✅ FPF specification fetched and saved to {output}")
+        else:
+            print(content)
+
+        return True
+    except Exception as e:
+        print(f"❌ Error fetching FPF specification: {str(e)}")
+        return False
+
+
+def handle_fpf_parse(file: str, output: Optional[str]) -> bool:
+    """Handle FPF parse command."""
+    try:
+        from codomyrmex.fpf import FPFClient
+
+        client = FPFClient()
+        spec = client.load_from_file(file)
+
+        print(f"✅ Parsed FPF specification: {len(spec.patterns)} patterns, {len(spec.concepts)} concepts")
+
+        if output:
+            client.export_json(output)
+            print(f"✅ Exported to {output}")
+
+        return True
+    except Exception as e:
+        print(f"❌ Error parsing FPF specification: {str(e)}")
+        return False
+
+
+def handle_fpf_export(file: str, output: str, format: str) -> bool:
+    """Handle FPF export command."""
+    try:
+        from codomyrmex.fpf import FPFClient
+
+        client = FPFClient()
+        client.load_from_file(file)
+        client.export_json(output)
+
+        print(f"✅ Exported FPF specification to {output}")
+        return True
+    except Exception as e:
+        print(f"❌ Error exporting FPF specification: {str(e)}")
+        return False
+
+
+def handle_fpf_search(query: str, file: Optional[str], filters: dict) -> bool:
+    """Handle FPF search command."""
+    try:
+        from codomyrmex.fpf import FPFClient
+
+        if not file:
+            # Try default location
+            default_path = Path(__file__).parent.parent / "fpf" / "FPF-Spec.md"
+            if default_path.exists():
+                file = str(default_path)
+            else:
+                print("❌ No file specified and default not found")
+                return False
+
+        client = FPFClient()
+        client.load_from_file(file)
+        results = client.search(query, filters)
+
+        print(f"Found {len(results)} matching patterns:")
+        for pattern in results:
+            print(f"  - {pattern.id}: {pattern.title}")
+
+        return True
+    except Exception as e:
+        print(f"❌ Error searching FPF: {str(e)}")
+        return False
+
+
+def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, layout: str, chart_type: str) -> bool:
+    """Handle FPF visualize command."""
+    try:
+        from codomyrmex.fpf import FPFClient, FPFVisualizer
+        from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
+
+        client = FPFClient()
+        client.load_from_file(file)
+
+        if format == "png":
+            # Use PNG visualizer
+            png_visualizer = FPFVisualizerPNG()
+            output_path = Path(output)
+
+            if viz_type == "shared-terms":
+                png_visualizer.visualize_shared_terms_network(client.spec, output_path)
+            elif viz_type == "dependencies":
+                png_visualizer.visualize_pattern_dependencies(client.spec, output_path, layout=layout)
+            elif viz_type == "concept-map":
+                png_visualizer.visualize_concept_map(client.spec, output_path, layout=layout)
+            elif viz_type == "part-hierarchy":
+                png_visualizer.visualize_part_hierarchy(client.spec, output_path)
+            elif viz_type == "status-distribution":
+                png_visualizer.visualize_status_distribution(client.spec, output_path, chart_type=chart_type)
+            else:
+                # Default to hierarchy
+                png_visualizer.visualize_pattern_dependencies(client.spec, output_path, layout="hierarchical")
+
+            print(f"✅ PNG visualization saved to {output}")
+        else:
+            # Use Mermaid visualizer
+            visualizer = FPFVisualizer()
+            if viz_type == "hierarchy":
+                diagram = visualizer.visualize_pattern_hierarchy(client.spec.patterns)
+            else:
+                diagram = visualizer.visualize_dependencies(client.spec.patterns)
+
+            Path(output).write_text(diagram, encoding="utf-8")
+            print(f"✅ Mermaid diagram saved to {output}")
+
+        return True
+    except Exception as e:
+        print(f"❌ Error generating visualization: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def handle_fpf_context(file: str, pattern: Optional[str], output: Optional[str], depth: int) -> bool:
+    """Handle FPF context command."""
+    try:
+        from codomyrmex.fpf import FPFClient
+
+        client = FPFClient()
+        client.load_from_file(file)
+
+        if pattern:
+            context = client.build_context(pattern_id=pattern)
+        else:
+            context = client.build_context()
+
+        if output:
+            Path(output).write_text(context, encoding="utf-8")
+            print(f"✅ Context saved to {output}")
+        else:
+            print(context)
+
+        return True
+    except Exception as e:
+        print(f"❌ Error building context: {str(e)}")
+        return False
+
+
+def handle_fpf_export_section(file: str, part: Optional[str], pattern: Optional[str], output: str, include_dependencies: bool) -> bool:
+    """Handle FPF export-section command."""
+    try:
+        from codomyrmex.fpf import FPFClient
+        from codomyrmex.fpf.section_manager import SectionManager
+        from codomyrmex.fpf.section_exporter import SectionExporter
+
+        client = FPFClient()
+        client.load_from_file(file)
+
+        section_manager = SectionManager(client.spec)
+        exporter = SectionExporter(section_manager)
+
+        if part:
+            exporter.export_part(part, Path(output))
+            print(f"✅ Part {part} exported to {output}")
+        elif pattern:
+            exporter.export_single_pattern(pattern, Path(output), include_related=include_dependencies)
+            print(f"✅ Pattern {pattern} exported to {output}")
+        else:
+            print("❌ Must specify either --part or --pattern")
+            return False
+
+        return True
+    except Exception as e:
+        print(f"❌ Error exporting section: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def handle_fpf_analyze(file: str, output: Optional[str]) -> bool:
+    """Handle FPF analyze command."""
+    try:
+        import json
+        from codomyrmex.fpf import FPFClient
+        from codomyrmex.fpf.analyzer import FPFAnalyzer
+
+        client = FPFClient()
+        client.load_from_file(file)
+
+        analyzer = FPFAnalyzer(client.spec)
+        analysis = analyzer.get_analysis_summary()
+
+        if output:
+            with open(output, "w", encoding="utf-8") as f:
+                json.dump(analysis, f, indent=2, ensure_ascii=False, default=str)
+            print(f"✅ Analysis saved to {output}")
+        else:
+            print(json.dumps(analysis, indent=2, default=str))
+
+        return True
+    except Exception as e:
+        print(f"❌ Error analyzing FPF: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
+    """Handle FPF report command."""
+    try:
+        from codomyrmex.fpf import FPFClient
+        from codomyrmex.fpf.report_generator import ReportGenerator
+
+        client = FPFClient()
+        client.load_from_file(file)
+
+        generator = ReportGenerator(client.spec)
+        generator.generate_html_report(Path(output), include_analysis=include_analysis)
+
+        print(f"✅ Report generated at {output}")
+        return True
+    except Exception as e:
+        print(f"❌ Error generating report: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return False
 
 

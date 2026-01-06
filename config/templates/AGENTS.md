@@ -1,5 +1,14 @@
 # Codomyrmex Agents — config/templates
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -142,5 +151,8 @@ def apply_environment_overrides(base_config: dict, env_overrides: dict) -> dict:
 - Include validation checks for critical configuration values
 
 ## Navigation Links
-- **Parent Directory**: [config](../README.md) - Configuration management documentation
-- **Environment Setup**: [docs/development/environment-setup.md](../../docs/development/environment-setup.md) - Environment configuration guide
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Parent AGENTS**: [../AGENTS.md](../AGENTS.md)
+- **Repository Root**: [../../README.md](../../README.md)

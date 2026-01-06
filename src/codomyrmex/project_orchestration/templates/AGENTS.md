@@ -1,9 +1,18 @@
 # Codomyrmex Agents — src/codomyrmex/project_orchestration/templates
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [doc_templates](doc_templates/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Contains components for the src system.
+Module components and implementation for templates..
 
 ## Active Components
 - `README.md` – Project file
@@ -18,5 +27,5 @@ Contains components for the src system.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [project_orchestration](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
+- **Parent Directory**: [project_orchestration](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../README.md) - Main project documentation

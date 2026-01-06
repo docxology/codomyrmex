@@ -1,5 +1,15 @@
 # Codomyrmex Agents — config
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [examples](examples/AGENTS.md)
+    - [templates](templates/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -131,11 +141,13 @@ Configurations undergo validation:
 - Security policy compliance
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### For Users
 - **Quick Start**: [examples/workflow-basic.json](examples/workflow-basic.json) - Basic configuration example
 - **Docker Setup**: [examples/docker-compose.yml](examples/docker-compose.yml) - Container deployment
-- **Templates**: [templates/](templates/) - Reusable configuration templates
+- **Templates**: [templates/](templates) - Reusable configuration templates
 
 ### For Agents
 - **Configuration Standards**: [cursorrules/general.cursorrules](../cursorrules/general.cursorrules)

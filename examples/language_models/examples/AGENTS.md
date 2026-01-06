@@ -1,5 +1,14 @@
 # Codomyrmex Agents — examples/language_models/examples
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -41,3 +50,12 @@ Validates language model configuration parameters.
 def estimate_token_count(text: str, model: str) -> int
 ```
 Estimates token count for text with specific model.
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [language_models](../README.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)

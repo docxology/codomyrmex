@@ -1,9 +1,18 @@
 # Codomyrmex Agents — src/codomyrmex/ai_code_editing/droid
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [handlers](handlers/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Contains components for the src system.
+Module components and implementation for droid..
 
 ## Active Components
 - `README.md` – Project file
@@ -22,5 +31,5 @@ Contains components for the src system.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [ai_code_editing](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
+- **Parent Directory**: [ai_code_editing](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../README.md) - Main project documentation

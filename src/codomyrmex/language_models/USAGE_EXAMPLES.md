@@ -107,7 +107,8 @@ async def streaming_example():
     # Stream simple text
     async for chunk in stream_with_ollama("Tell me a bedtime story"):
         print(chunk, end="", flush=True)
-    print("\n")
+    print("
+")
 
     print("=== Streaming Chat ===")
 

@@ -1,8 +1,18 @@
 # Codomyrmex Agents — [Module/Directory Name]
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [[Module Name] Agents](AGENTS.md)
+- **Children**:
+    - [Subdirectory Name](subdirectory/AGENTS.md) (if applicable)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: [Date]
 
 ## Purpose
+
 [Clear, concise description of the module or directory's purpose and role in the Codomyrmex ecosystem.]
 
 ## Active Components
@@ -22,15 +32,16 @@
 - **[Module Name]** (`[module_path]/`) - [Description of relationship]
 
 ## Navigation Links
-- **📚 Module Overview**: [README.md](README.md) - Module documentation and usage
-- **🔌 API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Complete API reference (if applicable)
-- **🔧 MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) - MCP tool specifications (if applicable)
-- **🔒 Security**: [SECURITY.md](SECURITY.md) - Security considerations (if applicable)
-- **🏠 Package Root**: [../../README.md](../../README.md) - Package overview
-- **📖 Documentation Hub**: [../../../docs/README.md](../../../docs/README.md) - Complete documentation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
-## Checkpoints
-- [x] Confirm AGENTS.md reflects the current module purpose.
-- [x] Verify logging and telemetry hooks for this directory's agents.
-- [x] Sync automation scripts or TODO entries after modifications.
+### Module Documentation
+- **Module Overview**: [README.md](README.md) - Complete module documentation
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
+
+### Platform Navigation
+- **Parent Directory**: [codomyrmex](../README.md) - Package overview
+- **Project Root**: [README](../../../README.md) - Main project documentation
+- **Source Root**: [src](../../README.md) - Source code documentation
 

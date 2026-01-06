@@ -1,5 +1,14 @@
 # Codomyrmex Agents — projects/test_project/reports
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -218,6 +227,8 @@ Report systems must be updated when:
 - **User Acceptance Testing**: Report usability and content validation
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Report Hierarchy
 - **Reports Overview**: [README.md](README.md) - Report generation and management guide

@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/git_operations
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Git Operations Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -300,40 +310,15 @@ All Git operations within the Codomyrmex platform must:
 - Handle commit signing and verification
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Complete API Docs**: [COMPLETE_API_DOCUMENTATION.md](COMPLETE_API_DOCUMENTATION.md) - Full API reference
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **CI/CD Integration** - Provide Git operations for automated pipelines
-2. **Project Orchestration** - Support version control workflows in project management
-3. **Code Review Integration** - Enable repository analysis for review processes
-4. **Backup Coordination** - Support repository backup and recovery operations
-
-### Quality Gates
-
-Before Git operation changes are accepted:
-
-1. **Repository Safety Verified** - Operations don't corrupt repository state
-2. **Authentication Handled Securely** - Credentials managed without exposure
-3. **Error Recovery Tested** - Failed operations can be safely rolled back
-4. **Performance Validated** - Operations scale appropriately for repository size
-5. **Integration Tested** - Works correctly with dependent workflow systems
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial Git operations system with repository management and automation capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

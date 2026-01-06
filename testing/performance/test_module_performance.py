@@ -29,10 +29,10 @@ except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
 
 try:
-    from codomyrmex.security_audit import analyze_file_security, check_compliance
-    MODULE_AVAILABILITY["security_audit"] = True
+    from codomyrmex.security.digital import analyze_file_security, check_compliance
+    MODULE_AVAILABILITY["security"] = True
 except ImportError:
-    MODULE_AVAILABILITY["security_audit"] = False
+    MODULE_AVAILABILITY["security"] = False
 
 try:
     from codomyrmex.ai_code_editing import generate_code_snippet

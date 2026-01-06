@@ -1,5 +1,16 @@
 # Codomyrmex Agents — src/codomyrmex/physical_management
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Physical Management Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [examples](examples/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -770,44 +781,14 @@ All physical object management within the Codomyrmex platform must:
 - Maintain data quality and integrity
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **performance**: Performance monitoring for physical simulations
-- **logging_monitoring**: Logging of physical object events
-- **data_visualization**: Visualization of physical data and analytics
-- **security_audit**: Security monitoring for physical systems
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Performance Monitoring** - Monitor physics simulation performance
-2. **Data Visualization** - Visualize physical object data and analytics
-3. **Logging Integration** - Log physical object events and sensor data
-4. **Security Integration** - Monitor physical system security
-5. **Configuration Management** - Configure physical system parameters
-
-### Quality Gates
-
-Before physical management changes are accepted:
-
-1. **Simulation Accuracy** - Physics simulations produce physically accurate results
-2. **Real-Time Performance** - Physical operations meet real-time requirements
-3. **Sensor Calibration** - Sensor data is properly calibrated and validated
-4. **Safety Compliance** - Physical operations follow safety protocols
-5. **Resource Efficiency** - Physical systems use resources efficiently
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial physical management system with object tracking, physics simulation, sensor integration, and analytics
+- **Source Root**: [src](../../README.md) - Source code documentation

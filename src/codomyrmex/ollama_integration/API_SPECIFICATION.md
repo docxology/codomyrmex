@@ -157,7 +157,9 @@ for chunk in runner.stream_execute(
     if 'response' in chunk:
         print(chunk['response'], end='', flush=True)
     elif chunk.get('done', False):
-        print(f"\\n\\nTokens used: {chunk.get('total_tokens', 0)}")
+        print(f"\
+\
+Tokens used: {chunk.get('total_tokens', 0)}")
 ```
 
 ### Output Processing Pipeline

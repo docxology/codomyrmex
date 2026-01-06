@@ -70,7 +70,7 @@ Public disclosure of the vulnerability will be coordinated with you after the vu
 
 ## 6. Security Updates
 
-Security patches and updates for this module (e.g., to `env_checker.py` or setup documentation) will be documented in the [CHANGELOG.md](./CHANGELOG.md) and released as part of regular version updates.
+Security patches and updates for this module (e.g., to `env_checker.py` or setup documentation) will be documented in the module changelog and released as part of regular version updates.
 
 ## 7. Scope
 

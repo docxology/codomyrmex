@@ -150,11 +150,14 @@ from codomyrmex.code_execution_sandbox.code_executor import execute_code
 # Execute Python code
 result = execute_code(
     language="python",
-    code="print('Hello, World!')\nprint(2 + 2)",
+    code="print('Hello, World!')
+print(2 + 2)",
     timeout=30
 )
 
-print(result['output'])  # "Hello, World!\n4\n"
+print(result['output'])  # "Hello, World!
+4
+"
 print(result['success'])  # True
 print(result['execution_time'])  # Time in seconds
 ```

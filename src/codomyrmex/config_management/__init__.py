@@ -6,7 +6,7 @@ validation, and deployment capabilities for the Codomyrmex ecosystem.
 
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
-- Integrates with `security_audit` for secure configuration handling.
+- Integrates with `security` for secure configuration handling.
 - Works with `environment_setup` for environment-specific configurations.
 - Supports `static_analysis` for configuration validation.
 

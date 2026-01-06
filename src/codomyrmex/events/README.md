@@ -1,5 +1,13 @@
 # events
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -30,7 +38,7 @@ emit_event("user.action", {"action": "login", "user_id": 123})
 
 ## API Reference
 
-See [API_SPECIFICATION.md](API_SPECIFICATION.md) for complete API documentation.
+See the module documentation for complete API reference.
 
 ## Navigation
 

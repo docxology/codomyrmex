@@ -1,5 +1,14 @@
 # Data Visualization Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 Demonstrates creating charts and visualizations using the Codomyrmex Data Visualization module.
 
 ## Overview
@@ -48,3 +57,11 @@ Check the `output/visualizations/` directory for generated charts.
 - [Module README](../../src/codomyrmex/data_visualization/README.md)
 - [Unit Tests](../../testing/unit/test_data_visualization.py)
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

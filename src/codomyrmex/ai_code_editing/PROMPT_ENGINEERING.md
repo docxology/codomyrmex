@@ -22,7 +22,9 @@ The main prompt composition utility:
 def compose_prompt(system: Optional[str], task: Optional[str], context: Optional[str]) -> str:
     """Compose a complete prompt from system, task, and context components."""
     parts = [p.strip() for p in ((system or ""), (task or ""), (context or "")) if p and p.strip()]
-    return "\n\n".join(parts)
+    return "
+
+".join(parts)
 ```
 
 ### Template System

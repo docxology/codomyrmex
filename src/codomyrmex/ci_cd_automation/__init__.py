@@ -9,7 +9,7 @@ Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
 - Relies on `environment_setup` for environment and dependency checks.
 - Integrates with `project_orchestration` for workflow management.
-- Works with `security_audit` for security scanning in pipelines.
+- Works with `security` for security scanning in pipelines.
 
 Available functions:
 - create_pipeline: Create and configure CI/CD pipelines

@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/performance
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Performance Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -321,39 +330,14 @@ All performance optimization within the Codomyrmex platform must:
 - Ensure resource tracking doesn't interfere with normal operations
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Module Loading** - Use lazy loading for optional module dependencies
-2. **Function Caching** - Apply caching to expensive operations in other modules
-3. **Performance Monitoring** - Share performance metrics with monitoring systems
-4. **Resource Management** - Coordinate resource usage across module operations
-
-### Quality Gates
-
-Before performance changes are accepted:
-
-1. **Performance Validated** - Optimizations provide measurable performance improvements
-2. **Overhead Minimized** - Performance monitoring doesn't significantly impact operations
-3. **Memory Usage Controlled** - Caching and lazy loading don't cause memory issues
-4. **Configuration Flexible** - Performance features work across different environments
-5. **Error Handling Robust** - Performance monitoring handles failures gracefully
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial performance optimization system with lazy loading, caching, and monitoring capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

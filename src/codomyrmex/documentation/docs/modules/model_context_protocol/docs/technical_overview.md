@@ -137,7 +137,8 @@ This is the message a tool sends back to the AI agent after processing a tool ca
 {
   "status": "success",
   "data": {
-    "refactored_code": "def new_code():\n  return True",
+    "refactored_code": "def new_code():
+  return True",
     "lines_changed": 5
   },
   "explanation": "The code was refactored for clarity.",

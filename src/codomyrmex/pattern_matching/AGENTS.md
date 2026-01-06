@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/pattern_matching
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Pattern Matching Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -286,39 +296,15 @@ All pattern analysis within the Codomyrmex platform must:
 - Enable export of results for external consumption
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Analysis Coordination** - Share analysis results with static_analysis and ai_code_editing modules
-2. **Data Provision** - Supply pattern data to data_visualization for analysis visualization
-3. **Search Enhancement** - Enhance search capabilities in documentation and git_operations modules
-4. **Workflow Integration** - Provide analysis data for project_orchestration workflows
-
-### Quality Gates
-
-Before pattern analysis changes are accepted:
-
-1. **Analysis Accuracy Verified** - Pattern recognition correctly identifies code structures
-2. **Performance Validated** - Analysis scales appropriately for repository size
-3. **Result Consistency Checked** - Analysis produces consistent results across runs
-4. **Security Reviewed** - Analysis doesn't expose sensitive information
-5. **Integration Tested** - Results integrate properly with dependent modules
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial pattern matching system with repository analysis, symbol extraction, and embedding generation capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

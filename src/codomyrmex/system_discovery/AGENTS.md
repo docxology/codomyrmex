@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/system_discovery
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [System Discovery Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -429,42 +438,14 @@ All system discovery operations within the Codomyrmex platform must:
 - Include historical trends where applicable
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **All Modules**: This module discovers and analyzes all other modules
-- **logging_monitoring**: System status logging
-- **performance**: Performance monitoring integration
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Universal Integration** - This module integrates with and analyzes all other modules
-2. **Logging Integration** - Log discovery operations and results
-3. **Performance Monitoring** - Monitor discovery operation performance
-4. **Status Communication** - Provide system status to other modules
-
-### Quality Gates
-
-Before system discovery changes are accepted:
-
-1. **Discovery Accuracy** - Module analysis produces correct results
-2. **Performance Impact** - Discovery operations don't significantly slow the system
-3. **Error Handling** - Discovery handles module errors gracefully
-4. **Output Quality** - Generated reports are accurate and useful
-5. **Security Compliance** - Discovery operations follow security guidelines
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial system discovery module with module scanning, capability analysis, health checking, and status reporting
+- **Source Root**: [src](../../README.md) - Source code documentation

@@ -1,5 +1,16 @@
 # Codomyrmex Agents — scripts/examples
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [basic](basic/AGENTS.md)
+    - [configs](configs/AGENTS.md)
+    - [integration](integration/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -280,6 +291,8 @@ Solution: Fix syntax errors or update to match schema
 4. Add incremental validation support
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Validation Scripts
 - **Coverage Checker**: [check_example_coverage.py](check_example_coverage.py) - Module coverage analysis
@@ -287,14 +300,13 @@ Solution: Fix syntax errors or update to match schema
 - **Config Validator**: [validate_configs.py](validate_configs.py) - Configuration validation
 
 ### Example Categories
-- **Basic Examples**: [basic/](basic/) - Fundamental demonstrations
-- **Integration Examples**: [integration/](integration/) - Workflow integrations
-- **Configuration Templates**: [configs/](configs/) - Setup templates
+- **Basic Examples**: [basic/](basic) - Fundamental demonstrations
+- **Integration Examples**: [integration/](integration) - Workflow integrations
+- **Configuration Templates**: [configs/](configs) - Setup templates
 
 ### Platform Navigation
 - **Scripts Directory**: [../README.md](../README.md) - Script utilities overview
 - **Examples Directory**: [../../examples/README.md](../../examples/README.md) - Main examples
-- **Validation Results**: [../../@output/](../../@output/) - Generated reports
 
 ## Agent Coordination
 

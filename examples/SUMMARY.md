@@ -263,8 +263,8 @@ The examples structure is considered complete when:
 
 ## 🔗 Related Documentation
 
-- **[ASSESSMENT.md](ASSESSMENT.md)** - Detailed gap analysis
-- **[ROADMAP.md](ROADMAP.md)** - Prioritized development plan
+- [COMPLETE_INVENTORY.md](COMPLETE_INVENTORY.md)
+- [ROADMAP.md](ROADMAP.md) - Prioritized development plan
 - **[README.md](README.md)** - Complete examples guide
 - **[AGENTS.md](AGENTS.md)** - Agent coordination
 

@@ -1,5 +1,13 @@
 # Build Synthesis Example
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Module**: `codomyrmex.build_synthesis` - Multi-Language Build Automation
 
 ## Overview
@@ -621,14 +629,23 @@ print(f"Average build time: {stats['avg_build_time']}s")
 
 ## Related Documentation
 
-- **[Build Synthesis API](../src/codomyrmex/build_synthesis/)**
-- **[Build Manager](../src/codomyrmex/build_synthesis/build_manager.py)**
-- **[Build Orchestrator](../src/codomyrmex/build_synthesis/build_orchestrator.py)**
-- **[CI/CD Automation](../examples/ci_cd_automation/)**
-- **[Containerization](../examples/containerization/)**
+- **[Build Synthesis API](../../src/codomyrmex/build_synthesis/)**
+- **[Build Manager](../../src/codomyrmex/build_synthesis/build_manager.py)**
+- **[Build Orchestrator](../../src/codomyrmex/build_synthesis/build_orchestrator.py)**
+- **[CI/CD Automation](../ci_cd_automation/)**
+- **[Containerization](../containerization/)**
 
 ---
 
 **Status**: Complete multi-language build automation demonstration
 **Tested Methods**: 13 core build synthesis methods
 **Features**: Multi-language builds, dependency resolution, artifact synthesis, pipeline orchestration, parallel execution, and validation
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

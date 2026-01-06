@@ -1,5 +1,13 @@
 # API Standardization Module
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 The API Standardization module provides a comprehensive framework for building consistent, versioned, and well-documented APIs in Codomyrmex. It supports both REST and GraphQL APIs with automatic OpenAPI specification generation.
 
 ## Features
@@ -300,3 +308,12 @@ The module provides robust error handling:
 - **CORS Support**: Cross-origin resource sharing configuration
 - **Authentication**: Middleware-based authentication and authorization
 - **Audit Logging**: Complete audit trail of API access and modifications
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)

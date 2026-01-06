@@ -206,6 +206,19 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Module Relationships**: [docs/modules/relationships.md](docs/modules/relationships.md)
 - **API Reference**: [docs/reference/api.md](docs/reference/api.md)
 
+## Signposting
+- **Self**: [Codomyrmex Root](README.md)
+- **Children**:
+    - [Source Code](src/README.md)
+    - [Documentation](docs/README.md)
+    - [Scripts](scripts/README.md)
+    - [Tests](testing/README.md)
+    - [Config](config/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+
 ### For Contributors
 - **Development Setup**: [docs/development/environment-setup.md](docs/development/environment-setup.md)
 - **Testing Strategy**: [docs/development/testing-strategy.md](docs/development/testing-strategy.md)

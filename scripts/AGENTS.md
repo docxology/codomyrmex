@@ -1,5 +1,49 @@
 # Codomyrmex Agents — scripts
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [ai_code_editing](ai_code_editing/AGENTS.md)
+    - [api_documentation](api_documentation/AGENTS.md)
+    - [build_synthesis](build_synthesis/AGENTS.md)
+    - [cerebrum](cerebrum/AGENTS.md)
+    - [ci_cd_automation](ci_cd_automation/AGENTS.md)
+    - [code_execution_sandbox](code_execution_sandbox/AGENTS.md)
+    - [code_review](code_review/AGENTS.md)
+    - [config_management](config_management/AGENTS.md)
+    - [containerization](containerization/AGENTS.md)
+    - [data_visualization](data_visualization/AGENTS.md)
+    - [database_management](database_management/AGENTS.md)
+    - [development](development/AGENTS.md)
+    - [docs](docs/AGENTS.md)
+    - [documentation](documentation/AGENTS.md)
+    - [documentation_module](documentation_module/AGENTS.md)
+    - [environment_setup](environment_setup/AGENTS.md)
+    - [examples](examples/AGENTS.md)
+    - [fabric_integration](fabric_integration/AGENTS.md)
+    - [fpf](fpf/AGENTS.md)
+    - [git_operations](git_operations/AGENTS.md)
+    - [language_models](language_models/AGENTS.md)
+    - [logging_monitoring](logging_monitoring/AGENTS.md)
+    - [maintenance](maintenance/AGENTS.md)
+    - [model_context_protocol](model_context_protocol/AGENTS.md)
+    - [modeling_3d](modeling_3d/AGENTS.md)
+    - [module_template](module_template/AGENTS.md)
+    - [ollama_integration](ollama_integration/AGENTS.md)
+    - [pattern_matching](pattern_matching/AGENTS.md)
+    - [performance](performance/AGENTS.md)
+    - [physical_management](physical_management/AGENTS.md)
+    - [project_orchestration](project_orchestration/AGENTS.md)
+    - [security_audit](security_audit/AGENTS.md)
+    - [static_analysis](static_analysis/AGENTS.md)
+    - [system_discovery](system_discovery/AGENTS.md)
+    - [terminal_interface](terminal_interface/AGENTS.md)
+    - [testing](testing/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -389,6 +433,15 @@ Each module has dedicated automation scripts:
 - `system_discovery/` - Module discovery and health monitoring
 - `terminal_interface/` - Rich terminal UI components
 
+## Script Organization Policy
+
+**All scripts must be organized in module-specific subdirectories.** Scripts in the root `scripts/` directory should only include:
+- Core utilities (`_orchestrator_utils.py`)
+- Module-specific orchestrators (in their respective subdirectories)
+- Category-specific scripts (documentation/, testing/, development/, maintenance/, etc.)
+
+No standalone utility scripts should remain in the root `scripts/` directory. All documentation-related scripts are in `documentation/`, all testing-related scripts are in `testing/`, and so on.
+
 ## Active Components
 
 ### Core Files
@@ -408,11 +461,14 @@ Each module has dedicated automation scripts:
 - `database_management/` – Database operations and maintenance
 - `development/` – Development workflow scripts
 - `docs/` – Documentation maintenance utilities
-- `documentation/` – Documentation generation system
+- `documentation/` – Documentation generation system (includes all documentation maintenance, validation, and generation scripts)
 - `documentation_module/` – Module documentation tools
+- `testing/` – Testing automation and verification scripts
 - `environment_setup/` – Environment validation and setup
 - `examples/` – Example scripts and demonstrations
 - `fabric_integration/` – Fabric AI framework integration
+- `fpf/` – FPF orchestration and end-to-end processing
+- `cerebrum/` – CEREBRUM-FPF orchestration and comprehensive analysis
 - `git_operations/` – Git workflow automation
 - `language_models/` – Language model management
 - `logging_monitoring/` – Logging system configuration
@@ -462,21 +518,23 @@ All scripts in this directory must:
 - Update module documentation when making changes
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### For Users
-- **Quick Start**: [development/](development/) - Environment setup
-- **Examples**: [examples/](examples/) - Usage examples and demonstrations
-- **Maintenance**: [maintenance/](maintenance/) - System maintenance utilities
+- **Quick Start**: [development/](development) - Environment setup
+- **Examples**: [examples/](examples) - Usage examples and demonstrations
+- **Maintenance**: [maintenance/](maintenance) - System maintenance utilities
 
 ### For Agents
-- **Coding Standards**: [cursorrules/general.cursorrules](../../../cursorrules/general.cursorrules)
-- **Script Development**: [development/](development/)
-- **Module System**: [docs/modules/overview.md](../../../docs/modules/overview.md)
+- **Coding Standards**: [cursorrules/general.cursorrules](../cursorrules/general.cursorrules)
+- **Script Development**: [development/](development)
+- **Module System**: [docs/modules/overview.md](../docs/modules/overview.md)
 
 ### For Contributors
-- **Script Templates**: [module_template/](module_template/) - Script creation templates
-- **Testing**: [testing/unit/](../../testing/unit/) - Script testing guidelines
-- **Contributing**: [docs/project/contributing.md](../../../docs/project/contributing.md)
+- **Script Templates**: [module_template/](module_template) - Script creation templates
+- **Testing**: [testing/unit/](../testing/unit/) - Script testing guidelines
+- **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)
 
 ## Agent Coordination
 
@@ -505,5 +563,5 @@ Before deploying script changes:
 ## Related Documentation
 
 - **[Script Development Guide](development/README.md)** - Guidelines for creating new scripts
-- **[Module Orchestration](docs/modules/overview.md)** - Module system documentation
-- **[Testing Strategy](docs/development/testing-strategy.md)** - Testing approach for scripts
+- **[Module Orchestration](../docs/modules/overview.md)** - Module system documentation
+- **[Testing Strategy](../docs/development/testing-strategy.md)** - Testing approach for scripts

@@ -1,5 +1,13 @@
 # config/examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -14,6 +22,7 @@ Example implementations and demonstrations.
 - `workflow-with-dependencies.json` – File
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [config](../README.md)
-- **Config Hub**: [config](../../../config/README.md)
+- **Repository Root**: [../../README.md](../../README.md)

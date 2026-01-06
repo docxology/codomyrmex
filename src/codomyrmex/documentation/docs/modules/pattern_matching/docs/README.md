@@ -1,5 +1,13 @@
 # src/codomyrmex/documentation/docs/modules/pattern_matching/docs
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [tutorials](tutorials/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -41,6 +49,6 @@ The pattern matching process provides comprehensive code analysis capabilities t
 - `tutorials/` – Subdirectory
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../../../../README.md)
 - **Parent Directory**: [pattern_matching](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../../../../README.md)

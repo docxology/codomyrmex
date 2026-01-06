@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/events
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Events Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -300,13 +309,15 @@ Create an alert event.
 ### EventPriority Enum
 ```python
 class EventPriority(Enum):
-    LOW = 1
-    NORMAL = 2
-    HIGH = 3
-    URGENT = 4
+    DEBUG = "debug"
+    INFO = "info"
+    NORMAL = "normal"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
 ```
 
-Enumeration of event priority levels for processing order.
+Enumeration of event priority levels.
 
 ### EventType Enum
 ```python
@@ -314,13 +325,10 @@ class EventType(Enum):
     SYSTEM_STARTUP = "system.startup"
     MODULE_LOAD = "module.load"
     ANALYSIS_START = "analysis.start"
+    ANALYSIS_PROGRESS = "analysis.progress"
     ANALYSIS_COMPLETE = "analysis.complete"
+    ANALYSIS_ERROR = "analysis.error"
     ERROR_OCCURRED = "error.occurred"
-    METRIC_UPDATE = "metric.update"
-    ALERT_TRIGGERED = "alert.triggered"
-    USER_ACTION = "user.action"
-    WORKFLOW_START = "workflow.start"
-    WORKFLOW_COMPLETE = "workflow.complete"
 ```
 
 Enumeration of standard event types in the platform.
@@ -360,11 +368,9 @@ class EventEmitter:
 
     def emit(self, event_type: EventType, data: Optional[Dict[str, Any]] = None, **kwargs) -> None: ...
 
-    def emit_event(self, event: Event) -> None: ...
+    def emit_sync(self, event_type: EventType, data: Optional[Dict[str, Any]] = None, **kwargs) -> None: ...
 
-    def get_source(self) -> str: ...
-
-    def get_emitted_count(self) -> int: ...
+    def emit_async(self, event_type: EventType, data: Optional[Dict[str, Any]] = None, **kwargs) -> Awaitable[None]: ...
 ```
 
 Class for emitting events with source tracking and metrics.
@@ -374,15 +380,11 @@ Class for emitting events with source tracking and metrics.
 class EventListener:
     def __init__(self, listener_id: str): ...
 
-    def subscribe(self, event_types: List[EventType], handler: Callable[[Event], Any], priority: int = 0) -> str: ...
+    def on(self, event_types: Union[EventType, List[EventType]], handler: Callable[[Event], Any], priority: int = 0) -> str: ...
 
-    def unsubscribe(self, subscription_id: str) -> bool: ...
+    def off(self, subscription_id: str) -> bool: ...
 
-    def get_subscriptions(self) -> Dict[str, Subscription]: ...
-
-    def get_listener_id(self) -> str: ...
-
-    def handle_event(self, event: Event) -> Any: ...
+    def once(self, event_type: EventType, handler: Callable[[Event], Any], priority: int = 0) -> str: ...
 ```
 
 Base class for event listeners with subscription management.
@@ -498,38 +500,13 @@ All event handling within the Codomyrmex platform must:
 - Consider listener execution order and dependencies
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
 
-### Related Modules
-- **Logging Monitoring**: [../logging_monitoring/](../logging_monitoring/) - Event logging integration
-- **System Discovery**: [../system_discovery/](../system_discovery/) - System event monitoring
-
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Event Schema Coordination** - Define event types in coordination with consuming modules
-2. **Performance Monitoring** - Monitor event throughput and processing times
-3. **Error Handling** - Ensure event system reliability doesn't affect other modules
-4. **Security Integration** - Validate event sources and content security
-
-### Quality Gates
-
-Before event system changes are accepted:
-
-1. **Event Handling Tested** - All event types properly handled by listeners
-2. **Performance Validated** - Event processing meets performance requirements
-3. **Error Isolation Confirmed** - Listener failures don't affect other components
-4. **Security Validated** - Event payloads properly validated and sanitized
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial event system with publish-subscribe pattern and type safety
+- **Source Root**: [src](../../README.md) - Source code documentation

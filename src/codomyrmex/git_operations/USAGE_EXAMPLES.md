@@ -270,7 +270,8 @@ print(diff)
 
 # Get diff of staged changes
 staged_diff = get_diff(staged=True)
-print("\nStaged changes diff:")
+print("
+Staged changes diff:")
 print(staged_diff)
 ```
 

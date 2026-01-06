@@ -1,10 +1,20 @@
 # src/codomyrmex/modeling_3d
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
+    - [examples](examples/README.md)
+    - [tests](tests/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the src system.
+Provides 3D modeling, rendering, and AR/VR visualization capabilities.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

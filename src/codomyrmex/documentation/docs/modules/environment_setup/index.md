@@ -91,7 +91,8 @@ The main documentation website is built using Docusaurus and is managed within t
     ```
     The output will be in `documentation/build/`.
 
-Refer to the [Documentation Module documentation](../documentation/index.md) for more details on the Docusaurus setup and structure.
+Refer to the [Documentation Module documentation](../../index.md)
+ for more details on the Docusaurus setup and structure.
 
 ## Key Components of this Module
 
@@ -105,4 +106,5 @@ Refer to the [Documentation Module documentation](../documentation/index.md) for
 - [Usage Examples](./usage_examples.md)
 - [Detailed Documentation for this module](./docs/index.md)
 - [Changelog](./changelog.md)
-- [Security Policy](./security.md) 
+- [SECURITY.md](../../../../../../docs/project/security.md)
+- [Security Policy](./security.md)

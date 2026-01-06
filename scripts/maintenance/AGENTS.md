@@ -1,5 +1,14 @@
 # Codomyrmex Agents — scripts/maintenance
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -568,6 +577,8 @@ Solution: Check Python path and module installation
 5. Update documentation and usage examples
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Maintenance Scripts
 - **Quality Checks**: [run_quality_checks.py](run_quality_checks.py) - Comprehensive quality assurance

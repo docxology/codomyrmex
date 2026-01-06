@@ -471,7 +471,8 @@ async def concurrent_file_processing(self, file_paths: List[Path]) -> List[Dict[
         with open(file_path, 'r') as f:
             content = f.read()
             # Process content
-            return {"size": len(content), "lines": len(content.split('\n'))}
+            return {"size": len(content), "lines": len(content.split('
+'))}
 
     # Execute all file processing concurrently
     tasks = [process_file(path) for path in file_paths]

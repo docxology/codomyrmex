@@ -62,7 +62,8 @@ def setup_new_project(project_path, project_name):
         full_path = os.path.join(project_path, file_path)
         os.makedirs(os.path.dirname(full_path), exist_ok=True)
         with open(full_path, 'w') as f:
-            f.write(f"# {file_path}\n")
+            f.write(f"# {file_path}
+")
     
     # Add all files to Git
     success = add_files(project_files, project_path)
@@ -177,7 +178,8 @@ def feature_branch_workflow(repo_path, feature_name):
         full_path = os.path.join(repo_path, file_path)
         os.makedirs(os.path.dirname(full_path), exist_ok=True)
         with open(full_path, 'w') as f:
-            f.write(f"# {feature_name} implementation\n")
+            f.write(f"# {feature_name} implementation
+")
     
     # Add and commit feature files
     if not add_files(feature_files, repo_path):
@@ -236,7 +238,8 @@ def branch_operations(repo_path):
         print(f"✅ Created feature branch: feature/{feature}")
     
     # Demonstrate rebase workflow
-    print("\n🔄 Demonstrating rebase workflow...")
+    print("
+🔄 Demonstrating rebase workflow...")
     
     # Switch to feature_b and rebase onto main
     switch_branch("feature/feature_b", repo_path)
@@ -281,8 +284,10 @@ def file_operations(repo_path):
     
     # Create multiple files with different states
     files_to_create = {
-        "new_feature.py": "# New feature implementation\nprint('Hello, World!')",
-        "updated_file.py": "# Updated existing file\nprint('Updated!')",
+        "new_feature.py": "# New feature implementation
+print('Hello, World!')",
+        "updated_file.py": "# Updated existing file
+print('Updated!')",
         "config.json": '{"setting": "value"}',
         "temp_file.txt": "Temporary content"
     }
@@ -333,7 +338,8 @@ def file_operations(repo_path):
         print(working_diff)
     
     # Demonstrate reset operations
-    print("\n🔄 Demonstrating reset operations...")
+    print("
+🔄 Demonstrating reset operations...")
     
     # Add the modified file
     add_files(["config.json"], repo_path)
@@ -395,9 +401,14 @@ def release_management_workflow(repo_path, version):
     
     # Get recent commits for changelog
     recent_commits = get_commit_history(limit=10, repository_path=repo_path)
-    changelog_content = f"# Changelog\n\n## Version {version}\n\n"
+    changelog_content = f"# Changelog
+
+## Version {version}
+
+"
     for commit in recent_commits[:5]:  # Last 5 commits
-        changelog_content += f"- {commit['message']} ({commit['hash'][:8]})\n"
+        changelog_content += f"- {commit['message']} ({commit['hash'][:8]})
+"
     
     with open(changelog_file, 'w') as f:
         f.write(changelog_content)
@@ -553,7 +564,8 @@ def tagging_strategy(repo_path):
     
     # Step 2: List and analyze tags
     all_tags = list_tags(repo_path)
-    print(f"\n📋 Repository tags ({len(all_tags)} total):")
+    print(f"
+📋 Repository tags ({len(all_tags)} total):")
     
     # Categorize tags
     release_tags = [tag for tag in all_tags if tag.startswith('v') and not any(x in tag for x in ['beta', 'rc', 'alpha'])]
@@ -565,10 +577,12 @@ def tagging_strategy(repo_path):
     print(f"   🚀 RC tags: {', '.join(rc_tags)}")
     
     # Step 3: Tag-based release notes
-    print(f"\n📝 Generating release notes...")
+    print(f"
+📝 Generating release notes...")
     
     for tag in release_tags[-3:]:  # Last 3 releases
-        print(f"\n🏷️ {tag}:")
+        print(f"
+🏷️ {tag}:")
         # In a real scenario, you'd get commits between tags
         commits = get_commit_history(limit=5, repository_path=repo_path)
         for commit in commits[:3]:
@@ -603,8 +617,10 @@ def advanced_stash_workflow(repo_path):
     
     # Simulate multiple files being worked on
     wip_files = {
-        "feature_a.py": "# Work in progress on feature A\nprint('Feature A - 50% complete')",
-        "feature_b.py": "# Work in progress on feature B\nprint('Feature B - 25% complete')",
+        "feature_a.py": "# Work in progress on feature A
+print('Feature A - 50% complete')",
+        "feature_b.py": "# Work in progress on feature B
+print('Feature B - 25% complete')",
         "config_update.json": '{"new_setting": "work_in_progress"}'
     }
     
@@ -639,7 +655,8 @@ def advanced_stash_workflow(repo_path):
     
     # Step 4: List and analyze stashes
     stashes = list_stashes(repo_path)
-    print(f"\n📋 Available stashes ({len(stashes)} total):")
+    print(f"
+📋 Available stashes ({len(stashes)} total):")
     
     for i, stash in enumerate(stashes):
         print(f"   {stash['ref']}: {stash['message']}")
@@ -647,7 +664,8 @@ def advanced_stash_workflow(repo_path):
             print(f"      Branch: {stash['branch_info']}")
     
     # Step 5: Demonstrate stash application workflow
-    print(f"\n🔄 Demonstrating stash application workflow...")
+    print(f"
+🔄 Demonstrating stash application workflow...")
     
     # Apply specific stash for urgent work
     if stashes:
@@ -707,12 +725,17 @@ def fullstack_development_workflow(repo_path):
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
             
             with open(file_path, 'w') as f:
-                f.write(f"# {component.title()} - {file}\n")
-                f.write(f"# Implementation for {file}\n")
+                f.write(f"# {component.title()} - {file}
+")
+                f.write(f"# Implementation for {file}
+")
                 if file.endswith('.py'):
-                    f.write(f"def {file.replace('.py', '')}_function():\n    pass\n")
+                    f.write(f"def {file.replace('.py', '')}_function():
+    pass
+")
                 elif file.endswith('.js'):
-                    f.write(f"function {file.replace('.js', '')}Function() {{}}\n")
+                    f.write(f"function {file.replace('.js', '')}Function() {{}}
+")
         
         # Commit component implementation
         component_files = [os.path.join(component, f) for f in files]
@@ -725,7 +748,8 @@ def fullstack_development_workflow(repo_path):
         switch_branch("main", repo_path)
     
     # Step 2: Integration phase - merge components
-    print("\n🔗 Integration phase")
+    print("
+🔗 Integration phase")
     
     for component in components.keys():
         component_branch = f"feature/{component}-implementation"
@@ -743,8 +767,10 @@ def fullstack_development_workflow(repo_path):
     for file in integration_files:
         file_path = os.path.join(repo_path, "tests", file)
         with open(file_path, 'w') as f:
-            f.write(f"# Integration test - {file}\n")
-            f.write("# Test full-stack integration\n")
+            f.write(f"# Integration test - {file}
+")
+            f.write("# Test full-stack integration
+")
     
     add_files([os.path.join("tests", f) for f in integration_files], repo_path)
     commit_changes("Add integration tests", repo_path)
@@ -754,7 +780,8 @@ def fullstack_development_workflow(repo_path):
     merge_branch(integration_branch, repository_path=repo_path)
     
     # Step 4: Release preparation
-    print("\n🚀 Release preparation")
+    print("
+🚀 Release preparation")
     
     # Create release tag
     create_tag("v1.0.0", "Full-stack application v1.0.0 - Initial release", repo_path)
@@ -762,7 +789,8 @@ def fullstack_development_workflow(repo_path):
     # Generate project summary
     commits = get_commit_history(limit=20, repository_path=repo_path)
     
-    print(f"\n📊 Project Summary:")
+    print(f"
+📊 Project Summary:")
     print(f"   - Total commits: {len(commits)}")
     print(f"   - Components: {', '.join(components.keys())}")
     
@@ -848,7 +876,9 @@ def robust_git_operations(repo_path):
         
         try:
             with open(test_file, 'w') as f:
-                f.write("# Error handling test file\nprint('Testing error handling')\n")
+                f.write("# Error handling test file
+print('Testing error handling')
+")
             print("✅ Created test file")
         except IOError as e:
             print(f"❌ Failed to create test file: {e}")
@@ -922,7 +952,8 @@ def performance_optimized_operations(repo_path):
         return result, duration
     
     # Performance test 1: Batch vs individual file operations
-    print("\n📊 Performance Test 1: Batch vs Individual Operations")
+    print("
+📊 Performance Test 1: Batch vs Individual Operations")
     
     import os
     
@@ -932,7 +963,9 @@ def performance_optimized_operations(repo_path):
         file_name = f"perf_test_{i:02d}.py"
         file_path = os.path.join(repo_path, file_name)
         with open(file_path, 'w') as f:
-            f.write(f"# Performance test file {i}\nprint('File {i}')\n")
+            f.write(f"# Performance test file {i}
+print('File {i}')
+")
         test_files.append(file_name)
     
     # Method 1: Batch operation (efficient)
@@ -946,19 +979,22 @@ def performance_optimized_operations(repo_path):
     if batch_result:
         time_operation("Batch commit", commit_changes, "Batch commit - 20 files", repo_path)
     
-    print(f"\n📈 Performance Summary:")
+    print(f"
+📈 Performance Summary:")
     print(f"   Batch operation: {batch_time:.3f}s for 20 files")
     print(f"   Recommendation: Use batch operations for multiple files")
     
     # Performance test 2: Repository status optimization
-    print("\n📊 Performance Test 2: Status Operations")
+    print("
+📊 Performance Test 2: Status Operations")
     
     # Test status operation performance
     for i in range(3):
         time_operation(f"Status check {i+1}", get_status, repo_path)
     
     # Performance test 3: History retrieval optimization
-    print("\n📊 Performance Test 3: History Operations")
+    print("
+📊 Performance Test 3: History Operations")
     
     history_limits = [5, 10, 20]
     for limit in history_limits:

@@ -1,5 +1,14 @@
 # src/codomyrmex/project_orchestration
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [templates](templates/README.md)
+    - [tests](tests/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview

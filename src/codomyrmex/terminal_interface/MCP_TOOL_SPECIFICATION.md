@@ -83,7 +83,11 @@ Execute terminal commands and capture output for system administration and devel
 {
   "command": "ls -la",
   "return_code": 0,
-  "stdout": "total 48\ndrwxr-xr-x  12 user  staff   384 Jan 18 13:46 .\ndrwxr-xr-x   3 user  staff    96 Jan 18 13:46 ..\n-rw-r--r--   1 user  staff  1073 Jan 18 13:46 README.md\n",
+  "stdout": "total 48
+drwxr-xr-x  12 user  staff   384 Jan 18 13:46 .
+drwxr-xr-x   3 user  staff    96 Jan 18 13:46 ..
+-rw-r--r--   1 user  staff  1073 Jan 18 13:46 README.md
+",
   "stderr": "",
   "execution_time": 0.023,
   "working_directory": "/path/to/project"

@@ -213,7 +213,9 @@ class TextAnalyzer:
 
     def _count_paragraphs(self, text: str) -> int:
         """Count paragraphs in text."""
-        paragraphs = re.split(r'\n\s*\n', text.strip())
+        paragraphs = re.split(r'
+\s*
+', text.strip())
         return len([p for p in paragraphs if p.strip()])
 
     def _calculate_readability(self, words: int, sentences: int, characters: int) -> float:
@@ -707,8 +709,14 @@ class TestTextAnalyzer:
     def test_paragraph_counting_accuracy(self):
         """Test paragraph counting with various formatting"""
         single_paragraph = "This is one paragraph."
-        two_paragraphs = "First paragraph.\n\nSecond paragraph."
-        three_paragraphs = "First.\n\nSecond.\n\nThird."
+        two_paragraphs = "First paragraph.
+
+Second paragraph."
+        three_paragraphs = "First.
+
+Second.
+
+Third."
 
         assert self.analyzer.analyze_text(single_paragraph).paragraph_count == 1
         assert self.analyzer.analyze_text(two_paragraphs).paragraph_count == 2
@@ -959,9 +967,11 @@ print(f"Sentiment: {result.sentiment} ({result.sentiment_score:.2f})")
 # Test class-based approach
 analyzer = TextAnalyzer(enable_sentiment=False)
 result2 = analyzer.analyze_text(text.strip())
-print(f"\nWithout sentiment: {result2.sentiment}")
+print(f"
+Without sentiment: {result2.sentiment}")
 
-print("\n✅ Module working correctly!")
+print("
+✅ Module working correctly!")
 ```
 
 ## 🔧 Step 7: Integration Testing

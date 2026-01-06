@@ -1,5 +1,14 @@
 # testing/examples - Example Validation Tests
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -63,6 +72,8 @@ This directory contains test suites for validating the functionality and correct
 3. **Result Persistence**: Test results should be stored for analysis
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Testing Root**: [../README.md](../README.md) - Testing suite documentation
 - **Testing Agents**: [../AGENTS.md](../AGENTS.md) - Test coordination

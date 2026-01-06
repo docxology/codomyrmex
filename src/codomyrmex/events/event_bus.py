@@ -8,6 +8,7 @@ subscription handling, and asynchronous event processing.
 import asyncio
 import threading
 import queue
+import inspect
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Any, Optional, Callable, Set, Awaitable
 from dataclasses import dataclass, field
@@ -108,7 +109,7 @@ class EventBus:
                 subscriber_id = f"subscriber_{self._subscriber_counter}"
 
         # Check if handler is async
-        is_async = asyncio.iscoroutinefunction(handler)
+        is_async = inspect.iscoroutinefunction(handler)
 
         subscription = Subscription(
             subscriber_id=subscriber_id,

@@ -25,6 +25,7 @@ class EventPriority(Enum):
 
     DEBUG = "debug"
     INFO = "info"
+    NORMAL = "normal"
     WARNING = "warning"
     ERROR = "error"
     CRITICAL = "critical"
@@ -103,11 +104,12 @@ class Event:
 
     event_type: EventType
     source: str
+    event_id: str = field(default_factory=lambda: str(__import__('uuid').uuid4()))
     timestamp: float = field(default_factory=lambda: __import__('time').time())
     correlation_id: Optional[str] = None
     data: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    priority: int = 0  # 0=normal, 1=high, 2=critical
+    priority: Union[int, EventPriority] = 0  # 0=normal, 1=high, 2=critical or EventPriority
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert event to dictionary."""
@@ -132,6 +134,7 @@ class Event:
         return cls(
             event_type=event_type,
             source=data["source"],
+            event_id=data.get("event_id", str(__import__('uuid').uuid4())),
             timestamp=data.get("timestamp", __import__('time').time()),
             correlation_id=data.get("correlation_id"),
             data=data.get("data", {}),

@@ -146,7 +146,8 @@ This tool maps to the `synthesize_component_from_prompt` Python API function.
 | `prompt`          | `string` | Yes      | Detailed natural language description of the component to be synthesized.           | `"Create a Python function to calculate factorial recursively with a docstring."` |
 | `language`        | `string` | Yes      | Target programming language (e.g., "python", "javascript").                         | `"python"`                                                                   |
 | `target_directory`| `string` | Yes      | The directory where the generated file(s) should be placed.                         | `"./src/utils/"`                                                             |
-| `context_code`    | `string` | No       | Existing code snippet(s) to provide context to the LLM.                             | `"class MathHelpers:\n    # new function will be part of this class"`          |
+| `context_code`    | `string` | No       | Existing code snippet(s) to provide context to the LLM.                             | `"class MathHelpers:
+    # new function will be part of this class"`          |
 | `style_guide`     | `string` | No       | Instructions or examples related to coding style or conventions.                    | `"Follow PEP8. Max line length 88."`                                       |
 | `llm_config`      | `object` | No       | Configuration for the LLM (e.g., provider, model name). Defaults to module settings.| `{"model_name": "gpt-4-turbo"}`                                              |
 
@@ -155,7 +156,11 @@ This tool maps to the `synthesize_component_from_prompt` Python API function.
 | Field Name        | Type     | Description                                                                                               | Example Value                                                                   |
 | :---------------- | :------- | :-------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
 | `status`          | `string` | Synthesis status: "success", "failure".                                                                   | `"success"`                                                                     |
-| `generated_files` | `object` | A dictionary where keys are filenames and values are the string content of the generated files.             | `{"factorial.py": "def factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n-1)"}` |
+| `generated_files` | `object` | A dictionary where keys are filenames and values are the string content of the generated files.             | `{"factorial.py": "def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n-1)"}` |
 | `explanation`     | `string` | LLM-generated explanation of the synthesized code (if any).                                               | `"This function calculates factorial using recursion..."`                     |
 | `error_message`   | `string` | Error description if `status` is "failure".                                                               | `"LLM request failed due to invalid API key."`                                |
 

@@ -102,9 +102,11 @@ result = refactor_code_snippet(
 if result["status"] == "success":
     print("Original code:")
     print(original_code)
-    print("\nRefactored code:")
+    print("
+Refactored code:")
     print(result["refactored_code"])
-    print("\nExplanation:")
+    print("
+Explanation:")
     print(result["explanation"])
 else:
     print(f"Error: {result['error_message']}")
@@ -188,7 +190,8 @@ def complete_coding_task(task_description, language):
         return f"Failed to generate code: {gen_result['error_message']}"
     
     initial_code = gen_result["generated_code"]
-    print("\nInitial code generated:")
+    print("
+Initial code generated:")
     print(initial_code)
     
     # Step 2: Refactor for best practices
@@ -202,7 +205,8 @@ def complete_coding_task(task_description, language):
         return f"Failed to refactor code: {refactor_result['error_message']}"
     
     final_code = refactor_result["refactored_code"]
-    print("\nFinal optimized code:")
+    print("
+Final optimized code:")
     print(final_code)
     
     return final_code
@@ -216,8 +220,14 @@ complete_coding_task(
 
 ## Common Pitfalls & Troubleshooting
 
-- **Issue**: <!-- TODO: Describe a common problem users might encounter (e.g., API key not set, LLM error, unexpected output). -->
-  - **Solution**: <!-- TODO: Explain how to resolve it (e.g., check .env file, review prompt, consult LLM provider documentation). -->
+- **Issue**: **API Key Configuration Errors** (e.g., getting "API key not found" or "Authentication failed")
+  - **Solution**: Ensure `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` are set in your environment or `.env` file. Verify the key format (e.g., OpenAI keys typically start with `sk-`).
 
-- **Issue**: <!-- TODO: Add another common issue. -->
-  - **Solution**: <!-- TODO: Add solution. --> 
+- **Issue**: **LLM Service Unavailable or Rate Limits**
+  - **Solution**: Check service availability using `check_llm_availability()`. Implement exponential backoff for rate limits; the `generate_code_snippet` function handles some retries, but callers should handle persistent issues.
+
+- **Issue**: **Unexpected or Low-Quality Code Generation**
+  - **Solution**: Improve prompt specificity. Explicitly state function signatures, parameter types, and success criteria. Use the `refactor_code_snippet` function to improve an initial generation.
+
+- **Issue**: **Context Integration Failures**
+  - **Solution**: Provide more detailed `context_code`. Include relevant class definitions, imports, and existing function signatures so the LLM understands the surrounding environment.

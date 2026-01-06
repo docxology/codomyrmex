@@ -1,5 +1,13 @@
 # AI Code Editing Example
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Module**: `codomyrmex.ai_code_editing` - AI-Powered Code Generation and Refactoring
 
 ## Overview
@@ -485,13 +493,22 @@ The AI code editing module continues to evolve with:
 
 ## Related Documentation
 
-- **[AI Code Editing API](../src/codomyrmex/ai_code_editing/)**
-- **[Language Models](../examples/language_models/)**
-- **[Code Review](../examples/code_review/)**
-- **[Prompt Engineering Guide](../src/codomyrmex/ai_code_editing/PROMPT_ENGINEERING.md)**
+- **[AI Code Editing API](../../src/codomyrmex/ai_code_editing/)**
+- **[Language Models](../language_models/)**
+- **[Code Review](../code_review/)**
+- **[Prompt Engineering Guide](../../src/codomyrmex/ai_code_editing/PROMPT_ENGINEERING.md)**
 
 ---
 
 **Status**: Complete AI-powered code assistance demonstration
 **Tested Methods**: 10 core AI code editing functions
 **Features**: Code generation, refactoring, analysis, documentation, multi-provider support
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

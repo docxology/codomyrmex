@@ -18,7 +18,7 @@ def get_dependency_location(module_name: str) -> str:
     # Modules with optional dependencies
     optional_deps = {
         "code_review", "language_models", "modeling_3d", "performance",
-        "physical_management", "security_audit", "static_analysis"
+        "physical_management", "security", "static_analysis"
     }
     
     if module_name in optional_deps:

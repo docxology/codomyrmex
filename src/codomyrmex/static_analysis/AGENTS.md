@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/static_analysis
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Static Analysis Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -182,39 +192,15 @@ All static analysis within the Codomyrmex platform must:
 - Support custom quality thresholds and policies
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **CI/CD Integration** - Provide analysis results for automated quality gates
-2. **Code Review Enhancement** - Supply analysis data to code review processes
-3. **Security Coordination** - Work with security_audit for comprehensive assessment
-4. **Reporting Integration** - Feed analysis results into reporting systems
-
-### Quality Gates
-
-Before analysis changes are accepted:
-
-1. **Accuracy Verified** - Analysis correctly identifies code issues
-2. **Performance Tested** - Analysis completes within reasonable time limits
-3. **False Positive Management** - Minimize incorrect issue reporting
-4. **Rule Consistency** - Analysis rules align with platform standards
-5. **Integration Validated** - Results integrate properly with dependent systems
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial static analysis system with code quality and security scanning capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

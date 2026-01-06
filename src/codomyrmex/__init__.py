@@ -53,7 +53,8 @@ __all__ = [
     "pattern_matching",
     "performance",
     "project_orchestration",
-    "security_audit",
+    "security",
+    "documents",
     "static_analysis",
     "system_discovery",
     "terminal_interface",
@@ -65,6 +66,7 @@ __all__ = [
     "template",
     "modeling_3d",
     "physical_management",
+    "cerebrum",
 ]
 
 # Import core exceptions and utilities for easier access

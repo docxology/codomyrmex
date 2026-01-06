@@ -1,5 +1,14 @@
 # Codomyrmex Agents — cursorrules/file-specific
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -34,6 +43,8 @@ Brief description of the component/folder purpose.
 Component-specific content with Mermaid diagrams where applicable.
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 Links to related documentation and parent/child directories.
 ```
 
@@ -134,5 +145,7 @@ validate_shell_script() {
 - Include clear examples and counter-examples for each standard
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cursorrules](../README.md) - Coding standards documentation
 - **General Rules**: [general.cursorrules](../general.cursorrules) - Repository-wide standards

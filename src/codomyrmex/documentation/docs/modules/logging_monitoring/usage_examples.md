@@ -116,7 +116,10 @@ CODOMYRMEX_LOG_OUTPUT_TYPE=JSON
 **Example JSON Log Entry (content will vary):**
 ```json
 {"timestamp":"2023-10-27T12:34:56.789012Z","level":"INFO","name":"my_module","module":"my_module","funcName":"do_something","lineno":10,"message":"do_something() called in my_module."}
-{"timestamp":"2023-10-27T12:34:56.790000Z","level":"ERROR","name":"my_module","module":"my_module","funcName":"do_something","lineno":15,"message":"Attempted to divide by zero!","exception":"Traceback (most recent call last):\\n  File \\"my_module.py\\\", line 13, in do_something\\n    x = 1 / 0\\nZeroDivisionError: division by zero"}
+{"timestamp":"2023-10-27T12:34:56.790000Z","level":"ERROR","name":"my_module","module":"my_module","funcName":"do_something","lineno":15,"message":"Attempted to divide by zero!","exception":"Traceback (most recent call last):\
+  File \\"my_module.py\\\", line 13, in do_something\
+    x = 1 / 0\
+ZeroDivisionError: division by zero"}
 ```
 
 ## Common Pitfalls & Troubleshooting

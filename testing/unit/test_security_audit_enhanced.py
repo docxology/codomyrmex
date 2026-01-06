@@ -1,4 +1,7 @@
-"""Unit tests for enhanced security audit module functionality."""
+"""Unit tests for enhanced digital security module functionality.
+
+NOTE: This file is deprecated. Use test_security_digital.py instead.
+"""
 
 import pytest
 import tempfile
@@ -11,7 +14,7 @@ class TestSecretsDetector:
 
     def test_secrets_detector_initialization(self):
         """Test SecretsDetector initialization."""
-        from codomyrmex.security_audit.secrets_detector import SecretsDetector
+        from codomyrmex.security.digital.secrets_detector import SecretsDetector
 
         detector = SecretsDetector()
         assert detector is not None
@@ -20,7 +23,7 @@ class TestSecretsDetector:
 
     def test_audit_secrets_exposure_basic(self):
         """Test basic secrets detection in text content."""
-        from codomyrmex.security_audit.secrets_detector import audit_secrets_exposure
+        from codomyrmex.security.digital.secrets_detector import audit_secrets_exposure
 
         # Test with no secrets
         content = "This is normal text with no secrets."
@@ -36,7 +39,7 @@ class TestSecretsDetector:
 
     def test_entropy_calculation(self):
         """Test entropy calculation for secret detection."""
-        from codomyrmex.security_audit.secrets_detector import SecretsDetector
+        from codomyrmex.security.digital.secrets_detector import SecretsDetector
 
         detector = SecretsDetector()
 
@@ -56,7 +59,7 @@ class TestSecretsDetector:
 
     def test_scan_file_for_secrets(self):
         """Test scanning a file for secrets."""
-        from codomyrmex.security_audit.secrets_detector import scan_file_for_secrets
+        from codomyrmex.security.digital.secrets_detector import scan_file_for_secrets
 
         # Create a temporary file with test content
         with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
@@ -71,7 +74,7 @@ class TestSecretsDetector:
 
     def test_scan_directory_for_secrets(self):
         """Test scanning a directory for secrets."""
-        from codomyrmex.security_audit.secrets_detector import scan_directory_for_secrets
+        from codomyrmex.security.digital.secrets_detector import scan_directory_for_secrets
 
         # Create a temporary directory with test files
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -89,7 +92,7 @@ class TestSecurityAnalyzer:
 
     def test_security_analyzer_initialization(self):
         """Test SecurityAnalyzer initialization."""
-        from codomyrmex.security_audit.security_analyzer import SecurityAnalyzer
+        from codomyrmex.security.digital.security_analyzer import SecurityAnalyzer
 
         analyzer = SecurityAnalyzer()
         assert analyzer is not None
@@ -98,7 +101,7 @@ class TestSecurityAnalyzer:
 
     def test_analyze_file_security(self):
         """Test analyzing a file for security issues."""
-        from codomyrmex.security_audit.security_analyzer import analyze_file_security
+        from codomyrmex.security.digital.security_analyzer import analyze_file_security
 
         # Create a temporary Python file with potential security issues
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -121,7 +124,7 @@ def dangerous_function():
 
     def test_analyze_directory_security(self):
         """Test analyzing a directory for security issues."""
-        from codomyrmex.security_audit.security_analyzer import analyze_directory_security
+        from codomyrmex.security.digital.security_analyzer import analyze_directory_security
 
         # Create a temporary directory with test files
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -139,7 +142,7 @@ class TestComplianceChecker:
 
     def test_compliance_checker_initialization(self):
         """Test ComplianceChecker initialization."""
-        from codomyrmex.security_audit.compliance_checker import ComplianceChecker
+        from codomyrmex.security.digital.compliance_checker import ComplianceChecker
 
         checker = ComplianceChecker()
         assert checker is not None
@@ -152,7 +155,7 @@ class TestComplianceChecker:
 
     def test_check_compliance_function(self):
         """Test the check_compliance convenience function."""
-        from codomyrmex.security_audit.compliance_checker import check_compliance
+        from codomyrmex.security.digital.compliance_checker import check_compliance
 
         # Create a temporary directory for testing
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -177,7 +180,7 @@ class TestComplianceChecker:
 
     def test_compliance_standards(self):
         """Test that supported compliance standards are available."""
-        from codomyrmex.security_audit.compliance_checker import ComplianceChecker, ComplianceStandard
+        from codomyrmex.security.digital.compliance_checker import ComplianceChecker, ComplianceStandard
 
         checker = ComplianceChecker()
 
@@ -195,7 +198,7 @@ class TestComplianceChecker:
 
     def test_compliance_requirement_structure(self):
         """Test that compliance requirements have correct structure."""
-        from codomyrmex.security_audit.compliance_checker import ComplianceChecker
+        from codomyrmex.security.digital.compliance_checker import ComplianceChecker
 
         checker = ComplianceChecker()
 
@@ -222,7 +225,7 @@ class TestSecurityFinding:
 
     def test_security_finding_creation(self):
         """Test creating SecurityFinding instances."""
-        from codomyrmex.security_audit.security_analyzer import SecurityFinding, SecurityIssue
+        from codomyrmex.security.digital.security_analyzer import SecurityFinding, SecurityIssue
 
         finding = SecurityFinding(
             issue_type=SecurityIssue.SQL_INJECTION,
@@ -244,7 +247,7 @@ class TestSecurityFinding:
 
     def test_security_issue_enum(self):
         """Test SecurityIssue enum values."""
-        from codomyrmex.security_audit.security_analyzer import SecurityIssue
+        from codomyrmex.security.digital.security_analyzer import SecurityIssue
 
         assert SecurityIssue.SQL_INJECTION.value == "sql_injection"
         assert SecurityIssue.XSS_VULNERABILITY.value == "xss_vulnerability"
@@ -257,7 +260,7 @@ class TestComplianceRequirement:
 
     def test_compliance_requirement_creation(self):
         """Test creating ComplianceRequirement instances."""
-        from codomyrmex.security_audit.compliance_checker import ComplianceRequirement
+        from codomyrmex.security.digital.compliance_checker import ComplianceRequirement
 
         req = ComplianceRequirement(
             standard="OWASP_TOP_10",

@@ -1,5 +1,14 @@
 # Codomyrmex Agents — config/examples
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -182,4 +191,8 @@ services:
 - Provide clear usage instructions
 
 ## Navigation Links
-- **Parent Directory**: [config](../README.md) - Configuration management documentation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [config](../README.md)
+- **Parent AGENTS**: [../AGENTS.md](../AGENTS.md)
+- **Repository Root**: [../../README.md](../../README.md)

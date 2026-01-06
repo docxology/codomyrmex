@@ -214,7 +214,7 @@ env_result = setup_environment(config)
 ### With Security Audit
 ```python
 from codomyrmex.config_management import audit_configuration
-from codomyrmex.security_audit import scan_security
+from codomyrmex.security.digital import scan_vulnerabilities
 
 # Audit configuration for security issues
 config_audit = audit_configuration(config, audit_rules=[

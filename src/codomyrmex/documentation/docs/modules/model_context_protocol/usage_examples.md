@@ -138,7 +138,11 @@ This is an example of a JSON message the `file_utility.read_file_content` tool w
 {
   "status": "success",
   "data": {
-    "file_content": "def main():\n  print(\"Hello, World!\")\n\nif __name__ == \"__main__\":\n  main()",
+    "file_content": "def main():
+  print(\"Hello, World!\")
+
+if __name__ == \"__main__\":
+  main()",
     "chars_read": 65,
     "encoding_used": "utf-8"
   },

@@ -636,7 +636,7 @@ Primary capabilities for development workflows:
 | [**git_operations**](src/codomyrmex/git_operations/) | Version control automation | Git workflows, branch management, commit automation |
 | [**code_review**](src/codomyrmex/code_review/) | Automated code review | AI-powered review, quality analysis, suggestions |
 | [**ollama_integration**](src/codomyrmex/ollama_integration/) | Local LLM integration | Local model management, execution, benchmarking |
-| [**security_audit**](src/codomyrmex/security_audit/) | Security scanning | Vulnerability detection, compliance checking |
+| [**security**](src/codomyrmex/security/) | Security scanning | Vulnerability detection, compliance checking |
 | [**language_models**](src/codomyrmex/language_models/) | LLM infrastructure | Model management, API integration, benchmarking |
 | [**performance**](src/codomyrmex/performance/) | Performance monitoring | Profiling, optimization, benchmarking |
 
@@ -674,7 +674,7 @@ Advanced capabilities for specific domains:
 |----------|---------|
 | **Foundation** | [logging_monitoring](src/codomyrmex/logging_monitoring/) • [environment_setup](src/codomyrmex/environment_setup/) • [model_context_protocol](src/codomyrmex/model_context_protocol/) • [terminal_interface](src/codomyrmex/terminal_interface/) |
 | **AI & Intelligence** | [ai_code_editing](src/codomyrmex/ai_code_editing/) • [ollama_integration](src/codomyrmex/ollama_integration/) • [language_models](src/codomyrmex/language_models/) |
-| **Analysis & Quality** | [static_analysis](src/codomyrmex/static_analysis/) • [code_review](src/codomyrmex/code_review/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security_audit](src/codomyrmex/security_audit/) |
+| **Analysis & Quality** | [static_analysis](src/codomyrmex/static_analysis/) • [code_review](src/codomyrmex/code_review/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) |
 | **Build & Deploy** | [build_synthesis](src/codomyrmex/build_synthesis/) • [git_operations](src/codomyrmex/git_operations/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) |
 | **Visualization** | [data_visualization](src/codomyrmex/data_visualization/) • [modeling_3d](src/codomyrmex/modeling_3d/) |
 | **Infrastructure** | [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [physical_management](src/codomyrmex/physical_management/) |
@@ -685,7 +685,7 @@ Advanced capabilities for specific domains:
 ## Common Use Cases
 
 ### Development Workflows
-- **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/code_review/) → [Security audit](src/codomyrmex/security_audit/)
+- **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/code_review/) → [Security scan](src/codomyrmex/security/)
 - **AI-Assisted Development**: [AI code editing](src/codomyrmex/ai_code_editing/) with [pattern matching](src/codomyrmex/pattern_matching/) for code refactoring
 - **Build & Deploy**: [Build synthesis](src/codomyrmex/build_synthesis/) → [CI/CD automation](src/codomyrmex/ci_cd_automation/) → [Container management](src/codomyrmex/containerization/)
 
@@ -695,7 +695,7 @@ Advanced capabilities for specific domains:
 
 ### Production Operations
 - **Infrastructure Management**: [Database operations](src/codomyrmex/database_management/) → [Configuration management](src/codomyrmex/config_management/) → [Physical monitoring](src/codomyrmex/physical_management/)
-- **Quality Assurance**: [Security scanning](src/codomyrmex/security_audit/) → [Performance benchmarking](src/codomyrmex/performance/) → [Automated testing](testing/)
+- **Quality Assurance**: [Security scanning](src/codomyrmex/security/) → [Performance benchmarking](src/codomyrmex/performance/) → [Automated testing](testing/)
 
 See **[executable examples](scripts/examples/)** for working demonstrations of these workflows.
 
@@ -797,6 +797,17 @@ Modules organized to prevent circular dependencies:
 - **Core Layer**: Functional capabilities (analysis, execution, visualization)
 - **Service Layer**: Orchestration and integration
 - **Application Layer**: User interfaces (CLI, interactive shell)
+
+## Signposting
+- **Self**: [Codomyrmex Root](README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+- **Children**:
+    - [Source Code](src/README.md)
+    - [Documentation](docs/README.md)
+    - [Scripts](scripts/README.md)
+
 
 ## Documentation
 

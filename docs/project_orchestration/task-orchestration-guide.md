@@ -286,7 +286,8 @@ completed_tasks = orchestrator.list_tasks(status=TaskStatus.COMPLETED)
 for task in completed_tasks:
     result = orchestrator.get_task_result(task.id)
     if result and result.success:
-        print(f"\nTask: {task.name}")
+        print(f"
+Task: {task.name}")
         print(f"  Execution time: {result.execution_time:.2f}s")
         print(f"  Data: {result.data}")
         print(f"  Metadata: {result.metadata}")

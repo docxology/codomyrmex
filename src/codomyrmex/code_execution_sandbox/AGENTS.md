@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/code_execution_sandbox
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Code Execution Sandbox Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -103,39 +113,15 @@ All code execution within the Codomyrmex platform must:
 - Validate and sanitize all user-provided code
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Security Validation** - Coordinate with security_audit for code analysis before execution
-2. **Result Processing** - Provide execution results to dependent modules
-3. **Resource Monitoring** - Track execution resource usage for performance analysis
-4. **Error Handling** - Propagate execution errors with appropriate context
-
-### Quality Gates
-
-Before execution changes are accepted:
-
-1. **Security Validated** - Sandbox properly isolates execution environments
-2. **Resource Limits Tested** - Execution constraints prevent abuse
-3. **Multi-Language Support Verified** - All supported languages execute correctly
-4. **Error Handling Complete** - Robust handling of execution failures
-5. **Performance Optimized** - Efficient resource usage and startup times
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial secure code execution system with Docker sandboxing and multi-language support
+- **Source Root**: [src](../../README.md) - Source code documentation

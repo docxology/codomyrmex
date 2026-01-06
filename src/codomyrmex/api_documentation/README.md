@@ -1,10 +1,18 @@
 # src/codomyrmex/api_documentation
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Documentation files and guides.
+Documentation files and guides for api_documentation.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

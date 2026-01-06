@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/plugin_system
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Plugin System Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -268,39 +277,13 @@ All plugin handling within the Codomyrmex platform must:
 - Monitor plugin resource usage
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
 
-### Related Modules
-- **Environment Setup**: [../environment_setup/](../environment_setup/) - Plugin environment validation
-- **Security Audit**: [../security_audit/](../security_audit/) - Plugin security validation
-- **System Discovery**: [../system_discovery/](../system_discovery/) - Plugin discovery
-
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Security Coordination** - Work with security_audit for plugin validation
-2. **Environment Setup** - Coordinate with environment_setup for plugin dependencies
-3. **Module Discovery** - Integrate with system_discovery for plugin discovery
-4. **Configuration Management** - Use config_management for plugin settings
-
-### Quality Gates
-
-Before plugin system changes are accepted:
-
-1. **Security Validated** - Plugin loading and execution security confirmed
-2. **Compatibility Tested** - Plugins work across supported platforms
-3. **Performance Verified** - Plugin loading and execution performance acceptable
-4. **Error Handling Complete** - Robust error handling for plugin failures
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial plugin system with secure loading and lifecycle management
+- **Source Root**: [src](../../README.md) - Source code documentation

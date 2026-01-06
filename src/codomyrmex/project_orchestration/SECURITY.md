@@ -23,7 +23,7 @@ We aim to acknowledge receipt of your vulnerability report within 2-3 business d
 
 ## Security Updates
 
-Security patches and updates for this module will be documented in the [CHANGELOG.md](./CHANGELOG.md) and released as part of regular version updates. Critical vulnerabilities may warrant out-of-band releases.
+Security patches and updates for this module will be documented in the module changelog and released as part of regular version updates. Critical vulnerabilities may warrant out-of-band releases.
 
 ## Scope
 

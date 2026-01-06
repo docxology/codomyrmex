@@ -1,10 +1,22 @@
 # src/codomyrmex/language_models/outputs
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [integration](integration/README.md)
+    - [llm_outputs](llm_outputs/README.md)
+    - [performance](performance/README.md)
+    - [reports](reports/README.md)
+    - [test_results](test_results/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the src system.
+Persistence layer for LLM interaction traces, test results, and performance metrics.
 
 ## Directory Contents
 - `config.json` – File
@@ -17,6 +29,6 @@ Contains components for the src system.
 - `test_results/` – Subdirectory
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [language_models](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../src/README.md)

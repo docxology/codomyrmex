@@ -25,7 +25,7 @@ Public disclosure of the vulnerability will be coordinated with you after the vu
 
 ## Security Updates
 
-Updates to the MCP specification or security guidance will be documented in the [CHANGELOG.md](./CHANGELOG.md) and may be part of regular version updates to the `model_context_protocol` module. Critical vulnerabilities might warrant immediate updates and notifications.
+Updates to the MCP specification or security guidance will be documented in the module changelog and may be part of regular version updates to the `model_context_protocol` module. Critical vulnerabilities might warrant immediate updates and notifications.
 
 ## Scope
 

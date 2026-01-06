@@ -1,5 +1,48 @@
 # scripts
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [ai_code_editing](ai_code_editing/README.md)
+    - [api_documentation](api_documentation/README.md)
+    - [build_synthesis](build_synthesis/README.md)
+    - [cerebrum](cerebrum/README.md)
+    - [ci_cd_automation](ci_cd_automation/README.md)
+    - [code_execution_sandbox](code_execution_sandbox/README.md)
+    - [code_review](code_review/README.md)
+    - [config_management](config_management/README.md)
+    - [containerization](containerization/README.md)
+    - [data_visualization](data_visualization/README.md)
+    - [database_management](database_management/README.md)
+    - [development](development/README.md)
+    - [docs](docs/README.md)
+    - [documentation](documentation/README.md)
+    - [documentation_module](documentation_module/README.md)
+    - [environment_setup](environment_setup/README.md)
+    - [examples](examples/README.md)
+    - [fabric_integration](fabric_integration/README.md)
+    - [fpf](fpf/README.md)
+    - [git_operations](git_operations/README.md)
+    - [language_models](language_models/README.md)
+    - [logging_monitoring](logging_monitoring/README.md)
+    - [maintenance](maintenance/README.md)
+    - [model_context_protocol](model_context_protocol/README.md)
+    - [modeling_3d](modeling_3d/README.md)
+    - [module_template](module_template/README.md)
+    - [ollama_integration](ollama_integration/README.md)
+    - [pattern_matching](pattern_matching/README.md)
+    - [performance](performance/README.md)
+    - [physical_management](physical_management/README.md)
+    - [project_orchestration](project_orchestration/README.md)
+    - [security_audit](security_audit/README.md)
+    - [static_analysis](static_analysis/README.md)
+    - [system_discovery](system_discovery/README.md)
+    - [terminal_interface](terminal_interface/README.md)
+    - [testing](testing/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -33,6 +76,8 @@ graph TB
         DOC_SCRIPTS[documentation/<br/>Doc generation<br/>Website creation]
         API_DOC_SCRIPTS[api_documentation/<br/>API documentation<br/>OpenAPI specs]
         ENV_SCRIPTS[environment_setup/<br/>Environment setup<br/>Validation, configuration]
+        FPF_SCRIPTS[fpf/<br/>FPF orchestration<br/>End-to-end FPF processing]
+        CEREBRUM_SCRIPTS[cerebrum/<br/>CEREBRUM-FPF orchestration<br/>Comprehensive CEREBRUM analysis]
         GIT_SCRIPTS[git_operations/<br/>Git automation<br/>Workflow management]
         LANG_SCRIPTS[language_models/<br/>LLM management<br/>Model operations]
         LOG_SCRIPTS[logging_monitoring/<br/>Logging configuration<br/>Telemetry setup]
@@ -253,6 +298,15 @@ stateDiagram-v2
     ErrorExit --> [*]: Error exit
 ```
 
+## Script Organization Policy
+
+**All scripts must be organized in module-specific subdirectories.** Scripts in the root `scripts/` directory should only include:
+- Core utilities (`_orchestrator_utils.py`)
+- Module-specific orchestrators (in their respective subdirectories)
+- Category-specific scripts (documentation/, testing/, development/, maintenance/, etc.)
+
+No standalone utility scripts should remain in the root `scripts/` directory.
+
 ## Directory Contents
 
 ### Core Utilities
@@ -262,13 +316,16 @@ stateDiagram-v2
 - `development/` – Development environment setup, testing, code quality tools
 
 ### Documentation Scripts
-- `docs/` – Documentation generation and maintenance utilities
-- `documentation/` – Comprehensive documentation system scripts
+- `docs/` – Documentation maintenance utilities
+- `documentation/` – Comprehensive documentation system scripts (includes all documentation maintenance, validation, generation, and link-fixing scripts)
 - `documentation_module/` – Module-specific documentation automation
 - `api_documentation/` – API documentation generation tools
 
 ### Maintenance Scripts
 - `maintenance/` – System maintenance, cleanup, and organization utilities
+
+### Testing Scripts
+- `testing/` – Testing automation, verification, and test suite generation scripts
 
 ### Example and Demonstration Scripts
 - `examples/` – Usage examples, tutorials, and demonstration scripts
@@ -307,6 +364,8 @@ stateDiagram-v2
 - `physical_management/` – Hardware resource monitoring
 - `system_discovery/` – Module discovery and system exploration
 - `module_template/` – Module creation and scaffolding tools
+- `fpf/` – FPF orchestration and end-to-end processing
+- `cerebrum/` – CEREBRUM-FPF orchestration and comprehensive analysis
 
 ### Integration Scripts
 - `fabric_integration/` – Integration with Fabric AI framework
@@ -383,6 +442,8 @@ def monitor_container_health(container_ids: list[str]) -> dict[str, dict]
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
 - **Scripts Hub**: [Scripts](README.md)
 - **Development Scripts**: [development/README.md](development/README.md)

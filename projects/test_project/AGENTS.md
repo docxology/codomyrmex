@@ -1,5 +1,17 @@
 # Codomyrmex Agents — projects/test_project
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [config](config/AGENTS.md)
+    - [data](data/AGENTS.md)
+    - [reports](reports/AGENTS.md)
+    - [src](src/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -205,6 +217,8 @@ The test project must be updated when:
 - **User Testing**: Validation by intended user groups
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Project Hierarchy
 - **Project Overview**: [README.md](README.md) - Test project documentation

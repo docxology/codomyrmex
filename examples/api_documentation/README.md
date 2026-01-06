@@ -1,5 +1,13 @@
 # API Documentation Example
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Module**: `api_documentation` | **Status**: ✅ Complete | **Test Coverage**: Comprehensive
 
 ## Overview
@@ -335,3 +343,12 @@ This example is verified by the comprehensive test suite in `testing/unit/test_a
 ---
 
 **Status**: ✅ Complete | **Tested Methods**: 4 | **Integration Points**: 4 | **Export Formats**: 3
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

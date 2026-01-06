@@ -1,10 +1,18 @@
 # testing/unit
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Test files and validation suites.
+Test files and validation suites for unit.
 
 ## Directory Contents
 - `test_ai_code_editing.py` – File
@@ -48,6 +56,9 @@ Test files and validation suites.
 - `test_terminal_interface_comprehensive.py` – File
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Project Root**: [README](../../README.md)
 - **Parent Directory**: [testing](../README.md)
-- **Testing Hub**: [testing](../../../testing/README.md)
+- **Parent SPEC**: [../SPEC.md](../SPEC.md)
+- **Repository Root**: [../../README.md](../../README.md)

@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/logging_monitoring
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Logging Monitoring Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -257,39 +267,15 @@ All logging within the Codomyrmex platform must:
 - Enable JSON logging for production monitoring systems
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Logger Dependencies** - Ensure logging is configured before other modules initialize
-2. **Configuration Sharing** - Coordinate log level settings across related modules
-3. **Output Coordination** - Align log destinations and formats with monitoring systems
-4. **Performance Monitoring** - Monitor logging performance impact on other modules
-
-### Quality Gates
-
-Before logging changes are accepted:
-
-1. **Configuration Tested** - All environment configurations properly tested
-2. **Format Validated** - Both text and JSON formats produce expected output
-3. **Performance Verified** - Logging overhead remains within acceptable limits
-4. **Security Reviewed** - No sensitive data logging introduced
-5. **Integration Confirmed** - Changes work correctly with existing module loggers
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial centralized logging system with JSON and text format support
+- **Source Root**: [src](../../README.md) - Source code documentation

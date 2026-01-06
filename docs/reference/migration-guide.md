@@ -427,20 +427,32 @@ class CodomyrmexMigrator:
 """
         import_changes = [c for c in report['changes_made'] if c['type'] == 'import_update']
         for change in import_changes:
-            summary_content += f"- **{change['file']}**: `{change['old']}` → `{change['new']}`\n"
+            summary_content += f"- **{change['file']}**: `{change['old']}` → `{change['new']}`
+"
 
-        summary_content += "\n### Function Updates\n"
+        summary_content += "
+### Function Updates
+"
         function_changes = [c for c in report['changes_made'] if c['type'] == 'function_update']
         for change in function_changes:
-            summary_content += f"- **{change['file']}**: `{change['old']}` → `{change['new']}`\n"
+            summary_content += f"- **{change['file']}**: `{change['old']}` → `{change['new']}`
+"
             if change.get('note'):
-                summary_content += f"  - ⚠️ {change['note']}\n"
+                summary_content += f"  - ⚠️ {change['note']}
+"
 
-        summary_content += f"\n## Next Steps\n\n"
-        summary_content += f"1. Run tests: `codomyrmex test --all`\n"
-        summary_content += f"2. Validate configuration: `codomyrmex validate-config`\n"
-        summary_content += f"3. Check for any remaining issues: `codomyrmex check-compatibility`\n"
-        summary_content += f"4. If issues occur, restore backup from: `{report['backup_path']}`\n"
+        summary_content += f"
+## Next Steps
+
+"
+        summary_content += f"1. Run tests: `codomyrmex test --all`
+"
+        summary_content += f"2. Validate configuration: `codomyrmex validate-config`
+"
+        summary_content += f"3. Check for any remaining issues: `codomyrmex check-compatibility`
+"
+        summary_content += f"4. If issues occur, restore backup from: `{report['backup_path']}`
+"
 
         summary_file.write_text(summary_content)
         print(f"Migration summary written to: {summary_file}")

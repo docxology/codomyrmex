@@ -1,10 +1,18 @@
 # src/codomyrmex/language_models/outputs/llm_outputs
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the src system.
+Raw LLM response logs for debugging, analysis, and regression testing.
 
 ## Directory Contents
 - `chat_completion.md` – File
@@ -15,6 +23,6 @@ Contains components for the src system.
 - `text_generation_with_options.md` – File
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [outputs](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../../src/README.md)

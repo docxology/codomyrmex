@@ -1,5 +1,13 @@
 # Plugin System Example
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Module**: `codomyrmex.plugin_system` - Extensible Plugin Architecture
 
 ## Overview
@@ -386,13 +394,20 @@ manager.load_plugin_registry("plugin_registry.json")
 
 ## Related Documentation
 
-- **[Plugin System API](../src/codomyrmex/plugin_system/)**
-- **[Plugin Development Guide](../docs/development/plugin-development.md)**
-- **[Security Guidelines](../docs/security/plugin-security.md)**
-- **[Configuration Management](../examples/config_management/)**
+- **[Plugin System API](../../src/codomyrmex/plugin_system/)**
+- **[Configuration Management](../config_management/)**
 
 ---
 
 **Status**: Complete example demonstrating plugin system capabilities
 **Tested Methods**: 12 core plugin management methods
 **Features**: Discovery, validation, loading, lifecycle, hooks, monitoring
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

@@ -1,9 +1,29 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [ai_code_editing](ai_code_editing/AGENTS.md)
+    - [build_synthesis](build_synthesis/AGENTS.md)
+    - [code_execution_sandbox](code_execution_sandbox/AGENTS.md)
+    - [data_visualization](data_visualization/AGENTS.md)
+    - [environment_setup](environment_setup/AGENTS.md)
+    - [git_operations](git_operations/AGENTS.md)
+    - [logging_monitoring](logging_monitoring/AGENTS.md)
+    - [model_context_protocol](model_context_protocol/AGENTS.md)
+    - [module_template](module_template/AGENTS.md)
+    - [pattern_matching](pattern_matching/AGENTS.md)
+    - [static_analysis](static_analysis/AGENTS.md)
+    - [template](template/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Documentation files and guides.
+Documentation files and guides for modules.
 
 ## Active Components
 - `README.md` – Project file
@@ -26,5 +46,5 @@ Documentation files and guides.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
+- **Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../../README.md) - Main project documentation

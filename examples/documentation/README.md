@@ -1,5 +1,13 @@
 # Documentation Example
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [examples](examples/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Complete | **Last Updated**: December 2025
 
 ## Overview
@@ -312,6 +320,15 @@ The example generates several output files:
 
 ## Module Documentation
 
-- **[Documentation Module](../../../src/codomyrmex/documentation/)** - Complete module documentation
-- **[API Specification](../../../src/codomyrmex/documentation/API_SPECIFICATION.md)** - Detailed API reference
-- **[Usage Examples](../../../src/codomyrmex/documentation/USAGE_EXAMPLES.md)** - Additional usage patterns
+- **[Documentation Module](../../src/codomyrmex/documentation/)** - Complete module documentation
+- **[API Specification](../../src/codomyrmex/documentation/API_SPECIFICATION.md)** - Detailed API reference
+- **[Usage Examples](../../src/codomyrmex/documentation/USAGE_EXAMPLES.md)** - Additional usage patterns
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

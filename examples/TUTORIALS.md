@@ -1247,8 +1247,8 @@ Congratulations! You've completed all the Codomyrmex Examples tutorials. You now
 
 ## Additional Resources
 
-- **[Main Documentation](../../docs/)** - Complete Codomyrmex documentation
-- **[API Reference](../../docs/reference/api.md)** - Detailed API specifications
-- **[Module Guides](../../docs/modules/)** - In-depth module documentation
+- **[Main Documentation](../docs/)** - Complete Codomyrmex documentation
+- **[API Reference](../docs/reference/api.md)** - Detailed API specifications
+- **[Module Guides](../docs/modules/)** - In-depth module documentation
 - **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Solutions to common issues
 - **[Best Practices Guide](BEST_PRACTICES.md)** - Advanced usage patterns

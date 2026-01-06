@@ -1,5 +1,13 @@
 # Codomyrmex Plugin System
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -175,7 +183,8 @@ class MyAnalysisPlugin(Plugin):
         # Plugin-specific analysis logic
         analysis_result = {
             "language": language,
-            "lines_of_code": len(code.split('\n')),
+            "lines_of_code": len(code.split('
+')),
             "complexity_score": self.calculate_complexity(code),
             "custom_findings": []
         }
@@ -553,7 +562,16 @@ Plugin system components are licensed under MIT. Individual plugins may have dif
 
 ## Support
 
-- **Documentation**: [Plugin Development Guide](../../docs/plugins/)
+- **Documentation**: See this README for plugin development guide
 - **Issues**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
 - **Email**: plugins@codomyrmex.dev
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)

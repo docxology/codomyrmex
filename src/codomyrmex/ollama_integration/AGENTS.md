@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/ollama_integration
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Ollama Integration Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -654,44 +663,14 @@ All Ollama integration within the Codomyrmex platform must:
 - Export/import capabilities for portability
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **language_models**: Higher-level LLM abstraction layer
-- **ai_code_editing**: AI-powered code editing capabilities
-- **performance**: Performance monitoring for model execution
-- **logging_monitoring**: Logging integration for model operations
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Language Models** - Provide underlying Ollama execution for language_models module
-2. **AI Code Editing** - Supply local LLM capabilities for code assistance
-3. **Performance Monitoring** - Share execution metrics with performance module
-4. **Logging Integration** - Log model operations through logging_monitoring
-5. **Configuration Coordination** - Coordinate with config_management for model settings
-
-### Quality Gates
-
-Before Ollama integration changes are accepted:
-
-1. **Model Availability** - Integration works with available Ollama models
-2. **Error Handling** - Robust handling of network and model errors
-3. **Resource Management** - Proper cleanup and resource management
-4. **Output Integrity** - Output files are properly saved and retrievable
-5. **Configuration Validation** - Configuration changes are validated
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial Ollama integration with model management, execution, and output handling capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

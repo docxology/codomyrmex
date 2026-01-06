@@ -1,5 +1,18 @@
 # testing
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [examples](examples/README.md)
+    - [fixtures](fixtures/README.md)
+    - [integration](integration/README.md)
+    - [output](output/README.md)
+    - [performance](performance/README.md)
+    - [unit](unit/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -244,6 +257,8 @@ graph TD
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
 - **Testing Hub**: [testing](../testing/README.md)
 - **Testing Strategy**: [docs/development/testing-strategy.md](../docs/development/testing-strategy.md)

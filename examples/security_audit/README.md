@@ -1,5 +1,14 @@
 # Security Audit Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 Demonstrates security vulnerability scanning and compliance checking using the Codomyrmex Security Audit module.
 
 ## Overview
@@ -82,3 +91,11 @@ The security audit module integrates with CI/CD pipelines to:
 - [Module README](../../src/codomyrmex/security_audit/README.md)
 - [Unit Tests](../../testing/unit/test_security_audit.py)
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

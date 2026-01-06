@@ -116,7 +116,9 @@ def benchmark_static_analysis():
     # Single file analysis
     with tempfile.TemporaryDirectory() as temp_dir:
         test_file = Path(temp_dir) / "sample_module.py"
-        test_file.write_text("def sample_function():\n    return True\n" * 250)  # ~500 lines
+        test_file.write_text("def sample_function():
+    return True
+" * 250)  # ~500 lines
 
         start_time = time.time()
         # Test with actual function signature

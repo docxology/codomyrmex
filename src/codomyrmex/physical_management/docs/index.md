@@ -9,7 +9,7 @@ This documentation provides in-depth information beyond the main `README.md` for
 - [Architecture](./architecture.md) (Physical system architecture and design)
 - [API Reference](./API_REFERENCE.md) (Detailed API documentation)
 - [API Specification](../API_SPECIFICATION.md) (Link to the main API spec)
-- [Contributing Guidelines](../../../docs/project/contributing.md) (Link to contribution guide)
+- [Contributing Guidelines](../../../../docs/project/contributing.md) (Link to contribution guide)
 
 ## How to Use This Documentation
 

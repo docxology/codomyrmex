@@ -7,7 +7,7 @@ orchestration, and deployment capabilities for the Codomyrmex ecosystem.
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
 - Integrates with `ci_cd_automation` for automated container builds and deployments.
-- Works with `security_audit` for container security scanning.
+- Works with `security` for container security scanning.
 - Supports `environment_setup` for container environment configuration.
 
 Available functions:

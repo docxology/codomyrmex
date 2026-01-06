@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/data_visualization
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Data Visualization Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -434,39 +444,15 @@ All data visualization within the Codomyrmex platform must:
 - Support both single and multi-series visualizations
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Data Sources** - Coordinate with modules providing data for visualization
-2. **Output Integration** - Support embedding visualizations in reports and documentation
-3. **Configuration Sharing** - Use consistent styling across platform visualizations
-4. **Performance Monitoring** - Track visualization generation performance
-
-### Quality Gates
-
-Before visualization changes are accepted:
-
-1. **Chart Accuracy Verified** - Generated charts correctly represent input data
-2. **Output Formats Tested** - All supported formats (PNG, SVG, PDF) working
-3. **Data Validation Complete** - Robust handling of edge cases and invalid data
-4. **Performance Optimized** - Efficient processing of large datasets
-5. **Styling Consistent** - Visualizations follow platform design standards
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial comprehensive visualization system with multiple chart types and output formats
+- **Source Root**: [src](../../README.md) - Source code documentation

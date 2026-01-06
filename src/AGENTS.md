@@ -165,6 +165,18 @@ Package dependencies organized by purpose:
 - **Development** - Testing and development tools
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+
+### Signposting
+- **Parent**: [Root](../AGENTS.md)
+- **Self**: [Source Agents](AGENTS.md)
+- **Children**:
+    - [Codomyrmex Package](codomyrmex/AGENTS.md)
+    - [Template Package](template/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
 
 ### For Users
 - **Installation**: [docs/getting-started/installation.md](../docs/getting-started/installation.md)

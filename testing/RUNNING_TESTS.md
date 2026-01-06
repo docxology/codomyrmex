@@ -257,7 +257,8 @@ If you encounter import errors:
 
 ```bash
 # Check Python path
-python -c "import sys; print('\n'.join(sys.path))"
+python -c "import sys; print('
+'.join(sys.path))"
 
 # Verify package installation
 uv run python -c "import codomyrmex; print('Package imported successfully')"

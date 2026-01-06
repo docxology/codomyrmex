@@ -22,10 +22,10 @@ except ImportError:
     STATIC_ANALYSIS_AVAILABLE = False
 
 try:
-    from codomyrmex.security_audit import scan_vulnerabilities, check_compliance, analyze_file_security
-    SECURITY_AUDIT_AVAILABLE = True
+    from codomyrmex.security.digital import scan_vulnerabilities, check_compliance, analyze_file_security
+    SECURITY_AVAILABLE = True
 except ImportError:
-    SECURITY_AUDIT_AVAILABLE = False
+    SECURITY_AVAILABLE = False
 
 try:
     from codomyrmex.ci_cd_automation import create_pipeline, validate_pipeline_config
@@ -135,7 +135,7 @@ django==3.2.0
             assert "severity" in result
             assert "description" in result
 
-    @pytest.mark.skipif(not SECURITY_AUDIT_AVAILABLE,
+    @pytest.mark.skipif(not SECURITY_AVAILABLE,
                        reason="Security audit module not available")
     def test_security_audit_integration(self):
         """Test that security audit can scan the test codebase."""
@@ -153,7 +153,7 @@ django==3.2.0
         # Should have found some vulnerabilities
         assert len(report.vulnerabilities) > 0
 
-    @pytest.mark.skipif(not SECURITY_AUDIT_AVAILABLE,
+    @pytest.mark.skipif(not SECURITY_AVAILABLE,
                        reason="Security audit module not available")
     def test_compliance_checking_integration(self):
         """Test compliance checking against security standards."""
@@ -171,7 +171,7 @@ django==3.2.0
             assert hasattr(result, 'status')
             assert hasattr(result, 'evidence')
 
-    @pytest.mark.skipif(not SECURITY_AUDIT_AVAILABLE,
+    @pytest.mark.skipif(not SECURITY_AVAILABLE,
                        reason="Security audit module not available")
     def test_advanced_security_analysis_integration(self):
         """Test advanced security analysis with AST and patterns."""
@@ -276,7 +276,7 @@ django==3.2.0
         assert not is_valid
         assert len(errors) > 0
 
-    @pytest.mark.skipif(not all([STATIC_ANALYSIS_AVAILABLE, SECURITY_AUDIT_AVAILABLE, CI_CD_AVAILABLE]),
+    @pytest.mark.skipif(not all([STATIC_ANALYSIS_AVAILABLE, SECURITY_AVAILABLE, CI_CD_AVAILABLE]),
                        reason="Required modules not available")
     def test_complete_workflow_integration(self):
         """Test the complete analysis → security → CI/CD workflow."""
@@ -361,7 +361,7 @@ django==3.2.0
                 assert isinstance(e, Exception)
 
         # Security audit should handle gracefully
-        if SECURITY_AUDIT_AVAILABLE:
+        if SECURITY_AVAILABLE:
             from codomyrmex.security_audit import scan_vulnerabilities
             try:
                 report = scan_vulnerabilities(nonexistent_dir)
@@ -384,7 +384,7 @@ django==3.2.0
             analyze_file(self.test_files["python_file"])
             workflow_steps += 1
 
-        if SECURITY_AUDIT_AVAILABLE:
+        if SECURITY_AVAILABLE:
             from codomyrmex.security_audit import analyze_file_security
             analyze_file_security(self.test_files["python_file"])
             workflow_steps += 1
@@ -413,7 +413,7 @@ django==3.2.0
             analysis_data["static_analysis"] = analysis_results
 
         # Collect security data
-        if SECURITY_AUDIT_AVAILABLE:
+        if SECURITY_AVAILABLE:
             from codomyrmex.security_audit import analyze_file_security
             security_findings = analyze_file_security(python_file)
             security_data["security_analysis"] = security_findings

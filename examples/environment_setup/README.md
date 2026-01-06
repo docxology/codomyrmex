@@ -1,5 +1,14 @@
 # Environment Setup Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 Demonstrates environment validation and dependency checking for Codomyrmex.
 
 ## Overview
@@ -41,3 +50,11 @@ python example_basic.py
 - [Module README](../../src/codomyrmex/environment_setup/README.md)
 - [Unit Tests](../../testing/unit/test_environment_setup.py)
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

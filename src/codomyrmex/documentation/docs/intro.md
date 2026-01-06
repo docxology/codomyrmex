@@ -11,9 +11,9 @@ This documentation provides comprehensive information about the Codomyrmex proje
 
 ## Getting Started
 
--   **New to Codomyrmex?** Start with the [Project Overview](./project-overview/) to understand its goals and structure.
--   **Ready to install?** Head over to the [Environment Setup](./development-guides/environment-setup.md) guide.
--   **Want to contribute?** Check out our [Contributing Guidelines](./project-overview/contributing.md).
+-   **New to Codomyrmex?** Start with the [Project Overview](./project/) to understand its goals and structure.
+-   **Ready to install?** Head over to the [Environment Setup](./development/environment-setup) guide.
+-   **Want to contribute?** Check out our [Contributing Guidelines](./project/contributing).
 
 ## Explore the Modules
 

@@ -8,7 +8,7 @@ Integration:
 - Uses `static_analysis` for code introspection and documentation extraction.
 - Integrates with `data_visualization` for API usage analytics.
 - Works with `logging_monitoring` for API access logging.
-- Supports `security_audit` for API security documentation.
+- Supports `security` for API security documentation.
 
 Available functions:
 - generate_api_docs: Generate API documentation

@@ -1,5 +1,14 @@
 # config
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [examples](examples/README.md)
+    - [templates](templates/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -88,5 +97,7 @@ flowchart TD
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
 - **Configuration Scripts**: [scripts/config_management/](../scripts/config_management/) - Configuration management utilities

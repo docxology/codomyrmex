@@ -336,7 +336,8 @@ result = execute_code("python", "print('test')")
 
 # 3. Refactor if needed
 refactored = refactor_code_snippet(
-    code_snippet="def func():\n    return True",
+    code_snippet="def func():
+    return True",
     refactoring_instruction="Add type hints",
     language="python"
 )

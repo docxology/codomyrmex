@@ -96,7 +96,7 @@ physical_management = [
     "websockets>=10.0",
 ]
 
-security_audit = [
+security = [
     "cryptography>=41.0.0",
     "jinja2>=3.1.0",
     "pyopenssl>=23.0.0",

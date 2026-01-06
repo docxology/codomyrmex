@@ -1,5 +1,14 @@
 # Codomyrmex Agents — projects/test_project/config
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -176,6 +185,8 @@ Configuration must be updated when:
 - **Documentation**: Configuration change documentation and communication
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Configuration Hierarchy
 - **Configuration Overview**: [README.md](README.md) - Configuration management guide

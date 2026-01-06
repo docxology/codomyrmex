@@ -1,5 +1,14 @@
 # Logging Monitoring Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 This directory contains examples demonstrating the **Logging Monitoring** module of Codomyrmex.
 
 ## Overview
@@ -83,3 +92,11 @@ The Logging Monitoring module is foundational and used by all other Codomyrmex m
 - [API Specification](../../src/codomyrmex/logging_monitoring/API_SPECIFICATION.md)
 - [Unit Tests](../../testing/unit/test_logging_monitoring.py)
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

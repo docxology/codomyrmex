@@ -1,5 +1,14 @@
 # Codomyrmex Agents — src/codomyrmex/containerization
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Containerization Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -276,44 +285,14 @@ All container operations within the Codomyrmex platform must:
 - Monitor registry usage and storage
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **ci_cd_automation**: Container build and deployment pipelines
-- **security_audit**: Container security scanning integration
-- **environment_setup**: Container environment configuration
-- **logging_monitoring**: Container logging and monitoring
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **CI/CD Integration** - Build containers as part of automated pipelines
-2. **Security Integration** - Scan containers for vulnerabilities
-3. **Environment Setup** - Configure container environments
-4. **Monitoring Integration** - Monitor container health and performance
-5. **Registry Coordination** - Manage container image lifecycle
-
-### Quality Gates
-
-Before containerization changes are accepted:
-
-1. **Security Validated** - Container images pass security scans
-2. **Build Successful** - Containers build without errors
-3. **Configuration Valid** - Container configurations are syntactically correct
-4. **Resource Appropriate** - Resource limits set appropriately
-5. **Documentation Complete** - Container configurations documented
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial containerization system with Docker management, Kubernetes orchestration, and security scanning
+- **Source Root**: [src](../../README.md) - Source code documentation

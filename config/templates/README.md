@@ -1,16 +1,32 @@
 # config/templates
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Configuration files and templates.
+Reusable configuration templates and environment scaffolding for Codomyrmex. Templates provide standardized starting points for different deployment scenarios and can be customized for specific use cases.
 
 ## Directory Contents
-- `development.env` – File
-- `production.env` – File
+- `development.env` – Development environment template
+- `production.env` – Production environment template
+
+## Template Usage
+
+Templates support variable substitution:
+- `${VARIABLE_NAME}` - Required environment variables
+- `${VARIABLE_NAME:-default}` - Optional with default value
+- `{{template_var}}` - Template-specific variables
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [config](../README.md)
-- **Config Hub**: [config](../../../config/README.md)
+- **Repository Root**: [../../README.md](../../README.md)

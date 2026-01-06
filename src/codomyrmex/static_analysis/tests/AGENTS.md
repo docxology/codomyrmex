@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/static_analysis/tests
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [integration](integration/AGENTS.md)
+    - [unit](unit/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -17,5 +27,5 @@ Test files and validation suites.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [static_analysis](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
+- **Parent Directory**: [static_analysis](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../README.md) - Main project documentation

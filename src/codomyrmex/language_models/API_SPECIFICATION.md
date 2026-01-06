@@ -243,7 +243,9 @@ messages = create_chat_messages(
 # Stream the response
 for chunk in stream_chat_with_ollama(messages, model="llama2"):
     if chunk.get("done", False):
-        print(f"\\n\\nTotal tokens: {chunk.get('total_tokens', 0)}")
+        print(f"\
+\
+Total tokens: {chunk.get('total_tokens', 0)}")
     else:
         print(chunk.get("response", ""), end="", flush=True)
 ```

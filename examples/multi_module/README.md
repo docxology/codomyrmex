@@ -1,5 +1,14 @@
 # Multi-Module Integration Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 This directory contains examples demonstrating integration of multiple Codomyrmex modules working together in real-world workflows.
 
 ## Overview
@@ -160,3 +169,11 @@ To create custom workflows:
 - [Project Orchestration](../../src/codomyrmex/project_orchestration/README.md)
 - [Integration Tests](../../testing/integration/)
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

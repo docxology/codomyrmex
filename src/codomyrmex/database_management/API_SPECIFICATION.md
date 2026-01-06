@@ -276,7 +276,7 @@ if metrics.performance_score < 70:
 ### With Security Audit
 ```python
 from codomyrmex.database_management import manage_databases
-from codomyrmex.security_audit import audit_database_security
+from codomyrmex.security.digital import audit_code_security
 
 # Run security health check
 health_check = manage_databases("health_check", db_config)

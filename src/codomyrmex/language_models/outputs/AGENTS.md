@@ -1,9 +1,22 @@
 # Codomyrmex Agents — src/codomyrmex/language_models/outputs
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [integration](integration/AGENTS.md)
+    - [llm_outputs](llm_outputs/AGENTS.md)
+    - [performance](performance/AGENTS.md)
+    - [reports](reports/AGENTS.md)
+    - [test_results](test_results/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Contains components for the src system.
+Module components and implementation for outputs..
 
 ## Active Components
 - `README.md` – Project file
@@ -22,6 +35,5 @@ Contains components for the src system.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [language_models](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
-
+- **Parent Directory**: [language_models](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../README.md) - Main project documentation

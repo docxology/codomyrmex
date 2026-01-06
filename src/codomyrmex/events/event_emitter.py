@@ -74,6 +74,21 @@ class EventEmitter:
         except Exception as e:
             logger.error(f"Failed to emit event {event_type.value}: {e}")
 
+    def emit_sync(self, event_type: EventType, data: Optional[Dict[str, Any]] = None,
+                 correlation_id: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None,
+                 priority: int = 0) -> None:
+        """
+        Emit a single event synchronously.
+
+        Args:
+            event_type: Type of event to emit
+            data: Event data payload
+            correlation_id: Correlation ID for event tracing
+            metadata: Additional metadata
+            priority: Event priority (0=normal, 1=high, 2=critical)
+        """
+        self.emit(event_type, data, correlation_id, metadata, priority)
+
     async def emit_async(self, event_type: EventType, data: Optional[Dict[str, Any]] = None,
                         correlation_id: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None,
                         priority: int = 0) -> None:

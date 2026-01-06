@@ -1,5 +1,18 @@
 # Codomyrmex Agents — src/codomyrmex/documentation
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Documentation Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [scripts](scripts/AGENTS.md)
+    - [src](src/AGENTS.md)
+    - [static](static/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -262,46 +275,15 @@ All documentation within the Codomyrmex platform must:
 - Verify version consistency across modules
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Documentation Website
-- **Live Documentation**: Points to generated Docusaurus site
-- **Quality Reports**: [coverage_assessment.md](coverage_assessment.md) - Coverage evaluation
-- **Issue Taxonomy**: [bug_taxonomy.md](bug_taxonomy.md) - Documentation issue classification
-
-### Related Modules
-- **All Modules**: This module aggregates documentation from all other modules
-- **build_synthesis**: Documentation website build integration
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Module Documentation** - Each module provides documentation that gets aggregated
-2. **Build Integration** - Documentation website builds through build_synthesis
-3. **Quality Gates** - Documentation quality checks in CI/CD pipelines
-4. **Version Management** - Coordinate documentation versions with code versions
-
-### Quality Gates
-
-Before documentation changes are accepted:
-
-1. **Build Validation** - Documentation website builds successfully
-2. **Link Validation** - All internal links are functional
-3. **Consistency Check** - Documentation follows established patterns
-4. **Quality Assessment** - Documentation meets quality thresholds
-5. **Accessibility Review** - Documentation is accessible and understandable
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial documentation management system with Docusaurus website, aggregation, and quality assessment capabilities
+- **Source Root**: [src](../../README.md) - Source code documentation

@@ -1,5 +1,14 @@
 # Config Management Examples
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 Demonstrates configuration loading, validation, and management using the Codomyrmex Config Management module.
 
 ## Overview
@@ -104,3 +113,11 @@ The config management module integrates with:
 - [Unit Tests](../../testing/unit/test_config_management.py)
 - [Enhanced Tests](../../testing/unit/test_config_management_enhanced.py)
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

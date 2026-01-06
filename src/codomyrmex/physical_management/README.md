@@ -1,10 +1,20 @@
 # src/codomyrmex/physical_management
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
+    - [examples](examples/README.md)
+    - [tests](tests/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
 
-Contains components for the src system.
+Bridges digital systems with physical world sensors and simulation engines for IoT and robotics applications.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

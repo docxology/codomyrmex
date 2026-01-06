@@ -5,6 +5,9 @@ import sys
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 import json
 
+# Skip entire module if pydantic is not installed
+pydantic = pytest.importorskip("pydantic")
+
 
 class TestModelContextProtocol:
     """Test cases for model context protocol functionality."""
@@ -37,7 +40,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from model_context_protocol.mcp_schemas import MCPErrorDetail
+        from codomyrmex.model_context_protocol.mcp_schemas import MCPErrorDetail
 
         # Test valid error detail
         error_data = {
@@ -72,7 +75,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from model_context_protocol.mcp_schemas import MCPToolCall
+        from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall
 
         # Test valid tool call
         tool_call_data = {
@@ -102,7 +105,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from model_context_protocol.mcp_schemas import MCPToolResult
+        from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult
 
         # Test successful result with data
         success_data = {
@@ -132,7 +135,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from model_context_protocol.mcp_schemas import MCPToolResult, MCPErrorDetail
+        from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult, MCPErrorDetail
 
         # Test failure result with error details
         failure_data = {
@@ -157,7 +160,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from model_context_protocol.mcp_schemas import MCPToolResult
+        from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult
 
         # Test failure without error (should raise ValueError)
         invalid_failure_data = {
@@ -180,7 +183,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult, MCPErrorDetail
+        from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult, MCPErrorDetail
 
         # Test MCPToolCall serialization
         tool_call = MCPToolCall(
@@ -217,7 +220,7 @@ class TestModelContextProtocol:
             sys.path.insert(0, str(code_dir))
 
         # Execute the main block by calling it directly
-        import model_context_protocol.mcp_schemas as mcp_schemas
+        import codomyrmex.model_context_protocol.mcp_schemas as mcp_schemas
 
         # Replicate the main block logic with real execution
         tool_call_data = {
@@ -265,7 +268,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        import model_context_protocol.mcp_schemas as mcp_schemas
+        import codomyrmex.model_context_protocol.mcp_schemas as mcp_schemas
 
         # Test invalid failure data (data present when status is failure)
         invalid_failure_data = {
@@ -290,7 +293,7 @@ class TestModelContextProtocol:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult
+        from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult
 
         # Test MCPToolCall allows extra fields
         tool_call = MCPToolCall(

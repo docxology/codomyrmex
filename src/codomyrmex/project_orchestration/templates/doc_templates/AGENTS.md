@@ -1,9 +1,18 @@
 # Codomyrmex Agents — src/codomyrmex/project_orchestration/templates/doc_templates
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Documentation files and guides.
+Documentation files and guides for doc_templates.
 
 ## Active Components
 - `AGENTS.nested.template.md` – Project file
@@ -18,6 +27,5 @@ Documentation files and guides.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory: Parent Directory**: [templates](../README.md) - Parent directory documentation
-- **Project Root: Project Root**: [README](../../../README.md) - Main project documentation
-
+- **Parent Directory**: [templates](../README.md) - Parent directory documentation
+- **Project Root**: [README](../../../../../README.md) - Main project documentation

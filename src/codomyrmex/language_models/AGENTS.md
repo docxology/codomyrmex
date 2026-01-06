@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/language_models
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Language Models Agents](AGENTS.md)
+- **Children**:
+    - [outputs](outputs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -325,40 +335,15 @@ All language model interactions within the Codomyrmex platform must:
 - Handle rate limiting and quota management
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-- **Comprehensive Report**: [COMPREHENSIVE_REPORT.md](COMPREHENSIVE_REPORT.md) - Detailed analysis reports
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Model Requirements** - Coordinate model capabilities with module needs
-2. **Cost Management** - Share API usage costs across platform components
-3. **Performance Optimization** - Optimize model calls for overall platform performance
-4. **Fallback Coordination** - Ensure consistent fallback behavior across modules
-
-### Quality Gates
-
-Before language model changes are accepted:
-
-1. **Multi-Provider Tested** - Works with all supported LLM providers
-2. **Cost Tracking Verified** - Accurate usage and cost reporting
-3. **Security Validated** - No credential exposure or prompt leakage
-4. **Error Handling Complete** - Robust handling of API failures and edge cases
-5. **Performance Optimized** - Efficient API usage and response caching
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial language model infrastructure with multi-provider support and benchmarking
+- **Source Root**: [src](../../README.md) - Source code documentation

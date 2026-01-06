@@ -1,5 +1,13 @@
 # src/codomyrmex/documentation/docs/modules/static_analysis
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -46,6 +54,6 @@ The static analysis workflow provides comprehensive code analysis capabilities w
 - `usage_examples.md` – File
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../../../README.md)
 - **Parent Directory**: [modules](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../../../README.md)

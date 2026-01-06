@@ -25,7 +25,7 @@ Public disclosure of the vulnerability will be coordinated with you after the vu
 
 ## Security Updates
 
-Security patches and updates for this module will be documented in the [CHANGELOG.md](./CHANGELOG.md) (if available) and released as part of regular version updates. Critical vulnerabilities may warrant out-of-band releases.
+Security patches and updates for this module will be documented in the module changelog (if available) and released as part of regular version updates. Critical vulnerabilities may warrant out-of-band releases.
 
 ## Scope
 

@@ -1,5 +1,16 @@
 # Codomyrmex Agents — src/codomyrmex/environment_setup
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Environment Setup Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [scripts](scripts/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -177,39 +188,15 @@ All environment setup within the Codomyrmex platform must:
 - Document all required and optional environment variables
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Initialization Order** - Ensure environment setup runs before module imports
-2. **Configuration Sharing** - Coordinate environment variable requirements with other modules
-3. **Error Propagation** - Handle environment setup failures gracefully in dependent modules
-4. **Documentation Updates** - Update environment requirements when adding new dependencies
-
-### Quality Gates
-
-Before environment setup changes are accepted:
-
-1. **Validation Tested** - All validation scenarios properly tested
-2. **Error Messages Clear** - Guidance messages are actionable and helpful
-3. **Security Verified** - No sensitive data exposure in error handling
-4. **Cross-Platform Compatible** - Works on supported operating systems
-5. **Documentation Updated** - Environment requirements clearly documented
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial environment validation system with dependency checking and API key management
+- **Source Root**: [src](../../README.md) - Source code documentation

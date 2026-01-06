@@ -44,7 +44,10 @@ for i in range(1, 4):
   "tool_name": "execute_code",
   "arguments": {
     "language": "python",
-    "code": "name = input(\"Enter your name: \")\nprint(f\"Hello, {name}, from the Python sandbox!\")\nfor i in range(1, 4):\n    print(f\"Python count: {i}\")",
+    "code": "name = input(\"Enter your name: \")
+print(f\"Hello, {name}, from the Python sandbox!\")
+for i in range(1, 4):
+    print(f\"Python count: {i}\")",
     "stdin": "CodomyrmexDev",
     "timeout": 10 
   }
@@ -60,7 +63,11 @@ codomyrmex_mcp_client send_request --file request1.json
 **Expected Response (example):**
 ```json
 {
-  "stdout": "Hello, CodomyrmexDev, from the Python sandbox!\nPython count: 1\nPython count: 2\nPython count: 3\n",
+  "stdout": "Hello, CodomyrmexDev, from the Python sandbox!
+Python count: 1
+Python count: 2
+Python count: 3
+",
   "stderr": "",
   "exit_code": 0,
   "execution_time": 0.08, 
@@ -93,7 +100,10 @@ console.log(`Calculation: ${a} * ${b} = ${a * b}`);
   "tool_name": "execute_code",
   "arguments": {
     "language": "javascript", 
-    "code": "let message = \"Hello from JavaScript sandbox!\";\nlet a = 5, b = 10;\nconsole.log(message);\nconsole.log(`Calculation: ${a} * ${b} = ${a * b}`);",
+    "code": "let message = \"Hello from JavaScript sandbox!\";
+let a = 5, b = 10;
+console.log(message);
+console.log(`Calculation: ${a} * ${b} = ${a * b}`);",
     "timeout": 5
   }
 }
@@ -108,7 +118,9 @@ codomyrmex_mcp_client send_request --file request2.json
 **Expected Response (example):**
 ```json
 {
-  "stdout": "Hello from JavaScript sandbox!\nCalculation: 5 * 10 = 50\n",
+  "stdout": "Hello from JavaScript sandbox!
+Calculation: 5 * 10 = 50
+",
   "stderr": "",
   "exit_code": 0,
   "execution_time": 0.15, 
@@ -138,7 +150,12 @@ while True:
   "tool_name": "execute_code",
   "arguments": {
     "language": "python",
-    "code": "import time\nprint(\"Starting long task...\")\ni = 0\nwhile True:\n    i += 1\n    time.sleep(0.5)",
+    "code": "import time
+print(\"Starting long task...\")
+i = 0
+while True:
+    i += 1
+    time.sleep(0.5)",
     "timeout": 2 
   }
 }
@@ -153,7 +170,8 @@ codomyrmex_mcp_client send_request --file request3.json
 **Expected Response (example):**
 ```json
 {
-  "stdout": "Starting long task...\n", // Might contain some output before timeout
+  "stdout": "Starting long task...
+", // Might contain some output before timeout
   "stderr": "",
   "exit_code": null, // Or a system-specific code indicating termination due to timeout
   "execution_time": 2.0, // Approximately the timeout value
@@ -182,7 +200,11 @@ print(f"Result: {result}") # This won't be reached
   "tool_name": "execute_code",
   "arguments": {
     "language": "python",
-    "code": "print(\"Preparing to divide...\")\nx = 10\ny = 0\nresult = x / y \nprint(f\"Result: {result}\")",
+    "code": "print(\"Preparing to divide...\")
+x = 10
+y = 0
+result = x / y 
+print(f\"Result: {result}\")",
     "timeout": 5
   }
 }
@@ -197,8 +219,13 @@ codomyrmex_mcp_client send_request --file request4.json
 **Expected Response (example):**
 ```json
 {
-  "stdout": "Preparing to divide...\n",
-  "stderr": "Traceback (most recent call last):\n  File \"/sandbox/code.py\", line 4, in <module>\n    result = x / y \nZeroDivisionError: division by zero\n",
+  "stdout": "Preparing to divide...
+",
+  "stderr": "Traceback (most recent call last):
+  File \"/sandbox/code.py\", line 4, in <module>
+    result = x / y 
+ZeroDivisionError: division by zero
+",
   "exit_code": 1,
   "execution_time": 0.06, 
   "status": "execution_error",

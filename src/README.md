@@ -1,5 +1,14 @@
 # src
 
+## Signposting
+- **Parent**: [Root](../README.md)
+- **Children**:
+    - [codomyrmex](codomyrmex/README.md) - Main package
+    - [template](template/README.md) - Scaffolding templates
+- **Related**:
+    - [Tests](../testing/README.md)
+    - [Docs](../docs/README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -401,6 +410,8 @@ graph TD
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
 - **Package Documentation**: [src/codomyrmex/README.md](codomyrmex/README.md)
 - **API Reference**: [docs/reference/api.md](../docs/reference/api.md)

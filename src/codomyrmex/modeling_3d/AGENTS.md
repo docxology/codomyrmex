@@ -1,5 +1,16 @@
 # Codomyrmex Agents — src/codomyrmex/modeling_3d
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Modeling 3D Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [examples](examples/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -687,42 +698,14 @@ All 3D operations within the Codomyrmex platform must:
 - Include asset validation and error handling
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
-- **data_visualization**: 2D visualization integration
-- **performance**: Performance monitoring for 3D operations
-- **logging_monitoring**: 3D operation logging
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **Data Visualization** - Combine 3D scenes with 2D visualization overlays
-2. **Performance Monitoring** - Monitor 3D rendering performance metrics
-3. **Logging Integration** - Log 3D operations and errors
-4. **Configuration Management** - Configure 3D rendering parameters
-
-### Quality Gates
-
-Before 3D modeling changes are accepted:
-
-1. **Rendering Performance** - 3D scenes render at acceptable frame rates
-2. **Memory Usage** - 3D operations don't cause excessive memory usage
-3. **Cross-Platform Compatibility** - 3D functionality works on target platforms
-4. **Asset Loading** - 3D assets load correctly and efficiently
-5. **XR Safety** - XR experiences include appropriate safety measures
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial 3D modeling system with scene management, rendering pipeline, and AR/VR/XR support
+- **Source Root**: [src](../../README.md) - Source code documentation

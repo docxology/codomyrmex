@@ -22,7 +22,8 @@ This API specification documents the programmatic interfaces for the AI Code Edi
         ```python
         {
           "status": "success",
-          "generated_code": "def max_value(numbers):\n    return max(numbers)",
+          "generated_code": "def max_value(numbers):
+    return max(numbers)",
           "error_message": None
         }
         ```
@@ -51,7 +52,10 @@ This API specification documents the programmatic interfaces for the AI Code Edi
         ```python
         {
           "status": "success",
-          "refactored_code": "def max_value(numbers: list) -> int:\n    if not numbers:\n        raise ValueError(\"List cannot be empty\")\n    return max(numbers)",
+          "refactored_code": "def max_value(numbers: list) -> int:
+    if not numbers:
+        raise ValueError(\"List cannot be empty\")
+    return max(numbers)",
           "explanation": "Added type hints and error handling for empty lists",
           "error_message": None
         }

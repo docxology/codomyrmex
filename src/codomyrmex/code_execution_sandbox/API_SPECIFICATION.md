@@ -21,7 +21,8 @@ The Code Execution Sandbox module provides a secure environment for executing un
     - **Success**:
         ```python
         {
-          "stdout": "Hello, World!\n",
+          "stdout": "Hello, World!
+",
           "stderr": "",
           "exit_code": 0,
           "execution_time": 0.834,
@@ -63,7 +64,8 @@ The Code Execution Sandbox module provides a secure environment for executing un
 - **Returns/Response**: Dictionary with execution results plus resource usage:
     ```python
     {
-      "stdout": "Hello, World!\n",
+      "stdout": "Hello, World!
+",
       "stderr": "",
       "exit_code": 0,
       "execution_time": 0.834,

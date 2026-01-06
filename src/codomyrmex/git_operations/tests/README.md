@@ -1,16 +1,26 @@
 # src/codomyrmex/git_operations/tests
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [integration](integration/README.md)
+    - [unit](unit/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Test files and validation suites.
+Test suites for the Git Operations module, covering local repository manipulation and remote API interactions.
 
-## Directory Contents
-- `integration/` – Subdirectory
-- `unit/` – Subdirectory
+## Testing Structure
+
+- **unit/**: Isolated tests for git manager logic, command parsing, and metadata handling.
+- **integration/**: End-to-end tests involving temporary local repositories and mock GitHub API responses.
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [git_operations](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../src/README.md)

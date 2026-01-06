@@ -1,5 +1,14 @@
 # Build Synthesis Module
 
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
+    - [tests](tests/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Overview
@@ -144,7 +153,7 @@ Specialized build implementations
 
 #### CI/CD Integration
 - **ci_cd_automation**: Pipeline integration for automated builds
-- **security_audit**: Security scanning in build pipelines
+- **security**: Security scanning in build pipelines
 - **performance**: Build performance monitoring
 
 #### Development Workflow

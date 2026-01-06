@@ -1,16 +1,26 @@
 # src/codomyrmex/code_review/tests/unit
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Test files and validation suites.
+Unit tests for the Code Review module. These tests isolate individual analysis rules, feedback generation logic, and metrics calculation to ensure they provide accurate and actionable data.
 
-## Directory Contents
-- `test_code_reviewer.py` – File
-- `test_error_handling.py` – File
+## Test Areas
+
+- **Static Analysis Rules**: Verifying individual rules (e.g., naming conventions, docstring checks) on targeted code snippets.
+- **Metrics Accuracy**: Ensuring that quality score calculations are deterministic and correct.
+- **Feedback Formatting**: Testing the generation of human-readable and agent-readable review comments.
 
 ## Navigation
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [tests](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../../../src/README.md)

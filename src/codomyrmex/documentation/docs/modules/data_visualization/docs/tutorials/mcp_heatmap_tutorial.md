@@ -112,10 +112,11 @@ If an error occurred (e.g., invalid `output_path`, incorrect data format), the r
 - **Data Validation**: While the tool will attempt to generate a plot, providing correctly structured data as per the `MCP_TOOL_SPECIFICATION.md` is essential for meaningful output.
 - **Resource Usage**: Generating heatmaps from very large datasets can be resource-intensive. Be mindful of this if allowing arbitrary data sizes via MCP calls.
 
-For a complete list of parameters and details for the `create_heatmap` MCP tool and others, always refer to the [Data Visualization MCP Tool Specification](../MCP_TOOL_SPECIFICATION.md).
+For a complete list of parameters and details for the `create_heatmap` MCP tool and others, always refer to the [Data Visualization MCP Tool Specification](../../../../../../data_visualization/MCP_TOOL_SPECIFICATION.md).
 
 ## 5. Next Steps
 
 - Experiment with different colormaps (`cmap` parameter).
 - Try generating heatmaps with larger or different datasets.
-- Explore other MCP plotting tools provided by the `data_visualization` module, such as `create_line_plot` or `create_bar_chart`, by consulting the `MCP_TOOL_SPECIFICATION.md`. 
+- Explore other MCP plotting tools provided by the `data_visualization` module, such as `create_line_plot` or `create_bar_chart`, by consulting the [MCP_TOOL_SPECIFICATION.md](../../../../../../data_visualization/MCP_TOOL_SPECIFICATION.md).
+ 

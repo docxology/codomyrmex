@@ -1,5 +1,15 @@
 # Codomyrmex Agents — src/codomyrmex/code_review
 
+## Signposting
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Self**: [Code Review Agents](AGENTS.md)
+- **Children**:
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -350,39 +360,15 @@ All code review activities within the Codomyrmex platform must:
 - Include review result export capabilities
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations
-
-### Related Modules
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
+- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../../README.md) - Main project documentation
-
-## Agent Coordination
-
-### Integration Points
-
-When integrating with other modules:
-
-1. **CI/CD Integration** - Provide automated review gates in pipelines
-2. **Version Control** - Coordinate with Git operations for change analysis
-3. **Quality Metrics** - Contribute to overall platform quality measurements
-4. **Security Enhancement** - Include security findings in review feedback
-
-### Quality Gates
-
-Before code review changes are accepted:
-
-1. **Accuracy Validated** - Review findings are accurate and helpful
-2. **Performance Tested** - Review processes complete within acceptable timeframes
-3. **False Positive Minimized** - Low rate of incorrect review feedback
-4. **Integration Verified** - Works correctly with supported version control systems
-5. **Customization Supported** - Allows organization-specific review rules
-
-## Version History
-
-- **v0.1.0** (December 2025) - Initial automated code review system with quality analysis and feedback generation
+- **Source Root**: [src](../../README.md) - Source code documentation

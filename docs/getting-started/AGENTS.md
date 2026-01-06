@@ -1,5 +1,14 @@
 # Codomyrmex Agents — docs/getting-started
 
+## Signposting
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - [tutorials](tutorials/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
@@ -115,12 +124,14 @@ Getting started content must be updated when:
 - **Time-to-Value Measurement** - Track and optimize onboarding completion time
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### For New Users
 - **Start Here**: [quickstart.md](quickstart.md) - Fast-track to first success
 - **Full Installation**: [installation.md](installation.md) - Complete setup guide
 - **Detailed Setup**: [setup.md](setup.md) - Advanced configuration
-- **Learn More**: [tutorials/](tutorials/) - Hands-on learning
+- **Learn More**: [tutorials/](tutorials) - Hands-on learning
 
 ### For Contributors
 - **Content Standards**: [docs/development/documentation.md](../development/documentation.md) - Documentation guidelines
