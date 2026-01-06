@@ -195,5 +195,5 @@ examples/{module}/
 ## Related Documentation
 
 - **[Basic Examples](../README.md)** - Standard example format
-- **[Module Documentation](../../src/codomyrmex/{module}/)** - Detailed API docs
+- **[Module Documentation](../../src/codomyrmex/{{module}}/ <!-- replace with actual module name -->)** - Detailed API docs
 - **[Testing Framework](../../src/codomyrmex/tests/)** - Unit test references

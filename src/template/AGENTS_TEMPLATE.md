@@ -1,3 +1,4 @@
+<!-- Template file: Links below are intentional placeholder examples -->
 # Codomyrmex Agents — [Module/Directory Name]
 
 ## Signposting
@@ -37,8 +38,8 @@
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
+- **API Reference**: [API Specification](docs/API_SPECIFICATION.md) <!-- optional --> - Detailed API specification (if applicable)
+- **Usage Examples**: [Usage Examples](docs/USAGE_EXAMPLES.md) <!-- optional --> - Practical usage demonstrations (if applicable)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview

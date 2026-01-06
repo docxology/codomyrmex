@@ -9,6 +9,7 @@
         - [Environment Setup Agents](environment_setup/AGENTS.md)
         - [Model Context Protocol Agents](model_context_protocol/AGENTS.md)
         - [Terminal Interface Agents](terminal_interface/AGENTS.md)
+        - [Validation Agents](validation/AGENTS.md)
     - **Core Layer**:
         - [Static Analysis Agents](static_analysis/AGENTS.md)
         - [Code Agents](code/AGENTS.md) - Code execution, sandboxing, review, and monitoring
@@ -20,6 +21,9 @@
         - [Documents Agents](documents/AGENTS.md)
         - [LLM Agents](llm/AGENTS.md)
         - [Performance Agents](performance/AGENTS.md)
+        - [Cache Agents](cache/AGENTS.md)
+        - [Serialization Agents](serialization/AGENTS.md)
+        - [Metrics Agents](metrics/AGENTS.md)
     - **Service Layer**:
         - [Build Synthesis Agents](build_synthesis/AGENTS.md)
         - [Documentation Agents](documentation/AGENTS.md)
@@ -29,12 +33,16 @@
         - [Database Management Agents](database_management/AGENTS.md)
         - [Config Management Agents](config_management/AGENTS.md)
         - [Project Orchestration Agents](project_orchestration/AGENTS.md)
+        - [Networking Agents](networking/AGENTS.md)
+        - [Queue Agents](queue/AGENTS.md)
+        - [Auth Agents](auth/AGENTS.md)
     - **Specialized Layer**:
         - [Spatial Agents](spatial/AGENTS.md)
         - [Physical Management Agents](physical_management/AGENTS.md)
         - [System Discovery Agents](system_discovery/AGENTS.md)
         - [Module Template Agents](module_template/AGENTS.md)
         - [Template Agents](template/AGENTS.md)
+        - [Templating Agents](templating/AGENTS.md)
         - [Events Agents](events/AGENTS.md)
         - [API Standardization Agents](api/standardization/AGENTS.md)
         - [Plugin System Agents](plugin_system/AGENTS.md)
@@ -44,6 +52,8 @@
         - [Agents Agents](agents/AGENTS.md)
             - [AI Code Editing Agents](agents/ai_code_editing/AGENTS.md)
             - [Droid Agents](agents/droid/AGENTS.md)
+        - [Compression Agents](compression/AGENTS.md)
+        - [Encryption Agents](encryption/AGENTS.md)
         - [Tests Agents](tests/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
@@ -68,6 +78,7 @@ Modules are organized into functional layers:
 - `environment_setup/` - Environment validation and configuration
 - `model_context_protocol/` - AI communication standards
 - `terminal_interface/` - Rich terminal interactions
+- `validation/` - Input validation framework (JSON Schema, Pydantic, custom validators)
 
 **Core Layer** - Primary development capabilities:
 - `static_analysis/` - Code quality and security analysis
@@ -101,6 +112,9 @@ Modules are organized into functional layers:
   - `llm/outputs/` - LLM output management
   - `llm/prompt_templates/` - Prompt template system
 - `performance/` - Performance monitoring and optimization
+- `cache/` - Caching strategies (Redis, in-memory, file-based)
+- `serialization/` - Data serialization (JSON, YAML, TOML, MessagePack)
+- `metrics/` - Metrics collection and Prometheus integration
 
 **Service Layer** - Higher-level orchestration:
 - `build_synthesis/` - Multi-language build automation
@@ -126,6 +140,7 @@ Modules are organized into functional layers:
 - `module_template/` - Module creation templates
   - `module_template/docs/` - Module template documentation
 - `template/` - Code generation templates
+- `templating/` - Template engine support (Jinja2, Mako) for code/documentation generation
 - `events/` - Event system and pub/sub
 - `plugin_system/` - Plugin architecture and management
 - `tools/` - Utility tools and helpers
@@ -141,6 +156,8 @@ Modules are organized into functional layers:
   - `agents/codex/` - Codex agent integration
   - `agents/generic/` - Generic agent framework
   - `agents/theory/` - Agent theory and frameworks
+- `compression/` - Data compression utilities and archive handling
+- `encryption/` - Encryption/decryption utilities and key management
 
 ## Active Components
 

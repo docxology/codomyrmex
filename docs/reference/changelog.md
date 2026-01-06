@@ -16,7 +16,7 @@ For changes specific to individual modules, see:
 
 - **AI Code Editing**: [Changelog](../../src/codomyrmex/agents/ai_code_editing/CHANGELOG.md)
 - **Data Visualization**: [Changelog](../../src/codomyrmex/data_visualization/CHANGELOG.md)
-- **Code Execution Sandbox**: [Changelog](../../src/codomyrmex/code/CHANGELOG.md)
+- **Code Execution Sandbox**: [Changelog](../../src/codomyrmex/coding/MIGRATION_COMPLETE.md)
 - **Static Analysis**: [Changelog](../../src/codomyrmex/static_analysis/CHANGELOG.md)
 - **Build Synthesis**: [Changelog](../../src/codomyrmex/build_synthesis/CHANGELOG.md)
 - **Documentation**: [Changelog](../../src/codomyrmex/documentation/CHANGELOG.md)

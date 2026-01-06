@@ -110,12 +110,12 @@
 - `src/codomyrmex/build_synthesis/docs/index.md` (line 16): `../../../docs/project/contributing.md`
 
 **code** (1 issues):
-- `src/codomyrmex/code/docs/index.md` (line 16): `../../../docs/project/contributing.md`
+- `src/codomyrmex/coding/docs/index.md` (line 16): `../../../docs/project/contributing.md`
 
 **code_review** (3 issues):
-- `src/codomyrmex/code/review/docs/index.md` (line 12): `../../../docs/project/contributing.md`
-- `src/codomyrmex/code/review/tests/AGENTS.md` (line 34): `integration/AGENTS.md`
-- `src/codomyrmex/code/review/tests/unit/AGENTS.md` (line 29): `../integration/AGENTS.md`
+- `src/codomyrmex/coding/review/docs/index.md` (line 12): `../../../docs/project/contributing.md`
+- `src/codomyrmex/coding/review/tests/AGENTS.md` (line 34): `integration/AGENTS.md`
+- `src/codomyrmex/coding/review/tests/unit/AGENTS.md` (line 29): `../integration/AGENTS.md`
 
 **data_visualization** (1 issues):
 - `src/codomyrmex/data_visualization/docs/index.md` (line 16): `../../../docs/project/contributing.md`
@@ -185,10 +185,10 @@
 - `src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
 
 **code** (4 issues):
-- `src/codomyrmex/code/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
-- `src/codomyrmex/code/docs/tutorials/example_tutorial.md` (line 48): `../USAGE_EXAMPLES.md`
-- `src/codomyrmex/code/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
-- `src/codomyrmex/code/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
+- `src/codomyrmex/coding/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
+- `src/codomyrmex/coding/docs/tutorials/example_tutorial.md` (line 48): `../USAGE_EXAMPLES.md`
+- `src/codomyrmex/coding/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
+- `src/codomyrmex/coding/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
 
 **data_visualization** (5 issues):
 - `src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`

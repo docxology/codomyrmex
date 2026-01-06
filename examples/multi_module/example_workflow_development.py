@@ -23,7 +23,7 @@ import os
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from codomyrmex.agents.ai_code_editing.openai_codex import generate_code_snippet
-from codomyrmex.code.review import CodeReviewer, analyze_file
+from codomyrmex.coding.review import CodeReviewer, analyze_file
 from codomyrmex.git_operations.git_manager import get_status, commit_changes
 from codomyrmex.static_analysis.code_analyzer import analyze_file
 from codomyrmex.logging_monitoring import setup_logging, get_logger

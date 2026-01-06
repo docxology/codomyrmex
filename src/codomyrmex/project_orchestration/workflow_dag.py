@@ -171,6 +171,12 @@ class WorkflowDAG:
         rec_stack = set()
 
         def dfs(node: str) -> None:
+            """
+            Depth-First Search to detect cycles.
+            
+            Args:
+                node: The starting node identifier.
+            """
             visited.add(node)
             rec_stack.add(node)
 

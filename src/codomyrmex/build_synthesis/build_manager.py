@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -42,20 +43,29 @@ except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
+        """Decorator for performance monitoring (fallback)."""
         def decorator(func):
             return func
 
         return decorator
 
     class performance_context:
-        def __init__(self, *args, **kwargs):
-            pass
+        """
+        A class for handling performance_context operations.
+        """
+        def __init__(self, context_name: str = "unknown_context", *args, **kwargs):
+            """Initialize performance context (fallback)."""
+            self.context_name = context_name
+            self.start_time = 0
 
         def __enter__(self):
+            self.start_time = time.time()
+            logger.debug(f"Entering performance context: {self.context_name}")
             return self
 
-        def __exit__(self, *args):
-            pass
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            duration = time.time() - self.start_time
+            logger.debug(f"Exiting performance context: {self.context_name} (Duration: {duration:.4f}s)")
 
 
 # Enums for build types and status

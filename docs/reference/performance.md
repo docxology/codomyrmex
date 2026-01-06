@@ -564,7 +564,7 @@ class AsyncAPIProcessor:
 # Usage example for AI code enhancement
 async def batch_code_execution(code_snippets: List[str]) -> List[Dict]:
     """Process multiple code executions efficiently (ACTUAL IMPLEMENTATION)."""
-    from codomyrmex.code.code_executor import execute_code
+    from codomyrmex.coding.code_executor import execute_code
     import asyncio
 
     async def execute_single_code(code: str) -> Dict:

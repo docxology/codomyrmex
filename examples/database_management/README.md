@@ -356,8 +356,8 @@ The example generates several output files:
 
 ## Related Examples
 
-- **[API Standardization](../api/standardization/)** - API database integration
-- **[Security Audit](../security/)** - Database security scanning
+- **[API Standardization](../api_standardization/)** - API database integration
+- **[Security Audit](../security_audit/)** - Database security scanning
 - **[Performance](../performance/)** - Database performance monitoring
 - **[Config Management](../config_management/)** - Database configuration management
 

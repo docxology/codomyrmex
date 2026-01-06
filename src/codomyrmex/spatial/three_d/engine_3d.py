@@ -1,5 +1,9 @@
 """Core 3D Engine for modeling and rendering."""
 
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
+
 from dataclasses import dataclass
 from typing import Any, Optional
 
@@ -143,7 +147,11 @@ class AnimationController:
 
     def play_animation(self, name: str) -> None:
         """Play a specific animation."""
-        pass
+        if name in self.animations:
+            logger.info(f"Playing animation: {name}")
+            # Logic to update object transforms over time
+        else:
+            logger.warning(f"Animation not found: {name}")
 
 
 class PhysicsEngine:

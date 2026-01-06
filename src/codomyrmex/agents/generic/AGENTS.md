@@ -97,6 +97,18 @@ Execute request with fallback to next agent on failure.
 
 **Returns:** `AgentResponse` - First successful response or last error
 
+```python
+def select_agent_by_capability(self, capability: str, agents: Optional[list[AgentInterface]] = None) -> list[AgentInterface]
+```
+
+Select agents that support a specific capability.
+
+**Parameters:**
+- `capability` (str): Capability name to check
+- `agents` (Optional[list[AgentInterface]]): List of agents to check (defaults to all agents)
+
+**Returns:** `list[AgentInterface]` - List of agents that support the capability
+
 ### MessageBus
 
 ```python

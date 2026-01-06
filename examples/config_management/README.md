@@ -110,8 +110,8 @@ The config management module integrates with:
 ## Related Documentation
 
 - [Module README](../../src/codomyrmex/config_management/README.md)
-- [Unit Tests](../../src/codomyrmex/tests/unit/test_config_management.py)
-- [Enhanced Tests](../../src/codomyrmex/tests/unit/test_config_management_enhanced.py)
+- [Unit Tests](../../src/codomyrmex/tests/)
+- [Enhanced Tests](../../src/codomyrmex/tests/)
 
 ## Navigation
 

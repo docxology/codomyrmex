@@ -251,7 +251,7 @@ except Exception as e:
     print(f"⚠️ AI test skipped (no API key): {e}")
 
 # Test code execution sandbox
-from codomyrmex.code import execute_code
+from codomyrmex.coding import execute_code
 
 sandbox_result = execute_code("python", "print('Hello from sandbox!')")
 print(f"✅ Sandbox test: {sandbox_result['success']}")
@@ -448,7 +448,7 @@ sudo usermod -aG docker $USER
 
 # 3. Test sandbox functionality
 uv run python -c "
-from codomyrmex.code import execute_code
+from codomyrmex.coding import execute_code
 result = execute_code('python', 'print(\"Hello\")')
 print('Sandbox test:', result['success'])
 "

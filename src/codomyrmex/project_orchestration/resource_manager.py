@@ -33,6 +33,7 @@ except ImportError:
     PERFORMANCE_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
+        """Decorator for performance monitoring (fallback)."""
         def decorator(func):
             return func
 
@@ -184,12 +185,15 @@ class Resource:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Resource":
-        """From Dict.
+        """
+        Create a Resource instance from a dictionary.
 
-            Args:        cls: Parameter for the operation.        data: Data to process.
+        Args:
+            data: Dictionary containing resource data.
 
-            Returns:        The result of the operation.
-            """
+        Returns:
+            New Resource instance.
+        """
         rt = (
             ResourceType(data.get("type"))
             if "type" in data
@@ -222,14 +226,15 @@ class Resource:
         return self.status == ResourceStatus.AVAILABLE
 
     def can_allocate(self, requested: dict[str, Any], user_id: str) -> bool:
-        """Can Allocate.
+        """
+        Check if requested resources can be allocated.
 
         Args:
-            requested: Parameter for the operation.
-            user_id: Unique identifier.
+            requested: Dictionary of requested resources.
+            user_id: ID of the user requesting resources.
 
         Returns:
-            The result of the operation.
+            True if allocation is possible, False otherwise.
         """
         if not self.is_available():
             return False
@@ -250,14 +255,15 @@ class Resource:
         return True
 
     def allocate(self, requested: dict[str, Any], user_id: str) -> bool:
-        """Allocate.
+        """
+        Allocate resources to a user.
 
         Args:
-            requested: Parameter for the operation.
-            user_id: Unique identifier.
+            requested: Dictionary of requested resources.
+            user_id: ID of the user requesting resources.
 
         Returns:
-            The result of the operation.
+            True if allocation successful, False otherwise.
         """
         if not self.can_allocate(requested, user_id):
             return False
@@ -282,10 +288,12 @@ class Resource:
         self.updated_at = datetime.now(timezone.utc)
 
     def get_utilization(self) -> dict[str, float]:
-        """Get Utilization.
+        """
+        Get current resource utilization percentage.
 
-            Returns:        The result of the operation.
-            """
+        Returns:
+            Dictionary mapping resource keys to utilization percentage (0-100).
+        """
         utilization = {}
         for key, capacity in self.capacity.items():
             try:

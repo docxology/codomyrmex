@@ -10,7 +10,7 @@ from pathlib import Path
 
 # Import the bootstrapper
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'scripts' / 'documentation'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[5] / 'scripts' / 'documentation'))
 from bootstrap_agents_readmes import DocumentationBootstrapper
 
 

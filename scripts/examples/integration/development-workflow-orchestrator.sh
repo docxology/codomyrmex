@@ -607,7 +607,7 @@ from pathlib import Path
 sys.path.insert(0, 'src')
 
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.code.execution.executor import execute_code
+from codomyrmex.coding.execution.executor import execute_code
 
 logger = get_logger('code_execution')
 logger.info('⚡ Starting code execution and testing phase')

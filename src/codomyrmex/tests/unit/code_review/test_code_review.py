@@ -14,7 +14,7 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex import code
+            from codomyrmex import coding
             assert code is not None
         except ImportError as e:
             pytest.fail(f"Failed to import code_review: {e}")
@@ -132,7 +132,7 @@ class TestCodeReview:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex import code
+        from codomyrmex import coding
         assert hasattr(code, "__version__")
         assert code.__version__ == "0.1.0"
 
@@ -141,7 +141,7 @@ class TestCodeReview:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex import code
+        from codomyrmex import coding
 
         expected_exports = [
             "CodeReviewer",

@@ -1,7 +1,7 @@
 """Agents Module for Codomyrmex.
 
 This module provides integration with various agentic frameworks including
-Jules CLI, Claude API, and OpenAI Codex. It includes theoretical foundations,
+Jules CLI, Claude API, OpenAI Codex, and OpenCode CLI. It includes theoretical foundations,
 generic utilities, and framework-specific implementations.
 
 Integration:
@@ -22,6 +22,7 @@ Available submodules:
 - jules: Jules CLI integration
 - claude: Claude API integration
 - codex: OpenAI Codex integration
+- opencode: OpenCode CLI integration
 """
 
 from .config import AgentConfig, get_config, reset_config, set_config

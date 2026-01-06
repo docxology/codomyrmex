@@ -7,7 +7,6 @@ subscription handling, and asynchronous event processing.
 
 import asyncio
 import threading
-import queue
 import inspect
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Any, Optional, Callable, Set, Awaitable

@@ -87,6 +87,10 @@ dependencies = [
     "Pygments>=2.15.0",
     # For progress bars
     "tqdm>=4.65.0",
+    # For graph structures (used in cerebrum)
+    "networkx>=3.0.0",
+    # For scientific computing (used in cerebrum)
+    "scipy>=1.7.0",
 ]
 
 [project.optional-dependencies]

@@ -447,9 +447,9 @@
       "validation_type": "execution",
       "severity": "error",
       "message": "Example execution failed with exit code 1",
-      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/example_basic.py\", line 432\n    print(\".2f\"    print(\".1f\"\n                        ^\nSyntaxError: '(' was never closed\n",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/coding_execution_sandbox/example_basic.py\", line 432\n    print(\".2f\"    print(\".1f\"\n                        ^\nSyntaxError: '(' was never closed\n",
       "fix_suggestion": null,
-      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/example_basic.py",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/coding_execution_sandbox/example_basic.py",
       "line_number": null
     },
     {
@@ -459,7 +459,7 @@
       "message": "Missing documentation sections: ## Features, ## Usage",
       "details": null,
       "fix_suggestion": "Add the missing sections to README.md",
-      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/coding_execution_sandbox/README.md",
       "line_number": null
     },
     {
@@ -469,7 +469,7 @@
       "message": "No properly formatted test method references found",
       "details": "Expected format: file::Class::method()",
       "fix_suggestion": null,
-      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/example_basic.py",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/coding_execution_sandbox/example_basic.py",
       "line_number": null
     },
     {
@@ -477,9 +477,9 @@
       "validation_type": "execution",
       "severity": "error",
       "message": "Example execution failed with exit code 1",
-      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py\", line 526\n    print(\".1f\"            print(\".1f\"            print(f\"   Files with issues: {metrics['files_with_issues']}\")\n          ^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax. Perhaps you forgot a comma?\n",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/coding_review/example_basic.py\", line 526\n    print(\".1f\"            print(\".1f\"            print(f\"   Files with issues: {metrics['files_with_issues']}\")\n          ^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax. Perhaps you forgot a comma?\n",
       "fix_suggestion": null,
-      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/coding_review/example_basic.py",
       "line_number": null
     },
     {
@@ -489,7 +489,7 @@
       "message": "Missing documentation sections: ## Features, ## Usage",
       "details": null,
       "fix_suggestion": "Add the missing sections to README.md",
-      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/README.md",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/coding_review/README.md",
       "line_number": null
     },
     {
@@ -499,7 +499,7 @@
       "message": "No properly formatted test method references found",
       "details": "Expected format: file::Class::method()",
       "fix_suggestion": null,
-      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/coding_review/example_basic.py",
       "line_number": null
     },
     {
@@ -509,7 +509,7 @@
       "message": "Results file missing required fields: status",
       "details": null,
       "fix_suggestion": null,
-      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/output/code_review_results.json",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/coding_review/output/code_review_results.json",
       "line_number": null
     },
     {

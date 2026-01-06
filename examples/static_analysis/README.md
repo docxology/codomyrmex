@@ -84,7 +84,7 @@ The static analysis module integrates with CI/CD pipelines to:
 ## Related Documentation
 
 - [Module README](../../src/codomyrmex/static_analysis/README.md)
-- [Unit Tests](../../src/codomyrmex/tests/unit/test_static_analysis.py)
+- [Unit Tests](../../src/codomyrmex/tests/)
 
 ## Navigation
 

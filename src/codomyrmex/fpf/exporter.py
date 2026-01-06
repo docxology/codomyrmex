@@ -16,6 +16,7 @@ class FPFExporter:
 
     def __init__(self):
         """Initialize the exporter."""
+        self.config: Dict[str, Any] = {}
 
     def export_json(self, spec: FPFSpec, output_path: Path) -> None:
         """Export the complete specification to JSON.

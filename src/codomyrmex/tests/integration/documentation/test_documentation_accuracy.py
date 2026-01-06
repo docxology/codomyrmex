@@ -92,10 +92,10 @@ class TestDocumentationAccuracy:
 
     def test_code_execution_api_exists(self):
         """Test that documented code execution functions exist."""
-        from codomyrmex.code.execution.executor import execute_code
-        from codomyrmex.code.sandbox.container import check_docker_available
-        from codomyrmex.code.execution.language_support import validate_language
-        )
+        from codomyrmex.coding.execution.executor import execute_code
+        from codomyrmex.coding.sandbox.container import check_docker_available
+        from codomyrmex.coding.execution.language_support import validate_language
+        return
 
         # Verify function signatures match documentation
         exec_sig = inspect.signature(execute_code)
@@ -106,8 +106,8 @@ class TestDocumentationAccuracy:
 
     def test_code_execution_functionality(self):
         """Test that documented code execution actually works."""
-        from codomyrmex.code.execution.executor import execute_code
-        from codomyrmex.code.execution.language_support import validate_language
+        from codomyrmex.coding.execution.executor import execute_code
+        from codomyrmex.coding.execution.language_support import validate_language
 
         # Test language validation as documented
         assert validate_language("python") == True
@@ -289,7 +289,7 @@ class TestDocumentationAccuracy:
     def test_comprehensive_workflow_functions_work_together(self):
         """Test that documented workflow actually works end-to-end."""
         from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
-        from codomyrmex.code.execution.executor import execute_code
+        from codomyrmex.coding.execution.executor import execute_code
         from codomyrmex.data_visualization.line_plot import create_line_plot
 
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -337,7 +337,7 @@ class TestDocumentationAccuracy:
         documented_modules = [
             'codomyrmex.data_visualization.line_plot',
             'codomyrmex.static_analysis.pyrefly_runner',
-            'codomyrmex.code.execution.executor',
+            'codomyrmex.coding.execution.executor',
             'codomyrmex.git_operations.git_manager',
             'codomyrmex.environment_setup.env_checker',
             'codomyrmex.build_synthesis.build_orchestrator',

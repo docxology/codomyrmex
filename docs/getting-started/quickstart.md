@@ -172,7 +172,7 @@ if refactored["status"] == "success":
 Test and run code in a secure, isolated environment:
 
 ```python
-from codomyrmex.code import execute_code
+from codomyrmex.coding import execute_code
 
 print("🏃 Testing code in secure sandbox...")
 
@@ -311,7 +311,7 @@ EOF
 | ---------------------- | ----------------------------------------------------------------- | --------------------------- |
 | **Data Visualization** | `from codomyrmex.data_visualization import create_bar_chart`      | `create_bar_chart()`        |
 | **AI Code Editing**    | `from codomyrmex.agents.ai_code_editing import generate_code_snippet`    | `generate_code_snippet()`   |
-| **Code Execution**     | `from codomyrmex.code import execute_code`      | `execute_code()`            |
+| **Code Execution**     | `from codomyrmex.coding import execute_code`      | `execute_code()`            |
 | **Static Analysis**    | `from codomyrmex.static_analysis import run_pyrefly_analysis`     | `run_pyrefly_analysis()`    |
 | **Pattern Matching**   | `from codomyrmex.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
 
@@ -325,7 +325,7 @@ EOF
 
 ```python
 from codomyrmex.static_analysis import run_pyrefly_analysis
-from codomyrmex.code import execute_code
+from codomyrmex.coding import execute_code
 from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
 # 1. Analyze code quality
@@ -371,7 +371,7 @@ create_scatter_plot(
 
 ```python
 from codomyrmex.agents.ai_code_editing import generate_code_snippet, refactor_code_snippet
-from codomyrmex.code import execute_code
+from codomyrmex.coding import execute_code
 
 # Generate new feature
 feature_code = generate_code_snippet(

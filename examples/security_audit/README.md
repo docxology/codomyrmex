@@ -89,7 +89,7 @@ The security audit module integrates with CI/CD pipelines to:
 ## Related Documentation
 
 - [Module README](../../src/codomyrmex/security/README.md)
-- [Unit Tests](../../../src/codomyrmex/tests/unit/test_security.py)
+- [Unit Tests](../../src/codomyrmex/tests/)
 
 ## Navigation
 

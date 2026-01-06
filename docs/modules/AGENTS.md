@@ -210,7 +210,7 @@ graph TD
 - **Integration Patterns**: [relationships.md](relationships.md) - Best practices for module integration
 
 ### For Specialized Modules
-- **Ollama Integration**: [ollama_integration.md](llm/ollama.md) - Advanced Ollama usage guide
+- **Ollama Integration**: [ollama_integration.md](../../scripts/llm/README.md) - Advanced Ollama usage guide
 
 ## Agent Coordination
 

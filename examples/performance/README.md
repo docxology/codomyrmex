@@ -107,7 +107,7 @@ The performance module integrates with:
 ## Related Documentation
 
 - [Module README](../../src/codomyrmex/performance/README.md)
-- [Comprehensive Tests](../../src/codomyrmex/tests/unit/test_performance_comprehensive.py)
+- [Comprehensive Tests](../../src/codomyrmex/tests/)
 
 ## Navigation
 

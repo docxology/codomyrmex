@@ -159,7 +159,7 @@ codomyrmex validate-config --config ~/.codomyrmex/config_v1.0.yaml
 ##### **Step 4: Code Updates**
 ```python
 # Before (v0.x.x) - DEPRECATED
-from codomyrmex.code.data_visualization import create_plot
+from codomyrmex.coding.data_visualization import create_plot
 from codomyrmex.analysis.static import run_analysis
 
 # After (v1.0.0) - NEW STRUCTURE
@@ -257,7 +257,7 @@ class CodomyrmexMigrator:
         """Update import statements for new version."""
         import_mapping = {
             # v0.x.x → v1.0.0 import mappings
-            'from codomyrmex.code.data_visualization import': 'from codomyrmex.data_visualization import',
+            'from codomyrmex.coding.data_visualization import': 'from codomyrmex.data_visualization import',
             'from codomyrmex.analysis.static import': 'from codomyrmex.static_analysis import',
             'from codomyrmex.ai.code_editing import': 'from codomyrmex.agents.ai_code_editing import',
             'from codomyrmex.utils.environment import': 'from codomyrmex.environment_setup import',
@@ -523,7 +523,7 @@ class MigrationTestSuite:
         """Create v0.1.x project structure."""
         main_py = project_dir / "src" / "main.py"
         main_py.write_text("""
-from codomyrmex.code.data_visualization import create_plot
+from codomyrmex.coding.data_visualization import create_plot
 from codomyrmex.analysis.static import run_analysis
 
 def main():
@@ -615,11 +615,11 @@ All existing code continues to work without modification. New features are addit
 ##### **Issue 1: Import Errors**
 ```python
 # Problem
-ModuleNotFoundError: No module named 'codomyrmex.code.data_visualization'
+ModuleNotFoundError: No module named 'codomyrmex.coding.data_visualization'
 
 # Solution
 # Old import (v0.x.x)
-from codomyrmex.code.data_visualization import create_plot
+from codomyrmex.coding.data_visualization import create_plot
 
 # New import (v1.0.0)
 from codomyrmex.data_visualization import create_line_plot

@@ -79,7 +79,7 @@ try:
     from codomyrmex.logging_monitoring import setup_logging, get_logger
     from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
     from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet, refactor_code_snippet
-    from codomyrmex.code.execution.executor import execute_code
+    from codomyrmex.coding.execution.executor import execute_code
     print('✅ All required modules imported successfully')
 except ImportError as e:
     print(f'❌ Module import failed: {e}')
@@ -191,7 +191,7 @@ sys.path.insert(0, 'src')
 
 from codomyrmex.logging_monitoring import setup_logging, get_logger
 from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet, refactor_code_snippet  
-from codomyrmex.code_execution_sandbox.code_executor import execute_code
+from codomyrmex.coding_execution_sandbox.code_executor import execute_code
 
 # Setup logging
 setup_logging()

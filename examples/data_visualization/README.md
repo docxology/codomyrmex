@@ -55,7 +55,7 @@ Check the `output/visualizations/` directory for generated charts.
 ## Related Documentation
 
 - [Module README](../../src/codomyrmex/data_visualization/README.md)
-- [Unit Tests](../../src/codomyrmex/tests/unit/test_data_visualization.py)
+- [Unit Tests](../../src/codomyrmex/tests/)
 
 ## Navigation
 

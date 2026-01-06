@@ -5,13 +5,26 @@ with shared utilities for legends, axes, titles, color mapping, and node sizing.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+
+if TYPE_CHECKING:
+    import networkx as nx
+else:
+    try:
+        import networkx as nx
+    except ImportError:
+        # Create a dummy type for nx when not available
+        class _DummyGraph:
+            pass
+        class _DummyNX:
+            Graph = _DummyGraph
+            DiGraph = _DummyGraph
+        nx = _DummyNX()
 
 try:
     import matplotlib
     import matplotlib.colors
     import matplotlib.pyplot as plt
-    import networkx as nx
     import numpy as np
     from matplotlib.axes import Axes
     from matplotlib.figure import Figure

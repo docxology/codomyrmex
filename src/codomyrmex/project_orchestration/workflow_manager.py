@@ -72,6 +72,7 @@ except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
+        """Decorator for performance monitoring (fallback)."""
         def decorator(func):
             return func
 
@@ -82,14 +83,21 @@ except ImportError:
 
         A class for handling performance_context operations.
         """
-        def __init__(self, *args, **kwargs):
-            pass
+        def __init__(self, context_name: str = "unknown_context", *args, **kwargs):
+            """Initialize performance context (fallback)."""
+            self.context_name = context_name
+            self.start_time = 0
 
         def __enter__(self):
+            """Enter performance context."""
+            self.start_time = time.time()
+            logging.debug(f"Entering performance context: {self.context_name}")
             return self
 
-        def __exit__(self, *args):
-            pass
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            """Exit performance context."""
+            duration = time.time() - self.start_time
+            logging.debug(f"Exiting performance context: {self.context_name} (Duration: {duration:.4f}s)")
 
 
 class WorkflowStatus(Enum):

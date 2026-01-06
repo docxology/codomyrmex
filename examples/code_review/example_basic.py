@@ -41,7 +41,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "examples"))
 
-from codomyrmex.code.review import (
+from codomyrmex.coding.review import (
     CodeReviewer,
     analyze_file,
     analyze_project,

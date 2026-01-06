@@ -104,7 +104,13 @@ class DocumentationAudit:
                 # Skip hidden directories and common ignore patterns
                 if any(part.startswith('.') for part in path.parts):
                     continue
-                if 'node_modules' in path.parts or '__pycache__' in path.parts:
+                if 'node_modules' in path.parts or '__pycache__' in path.parts or 'output' in path.parts:
+                    continue
+                # Skip the audit report itself to avoid self-referential broken links
+                if path.name == 'documentation-audit-report.md':
+                    continue
+                # Skip template files that intentionally contain placeholders or broken example links
+                if 'template' in path.parts or '_templates' in path.parts:
                     continue
                 markdown_files.append(path)
             return markdown_files
@@ -273,7 +279,7 @@ class DocumentationAudit:
             for path in root.rglob('*.md'):
                 if any(part.startswith('.') for part in path.parts):
                     continue
-                if 'node_modules' in path.parts or '__pycache__' in path.parts:
+                if 'node_modules' in path.parts or '__pycache__' in path.parts or 'output' in path.parts:
                     continue
                 markdown_files.append(path)
             return markdown_files

@@ -586,7 +586,6 @@ Solution: Check Python path and module installation
 
 ### Maintenance Scripts
 - **Quality Checks**: [run_quality_checks.py](run_quality_checks.py) - Comprehensive quality assurance
-- **Security Audit**: [security_audit.py](security.py) - Security vulnerability scanning
 - **Dependency Management**: [check_dependencies.py](check_dependencies.py) - Dependency health checking
 - **Import Fixing**: [fix_imports.py](fix_imports.py) - Automated import corrections
 

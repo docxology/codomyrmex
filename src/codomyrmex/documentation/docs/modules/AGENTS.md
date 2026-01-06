@@ -4,10 +4,7 @@
 - **Parent**: [Documentation Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [ai_code_editing](agents/ai_code_editing/AGENTS.md)
-    - [build_synthesis](build_synthesis/AGENTS.md)
-    - [code](code/AGENTS.md)
-    - [data_visualization](data_visualization/AGENTS.md)
+    - [build_synthesis](build_synthesis/AGENTS.md)    - [data_visualization](data_visualization/AGENTS.md)
     - [environment_setup](environment_setup/AGENTS.md)
     - [git_operations](git_operations/AGENTS.md)
     - [logging_monitoring](logging_monitoring/AGENTS.md)

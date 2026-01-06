@@ -380,7 +380,7 @@ The AI code editing module integrates with:
 
 ```python
 from codomyrmex.agents.ai_code_editing import generate_code_snippet, refactor_code_snippet
-from codomyrmex.code.review import review_file
+from codomyrmex.coding.review import review_file
 from codomyrmex.static_analysis import analyze_file
 
 # Generate code

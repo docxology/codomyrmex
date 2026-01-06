@@ -510,18 +510,19 @@ Solution: Validate environment configuration, check dependency versions, review 
 ### Integration Test Suites
 - **Main Integration Tests**: [integration_test.py](integration_test.py) - Core integration test runner
 - **Cross-Module Tests**: [test_cross_module_workflows.py](test_cross_module_workflows.py) - Multi-module validation
-- **AI Code Execution**: [test_ai_code_execution_flow.py](test_ai_code_execution_flow.py) - AI workflow testing
+- **Comprehensive Improvements**: [test_comprehensive_improvements.py](test_comprehensive_improvements.py) - System improvement validation
 
 ### Git and GitHub Tests
-- **GitHub Functionality**: [test_github_functionality_demo.py](test_github_functionality_demo.py) - GitHub API testing
-- **Git Operations**: [test_github_operations_demo.py](test_github_operations_demo.py) - Git workflow testing
-- **Real Repositories**: [test_real_github_repos.py](test_real_github_repos.py) - Live GitHub testing
-- **Git Method Verification**: [verify_all_git_methods_comprehensive.py](verify_all_git_methods_comprehensive.py) - Complete Git validation
+Located in subdirectories:
+- **Git Operations**: [git_operations/](git_operations/) - Git workflow testing
 
 ### Specialized Tests
-- **Security & CI/CD**: [test_analysis_security_cicd.py](test_analysis_security_cicd.py) - Security pipeline testing
-- **Documentation**: [test_documentation_accuracy.py](test_documentation_accuracy.py) - Documentation validation
-- **Visualization**: [test_visualization_performance.py](test_visualization_performance.py) - Visualization performance
+Located in subdirectories:
+- **AI Code Editing**: [ai_code_editing/](ai_code_editing/) - AI workflow testing
+- **Data Visualization**: [data_visualization/](data_visualization/) - Visualization performance
+- **Documentation**: [documentation/](documentation/) - Documentation validation
+- **Security**: [security/](security/) - Security pipeline testing
+
 
 ### Platform Navigation
 - **Testing Suite**: [../README.md](../README.md) - Testing overview

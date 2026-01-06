@@ -45,6 +45,16 @@ except ImportError:
             error_details: list = None,
             metadata: dict = None,
         ):
+            """
+            Initialize MCPToolResult.
+            
+            Args:
+                success: Whether the operation was successful
+                data: The result data
+                error: Error message if any
+                error_details: List of detailed errors
+                metadata: Additional metadata
+            """
             self.success = success
             self.data = data
             self.error = error
@@ -57,6 +67,13 @@ except ImportError:
         A class for handling MCPErrorDetail operations.
         """
         def __init__(self, type: str, message: str):
+            """
+            Initialize MCPErrorDetail.
+            
+            Args:
+                type: The error type
+                message: The error message
+            """
             self.type = type
             self.message = message
 

@@ -68,7 +68,7 @@ def fix_spatial_children():
 
 def fix_code_agents_references():
     """Remove API_SPECIFICATION.md and USAGE_EXAMPLES.md references from code/AGENTS.md"""
-    file_path = REPO_ROOT / "src/codomyrmex/code/AGENTS.md"
+    file_path = REPO_ROOT / "src/codomyrmex/coding/AGENTS.md"
     content = file_path.read_text()
     
     # Remove broken reference lines
@@ -170,7 +170,7 @@ def fix_examples_code_review_refs():
         REPO_ROOT / "examples/documentation/README.md",
         REPO_ROOT / "examples/pattern_matching/README.md",
         REPO_ROOT / "examples/ai_code_editing/README.md",
-        REPO_ROOT / "examples/code/README.md"
+        REPO_ROOT / "examples/coding/README.md"
     ]
     
     for file_path in files_to_fix:
@@ -185,7 +185,7 @@ def fix_examples_code_review_refs():
             content = content.replace("](../security/)", "](../security_audit/)")
             content = content.replace("](../security)", "](../security_audit)")
             # Fix code.review references in src paths
-            content = content.replace("src/codomyrmex/code.review/", "src/codomyrmex/code/review/")
+            content = content.replace("src/codomyrmex/coding.review/", "src/codomyrmex/coding/review/")
             
             file_path.write_text(content)
             print(f"Fixed code review refs: {file_path}")
@@ -209,11 +209,11 @@ def main():
     # Add Active Components to AGENTS.md files
     agents_files = [
         REPO_ROOT / "src/codomyrmex/spatial/AGENTS.md",
-        REPO_ROOT / "src/codomyrmex/code/tests/AGENTS.md",
-        REPO_ROOT / "src/codomyrmex/code/sandbox/AGENTS.md",
-        REPO_ROOT / "src/codomyrmex/code/execution/AGENTS.md",
-        REPO_ROOT / "src/codomyrmex/code/review/AGENTS.md",
-        REPO_ROOT / "src/codomyrmex/code/monitoring/AGENTS.md",
+        REPO_ROOT / "src/codomyrmex/coding/tests/AGENTS.md",
+        REPO_ROOT / "src/codomyrmex/coding/sandbox/AGENTS.md",
+        REPO_ROOT / "src/codomyrmex/coding/execution/AGENTS.md",
+        REPO_ROOT / "src/codomyrmex/coding/review/AGENTS.md",
+        REPO_ROOT / "src/codomyrmex/coding/monitoring/AGENTS.md",
     ]
     
     for f in agents_files:

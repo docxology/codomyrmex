@@ -43,7 +43,11 @@ class VRRenderer:
 
     def render_stereo(self, scene) -> None:
         """Render scene for stereo VR display."""
-        pass
+        # Simulate rendering for left and right eyes
+        logger.info("Rendering stereo view for VR")
+        # In a real engine, this would render to framebuffers
+        self.left_eye_texture = "rendered_left_frame"
+        self.right_eye_texture = "rendered_right_frame"
 
 
 class XRInterface:

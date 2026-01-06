@@ -688,7 +688,7 @@ if __name__ == "__main__":
     def phase_3_code_execution(self, code):
         """Phase 3: Execute and test generated code."""
         try:
-            from codomyrmex.code import execute_code
+            from codomyrmex.coding import execute_code
             
             print("   🔧 Testing generated code in sandbox...")
             

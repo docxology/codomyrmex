@@ -15,6 +15,8 @@ class FPFVisualizer:
 
     def __init__(self):
         """Initialize the visualizer."""
+        self.config: dict[str, Any] = {}
+        self.theme: str = "default"
 
     def visualize_pattern_hierarchy(self, patterns: List[Pattern]) -> str:
         """Generate a Mermaid diagram of the pattern hierarchy.

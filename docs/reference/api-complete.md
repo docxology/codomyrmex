@@ -131,7 +131,7 @@ issues = parse_pyrefly_output(
 ## 🐳 Code Execution Sandbox API
 
 ### **Main Execution Function**
-**Source**: `src/codomyrmex/code/code_executor.py`
+**Source**: `src/codomyrmex/coding/code_executor.py`
 
 ```python
 def execute_code(
@@ -145,7 +145,7 @@ def execute_code(
 
 **Usage Example**:
 ```python
-from codomyrmex.code.code_executor import execute_code
+from codomyrmex.coding.code_executor import execute_code
 
 # Execute Python code
 result = execute_code(
@@ -544,7 +544,7 @@ def test_parse_pyrefly_real():
 # From src/codomyrmex/tests/unit/test_code_comprehensive.py
 def test_execute_code_real():
     """Test real code execution."""
-    from codomyrmex.code.code_executor import execute_code
+    from codomyrmex.coding.code_executor import execute_code
 
     # Real code execution test
     result = execute_code(

@@ -10,6 +10,7 @@
     - [jules](jules/README.md)
     - [claude](claude/README.md)
     - [codex](codex/README.md)
+    - [opencode](opencode/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -18,7 +19,7 @@
 
 ## Overview
 
-The agents module provides integration with various agentic frameworks including Jules CLI, Claude API, and OpenAI Codex. It includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
+The agents module provides integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, and OpenCode CLI. It includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
 
 The agents module serves as the agentic framework integration layer, supporting multiple agent frameworks through a unified interface.
 
@@ -42,6 +43,7 @@ graph TB
         Jules[JulesClient<br/>CLI Integration]
         Claude[ClaudeClient<br/>API Integration]
         Codex[CodexClient<br/>API Integration]
+        OpenCode[OpenCodeClient<br/>CLI Integration]
     end
 
     subgraph "Integration Adapters"
@@ -61,6 +63,7 @@ graph TB
     BaseAgent --> Jules
     BaseAgent --> Claude
     BaseAgent --> Codex
+    BaseAgent --> OpenCode
 
     Orchestrator --> BaseAgent
     MessageBus --> BaseAgent
@@ -69,6 +72,7 @@ graph TB
     Jules --> AICodeAdapter
     Claude --> AICodeAdapter
     Codex --> AICodeAdapter
+    OpenCode --> AICodeAdapter
 
     AICodeAdapter --> AICodeEditing
     LLMAdapter --> LanguageModels
@@ -78,7 +82,7 @@ graph TB
 ## Key Features
 
 - **Unified Interface**: Consistent interface across all agent frameworks via `AgentInterface`
-- **Framework Support**: Integration with Jules CLI, Claude API, and OpenAI Codex
+- **Framework Support**: Integration with Jules CLI, Claude API, OpenAI Codex, and OpenCode CLI
 - **Code Generation**: Generate code using various agent frameworks
 - **Code Editing**: Edit and refactor code using agents
 - **Streaming Support**: Support streaming responses where available
@@ -147,6 +151,7 @@ code = adapter.adapt_for_ai_code_editing(
 - `jules/` - Jules CLI integration
 - `claude/` - Claude API integration
 - `codex/` - OpenAI Codex integration
+- `opencode/` - OpenCode CLI integration
 
 ## Configuration
 
@@ -172,6 +177,10 @@ set_config(config)
 - `OPENAI_API_KEY` - Codex API key
 - `CLAUDE_MODEL` - Claude model name
 - `CODEX_MODEL` - Codex model name
+- `OPENCODE_COMMAND` - OpenCode command name (default: "opencode")
+- `OPENCODE_TIMEOUT` - OpenCode operation timeout
+- `OPENCODE_WORKING_DIR` - OpenCode working directory
+- `OPENCODE_API_KEY` - OpenCode API key (for OpenCode Zen)
 - `AGENT_DEFAULT_TIMEOUT` - Default timeout for agent operations
 - `AGENT_ENABLE_LOGGING` - Enable/disable logging
 - `AGENT_LOG_LEVEL` - Logging level
@@ -225,7 +234,8 @@ from codomyrmex.agents.exceptions import (
     AgentTimeoutError,
     ClaudeError,
     CodexError,
-    JulesError
+    JulesError,
+    OpenCodeError
 )
 
 try:

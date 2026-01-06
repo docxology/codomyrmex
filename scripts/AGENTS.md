@@ -77,7 +77,7 @@ Some modules have submodules with dedicated script folders:
 - `agents/ai_code_editing/` → `scripts/ai_code_editing/`
 - `api/documentation/` → (handled via `scripts/api/`)
 - `api/standardization/` → (handled via `scripts/api/`)
-- `code/sandbox/`, `code/review/`, `code/execution/`, `code/monitoring/` → (handled via `scripts/code/`)
+- `code/sandbox/`, `code/review/`, `code/execution/`, `code/monitoring/` → (handled via `scripts/coding/`)
 
 ### Utility Folders (Not Module Folders)
 

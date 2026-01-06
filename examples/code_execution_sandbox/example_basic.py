@@ -41,7 +41,7 @@ from typing import Dict, Any, List
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from codomyrmex.code import execute_code
+from codomyrmex.coding import execute_code
 from examples._common.config_loader import load_config
 from examples._common.example_runner import ExampleRunner
 from examples._common.utils import print_section, print_results, print_success, print_error, print_warning, ensure_output_dir

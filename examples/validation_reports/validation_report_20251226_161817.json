@@ -89,9 +89,9 @@
       "validation_type": "execution",
       "severity": "error",
       "message": "Example execution failed with exit code 1",
-      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py\", line 626\n    print_success(\".2f\"        error_cases['large_file'] = True\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax. Perhaps you forgot a comma?\n",
+      "details": "  File \"/Users/4d/Documents/GitHub/codomyrmex/examples/coding_review/example_basic.py\", line 626\n    print_success(\".2f\"        error_cases['large_file'] = True\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax. Perhaps you forgot a comma?\n",
       "fix_suggestion": null,
-      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/code_review/example_basic.py",
+      "file_path": "/Users/4d/Documents/GitHub/codomyrmex/examples/coding_review/example_basic.py",
       "line_number": null
     },
     {

@@ -168,13 +168,13 @@ graph TD
 - **Cross-Module Usage**:
   ```python
   # Used by ai_code_editing for code validation
-  from codomyrmex.code import execute_code
+  from codomyrmex.coding import execute_code
 
   # Test generated code before applying
   result = execute_code(language="python", code="print('test')")
   
   # Code review integration
-  from codomyrmex.code.review import CodeReviewer, analyze_file
+  from codomyrmex.coding.review import CodeReviewer, analyze_file
   reviewer = CodeReviewer()
   results = analyze_file("path/to/file.py")
   ```

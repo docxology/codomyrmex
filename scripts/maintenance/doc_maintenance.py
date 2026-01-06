@@ -10,8 +10,8 @@ ROOT_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 PATH_MAPPINGS = {
     r"src/codomyrmex/language_models/": "src/codomyrmex/llm/",
     r"src/codomyrmex/modeling_3d/": "src/codomyrmex/spatial/three_d/",
-    r"src/codomyrmex/code_execution_sandbox/": "src/codomyrmex/code/sandbox/",
-    r"src/codomyrmex/code_review/": "src/codomyrmex/code/review/",
+    r"src/codomyrmex/coding_execution_sandbox/": "src/codomyrmex/coding/sandbox/",
+    r"src/codomyrmex/coding_review/": "src/codomyrmex/coding/review/",
     r"src/codomyrmex/ollama_integration/": "src/codomyrmex/llm/ollama/",
     r"src/codomyrmex/api_standardization/": "src/codomyrmex/api/standardization/",
     r"src/codomyrmex/api_documentation/": "src/codomyrmex/api_documentation/", # Wait, Check if this exists

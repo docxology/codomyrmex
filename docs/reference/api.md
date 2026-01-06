@@ -216,7 +216,7 @@ print(f"🚨 Issues found: {analysis.get('issue_count', 0)}")
 print(f"⚡ Performance score: {analysis.get('performance_score', 'N/A')}")
 ```
 
-#### **[🏃 code](../../src/codomyrmex/code/API_SPECIFICATION.md)**
+#### **[🏃 code](../../src/codomyrmex/coding/README.md)**
 **Secure multi-language code execution**
 
 | Function | Description | Status | Example |
@@ -228,7 +228,7 @@ print(f"⚡ Performance score: {analysis.get('performance_score', 'N/A')}")
 
 **Quick Example:**
 ```python
-from codomyrmex.code import execute_code
+from codomyrmex.coding import execute_code
 
 # Execute Python code safely
 result = execute_code(
@@ -245,7 +245,7 @@ print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 - **`create_heatmap(data, **options)`**: Heatmaps
 - **Status**: ✅ Stable API
 
-#### **[code](../../src/codomyrmex/code/API_SPECIFICATION.md)**
+#### **[code](../../src/codomyrmex/coding/README.md)**
 - **`execute_code(language, code, timeout)`**: Safe code execution
 - **`CodeExecutor`**: Main execution class
 - **`ExecutionResult`**: Result data class
@@ -482,7 +482,7 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 |--------|---------------|-----------|--------|
 | **ai_code_editing** | [API Docs](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **data_visualization** | [API Docs](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md) | None | ✅ Stable |
-| **code** | [API Docs](../../src/codomyrmex/code/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/code/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
+| **code** | [API Docs](../../src/codomyrmex/coding/README.md) | [MCP Tools](../../src/codomyrmex/coding/README.md#mcp-tools) | 🔄 Evolving |
 | **static_analysis** | [API Docs](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/static_analysis/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **build_synthesis** | [API Docs](../../src/codomyrmex/build_synthesis/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/build_synthesis/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **pattern_matching** | [API Docs](../../src/codomyrmex/pattern_matching/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/pattern_matching/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |

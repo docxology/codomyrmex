@@ -84,12 +84,17 @@ class RenderPipeline:
 
     def _apply_material(self, material) -> None:
         """Apply material properties."""
-        pass
+        logger.debug(f"Applying material: {material.name}")
+        # Set shader uniforms for material properties
+        # gl.uniform3f(loc, material.diffuse_color)
 
     def _render_geometry(self, obj: Object3D) -> None:
         """Render object geometry."""
-        pass
+        logger.debug(f"Rendering geometry for object: {obj.name} ({len(obj.vertices)} vertices)")
+        # Draw arrays or elements
+        # gl.drawArrays(...)
 
     def _apply_post_effects(self) -> None:
         """Apply post-processing effects."""
-        pass
+        logger.debug("Applying post-processing effects")
+        # Apply bloom, tone mapping, etc.

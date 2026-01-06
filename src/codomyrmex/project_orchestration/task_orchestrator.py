@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from queue import PriorityQueue
+from queue import PriorityQueue as StdPriorityQueue
 from typing import Any, Optional
 
 # Import Codomyrmex modules
@@ -33,6 +33,7 @@ except ImportError:
     PERFORMANCE_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
+        """Decorator for performance monitoring (fallback)."""
         def decorator(func):
             return func
 
@@ -271,7 +272,7 @@ class TaskQueue:
 
     def __init__(self):
         """Initialize the task queue."""
-        self.queue = PriorityQueue()
+        self.queue = StdPriorityQueue()
         self.tasks: dict[str, Task] = {}
         self.lock = threading.Lock()
 
@@ -453,6 +454,7 @@ class TaskOrchestrator:
         """Execute a task asynchronously."""
 
         def task_wrapper():
+            """Wrapper for async task execution."""
             try:
                 result = self.execute_task(task)
                 self.task_results[task.id] = result
@@ -522,6 +524,7 @@ class TaskOrchestrator:
                 import signal
 
                 def timeout_handler(signum, frame):
+                    """Handle task timeout signal."""
                     raise TimeoutError(f"Task timed out after {task.timeout} seconds")
 
                 old_handler = signal.signal(signal.SIGALRM, timeout_handler)

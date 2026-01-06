@@ -31,6 +31,7 @@ except ImportError:
     PERFORMANCE_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
+        """Decorator for performance monitoring (fallback)."""
         def decorator(func):
             return func
 
@@ -120,12 +121,15 @@ class OrchestrationSession:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "OrchestrationSession":
-        """From Dict.
+        """
+        Create session from dictionary.
 
-            Args:        cls: Parameter for the operation.        data: Data to process.
+        Args:
+            data: Dictionary containing session data.
 
-            Returns:        The result of the operation.
-            """
+        Returns:
+            New OrchestrationSession instance.
+        """
         sess = cls(
             session_id=data.get("session_id", str(uuid.uuid4())),
             name=data.get("name", ""),
@@ -296,10 +300,12 @@ class OrchestrationEngine:
                     import concurrent.futures
 
                     def run_async():
-                        """Run Async.
+                        """
+                        Run workflow execution in a new event loop.
 
-                            Returns:        The result of the operation.
-                            """
+                        Returns:
+                            Result of the workflow execution.
+                        """
                         new_loop = asyncio.new_event_loop()
                         asyncio.set_event_loop(new_loop)
                         try:

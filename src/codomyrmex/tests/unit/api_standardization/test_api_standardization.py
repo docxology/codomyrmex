@@ -8,18 +8,18 @@ import pytest
 import json
 from datetime import datetime
 
-from src.codomyrmex.api_standardization.rest_api import (
+from codomyrmex.api.standardization.rest_api import (
     RESTAPI, APIEndpoint, APIResponse, APIRouter, HTTPMethod, HTTPStatus, APIRequest
 )
-from src.codomyrmex.api_standardization.graphql_api import (
+from codomyrmex.api.standardization.graphql_api import (
     GraphQLAPI, GraphQLSchema, GraphQLResolver, GraphQLMutation,
     GraphQLObjectType, GraphQLField, GraphQLType
 )
-from src.codomyrmex.api_standardization.api_versioning import (
+from codomyrmex.api.standardization.api_versioning import (
     APIVersionManager, APIVersion, VersionedEndpoint, VersionFormat
 )
-from src.codomyrmex.api_standardization.openapi_generator import (
-    OpenAPIGenerator, OpenAPISpecification
+from codomyrmex.api.openapi_generator import (
+    StandardizationOpenAPIGenerator as OpenAPIGenerator, OpenAPISpecification
 )
 
 
