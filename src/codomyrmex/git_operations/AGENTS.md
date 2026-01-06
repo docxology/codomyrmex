@@ -277,6 +277,16 @@ Create a new repository on GitHub.
 - `tests/` – Comprehensive test suite
 - `visualization_integration.py` – Integration with visualization modules
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `docxology_repository_library.txt` – Docxology Repository Library Txt
+- `repository_metadata.json.backup.20260105_140649` – Repository Metadata Json Backup 20260105 140649
+- `repository_metadata.py` – Repository Metadata Py
+- `tests` – Tests
+
 ## Operating Contracts
 
 ### Universal Git Protocols

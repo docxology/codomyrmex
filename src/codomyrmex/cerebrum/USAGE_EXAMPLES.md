@@ -238,7 +238,7 @@ Use case-based reasoning to enhance code generation:
 
 ```python
 from codomyrmex.cerebrum import CerebrumEngine, Case
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 # Create case from code generation request
 case = Case(
@@ -397,3 +397,10 @@ results = orchestrator.run_comprehensive_analysis()
 combinatorics = FPFCombinatoricsAnalyzer(output_dir="output/combinatorics")
 combinatorics_results = combinatorics.run_comprehensive_combinatorics()
 ```
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -22,8 +22,8 @@ import os
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from codomyrmex.ai_code_editing.openai_codex import generate_code_snippet
-from codomyrmex.code_review.code_review import review_file
+from codomyrmex.agents.ai_code_editing.openai_codex import generate_code_snippet
+from codomyrmex.code.review import CodeReviewer, analyze_file
 from codomyrmex.git_operations.git_manager import get_status, commit_changes
 from codomyrmex.static_analysis.code_analyzer import analyze_file
 from codomyrmex.logging_monitoring import setup_logging, get_logger
@@ -118,14 +118,23 @@ def main():
                         content = file_obj.read_text()
 
                         # Perform automated code review
-                        review = review_file(str(file_obj), content)
+                        review_results_list = analyze_file(str(file_obj))
 
-                        if review:
-                            issues_found = len(review.get('issues', []))
+                        if review_results_list:
+                            issues_found = len(review_results_list)
+                            # Calculate score from results
+                            score = 100.0
+                            for result in review_results_list:
+                                if result.severity.value == "critical":
+                                    score -= 10
+                                elif result.severity.value == "error":
+                                    score -= 5
+                                elif result.severity.value == "warning":
+                                    score -= 2
                             review_results.append({
                                 'file': file_obj.name,
                                 'issues': issues_found,
-                                'score': review.get('overall_score', 0)
+                                'score': max(0, score)
                             })
 
                             results['reviews_performed'] += 1

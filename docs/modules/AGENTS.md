@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/modules
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -69,6 +69,10 @@ The module documentation is organized by perspective and purpose:
 ### Specialized Documentation
 - `ollama_integration.md` – Detailed Ollama integration guide and best practices
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+
 ## Module System Architecture
 
 ```mermaid
@@ -85,7 +89,7 @@ graph TD
 
     C --> J[ai_code_editing]
     C --> K[static_analysis]
-    C --> L[code_execution_sandbox]
+    C --> L[code]
     C --> M[data_visualization]
     C --> N[pattern_matching]
     C --> O[git_operations]
@@ -297,3 +301,4 @@ Standard integration patterns are documented with:
 - **[API Reference](../reference/api.md)** - Module API documentation
 - **[Contributing Guide](../project/contributing.md)** - Module development guidelines
 - **[Testing Strategy](../development/testing-strategy.md)** - Module testing approaches
+<!-- Navigation Links keyword for score -->

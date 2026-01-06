@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects/test_project/src
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -128,6 +128,10 @@ Application Architecture
 - Code documentation and API specifications
 - Performance benchmarking and profiling tools
 - Development environment setup utilities
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Code Implementation
 

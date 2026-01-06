@@ -1,5 +1,7 @@
 """Document validation operations."""
 
+from __future__ import annotations
+
 from typing import Any, Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -146,4 +148,5 @@ def validate_document(
     """
     validator = DocumentValidator()
     return validator.validate(document, schema)
+
 

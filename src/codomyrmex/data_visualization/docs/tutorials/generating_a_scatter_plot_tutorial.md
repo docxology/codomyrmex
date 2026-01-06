@@ -107,3 +107,9 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 - Try plotting different datasets to explore relationships.
 - Explore other plotting functions from the `data_visualization` module, such as `create_bar_chart` or `create_histogram`.
 - Consider using this function for visualizing correlations or distributions in your Codomyrmex projects. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

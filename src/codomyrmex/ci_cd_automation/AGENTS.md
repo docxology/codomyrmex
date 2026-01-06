@@ -338,6 +338,11 @@ Pipeline performance analysis and optimization class.
 - `USAGE_EXAMPLES.md` – Practical usage demonstrations
 - `SECURITY.md` – Security considerations for CI/CD operations
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal CI/CD Protocols

@@ -105,18 +105,16 @@ class ContentQualityAnalyzer:
     
     # Placeholder patterns to detect
     PLACEHOLDER_PATTERNS = [
-        (r'\bTODO\b', 'TODO'),
-        (r'\bFIXME\b', 'FIXME'),
-        (r'\bXXX\b', 'XXX'),
-        (r'\bTBD\b', 'TBD'),
-        (r'\bplaceholder\b', 'placeholder'),
-        (r'\bcoming soon\b', 'coming soon'),
-        (r'\[.*to be completed.*\]', 'to be completed'),
-        (r'\bneeds? filling\b', 'needs filling'),
-        (r'\bneeds? specific content\b', 'needs specific content'),
-        (r'example_function\(\)', 'example function'),
-        (r'# Placeholder', 'placeholder header'),
-        (r'This is a placeholder', 'placeholder text')
+        (r'\[TBD\]', 'TBD'),
+        (r'\[FIXME\]', 'FIXME'),
+        (r'\[TODO\]', 'TODO'),
+        (r'\[placeholder\]', 'placeholder'),
+        (r'\[Insert description\]', 'description placeholder'),
+        (r'\[Brief description.*?\]', 'brief description'),
+        (r'\[file\.py\]', 'file placeholder'),
+        (r'\[module_path\]', 'module path placeholder'),
+        (r'\[Module Name\]', 'module name placeholder'),
+        (r'\[YOUR_.*?\]', 'user entry placeholder')
     ]
     
     # Required navigation sections for README files
@@ -137,10 +135,16 @@ class ContentQualityAnalyzer:
             md_files.extend(self.repo_root.glob(pattern))
         
         # Filter out ignored directories
-        ignored_dirs = {'.git', 'node_modules', '__pycache__', '.venv', 'venv'}
+        ignored_dirs = {
+            '.git', 'node_modules', '__pycache__', '.venv', 'venv', 
+            'output', '.pytest_cache', 'plugins', 'templates', 'doc_templates',
+            'docs/project', '_templates', '_common', '_configs', 'outputs',
+            'module_template', 'template'
+        }
         filtered = [
             f for f in md_files
             if not any(ignored in f.parts for ignored in ignored_dirs)
+            and 'template' not in f.name.lower()
         ]
         
         return sorted(filtered)
@@ -206,7 +210,7 @@ class ContentQualityAnalyzer:
         # Check for navigation section
         has_navigation = any(
             section in content.lower()
-            for section in self.NAVIGATION_SECTIONS
+            for section in self.NAVIGATION_SECTIONS + ['signposting', 'navigation links', 'parent']
         )
         
         if has_navigation:

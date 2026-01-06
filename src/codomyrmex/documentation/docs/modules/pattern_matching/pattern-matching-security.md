@@ -46,3 +46,9 @@ Results from code analysis should be handled securely:
 ## Updates
 
 The Pattern Matching module is regularly maintained and updated to address security concerns as they arise. Users are encouraged to use the latest version of the module. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -33,11 +33,11 @@
 
 1. `docs/project/documentation-completeness.md` - **REMOVED** (outdated report)
 2. `docs/project/implementation-status.md` - **UPDATED** (current metrics)
-3. `src/codomyrmex/ai_code_editing/PROMPT_ENGINEERING.md` - Incomplete prompt guide
-4. `src/codomyrmex/ai_code_editing/USAGE_EXAMPLES.md` - Missing examples
-5. `src/codomyrmex/ai_code_editing/prompt_templates/context_template.md` - Empty template
-6. `src/codomyrmex/ai_code_editing/prompt_templates/system_template.md` - Empty template
-7. `src/codomyrmex/ai_code_editing/prompt_templates/task_template.md` - Empty template
+3. `src/codomyrmex/agents/ai_code_editing/PROMPT_ENGINEERING.md` - Incomplete prompt guide
+4. `src/codomyrmex/agents/ai_code_editing/USAGE_EXAMPLES.md` - Missing examples
+5. `src/codomyrmex/llm/prompt_templates/context_template.md` - Empty template
+6. `src/codomyrmex/llm/prompt_templates/system_template.md` - Empty template
+7. `src/codomyrmex/llm/prompt_templates/task_template.md` - Empty template
 8. `src/codomyrmex/build_synthesis/USAGE_EXAMPLES.md` - Missing examples
 9. `src/codomyrmex/documentation/coverage_assessment.md` - Incomplete assessment
 10. `src/codomyrmex/documentation/docs/modules/ai_code_editing/usage_examples.md` - Duplicate/incomplete
@@ -134,3 +134,9 @@ python scripts/documentation/monitor_health.py --repo-root . --output output
 ---
 
 *This status is generated from automated validation tools. Run validation suite for current metrics.*
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

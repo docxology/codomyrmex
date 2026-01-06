@@ -9,7 +9,7 @@
 #
 # Prerequisites: API keys for OpenAI/Anthropic (in .env file)  
 # Duration: ~6 minutes
-# Modules: ai_code_editing + code_execution_sandbox + logging_monitoring + environment_setup
+# Modules: ai_code_editing + code + logging_monitoring + environment_setup
 
 set -e  # Exit on any error
 
@@ -78,8 +78,8 @@ except ImportError:
 try:
     from codomyrmex.logging_monitoring import setup_logging, get_logger
     from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
-    from codomyrmex.ai_code_editing.ai_code_helpers import generate_code_snippet, refactor_code_snippet
-    from codomyrmex.code_execution_sandbox.code_executor import execute_code
+    from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet, refactor_code_snippet
+    from codomyrmex.code.execution.executor import execute_code
     print('✅ All required modules imported successfully')
 except ImportError as e:
     print(f'❌ Module import failed: {e}')
@@ -190,7 +190,7 @@ from pathlib import Path
 sys.path.insert(0, 'src')
 
 from codomyrmex.logging_monitoring import setup_logging, get_logger
-from codomyrmex.ai_code_editing.ai_code_helpers import generate_code_snippet, refactor_code_snippet  
+from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet, refactor_code_snippet  
 from codomyrmex.code_execution_sandbox.code_executor import execute_code
 
 # Setup logging
@@ -444,7 +444,7 @@ echo "  • ${TASK_NAME}_v2.py - Refined code (if refinement occurred)"
 echo ""
 echo -e "${YELLOW}💡 This orchestrator demonstrated:${NC}"
 echo "  ✅ AI code generation (ai_code_editing module)"
-echo "  ✅ Secure code execution (code_execution_sandbox module)" 
+echo "  ✅ Secure code execution (code module)" 
 echo "  ✅ Iterative refinement based on execution feedback"
 echo "  ✅ Comprehensive logging and session tracking"
 echo ""

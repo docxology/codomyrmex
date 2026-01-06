@@ -124,7 +124,7 @@ print("🎉 Check your output files: sine_wave.png and language_popularity.png")
 Experience the future of coding with AI assistance (requires API key):
 
 ```python
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 print("🤖 Generating code with AI assistance...")
 
@@ -146,7 +146,7 @@ else:
     print(f"❌ Generation failed: {result['error_message']}")
 
 # You can also refactor existing code
-from codomyrmex.ai_code_editing import refactor_code_snippet
+from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
 code_to_refactor = """
 def calculate_total(items):
@@ -172,7 +172,7 @@ if refactored["status"] == "success":
 Test and run code in a secure, isolated environment:
 
 ```python
-from codomyrmex.code_execution_sandbox import execute_code
+from codomyrmex.code import execute_code
 
 print("🏃 Testing code in secure sandbox...")
 
@@ -310,8 +310,8 @@ EOF
 | Module                 | Import                                                            | Main Function               |
 | ---------------------- | ----------------------------------------------------------------- | --------------------------- |
 | **Data Visualization** | `from codomyrmex.data_visualization import create_bar_chart`      | `create_bar_chart()`        |
-| **AI Code Editing**    | `from codomyrmex.ai_code_editing import generate_code_snippet`    | `generate_code_snippet()`   |
-| **Code Execution**     | `from codomyrmex.code_execution_sandbox import execute_code`      | `execute_code()`            |
+| **AI Code Editing**    | `from codomyrmex.agents.ai_code_editing import generate_code_snippet`    | `generate_code_snippet()`   |
+| **Code Execution**     | `from codomyrmex.code import execute_code`      | `execute_code()`            |
 | **Static Analysis**    | `from codomyrmex.static_analysis import run_pyrefly_analysis`     | `run_pyrefly_analysis()`    |
 | **Pattern Matching**   | `from codomyrmex.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
 
@@ -325,8 +325,8 @@ EOF
 
 ```python
 from codomyrmex.static_analysis import run_pyrefly_analysis
-from codomyrmex.code_execution_sandbox import execute_code
-from codomyrmex.ai_code_editing import refactor_code_snippet
+from codomyrmex.code import execute_code
+from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
 # 1. Analyze code quality
 issues = run_pyrefly_analysis(["src/"], "/project")
@@ -370,8 +370,8 @@ create_scatter_plot(
 ### **AI-Enhanced Development**
 
 ```python
-from codomyrmex.ai_code_editing import generate_code_snippet, refactor_code_snippet
-from codomyrmex.code_execution_sandbox import execute_code
+from codomyrmex.agents.ai_code_editing import generate_code_snippet, refactor_code_snippet
+from codomyrmex.code import execute_code
 
 # Generate new feature
 feature_code = generate_code_snippet(
@@ -532,7 +532,7 @@ EOF
 
 ```python
 # Test AI code generation
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 result = generate_code_snippet(
     prompt="Create a function to calculate fibonacci numbers",
@@ -547,3 +547,10 @@ if result["status"] == "success":
 > **💡 Tip**: AI features work with OpenAI, Anthropic, and Google models. You only need one provider to get started!
 
 **Happy coding! 🐜✨**
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

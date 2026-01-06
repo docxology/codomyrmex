@@ -174,3 +174,10 @@ The integration framework provides foundation for:
 
 This integration represents a comprehensive approach to AI-augmented development workflows, combining the best of both Fabric's curated AI patterns and Codomyrmex's modular architecture for maximum developer productivity.
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

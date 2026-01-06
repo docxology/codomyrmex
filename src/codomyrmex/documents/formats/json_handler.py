@@ -1,5 +1,7 @@
 """JSON document handler."""
 
+from __future__ import annotations
+
 import json
 from pathlib import Path
 from typing import Any, Optional
@@ -102,4 +104,5 @@ def write_json(
             f"Failed to write JSON file: {str(e)}",
             file_path=str(file_path)
         ) from e
+
 

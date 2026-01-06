@@ -10,39 +10,40 @@
         - [Model Context Protocol Agents](model_context_protocol/AGENTS.md)
         - [Terminal Interface Agents](terminal_interface/AGENTS.md)
     - **Core Layer**:
-        - [AI Code Editing Agents](ai_code_editing/AGENTS.md)
         - [Static Analysis Agents](static_analysis/AGENTS.md)
-        - [Code Execution Sandbox Agents](code_execution_sandbox/AGENTS.md)
+        - [Code Agents](code/AGENTS.md) - Code execution, sandboxing, review, and monitoring
         - [Data Visualization Agents](data_visualization/AGENTS.md)
         - [Pattern Matching Agents](pattern_matching/AGENTS.md)
         - [Git Operations Agents](git_operations/AGENTS.md)
-        - [Code Review Agents](code_review/AGENTS.md)
-                - [Security Agents](security/AGENTS.md)
-                - [Documents Agents](documents/AGENTS.md)
-        - [Ollama Integration Agents](ollama_integration/AGENTS.md)
-        - [Language Models Agents](language_models/AGENTS.md)
+        - [Security Agents](security/AGENTS.md)
+        - [Documents Agents](documents/AGENTS.md)
+        - [LLM Agents](llm/AGENTS.md)
         - [Performance Agents](performance/AGENTS.md)
     - **Service Layer**:
         - [Build Synthesis Agents](build_synthesis/AGENTS.md)
         - [Documentation Agents](documentation/AGENTS.md)
-        - [API Documentation Agents](api_documentation/AGENTS.md)
+        - [API Documentation Agents](api/documentation/AGENTS.md)
         - [CI/CD Automation Agents](ci_cd_automation/AGENTS.md)
         - [Containerization Agents](containerization/AGENTS.md)
         - [Database Management Agents](database_management/AGENTS.md)
         - [Config Management Agents](config_management/AGENTS.md)
         - [Project Orchestration Agents](project_orchestration/AGENTS.md)
     - **Specialized Layer**:
-        - [Modeling 3D Agents](modeling_3d/AGENTS.md)
+        - [Spatial Agents](spatial/AGENTS.md)
         - [Physical Management Agents](physical_management/AGENTS.md)
         - [System Discovery Agents](system_discovery/AGENTS.md)
         - [Module Template Agents](module_template/AGENTS.md)
         - [Template Agents](template/AGENTS.md)
         - [Events Agents](events/AGENTS.md)
-        - [API Standardization Agents](api_standardization/AGENTS.md)
+        - [API Standardization Agents](api/standardization/AGENTS.md)
         - [Plugin System Agents](plugin_system/AGENTS.md)
         - [Tools Agents](tools/AGENTS.md)
         - [FPF Agents](fpf/AGENTS.md)
         - [CEREBRUM Agents](cerebrum/AGENTS.md)
+        - [Agents Agents](agents/AGENTS.md)
+            - [AI Code Editing Agents](agents/ai_code_editing/AGENTS.md)
+            - [Droid Agents](agents/droid/AGENTS.md)
+        - [Tests Agents](tests/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -70,7 +71,7 @@ Modules are organized into functional layers:
 **Core Layer** - Primary development capabilities:
 - `ai_code_editing/` - AI-powered code assistance
 - `static_analysis/` - Code quality and security analysis
-- `code_execution_sandbox/` - Safe code execution environments
+- `code/` - Code execution, sandboxing, review, and monitoring
 - `data_visualization/` - Charts, plots, and visualizations
 - `pattern_matching/` - Code pattern recognition
 - `git_operations/` - Version control automation
@@ -78,12 +79,12 @@ Modules are organized into functional layers:
 **Service Layer** - Higher-level orchestration:
 - `build_synthesis/` - Multi-language build automation
 - `documentation/` - Documentation generation systems
-- `api_documentation/` - API specification management
+- `api/` - API documentation and standardization (with `documentation/` and `standardization/` submodules)
 - `ci_cd_automation/` - Continuous integration pipelines
 - `database_management/` - Database operations and migrations
 
 **Specialized Layer** - Domain-specific capabilities:
-- `modeling_3d/` - 3D modeling and visualization
+- `spatial/` - Spatial modeling (3D, 4D, World Models)
 - `physical_management/` - Hardware resource management
 - `system_discovery/` - Module discovery and health monitoring
 
@@ -97,11 +98,10 @@ Modules are organized into functional layers:
 
 ### Module Directories
 - `ai_code_editing/` – AI-assisted code generation and editing
-- `api_documentation/` – API documentation generation
+- `api/` – API documentation and standardization (with `documentation/` and `standardization/` submodules)
 - `build_synthesis/` – Build orchestration and automation
 - `ci_cd_automation/` – CI/CD pipeline management
-- `code_execution_sandbox/` – Safe code execution environments
-- `code_review/` – Automated code review and analysis
+- `code/` – Code execution, sandboxing, review, and monitoring
 - `config_management/` – Configuration management and validation
 - `containerization/` – Container lifecycle management
 - `data_visualization/` – Data plotting and visualization
@@ -109,12 +109,11 @@ Modules are organized into functional layers:
 - `documentation/` – Documentation generation system
 - `environment_setup/` – Environment validation and setup
 - `git_operations/` – Git workflow automation
-- `language_models/` – Language model management
 - `logging_monitoring/` – Centralized logging system
 - `model_context_protocol/` – MCP tool specifications
-- `modeling_3d/` – 3D modeling and rendering
+- `spatial/` – Spatial modeling (3D, 4D, World Models)
 - `module_template/` – Module creation templates
-- `ollama_integration/` – Local LLM integration
+- `llm/` – LLM integration (with `ollama/` submodule for local LLM integration)
 - `pattern_matching/` – Code pattern analysis
 - `performance/` – Performance monitoring and optimization
 - `physical_management/` – Hardware resource management
@@ -127,6 +126,45 @@ Modules are organized into functional layers:
 - `terminal_interface/` – Rich terminal UI components
 - `tests/` – Cross-module integration tests
 - `tools/` – Utility tools and helpers
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `agents` – Agents
+- `ai_code_editing` – Ai Code Editing
+- `api` – Api
+- `build_synthesis` – Build Synthesis
+- `cerebrum` – Cerebrum
+- `ci_cd_automation` – Ci Cd Automation
+- `code` – Code
+- `config_management` – Config Management
+- `containerization` – Containerization
+- `data_visualization` – Data Visualization
+- `database_management` – Database Management
+- `documentation` – Documentation
+- `documents` – Documents
+- `environment_setup` – Environment Setup
+- `events` – Events
+- `fpf` – Fpf
+- `git_operations` – Git Operations
+- `llm` – Llm
+- `logging_monitoring` – Logging Monitoring
+- `model_context_protocol` – Model Context Protocol
+- `spatial` – Spatial
+- `module_template` – Module Template
+- `pattern_matching` – Pattern Matching
+- `performance` – Performance
+- `physical_management` – Physical Management
+- `plugin_system` – Plugin System
+- `project_orchestration` – Project Orchestration
+- `security` – Security
+- `static_analysis` – Static Analysis
+- `system_discovery` – System Discovery
+- `template` – Template
+- `terminal_interface` – Terminal Interface
+- `tests` – Tests
+- `tools` – Tools
 
 ## Operating Contracts
 
@@ -225,10 +263,18 @@ def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict
 def analyze_codebase(*args, **kwargs) -> AnalysisSummary
 ```
 
-#### code_execution_sandbox
+#### code
 
+**Execution:**
 ```python
 def execute_code(language: str, code: str, stdin: Optional[str] = None, timeout: Optional[int] = None, session_id: Optional[str] = None) -> dict[str, Any]
+```
+
+**Review:**
+```python
+def analyze_file(file_path: str, analysis_types: list[str] = None) -> list[AnalysisResult]
+def analyze_project(project_root: str, target_paths: list[str] = None, analysis_types: list[str] = None) -> AnalysisSummary
+def check_quality_gates(project_root: str, thresholds: dict[str, int] = None) -> QualityGateResult
 ```
 
 #### data_visualization
@@ -270,10 +316,6 @@ def get_branches() -> list
 def switch_branch(name: str) -> bool
 ```
 
-#### code_review
-
-```python
-def review_pull_request(pr_number: int, repo: str) -> ReviewResult
 def analyze_code_quality(code: str) -> dict
 def review_file(filepath: str, content: str = None) -> dict
 def generate_review_comments(issues: list) -> list
@@ -291,7 +333,7 @@ def check_compliance(code: str, standards: list) -> dict
 def generate_security_report(scan_results: list) -> str
 ```
 
-#### ollama_integration
+#### llm.ollama
 
 ```python
 def load_model(name: str) -> bool
@@ -348,7 +390,7 @@ def validate_documentation(docs: dict) -> list
 def update_documentation(source: str, target: str) -> bool
 ```
 
-#### api_documentation
+#### api.documentation
 
 ```python
 def generate_openapi_spec(routes: list) -> dict
@@ -416,8 +458,9 @@ def validate_workflow(definition: dict) -> list
 
 ### Specialized Layer
 
-#### modeling_3d
+#### spatial
 
+**three_d:**
 ```python
 def create_scene(objects: list) -> Scene
 def render_scene(scene: Scene, camera: Camera) -> Image
@@ -425,6 +468,20 @@ def create_mesh(geometry: dict) -> Mesh
 def apply_material(mesh: Mesh, material: dict) -> Mesh
 def animate_object(obj: Object3D, animation: dict) -> Object3D
 def export_scene(scene: Scene, format: str) -> bytes
+```
+
+**four_d:**
+```python
+class QuadrayCoordinate:
+class IsotropicVectorMatrix:
+class ClosePackedSphere:
+def synergetics_transform(coord_3d) -> QuadrayCoordinate
+```
+
+**world_models:**
+```python
+class WorldModel:
+    def update(self, perception_data) -> None
 ```
 
 #### physical_management

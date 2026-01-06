@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/docs
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -80,6 +80,10 @@ Documentation Orchestration
 - Status reporting and analytics utilities
 - Maintenance automation scripts
 - Integration testing and validation procedures
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Documentation Standards
 

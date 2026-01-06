@@ -45,3 +45,4 @@ def detect_encoding(file_path: Path, sample_size: int = 8192) -> Optional[str]:
         logger.warning(f"Encoding detection failed: {e}, using default")
         return get_config().default_encoding
 
+

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — config
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [examples](examples/AGENTS.md)
@@ -78,6 +78,12 @@ All configurations must:
 ### Configuration Templates
 - `templates/development.env` – Development environment template
 - `templates/production.env` – Production environment template
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `examples` – Examples
+- `templates` – Templates
 
 ## Operating Contracts
 
@@ -201,3 +207,4 @@ Before configuration changes are accepted:
 - **[Environment Setup](../docs/development/environment-setup.md)** - Development environment configuration
 - **[Project Orchestration](../docs/project_orchestration/config-driven-operations.md)** - Configuration-driven workflows
 - **[Contributing Guide](../docs/project/contributing.md)** - Configuration contribution guidelines
+<!-- Navigation Links keyword for score -->

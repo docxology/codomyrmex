@@ -31,7 +31,7 @@ from config_loader import load_config
 from example_runner import ExampleRunner
 from utils import print_section, print_results, print_success, print_error, ensure_output_dir
 
-from codomyrmex.api_documentation import (
+from codomyrmex.api.documentation import (
     generate_api_docs,
     extract_api_specs,
     generate_openapi_spec,

@@ -1,12 +1,12 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [ai_code_editing](ai_code_editing/AGENTS.md)
     - [build_synthesis](build_synthesis/AGENTS.md)
-    - [code_execution_sandbox](code_execution_sandbox/AGENTS.md)
+    - [code](code/AGENTS.md)
     - [data_visualization](data_visualization/AGENTS.md)
     - [environment_setup](environment_setup/AGENTS.md)
     - [git_operations](git_operations/AGENTS.md)
@@ -29,7 +29,7 @@ Documentation files and guides for modules.
 - `README.md` – Project file
 - `ai_code_editing/` – Directory containing ai_code_editing components
 - `build_synthesis/` – Directory containing build_synthesis components
-- `code_execution_sandbox/` – Directory containing code_execution_sandbox components
+- `code/` – Directory containing code module components
 - `data_visualization/` – Directory containing data_visualization components
 - `environment_setup/` – Directory containing environment_setup components
 - `git_operations/` – Directory containing git_operations components
@@ -39,6 +39,22 @@ Documentation files and guides for modules.
 - `pattern_matching/` – Directory containing pattern_matching components
 - `static_analysis/` – Directory containing static_analysis components
 - `template/` – Directory containing template components
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `ai_code_editing` – Ai Code Editing
+- `build_synthesis` – Build Synthesis
+- `code` – Code module (execution, sandboxing, review, monitoring)
+- `data_visualization` – Data Visualization
+- `environment_setup` – Environment Setup
+- `git_operations` – Git Operations
+- `logging_monitoring` – Logging Monitoring
+- `model_context_protocol` – Model Context Protocol
+- `module_template` – Module Template
+- `pattern_matching` – Pattern Matching
+- `static_analysis` – Static Analysis
+- `template` – Template
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

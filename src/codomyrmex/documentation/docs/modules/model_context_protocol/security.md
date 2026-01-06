@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Model Context Protocol - [Brief Description]".
+Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Model Context Protocol - Security Issue".
 
 Please include the following information in your report:
 
@@ -82,3 +82,9 @@ The Model Context Protocol facilitates communication; therefore, security relies
 -   If this module provides Python-based validation utilities (e.g., using `jsonschema` as listed in its `requirements.txt`), vulnerabilities in those libraries could affect systems using these utilities. Keep these dependencies updated.
 
 Thank you for helping keep Codomyrmex and the Model Context Protocol secure. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

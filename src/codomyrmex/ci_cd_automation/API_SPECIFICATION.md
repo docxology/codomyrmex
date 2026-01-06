@@ -270,3 +270,10 @@ result = execute_workflow("ci_cd_pipeline", {
 - **Caching**: Build artifacts and test results are cached for efficiency
 - **Parallelization**: Pipeline stages can execute in parallel when dependencies allow
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -19,7 +19,7 @@
   ],
   "required_modules": [
     "build_synthesis",
-    "code_execution_sandbox",
+    "code",
     "documentation"
   ],
   "optional_modules": [

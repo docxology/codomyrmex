@@ -309,7 +309,7 @@ class CodomyrmexMongoDB:
 async def ai_enhancement_with_history(code: str, user_id: str,
                                     mongo_db: CodomyrmexMongoDB):
     """AI code enhancement with history tracking."""
-    from codomyrmex.ai_code_editing import enhance_code
+    from codomyrmex.agents.ai_code_editing import enhance_code
 
     # Enhance code
     result = await enhance_code(code, user_context=user_id)
@@ -597,7 +597,7 @@ class GitHubIntegration:
     async def create_pull_request_analysis(self, pr_number: int) -> Dict:
         """Analyze pull request and create detailed analysis."""
         from codomyrmex.static_analysis import analyze_diff
-        from codomyrmex.ai_code_editing import review_code_changes
+        from codomyrmex.agents.ai_code_editing import review_code_changes
 
         async with aiohttp.ClientSession() as session:
             # Get PR details
@@ -665,7 +665,7 @@ class GitHubIntegration:
             # AI review (if enabled)
             ai_review = None
             if os.getenv('ENABLE_AI_REVIEW', 'false').lower() == 'true':
-                from codomyrmex.ai_code_editing import review_code_changes
+                from codomyrmex.agents.ai_code_editing import review_code_changes
                 ai_review = await review_code_changes(content, patch, filename)
 
             return {
@@ -1208,7 +1208,7 @@ async def monitored_analysis_workflow(codebase_path: str):
 
 ### **Module-Specific Integration**
 
--   **[AI Code Editing API](../../src/codomyrmex/ai_code_editing/API_SPECIFICATION.md)**: AI service integration
+-   **[AI Code Editing API](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md)**: AI service integration
 -   **[Static Analysis API](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md)**: Analysis service integration
 -   **[Data Visualization API](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md)**: Visualization integration
 
@@ -1226,3 +1226,10 @@ async def monitored_analysis_workflow(codebase_path: str):
 -   [ ] Security review completed
 
 **Need Integration Help?** Refer to our [Integration Troubleshooting Guide](../reference/troubleshooting.md#integration-issues) or check module-specific integration documentation.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -1,5 +1,7 @@
 """Document versioning operations."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Optional
 
@@ -46,4 +48,5 @@ def set_document_version(file_path: str | Path, version: str) -> None:
     except Exception as e:
         logger.error(f"Error setting document version: {e}")
         raise MetadataError(f"Failed to set version: {str(e)}") from e
+
 

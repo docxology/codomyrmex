@@ -160,3 +160,4 @@ def test_e2e_error_handling():
     with pytest.raises(ValueError):
         client.build_context()
 
+

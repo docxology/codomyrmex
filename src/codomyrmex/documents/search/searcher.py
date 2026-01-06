@@ -43,3 +43,4 @@ def search_index(query: str, index_path: Path) -> List[dict]:
     # Placeholder - full implementation would query search index
     return []
 
+

@@ -131,7 +131,7 @@ issues = parse_pyrefly_output(
 ## 🐳 Code Execution Sandbox API
 
 ### **Main Execution Function**
-**Source**: `src/codomyrmex/code_execution_sandbox/code_executor.py`
+**Source**: `src/codomyrmex/code/code_executor.py`
 
 ```python
 def execute_code(
@@ -145,7 +145,7 @@ def execute_code(
 
 **Usage Example**:
 ```python
-from codomyrmex.code_execution_sandbox.code_executor import execute_code
+from codomyrmex.code.code_executor import execute_code
 
 # Execute Python code
 result = execute_code(
@@ -541,10 +541,10 @@ def test_parse_pyrefly_real():
 
 ### **Code Execution Testing**
 ```python
-# From testing/unit/test_code_execution_sandbox_comprehensive.py
+# From testing/unit/test_code_comprehensive.py
 def test_execute_code_real():
     """Test real code execution."""
-    from codomyrmex.code_execution_sandbox.code_executor import execute_code
+    from codomyrmex.code.code_executor import execute_code
 
     # Real code execution test
     result = execute_code(
@@ -578,3 +578,10 @@ def test_execute_code_real():
 ---
 
 **API Guarantee** ✅: Every function listed in this document exists in the codebase with the exact signature shown. All examples are tested and functional. This is the definitive API reference for production use.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

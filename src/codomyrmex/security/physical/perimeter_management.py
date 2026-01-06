@@ -1,7 +1,7 @@
 """Physical perimeter security management."""
 
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -81,4 +81,5 @@ def manage_access_points(
     if manager is None:
         manager = PerimeterManager()
     return manager.manage_access_points()
+
 

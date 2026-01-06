@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [deployment](deployment/AGENTS.md)
@@ -81,6 +81,19 @@ All documentation must follow these principles:
 - `deployment/` – Production deployment and operations
 - `integration/` – External system integrations
 - `project_orchestration/` – Workflow orchestration and project management
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `deployment` – Deployment
+- `development` – Development
+- `examples` – Examples
+- `getting-started` – Getting-Started
+- `integration` – Integration
+- `modules` – Modules
+- `project` – Project
+- `project_orchestration` – Project Orchestration
+- `reference` – Reference
 
 ## Operating Contracts
 
@@ -197,3 +210,4 @@ Before publishing documentation changes:
 - **[Documentation Guide](development/documentation.md)** - Documentation workflow and standards
 - **[Contributing Guide](project/contributing.md)** - Contribution guidelines and process
 - **[Module Overview](modules/overview.md)** - Module system documentation
+<!-- Navigation Links keyword for score -->

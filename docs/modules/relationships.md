@@ -18,10 +18,10 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 | **`data_visualization`** | Charting and plotting utilities | matplotlib, seaborn | logging_monitoring | All modules |
 | **`static_analysis`** | Code quality and security analysis | pylint, flake8, bandit | logging_monitoring | build_synthesis, security_audit |
 | **`pattern_matching`** | Code analysis and pattern recognition | cased/kit | logging_monitoring, environment_setup | All modules |
-| **`code_execution_sandbox`** | Secure code execution | Docker | logging_monitoring | All modules |
+| **`code`** | Secure code execution | Docker | logging_monitoring | All modules |
 | **`code_review`** | Automated code review | AI providers | logging_monitoring, ai_code_editing, static_analysis | All modules |
 | **`security_audit`** | Security scanning | bandit, semgrep, cryptography | logging_monitoring, static_analysis | All modules |
-| **`ollama_integration`** | Local LLM integration | Ollama | logging_monitoring, model_context_protocol | AI modules |
+| **`llm/ollama`** | Local LLM integration | Ollama | logging_monitoring, model_context_protocol | AI modules |
 | **`build_synthesis`** | Build automation and scaffolding | build tools | static_analysis, logging_monitoring | All modules |
 | **`git_operations`** | Git workflow automation | GitPython | logging_monitoring | All modules |
 | **`documentation`** | Documentation generation | Docusaurus | All modules | All modules |
@@ -129,7 +129,7 @@ graph TD
 - **Cross-Module Usage**:
   ```python
   # Used by pattern_matching for code understanding
-  from codomyrmex.ai_code_editing.ai_code_helpers import generate_code
+  from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code
 
   # Used by documentation for example generation
   result = generate_code("Create a hello world function", "python")
@@ -161,16 +161,22 @@ graph TD
   issues = run_pyrefly_analysis(target_paths=["src/"], project_root=".")
   ```
 
-#### **`code_execution_sandbox` Integration Points**
+#### **`code` Integration Points**
 - **Consumes**: `logging_monitoring`
-- **Provides**: Secure code execution environment
+- **Provides**: Code execution, sandboxing, review, and monitoring
+- **Submodules**: `execution`, `sandbox`, `review`, `monitoring`
 - **Cross-Module Usage**:
   ```python
   # Used by ai_code_editing for code validation
-  from codomyrmex.code_execution_sandbox.code_executor import execute_code
+  from codomyrmex.code import execute_code
 
   # Test generated code before applying
-  result = execute_code("print('test')", language="python")
+  result = execute_code(language="python", code="print('test')")
+  
+  # Code review integration
+  from codomyrmex.code.review import CodeReviewer, analyze_file
+  reviewer = CodeReviewer()
+  results = analyze_file("path/to/file.py")
   ```
 
 ### **🏗️ Build & Deployment Modules**
@@ -299,7 +305,7 @@ graph LR
 
         subgraph "Analysis & Quality Layer"
             STATIC["static_analysis"]
-            EXEC["code_execution_sandbox"]
+            EXEC["code"]
         end
 
         subgraph "Build & Deploy Layer"
@@ -343,7 +349,7 @@ graph LR
 
 **Key Modules Dependency Matrix** (showing core module dependencies):
 
-| Consumer Module | environment_setup | logging_monitoring | model_context_protocol | ai_code_editing | data_visualization | static_analysis | pattern_matching | code_execution_sandbox | build_synthesis | git_operations | documentation |
+| Consumer Module | environment_setup | logging_monitoring | model_context_protocol | ai_code_editing | data_visualization | static_analysis | pattern_matching | code | build_synthesis | git_operations | documentation |
 |-----------------|-------------------|-------------------|-------------------------|----------------|-------------------|-----------------|------------------|------------------------|-----------------|---------------|---------------|
 | **environment_setup** | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **logging_monitoring** | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -357,10 +363,10 @@ graph LR
 | **data_visualization** | ❌ | ✅ | ❌ | ❌ | ✅ Self | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ |
 | **static_analysis** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ | ❌ | ✅ |
 | **pattern_matching** | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ✅ |
-| **code_execution_sandbox** | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ |
+| **code** | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ |
 | **code_review** | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **security_audit** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **ollama_integration** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **llm/ollama** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **build_synthesis** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self | ✅ | ✅ |
 | **git_operations** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ Self | ✅ |
 | **documentation** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self |
@@ -433,7 +439,7 @@ def visualize_analysis_results(target_paths, project_root):
 from environment_setup.env_checker import ensure_dependencies_installed
 from logging_monitoring import get_logger
 from ai_code_editing.ai_code_helpers import generate_code_snippet
-from code_execution_sandbox.code_executor import execute_code
+from code.code_executor import execute_code
 from data_visualization.plotter import create_line_plot
 
 def complete_development_workflow():
@@ -471,3 +477,10 @@ def complete_development_workflow():
 
 This comprehensive integration guide shows how Codomyrmex modules work together to create powerful, interconnected development workflows.
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

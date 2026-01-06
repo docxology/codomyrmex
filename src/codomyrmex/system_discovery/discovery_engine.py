@@ -663,12 +663,12 @@ class SystemDiscovery:
 
         # Code execution demo
         if (
-            "code_execution_sandbox" in self.modules
-            and self.modules["code_execution_sandbox"].is_importable
+            "code" in self.modules
+            and self.modules["code"].is_importable
         ):
             print("\n🏃 Testing Code Execution...")
             try:
-                from codomyrmex.code_execution_sandbox import execute_code
+                from codomyrmex.code import execute_code
 
                 result = execute_code(
                     language="python", code="print('Hello from Codomyrmex sandbox!')"

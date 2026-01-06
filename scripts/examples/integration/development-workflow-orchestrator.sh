@@ -11,7 +11,7 @@
 #
 # Prerequisites: API keys recommended, Git repository
 # Duration: ~8 minutes
-# Modules: ALL - environment_setup + ai_code_editing + static_analysis + code_execution_sandbox + git_operations + data_visualization + logging_monitoring
+# Modules: ALL - environment_setup + ai_code_editing + static_analysis + code + git_operations + data_visualization + logging_monitoring
 
 set -e  # Exit on any error
 
@@ -98,7 +98,7 @@ required_modules = [
     ('logging_monitoring.logger_config', 'Logging & Monitoring'),
     ('ai_code_editing.ai_code_helpers', 'AI Code Editing'),
     ('static_analysis.pyrefly_runner', 'Static Analysis'),
-    ('code_execution_sandbox.code_executor', 'Code Execution'),
+    ('code.execution.executor', 'Code Execution'),
     ('data_visualization', 'Data Visualization'),
     ('git_operations.git_manager', 'Git Operations')
 ]
@@ -226,7 +226,7 @@ from pathlib import Path
 sys.path.insert(0, 'src')
 
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.ai_code_editing.ai_code_helpers import generate_code_snippet
+from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet
 
 logger = get_logger('ai_development')
 logger.info('🤖 Starting AI-powered development phase')
@@ -607,7 +607,7 @@ from pathlib import Path
 sys.path.insert(0, 'src')
 
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.code_execution_sandbox.code_executor import execute_code
+from codomyrmex.code.execution.executor import execute_code
 
 logger = get_logger('code_execution')
 logger.info('⚡ Starting code execution and testing phase')
@@ -1026,7 +1026,7 @@ with open(f'{output_dir}/WORKFLOW_COMPLETE.md', 'w') as f:
     f.write('- 📝 **logging_monitoring**: Comprehensive workflow logging\\n')
     f.write('- 🤖 **ai_code_editing**: AI-powered code generation and refinement\\n')
     f.write('- 🔍 **static_analysis**: Code quality analysis and validation\\n')
-    f.write('- ⚡ **code_execution_sandbox**: Secure code testing and validation\\n')
+    f.write('- ⚡ **code**: Code execution, sandboxing, review, and monitoring\\n')
     f.write('- 📊 **data_visualization**: Metrics dashboards and development charts\\n')
     f.write('- 🌳 **git_operations**: Version control integration\\n\\n')
     
@@ -1108,7 +1108,7 @@ echo -e "${CYAN}  🔧 environment_setup${NC} - Environment validation and confi
 echo -e "${CYAN}  📝 logging_monitoring${NC} - Structured logging throughout workflow"
 echo -e "${CYAN}  🤖 ai_code_editing${NC} - AI-powered code generation and refinement"
 echo -e "${CYAN}  🔍 static_analysis${NC} - Code quality analysis and validation"
-echo -e "${CYAN}  ⚡ code_execution_sandbox${NC} - Secure code testing and validation"
+echo -e "${CYAN}  ⚡ code${NC} - Code execution, sandboxing, review, and monitoring"
 echo -e "${CYAN}  📊 data_visualization${NC} - Metrics dashboards and charts"
 echo -e "${CYAN}  🌳 git_operations${NC} - Version control integration"
 echo ""

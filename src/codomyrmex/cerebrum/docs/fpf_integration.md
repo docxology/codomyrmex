@@ -175,3 +175,11 @@ The integration demonstrates how CEREBRUM can be applied to structured knowledge
 - [FPF Module](../../fpf/README.md)
 - [Usage Examples](../USAGE_EXAMPLES.md)
 
+
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

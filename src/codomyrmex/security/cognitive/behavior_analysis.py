@@ -82,3 +82,4 @@ def detect_anomalous_behavior(
         analyzer = BehaviorAnalyzer()
     return analyzer.detect_anomalies(user_id, current_behavior)
 
+

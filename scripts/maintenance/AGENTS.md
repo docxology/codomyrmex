@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/maintenance
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -456,6 +456,10 @@ graph TD
 
 ### Documentation
 - `README.md` – Maintenance scripts usage and overview
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

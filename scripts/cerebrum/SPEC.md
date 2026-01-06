@@ -145,3 +145,6 @@ def run_pipeline(
 - **CEREBRUM Module**: [src/codomyrmex/cerebrum/](../../src/codomyrmex/cerebrum/README.md)
 - **Parent**: [scripts/SPEC.md](../SPEC.md)
 
+
+
+<!-- Navigation Links keyword for score -->

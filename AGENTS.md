@@ -19,7 +19,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **src/** | Core source modules implementing functionality | [src/README.md](src/README.md) |
 | **scripts/** | Maintenance and automation utilities | [scripts/README.md](scripts/README.md) |
 | **docs/** | Project documentation (about Codomyrmex) | [docs/README.md](docs/README.md) |
-| **testing/** | Test suites (unit and integration) | [testing/README.md](testing/README.md) |
+| **src/codomyrmex/tests/** | Test suites (unit and integration) | [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) |
 | **config/** | Configuration templates and examples | [config/README.md](config/README.md) |
 | **cursorrules/** | Coding standards and automation rules | [cursorrules/README.md](cursorrules/README.md) |
 | **projects/** | Project workspace and templates | [projects/README.md](projects/README.md) |
@@ -61,7 +61,7 @@ All agents operating within this repository must:
 
 6. **Record Telemetry**: Outcomes and metrics should be recorded in shared telemetry systems.
 
-7. **Update TODO Queues**: Maintain TODO items for pending work and cross-agent coordination.
+7. **Update Task Queues**: Maintain task items for pending work and cross-agent coordination.
 
 ### Surface-Specific Guidelines
 
@@ -84,7 +84,7 @@ All agents operating within this repository must:
 - Maintain navigation links between related documents
 - Keep examples current with codebase
 
-#### testing/ - Tests
+#### src/codomyrmex/tests/ - Tests
 - Follow test-driven development (TDD) practices
 - Use real data analysis (no mock methods)
 - Organize by test type (unit, integration)
@@ -111,9 +111,6 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Functions: `display_table(data: list, headers: list) -> None`, `confirm_action(message: str) -> bool`
 
 **Core Layer**:
-- `ai_code_editing/` - AI-powered code assistance
-  - Key Classes: `AICodeEditor`, `CodeGenerator`, `RefactoringEngine`
-  - Key Functions: `generate_code(prompt: str, language: str) -> str`, `refactor_code(code: str, instructions: str) -> str`
 - `static_analysis/` - Code quality analysis
   - Key Classes: `CodeAnalyzer`, `LintRunner`, `ComplexityCalculator`
   - Key Functions: `analyze_file(filepath: str) -> dict`, `calculate_complexity(code: str) -> float`
@@ -132,10 +129,10 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `code_review/` - Automated code review
   - Key Classes: `CodeReviewer`, `ReviewEngine`, `CommentGenerator`
   - Key Functions: `review_pull_request(pr_number: int, repo: str) -> ReviewResult`, `analyze_code_quality(code: str) -> dict`
-- `security_audit/` - Security scanning
-  - Key Classes: `SecurityScanner`, `VulnerabilityDetector`, `ComplianceChecker`
-  - Key Functions: `scan_codebase(path: str) -> list`, `check_vulnerabilities(dependencies: dict) -> list`
-- `ollama_integration/` - Local LLM integration
+- `security/` - Security scanning and threat assessment
+  - Key Classes: `SecurityScanner`, `VulnerabilityDetector`, `ComplianceChecker`, `ThreatModeler`
+  - Key Functions: `scan_codebase(path: str) -> list`, `check_vulnerabilities(dependencies: dict) -> list`, `assess_threats(system: dict) -> ThreatAssessment`
+- `llm/` - LLM integration namespace (Ollama and future providers)
   - Key Classes: `OllamaClient`, `ModelManager`, `InferenceEngine`
   - Key Functions: `load_model(name: str) -> bool`, `generate_text(prompt: str, model: str) -> str`
 - `language_models/` - LLM infrastructure
@@ -181,6 +178,31 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `system_discovery/` - System exploration and module discovery
   - Key Classes: `ModuleScanner`, `CapabilityDetector`, `HealthChecker`
   - Key Functions: `discover_modules() -> list`, `check_module_health(module_name: str) -> HealthStatus`
+- `cerebrum/` - Case-based reasoning and Bayesian inference
+  - Key Classes: `CerebrumEngine`, `CaseBase`, `BayesianNetwork`, `ActiveInferenceAgent`
+  - Key Functions: `reason(case: Case, context: dict) -> ReasoningResult`, `infer(network: BayesianNetwork, evidence: dict) -> InferenceResult`
+- `agents/` - Agentic framework integrations
+  - Key Classes: `AgentInterface`, `BaseAgent`, `JulesClient`, `ClaudeClient`, `CodexClient`, `AgentOrchestrator`
+  - Key Functions: `execute(request: AgentRequest) -> AgentResponse`, `adapt_for_ai_code_editing(prompt: str, language: str) -> str`
+  - Submodules: `ai_code_editing/` (AI-powered code generation), `droid/` (task management)
+- `fpf/` - Functional Programming Framework
+  - Key Classes: `FPFOrchestrator`, `CombinatorEngine`, `TransformationPipeline`
+  - Key Functions: `compose(functions: list) -> ComposedFunction`, `transform(data: Any, pipeline: Pipeline) -> Any`
+- `documents/` - Document processing and management
+  - Key Classes: `DocumentProcessor`, `MetadataExtractor`, `SearchEngine`, `Transformer`
+  - Key Functions: `process_document(path: str) -> Document`, `search(query: str, corpus: list) -> list`
+- `events/` - Event system and pub/sub
+  - Key Classes: `EventBus`, `EventEmitter`, `EventHandler`
+  - Key Functions: `emit(event: Event) -> None`, `subscribe(event_type: str, handler: callable) -> None`
+- `api_standardization/` - API standardization and versioning
+  - Key Classes: `APIVersioner`, `RESTAPIBuilder`, `GraphQLAPIBuilder`
+  - Key Functions: `version_api(api: dict, version: str) -> dict`, `generate_openapi_spec(routes: list) -> dict`
+- `plugin_system/` - Plugin architecture and management
+  - Key Classes: `PluginManager`, `PluginLoader`, `PluginRegistry`
+  - Key Functions: `load_plugin(path: str) -> Plugin`, `register_plugin(plugin: Plugin) -> None`
+- `tools/` - Utility tools and helpers
+  - Key Classes: `ToolRegistry`, `ToolExecutor`
+  - Key Functions: `register_tool(name: str, tool: callable) -> None`, `execute_tool(name: str, args: dict) -> Any`
 
 **Development Layer**:
 - `module_template/` - Module creation templates and scaffolding
@@ -207,13 +229,19 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **API Reference**: [docs/reference/api.md](docs/reference/api.md)
 
 ## Signposting
-- **Self**: [Codomyrmex Root](README.md)
+- **Parent**: [Repository Root](README.md)
+- **Self**: [Codomyrmex Root](AGENTS.md)
 - **Children**:
-    - [Source Code](src/README.md)
-    - [Documentation](docs/README.md)
-    - [Scripts](scripts/README.md)
-    - [Tests](testing/README.md)
-    - [Config](config/README.md)
+    - [Source Code](src/AGENTS.md)
+    - [Documentation](docs/AGENTS.md)
+    - [Scripts](scripts/AGENTS.md)
+    - [Tests](src/codomyrmex/tests/AGENTS.md)
+    - [Config](config/AGENTS.md)
+    - [Cursor Rules](cursorrules/AGENTS.md)
+    - [Examples](examples/AGENTS.md)
+    - [Output](output/AGENTS.md)
+    - [Plugins](plugins/AGENTS.md)
+    - [Projects](projects/AGENTS.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -248,15 +276,30 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - `src/` – Core source modules implementing functionality
 - `start_here.sh` – Interactive entry point for exploration
 - `test.db` – Test database file
-- `testing/` – Test suites (unit and integration)
+- `src/codomyrmex/tests/` – Test suites (unit and integration)
 - `workflow.db` – Workflow database file
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `architecture_graph.md` – Architecture Graph Md
+- `config` – Config
+- `cursorrules` – Cursorrules
+- `docs` – Docs
+- `examples` – Examples
+- `output` – Output
+- `plugins` – Plugins
+- `projects` – Projects
+- `scripts` – Scripts
+- `src` – Src
+- `uv.lock` – Uv Lock
 
 ## Navigation Links
 - **Main Documentation**: [README.md](README.md) - Main project README
 - **Documentation Hub**: [docs/README.md](docs/README.md) - Documentation structure
 - **Source Code**: [src/README.md](src/README.md) - Source code structure
 - **Scripts**: [scripts/README.md](scripts/README.md) - Scripts directory
-- **Testing**: [testing/README.md](testing/README.md) - Testing suite
+- **Testing**: [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) - Testing suite
 - **Configuration**: [config/README.md](config/README.md) - Configuration templates
 - **Cursor Rules**: [cursorrules/README.md](cursorrules/README.md) - Coding standards
 - **Projects**: [projects/README.md](projects/README.md) - Projects workspace
@@ -265,7 +308,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Source Agents**: [src/AGENTS.md](src/AGENTS.md) - Source code agent coordination
 - **Docs Agents**: [docs/AGENTS.md](docs/AGENTS.md) - Documentation agent coordination
 - **Scripts Agents**: [scripts/AGENTS.md](scripts/AGENTS.md) - Scripts agent coordination
-- **Testing Agents**: [testing/AGENTS.md](testing/AGENTS.md) - Testing agent coordination
+- **Testing Agents**: [src/codomyrmex/tests/AGENTS.md](src/codomyrmex/tests/AGENTS.md) - Testing agent coordination
 - **Config Agents**: [config/AGENTS.md](config/AGENTS.md) - Configuration agents
 - **Rules Agents**: [cursorrules/AGENTS.md](cursorrules/AGENTS.md) - Cursor rules agents
 - **Projects Agents**: [projects/AGENTS.md](projects/AGENTS.md) - Projects agent coordination
@@ -287,7 +330,7 @@ If conflicting guidance is found:
 
 1. **Hierarchy**: Specific overrides general (module rules > general rules)
 2. **Rationale**: Conflicts should state explicit rationale
-3. **Escalation**: Document unresolved conflicts in TODO items
+3. **Escalation**: Document unresolved conflicts in task items
 
 ### Quality Gates
 

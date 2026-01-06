@@ -132,3 +132,4 @@ class TestInferenceEngine:
         with pytest.raises(InferenceError):
             inference.compute_marginal("B")  # B doesn't exist
 
+

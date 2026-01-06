@@ -130,3 +130,9 @@ Expected output (example):
 - **Output Handling**: Reports from tools might contain snippets of source code. Ensure these are handled appropriately if displayed or stored, respecting data privacy if the code is sensitive.
 
 ---
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

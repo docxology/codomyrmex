@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Documentation - [Brief Description]".
+Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Documentation - Security Issue".
 
 Please include the following information in your report:
 
@@ -45,3 +45,9 @@ This security policy applies only to the `Documentation` module within the Codom
 - Regularly review configurations and logs for suspicious activity, especially if the documentation site is publicly hosted.
 
 Thank you for helping keep Codomyrmex and the Documentation module secure. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

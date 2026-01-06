@@ -43042,3 +43042,9 @@ Legacy artifacts MAY keep their historical phrasing in body prose. All **guards,
 * **Deprecated labels.** “applicability / envelope / generality / capability envelope / validity” as characteristic names.
 * **Edits required.** C.2.2 (G = Claim scope), A.2.2 (Work scope for capabilities), Part B (CL→R note), Part E (Lexicon updates), ESG/Method–Work guard templates (ScopeCoverage + `Γ_time`).
 * **No change.** C.2.3 (F) unchanged; its examples updated only for wording consistency.
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

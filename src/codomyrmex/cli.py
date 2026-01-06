@@ -174,7 +174,7 @@ Available modules:
 🔨 build_synthesis      - Build automation and code generation
 📚 documentation        - Rich documentation with Docusaurus
 🔍 static_analysis      - Code quality and security analysis
-🏃 code_execution_sandbox - Safe code execution
+🏃 code - Code execution, sandboxing, review, and monitoring
 📊 data_visualization   - Charts and data plotting
 📦 git_operations       - Git workflow automation
 📋 logging_monitoring   - Structured logging
@@ -216,7 +216,7 @@ def show_modules():
             "git_operations": "Advanced git workflows, GitHub integration, and repository management",
         },
         "Execution & Building": {
-            "code_execution_sandbox": "Secure Docker-based code execution with resource limits",
+            "code": "Code execution, sandboxing, review, and monitoring",
             "build_synthesis": "Build automation and code synthesis pipelines",
             "documentation": "Automated documentation generation with Docusaurus",
         },
@@ -347,7 +347,7 @@ def show_system_status():
     modules = [
         "ai_code_editing",
         "data_visualization",
-        "code_execution_sandbox",
+        "code",
         "git_operations",
         "build_synthesis",
         "static_analysis",
@@ -767,7 +767,7 @@ Examples:
 def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
     """Handle AI code generation command."""
     try:
-        from codomyrmex.ai_code_editing import generate_code_snippet
+        from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
         result = generate_code_snippet(
             prompt=prompt, language=language, provider=provider
@@ -794,7 +794,7 @@ def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
 def handle_ai_refactor(file_path: str, instruction: str) -> bool:
     """Handle AI code refactoring command."""
     try:
-        from codomyrmex.ai_code_editing import refactor_code_snippet
+        from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
         # Read the file
         with open(file_path) as f:
@@ -946,7 +946,7 @@ def handle_module_demo(module_name: str) -> bool:
     demos = {
         "data_visualization": demo_data_visualization,
         "ai_code_editing": demo_ai_code_editing,
-        "code_execution_sandbox": demo_code_execution,
+        "code": demo_code_execution,
         "git_operations": demo_git_operations,
     }
 
@@ -990,7 +990,7 @@ def demo_data_visualization() -> bool:
 def demo_ai_code_editing() -> bool:
     """Demo AI code editing capabilities."""
     try:
-        from codomyrmex.ai_code_editing import generate_code_snippet
+        from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
         result = generate_code_snippet(
             prompt="Create a simple function to calculate factorial", language="python"
@@ -1018,7 +1018,7 @@ def demo_ai_code_editing() -> bool:
 def demo_code_execution() -> bool:
     """Demo code execution sandbox."""
     try:
-        from codomyrmex.code_execution_sandbox import execute_code
+        from codomyrmex.code import execute_code
 
         code = """
 def fibonacci(n):
@@ -1032,15 +1032,15 @@ for i in range(8):
 
         result = execute_code(language="python", code=code)
 
-        if result.get("success"):
+        if result.get("status") == "success":
             print("✅ Code Execution Demo:")
             print("Executed Fibonacci sequence:")
             print("-" * 40)
-            print(result.get("output", "No output"))
+            print(result.get("stdout", "No output"))
             print("-" * 40)
             return True
         else:
-            print(f"❌ Demo failed: {result.get('error', 'Unknown error')}")
+            print(f"❌ Demo failed: {result.get('error_message', result.get('stderr', 'Unknown error'))}")
             return False
 
     except ImportError:
@@ -1114,7 +1114,7 @@ def handle_workflow_create(name: str, template: Optional[str] = None) -> bool:
                 ),
                 WorkflowStep(
                     name="run_tests",
-                    module="code_execution_sandbox",
+                    module="code",
                     action="run_tests",
                     parameters={"test_path": "tests/"},
                 ),

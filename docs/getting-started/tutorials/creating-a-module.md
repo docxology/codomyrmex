@@ -361,7 +361,7 @@ create_bar_chart(
 ### With AI Code Editing
 ```python
 from codomyrmex.text_analysis import analyze_text
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 # Analyze text and generate improvements
 text = "This text needs improvement."
@@ -1245,3 +1245,10 @@ You've successfully created a complete Codomyrmex module! Your `text_analysis` m
 ---
 
 This tutorial showed you the complete process of creating a professional-grade Codomyrmex module. The patterns and practices you've learned can be applied to create any type of module for the Codomyrmex ecosystem!
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

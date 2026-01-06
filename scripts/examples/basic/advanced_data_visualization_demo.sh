@@ -169,7 +169,7 @@ except ImportError as e:
 
 # AI integration
 try:
-    from codomyrmex.ai_code_editing import generate_code_snippet
+    from codomyrmex.agents.ai_code_editing import generate_code_snippet
     modules_status['ai_integration'] = 'available'
     print("✅ AI integration: Available")
 except ImportError as e:

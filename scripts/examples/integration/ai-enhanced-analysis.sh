@@ -104,7 +104,7 @@ check_environment() {
 import sys
 sys.path.insert(0, '$PROJECT_ROOT/src')
 try:
-    from codomyrmex.ai_code_editing import generate_code_snippet
+    from codomyrmex.agents.ai_code_editing import generate_code_snippet
     from codomyrmex.static_analysis import run_pyrefly_analysis
     from codomyrmex.data_visualization import create_bar_chart
     print('All required modules available')
@@ -200,7 +200,7 @@ SIMULATION_MODE = os.getenv('SIMULATION_MODE', 'false').lower() == 'true'
 
 if not SIMULATION_MODE:
     try:
-        from codomyrmex.ai_code_editing import generate_code_snippet
+        from codomyrmex.agents.ai_code_editing import generate_code_snippet
     except ImportError:
         print("AI modules not available, using simulation mode")
         SIMULATION_MODE = True
@@ -934,7 +934,7 @@ SIMULATION_MODE = os.getenv('SIMULATION_MODE', 'false').lower() == 'true'
 
 if not SIMULATION_MODE:
     try:
-        from codomyrmex.ai_code_editing import generate_code_snippet
+        from codomyrmex.agents.ai_code_editing import generate_code_snippet
     except ImportError:
         SIMULATION_MODE = True
 

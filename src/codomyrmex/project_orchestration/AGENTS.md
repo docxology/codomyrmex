@@ -195,6 +195,15 @@ class ProjectStatus(Enum):
 - `requirements.txt` – Module dependencies
 - `tests/` – Comprehensive test suite
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `parallel_executor.py` – Parallel Executor Py
+- `templates` – Templates
+- `tests` – Tests
+- `workflow_dag.py` – Workflow Dag Py
+
 ## Operating Contracts
 
 ### Universal Orchestration Protocols

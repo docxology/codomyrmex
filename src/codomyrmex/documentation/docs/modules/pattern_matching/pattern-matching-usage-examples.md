@@ -88,3 +88,9 @@ open dependency_graph.png      # on macOS
 
 - **Issue**: Code summarization fails or produces poor results.
   - **Solution**: Check your OpenAI API key and ensure your code files aren't too large (>25K characters). 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

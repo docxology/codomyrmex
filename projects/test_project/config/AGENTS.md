@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects/test_project/config
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -114,6 +114,10 @@ Project Configuration
 - Validation schemas and test cases
 - Documentation and usage examples
 - Migration scripts and procedures
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Configuration Implementation
 

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/examples/configs
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -185,6 +185,11 @@ Configuration Schema
 - Performance benchmarks and metrics
 - Usage documentation and tutorials
 - Troubleshooting guides and FAQs
+
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
 
 ## Configuration Standards
 

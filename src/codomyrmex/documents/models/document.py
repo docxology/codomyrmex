@@ -1,5 +1,7 @@
 """Document model definitions."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -81,4 +83,5 @@ class Document:
             return self.content.decode(encoding)
         else:
             return str(self.content)
+
 

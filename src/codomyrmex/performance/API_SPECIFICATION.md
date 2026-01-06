@@ -6,7 +6,7 @@ This document provides the complete API specification for the `performance` modu
 
 ## Module Overview
 
-The `performance` module provides [brief description of module purpose].
+The `performance` module provides utilities for optimizing application execution, including lazy loading, intelligent caching, and comprehensive performance monitoring.
 
 ## Public API
 
@@ -14,7 +14,7 @@ The `performance` module provides [brief description of module purpose].
 
 #### `function_name()`
 
-**Description**: [Function description]
+**Description**: Executes a specific operation with performance tracking.
 
 **Parameters**:
 - `param1` (type): Description
@@ -33,7 +33,7 @@ result = function_name(param1="value")
 
 ### `ClassName`
 
-**Description**: [Class description]
+**Description**: Base class for performance-optimized components.
 
 **Methods**:
 - `method1()`: Description
@@ -216,3 +216,10 @@ print(report)
 
 monitor.stop_monitoring()
 ```
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

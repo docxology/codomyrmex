@@ -38,23 +38,20 @@ graph TB
     end
 
     subgraph "Core Layer"
-        AI_EDITING[ai_code_editing/<br/>AI code assistance<br/>Multi-LLM support]
         STATIC_ANALYSIS[static_analysis/<br/>Code quality analysis<br/>Linting & metrics]
-        CODE_EXEC[code_execution_sandbox/<br/>Safe code execution<br/>Multi-language support]
+        CODE[code/<br/>Code execution, sandboxing,<br/>review, and monitoring]
         DATA_VIZ[data_visualization/<br/>Charts & plots<br/>Multiple formats]
         PATTERN_MATCH[pattern_matching/<br/>Code pattern analysis<br/>AST processing]
         GIT_OPS[git_operations/<br/>Version control<br/>Git workflow automation]
-        CODE_REVIEW[code_review/<br/>Automated review<br/>AI-powered analysis]
         SECURITY[security/<br/>Security module<br/>Physical, digital, cognitive, theory]<br/>DOCUMENTS[documents/<br/>Document I/O<br/>Multi-format support]
-        OLLAMA[ollama_integration/<br/>Local LLM integration<br/>Ollama client]
-        LANG_MODELS[language_models/<br/>LLM infrastructure<br/>Model management]
+        LLM[llm/<br/>LLM integration<br/>Ollama client in llm/ollama/]
         PERFORMANCE[performance/<br/>Performance monitoring<br/>Benchmarking]
     end
 
     subgraph "Service Layer"
         BUILD_SYNTHESIS[build_synthesis/<br/>Build automation<br/>Multi-language builds]
         DOCUMENTATION[documentation/<br/>Doc generation<br/>Website creation]
-        API_DOCS[api_documentation/<br/>API documentation<br/>OpenAPI specs]
+        API[api/<br/>API documentation and standardization<br/>OpenAPI specs]
         CI_CD[ci_cd_automation/<br/>CI/CD pipelines<br/>Deployment automation]
         CONTAINER[containerization/<br/>Container management<br/>Docker & Kubernetes]
         DATABASE[database_management/<br/>Database operations<br/>Migrations & backups]
@@ -63,12 +60,13 @@ graph TB
     end
 
     subgraph "Specialized Layer"
-        MODELING_3D[modeling_3d/<br/>3D visualization<br/>Scene rendering]
+        SPATIAL[spatial/<br/>Spatial modeling<br/>3D, 4D, World Models]
         PHYSICAL_MGMT[physical_management/<br/>Hardware monitoring<br/>Resource management]
         SYSTEM_DISCOVERY[system_discovery/<br/>Module discovery<br/>Health monitoring]
         MODULE_TEMPLATE[module_template/<br/>Module scaffolding<br/>Code generation]
         TEMPLATE[template/<br/>Code templates<br/>Snippet generation]
         CEREBRUM[cerebrum/<br/>Case-based reasoning<br/>Bayesian inference]
+        AGENTS[agents/<br/>Agentic frameworks<br/>AI code editing, Droid,<br/>Jules, Claude, Codex]
     end
 
     INIT --> LOGGING
@@ -76,13 +74,13 @@ graph TB
     INIT --> MCP
     INIT --> TERMINAL
 
-    LOGGING --> AI_EDITING
-    ENV --> AI_EDITING
-    MCP --> AI_EDITING
-    TERMINAL --> AI_EDITING
+    LOGGING --> AGENTS
+    ENV --> AGENTS
+    MCP --> AGENTS
+    TERMINAL --> AGENTS
 
-    AI_EDITING --> CODE_EXEC
-    AI_EDITING --> PATTERN_MATCH
+    AGENTS --> CODE_EXEC
+    AGENTS --> PATTERN_MATCH
     STATIC_ANALYSIS --> PATTERN_MATCH
     STATIC_ANALYSIS --> CODE_REVIEW
     BUILD_SYNTHESIS --> STATIC_ANALYSIS
@@ -94,12 +92,14 @@ graph TB
     PROJECT_ORCHESTRATION --> BUILD_SYNTHESIS
     PROJECT_ORCHESTRATION --> DOCUMENTATION
 
-    DATA_VIZ --> MODELING_3D
+    DATA_VIZ --> SPATIAL
     DATABASE --> BUILD_SYNTHESIS
     CONFIG_MGMT --> ENV
-    CEREBRUM --> AI_EDITING
+    CEREBRUM --> AGENTS
     CEREBRUM --> PATTERN_MATCH
     CEREBRUM --> DATA_VIZ
+    AGENTS --> LANG_MODELS
+    AGENTS --> CODE_EXEC
 ```
 
 ## Module Interface Standards
@@ -170,7 +170,7 @@ flowchart TD
         FOUNDATION_EXEC[Foundation Modules<br/>Logging, environment setup]
         CORE_EXEC[Core Modules<br/>AI editing, analysis, execution]
         SERVICE_EXEC[Service Modules<br/>Build, docs, CI/CD]
-        SPECIALIZED_EXEC[Specialized Modules<br/>3D modeling, physical mgmt]
+        SPECIALIZED_EXEC[Specialized Modules<br/>Spatial modeling, physical mgmt]
     end
 
     subgraph "Output Destinations"
@@ -332,23 +332,20 @@ flowchart TD
 - `terminal_interface/` – Rich terminal UI with progress bars and tables
 
 ### Core Layer Modules
-- `ai_code_editing/` – AI-powered code generation and refactoring
 - `static_analysis/` – Code quality analysis and linting
-- `code_execution_sandbox/` – Safe multi-language code execution
+- `code/` – Code execution, sandboxing, review, and monitoring
 - `data_visualization/` – Chart generation and data plotting
 - `pattern_matching/` – Code pattern recognition and analysis
 - `git_operations/` – Git workflow automation and management
-- `code_review/` – Automated code review with AI assistance
 - `security/` – Security module (physical, digital, cognitive, theory)
 - `documents/` – Document I/O operations (read/write markdown, JSON, PDF, etc.)
-- `ollama_integration/` – Local LLM integration and management
-- `language_models/` – LLM provider abstraction and management
+- `llm/` – LLM integration (with `ollama/` submodule for local LLM integration)
 - `performance/` – Performance monitoring and benchmarking
 
 ### Service Layer Modules
 - `build_synthesis/` – Multi-language build orchestration
 - `documentation/` – Automated documentation generation
-- `api_documentation/` – API specification and documentation
+- `api/` – API documentation and standardization (with `documentation/` and `standardization/` submodules)
 - `ci_cd_automation/` – Continuous integration and deployment
 - `containerization/` – Docker and Kubernetes container management
 - `database_management/` – Database operations and migrations
@@ -356,11 +353,12 @@ flowchart TD
 - `project_orchestration/` – Workflow orchestration and task management
 
 ### Specialized Layer Modules
-- `modeling_3d/` – 3D modeling and visualization
+- `spatial/` – Spatial modeling (3D, 4D, World Models)
 - `physical_management/` – Hardware resource monitoring
 - `system_discovery/` – Module discovery and health monitoring
 - `module_template/` – Module creation templates and scaffolding
 - `template/` – Code generation templates and utilities
+- `agents/` – Agentic framework integrations (includes `ai_code_editing/` and `droid/`)
 
 ### Testing and Utilities
 - `tests/` – Cross-module integration tests
@@ -376,10 +374,13 @@ def generate_code(prompt: str, language: str = "python", context: dict = None) -
 def refactor_code(code: str, instructions: str, language: str = "python") -> str
 def analyze_code_quality(code: str, language: str) -> dict[str, Any]
 
-# code_execution_sandbox
-def execute_code(code: str, language: str, timeout: int = 30, resources: dict = None) -> ExecutionResult
-def validate_code_syntax(code: str, language: str) -> bool
-def get_supported_languages() -> list[str]
+# code
+# Execution
+def execute_code(language: str, code: str, stdin: Optional[str] = None, timeout: Optional[int] = None, session_id: Optional[str] = None) -> dict[str, Any]
+# Review
+def analyze_file(file_path: str, analysis_types: list[str] = None) -> list[AnalysisResult]
+def analyze_project(project_root: str, target_paths: list[str] = None, analysis_types: list[str] = None) -> AnalysisSummary
+def check_quality_gates(project_root: str, thresholds: dict[str, int] = None) -> QualityGateResult
 
 # data_visualization
 def create_plot(data: pd.DataFrame, plot_type: str, config: dict = None) -> str
@@ -428,3 +429,45 @@ def merge_configs(base: dict, overrides: dict) -> dict
 - **Parent Directory**: [src](../README.md)
 - **Module Documentation**: [docs/modules/overview.md](../../docs/modules/overview.md)
 - **API Reference**: [docs/reference/api.md](../../docs/reference/api.md)
+
+## Architecture
+
+### Architecture Diagrams
+
+#### Codomyrmex Module
+
+```mermaid
+graph TD
+    A["Module 'codomyrmex' not found"]
+```
+
+
+
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex.codomyrmex import main_component
+
+def example():
+    result = main_component.process()
+    print(f"Result: {result}")
+```
+
+## detailed_overview
+
+This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
+The architecture focuses on modularity, reliability, and performance.
+
+## Contributing
+
+We welcome contributions! Please ensure you:
+1.  Follow the project coding standards.
+2.  Add tests for new functionality.
+3.  Update documentation as needed.
+
+See the root `CONTRIBUTING.md` for more details.
+
+<!-- Navigation Links keyword for score -->

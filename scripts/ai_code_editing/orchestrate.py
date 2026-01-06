@@ -3,7 +3,7 @@
 AI Code Editing Orchestrator
 
 Thin orchestrator script providing CLI access to ai_code_editing module functionality.
-Calls actual module functions from codomyrmex.ai_code_editing.
+Calls actual module functions from codomyrmex.agents.ai_code_editing.
 
 See also: src/codomyrmex/cli.py for main CLI integration
 """
@@ -51,7 +51,7 @@ except ImportError:
     )
 
 # Import module functions
-from codomyrmex.ai_code_editing import (
+from codomyrmex.agents.ai_code_editing import (
     analyze_code_quality,
     generate_code_snippet,
     get_available_models,

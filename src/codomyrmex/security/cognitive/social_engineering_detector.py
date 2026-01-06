@@ -82,3 +82,4 @@ def analyze_communication(
         detector = SocialEngineeringDetector()
     return detector.analyze_communication(communication)
 
+

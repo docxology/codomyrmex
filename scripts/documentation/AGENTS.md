@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/documentation
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -99,6 +99,18 @@ Documentation files and guides for documentation.
 
 ### Configuration Files
 - `module_audit_data.json` – Module audit data
+
+
+### Additional Files
+- `__pycache__` –   Pycache  
+- `audit_structure.py` – Audit Structure Py
+- `check_documentation_completeness.py` – Check Documentation Completeness Py
+- `comprehensive_filepath_audit.py` – Comprehensive Filepath Audit Py
+- `fix_agents_structure.py` – Fix Agents Structure Py
+- `fix_links.py` – Fix Links Py
+- `fix_markdown_newlines.py` – Fix Markdown Newlines Py
+- `fix_src_doubling.py` – Fix Src Doubling Py
+- `generate_architecture_diagrams.py` – Generate Architecture Diagrams Py
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

@@ -632,13 +632,50 @@ class ComplianceChecker:
     # Additional standard-specific check functions would be implemented here
     # For brevity, using placeholder implementations
 
-    def _check_flaw_remediation(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-        return ("manual_review_required", "Flaw remediation requires vulnerability scanning integration",
-               ["Manual review required"], None)
+    def _check_vulnerable_components(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
+        """Check for potentially vulnerable components by scanning for dependency files."""
+        findings = []
+        dep_files = ["requirements.txt", "package.json", "Gemfile", "pom.xml", "go.mod"]
+        found_files = []
+        
+        for root, _, files in os.walk(target_path):
+            for f in files:
+                if f in dep_files:
+                    found_files.append(os.path.join(root, f))
+                    
+        if not found_files:
+            return ("compliant", "No standard dependency files found (potential isolation)", [], None)
+            
+        findings.append(f"Dependency files found: {', '.join([os.path.basename(f) for f in found_files])}")
+        findings.append("Automated vulnerability scanning against these files is recommended (e.g., using 'safety' or 'npm audit')")
+        
+        return ("manual_review_required", "Dependency files detected; manual verification of versions required", findings, 
+                "Integrate with automated dependency scanning tools")
 
     def _check_transmission_confidentiality(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-        return ("manual_review_required", "Transmission confidentiality requires network analysis",
-               ["Manual review required"], None)
+        """Scan for hardcoded unencrypted endpoints (http://)."""
+        findings = []
+        http_pattern = re.compile(r'http://[a-zA-Z0-9.-]+')
+        
+        for root, _, files in os.walk(target_path):
+            for filename in files:
+                if filename.endswith(('.py', '.js', '.ts', '.html', '.json', '.yaml', '.yml')):
+                    filepath = os.path.join(root, filename)
+                    try:
+                        with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                            content = f.read()
+                            matches = http_pattern.findall(content)
+                            for match in matches:
+                                if not any(local in match for local in ["localhost", "127.0.0.1", "0.0.0.0"]):
+                                    findings.append(f"Unencrypted endpoint found in {filename}: {match}")
+                    except Exception as e:
+                        logger.warning(f"Could not check {filepath}: {e}")
+                        
+        if findings:
+            return ("non_compliant", "Potential unencrypted transmissions detected", findings,
+                   "Use HTTPS for all external communications")
+        else:
+            return ("compliant", "No unencrypted external endpoints detected", [], None)
 
     def _check_operations_security(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
         return ("manual_review_required", "Operations security requires comprehensive security audit",

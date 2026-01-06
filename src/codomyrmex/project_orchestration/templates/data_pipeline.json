@@ -20,7 +20,7 @@
   ],
   "required_modules": [
     "data_visualization",
-    "code_execution_sandbox"
+    "code"
   ],
   "optional_modules": [
     "ai_code_editing",

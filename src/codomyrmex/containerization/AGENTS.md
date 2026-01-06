@@ -246,6 +246,13 @@ Container registry management interface.
 - `USAGE_EXAMPLES.md` – Practical usage demonstrations
 - `SECURITY.md` – Security considerations for containerization
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `build_generator.py` – Build Generator Py
+- `image_optimizer.py` – Image Optimizer Py
+
 ## Operating Contracts
 
 ### Universal Containerization Protocols

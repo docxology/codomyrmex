@@ -1,5 +1,7 @@
 """Document parsing operations."""
 
+from __future__ import annotations
+
 from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -83,4 +85,5 @@ def parse_document(
     """
     parser = DocumentParser()
     return parser.parse(content, format, file_path)
+
 

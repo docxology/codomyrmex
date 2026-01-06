@@ -299,3 +299,4 @@ class FPFExtractor:
                     references.append(pattern.id)
         return references
 
+

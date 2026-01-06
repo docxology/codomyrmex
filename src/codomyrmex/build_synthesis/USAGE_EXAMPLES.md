@@ -359,3 +359,9 @@ build_manager.enable_caching(cache_dir=".build_cache", max_age_days=7)
 # Only rebuild what changed
 build_manager.enable_incremental_builds(changed_files=get_git_changes())
 ``` 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

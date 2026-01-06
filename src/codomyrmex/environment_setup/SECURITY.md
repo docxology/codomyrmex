@@ -54,7 +54,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email **blanket@activeinference.institute** with the subject line: "**SECURITY Vulnerability Report: Environment Setup - [Brief Description]**".
+Instead, please email **blanket@activeinference.institute** with the subject line: "**SECURITY Vulnerability Report: Environment Setup - Security Issue**".
 
 Please include the following information in your report:
 
@@ -85,3 +85,9 @@ This security policy applies only to the `Environment Setup` module itself and t
 -   **Update Regularly**: Keep your local development tools (Python, pip, Node, Git, OS) updated.
 
 Thank you for helping keep Codomyrmex and the Environment Setup module secure. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

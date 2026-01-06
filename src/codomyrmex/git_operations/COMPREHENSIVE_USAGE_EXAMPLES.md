@@ -1059,3 +1059,10 @@ def safe_git_workflow(repo_path):
 ```
 
 This comprehensive usage guide demonstrates all 22 Git operations in practical, real-world scenarios with proper error handling and performance considerations.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

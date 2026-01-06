@@ -66,3 +66,9 @@ This module centralizes tools and processes for static analysis of code within t
 - [Detailed Documentation](./docs/index.md) (linking to specific docs within this module)
 - [Changelog](./changelog.md)
 - [Security Policy](./security.md) 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

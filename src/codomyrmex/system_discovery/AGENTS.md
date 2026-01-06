@@ -399,6 +399,11 @@ Health status levels for modules and systems.
 - `MCP_TOOL_SPECIFICATION.md` – AI agent tool specifications
 - `SECURITY.md` – Security considerations for system discovery
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal System Discovery Protocols

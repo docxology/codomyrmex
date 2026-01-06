@@ -236,6 +236,17 @@ Generate tests for documentation quality validation.
 - `package-lock.json` – Node.js dependency lock file
 - `tests/` – Documentation validation tests
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `scripts` – Scripts
+- `sidebars.js.backup` – Sidebars Js Backup
+- `src` – Src
+- `static` – Static
+- `tests` – Tests
+
 ## Operating Contracts
 
 ### Universal Documentation Protocols

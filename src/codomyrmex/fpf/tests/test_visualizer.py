@@ -97,3 +97,4 @@ def test_create_pattern_card():
     assert "A.1" in card
     assert "Test Pattern" in card
 
+

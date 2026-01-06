@@ -251,6 +251,12 @@ Result of plugin loading operation with timing and error information.
 - `plugin_registry.py` – Plugin discovery and registration
 - `plugin_validator.py` – Plugin security and compatibility validation
 
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Plugin Protocols

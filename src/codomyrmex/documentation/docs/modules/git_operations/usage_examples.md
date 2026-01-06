@@ -106,3 +106,9 @@ except Exception as e:
 
 - **Issue**: **Author Information Missing**
   - **Solution**: If `commit_changes()` fails due to missing user name/email, ensure they are set in your global Git config or pass `author_name` and `author_email` explicitly to the function.
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

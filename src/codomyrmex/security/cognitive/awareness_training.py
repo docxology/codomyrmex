@@ -108,3 +108,4 @@ def assess_training_effectiveness(
         trainer = AwarenessTrainer()
     return trainer.assess_effectiveness(user_id)
 
+

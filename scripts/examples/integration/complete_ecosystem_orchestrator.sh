@@ -181,7 +181,7 @@ setup_ecosystem_environment() {
         "logging_monitoring",
         "ai_code_editing",
         "static_analysis",
-        "code_execution_sandbox",
+        "code",
         "git_operations",
         "data_visualization",
         "documentation",
@@ -426,15 +426,15 @@ class EcosystemDiscovery:
         ecosystem_map = {
             "core_modules": {
                 "Infrastructure": ["environment_setup", "logging_monitoring", "system_discovery"],
-                "Development": ["ai_code_editing", "code_execution_sandbox", "build_synthesis"],
+                "Development": ["ai_code_editing", "code", "build_synthesis"],
                 "Analysis": ["static_analysis", "pattern_matching"],
                 "Integration": ["git_operations", "model_context_protocol"],
                 "Visualization": ["data_visualization", "documentation"]
             },
             "integration_patterns": {
-                "AI_Workflow": ["ai_code_editing", "code_execution_sandbox", "static_analysis", "data_visualization"],
+                "AI_Workflow": ["ai_code_editing", "code", "static_analysis", "data_visualization"],
                 "Quality_Pipeline": ["static_analysis", "pattern_matching", "data_visualization", "logging_monitoring"],
-                "Development_Cycle": ["git_operations", "ai_code_editing", "code_execution_sandbox", "documentation"]
+                "Development_Cycle": ["git_operations", "ai_code_editing", "code", "documentation"]
             }
         }
         
@@ -561,7 +561,7 @@ class AIDevelopmentSuite:
         print("\n🚀 Intelligent code generation...")
         
         try:
-            from codomyrmex.ai_code_editing import generate_code_snippet
+            from codomyrmex.agents.ai_code_editing import generate_code_snippet
             
             generation_tasks = [
                 {

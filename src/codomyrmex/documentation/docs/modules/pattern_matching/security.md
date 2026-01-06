@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Pattern Matching - [Brief Description]".
+Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Pattern Matching - Security Issue".
 
 Please include the following information in your report:
 
@@ -51,3 +51,9 @@ This security policy applies only to the `Pattern Matching` module within the Co
 - Regularly review configurations and logs for suspicious activity.
 
 Thank you for helping keep Codomyrmex and the Pattern Matching module secure. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

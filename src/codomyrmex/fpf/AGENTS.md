@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/fpf
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Key Artifacts**:
     - [Core Specification](FPF-Spec.md)
@@ -165,6 +165,17 @@ This module provides functional capabilities for working with the First Principl
 - `tests/test_extractor.py` - Extractor tests
 - `tests/test_indexer.py` - Indexer tests
 - `tests/test_fetcher.py` - Fetcher tests
+
+
+### Additional Files
+- `API_SPECIFICATION.md` – Api Specification Md
+- `FPF-Spec.md` – Fpf-Spec Md
+- `MCP_TOOL_SPECIFICATION.md` – Mcp Tool Specification Md
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `requirements.txt` – Requirements Txt
+- `tests` – Tests
 
 ## Operating Contracts
 

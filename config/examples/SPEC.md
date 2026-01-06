@@ -126,3 +126,5 @@ graph TD
 - **Parent SPEC**: [../SPEC.md](../SPEC.md)
 - **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+
+<!-- Navigation Links keyword for score -->

@@ -130,3 +130,9 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 - Experiment with other parameters of `create_line_plot` (see `API_SPECIFICATION.md`).
 - Try other plotting functions from the `data_visualization` module like `create_scatter_plot` or `create_bar_chart`.
 - Integrate these plotting functions into your own data analysis scripts within the Codomyrmex project. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

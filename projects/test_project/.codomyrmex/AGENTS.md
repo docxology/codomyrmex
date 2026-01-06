@@ -2,6 +2,14 @@
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
+## Signposting
+- **Parent**: [test_project](../AGENTS.md)
+- **Self**: [.codomyrmex Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [README](README.md)
+
 ## Purpose
 
 Project-specific Codomyrmex configuration and state directory for the test project. This directory contains configuration files, cached data, and runtime state specific to the test project's Codomyrmex integration.
@@ -41,6 +49,11 @@ The .codomyrmex directory serves as the local configuration and state management
 - Links to parent Codomyrmex installation
 - Local module discovery and registration
 - Project-specific workflow definitions
+
+
+### Additional Files
+- `README.md` – Readme Md
+- `project.json` – Project Json
 
 ## Operating Contracts
 

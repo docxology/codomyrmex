@@ -1,7 +1,7 @@
 # Codomyrmex Agents — cursorrules/cross-module
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Cursor Rules](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -30,7 +30,7 @@ This directory contains cross-module coordination rules that ensure consistency 
 - Common build pipeline patterns
 - Cross-module build coordination protocols
 
-### Code Execution Sandbox Rules (`code_execution_sandbox.cursorrules`)
+### Code Execution Sandbox Rules (`code.cursorrules`)
 **Purpose**: Safe code execution standards across modules
 **Key Functions**:
 - `validate_execution_environment(env_config: dict) -> bool`
@@ -137,7 +137,7 @@ This directory contains cross-module coordination rules that ensure consistency 
 ## Active Components
 - `README.md` – Directory documentation
 - `build_synthesis.cursorrules` – Build orchestration standards (function: coordinate_builds(modules: list) -> BuildPlan)
-- `code_execution_sandbox.cursorrules` – Safe execution guidelines (function: validate_execution_safety(config: dict) -> bool)
+- `code.cursorrules` – Safe execution guidelines (function: validate_execution_safety(config: dict) -> bool)
 - `data_visualization.cursorrules` – Visualization consistency (function: standardize_charts(config: dict) -> ChartStandard)
 - `logging_monitoring.cursorrules` – Logging standards (function: create_structured_logger(name: str) -> Logger)
 - `model_context_protocol.cursorrules` – MCP compliance (function: validate_mcp_interface(interface: dict) -> bool)
@@ -145,6 +145,10 @@ This directory contains cross-module coordination rules that ensure consistency 
 - `pattern_matching.cursorrules` – Pattern matching coordination (function: unify_patterns(patterns: list) -> UnifiedPattern)
 - `static_analysis.cursorrules` – Static analysis coordination (function: aggregate_analysis(results: list) -> AnalysisSummary)
 - `template_module.cursorrules` – Template usage coordination (function: validate_template_usage(template: str, context: dict) -> bool)
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

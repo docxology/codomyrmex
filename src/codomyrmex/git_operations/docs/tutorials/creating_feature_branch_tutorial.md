@@ -53,7 +53,10 @@ Here's how you might use the function in a Python script:
 # Assuming the function is imported, e.g.:
 # from git_operations.git_wrapper import create_feature_branch, pull_changes, get_current_branch
 
-# Placeholder for actual function call
+```bash
+# Example function call
+create_feature_branch("feature/user-login", "main")
+```
 def create_feature_branch(repo_path: str, branch_name: str, base_branch: str = "main", checkout: bool = True):
     print(f"Simulating: Creating branch '{branch_name}' from '{base_branch}' in '{repo_path}'. Checkout: {checkout}")
     # In a real scenario, this would pull base_branch first to ensure it's up-to-date
@@ -133,3 +136,9 @@ Once your feature branch is created:
 - Start developing your feature, making regular commits.
 - Refer to `CONTRIBUTING.md` for guidelines on commit messages and the Pull Request process.
 - Explore other (future) tools from the `git_operations` module for tasks like validating commit messages or automating PR creation. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

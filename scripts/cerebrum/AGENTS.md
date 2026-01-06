@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/cerebrum
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -126,6 +126,11 @@ output/cerebrum/
 - `codomyrmex.fpf` - FPF module for specification processing
 - `codomyrmex.logging_monitoring` - Structured logging
 
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+
 ## Operating Contracts
 
 ### Command Line Interface
@@ -162,3 +167,4 @@ The script supports the following arguments:
 ### Platform Navigation
 - **Parent Directory**: [scripts](../README.md) - Scripts overview
 - **Project Root**: [README](../../README.md) - Main project documentation
+

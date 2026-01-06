@@ -117,7 +117,7 @@ def test_complete_development_workflow():
     import tempfile
     from pathlib import Path
     from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
-    from codomyrmex.code_execution_sandbox.code_executor import execute_code
+    from codomyrmex.code.code_executor import execute_code
     from codomyrmex.data_visualization.line_plot import create_line_plot
 
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -325,7 +325,7 @@ def test_environment_validation():
         is_uv_environment,
         check_docker_available
     )
-    from codomyrmex.code_execution_sandbox.code_executor import check_docker_available
+    from codomyrmex.code.code_executor import check_docker_available
 
     # Test real UV availability check
     uv_available = is_uv_available()
@@ -350,7 +350,7 @@ def test_environment_validation():
 # Example: Code execution testing (ACTUAL IMPLEMENTATION - AI not yet implemented)
 def test_code_execution_real():
     """Test real code execution functionality."""
-    from codomyrmex.code_execution_sandbox.code_executor import execute_code, validate_language
+    from codomyrmex.code.code_executor import execute_code, validate_language
 
     # Test language validation (real function)
     assert validate_language("python") == True
@@ -485,3 +485,10 @@ def test_error_handling_comprehensive():
 ---
 
 **Remember**: Tests are documentation that never lies. Write tests that clearly express intent, use real data, and provide confidence in system behavior [[memory:7401885]] [[memory:7401883]].
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

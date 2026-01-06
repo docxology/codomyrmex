@@ -145,3 +145,4 @@ def test_integration_full_pipeline(fpf_spec_path):
         pattern = index.get_pattern(spec.patterns[0].id)
         assert pattern is not None
 
+

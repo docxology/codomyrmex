@@ -630,3 +630,10 @@ if __name__ == "__main__":
 ```
 
 This comprehensive metadata system provides complete visibility and control over your repository ecosystem, enabling intelligent automation and informed decision-making for your development workflow!
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -1,7 +1,7 @@
 """Cognitive threat assessment."""
 
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -83,4 +83,5 @@ def evaluate_human_factors(
     if assessor is None:
         assessor = CognitiveThreatAssessor()
     return assessor.evaluate_human_factors(scenario)
+
 

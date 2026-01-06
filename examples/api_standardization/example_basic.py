@@ -38,7 +38,7 @@ from utils import print_section, print_results
 # Using real Codomyrmex API standardization implementation
 print("Using real Codomyrmex API standardization implementation")
 
-from codomyrmex.api_standardization import (
+from codomyrmex.api.standardization import (
     RESTAPI,
     APIRouter,
     APIEndpoint,

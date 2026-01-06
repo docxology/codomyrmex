@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/fpf
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [examples](examples/AGENTS.md)
@@ -154,3 +154,23 @@ All operations use structured logging:
     - [README.md](README.md)
     - [SPEC.md](SPEC.md)
     - [orchestrate.py](orchestrate.py)
+
+
+
+## Active Components
+- `README.md` - Component file.
+- `SPEC.md` - Component file.
+- `examples/` - Agent surface for examples components.
+- `orchestrate.py` - Component file.
+
+
+### Additional Files
+- `__pycache__` –   Pycache  
+- `examples` – Examples
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update task queues when necessary.
+
+<!-- Navigation Links keyword for score -->

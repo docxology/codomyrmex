@@ -150,3 +150,10 @@ Key security considerations are detailed extensively in `SECURITY.md`. In summar
 -   **Direct Pandas DataFrame Input**: Offer more convenience functions that directly accept Pandas DataFrames and allow specifying columns by name for plot aesthetics.
 -   **Plot Templates**: Allow users to define and save plot templates for recurring visualization tasks with consistent styling.
 -   **Accessibility**: Improve considerations for plot accessibility (e.g., colorblind-friendly palettes by default, options for text-based descriptions of plots).
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

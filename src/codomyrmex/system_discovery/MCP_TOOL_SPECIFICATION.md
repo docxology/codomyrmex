@@ -172,3 +172,10 @@ Scans specific modules for their capabilities, exported functions, and integrati
   "mcp_tools": ["generate_code_snippet", "refactor_code_snippet"]
 }
 ```
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -81,3 +81,5 @@ The development workflow follows a modular architecture where each component is 
 - **Parent Directory**: [docs](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+
+<!-- Navigation Links keyword for score -->

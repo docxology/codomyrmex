@@ -117,3 +117,4 @@ def _merge_text(documents: List[Document]) -> str:
         parts.append(doc.get_content_as_string())
     return "\n\n".join(parts)
 
+

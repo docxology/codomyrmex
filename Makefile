@@ -48,19 +48,19 @@ setup: install
 # Testing
 test:
 	@echo "Running all tests..."
-	uv run pytest testing/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
+	uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
 
 test-unit:
 	@echo "Running unit tests..."
-	uv run pytest testing/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json
+	uv run pytest src/codomyrmex/tests/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json
 
 test-integration:
 	@echo "Running integration tests..."
-	uv run pytest testing/integration/ -v --tb=short -m integration
+	uv run pytest src/codomyrmex/tests/integration/ -v --tb=short -m integration
 
 test-coverage:
 	@echo "Running tests with coverage report..."
-	uv run pytest testing/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
+	uv run pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json
 	@echo "Coverage report generated: coverage.json and htmlcov/"
 
 test-coverage-html:
@@ -75,12 +75,12 @@ test-coverage-html:
 # Code quality
 lint:
 	@echo "Running linting..."
-	uv run python -m flake8 src/codomyrmex/ testing/
+	uv run python -m flake8 src/codomyrmex/ src/codomyrmex/tests/
 
 format:
 	@echo "Formatting code..."
-	uv run python -m black src/codomyrmex/ testing/
-	uv run python -m isort --profile=black src/codomyrmex/ testing/
+	uv run python -m black src/codomyrmex/ src/codomyrmex/tests/
+	uv run python -m isort --profile=black src/codomyrmex/ src/codomyrmex/tests/
 
 type-check:
 	@echo "Running type checking..."

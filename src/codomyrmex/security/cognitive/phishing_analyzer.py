@@ -82,3 +82,4 @@ def detect_phishing_attempt(
     analysis = analyzer.analyze(email_content, sender)
     return analysis.is_phishing
 
+

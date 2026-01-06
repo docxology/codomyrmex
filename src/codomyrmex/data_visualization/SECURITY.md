@@ -60,7 +60,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email **blanket@activeinference.institute** with the subject line: "**SECURITY Vulnerability Report: Data Visualization - [Brief Description]**".
+Instead, please email **blanket@activeinference.institute** with the subject line: "**SECURITY Vulnerability Report: Data Visualization - Security Issue**".
 
 Please include the following information in your report:
 
@@ -89,3 +89,9 @@ This security policy applies *only* to the `Data Visualization` module within th
 -   **Least Privilege**: Run the application utilizing this module with the minimum necessary permissions, especially file system permissions related to `output_path`.
 
 Thank you for helping keep Codomyrmex and the Data Visualization module secure. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

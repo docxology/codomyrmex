@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/module_template/tests
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Module Template](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [integration](integration/AGENTS.md)
@@ -19,6 +19,12 @@ Test files and validation suites.
 - `README.md` – Project file
 - `integration/` – Directory containing integration components
 - `unit/` – Directory containing unit components
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `integration` – Integration
+- `unit` – Unit
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

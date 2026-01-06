@@ -95,3 +95,4 @@ def calculate_risk_score(likelihood: str, impact: str) -> float:
     
     return likelihood_scores.get(likelihood, 0.5) * impact_scores.get(impact, 0.5)
 
+

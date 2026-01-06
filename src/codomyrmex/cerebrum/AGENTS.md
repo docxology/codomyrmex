@@ -4,8 +4,9 @@
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [CEREBRUM Agents](AGENTS.md)
 - **Children**:
-    - [docs](docs/README.md)
-    - [tests](tests/README.md)
+    - [docs](docs/AGENTS.md)
+    - [scripts](scripts/AGENTS.md)
+    - [tests](tests/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -494,3 +495,47 @@ Represents a belief state in active inference.
 - **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md)
 - **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
 
+
+
+
+## Active Components
+- `API_SPECIFICATION.md` - Component file.
+- `CHANGELOG.md` - Component file.
+- `FPF_INTEGRATION_SUMMARY.md` - Component file.
+- `MCP_TOOL_SPECIFICATION.md` - Component file.
+- `README.md` - Component file.
+- `SECURITY.md` - Component file.
+- `SPEC.md` - Component file.
+- `USAGE_EXAMPLES.md` - Component file.
+- `__init__.py` - Component file.
+- `active_inference.py` - Component file.
+- `bayesian.py` - Component file.
+- `cases.py` - Component file.
+- `composition_visualizer.py` - Component file.
+- `concordance_visualizer.py` - Component file.
+- `config.py` - Component file.
+- `core.py` - Component file.
+- `docs/` - Agent surface for docs components.
+- `exceptions.py` - Component file.
+- `fpf_combinatorics.py` - Component file.
+- `fpf_orchestration.py` - Component file.
+- `models.py` - Component file.
+- `scripts/` - Agent surface for scripts components.
+- `tests/` - Agent surface for tests components.
+- `transformations.py` - Component file.
+- `utils.py` - Component file.
+- `visualization.py` - Component file.
+- `visualization_base.py` - Component file.
+- `visualization_theme.py` - Component file.
+
+
+### Additional Files
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `scripts` – Scripts
+- `tests` – Tests
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update task queues when necessary.

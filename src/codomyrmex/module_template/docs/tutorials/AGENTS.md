@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/module_template/docs/tutorials
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Module Template Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -17,6 +17,10 @@ Documentation files and guides for tutorials.
 ## Active Components
 - `README.md` – Project file
 - `example_tutorial.md` – Project file
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

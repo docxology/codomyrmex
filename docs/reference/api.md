@@ -129,7 +129,7 @@ result = MCPToolResult(
 
 ### **🤖 AI & Intelligence Modules**
 
-#### **[🤖 ai_code_editing](../../src/codomyrmex/ai_code_editing/API_SPECIFICATION.md)**
+#### **[🤖 ai_code_editing](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md)**
 **AI-powered code generation, refactoring, and analysis**
 
 | Function | Description | Status | Example |
@@ -142,7 +142,7 @@ result = MCPToolResult(
 
 **Quick Example:**
 ```python
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 # Generate a complete function
 result = generate_code_snippet(
@@ -216,7 +216,7 @@ print(f"🚨 Issues found: {analysis.get('issue_count', 0)}")
 print(f"⚡ Performance score: {analysis.get('performance_score', 'N/A')}")
 ```
 
-#### **[🏃 code_execution_sandbox](../../src/codomyrmex/code_execution_sandbox/API_SPECIFICATION.md)**
+#### **[🏃 code](../../src/codomyrmex/code/API_SPECIFICATION.md)**
 **Secure multi-language code execution**
 
 | Function | Description | Status | Example |
@@ -228,7 +228,7 @@ print(f"⚡ Performance score: {analysis.get('performance_score', 'N/A')}")
 
 **Quick Example:**
 ```python
-from codomyrmex.code_execution_sandbox import execute_code
+from codomyrmex.code import execute_code
 
 # Execute Python code safely
 result = execute_code(
@@ -245,7 +245,7 @@ print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 - **`create_heatmap(data, **options)`**: Heatmaps
 - **Status**: ✅ Stable API
 
-#### **[code_execution_sandbox](../../src/codomyrmex/code_execution_sandbox/API_SPECIFICATION.md)**
+#### **[code](../../src/codomyrmex/code/API_SPECIFICATION.md)**
 - **`execute_code(language, code, timeout)`**: Safe code execution
 - **`CodeExecutor`**: Main execution class
 - **`ExecutionResult`**: Result data class
@@ -412,7 +412,7 @@ ensure_dependencies_installed()
 
 # Use core modules
 from codomyrmex.data_visualization import create_line_plot
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 # Create visualization
 plot_result = create_line_plot(x_data, y_data, title="My Plot")
@@ -480,9 +480,9 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 ### **Module-Specific API Documentation**
 | Module | API Reference | MCP Tools | Status |
 |--------|---------------|-----------|--------|
-| **ai_code_editing** | [API Docs](../../src/codomyrmex/ai_code_editing/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/ai_code_editing/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
+| **ai_code_editing** | [API Docs](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **data_visualization** | [API Docs](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md) | None | ✅ Stable |
-| **code_execution_sandbox** | [API Docs](../../src/codomyrmex/code_execution_sandbox/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/code_execution_sandbox/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
+| **code** | [API Docs](../../src/codomyrmex/code/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/code/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **static_analysis** | [API Docs](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/static_analysis/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **build_synthesis** | [API Docs](../../src/codomyrmex/build_synthesis/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/build_synthesis/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **pattern_matching** | [API Docs](../../src/codomyrmex/pattern_matching/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/pattern_matching/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
@@ -548,3 +548,10 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 **Version**: 0.1.0
 **Last Updated**: Auto-generated from API analysis
 **API Stability**: See individual module documentation for stability guarantees
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

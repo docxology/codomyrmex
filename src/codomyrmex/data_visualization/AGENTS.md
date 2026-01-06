@@ -411,6 +411,13 @@ Create Mermaid diagram showing commit timeline.
 - `docs/` – Additional documentation
 - `tests/` – Comprehensive test suite
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `tests` – Tests
+
 ## Operating Contracts
 
 ### Universal Visualization Protocols

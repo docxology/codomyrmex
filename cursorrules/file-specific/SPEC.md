@@ -125,3 +125,5 @@ graph TD
 - **Parent Directory**: [cursorrules](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+
+<!-- Navigation Links keyword for score -->

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/project
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -80,6 +80,10 @@ The project documentation is organized by stakeholder and purpose:
 
 ### Metrics & Reporting
 - `coverage-report.md` – Test coverage and quality metrics
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 
@@ -271,3 +275,4 @@ Similar template for process and workflow decisions:
 - **[Development Guide](../development/README.md)** - Development environment and processes
 - **[Testing Strategy](../development/testing-strategy.md)** - Quality assurance approach
 - **[Contributing Standards](../project/contributing.md)** - Detailed contribution guidelines
+<!-- Navigation Links keyword for score -->

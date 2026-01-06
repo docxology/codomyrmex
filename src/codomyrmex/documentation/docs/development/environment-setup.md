@@ -106,3 +106,9 @@ The `cased/kit` toolkit is a core component for many modules within this project
 - Building context for LLMs
 
 Refer to the documentation of individual modules for specific examples of how `cased/kit` is utilized. The official `cased/kit` documentation is also a key resource. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

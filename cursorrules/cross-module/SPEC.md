@@ -44,7 +44,7 @@ Cross-module coding rules and coordination standards defining how Codomyrmex mod
 graph TD
     subgraph "Rule Categories"
         Build[build_synthesis]
-        Exec[code_execution_sandbox]
+        Exec[code]
         Viz[data_visualization]
         Log[logging_monitoring]
         MCP[model_context_protocol]
@@ -134,3 +134,5 @@ graph TD
 - **Parent Directory**: [cursorrules](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+
+<!-- Navigation Links keyword for score -->

@@ -142,7 +142,7 @@ setup_performance_environment() {
         "quick_mode": $QUICK_MODE
     },
     "modules_tested": [
-        "code_execution_sandbox",
+        "code",
         "static_analysis", 
         "data_visualization",
         "ai_code_editing"
@@ -177,7 +177,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 try:
-    from codomyrmex.code_execution_sandbox import execute_code
+    from codomyrmex.code import execute_code
     from codomyrmex.data_visualization import create_line_plot, create_bar_chart
     from codomyrmex.logging_monitoring import get_logger
     MODULES_AVAILABLE = True

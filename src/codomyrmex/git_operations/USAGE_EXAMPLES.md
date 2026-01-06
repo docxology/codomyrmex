@@ -382,3 +382,10 @@ create_git_analysis_report(
 ```
 
 For more detailed function signatures and parameters, see [COMPLETE_API_DOCUMENTATION.md](./COMPLETE_API_DOCUMENTATION.md) and [API_SPECIFICATION.md](./API_SPECIFICATION.md).
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -60,3 +60,4 @@ def test_bayesian_integration():
     assert result.prediction is not None
     assert "outcome" in result.inference_results or result.prediction is not None
 
+

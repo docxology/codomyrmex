@@ -145,3 +145,9 @@ ZeroDivisionError: division by zero"}
     - The current `setup_logging()` configures the root logger. If third-party libraries use standard Python logging, their messages should be captured.
     - To silence a specific verbose library: `logging.getLogger("some_verbose_library").setLevel(logging.WARNING)` *after* your `setup_logging()` call.
     - To make a quiet library louder (if it logs to a specific logger and its level is higher than your root logger): `logging.getLogger("some_quiet_library").setLevel(logging.DEBUG)` *after* `setup_logging()`. You also need to ensure your root logger level (set by `CODOMYRMEX_LOG_LEVEL`) is also at least DEBUG. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

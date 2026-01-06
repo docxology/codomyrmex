@@ -1,7 +1,7 @@
 # Codomyrmex Agents — _common
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Examples](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -16,6 +16,16 @@
 Directory: _common
 
 ## Active Components
+
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+- `__init__.py` –   Init   Py
+- `__pycache__` –   Pycache  
+- `config_loader.py` – Config Loader Py
+- `example_runner.py` – Example Runner Py
+- `utils.py` – Utils Py
 
 ## Operating Contracts
 

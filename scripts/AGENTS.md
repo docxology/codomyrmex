@@ -1,16 +1,16 @@
 # Codomyrmex Agents — scripts
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
+    - [agents](agents/AGENTS.md)
     - [ai_code_editing](ai_code_editing/AGENTS.md)
-    - [api_documentation](api_documentation/AGENTS.md)
+    - [api](api/AGENTS.md)
     - [build_synthesis](build_synthesis/AGENTS.md)
     - [cerebrum](cerebrum/AGENTS.md)
     - [ci_cd_automation](ci_cd_automation/AGENTS.md)
-    - [code_execution_sandbox](code_execution_sandbox/AGENTS.md)
-    - [code_review](code_review/AGENTS.md)
+    - [code](code/AGENTS.md)
     - [config_management](config_management/AGENTS.md)
     - [containerization](containerization/AGENTS.md)
     - [data_visualization](data_visualization/AGENTS.md)
@@ -19,7 +19,9 @@
     - [docs](docs/AGENTS.md)
     - [documentation](documentation/AGENTS.md)
     - [documentation_module](documentation_module/AGENTS.md)
+    - [documents](documents/AGENTS.md)
     - [environment_setup](environment_setup/AGENTS.md)
+    - [events](events/AGENTS.md)
     - [examples](examples/AGENTS.md)
     - [fabric_integration](fabric_integration/AGENTS.md)
     - [fpf](fpf/AGENTS.md)
@@ -30,16 +32,18 @@
     - [model_context_protocol](model_context_protocol/AGENTS.md)
     - [modeling_3d](modeling_3d/AGENTS.md)
     - [module_template](module_template/AGENTS.md)
-    - [ollama_integration](ollama_integration/AGENTS.md)
     - [pattern_matching](pattern_matching/AGENTS.md)
     - [performance](performance/AGENTS.md)
     - [physical_management](physical_management/AGENTS.md)
+    - [plugin_system](plugin_system/AGENTS.md)
     - [project_orchestration](project_orchestration/AGENTS.md)
-    - [security_audit](security_audit/AGENTS.md)
+    - [security](security/AGENTS.md)
     - [static_analysis](static_analysis/AGENTS.md)
     - [system_discovery](system_discovery/AGENTS.md)
+    - [template](template/AGENTS.md)
     - [terminal_interface](terminal_interface/AGENTS.md)
     - [testing](testing/AGENTS.md)
+    - [tools](tools/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -409,11 +413,10 @@ The scripts are organized by functionality:
 
 Each module has dedicated automation scripts:
 - `ai_code_editing/` - AI-assisted code generation and editing workflows
-- `api_documentation/` - API specification generation and validation
+- `api/` - API specification generation and validation
 - `build_synthesis/` - Multi-language build orchestration
 - `ci_cd_automation/` - Continuous integration pipeline management
-- `code_execution_sandbox/` - Safe code execution environments
-- `code_review/` - Automated code review and quality analysis
+- `code/` - Code execution, sandbox, review, and monitoring
 - `config_management/` - Configuration validation and deployment
 - `containerization/` - Docker and container lifecycle management
 - `data_visualization/` - Chart generation and data plotting
@@ -423,12 +426,11 @@ Each module has dedicated automation scripts:
 - `logging_monitoring/` - Centralized logging configuration
 - `model_context_protocol/` - MCP tool specification management
 - `modeling_3d/` - 3D visualization and modeling
-- `ollama_integration/` - Local LLM integration
 - `pattern_matching/` - Code pattern analysis
 - `performance/` - Performance monitoring and profiling
 - `physical_management/` - Hardware resource management
 - `project_orchestration/` - Workflow orchestration
-- `security_audit/` - Security scanning and compliance
+- `security/` - Security scanning and compliance
 - `static_analysis/` - Code quality analysis
 - `system_discovery/` - Module discovery and health monitoring
 - `terminal_interface/` - Rich terminal UI components
@@ -437,10 +439,15 @@ Each module has dedicated automation scripts:
 
 **All scripts must be organized in module-specific subdirectories.** Scripts in the root `scripts/` directory should only include:
 - Core utilities (`_orchestrator_utils.py`)
-- Module-specific orchestrators (in their respective subdirectories)
-- Category-specific scripts (documentation/, testing/, development/, maintenance/, etc.)
 
-No standalone utility scripts should remain in the root `scripts/` directory. All documentation-related scripts are in `documentation/`, all testing-related scripts are in `testing/`, and so on.
+**All other scripts are organized in subdirectories:**
+- **Documentation scripts**: All documentation maintenance, validation, generation, and link-fixing scripts are in `documentation/`
+- **Testing scripts**: All testing automation, verification, and test suite generation scripts are in `testing/`
+- **Development scripts**: Development workflow scripts are in `development/`
+- **Maintenance scripts**: System maintenance and cleanup scripts are in `maintenance/`
+- **Module-specific scripts**: Each module has its own subdirectory with orchestration scripts
+
+No standalone utility scripts remain in the root `scripts/` directory. This organization ensures clear categorization and easy discovery of scripts by purpose.
 
 ## Active Components
 
@@ -449,12 +456,12 @@ No standalone utility scripts should remain in the root `scripts/` directory. Al
 - `_orchestrator_utils.py` – Shared utilities for script orchestration
 
 ### Module Script Directories
+- `agents/` – Agent framework integration
 - `ai_code_editing/` – AI-powered code assistance automation
-- `api_documentation/` – API documentation generation tools
+- `api/` – API documentation generation tools
 - `build_synthesis/` – Build pipeline orchestration
 - `ci_cd_automation/` – CI/CD workflow management
-- `code_execution_sandbox/` – Safe execution environment setup
-- `code_review/` – Code review automation
+- `code/` – Code execution, sandbox, review, and monitoring
 - `config_management/` – Configuration management utilities
 - `containerization/` – Container lifecycle management
 - `data_visualization/` – Data visualization automation
@@ -476,15 +483,64 @@ No standalone utility scripts should remain in the root `scripts/` directory. Al
 - `model_context_protocol/` – MCP tool management
 - `modeling_3d/` – 3D modeling utilities
 - `module_template/` – Module creation templates
-- `ollama_integration/` – Local LLM integration tools
 - `pattern_matching/` – Pattern analysis automation
 - `performance/` – Performance monitoring tools
 - `physical_management/` – Hardware management scripts
+- `plugin_system/` – Plugin management scripts
 - `project_orchestration/` – Project workflow orchestration
-- `security_audit/` – Security scanning utilities
+- `security/` – Security scanning utilities
+- `template/` – Template generation scripts
+- `tools/` – Development utility scripts
 - `static_analysis/` – Code analysis tools
 - `system_discovery/` – System exploration utilities
 - `terminal_interface/` – Terminal interface components
+
+
+### Additional Files
+- `ORGANIZATION_SUMMARY.md` – Organization Summary Md
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `ai_code_editing` – Ai Code Editing
+- `api` – Api
+- `agents` – Agents
+- `documents` – Documents
+- `events` – Events
+- `build_synthesis` – Build Synthesis
+- `cerebrum` – Cerebrum
+- `ci_cd_automation` – Ci Cd Automation
+- `code` – Code
+- `config_management` – Config Management
+- `containerization` – Containerization
+- `data_visualization` – Data Visualization
+- `database_management` – Database Management
+- `development` – Development
+- `docs` – Docs
+- `documentation` – Documentation
+- `documentation_module` – Documentation Module
+- `environment_setup` – Environment Setup
+- `examples` – Examples
+- `fabric_integration` – Fabric Integration
+- `fpf` – Fpf
+- `git_operations` – Git Operations
+- `language_models` – Language Models
+- `llm` – Llm
+- `logging_monitoring` – Logging Monitoring
+- `maintenance` – Maintenance
+- `model_context_protocol` – Model Context Protocol
+- `modeling_3d` – Modeling 3D
+- `module_template` – Module Template
+- `plugin_system` – Plugin System
+- `template` – Template
+- `tools` – Tools
+- `pattern_matching` – Pattern Matching
+- `performance` – Performance
+- `physical_management` – Physical Management
+- `project_orchestration` – Project Orchestration
+- `security` – Security
+- `static_analysis` – Static Analysis
+- `system_discovery` – System Discovery
+- `terminal_interface` – Terminal Interface
+- `testing` – Testing
 
 ## Operating Contracts
 
@@ -533,7 +589,7 @@ All scripts in this directory must:
 
 ### For Contributors
 - **Script Templates**: [module_template/](module_template) - Script creation templates
-- **Testing**: [testing/unit/](../testing/unit/) - Script testing guidelines
+- **Testing**: [testing/unit/](../src/codomyrmex/tests/unit/) - Script testing guidelines
 - **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)
 
 ## Agent Coordination
@@ -565,3 +621,4 @@ Before deploying script changes:
 - **[Script Development Guide](development/README.md)** - Guidelines for creating new scripts
 - **[Module Orchestration](../docs/modules/overview.md)** - Module system documentation
 - **[Testing Strategy](../docs/development/testing-strategy.md)** - Testing approach for scripts
+<!-- Navigation Links keyword for score -->

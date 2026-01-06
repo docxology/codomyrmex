@@ -346,3 +346,9 @@ You have now learned the basic steps to implement an MCP-compliant tool in Pytho
 -   Consider creating dedicated Pydantic models for the `arguments` of each of your tools for stricter validation that aligns perfectly with your JSON Schemas.
 
 This approach ensures your tools are well-defined, robust, and can be easily integrated into the broader Codomyrmex AI agent ecosystem. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

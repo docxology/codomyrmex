@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Physical Management - [Brief Description]".
+Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Physical Management - Security Issue".
 
 Please include the following information in your report:
 
@@ -41,3 +41,10 @@ This security policy applies to the Physical Management module within the Codomy
 
 For project-wide security information, see the main [Codomyrmex Security Policy](../../../SECURITY.md).
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

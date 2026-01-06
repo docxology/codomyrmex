@@ -111,3 +111,9 @@ Configuration is primarily through the following environment variables, typicall
 - **Log Rotation Configuration**: Basic built-in support for log rotation if `CODOMYRMEX_LOG_FILE` is used, though often this is handled by external tools (like `logrotate` on Linux).
 - **Configuration from a file**: Allow loading configuration from a dedicated logging config file (e.g., YAML or JSON) in addition to environment variables.
 - **More granular control over third-party library logging**: Potentially a mechanism to easily set log levels for specific external libraries via configuration. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

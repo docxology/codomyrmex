@@ -295,7 +295,7 @@ configure_llm_apis() {
     $PYTHON_CMD -c "
 import sys
 sys.path.insert(0, 'src')
-from codomyrmex.ai_code_editing import validate_api_keys, get_supported_providers
+from codomyrmex.agents.ai_code_editing import validate_api_keys, get_supported_providers
 
 print('\\nCurrent API Key Status:')
 providers = get_supported_providers()
@@ -388,7 +388,7 @@ print('\\nSupported Providers:', ', '.join(providers))
             $PYTHON_CMD -c "
 import sys
 sys.path.insert(0, 'src')
-from codomyrmex.ai_code_editing import validate_api_keys, get_llm_client
+from codomyrmex.agents.ai_code_editing import validate_api_keys, get_llm_client
 
 api_status = validate_api_keys()
 print('\\nTesting API connections...')
@@ -409,7 +409,7 @@ for provider, available in api_status.items():
             $PYTHON_CMD -c "
 import sys
 sys.path.insert(0, 'src')
-from codomyrmex.ai_code_editing import generate_code_snippet, get_supported_languages, get_available_models
+from codomyrmex.agents.ai_code_editing import generate_code_snippet, get_supported_languages, get_available_models
 
 print('\\nExample: Generate Python code')
 print('=' * 50)

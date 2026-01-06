@@ -1,6 +1,6 @@
 # Codomyrmex Functional Specification
 
-## Core Concept
+## System Concept
 Codomyrmex is an idealized modular workspace designed to facilitate interaction between (pairwise) and among (multiple) humans, people, agents, synthetic systems, embodiments tools, and things most broadly. 
 
 It functions as a cohesive "colony" of specialized modules where each component has a single responsibility, clear boundaries, and standardized interfaces. The system abstracts complexity through layering, ensuring that high-level workflows can be orchestrated without tight coupling to low-level implementations.
@@ -28,3 +28,10 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ## Coherence
 This root directory serves as the nexus of the colony. It does not contain business logic itself but defines the structure (skeleton) and rules (membrane) that hold the organism together. The `src/` directory contains the organs, `docs/` the memory, and `scripts/` the reflexive behaviors.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

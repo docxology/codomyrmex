@@ -1,0 +1,15 @@
+{
+  "name": "perf_test_workflow",
+  "steps": [
+    {
+      "name": "perf_test_step",
+      "module": "environment_setup",
+      "action": "check_environment",
+      "parameters": {},
+      "dependencies": [],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    }
+  ]
+}

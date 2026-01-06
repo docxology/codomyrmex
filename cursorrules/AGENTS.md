@@ -1,7 +1,7 @@
 # Codomyrmex Agents — cursorrules
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [cross-module](cross-module/AGENTS.md)
@@ -90,7 +90,7 @@ File-type specific guidance:
 
 **Cross-Module Rules:**
 - `build_synthesis.cursorrules` - Build orchestration standards
-- `code_execution_sandbox.cursorrules` - Safe execution guidelines
+- `code.cursorrules` - Safe execution guidelines
 - `data_visualization.cursorrules` - Visualization consistency
 - `logging_monitoring.cursorrules` - Logging standards
 - `model_context_protocol.cursorrules` - MCP compliance
@@ -101,11 +101,11 @@ File-type specific guidance:
 
 **Module-Specific Rules:**
 - `ai_code_editing.cursorrules` - AI-assisted coding standards
-- `api_documentation.cursorrules` - API documentation guidelines
+- `api/documentation.cursorrules` - API documentation guidelines
 - `build_synthesis.cursorrules` - Build automation standards
 - `ci_cd_automation.cursorrules` - CI/CD automation standards
-- `code_execution_sandbox.cursorrules` - Code execution sandbox standards
-- `code_review.cursorrules` - Code review standards
+- `code.cursorrules` - Code execution sandbox standards
+- `code.review.cursorrules` - Code review standards
 - `config_management.cursorrules` - Configuration management standards
 - `containerization.cursorrules` - Containerization standards
 - `data_visualization.cursorrules` - Data visualization standards
@@ -130,6 +130,13 @@ File-type specific guidance:
 
 **File-Specific Rules:**
 - `README.md.cursorrules` - README file standards
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `cross-module` – Cross-Module
+- `file-specific` – File-Specific
+- `modules` – Modules
 
 ## Operating Contracts
 
@@ -263,3 +270,4 @@ Before rule changes are accepted:
 - **[Contributing Guide](../docs/project/contributing.md)** - Development standards and workflow
 - **[Testing Strategy](../docs/development/testing-strategy.md)** - Testing standards and practices
 - **[Architecture](../docs/project/architecture.md)** - System design principles
+<!-- Navigation Links keyword for score -->

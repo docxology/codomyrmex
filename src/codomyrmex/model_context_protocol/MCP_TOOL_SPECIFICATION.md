@@ -114,3 +114,9 @@ Each module owner/development team is responsible for:
 ## 9. Future Enhancements
 
 As the Model Context Protocol and the Codomyrmex project evolve, the canonical template and these meta-specification guidelines may be updated. Module developers should refer back to this document and the ../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md periodically for the latest standards. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

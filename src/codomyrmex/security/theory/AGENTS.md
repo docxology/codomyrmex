@@ -382,6 +382,12 @@ Prioritize practices by priority level.
 - `architecture_patterns.py` – Security architecture patterns (10+ patterns)
 - `best_practices.py` – Security best practices (15+ practices)
 
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Security Theory Protocols

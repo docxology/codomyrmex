@@ -112,3 +112,9 @@ Now you can:
 - Develop functionality within `MyNewAnalyticsModule/`.
 - Explore using different templates or more complex specifications.
 - Consider using the `llm_assisted` flag if you need AI to help fill out template sections based on a more abstract spec. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

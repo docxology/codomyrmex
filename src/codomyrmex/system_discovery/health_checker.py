@@ -88,18 +88,16 @@ class HealthChecker:
             "terminal_interface": self._check_terminal_interface,
             "ai_code_editing": self._check_ai_code_editing,
             "static_analysis": self._check_static_analysis,
-            "code_execution_sandbox": self._check_code_execution_sandbox,
+            "code": self._check_code,
             "data_visualization": self._check_data_visualization,
             "pattern_matching": self._check_pattern_matching,
             "git_operations": self._check_git_operations,
-            "code_review": self._check_code_review,
             "security": self._check_security_digital,
-            "ollama_integration": self._check_ollama_integration,
-            "language_models": self._check_language_models,
+            "llm": self._check_ollama_integration,
             "performance": self._check_performance,
             "build_synthesis": self._check_build_synthesis,
             "documentation": self._check_documentation,
-            "api_documentation": self._check_api_documentation,
+            "api": self._check_api,
             "ci_cd_automation": self._check_ci_cd_automation,
             "containerization": self._check_containerization,
             "config_management": self._check_config_management,
@@ -108,7 +106,7 @@ class HealthChecker:
             "physical_management": self._check_physical_management,
             "system_discovery": self._check_system_discovery,
             "module_template": self._check_module_template,
-            "modeling_3d": self._check_modeling_3d,
+            "spatial": self._check_spatial,
         }
 
     def perform_health_check(self, module_name: str) -> HealthCheckResult:
@@ -241,12 +239,12 @@ class HealthChecker:
         except Exception as e:
             result.add_issue(f"Environment check error: {str(e)}")
 
-    def _check_code_execution_sandbox(self, result: HealthCheckResult) -> None:
-        """Check code execution sandbox health."""
-        result.checks_performed.extend(["docker_availability", "sandbox_execution"])
+    def _check_code(self, result: HealthCheckResult) -> None:
+        """Check code module health (execution, sandbox, review, monitoring)."""
+        result.checks_performed.extend(["docker_availability", "sandbox_execution", "code_review"])
 
         try:
-            from codomyrmex.code_execution_sandbox.code_executor import execute_code
+            from codomyrmex.code.execution.executor import execute_code
 
             # Test basic execution (this might require Docker)
             test_result = execute_code("python", "print('test')", timeout=5)
@@ -424,15 +422,10 @@ class HealthChecker:
         except Exception as e:
             result.add_issue(f"Git check error: {str(e)}")
 
-    # Add placeholder checks for remaining modules
-    def _check_code_review(self, result: HealthCheckResult) -> None:
-        result.checks_performed.append("code_review_tools")
+    # Code review is now part of code module, checked in _check_code
 
     def _check_ollama_integration(self, result: HealthCheckResult) -> None:
         result.checks_performed.append("ollama_connection")
-
-    def _check_language_models(self, result: HealthCheckResult) -> None:
-        result.checks_performed.append("language_model_apis")
 
     def _check_build_synthesis(self, result: HealthCheckResult) -> None:
         result.checks_performed.append("build_tools")
@@ -440,7 +433,7 @@ class HealthChecker:
     def _check_documentation(self, result: HealthCheckResult) -> None:
         result.checks_performed.append("documentation_generation")
 
-    def _check_api_documentation(self, result: HealthCheckResult) -> None:
+    def _check_api(self, result: HealthCheckResult) -> None:
         result.checks_performed.append("api_docs")
 
     def _check_ci_cd_automation(self, result: HealthCheckResult) -> None:
@@ -461,8 +454,16 @@ class HealthChecker:
     def _check_module_template(self, result: HealthCheckResult) -> None:
         result.checks_performed.append("template_generation")
 
-    def _check_modeling_3d(self, result: HealthCheckResult) -> None:
-        result.checks_performed.append("3d_libraries")
+    def _check_spatial(self, result: HealthCheckResult) -> None:
+        """Check spatial module health."""
+        result.checks_performed.append("spatial_libraries")
+        # Check submodules
+        for sub in ["three_d", "four_d", "world_models"]:
+            try:
+                importlib.import_module(f"codomyrmex.spatial.{sub}")
+                result.add_metric(f"{sub}_available", True)
+            except ImportError:
+                result.add_issue(f"Submodule {sub} not available")
 
 
 def perform_health_check(module_name: str) -> HealthCheckResult:

@@ -356,7 +356,7 @@ uv run pytest testing/unit/test_new_module.py
 uv pip install openai anthropic google-generativeai
 
 # Test AI features
-uv run python -c "from codomyrmex.ai_code_editing import generate_code_snippet"
+uv run python -c "from codomyrmex.agents.ai_code_editing import generate_code_snippet"
 ```
 
 ### Performance Monitoring
@@ -378,3 +378,10 @@ uv run python -c "from codomyrmex.performance import PerformanceMonitor"
 ---
 
 **Happy coding with UV and Codomyrmex! 🐜✨**
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

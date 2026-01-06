@@ -335,7 +335,7 @@ class ProjectManager:
             workflows=["build-and-test", "deploy"],
             required_modules=[
                 "build_synthesis",
-                "code_execution_sandbox",
+                "code",
                 "documentation",
             ],
             optional_modules=["ai_code_editing", "static_analysis", "git_operations"],
@@ -364,7 +364,7 @@ class ProjectManager:
                 ".codomyrmex/",
             ],
             workflows=["data-processing", "visualization"],
-            required_modules=["data_visualization", "code_execution_sandbox"],
+            required_modules=["data_visualization", "code"],
             optional_modules=["ai_code_editing", "pattern_matching", "performance"],
             default_config={
                 "data": {

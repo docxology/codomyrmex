@@ -25,10 +25,10 @@ Core Sandbox Concepts:
 - **Audit Logging**: Complete execution tracking for security monitoring
 
 Tested Methods:
-- execute_code() - Verified in test_code_execution_sandbox.py::TestCodeExecutionSandbox::test_execute_code
-- execute_code() with timeout - Verified in test_code_execution_sandbox.py::TestCodeExecutionSandbox::test_execute_code_timeout
-- execute_code() with resource limits - Verified in test_code_execution_sandbox.py::TestCodeExecutionSandbox::test_execute_code_resource_limits
-- execute_code() error handling - Verified in test_code_execution_sandbox.py::TestCodeExecutionSandbox::test_execute_code_error_handling
+- execute_code() - Verified in test_code.py::TestCodeExecutionSandbox::test_execute_code
+- execute_code() with timeout - Verified in test_code.py::TestCodeExecutionSandbox::test_execute_code_timeout
+- execute_code() with resource limits - Verified in test_code.py::TestCodeExecutionSandbox::test_execute_code_resource_limits
+- execute_code() error handling - Verified in test_code.py::TestCodeExecutionSandbox::test_execute_code_error_handling
 """
 
 import sys
@@ -41,7 +41,7 @@ from typing import Dict, Any, List
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from codomyrmex.code_execution_sandbox import execute_code
+from codomyrmex.code import execute_code
 from examples._common.config_loader import load_config
 from examples._common.example_runner import ExampleRunner
 from examples._common.utils import print_section, print_results, print_success, print_error, print_warning, ensure_output_dir

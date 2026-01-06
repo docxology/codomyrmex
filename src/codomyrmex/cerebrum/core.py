@@ -318,3 +318,4 @@ class CerebrumEngine:
             "bayesian_network": self.bayesian_network.to_dict() if self.bayesian_network else None,
         }
 
+

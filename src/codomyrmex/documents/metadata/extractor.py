@@ -1,5 +1,7 @@
 """Metadata extraction from documents."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Any
 
@@ -97,4 +99,5 @@ def _extract_markdown_metadata(file_path: Path) -> dict[str, Any]:
         return {}
     except Exception:
         return {}
+
 

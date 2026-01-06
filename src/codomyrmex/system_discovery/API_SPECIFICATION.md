@@ -238,3 +238,10 @@ except Exception as e:
 - **Permission Checks**: Proper access controls for system introspection
 - **Data Sanitization**: Sensitive information is filtered from reports
 - **Audit Logging**: All discovery operations are logged for security review
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

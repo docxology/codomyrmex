@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/template/docs
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [tutorials](tutorials/AGENTS.md)
@@ -12,13 +12,18 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Documentation files and guides.
+Documentation files and guides for template.
 
 ## Active Components
 - `README.md` – Project file
 - `index.md` – Project file
 - `technical_overview.md` – Project file
 - `tutorials/` – Directory containing tutorials components
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `tutorials` – Tutorials
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

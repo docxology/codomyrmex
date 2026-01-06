@@ -269,3 +269,9 @@ flowchart TD
 ## 13. Security Aspects
 
 (Elaborate on security considerations specific to this module's design and implementation, beyond what's in the MCP tool spec if applicable.) 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

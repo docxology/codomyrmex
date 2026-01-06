@@ -63,7 +63,7 @@ If you discover a security vulnerability related to how the `logging_monitoring`
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email **blanket@activeinference.institute** with the subject line: "**SECURITY Vulnerability Report: Logging & Monitoring - [Brief Description]**".
+Instead, please email **blanket@activeinference.institute** with the subject line: "**SECURITY Vulnerability Report: Logging & Monitoring - Security Issue**".
 
 Please include relevant details as outlined in the project's main security policy.
 
@@ -84,3 +84,9 @@ This policy primarily covers the security aspects of the `logging_monitoring` mo
 -   **Follow Guidance in this `SECURITY.md`**: Adhere to the principles and mitigation strategies outlined here.
 
 Thank you for helping keep Codomyrmex logging secure and effective. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

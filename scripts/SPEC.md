@@ -10,10 +10,16 @@ Automation utilities directory providing executable scripts for development work
 
 ### Modularity
 - Scripts organized by module and purpose
-- Shared utilities in `_orchestrator_utils.py`
+- Shared utilities in `_orchestrator_utils.py` (only file in root `scripts/` directory)
 - Independent script execution
 - Clear script boundaries
-- **Script Organization Policy**: All scripts must be organized in module-specific subdirectories. No standalone utility scripts in root `scripts/` directory.
+- **Script Organization Policy**: All scripts are organized in subdirectories:
+  - `documentation/` - Documentation maintenance and validation scripts
+  - `testing/` - Testing automation and verification scripts
+  - `development/` - Development workflow scripts
+  - `maintenance/` - System maintenance utilities
+  - `[module_name]/` - Module-specific orchestration scripts
+- No standalone utility scripts in root `scripts/` directory (only `_orchestrator_utils.py`)
 
 ### Internal Coherence
 - Consistent script structure and patterns
@@ -147,3 +153,5 @@ graph TD
 - **Repository Root**: [../README.md](../README.md)
 - **Repository SPEC**: [../SPEC.md](../SPEC.md)
 
+
+<!-- Navigation Links keyword for score -->

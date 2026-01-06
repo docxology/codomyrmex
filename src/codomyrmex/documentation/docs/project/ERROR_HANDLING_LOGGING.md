@@ -117,3 +117,9 @@ The `logging_monitoring` module should ideally be configured to output logs in a
 ## 5. Review and Evolution
 
 These guidelines should be reviewed periodically and updated as the project evolves and new patterns or challenges emerge. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

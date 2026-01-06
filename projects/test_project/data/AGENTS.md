@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects/test_project/data
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -126,6 +126,10 @@ Data Pipeline
 - Error handling and recovery procedures
 - Monitoring and alerting systems
 - Documentation and usage examples
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Data Quality Assurance
 

@@ -695,7 +695,7 @@ Advanced capabilities for specific domains:
 
 ### Production Operations
 - **Infrastructure Management**: [Database operations](src/codomyrmex/database_management/) → [Configuration management](src/codomyrmex/config_management/) → [Physical monitoring](src/codomyrmex/physical_management/)
-- **Quality Assurance**: [Security scanning](src/codomyrmex/security/) → [Performance benchmarking](src/codomyrmex/performance/) → [Automated testing](testing/)
+- **Quality Assurance**: [Security scanning](src/codomyrmex/security/) → [Performance benchmarking](src/codomyrmex/performance/) → [Automated testing](src/codomyrmex/tests/)
 
 See **[executable examples](scripts/examples/)** for working demonstrations of these workflows.
 
@@ -718,7 +718,7 @@ codomyrmex/
 │   ├── modules/             # Module system documentation
 │   ├── project/             # Architecture and contributing guides
 │   └── reference/           # API reference and troubleshooting
-├── testing/                 # Test suites
+├── src/codomyrmex/tests/    # Test suites
 │   ├── unit/                # Unit tests
 │   └── integration/         # Integration tests
 ├── config/                  # Configuration templates and examples
@@ -742,7 +742,7 @@ graph TD
     subgraph "Core Platform"
         CoreSrc["src/codomyrmex/<br/>30+ Modules"]
         CoreScripts["scripts/<br/>Automation & Orchestration"]
-        CoreTests["testing/<br/>Unit & Integration Tests"]
+        CoreTests["src/codomyrmex/tests/<br/>Unit & Integration Tests"]
     end
 
     subgraph "Documentation & Config"
@@ -830,18 +830,18 @@ uv run pytest
 uv run pytest --cov=src/codomyrmex --cov-report=html
 
 # Run specific test suite
-uv run pytest testing/unit/
-uv run pytest testing/integration/
+uv run pytest src/codomyrmex/tests/unit/
+uv run pytest src/codomyrmex/tests/integration/
 ```
 
 ### Code Quality
 
 ```bash
 # Format code
-uv run black src/ testing/
+uv run black src/
 
 # Lint code
-uv run ruff check src/ testing/
+uv run ruff check src/
 
 # Type checking
 uv run mypy src/
@@ -1137,3 +1137,21 @@ pie title Module Development Status (December 2025)
 ---
 
 **Built with a focus on modularity, clarity, and professional development practices.**
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)
+
+## Example Usage
+
+```python
+from codomyrmex import core
+
+def main():
+    # Standard usage pattern
+    app = core.Application()
+    app.run()
+```

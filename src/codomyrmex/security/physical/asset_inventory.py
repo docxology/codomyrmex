@@ -101,3 +101,4 @@ def get_asset_status(
         inventory = AssetInventory()
     return inventory.get_asset_status(asset_id)
 
+

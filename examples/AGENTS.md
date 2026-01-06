@@ -1,7 +1,7 @@
 # Codomyrmex Agents — examples
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [_common](_common/AGENTS.md)
@@ -12,8 +12,8 @@
     - [api_standardization](api_standardization/AGENTS.md)
     - [build_synthesis](build_synthesis/AGENTS.md)
     - [ci_cd_automation](ci_cd_automation/AGENTS.md)
-    - [code_execution_sandbox](code_execution_sandbox/AGENTS.md)
-    - [code_review](code_review/AGENTS.md)
+    - [code](code/AGENTS.md)
+    - [code.review](code.review/AGENTS.md)
     - [config_management](config_management/AGENTS.md)
     - [containerization](containerization/AGENTS.md)
     - [data_visualization](data_visualization/AGENTS.md)
@@ -101,11 +101,11 @@ The examples follow a hierarchical organization:
 ### Core Layer Examples ✅
 - `ai_code_editing/` – AI code generation ✅
 - `static_analysis/` – Code analysis ✅
-- `code_execution_sandbox/` – Sandbox execution ✅
+- `code/` – Sandbox execution ✅
 - `data_visualization/` – Chart creation examples ✅
 - `pattern_matching/` – Pattern analysis ✅
 - `git_operations/` – Git automation ✅
-- `code_review/` – Automated review ✅
+- `code.review/` – Automated review ✅
 - `security_audit/` – Security scanning ✅
 
 ### Service Layer Examples ✅
@@ -137,6 +137,53 @@ The examples follow a hierarchical organization:
 - `example_workflow_monitoring.py` – Monitoring dashboard (logging + perf + discovery) ✅
 - `example_workflow_build.py` – Build pipeline *(planned)*
 - `example_workflow_api.py` – API development *(planned)*
+
+
+### Additional Files
+- `ASSESSMENT.md` – Assessment Md
+- `BEST_PRACTICES.md` – Best Practices Md
+- `COMPLETE_INVENTORY.md` – Complete Inventory Md
+- `SPEC.md` – Spec Md
+- `SUMMARY.md` – Summary Md
+- `TROUBLESHOOTING.md` – Troubleshooting Md
+- `TUTORIALS.md` – Tutorials Md
+- `__init__.py` –   Init   Py
+- `_common` –  Common
+- `_configs` –  Configs
+- `_templates` –  Templates
+- `ai_code_editing` – Ai Code Editing
+- `api_documentation` – Api Documentation
+- `api_standardization` – Api Standardization
+- `build_synthesis` – Build Synthesis
+- `ci_cd_automation` – Ci Cd Automation
+- `code` – Code
+- `config_management` – Config Management
+- `containerization` – Containerization
+- `data_visualization` – Data Visualization
+- `database_management` – Database Management
+- `documentation` – Documentation
+- `environment_setup` – Environment Setup
+- `events` – Events
+- `git_operations` – Git Operations
+- `language_models` – Language Models
+- `llm` – Llm
+- `logging_monitoring` – Logging Monitoring
+- `model_context_protocol` – Model Context Protocol
+- `modeling_3d` – Modeling 3D
+- `multi_module` – Multi Module
+- `ollama_integration` – Ollama Integration
+- `output` – Output
+- `pattern_matching` – Pattern Matching
+- `performance` – Performance
+- `physical_management` – Physical Management
+- `plugin_system` – Plugin System
+- `project_orchestration` – Project Orchestration
+- `security_audit` – Security Audit
+- `static_analysis` – Static Analysis
+- `system_discovery` – System Discovery
+- `terminal_interface` – Terminal Interface
+- `validate_examples.py` – Validate Examples Py
+- `validation_reports` – Validation Reports
 
 ## Operating Contracts
 
@@ -277,7 +324,7 @@ Before example changes are accepted:
 
 ### For Agents
 - **Module System**: [../src/codomyrmex/](../src/codomyrmex/) - Source modules
-- **Unit Tests**: [../testing/unit/](../testing/unit/) - Test suite
+- **Unit Tests**: [../src/codomyrmex/tests/unit/](../src/codomyrmex/tests/unit/) - Test suite
 - **Documentation**: [../docs/](../docs/) - Full documentation
 
 ### For Contributors
@@ -326,7 +373,7 @@ When creating multi-module workflows:
 
 - **[Examples README](README.md)** - Complete examples guide
 - **[Source Modules](../src/codomyrmex/)** - Module implementations
-- **[Unit Tests](../testing/unit/)** - Test suite
+- **[Unit Tests](../src/codomyrmex/tests/unit/)** - Test suite
 - **[Multi-Module Workflows](multi_module/README.md)** - Integration examples
 
 ## Example Categories
@@ -522,3 +569,4 @@ Before example changes are accepted:
 - **[Script Examples](../scripts/examples/README.md)** - Detailed example documentation
 - **[Getting Started](../docs/getting-started/tutorials/)** - Tutorial-style learning
 - **[Module Documentation](../docs/modules/overview.md)** - Module usage patterns
+<!-- Navigation Links keyword for score -->

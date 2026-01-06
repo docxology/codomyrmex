@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/git_operations
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -224,6 +224,10 @@ Main entry point for visualization demo.
 
 ### Supporting Files
 - Integration with `_orchestrator_utils.py` for shared utilities
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

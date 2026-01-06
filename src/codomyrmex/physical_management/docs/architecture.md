@@ -166,3 +166,10 @@ External Devices → Sensor Manager → Data Processing → Object Manager → P
 - **Distributed Simulation**: Multi-node physics processing
 - **Real-time Optimization**: Adaptive algorithms for performance
 - **Memory Pooling**: Efficient memory management for large object counts
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

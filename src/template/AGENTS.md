@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/template
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [src](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -18,6 +18,10 @@ Module components and implementation for template..
 - `AGENTS_ROOT_TEMPLATE.md` – Project file
 - `AGENTS_TEMPLATE.md` – Project file
 - `README.md` – Project file
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

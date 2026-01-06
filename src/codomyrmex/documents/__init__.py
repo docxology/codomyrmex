@@ -103,11 +103,12 @@ except ImportError:
 
 # Import models
 try:
-    from .models.document import Document
+    from .models.document import Document, DocumentFormat
     from .models.metadata import DocumentMetadata
     MODELS_AVAILABLE = True
 except ImportError:
     Document = None
+    DocumentFormat = None
     DocumentMetadata = None
     MODELS_AVAILABLE = False
 
@@ -168,6 +169,8 @@ if SEARCH_AVAILABLE:
 if MODELS_AVAILABLE:
     __all__.extend([
         "Document",
+        "DocumentFormat",
         "DocumentMetadata",
     ])
+
 

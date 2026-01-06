@@ -223,7 +223,7 @@ result = create_line_plot(x, y, title="Test Plot", output_path="test_plot.png")
 print(f"✅ Visualization test: {result is not None}")
 
 # Test AI code generation (requires API key)
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 try:
     ai_result = generate_code_snippet("Create a hello world function", "python")
@@ -232,7 +232,7 @@ except Exception as e:
     print(f"⚠️ AI test skipped (no API key): {e}")
 
 # Test code execution sandbox
-from codomyrmex.code_execution_sandbox import execute_code
+from codomyrmex.code import execute_code
 
 sandbox_result = execute_code("python", "print('Hello from sandbox!')")
 print(f"✅ Sandbox test: {sandbox_result['success']}")
@@ -409,7 +409,7 @@ EOF
 # 3. Test API connectivity
 uv run python -c "
 import os
-from codomyrmex.ai_code_editing import validate_api_keys
+from codomyrmex.agents.ai_code_editing import validate_api_keys
 print('API Keys:', validate_api_keys())
 "
 ```
@@ -429,7 +429,7 @@ sudo usermod -aG docker $USER
 
 # 3. Test sandbox functionality
 uv run python -c "
-from codomyrmex.code_execution_sandbox import execute_code
+from codomyrmex.code import execute_code
 result = execute_code('python', 'print(\"Hello\")')
 print('Sandbox test:', result['success'])
 "
@@ -564,3 +564,10 @@ Once installed successfully:
 ---
 
 **📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: January 2025* | *Maintained by: Codomyrmex Documentation Team* | *Version: v0.1.0*
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

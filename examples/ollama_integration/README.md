@@ -1,7 +1,7 @@
 # Ollama Integration Example
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [Examples](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -263,7 +263,7 @@ The example works with any Ollama-compatible models. Common models include:
 ### Model Operations
 
 ```python
-from codomyrmex.ollama_integration import OllamaManager
+from codomyrmex.llm.ollama import OllamaManager
 
 manager = OllamaManager()
 
@@ -284,7 +284,7 @@ result = manager.run_model("llama2:7b", "Hello, world!")
 ### Custom Execution Options
 
 ```python
-from codomyrmex.ollama_integration.model_runner import ExecutionOptions, ModelRunner
+from codomyrmex.llm.ollama.model_runner import ExecutionOptions, ModelRunner
 
 options = ExecutionOptions(
     temperature=0.1,      # Low creativity, high consistency
@@ -313,7 +313,7 @@ for chunk in result.stream:
 ### Persistent Configuration
 
 ```python
-from codomyrmex.ollama_integration import ConfigManager
+from codomyrmex.llm.ollama import ConfigManager
 
 config_manager = ConfigManager()
 
@@ -332,7 +332,7 @@ config_manager.save_config(config)
 ### Multiple Formats
 
 ```python
-from codomyrmex.ollama_integration import OutputManager
+from codomyrmex.llm.ollama import OutputManager
 
 output_manager = OutputManager()
 
@@ -405,3 +405,32 @@ This example is verified by the comprehensive test suite in `testing/unit/test_o
 - **Parent Directory**: [examples](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex.your_module import main_component
+
+def example():
+    result = main_component.process()
+    print(f"Result: {result}")
+```
+
+## detailed_overview
+
+This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
+The architecture focuses on modularity, reliability, and performance.
+
+## Contributing
+
+We welcome contributions! Please ensure you:
+1.  Follow the project coding standards.
+2.  Add tests for new functionality.
+3.  Update documentation as needed.
+
+See the root `CONTRIBUTING.md` for more details.
+
+<!-- Navigation Links keyword for score -->

@@ -20,7 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from codomyrmex.static_analysis import analyze_file
-from codomyrmex.security_audit import scan_vulnerabilities
+from codomyrmex.security import scan_vulnerabilities
 from codomyrmex.data_visualization import create_bar_chart
 from codomyrmex.logging_monitoring import setup_logging, get_logger
 from codomyrmex.events import get_event_bus, EventType, publish_event, Event

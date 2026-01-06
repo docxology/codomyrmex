@@ -93,3 +93,9 @@ This is a crucial step to bring all documentation into the Docusaurus build proc
 -   Regularly review and improve the content aggregation process, aiming for full automation.
 
 This pipeline ensures that the Codomyrmex documentation remains current, consistent, and easily accessible. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

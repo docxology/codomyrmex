@@ -54,3 +54,4 @@ def detect_mime_type(file_path: Path) -> Optional[str]:
     except Exception:
         return None
 
+

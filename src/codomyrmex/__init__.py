@@ -31,13 +31,11 @@ __license__ = "MIT"
 # All available modules in the package
 __all__ = [
     # Core modules
-    "ai_code_editing",
-    "api_documentation",
+    "api",
     "build_synthesis",
     "ci_cd_automation",
     "cli",
-    "code_execution_sandbox",
-    "code_review",
+    "code",
     "config_management",
     "containerization",
     "data_visualization",
@@ -45,11 +43,10 @@ __all__ = [
     "documentation",
     "environment_setup",
     "git_operations",
-    "language_models",
     "logging_monitoring",
     "model_context_protocol",
     "module_template",
-    "ollama_integration",
+    "llm",
     "pattern_matching",
     "performance",
     "project_orchestration",
@@ -61,12 +58,12 @@ __all__ = [
     "tools",
     # Specialized modules
     "events",
-    "api_standardization",
     "plugin_system",
     "template",
-    "modeling_3d",
+    "spatial",
     "physical_management",
     "cerebrum",
+    "agents",
 ]
 
 # Import core exceptions and utilities for easier access
@@ -95,6 +92,9 @@ def get_module_path(module_name: str) -> Optional[Path]:
     """Get the path to a specific module."""
     if module_name in __all__:
         return Path(__file__).parent / module_name
+    # Handle nested modules like llm.ollama
+    if module_name == "llm.ollama" or module_name.startswith("llm."):
+        return Path(__file__).parent / "llm"
     return None
 
 

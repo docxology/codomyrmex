@@ -74,3 +74,10 @@ Or check the [full README.md](README.md) for comprehensive documentation.
 ---
 
 **🎊 Ready in 5 minutes? Your AI-augmented development environment awaits!**
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

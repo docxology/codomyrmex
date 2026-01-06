@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/project_orchestration
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [examples](examples/AGENTS.md)
@@ -389,6 +389,11 @@ graph TD
 ### Documentation
 - `README.md` – Orchestration overview and usage guide
 - `examples/README.md` – Workflow examples documentation
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `examples` – Examples
 
 ## Operating Contracts
 

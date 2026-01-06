@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects/test_project/reports
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -121,6 +121,10 @@ Report Generation
 - Export and delivery automation systems
 - Report storage and management systems
 - Documentation and usage examples
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Report Categories
 

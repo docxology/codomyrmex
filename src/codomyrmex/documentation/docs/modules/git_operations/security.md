@@ -69,7 +69,7 @@ If you discover a security vulnerability within this module (e.g., in its API de
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email **blanket@activeinference.institute** with the subject line: "**SECURITY Vulnerability Report: Git Operations - [Brief Description]**".
+Instead, please email **blanket@activeinference.institute** with the subject line: "**SECURITY Vulnerability Report: Git Operations - Security Issue**".
 
 Please include the following information in your report:
 
@@ -99,3 +99,9 @@ This security policy applies to the `Git Operations` module within Codomyrmex. I
 -   **Keep Dependencies Updated**: Regularly update this module, `GitPython` (if used), and your local Git client.
 
 Thank you for helping keep Codomyrmex and the Git Operations module secure. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

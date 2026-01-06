@@ -22,7 +22,7 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 2. ✅ `environment_setup/` - Environment validation
 3. ✅ `static_analysis/` - Code quality analysis
 4. ✅ `security_audit/` - Vulnerability scanning
-5. ✅ `code_execution_sandbox/` - Safe code execution
+5. ✅ `code/` - Safe code execution
 6. ✅ `data_visualization/` - Chart creation
 7. ✅ `containerization/` - Docker management
 8. ✅ `config_management/` - Configuration handling
@@ -62,9 +62,9 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
    - **Effort**: 3-5 hours
    - **Methods**: build_project(), resolve_dependencies(), execute_build()
 
-5. ⏳ `code_review/` - Automated review
+5. ⏳ `code.review/` - Automated review
    - **Files**: 4
-   - **Test File**: `test_code_review.py`
+   - **Test File**: `test_code.review.py`
    - **Effort**: 2-3 hours
    - **Methods**: review_file(), analyze_code_quality(), generate_review_comments()
 
@@ -159,10 +159,10 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 **Priority**: HIGH  
 **Effort**: 5-8 hours
 
-- [ ] `testing/examples/test_example_execution.py` - Execute all examples
-- [ ] `testing/examples/test_config_validation.py` - Validate config files
-- [ ] `testing/examples/test_output_validation.py` - Validate output formats
-- [ ] `testing/examples/__init__.py` - Package initialization
+- [ ] `src/codomyrmex/tests/examples/test_example_execution.py` - Execute all examples
+- [ ] `src/codomyrmex/tests/examples/test_config_validation.py` - Validate config files
+- [ ] `src/codomyrmex/tests/examples/test_output_validation.py` - Validate output formats
+- [ ] `src/codomyrmex/tests/examples/__init__.py` - Package initialization
 
 **Features**:
 - Automated execution of all examples
@@ -470,11 +470,10 @@ examples/multi_module/
 
 ## Related Documents
 
-- **[COMPREHENSIVE_PLAN.md](COMPREHENSIVE_PLAN.md)** - Detailed implementation plan
-- **[IMPLEMENTATION_CHECKLIST.md](IMPLEMENTATION_CHECKLIST.md)** - Quick reference checklist
 - **[ASSESSMENT.md](ASSESSMENT.md)** - Gap analysis and priorities
-- **[ROADMAP.md](ROADMAP.md)** - Development roadmap
 - **[SUMMARY.md](SUMMARY.md)** - Current status summary
+- **[README.md](README.md)** - Examples guide
+- **[AGENTS.md](AGENTS.md)** - Agent coordination
 
 ---
 
@@ -482,3 +481,10 @@ examples/multi_module/
 **Next Action**: Begin Phase 1 implementation (Plugin System)  
 **Target Completion**: 3-4 weeks for 100% coverage
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

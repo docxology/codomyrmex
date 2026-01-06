@@ -325,7 +325,7 @@ def interactive_module_discovery():
             "ai_code_editing - AI-powered code generation",
             "static_analysis - Code quality analysis",
             "git_operations - Git workflow automation",
-            "code_execution_sandbox - Safe code execution",
+            "code - Code execution, sandboxing, review, and monitoring",
             "environment_setup - Development environment management",
             "logging_monitoring - Structured logging",
             "build_synthesis - Build automation",
@@ -603,7 +603,7 @@ class AdvancedOrchestrator:
     def phase_1_ai_generation(self):
         """Phase 1: Generate code using AI."""
         try:
-            from codomyrmex.ai_code_editing import generate_code_snippet
+            from codomyrmex.agents.ai_code_editing import generate_code_snippet
             
             print("   🔧 Generating Python function with AI...")
             
@@ -688,7 +688,7 @@ if __name__ == "__main__":
     def phase_3_code_execution(self, code):
         """Phase 3: Execute and test generated code."""
         try:
-            from codomyrmex.code_execution_sandbox import execute_code
+            from codomyrmex.code import execute_code
             
             print("   🔧 Testing generated code in sandbox...")
             

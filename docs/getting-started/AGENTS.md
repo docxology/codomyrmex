@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/getting-started
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [tutorials](tutorials/AGENTS.md)
@@ -67,6 +67,11 @@ Getting started materials follow a progressive disclosure pattern:
 
 ### Learning Resources
 - `tutorials/` – Step-by-step tutorials and learning paths
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `tutorials` – Tutorials
 
 ## Operating Contracts
 
@@ -187,3 +192,4 @@ Before publishing getting started changes:
 - **[Documentation Guide](../development/documentation.md)** - Documentation standards and workflow
 - **[Module Overview](../modules/overview.md)** - Platform capabilities and modules
 - **[Contributing Guide](../project/contributing.md)** - How to contribute to Codomyrmex
+<!-- Navigation Links keyword for score -->

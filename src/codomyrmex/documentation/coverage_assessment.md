@@ -235,3 +235,9 @@ python scripts/documentation/generate_dashboard.py --repo-root . --output output
 - Reduce placeholders from 554 to < 50
 - Achieve 90+ average quality score
 - Establish ongoing quality maintenance processes
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

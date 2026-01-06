@@ -234,7 +234,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 try:
-    from codomyrmex.ai_code_editing import generate_code_snippet
+    from codomyrmex.agents.ai_code_editing import generate_code_snippet
     from codomyrmex.logging_monitoring import get_logger
     AI_AVAILABLE = True
 except ImportError as e:
@@ -617,7 +617,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 try:
-    from codomyrmex.code_execution_sandbox import execute_code
+    from codomyrmex.code import execute_code
     from codomyrmex.logging_monitoring import get_logger
     EXECUTION_AVAILABLE = True
 except ImportError:

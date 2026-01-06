@@ -503,3 +503,10 @@ rm.remove_resource("custom_api")
 - [Dispatch and Coordination](./dispatch-coordination.md)
 - [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

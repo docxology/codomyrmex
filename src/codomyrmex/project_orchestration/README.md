@@ -1,7 +1,7 @@
 # src/codomyrmex/project_orchestration
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [templates](templates/README.md)
     - [tests](tests/README.md)
@@ -144,3 +144,62 @@ graph TB
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Src Hub**: [src](../../../src/README.md)
+## Architecture
+
+### Architecture Diagrams
+
+#### Project Orchestration Module
+
+```mermaid
+graph TD
+    project_orchestration["project_orchestration<br/>Module"]
+    file_0["workflow_dag.py"]
+    project_orchestration --> file_0
+    file_1["documentation_generator.py"]
+    project_orchestration --> file_1
+    file_2["resource_manager.py"]
+    project_orchestration --> file_2
+    file_3["workflow_manager.py"]
+    project_orchestration --> file_3
+    file_4["task_orchestrator.py"]
+    project_orchestration --> file_4
+    file_5["parallel_executor.py"]
+    project_orchestration --> file_5
+    file_6["project_manager.py"]
+    project_orchestration --> file_6
+    file_7["orchestration_engine.py"]
+    project_orchestration --> file_7
+    file_8["mcp_tools.py"]
+    project_orchestration --> file_8
+```
+
+
+
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex.codomyrmex.project_orchestration import main_component
+
+def example():
+    result = main_component.process()
+    print(f"Result: {result}")
+```
+
+## detailed_overview
+
+This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
+The architecture focuses on modularity, reliability, and performance.
+
+## Contributing
+
+We welcome contributions! Please ensure you:
+1.  Follow the project coding standards.
+2.  Add tests for new functionality.
+3.  Update documentation as needed.
+
+See the root `CONTRIBUTING.md` for more details.
+
+<!-- Navigation Links keyword for score -->

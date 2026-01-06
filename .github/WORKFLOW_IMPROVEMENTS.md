@@ -188,3 +188,10 @@ The GitHub Actions workflows are now **100% functional, efficient, and productio
 - ✅ **Excellent developer experience**
 
 All workflows follow modern best practices, use consistent tooling, and provide comprehensive feedback to developers and maintainers.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

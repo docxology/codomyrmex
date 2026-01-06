@@ -954,3 +954,10 @@ def setup_git_environment():
 ```
 
 This comprehensive API documentation covers all 22 Git operations with detailed examples, error handling, and best practices for production use.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

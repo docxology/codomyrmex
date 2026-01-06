@@ -171,3 +171,9 @@ Now you can try:
 - Exploring how `trigger_build` might work for different types of components (e.g., Docker images, if supported by your `build_synthesis` module implementation, which would require a `Dockerfile` as `target` or similar).
 - Integrating this build step into an automated CI/CD pipeline.
 - Using the generated wheel file by installing it into a virtual environment (`pip install ./output/builds/sample_utility_module_pkg/codomyrmex_sample_utility_module-0.1.0-py3-none-any.whl`) and trying to import your module. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

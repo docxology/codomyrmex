@@ -259,6 +259,12 @@ Get all access points.
 - `physical_vulnerability.py` – Physical vulnerability assessment
 - `perimeter_management.py` – Security perimeter management
 
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Physical Security Protocols

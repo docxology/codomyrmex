@@ -1,5 +1,7 @@
 """YAML document handler."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Any, Optional
 
@@ -103,4 +105,5 @@ def write_yaml(
             f"Failed to write YAML file: {str(e)}",
             file_path=str(file_path)
         ) from e
+
 

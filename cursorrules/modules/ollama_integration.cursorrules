@@ -1,14 +1,14 @@
-# Cursor Rules for the ollama_integration Module
+# Cursor Rules for the llm/ollama Module
 
 ## 0. Preamble
-These rules are specific to the `ollama_integration` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+These rules are specific to the `llm/ollama` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
 
 ## 1. Module Purpose & Context
 -   **Core Functionality**: This module integrates with Ollama local Large Language Models, providing model management and execution.
 -   **Key Technologies/Tools**: Python, Ollama API, model management, configuration management, output processing.
 -   Refer to the module's main `README.md` for an overview.
 
-## 2. Key Files & Structure in `ollama_integration` Module
+## 2. Key Files & Structure in `llm/ollama` Module
 When working within this module, pay close attention to:
 -   `README.md`: High-level overview, setup, and usage of the Ollama Integration module.
 -   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
@@ -16,7 +16,7 @@ When working within this module, pay close attention to:
 -   `SECURITY.md`: Specific security considerations for Ollama integration and model interactions.
 -   `requirements.txt`: Python dependencies for this module.
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Ollama Integration.
--   `src/` (or primary Python package folders, e.g., `ollama_integration/` itself if it contains Python sources directly): Core logic of the module.
+-   `src/codomyrmex/llm/ollama/`: Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.
 -   `.gitignore`: Module-specific ignored files.
 -   `ollama_manager.py`: Core Ollama API interaction and model management.
@@ -24,31 +24,31 @@ When working within this module, pay close attention to:
 -   `config_manager.py`: Configuration management for Ollama integration.
 -   `output_manager.py`: Model output processing and handling.
 
-## 3. Coding Standards & Practices for `ollama_integration`
--   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `ollama_integration` module.
+## 3. Coding Standards & Practices for `llm/ollama`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `llm/ollama` module.
 -   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for model configurations and responses.
 -   **Model Management**: Implement robust model lifecycle management and resource handling.
 -   **Error Handling**: Provide comprehensive error handling for Ollama API failures and model issues.
 -   **Configuration**: Support flexible configuration for different Ollama setups and models.
 
-## 4. Testing in `ollama_integration`
+## 4. Testing in `llm/ollama`
 -   New features (e.g., new model support, output processing) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
 -   Tests should cover Ollama API interactions, model execution, configuration management, and error scenarios.
 -   Mock Ollama API where appropriate to ensure deterministic test behavior.
--   Run existing tests to ensure no regressions. Refer to `ollama_integration/tests/README.md`.
+-   Run existing tests to ensure no regressions. Refer to `src/codomyrmex/tests/unit/test_ollama_integration.py`.
 
-## 5. Documentation for `ollama_integration`
+## 5. Documentation for `llm/ollama`
 -   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
 -   Document Ollama configuration options, model management, and integration patterns clearly.
 -   Include examples of model execution and output handling.
 
-## 6. Specific Considerations for `ollama_integration`
+## 6. Specific Considerations for `llm/ollama`
 -   **Ollama Compatibility**: Ensure compatibility with different Ollama versions and model formats.
 -   **Resource Management**: Implement proper resource management for model loading and execution.
 -   **Output Processing**: Provide flexible output processing and formatting capabilities.
 -   **Error Recovery**: Implement robust error recovery for model failures and API issues.
 
-## 7. Final Check for `ollama_integration`
+## 7. Final Check for `llm/ollama`
 -   Before finalizing changes, ensure all module-specific documentation is updated.
 -   Verify that all tests for this module pass.
 -   Confirm that Ollama integration works correctly with actual Ollama services.

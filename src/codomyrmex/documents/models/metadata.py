@@ -66,3 +66,4 @@ class DocumentMetadata:
             custom_fields=data.get("custom_fields", {}),
         )
 
+

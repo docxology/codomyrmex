@@ -24,7 +24,7 @@ The Ollama Integration module enables seamless interaction with local Large Lang
 ### Basic Usage
 
 ```python
-from codomyrmex.ollama_integration import OllamaManager, ModelRunner
+from codomyrmex.llm.ollama import OllamaManager, ModelRunner
 
 # Initialize managers
 manager = OllamaManager()
@@ -48,7 +48,7 @@ print(f"Execution time: {result.execution_time:.2f}s")
 ### Configuration Management
 
 ```python
-from codomyrmex.ollama_integration import ConfigManager
+from codomyrmex.llm.ollama import ConfigManager
 
 # Initialize configuration manager
 config = ConfigManager()
@@ -133,7 +133,7 @@ result = manager.run_model(
 #### Flexible Execution
 
 ```python
-from codomyrmex.ollama_integration.model_runner import ExecutionOptions
+from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
 # Custom execution options
 options = ExecutionOptions(
@@ -309,7 +309,7 @@ config_manager.import_config("backup_config.json")
 ### Basic Model Execution
 
 ```python
-from codomyrmex.ollama_integration import OllamaManager, ModelRunner
+from codomyrmex.llm.ollama import OllamaManager, ModelRunner
 
 # Initialize
 manager = OllamaManager()
@@ -328,7 +328,7 @@ print(f"Answer: {result.response}")
 ### Advanced Execution with Options
 
 ```python
-from codomyrmex.ollama_integration.model_runner import ExecutionOptions
+from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
 # Custom options
 options = ExecutionOptions(
@@ -380,7 +380,7 @@ for model, data in comparison['results'].items():
 ### Configuration Management
 
 ```python
-from codomyrmex.ollama_integration import ConfigManager, OutputManager
+from codomyrmex.llm.ollama import ConfigManager, OutputManager
 
 # Setup configuration
 config = ConfigManager()
@@ -602,3 +602,10 @@ For issues and questions:
 **🎯 Result**: Comprehensive Ollama integration providing seamless local LLM management, execution, configuration, and output handling within the Codomyrmex ecosystem.
 
 **Status**: ✅ **FULLY FUNCTIONAL** - All 23 tests passing, real model execution validated, configuration and output management working correctly.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

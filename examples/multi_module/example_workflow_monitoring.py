@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 from codomyrmex.logging_monitoring import setup_logging, get_logger
 from codomyrmex.performance.performance_monitor import get_system_metrics
 from codomyrmex.system_discovery.health_checker import perform_health_check
-from codomyrmex.system_discovery.module_scanner import discover_modules
+from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
 from codomyrmex.data_visualization.plotter import create_bar_chart
 from codomyrmex.events import get_event_bus, EventType, publish_event
 
@@ -116,7 +116,8 @@ def main():
 
         try:
             # Discover available modules
-            modules = discover_modules()
+            discovery = SystemDiscovery()
+            modules = discovery.discover_modules()
 
             if modules:
                 results['modules_discovered'] = len(modules)

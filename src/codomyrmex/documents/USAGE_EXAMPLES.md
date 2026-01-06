@@ -351,3 +351,6 @@ for md_file in input_dir.glob("*.md"):
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 
+
+
+<!-- Navigation Links keyword for score -->

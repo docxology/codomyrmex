@@ -87,3 +87,4 @@ class TestCerebrumEngine:
         retrieved = engine.case_base.get_case("test")
         assert retrieved.outcome == "success"
 
+

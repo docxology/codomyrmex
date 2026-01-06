@@ -12,8 +12,8 @@ This documentation provides comprehensive information about the Codomyrmex proje
 ## Getting Started
 
 -   **New to Codomyrmex?** Start with the [Project Overview](./project/) to understand its goals and structure.
--   **Ready to install?** Head over to the [Environment Setup](./development/environment-setup) guide.
--   **Want to contribute?** Check out our [Contributing Guidelines](./project/contributing).
+-   **Ready to install?** Head over to the [Environment Setup](./development/environment-setup.md) guide.
+-   **Want to contribute?** Check out our [Contributing Guidelines](./project/contributing.md).
 
 ## Explore the Modules
 
@@ -23,13 +23,14 @@ Codomyrmex is composed of several specialized modules. Dive into their specific 
 
 Use the sidebar navigation to explore all available documentation sections.
 
-<!-- TODO: Flesh out this introduction. 
-Key things to include:
-- What is Codomyrmex? (A brief, compelling overview of the project's mission and purpose)
-- Who is this documentation for? (Developers, users, contributors?)
-- How is the documentation organized? (Briefly explain the main sections like Project Overview, Modules, etc.)
-- How to get started with the project or find key information.
--->
+Codomyrmex is designed from the ground up to be a modular, scalable infrastructure for AI-driven development. It provides the foundation for building autonomous agents, automated code analysis pipelines, and complex spatial modeling environments.
+
+This documentation serves as a central knowledge hub for:
+- **Core Developers**: Building and maintaining the Codomyrmex engine.
+- **Module Authors**: Creating specialized extensions for the platform.
+- **Users**: Utilizing the platform's CLI and API for their development workflows.
+
+The documentation is organized logically to reflect the layered architecture of the platform, moving from foundational services to core execution environments and finally to specialized service layers.
 
 ## Navigating the Documentation
 
@@ -44,15 +45,17 @@ Use the sidebar on the left to navigate through the different sections:
     - Changelogs, Security Information, and more.
     - Detailed technical overviews and tutorials.
 
-## Contributing
+## Developer Resources
 
-We welcome contributions! Please see our [Contributing Guidelines](./project/contributing.md) to learn how you can help.
+To get the most out of Codomyrmex, we recommend exploring the following developer guides:
 
-<!-- TODO: Consider adding a "Developer Guides" section to the documentation.
-This section could cover topics such as:
-- How to create a new module using the `template/module_template`.
-- Conventions for logging, error handling, and testing across the project.
-- Explanation of the `output/` directory and how modules should manage their outputs.
-- Details on the Model Context Protocol (MCP) and how to define tools.
-- Guidelines for writing and structuring documentation for modules.
---> 
+- **Module Creation**: Learn how to use the `module_template` to spin up new, standardized components.
+- **Standardized Interfaces**: Understand the protocols for logging, error handling, and configuration management.
+- **MCP Integration**: Deep dive into the Model Context Protocol for defining AI-compatible tools.
+- **Output Protocols**: Best practices for managing generated artifacts in the `output/` directory.
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

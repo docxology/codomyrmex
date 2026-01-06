@@ -222,9 +222,9 @@ If you encounter issues:
 ## Related Resources
 
 - **[Basic Example](example_basic.py)** - Comprehensive logging example
-- **[Logging Documentation](../../docs/modules/logging_monitoring/)** - Full API documentation
-- **[Configuration Guide](../../docs/getting-started/configuration.md)** - Logging configuration
-- **[Best Practices](../../docs/development/best-practices.md)** - Logging best practices
+- **[Logging Documentation](../../src/codomyrmex/logging_monitoring/README.md)** - Full API documentation
+- **[Configuration Guide](../../docs/)** - Documentation site
+- **[Best Practices](../BEST_PRACTICES.md)** - Example best practices
 
 ## Next Steps
 
@@ -244,3 +244,10 @@ To improve this tutorial:
 2. Suggest additional examples or use cases
 3. Propose better explanations or code samples
 4. Submit pull requests with improvements
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

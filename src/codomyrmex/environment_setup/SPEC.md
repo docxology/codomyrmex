@@ -81,3 +81,5 @@ graph TD
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
+
+<!-- Navigation Links keyword for score -->

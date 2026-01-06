@@ -1,7 +1,7 @@
 # Codomyrmex Agents — cursorrules/modules
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Cursor Rules](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -37,7 +37,7 @@ This directory contains module-specific coding standards and conventions for eac
 - Standards for code analysis and quality metrics
 - Key Functions: `validate_analysis_config(config: dict) -> bool`, `standardize_severity_levels(results: list) -> StandardizedResults`
 
-**Code Review** (`code_review.cursorrules`)
+**Code Review** (`code.review.cursorrules`)
 - Standards for automated code review processes
 - Key Functions: `validate_review_criteria(criteria: dict) -> bool`, `standardize_review_comments(comments: list) -> StandardizedComments`
 
@@ -87,7 +87,7 @@ This directory contains module-specific coding standards and conventions for eac
 - Standards for documentation generation and maintenance
 - Key Functions: `validate_doc_config(config: dict) -> bool`, `standardize_doc_formats(docs: list) -> StandardizedDocs`
 
-**API Documentation** (`api_documentation.cursorrules`)
+**API Documentation** (`api/documentation.cursorrules`)
 - Standards for API specification and documentation
 - Key Functions: `validate_api_spec(spec: dict) -> bool`, `standardize_api_endpoints(endpoints: list) -> StandardizedEndpoints`
 
@@ -132,11 +132,11 @@ This directory contains module-specific coding standards and conventions for eac
 ## Active Components
 - `README.md` – Directory documentation
 - `ai_code_editing.cursorrules` – AI-assisted coding standards (function: validate_ai_code_patterns(code: str) -> ValidationResult)
-- `api_documentation.cursorrules` – API documentation standards (function: validate_api_docs(docs: dict) -> ValidationResult)
+- `api/documentation.cursorrules` – API documentation standards (function: validate_api_docs(docs: dict) -> ValidationResult)
 - `build_synthesis.cursorrules` – Build orchestration standards (function: validate_build_process(config: dict) -> ValidationResult)
 - `ci_cd_automation.cursorrules` – CI/CD pipeline standards (function: validate_pipeline_config(config: dict) -> ValidationResult)
-- `code_execution_sandbox.cursorrules` – Code execution safety standards (function: validate_execution_safety(config: dict) -> ValidationResult)
-- `code_review.cursorrules` – Code review standards (function: validate_review_process(config: dict) -> ValidationResult)
+- `code.cursorrules` – Code execution safety standards (function: validate_execution_safety(config: dict) -> ValidationResult)
+- `code.review.cursorrules` – Code review standards (function: validate_review_process(config: dict) -> ValidationResult)
 - `config_management.cursorrules` – Configuration management standards (function: validate_config_management(config: dict) -> ValidationResult)
 - `containerization.cursorrules` – Container management standards (function: validate_container_config(config: dict) -> ValidationResult)
 - `data_visualization.cursorrules` – Data visualization standards (function: validate_chart_config(config: dict) -> ValidationResult)
@@ -158,6 +158,11 @@ This directory contains module-specific coding standards and conventions for eac
 - `static_analysis.cursorrules` – Static analysis standards (function: validate_analysis_config(config: dict) -> ValidationResult)
 - `system_discovery.cursorrules` – System discovery standards (function: validate_discovery_config(config: dict) -> ValidationResult)
 - `terminal_interface.cursorrules` – Terminal interface standards (function: validate_terminal_config(config: dict) -> ValidationResult)
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `api_documentation.cursorrules` – Api Documentation Cursorrules
 
 ## Operating Contracts
 

@@ -291,6 +291,11 @@ Context manager for tracking resource usage of operations.
 ### Supporting Files
 - `requirements.txt` – Module dependencies (psutil, cachetools, etc.)
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Performance Protocols

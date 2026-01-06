@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/examples/basic
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -140,6 +140,11 @@ Demonstration Execution
 - Expected output files for validation
 - Documentation and usage examples
 - Troubleshooting guides and FAQs
+
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
 
 ## Demonstration Standards
 

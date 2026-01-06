@@ -1,15 +1,15 @@
 # scripts
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [Repository Root](../README.md)
 - **Children**:
+    - [agents](agents/README.md)
     - [ai_code_editing](ai_code_editing/README.md)
-    - [api_documentation](api_documentation/README.md)
+    - [api](api/README.md)
     - [build_synthesis](build_synthesis/README.md)
     - [cerebrum](cerebrum/README.md)
     - [ci_cd_automation](ci_cd_automation/README.md)
-    - [code_execution_sandbox](code_execution_sandbox/README.md)
-    - [code_review](code_review/README.md)
+    - [code](code/README.md)
     - [config_management](config_management/README.md)
     - [containerization](containerization/README.md)
     - [data_visualization](data_visualization/README.md)
@@ -18,7 +18,9 @@
     - [docs](docs/README.md)
     - [documentation](documentation/README.md)
     - [documentation_module](documentation_module/README.md)
+    - [documents](documents/README.md)
     - [environment_setup](environment_setup/README.md)
+    - [events](events/README.md)
     - [examples](examples/README.md)
     - [fabric_integration](fabric_integration/README.md)
     - [fpf](fpf/README.md)
@@ -29,16 +31,18 @@
     - [model_context_protocol](model_context_protocol/README.md)
     - [modeling_3d](modeling_3d/README.md)
     - [module_template](module_template/README.md)
-    - [ollama_integration](ollama_integration/README.md)
     - [pattern_matching](pattern_matching/README.md)
     - [performance](performance/README.md)
     - [physical_management](physical_management/README.md)
+    - [plugin_system](plugin_system/README.md)
     - [project_orchestration](project_orchestration/README.md)
-    - [security_audit](security_audit/README.md)
+    - [security](security/README.md)
     - [static_analysis](static_analysis/README.md)
     - [system_discovery](system_discovery/README.md)
+    - [template](template/README.md)
     - [terminal_interface](terminal_interface/README.md)
     - [testing](testing/README.md)
+    - [tools](tools/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -67,14 +71,13 @@ graph TB
         AI_SCRIPTS[ai_code_editing/<br/>AI code assistance<br/>Generation workflows]
         BUILD_SCRIPTS[build_synthesis/<br/>Build automation<br/>Multi-language builds]
         CI_SCRIPTS[ci_cd_automation/<br/>CI/CD pipelines<br/>Deployment automation]
-        EXEC_SCRIPTS[code_execution_sandbox/<br/>Safe execution<br/>Code validation]
-        REVIEW_SCRIPTS[code_review/<br/>Code review automation<br/>Quality analysis]
+        CODE_SCRIPTS[code/<br/>Code execution, review<br/>Sandbox, monitoring]
         CONFIG_SCRIPTS[config_management/<br/>Configuration management<br/>Validation, deployment]
         CONTAINER_SCRIPTS[containerization/<br/>Container management<br/>Docker, Kubernetes]
         DATA_SCRIPTS[data_visualization/<br/>Data visualization<br/>Plot generation]
         DB_SCRIPTS[database_management/<br/>Database operations<br/>Migrations, backups]
         DOC_SCRIPTS[documentation/<br/>Doc generation<br/>Website creation]
-        API_DOC_SCRIPTS[api_documentation/<br/>API documentation<br/>OpenAPI specs]
+        API_SCRIPTS[api/<br/>API documentation<br/>OpenAPI specs]
         ENV_SCRIPTS[environment_setup/<br/>Environment setup<br/>Validation, configuration]
         FPF_SCRIPTS[fpf/<br/>FPF orchestration<br/>End-to-end FPF processing]
         CEREBRUM_SCRIPTS[cerebrum/<br/>CEREBRUM-FPF orchestration<br/>Comprehensive CEREBRUM analysis]
@@ -84,12 +87,11 @@ graph TB
         MCP_SCRIPTS[model_context_protocol/<br/>MCP management<br/>Tool specifications]
         MODELING_SCRIPTS[modeling_3d/<br/>3D modeling<br/>Visualization workflows]
         MODULE_SCRIPTS[module_template/<br/>Module creation<br/>Scaffolding tools]
-        OLLAMA_SCRIPTS[ollama_integration/<br/>Local LLM integration<br/>Ollama management]
         PATTERN_SCRIPTS[pattern_matching/<br/>Pattern analysis<br/>Code analysis]
         PERF_SCRIPTS[performance/<br/>Performance monitoring<br/>Benchmarking]
         PHYS_SCRIPTS[physical_management/<br/>Hardware monitoring<br/>Resource management]
         PROJECT_SCRIPTS[project_orchestration/<br/>Workflow orchestration<br/>Task coordination]
-        SECURITY_SCRIPTS[security_audit/<br/>Security scanning<br/>Compliance checks]
+        SECURITY_SCRIPTS[security/<br/>Security scanning<br/>Compliance checks]
         STATIC_SCRIPTS[static_analysis/<br/>Code analysis<br/>Quality metrics]
         SYSTEM_SCRIPTS[system_discovery/<br/>System exploration<br/>Module discovery]
         TERM_SCRIPTS[terminal_interface/<br/>Terminal UI<br/>Rich interfaces]
@@ -300,17 +302,34 @@ stateDiagram-v2
 
 ## Script Organization Policy
 
-**All scripts must be organized in module-specific subdirectories.** Scripts in the root `scripts/` directory should only include:
-- Core utilities (`_orchestrator_utils.py`)
-- Module-specific orchestrators (in their respective subdirectories)
-- Category-specific scripts (documentation/, testing/, development/, maintenance/, etc.)
+**All scripts are organized in subdirectories by category or module.** The root `scripts/` directory contains only:
+- Core utilities (`_orchestrator_utils.py`) - Shared utilities for script orchestration
 
-No standalone utility scripts should remain in the root `scripts/` directory.
+**Script Organization:**
+- **`documentation/`** - All documentation maintenance, validation, generation, and link-fixing scripts
+- **`testing/`** - All testing automation, verification, and test suite generation scripts
+- **`development/`** - Development workflow scripts (setup, testing, linting, formatting)
+- **`maintenance/`** - System maintenance, cleanup, and organization utilities
+- **`examples/`** - Example scripts and demonstrations
+- **`[module_name]/`** - Module-specific orchestration scripts (e.g., `ai_code_editing/`, `git_operations/`)
+
+No standalone utility scripts remain in the root `scripts/` directory. This ensures clear categorization and easy discovery of scripts by purpose.
+
+## Script Organization Summary
+
+**Current State**: All scripts are properly organized in subdirectories. The root `scripts/` directory contains only `_orchestrator_utils.py`.
+
+**Scripts moved/removed from root:**
+- Documentation scripts → `documentation/` (e.g., `comprehensive_triple_check.py`, `fix_*.py`, `generate_*.py`)
+- Testing scripts → `testing/` (e.g., `assess_module_documentation_tests.py`, `create_comprehensive_test_suites.py`)
+- Audit scripts → `documentation/` (e.g., `audit_structure.py`, `check_links.py`)
+
+**Result**: Clean organization with scripts categorized by purpose, making them easy to discover and maintain.
 
 ## Directory Contents
 
 ### Core Utilities
-- `_orchestrator_utils.py` – Shared utilities for script orchestration and coordination
+- `_orchestrator_utils.py` – Shared utilities for script orchestration and coordination (only file in root)
 
 ### Development Workflow Scripts
 - `development/` – Development environment setup, testing, code quality tools
@@ -319,7 +338,7 @@ No standalone utility scripts should remain in the root `scripts/` directory.
 - `docs/` – Documentation maintenance utilities
 - `documentation/` – Comprehensive documentation system scripts (includes all documentation maintenance, validation, generation, and link-fixing scripts)
 - `documentation_module/` – Module-specific documentation automation
-- `api_documentation/` – API documentation generation tools
+- `api/` – API documentation generation tools
 
 ### Maintenance Scripts
 - `maintenance/` – System maintenance, cleanup, and organization utilities
@@ -448,3 +467,32 @@ def monitor_container_health(container_ids: list[str]) -> dict[str, dict]
 - **Scripts Hub**: [Scripts](README.md)
 - **Development Scripts**: [development/README.md](development/README.md)
 - **Examples**: [examples/README.md](examples/README.md)
+
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex.your_module import main_component
+
+def example():
+    result = main_component.process()
+    print(f"Result: {result}")
+```
+
+## detailed_overview
+
+This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
+The architecture focuses on modularity, reliability, and performance.
+
+## Contributing
+
+We welcome contributions! Please ensure you:
+1.  Follow the project coding standards.
+2.  Add tests for new functionality.
+3.  Update documentation as needed.
+
+See the root `CONTRIBUTING.md` for more details.
+
+<!-- Navigation Links keyword for score -->

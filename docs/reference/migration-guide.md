@@ -51,7 +51,7 @@ graph LR
 #### **API Additions**
 ```python
 # New APIs (additive, backward compatible)
-from codomyrmex.ai_code_editing import enhance_code_batch
+from codomyrmex.agents.ai_code_editing import enhance_code_batch
 from codomyrmex.data_visualization import create_interactive_dashboard
 from codomyrmex.static_analysis import analyze_security_vulnerabilities
 
@@ -259,7 +259,7 @@ class CodomyrmexMigrator:
             # v0.x.x → v1.0.0 import mappings
             'from codomyrmex.code.data_visualization import': 'from codomyrmex.data_visualization import',
             'from codomyrmex.analysis.static import': 'from codomyrmex.static_analysis import',
-            'from codomyrmex.ai.code_editing import': 'from codomyrmex.ai_code_editing import',
+            'from codomyrmex.ai.code_editing import': 'from codomyrmex.agents.ai_code_editing import',
             'from codomyrmex.utils.environment import': 'from codomyrmex.environment_setup import',
         }
 
@@ -707,3 +707,10 @@ pip install codomyrmex==$(previous_version)
 - [ ] Rollback plan confirmed
 
 **Need Migration Help?** Use our automated migration tools or contact support for assistance with complex migrations.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

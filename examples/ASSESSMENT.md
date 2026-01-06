@@ -18,13 +18,13 @@ This document provides a comprehensive assessment of the Codomyrmex examples str
 
 **Core Layer** (8/8 = 100%):
 - ✅ `static_analysis/` - Complete with multi-tool analysis
-- ✅ `code_execution_sandbox/` - Complete with resource limits
+- ✅ `code/` - Complete with resource limits
 - ✅ `data_visualization/` - Complete with multiple chart types
 - ✅ `security_audit/` - Complete with vulnerability scanning
 - ✅ `ai_code_editing/` - Complete (AI-powered code generation, refactoring, analysis)
 - ✅ `pattern_matching/` - Complete (AST analysis with fallback implementation)
 - ✅ `git_operations/` - Complete (22+ operations demonstrated)
-- ✅ `code_review/` - Complete (Automated code review and analysis)
+- ✅ `code.review/` - Complete (Automated code review and analysis)
 
 **Service Layer** (8/8 = 100%):
 - ✅ `containerization/` - Complete with Docker optimization
@@ -127,3 +127,9 @@ All 5 planned multi-module workflows are implemented:
 ---
 
 **Final Status**: All examples are complete, functional, documented, and accurate. The Codomyrmex examples structure provides comprehensive coverage of all modules with production-quality implementations.
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

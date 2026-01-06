@@ -334,7 +334,7 @@ Type 'explore' to begin your foraging adventure!
                 self._demo_data_visualization()
             elif module_name == "logging_monitoring":
                 self._demo_logging()
-            elif module_name == "code_execution_sandbox":
+            elif module_name == "code":
                 self._demo_code_execution()
             else:
                 print(f"🤷 No specific demo available for {module_name}")
@@ -413,7 +413,7 @@ Type 'explore' to begin your foraging adventure!
     def _demo_code_execution(self):
         """Demo the code execution sandbox."""
         try:
-            from codomyrmex.code_execution_sandbox import execute_code
+            from codomyrmex.code import execute_code
 
             print("   🏃 Executing sample Python code in sandbox...")
 

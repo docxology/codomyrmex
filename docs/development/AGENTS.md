@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/development
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -98,6 +98,10 @@ Advanced usage guide for the UV package manager including:
 - Tool installation scripts and validation procedures
 - Testing framework examples and patterns
 - Documentation templates and style guides
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

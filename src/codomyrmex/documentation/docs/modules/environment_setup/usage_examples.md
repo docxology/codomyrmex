@@ -225,3 +225,9 @@ While Codomyrmex aims for a unified base setup, a specific module might have an 
 2.  Perform these steps *after* the main project setup and *within* the activated project virtual environment (`.venv`).
 
 This `environment_setup` module primarily focuses on the *common* baseline. Individual modules are responsible for documenting their *additional unique* setup requirements. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

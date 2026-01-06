@@ -1,9 +1,10 @@
 # Codomyrmex Agents — projects/test_project
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Projects](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
+    - [.codomyrmex](.codomyrmex/AGENTS.md)
     - [config](config/AGENTS.md)
     - [data](data/AGENTS.md)
     - [reports](reports/AGENTS.md)
@@ -115,6 +116,14 @@ Test Project
 - Test data and validation cases
 - Documentation and usage examples
 - Build and deployment scripts
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `config` – Config
+- `data` – Data
+- `reports` – Reports
+- `src` – Src
 
 ## Project Standards
 

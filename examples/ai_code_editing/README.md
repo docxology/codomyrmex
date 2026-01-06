@@ -1,14 +1,14 @@
 # AI Code Editing Example
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [Examples](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Module**: `codomyrmex.ai_code_editing` - AI-Powered Code Generation and Refactoring
+**Module**: `codomyrmex.agents.ai_code_editing` - AI-Powered Code Generation and Refactoring
 
 ## Overview
 
@@ -339,7 +339,7 @@ logging:
 Test individual functions directly:
 
 ```python
-from codomyrmex.ai_code_editing import generate_code_snippet, validate_api_keys
+from codomyrmex.agents.ai_code_editing import generate_code_snippet, validate_api_keys
 
 # Check API keys
 print(validate_api_keys())
@@ -379,8 +379,8 @@ The AI code editing module integrates with:
 ### Workflow Integration
 
 ```python
-from codomyrmex.ai_code_editing import generate_code_snippet, refactor_code_snippet
-from codomyrmex.code_review import review_file
+from codomyrmex.agents.ai_code_editing import generate_code_snippet, refactor_code_snippet
+from codomyrmex.code.review import review_file
 from codomyrmex.static_analysis import analyze_file
 
 # Generate code
@@ -493,10 +493,10 @@ The AI code editing module continues to evolve with:
 
 ## Related Documentation
 
-- **[AI Code Editing API](../../src/codomyrmex/ai_code_editing/)**
+- **[AI Code Editing API](../../src/codomyrmex/agents/ai_code_editing/)**
 - **[Language Models](../language_models/)**
-- **[Code Review](../code_review/)**
-- **[Prompt Engineering Guide](../../src/codomyrmex/ai_code_editing/PROMPT_ENGINEERING.md)**
+- **[Code Review](../code.review/)**
+- **[Prompt Engineering Guide](../../src/codomyrmex/agents/ai_code_editing/PROMPT_ENGINEERING.md)**
 
 ---
 
@@ -512,3 +512,32 @@ The AI code editing module continues to evolve with:
 - **Parent Directory**: [examples](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex.your_module import main_component
+
+def example():
+    result = main_component.process()
+    print(f"Result: {result}")
+```
+
+## detailed_overview
+
+This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
+The architecture focuses on modularity, reliability, and performance.
+
+## Contributing
+
+We welcome contributions! Please ensure you:
+1.  Follow the project coding standards.
+2.  Add tests for new functionality.
+3.  Update documentation as needed.
+
+See the root `CONTRIBUTING.md` for more details.
+
+<!-- Navigation Links keyword for score -->

@@ -362,3 +362,9 @@ For detailed specifications of all available MCP plotting tools, including `crea
   - **Solution**: Ensure `ensure_dependencies_installed()` is called at startup, and install all required packages.
 - **Issue**: Output directory not found or permission denied when saving plots.
   - **Solution**: Make sure the directory specified in `output_path` exists and that your application has write permissions to it. The `save_plot` helper attempts to create the directory, but deep path creation or permission issues can still occur. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

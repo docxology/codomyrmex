@@ -1,5 +1,7 @@
 """Metadata management operations."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Any, Optional
 
@@ -91,4 +93,5 @@ def _update_markdown_metadata(file_path: Path, metadata: dict[str, Any]) -> None
     except Exception as e:
         logger.error(f"Error updating markdown metadata: {e}")
         raise
+
 

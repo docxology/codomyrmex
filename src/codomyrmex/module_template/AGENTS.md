@@ -334,6 +334,14 @@ jobs:
 - `pyproject.toml` – Python project configuration template
 - `setup.cfg` – Setup configuration template
 
+
+### Additional Files
+- `MCP_TOOL_SPECIFICATION.md` – Mcp Tool Specification Md
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `tests` – Tests
+
 ## Operating Contracts
 
 ### Template Standards

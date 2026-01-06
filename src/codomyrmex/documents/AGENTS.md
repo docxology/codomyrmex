@@ -4,7 +4,16 @@
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Documents Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [core](core/AGENTS.md)
+    - [docs](docs/AGENTS.md)
+    - [formats](formats/AGENTS.md)
+    - [metadata](metadata/AGENTS.md)
+    - [models](models/AGENTS.md)
+    - [search](search/AGENTS.md)
+    - [templates](templates/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+    - [transformation](transformation/AGENTS.md)
+    - [utils](utils/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -188,6 +197,24 @@ def search_documents(query: str, index_path: Path) -> List[Document]
 - `utils/encoding_detector.py` – Encoding detection
 - `utils/mime_type_detector.py` – MIME type detection
 - `utils/file_validator.py` – File validation
+
+
+### Additional Files
+- `API_SPECIFICATION.md` – Api Specification Md
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+- `USAGE_EXAMPLES.md` – Usage Examples Md
+- `core` – Core
+- `docs` – Docs
+- `formats` – Formats
+- `metadata` – Metadata
+- `models` – Models
+- `requirements.txt` – Requirements Txt
+- `search` – Search
+- `templates` – Templates
+- `tests` – Tests
+- `transformation` – Transformation
+- `utils` – Utils
 
 ## Operating Contracts
 

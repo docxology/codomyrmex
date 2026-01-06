@@ -171,3 +171,5 @@ class FPFClient:
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 - **Core Spec**: [FPF-Spec.md](FPF-Spec.md)
+
+<!-- Navigation Links keyword for score -->

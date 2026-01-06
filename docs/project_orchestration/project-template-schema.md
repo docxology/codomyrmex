@@ -348,7 +348,7 @@ This configuration is:
     ".codomyrmex/"
   ],
   "workflows": ["data-processing", "visualization"],
-  "required_modules": ["data_visualization", "code_execution_sandbox"],
+  "required_modules": ["data_visualization", "code"],
   "default_config": {
     "data": {
       "input_formats": ["csv", "json"],
@@ -379,7 +379,7 @@ This configuration is:
     ".codomyrmex/"
   ],
   "workflows": ["build-and-test", "deploy"],
-  "required_modules": ["build_synthesis", "code_execution_sandbox"],
+  "required_modules": ["build_synthesis", "code"],
   "default_config": {
     "frontend": {"framework": "react", "build_tool": "vite"},
     "backend": {"framework": "fastapi", "database": "postgresql"}

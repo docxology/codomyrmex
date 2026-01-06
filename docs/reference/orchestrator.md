@@ -226,3 +226,10 @@ start_here.sh (Main Orchestrator)
 **Happy foraging in the Codomyrmex nest! 🐜✨**
 
 *Remember: You're not just browsing code - you're an epistemic forager exploring a vast, structured knowledge ecosystem. Every command helps you understand the territory better!*
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/logging_monitoring
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -95,6 +95,10 @@ Handle information display commands from CLI arguments.
 
 ### Supporting Files
 - Integration with `_orchestrator_utils.py` for shared utilities
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

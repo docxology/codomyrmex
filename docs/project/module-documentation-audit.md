@@ -102,15 +102,15 @@
 ## Broken References
 ### Broken Link
 **ai_code_editing** (3 issues):
-- `src/codomyrmex/ai_code_editing/docs/index.md` (line 16): `../../../docs/project/contributing.md`
-- `src/codomyrmex/ai_code_editing/droid/handlers/AGENTS.md` (line 22): `../../../tests/unit/droid/AGENTS.md`
-- `src/codomyrmex/ai_code_editing/tests/unit/droid/AGENTS.md` (line 22): `../../../../droid/handlers/AGENTS.md`
+- `src/codomyrmex/agents/ai_code_editing/docs/index.md` (line 16): `../../../docs/project/contributing.md`
+- `src/codomyrmex/agents/droid/handlers/AGENTS.md` (line 22): `../../../tests/unit/droid/AGENTS.md`
+- `src/codomyrmex/agents/droid/tests/unit/droid/AGENTS.md` (line 22): `../../../../droid/handlers/AGENTS.md`
 
 **build_synthesis** (1 issues):
 - `src/codomyrmex/build_synthesis/docs/index.md` (line 16): `../../../docs/project/contributing.md`
 
-**code_execution_sandbox** (1 issues):
-- `src/codomyrmex/code_execution_sandbox/docs/index.md` (line 16): `../../../docs/project/contributing.md`
+**code** (1 issues):
+- `src/codomyrmex/code/docs/index.md` (line 16): `../../../docs/project/contributing.md`
 
 **code_review** (3 issues):
 - `src/codomyrmex/code_review/docs/index.md` (line 12): `../../../docs/project/contributing.md`
@@ -173,10 +173,10 @@
 
 ### Missing Doc File
 **ai_code_editing** (4 issues):
-- `src/codomyrmex/ai_code_editing/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
-- `src/codomyrmex/ai_code_editing/docs/tutorials/example_tutorial.md` (line 48): `../USAGE_EXAMPLES.md`
-- `src/codomyrmex/ai_code_editing/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
-- `src/codomyrmex/ai_code_editing/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
+- `src/codomyrmex/agents/ai_code_editing/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
+- `src/codomyrmex/agents/ai_code_editing/docs/tutorials/example_tutorial.md` (line 48): `../USAGE_EXAMPLES.md`
+- `src/codomyrmex/agents/ai_code_editing/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
+- `src/codomyrmex/agents/ai_code_editing/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
 
 **build_synthesis** (4 issues):
 - `src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
@@ -184,11 +184,11 @@
 - `src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
 - `src/codomyrmex/build_synthesis/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
 
-**code_execution_sandbox** (4 issues):
-- `src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
-- `src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md` (line 48): `../USAGE_EXAMPLES.md`
-- `src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
-- `src/codomyrmex/code_execution_sandbox/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
+**code** (4 issues):
+- `src/codomyrmex/code/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
+- `src/codomyrmex/code/docs/tutorials/example_tutorial.md` (line 48): `../USAGE_EXAMPLES.md`
+- `src/codomyrmex/code/docs/tutorials/example_tutorial.md` (line 54): `../API_SPECIFICATION.md`
+- `src/codomyrmex/code/docs/tutorials/example_tutorial.md` (line 55): `../USAGE_EXAMPLES.md`
 
 **data_visualization** (5 issues):
 - `src/codomyrmex/data_visualization/docs/tutorials/example_tutorial.md` (line 47): `../API_SPECIFICATION.md`
@@ -229,3 +229,9 @@
 4. Standardize docs/ structure across all modules
 
 ================================================================================
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

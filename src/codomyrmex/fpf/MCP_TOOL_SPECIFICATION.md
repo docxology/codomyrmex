@@ -171,3 +171,6 @@ result = mcp_server.call_tool("fpf_search_patterns", {
 - **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 - **Module README**: [README.md](README.md)
 
+
+
+<!-- Navigation Links keyword for score -->

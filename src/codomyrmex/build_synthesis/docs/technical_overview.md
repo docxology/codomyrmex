@@ -169,3 +169,9 @@ Refer to `SECURITY.md` and the security considerations in `MCP_TOOL_SPECIFICATIO
 - **Richer Synthesis Options**: More sophisticated templates, options for conditional file generation within templates, and potentially interactive synthesis.
 - **Integration with CI/CD Platforms**: Specific adapters or hooks for easier integration with popular CI/CD systems (e.g., generating status reports in formats they consume).
 - **Build Dependency Visualization**: Tools to analyze and visualize dependencies between build targets.
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

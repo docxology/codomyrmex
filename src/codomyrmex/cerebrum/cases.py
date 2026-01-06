@@ -253,3 +253,4 @@ class CaseRetriever:
         else:
             return similar_cases
 
+

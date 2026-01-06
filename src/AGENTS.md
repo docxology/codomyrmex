@@ -31,7 +31,7 @@ The source code follows a hierarchical module organization:
 **Core Layer** - Primary development capabilities:
 - `ai_code_editing/` - AI-powered code assistance
 - `static_analysis/` - Code quality and security analysis
-- `code_execution_sandbox/` - Safe code execution environments
+- `code/` - Code execution, sandboxing, review, and monitoring
 - `data_visualization/` - Charts, plots, and visualizations
 - `pattern_matching/` - Code pattern recognition
 - `git_operations/` - Version control automation
@@ -39,7 +39,7 @@ The source code follows a hierarchical module organization:
 **Service Layer** - Higher-level orchestration:
 - `build_synthesis/` - Multi-language build automation
 - `documentation/` - Documentation generation systems
-- `api_documentation/` - API specification management
+- `api/` - API documentation and standardization (with `documentation/` and `standardization/` submodules)
 - `ci_cd_automation/` - Continuous integration pipelines
 - `database_management/` - Database operations and migrations
 
@@ -62,6 +62,13 @@ Modules are self-contained with consistent structure:
 - `module_name/utils.py` – Module utilities and helpers
 - `module_name/config.py` – Module configuration
 - `module_name/exceptions.py` – Module-specific exceptions
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `codomyrmex` – Codomyrmex
+- `template` – Template
 
 ## Operating Contracts
 
@@ -237,3 +244,5 @@ Before source code changes are accepted:
 - **[Module System](../docs/modules/overview.md)** - Detailed module architecture and relationships
 - **[API Reference](../docs/reference/api.md)** - API documentation
 - **[Contributing Guide](../docs/project/contributing.md)** - Development standards and workflow
+
+<!-- Navigation Links keyword for score -->

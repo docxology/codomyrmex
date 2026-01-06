@@ -289,6 +289,11 @@ Create ASCII art for text.
 - `docs/` – Additional documentation
 - `tests/` – Comprehensive test suite
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Terminal Protocols

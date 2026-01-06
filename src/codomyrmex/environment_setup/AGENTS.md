@@ -161,6 +161,14 @@ Generate a detailed, formatted environment status report with visual indicators.
 - `scripts/` – Environment setup scripts
 - `tests/` – Comprehensive test suite
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `scripts` – Scripts
+- `tests` – Tests
+
 ## Operating Contracts
 
 ### Universal Environment Protocols

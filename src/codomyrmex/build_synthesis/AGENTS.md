@@ -303,6 +303,13 @@ class DependencyType(Enum):
 - `docs/` – Additional build documentation and guides
 - `tests/` – Comprehensive test suite for build functionality
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `tests` – Tests
+
 ## Operating Contracts
 
 ### Universal Build Protocols

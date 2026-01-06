@@ -113,3 +113,9 @@ Checks if the necessary environment (Node.js, npm/yarn) for building and serving
 - Executes version checking commands (`node --version`, etc.). Assumes these commands are safe and do not pose a risk in the execution environment.
 
 --- 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

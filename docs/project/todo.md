@@ -50,7 +50,7 @@ This document outlines the tasks required to complete the Codomyrmex project. It
     - [ ] Create `build_synthesis/.cursor/.cursorrules` file from `template/module_template/.cursor/.cursorrules`.
     - [ ] Ensure development activity respects these guidelines (ongoing).
 
-### 3. Code Execution Sandbox (`code_execution_sandbox`)
+### 3. Code Execution Sandbox (`code`)
 
 - [ ] **`SECURITY.md`**: This is critical.
     - [ ] Detail security measures, threat model, and responsible disclosure. (Template present, needs specific content for sandbox)
@@ -71,8 +71,8 @@ This document outlines the tasks required to complete the Codomyrmex project. It
 - [ ] **Tests**:
     - [ ] Include security tests (sandbox escapes), resource limit tests, and functionality tests.
     - [ ] Update `tests/README.md`.
-- [ ] **Adherence to `code_execution_sandbox.cursorrules`**: Ensure all development follows module-specific rules, prioritizing security.
-    - [ ] Create `code_execution_sandbox/.cursor/.cursorrules` file from `template/module_template/.cursor/.cursorrules`.
+- [ ] **Adherence to `code.cursorrules`**: Ensure all development follows module-specific rules, prioritizing security.
+    - [ ] Create `code/.cursor/.cursorrules` file from `template/module_template/.cursor/.cursorrules`.
     - [ ] Ensure development activity respects these guidelines (ongoing).
 
 ### 4. Data Visualization (`data_visualization`)
@@ -272,3 +272,9 @@ This document outlines the tasks required to complete the Codomyrmex project. It
 - [ ] **Adherence to `static_analysis.cursorrules`**:
     - [ ] Create `static_analysis/.cursor/.cursorrules`.
     - [ ] Ensure all development follows module-specific rules.
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

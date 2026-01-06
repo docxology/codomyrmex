@@ -81,3 +81,4 @@ def log_physical_event(
         monitor = SurveillanceMonitor()
     return monitor.log_event(event_type, location, description, severity)
 
+

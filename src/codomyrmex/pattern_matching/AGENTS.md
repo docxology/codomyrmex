@@ -263,6 +263,13 @@ Print a message only once per unique key (prevents duplicate output).
 - `docs/` – Additional documentation
 - `tests/` – Comprehensive test suite
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `tests` – Tests
+
 ## Operating Contracts
 
 ### Universal Analysis Protocols

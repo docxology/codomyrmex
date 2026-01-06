@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/project_orchestration/templates
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Project Orchestration](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [doc_templates](doc_templates/AGENTS.md)
@@ -20,6 +20,11 @@ Module components and implementation for templates..
 - `data_pipeline.json` – Project file
 - `doc_templates/` – Directory containing doc_templates components
 - `web_application.json` – Project file
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `doc_templates` – Doc Templates
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

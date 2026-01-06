@@ -54,3 +54,4 @@ def build_query(terms: List[str], filters: dict = None, sort_by: str = None) -> 
         builder.set_sort(sort_by)
     return builder.build()
 
+

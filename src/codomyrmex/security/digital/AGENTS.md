@@ -242,6 +242,14 @@ Generate security assessment reports.
 - `docs/` – Additional documentation
 - `tests/` – Comprehensive test suite
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `compliance_checker.py` – Compliance Checker Py
+- `secrets_detector.py` – Secrets Detector Py
+- `security_analyzer.py` – Security Analyzer Py
+
 ## Operating Contracts
 
 ### Universal Security Protocols

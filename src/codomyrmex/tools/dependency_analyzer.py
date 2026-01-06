@@ -50,7 +50,7 @@ class DependencyAnalyzer:
             "pattern_matching": {"logging_monitoring", "environment_setup"},
             # Analysis & Quality layer
             "static_analysis": {"logging_monitoring"},
-            "code_execution_sandbox": {"logging_monitoring"},
+            "code": {"logging_monitoring"},
             "security": {"logging_monitoring", "static_analysis"},
             # Visualization layer
             "data_visualization": {"logging_monitoring"},
@@ -67,12 +67,11 @@ class DependencyAnalyzer:
             "config_management": {"logging_monitoring"},
             "database_management": {"logging_monitoring"},
             "documentation": set(),  # Can import from all
-            "api_documentation": {"logging_monitoring", "static_analysis"},
-            "code_review": {"logging_monitoring", "ai_code_editing", "static_analysis"},
-            "language_models": {"logging_monitoring", "model_context_protocol"},
-            "ollama_integration": {"logging_monitoring", "model_context_protocol"},
+            "api": {"logging_monitoring", "static_analysis"},
+            "llm": {"logging_monitoring", "model_context_protocol"},
+            "llm": {"logging_monitoring", "model_context_protocol"},
             "performance": {"logging_monitoring"},
-            "modeling_3d": {"logging_monitoring"},
+            "spatial.three_d": {"logging_monitoring"},
             "physical_management": {"logging_monitoring"},
             "module_template": set(),
         }

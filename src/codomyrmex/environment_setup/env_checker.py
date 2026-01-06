@@ -2,8 +2,18 @@ import os
 import subprocess
 import sys
 from typing import Dict, Any
-import pkg_resources
 from pathlib import Path
+
+try:
+    from importlib.metadata import distributions
+    METADATA_AVAILABLE = True
+except ImportError:
+    # Fallback for Python < 3.8
+    try:
+        from importlib_metadata import distributions
+        METADATA_AVAILABLE = True
+    except ImportError:
+        METADATA_AVAILABLE = False
 
 try:
     from packaging import version
@@ -222,10 +232,17 @@ def check_package_versions() -> Dict[str, str]:
     """
     installed_packages = {}
 
+    if not METADATA_AVAILABLE:
+        logger.warning("importlib.metadata not available for package version checking")
+        return installed_packages
+
     try:
-        # Get all installed packages
-        for package in pkg_resources.working_set:
-            installed_packages[package.project_name.lower()] = package.version
+        # Get all installed packages using importlib.metadata (modern replacement for pkg_resources)
+        for dist in distributions():
+            name = dist.metadata.get('Name', '')
+            version_str = dist.metadata.get('Version', '')
+            if name:
+                installed_packages[name.lower()] = version_str
     except Exception as e:
         logger.error(f"Error checking package versions: {e}")
 

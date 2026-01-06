@@ -1,7 +1,7 @@
 # Codomyrmex Agents — cursorrules/file-specific
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Cursor Rules](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -57,6 +57,10 @@ Links to related documentation and parent/child directories.
 ## Active Components
 - `README.md` – Directory documentation
 - `README.md.cursorrules` – README file formatting standards (function: validate_readme_format(filepath: str) -> ValidationResult)
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## File Type Coverage
 

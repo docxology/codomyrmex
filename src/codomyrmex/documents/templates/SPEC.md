@@ -1,16 +1,16 @@
 # templates Functional Specification
 
 ## Core Concept
-[DESCRIBE THE CORE ARCHITECTURAL OR FUNCTIONAL CONCEPT OF templates]
+<!-- Description pending -->
 
 ## Functional Requirements
-- [REQUIREMENT 1: Describe a specific capability]
-- [REQUIREMENT 2: Describe another specific capability]
+- <!-- Requirement pending definition -->
+- <!-- Requirement pending definition -->
 
 ## Modularity & Interfaces
-- Inputs: [DESCRIBE INPUTS]
-- Outputs: [DESCRIBE OUTPUTS]
-- Dependencies: [LIST DEPENDENCIES]
+- Inputs: <!-- Description pending -->
+- Outputs: <!-- Description pending -->
+- Dependencies: <!-- Dependencies pending -->
 
 ## Coherence
-[DESCRIBE HOW THIS COMPONENT FITS INTO THE LARGER CODOMYRMEX SYSTEM]
+<!-- Description pending -->

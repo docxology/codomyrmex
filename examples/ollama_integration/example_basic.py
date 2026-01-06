@@ -32,14 +32,14 @@ from config_loader import load_config
 from example_runner import ExampleRunner
 from utils import print_section, print_results, print_success, print_error, ensure_output_dir
 
-from codomyrmex.ollama_integration import (
+from codomyrmex.llm.ollama import (
     OllamaManager,
     ModelRunner,
     OutputManager,
     ConfigManager,
 )
-from codomyrmex.ollama_integration.ollama_manager import OllamaModel, ModelExecutionResult
-from codomyrmex.ollama_integration.model_runner import ExecutionOptions
+from codomyrmex.llm.ollama.ollama_manager import OllamaModel, ModelExecutionResult
+from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 from codomyrmex.logging_monitoring import setup_logging, get_logger
 
 logger = get_logger(__name__)

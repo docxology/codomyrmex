@@ -1252,3 +1252,10 @@ Congratulations! You've completed all the Codomyrmex Examples tutorials. You now
 - **[Module Guides](../docs/modules/)** - In-depth module documentation
 - **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Solutions to common issues
 - **[Best Practices Guide](BEST_PRACTICES.md)** - Advanced usage patterns
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

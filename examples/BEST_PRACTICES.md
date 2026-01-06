@@ -888,3 +888,10 @@ def create_shared_config(base_config: dict) -> dict:
 ---
 
 **Remember**: Examples should demonstrate best practices, not just functionality. Each example is a learning opportunity for users to understand how to properly use Codomyrmex modules.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

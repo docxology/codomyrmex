@@ -2,7 +2,7 @@
   "name": "test_workflow",
   "steps": [
     {
-      "name": "setup",
+      "name": "test_step",
       "module": "environment_setup",
       "action": "check_environment",
       "parameters": {},

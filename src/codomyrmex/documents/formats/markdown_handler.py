@@ -1,5 +1,7 @@
 """Markdown document handler."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Optional
 
@@ -66,4 +68,5 @@ def write_markdown(content: str, file_path: str | Path, encoding: Optional[str] 
             f"Failed to write markdown file: {str(e)}",
             file_path=str(file_path)
         ) from e
+
 

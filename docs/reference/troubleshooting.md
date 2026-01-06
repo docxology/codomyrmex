@@ -339,7 +339,7 @@ except Exception as e:
 
 # Or use different model with higher limits
 python -c "
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 result = generate_code_snippet(
     'print hello world',
     'python',
@@ -702,3 +702,10 @@ pytest testing/unit/ -x
 ---
 
 This troubleshooting guide covers the most common issues. If you encounter something not covered here, please [open an issue](https://github.com/codomyrmex/codomyrmex/issues) so we can help you and improve this guide for others.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

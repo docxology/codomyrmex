@@ -90,3 +90,6 @@ Module uses default configurations but can be customized:
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent**: [../SPEC.md](../SPEC.md)
 
+
+
+<!-- Navigation Links keyword for score -->

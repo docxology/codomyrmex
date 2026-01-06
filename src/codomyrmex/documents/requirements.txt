@@ -19,3 +19,4 @@ pypdf>=3.0.0  # PDF reading (preferred)
 # openpyxl>=3.0.0  # XLSX support
 # python-magic>=0.4.0  # MIME type detection
 
+

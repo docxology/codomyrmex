@@ -63,7 +63,7 @@ language_models = [
     "urllib3>=1.26.0",
 ]
 
-modeling_3d = [
+spatial.three_d = [
     "isort>=5.9.0",
     "moderngl>=5.6.0",
     "pillow>=8.0.0",
@@ -107,3 +107,10 @@ static_analysis = [
     "pyrefly>=0.16.0",
 ]
 ```
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

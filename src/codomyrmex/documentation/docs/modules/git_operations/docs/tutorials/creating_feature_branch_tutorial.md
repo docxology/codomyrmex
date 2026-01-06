@@ -133,3 +133,9 @@ Once your feature branch is created:
 - Start developing your feature, making regular commits.
 - Refer to `CONTRIBUTING.md` for guidelines on commit messages and the Pull Request process.
 - Explore other (future) tools from the `git_operations` module for tasks like validating commit messages or automating PR creation. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

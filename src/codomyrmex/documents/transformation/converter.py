@@ -100,3 +100,4 @@ def _to_yaml(content: str, source_format: DocumentFormat) -> dict:
         # Convert text to YAML object
         return {"content": content}
 
+

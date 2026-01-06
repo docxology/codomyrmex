@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/static_analysis
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -117,6 +117,10 @@ Handle tool listing command from CLI arguments.
 
 ### Supporting Files
 - Integration with `_orchestrator_utils.py` for shared utilities
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — config/templates
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Config](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -134,6 +134,10 @@ def apply_environment_overrides(base_config: dict, env_overrides: dict) -> dict:
 - `README.md` – Directory documentation
 - `development.env` – Development environment template (function: load_development_config() -> dict)
 - `production.env` – Production environment template (function: load_production_config() -> dict)
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

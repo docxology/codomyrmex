@@ -19,7 +19,7 @@ graph TD
 
     subgraph "Analysis & Quality Layer"
         STATIC[static_analysis]
-        EXEC[code_execution_sandbox]
+        EXEC[code]
         SECURITY[security_audit]
     end
 
@@ -87,7 +87,7 @@ graph TD
 
 ### Analysis & Quality Layer
 - **Can depend on**: Foundation layer, and other analysis modules
-- Modules: `static_analysis`, `code_execution_sandbox`, `security_audit`
+- Modules: `static_analysis`, `code`, `security_audit`
 
 ### Visualization Layer
 - **Can depend on**: Foundation layer
@@ -116,3 +116,10 @@ Run `python -m codomyrmex.tools.dependency_analyzer` to check for violations.
 
 *Last updated: Run `python -m codomyrmex.tools.dependency_analyzer` to regenerate*
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

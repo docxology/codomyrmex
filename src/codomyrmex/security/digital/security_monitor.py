@@ -292,12 +292,37 @@ class SecurityMonitor:
 
     def _check_system_integrity(self):
         """Check system integrity and detect anomalies."""
-        # Check for suspicious processes
-        # Check file integrity
-        # Check network connections
+        # This is a basic implementation monitoring critical file changes
+        critical_files = ["/etc/passwd", "/etc/hosts", "/etc/resolv.conf"]
+        
         try:
-            # This is a placeholder for actual system integrity checks
-            pass
+            import hashlib
+            
+            if not hasattr(self, '_file_hashes'):
+                self._file_hashes = {}
+                
+            for file_path in critical_files:
+                if os.path.exists(file_path):
+                    try:
+                        with open(file_path, "rb") as f:
+                            file_hash = hashlib.sha256(f.read()).hexdigest()
+                            
+                        if file_path in self._file_hashes:
+                            if self._file_hashes[file_path] != file_hash:
+                                self._record_event(SecurityEvent(
+                                    event_id=str(uuid.uuid4()),
+                                    timestamp=datetime.now(),
+                                    event_type=SecurityEventType.SUSPICIOUS_ACTIVITY,
+                                    severity=SecuritySeverity.HIGH,
+                                    source="system_integrity",
+                                    description=f"Integrity violation detected in {file_path}",
+                                    metadata={"file": file_path, "old_hash": self._file_hashes[file_path], "new_hash": file_hash}
+                                ))
+                        
+                        self._file_hashes[file_path] = file_hash
+                    except (OSError, PermissionError) as e:
+                        logger.debug(f"Could not read {file_path} for integrity check: {e}")
+                        
         except (OSError, RuntimeError) as e:
             logger.error(f"Error checking system integrity: {e}")
 

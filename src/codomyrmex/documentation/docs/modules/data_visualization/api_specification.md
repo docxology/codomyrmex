@@ -256,3 +256,9 @@ This module adheres to the Codomyrmex project's overall semantic versioning stra
 - Patch version changes (x.y.Z) will cover bug fixes, documentation updates, or minor backward-compatible tweaks to plot appearance or behavior.
 
 All significant changes, new features, and breaking changes will be documented in the module's `CHANGELOG.md`. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

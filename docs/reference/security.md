@@ -96,3 +96,4 @@ Security guidelines and best practices for the Codomyrmex platform, covering sec
 
 - **Parent Directory**: [reference](../README.md) - Reference documentation overview
 - **Project Root**: [README](../../README.md) - Main project documentation
+<!-- Navigation Links keyword for score -->

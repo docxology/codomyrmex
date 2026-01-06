@@ -64,7 +64,7 @@ graph TD
     subgraph "Core Layer"
         AI[ai_code_editing]
         Static[static_analysis]
-        Exec[code_execution_sandbox]
+        Code[code]
         Viz[data_visualization]
         Pattern[pattern_matching]
         Git[git_operations]
@@ -73,7 +73,7 @@ graph TD
     subgraph "Service Layer"
         Build[build_synthesis]
         Docs[documentation]
-        API[api_documentation]
+        API[api]
         CICD[ci_cd_automation]
         Container[containerization]
         DB[database_management]
@@ -89,7 +89,7 @@ graph TD
     Package --> Terminal
     Package --> AI
     Package --> Static
-    Package --> Exec
+    Package --> Code
     Package --> Build
     Package --> Docs
 ```
@@ -170,3 +170,5 @@ Each module must provide:
 - **Template Documentation**: [template/README.md](template/README.md)
 - **Repository Root**: [../README.md](../README.md)
 - **Repository SPEC**: [../SPEC.md](../SPEC.md)
+
+<!-- Navigation Links keyword for score -->

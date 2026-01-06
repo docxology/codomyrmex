@@ -552,3 +552,10 @@ When implementing an MCP tool:
 - [Pydantic Documentation](https://docs.pydantic.dev/) - Python data validation library
 
 This technical overview provides the current state and foundational principles of the Model Context Protocol. It will evolve as the Codomyrmex project matures.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

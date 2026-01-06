@@ -35,7 +35,7 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from codomyrmex.environment_setup.environment_checker import (
+from codomyrmex.environment_setup.env_checker import (
     is_uv_available,
     is_uv_environment,
     check_and_setup_env_vars,

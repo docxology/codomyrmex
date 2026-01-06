@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/development
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -186,6 +186,10 @@ python example_usage.py [options]
 ### Supporting Files
 - Integration with repository testing framework
 - Configuration files for different environments
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

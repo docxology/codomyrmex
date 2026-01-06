@@ -56,7 +56,7 @@ project_root = current_dir.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 sys.path.insert(0, str(project_root / "examples" / "_common"))
 
-from codomyrmex.ai_code_editing import (
+from codomyrmex.agents.ai_code_editing import (
     generate_code_snippet,
     refactor_code_snippet,
     analyze_code_quality,
@@ -775,7 +775,7 @@ def demonstrate_realistic_ai_assisted_development_workflow() -> Dict[str, Any]:
         'code_generated': 0,
         'tests_generated': 0,
         'documentation_created': 0,
-        'code_review_passed': 0,
+        'code.review_passed': 0,
         'integration_tests_passed': 0,
         'deployment_ready': False
     }
@@ -1022,9 +1022,9 @@ Create a  README.md for the user authentication module that includes:
             }
             review_comments.append(comment)
 
-        workflow_results['code_review_passed'] = len(review_comments) <= 2  # Pass if ≤ 2 major issues
+        workflow_results['code.review_passed'] = len(review_comments) <= 2  # Pass if ≤ 2 major issues
         print(f"✓ Code review completed: {len(review_comments)} suggestions generated")
-        print(f"   Review status: {'✅ PASSED' if workflow_results['code_review_passed'] else '⚠️ NEEDS IMPROVEMENT'}")
+        print(f"   Review status: {'✅ PASSED' if workflow_results['code.review_passed'] else '⚠️ NEEDS IMPROVEMENT'}")
 
         workflow_results['workflow_stages_completed'] += 1
 
@@ -1065,7 +1065,7 @@ Create a  README.md for the user authentication module that includes:
             'code_generated': workflow_results['code_generated'] >= 3,
             'tests_generated': workflow_results['tests_generated'] >= 1,
             'documentation_created': workflow_results['documentation_created'] >= 1,
-            'code_review_passed': workflow_results['code_review_passed'],
+            'code.review_passed': workflow_results['code.review_passed'],
             'integration_tests_passed': workflow_results['integration_tests_passed'] == len(integration_tests),
             'security_audit_passed': security_audit_passed
         }
@@ -1077,7 +1077,7 @@ Create a  README.md for the user authentication module that includes:
         print(f"   Code generated: {'✅' if readiness_criteria['code_generated'] else '❌'}")
         print(f"   Tests created: {'✅' if readiness_criteria['tests_generated'] else '❌'}")
         print(f"   Documentation: {'✅' if readiness_criteria['documentation_created'] else '❌'}")
-        print(f"   Code review: {'✅' if readiness_criteria['code_review_passed'] else '❌'}")
+        print(f"   Code review: {'✅' if readiness_criteria['code.review_passed'] else '❌'}")
         print(f"   Integration tests: {'✅' if readiness_criteria['integration_tests_passed'] else '❌'}")
         print(f"   Security audit: {'✅' if readiness_criteria['security_audit_passed'] else '❌'}")
 

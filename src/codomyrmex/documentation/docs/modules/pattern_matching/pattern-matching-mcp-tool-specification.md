@@ -218,3 +218,9 @@ Searches the codebase for code snippets that are semantically related to a given
 
 - Requires secure handling of embedding models and related API keys.
 - Validate `target_paths` to ensure scope is appropriate. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

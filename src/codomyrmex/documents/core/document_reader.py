@@ -1,5 +1,7 @@
 """Document reading operations."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Optional
 
@@ -140,4 +142,5 @@ def read_document(
     """
     reader = DocumentReader()
     return reader.read(file_path, format=format, encoding=encoding)
+
 

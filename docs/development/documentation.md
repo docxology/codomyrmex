@@ -411,3 +411,10 @@ Good documentation should achieve:
 **Last Updated**: Auto-generated from documentation review  
 **Maintainers**: Documentation team and community contributors  
 **Feedback**: [Open an issue](https://github.com/codomyrmex/codomyrmex/issues) for documentation improvements
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

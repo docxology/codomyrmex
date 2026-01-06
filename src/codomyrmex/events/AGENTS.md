@@ -474,6 +474,12 @@ Central event bus for routing events to subscribers.
 - `event_logger.py` – Event tracking and debugging
 - `event_schema.py` – Event type definitions and validation
 
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Event Protocols

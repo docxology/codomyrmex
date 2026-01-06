@@ -321,3 +321,10 @@ python -c "from codomyrmex.project_orchestration import get_resource_manager; rm
 - [Dispatch and Coordination](../project_orchestration/dispatch-coordination.md)
 - [Config-Driven Operations](../project_orchestration/config-driven-operations.md)
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

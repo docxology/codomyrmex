@@ -347,3 +347,4 @@ class CompositionVisualizer:
             plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
             return fig
 
+

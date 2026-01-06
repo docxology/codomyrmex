@@ -419,3 +419,10 @@ else:
 - [Resource Configuration](./resource-configuration.md)
 - [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

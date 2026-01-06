@@ -136,7 +136,7 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 
 - **`ai_code_editing`**: AI-powered code generation and modification
 - **`static_analysis`**: Code quality analysis and security scanning
-- **`code_execution_sandbox`**: Safe code execution environment
+- **`code`**: Safe code execution environment
 - **`data_visualization`**: Chart and plot generation
 - **`pattern_matching`**: Code pattern analysis and recognition
 - **`git_operations`**: Git workflow automation
@@ -306,3 +306,10 @@ This architecture provides a solid foundation for extensible, maintainable code 
 3. **Get Involved**: Read the [Contributing Guide](./contributing.md)
 4. **Learn Orchestration**: Review the [Task Orchestration Guide](../project_orchestration/task-orchestration-guide.md)
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

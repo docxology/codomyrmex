@@ -74,3 +74,4 @@ class CerebrumConfig:
         """Create config from dictionary."""
         return cls(**config_dict)
 
+

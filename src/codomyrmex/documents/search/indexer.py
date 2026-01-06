@@ -39,3 +39,4 @@ def create_index(index_path: Path) -> None:
     # Placeholder - full implementation would initialize search index
     pass
 
+

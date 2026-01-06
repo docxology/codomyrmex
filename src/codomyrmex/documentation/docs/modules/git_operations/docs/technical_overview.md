@@ -92,3 +92,10 @@ Security is a major consideration, detailed extensively in `git_operations/SECUR
 - **MCP Tool Development**: If AI agents require Git interaction, develop MCP tools based on the Python API.
 - **Enhanced Repository Object**: A more comprehensive `Repository` class that encapsulates `GitPython`'s `Repo` object and provides convenient methods.
 - **Asynchronous Operations**: For long-running Git commands, consider offering asynchronous versions of API functions (e.g., using `asyncio` and `asyncpgit` if `GitPython` has async alternatives or if using `asyncio.create_subprocess_shell`).
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

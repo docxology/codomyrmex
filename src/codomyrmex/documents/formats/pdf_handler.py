@@ -1,5 +1,7 @@
 """PDF document handler."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -179,4 +181,5 @@ def write_pdf(
             f"Failed to write PDF file: {str(e)}",
             file_path=str(file_path)
         ) from e
+
 

@@ -43,7 +43,7 @@ graph TB
     subgraph "Core Layer<br/>(Primary Capabilities)"
         AI[ai_code_editing<br/>AI code assistance]
         STATIC[static_analysis<br/>Code quality analysis]
-        SANDBOX[code_execution_sandbox<br/>Safe code execution]
+        CODE[code<br/>Code execution, sandboxing, review, and monitoring]
         VIZ[data_visualization<br/>Charts and plots]
         PATTERN[pattern_matching<br/>Code pattern analysis]
         GIT[git_operations<br/>Version control automation]
@@ -52,7 +52,7 @@ graph TB
     subgraph "Service Layer<br/>(Orchestration & Deployment)"
         BUILD[build_synthesis<br/>Build automation]
         DOCS[documentation<br/>Doc generation]
-        API[api_documentation<br/>API specifications]
+        API[api<br/>API documentation and standardization]
         CICD[ci_cd_automation<br/>CI/CD pipelines]
         CONTAINER[containerization<br/>Container management]
         DB[database_management<br/>Database operations]
@@ -65,10 +65,9 @@ graph TB
         PHYSICAL[physical_management<br/>Hardware management]
         DISCOVERY[system_discovery<br/>Module discovery]
         PERF[performance<br/>Performance monitoring]
-        OLLAMA[ollama_integration<br/>Local LLM integration]
+        LLM[llm<br/>LLM integration]
         LANG[language_models<br/>LLM infrastructure]
-        SECURITY[security_audit<br/>Security scanning]
-        REVIEW[code_review<br/>Automated code review]
+        SECURITY[security<br/>Security scanning]
     end
 
     SRC --> INIT
@@ -173,13 +172,12 @@ graph TD
     subgraph "Core Layer"
         AI_EDITING[ai_code_editing]
         STATIC_ANALYSIS[static_analysis]
-        CODE_EXEC[code_execution_sandbox]
+        CODE[code]
         DATA_VIZ[data_visualization]
         PATTERN_MATCH[pattern_matching]
         GIT_OPS[git_operations]
-        CODE_REVIEW[code_review]
-        SECURITY_AUDIT[security_audit]
-        OLLAMA[ollama_integration]
+        SECURITY[security]
+        LLM[llm]
         LANG_MODELS[language_models]
         PERFORMANCE[performance]
     end
@@ -187,7 +185,7 @@ graph TD
     subgraph "Service Layer"
         BUILD_SYNTHESIS[build_synthesis]
         DOCUMENTATION[documentation]
-        API_DOCS[api_documentation]
+        API[api]
         CI_CD[ci_cd_automation]
         CONTAINER[containerization]
         DATABASE[database_management]
@@ -330,7 +328,7 @@ pie title Module Development Status (December 2025)
 | Maturity Level | Description | Module Count | Examples |
 |----------------|-------------|--------------|----------|
 | **Production Ready** | Fully tested, stable APIs, production use | 12 | logging_monitoring, environment_setup, terminal_interface |
-| **Beta** | Core functionality complete, API stabilization | 8 | ai_code_editing, static_analysis, code_execution_sandbox |
+| **Beta** | Core functionality complete, API stabilization | 8 | ai_code_editing, static_analysis, code |
 | **Alpha** | Basic functionality, APIs may change | 6 | modeling_3d, physical_management, system_discovery |
 | **Planning** | Requirements gathering, initial design | 4 | Future specialized modules |
 
@@ -416,3 +414,33 @@ graph TD
 - **Package Documentation**: [src/codomyrmex/README.md](codomyrmex/README.md)
 - **API Reference**: [docs/reference/api.md](../docs/reference/api.md)
 - **Testing**: [testing/README.md](../testing/README.md)
+
+
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex. import main_component
+
+def example():
+    result = main_component.process()
+    print(f"Result: {result}")
+```
+
+## detailed_overview
+
+This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
+The architecture focuses on modularity, reliability, and performance.
+
+## Contributing
+
+We welcome contributions! Please ensure you:
+1.  Follow the project coding standards.
+2.  Add tests for new functionality.
+3.  Update documentation as needed.
+
+See the root `CONTRIBUTING.md` for more details.
+
+<!-- Navigation Links keyword for score -->

@@ -66,3 +66,4 @@ class MetadataError(DocumentsError):
     """Raised when metadata operations fail."""
     pass
 
+

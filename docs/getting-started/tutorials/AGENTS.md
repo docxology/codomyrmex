@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/getting-started/tutorials
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -106,6 +106,10 @@ Comprehensive guide for creating custom Codomyrmex modules including:
 - Test data and sample inputs
 - Validation scripts and checklists
 - Troubleshooting guides and FAQs
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

@@ -457,3 +457,4 @@ def set_default_theme(theme: VisualizationTheme) -> None:
     global _default_theme
     _default_theme = theme
 
+

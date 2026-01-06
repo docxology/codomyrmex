@@ -106,5 +106,11 @@ Refer to the [Documentation Module documentation](../../index.md)
 - [Usage Examples](./usage_examples.md)
 - [Detailed Documentation for this module](./docs/index.md)
 - [Changelog](./changelog.md)
-- [SECURITY.md](../../../../../../docs/project/security.md)
+- [SECURITY.md](../../../../../../SECURITY.md)
 - [Security Policy](./security.md)
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

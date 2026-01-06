@@ -170,7 +170,7 @@ def benchmark_static_analysis():
 ### **AI Code Editing Module**
 ```python
 # Benchmark: ai_code_editing performance
-from codomyrmex.ai_code_editing import enhance_code, generate_code
+from codomyrmex.agents.ai_code_editing import enhance_code, generate_code
 import asyncio
 
 async def benchmark_ai_code_editing():
@@ -564,7 +564,7 @@ class AsyncAPIProcessor:
 # Usage example for AI code enhancement
 async def batch_code_execution(code_snippets: List[str]) -> List[Dict]:
     """Process multiple code executions efficiently (ACTUAL IMPLEMENTATION)."""
-    from codomyrmex.code_execution_sandbox.code_executor import execute_code
+    from codomyrmex.code.code_executor import execute_code
     import asyncio
 
     async def execute_single_code(code: str) -> Dict:
@@ -922,3 +922,10 @@ def test_performance_benchmarks():
 - [ ] Optimization strategies documented and tested
 
 **Need Performance Help?** Check our [Performance Troubleshooting Guide](../reference/troubleshooting.md#performance-issues) or review module-specific performance documentation.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

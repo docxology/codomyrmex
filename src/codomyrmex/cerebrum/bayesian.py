@@ -438,3 +438,4 @@ class PriorBuilder:
 
         return Distribution(unique_values, probabilities)
 
+

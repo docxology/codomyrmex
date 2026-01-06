@@ -85,3 +85,9 @@ N/A for this type of utility module. The checks performed by `env_checker.py` (i
 - **Broader Environment Validation**: Could incorporate checks for Node.js, npm/yarn if these are not covered by a separate mechanism, especially for bootstrapping the `documentation` module setup.
 - **Platform-Specific Guidance**: For system prerequisites, provide more platform-specific installation advice (e.g., `apt-get install python3-venv` on Debian/Ubuntu).
 - **Integration into a `make setup` or `codomyrmex_cli setup` command**: Encapsulate `env_checker.py` and other setup steps into a more unified project setup command. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -79,3 +79,4 @@ def check_compliance_with_practices(context: dict) -> dict:
     # Placeholder for actual compliance checking
     return compliance
 
+

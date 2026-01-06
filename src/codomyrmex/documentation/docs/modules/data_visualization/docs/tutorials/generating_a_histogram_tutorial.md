@@ -121,3 +121,9 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 - Plot distributions of different datasets from your projects.
 - Explore using the `density=True` option to compare the shape of distributions regardless of sample size.
 - Try other visualization functions like `create_box_plot` (if available) or `create_violin_plot` (if available) for alternative ways to see distributions. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

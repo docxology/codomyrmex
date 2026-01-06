@@ -444,7 +444,7 @@ LOGGING_CONFIG = {
             'handlers': ['console', 'file'],
             'propagate': False
         },
-        'codomyrmex.ai_code_editing': {
+        'codomyrmex.agents.ai_code_editing': {
             'level': 'DEBUG',  # More verbose for AI operations
             'handlers': ['file'],
             'propagate': True
@@ -501,7 +501,7 @@ def analyze_large_codebase(codebase_path):
 ```python
 # async_workers.py - Background task processing
 from celery import Celery
-from codomyrmex.ai_code_editing import enhance_code
+from codomyrmex.agents.ai_code_editing import enhance_code
 from codomyrmex.logging_monitoring import get_logger
 
 # Configure Celery for async processing
@@ -758,3 +758,10 @@ def backup_application_state():
 - [ ] Team training completed
 
 **Need Help?** Refer to our [Troubleshooting Guide](../reference/troubleshooting.md) or contact the team through established channels.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

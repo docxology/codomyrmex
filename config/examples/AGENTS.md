@@ -1,7 +1,7 @@
 # Codomyrmex Agents — config/examples
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Config](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -175,6 +175,10 @@ services:
 - `resources-custom.json` – Resource allocation configuration (function: allocate_resources(config: dict) -> ResourceAllocation)
 - `workflow-basic.json` – Basic sequential workflow (function: execute_workflow(workflow: dict) -> WorkflowResult)
 - `workflow-with-dependencies.json` – Complex parallel workflow (function: execute_parallel_workflow(workflow: dict) -> WorkflowResult)
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

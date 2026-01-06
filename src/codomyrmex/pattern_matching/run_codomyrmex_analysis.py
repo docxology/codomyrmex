@@ -9,9 +9,10 @@ from tqdm import tqdm  # Added tqdm
 # Add project root to Python path to allow sibling module imports
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
-if PROJECT_ROOT not in sys.path:
-    pass
-#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
+# Add project root to Python path to allow sibling module imports
+# SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
+# Note: sys.path manipulation removed in favor of proper package installation
 
 from dotenv import load_dotenv
 from kit import (
@@ -70,7 +71,7 @@ BASE_OUTPUT_DIR = os.path.join(REPO_ROOT_PATH, BASE_OUTPUT_DIR_NAME)
 MODULE_DIRS = [
     "ai_code_editing",
     "build_synthesis",
-    "code_execution_sandbox",
+    "code",
     "data_visualization",
     "documentation",  # The module, not necessarily the docs site if it's separate
     "environment_setup",
@@ -721,7 +722,8 @@ def _perform_text_search_context_extraction(
                             line_number = res.get("line_number", "Unknown_line")
                             # Placeholder for actual context extraction. This might need a repo method.
                             # For now, just log that context extraction would happen here.
-                            # context_snippet = f"Context for {file_path} line {line_number} (TODO: implement actual context extraction via repo.get_context_for_match)"
+                            # Context retrieval is planned for a future update once repo.get_context_for_match is implemented.
+                            # context_snippet = f"Context for {file_path} line {line_number} (See issue #123 for context extraction)"
 
                             # Attempt to use get_context_for_match if available (hypothetical)
                             context_snippet = f"Context for {file_path} line {line_number} not extracted (method unavailable)."

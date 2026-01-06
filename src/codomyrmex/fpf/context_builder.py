@@ -213,3 +213,4 @@ class ContextBuilder:
 
         return related_patterns[:10]  # Limit to 10
 
+

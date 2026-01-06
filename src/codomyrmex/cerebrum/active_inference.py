@@ -403,3 +403,4 @@ class ActiveInferenceAgent:
         self.beliefs.observations = {}
         self.logger.debug("Reset agent")
 
+

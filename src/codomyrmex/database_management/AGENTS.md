@@ -329,6 +329,11 @@ Database schema generation and management.
 - `USAGE_EXAMPLES.md` – Practical usage demonstrations
 - `SECURITY.md` – Security considerations for database operations
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Database Protocols

@@ -1,0 +1,67 @@
+# Cursor Rules for the code Module
+
+## 0. Preamble
+These rules are specific to the `code` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: This module provides unified code execution, sandboxing, review, and monitoring capabilities.
+-   **Submodules**: 
+    - `execution/` - Code execution with language support
+    - `sandbox/` - Docker container isolation and security
+    - `review/` - Automated code review and quality assessment
+    - `monitoring/` - Resource tracking and execution monitoring
+-   **Key Technologies/Tools**: Docker, pyscn, CFG analysis, APTED clone detection, container security, resource management, multi-language runtime support.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `code` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Code module.
+-   `AGENTS.md`: Agent documentation and function signatures.
+-   `SPEC.md`: Functional specification.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for sandbox implementation and code execution.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials.
+-   `execution/`: Code execution submodule
+-   `sandbox/`: Sandboxing submodule
+-   `review/`: Code review submodule
+-   `monitoring/`: Monitoring submodule
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `code`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `code` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for execution configurations, analysis results, and review findings.
+-   **Security First**: Every change must prioritize security, isolation, and safe execution practices.
+-   **Resource Management**: Implement strict resource limits and monitoring for all executions.
+-   **Error Handling**: Provide comprehensive error reporting for execution failures, sandbox issues, and review errors.
+-   **Performance**: Optimize for high-speed analysis (100,000+ lines/sec) with parallel processing where applicable.
+
+## 4. Testing in `code`
+-   New features or bug fixes MUST be accompanied by relevant tests in `tests/execution/`, `tests/sandbox/`, `tests/review/`, and/or `tests/monitoring/`.
+-   Tests should cover sandbox isolation, resource limits, execution scenarios, security validations, review analysis, and monitoring capabilities.
+-   Include security-specific tests to probe for potential vulnerabilities.
+-   Run existing tests to ensure no regressions. Refer to `code/tests/README.md`.
+
+## 5. Documentation for `code`
+-   Keep this module's `README.md`, `AGENTS.md`, `SPEC.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `SECURITY.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document supported languages, sandbox configurations, security measures, review capabilities, and monitoring features clearly.
+-   Include examples of code execution, sandbox usage, code review, and monitoring patterns.
+
+## 6. Specific Considerations for `code`
+-   **Security Critical**: This module handles potentially untrusted code execution and must maintain robust isolation.
+-   **Sandbox Management**: Ensure proper lifecycle management of sandbox environments.
+-   **Resource Limits**: Implement and enforce strict CPU, memory, time, and network limitations.
+-   **Multi-Language Support**: Maintain compatibility with various programming language runtimes.
+-   **Review Accuracy**: Ensure code review analysis provides accurate results with minimal false positives.
+-   **Pyscn Integration**: Ensure proper integration with pyscn for CFG analysis, clone detection, and complexity metrics.
+-   **Monitoring**: Track resource usage and execution metrics comprehensively.
+
+## 7. Final Check for `code`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass, especially security-related tests.
+-   Confirm that sandbox isolation works correctly and resource limits are enforced.
+-   Verify code review analysis produces accurate results.
+-   Test integration with related modules like `ai_code_editing`, `static_analysis`, and `security_audit`.
+

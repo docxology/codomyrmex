@@ -1,2 +1,0 @@
-# Testing package for Codomyrmex
-

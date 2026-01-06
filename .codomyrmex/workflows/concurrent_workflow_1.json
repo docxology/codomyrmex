@@ -1,0 +1,15 @@
+{
+  "name": "concurrent_workflow_1",
+  "steps": [
+    {
+      "name": "concurrent_step_1",
+      "module": "environment_setup",
+      "action": "check_environment",
+      "parameters": {},
+      "dependencies": [],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    }
+  ]
+}

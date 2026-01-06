@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/examples
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [basic](basic/AGENTS.md)
@@ -171,6 +171,13 @@ Reusable configuration patterns:
 ### Documentation
 - `README.md` – Examples directory overview and usage
 - `AGENTS.md` – This coordination document
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `basic` – Basic
+- `configs` – Configs
+- `integration` – Integration
 
 ## Operating Contracts
 

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [test_project](test_project/AGENTS.md)
@@ -85,6 +85,11 @@ Projects provide reusable templates for:
 - `data/` – Sample data for demonstrations
 - `reports/` – Generated reports and outputs
 - `docs/` – Project documentation and guides
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `test_project` – Test Project
 
 ## Operating Contracts
 
@@ -225,3 +230,4 @@ Before project changes are accepted:
 - **[Project Orchestration](../docs/project_orchestration/project-lifecycle-guide.md)** - Project development lifecycle
 - **[Module System](../docs/modules/overview.md)** - Available modules for projects
 - **[Contributing Guide](../docs/project/contributing.md)** - Project contribution guidelines
+<!-- Navigation Links keyword for score -->

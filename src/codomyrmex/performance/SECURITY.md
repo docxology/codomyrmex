@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email the project maintainers with the subject line: "SECURITY Vulnerability Report: Performance Module - [Brief Description]".
+Instead, please email the project maintainers with the subject line: "SECURITY Vulnerability Report: Performance Module - Security Issue".
 
 Please include the following information in your report:
 
@@ -72,3 +72,10 @@ This security policy applies only to the `performance` module within the Codomyr
 
 Thank you for helping keep Codomyrmex and the Performance module secure.
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

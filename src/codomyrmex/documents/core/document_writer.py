@@ -1,5 +1,7 @@
 """Document writing operations."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Optional
 
@@ -109,4 +111,5 @@ def write_document(
     """
     writer = DocumentWriter()
     writer.write(document, file_path, format=format, encoding=encoding)
+
 

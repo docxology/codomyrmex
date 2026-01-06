@@ -108,13 +108,13 @@ graph TD
 |--------|---------|-------------|
 | **`ai_code_editing`** | AI-powered code assistance | Code generation, refactoring, explanation, multi-LLM support |
 | **`static_analysis`** | Code quality analysis | Linting, security scanning, complexity metrics, quality gates |
-| **`code_execution_sandbox`** | Safe code execution | Multi-language support, resource limits, security isolation |
+| **`code`** | Safe code execution | Multi-language support, resource limits, security isolation |
 | **`data_visualization`** | Charts and plots | Static/interactive plots, multiple formats, customizable styling |
 | **`pattern_matching`** | Code pattern analysis | Pattern recognition, dependency analysis, code understanding |
 | **`git_operations`** | Version control automation | Git workflows, branch management, commit automation |
 | **`code_review`** | Automated code review | AI-powered review, quality analysis, improvement suggestions |
 | **`security_audit`** | Security scanning | Vulnerability detection, compliance checking, security monitoring |
-| **`ollama_integration`** | Local LLM integration | Ollama model management, execution, configuration, benchmarking |
+| **`llm/ollama`** | Local LLM integration | Ollama model management, execution, configuration, benchmarking |
 
 ### **🔧 Service Modules**
 *Higher-level services that orchestrate core modules*
@@ -160,7 +160,7 @@ graph TD
 Modules expose public functions and classes:
 ```python
 from codomyrmex.data_visualization import create_line_plot
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 # Direct function calls
 plot_result = create_line_plot(x_data, y_data, title="Sample Plot")
@@ -193,7 +193,7 @@ def enhance_code_pipeline(source_code):
     improvements = ai_code_editing.suggest_improvements(source_code, analysis)
 
     # 3. Validate generated code
-    validation = code_execution_sandbox.validate_code(improvements)
+    validation = code.validate_code(improvements)
 
     return validation
 ```
@@ -295,7 +295,7 @@ for module_name, module_info in modules.items():
 ```python
 # Import specific functionality
 from codomyrmex.data_visualization import create_bar_chart
-from codomyrmex.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 # Use modules in combination
 def create_code_with_visualization():
@@ -365,3 +365,10 @@ def timed_operation():
 ---
 
 This modular architecture enables Codomyrmex to be both powerful and flexible, allowing users to leverage individual capabilities or compose complex workflows across multiple modules. The standardized interfaces and clear dependency relationships make it easy to extend, maintain, and integrate with external systems.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

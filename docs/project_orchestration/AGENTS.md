@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/project_orchestration
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -142,6 +142,10 @@ Project templating and scaffolding including:
 - Performance benchmarks and metrics
 - Troubleshooting guides and best practices
 - Integration patterns and examples
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

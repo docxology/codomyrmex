@@ -9,7 +9,7 @@ We take all security reports seriously and will work to address them promptly.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Project Orchestration - [Brief Description]".
+Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Project Orchestration - Security Issue".
 
 Please include the following information in your report:
 
@@ -365,3 +365,10 @@ All security-relevant operations are logged with the following information:
 ---
 
 *Thank you for helping keep Codomyrmex and the Project Orchestration module secure. Security is everyone's responsibility.*
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

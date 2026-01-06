@@ -202,6 +202,11 @@ Check compliance with security best practices.
 - `architecture_patterns.py` – Security architecture patterns
 - `best_practices.py` – Security best practices
 
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+
 ## Operating Contracts
 
 ### Universal Security Theory Protocols

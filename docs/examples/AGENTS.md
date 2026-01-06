@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/examples
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -127,6 +127,10 @@ Complex workflow orchestration patterns featuring:
 - Test data and validation procedures
 - Performance benchmarks and metrics
 - Troubleshooting guides and FAQs
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

@@ -379,6 +379,11 @@ Configuration deployment and rollback management.
 - `USAGE_EXAMPLES.md` – Practical usage demonstrations
 - `SECURITY.md` – Security considerations for configuration management
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Configuration Protocols

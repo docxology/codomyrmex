@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/integration
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -116,6 +116,10 @@ Specialized guide for Fabric AI framework integration including:
 - Integration testing frameworks
 - Security configuration guides
 - Performance optimization guides
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

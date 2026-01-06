@@ -237,3 +237,10 @@ Use working examples as templates to create custom orchestrators that combine Co
 
 **🎯 Result**: Codomyrmex now has **7 fully functional orchestrator examples** that demonstrate true thin orchestration patterns, with comprehensive testing infrastructure and production-ready error handling. All examples work seamlessly in both interactive and non-interactive modes, making them perfect for development workflows and automated CI/CD integration.
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

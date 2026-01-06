@@ -221,6 +221,12 @@ Detect anomalous user behavior.
 - `cognitive_threat_assessment.py` – Cognitive threat assessment
 - `behavior_analysis.py` – User behavior analysis
 
+
+### Additional Files
+- `README.md` – Readme Md
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+
 ## Operating Contracts
 
 ### Universal Cognitive Security Protocols

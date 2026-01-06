@@ -41,8 +41,8 @@ try:
     from codomyrmex.static_analysis.core import StaticAnalyzer
     from codomyrmex.data_visualization.visualizer import DataVisualizer  
     from codomyrmex.git_operations.git_manager import GitOperationsManager
-    from codomyrmex.ai_code_editing.ai_code_helpers import AICodeHelper
-    from codomyrmex.logging_monitoring.logger import LoggingManager
+    from codomyrmex.agents.ai_code_editing.ai_code_helpers import AICodeHelper
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     MODULES_AVAILABLE = True
 except ImportError:
     print("Warning: Some Codomyrmex modules not available - using simulation mode")

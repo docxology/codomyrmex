@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/deployment
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -87,6 +87,10 @@ Set up monitoring and alerting for deployment.
 - Monitoring and alerting setups
 - Security hardening procedures
 - Backup and recovery procedures
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

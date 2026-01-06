@@ -6,7 +6,7 @@ This document provides the complete API specification for the `terminal_interfac
 
 ## Module Overview
 
-The `terminal_interface` module provides [brief description of module purpose].
+The `terminal_interface` module provides a set of tools for building interactive command-line interfaces, including colored formatting, table generation, and a command execution shell.
 
 ## Public API
 
@@ -14,7 +14,7 @@ The `terminal_interface` module provides [brief description of module purpose].
 
 #### `function_name()`
 
-**Description**: [Function description]
+**Description**: Initializes a new terminal session with specified parameters.
 
 **Parameters**:
 - `param1` (type): Description
@@ -33,7 +33,7 @@ result = function_name(param1="value")
 
 ### `ClassName`
 
-**Description**: [Class description]
+**Description**: Interface for custom terminal command handlers.
 
 **Methods**:
 - `method1()`: Description
@@ -191,3 +191,10 @@ if runner.check_command_available("git"):
 else:
     print("Git is not installed")
 ```
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

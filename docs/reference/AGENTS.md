@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/reference
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -146,6 +146,11 @@ Reference documentation must be updated when:
 - Troubleshooting checklists and procedures
 - Performance benchmark data and metrics
 - Migration scripts and validation procedures
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `security.md` – Security Md
 
 ## Operating Contracts
 

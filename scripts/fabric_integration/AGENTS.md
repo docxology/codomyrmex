@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/fabric_integration
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -327,6 +327,10 @@ graph TD
 
 ### Documentation
 - `README.md` – Integration overview and usage
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 

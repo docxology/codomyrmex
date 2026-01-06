@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email the project maintainers with the subject line: "SECURITY Vulnerability Report: Terminal Interface Module - [Brief Description]".
+Instead, please email the project maintainers with the subject line: "SECURITY Vulnerability Report: Terminal Interface Module - Security Issue".
 
 Please include the following information in your report:
 
@@ -71,3 +71,10 @@ This security policy applies only to the `terminal_interface` module within the 
 -   Use secure channels for terminal communications.
 
 Thank you for helping keep Codomyrmex and the Terminal Interface module secure.
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

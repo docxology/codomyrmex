@@ -77,3 +77,9 @@ This module enables visual understanding of data and integrates as follows:
 - [Detailed Documentation](./docs/index.md)
 - [Changelog](./changelog.md)
 - [Security Policy](./security.md) 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

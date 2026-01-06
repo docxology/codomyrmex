@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email the project maintainers with the subject line: "SECURITY Vulnerability Report: System Discovery Module - [Brief Description]".
+Instead, please email the project maintainers with the subject line: "SECURITY Vulnerability Report: System Discovery Module - Security Issue".
 
 Please include the following information in your report:
 
@@ -68,3 +68,10 @@ This security policy applies only to the `system_discovery` module within the Co
 
 Thank you for helping keep Codomyrmex and the System Discovery module secure.
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

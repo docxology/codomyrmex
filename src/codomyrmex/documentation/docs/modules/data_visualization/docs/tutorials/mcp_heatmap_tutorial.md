@@ -120,3 +120,9 @@ For a complete list of parameters and details for the `create_heatmap` MCP tool 
 - Try generating heatmaps with larger or different datasets.
 - Explore other MCP plotting tools provided by the `data_visualization` module, such as `create_line_plot` or `create_bar_chart`, by consulting the [MCP_TOOL_SPECIFICATION.md](../../../../../../data_visualization/MCP_TOOL_SPECIFICATION.md).
  
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

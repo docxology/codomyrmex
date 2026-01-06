@@ -4,7 +4,13 @@
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Security Agents](AGENTS.md)
 - **Children**:
+    - [Cognitive Security Agents](cognitive/AGENTS.md)
     - [Digital Security Agents](digital/AGENTS.md)
+    - [docs](docs/AGENTS.md)
+    - [Physical Security Agents](physical/AGENTS.md)
+    - [Security Theory Agents](security_theory/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+    - [Theory Agents](theory/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -79,6 +85,18 @@ def get_best_practices(category: str = None) -> List[SecurityBestPractice]
 - `README.md` – Module overview
 - `SPEC.md` – Functional specification
 - `AGENTS.md` – This file: agent coordination
+
+
+### Additional Files
+- `__init__.py` –   Init   Py
+- `__pycache__` –   Pycache  
+- `cognitive` – Cognitive
+- `digital` – Digital
+- `docs` – Docs
+- `physical` – Physical
+- `security_theory` – Security Theory
+- `tests` – Tests
+- `theory` – Theory
 
 ## Operating Contracts
 

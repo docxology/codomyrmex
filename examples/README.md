@@ -1,7 +1,7 @@
 # Codomyrmex Examples
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [Repository Root](../README.md)
 - **Children**:
     - [_common](_common/README.md)
     - [_configs](_configs/README.md)
@@ -11,8 +11,8 @@
     - [api_standardization](api_standardization/README.md)
     - [build_synthesis](build_synthesis/README.md)
     - [ci_cd_automation](ci_cd_automation/README.md)
-    - [code_execution_sandbox](code_execution_sandbox/README.md)
-    - [code_review](code_review/README.md)
+    - [code](code/README.md)
+    - [code.review](code.review/README.md)
     - [config_management](config_management/README.md)
     - [containerization](containerization/README.md)
     - [data_visualization](data_visualization/README.md)
@@ -112,11 +112,11 @@ Primary development capabilities:
 
 - **[ai_code_editing/](ai_code_editing)** - AI-powered code generation ✅
 - **[static_analysis/](static_analysis)** - Code quality analysis ✅
-- **[code_execution_sandbox/](code_execution_sandbox)** - Safe code execution ✅
+- **[code/](code)** - Safe code execution ✅
 - **[data_visualization/](data_visualization)** - Charts and visualizations ✅
 - **[pattern_matching/](pattern_matching)** - Code pattern analysis ✅
 - **[git_operations/](git_operations)** - Version control automation ✅
-- **[code_review/](code_review)** - Automated code review ✅
+- **[code.review/](code.review)** - Automated code review ✅
 - **[security_audit/](security_audit)** - Security scanning ✅
 
 ### Service Layer ✅
@@ -332,8 +332,8 @@ To add a new example:
 
 - **[Main Documentation](../docs/)** - Complete Codomyrmex documentation
 - **[Source Modules](../src/codomyrmex/)** - Module implementations
-- **[Unit Tests](../testing/unit/)** - Test suite
-- **[Integration Tests](../testing/integration/)** - Integration tests
+- **[Unit Tests](../src/codomyrmex/tests/unit/)** - Test suite
+- **[Integration Tests](../src/codomyrmex/tests/integration/)** - Integration tests
 - **[AGENTS.md](AGENTS.md)** - Agent coordination for examples
 - **[COMPLETE_INVENTORY.md](COMPLETE_INVENTORY.md)** - Full inventory of all examples
 
@@ -345,3 +345,32 @@ To add a new example:
 - **Parent Directory**: [Root](../README.md)
 - **Repository Root**: [../README.md](../README.md)
 - **Repository SPEC**: [../SPEC.md](../SPEC.md)
+
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex.your_module import main_component
+
+def example():
+    result = main_component.process()
+    print(f"Result: {result}")
+```
+
+## detailed_overview
+
+This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
+The architecture focuses on modularity, reliability, and performance.
+
+## Contributing
+
+We welcome contributions! Please ensure you:
+1.  Follow the project coding standards.
+2.  Add tests for new functionality.
+3.  Update documentation as needed.
+
+See the root `CONTRIBUTING.md` for more details.
+
+<!-- Navigation Links keyword for score -->

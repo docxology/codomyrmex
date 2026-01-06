@@ -1,5 +1,7 @@
 """Plain text document handler."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Optional
 
@@ -85,4 +87,5 @@ def write_text(content: str, file_path: str | Path, encoding: Optional[str] = No
             f"Failed to write text file: {str(e)}",
             file_path=str(file_path)
         ) from e
+
 

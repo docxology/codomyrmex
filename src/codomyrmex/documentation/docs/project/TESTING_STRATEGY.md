@@ -99,3 +99,9 @@ Each module should have a `tests/README.md` file detailing:
 *   Guidance on how to add new tests for the module.
 
 This project-wide strategy provides a baseline, and modules may extend it with more specific approaches as needed, documenting these in their respective `tests/README.md` files. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

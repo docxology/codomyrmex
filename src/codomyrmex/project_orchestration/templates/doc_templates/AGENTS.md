@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/project_orchestration/templates/doc_templates
 
 ## Signposting
-- **Parent**: [Parent](../AGENTS.md)
+- **Parent**: [Project Orchestration](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -20,6 +20,10 @@ Documentation files and guides for doc_templates.
 - `README.md` – Project file
 - `README.nested.template.md` – Project file
 - `README.template.md` – Project file
+
+
+### Additional Files
+- `SPEC.md` – Spec Md
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

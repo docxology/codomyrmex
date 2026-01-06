@@ -476,3 +476,10 @@ Manages project lifecycle operations including status updates, milestone trackin
 ---
 
 *These MCP tools enable sophisticated AI-driven project management and workflow orchestration, providing intelligent automation capabilities across the entire Codomyrmex ecosystem.*
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -24,7 +24,7 @@ The tool will return an MCP JSON response indicating the status and the location
 ```json
 {
   "status": "success",
-  "artifact_paths": ["./src/codomyrmex/ai_code_editing/dist/codomyrmex_ai_code_editing-0.1.0-py3-none-any.whl"],
+  "artifact_paths": ["./src/codomyrmex/agents/ai_code_editing/dist/codomyrmex_ai_code_editing-0.1.0-py3-none-any.whl"],
   "log_output": "Build started for ai_code_editing... Running build scripts... Build completed successfully.",
   "error_message": null
 }
@@ -88,3 +88,9 @@ Successful synthesis will create a full directory structure with localized docum
 
 - **Issue**: **Signposting Drift**
   - **Solution**: After synthesis, it is recommended to run `scripts/documentation/doc_scaffolder.py` to ensure all parent/child links are correctly populated in the new directory.
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

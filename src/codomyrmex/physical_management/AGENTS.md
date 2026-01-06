@@ -742,6 +742,15 @@ Types of object-related events.
 - `tests/` – Comprehensive test suite
 - `docs/` – Additional documentation and guides
 
+
+### Additional Files
+- `SPEC.md` – Spec Md
+- `__pycache__` –   Pycache  
+- `docs` – Docs
+- `examples` – Examples
+- `requirements.txt` – Requirements Txt
+- `tests` – Tests
+
 ## Operating Contracts
 
 ### Universal Physical Management Protocols

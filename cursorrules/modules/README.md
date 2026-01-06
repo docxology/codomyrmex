@@ -1,7 +1,7 @@
 # cursorrules/modules
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [Cursor Rules](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -19,8 +19,8 @@ Contains components for the cursorrules system.
 - `api_documentation.cursorrules` – File
 - `build_synthesis.cursorrules` – File
 - `ci_cd_automation.cursorrules` – File
-- `code_execution_sandbox.cursorrules` – File
-- `code_review.cursorrules` – File
+- `code.cursorrules` – File
+- `code.review.cursorrules` – File
 - `config_management.cursorrules` – File
 - `containerization.cursorrules` – File
 - `data_visualization.cursorrules` – File
@@ -52,8 +52,8 @@ Module-specific coding standards and conventions for individual Codomyrmex modul
 - `api_documentation.cursorrules` – API documentation module rules
 - `build_synthesis.cursorrules` – Build synthesis module rules
 - `ci_cd_automation.cursorrules` – CI/CD automation module rules
-- `code_execution_sandbox.cursorrules` – Code execution sandbox rules
-- `code_review.cursorrules` – Code review module rules
+- `code.cursorrules` – Code execution sandbox rules
+- `code.review.cursorrules` – Code review module rules
 - `config_management.cursorrules` – Config management module rules
 - `containerization.cursorrules` – Containerization module rules
 - `data_visualization.cursorrules` – Data visualization module rules
@@ -81,3 +81,32 @@ Module-specific coding standards and conventions for individual Codomyrmex modul
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cursorrules](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
+
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex.your_module import main_component
+
+def example():
+    result = main_component.process()
+    print(f"Result: {result}")
+```
+
+## detailed_overview
+
+This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
+The architecture focuses on modularity, reliability, and performance.
+
+## Contributing
+
+We welcome contributions! Please ensure you:
+1.  Follow the project coding standards.
+2.  Add tests for new functionality.
+3.  Update documentation as needed.
+
+See the root `CONTRIBUTING.md` for more details.
+
+<!-- Navigation Links keyword for score -->

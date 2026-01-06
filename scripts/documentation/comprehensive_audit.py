@@ -110,17 +110,45 @@ class DocumentationAudit:
             return markdown_files
         
         def extract_links(content: str) -> List[Tuple[str, int, str]]:
-            """Extract markdown links from content."""
+            """Extract markdown links from content, ignoring code blocks."""
             links = []
-            link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
-            for line_num, line in enumerate(content.split('\n'), start=1):
-                for match in re.finditer(link_pattern, line):
-                    link_text = match.group(1)
-                    link_url = match.group(2)
-                    # Remove title if present
-                    if link_url.startswith('"') and link_url.endswith('"'):
-                        link_url = link_url[1:-1]
-                    links.append((link_text, line_num, link_url))
+            
+            # Split content into segments: code blocks and non-code blocks
+            # This regex splits by code blocks (fenced ```...``` or inline `...`)
+            # Capturing the separator allows us to check if it's a code block
+            parts = re.split(r'(```[\s\S]*?```|`[^`\n]+`)', content)
+            
+            current_line = 1
+            for part in parts:
+                num_lines = part.count('\n')
+                
+                # If the part starts with backticks, it's a code block -> skip link extraction
+                if part.startswith('`'):
+                    current_line += num_lines
+                    continue
+                
+                # Otherwise, it's normal text -> extract links
+                link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+                # We need to process line by line to track line numbers correctly relative to the file
+                part_lines = part.split('\n')
+                for i, line in enumerate(part_lines):
+                    # For the first line of a part, it continues from the previous part
+                    # subsequent lines are new lines
+                    
+                    # NOTE: splitting by \n in the part content might be tricky if we want exact line numbers
+                    # A simpler approach for line numbers in this hybrid split mode:
+                    # Just calculate line number based on cumulative count.
+                    
+                    for match in re.finditer(link_pattern, line):
+                        link_text = match.group(1)
+                        link_url = match.group(2)
+                        # Remove title if present
+                        if link_url.startswith('"') and link_url.endswith('"'):
+                            link_url = link_url[1:-1]
+                        links.append((link_text, current_line + i, link_url))
+                
+                current_line += num_lines
+
             return links
         
         def resolve_link(link_url: str, from_file: Path) -> Tuple[bool, Optional[Path]]:
@@ -229,7 +257,52 @@ class DocumentationAudit:
                     'issue': 'Multiple "Recent Enhancements" sections',
                     'lines': enhancements_sections
                 })
-    
+
+    def check_placeholders(self):
+        """Check for remaining placeholder text."""
+        print("🚧 Checking for placeholders...")
+        
+        placeholders = [
+            'TODO', 'TBD', '[Insert', 'Requirement 1', 'Core Concept', 
+            'example.com', 'your-name', 'path/to/repo'
+        ]
+        
+        def find_markdown_files(root: Path) -> List[Path]:
+            """Find all markdown files."""
+            markdown_files = []
+            for path in root.rglob('*.md'):
+                if any(part.startswith('.') for part in path.parts):
+                    continue
+                if 'node_modules' in path.parts or '__pycache__' in path.parts:
+                    continue
+                markdown_files.append(path)
+            return markdown_files
+
+        markdown_files = find_markdown_files(self.repo_root)
+        
+        for file_path in markdown_files:
+            try:
+                content = file_path.read_text(encoding='utf-8')
+                lines = content.split('\n')
+                
+                for i, line in enumerate(lines, 1):
+                    for placeholder in placeholders:
+                        if placeholder in line:
+                            # Skip if it looks like a task list item [ ] or [x]
+                            if placeholder == 'TODO' and ('- [ ]' in line or '- [x]' in line):
+                                continue
+                                
+                            rel_path = file_path.relative_to(self.repo_root)
+                            self.issues['placeholders'] = self.issues.get('placeholders', [])
+                            self.issues['placeholders'].append({
+                                'file': str(rel_path),
+                                'line': i,
+                                'text': placeholder,
+                                'content': line.strip()
+                            })
+            except Exception:
+                pass
+
     def check_examples_migration(self):
         """Check for references to old examples/ paths."""
         print("📦 Checking examples migration...")
@@ -417,6 +490,7 @@ class DocumentationAudit:
         self.scan_structure()
         self.validate_links()
         self.find_duplicates()
+        self.check_placeholders()  # New check
         self.check_examples_migration()
         self.audit_agents_structure()
         self.validate_navigation()
@@ -473,6 +547,15 @@ class DocumentationAudit:
                 report.append(f"- **{issue['file']}**: {issue['issue']}\n")
                 report.append(f"  - Lines: {issue['lines']}\n")
             report.append("\n")
+
+        if self.issues.get('placeholders'):
+            report.append("## Placeholders Found\n")
+            for issue in self.issues['placeholders'][:30]:
+                report.append(f"- **{issue['file']}** (line {issue['line']}): `{issue['text']}`\n")
+                report.append(f"  - Content: `{issue['content'][:80]}...`\n")
+            if len(self.issues['placeholders']) > 30:
+                report.append(f"\n*... and {len(self.issues['placeholders']) - 30} more placeholders*\n")
+            report.append("\n")
         
         if self.issues['examples_migration']:
             report.append("## Examples Migration Issues\n")
@@ -514,6 +597,8 @@ class DocumentationAudit:
             report.append("3. Update examples migration references\n")
             report.append("4. Standardize AGENTS.md structure across all files\n")
             report.append("5. Add missing README.md and AGENTS.md files\n")
+            if self.issues.get('placeholders'):
+                report.append("6. Replace remaining placeholders with actual content\n")
         else:
             report.append("✅ No issues found! Documentation is in excellent shape.\n")
         

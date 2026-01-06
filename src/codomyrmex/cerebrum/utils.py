@@ -102,3 +102,4 @@ def softmax(values: list[float], temperature: float = 1.0) -> list[float]:
 
     return [v / sum_exp for v in exp_values]
 
+

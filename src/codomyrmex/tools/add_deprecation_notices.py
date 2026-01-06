@@ -17,7 +17,7 @@ def get_dependency_location(module_name: str) -> str:
     """Determine where dependencies are located in pyproject.toml."""
     # Modules with optional dependencies
     optional_deps = {
-        "code_review", "language_models", "modeling_3d", "performance",
+        "code_review", "llm", "spatial.three_d", "performance",
         "physical_management", "security", "static_analysis"
     }
     

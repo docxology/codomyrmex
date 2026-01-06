@@ -38,7 +38,7 @@ from example_runner import ExampleRunner
 from utils import print_section, print_results, print_success, print_error, ensure_output_dir
 
 # Import working modules
-from codomyrmex.api_documentation import (
+from codomyrmex.api.documentation import (
     generate_api_docs,
     extract_api_specs,
     generate_openapi_spec,
@@ -65,7 +65,7 @@ from codomyrmex.database_management import (
 from codomyrmex.database_management.schema_generator import SchemaTable, Column
 from codomyrmex.database_management.db_manager import DatabaseType
 
-from codomyrmex.security_audit import (
+from codomyrmex.security import (
     scan_vulnerabilities,
     audit_code_security,
     check_compliance,

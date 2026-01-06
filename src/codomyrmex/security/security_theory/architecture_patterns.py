@@ -64,3 +64,4 @@ def apply_pattern(pattern_name: str, context: dict) -> dict:
         "context": context,
     }
 
+
