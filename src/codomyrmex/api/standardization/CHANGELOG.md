@@ -49,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enums for HTTP methods, status codes, and version formats
   - Type hints for all public APIs
 
-- **Testing Suite** (`testing/unit/test_api_standardization.py`):
+- **Testing Suite** (`src/codomyrmex/tests/unit/test_api_standardization.py`):
   - Unit tests for all components
   - Integration tests combining multiple components
   - Mock-based testing for external dependencies
@@ -136,5 +136,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

@@ -28,7 +28,7 @@ This directory contains comprehensive documentation and guides for the AI Code E
 ## Navigation
 - **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [ai_code_editing](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Src Hub**: [src](../../../../README.md)
 
 ## Getting Started
 

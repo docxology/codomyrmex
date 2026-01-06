@@ -109,8 +109,8 @@ CI/CD-ready validation tool:
 - `scripts/documentation/validate_module_docs.py`
 
 ### Documentation Files Created
-- `src/codomyrmex/ollama_integration/README.md`
-- `src/codomyrmex/ollama_integration/AGENTS.md`
+- `src/codomyrmex/llm/ollama/README.md`
+- `src/codomyrmex/llm/ollama/AGENTS.md`
 - `src/codomyrmex/physical_management/SECURITY.md`
 - `src/codomyrmex/performance/API_SPECIFICATION.md`
 - `src/codomyrmex/performance/MCP_TOOL_SPECIFICATION.md`

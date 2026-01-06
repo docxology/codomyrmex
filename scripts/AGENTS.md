@@ -38,11 +38,12 @@
     - [plugin_system](plugin_system/AGENTS.md)
     - [project_orchestration](project_orchestration/AGENTS.md)
     - [security](security/AGENTS.md)
+    - [spatial](spatial/AGENTS.md)
     - [static_analysis](static_analysis/AGENTS.md)
     - [system_discovery](system_discovery/AGENTS.md)
     - [template](template/AGENTS.md)
     - [terminal_interface](terminal_interface/AGENTS.md)
-    - [testing](testing/AGENTS.md)
+    - [testing](../src/codomyrmex/tests/AGENTS.md)
     - [tools](tools/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
@@ -55,6 +56,42 @@
 This is the scripts coordination document for all automation utilities in the Codomyrmex repository. It defines the maintenance and automation utilities that support project management, module orchestration, and development workflows.
 
 The scripts directory contains executable utilities that automate common development tasks, module management, and system operations across the entire Codomyrmex platform.
+
+## Module Alignment
+
+### Source Module Correspondence
+
+All 31 source modules in `src/codomyrmex/` have corresponding script folders in `scripts/`:
+
+**Foundation Layer**: logging_monitoring, environment_setup, model_context_protocol, terminal_interface
+
+**Core Layer**: agents, api, build_synthesis, code, config_management, containerization, data_visualization, database_management, documentation, documents, events, fpf, git_operations, llm, logging_monitoring, pattern_matching, performance, security, static_analysis
+
+**Service Layer**: ci_cd_automation, project_orchestration
+
+**Specialized Layer**: cerebrum, module_template, physical_management, plugin_system, spatial, system_discovery, template, tools
+
+### Submodule Script Mappings
+
+Some modules have submodules with dedicated script folders:
+- `agents/ai_code_editing/` → `scripts/ai_code_editing/`
+- `api/documentation/` → (handled via `scripts/api/`)
+- `api/standardization/` → (handled via `scripts/api/`)
+- `code/sandbox/`, `code/review/`, `code/execution/`, `code/monitoring/` → (handled via `scripts/code/`)
+
+### Utility Folders (Not Module Folders)
+
+The following folders are utility/automation folders, not direct module mappings:
+- `development/` - Development workflow automation
+- `docs/` - Documentation maintenance utilities
+- `documentation_module/` - Module-specific documentation tools
+- `examples/` - Example scripts and demonstrations
+- `fabric_integration/` - Fabric AI framework integration
+- `language_models/` - Language model management (separate from `llm/`)
+- `maintenance/` - System maintenance and cleanup
+- `modeling_3d/` - 3D modeling utilities (related to `spatial/` module)
+- `src/codomyrmex/tests/` - Testing automation and verification scripts
+- `template/` - Template generation scripts (separate from module `template/`)
 
 ## Function Signatures
 
@@ -411,29 +448,48 @@ The scripts are organized by functionality:
 
 ### Module-Specific Scripts
 
-Each module has dedicated automation scripts:
-- `ai_code_editing/` - AI-assisted code generation and editing workflows
+Each of the 31 source modules has dedicated automation scripts in `scripts/<module_name>/`:
+
+**Foundation Layer Scripts**:
+- `logging_monitoring/` - Centralized logging configuration
+- `environment_setup/` - Environment validation and setup automation
+- `model_context_protocol/` - MCP tool specification management
+- `terminal_interface/` - Rich terminal UI components
+
+**Core Layer Scripts**:
+- `agents/` - Agent framework integration
+- `ai_code_editing/` - AI-assisted code generation and editing workflows (submodule of agents)
 - `api/` - API specification generation and validation
 - `build_synthesis/` - Multi-language build orchestration
-- `ci_cd_automation/` - Continuous integration pipeline management
 - `code/` - Code execution, sandbox, review, and monitoring
 - `config_management/` - Configuration validation and deployment
 - `containerization/` - Docker and container lifecycle management
 - `data_visualization/` - Chart generation and data plotting
 - `database_management/` - Database operations and migrations
+- `documentation/` - Documentation generation system
+- `documents/` - Document processing automation
+- `events/` - Event system automation
+- `fpf/` - FPF orchestration and end-to-end processing
 - `git_operations/` - Version control automation
-- `language_models/` - LLM management and benchmarking
-- `logging_monitoring/` - Centralized logging configuration
-- `model_context_protocol/` - MCP tool specification management
-- `modeling_3d/` - 3D visualization and modeling
+- `llm/` - LLM integration and management
 - `pattern_matching/` - Code pattern analysis
 - `performance/` - Performance monitoring and profiling
-- `physical_management/` - Hardware resource management
-- `project_orchestration/` - Workflow orchestration
 - `security/` - Security scanning and compliance
 - `static_analysis/` - Code quality analysis
+
+**Service Layer Scripts**:
+- `ci_cd_automation/` - Continuous integration pipeline management
+- `project_orchestration/` - Workflow orchestration
+
+**Specialized Layer Scripts**:
+- `cerebrum/` - CEREBRUM-FPF orchestration
+- `module_template/` - Module creation templates
+- `physical_management/` - Hardware resource management
+- `plugin_system/` - Plugin management
+- `spatial/` - Spatial modeling utilities
 - `system_discovery/` - Module discovery and health monitoring
-- `terminal_interface/` - Rich terminal UI components
+- `template/` - Template generation scripts
+- `tools/` - Development utility scripts
 
 ## Script Organization Policy
 
@@ -442,7 +498,7 @@ Each module has dedicated automation scripts:
 
 **All other scripts are organized in subdirectories:**
 - **Documentation scripts**: All documentation maintenance, validation, generation, and link-fixing scripts are in `documentation/`
-- **Testing scripts**: All testing automation, verification, and test suite generation scripts are in `testing/`
+- **Testing scripts**: All testing automation, verification, and test suite generation scripts are in `src/codomyrmex/tests/`
 - **Development scripts**: Development workflow scripts are in `development/`
 - **Maintenance scripts**: System maintenance and cleanup scripts are in `maintenance/`
 - **Module-specific scripts**: Each module has its own subdirectory with orchestration scripts
@@ -470,7 +526,7 @@ No standalone utility scripts remain in the root `scripts/` directory. This orga
 - `docs/` – Documentation maintenance utilities
 - `documentation/` – Documentation generation system (includes all documentation maintenance, validation, and generation scripts)
 - `documentation_module/` – Module documentation tools
-- `testing/` – Testing automation and verification scripts
+- `src/codomyrmex/tests/` – Testing automation and verification scripts
 - `environment_setup/` – Environment validation and setup
 - `examples/` – Example scripts and demonstrations
 - `fabric_integration/` – Fabric AI framework integration
@@ -589,7 +645,7 @@ All scripts in this directory must:
 
 ### For Contributors
 - **Script Templates**: [module_template/](module_template) - Script creation templates
-- **Testing**: [testing/unit/](../src/codomyrmex/tests/unit/) - Script testing guidelines
+- **Testing**: [src/codomyrmex/tests/unit/](../src/codomyrmex/tests/unit/) - Script testing guidelines
 - **Contributing**: [docs/project/contributing.md](../docs/project/contributing.md)
 
 ## Agent Coordination

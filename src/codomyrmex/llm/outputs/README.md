@@ -1,4 +1,4 @@
-# src/codomyrmex/language_models/outputs
+# src/codomyrmex/llm/outputs
 
 ## Signposting
 - **Parent**: [Language Models](../README.md)
@@ -30,5 +30,5 @@ Persistence layer for LLM interaction traces, test results, and performance metr
 
 ## Navigation
 - **Project Root**: [README](../../../../README.md)
-- **Parent Directory**: [language_models](../README.md)
+- **Parent Directory**: [llm](../README.md)
 - **Src Hub**: [src](../../../../src/README.md)

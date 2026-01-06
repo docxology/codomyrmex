@@ -52,7 +52,7 @@ graph TB
 
     subgraph "Codomyrmex Modules"
         AICodeEditing[agents/ai_code_editing]
-        LanguageModels[language_models]
+        LanguageModels[llm]
         CodeExecution[code]
     end
 
@@ -196,7 +196,7 @@ code = adapter.adapt_for_ai_code_editing(
 from codomyrmex.agents.claude import ClaudeIntegrationAdapter
 
 adapter = ClaudeIntegrationAdapter(claude_agent)
-result = adapter.adapt_for_language_models(
+result = adapter.adapt_for_llm(
     messages=[
         {"role": "user", "content": "Explain quantum computing"}
     ]

@@ -60,6 +60,16 @@ python orchestrate.py [command] [options]
 - `AGENTS.md` – This coordination document
 - `SPEC.md` – Functional specification
 
+
+## Operating Contracts
+
+### Universal Execution Protocols
+1. **Tool Integrity** - Ensure all tools are correctly configured before execution.
+2. **Resource Management** - Monitor system resources during long-running tool operations.
+3. **Error Reporting** - Provide detailed error information and remediation steps.
+4. **Configuration Validation** - Validate all input configurations before processing.
+5. **Observability** - Log all tool operations for auditability and troubleshooting.
+
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)

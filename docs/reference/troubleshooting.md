@@ -206,7 +206,7 @@ print(f'Memory after: {process.memory_info().rss / 1024 / 1024:.1f} MB')
 ```bash
 # Run tests from project root
 cd /path/to/codomyrmex
-pytest testing/ -v
+pytest src/codomyrmex/tests/ -v
 
 # Check test environment
 python -m pytest --version
@@ -226,7 +226,7 @@ pytest --version
 uv sync --dev
 
 # Run tests with same options as CI
-pytest testing/ -v --tb=short --cov=src/codomyrmex
+pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex
 ```
 
 #### Issue: Coverage reports not generating
@@ -238,8 +238,8 @@ uv sync
 pytest --cov=src/codomyrmex --cov-report=html --cov-report=term
 
 # View coverage report
-open testing/htmlcov/index.html  # macOS
-xdg-open testing/htmlcov/index.html  # Linux
+open src/codomyrmex/tests/htmlcov/index.html  # macOS
+xdg-open src/codomyrmex/tests/htmlcov/index.html  # Linux
 ```
 
 ### **Linting and Code Quality Issues**
@@ -262,10 +262,10 @@ git commit --no-verify -m "temporary commit"
 #### Issue: Code formatting inconsistencies
 ```bash
 # Run Black formatter
-black src/ testing/
+black src/ src/codomyrmex/tests/
 
 # Check what would be formatted
-black --check --diff src/ testing/
+black --check --diff src/ src/codomyrmex/tests/
 
 # Configure Black in pyproject.toml if needed
 ```
@@ -696,7 +696,7 @@ uv sync
 
 # Verify installation
 codomyrmex check
-pytest testing/unit/ -x
+pytest src/codomyrmex/tests/unit/ -x
 ```
 
 ---

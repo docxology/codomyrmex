@@ -45,13 +45,13 @@ We take the security of Codomyrmex seriously. If you discover a security vulnera
 - Executes untrusted code in isolated environments
 - **Risk**: Code injection, container escape, resource exhaustion
 - **Mitigation**: Docker isolation, resource limits, network restrictions
-- [Module Security Details](src/codomyrmex/code_execution_sandbox/SECURITY.md)
+- [Module Security Details](src/codomyrmex/code/SECURITY.md)
 
 #### **ai_code_editing**  
 - Processes external AI API responses
 - **Risk**: Prompt injection, malicious code generation
 - **Mitigation**: Input sanitization, output validation, API key protection
-- [Module Security Details](src/codomyrmex/ai_code_editing/SECURITY.md)
+- [Module Security Details](src/codomyrmex/agents/ai_code_editing/SECURITY.md)
 
 #### **git_operations**
 - Interacts with version control systems
@@ -176,8 +176,8 @@ For security-related questions or concerns:
 
 - **[Production Deployment Guide](docs/deployment/production.md)** - Production security and deployment practices
 - **[Contributing Guide](docs/project/contributing.md)** - Security considerations for contributions
-- **[Module Security Details](src/codomyrmex/code_execution_sandbox/SECURITY.md)** - Code execution sandbox security
-- **[AI Security Details](src/codomyrmex/ai_code_editing/SECURITY.md)** - AI integration security considerations
+- **[Module Security Details](src/codomyrmex/code/SECURITY.md)** - Code execution sandbox security
+- **[AI Security Details](src/codomyrmex/agents/ai_code_editing/SECURITY.md)** - AI integration security considerations
 - **[Git Operations Security](src/codomyrmex/git_operations/SECURITY.md)** - Version control security
 
 ---
@@ -188,7 +188,7 @@ For security-related questions or concerns:
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Documentation**: [Reference Guides](docs/README.md)
+- **All Agents**: [AGENTS.md](AGENTS.md)
+- **Functional Spec**: [SPEC.md](SPEC.md)
+- **Home**: [README.md](README.md)

@@ -115,7 +115,7 @@ uv run pytest
 uv run pytest --cov=src/codomyrmex
 
 # Run specific test file
-uv run pytest testing/unit/test_data_visualization.py
+uv run pytest src/codomyrmex/tests/unit/test_data_visualization.py
 
 # Run with verbose output
 uv run pytest -v
@@ -124,10 +124,10 @@ uv run pytest -v
 ### Code Quality
 ```bash
 # Format code
-uv run black src/ testing/
+uv run black src/ src/codomyrmex/tests/
 
 # Lint code
-uv run ruff check src/ testing/
+uv run ruff check src/ src/codomyrmex/tests/
 
 # Type checking
 uv run mypy src/codomyrmex/
@@ -347,7 +347,7 @@ uv lock  # Update lock file
 ```bash
 # When developing new modules
 uv pip install -e .  # Install in development mode
-uv run pytest testing/unit/test_new_module.py
+uv run pytest src/codomyrmex/tests/unit/test_new_module.py
 ```
 
 ### AI Integration

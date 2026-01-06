@@ -20,7 +20,7 @@ Example implementations and demonstrations.
 ## Navigation
 - **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [three_d](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Src Hub**: [src](../../../../README.md)
 
 ## Getting Started
 

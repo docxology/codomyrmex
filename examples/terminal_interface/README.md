@@ -345,7 +345,7 @@ The example includes comprehensive error handling for:
 
 ## Testing
 
-This example is verified by the comprehensive test suite in `testing/unit/test_terminal_interface_comprehensive.py`, which covers:
+This example is verified by the comprehensive test suite in `src/codomyrmex/tests/unit/test_terminal_interface_comprehensive.py`, which covers:
 
 - Terminal color and formatting capabilities
 - Progress bar generation and display

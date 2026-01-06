@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The `outputs` directory serves as the persistence layer for `language_models`. It stores traces, generation logs, and performance metrics. It provides a structured way to debug and analyze LLM interactions.
+The `outputs` directory serves as the persistence layer for `llm`. It stores traces, generation logs, and performance metrics. It provides a structured way to debug and analyze LLM interactions.
 
 ## Design Principles
 

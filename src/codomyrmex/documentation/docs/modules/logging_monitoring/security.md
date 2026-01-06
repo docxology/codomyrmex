@@ -88,5 +88,5 @@ Thank you for helping keep Codomyrmex logging secure and effective.
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

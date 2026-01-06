@@ -23,7 +23,7 @@ Integration tests for the Code Execution Sandbox. These tests verify the full li
 ## Navigation
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [tests](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../README.md)
 
 ## Getting Started
 

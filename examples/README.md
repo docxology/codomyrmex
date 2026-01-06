@@ -11,9 +11,7 @@
     - [api_standardization](api_standardization/README.md)
     - [build_synthesis](build_synthesis/README.md)
     - [ci_cd_automation](ci_cd_automation/README.md)
-    - [code](code/README.md)
-    - [code.review](code.review/README.md)
-    - [config_management](config_management/README.md)
+    - [code](code/README.md)    - [config_management](config_management/README.md)
     - [containerization](containerization/README.md)
     - [data_visualization](data_visualization/README.md)
     - [database_management](database_management/README.md)
@@ -116,7 +114,7 @@ Primary development capabilities:
 - **[data_visualization/](data_visualization)** - Charts and visualizations ✅
 - **[pattern_matching/](pattern_matching)** - Code pattern analysis ✅
 - **[git_operations/](git_operations)** - Version control automation ✅
-- **[code.review/](code.review)** - Automated code review ✅
+- **[code_review/](code_review)** - Automated code review ✅
 - **[security_audit/](security_audit)** - Security scanning ✅
 
 ### Service Layer ✅

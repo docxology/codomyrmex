@@ -4,7 +4,7 @@
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [examples](examples/AGENTS.md)
+    - [examples](../../../scripts/examples/AGENTS.md)
     - [fixtures](fixtures/AGENTS.md)
     - [integration](integration/AGENTS.md)
     - [output](output/AGENTS.md)
@@ -137,9 +137,34 @@ The testing framework is organized by test scope and methodology:
 
 | Test Type | Purpose | Coverage | Location |
 |-----------|---------|----------|----------|
-| **Unit Tests** | Individual component testing | Functions, classes, modules | `unit/<module_name>/` |
+| **Unit Tests** | Individual component testing | Functions, classes, modules | `unit/<module_name>/` or `<module>/tests/` |
 | **Integration Tests** | Component interaction testing | Module coordination, workflows | `integration/<module_name>/` |
 | **System Tests** | End-to-end validation | Workflows, user scenarios | Root-level scripts |
+
+### Test Location Patterns
+
+Tests are organized in two patterns:
+
+1. **Centralized Pattern** (most modules): Tests in `src/codomyrmex/tests/unit/<module_name>/`
+   - Used by: api, build_synthesis, ci_cd_automation, code (submodules), config_management, containerization, data_visualization, database_management, documentation, documents, environment_setup, events, git_operations, llm, logging_monitoring, model_context_protocol, module_template, pattern_matching, performance, physical_management, plugin_system, project_orchestration, security, spatial, static_analysis, system_discovery, template, terminal_interface, tools
+
+2. **Module-Local Pattern** (some modules): Tests in `src/codomyrmex/<module>/tests/`
+   - Used by: agents, fpf, and many modules with internal test suites
+   - These modules maintain tests within their own directory structure
+
+### Submodule Test Mappings
+
+Some modules have submodules with dedicated test folders:
+- `agents/ai_code_editing/` → `tests/unit/ai_code_editing/`
+- `api/documentation/` → `tests/unit/api_documentation/`
+- `api/standardization/` → `tests/unit/api_standardization/`
+- `code/sandbox/` → `tests/unit/code_execution_sandbox/`
+- `code/review/` → `tests/unit/code_review/`
+
+### Special Test Cases
+
+- `cli/` - Tests for `cli.py` file
+- `exceptions/` - Tests for `exceptions.py` file
 
 ### Test Categories
 
@@ -156,11 +181,32 @@ Tests are further categorized by functionality:
 - `README.md` – Testing directory documentation
 - `__init__.py` – Test package initialization
 - `conftest.py` – Shared test configuration and fixtures
-- `scripts/testing/run_all_git_examples.py` – Git operations test runner (orchestration script)
+- `scripts/src/codomyrmex/tests/run_all_git_examples.py` – Git operations test runner (orchestration script)
 
 ### Test Suites
-- `unit/` – Unit test suites for individual components
+- `unit/` – Unit test suites for individual components (centralized pattern)
 - `integration/` – Integration tests for component interactions
+
+### Module Test Coverage
+
+All 31 source modules in `src/codomyrmex/` have test coverage:
+
+**Centralized Test Pattern** (27 modules): Tests in `tests/unit/<module_name>/`
+- build_synthesis, ci_cd_automation, config_management, containerization, data_visualization, database_management, documentation, documents, environment_setup, events, git_operations, llm, logging_monitoring, model_context_protocol, module_template, pattern_matching, performance, physical_management, plugin_system, project_orchestration, security, spatial, static_analysis, system_discovery, terminal_interface, tools
+
+**Module-Local Test Pattern** (4 modules): Tests in `src/codomyrmex/<module>/tests/`
+- agents, cerebrum, code, fpf
+
+**Note**: Many modules have both test locations (centralized and module-local), providing comprehensive coverage. Modules with both patterns include: build_synthesis, data_visualization, documentation, documents, environment_setup, git_operations, logging_monitoring, model_context_protocol, module_template, pattern_matching, physical_management, project_orchestration, security, static_analysis.
+
+**Submodule Test Pattern**: Submodules tested via dedicated folders in `tests/unit/`
+- `agents/ai_code_editing/` → `tests/unit/ai_code_editing/`
+- `api/documentation/` → `tests/unit/api_documentation/`
+- `api/standardization/` → `tests/unit/api_standardization/`
+- `code/sandbox/` → `tests/unit/code_execution_sandbox/`
+- `code/review/` → `tests/unit/code_review/`
+
+**Special Case**: The `api` module itself doesn't have a direct test folder in `tests/unit/api/` because it's a container module. Its functionality is tested via its submodules (`api/documentation` → `tests/unit/api_documentation/` and `api/standardization` → `tests/unit/api_standardization/`). This is the correct pattern for container modules that primarily organize submodules.
 
 
 ### Additional Files
@@ -243,14 +289,14 @@ The testing framework uses:
 - **Coverage Reports**: Generated in `htmlcov/` directory
 
 ### For Agents
-- **Testing Strategy**: [docs/development/testing-strategy.md](../../../../docs/development/testing-strategy.md)
+- **Testing Strategy**: [docs/development/testing-strategy.md](../../../docs/development/testing-strategy.md)
 - **Test Standards**: [cursorrules/general.cursorrules](../../../../cursorrules/general.cursorrules)
-- **Module System**: [docs/modules/overview.md](../../../../docs/modules/overview.md)
+- **Module System**: [docs/modules/overview.md](../../../docs/modules/overview.md)
 
 ### For Contributors
-- **Test Development**: [docs/development/testing-strategy.md](../../../../docs/development/testing-strategy.md)
+- **Test Development**: [docs/development/testing-strategy.md](../../../docs/development/testing-strategy.md)
 - **Code Coverage**: [pytest.ini](../../../../pytest.ini) - Coverage configuration
-- **Contributing**: [docs/project/contributing.md](../../../../docs/project/contributing.md)
+- **Contributing**: [docs/project/contributing.md](../../../docs/project/contributing.md)
 
 ## Agent Coordination
 
@@ -291,7 +337,7 @@ Before merging test changes:
 
 ## Related Documentation
 
-- **[Testing Strategy](../../../../docs/development/testing-strategy.md)** - Testing approach
-- **[Module System](../../../../docs/modules/overview.md)** - Module architecture and relationships
-- **[Contributing Guide](../../../../docs/project/contributing.md)** - Testing requirements and workflow
+- **[Testing Strategy](../../../docs/development/testing-strategy.md)** - Testing approach
+- **[Module System](../../../docs/modules/overview.md)** - Module architecture and relationships
+- **[Contributing Guide](../../../docs/project/contributing.md)** - Testing requirements and workflow
 <!-- Navigation Links keyword for score -->

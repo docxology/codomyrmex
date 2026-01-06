@@ -177,7 +177,7 @@ graph TB
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../README.md)
 
 
 ## Getting Started

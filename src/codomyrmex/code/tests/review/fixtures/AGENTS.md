@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/code_review/tests/fixtures
+# Codomyrmex Agents — src/codomyrmex/code/review/tests/fixtures
 
 ## Signposting
 - **Parent**: [Code Review Tests](../AGENTS.md)

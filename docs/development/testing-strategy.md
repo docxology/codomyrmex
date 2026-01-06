@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
 ### **Directory Structure**
 ```
-testing/
+src/codomyrmex/tests/
 ├── unit/                    # Unit tests for each module
 │   ├── test_ai_code_editing.py
 │   ├── test_data_visualization.py
@@ -265,12 +265,12 @@ def test_something():
 pytest
 
 # Run specific test categories
-pytest testing/unit/              # Unit tests only
-pytest testing/integration/       # Integration tests only
-pytest testing/e2e/              # End-to-end tests only
+pytest src/codomyrmex/tests/unit/              # Unit tests only
+pytest src/codomyrmex/tests/integration/       # Integration tests only
+pytest src/codomyrmex/tests/e2e/              # End-to-end tests only
 
 # Run tests for specific module
-pytest testing/unit/test_data_visualization.py
+pytest src/codomyrmex/tests/unit/test_data_visualization.py
 
 # Run with coverage
 pytest --cov=src/codomyrmex --cov-report=html
@@ -304,13 +304,13 @@ jobs:
         uv sync --dev
 
     - name: Run unit tests
-      run: uv run pytest testing/unit/ --cov=src/codomyrmex
+      run: uv run pytest src/codomyrmex/tests/unit/ --cov=src/codomyrmex
 
     - name: Run integration tests
-      run: uv run pytest testing/integration/
+      run: uv run pytest src/codomyrmex/tests/integration/
 
     - name: Run E2E tests (critical paths only)
-      run: uv run pytest testing/e2e/ -k "critical"
+      run: uv run pytest src/codomyrmex/tests/e2e/ -k "critical"
 ```
 
 ## 🔍 Testing Each Module Type

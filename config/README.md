@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [Repository Root](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](../scripts/examples/README.md)
     - [templates](templates/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)

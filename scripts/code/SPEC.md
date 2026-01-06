@@ -1,10 +1,10 @@
-# scripts/code_review - Functional Specification
+# scripts/code - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
-This module contains the **automation scripts** and **CLI entry points** for the `code_review` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/code_review`) to the terminal and CI/CD pipelines.
+This module contains the **automation scripts** and **CLI entry points** for the `code` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/code`) to the terminal and CI/CD pipelines.
 
 ## Design Principles
 
@@ -27,7 +27,7 @@ This module contains the **automation scripts** and **CLI entry points** for the
 - Check `AGENTS.md` or run with `--help` for specific command usage.
 
 ### Dependencies
-- **Core Library**: `codomyrmex.code_review`.
+- **Core Library**: `codomyrmex.code`.
 
 ## Navigation
 

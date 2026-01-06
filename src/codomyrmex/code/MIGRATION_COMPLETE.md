@@ -85,8 +85,8 @@ src/codomyrmex/code/
 - ✅ Updated cursorrules documentation
 
 ### 7. Cleanup
-- ✅ Deleted `src/codomyrmex/code_execution_sandbox/`
-- ✅ Deleted `src/codomyrmex/code_review/`
+- ✅ Deleted `src/codomyrmex/code/sandbox/`
+- ✅ Deleted `src/codomyrmex/code/review/`
 - ✅ Deleted `scripts/code_execution_sandbox/`
 - ✅ Deleted `scripts/code_review/`
 - ✅ Deleted `examples/code_execution_sandbox/`
@@ -144,5 +144,5 @@ All old module directories have been removed. All imports have been updated. All
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

@@ -2,66 +2,117 @@
 Generated: comprehensive_audit.py
 ================================================================================
 ## Summary
-**Total Issues Found**: 1000
+**Total Issues Found**: 1038
 
 ### Issue Breakdown
-- **Broken Links**: 26
-- **Examples Migration**: 66
-- **Placeholders**: 908
+- **Broken Links**: 74
+- **Examples Migration**: 44
+- **Agents Structure**: 6
+- **Placeholders**: 914
 
 ## Broken Links
-- **testing/AGENTS.md** (line 20): `./unit/README.md`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/README.md`
-- **testing/AGENTS.md** (line 21): `./integration/README.md`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/integration/README.md`
-- **scripts/AGENTS.md** (line 541): `../testing/unit/`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit`
+- **examples/README.md** (line 15): `code_execution_sandbox/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/README.md`
+- **examples/README.md** (line 16): `code_review/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/code_review/README.md`
+- **examples/AGENTS.md** (line 16): `code_execution_sandbox/AGENTS.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/code_execution_sandbox/AGENTS.md`
+- **examples/AGENTS.md** (line 17): `code_review/AGENTS.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/code_review/AGENTS.md`
 - **src/template/AGENTS_TEMPLATE.md** (line 7): `subdirectory/AGENTS.md`
   - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/template/subdirectory/AGENTS.md`
 - **src/template/AGENTS_TEMPLATE.md** (line 40): `API_SPECIFICATION.md`
   - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/template/API_SPECIFICATION.md`
 - **src/template/AGENTS_TEMPLATE.md** (line 41): `USAGE_EXAMPLES.md`
   - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/template/USAGE_EXAMPLES.md`
-- **src/codomyrmex/tests/RUNNING_TESTS.md** (line 419): `../docs/development/testing-strategy.md`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/docs/development/testing-strategy.md`
-- **src/codomyrmex/tests/integration/AGENTS.md** (line 518): `../../examples/README.md`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/README.md`
-- **src/codomyrmex/tests/examples/AGENTS.md** (line 90): `../../examples/README.md`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/README.md`
-- **src/codomyrmex/tests/examples/AGENTS.md** (line 95): `../../examples/AGENTS.md`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/AGENTS.md`
-- **src/codomyrmex/tests/performance/AGENTS.md** (line 85): `../../src/codomyrmex/performance/README.md`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/src/codomyrmex/performance/README.md`
-- **src/codomyrmex/tests/performance/AGENTS.md** (line 90): `../../src/codomyrmex/performance/AGENTS.md`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/src/codomyrmex/performance/AGENTS.md`
+- **src/codomyrmex/code/AGENTS.md** (line 220): `API_SPECIFICATION.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/code/API_SPECIFICATION.md`
+- **src/codomyrmex/code/AGENTS.md** (line 221): `USAGE_EXAMPLES.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/code/USAGE_EXAMPLES.md`
+- **src/codomyrmex/spatial/README.md** (line 7): `four_d/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/spatial/four_d/README.md`
+- **src/codomyrmex/spatial/README.md** (line 8): `world_models/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/spatial/world_models/README.md`
+- **src/codomyrmex/spatial/AGENTS.md** (line 8): `four_d/AGENTS.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/spatial/four_d/AGENTS.md`
+- **src/codomyrmex/spatial/AGENTS.md** (line 9): `world_models/AGENTS.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/spatial/world_models/AGENTS.md`
+- **src/codomyrmex/tests/integration/AGENTS.md** (line 513): `test_ai_code_execution_flow.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/integration/test_ai_code_execution_flow.py`
+- **src/codomyrmex/tests/integration/AGENTS.md** (line 516): `test_github_functionality_demo.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/integration/test_github_functionality_demo.py`
+- **src/codomyrmex/tests/integration/AGENTS.md** (line 517): `test_github_operations_demo.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/integration/test_github_operations_demo.py`
+- **src/codomyrmex/tests/integration/AGENTS.md** (line 518): `test_real_github_repos.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/integration/test_real_github_repos.py`
+- **src/codomyrmex/tests/integration/AGENTS.md** (line 519): `verify_all_git_methods_comprehensive.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/integration/verify_all_git_methods_comprehensive.py`
+- **src/codomyrmex/tests/integration/AGENTS.md** (line 522): `test_analysis_security_cicd.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/integration/test_analysis_security_cicd.py`
+- **src/codomyrmex/tests/integration/AGENTS.md** (line 523): `test_documentation_accuracy.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/integration/test_documentation_accuracy.py`
+- **src/codomyrmex/tests/integration/AGENTS.md** (line 524): `test_visualization_performance.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/integration/test_visualization_performance.py`
+- **src/codomyrmex/llm/outputs/SPEC.md** (line 27): `../SPEC.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/llm/SPEC.md`
+- **src/codomyrmex/llm/prompt_templates/SPEC.md** (line 15): `../SPEC.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/llm/SPEC.md`
+- **src/codomyrmex/documentation/docs/modules/README.md** (line 6): `agents/ai_code_editing/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/docs/modules/agents/ai_code_editing/README.md`
+- **src/codomyrmex/documentation/docs/modules/README.md** (line 8): `code/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/docs/modules/code/README.md`
+- **src/codomyrmex/documentation/docs/modules/AGENTS.md** (line 7): `agents/ai_code_editing/AGENTS.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/docs/modules/agents/ai_code_editing/AGENTS.md`
+- **src/codomyrmex/documentation/docs/modules/AGENTS.md** (line 9): `code/AGENTS.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/documentation/docs/modules/code/AGENTS.md`
+- **scripts/maintenance/AGENTS.md** (line 589): `security.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/scripts/maintenance/security.py`
+- **scripts/llm/ollama/README.md** (line 4): `../README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/scripts/llm/README.md`
+- **scripts/llm/ollama/README.md** (line 27): `../README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/scripts/llm/README.md`
+- **scripts/llm/ollama/README.md** (line 28): `../README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/scripts/llm/README.md`
+- **scripts/llm/ollama/AGENTS.md** (line 4): `../AGENTS.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/scripts/llm/AGENTS.md`
+- **scripts/llm/ollama/AGENTS.md** (line 36): `../README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/scripts/llm/README.md`
+- **examples/documentation/README.md** (line 317): `../code.review/`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/code.review`
+- **examples/documentation/README.md** (line 318): `../api/documentation/`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/api/documentation`
+- **examples/pattern_matching/README.md** (line 342): `../code.review/`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/code.review`
 - **examples/_templates/tutorial_template_README.md** (line 198): `../../src/codomyrmex/{module}/`
   - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/{module}`
-- **examples/multi_module/README.md** (line 170): `../../testing/integration/`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/integration`
-- **examples/static_analysis/README.md** (line 87): `../../testing/unit/test_static_analysis.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_static_analysis.py`
-- **examples/containerization/README.md** (line 111): `../../testing/unit/test_containerization.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_containerization.py`
-- **examples/containerization/README.md** (line 112): `../../testing/unit/test_containerization_enhanced.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_containerization_enhanced.py`
-- **examples/environment_setup/README.md** (line 51): `../../testing/unit/test_environment_setup.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_environment_setup.py`
-- **examples/modeling_3d/README.md** (line 259): `../../testing/unit/test_modeling_3d.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_modeling_3d.py`
-- **examples/data_visualization/README.md** (line 58): `../../testing/unit/test_data_visualization.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_data_visualization.py`
-- **examples/code/README.md** (line 98): `../../testing/unit/test_code.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_code.py`
-- **examples/logging_monitoring/README.md** (line 93): `../../testing/unit/test_logging_monitoring.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_logging_monitoring.py`
-- **examples/config_management/README.md** (line 113): `../../testing/unit/test_config_management.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_config_management.py`
-- **examples/config_management/README.md** (line 114): `../../testing/unit/test_config_management_enhanced.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_config_management_enhanced.py`
-- **examples/physical_management/README.md** (line 204): `../../testing/unit/test_physical_management.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_physical_management.py`
-- **examples/performance/README.md** (line 110): `../../testing/unit/test_performance_comprehensive.py`
-  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/testing/unit/test_performance_comprehensive.py`
+- **examples/static_analysis/README.md** (line 87): `../../src/codomyrmex/tests/unit/test_static_analysis.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/test_static_analysis.py`
+- **examples/ai_code_editing/README.md** (line 498): `../code.review/`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/code.review`
+- **examples/containerization/README.md** (line 111): `../../src/codomyrmex/tests/unit/test_containerization.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/test_containerization.py`
+- **examples/containerization/README.md** (line 112): `../../src/codomyrmex/tests/unit/test_containerization_enhanced.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/test_containerization_enhanced.py`
+- **examples/code/README.md** (line 261): `../security/`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/examples/security`
+- **examples/code/README.md** (line 267): `../../src/codomyrmex/code.review/`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/code.review`
+- **examples/code/README.md** (line 268): `../../src/codomyrmex/code.review/API_SPECIFICATION.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/code.review/API_SPECIFICATION.md`
+- **examples/code/README.md** (line 269): `../../src/codomyrmex/code.review/USAGE_EXAMPLES.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/code.review/USAGE_EXAMPLES.md`
+- **examples/environment_setup/README.md** (line 51): `../../src/codomyrmex/tests/unit/test_environment_setup.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/test_environment_setup.py`
+- **examples/modeling_3d/README.md** (line 259): `../../src/codomyrmex/tests/unit/test_spatial/three_d.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/test_spatial/three_d.py`
+- **examples/data_visualization/README.md** (line 58): `../../src/codomyrmex/tests/unit/test_data_visualization.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/test_data_visualization.py`
+- **examples/logging_monitoring/README.md** (line 93): `../../src/codomyrmex/tests/unit/test_logging_monitoring.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/test_logging_monitoring.py`
+- **examples/security_audit/README.md** (line 92): `../../../src/codomyrmex/tests/unit/test_security.py`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/tests/unit/test_security.py`
+
+*... and 24 more broken links*
 
 ## Placeholders Found
 - **plugins/SPEC.md** (line 3): `Core Concept`
@@ -125,81 +176,37 @@ Generated: comprehensive_audit.py
 - **output/triple_check_report.md** (line 301): `TODO`
   - Content: `- Context: `oject_root: Path) -> List[TodoItem] ```  Find all TODO items across ...`
 
-*... and 878 more placeholders*
+*... and 884 more placeholders*
 
 ## Examples Migration Issues
 Found references to old `examples/` paths that should be updated to `scripts/examples/`:
-- **AGENTS.md** (line 26):
-  ```
-  | **examples/** | Example scripts and demonstrations | [examples/README.md](examples/README.md) |...
-  ```
-- **AGENTS.md** (line 240):
-  ```
-  - [Examples](examples/AGENTS.md)...
-  ```
-- **AGENTS.md** (line 290):
-  ```
-  - **Examples**: [examples/README.md](examples/README.md) - Example implementations...
-  ```
-- **config/README.md** (line 6):
-  ```
-  - [examples](examples/README.md)...
-  ```
-- **config/AGENTS.md** (line 7):
-  ```
-  - [examples](examples/AGENTS.md)...
-  ```
-- **config/AGENTS.md** (line 148):
+- **config/AGENTS.md** (line 154):
   ```
   - **Quick Start**: [examples/workflow-basic.json](examples/workflow-basic.json) - Basic configuratio...
   ```
-- **config/AGENTS.md** (line 149):
+- **config/AGENTS.md** (line 155):
   ```
   - **Docker Setup**: [examples/docker-compose.yml](examples/docker-compose.yml) - Container deploymen...
   ```
-- **docs/README.md** (line 8):
+- **scripts/README.md** (line 24):
   ```
   - [examples](examples/README.md)...
   ```
-- **docs/AGENTS.md** (line 9):
-  ```
-  - [examples](examples/AGENTS.md)...
-  ```
-- **scripts/README.md** (line 22):
-  ```
-  - [examples](examples/README.md)...
-  ```
-- **scripts/README.md** (line 467):
+- **scripts/README.md** (line 470):
   ```
   - **Examples**: [examples/README.md](examples/README.md)...
   ```
-- **scripts/AGENTS.md** (line 23):
+- **scripts/AGENTS.md** (line 25):
   ```
   - [examples](examples/AGENTS.md)...
   ```
-- **src/codomyrmex/tests/README.md** (line 6):
+- **src/codomyrmex/spatial/three_d/docs/index.md** (line 17):
   ```
-  - [examples](examples/README.md)...
+  - Explore the [Examples](../examples/) directory for usage examples....
   ```
-- **src/codomyrmex/tests/AGENTS.md** (line 7):
+- **src/codomyrmex/spatial/three_d/docs/index.md** (line 23):
   ```
-  - [examples](examples/AGENTS.md)...
-  ```
-- **src/codomyrmex/modeling_3d/README.md** (line 7):
-  ```
-  - [examples](examples/README.md)...
-  ```
-- **src/codomyrmex/modeling_3d/AGENTS.md** (line 8):
-  ```
-  - [examples](examples/AGENTS.md)...
-  ```
-- **src/codomyrmex/physical_management/README.md** (line 7):
-  ```
-  - [examples](examples/README.md)...
-  ```
-- **src/codomyrmex/physical_management/AGENTS.md** (line 8):
-  ```
-  - [examples](examples/AGENTS.md)...
+  - [Examples](../examples/) - Usage examples and demonstrations...
   ```
 - **src/codomyrmex/physical_management/docs/index.md** (line 18):
   ```
@@ -209,48 +216,100 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
   ```
   - [Examples](../examples/) - Usage examples and demonstrations...
   ```
-- **src/codomyrmex/modeling_3d/docs/index.md** (line 17):
-  ```
-  - Explore the [Examples](../examples/) directory for usage examples....
-  ```
-- **src/codomyrmex/modeling_3d/docs/index.md** (line 23):
-  ```
-  - [Examples](../examples/) - Usage examples and demonstrations...
-  ```
-- **src/codomyrmex/tests/integration/AGENTS.md** (line 518):
-  ```
-  - **Examples**: [../../examples/README.md](../../examples/README.md) - Example implementations...
-  ```
-- **src/codomyrmex/tests/examples/AGENTS.md** (line 90):
-  ```
-  - **Examples**: [../../examples/README.md](../../examples/README.md) - Example implementations...
-  ```
-- **src/codomyrmex/tests/examples/AGENTS.md** (line 95):
-  ```
-  - **[Examples Agents](../../examples/AGENTS.md)** - Example coordination...
-  ```
-- **scripts/examples/AGENTS.md** (line 309):
-  ```
-  - **Examples Directory**: [../../examples/README.md](../../examples/README.md) - Main examples...
-  ```
 - **scripts/project_orchestration/README.md** (line 6):
   ```
-  - [examples](examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **scripts/project_orchestration/AGENTS.md** (line 7):
   ```
-  - [examples](examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
-- **scripts/project_orchestration/AGENTS.md** (line 505):
+- **scripts/project_orchestration/AGENTS.md** (line 510):
   ```
   - **Comprehensive Demo**: [examples/comprehensive_workflow_demo.py](examples/comprehensive_workflow_...
   ```
 - **scripts/fpf/README.md** (line 6):
   ```
-  - [examples](examples/README.md)...
+  - [examples](../examples/README.md)...
+  ```
+- **scripts/fpf/AGENTS.md** (line 7):
+  ```
+  - [examples](../examples/AGENTS.md)...
+  ```
+- **docs/project/documentation-audit-report.md** (line 185):
+  ```
+  - **Quick Start**: [examples/workflow-basic.json](examples/workflow-basic.json) - Basic configuratio...
+  ```
+- **docs/project/documentation-audit-report.md** (line 189):
+  ```
+  - **Docker Setup**: [examples/docker-compose.yml](examples/docker-compose.yml) - Container deploymen...
+  ```
+- **docs/project/documentation-audit-report.md** (line 193):
+  ```
+  - [examples](examples/README.md)......
+  ```
+- **docs/project/documentation-audit-report.md** (line 197):
+  ```
+  - **Examples**: [examples/README.md](examples/README.md)......
+  ```
+- **docs/project/documentation-audit-report.md** (line 201):
+  ```
+  - [examples](examples/AGENTS.md)......
+  ```
+- **docs/project/documentation-audit-report.md** (line 205):
+  ```
+  - Explore the [Examples](../examples/) directory for usage examples.......
+  ```
+- **docs/project/documentation-audit-report.md** (line 209):
+  ```
+  - [Examples](../examples/) - Usage examples and demonstrations......
+  ```
+- **docs/project/documentation-audit-report.md** (line 213):
+  ```
+  - Explore the [Examples](../examples/) directory for usage examples.......
+  ```
+- **docs/project/documentation-audit-report.md** (line 217):
+  ```
+  - [Examples](../examples/) - Usage examples and demonstrations......
+  ```
+- **docs/project/documentation-audit-report.md** (line 221):
+  ```
+  - [examples](../examples/README.md)......
+  ```
+- **docs/project/documentation-audit-report.md** (line 225):
+  ```
+  - [examples](../examples/AGENTS.md)......
+  ```
+- **docs/project/documentation-audit-report.md** (line 229):
+  ```
+  - **Comprehensive Demo**: [examples/comprehensive_workflow_demo.py](examples/comprehensive_workflow_...
+  ```
+- **docs/project/documentation-audit-report.md** (line 233):
+  ```
+  - [examples](../examples/README.md)......
+  ```
+- **docs/project/documentation-audit-report.md** (line 237):
+  ```
+  - [examples](../examples/AGENTS.md)......
+  ```
+- **docs/project/documentation-audit-report.md** (line 241):
+  ```
+  - **Quick Start**: [examples/workflow-basic.json](examples/workflow-basic.json) - Basic configuratio...
+  ```
+- **docs/project/documentation-audit-report.md** (line 245):
+  ```
+  - **Docker Setup**: [examples/docker-compose.yml](examples/docker-compose.yml) - Container deploymen...
   ```
 
-*... and 36 more examples migration issues*
+*... and 14 more examples migration issues*
+
+## AGENTS.md Structure Issues
+- **src/codomyrmex/spatial/AGENTS.md**: Missing sections: Active Components
+- **src/codomyrmex/code/tests/AGENTS.md**: Missing sections: Active Components
+- **src/codomyrmex/code/sandbox/AGENTS.md**: Missing sections: Active Components
+- **src/codomyrmex/code/execution/AGENTS.md**: Missing sections: Active Components
+- **src/codomyrmex/code/review/AGENTS.md**: Missing sections: Active Components
+- **src/codomyrmex/code/monitoring/AGENTS.md**: Missing sections: Active Components
 
 ## Recommendations
 1. Fix all broken links identified above
@@ -261,9 +320,3 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
 6. Replace remaining placeholders with actual content
 
 ================================================================================
-## Navigation Links
-
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)

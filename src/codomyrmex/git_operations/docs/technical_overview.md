@@ -97,5 +97,5 @@ Security is a major consideration, detailed extensively in `git_operations/SECUR
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

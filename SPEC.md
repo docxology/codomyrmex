@@ -31,7 +31,8 @@ This root directory serves as the nexus of the colony. It does not contain busin
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Documentation**: [Reference Guides](docs/README.md)
+- **All Agents**: [AGENTS.md](AGENTS.md)
+- **Functional Spec**: [SPEC.md](SPEC.md)
+- **Source Index**: [src/README.md](src/README.md)
+

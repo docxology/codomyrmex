@@ -7,7 +7,7 @@ generic utilities, and framework-specific implementations.
 Integration:
 - Uses `logging_monitoring` for all logging
 - Integrates with `ai_code_editing` for code generation workflows
-- Integrates with `language_models` for LLM infrastructure
+- Integrates with `llm` for LLM infrastructure
 - Integrates with `code` for safe code execution
 
 Available classes:

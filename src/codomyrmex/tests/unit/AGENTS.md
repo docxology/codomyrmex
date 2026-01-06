@@ -1,4 +1,4 @@
-# Codomyrmex Agents — testing/unit
+# Codomyrmex Agents — src/codomyrmex/tests/unit
 
 ## Signposting
 - **Parent**: [Tests](../AGENTS.md)
@@ -12,7 +12,34 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
-Test files and validation suites for unit.
+
+Unit test files and validation suites for individual components. This directory contains centralized unit tests for most modules, with some modules maintaining tests in their own `tests/` subdirectories.
+
+## Module Test Organization
+
+### Test Location Patterns
+
+**Centralized Pattern** (28 modules): Tests in `src/codomyrmex/tests/unit/<module_name>/`
+- Most modules follow this pattern for centralized test management
+
+**Module-Local Pattern** (3 modules): Tests in `src/codomyrmex/<module>/tests/`
+- `agents/` - Has tests in `src/codomyrmex/agents/tests/`
+- `fpf/` - Has tests in `src/codomyrmex/fpf/tests/`
+- `spatial/` - Has tests in `src/codomyrmex/spatial/three_d/tests/` (submodule)
+
+### Submodule Test Mappings
+
+Some modules have submodules with dedicated test folders in this directory:
+- `agents/ai_code_editing/` → `tests/unit/ai_code_editing/`
+- `api/documentation/` → `tests/unit/api_documentation/`
+- `api/standardization/` → `tests/unit/api_standardization/`
+- `code/sandbox/` → `tests/unit/code_execution_sandbox/`
+- `code/review/` → `tests/unit/code_review/`
+
+### Special Test Cases
+
+- `cli/` - Tests for `cli.py` file (not a module directory)
+- `exceptions/` - Tests for `exceptions.py` file (not a module directory)
 
 ## Active Components
 - `README.md` – Project file
@@ -37,7 +64,7 @@ Test files and validation suites for unit.
 - `test_git_operations_advanced.py` – Project file
 - `test_git_operations_comprehensive.py` – Project file
 - `test_github_operations_comprehensive.py` – Project file
-- `test_language_models.py` – Project file
+- `test_llm.py` – Project file
 - `test_logging_monitoring.py` – Project file
 - `test_model_context_protocol.py` – Project file
 - `test_spatial.three_d.py` – Project file
@@ -77,7 +104,7 @@ Test files and validation suites for unit.
 - `events` – Events
 - `exceptions` – Exceptions
 - `git_operations` – Git Operations
-- `language_models` – Language Models
+- `llm` – Language Models
 - `llm` – Llm
 - `logging_monitoring` – Logging Monitoring
 - `model_context_protocol` – Model Context Protocol

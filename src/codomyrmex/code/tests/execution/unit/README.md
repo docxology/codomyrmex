@@ -23,7 +23,7 @@ Unit tests for the Code Execution Sandbox components. These tests ensure that th
 ## Navigation
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [tests](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../README.md)
 
 ## Getting Started
 

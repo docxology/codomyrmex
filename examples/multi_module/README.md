@@ -167,7 +167,7 @@ To create custom workflows:
 - [Events Module](../../src/codomyrmex/events/README.md)
 - [Logging Module](../../src/codomyrmex/logging_monitoring/README.md)
 - [Project Orchestration](../../src/codomyrmex/project_orchestration/README.md)
-- [Integration Tests](../../testing/integration/)
+- [Integration Tests](../../src/codomyrmex/tests/integration/)
 
 ## Navigation
 

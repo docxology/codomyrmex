@@ -37,11 +37,12 @@
     - [plugin_system](plugin_system/README.md)
     - [project_orchestration](project_orchestration/README.md)
     - [security](security/README.md)
+    - [spatial](spatial/README.md)
     - [static_analysis](static_analysis/README.md)
     - [system_discovery](system_discovery/README.md)
     - [template](template/README.md)
     - [terminal_interface](terminal_interface/README.md)
-    - [testing](testing/README.md)
+    - [testing](../src/codomyrmex/tests/README.md)
     - [tools](tools/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -307,7 +308,7 @@ stateDiagram-v2
 
 **Script Organization:**
 - **`documentation/`** - All documentation maintenance, validation, generation, and link-fixing scripts
-- **`testing/`** - All testing automation, verification, and test suite generation scripts
+- **`src/codomyrmex/tests/`** - All testing automation, verification, and test suite generation scripts
 - **`development/`** - Development workflow scripts (setup, testing, linting, formatting)
 - **`maintenance/`** - System maintenance, cleanup, and organization utilities
 - **`examples/`** - Example scripts and demonstrations
@@ -321,7 +322,7 @@ No standalone utility scripts remain in the root `scripts/` directory. This ensu
 
 **Scripts moved/removed from root:**
 - Documentation scripts → `documentation/` (e.g., `comprehensive_triple_check.py`, `fix_*.py`, `generate_*.py`)
-- Testing scripts → `testing/` (e.g., `assess_module_documentation_tests.py`, `create_comprehensive_test_suites.py`)
+- Testing scripts → `src/codomyrmex/tests/` (e.g., `assess_module_documentation_tests.py`, `create_comprehensive_test_suites.py`)
 - Audit scripts → `documentation/` (e.g., `audit_structure.py`, `check_links.py`)
 
 **Result**: Clean organization with scripts categorized by purpose, making them easy to discover and maintain.
@@ -344,7 +345,7 @@ No standalone utility scripts remain in the root `scripts/` directory. This ensu
 - `maintenance/` – System maintenance, cleanup, and organization utilities
 
 ### Testing Scripts
-- `testing/` – Testing automation, verification, and test suite generation scripts
+- `src/codomyrmex/tests/` – Testing automation, verification, and test suite generation scripts
 
 ### Example and Demonstration Scripts
 - `examples/` – Usage examples, tutorials, and demonstration scripts
@@ -360,13 +361,12 @@ No standalone utility scripts remain in the root `scripts/` directory. This ensu
 #### Core Layer Scripts
 - `ai_code_editing/` – AI-assisted code generation and editing workflows
 - `static_analysis/` – Code quality analysis and linting automation
-- `code_execution_sandbox/` – Safe code execution environment management
+- `code/` – Code execution, sandboxing, review, and monitoring
 - `data_visualization/` – Data visualization and plotting automation
 - `pattern_matching/` – Code pattern analysis and recognition
 - `git_operations/` – Git workflow automation and management
-- `code_review/` – Automated code review and quality assessment
-- `security_audit/` – Security scanning and vulnerability assessment
-- `ollama_integration/` – Local LLM integration and management
+- `security/` – Security scanning and vulnerability assessment
+- `llm/` – Local and remote LLM integration and management
 - `language_models/` – Language model management and operations
 - `performance/` – Performance monitoring and benchmarking
 
@@ -380,6 +380,7 @@ No standalone utility scripts remain in the root `scripts/` directory. This ensu
 
 #### Specialized Layer Scripts
 - `modeling_3d/` – 3D modeling and visualization workflows
+- `spatial/` – Spatial modeling and visualization (3D, 4D, World Models)
 - `physical_management/` – Hardware resource monitoring
 - `system_discovery/` – Module discovery and system exploration
 - `module_template/` – Module creation and scaffolding tools

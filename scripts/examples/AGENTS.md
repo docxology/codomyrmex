@@ -313,7 +313,7 @@ Solution: Fix syntax errors or update to match schema
 
 ### Platform Navigation
 - **Scripts Directory**: [../README.md](../README.md) - Script utilities overview
-- **Examples Directory**: [../../examples/README.md](../../examples/README.md) - Main examples
+- **Examples Directory**: [../../examples/README.md](../../scripts/examples/README.md) - Main examples
 
 ## Agent Coordination
 

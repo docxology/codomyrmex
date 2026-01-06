@@ -88,7 +88,7 @@ All critical tests pass with real Ollama API calls.
 ## Navigation
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [llm](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../README.md)
 
 ## Getting Started
 

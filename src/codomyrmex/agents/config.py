@@ -29,6 +29,12 @@ class AgentConfig:
     codex_max_tokens: int = 4096
     codex_temperature: float = 0.0
 
+    # OpenCode configuration
+    opencode_command: str = "opencode"
+    opencode_timeout: int = 60
+    opencode_working_dir: Optional[str] = None
+    opencode_api_key: Optional[str] = None
+
     # General agent configuration
     default_timeout: int = 30
     enable_logging: bool = True
@@ -64,6 +70,16 @@ class AgentConfig:
             os.getenv("CODEX_TEMPERATURE", str(self.codex_temperature))
         )
 
+        # OpenCode configuration
+        self.opencode_command = os.getenv("OPENCODE_COMMAND", self.opencode_command)
+        self.opencode_timeout = int(
+            os.getenv("OPENCODE_TIMEOUT", str(self.opencode_timeout))
+        )
+        self.opencode_working_dir = os.getenv(
+            "OPENCODE_WORKING_DIR", self.opencode_working_dir
+        )
+        self.opencode_api_key = os.getenv("OPENCODE_API_KEY", self.opencode_api_key)
+
         # General configuration
         self.default_timeout = int(
             os.getenv("AGENT_DEFAULT_TIMEOUT", str(self.default_timeout))
@@ -97,6 +113,10 @@ class AgentConfig:
             "codex_timeout": self.codex_timeout,
             "codex_max_tokens": self.codex_max_tokens,
             "codex_temperature": self.codex_temperature,
+            "opencode_command": self.opencode_command,
+            "opencode_timeout": self.opencode_timeout,
+            "opencode_working_dir": self.opencode_working_dir,
+            "opencode_api_key": "***" if self.opencode_api_key else None,
             "default_timeout": self.default_timeout,
             "enable_logging": self.enable_logging,
             "log_level": self.log_level,
@@ -127,6 +147,9 @@ class AgentConfig:
 
         if self.codex_timeout <= 0:
             errors.append("codex_timeout must be positive")
+
+        if self.opencode_timeout <= 0:
+            errors.append("opencode_timeout must be positive")
 
         return errors
 

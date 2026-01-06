@@ -1,4 +1,4 @@
-# scripts/api_documentation
+# scripts/api
 
 ## Signposting
 - **Parent**: [Scripts](../README.md)

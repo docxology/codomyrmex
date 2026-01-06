@@ -122,7 +122,7 @@ services:
       },
       {
         "name": "test",
-        "command": "pytest testing/",
+        "command": "pytest src/codomyrmex/tests/",
         "timeout": 600,
         "depends_on": ["lint"]
       }

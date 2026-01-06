@@ -23,12 +23,34 @@ from codomyrmex.agents.core import AgentRequest
 # Create client
 jules = JulesClient()
 
-# Execute request
-request = AgentRequest(prompt="Generate a Python function to sort a list")
+# Execute request (creates a Jules task session)
+request = AgentRequest(
+    prompt="write unit tests for the authentication module",
+    context={"repo": "myorg/myrepo"}  # Optional repository context
+)
 response = jules.execute(request)
 
 if response.is_success():
     print(response.content)
+```
+
+### Using Context Parameters
+
+```python
+from codomyrmex.agents.jules import JulesClient
+from codomyrmex.agents.core import AgentRequest
+
+jules = JulesClient()
+
+# Create task with repository and parallel sessions
+request = AgentRequest(
+    prompt="refactor the database layer",
+    context={
+        "repo": "owner/repository",
+        "parallel": 3  # Create 3 parallel sessions
+    }
+)
+response = jules.execute(request)
 ```
 
 ### Using Integration Adapter
@@ -40,11 +62,65 @@ from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
 jules = JulesClient()
 adapter = JulesIntegrationAdapter(jules)
 
-# Generate code
+# Generate code via AI code editing module
 code = adapter.adapt_for_ai_code_editing(
     prompt="Create a REST API endpoint",
+    language="python",
+    repo="myorg/myrepo"  # Optional context
+)
+
+# Use with LLM module
+messages = [
+    {"role": "user", "content": "Explain this code"},
+    {"role": "assistant", "content": "I'll analyze it"}
+]
+result = adapter.adapt_for_llm(messages)
+
+# Analyze code via code execution module
+analysis = adapter.adapt_for_code_execution(
+    code="def test(): pass",
     language="python"
 )
+```
+
+### Multi-Agent Orchestration
+
+```python
+from codomyrmex.agents.jules import JulesClient
+from codomyrmex.agents.claude import ClaudeClient
+from codomyrmex.agents.generic import AgentOrchestrator
+from codomyrmex.agents.core import AgentRequest
+
+# Create multiple agents
+jules = JulesClient()
+claude = ClaudeClient()
+
+# Create orchestrator
+orchestrator = AgentOrchestrator([jules, claude])
+
+# Execute in parallel
+request = AgentRequest(prompt="write comprehensive tests")
+responses = orchestrator.execute_parallel(request)
+
+# Execute with fallback (try Jules first, fallback to Claude)
+response = orchestrator.execute_with_fallback(request)
+
+# Execute sequentially
+responses = orchestrator.execute_sequential(request, stop_on_success=True)
+```
+
+### Streaming Output
+
+```python
+from codomyrmex.agents.jules import JulesClient
+from codomyrmex.agents.core import AgentRequest
+
+jules = JulesClient()
+request = AgentRequest(prompt="analyze codebase structure")
+
+# Stream output in real-time
+for chunk in jules.stream(request):
+    print(chunk)
 ```
 
 ## Navigation
@@ -54,23 +130,63 @@ code = adapter.adapt_for_ai_code_editing(
 
 
 
-## Getting Started
+## Capabilities
 
-To use this module in your project, import the necessary components:
+JulesClient supports the following agent capabilities:
+
+- **CODE_GENERATION**: Generate code from task descriptions via Jules sessions
+- **CODE_EDITING**: Edit and refactor code through task-based workflows
+- **CODE_ANALYSIS**: Analyze code quality and provide improvement suggestions
+- **TEXT_COMPLETION**: Complete text and code snippets
+- **STREAMING**: Stream command output in real-time
+
+## Configuration
+
+Jules client can be configured via environment variables or config dictionary:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.agents.jules import main_component
+# Environment variables
+JULES_COMMAND=jules          # Jules CLI command (default: "jules")
+JULES_TIMEOUT=30             # Command timeout in seconds (default: 30)
+JULES_WORKING_DIR=/path/to/dir  # Working directory (optional)
 
-def example():
-    result = main_component.process()
-    print(f"Result: {result}")
+# Or via config dictionary
+jules = JulesClient(config={
+    "jules_command": "jules",
+    "jules_timeout": 60,
+    "jules_working_dir": "/path/to/project"
+})
 ```
 
-## detailed_overview
+## Error Handling
 
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
+Jules operations raise `JulesError` for command failures:
+
+```python
+from codomyrmex.agents.jules import JulesClient
+from codomyrmex.agents.exceptions import JulesError
+from codomyrmex.agents.core import AgentRequest
+
+jules = JulesClient()
+request = AgentRequest(prompt="test task")
+
+try:
+    response = jules.execute(request)
+except JulesError as e:
+    print(f"Jules error: {e}")
+    print(f"Command: {e.context.get('command')}")
+    print(f"Exit code: {e.context.get('exit_code')}")
+```
+
+## Integration with Codomyrmex Modules
+
+Jules integrates seamlessly with Codomyrmex modules:
+
+- **AI Code Editing** (`agents/ai_code_editing`): Generate and edit code
+- **LLM Module** (`llm`): Text completion and conversation
+- **Code Execution** (`code`): Code analysis and validation
+
+All integrations use the `JulesIntegrationAdapter` which provides a consistent interface across modules.
 
 ## Contributing
 

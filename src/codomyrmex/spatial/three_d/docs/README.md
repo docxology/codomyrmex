@@ -21,7 +21,7 @@ Documentation files and guides.
 ## Navigation
 - **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [three_d](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Src Hub**: [src](../../../../README.md)
 
 ## Getting Started
 

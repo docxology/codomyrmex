@@ -104,5 +104,5 @@ This module follows the main Codomyrmex versioning scheme and does not have its 
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

@@ -23,7 +23,7 @@ Test suites for the Code Execution Sandbox, verifying security boundaries, resou
 ## Navigation
 - **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [code](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Src Hub**: [src](../../../../README.md)
 
 ## Getting Started
 

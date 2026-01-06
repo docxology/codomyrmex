@@ -1,4 +1,4 @@
-# scripts/code_review
+# scripts/code
 
 ## Signposting
 - **Parent**: [Scripts](../README.md)

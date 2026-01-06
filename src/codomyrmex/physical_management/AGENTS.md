@@ -5,7 +5,7 @@
 - **Self**: [Physical Management Agents](AGENTS.md)
 - **Children**:
     - [docs](docs/AGENTS.md)
-    - [examples](examples/AGENTS.md)
+    - [examples](../../../scripts/examples/AGENTS.md)
     - [tests](tests/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)

@@ -24,7 +24,7 @@ Practical, hands-on tutorials for mastering the AI Code Editing module. These gu
 ## Navigation
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [docs](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../README.md)
 
 ## Getting Started
 

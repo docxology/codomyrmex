@@ -4,7 +4,7 @@
 - **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
-    - [examples](examples/README.md)
+    - [examples](../../../../scripts/examples/README.md)
     - [tests](tests/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -31,7 +31,7 @@ Provides 3D modeling, rendering, and AR/VR visualization capabilities.
 ## Navigation
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Src Hub**: [src](../../../README.md)
 
 ## Getting Started
 

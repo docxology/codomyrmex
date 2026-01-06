@@ -1,0 +1,7 @@
+# Scrape Module Dependencies
+
+# Firecrawl Python SDK
+# Install with: pip install firecrawl-py
+# Or use: uv sync --extra scrape
+firecrawl-py>=1.0.0
+

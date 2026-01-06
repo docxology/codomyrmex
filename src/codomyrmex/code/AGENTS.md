@@ -8,7 +8,7 @@
     - [sandbox](sandbox/AGENTS.md)
     - [review](review/AGENTS.md)
     - [monitoring](monitoring/AGENTS.md)
-    - [docs](docs/AGENTS.md)
+    - [docs](../../../docs/AGENTS.md)
     - [tests](tests/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
@@ -155,8 +155,6 @@ Generate a code review report.
 - `README.md` – Module usage and overview
 - `AGENTS.md` – This file: agent documentation
 - `SPEC.md` – Functional specification
-- `API_SPECIFICATION.md` – Complete API documentation
-- `USAGE_EXAMPLES.md` – Practical usage demonstrations
 - `MCP_TOOL_SPECIFICATION.md` – AI agent tool specifications
 - `SECURITY.md` – Security considerations
 - `CHANGELOG.md` – Version history

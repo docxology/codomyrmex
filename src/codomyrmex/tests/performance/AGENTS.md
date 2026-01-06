@@ -1,4 +1,4 @@
-# testing/performance - Performance Testing Suite
+# src/codomyrmex/tests/performance - Performance Testing Suite
 
 ## Signposting
 - **Parent**: [Tests](../AGENTS.md)
@@ -86,10 +86,10 @@ This directory contains performance testing suites for measuring and validating 
 
 - **Testing Root**: [../README.md](../README.md) - Testing suite documentation
 - **Testing Agents**: [../AGENTS.md](../AGENTS.md) - Test coordination
-- **Performance Module**: [../../src/codomyrmex/performance/README.md](../../src/codomyrmex/performance/README.md) - Performance monitoring module
+- **Performance Module**: [../../src/codomyrmex/performance/README.md](../../performance/README.md) - Performance monitoring module
 
 ## Related Documentation
 
 - **[AGENTS Root](../../AGENTS.md)** - Repository-level agent coordination
-- **[Performance Module](../../src/codomyrmex/performance/AGENTS.md)** - Performance monitoring coordination
+- **[Performance Module](../../performance/AGENTS.md)** - Performance monitoring coordination
 <!-- Navigation Links keyword for score -->

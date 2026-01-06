@@ -87,3 +87,20 @@ class CodexError(AgentError):
         if status_code is not None:
             self.context["status_code"] = status_code
 
+
+class OpenCodeError(AgentError):
+    """Raised when OpenCode CLI operations fail."""
+
+    def __init__(
+        self,
+        message: str = "OpenCode operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
+        super().__init__(message, **kwargs)
+        if command:
+            self.context["command"] = command
+        if exit_code is not None:
+            self.context["exit_code"] = exit_code
+

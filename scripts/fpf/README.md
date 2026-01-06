@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [Scripts](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](../examples/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)

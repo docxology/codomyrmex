@@ -24,7 +24,7 @@ Integration tests for the AI Code Editing module. These tests verify the end-to-
 ## Navigation
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [tests](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../README.md)
 
 ## Getting Started
 

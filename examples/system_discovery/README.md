@@ -335,7 +335,7 @@ The example includes comprehensive error handling for:
 
 ## Testing
 
-This example is verified by the comprehensive test suite in `testing/unit/test_system_discovery_comprehensive.py`, which covers:
+This example is verified by the comprehensive test suite in `src/codomyrmex/tests/unit/test_system_discovery_comprehensive.py`, which covers:
 
 - Complete system discovery workflows
 - Health check validation and reporting

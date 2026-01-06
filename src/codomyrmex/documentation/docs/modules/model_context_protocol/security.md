@@ -86,5 +86,5 @@ Thank you for helping keep Codomyrmex and the Model Context Protocol secure.
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

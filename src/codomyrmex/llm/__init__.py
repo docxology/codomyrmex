@@ -15,13 +15,6 @@ from .config import (
     reset_config,
     set_config,
 )
-from .ollama_client import (
-    OllamaClient,
-    OllamaConnectionError,
-    OllamaError,
-    OllamaModelError,
-    OllamaTimeoutError,
-)
 
 __all__ = [
     'OllamaManager',
@@ -34,10 +27,4 @@ __all__ = [
     'get_config',
     'set_config',
     'reset_config',
-
-    'OllamaClient',
-    'OllamaError',
-    'OllamaConnectionError',
-    'OllamaTimeoutError',
-    'OllamaModelError',
 ]

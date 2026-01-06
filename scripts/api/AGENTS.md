@@ -1,4 +1,4 @@
-# Codomyrmex Agents — scripts/api_documentation
+# Codomyrmex Agents — scripts/api
 
 ## Signposting
 - **Parent**: [Scripts](../AGENTS.md)

@@ -90,7 +90,7 @@ The Logging Monitoring module is foundational and used by all other Codomyrmex m
 
 - [Module README](../../src/codomyrmex/logging_monitoring/README.md)
 - [API Specification](../../src/codomyrmex/logging_monitoring/API_SPECIFICATION.md)
-- [Unit Tests](../../testing/unit/test_logging_monitoring.py)
+- [Unit Tests](../../src/codomyrmex/tests/unit/test_logging_monitoring.py)
 
 ## Navigation
 

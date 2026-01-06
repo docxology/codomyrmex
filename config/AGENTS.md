@@ -4,7 +4,7 @@
 - **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [examples](examples/AGENTS.md)
+    - [examples](../scripts/examples/AGENTS.md)
     - [templates](templates/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)

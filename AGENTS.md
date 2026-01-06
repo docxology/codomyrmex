@@ -23,7 +23,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **config/** | Configuration templates and examples | [config/README.md](config/README.md) |
 | **cursorrules/** | Coding standards and automation rules | [cursorrules/README.md](cursorrules/README.md) |
 | **projects/** | Project workspace and templates | [projects/README.md](projects/README.md) |
-| **examples/** | Example scripts and demonstrations | [examples/README.md](examples/README.md) |
+| **examples/** | Example scripts and demonstrations | [examples/README.md](scripts/examples/README.md) |
 | **scripts/examples/** | Executable examples and demos | [scripts/examples/README.md](scripts/examples/README.md) |
 
 ### Repository Root Files
@@ -114,9 +114,10 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `static_analysis/` - Code quality analysis
   - Key Classes: `CodeAnalyzer`, `LintRunner`, `ComplexityCalculator`
   - Key Functions: `analyze_file(filepath: str) -> dict`, `calculate_complexity(code: str) -> float`
-- `code_execution_sandbox/` - Safe code execution
-  - Key Classes: `SandboxExecutor`, `ResourceLimiter`, `ExecutionContext`
-  - Key Functions: `execute_code(code: str, language: str, timeout: int = 30) -> ExecutionResult`
+- `code/` - Code execution & review
+  - Key Submodules: `sandbox/`, `review/`, `execution/`
+  - Key Classes: `SandboxExecutor`, `CodeReviewer`, `ExecutionContext`
+  - Key Functions: `execute_code(code: str, language: str) -> ExecutionResult`, `review_code(code: str) -> dict`
 - `data_visualization/` - Charts and plots
   - Key Classes: `PlotGenerator`, `ChartBuilder`, `DataProcessor`
   - Key Functions: `create_plot(data: pd.DataFrame, plot_type: str) -> str`, `save_visualization(fig: Any, filepath: str) -> None`
@@ -126,18 +127,13 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `git_operations/` - Version control automation
   - Key Classes: `GitManager`, `CommitBuilder`, `BranchManager`
   - Key Functions: `commit_changes(message: str, files: list = None) -> str`, `create_branch(name: str) -> bool`
-- `code_review/` - Automated code review
-  - Key Classes: `CodeReviewer`, `ReviewEngine`, `CommentGenerator`
-  - Key Functions: `review_pull_request(pr_number: int, repo: str) -> ReviewResult`, `analyze_code_quality(code: str) -> dict`
 - `security/` - Security scanning and threat assessment
   - Key Classes: `SecurityScanner`, `VulnerabilityDetector`, `ComplianceChecker`, `ThreatModeler`
   - Key Functions: `scan_codebase(path: str) -> list`, `check_vulnerabilities(dependencies: dict) -> list`, `assess_threats(system: dict) -> ThreatAssessment`
-- `llm/` - LLM integration namespace (Ollama and future providers)
+- `llm/` - LLM infrastructure and integration
+  - Key Submodules: `ollama/`, `outputs/`, `prompt_templates/`
   - Key Classes: `OllamaClient`, `ModelManager`, `InferenceEngine`
   - Key Functions: `load_model(name: str) -> bool`, `generate_text(prompt: str, model: str) -> str`
-- `language_models/` - LLM infrastructure
-  - Key Classes: `ModelProvider`, `TokenCounter`, `EmbeddingGenerator`
-  - Key Functions: `get_completion(messages: list, model: str) -> str`, `calculate_tokens(text: str) -> int`
 - `performance/` - Performance monitoring
   - Key Classes: `PerformanceProfiler`, `BenchmarkRunner`, `MetricsCollector`
   - Key Functions: `profile_function(func: callable, *args, **kwargs) -> ProfileResult`, `run_benchmark(test_func: callable) -> dict`
@@ -149,9 +145,10 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `documentation/` - Documentation generation tools
   - Key Classes: `DocGenerator`, `APIDocumenter`, `MarkdownRenderer`
   - Key Functions: `generate_docs(source_path: str, output_path: str) -> None`, `extract_api_docs(code: str) -> dict`
-- `api_documentation/` - API documentation generation
-  - Key Classes: `OpenAPISpecGenerator`, `SwaggerRenderer`, `EndpointAnalyzer`
-  - Key Functions: `generate_openapi_spec(routes: list) -> dict`, `create_swagger_ui(spec: dict) -> str`
+- `api/` - API infrastructure
+  - Key Submodules: `documentation/`, `standardization/`
+  - Key Classes: `OpenAPISpecGenerator`, `APIVersioner`, `RESTAPIBuilder`
+  - Key Functions: `generate_openapi_spec(routes: list) -> dict`, `version_api(api: dict) -> dict`
 - `ci_cd_automation/` - CI/CD pipeline management
   - Key Classes: `PipelineBuilder`, `DeploymentManager`, `TestRunner`
   - Key Functions: `create_pipeline(config: dict) -> Pipeline`, `deploy_to_environment(app: str, env: str) -> bool`
@@ -169,9 +166,10 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Functions: `load_config(path: str) -> dict`, `get_secret(key: str) -> str`
 
 **Specialized Layer**:
-- `modeling_3d/` - 3D modeling and visualization
+- `spatial/` - Spatial modeling (3D/4D)
+  - Key Submodules: `three_d/`, `four_d/`, `world_models/`
   - Key Classes: `SceneBuilder`, `MeshGenerator`, `Renderer`
-  - Key Functions: `create_scene(objects: list) -> Scene`, `render_scene(scene: Scene, camera: Camera) -> Image`
+  - Key Functions: `create_scene(objects: list) -> Scene`, `render_scene(scene: Scene) -> Image`
 - `physical_management/` - Physical system simulation
   - Key Classes: `SystemMonitor`, `ResourceManager`, `PerformanceTracker`
   - Key Functions: `get_system_info() -> dict`, `monitor_resources(interval: int) -> Iterator[dict]`
@@ -183,8 +181,8 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Functions: `reason(case: Case, context: dict) -> ReasoningResult`, `infer(network: BayesianNetwork, evidence: dict) -> InferenceResult`
 - `agents/` - Agentic framework integrations
   - Key Classes: `AgentInterface`, `BaseAgent`, `JulesClient`, `ClaudeClient`, `CodexClient`, `AgentOrchestrator`
-  - Key Functions: `execute(request: AgentRequest) -> AgentResponse`, `adapt_for_ai_code_editing(prompt: str, language: str) -> str`
-  - Submodules: `ai_code_editing/` (AI-powered code generation), `droid/` (task management)
+  - Key Functions: `execute(request: AgentRequest) -> AgentResponse`
+  - Key Submodules: `ai_code_editing/`, `droid/` (task management), `claude/`, `codex/`
 - `fpf/` - Functional Programming Framework
   - Key Classes: `FPFOrchestrator`, `CombinatorEngine`, `TransformationPipeline`
   - Key Functions: `compose(functions: list) -> ComposedFunction`, `transform(data: Any, pipeline: Pipeline) -> Any`
@@ -194,9 +192,6 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `events/` - Event system and pub/sub
   - Key Classes: `EventBus`, `EventEmitter`, `EventHandler`
   - Key Functions: `emit(event: Event) -> None`, `subscribe(event_type: str, handler: callable) -> None`
-- `api_standardization/` - API standardization and versioning
-  - Key Classes: `APIVersioner`, `RESTAPIBuilder`, `GraphQLAPIBuilder`
-  - Key Functions: `version_api(api: dict, version: str) -> dict`, `generate_openapi_spec(routes: list) -> dict`
 - `plugin_system/` - Plugin architecture and management
   - Key Classes: `PluginManager`, `PluginLoader`, `PluginRegistry`
   - Key Functions: `load_plugin(path: str) -> Plugin`, `register_plugin(plugin: Plugin) -> None`
@@ -238,9 +233,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
     - [Tests](src/codomyrmex/tests/AGENTS.md)
     - [Config](config/AGENTS.md)
     - [Cursor Rules](cursorrules/AGENTS.md)
-    - [Examples](examples/AGENTS.md)
-    - [Output](output/AGENTS.md)
-    - [Plugins](plugins/AGENTS.md)
+    - [Examples](scripts/examples/AGENTS.md)
     - [Projects](projects/AGENTS.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -280,20 +273,6 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - `workflow.db` – Workflow database file
 
 
-### Additional Files
-- `SPEC.md` – Spec Md
-- `architecture_graph.md` – Architecture Graph Md
-- `config` – Config
-- `cursorrules` – Cursorrules
-- `docs` – Docs
-- `examples` – Examples
-- `output` – Output
-- `plugins` – Plugins
-- `projects` – Projects
-- `scripts` – Scripts
-- `src` – Src
-- `uv.lock` – Uv Lock
-
 ## Navigation Links
 - **Main Documentation**: [README.md](README.md) - Main project README
 - **Documentation Hub**: [docs/README.md](docs/README.md) - Documentation structure
@@ -303,7 +282,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Configuration**: [config/README.md](config/README.md) - Configuration templates
 - **Cursor Rules**: [cursorrules/README.md](cursorrules/README.md) - Coding standards
 - **Projects**: [projects/README.md](projects/README.md) - Projects workspace
-- **Examples**: [examples/README.md](examples/README.md) - Example implementations
+- **Examples**: [examples/README.md](scripts/examples/README.md) - Example implementations
 - **Scripts Examples**: [scripts/examples/README.md](scripts/examples/README.md) - Executable examples and demos
 - **Source Agents**: [src/AGENTS.md](src/AGENTS.md) - Source code agent coordination
 - **Docs Agents**: [docs/AGENTS.md](docs/AGENTS.md) - Documentation agent coordination

@@ -168,7 +168,7 @@ Scans specific modules for their capabilities, exported functions, and integrati
     "languages": ["python", "javascript", "java", "cpp"],
     "providers": ["openai", "anthropic", "google"]
   },
-  "dependencies": ["language_models", "pattern_matching"],
+  "dependencies": ["llm", "pattern_matching"],
   "mcp_tools": ["generate_code_snippet", "refactor_code_snippet"]
 }
 ```
@@ -177,5 +177,5 @@ Scans specific modules for their capabilities, exported functions, and integrati
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

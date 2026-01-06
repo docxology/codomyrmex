@@ -1,7 +1,7 @@
-# Codomyrmex Agents — scripts/ollama_integration
+# Codomyrmex Agents — scripts/llm/ollama
 
 ## Signposting
-- **Parent**: [Scripts](../AGENTS.md)
+- **Parent**: [Scripts LLM](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

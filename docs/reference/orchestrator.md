@@ -219,7 +219,7 @@ start_here.sh (Main Orchestrator)
 - [Workflow Configuration Schema](../project_orchestration/workflow-configuration-schema.md) - Workflow JSON schema
 - [Project Template Schema](../project_orchestration/project-template-schema.md) - Project template structure
 - [Resource Configuration](../project_orchestration/resource-configuration.md) - Resource management
-- [Examples Documentation](../examples/README.md) - Complete examples guide
+- [Examples Documentation](../../scripts/examples/README.md) - Complete examples guide
 
 ---
 

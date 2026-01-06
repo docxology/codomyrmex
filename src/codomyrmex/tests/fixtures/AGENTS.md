@@ -1,4 +1,4 @@
-# testing/fixtures - Test Data and Fixtures
+# src/codomyrmex/tests/fixtures - Test Data and Fixtures
 
 ## Signposting
 - **Parent**: [Tests](../AGENTS.md)

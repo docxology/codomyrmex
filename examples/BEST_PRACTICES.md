@@ -893,5 +893,5 @@ def create_shared_config(base_config: dict) -> dict:
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../docs/README.md)
 - **Home**: [Root README](../../../README.md)

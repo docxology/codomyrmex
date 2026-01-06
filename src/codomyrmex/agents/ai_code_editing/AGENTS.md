@@ -462,7 +462,7 @@ All AI code assistance within the Codomyrmex platform must:
 
 When integrating with other modules:
 
-1. **Model Management** - Coordinate with language_models module for provider management
+1. **Model Management** - Coordinate with llm module for provider management
 2. **Context Sharing** - Exchange codebase context for improved AI assistance
 3. **Code Review Integration** - Combine AI generation with automated code review
 4. **Security Validation** - Ensure AI-generated code meets security standards

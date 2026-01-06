@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [src](../README.md)
 - **Children**:
-    - [ai_code_editing](ai_code_editing/README.md)
+    - [ai_code_editing](agents/ai_code_editing/README.md)
     - [static_analysis](static_analysis/README.md)
     - [... (20+ modules)](./)
 - **Key Artifacts**:
@@ -337,6 +337,7 @@ flowchart TD
 - `data_visualization/` – Chart generation and data plotting
 - `pattern_matching/` – Code pattern recognition and analysis
 - `git_operations/` – Git workflow automation and management
+- `scrape/` – Web scraping and data extraction
 - `security/` – Security module (physical, digital, cognitive, theory)
 - `documents/` – Document I/O operations (read/write markdown, JSON, PDF, etc.)
 - `llm/` – LLM integration (with `ollama/` submodule for local LLM integration)

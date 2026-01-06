@@ -509,10 +509,10 @@ Find the relevant test file and examine the tested methods:
 
 ```bash
 # Find the test file
-find testing/unit -name "*pattern_matching*"
+find src/codomyrmex/tests/unit -name "*pattern_matching*"
 
 # Examine the tests
-head -50 testing/unit/test_pattern_matching.py
+head -50 src/codomyrmex/tests/unit/test_pattern_matching.py
 ```
 
 ### Step 4: Create the Example Script
@@ -1084,7 +1084,7 @@ print('Output validation passed')
 "
 
 # Run example testing infrastructure (when available)
-cd ../../../testing/examples
+cd ../../../src/codomyrmex/tests/examples
 python -m pytest test_example_execution.py -k your_module
 ```
 
@@ -1257,5 +1257,5 @@ Congratulations! You've completed all the Codomyrmex Examples tutorials. You now
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../docs/README.md)
 - **Home**: [Root README](../../../README.md)

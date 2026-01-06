@@ -34,7 +34,7 @@ This example demonstrates comprehensive code pattern detection and analysis usin
 
 ## Tested Methods
 
-This example references the following tested methods from `testing/unit/test_pattern_matching.py`:
+This example references the following tested methods from `src/codomyrmex/tests/unit/test_pattern_matching.py`:
 
 - `analyze_repository_path()` - Verified in `TestPatternMatching::test_pattern_matching_module_structure`
 - `run_full_analysis()` - Verified in `TestPatternMatching::test_pattern_matching_module_structure`
@@ -339,7 +339,7 @@ The example generates several output files:
 ## Related Examples
 
 - **[Static Analysis](../static_analysis/)** - Code quality and structure analysis
-- **[Code Review](../code.review/)** - Automated code review and feedback
+- **[Code Review](../code_review/)** - Automated code review and feedback
 - **[Data Visualization](../data_visualization/)** - Pattern analysis visualization
 - **[Git Operations](../git_operations/)** - Code change pattern analysis
 

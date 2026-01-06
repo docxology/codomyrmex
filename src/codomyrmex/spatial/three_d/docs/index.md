@@ -8,7 +8,7 @@ This documentation provides in-depth information beyond the main `README.md` for
 
 - [Architecture](./architecture.md) (3D engine architecture and design)
 - [API Specification](../API_SPECIFICATION.md) (Link to the main API spec)
-- [Contributing Guidelines](../../../../docs/project/contributing.md) (Link to contribution guide)
+- [Contributing Guidelines](../../../../../docs/project/contributing.md) (Link to contribution guide)
 
 ## How to Use This Documentation
 
@@ -27,7 +27,7 @@ This documentation provides in-depth information beyond the main `README.md` for
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
 
 ## Detailed Architecture and Implementation

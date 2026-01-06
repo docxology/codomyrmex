@@ -33,16 +33,14 @@ graph TB
     subgraph "Module Layer - AI & Intelligence"
         AICode["AI Code<br/>Editing"]
         MCP["Model Context<br/>Protocol"]
-        Ollama["Ollama<br/>Integration"]
-        LangModels["Language<br/>Models"]
+        LLM["LLM<br/>Infrastructure"]
     end
 
     subgraph "Module Layer - Analysis & Quality"
         StaticAnalysis["Static<br/>Analysis"]
         PatternMatch["Pattern<br/>Matching"]
-        CodeExec["Code Execution<br/>Sandbox"]
-        CodeReview["Code<br/>Review"]
-        SecurityAudit["Security<br/>Audit"]
+        Code["Code Execution<br/>& Review"]
+        Security["Security"]
         Perf["Performance<br/>Monitoring"]
     end
 
@@ -58,7 +56,7 @@ graph TB
 
     subgraph "Module Layer - Visualization & Data"
         DataViz["Data<br/>Visualization"]
-        Modeling3D["3D<br/>Modeling"]
+        Spatial["Spatial<br/>(3D/4D)"]
     end
 
     subgraph "Module Layer - Infrastructure"
@@ -207,24 +205,21 @@ graph TD
     end
 
     subgraph core ["Core Layer"]
-        AICode["ai_code_editing"]
+        Agents["agents"]
         StaticAnalysis["static_analysis"]
-        CodeExec["code_execution_sandbox"]
+        Code["code"]
         DataViz["data_visualization"]
         PatternMatch["pattern_matching"]
         GitOps["git_operations"]
-        CodeReview["code_review"]
-        SecurityAudit["security_audit"]
-        Ollama["ollama_integration"]
-        LangModels["language_models"]
+        Security["security"]
+        LLM["llm"]
         Performance["performance"]
     end
 
     subgraph service ["Service Layer"]
         BuildSynth["build_synthesis"]
         Documentation["documentation"]
-        APIDoc["api_documentation"]
-        APIStd["api_standardization"]
+        API["api"]
         CICD["ci_cd_automation"]
         Container["containerization"]
         ConfigMgmt["config_management"]
@@ -236,7 +231,7 @@ graph TD
     subgraph specialized ["Specialized Layer"]
         SysDiscovery["system_discovery"]
         ModuleTemplate["module_template"]
-        Modeling3D["modeling_3d"]
+        Spatial["spatial"]
         Events["events"]
         PluginSys["plugin_system"]
         Tools["tools"]
@@ -246,37 +241,35 @@ graph TD
     Env --> Logging
 
     %% Core layer dependencies
-    Logging --> AICode
+    Logging --> Agents
     Logging --> StaticAnalysis
-    Logging --> CodeExec
+    Logging --> Code
     Logging --> DataViz
     Logging --> PatternMatch
     Logging --> GitOps
-    Logging --> CodeReview
-    Logging --> SecurityAudit
-    Logging --> Ollama
-    Logging --> LangModels
+    Logging --> Security
+    Logging --> LLM
     Logging --> Performance
 
-    Env --> AICode
-    Env --> CodeExec
-    Env --> SecurityAudit
+    Env --> Agents
+    Env --> Code
+    Env --> Security
     Env --> Performance
 
-    MCP --> AICode
-    MCP --> LangModels
+    MCP --> Agents
+    MCP --> LLM
 
-    Terminal --> AICode
-    Terminal --> CodeReview
+    Terminal --> Agents
+    Terminal --> Code
 
-    StaticAnalysis --> CodeReview
-    PatternMatch --> CodeReview
-    SecurityAudit --> CodeReview
+    StaticAnalysis --> Code
+    PatternMatch --> Code
+    Security --> Code
 
     %% Service layer dependencies
     Logging --> BuildSynth
     Logging --> Documentation
-    Logging --> APIDoc
+    Logging --> API
     Logging --> CICD
     Logging --> Container
     Logging --> ConfigMgmt
@@ -291,27 +284,25 @@ graph TD
     Env --> Database
     Env --> PhysMgmt
 
-    AICode --> BuildSynth
-    AICode --> Documentation
-    AICode --> ProjectOrch
+    Agents --> BuildSynth
+    Agents --> Documentation
+    Agents --> ProjectOrch
 
     StaticAnalysis --> BuildSynth
     StaticAnalysis --> CICD
 
-    CodeExec --> BuildSynth
-    CodeExec --> CICD
+    Code --> BuildSynth
+    Code --> CICD
 
     DataViz --> Documentation
-    DataViz --> APIDoc
+    DataViz --> API
 
     GitOps --> BuildSynth
     GitOps --> CICD
     GitOps --> ProjectOrch
 
-    CodeReview --> CICD
-
-    SecurityAudit --> CICD
-    SecurityAudit --> Container
+    Security --> CICD
+    Security --> Container
 
     Performance --> CICD
     Performance --> Container
@@ -326,7 +317,7 @@ graph TD
     %% Specialized layer dependencies
     Logging --> SysDiscovery
     Logging --> ModuleTemplate
-    Logging --> Modeling3D
+    Logging --> Spatial
     Logging --> Events
     Logging --> PluginSys
     Logging --> Tools
@@ -338,7 +329,7 @@ graph TD
 
     SysDiscovery --> ModuleTemplate
     SysDiscovery --> Tools
-    DataViz --> Modeling3D
+    DataViz --> Spatial
     Events --> PluginSys
     PluginSys --> ModuleTemplate
 ```
@@ -628,16 +619,14 @@ Primary capabilities for development workflows:
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
-| [**ai_code_editing**](src/codomyrmex/ai_code_editing/) | AI-powered code assistance | Code generation, refactoring, multi-LLM support |
+| [**agents**](src/codomyrmex/agents/) | Agentic framework integrations | AI code editing, task management, various providers |
 | [**static_analysis**](src/codomyrmex/static_analysis/) | Code quality analysis | Linting, security scanning, complexity metrics |
-| [**code_execution_sandbox**](src/codomyrmex/code_execution_sandbox/) | Safe code execution | Multi-language support, resource limits, isolation |
+| [**code**](src/codomyrmex/code/) | Code execution & review | Safe sandbox execution, automated code review |
 | [**data_visualization**](src/codomyrmex/data_visualization/) | Charts and plots | Static/interactive plots, multiple formats |
 | [**pattern_matching**](src/codomyrmex/pattern_matching/) | Code pattern analysis | Pattern recognition, dependency analysis |
 | [**git_operations**](src/codomyrmex/git_operations/) | Version control automation | Git workflows, branch management, commit automation |
-| [**code_review**](src/codomyrmex/code_review/) | Automated code review | AI-powered review, quality analysis, suggestions |
-| [**ollama_integration**](src/codomyrmex/ollama_integration/) | Local LLM integration | Local model management, execution, benchmarking |
-| [**security**](src/codomyrmex/security/) | Security scanning | Vulnerability detection, compliance checking |
-| [**language_models**](src/codomyrmex/language_models/) | LLM infrastructure | Model management, API integration, benchmarking |
+| [**security**](src/codomyrmex/security/) | Security scanning | Vulnerability detection, compliance checking, threat assessment |
+| [**llm**](src/codomyrmex/llm/) | LLM infrastructure | Model management, local/remote providers (Ollama), benchmarking |
 | [**performance**](src/codomyrmex/performance/) | Performance monitoring | Profiling, optimization, benchmarking |
 
 ### Service Modules
@@ -647,7 +636,7 @@ Higher-level services that orchestrate core modules:
 |--------|---------|-------------|
 | [**build_synthesis**](src/codomyrmex/build_synthesis/) | Build automation | Multi-language builds, artifact generation, pipelines |
 | [**documentation**](src/codomyrmex/documentation/) | Documentation generation | Website generation, API docs, tutorial creation |
-| [**api_documentation**](src/codomyrmex/api_documentation/) | API documentation | OpenAPI/Swagger specs, structured documentation |
+| [**api**](src/codomyrmex/api/) | API infrastructure | OpenAPI/Swagger specs, standardization, documentation |
 | [**ci_cd_automation**](src/codomyrmex/ci_cd_automation/) | CI/CD pipeline management | Pipeline orchestration, deployment automation |
 | [**containerization**](src/codomyrmex/containerization/) | Container management | Docker lifecycle, Kubernetes orchestration |
 | [**database_management**](src/codomyrmex/database_management/) | Database operations | Schema management, migrations, backups |
@@ -659,13 +648,12 @@ Advanced capabilities for specific domains:
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
-| [**modeling_3d**](src/codomyrmex/modeling_3d/) | 3D modeling and visualization | Scene creation, rendering, geometric operations |
+| [**spatial**](src/codomyrmex/spatial/) | Spatial modeling (3D/4D) | Scene creation, rendering, geometric operations, world models |
 | [**physical_management**](src/codomyrmex/physical_management/) | Physical system simulation | Hardware monitoring, resource management |
 | [**system_discovery**](src/codomyrmex/system_discovery/) | System exploration | Module discovery, capability detection, health monitoring |
 | [**module_template**](src/codomyrmex/module_template/) | Module creation templates | Scaffold generation, template management |
 | [**events**](src/codomyrmex/events/) | Event system | Message passing, pub/sub patterns, event logging |
 | [**plugin_system**](src/codomyrmex/plugin_system/) | Plugin architecture | Extension loading, plugin management, interfaces |
-| [**api_standardization**](src/codomyrmex/api_standardization/) | API standards | REST/GraphQL APIs, versioning, validation |
 | [**tools**](src/codomyrmex/tools/) | Utility tools | Development helpers, analysis utilities |
 
 ## Module Quick Reference
@@ -673,24 +661,24 @@ Advanced capabilities for specific domains:
 | Category | Modules |
 |----------|---------|
 | **Foundation** | [logging_monitoring](src/codomyrmex/logging_monitoring/) • [environment_setup](src/codomyrmex/environment_setup/) • [model_context_protocol](src/codomyrmex/model_context_protocol/) • [terminal_interface](src/codomyrmex/terminal_interface/) |
-| **AI & Intelligence** | [ai_code_editing](src/codomyrmex/ai_code_editing/) • [ollama_integration](src/codomyrmex/ollama_integration/) • [language_models](src/codomyrmex/language_models/) |
-| **Analysis & Quality** | [static_analysis](src/codomyrmex/static_analysis/) • [code_review](src/codomyrmex/code_review/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) |
+| **AI & Intelligence** | [agents](src/codomyrmex/agents/) • [llm](src/codomyrmex/llm/) |
+| **Analysis & Quality** | [static_analysis](src/codomyrmex/static_analysis/) • [code](src/codomyrmex/code/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) |
 | **Build & Deploy** | [build_synthesis](src/codomyrmex/build_synthesis/) • [git_operations](src/codomyrmex/git_operations/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) |
-| **Visualization** | [data_visualization](src/codomyrmex/data_visualization/) • [modeling_3d](src/codomyrmex/modeling_3d/) |
+| **Visualization** | [data_visualization](src/codomyrmex/data_visualization/) • [spatial](src/codomyrmex/spatial/) |
 | **Infrastructure** | [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [physical_management](src/codomyrmex/physical_management/) |
-| **Orchestration** | [documentation](src/codomyrmex/documentation/) • [api_documentation](src/codomyrmex/api_documentation/) • [api_standardization](src/codomyrmex/api_standardization/) • [project_orchestration](src/codomyrmex/project_orchestration/) • [system_discovery](src/codomyrmex/system_discovery/) |
-| **Execution** | [code_execution_sandbox](src/codomyrmex/code_execution_sandbox/) • [performance](src/codomyrmex/performance/) |
+| **Orchestration** | [documentation](src/codomyrmex/documentation/) • [api](src/codomyrmex/api/) • [project_orchestration](src/codomyrmex/project_orchestration/) • [system_discovery](src/codomyrmex/system_discovery/) |
+| **Execution** | [code](src/codomyrmex/code/) • [performance](src/codomyrmex/performance/) |
 | **Extensions** | [events](src/codomyrmex/events/) • [plugin_system](src/codomyrmex/plugin_system/) • [module_template](src/codomyrmex/module_template/) • [tools](src/codomyrmex/tools/) |
 
 ## Common Use Cases
 
 ### Development Workflows
-- **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/code_review/) → [Security scan](src/codomyrmex/security/)
-- **AI-Assisted Development**: [AI code editing](src/codomyrmex/ai_code_editing/) with [pattern matching](src/codomyrmex/pattern_matching/) for code refactoring
+- **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/code/review/) → [Security scan](src/codomyrmex/security/)
+- **AI-Assisted Development**: [AI code editing](src/codomyrmex/agents/ai_code_editing/) with [pattern matching](src/codomyrmex/pattern_matching/) for code refactoring
 - **Build & Deploy**: [Build synthesis](src/codomyrmex/build_synthesis/) → [CI/CD automation](src/codomyrmex/ci_cd_automation/) → [Container management](src/codomyrmex/containerization/)
 
 ### Research & Analysis
-- **Data Science Workflow**: [Code execution](src/codomyrmex/code_execution_sandbox/) → [Data visualization](src/codomyrmex/data_visualization/) → [Performance monitoring](src/codomyrmex/performance/)
+- **Data Science Workflow**: [Code execution](src/codomyrmex/code/sandbox/) → [Data visualization](src/codomyrmex/data_visualization/) → [Performance monitoring](src/codomyrmex/performance/)
 - **System Exploration**: [System discovery](src/codomyrmex/system_discovery/) → [Pattern analysis](src/codomyrmex/pattern_matching/) → [Documentation generation](src/codomyrmex/documentation/)
 
 ### Production Operations
@@ -945,8 +933,8 @@ graph TD
     subgraph "Core Processing Modules"
         AICode[🤖 AI Code Editing<br/>Generation, Refactoring]
         StaticAnalysis[🔬 Static Analysis<br/>Quality Metrics]
-        CodeExecution[⚙️ Code Execution<br/>Sandbox Testing]
-        SecurityAudit[🛡️ Security Audit<br/>Vulnerability Scanning]
+        Code[⚙️ Code Execution<br/>& Review]
+        Security[🛡️ Security<br/>Vulnerability Scanning]
     end
 
     subgraph "Infrastructure Modules"
@@ -972,13 +960,13 @@ graph TD
 
     TaskScheduler --> AICode
     TaskScheduler --> StaticAnalysis
-    TaskScheduler --> CodeExecution
-    TaskScheduler --> SecurityAudit
+    TaskScheduler --> Code
+    TaskScheduler --> Security
 
     AICode --> GitOps
     StaticAnalysis --> BuildSynth
-    CodeExecution --> ContainerMgmt
-    SecurityAudit --> DatabaseMgmt
+    Code --> ContainerMgmt
+    Security --> DatabaseMgmt
 
     GitOps --> DataVisualization
     BuildSynth --> Documentation
@@ -990,7 +978,7 @@ graph TD
 
     %% Cross-module dependencies
     AICode -.->|"Code Review"| StaticAnalysis
-    StaticAnalysis -.->|"Security Scan"| SecurityAudit
+    StaticAnalysis -.->|"Security Scan"| Security
     BuildSynth -.->|"Container Build"| ContainerMgmt
     GitOps -.->|"Version Control"| BuildSynth
 ```
@@ -1014,7 +1002,7 @@ flowchart TD
 
     subgraph "Quality Assurance"
         StaticAnalysis[🔬 Static Analysis<br/>Linting, Metrics]
-        SecurityAudit[🛡️ Security Audit<br/>Vulnerability Checks]
+        Security[🛡️ Security<br/>Vulnerability Checks]
         PerformanceTesting[⚡ Performance Testing<br/>Benchmarking]
         Documentation[📚 Documentation<br/>API Docs, Guides]
     end
@@ -1036,8 +1024,8 @@ flowchart TD
     Testing --> CodeReview
     CodeReview --> StaticAnalysis
 
-    StaticAnalysis --> SecurityAudit
-    SecurityAudit --> PerformanceTesting
+    StaticAnalysis --> Security
+    Security --> PerformanceTesting
     PerformanceTesting --> Documentation
 
     Documentation --> BuildProcess
@@ -1050,7 +1038,7 @@ flowchart TD
     %% Tool integration
     CodeGeneration -.->|"AI Code Editing"| Testing
     Testing -.->|"Test Runners"| CodeReview
-    StaticAnalysis -.->|"Linting Tools"| SecurityAudit
+    StaticAnalysis -.->|"Linting Tools"| Security
     BuildProcess -.->|"CI/CD"| Deployment
     Monitoring -.->|"Logging"| FeedbackLoop
 ```
@@ -1110,11 +1098,9 @@ pie title Module Development Status (December 2025)
     "Planning" : 4
 ```
 
-| Maturity Level | Description | Examples |
-|----------------|-------------|----------|
 | **Production Ready** | Fully tested, documented, stable APIs | logging_monitoring, environment_setup, terminal_interface |
-| **Beta** | Core functionality complete, API stabilization | ai_code_editing, static_analysis, code_execution_sandbox |
-| **Alpha** | Basic functionality, APIs may change | modeling_3d, physical_management, system_discovery |
+| **Beta** | Core functionality complete, API stabilization | agents, static_analysis, code |
+| **Alpha** | Basic functionality, APIs may change | spatial, physical_management, system_discovery |
 | **Planning** | Requirements gathering, initial design | Future specialized modules |
 
 ## Key Metrics
@@ -1140,10 +1126,10 @@ pie title Module Development Status (December 2025)
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Documentation**: [Reference Guides](docs/README.md)
+- **All Agents**: [AGENTS.md](AGENTS.md)
+- **Functional Spec**: [SPEC.md](SPEC.md)
+- **Source Index**: [src/README.md](src/README.md)
 
 ## Example Usage
 

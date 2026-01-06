@@ -181,5 +181,5 @@ The integration demonstrates how CEREBRUM can be applied to structured knowledge
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

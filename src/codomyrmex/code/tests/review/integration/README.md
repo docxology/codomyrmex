@@ -1,4 +1,4 @@
-# src/codomyrmex/code_review/tests/integration
+# src/codomyrmex/code/review/tests/integration
 
 ## Signposting
 - **Parent**: [Code Review Tests](../README.md)
@@ -23,7 +23,7 @@ Integration tests for the Code Review module. These tests verify the full review
 ## Navigation
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [tests](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../README.md)
 
 ## Getting Started
 

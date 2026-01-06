@@ -48,7 +48,7 @@ python example_basic.py
 ## Related Documentation
 
 - [Module README](../../src/codomyrmex/environment_setup/README.md)
-- [Unit Tests](../../testing/unit/test_environment_setup.py)
+- [Unit Tests](../../src/codomyrmex/tests/unit/test_environment_setup.py)
 
 ## Navigation
 

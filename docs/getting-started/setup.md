@@ -57,7 +57,7 @@ codomyrmex check
 codomyrmex info
 
 # Run basic tests
-pytest testing/unit/ -x
+pytest src/codomyrmex/tests/unit/ -x
 
 # Try interactive exploration
 ./start_here.sh
@@ -143,7 +143,7 @@ uv sync --dev
 pre-commit install
 
 # 5. Run tests to verify everything works
-uv run pytest testing/ -v
+uv run pytest src/codomyrmex/tests/ -v
 ```
 
 ## ⚙️ Configuration
@@ -260,16 +260,16 @@ print(f"✅ Sandbox test: {sandbox_result['success']}")
 ### **Step 4: Run Comprehensive Tests**
 ```bash
 # Run all tests with coverage reporting
-pytest testing/ --cov=src/codomyrmex --cov-report=html
+pytest src/codomyrmex/tests/ --cov=src/codomyrmex --cov-report=html
 
 # Run specific module tests
-pytest testing/unit/test_data_visualization.py -v
+pytest src/codomyrmex/tests/unit/test_data_visualization.py -v
 
 # Run integration tests
-pytest testing/integration/ -v
+pytest src/codomyrmex/tests/integration/ -v
 
 # Check test coverage
-open testing/htmlcov/index.html  # View coverage report
+open src/codomyrmex/tests/htmlcov/index.html  # View coverage report
 ```
 
 ### **Step 5: Code Quality Check**

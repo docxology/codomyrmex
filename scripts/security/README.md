@@ -1,4 +1,4 @@
-# scripts/security_audit
+# scripts/security
 
 ## Signposting
 - **Parent**: [Scripts](../README.md)

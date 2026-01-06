@@ -28,7 +28,7 @@
     },
     {
       "scenario": "configuration_persistence",
-      "error": "[Errno 2] No such file or directory: 'src/codomyrmex/language_models/outputs/config/config.json'",
+      "error": "[Errno 2] No such file or directory: 'src/codomyrmex/llm/outputs/config/config.json'",
       "status": "error"
     },
     {

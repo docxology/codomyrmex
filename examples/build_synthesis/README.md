@@ -57,7 +57,7 @@ This example demonstrates the comprehensive build automation capabilities of Cod
 ## Tested Methods
 
 The example utilizes and demonstrates methods primarily tested in:
-- `testing/unit/test_build_synthesis.py`
+- `src/codomyrmex/tests/unit/test_build_synthesis.py`
 
 Specifically, it covers:
 - `build_project()` - Verified in `TestBuildOrchestrator::test_build_project`

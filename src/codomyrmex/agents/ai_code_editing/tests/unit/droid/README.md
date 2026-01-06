@@ -20,7 +20,7 @@ Test files and validation suites for droid.
 ## Navigation
 - **Project Root**: [README](../../../../../../README.md)
 - **Parent Directory**: [unit](../README.md)
-- **Src Hub**: [src](../../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../../README.md)
 
 ## Getting Started
 

@@ -504,7 +504,7 @@ python -c "import sys; print('src' in str(sys.path))"
 
 2. **Verify test structure**:
    ```bash
-   python -m pytest --collect-only testing/examples/
+   python -m pytest --collect-only src/codomyrmex/tests/examples/
    ```
 
 3. **Check imports** in test files.
@@ -638,7 +638,7 @@ When reporting issues, include:
 
 3. **Test examples regularly**:
    ```bash
-   python -m pytest testing/examples/
+   python -m pytest src/codomyrmex/tests/examples/
    ```
 
 4. **Use version control** for configuration changes.
@@ -781,5 +781,5 @@ git clean -fdx examples/
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../docs/README.md)
 - **Home**: [Root README](../../../README.md)

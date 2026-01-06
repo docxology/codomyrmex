@@ -16,7 +16,7 @@ import psutil
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-from ..execution.executor import execute_code
+
 
 logger = get_logger(__name__)
 
@@ -101,6 +101,7 @@ def execute_with_limits(
         monitor.start_monitoring()
 
         # Execute the code
+        from ..execution.executor import execute_code
         result = execute_code(language, code, stdin, limits.time_limit, session_id)
 
         # Update monitoring during execution (in a separate thread for better tracking)
@@ -163,6 +164,7 @@ def sandbox_process_isolation(
             resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
 
             # Execute the code
+            from ..execution.executor import execute_code
             result = execute_code(language, code, stdin, limits.time_limit)
 
             # Cap output size

@@ -586,7 +586,7 @@ Solution: Check Python path and module installation
 
 ### Maintenance Scripts
 - **Quality Checks**: [run_quality_checks.py](run_quality_checks.py) - Comprehensive quality assurance
-- **Security Audit**: [security_audit.py](security_audit.py) - Security vulnerability scanning
+- **Security Audit**: [security_audit.py](security.py) - Security vulnerability scanning
 - **Dependency Management**: [check_dependencies.py](check_dependencies.py) - Dependency health checking
 - **Import Fixing**: [fix_imports.py](fix_imports.py) - Automated import corrections
 
@@ -597,7 +597,7 @@ Solution: Check Python path and module installation
 
 ### Platform Navigation
 - **Scripts Directory**: [../README.md](../README.md) - Script utilities overview
-- **Quality Assurance**: [../../testing/README.md](../../testing/README.md) - Testing and quality guidelines
+- **Quality Assurance**: [../../src/codomyrmex/tests/README.md](../../src/codomyrmex/tests/README.md) - Testing and quality guidelines
 - **Security**: [../../SECURITY.md](../../SECURITY.md) - Security policies and procedures
 
 ## Agent Coordination

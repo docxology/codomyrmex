@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/language_models/outputs/test_results
+# Codomyrmex Agents — src/codomyrmex/llm/outputs/test_results
 
 ## Signposting
 - **Parent**: [Language Models](../AGENTS.md)

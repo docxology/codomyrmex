@@ -201,7 +201,7 @@ The module includes comprehensive physics simulation:
 
 - [Module README](../../src/codomyrmex/physical_management/README.md)
 - [API Specification](../../src/codomyrmex/physical_management/API_SPECIFICATION.md)
-- [Unit Tests](../../testing/unit/test_physical_management.py)
+- [Unit Tests](../../src/codomyrmex/tests/unit/test_physical_management.py)
 
 ## Navigation
 

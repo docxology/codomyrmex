@@ -6,7 +6,7 @@
 - **Children**:
     - [deployment](deployment/AGENTS.md)
     - [development](development/AGENTS.md)
-    - [examples](examples/AGENTS.md)
+    - [examples](../scripts/examples/AGENTS.md)
     - [getting-started](getting-started/AGENTS.md)
     - [integration](integration/AGENTS.md)
     - [modules](modules/AGENTS.md)

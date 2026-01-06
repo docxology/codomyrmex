@@ -15,7 +15,7 @@ Automation utilities directory providing executable scripts for development work
 - Clear script boundaries
 - **Script Organization Policy**: All scripts are organized in subdirectories:
   - `documentation/` - Documentation maintenance and validation scripts
-  - `testing/` - Testing automation and verification scripts
+  - `src/codomyrmex/tests/` - Testing automation and verification scripts
   - `development/` - Development workflow scripts
   - `maintenance/` - System maintenance utilities
   - `[module_name]/` - Module-specific orchestration scripts
@@ -88,7 +88,7 @@ graph TD
 ### Script Categories
 1. **Development Scripts**: Environment setup, testing, linting, formatting (in `development/`)
 2. **Documentation Scripts**: API docs generation, documentation audits, validation, link fixing (in `documentation/`)
-3. **Testing Scripts**: Test automation, verification, test suite generation (in `testing/`)
+3. **Testing Scripts**: Test automation, verification, test suite generation (in `src/codomyrmex/tests/`)
 4. **Maintenance Scripts**: Cleanup, organization, system maintenance (in `maintenance/`)
 5. **Module Scripts**: Module-specific automation and orchestration (in module-specific subdirectories)
 6. **Example Scripts**: Demonstrations and tutorials (in `examples/`)

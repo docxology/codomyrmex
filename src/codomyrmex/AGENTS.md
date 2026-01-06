@@ -15,6 +15,7 @@
         - [Data Visualization Agents](data_visualization/AGENTS.md)
         - [Pattern Matching Agents](pattern_matching/AGENTS.md)
         - [Git Operations Agents](git_operations/AGENTS.md)
+        - [Scrape Agents](scrape/AGENTS.md)
         - [Security Agents](security/AGENTS.md)
         - [Documents Agents](documents/AGENTS.md)
         - [LLM Agents](llm/AGENTS.md)
@@ -69,24 +70,77 @@ Modules are organized into functional layers:
 - `terminal_interface/` - Rich terminal interactions
 
 **Core Layer** - Primary development capabilities:
-- `ai_code_editing/` - AI-powered code assistance
 - `static_analysis/` - Code quality and security analysis
 - `code/` - Code execution, sandboxing, review, and monitoring
+  - `code/execution/` - Code execution engine
+  - `code/sandbox/` - Sandboxed execution environment
+  - `code/review/` - Code review and analysis
+  - `code/monitoring/` - Execution monitoring and metrics
 - `data_visualization/` - Charts, plots, and visualizations
 - `pattern_matching/` - Code pattern recognition
 - `git_operations/` - Version control automation
+- `scrape/` - Web scraping and data extraction
+  - `scrape/firecrawl/` - Firecrawl integration
+- `security/` - Security module (physical, digital, cognitive, theory)
+  - `security/digital/` - Digital security scanning
+  - `security/physical/` - Physical security management
+  - `security/cognitive/` - Cognitive security analysis
+  - `security/theory/` - Security theory and frameworks
+  - `security/security_theory/` - Advanced security theory
+- `documents/` - Document I/O operations
+  - `documents/core/` - Core document processing
+  - `documents/formats/` - Format handlers
+  - `documents/metadata/` - Metadata extraction
+  - `documents/models/` - Document models
+  - `documents/search/` - Document search
+  - `documents/transformation/` - Document transformation
+  - `documents/utils/` - Document utilities
+  - `documents/templates/` - Document templates
+- `llm/` - LLM integration
+  - `llm/ollama/` - Local LLM integration via Ollama
+  - `llm/outputs/` - LLM output management
+  - `llm/prompt_templates/` - Prompt template system
+- `performance/` - Performance monitoring and optimization
 
 **Service Layer** - Higher-level orchestration:
 - `build_synthesis/` - Multi-language build automation
 - `documentation/` - Documentation generation systems
-- `api/` - API documentation and standardization (with `documentation/` and `standardization/` submodules)
+  - `documentation/scripts/` - Documentation scripts
+  - `documentation/src/` - Documentation source
+  - `documentation/static/` - Static documentation assets
+- `api/` - API documentation and standardization
+  - `api/documentation/` - API documentation generation
+  - `api/standardization/` - API standardization frameworks
 - `ci_cd_automation/` - Continuous integration pipelines
+- `containerization/` - Container lifecycle management
 - `database_management/` - Database operations and migrations
 
 **Specialized Layer** - Domain-specific capabilities:
 - `spatial/` - Spatial modeling (3D, 4D, World Models)
+  - `spatial/three_d/` - 3D modeling and visualization
+  - `spatial/four_d/` - 4D modeling and transformations
+  - `spatial/world_models/` - World model representations
 - `physical_management/` - Hardware resource management
+  - `physical_management/examples/` - Physical management examples
 - `system_discovery/` - Module discovery and health monitoring
+- `module_template/` - Module creation templates
+  - `module_template/docs/` - Module template documentation
+- `template/` - Code generation templates
+- `events/` - Event system and pub/sub
+- `plugin_system/` - Plugin architecture and management
+- `tools/` - Utility tools and helpers
+- `fpf/` - Functional Programming Framework
+- `cerebrum/` - Case-based reasoning and Bayesian inference
+  - `cerebrum/scripts/` - Cerebrum scripts
+  - `cerebrum/docs/` - Cerebrum documentation
+- `agents/` - Agentic framework integrations
+  - `agents/ai_code_editing/` - AI-powered code assistance
+  - `agents/droid/` - Droid task management
+  - `agents/jules/` - Jules agent integration
+  - `agents/claude/` - Claude agent integration
+  - `agents/codex/` - Codex agent integration
+  - `agents/generic/` - Generic agent framework
+  - `agents/theory/` - Agent theory and frameworks
 
 ## Active Components
 
@@ -97,7 +151,6 @@ Modules are organized into functional layers:
 - `exceptions.py` – Platform-wide exception definitions
 
 ### Module Directories
-- `ai_code_editing/` – AI-assisted code generation and editing
 - `api/` – API documentation and standardization (with `documentation/` and `standardization/` submodules)
 - `build_synthesis/` – Build orchestration and automation
 - `ci_cd_automation/` – CI/CD pipeline management
@@ -236,22 +289,6 @@ def get_user_input(prompt: str, default: str = "") -> str
 
 ### Core Layer
 
-#### ai_code_editing
-
-```python
-def generate_code_snippet(prompt: str, language: str, provider: str = "openai", model_name: Optional[str] = None, context: Optional[str] = None, max_length: Optional[int] = None, temperature: float = 0.7, **kwargs) -> dict
-def refactor_code_snippet(code: str, refactoring_type: str, language: str, provider: str = "openai", model_name: Optional[str] = None, context: Optional[str] = None, preserve_functionality: bool = True, **kwargs) -> dict
-def analyze_code_quality(code: str, language: str, provider: str = "openai", model_name: Optional[str] = None, **kwargs) -> dict
-def generate_code_batch(prompts: list[dict], provider: str = "openai", **kwargs) -> list[dict]
-def compare_code_versions(code1: str, code2: str, language: str, provider: str = "openai", **kwargs) -> dict
-def generate_code_documentation(code: str, language: str, provider: str = "openai", **kwargs) -> str
-def get_supported_languages() -> list[str]
-def get_supported_providers() -> list[str]
-def get_available_models(provider: str) -> list[str]
-def validate_api_keys(provider: str = None) -> dict[str, bool]
-def setup_environment() -> bool
-```
-
 #### static_analysis
 
 ```python
@@ -265,16 +302,30 @@ def analyze_codebase(*args, **kwargs) -> AnalysisSummary
 
 #### code
 
-**Execution:**
+**Execution** (`code/execution/`):
 ```python
 def execute_code(language: str, code: str, stdin: Optional[str] = None, timeout: Optional[int] = None, session_id: Optional[str] = None) -> dict[str, Any]
 ```
 
-**Review:**
+**Sandbox** (`code/sandbox/`):
+```python
+def run_code_in_docker(code: str, language: str, limits: ExecutionLimits) -> dict[str, Any]
+def sandbox_process_isolation(code: str, language: str) -> dict[str, Any]
+def check_docker_available() -> bool
+```
+
+**Review** (`code/review/`):
 ```python
 def analyze_file(file_path: str, analysis_types: list[str] = None) -> list[AnalysisResult]
 def analyze_project(project_root: str, target_paths: list[str] = None, analysis_types: list[str] = None) -> AnalysisSummary
 def check_quality_gates(project_root: str, thresholds: dict[str, int] = None) -> QualityGateResult
+```
+
+**Monitoring** (`code/monitoring/`):
+```python
+def monitor_execution(session_id: str) -> ExecutionMonitor
+def collect_metrics(session_id: str) -> MetricsCollector
+def track_resources(session_id: str) -> ResourceMonitor
 ```
 
 #### data_visualization
@@ -316,11 +367,6 @@ def get_branches() -> list
 def switch_branch(name: str) -> bool
 ```
 
-def analyze_code_quality(code: str) -> dict
-def review_file(filepath: str, content: str = None) -> dict
-def generate_review_comments(issues: list) -> list
-def summarize_review(review_result: ReviewResult) -> str
-```
 
 #### security
 
@@ -333,8 +379,19 @@ def check_compliance(code: str, standards: list) -> dict
 def generate_security_report(scan_results: list) -> str
 ```
 
-#### llm.ollama
+#### llm
 
+**Core LLM**:
+```python
+def get_completion(messages: list, model: str) -> str
+def calculate_tokens(text: str) -> int
+def list_models(provider: str) -> list
+def validate_api_key(provider: str) -> bool
+def get_model_limits(model: str) -> dict
+def stream_completion(messages: list, model: str) -> Iterator[str]
+```
+
+**Ollama** (`llm/ollama/`):
 ```python
 def load_model(name: str) -> bool
 def generate_text(prompt: str, model: str) -> str
@@ -344,15 +401,16 @@ def get_model_info(name: str) -> dict
 def chat_completion(messages: list, model: str) -> dict
 ```
 
-#### language_models
-
+**Prompt Templates** (`llm/prompt_templates/`):
 ```python
-def get_completion(messages: list, model: str) -> str
-def calculate_tokens(text: str) -> int
-def list_models(provider: str) -> list
-def validate_api_key(provider: str) -> bool
-def get_model_limits(model: str) -> dict
-def stream_completion(messages: list, model: str) -> Iterator[str]
+def load_template(template_name: str) -> str
+def render_template(template: str, context: dict) -> str
+```
+
+**Outputs** (`llm/outputs/`):
+```python
+def save_output(output: dict, output_type: str) -> str
+def load_output(output_id: str) -> dict
 ```
 
 #### performance
@@ -515,6 +573,55 @@ def validate_module_structure(path: str) -> list
 def update_module_template(template_name: str, updates: dict) -> bool
 def list_available_templates() -> list
 def customize_template(template: str, customizations: dict) -> str
+```
+
+#### agents
+
+**AI Code Editing** (`agents/ai_code_editing/`):
+```python
+def generate_code_snippet(prompt: str, language: str, provider: str = "openai", model_name: Optional[str] = None, context: Optional[str] = None, max_length: Optional[int] = None, temperature: float = 0.7, **kwargs) -> dict
+def refactor_code_snippet(code: str, refactoring_type: str, language: str, provider: str = "openai", model_name: Optional[str] = None, context: Optional[str] = None, preserve_functionality: bool = True, **kwargs) -> dict
+def analyze_code_quality(code: str, language: str, provider: str = "openai", model_name: Optional[str] = None, **kwargs) -> dict
+def generate_code_batch(prompts: list[dict], provider: str = "openai", **kwargs) -> list[dict]
+def compare_code_versions(code1: str, code2: str, language: str, provider: str = "openai", **kwargs) -> dict
+def generate_code_documentation(code: str, language: str, provider: str = "openai", **kwargs) -> str
+def get_supported_languages() -> list[str]
+def get_supported_providers() -> list[str]
+def get_available_models(provider: str) -> list[str]
+def validate_api_keys(provider: str = None) -> dict[str, bool]
+def setup_environment() -> bool
+```
+
+**Droid** (`agents/droid/`):
+```python
+def create_task(task_def: dict) -> str
+def execute_task(task_id: str) -> dict
+def get_task_status(task_id: str) -> dict
+```
+
+**Generic Agents** (`agents/generic/`):
+```python
+def create_agent(agent_config: dict) -> Agent
+def execute_agent_request(agent: Agent, request: dict) -> dict
+```
+
+#### fpf
+
+```python
+def fetch_latest(repo: str, branch: str) -> str
+def load_from_file(file: str) -> FPFSpecification
+def search(query: str, filters: dict) -> list[Pattern]
+def visualize_pattern_hierarchy(patterns: list) -> str
+def build_context(pattern_id: str, depth: int = 1) -> str
+```
+
+#### cerebrum
+
+```python
+def reason(case: Case, context: dict) -> ReasoningResult
+def infer(network: BayesianNetwork, evidence: dict) -> InferenceResult
+def update_case_base(case: Case) -> None
+def query_case_base(query: dict) -> list[Case]
 ```
 
 ## Navigation Links

@@ -173,8 +173,8 @@ All scripts in this module must:
 When integrating with other scripts:
 
 1. **Shared Utilities**: Use `_orchestrator_utils.py` for common CLI patterns
-2. **Quality Integration**: Share results with code_review scripts
-3. **Security Integration**: Coordinate with security_audit scripts
+2. **Quality Integration**: Share results with code scripts
+3. **Security Integration**: Coordinate with security scripts
 4. **CI/CD Integration**: Provide analysis results for automated pipelines
 
 ### Quality Gates

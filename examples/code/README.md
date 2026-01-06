@@ -34,7 +34,7 @@ This example demonstrates automated code review and quality assessment using the
 
 ## Tested Methods
 
-This example references the following tested methods from `testing/unit/test_code.review.py`:
+This example references the following tested methods from `src/codomyrmex/tests/unit/test_code.review.py`:
 
 - `CodeReviewer.review_file()` - Verified in `TestCodeReview::test_code.reviewer_class_import`
 - `CodeReviewer.analyze_code_quality()` - Verified in `TestCodeReview::test_code.review_all_exports`
@@ -264,9 +264,9 @@ The example generates several output files:
 
 ## Module Documentation
 
-- **[Code Review Module](../../src/codomyrmex/code.review/)** - Complete module documentation
-- **[API Specification](../../src/codomyrmex/code.review/API_SPECIFICATION.md)** - Detailed API reference
-- **[Usage Examples](../../src/codomyrmex/code.review/USAGE_EXAMPLES.md)** - Additional usage patterns
+- **[Code Review Module](../../src/codomyrmex/code_review/)** - Complete module documentation
+- **[API Specification](../../src/codomyrmex/code_review/API_SPECIFICATION.md)** - Detailed API reference
+- **[Usage Examples](../../src/codomyrmex/code_review/USAGE_EXAMPLES.md)** - Additional usage patterns
 
 ## Navigation
 

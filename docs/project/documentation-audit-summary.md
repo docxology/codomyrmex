@@ -14,7 +14,7 @@ A comprehensive repository-wide documentation audit was conducted to assess comp
 - Updated all examples migration references from `examples/` to `scripts/examples/`
 - Fixed broken directory references in README.md (template/, git_operations/, etc.)
 - Fixed CONTRIBUTING.md and CODE_OF_CONDUCT.md references
-- Added navigation links to AGENTS.md files (src/, scripts/, testing/, projects/)
+- Added navigation links to AGENTS.md files (src/, scripts/, src/codomyrmex/tests/, projects/)
 - Corrected module template path references
 
 ## Issues Identified and Resolved
@@ -68,7 +68,7 @@ A comprehensive repository-wide documentation audit was conducted to assess comp
 **Resolution**: Added navigation links to:
 - `src/AGENTS.md`
 - `scripts/AGENTS.md`
-- `testing/AGENTS.md`
+- `src/codomyrmex/tests/AGENTS.md`
 - `projects/AGENTS.md`
 
 All AGENTS.md files now have consistent structure with:

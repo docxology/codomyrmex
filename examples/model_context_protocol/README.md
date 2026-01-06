@@ -330,7 +330,7 @@ The example includes comprehensive error handling for:
 
 ## Testing
 
-This example is verified by the comprehensive test suite in `testing/unit/test_model_context_protocol.py`, which covers:
+This example is verified by the comprehensive test suite in `src/codomyrmex/tests/unit/test_model_context_protocol.py`, which covers:
 
 - MCP schema validation and compliance
 - Tool call creation and argument validation

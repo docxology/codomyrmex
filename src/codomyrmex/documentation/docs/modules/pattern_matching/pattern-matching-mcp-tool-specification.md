@@ -222,5 +222,5 @@ Searches the codebase for code snippets that are semantically related to a given
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

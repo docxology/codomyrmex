@@ -131,7 +131,7 @@ This API follows semantic versioning aligned with the `codomyrmex` package.
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
 
 ## Authentication & Authorization
@@ -159,5 +159,5 @@ API functions will be versioned as part of the `git_operations` module, followin
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

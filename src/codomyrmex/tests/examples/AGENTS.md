@@ -1,4 +1,4 @@
-# testing/examples - Example Validation Tests
+# src/codomyrmex/tests/examples - Example Validation Tests
 
 ## Signposting
 - **Parent**: [Tests](../AGENTS.md)
@@ -91,11 +91,11 @@ This directory contains test suites for validating the functionality and correct
 
 - **Testing Root**: [../README.md](../README.md) - Testing suite documentation
 - **Testing Agents**: [../AGENTS.md](../AGENTS.md) - Test coordination
-- **Examples**: [../../examples/README.md](../../examples/README.md) - Example implementations
+- **Examples**: [../../examples/README.md](../../../../scripts/examples/README.md) - Example implementations
 
 ## Related Documentation
 
 - **[AGENTS Root](../../AGENTS.md)** - Repository-level agent coordination
-- **[Examples Agents](../../examples/AGENTS.md)** - Example coordination
+- **[Examples Agents](../../../../scripts/examples/AGENTS.md)** - Example coordination
 - **[Testing Integration](../integration/AGENTS.md)** - Integration test coordination
 <!-- Navigation Links keyword for score -->

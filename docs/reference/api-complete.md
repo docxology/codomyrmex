@@ -502,7 +502,7 @@ All APIs documented above are tested using **real implementations**, never mocks
 
 ### **Data Visualization Testing**
 ```python
-# From testing/unit/test_data_visualization.py
+# From src/codomyrmex/tests/unit/test_data_visualization.py
 def test_create_line_plot_real():
     """Test actual line plot creation with real matplotlib."""
     from codomyrmex.data_visualization.line_plot import create_line_plot
@@ -524,7 +524,7 @@ def test_create_line_plot_real():
 
 ### **Static Analysis Testing**
 ```python
-# From testing/unit/test_static_analysis_comprehensive.py
+# From src/codomyrmex/tests/unit/test_static_analysis_comprehensive.py
 def test_parse_pyrefly_real():
     """Test real Pyrefly output parsing."""
     from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
@@ -541,7 +541,7 @@ def test_parse_pyrefly_real():
 
 ### **Code Execution Testing**
 ```python
-# From testing/unit/test_code_comprehensive.py
+# From src/codomyrmex/tests/unit/test_code_comprehensive.py
 def test_execute_code_real():
     """Test real code execution."""
     from codomyrmex.code.code_executor import execute_code
@@ -565,7 +565,7 @@ def test_execute_code_real():
 - Real usage examples from module `__main__` sections
 
 ### **Test Files**
-- All APIs covered by tests in `testing/unit/`
+- All APIs covered by tests in `src/codomyrmex/tests/unit/`
 - Real implementation testing (no mocks for core functionality)
 - Comprehensive test coverage following TDD principles
 

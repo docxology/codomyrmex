@@ -1,4 +1,4 @@
-# Codomyrmex Agents — scripts/code_review
+# Codomyrmex Agents — scripts/code
 
 ## Signposting
 - **Parent**: [Scripts](../AGENTS.md)
@@ -15,7 +15,7 @@
 
 Code review automation scripts providing command-line interfaces for automated code quality analysis, review generation, and quality assessment. This script module enables systematic code review workflows for Codomyrmex projects.
 
-The code_review scripts serve as the primary interface for developers and teams to perform automated code quality analysis and generate review feedback.
+The code scripts serve as the primary interface for developers and teams to perform automated code quality analysis, review, and execution operations.
 
 ## Module Overview
 

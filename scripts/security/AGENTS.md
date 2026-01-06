@@ -1,4 +1,4 @@
-# Codomyrmex Agents — scripts/security_audit
+# Codomyrmex Agents — scripts/security
 
 ## Signposting
 - **Parent**: [Scripts](../AGENTS.md)
@@ -203,7 +203,7 @@ All scripts in this module must:
 When integrating with other scripts:
 
 1. **Shared Utilities**: Use `_orchestrator_utils.py` for common CLI patterns
-2. **Quality Integration**: Coordinate with code_review scripts
+2. **Quality Integration**: Coordinate with code scripts
 3. **CI/CD Integration**: Provide security gates for automated pipelines
 4. **Monitoring Integration**: Share security metrics with monitoring systems
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/code_review/tests/fixtures/python
+# Codomyrmex Agents — src/codomyrmex/code/review/tests/fixtures/python
 
 ## Signposting
 - **Parent**: [Repository Root](../AGENTS.md)

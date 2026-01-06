@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [Examples](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](../../scripts/examples/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -420,7 +420,7 @@ The example includes comprehensive error handling for:
 
 ## Testing
 
-This example is verified by the comprehensive test suite in `testing/unit/test_language_models.py`, which covers:
+This example is verified by the comprehensive test suite in `src/codomyrmex/tests/unit/test_language_models.py`, which covers:
 
 - LLM configuration management and validation
 - Text generation with various models and parameters

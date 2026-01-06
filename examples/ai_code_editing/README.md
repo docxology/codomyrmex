@@ -53,7 +53,7 @@ This example demonstrates the comprehensive AI-powered code assistance capabilit
 ## Tested Methods
 
 The example utilizes and demonstrates methods primarily tested in:
-- `testing/unit/test_ai_code_editing.py`
+- `src/codomyrmex/tests/unit/test_ai_code_editing.py`
 
 Specifically, it covers:
 - `generate_code_snippet()` - Verified in `TestAICodeEditing::test_ai_code_helpers_structure`
@@ -494,8 +494,8 @@ The AI code editing module continues to evolve with:
 ## Related Documentation
 
 - **[AI Code Editing API](../../src/codomyrmex/agents/ai_code_editing/)**
-- **[Language Models](../language_models/)**
-- **[Code Review](../code.review/)**
+- **[Language Models](../llm/)**
+- **[Code Review](../code_review/)**
 - **[Prompt Engineering Guide](../../src/codomyrmex/agents/ai_code_editing/PROMPT_ENGINEERING.md)**
 
 ---

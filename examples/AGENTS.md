@@ -12,9 +12,7 @@
     - [api_standardization](api_standardization/AGENTS.md)
     - [build_synthesis](build_synthesis/AGENTS.md)
     - [ci_cd_automation](ci_cd_automation/AGENTS.md)
-    - [code](code/AGENTS.md)
-    - [code.review](code.review/AGENTS.md)
-    - [config_management](config_management/AGENTS.md)
+    - [code](code/AGENTS.md)    - [config_management](config_management/AGENTS.md)
     - [containerization](containerization/AGENTS.md)
     - [data_visualization](data_visualization/AGENTS.md)
     - [database_management](database_management/AGENTS.md)
@@ -39,6 +37,7 @@
     - [system_discovery](system_discovery/AGENTS.md)
     - [terminal_interface](terminal_interface/AGENTS.md)
     - [validation_reports](validation_reports/AGENTS.md)
+
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -330,7 +329,7 @@ Before example changes are accepted:
 ### For Contributors
 - **Contributing**: [../docs/project/contributing.md](../docs/project/contributing.md)
 - **Coding Standards**: [../cursorrules/general.cursorrules](../cursorrules/general.cursorrules)
-- **Testing**: [../testing/README.md](../testing/README.md)
+- **Testing**: [../src/codomyrmex/tests/README.md](../src/codomyrmex/tests/README.md)
 
 ## Agent Coordination
 

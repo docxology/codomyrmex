@@ -934,7 +934,7 @@ pytest src/codomyrmex/text_analysis/tests/ -v
 pytest src/codomyrmex/text_analysis/tests/ --cov=src/codomyrmex/text_analysis --cov-report=term
 
 # Add to main test suite
-pytest testing/unit/test_text_analysis.py -v
+pytest src/codomyrmex/tests/unit/test_text_analysis.py -v
 ```
 
 ### **Manual Testing**
@@ -1122,7 +1122,7 @@ print(f"Analyzed {len(results)} files")
 ## 🚀 Step 9: Final Integration
 
 ### **Add to Main Test Suite**
-Create `testing/unit/test_text_analysis.py`:
+Create `src/codomyrmex/tests/unit/test_text_analysis.py`:
 
 ```python
 """Integration tests for text_analysis module with main test suite"""
@@ -1160,10 +1160,10 @@ Add your module to the main documentation in `docs/modules/overview.md` (add to 
 ### **Run Full Test Suite**
 ```bash
 # Run all tests to ensure no regressions
-pytest testing/ -v
+pytest src/codomyrmex/tests/ -v
 
 # Run your module specifically
-pytest testing/unit/test_text_analysis.py -v
+pytest src/codomyrmex/tests/unit/test_text_analysis.py -v
 
 # Check system discovery
 python -c "
@@ -1250,5 +1250,5 @@ This tutorial showed you the complete process of creating a professional-grade C
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

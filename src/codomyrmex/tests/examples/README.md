@@ -1,4 +1,4 @@
-# testing/examples
+# src/codomyrmex/tests/examples
 
 ## Signposting
 - **Parent**: [Tests](../README.md)
@@ -17,7 +17,7 @@ This directory contains examples demonstrating testing capabilities and validati
 ## Directory Structure
 
 ```
-testing/examples/
+src/codomyrmex/tests/examples/
 ├── README.md                 # This file
 ├── AGENTS.md                 # Agent coordination document
 ├── conftest.py               # Pytest configuration for examples
@@ -32,7 +32,7 @@ testing/examples/
 ### Running Example Tests
 
 ```bash
-# From testing/examples directory
+# From src/codomyrmex/tests/examples directory
 pytest config_validation.py -v
 pytest example_execution.py -v
 pytest output_validation.py -v

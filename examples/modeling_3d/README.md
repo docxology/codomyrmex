@@ -254,9 +254,9 @@ The module includes a complete rendering pipeline:
 
 ## Related Documentation
 
-- [Module README](../../src/codomyrmex/modeling_3d/README.md)
-- [API Specification](../../src/codomyrmex/modeling_3d/API_SPECIFICATION.md)
-- [Unit Tests](../../testing/unit/test_modeling_3d.py)
+- [Module README](../../src/codomyrmex/spatial/three_d/README.md)
+- [API Specification](../../src/codomyrmex/spatial/three_d/API_SPECIFICATION.md)
+- [Unit Tests](../../src/codomyrmex/tests/unit/test_spatial/three_d.py)
 
 ## Navigation
 

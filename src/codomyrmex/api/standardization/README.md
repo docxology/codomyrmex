@@ -281,7 +281,7 @@ The module includes comprehensive unit tests covering:
 
 Run tests with:
 ```bash
-pytest testing/unit/test_api_standardization.py
+pytest src/codomyrmex/tests/unit/test_api_standardization.py
 ```
 
 ## Error Handling

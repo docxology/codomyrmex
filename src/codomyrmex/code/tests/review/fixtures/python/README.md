@@ -1,4 +1,4 @@
-# src/codomyrmex/code_review/tests/fixtures/python
+# src/codomyrmex/code/review/tests/fixtures/python
 
 ## Signposting
 - **Parent**: [Repository Root](../README.md)
@@ -23,7 +23,7 @@ Test files and validation suites for python.
 ## Navigation
 - **Project Root**: [README](../../../../../../README.md)
 - **Parent Directory**: [fixtures](../README.md)
-- **Src Hub**: [src](../../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../../README.md)
 
 ## Getting Started
 

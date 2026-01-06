@@ -4,7 +4,7 @@
 - **Parent**: [Scripts](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [examples](examples/AGENTS.md)
+    - [examples](../examples/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)

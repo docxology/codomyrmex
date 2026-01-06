@@ -1,4 +1,4 @@
-# Codomyrmex Agents — testing/integration
+# Codomyrmex Agents — src/codomyrmex/tests/integration
 
 ## Signposting
 - **Parent**: [Tests](../AGENTS.md)
@@ -15,7 +15,7 @@
 
 Integration test suites for the Codomyrmex repository. This directory contains comprehensive integration tests that validate cross-module interactions, end-to-end workflows, and system-level functionality with real data analysis (no mock methods).
 
-The testing/integration directory serves as the validation layer for ensuring Codomyrmex modules work together correctly in production-like scenarios.
+The src/codomyrmex/tests/integration directory serves as the validation layer for ensuring Codomyrmex modules work together correctly in production-like scenarios.
 
 ## Module Overview
 
@@ -526,7 +526,7 @@ Solution: Validate environment configuration, check dependency versions, review 
 ### Platform Navigation
 - **Testing Suite**: [../README.md](../README.md) - Testing overview
 - **Unit Tests**: [../unit/](../unit/) - Individual component testing
-- **Examples**: [../../examples/README.md](../../examples/README.md) - Example implementations
+- **Examples**: [../../examples/README.md](../../../../scripts/examples/README.md) - Example implementations
 
 ## Agent Coordination
 

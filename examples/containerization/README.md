@@ -108,8 +108,8 @@ The containerization module integrates with:
 ## Related Documentation
 
 - [Module README](../../src/codomyrmex/containerization/README.md)
-- [Unit Tests](../../testing/unit/test_containerization.py)
-- [Enhanced Tests](../../testing/unit/test_containerization_enhanced.py)
+- [Unit Tests](../../src/codomyrmex/tests/unit/test_containerization.py)
+- [Enhanced Tests](../../src/codomyrmex/tests/unit/test_containerization_enhanced.py)
 
 ## Navigation
 

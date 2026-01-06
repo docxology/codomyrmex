@@ -111,7 +111,7 @@ class TestOutputValidation:
             "model_context_protocol": ["tools_registered", "protocols_established"],
             "terminal_interface": ["ui_components_created", "interactions_handled"],
             "llm": ["models_loaded", "inference_completed"],
-            "language_models": ["providers_configured", "completions_generated"],
+            "llm": ["providers_configured", "completions_generated"],
             "spatial.three_d": ["scenes_created", "rendering_completed"],
             "physical_management": ["systems_monitored", "resources_managed"],
             "system_discovery": ["modules_discovered", "health_assessed"],

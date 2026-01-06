@@ -23,7 +23,7 @@ Comprehensive test suites for the AI Code Editing module, including unit and int
 ## Navigation
 - **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [ai_code_editing](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Src Hub**: [src](../../../../README.md)
 
 ## Getting Started
 

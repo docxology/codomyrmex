@@ -381,7 +381,7 @@ The example includes comprehensive error handling for:
 
 ## Testing
 
-This example is verified by the comprehensive test suite in `testing/unit/test_ollama_integration.py`, which covers:
+This example is verified by the comprehensive test suite in `src/codomyrmex/tests/unit/test_ollama_integration.py`, which covers:
 
 - Ollama server connectivity and availability
 - Model listing and metadata retrieval

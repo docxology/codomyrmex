@@ -1,4 +1,4 @@
-# src/codomyrmex/code_review/tests/performance
+# src/codomyrmex/code/review/tests/performance
 
 ## Signposting
 - **Parent**: [Code Review Tests](../README.md)
@@ -20,7 +20,7 @@ Test files and validation suites for performance.
 ## Navigation
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [tests](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../README.md)
 
 ## Getting Started
 

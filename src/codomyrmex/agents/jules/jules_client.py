@@ -34,7 +34,10 @@ class JulesClient(BaseAgent):
             name="jules",
             capabilities=[
                 AgentCapabilities.CODE_GENERATION,
+                AgentCapabilities.CODE_EDITING,
+                AgentCapabilities.CODE_ANALYSIS,
                 AgentCapabilities.TEXT_COMPLETION,
+                AgentCapabilities.STREAMING,
             ],
             config=config or {},
         )
@@ -102,34 +105,64 @@ class JulesClient(BaseAgent):
 
             execution_time = time.time() - start_time
 
+            # Determine if operation was successful
+            # Jules may return non-zero but still produce useful output
+            output = result.get("output", "")
+            exit_code = result.get("exit_code", 0)
+            stderr_output = result.get("stderr", "")
+            success = result.get("success", exit_code == 0)
+
+            error = None
+            if not success and stderr_output:
+                error = stderr_output
+            elif not success and not output:
+                error = f"Jules command failed with exit code {exit_code}"
+
             return AgentResponse(
-                content=result.get("output", ""),
+                content=output,
+                error=error,
                 metadata={
                     "command": " ".join([self.jules_command] + jules_args),
-                    "exit_code": result.get("exit_code", 0),
+                    "exit_code": exit_code,
                     "stdout": result.get("stdout", ""),
-                    "stderr": result.get("stderr", ""),
+                    "stderr": stderr_output,
+                    "jules_success": success,
                 },
                 execution_time=execution_time,
             )
 
-        except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired as e:
             execution_time = time.time() - start_time
-            raise JulesError(
-                "Jules command timed out",
-                command=" ".join([self.jules_command] + jules_args),
-                timeout=self.timeout,
+            error_msg = f"Jules command timed out after {self.timeout}s"
+            return AgentResponse(
+                content="",
+                error=error_msg,
+                metadata={
+                    "command": " ".join([self.jules_command] + jules_args),
+                    "timeout": self.timeout,
+                },
+                execution_time=execution_time,
             )
         except Exception as e:
             execution_time = time.time() - start_time
-            raise JulesError(
-                f"Jules command failed: {str(e)}",
-                command=" ".join([self.jules_command] + jules_args),
-            ) from e
+            error_msg = f"Jules command failed: {str(e)}"
+            return AgentResponse(
+                content="",
+                error=error_msg,
+                metadata={
+                    "command": " ".join([self.jules_command] + jules_args),
+                    "exception": str(e),
+                },
+                execution_time=execution_time,
+            )
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """
         Stream Jules command output.
+
+        Note: Jules CLI is primarily TUI-based. For streaming, we execute
+        the command and stream its output. For interactive TUI mode,
+        users should use Jules CLI directly.
 
         Args:
             request: Agent request
@@ -149,40 +182,52 @@ class JulesClient(BaseAgent):
                 stderr=subprocess.PIPE,
                 text=True,
                 cwd=self.working_dir,
+                bufsize=1,  # Line buffered
             )
 
-            # Stream stdout
-            for line in process.stdout:
-                yield line.rstrip()
+            # Stream stdout line by line
+            for line in iter(process.stdout.readline, ""):
+                if line:
+                    yield line.rstrip()
+                else:
+                    break
 
             process.wait()
 
             if process.returncode != 0:
                 stderr = process.stderr.read()
-                yield f"Error: {stderr}"
+                if stderr:
+                    yield f"Error: {stderr}"
 
         except Exception as e:
+            logger.error(f"Error streaming Jules output: {e}", exc_info=True)
             yield f"Error: {str(e)}"
 
     def _build_jules_args(self, prompt: str, context: dict[str, Any]) -> list[str]:
         """
         Build jules command arguments from prompt and context.
 
+        Jules CLI uses task-based commands. For code generation/editing tasks,
+        we use 'jules new' to create a session with the task description.
+
         Args:
-            prompt: User prompt
-            context: Additional context
+            prompt: User prompt (task description)
+            context: Additional context (may include repo, parallel, etc.)
 
         Returns:
             List of command arguments
         """
-        args = []
+        args = ["new"]
 
-        # Add context as JSON if provided
-        if context:
-            context_json = json.dumps(context)
-            args.extend(["--context", context_json])
+        # Add repository if specified in context
+        if "repo" in context:
+            args.extend(["--repo", str(context["repo"])])
 
-        # Add prompt
+        # Add parallel sessions if specified
+        if "parallel" in context:
+            args.extend(["--parallel", str(context["parallel"])])
+
+        # Add prompt as task description
         args.append(prompt)
 
         return args
@@ -206,17 +251,22 @@ class JulesClient(BaseAgent):
                 cwd=self.working_dir,
             )
 
+            # Jules CLI may return non-zero for some operations but still produce output
+            # Check if we got meaningful output even with non-zero exit code
+            output = result.stdout.strip()
+            stderr_output = result.stderr.strip()
+
             return {
-                "output": result.stdout,
+                "output": output,
                 "exit_code": result.returncode,
                 "stdout": result.stdout,
                 "stderr": result.stderr,
+                "success": result.returncode == 0 or (output and not stderr_output),
             }
         except subprocess.TimeoutExpired:
             raise JulesError(
                 "Jules command timed out",
                 command=" ".join([self.jules_command] + args),
-                timeout=self.timeout,
             )
         except FileNotFoundError:
             raise JulesError(

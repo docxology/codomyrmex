@@ -50,16 +50,16 @@ For the complete test suite, use the batch runner:
 
 ```bash
 # Run complete test suite in batches
-./scripts/testing/run_tests_batched.sh all
+./scripts/src/codomyrmex/tests/run_tests_batched.sh all
 
 # Run quick test suite (unit + examples)
-./scripts/testing/run_tests_batched.sh quick
+./scripts/src/codomyrmex/tests/run_tests_batched.sh quick
 
 # Run specific batch
-./scripts/testing/run_tests_batched.sh unit
-./scripts/testing/run_tests_batched.sh integration
-./scripts/testing/run_tests_batched.sh examples
-./scripts/testing/run_tests_batched.sh performance
+./scripts/src/codomyrmex/tests/run_tests_batched.sh unit
+./scripts/src/codomyrmex/tests/run_tests_batched.sh integration
+./scripts/src/codomyrmex/tests/run_tests_batched.sh examples
+./scripts/src/codomyrmex/tests/run_tests_batched.sh performance
 ```
 
 ### Manual Test Execution
@@ -112,10 +112,10 @@ For detailed test output:
 
 ```bash
 # Verbose mode
-uv run pytest -v testing/unit/
+uv run pytest -v src/codomyrmex/tests/unit/
 
 # Very verbose (shows all output)
-uv run pytest -vv testing/unit/test_exceptions.py
+uv run pytest -vv src/codomyrmex/tests/unit/test_exceptions.py
 ```
 
 ### Selective Test Execution
@@ -124,13 +124,13 @@ Run specific tests:
 
 ```bash
 # Run specific test file
-uv run pytest testing/unit/test_exceptions.py
+uv run pytest src/codomyrmex/tests/unit/test_exceptions.py
 
 # Run specific test class
-uv run pytest testing/unit/test_exceptions.py::TestCodomyrmexError
+uv run pytest src/codomyrmex/tests/unit/test_exceptions.py::TestCodomyrmexError
 
 # Run specific test method
-uv run pytest testing/unit/test_exceptions.py::TestCodomyrmexError::test_basic_error_creation
+uv run pytest src/codomyrmex/tests/unit/test_exceptions.py::TestCodomyrmexError::test_basic_error_creation
 
 # Run tests by marker
 uv run pytest -m "unit and not slow"
@@ -145,13 +145,13 @@ Debug failing tests:
 
 ```bash
 # Stop on first failure
-uv run pytest -x testing/unit/
+uv run pytest -x src/codomyrmex/tests/unit/
 
 # Show full traceback
-uv run pytest --tb=long testing/unit/test_exceptions.py
+uv run pytest --tb=long src/codomyrmex/tests/unit/test_exceptions.py
 
 # Debug with PDB
-uv run pytest --pdb testing/unit/test_exceptions.py::TestCodomyrmexError::test_basic_error_creation
+uv run pytest --pdb src/codomyrmex/tests/unit/test_exceptions.py::TestCodomyrmexError::test_basic_error_creation
 ```
 
 ## Batch Test Execution
@@ -162,13 +162,13 @@ The batch script provides intelligent test execution:
 
 ```bash
 # Complete test suite
-./scripts/testing/run_tests_batched.sh all --coverage --verbose
+./scripts/src/codomyrmex/tests/run_tests_batched.sh all --coverage --verbose
 
 # Quick validation
-./scripts/testing/run_tests_batched.sh quick --fail-fast
+./scripts/src/codomyrmex/tests/run_tests_batched.sh quick --fail-fast
 
 # Custom timeout
-./scripts/testing/run_tests_batched.sh unit --timeout=600
+./scripts/src/codomyrmex/tests/run_tests_batched.sh unit --timeout=600
 ```
 
 ### Batch Script Options
@@ -198,7 +198,7 @@ For CI/CD pipelines, use the batch script:
 ```yaml
 - name: Run Tests
   run: |
-    ./scripts/testing/run_tests_batched.sh all --coverage
+    ./scripts/src/codomyrmex/tests/run_tests_batched.sh all --coverage
 
 - name: Upload Coverage
   uses: codecov/codecov-action@v3
@@ -212,14 +212,14 @@ For faster CI execution:
 
 ```yaml
 # Unit tests
-- run: ./scripts/testing/run_tests_batched.sh unit
+- run: ./scripts/src/codomyrmex/tests/run_tests_batched.sh unit
 
 # Integration tests
-- run: ./scripts/testing/run_tests_batched.sh integration
+- run: ./scripts/src/codomyrmex/tests/run_tests_batched.sh integration
 
 # Examples and performance
-- run: ./scripts/testing/run_tests_batched.sh examples
-- run: ./scripts/testing/run_tests_batched.sh performance
+- run: ./scripts/src/codomyrmex/tests/run_tests_batched.sh examples
+- run: ./scripts/src/codomyrmex/tests/run_tests_batched.sh performance
 ```
 
 ## Troubleshooting
@@ -232,11 +232,11 @@ If tests run out of memory:
 
 ```bash
 # Run in smaller batches
-./scripts/testing/run_tests_batched.sh unit
-./scripts/testing/run_tests_batched.sh integration
+./scripts/src/codomyrmex/tests/run_tests_batched.sh unit
+./scripts/src/codomyrmex/tests/run_tests_batched.sh integration
 
 # Or run with limited parallelism
-uv run pytest -n 2 testing/unit/
+uv run pytest -n 2 src/codomyrmex/tests/unit/
 ```
 
 #### Hanging Tests
@@ -245,10 +245,10 @@ Tests that hang can be identified and fixed:
 
 ```bash
 # Run with timeout to identify hanging tests
-uv run pytest --timeout=60 testing/unit/
+uv run pytest --timeout=60 src/codomyrmex/tests/unit/
 
 # Debug specific slow test
-uv run pytest --durations=10 testing/unit/
+uv run pytest --durations=10 src/codomyrmex/tests/unit/
 ```
 
 #### Import Errors
@@ -273,10 +273,10 @@ Tests requiring external services may fail in isolated environments:
 
 ```bash
 # Skip network tests
-uv run pytest -m "not network" testing/unit/
+uv run pytest -m "not network" src/codomyrmex/tests/unit/
 
 # Run only local tests
-uv run pytest -m "not external and not network" testing/
+uv run pytest -m "not external and not network" src/codomyrmex/tests/
 ```
 
 ### Test Performance
@@ -285,21 +285,21 @@ uv run pytest -m "not external and not network" testing/
 
 ```bash
 # Show slowest tests
-uv run pytest --durations=20 testing/
+uv run pytest --durations=20 src/codomyrmex/tests/
 
 # Profile test execution
-uv run pytest --profile testing/unit/
+uv run pytest --profile src/codomyrmex/tests/unit/
 ```
 
 #### Optimizing Test Runs
 
 ```bash
 # Run tests in parallel (if available)
-uv run pytest -n auto testing/unit/
+uv run pytest -n auto src/codomyrmex/tests/unit/
 
 # Use pytest-xdist for distributed execution
 pip install pytest-xdist
-uv run pytest -n 4 testing/unit/
+uv run pytest -n 4 src/codomyrmex/tests/unit/
 ```
 
 ## Test Development
@@ -316,7 +316,7 @@ When adding tests:
 
 ### Test Fixtures
 
-Common fixtures are available in `testing/conftest.py`:
+Common fixtures are available in `src/codomyrmex/tests/conftest.py`:
 
 ```python
 def project_root():
@@ -361,7 +361,7 @@ Coverage reports are generated automatically:
 
 ```bash
 # HTML report
-open testing/htmlcov/index.html
+open src/codomyrmex/tests/htmlcov/index.html
 
 # Terminal summary
 uv run pytest --cov=src/codomyrmex --cov-report=term-missing
@@ -376,13 +376,13 @@ Use the test summary script for detailed analysis:
 
 ```bash
 # Generate test summary
-python scripts/testing/test_summary.py
+python scripts/src/codomyrmex/tests/test_summary.py
 
 # Analyze test durations
-python scripts/testing/test_summary.py --durations
+python scripts/src/codomyrmex/tests/test_summary.py --durations
 
 # Identify flaky tests
-python scripts/testing/test_summary.py --flaky
+python scripts/src/codomyrmex/tests/test_summary.py --flaky
 ```
 
 ## Best Practices
@@ -416,7 +416,7 @@ python scripts/testing/test_summary.py --flaky
 - Check this document first
 - Review test error messages carefully
 - Use `--pdb` for debugging failed tests
-- Check the [Testing Guide](../docs/development/testing-strategy.md) for detailed testing strategy
+- Check the [Testing Guide](../../../docs/development/testing-strategy.md) for detailed testing strategy
 
 ### Contributing
 
@@ -433,24 +433,24 @@ When contributing tests:
 
 ```bash
 # Quick validation
-./scripts/testing/run_tests_batched.sh quick
+./scripts/src/codomyrmex/tests/run_tests_batched.sh quick
 
 # Full test suite
-./scripts/testing/run_tests_batched.sh all --coverage
+./scripts/src/codomyrmex/tests/run_tests_batched.sh all --coverage
 
 # Debug failing test
-uv run pytest -vv --pdb testing/unit/test_specific.py::TestClass::test_method
+uv run pytest -vv --pdb src/codomyrmex/tests/unit/test_specific.py::TestClass::test_method
 
 # Check coverage
 uv run pytest --cov=src/codomyrmex --cov-report=html
 
 # Find slow tests
-uv run pytest --durations=10 testing/
+uv run pytest --durations=10 src/codomyrmex/tests/
 ```
 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

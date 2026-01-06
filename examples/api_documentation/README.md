@@ -332,7 +332,7 @@ The example includes comprehensive error handling for:
 
 ## Testing
 
-This example is verified by the comprehensive test suite in `testing/unit/test_api_documentation.py`, which covers:
+This example is verified by the comprehensive test suite in `src/codomyrmex/tests/unit/test_api_documentation.py`, which covers:
 
 - API documentation generation
 - OpenAPI specification validation

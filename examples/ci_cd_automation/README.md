@@ -55,7 +55,7 @@ This example demonstrates the comprehensive CI/CD automation capabilities of Cod
 ## Tested Methods
 
 The example utilizes and demonstrates methods primarily tested in:
-- `testing/unit/test_ci_cd_automation.py`
+- `src/codomyrmex/tests/unit/test_ci_cd_automation.py`
 
 Specifically, it covers:
 - `create_pipeline()` - Verified in `TestPipelineManager::test_create_pipeline`

@@ -7,7 +7,7 @@
     - [sandbox](sandbox/README.md)
     - [review](review/README.md)
     - [monitoring](monitoring/README.md)
-    - [docs](docs/README.md)
+    - [docs](../../../docs/README.md)
     - [tests](tests/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)

@@ -31,7 +31,7 @@ bash src/codomyrmex/environment_setup/scripts/setup_dev_env.sh
 
 # 3. Verify setup
 codomyrmex check
-pytest testing/unit/ -x  # Run tests (stop at first failure)
+pytest src/codomyrmex/tests/unit/ -x  # Run tests (stop at first failure)
 ```
 
 ### **Manual Development Setup**
@@ -69,8 +69,8 @@ mypy               # Type checking
 bandit             # Security scanning
 
 # Usage
-black src/ testing/              # Format code
-ruff src/ testing/               # Quick linting  
+black src/ src/codomyrmex/tests/              # Format code
+ruff src/ src/codomyrmex/tests/               # Quick linting  
 pylint src/codomyrmex/          # Detailed analysis
 mypy src/codomyrmex/            # Type checking
 bandit -r src/codomyrmex/       # Security scan
@@ -84,8 +84,8 @@ pytest-cov         # Coverage reporting
 pytest-mock        # Mocking utilities
 
 # Usage
-pytest testing/                           # Run all tests
-pytest testing/unit/test_specific.py -v  # Run specific tests
+pytest src/codomyrmex/tests/                           # Run all tests
+pytest src/codomyrmex/tests/unit/test_specific.py -v  # Run specific tests
 pytest --cov=src/codomyrmex --cov-report=html  # Coverage report
 ```
 
@@ -194,7 +194,7 @@ pytest -m integration   # Integration tests only
 pytest -k "test_ai"     # Tests matching pattern
 
 # Run tests for specific module
-pytest testing/unit/test_data_visualization.py -v
+pytest src/codomyrmex/tests/unit/test_data_visualization.py -v
 
 # Run tests in parallel (faster)
 pytest -n auto  # Requires pytest-xdist
@@ -203,12 +203,12 @@ pytest -n auto  # Requires pytest-xdist
 ### **Test Coverage Requirements**
 - **Minimum coverage**: 80% (enforced by CI)
 - **Target coverage**: 90%+ for new modules
-- **Coverage reporting**: HTML reports generated in `testing/htmlcov/`
+- **Coverage reporting**: HTML reports generated in `src/codomyrmex/tests/htmlcov/`
 
 ### **Writing Tests**
 Follow the existing patterns:
 ```python
-# testing/unit/test_my_module.py
+# src/codomyrmex/tests/unit/test_my_module.py
 import pytest
 from unittest.mock import patch, MagicMock
 
@@ -321,8 +321,8 @@ git checkout -b feature/my-new-feature
 
 # 3. Make changes and test frequently
 # Edit code...
-pytest testing/unit/test_my_module.py -v  # Test your changes
-black src/ testing/                       # Format code
+pytest src/codomyrmex/tests/unit/test_my_module.py -v  # Test your changes
+black src/ src/codomyrmex/tests/                       # Format code
 
 # 4. Run quality checks
 pre-commit run --all-files  # Check all quality standards

@@ -1,4 +1,4 @@
-# src/codomyrmex/code_review/tests/e2e
+# src/codomyrmex/code/review/tests/e2e
 
 ## Signposting
 - **Parent**: [Code Review Tests](../README.md)
@@ -20,7 +20,7 @@ Test files and validation suites for e2e.
 ## Navigation
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [tests](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Src Hub**: [src](../../../../../README.md)
 
 ## Getting Started
 

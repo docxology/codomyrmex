@@ -49,7 +49,7 @@ This example demonstrates the comprehensive plugin management capabilities of Co
 ## Tested Methods
 
 The example utilizes and demonstrates methods primarily tested in:
-- `testing/unit/test_plugin_system.py`
+- `src/codomyrmex/tests/unit/test_plugin_system.py`
 
 Specifically, it covers:
 - `PluginManager.discover_plugins()` - Verified in `TestPluginManager::test_plugin_discovery_through_manager`

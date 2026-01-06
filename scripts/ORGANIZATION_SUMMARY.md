@@ -16,7 +16,7 @@ All scripts have been organized into appropriate subdirectories according to the
 - 73 Python scripts for documentation maintenance, validation, generation, and link-fixing
 - Includes: `audit_structure.py`, `check_links.py`, `fix_links.py`, and all other documentation-related scripts
 
-### Testing Scripts (`scripts/testing/`)
+### Testing Scripts (`scripts/src/codomyrmex/tests/`)
 - 8 Python scripts for testing automation, verification, and test suite generation
 - Includes: `assess_module_documentation_tests.py`, `create_comprehensive_test_suites.py`, `fix_test_mocks.py`, `generate_module_test_plan.py`, `verify_modular_testing.py`
 
@@ -53,12 +53,12 @@ All scripts have been organized into appropriate subdirectories according to the
 - `remove_nonexistent_spec_links.py` → `documentation/`
 - `check_links.py` → `documentation/`
 
-### Removed from root (duplicates in `testing/`):
-- `assess_module_documentation_tests.py` → `testing/`
-- `create_comprehensive_test_suites.py` → `testing/`
-- `fix_test_mocks.py` → `testing/`
-- `generate_module_test_plan.py` → `testing/`
-- `verify_modular_testing.py` → `testing/`
+### Removed from root (duplicates in `src/codomyrmex/tests/`):
+- `assess_module_documentation_tests.py` → `src/codomyrmex/tests/`
+- `create_comprehensive_test_suites.py` → `src/codomyrmex/tests/`
+- `fix_test_mocks.py` → `src/codomyrmex/tests/`
+- `generate_module_test_plan.py` → `src/codomyrmex/tests/`
+- `verify_modular_testing.py` → `src/codomyrmex/tests/`
 
 ## Documentation Updated
 
@@ -66,7 +66,7 @@ All scripts have been organized into appropriate subdirectories according to the
 - `scripts/README.md` - Updated Script Organization Policy and added organization summary
 - `scripts/SPEC.md` - Updated Modularity section
 - `scripts/documentation/README.md` - Added organization note
-- `scripts/testing/README.md` - Added organization note
+- `scripts/src/codomyrmex/tests/README.md` - Added organization note
 
 ## Result
 
@@ -79,5 +79,5 @@ All scripts have been organized into appropriate subdirectories according to the
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../docs/README.md)
 - **Home**: [Root README](../../../README.md)

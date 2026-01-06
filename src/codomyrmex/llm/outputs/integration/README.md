@@ -1,4 +1,4 @@
-# src/codomyrmex/language_models/outputs/integration
+# src/codomyrmex/llm/outputs/integration
 
 ## Signposting
 - **Parent**: [Language Models](../README.md)

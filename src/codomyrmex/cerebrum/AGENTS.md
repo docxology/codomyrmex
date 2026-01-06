@@ -472,7 +472,7 @@ Represents a belief state in active inference.
 - Apply Bayesian inference to predict code quality
 - Enhance prompts with case-based context
 
-### With `language_models`
+### With `llm`
 - Use active inference to optimize LLM interactions
 - Apply Bayesian methods for model selection
 - Learn from LLM response patterns

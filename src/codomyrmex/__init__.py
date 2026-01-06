@@ -30,40 +30,45 @@ __license__ = "MIT"
 
 # All available modules in the package
 __all__ = [
-    # Core modules
-    "api",
-    "build_synthesis",
-    "ci_cd_automation",
-    "cli",
-    "code",
-    "config_management",
-    "containerization",
-    "data_visualization",
-    "database_management",
-    "documentation",
-    "environment_setup",
-    "git_operations",
+    # Foundation Layer
     "logging_monitoring",
+    "environment_setup",
     "model_context_protocol",
-    "module_template",
-    "llm",
+    "terminal_interface",
+    # Core Layer
+    "static_analysis",
+    "code",
+    "data_visualization",
     "pattern_matching",
-    "performance",
-    "project_orchestration",
+    "git_operations",
+    "scrape",
     "security",
     "documents",
-    "static_analysis",
-    "system_discovery",
-    "terminal_interface",
-    "tools",
-    # Specialized modules
-    "events",
-    "plugin_system",
-    "template",
+    "llm",
+    "performance",
+    # Service Layer
+    "build_synthesis",
+    "documentation",
+    "api",
+    "ci_cd_automation",
+    "containerization",
+    "database_management",
+    "config_management",
+    "project_orchestration",
+    # Specialized Layer
     "spatial",
     "physical_management",
+    "system_discovery",
+    "module_template",
+    "template",
+    "events",
+    "plugin_system",
+    "tools",
+    "fpf",
     "cerebrum",
     "agents",
+    # Infrastructure
+    "tests",
 ]
 
 # Import core exceptions and utilities for easier access

@@ -198,7 +198,7 @@ Package dependencies organized by purpose:
 ### For Contributors
 - **Contributing**: [../docs/project/contributing.md](../docs/project/contributing.md)
 - **Development Setup**: [docs/development/environment-setup.md](../docs/development/environment-setup.md)
-- **Testing**: [testing/README.md](../testing/README.md)
+- **Testing**: [src/codomyrmex/tests/README.md](../src/codomyrmex/tests/README.md)
 
 ## Agent Coordination
 

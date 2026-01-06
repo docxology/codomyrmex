@@ -155,6 +155,10 @@ static_analysis = [
     "pyrefly>=0.16.0",
 ]
 
+scrape = [
+    "firecrawl-py>=1.0.0",
+]
+
 [project.urls]
 Homepage = "https://github.com/codomyrmex/codomyrmex"
 Repository = "https://github.com/codomyrmex/codomyrmex"

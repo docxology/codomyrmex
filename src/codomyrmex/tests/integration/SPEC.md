@@ -6,7 +6,7 @@
 
 Integration test suites for the Codomyrmex repository. This directory contains comprehensive integration tests that validate cross-module interactions, end-to-end workflows, and system-level functionality with real data analysis (no mock methods).
 
-The testing/integration directory serves as the validation layer for ensuring Codomyrmex modules work together correctly in production-like scenarios.
+The src/codomyrmex/tests/integration directory serves as the validation layer for ensuring Codomyrmex modules work together correctly in production-like scenarios.
 
 ## Overview
 

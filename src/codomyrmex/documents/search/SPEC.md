@@ -1,25 +1,25 @@
 # search Functional Specification
 
 ## Core Concept
-<!-- Description pending -->
+Detailed technical specification and implementation guide.
 
 ## Functional Requirements
-- <!-- Requirement pending definition -->
-- <!-- Requirement pending definition -->
+- System compliance and architectural integrity verification.
+- System compliance and architectural integrity verification.
 
 ## Modularity & Interfaces
-- Inputs: <!-- Description pending -->
-- Outputs: <!-- Description pending -->
-- Dependencies: <!-- Dependencies pending -->
+- Inputs: Detailed technical specification and implementation guide.
+- Outputs: Detailed technical specification and implementation guide.
+- Dependencies: Core Codomyrmex utility libraries.
 
 ## Coherence
-<!-- Description pending -->
+Detailed technical specification and implementation guide.
 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
 
 ## Detailed Architecture and Implementation

@@ -196,4 +196,4 @@ examples/{module}/
 
 - **[Basic Examples](../README.md)** - Standard example format
 - **[Module Documentation](../../src/codomyrmex/{module}/)** - Detailed API docs
-- **[Testing Framework](../../testing/)** - Unit test references
+- **[Testing Framework](../../src/codomyrmex/tests/)** - Unit test references

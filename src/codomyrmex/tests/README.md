@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [codomyrmex](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](../../../scripts/examples/README.md)
     - [fixtures](fixtures/README.md)
     - [integration](integration/README.md)
     - [output](output/README.md)
@@ -261,7 +261,7 @@ graph TD
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
 - **Testing Hub**: [src/codomyrmex/tests](README.md)
-- **Testing Strategy**: [docs/development/testing-strategy.md](../../../../docs/development/testing-strategy.md)
+- **Testing Strategy**: [docs/development/testing-strategy.md](../../../docs/development/testing-strategy.md)
 - **Coverage Reports**: Generated in `htmlcov/` directory after test execution
 
 ## Getting Started

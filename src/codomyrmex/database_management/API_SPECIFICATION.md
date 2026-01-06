@@ -311,5 +311,5 @@ audit_result = audit_database_security(db_config, audit_types=[
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

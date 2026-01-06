@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [Documentation Documentation](../README.md)
 - **Children**:
-    - [ai_code_editing](ai_code_editing/README.md)
+    - [ai_code_editing](agents/ai_code_editing/README.md)
     - [build_synthesis](build_synthesis/README.md)
     - [code](code/README.md)
     - [data_visualization](data_visualization/README.md)

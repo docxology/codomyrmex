@@ -19,7 +19,7 @@ The `ai_code_editing` module serves as the semantic intelligence layer of Codomy
 - **Error Handling**: A unified strategy for rate limits and provider failures.
 
 ### Parsimony
-- **Dependencies**: Depends strictly on `language_models` for raw inference and `model_context_protocol` for tool definitions.
+- **Dependencies**: Depends strictly on `llm` for raw inference and `model_context_protocol` for tool definitions.
 - **Focus**: Does NOT execute code. Does NOT manage the file system directly (outside of reading context).
 
 ### Functionality

@@ -1,7 +1,7 @@
-# scripts/ollama_integration
+# scripts/llm/ollama
 
 ## Signposting
-- **Parent**: [Scripts](../README.md)
+- **Parent**: [Scripts LLM](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

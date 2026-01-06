@@ -5,7 +5,7 @@
 - **Children**:
     - [deployment](deployment/README.md)
     - [development](development/README.md)
-    - [examples](examples/README.md)
+    - [examples](../scripts/examples/README.md)
     - [getting-started](getting-started/README.md)
     - [integration](integration/README.md)
     - [modules](modules/README.md)

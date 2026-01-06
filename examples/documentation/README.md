@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [Examples](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](../../scripts/examples/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -34,7 +34,7 @@ This example demonstrates comprehensive documentation generation, quality assess
 
 ## Tested Methods
 
-This example references the following tested methods from `testing/unit/test_documentation.py`:
+This example references the following tested methods from `src/codomyrmex/tests/unit/test_documentation.py`:
 
 - `check_doc_environment()` - Verified in `TestDocumentation::test_documentation_module_structure`
 - `install_dependencies()` - Verified in `TestDocumentation::test_documentation_module_structure`
@@ -314,7 +314,7 @@ The example generates several output files:
 ## Related Examples
 
 - **[Static Analysis](../static_analysis/)** - Code quality analysis integration
-- **[Code Review](../code.review/)** - Documentation review integration
+- **[Code Review](../code_review/)** - Documentation review integration
 - **[API Documentation](../api_documentation/)** - API documentation generation
 - **[Build Synthesis](../build_synthesis/)** - Documentation site building
 

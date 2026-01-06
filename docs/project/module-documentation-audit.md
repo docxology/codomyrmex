@@ -113,9 +113,9 @@
 - `src/codomyrmex/code/docs/index.md` (line 16): `../../../docs/project/contributing.md`
 
 **code_review** (3 issues):
-- `src/codomyrmex/code_review/docs/index.md` (line 12): `../../../docs/project/contributing.md`
-- `src/codomyrmex/code_review/tests/AGENTS.md` (line 34): `integration/AGENTS.md`
-- `src/codomyrmex/code_review/tests/unit/AGENTS.md` (line 29): `../integration/AGENTS.md`
+- `src/codomyrmex/code/review/docs/index.md` (line 12): `../../../docs/project/contributing.md`
+- `src/codomyrmex/code/review/tests/AGENTS.md` (line 34): `integration/AGENTS.md`
+- `src/codomyrmex/code/review/tests/unit/AGENTS.md` (line 29): `../integration/AGENTS.md`
 
 **data_visualization** (1 issues):
 - `src/codomyrmex/data_visualization/docs/index.md` (line 16): `../../../docs/project/contributing.md`
@@ -148,7 +148,7 @@
 - `src/codomyrmex/model_context_protocol/docs/tutorials/example_tutorial.md` (line 86): `./advanced_feature_x_guide.md`
 
 **modeling_3d** (1 issues):
-- `src/codomyrmex/modeling_3d/docs/index.md` (line 11): `../../../docs/project/contributing.md`
+- `src/codomyrmex/spatial/three_d/docs/index.md` (line 11): `../../../docs/project/contributing.md`
 
 **module_template** (2 issues):
 - `src/codomyrmex/module_template/docs/index.md` (line 16): `../../../docs/project/contributing.md`

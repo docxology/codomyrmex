@@ -1,4 +1,4 @@
-# testing/integration
+# src/codomyrmex/tests/integration
 
 ## Signposting
 - **Parent**: [Tests](../README.md)

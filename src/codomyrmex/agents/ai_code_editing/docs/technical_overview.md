@@ -174,5 +174,5 @@ Beyond the general security measures outlined in `SECURITY.md`:
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

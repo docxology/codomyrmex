@@ -6,6 +6,7 @@
 - **Children**:
     - [Ollama Integration Agents](ollama/AGENTS.md)
     - [Prompt Templates Agents](prompt_templates/AGENTS.md)
+    - [Outputs Agents](outputs/AGENTS.md)
 - **Key Artifacts**:
     - None
 
@@ -25,6 +26,12 @@ LLM integration namespace for Codomyrmex, providing a logical grouping for Large
 ### Current Modules
 - `ollama/` - Ollama local LLM integration
 - `prompt_templates/` - Standardized prompt templates for AI interactions
+- `outputs/` - LLM output management and processing
+  - `outputs/llm_outputs/` - Core LLM output handling
+  - `outputs/integration/` - Integration testing outputs
+  - `outputs/performance/` - Performance evaluation outputs
+  - `outputs/reports/` - Generated reports
+  - `outputs/test_results/` - Test result outputs
 
 ## Navigation Links
 - **Parent**: [codomyrmex](../AGENTS.md) - Package overview

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/language_models/outputs
+# Codomyrmex Agents — src/codomyrmex/llm/outputs
 
 ## Signposting
 - **Parent**: [Language Models](../AGENTS.md)
@@ -44,5 +44,5 @@ Module components and implementation for outputs..
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent Directory**: [language_models](../README.md) - Parent directory documentation
+- **Parent Directory**: [llm](../README.md) - Parent directory documentation
 - **Project Root**: [README](../../../../README.md) - Main project documentation

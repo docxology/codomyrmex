@@ -19,7 +19,7 @@ The `agents` module provides integration with various agentic frameworks includi
 - **Standardized Integration**: Integration adapters provide consistent interfaces to Codomyrmex modules
 
 ### Parsimony
-- **Dependencies**: Depends on `logging_monitoring` for logging, `ai_code_editing`, `language_models`, and `code` for integration
+- **Dependencies**: Depends on `logging_monitoring` for logging, `ai_code_editing`, `llm`, and `code` for integration
 - **Focus**: Provides agent framework integrations, not direct code execution or file management
 - **Minimal External Dependencies**: Uses standard libraries and framework-specific packages (anthropic, openai)
 

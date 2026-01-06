@@ -504,11 +504,11 @@ Comprehensive test suite validates all functionality:
 
 ```bash
 # Run all Ollama integration tests
-python -m pytest testing/unit/test_ollama_integration.py -v
+python -m pytest src/codomyrmex/tests/unit/test_ollama_integration.py -v
 
 # Run specific test categories
-python -m pytest testing/unit/test_ollama_integration.py::TestOllamaIntegration -v
-python -m pytest testing/unit/test_ollama_integration.py::TestOllamaIntegrationRealExecution -v
+python -m pytest src/codomyrmex/tests/unit/test_ollama_integration.py::TestOllamaIntegration -v
+python -m pytest src/codomyrmex/tests/unit/test_ollama_integration.py::TestOllamaIntegrationRealExecution -v
 ```
 
 ### Test Coverage

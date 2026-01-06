@@ -55,7 +55,7 @@ code_review = [
     "vulture>=2.7.0",
 ]
 
-language_models = [
+llm = [
     "aiohttp>=3.8.0",
     "certifi>=2022.0.0",
     "pytest-asyncio>=0.15.0",
@@ -112,5 +112,5 @@ static_analysis = [
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)

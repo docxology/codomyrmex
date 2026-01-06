@@ -1,4 +1,4 @@
-# testing/unit
+# src/codomyrmex/tests/unit
 
 ## Signposting
 - **Parent**: [Tests](../README.md)
@@ -36,7 +36,7 @@ Test files and validation suites for unit.
 - `test_git_operations_advanced.py` – File
 - `test_git_operations_comprehensive.py` – File
 - `test_github_operations_comprehensive.py` – File
-- `test_language_models.py` – File
+- `test_llm.py` – File
 - `test_logging_monitoring.py` – File
 - `test_model_context_protocol.py` – File
 - `test_spatial.three_d.py` – File

@@ -36,7 +36,7 @@ This example demonstrates comprehensive database management operations using the
 
 ## Tested Methods
 
-This example references the following tested methods from `testing/unit/test_database_management.py`:
+This example references the following tested methods from `src/codomyrmex/tests/unit/test_database_management.py`:
 
 - `DatabaseManager.add_connection()` - Verified in `TestDatabaseManager::test_add_connection`
 - `DatabaseConnection.execute_query()` - Verified in `TestDatabaseConnection::test_execute_query_select_sqlite`
@@ -356,8 +356,8 @@ The example generates several output files:
 
 ## Related Examples
 
-- **[API Standardization](../api_standardization/)** - API database integration
-- **[Security Audit](../security_audit/)** - Database security scanning
+- **[API Standardization](../api/standardization/)** - API database integration
+- **[Security Audit](../security/)** - Database security scanning
 - **[Performance](../performance/)** - Database performance monitoring
 - **[Config Management](../config_management/)** - Database configuration management
 
