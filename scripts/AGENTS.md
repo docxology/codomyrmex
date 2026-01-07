@@ -44,8 +44,6 @@
     - [terminal_interface](terminal_interface/AGENTS.md)
     - [testing](testing/AGENTS.md)
     - [tools](tools/AGENTS.md)
-    - [language_models](language_models/AGENTS.md)
-    - [modeling_3d](modeling_3d/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)

@@ -11,6 +11,7 @@
     - [claude](claude/README.md)
     - [codex](codex/README.md)
     - [opencode](opencode/README.md)
+    - [gemini](gemini/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -19,7 +20,7 @@
 
 ## Overview
 
-The agents module provides integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, and OpenCode CLI. It includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
+The agents module provides integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, and Gemini CLI. It includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
 
 The agents module serves as the agentic framework integration layer, supporting multiple agent frameworks through a unified interface.
 
@@ -44,6 +45,7 @@ graph TB
         Claude[ClaudeClient<br/>API Integration]
         Codex[CodexClient<br/>API Integration]
         OpenCode[OpenCodeClient<br/>CLI Integration]
+        Gemini[GeminiClient<br/>CLI Integration]
     end
 
     subgraph "Integration Adapters"
@@ -64,6 +66,7 @@ graph TB
     BaseAgent --> Claude
     BaseAgent --> Codex
     BaseAgent --> OpenCode
+    BaseAgent --> Gemini
 
     Orchestrator --> BaseAgent
     MessageBus --> BaseAgent
@@ -73,6 +76,7 @@ graph TB
     Claude --> AICodeAdapter
     Codex --> AICodeAdapter
     OpenCode --> AICodeAdapter
+    Gemini --> AICodeAdapter
 
     AICodeAdapter --> AICodeEditing
     LLMAdapter --> LanguageModels
@@ -82,7 +86,7 @@ graph TB
 ## Key Features
 
 - **Unified Interface**: Consistent interface across all agent frameworks via `AgentInterface`
-- **Framework Support**: Integration with Jules CLI, Claude API, OpenAI Codex, and OpenCode CLI
+- **Framework Support**: Integration with Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, and Gemini CLI
 - **Code Generation**: Generate code using various agent frameworks
 - **Code Editing**: Edit and refactor code using agents
 - **Streaming Support**: Support streaming responses where available
@@ -152,6 +156,7 @@ code = adapter.adapt_for_ai_code_editing(
 - `claude/` - Claude API integration
 - `codex/` - OpenAI Codex integration
 - `opencode/` - OpenCode CLI integration
+- `gemini/` - Gemini CLI integration
 
 ## Configuration
 
@@ -181,6 +186,12 @@ set_config(config)
 - `OPENCODE_TIMEOUT` - OpenCode operation timeout
 - `OPENCODE_WORKING_DIR` - OpenCode working directory
 - `OPENCODE_API_KEY` - OpenCode API key (for OpenCode Zen)
+- `GEMINI_COMMAND` - Gemini CLI command (default: "gemini")
+- `GEMINI_TIMEOUT` - Gemini operation timeout
+- `GEMINI_WORKING_DIR` - Gemini working directory
+- `GEMINI_API_KEY` - Gemini API key (optional)
+- `GEMINI_AUTH_METHOD` - Gemini authentication method: "oauth" or "api_key" (default: "oauth")
+- `GEMINI_SETTINGS_PATH` - Path to .gemini/settings.json (optional)
 - `AGENT_DEFAULT_TIMEOUT` - Default timeout for agent operations
 - `AGENT_ENABLE_LOGGING` - Enable/disable logging
 - `AGENT_LOG_LEVEL` - Logging level
@@ -235,7 +246,8 @@ from codomyrmex.agents.exceptions import (
     ClaudeError,
     CodexError,
     JulesError,
-    OpenCodeError
+    OpenCodeError,
+    GeminiError
 )
 
 try:

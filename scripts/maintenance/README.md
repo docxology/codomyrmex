@@ -25,7 +25,7 @@ Automation and utility scripts.
 - `fix_syntax_errors.py` – File
 - `pin_dependency_versions.py` – File
 - `run_quality_checks.py` – File
-- `security_audit.py` – File
+- `security.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)

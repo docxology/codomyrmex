@@ -1018,7 +1018,7 @@ def demo_ai_code_editing() -> bool:
 def demo_code_execution() -> bool:
     """Demo code execution sandbox."""
     try:
-        from codomyrmex.code import execute_code
+        from codomyrmex.coding import execute_code
 
         code = """
 def fibonacci(n):

@@ -311,7 +311,7 @@ Demonstrates:
 
 Tested Methods:
 - Static analysis integration - Verified in test_static_analysis.py
-- Security audit integration - Verified in test_security_audit.py
+- Security integration - Verified in test_security.py
 - Data visualization integration - Verified in test_data_visualization.py
 - Event system integration - Verified in test_events.py
 """
@@ -327,7 +327,7 @@ sys.path.insert(0, str(project_root / "src"))
 
 # Import multiple modules for integration
 from codomyrmex.static_analysis import analyze_project, get_available_tools
-from codomyrmex.security_audit import scan_codebase, check_vulnerabilities
+from codomyrmex.security import scan_codebase, check_vulnerabilities
 from codomyrmex.data_visualization import create_plot, save_visualization
 from codomyrmex.events import EventBus, EventEmitter
 

@@ -45,7 +45,7 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from codomyrmex.security_audit import (
+from codomyrmex.security import (
     # Core vulnerability scanning
     VulnerabilityScanner,
     scan_vulnerabilities,

@@ -123,7 +123,7 @@ workflow:
   modules:
     - module_name: static_analysis
       config: {...}
-    - module_name: security_audit
+    - module_name: security
       config: {...}
 ```
 

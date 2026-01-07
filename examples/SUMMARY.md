@@ -28,7 +28,7 @@
 
 **Core Layer** (8/8 = 100%):
 3. ✅ `static_analysis/` - Code quality analysis
-4. ✅ `security_audit/` - Vulnerability scanning
+4. ✅ `security/` - Vulnerability scanning
 5. ✅ `code/` - Safe code execution
 6. ✅ `data_visualization/` - Chart creation
 7. ✅ `git_operations/` - Version control automation

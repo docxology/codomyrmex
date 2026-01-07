@@ -20,7 +20,7 @@
     - [environment_setup](environment_setup/README.md)
     - [events](events/README.md)
     - [git_operations](git_operations/README.md)
-    - [language_models](language_models/README.md)
+    - [llm](llm/README.md)
     - [logging_monitoring](logging_monitoring/README.md)
     - [model_context_protocol](model_context_protocol/README.md)
     - [spatial](spatial/README.md)
@@ -32,7 +32,7 @@
     - [physical_management](physical_management/README.md)
     - [plugin_system](plugin_system/README.md)
     - [project_orchestration](project_orchestration/README.md)
-    - [security_audit](security_audit/README.md)
+    - [security](security/README.md)
     - [static_analysis](static_analysis/README.md)
     - [system_discovery](system_discovery/README.md)
     - [terminal_interface](terminal_interface/README.md)
@@ -111,12 +111,12 @@ Primary development capabilities:
 
 - **[ai_code_editing/](ai_code_editing)** - AI-powered code generation ✅
 - **[static_analysis/](static_analysis)** - Code quality analysis ✅
-- **[code/](code)** - Safe code execution ✅
+- **[coding/](coding)** - Safe code execution ✅
 - **[data_visualization/](data_visualization)** - Charts and visualizations ✅
 - **[pattern_matching/](pattern_matching)** - Code pattern analysis ✅
 - **[git_operations/](git_operations)** - Version control automation ✅
 - **[code_review/](code_review)** - Automated code review ✅
-- **[security_audit/](security_audit)** - Security scanning ✅
+- **[security/](security)** - Security scanning ✅
 
 ### Service Layer ✅
 
@@ -140,7 +140,7 @@ Domain-specific capabilities:
 - **[system_discovery/](system_discovery)** - System exploration ✅
 - **[performance/](performance)** - Performance monitoring ✅
 - **[ollama_integration/](ollama_integration)** - Local LLM integration ✅
-- **[language_models/](language_models)** - LLM infrastructure ✅
+- **[llm/](llm)** - LLM infrastructure ✅
 
 ### New Modules
 

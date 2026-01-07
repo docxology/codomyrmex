@@ -1,9 +1,13 @@
-"""Tests for agent configuration management."""
+"""Tests for agent configuration management.
+
+Tests use real implementations only. Environment variable tests use
+real environment manipulation or skip when not applicable.
+"""
 
 import os
 import pytest
 from pathlib import Path
-from unittest.mock import patch
+import tempfile
 
 from codomyrmex.agents.config import (
     AgentConfig,
@@ -26,23 +30,31 @@ class TestAgentConfigSimple:
         assert config.claude_model == "claude-3-opus-20240229"
         assert config.codex_model == "code-davinci-002"
         assert config.opencode_command == "opencode"
+        assert config.gemini_command == "gemini"
+        assert config.gemini_timeout == 60
         assert config.default_timeout == 30
         assert config.enable_logging is True
         assert config.log_level == "INFO"
 
     def test_environment_variable_overrides(self):
         """Test environment variable configuration overrides."""
-        with patch.dict(
-            os.environ,
-            {
-                "JULES_COMMAND": "custom-jules",
-                "JULES_TIMEOUT": "45",
-                "CLAUDE_MODEL": "custom-model",
-                "AGENT_DEFAULT_TIMEOUT": "60",
-                "AGENT_LOG_LEVEL": "DEBUG",
-            },
-            clear=False,
-        ):
+        # Save original values
+        original_jules = os.environ.get("JULES_COMMAND")
+        original_timeout = os.environ.get("JULES_TIMEOUT")
+        original_model = os.environ.get("CLAUDE_MODEL")
+        original_default = os.environ.get("AGENT_DEFAULT_TIMEOUT")
+        original_log = os.environ.get("AGENT_LOG_LEVEL")
+        
+        try:
+            # Set environment variables
+            os.environ["JULES_COMMAND"] = "custom-jules"
+            os.environ["JULES_TIMEOUT"] = "45"
+            os.environ["CLAUDE_MODEL"] = "custom-model"
+            os.environ["AGENT_DEFAULT_TIMEOUT"] = "60"
+            os.environ["AGENT_LOG_LEVEL"] = "DEBUG"
+            
+            # Reset config to pick up new environment variables
+            reset_config()
             config = AgentConfig()
             
             assert config.jules_command == "custom-jules"
@@ -50,6 +62,34 @@ class TestAgentConfigSimple:
             assert config.claude_model == "custom-model"
             assert config.default_timeout == 60
             assert config.log_level == "DEBUG"
+        finally:
+            # Restore original values
+            if original_jules is not None:
+                os.environ["JULES_COMMAND"] = original_jules
+            elif "JULES_COMMAND" in os.environ:
+                del os.environ["JULES_COMMAND"]
+                
+            if original_timeout is not None:
+                os.environ["JULES_TIMEOUT"] = original_timeout
+            elif "JULES_TIMEOUT" in os.environ:
+                del os.environ["JULES_TIMEOUT"]
+                
+            if original_model is not None:
+                os.environ["CLAUDE_MODEL"] = original_model
+            elif "CLAUDE_MODEL" in os.environ:
+                del os.environ["CLAUDE_MODEL"]
+                
+            if original_default is not None:
+                os.environ["AGENT_DEFAULT_TIMEOUT"] = original_default
+            elif "AGENT_DEFAULT_TIMEOUT" in os.environ:
+                del os.environ["AGENT_DEFAULT_TIMEOUT"]
+                
+            if original_log is not None:
+                os.environ["AGENT_LOG_LEVEL"] = original_log
+            elif "AGENT_LOG_LEVEL" in os.environ:
+                del os.environ["AGENT_LOG_LEVEL"]
+            
+            reset_config()
 
     def test_single_agent_configuration(self):
         """Test configuring a single agent."""
@@ -69,9 +109,15 @@ class TestAgentConfigSimple:
 
     def test_basic_timeout_and_logging_settings(self):
         """Test basic timeout and logging configuration."""
-        # Note: enable_logging is overridden by __post_init__ from environment
-        # So we test what we can control
-        with patch.dict(os.environ, {"AGENT_ENABLE_LOGGING": "false"}, clear=False):
+        # Save original value
+        original_logging = os.environ.get("AGENT_ENABLE_LOGGING")
+        
+        try:
+            # Set environment variable
+            os.environ["AGENT_ENABLE_LOGGING"] = "false"
+            
+            # Reset config to pick up new environment variable
+            reset_config()
             config = AgentConfig(
                 default_timeout=120,
                 log_level="WARNING",
@@ -80,14 +126,26 @@ class TestAgentConfigSimple:
             assert config.default_timeout == 120
             assert config.enable_logging is False
             assert config.log_level == "WARNING"
+        finally:
+            # Restore original value
+            if original_logging is not None:
+                os.environ["AGENT_ENABLE_LOGGING"] = original_logging
+            elif "AGENT_ENABLE_LOGGING" in os.environ:
+                del os.environ["AGENT_ENABLE_LOGGING"]
+            
+            reset_config()
 
     def test_output_directory_creation(self):
         """Test that output directory is created."""
-        with patch("pathlib.Path.mkdir") as mock_mkdir:
-            config = AgentConfig(output_dir=Path("/tmp/test_output"))
+        # Use real temporary directory
+        with tempfile.TemporaryDirectory() as tmpdir:
+            test_output_dir = Path(tmpdir) / "test_output"
+            config = AgentConfig(output_dir=test_output_dir)
             
-            assert config.output_dir == Path("/tmp/test_output")
-            mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
+            assert config.output_dir == test_output_dir
+            # Verify directory was actually created
+            assert test_output_dir.exists()
+            assert test_output_dir.is_dir()
 
 
 class TestAgentConfigComplex:
@@ -105,6 +163,8 @@ class TestAgentConfigComplex:
             codex_model="codex-model",
             opencode_command="opencode-cmd",
             opencode_timeout=120,
+            gemini_command="gemini-cmd",
+            gemini_timeout=150,
         )
         
         # Verify all configurations are set
@@ -114,6 +174,8 @@ class TestAgentConfigComplex:
         assert config.codex_api_key == "codex-key"
         assert config.opencode_command == "opencode-cmd"
         assert config.opencode_timeout == 120
+        assert config.gemini_command == "gemini-cmd"
+        assert config.gemini_timeout == 150
 
     def test_configuration_validation_invalid_values(self):
         """Test configuration validation with invalid values."""
@@ -121,6 +183,7 @@ class TestAgentConfigComplex:
             default_timeout=-1,
             jules_timeout=0,
             claude_timeout=-5,
+            gemini_timeout=-10,
         )
         
         errors = config.validate()
@@ -128,6 +191,7 @@ class TestAgentConfigComplex:
         assert "default_timeout must be positive" in errors
         assert "jules_timeout must be positive" in errors
         assert "claude_timeout must be positive" in errors
+        assert "gemini_timeout must be positive" in errors
 
     def test_configuration_validation_valid_values(self):
         """Test configuration validation with valid values."""
@@ -137,6 +201,7 @@ class TestAgentConfigComplex:
             claude_timeout=90,
             codex_timeout=120,
             opencode_timeout=150,
+            gemini_timeout=180,
         )
         
         errors = config.validate()
@@ -145,6 +210,7 @@ class TestAgentConfigComplex:
         assert "default_timeout must be positive" not in errors
         assert "jules_timeout must be positive" not in errors
         assert "claude_timeout must be positive" not in errors
+        assert "gemini_timeout must be positive" not in errors
 
     def test_configuration_to_dict(self):
         """Test converting configuration to dictionary."""
@@ -152,6 +218,7 @@ class TestAgentConfigComplex:
             jules_command="test-jules",
             claude_api_key="secret-key",
             opencode_timeout=90,
+            gemini_api_key="gemini-secret",
         )
         
         config_dict = config.to_dict()
@@ -159,6 +226,7 @@ class TestAgentConfigComplex:
         assert config_dict["jules_command"] == "test-jules"
         assert config_dict["claude_api_key"] == "***"  # Should be masked
         assert config_dict["opencode_timeout"] == 90
+        assert config_dict["gemini_api_key"] == "***"  # Should be masked
         assert "output_dir" in config_dict
 
     def test_dynamic_configuration_updates(self):
@@ -198,25 +266,28 @@ class TestAgentConfigComplex:
         config = AgentConfig(
             jules_working_dir="/tmp/jules",
             opencode_working_dir="/tmp/opencode",
+            gemini_working_dir="/tmp/gemini",
             output_dir=Path("/tmp/output"),
         )
         
         assert config.jules_working_dir == "/tmp/jules"
         assert config.opencode_working_dir == "/tmp/opencode"
+        assert config.gemini_working_dir == "/tmp/gemini"
         assert config.output_dir == Path("/tmp/output")
 
     def test_configuration_merging_and_precedence(self):
         """Test configuration merging and precedence."""
-        # Note: In AgentConfig, __post_init__ runs after __init__,
-        # so environment variables override explicit constructor values
-        with patch.dict(
-            os.environ,
-            {
-                "JULES_TIMEOUT": "100",
-                "CLAUDE_TIMEOUT": "200",
-            },
-            clear=False,
-        ):
+        # Save original values
+        original_jules = os.environ.get("JULES_TIMEOUT")
+        original_claude = os.environ.get("CLAUDE_TIMEOUT")
+        
+        try:
+            # Set environment variables
+            os.environ["JULES_TIMEOUT"] = "100"
+            os.environ["CLAUDE_TIMEOUT"] = "200"
+            
+            # Reset config to pick up environment variables
+            reset_config()
             # Environment variables override explicit values in __post_init__
             config = AgentConfig(
                 jules_timeout=50,  # Will be overridden by env var
@@ -226,6 +297,19 @@ class TestAgentConfigComplex:
             assert config.jules_timeout == 100
             # Environment variable applies where not overridden
             assert config.claude_timeout == 200
+        finally:
+            # Restore original values
+            if original_jules is not None:
+                os.environ["JULES_TIMEOUT"] = original_jules
+            elif "JULES_TIMEOUT" in os.environ:
+                del os.environ["JULES_TIMEOUT"]
+                
+            if original_claude is not None:
+                os.environ["CLAUDE_TIMEOUT"] = original_claude
+            elif "CLAUDE_TIMEOUT" in os.environ:
+                del os.environ["CLAUDE_TIMEOUT"]
+            
+            reset_config()
 
     def test_all_agent_configurations_together(self):
         """Test all agent configurations together."""
@@ -251,6 +335,12 @@ class TestAgentConfigComplex:
             opencode_timeout=60,
             opencode_working_dir="/opencode",
             opencode_api_key="opencode-key",
+            # Gemini
+            gemini_command="gemini",
+            gemini_timeout=60,
+            gemini_working_dir="/gemini",
+            gemini_api_key="gemini-key",
+            gemini_auth_method="api_key",
             # General
             default_timeout=30,
             enable_logging=True,
@@ -262,6 +352,8 @@ class TestAgentConfigComplex:
         assert config.claude_api_key == "claude-key"
         assert config.codex_api_key == "codex-key"
         assert config.opencode_api_key == "opencode-key"
+        assert config.gemini_api_key == "gemini-key"
+        assert config.gemini_auth_method == "api_key"
         assert config.default_timeout == 30
 
 
@@ -316,4 +408,3 @@ class TestGlobalConfigManagement:
         final_config = get_config()
         assert final_config.default_timeout == 30
         assert final_config is not custom_config
-

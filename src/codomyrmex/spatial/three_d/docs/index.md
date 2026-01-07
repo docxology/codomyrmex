@@ -14,13 +14,13 @@ This documentation provides in-depth information beyond the main `README.md` for
 
 - Start with the [Architecture](./architecture.md) for a high-level understanding of the module's 3D engine design.
 - Refer to the [API Specification](../API_SPECIFICATION.md) for details on how to interact with the module programmatically.
-- Explore the [Examples](../../../../scripts/examples/spatial/) directory for usage examples.
+- Explore the [Examples](../../../../../examples/spatial/) directory for usage examples.
 
 ## Related Documentation
 
 - [Module README](../README.md)
 - [Security Considerations](../SECURITY.md)
-- [Examples](../../../../scripts/examples/spatial/) - Usage examples and demonstrations
+- [Examples](../../../../../examples/spatial/) - Usage examples and demonstrations
 
 
 ## Navigation Links

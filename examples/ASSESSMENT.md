@@ -20,7 +20,7 @@ This document provides a comprehensive assessment of the Codomyrmex examples str
 - ✅ `static_analysis/` - Complete with multi-tool analysis
 - ✅ `code/` - Complete with resource limits
 - ✅ `data_visualization/` - Complete with multiple chart types
-- ✅ `security_audit/` - Complete with vulnerability scanning
+- ✅ `security/` - Complete with vulnerability scanning
 - ✅ `ai_code_editing/` - Complete (AI-powered code generation, refactoring, analysis)
 - ✅ `pattern_matching/` - Complete (AST analysis with fallback implementation)
 - ✅ `git_operations/` - Complete (22+ operations demonstrated)

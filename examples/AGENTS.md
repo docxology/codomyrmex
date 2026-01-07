@@ -106,7 +106,7 @@ The examples follow a hierarchical organization:
 - `pattern_matching/` – Pattern analysis ✅
 - `git_operations/` – Git automation ✅
 - `code.review/` – Automated review ✅
-- `security_audit/` – Security scanning ✅
+- `security/` – Security scanning ✅
 
 ### Service Layer Examples ✅
 - `build_synthesis/` – Build automation ✅
@@ -178,7 +178,7 @@ The examples follow a hierarchical organization:
 - `physical_management` – Physical Management
 - `plugin_system` – Plugin System
 - `project_orchestration` – Project Orchestration
-- `security_audit` – Security Audit
+- `security` – Security
 - `static_analysis` – Static Analysis
 - `system_discovery` – System Discovery
 - `terminal_interface` – Terminal Interface

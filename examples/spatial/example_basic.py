@@ -32,7 +32,7 @@ from config_loader import load_config
 from example_runner import ExampleRunner
 from utils import print_section, print_results, print_success, print_error, ensure_output_dir
 
-from codomyrmex.modeling_3d import (
+from codomyrmex.spatial import (
     Scene3D,
     Object3D,
     Camera3D,

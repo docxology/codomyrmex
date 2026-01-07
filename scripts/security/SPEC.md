@@ -1,10 +1,10 @@
-# scripts/security_audit - Functional Specification
+# scripts/security - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
-This module contains the **automation scripts** and **CLI entry points** for the `security_audit` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/security_audit`) to the terminal and CI/CD pipelines.
+This module contains the **automation scripts** and **CLI entry points** for the `security` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/security`) to the terminal and CI/CD pipelines.
 
 ## Design Principles
 
@@ -27,7 +27,7 @@ This module contains the **automation scripts** and **CLI entry points** for the
 - Check `AGENTS.md` or run with `--help` for specific command usage.
 
 ### Dependencies
-- **Core Library**: `codomyrmex.security_audit`.
+- **Core Library**: `codomyrmex.security`.
 
 ## Navigation
 

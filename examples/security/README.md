@@ -25,9 +25,9 @@ The Security Audit module provides comprehensive security analysis including vul
 - Generate risk assessments and reports
 
 **Tested Methods:**
-- `scan_codebase()` - Scan for vulnerabilities (from `test_security_audit.py`)
-- `check_vulnerabilities()` - Check dependencies (from `test_security_audit.py`)
-- `scan_secrets()` - Detect secrets in code (from `test_security_audit.py`)
+- `scan_codebase()` - Scan for vulnerabilities (from `test_security.py`)
+- `check_vulnerabilities()` - Check dependencies (from `test_security.py`)
+- `scan_secrets()` - Detect secrets in code (from `test_security.py`)
 
 ## Configuration
 
@@ -52,7 +52,7 @@ reporting:
 ## Running
 
 ```bash
-cd examples/security_audit
+cd examples/security
 python example_basic.py
 ```
 

@@ -1,8 +1,11 @@
-"""Comprehensive error handling and edge case tests."""
+"""Comprehensive error handling and edge case tests.
+
+Tests use real implementations only. FailingAgent is a test adapter
+that implements BaseAgent interface for testing error scenarios, not a mock.
+"""
 
 import pytest
 import subprocess
-from unittest.mock import Mock, patch, MagicMock
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
 from codomyrmex.agents.generic import BaseAgent, AgentOrchestrator
@@ -18,7 +21,10 @@ from codomyrmex.agents.opencode import OpenCodeClient
 
 
 class FailingAgent(BaseAgent):
-    """Agent that fails in various ways."""
+    """Test agent that fails in various ways for error testing.
+    
+    This is a test adapter implementing BaseAgent interface, not a mock.
+    """
 
     def __init__(self, name: str, failure_type: str = "error_response"):
         super().__init__(
@@ -49,17 +55,15 @@ class TestNetworkFailuresAndRetries:
 
     def test_agent_unavailable_handling(self):
         """Test handling when agent is unavailable."""
-        with patch("subprocess.run") as mock_run:
-            mock_run.side_effect = FileNotFoundError("Command not found")
-            
-            client = OpenCodeClient(config={"opencode_command": "nonexistent"})
-            request = AgentRequest(prompt="test")
-            
-            response = client.execute(request)
-            
-            assert not response.is_success()
-            assert response.error is not None
-            assert "not found" in response.error.lower() or "failed" in response.error.lower()
+        # Use invalid command to trigger real FileNotFoundError
+        client = OpenCodeClient(config={"opencode_command": "nonexistent-opencode-command-xyz"})
+        request = AgentRequest(prompt="test")
+        
+        response = client.execute(request)
+        
+        assert not response.is_success()
+        assert response.error is not None
+        assert "not found" in response.error.lower() or "failed" in response.error.lower()
 
     def test_partial_network_failure(self):
         """Test partial network failure in multi-agent scenario."""
@@ -117,7 +121,8 @@ class TestInvalidConfigurationHandling:
         config = AgentConfig(
             default_timeout=-1,
             jules_timeout=0,
-            claude_timeout=-5
+            claude_timeout=-5,
+            gemini_timeout=-10,
         )
         
         errors = config.validate()
@@ -126,6 +131,7 @@ class TestInvalidConfigurationHandling:
         assert any("default_timeout" in e for e in errors)
         assert any("jules_timeout" in e for e in errors)
         assert any("claude_timeout" in e for e in errors)
+        assert any("gemini_timeout" in e for e in errors)
 
     def test_missing_api_key_handling(self):
         """Test handling of missing API keys."""
@@ -142,16 +148,12 @@ class TestInvalidConfigurationHandling:
 
     def test_invalid_agent_configuration(self):
         """Test handling of invalid agent-specific configuration."""
-        with patch("subprocess.run") as mock_run:
-            mock_run.return_value = Mock(returncode=0)
-            
-            # Invalid timeout should be caught
-            try:
-                client = OpenCodeClient(config={"opencode_timeout": -1})
-                # Configuration might be validated elsewhere
-            except Exception as e:
-                # If validation happens, that's good
-                assert "timeout" in str(e).lower() or "positive" in str(e).lower()
+        # Invalid timeout should be caught by validation
+        config = AgentConfig(opencode_timeout=-1)
+        errors = config.validate()
+        
+        # Should catch invalid timeout
+        assert any("opencode_timeout" in e or "positive" in e for e in errors)
 
 
 class TestAgentUnavailabilityHandling:
@@ -369,4 +371,3 @@ class TestEdgeCases:
         # Validation should catch unsupported capability
         assert not response.is_success()
         assert "capability" in response.error.lower() or "support" in response.error.lower()
-

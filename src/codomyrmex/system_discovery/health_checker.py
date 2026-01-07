@@ -244,7 +244,7 @@ class HealthChecker:
         result.checks_performed.extend(["docker_availability", "sandbox_execution", "code_review"])
 
         try:
-            from codomyrmex.code.execution.executor import execute_code
+            from codomyrmex.coding.execution.executor import execute_code
 
             # Test basic execution (this might require Docker)
             test_result = execute_code("python", "print('test')", timeout=5)

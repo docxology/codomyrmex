@@ -15,12 +15,23 @@ from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logge
 
 # Import module-specific exceptions
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.language_models.ollama_client import (
-    OllamaError,
-    OllamaConnectionError,
-    OllamaTimeoutError,
-    OllamaModelError,
-)
+
+# Define Ollama-specific exceptions (previously from language_models module)
+class OllamaError(CodomyrmexError):
+    """Base exception for Ollama operations."""
+    pass
+
+class OllamaConnectionError(OllamaError):
+    """Raised when connection to Ollama fails."""
+    pass
+
+class OllamaTimeoutError(OllamaError):
+    """Raised when Ollama operation times out."""
+    pass
+
+class OllamaModelError(OllamaError):
+    """Raised when there's an issue with the Ollama model."""
+    pass
 
 # Import shared utilities
 try:

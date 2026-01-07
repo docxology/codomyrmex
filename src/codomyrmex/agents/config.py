@@ -35,6 +35,14 @@ class AgentConfig:
     opencode_working_dir: Optional[str] = None
     opencode_api_key: Optional[str] = None
 
+    # Gemini configuration
+    gemini_command: str = "gemini"
+    gemini_timeout: int = 60
+    gemini_working_dir: Optional[str] = None
+    gemini_api_key: Optional[str] = None
+    gemini_auth_method: str = "oauth"  # "oauth" or "api_key"
+    gemini_settings_path: Optional[str] = None
+
     # General agent configuration
     default_timeout: int = 30
     enable_logging: bool = True
@@ -80,6 +88,22 @@ class AgentConfig:
         )
         self.opencode_api_key = os.getenv("OPENCODE_API_KEY", self.opencode_api_key)
 
+        # Gemini configuration
+        self.gemini_command = os.getenv("GEMINI_COMMAND", self.gemini_command)
+        self.gemini_timeout = int(
+            os.getenv("GEMINI_TIMEOUT", str(self.gemini_timeout))
+        )
+        self.gemini_working_dir = os.getenv(
+            "GEMINI_WORKING_DIR", self.gemini_working_dir
+        )
+        self.gemini_api_key = os.getenv("GEMINI_API_KEY", self.gemini_api_key)
+        self.gemini_auth_method = os.getenv(
+            "GEMINI_AUTH_METHOD", self.gemini_auth_method
+        )
+        self.gemini_settings_path = os.getenv(
+            "GEMINI_SETTINGS_PATH", self.gemini_settings_path
+        )
+
         # General configuration
         self.default_timeout = int(
             os.getenv("AGENT_DEFAULT_TIMEOUT", str(self.default_timeout))
@@ -117,6 +141,12 @@ class AgentConfig:
             "opencode_timeout": self.opencode_timeout,
             "opencode_working_dir": self.opencode_working_dir,
             "opencode_api_key": "***" if self.opencode_api_key else None,
+            "gemini_command": self.gemini_command,
+            "gemini_timeout": self.gemini_timeout,
+            "gemini_working_dir": self.gemini_working_dir,
+            "gemini_api_key": "***" if self.gemini_api_key else None,
+            "gemini_auth_method": self.gemini_auth_method,
+            "gemini_settings_path": self.gemini_settings_path,
             "default_timeout": self.default_timeout,
             "enable_logging": self.enable_logging,
             "log_level": self.log_level,
@@ -150,6 +180,12 @@ class AgentConfig:
 
         if self.opencode_timeout <= 0:
             errors.append("opencode_timeout must be positive")
+
+        if self.gemini_timeout <= 0:
+            errors.append("gemini_timeout must be positive")
+
+        if self.gemini_auth_method not in ["oauth", "api_key"]:
+            errors.append("gemini_auth_method must be 'oauth' or 'api_key'")
 
         return errors
 

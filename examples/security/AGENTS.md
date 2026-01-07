@@ -1,4 +1,4 @@
-# Codomyrmex Agents — security_audit
+# Codomyrmex Agents — security
 
 ## Signposting
 - **Parent**: [Examples](../AGENTS.md)
@@ -13,7 +13,7 @@
 
 ## Purpose
 
-Directory: security_audit
+Directory: security
 
 ## Active Components
 
@@ -27,7 +27,7 @@ Directory: security_audit
 
 ## Operating Contracts
 
-[Operating contracts for security_audit]
+[Operating contracts for security]
 
 ## Navigation
 - **Human Documentation**: [README.md](README.md)

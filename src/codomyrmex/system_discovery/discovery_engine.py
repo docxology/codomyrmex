@@ -668,7 +668,7 @@ class SystemDiscovery:
         ):
             print("\n🏃 Testing Code Execution...")
             try:
-                from codomyrmex.code import execute_code
+                from codomyrmex.coding import execute_code
 
                 result = execute_code(
                     language="python", code="print('Hello from Codomyrmex sandbox!')"

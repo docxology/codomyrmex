@@ -25,7 +25,7 @@
     - [fabric_integration](fabric_integration/README.md)
     - [fpf](fpf/README.md)
     - [git_operations](git_operations/README.md)
-    - [language_models](language_models/README.md)
+    - [llm](llm/README.md)
     - [logging_monitoring](logging_monitoring/README.md)
     - [maintenance](maintenance/README.md)
     - [model_context_protocol](model_context_protocol/README.md)

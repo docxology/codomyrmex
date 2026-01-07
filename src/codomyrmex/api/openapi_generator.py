@@ -24,21 +24,30 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 # Import from standardization submodule
-try:
+# Use TYPE_CHECKING to avoid circular imports at runtime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
     from .standardization.rest_api import RESTAPI, APIEndpoint as StandardizationAPIEndpoint, HTTPMethod
     from .standardization.graphql_api import GraphQLAPI, GraphQLSchema, GraphQLObjectType, GraphQLField
     from .standardization.api_versioning import APIVersionManager, APIVersion
-except ImportError:
-    # Handle case where standardization module isn't available yet
-    RESTAPI = None
-    StandardizationAPIEndpoint = None
-    HTTPMethod = None
-    GraphQLAPI = None
-    GraphQLSchema = None
-    GraphQLObjectType = None
-    GraphQLField = None
-    APIVersionManager = None
-    APIVersion = None
+else:
+    # Runtime imports - try to import, but handle gracefully if circular import occurs
+    try:
+        from .standardization.rest_api import RESTAPI, APIEndpoint as StandardizationAPIEndpoint, HTTPMethod
+        from .standardization.graphql_api import GraphQLAPI, GraphQLSchema, GraphQLObjectType, GraphQLField
+        from .standardization.api_versioning import APIVersionManager, APIVersion
+    except (ImportError, AttributeError):
+        # Handle case where standardization module isn't available or circular import
+        RESTAPI = None
+        StandardizationAPIEndpoint = None
+        HTTPMethod = None
+        GraphQLAPI = None
+        GraphQLSchema = None
+        GraphQLObjectType = None
+        GraphQLField = None
+        APIVersionManager = None
+        APIVersion = None
 
 
 @dataclass
@@ -447,15 +456,26 @@ class StandardizationOpenAPIGenerator:
 
         logger.info(f"OpenAPI Generator initialized: {title} v{version}")
 
-    def add_rest_api(self, api: RESTAPI) -> None:
+    def add_rest_api(self, api) -> None:
         """
         Add a REST API to the specification.
 
         Args:
             api: REST API instance
         """
-        if RESTAPI is None or not hasattr(api, 'get_endpoints'):
-            raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
+        # Check if RESTAPI was successfully imported (not None from failed import)
+        # If RESTAPI is None, try to import it dynamically to avoid circular import issues
+        _restapi_class = RESTAPI
+        if _restapi_class is None:
+            try:
+                from .standardization.rest_api import RESTAPI as _RESTAPI
+                _restapi_class = _RESTAPI
+            except ImportError:
+                raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
+        
+        # Verify the api object has required methods (don't check isinstance to avoid import issues)
+        if not hasattr(api, 'get_endpoints'):
+            raise TypeError("API object must have get_endpoints method")
 
         for endpoint in api.get_endpoints():
             self._add_rest_endpoint(endpoint)

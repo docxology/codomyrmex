@@ -15,7 +15,7 @@
 
 Security audit automation scripts providing command-line interfaces for vulnerability scanning, code security analysis, compliance checking, and security reporting. This script module enables automated security assessment workflows for the Codomyrmex platform.
 
-The security_audit scripts serve as the primary interface for security teams and CI/CD systems to perform comprehensive security analysis and compliance validation.
+The security scripts serve as the primary interface for security teams and CI/CD systems to perform comprehensive security analysis and compliance validation.
 
 ## Module Overview
 

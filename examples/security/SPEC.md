@@ -1,10 +1,10 @@
-# security_audit - Functional Specification
+# security - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
 
-Directory: security_audit
+Directory: security
 
 ## Overview
 
@@ -48,7 +48,7 @@ Architecture description with component relationships and data flow patterns.
 
 ## Functional Requirements
 
-Functional requirements for security_audit including core capabilities and standards.
+Functional requirements for security including core capabilities and standards.
 
 ## Quality Standards
 
@@ -60,7 +60,7 @@ API interfaces, data structure definitions, and communication patterns.
 
 ## Implementation Guidelines
 
-Implementation guidelines for working within security_audit including best practices and patterns.
+Implementation guidelines for working within security including best practices and patterns.
 
 ## Navigation
 

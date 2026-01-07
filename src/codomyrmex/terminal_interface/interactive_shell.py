@@ -413,7 +413,7 @@ Type 'explore' to begin your foraging adventure!
     def _demo_code_execution(self):
         """Demo the code execution sandbox."""
         try:
-            from codomyrmex.code import execute_code
+            from codomyrmex.coding import execute_code
 
             print("   🏃 Executing sample Python code in sandbox...")
 

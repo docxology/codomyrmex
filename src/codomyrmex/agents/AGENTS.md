@@ -12,6 +12,7 @@
     - [claude](claude/AGENTS.md)
     - [codex](codex/AGENTS.md)
     - [opencode](opencode/AGENTS.md)
+    - [gemini](gemini/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -20,14 +21,14 @@
 
 ## Purpose
 
-Agents module providing integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, and OpenCode CLI. This module includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
+Agents module providing integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, and Gemini CLI. This module includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
 
 The agents module serves as the agentic framework integration layer, supporting multiple agent frameworks through a unified interface.
 
 ## Module Overview
 
 ### Key Capabilities
-- **Agent Framework Integration**: Integrate with Jules CLI, Claude API, OpenAI Codex, and OpenCode CLI
+- **Agent Framework Integration**: Integrate with Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, and Gemini CLI
 - **Unified Interface**: Consistent interface across all agent frameworks
 - **Code Generation**: Generate code using various agent frameworks
 - **Code Editing**: Edit and refactor code using agents
@@ -36,7 +37,7 @@ The agents module serves as the agentic framework integration layer, supporting 
 
 ### Key Features
 - Abstract base class for all agents (`AgentInterface`)
-- Framework-specific implementations (Jules, Claude, Codex, OpenCode)
+- Framework-specific implementations (Jules, Claude, Codex, OpenCode, Gemini)
 - Integration adapters for Codomyrmex modules
 - Configuration management with environment variable support
 - Comprehensive error handling and logging
@@ -190,6 +191,7 @@ Enum of agent capabilities.
 - `claude/` – Claude API integration
 - `codex/` – OpenAI Codex integration
 - `opencode/` – OpenCode CLI integration
+- `gemini/` – Gemini CLI integration
 
 
 ### Additional Files
@@ -240,6 +242,7 @@ When integrating with Codomyrmex modules:
 - **Claude**: [claude/AGENTS.md](claude/AGENTS.md)
 - **Codex**: [codex/AGENTS.md](codex/AGENTS.md)
 - **OpenCode**: [opencode/AGENTS.md](opencode/AGENTS.md)
+- **Gemini**: [gemini/AGENTS.md](gemini/AGENTS.md)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview

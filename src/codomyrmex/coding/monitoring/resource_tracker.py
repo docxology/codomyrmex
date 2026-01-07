@@ -7,7 +7,17 @@ Monitors resource usage during code execution.
 import time
 from typing import Any, Dict
 
-import psutil
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+    # Create a dummy psutil module for type hints
+    class _DummyPSUtil:
+        Process = None
+        cpu_percent = lambda *args, **kwargs: 0.0
+        virtual_memory = lambda: type('obj', (object,), {'used': 0, 'total': 0})()
+    psutil = _DummyPSUtil()
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -27,16 +37,22 @@ class ResourceMonitor:
     def start_monitoring(self) -> None:
         """Start resource monitoring."""
         self.start_time = time.time()
+        if not PSUTIL_AVAILABLE:
+            logger.warning("psutil not available - resource monitoring disabled")
+            self.start_memory = 0
+            return
         try:
             process = psutil.Process()
             self.start_memory = process.memory_info().rss / 1024 / 1024  # MB
             self.peak_memory = self.start_memory
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
+        except (AttributeError, psutil.NoSuchProcess, psutil.AccessDenied):
             logger.warning("Unable to start memory monitoring")
             self.start_memory = 0
 
     def update_monitoring(self) -> None:
         """Update resource usage metrics."""
+        if not PSUTIL_AVAILABLE:
+            return
         try:
             process = psutil.Process()
             current_memory = process.memory_info().rss / 1024 / 1024  # MB
@@ -45,7 +61,7 @@ class ResourceMonitor:
             # Get CPU usage (sample for 0.1 seconds)
             cpu_percent = process.cpu_percent(interval=0.1)
             self.cpu_usage.append(cpu_percent)
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
+        except (AttributeError, psutil.NoSuchProcess, psutil.AccessDenied):
             pass  # Process may have ended
 
     def get_resource_usage(self) -> Dict[str, Any]:

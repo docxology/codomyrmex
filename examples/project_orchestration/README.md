@@ -70,8 +70,8 @@ workflow:
           data: {"Python": 85, "JavaScript": 75}
         dependencies: []
 
-      - name: "security_audit"
-        module: "security_audit"
+      - name: "security"
+        module: "security"
         action: "scan_codebase"
         dependencies: ["data_collection"]
 

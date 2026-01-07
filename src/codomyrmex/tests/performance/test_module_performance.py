@@ -17,7 +17,7 @@ from dataclasses import dataclass
 MODULE_AVAILABILITY = {}
 
 try:
-    from codomyrmex.code import execute_code, execute_with_limits, ExecutionLimits
+    from codomyrmex.coding import execute_code, execute_with_limits, ExecutionLimits
     MODULE_AVAILABILITY["code_execution"] = True
 except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
@@ -329,8 +329,8 @@ class TestClass:
         assert result.execution_time > 0
         assert result.memory_usage > 0
 
-    @pytest.mark.skipif(not MODULE_AVAILABILITY.get("security_audit", False),
-                       reason="Security audit module not available")
+    @pytest.mark.skipif(not MODULE_AVAILABILITY.get("security", False),
+                       reason="Security module not available")
     def test_security_audit_performance(self, performance_suite, tmp_path):
         """Test security audit performance baselines."""
         # Create a test file with some security issues
@@ -347,7 +347,7 @@ PASSWORD = "admin123"
 ''')
 
         def security_test():
-            from codomyrmex.security_audit import analyze_file_security
+            from codomyrmex.security import analyze_file_security
             return analyze_file_security(str(test_file))
 
         result = performance_suite.run_performance_test(

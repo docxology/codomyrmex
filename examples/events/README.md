@@ -398,7 +398,7 @@ This example demonstrates event system integration with:
 
 - **`logging_monitoring`**: Event logging and monitoring
 - **`performance`**: Event processing performance tracking
-- **`security_audit`**: Event-based security monitoring
+- **`security`**: Event-based security monitoring
 - **Project Orchestration**: Workflow event communication
 
 ## Scaling Considerations

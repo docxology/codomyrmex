@@ -21,7 +21,7 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 1. ✅ `logging_monitoring/` - Centralized logging
 2. ✅ `environment_setup/` - Environment validation
 3. ✅ `static_analysis/` - Code quality analysis
-4. ✅ `security_audit/` - Vulnerability scanning
+4. ✅ `security/` - Vulnerability scanning
 5. ✅ `code/` - Safe code execution
 6. ✅ `data_visualization/` - Chart creation
 7. ✅ `containerization/` - Docker management

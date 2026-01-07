@@ -38,8 +38,8 @@ except ImportError:
 
 try:
     # Import available modules - we'll create mock versions if not available
-    from codomyrmex.static_analysis.core import StaticAnalyzer
-    from codomyrmex.data_visualization.visualizer import DataVisualizer  
+    from codomyrmex.static_analysis import StaticAnalyzer
+    from codomyrmex.data_visualization import DataVisualizer  
     from codomyrmex.git_operations.git_manager import GitOperationsManager
     from codomyrmex.agents.ai_code_editing.ai_code_helpers import AICodeHelper
     from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging

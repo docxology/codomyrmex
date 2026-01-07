@@ -447,7 +447,7 @@ graph TD
 - `check_version_pinning.py` – Version pinning compliance validation
 
 ### Security Scripts
-- `security_audit.py` – Comprehensive security vulnerability scanning
+- `security.py` – Comprehensive security vulnerability scanning
 
 ### Code Analysis Scripts
 - `audit_error_handling.py` – Error handling pattern analysis and recommendations

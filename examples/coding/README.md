@@ -258,7 +258,7 @@ The example generates several output files:
 ## Related Examples
 
 - **[Static Analysis](../static_analysis/)** - Code quality analysis
-- **[Security Audit](../security_audit/)** - Security vulnerability scanning
+- **[Security](../security/)** - Security vulnerability scanning
 - **[Git Operations](../git_operations/)** - Version control integration
 - **[Multi-Module Workflows](../multi_module/)** - Integrated workflows
 

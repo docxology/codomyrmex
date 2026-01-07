@@ -12,7 +12,20 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
-import psutil
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+    # Create a dummy psutil module for type hints
+    class _DummyPSUtil:
+        class Process:
+            def memory_info(self): return type('obj', (object,), {'rss': 0})()
+            def cpu_percent(self, interval=None): return 0.0
+        class NoSuchProcess(Exception): pass
+        class AccessDenied(Exception): pass
+        def Process(self): return self.Process()
+    psutil = _DummyPSUtil()
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 

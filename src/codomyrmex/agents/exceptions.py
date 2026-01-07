@@ -104,3 +104,20 @@ class OpenCodeError(AgentError):
         if exit_code is not None:
             self.context["exit_code"] = exit_code
 
+
+class GeminiError(AgentError):
+    """Raised when Gemini CLI operations fail."""
+
+    def __init__(
+        self,
+        message: str = "Gemini operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
+        super().__init__(message, **kwargs)
+        if command:
+            self.context["command"] = command
+        if exit_code is not None:
+            self.context["exit_code"] = exit_code
+

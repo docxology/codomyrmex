@@ -258,7 +258,7 @@ This example integrates with other Codomyrmex modules:
 - **`static_analysis`**: Code introspection for API endpoint discovery
 - **`data_visualization`**: API usage analytics and reporting
 - **`logging_monitoring`**: API access logging and monitoring
-- **`security_audit`**: API security documentation and compliance
+- **`security`**: API security documentation and compliance
 
 ## Advanced Usage
 

@@ -68,7 +68,9 @@ class TestBuildSynthesis(unittest.TestCase):
         """Test build environment checking."""
         result = check_build_environment()
         # This should work regardless of what's installed
-        self.assertIsInstance(result, bool)
+        # Function returns a dict, not a bool
+        self.assertIsInstance(result, dict)
+        self.assertIn('python_available', result)
 
     def test_synthesize_python_executable(self):
         """Test synthesis of Python executable."""

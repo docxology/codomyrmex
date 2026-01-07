@@ -24,7 +24,7 @@ except ImportError:
     MODULE_AVAILABILITY["ai_code_editing"] = False
 
 try:
-    from codomyrmex.code import execute_code, execute_with_limits, ExecutionLimits
+    from codomyrmex.coding import execute_code, execute_with_limits, ExecutionLimits
     MODULE_AVAILABILITY["code_execution"] = True
 except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
@@ -356,7 +356,7 @@ for email in emails:
             benchmark_b = run_benchmark(lambda: algorithm_b(10000), iterations=5)
 
             # Step 3: Execute algorithms with resource monitoring
-            from codomyrmex.code import execute_with_limits, ExecutionLimits
+            from codomyrmex.coding import execute_with_limits, ExecutionLimits
 
             code_a = f'''
 def algorithm_a(n):
@@ -474,7 +474,7 @@ print("Result:", algorithm_b({10000}))
 
         # Test 1: Invalid code execution
         if MODULE_AVAILABILITY.get("code_execution", False):
-            from codomyrmex.code import execute_code
+            from codomyrmex.coding import execute_code
 
             invalid_code = "def broken syntax here ("
             result = execute_code("python", invalid_code, timeout=5)
@@ -525,7 +525,7 @@ eval(input("Enter code: "))  # Code injection
         steps_completed = 0
 
         if MODULE_AVAILABILITY.get("code_execution", False):
-            from codomyrmex.code import execute_code
+            from codomyrmex.coding import execute_code
             result = execute_code("python", "print('Hello Workflow')", timeout=5)
             assert result["status"] == "success"
             steps_completed += 1
@@ -570,7 +570,7 @@ eval(input("Enter code: "))  # Code injection
 
         # Test code execution
         if MODULE_AVAILABILITY.get("code_execution", False):
-            from codomyrmex.code import execute_code
+            from codomyrmex.coding import execute_code
             exec_result = execute_code("python", test_data["code"], timeout=5)
             results["execution"] = exec_result["status"] == "success"
 
@@ -641,7 +641,7 @@ print(f"Fibonacci(10) = {result}")
 
             # Module 3: Code Execution
             if MODULE_AVAILABILITY.get("code_execution", False):
-                from codomyrmex.code import execute_code
+                from codomyrmex.coding import execute_code
                 exec_result = execute_code("python", test_code, timeout=10)
                 results["execution"] = exec_result["status"] == "success"
 

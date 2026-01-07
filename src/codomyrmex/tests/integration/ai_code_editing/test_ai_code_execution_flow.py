@@ -15,9 +15,8 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 # Import modules for integration testing
-try:
     from codomyrmex.agents.ai_code_editing import generate_code_snippet
-    from codomyrmex.code import execute_code, execute_with_limits, ExecutionLimits
+    from codomyrmex.coding import execute_code, execute_with_limits, ExecutionLimits
     from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
     AI_CODE_EDITING_AVAILABLE = True
 except ImportError:
@@ -26,7 +25,7 @@ except ImportError:
     AI_CODE_EDITING_AVAILABLE = False
 
 try:
-    from codomyrmex.code import execute_code
+    from codomyrmex.coding import execute_code
     CODE_EXECUTION_AVAILABLE = True
 except ImportError:
     CODE_EXECUTION_AVAILABLE = False

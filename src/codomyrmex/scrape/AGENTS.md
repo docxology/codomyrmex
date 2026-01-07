@@ -6,6 +6,7 @@
 - **Children**:
     - [firecrawl](firecrawl/AGENTS.md)
     - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)

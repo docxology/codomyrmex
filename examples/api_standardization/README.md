@@ -401,7 +401,7 @@ The example includes comprehensive error handling for:
 This example demonstrates API integration with:
 
 - **`logging_monitoring`**: Request/response logging
-- **`security_audit`**: API security validation
+- **`security`**: API security validation
 - **`performance`**: API performance monitoring
 - **`config_management`**: API configuration management
 

@@ -2,8 +2,8 @@
 """
 3D Modeling Orchestrator
 
-Thin orchestrator script providing CLI access to modeling_3d module functionality.
-Calls actual module functions from codomyrmex.modeling_3d.
+Thin orchestrator script providing CLI access to spatial module functionality.
+Calls actual module functions from codomyrmex.spatial.
 
 See also: src/codomyrmex/cli.py for main CLI integration
 """
@@ -51,7 +51,7 @@ def handle_info(args):
             logger.info("Retrieving 3D Modeling module information")
 
         info = {
-            "module": "modeling_3d",
+            "module": "spatial",
             "description": "3D modeling, rendering, and AR/VR/XR capabilities",
             "components": [
                 {"name": "Scene3D", "description": "3D scene management"},
@@ -61,7 +61,7 @@ def handle_info(args):
                 {"name": "VRRenderer", "description": "VR rendering"},
                 {"name": "RenderPipeline", "description": "Rendering pipeline"},
             ],
-            "api_location": "src/codomyrmex/modeling_3d/",
+            "api_location": "src/codomyrmex/spatial/",
         }
 
         print_section("3D Modeling Module Information")
