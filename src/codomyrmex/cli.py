@@ -624,6 +624,24 @@ Examples:
     fpf_report_parser.add_argument("--output", required=True, help="Output HTML file path")
     fpf_report_parser.add_argument("--include-analysis", action="store_true", default=True, help="Include analysis sections")
 
+    # Skills commands
+    skills_parser = subparsers.add_parser("skills", help="Skills management operations")
+    skills_subparsers = skills_parser.add_subparsers(dest="skills_action", help="Skills actions")
+
+    skills_sync_parser = skills_subparsers.add_parser("sync", help="Sync with upstream skills repository")
+    skills_sync_parser.add_argument("--force", action="store_true", help="Force re-clone even if directory exists")
+
+    skills_list_parser = skills_subparsers.add_parser("list", help="List available skills")
+    skills_list_parser.add_argument("category", nargs="?", help="Optional category filter")
+
+    skills_get_parser = skills_subparsers.add_parser("get", help="Get a specific skill")
+    skills_get_parser.add_argument("category", help="Skill category")
+    skills_get_parser.add_argument("name", help="Skill name")
+    skills_get_parser.add_argument("--output", help="Output file path (JSON or YAML)")
+
+    skills_search_parser = skills_subparsers.add_parser("search", help="Search skills")
+    skills_search_parser.add_argument("query", help="Search query")
+
     # Parse arguments
     args = parser.parse_args()
 
@@ -748,6 +766,19 @@ Examples:
             success = handle_fpf_analyze(args.file, args.output)
         elif args.fpf_action == "report":
             success = handle_fpf_report(args.file, args.output, args.include_analysis)
+
+    elif args.command == "skills":
+        if args.skills_action == "sync":
+            success = handle_skills_sync(args.force)
+        elif args.skills_action == "list":
+            success = handle_skills_list(args.category)
+        elif args.skills_action == "get":
+            success = handle_skills_get(args.category, args.name, args.output)
+        elif args.skills_action == "search":
+            success = handle_skills_search(args.query)
+        else:
+            skills_parser.print_help()
+            success = False
 
     else:
         if args.command is None:
@@ -1571,6 +1602,121 @@ def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
         return True
     except Exception as e:
         print(f"❌ Error generating report: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def handle_skills_sync(force: bool) -> bool:
+    """Handle skills sync command."""
+    try:
+        from codomyrmex.skills import get_skills_manager
+
+        manager = get_skills_manager()
+        success = manager.sync_upstream(force=force)
+
+        if success:
+            print("✅ Skills synced successfully")
+        else:
+            print("❌ Failed to sync skills")
+        return success
+    except Exception as e:
+        print(f"❌ Error syncing skills: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def handle_skills_list(category: Optional[str]) -> bool:
+    """Handle skills list command."""
+    try:
+        import json
+        from codomyrmex.skills import get_skills_manager
+
+        manager = get_skills_manager()
+        manager.initialize()
+
+        skills = manager.list_skills(category=category)
+
+        if not skills:
+            print("No skills found" + (f" in category '{category}'" if category else ""))
+            return True
+
+        print(f"Found {len(skills)} skill(s):\n")
+        for skill in skills:
+            cat = skill["category"]
+            name = skill["name"]
+            source = skill.get("metadata", {}).get("source", "unknown")
+            print(f"  {cat}/{name} ({source})")
+
+        return True
+    except Exception as e:
+        print(f"❌ Error listing skills: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def handle_skills_get(category: str, name: str, output: Optional[str]) -> bool:
+    """Handle skills get command."""
+    try:
+        import json
+        import yaml
+        from codomyrmex.skills import get_skills_manager
+
+        manager = get_skills_manager()
+        manager.initialize()
+
+        skill = manager.get_skill(category, name)
+
+        if not skill:
+            print(f"❌ Skill not found: {category}/{name}")
+            return False
+
+        if output:
+            output_path = Path(output)
+            if output_path.suffix in [".yaml", ".yml"]:
+                with open(output_path, "w", encoding="utf-8") as f:
+                    yaml.dump(skill, f, default_flow_style=False, sort_keys=False)
+            else:
+                with open(output_path, "w", encoding="utf-8") as f:
+                    json.dump(skill, f, indent=2, ensure_ascii=False)
+            print(f"✅ Skill saved to {output}")
+        else:
+            print(json.dumps(skill, indent=2, default=str, ensure_ascii=False))
+
+        return True
+    except Exception as e:
+        print(f"❌ Error getting skill: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def handle_skills_search(query: str) -> bool:
+    """Handle skills search command."""
+    try:
+        from codomyrmex.skills import get_skills_manager
+
+        manager = get_skills_manager()
+        manager.initialize()
+
+        results = manager.search_skills(query)
+
+        if not results:
+            print(f"No skills found matching '{query}'")
+            return True
+
+        print(f"Found {len(results)} matching skill(s):\n")
+        for result in results:
+            cat = result["category"]
+            name = result["name"]
+            source = result.get("metadata", {}).get("source", "unknown")
+            print(f"  {cat}/{name} ({source})")
+
+        return True
+    except Exception as e:
+        print(f"❌ Error searching skills: {str(e)}")
         import traceback
         traceback.print_exc()
         return False

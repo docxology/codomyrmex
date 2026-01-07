@@ -35,11 +35,29 @@ API standardization including REST API, GraphQL API, and API versioning. Provide
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.api.standardization import main_component
+from codomyrmex.api.standardization import (
+    RESTAPI,
+    create_api,
+    APIVersionManager,
+    GraphQLAPI,
+    create_schema,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create a REST API
+api = create_api("v1")
+router = api.create_router()
+
+@router.get("/users")
+def get_users():
+    return {"users": []}
+
+# API versioning
+version_manager = APIVersionManager()
+version_manager.register_version("v1", api)
+
+# Create GraphQL schema
+schema = create_schema()
+query = schema.create_query()
+query.field("users", lambda: [])
 ```
 

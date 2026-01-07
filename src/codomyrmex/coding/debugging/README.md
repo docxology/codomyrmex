@@ -1,7 +1,7 @@
 # debugging
 
 ## Signposting
-- **Parent**: [debugging](../README.md)
+- **Parent**: [coding](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -32,11 +32,38 @@ Code debugging including error analysis, patch generation, and fix verification.
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.coding.debugging import main_component
+from codomyrmex.coding.debugging import (
+    Debugger,
+    ErrorAnalyzer,
+    PatchGenerator,
+    FixVerifier,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Analyze an error
+analyzer = ErrorAnalyzer()
+diagnosis = analyzer.analyze_error(
+    error_message="NameError: name 'x' is not defined",
+    code="print(x)",
+    traceback="..."
+)
+print(f"Root cause: {diagnosis.root_cause}")
+print(f"Suggestions: {diagnosis.suggestions}")
+
+# Generate a patch
+patch_gen = PatchGenerator()
+patch = patch_gen.generate_patch(
+    error=diagnosis,
+    code="print(x)"
+)
+print(f"Patch: {patch.diff}")
+
+# Verify the fix
+verifier = FixVerifier()
+verification = verifier.verify_fix(
+    original_code="print(x)",
+    patched_code="x = 0; print(x)",
+    test_cases=["test_basic"]
+)
+print(f"Fix verified: {verification.success}")
 ```
 

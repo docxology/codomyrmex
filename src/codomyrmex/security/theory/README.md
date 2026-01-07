@@ -1,7 +1,7 @@
 # theory
 
 ## Signposting
-- **Parent**: [theory](../README.md)
+- **Parent**: [security](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -33,14 +33,26 @@ Security theory including architecture patterns, best practices, security framew
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+This module provides theoretical foundations for security analysis:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.security.theory import main_component
+from codomyrmex.security.theory import (
+    SecurityPrinciples,
+    ThreatModelingFramework,
+    RiskAssessmentMethodology,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Access security principles
+principles = SecurityPrinciples()
+print(f"Defense in depth: {principles.defense_in_depth}")
+
+# Use threat modeling
+threat_model = ThreatModelingFramework()
+threats = threat_model.identify_threats(system_architecture={...})
+
+# Perform risk assessment
+risk_assessment = RiskAssessmentMethodology()
+risk = risk_assessment.assess_risk(threats, vulnerabilities)
+print(f"Risk level: {risk.level}")
 ```
 

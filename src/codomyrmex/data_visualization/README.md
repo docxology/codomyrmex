@@ -49,11 +49,48 @@ Charts and plots generation for data visualization. Provides comprehensive visua
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.data_visualization import main_component
+from codomyrmex.data_visualization import (
+    create_line_plot,
+    create_bar_chart,
+    create_pie_chart,
+    create_scatter_plot,
+    create_histogram,
+    AdvancedPlotter,
+    MermaidDiagramGenerator,
+    GitVisualizer,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create a line plot
+create_line_plot(
+    data=[1, 2, 3, 4, 5],
+    labels=["A", "B", "C", "D", "E"],
+    output_path="line_plot.png"
+)
+
+# Create a bar chart
+create_bar_chart(
+    data={"Jan": 10, "Feb": 15, "Mar": 12},
+    title="Monthly Sales",
+    output_path="bar_chart.png"
+)
+
+# Use advanced plotter
+plotter = AdvancedPlotter()
+dashboard = plotter.create_dashboard(
+    plots=[
+        {"type": "line", "data": [1, 2, 3]},
+        {"type": "bar", "data": {"A": 10, "B": 20}}
+    ],
+    output_path="dashboard.png"
+)
+
+# Generate Mermaid diagram
+mermaid = MermaidDiagramGenerator()
+diagram = mermaid.create_git_branch_diagram(repo_path=".")
+print(diagram)
+
+# Visualize Git repository
+git_viz = GitVisualizer()
+git_viz.visualize_git_repository("src/", output_path="git_tree.png")
 ```
 

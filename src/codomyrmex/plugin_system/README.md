@@ -34,11 +34,29 @@ Plugin architecture and management system. Provides pluggable architecture for e
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.plugin_system import main_component
+from codomyrmex.plugin_system import (
+    PluginManager,
+    PluginLoader,
+    PluginRegistry,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Initialize plugin manager
+plugin_mgr = PluginManager()
+
+# Load plugin
+loader = PluginLoader()
+plugin = loader.load_plugin("path/to/plugin.py")
+
+# Register plugin
+registry = PluginRegistry()
+registry.register(plugin)
+
+# Use plugin
+plugin_mgr.activate_plugin(plugin.name)
+result = plugin_mgr.execute_plugin(plugin.name, action="process", data={...})
+
+# List available plugins
+plugins = plugin_mgr.list_plugins()
+print(f"Available plugins: {[p.name for p in plugins]}")
 ```
 

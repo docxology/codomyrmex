@@ -1,8 +1,9 @@
 """Agents Module for Codomyrmex.
 
 This module provides integration with various agentic frameworks including
-Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, and Gemini CLI. It includes theoretical foundations,
-generic utilities, and framework-specific implementations.
+Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, Gemini CLI, Mistral Vibe CLI,
+and Every Code CLI. It includes theoretical foundations, generic utilities, and
+framework-specific implementations.
 
 Integration:
 - Uses `logging_monitoring` for all logging
@@ -24,6 +25,8 @@ Available submodules:
 - codex: OpenAI Codex integration
 - opencode: OpenCode CLI integration
 - gemini: Gemini CLI integration
+- mistral_vibe: Mistral Vibe CLI integration
+- every_code: Every Code CLI integration (multi-agent orchestration)
 """
 
 from .config import AgentConfig, get_config, reset_config, set_config

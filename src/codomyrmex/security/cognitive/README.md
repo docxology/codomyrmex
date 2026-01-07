@@ -1,7 +1,7 @@
 # cognitive
 
 ## Signposting
-- **Parent**: [cognitive](../README.md)
+- **Parent**: [security](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -35,11 +35,25 @@ Cognitive security including phishing analysis, social engineering detection, be
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.security.cognitive import main_component
+from codomyrmex.security.cognitive import (
+    PhishingAnalyzer,
+    SocialEngineeringDetector,
+    BehaviorAnalyzer,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Analyze phishing attempts
+phishing_analyzer = PhishingAnalyzer()
+result = phishing_analyzer.analyze_email(email_content="...")
+print(f"Phishing score: {result.risk_score}")
+
+# Detect social engineering
+detector = SocialEngineeringDetector()
+threats = detector.detect_patterns(interaction_data={...})
+print(f"Threats detected: {len(threats)}")
+
+# Analyze behavior
+behavior_analyzer = BehaviorAnalyzer()
+anomalies = behavior_analyzer.analyze_patterns(user_behavior={...})
+print(f"Anomalies: {len(anomalies)}")
 ```
 

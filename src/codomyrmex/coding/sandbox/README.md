@@ -33,11 +33,33 @@ Sandboxing and isolation for secure code execution. Provides Docker container ma
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.coding.sandbox import main_component
+from codomyrmex.coding.sandbox import (
+    run_code_in_docker,
+    ExecutionLimits,
+    check_docker_available,
+    execute_with_limits,
+)
 
-def example():
+# Check if Docker is available
+if check_docker_available():
+    # Execute code with resource limits
+    limits = ExecutionLimits(
+        cpu_time=5.0,
+        memory_mb=512,
+        max_output_size=1024
+    )
     
-    print(f"Result: {result}")
+    result = execute_with_limits(
+        code="print('Hello from sandbox')",
+        language="python",
+        limits=limits
+    )
+    print(f"Output: {result.output}")
+    
+    # Or use Docker directly
+    docker_result = run_code_in_docker(
+        code="import sys; print(sys.version)",
+        language="python"
+    )
 ```
 

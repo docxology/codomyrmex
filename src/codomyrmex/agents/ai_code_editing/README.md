@@ -1,7 +1,7 @@
 # ai_code_editing
 
 ## Signposting
-- **Parent**: [ai_code_editing](../README.md)
+- **Parent**: [agents](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -45,11 +45,31 @@ Semantic intelligence layer for AI-powered code generation, editing, and analysi
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.agents.ai_code_editing import main_component
+from codomyrmex.agents.ai_code_editing import (
+    generate_code_snippet,
+    refactor_code_snippet,
+    analyze_code_quality,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Generate code
+result = generate_code_snippet(
+    language="python",
+    description="Create a function to calculate fibonacci numbers",
+    complexity="medium"
+)
+print(f"Generated code: {result.code}")
+
+# Refactor code
+refactored = refactor_code_snippet(
+    code="def fib(n): return n if n < 2 else fib(n-1) + fib(n-2)",
+    improvements=["add memoization", "add type hints"]
+)
+print(f"Refactored: {refactored.code}")
+
+# Analyze code quality
+analysis = analyze_code_quality(
+    code_path="src/my_module.py"
+)
+print(f"Quality score: {analysis.score}")
 ```
 

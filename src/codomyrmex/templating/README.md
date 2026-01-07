@@ -32,11 +32,28 @@ Template engine support (Jinja2, Mako) for code generation, documentation templa
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.templating import main_component
+from codomyrmex.templating import (
+    TemplateEngine,
+    TemplateManager,
+    render,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Render template string
+result = render(
+    template="Hello, {{ name }}!",
+    context={"name": "World"},
+    engine="jinja2"
+)
+print(result)  # "Hello, World!"
+
+# Use template engine
+engine = TemplateEngine(engine="jinja2")
+template = engine.load_template("template.j2")
+output = template.render(context={"variable": "value"})
+
+# Use template manager
+manager = TemplateManager()
+manager.register_template("my_template", "path/to/template.j2")
+rendered = manager.render("my_template", context={...})
 ```
 

@@ -16,42 +16,107 @@
 Static website and dashboard generation for visualizing Codomyrmex ecosystem state. Provides flexible, template-based system for generating documentation and operational dashboards. Generates self-contained HTML/CSS/JS websites that visualize agent status, system metrics, workflow states, and operational data. Aggregates data from various system modules (agents, queue, build, etc.).
 
 ## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `API_SPECIFICATION.md` – Detailed API specification
-- `__init__.py` – Module exports and public API
-- `generator.py` – Main generation logic using Jinja2 templates
-- `data_provider.py` – Data aggregation service from system modules
-- `server.py` – HTTP server for serving generated websites
-- `templates/` – Jinja2 HTML templates
-- `assets/` – Static assets (CSS, JS, images)
-- `docs/` – Directory containing docs components
-- `tests/` – Directory containing tests components
+- `README.md` – Human-readable documentation
+- `SPEC.md` – Functional specification
+- `API_SPECIFICATION.md` – API endpoint documentation
+- `__init__.py` – Module exports (WebsiteGenerator, DataProvider, WebsiteServer)
+- `generator.py` – Static website generation using Jinja2 templates
+- `data_provider.py` – Data aggregation from system modules
+- `server.py` – HTTP server with dynamic API endpoints
+- `templates/` – Jinja2 HTML templates (8 pages)
+- `assets/` – Static assets (CSS, JS)
+- `docs/` – Additional documentation
+- `tests/` – Unit and integration tests
 
 ## Key Classes and Functions
 
 ### WebsiteGenerator (`generator.py`)
-- `WebsiteGenerator(output_dir: str, root_dir: Optional[str] = None)` – Generates static website
-- `generate() -> None` – Execute generation process (renders templates, copies assets)
-- `_render_page(template_name: str, context: dict) -> None` – Render individual page
-- `_copy_assets() -> None` – Copy static assets to output directory
+```python
+class WebsiteGenerator:
+    def __init__(self, output_dir: str, root_dir: Optional[str] = None): ...
+    def generate(self) -> None: ...
+    def _render_page(template_name: str, context: dict) -> None: ...
+    def _copy_assets() -> None: ...
+```
 
 ### DataProvider (`data_provider.py`)
-- `DataProvider(root_dir: Path)` – Data aggregation service
-- `get_system_summary() -> dict` – Get system summary data
-- `get_agents_status() -> list[dict]` – Get agents status
-- `get_available_scripts() -> list[dict]` – Get available scripts
-- `get_config_files() -> list[dict]` – Get configuration files
-- `get_doc_tree() -> dict` – Get documentation tree
-- `get_pipeline_status() -> list[dict]` – Get pipeline status
+```python
+class DataProvider:
+    def __init__(self, root_dir: Path): ...
+    def get_system_summary() -> dict: ...
+    def get_agents_status() -> list[dict]: ...
+    def get_available_scripts() -> list[dict]: ...
+    def get_config_files() -> list[dict]: ...
+    def get_config_content(filename: str) -> str: ...
+    def save_config_content(filename: str, content: str) -> None: ...
+    def get_doc_tree() -> dict: ...
+    def get_pipeline_status() -> list[dict]: ...
+```
 
 ### WebsiteServer (`server.py`)
-- `WebsiteServer()` – Enhanced HTTP server with API endpoints
-- `do_GET()` – Handle GET requests
-- `do_POST()` – Handle API requests (execute, chat, refresh, config)
+```python
+class WebsiteServer(http.server.SimpleHTTPRequestHandler):
+    root_dir: Path  # Class attribute
+    data_provider: DataProvider  # Class attribute
+    
+    def do_GET() -> None: ...
+    def do_POST() -> None: ...
+    def handle_execute() -> None: ...
+    def handle_chat() -> None: ...
+    def handle_refresh() -> None: ...
+    def handle_config_list() -> None: ...
+    def handle_config_get(path: str) -> None: ...
+    def handle_config_save() -> None: ...
+    def handle_docs_list() -> None: ...
+    def handle_pipelines_list() -> None: ...
+    def send_json_response(data: dict, status: int = 200) -> None: ...
+```
+
+## Frontend Features
+
+### Markdown Rendering
+- Uses `marked.js` for client-side markdown parsing
+- Syntax highlighting via `highlight.js` (Python, JavaScript, Bash, JSON)
+- HTML sanitization via `DOMPurify`
+
+### Scripts Page
+- Search/filter functionality
+- Improved card layout with script path and description
+- Console output for execution results
+
+### Config Editor
+- File type icons
+- Auto-select first file on load
+- Save functionality with server-side persistence
+
+## Test Coverage
+
+### Unit Tests (`tests/unit/`)
+- `test_generator.py` - 11 tests for WebsiteGenerator
+- `test_data_provider.py` - 31 tests for DataProvider
+- `test_server.py` - 13 tests for WebsiteServer
+
+### Integration Tests (`tests/integration/`)
+- `test_website_integration.py` - 10 tests for end-to-end functionality
+
+**Total: 64 tests** (all passing)
 
 ## Operating Contracts
 - Output must be self-contained (no external CDN dependencies required for basic functionality unless specified).
 - Interfaces must be responsive and accessible.
 - All data aggregation must use proper module APIs.
 - Templates must use Jinja2 syntax.
+- Path traversal attacks must be prevented in config operations.
+- Scripts can only be executed from within the `scripts/` directory.
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/execute` | POST | Execute a script |
+| `/api/chat` | POST | Chat with Ollama |
+| `/api/refresh` | POST | Refresh system data |
+| `/api/config` | GET | List config files |
+| `/api/config/{file}` | GET/POST | Read/write config |
+| `/api/docs` | GET | Get doc tree |
+| `/api/pipelines` | GET | Get pipeline status |

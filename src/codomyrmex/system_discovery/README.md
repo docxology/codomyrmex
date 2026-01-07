@@ -38,11 +38,24 @@ System Discovery Engine for Codomyrmex. Provides comprehensive system discovery 
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.system_discovery import main_component
+from codomyrmex.system_discovery import (
+    SystemDiscovery,
+    CapabilityScanner,
+    StatusReporter,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Run full system discovery
+discovery = SystemDiscovery()
+discovery.run_full_discovery()
+
+# Scan module capabilities
+scanner = CapabilityScanner()
+capabilities = scanner.scan_all_capabilities()
+print(f"Found {len(capabilities)} capabilities")
+
+# Check system health
+reporter = StatusReporter()
+health_report = reporter.generate_status_report()
+print(f"System health: {health_report['status']}")
 ```
 

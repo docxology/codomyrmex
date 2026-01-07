@@ -29,7 +29,10 @@ Integration with OpenAI Codex API. Provides client for interacting with Codex AP
 - `get_capabilities() -> list[AgentCapabilities]` – Get supported capabilities
 
 ### CodexIntegrationAdapter (`codex_integration.py`)
-- `CodexIntegrationAdapter()` – Integration adapter for Codomyrmex modules (extends AgentIntegrationAdapter)
+- `CodexIntegrationAdapter(agent: AgentInterface)` – Integration adapter for Codomyrmex modules (extends AgentIntegrationAdapter)
+- `adapt_for_ai_code_editing(prompt: str, language: str = "python", **kwargs) -> str` – Adapt for AI code editing module
+- `adapt_for_llm(messages: list[dict], model: str = None, **kwargs) -> dict` – Adapt for LLM module
+- `adapt_for_code_execution(code: str, language: str = "python", **kwargs) -> dict[str, Any]` – Adapt for code execution sandbox
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

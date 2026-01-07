@@ -1,7 +1,7 @@
 # generic
 
 ## Signposting
-- **Parent**: [generic](../README.md)
+- **Parent**: [agents](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -34,11 +34,32 @@ Base agent classes and utilities. Provides abstract base classes for all agents,
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.agents.generic import main_component
+from codomyrmex.agents.generic import (
+    BaseAgent,
+    AgentOrchestrator,
+    MessageBus,
+    TaskPlanner,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create a base agent
+class MyAgent(BaseAgent):
+    def execute(self, task):
+        return f"Executed: {task}"
+
+agent = MyAgent(name="my_agent", capabilities=["task_execution"])
+
+# Use agent orchestrator
+orchestrator = AgentOrchestrator()
+orchestrator.add_agent(agent)
+result = orchestrator.execute_parallel([{"task": "task1"}, {"task": "task2"}])
+
+# Use message bus for inter-agent communication
+bus = MessageBus()
+bus.subscribe("task_complete", lambda msg: print(f"Task complete: {msg}"))
+bus.publish("task_complete", {"task_id": "123"})
+
+# Use task planner
+planner = TaskPlanner()
+plan = planner.create_plan(goal="Build API", context={})
 ```
 

@@ -12,20 +12,32 @@
             {% for config in config_files %}
             <li>
                 <a href="#" class="config-file-link" data-filename="{{ config.name }}">
+                    <span class="file-icon">{% if config.type == 'toml' %}⚙️{% elif config.type == 'yaml' or config.type
+                        == 'yml' %}📋{% elif config.type == 'json' %}📄{% else %}📝{% endif %}</span>
                     {{ config.name }}
                 </a>
             </li>
             {% endfor %}
         </ul>
+        {% if not config_files %}
+        <div class="empty-state" style="padding: 1rem;">
+            <p>No configuration files found.</p>
+        </div>
+        {% endif %}
     </div>
 
     <div style="flex: 1; display: flex; flex-direction: column;">
         <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <h3 id="current-config-file">Select a file</h3>
+            <h3 id="current-config-file">Select a file to edit</h3>
             <button id="save-config-btn" class="btn btn-primary" disabled>Save Changes</button>
         </div>
+        <div id="config-empty-state" class="empty-state"
+            style="flex: 1; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color);">
+            <div class="empty-state-icon">📝</div>
+            <p>Select a configuration file from the sidebar to view and edit its contents.</p>
+        </div>
         <textarea id="config-editor"
-            style="flex: 1; font-family: 'Fira Code', monospace; padding: 1rem; line-height: 1.5; resize: none; border-color: var(--border-color); background-color: var(--bg-tertiary); color: var(--text-primary);"
+            style="flex: 1; font-family: 'Fira Code', monospace; padding: 1rem; line-height: 1.5; resize: none; border-color: var(--border-color); background-color: var(--bg-tertiary); color: var(--text-primary); display: none;"
             spellcheck="false"></textarea>
     </div>
 </div>
@@ -43,7 +55,9 @@
     .file-list a {
         color: var(--text-secondary);
         text-decoration: none;
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         padding: 0.5rem;
         border-radius: 6px;
         transition: var(--transition);
@@ -54,5 +68,32 @@
         background-color: var(--bg-tertiary);
         color: var(--text-primary);
     }
+
+    .file-icon {
+        font-size: 1rem;
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const configEditor = document.getElementById('config-editor');
+        const emptyState = document.getElementById('config-empty-state');
+        const links = document.querySelectorAll('.config-file-link');
+
+        // Show editor when a file is selected
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                if (configEditor && emptyState) {
+                    emptyState.style.display = 'none';
+                    configEditor.style.display = 'block';
+                }
+            });
+        });
+
+        // Auto-select first file if available
+        if (links.length > 0) {
+            setTimeout(() => links[0].click(), 100);
+        }
+    });
+</script>
 {% endblock %}

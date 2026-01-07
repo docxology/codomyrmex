@@ -31,8 +31,10 @@ Integration with Jules CLI tool. Provides client wrapper for executing jules com
 - `_check_jules_available() -> bool` – Check if jules command is available
 
 ### JulesIntegrationAdapter (`jules_integration.py`)
-- `JulesIntegrationAdapter()` – Integration adapter for Codomyrmex modules (extends AgentIntegrationAdapter)
-- Provides integration with Codomyrmex modules for Jules-based operations
+- `JulesIntegrationAdapter(agent: AgentInterface)` – Integration adapter for Codomyrmex modules (extends AgentIntegrationAdapter)
+- `adapt_for_ai_code_editing(prompt: str, language: str = "python", **kwargs) -> str` – Adapt for AI code editing module
+- `adapt_for_llm(messages: list[dict], model: str = None, **kwargs) -> dict` – Adapt for LLM module
+- `adapt_for_code_execution(code: str, language: str = "python", **kwargs) -> dict[str, Any]` – Adapt for code execution sandbox
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

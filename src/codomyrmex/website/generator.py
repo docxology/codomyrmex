@@ -43,7 +43,8 @@ class WebsiteGenerator:
         # 2. Collect Data
         context = {
             "system": self.data_provider.get_system_summary(),
-            "agents": self.data_provider.get_agents_status(),
+            "modules": self.data_provider.get_modules(),
+            "agents": self.data_provider.get_actual_agents(),
             "scripts": self.data_provider.get_available_scripts(),
             "config_files": self.data_provider.get_config_files(),
             "doc_tree": self.data_provider.get_doc_tree(),
@@ -51,7 +52,7 @@ class WebsiteGenerator:
         }
 
         # 3. Render Pages
-        pages = ["index.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html"]
+        pages = ["index.html", "modules.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html"]
         for page in pages:
             self._render_page(page, context)
         

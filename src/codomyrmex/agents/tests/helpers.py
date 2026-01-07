@@ -47,6 +47,8 @@ def check_tool_available(command: str, help_flag: str = "--help") -> bool:
 GEMINI_AVAILABLE = check_tool_available("gemini")
 JULES_AVAILABLE = check_tool_available("jules")
 OPENCODE_AVAILABLE = check_tool_available("opencode")
+VIBE_AVAILABLE = check_tool_available("vibe")
+EVERY_CODE_AVAILABLE = check_tool_available("code") or check_tool_available("coder")
 
 
 def get_tool_version(command: str) -> Optional[str]:

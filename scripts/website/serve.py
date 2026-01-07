@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
 Simple HTTP server to serve the generated website.
+
+This server combines static file serving with dynamic API endpoints
+for script execution, chat, and configuration management.
 """
 import http.server
 import socketserver
 import argparse
-import os
+import functools
 import sys
 from pathlib import Path
 
@@ -38,14 +41,17 @@ def main():
     if not web_dir.exists():
         print(f"Error: Directory {web_dir} does not exist. Run generate.py first.", file=sys.stderr)
         sys.exit(1)
-        
-    os.chdir(web_dir)
     
-    # Configure Server
+    # Configure Server (using class-level attributes)
     WebsiteServer.root_dir = PROJECT_ROOT
     WebsiteServer.data_provider = DataProvider(PROJECT_ROOT)
+    WebsiteServer.website_dir = web_dir  # Store the website directory
     
-    with socketserver.TCPServer(("", args.port), WebsiteServer) as httpd:
+    # Create a handler class that uses the specified directory
+    # This avoids using os.chdir which can cause issues if the directory is recreated
+    handler = functools.partial(WebsiteServer, directory=str(web_dir))
+    
+    with socketserver.TCPServer(("", args.port), handler) as httpd:
         print(f"Serving at http://localhost:{args.port}")
         print(f"Serving content from: {web_dir}")
         print("API endpoints active (/api/execute, /api/chat, /api/refresh)")

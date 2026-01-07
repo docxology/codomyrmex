@@ -230,7 +230,7 @@ import logging
 
 # Enable debug logging
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger('codomyrmex.project_orchestration')
+logger = logging.getLogger('codomyrmex.logistics.orchestration.project')
 logger.setLevel(logging.DEBUG)
 
 # Execute workflow with debug info

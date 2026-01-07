@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Remove Typing Indicator
                 document.getElementById(typingId).remove();
 
-                if (data.message && data.message.content) {
-                    appendMessage('assistant', data.message.content);
+                if (data.success && data.response) {
+                    appendMessage('assistant', data.response);
                 } else if (data.error) {
                     appendMessage('system', `Error: ${data.error}`);
                 } else {
@@ -170,8 +170,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Documentation Browser Logic
-    // Just a placeholder since the template handles linking via data-path mostly?
-    // Not quite, doc-link needs to fetch content
+    // Configure marked.js if available
+    if (typeof marked !== 'undefined') {
+        marked.setOptions({
+            highlight: function (code, lang) {
+                if (typeof hljs !== 'undefined' && lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(code, { language: lang }).value;
+                    } catch (e) { }
+                }
+                return code;
+            },
+            breaks: true,
+            gfm: true
+        });
+    }
 
     document.querySelectorAll('.doc-link').forEach(link => {
         link.addEventListener('click', async (e) => {
@@ -183,34 +196,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const docContentForBrowser = document.getElementById('doc-content');
             docContentForBrowser.innerHTML = '<h3>Loading...</h3>';
 
-            // Since we don't have a markdown renderer endpoint yet that returns HTML,
-            // we fetch the raw markdown. In a real app we'd parse this client-side or server-side.
-            // For now let's just show it in a <pre> or simple text.
-            // Re-using config API logic for simplicity or create a new endpoint?
-            // We can assume config endpoint works for text files generally if we allowed it, 
-            // but we made a docs endpoint. Let's make the Docs API return raw text for now on specific file.
-            // Wait, server.py handle_docs just returns tree. We didn't implement get file content for docs yet.
-            // Let's rely on config endpoint reading for now? No, that's insecure/hacky.
-            // I'll assume I update server.py to handle GET /api/docs/<path> properly or use config endpoint if path allows.
-            // Actually, `get_config_content` in DataProvider takes any filename relative to root. 
-            // So `/api/config/docs/README.md` might work if allowed.
-
             try {
-                // HACK: Use config endpoint for now as it reads any text file relative to root
+                // Use config API to fetch the document content
                 const response = await fetch(`/api/config/${path}`);
                 const data = await response.json();
 
                 if (data.content !== undefined) {
-                    // Simple replacement of newlines for basic viewing
-                    // In production use a library like marked.js
-                    const html = data.content
-                        .replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                        .replace(/\n/g, "<br>")
-                        .replace(/# (.*)/g, "<h1>$1</h1>"); // Very basic
+                    // Render markdown with marked.js and sanitize with DOMPurify
+                    if (typeof marked !== 'undefined' && typeof DOMPurify !== 'undefined') {
+                        const rawHtml = marked.parse(data.content);
+                        const cleanHtml = DOMPurify.sanitize(rawHtml);
+                        docContentForBrowser.innerHTML = cleanHtml;
 
-                    docContentForBrowser.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.content}</pre>`;
+                        // Apply syntax highlighting to any code blocks
+                        if (typeof hljs !== 'undefined') {
+                            docContentForBrowser.querySelectorAll('pre code').forEach((block) => {
+                                hljs.highlightElement(block);
+                            });
+                        }
+                    } else {
+                        // Fallback: display as preformatted text
+                        docContentForBrowser.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
+                    }
                 } else {
                     docContentForBrowser.innerHTML = `<p style="color: var(--error-color)">Error loading document: ${data.error}</p>`;
                 }

@@ -42,11 +42,30 @@ Digital security including vulnerability scanning, encryption management, certif
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.security.digital import main_component
+from codomyrmex.security.digital import (
+    VulnerabilityScanner,
+    SecretsDetector,
+    ComplianceChecker,
+    EncryptionManager,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Scan for vulnerabilities
+scanner = VulnerabilityScanner()
+vulns = scanner.scan("src/")
+print(f"Vulnerabilities: {len(vulns)}")
+
+# Detect secrets
+detector = SecretsDetector()
+secrets = detector.scan_codebase("src/")
+print(f"Secrets found: {len(secrets)}")
+
+# Check compliance
+checker = ComplianceChecker()
+compliance = checker.check_compliance(standard="OWASP")
+print(f"Compliant: {compliance.passed}")
+
+# Manage encryption
+encryption = EncryptionManager()
+encrypted = encryption.encrypt("sensitive_data", algorithm="AES-256")
 ```
 

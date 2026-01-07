@@ -1,9 +1,9 @@
 # fpf
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [scripts](../README.md)
 - **Children**:
-    - [examples](scripts/README.md)
+    - [examples](examples/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -12,17 +12,18 @@
 
 ## Overview
 
-Automation and utility scripts.
+Automation and utility scripts for First Principles Framework (FPF) integration with Codomyrmex. Provides CLI access to FPF functionality, specification processing, analysis, visualization, and export capabilities.
 
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
-- `scripts/` – Subdirectory
-- `orchestrate.py` – File
+- `AGENTS.md` – File
+- `orchestrate.py` – Main orchestration script
+- `examples/` – Example implementations
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../README.md)
-
+- **Core Module**: [src/codomyrmex/fpf](../../../src/codomyrmex/fpf/README.md)

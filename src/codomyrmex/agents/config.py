@@ -43,6 +43,20 @@ class AgentConfig:
     gemini_auth_method: str = "oauth"  # "oauth" or "api_key"
     gemini_settings_path: Optional[str] = None
 
+    # Mistral Vibe configuration
+    mistral_vibe_command: str = "vibe"
+    mistral_vibe_timeout: int = 60
+    mistral_vibe_working_dir: Optional[str] = None
+    mistral_vibe_api_key: Optional[str] = None
+
+    # Every Code configuration
+    every_code_command: str = "code"
+    every_code_alt_command: str = "coder"  # Alternative command to avoid VS Code conflicts
+    every_code_timeout: int = 120
+    every_code_working_dir: Optional[str] = None
+    every_code_api_key: Optional[str] = None
+    every_code_config_path: Optional[str] = None  # Path to ~/.code/config.toml
+
     # General agent configuration
     default_timeout: int = 30
     enable_logging: bool = True
@@ -104,6 +118,30 @@ class AgentConfig:
             "GEMINI_SETTINGS_PATH", self.gemini_settings_path
         )
 
+        # Mistral Vibe configuration
+        self.mistral_vibe_command = os.getenv("MISTRAL_VIBE_COMMAND", self.mistral_vibe_command)
+        self.mistral_vibe_timeout = int(
+            os.getenv("MISTRAL_VIBE_TIMEOUT", str(self.mistral_vibe_timeout))
+        )
+        self.mistral_vibe_working_dir = os.getenv(
+            "MISTRAL_VIBE_WORKING_DIR", self.mistral_vibe_working_dir
+        )
+        self.mistral_vibe_api_key = os.getenv("MISTRAL_API_KEY", self.mistral_vibe_api_key)
+
+        # Every Code configuration
+        self.every_code_command = os.getenv("EVERY_CODE_COMMAND", self.every_code_command)
+        self.every_code_alt_command = os.getenv("EVERY_CODE_ALT_COMMAND", self.every_code_alt_command)
+        self.every_code_timeout = int(
+            os.getenv("EVERY_CODE_TIMEOUT", str(self.every_code_timeout))
+        )
+        self.every_code_working_dir = os.getenv(
+            "EVERY_CODE_WORKING_DIR", self.every_code_working_dir
+        )
+        self.every_code_api_key = os.getenv("OPENAI_API_KEY", self.every_code_api_key)
+        self.every_code_config_path = os.getenv(
+            "CODE_HOME", os.path.expanduser("~/.code")
+        )
+
         # General configuration
         self.default_timeout = int(
             os.getenv("AGENT_DEFAULT_TIMEOUT", str(self.default_timeout))
@@ -147,6 +185,16 @@ class AgentConfig:
             "gemini_api_key": "***" if self.gemini_api_key else None,
             "gemini_auth_method": self.gemini_auth_method,
             "gemini_settings_path": self.gemini_settings_path,
+            "mistral_vibe_command": self.mistral_vibe_command,
+            "mistral_vibe_timeout": self.mistral_vibe_timeout,
+            "mistral_vibe_working_dir": self.mistral_vibe_working_dir,
+            "mistral_vibe_api_key": "***" if self.mistral_vibe_api_key else None,
+            "every_code_command": self.every_code_command,
+            "every_code_alt_command": self.every_code_alt_command,
+            "every_code_timeout": self.every_code_timeout,
+            "every_code_working_dir": self.every_code_working_dir,
+            "every_code_api_key": "***" if self.every_code_api_key else None,
+            "every_code_config_path": self.every_code_config_path,
             "default_timeout": self.default_timeout,
             "enable_logging": self.enable_logging,
             "log_level": self.log_level,
@@ -186,6 +234,12 @@ class AgentConfig:
 
         if self.gemini_auth_method not in ["oauth", "api_key"]:
             errors.append("gemini_auth_method must be 'oauth' or 'api_key'")
+
+        if self.mistral_vibe_timeout <= 0:
+            errors.append("mistral_vibe_timeout must be positive")
+
+        if self.every_code_timeout <= 0:
+            errors.append("every_code_timeout must be positive")
 
         return errors
 

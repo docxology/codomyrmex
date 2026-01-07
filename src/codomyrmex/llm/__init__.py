@@ -8,6 +8,13 @@ from .ollama import (
     ConfigManager
 )
 
+# Fabric integration
+from .fabric import (
+    FabricManager,
+    FabricOrchestrator,
+    FabricConfigManager
+)
+
 from .config import (
     LLMConfig,
     LLMConfigPresets,
@@ -21,6 +28,10 @@ __all__ = [
     'ModelRunner',
     'OutputManager',
     'ConfigManager',
+    
+    'FabricManager',
+    'FabricOrchestrator',
+    'FabricConfigManager',
     
     'LLMConfig',
     'LLMConfigPresets',

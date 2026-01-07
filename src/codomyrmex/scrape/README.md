@@ -44,11 +44,32 @@ Web data extraction engine providing a unified interface for scraping web conten
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.scrape import main_component
+from codomyrmex.scrape import (
+    Scraper,
+    ScrapeOptions,
+    ScrapeFormat,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Initialize scraper
+scraper = Scraper()
+
+# Scrape a single URL
+options = ScrapeOptions(
+    formats=[ScrapeFormat.MARKDOWN, ScrapeFormat.HTML],
+    include_links=True
+)
+result = scraper.scrape("https://example.com", options)
+print(f"Content: {result.content[:100]}...")
+
+# Crawl a website
+crawl_result = scraper.crawl("https://example.com", max_pages=10)
+print(f"Crawled {len(crawl_result.pages)} pages")
+
+# Extract structured data
+extract_result = scraper.extract(
+    url="https://example.com",
+    schema={"title": "string", "description": "string"}
+)
+print(f"Extracted data: {extract_result.data}")
 ```
 

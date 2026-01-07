@@ -3,9 +3,6 @@
 from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
 
 
 class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
@@ -38,8 +35,27 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         response = self.agent.execute(request)
 
         if not response.is_success():
-            logger.error(f"Claude code generation failed: {response.error}")
+            self.logger.error(
+                "Claude code generation failed",
+                extra={
+                    "agent": "claude",
+                    "language": language,
+                    "error": response.error,
+                    "execution_time": response.execution_time,
+                },
+            )
             raise RuntimeError(f"Code generation failed: {response.error}")
+
+        self.logger.debug(
+            "Claude code generation succeeded",
+            extra={
+                "agent": "claude",
+                "language": language,
+                "content_length": len(response.content),
+                "execution_time": response.execution_time,
+                "tokens_used": response.tokens_used,
+            },
+        )
 
         return response.content
 

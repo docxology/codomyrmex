@@ -35,11 +35,28 @@ Rich CLI capabilities including colored output, progress bars, interactive promp
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.terminal_interface import main_component
+from codomyrmex.terminal_interface import (
+    InteractiveShell,
+    TerminalFormatter,
+    CommandRunner,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create interactive shell
+shell = InteractiveShell()
+shell.add_command("help", handler=lambda: print("Available commands..."))
+shell.add_command("status", handler=lambda: print("System status: OK"))
+shell.run()  # Starts interactive shell
+
+# Use terminal formatter
+formatter = TerminalFormatter()
+formatter.print_table(
+    data=[["Name", "Status"], ["Module1", "OK"], ["Module2", "OK"]],
+    title="System Status"
+)
+
+# Run commands
+runner = CommandRunner()
+result = runner.execute("python --version")
+print(f"Output: {result.output}")
 ```
 

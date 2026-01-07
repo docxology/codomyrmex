@@ -1,7 +1,7 @@
 # review
 
 ## Signposting
-- **Parent**: [review](../README.md)
+- **Parent**: [coding](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -33,11 +33,29 @@ Code review and analysis capabilities. Provides automated code review, quality a
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.coding.review import main_component
+from codomyrmex.coding.review import (
+    CodeReviewer,
+    analyze_file,
+    analyze_project,
+    check_quality_gates,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Review a single file
+reviewer = CodeReviewer()
+result = analyze_file("src/my_module.py")
+print(f"Issues found: {len(result.issues)}")
+for issue in result.issues:
+    print(f"  - {issue.severity}: {issue.message}")
+
+# Review entire project
+project_result = analyze_project("src/")
+print(f"Project metrics: {project_result.summary}")
+
+# Check quality gates
+gate_result = check_quality_gates(project_result)
+if gate_result.passed:
+    print("Quality gates passed!")
+else:
+    print(f"Quality gates failed: {gate_result.failures}")
 ```
 

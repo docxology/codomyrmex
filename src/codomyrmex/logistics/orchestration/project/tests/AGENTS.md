@@ -1,7 +1,7 @@
-# Codomyrmex Agents — src/codomyrmex/project_orchestration/tests
+# Codomyrmex Agents — src/codomyrmex/logistics/orchestration/project/tests
 
 ## Signposting
-- **Parent**: [Tests](../AGENTS.md)
+- **Parent**: [project](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -27,5 +27,5 @@ Test files and validation suites.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [project_orchestration](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [project](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation

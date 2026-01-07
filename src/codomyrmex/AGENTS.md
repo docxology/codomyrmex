@@ -35,6 +35,7 @@
     - [physical_management](physical_management/AGENTS.md)
     - [plugin_system](plugin_system/AGENTS.md)
     - [logistics](logistics/AGENTS.md)
+    - [website](website/AGENTS.md)
     - [scrape](scrape/AGENTS.md)
     - [security](security/AGENTS.md)
     - [serialization](serialization/AGENTS.md)
@@ -48,7 +49,7 @@
     - [tools](tools/AGENTS.md)
     - [utils](utils/AGENTS.md)
     - [validation](validation/AGENTS.md)
-    - [website](website/AGENTS.md)
+    - [skills](skills/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -95,14 +96,13 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 - `performance/` – Directory containing performance components
 - `physical_management/` – Directory containing physical_management components
 - `plugin_system/` – Directory containing plugin_system components
-- `project_orchestration/` – Directory containing project_orchestration components
+- `logistics/` – Directory containing logistics components (orchestration, task, schedule)
 - `scrape/` – Directory containing scrape components
 - `security/` – Directory containing security components
 - `serialization/` – Directory containing serialization components
 - `spatial/` – Directory containing spatial components
 - `static_analysis/` – Directory containing static_analysis components
 - `system_discovery/` – Directory containing system_discovery components
-- `task_queue/` – Directory containing task_queue components
 - `template/` – Directory containing template components
 - `templating/` – Directory containing templating components
 - `terminal_interface/` – Directory containing terminal_interface components
@@ -111,6 +111,7 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 - `utils/` – Directory containing utils components
 - `validation/` – Directory containing validation components
 - `website/` – Directory containing website components
+- `skills/` – Directory containing skills components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

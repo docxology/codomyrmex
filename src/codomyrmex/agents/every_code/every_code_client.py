@@ -1,0 +1,320 @@
+"""Every Code CLI client wrapper."""
+
+from pathlib import Path
+from typing import Any, Iterator, Optional
+
+from codomyrmex.agents.config import get_config
+from codomyrmex.agents.core import (
+    AgentCapabilities,
+    AgentRequest,
+    AgentResponse,
+)
+from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, EveryCodeError
+from codomyrmex.agents.generic import CLIAgentBase
+
+
+class EveryCodeClient(CLIAgentBase):
+    """Client for interacting with Every Code CLI tool."""
+
+    def __init__(self, config: Optional[dict[str, Any]] = None):
+        """
+        Initialize Every Code client.
+
+        Args:
+            config: Optional configuration override
+        """
+        agent_config = get_config()
+        code_command = (
+            config.get("every_code_command")
+            if config
+            else agent_config.every_code_command
+        )
+        alt_command = (
+            config.get("every_code_alt_command")
+            if config
+            else agent_config.every_code_alt_command
+        )
+        timeout = (
+            config.get("every_code_timeout")
+            if config
+            else agent_config.every_code_timeout
+        )
+        working_dir = (
+            Path(config.get("every_code_working_dir"))
+            if config and config.get("every_code_working_dir")
+            else Path(agent_config.every_code_working_dir)
+            if agent_config.every_code_working_dir
+            else None
+        )
+
+        # Try to find available command (code or coder)
+        available_command = self._find_available_command(code_command, alt_command)
+
+        # Set up environment variables
+        env_vars = {}
+        api_key = (
+            config.get("every_code_api_key")
+            if config
+            else agent_config.every_code_api_key
+        )
+        config_path = (
+            config.get("every_code_config_path")
+            if config
+            else agent_config.every_code_config_path
+        )
+        if api_key:
+            env_vars["OPENAI_API_KEY"] = api_key
+        if config_path:
+            env_vars["CODE_HOME"] = config_path
+
+        super().__init__(
+            name="every_code",
+            command=available_command,
+            capabilities=[
+                AgentCapabilities.CODE_GENERATION,
+                AgentCapabilities.CODE_EDITING,
+                AgentCapabilities.CODE_ANALYSIS,
+                AgentCapabilities.TEXT_COMPLETION,
+                AgentCapabilities.STREAMING,
+                AgentCapabilities.MULTI_TURN,
+            ],
+            config=config or {},
+            timeout=timeout,
+            working_dir=working_dir,
+            env_vars=env_vars,
+        )
+
+        self.api_key = api_key
+        self.config_path = config_path
+
+        # Verify code is available
+        if not self._check_command_available(check_args=["--version"]):
+            self.logger.warning(
+                "Every Code command not found, some operations may fail",
+                extra={"command": self.command},
+            )
+
+    @staticmethod
+    def _find_available_command(code_command: str, alt_command: str) -> str:
+        """
+        Find available Every Code command (code or coder).
+
+        Args:
+            code_command: Primary command name
+            alt_command: Alternative command name
+
+        Returns:
+            Available command name
+        """
+        import subprocess
+
+        # Try primary command first
+        try:
+            result = subprocess.run(
+                [code_command, "--version"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            if result.returncode == 0 or "--version" in (result.stdout or result.stderr):
+                return code_command
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+        # Fall back to alternative command
+        try:
+            result = subprocess.run(
+                [alt_command, "--version"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            if result.returncode == 0 or "--version" in (result.stdout or result.stderr):
+                return alt_command
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+        # Return primary as default (will fail later if not available)
+        return code_command
+
+    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+        """
+        Execute Every Code command.
+
+        Args:
+            request: Agent request
+
+        Returns:
+            Agent response
+        """
+        prompt = request.prompt
+        context = request.context or {}
+
+        # Build code command input
+        code_input = self._build_code_input(prompt, context)
+
+        try:
+            # Execute code command using base class method
+            result = self._execute_command(input_text=code_input)
+
+            # Build response using base class helper
+            return self._build_response_from_result(
+                result,
+                request,
+                additional_metadata={
+                    "code_success": result.get("success", False),
+                    "input_preview": code_input[:200] if len(code_input) > 200 else code_input,
+                },
+            )
+
+        except AgentTimeoutError as e:
+            # Convert timeout to EveryCodeError
+            raise EveryCodeError(
+                f"Every Code command timed out: {str(e)}",
+                command=self.command,
+            ) from e
+        except AgentError as e:
+            # Convert base agent error to EveryCodeError
+            raise EveryCodeError(
+                f"Every Code command failed: {str(e)}",
+                command=self.command,
+            ) from e
+        except Exception as e:
+            # Convert any other exception to EveryCodeError
+            self.logger.error(
+                f"Every Code execution failed: {e}",
+                exc_info=True,
+                extra={"command": self.command, "error": str(e)},
+            )
+            raise EveryCodeError(f"Every Code command failed: {str(e)}", command=self.command) from e
+
+    def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
+        """
+        Stream Every Code command output.
+
+        Args:
+            request: Agent request
+
+        Yields:
+            Chunks of output
+        """
+        prompt = request.prompt
+        context = request.context or {}
+
+        code_input = self._build_code_input(prompt, context)
+
+        # Use base class streaming method
+        yield from self._stream_command(input_text=code_input)
+
+    def _build_code_input(self, prompt: str, context: dict[str, Any]) -> str:
+        """
+        Build code command input from prompt and context.
+
+        Args:
+            prompt: User prompt
+            context: Additional context (may include files, directories, etc.)
+
+        Returns:
+            Formatted input string for Every Code CLI
+        """
+        # Handle special commands (e.g., /plan, /solve, /code, /auto)
+        input_parts = []
+
+        # Check if prompt starts with a command
+        if prompt.strip().startswith("/"):
+            # Pass through commands like /plan, /solve, /code, /auto
+            input_parts.append(prompt)
+        else:
+            # Regular prompt
+            input_parts.append(prompt)
+
+        # Handle context parameters
+        if "files" in context:
+            for file_path in context["files"]:
+                if Path(file_path).exists():
+                    input_parts.insert(0, f"@{file_path}\n")
+
+        if "directories" in context:
+            for dir_path in context["directories"]:
+                if Path(dir_path).is_dir():
+                    input_parts.insert(0, f"@directory {dir_path}\n")
+
+        # Join all parts
+        return "\n".join(input_parts)
+
+
+    def execute_code_command(
+        self, command: str, args: Optional[list[str]] = None, input_text: Optional[str] = None
+    ) -> dict[str, Any]:
+        """
+        Execute a code command (e.g., /plan, /solve, /code, /auto).
+
+        Args:
+            command: Code command name (e.g., "/plan", "/solve")
+            args: Optional command arguments
+            input_text: Optional input text to send
+
+        Returns:
+            Command result dictionary
+        """
+        # Build command input
+        cmd_input = command
+        if args:
+            cmd_input += " " + " ".join(args)
+        if input_text:
+            cmd_input += "\n" + input_text
+
+        return self._execute_command(input_text=cmd_input)
+
+    def get_code_help(self) -> dict[str, Any]:
+        """
+        Get code help information.
+
+        Returns:
+            Help information dictionary
+        """
+        try:
+            result = self._execute_command(args=["--help"], timeout=5)
+            return {
+                "help_text": result.get("stdout", "") or result.get("stderr", ""),
+                "exit_code": result.get("exit_code", 0),
+                "available": result.get("success", False),
+            }
+        except Exception as e:
+            self.logger.warning(
+                f"Failed to get Every Code help: {e}",
+                extra={"command": self.command, "error": str(e)},
+            )
+            return {
+                "help_text": "",
+                "exit_code": -1,
+                "available": False,
+                "error": str(e),
+            }
+
+    def get_code_version(self) -> dict[str, Any]:
+        """
+        Get code version information.
+
+        Returns:
+            Version information dictionary
+        """
+        try:
+            result = self._execute_command(args=["--version"], timeout=5)
+            return {
+                "version": result.get("stdout", "").strip() if result.get("success") else None,
+                "exit_code": result.get("exit_code", 0),
+                "available": result.get("success", False),
+            }
+        except Exception as e:
+            self.logger.warning(
+                f"Failed to get Every Code version: {e}",
+                extra={"command": self.command, "error": str(e)},
+            )
+            return {
+                "version": None,
+                "exit_code": -1,
+                "available": False,
+                "error": str(e),
+            }
+

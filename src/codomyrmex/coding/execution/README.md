@@ -1,7 +1,7 @@
 # execution
 
 ## Signposting
-- **Parent**: [execution](../README.md)
+- **Parent**: [coding](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -32,11 +32,28 @@ Code execution capabilities including language support and session management. P
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.coding.execution import main_component
+from codomyrmex.coding.execution import (
+    execute_code,
+    SUPPORTED_LANGUAGES,
+    validate_language,
+    validate_session_id,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Execute Python code
+result = execute_code(
+    code="print('Hello, World!')",
+    language="python",
+    session_id="session_123",
+    timeout=30
+)
+print(f"Output: {result.output}")
+print(f"Error: {result.error}")
+
+# Check supported languages
+print(f"Supported: {SUPPORTED_LANGUAGES}")
+
+# Validate language
+if validate_language("python"):
+    print("Python is supported")
 ```
 

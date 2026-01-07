@@ -47,15 +47,32 @@ Advanced scheduling capabilities including cron-like patterns, recurring schedul
 To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.logistics import WorkflowManager, Queue, ScheduleManager
+from codomyrmex.logistics import (
+    WorkflowManager,
+    TaskOrchestrator,
+    Queue,
+    Job,
+    ScheduleManager,
+    CronScheduler,
+)
 
-# Orchestration
-workflow_manager = WorkflowManager()
+# Workflow orchestration
+workflow_mgr = WorkflowManager()
+workflow = workflow_mgr.create_workflow("my_workflow")
+workflow.add_step("step1", action=lambda: print("Step 1"))
+workflow.add_step("step2", action=lambda: print("Step 2"), depends_on=["step1"])
+workflow_mgr.execute(workflow)
 
 # Task queue
 queue = Queue()
+job = Job(task="process_data", data={"file": "data.csv"})
+queue.enqueue(job)
+result = queue.dequeue()
 
-# Scheduling
+# Scheduling with cron
 scheduler = ScheduleManager()
+cron = CronScheduler()
+cron.schedule("0 9 * * *", lambda: print("Daily task at 9 AM"))
+scheduler.start()
 ```
 

@@ -16,16 +16,17 @@ class DataProvider:
             "status": "Operational",
             "version": "0.1.0",
             "environment": os.getenv("CODOMYRMEX_ENV", "Development"),
-            "agent_count": self._count_agents(),
-            "last_build": "N/A" # Placeholder
+            "module_count": len(self.get_modules()),
+            "agent_count": len(self.get_actual_agents()),
+            "last_build": "N/A"  # Placeholder
         }
 
-    def get_agents_status(self) -> List[Dict[str, Any]]:
+    def get_modules(self) -> List[Dict[str, Any]]:
         """
-        Scans the `src/codomyrmex` directory for likely agent modules.
-        This is a heuristic implementation.
+        Scans the `src/codomyrmex` directory for all modules (packages).
+        This returns all Codomyrmex packages, not agents.
         """
-        agents = []
+        modules = []
         src_path = self.root_dir / "src/codomyrmex"
         
         if not src_path.exists():
@@ -33,18 +34,78 @@ class DataProvider:
 
         for item in src_path.iterdir():
             if item.is_dir() and (item / "__init__.py").exists():
-                # Simple heuristic: treat every sub-package as a potential agent/component
-                agents.append({
+                modules.append({
                     "name": item.name,
-                    "status": "Active", # Placeholder
+                    "status": "Active",
+                    "path": str(item.relative_to(self.root_dir)),
+                    "description": self._get_description(item),
+                    "submodules": self._get_submodules(item)
+                })
+        
+        return sorted(modules, key=lambda x: x["name"])
+
+    def _get_submodules(self, module_path: Path) -> List[Dict[str, Any]]:
+        """Get submodules of a module for hierarchical navigation."""
+        submodules = []
+        for item in module_path.iterdir():
+            if item.is_dir() and (item / "__init__.py").exists():
+                submodules.append({
+                    "name": item.name,
                     "path": str(item.relative_to(self.root_dir)),
                     "description": self._get_description(item)
+                })
+        return sorted(submodules, key=lambda x: x["name"])
+
+    def get_actual_agents(self) -> List[Dict[str, Any]]:
+        """
+        Returns actual AI agent integrations from `src/codomyrmex/agents/`.
+        These are the real agent frameworks (jules, claude, codex, etc.).
+        """
+        agents = []
+        agents_path = self.root_dir / "src/codomyrmex/agents"
+        
+        if not agents_path.exists():
+            return []
+
+        # Known agent integration directories
+        for item in agents_path.iterdir():
+            if item.is_dir() and (item / "__init__.py").exists():
+                # Skip non-agent directories like 'tests'
+                if item.name in ["tests", "__pycache__"]:
+                    continue
+                agents.append({
+                    "name": item.name,
+                    "status": "Available",
+                    "path": str(item.relative_to(self.root_dir)),
+                    "description": self._get_description(item),
+                    "type": self._get_agent_type(item.name)
                 })
         
         return sorted(agents, key=lambda x: x["name"])
 
+    def _get_agent_type(self, agent_name: str) -> str:
+        """Categorize agent by type."""
+        cli_agents = ["jules", "opencode", "gemini", "mistral_vibe", "droid"]
+        api_agents = ["claude", "codex"]
+        framework_agents = ["generic", "theory", "every_code", "ai_code_editing"]
+        
+        if agent_name in cli_agents:
+            return "CLI Integration"
+        elif agent_name in api_agents:
+            return "API Integration"
+        elif agent_name in framework_agents:
+            return "Framework"
+        return "Agent"
+
+    def get_agents_status(self) -> List[Dict[str, Any]]:
+        """
+        DEPRECATED: Use get_modules() instead.
+        Kept for backwards compatibility.
+        """
+        return self.get_modules()
+
     def _count_agents(self) -> int:
-        return len(self.get_agents_status())
+        return len(self.get_actual_agents())
 
     
     def get_available_scripts(self) -> List[Dict[str, Any]]:

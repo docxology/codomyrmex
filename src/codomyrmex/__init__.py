@@ -68,6 +68,7 @@ __all__ = [
     "website",
     "cerebrum",
     "agents",
+    "skills",
     # Infrastructure
     "tests",
 ]

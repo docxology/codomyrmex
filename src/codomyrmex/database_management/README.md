@@ -37,11 +37,31 @@ Database operations including database connection management, query execution, s
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.database_management import main_component
+from codomyrmex.database_management import (
+    DatabaseManager,
+    MigrationManager,
+    BackupManager,
+    SchemaGenerator,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Connect to database
+db = DatabaseManager()
+db.connect(connection_string="postgresql://user:pass@localhost/db")
+
+# Run migrations
+migration = MigrationManager()
+migration.run_migrations("migrations/")
+
+# Create backup
+backup = BackupManager()
+backup.create_backup("backup_20250101.sql")
+
+# Generate schema
+schema_gen = SchemaGenerator()
+schema = schema_gen.generate_from_models(models=["User", "Post"])
+db.apply_schema(schema)
+
+# Execute query
+results = db.execute_query("SELECT * FROM users WHERE active = %s", (True,))
 ```
 

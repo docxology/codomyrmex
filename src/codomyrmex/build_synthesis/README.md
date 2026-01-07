@@ -41,11 +41,44 @@ Build automation, dependency management, artifact synthesis, and deployment orch
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.build_synthesis import main_component
+from codomyrmex.build_synthesis import (
+    BuildManager,
+    BuildTarget,
+    BuildType,
+    create_python_build_target,
+    trigger_build,
+    orchestrate_build_pipeline,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create Python build target
+target = create_python_build_target(
+    name="myapp",
+    source_dir="src/",
+    output_dir="dist/"
+)
+
+# Build project
+build_mgr = BuildManager()
+result = trigger_build(target)
+print(f"Build status: {result.status}")
+print(f"Artifacts: {result.artifacts}")
+
+# Orchestrate complete build pipeline
+pipeline_result = orchestrate_build_pipeline(
+    steps=[
+        {"name": "install_deps", "command": "pip install -r requirements.txt"},
+        {"name": "build", "command": "python setup.py build"},
+        {"name": "test", "command": "pytest"}
+    ],
+    target=target
+)
+print(f"Pipeline completed: {pipeline_result.success}")
+
+# Create Docker build target
+docker_target = create_docker_build_target(
+    name="myapp",
+    dockerfile="Dockerfile",
+    tag="myapp:latest"
+)
 ```
 

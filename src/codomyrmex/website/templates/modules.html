@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Modules - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>System Modules</h1>
+
+<div class="search-container">
+    <input type="text" class="search-input" id="moduleSearch" placeholder="Search modules...">
+</div>
+
+<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+    {{ modules|length }} Codomyrmex packages providing core functionality.
+</p>
+
+<div class="grid" id="modulesGrid">
+    {% for module in modules %}
+    <div class="card module-card" data-name="{{ module.name }}">
+        <div class="card-title">
+            {{ module.name }}
+            <span class="status-badge active">{{ module.status }}</span>
+        </div>
+        <p class="module-description">{{ module.description[:200] }}{% if module.description|length > 200 %}...{% endif
+            %}</p>
+
+        {% if module.submodules %}
+        <details class="submodules-details">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                {{ module.submodules|length }} submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                {% for sub in module.submodules %}
+                <li>{{ sub.name }}</li>
+                {% endfor %}
+            </ul>
+        </details>
+        {% endif %}
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            {{ module.path }}
+        </p>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.getElementById('moduleSearch').addEventListener('input', function (e) {
+        const filter = e.target.value.toLowerCase();
+        document.querySelectorAll('.module-card').forEach(card => {
+            const name = card.dataset.name.toLowerCase();
+            const desc = card.querySelector('.module-description').textContent.toLowerCase();
+            card.style.display = (name.includes(filter) || desc.includes(filter)) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

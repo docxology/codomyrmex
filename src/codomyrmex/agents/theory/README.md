@@ -1,7 +1,7 @@
 # theory
 
 ## Signposting
-- **Parent**: [theory](../README.md)
+- **Parent**: [agents](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -29,14 +29,22 @@ Theoretical foundations for agentic systems including agent architectures, reaso
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+This module provides theoretical foundations for understanding agentic systems:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.agents.theory import main_component
+from codomyrmex.agents.theory import (
+    AgentArchitecture,
+    ReasoningModel,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Explore agent architectures
+architectures = AgentArchitecture.list_architectures()
+for arch in architectures:
+    print(f"Architecture: {arch.name} - {arch.description}")
+
+# Understand reasoning models
+reasoning_models = ReasoningModel.list_models()
+for model in reasoning_models:
+    print(f"Model: {model.name} - {model.approach}")
 ```
 

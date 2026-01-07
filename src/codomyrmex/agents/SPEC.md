@@ -1,15 +1,17 @@
 # agents - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
-The `agents` module provides integration with various agentic frameworks including Jules CLI, Claude API, and OpenAI Codex. It includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
+The `agents` module provides integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, Gemini CLI, Mistral Vibe CLI, and Every Code CLI. It includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
 
 ## Design Principles
 
 ### Modularity
-- **Framework Separation**: Each agentic framework (Jules, Claude, Codex) is implemented as a separate submodule
+- **Framework Separation**: Each agentic framework is implemented as a separate submodule
+  - **CLI-based**: Jules, Gemini, OpenCode, Mistral Vibe, Every Code
+  - **API-based**: Claude, Codex
 - **Clear Interfaces**: All agents implement the `AgentInterface` abstract base class
 - **Extensibility**: New agentic frameworks can be added by implementing `AgentInterface`
 
@@ -49,10 +51,17 @@ graph TD
         TaskPlanner[TaskPlanner]
     end
 
-    subgraph "Framework Implementations"
-        JulesClient[JulesClient<br/>CLI Integration]
-        ClaudeClient[ClaudeClient<br/>API Integration]
-        CodexClient[CodexClient<br/>API Integration]
+    subgraph "CLI-based Agents"
+        JulesClient[JulesClient<br/>Jules CLI]
+        GeminiClient[GeminiClient<br/>Gemini CLI]
+        OpenCodeClient[OpenCodeClient<br/>OpenCode CLI]
+        MistralVibeClient[MistralVibeClient<br/>Mistral Vibe CLI]
+        EveryCodeClient[EveryCodeClient<br/>Every Code CLI]
+    end
+
+    subgraph "API-based Agents"
+        ClaudeClient[ClaudeClient<br/>Anthropic API]
+        CodexClient[CodexClient<br/>OpenAI API]
     end
 
     subgraph "Integration Adapters"
@@ -61,14 +70,20 @@ graph TD
         CodeExecutionAdapter[Code Execution Adapter]
     end
 
-    subgraph "Theory"
+    subgraph "Theory & Utilities"
         Architectures[Agent Architectures]
         ReasoningModels[Reasoning Models]
+        AICodeEditing[AI Code Editing Module]
+        DroidModule[Droid Task Management]
     end
 
     PublicAPI --> AgentInterface
     AgentInterface --> BaseAgent
     BaseAgent --> JulesClient
+    BaseAgent --> GeminiClient
+    BaseAgent --> OpenCodeClient
+    BaseAgent --> MistralVibeClient
+    BaseAgent --> EveryCodeClient
     BaseAgent --> ClaudeClient
     BaseAgent --> CodexClient
 
@@ -77,22 +92,29 @@ graph TD
     TaskPlanner --> BaseAgent
 
     JulesClient --> AICodeEditingAdapter
+    GeminiClient --> AICodeEditingAdapter
+    OpenCodeClient --> AICodeEditingAdapter
+    MistralVibeClient --> AICodeEditingAdapter
+    EveryCodeClient --> AICodeEditingAdapter
     ClaudeClient --> AICodeEditingAdapter
     CodexClient --> AICodeEditingAdapter
 
     AICodeEditingAdapter --> LanguageModelsAdapter
     LanguageModelsAdapter --> CodeExecutionAdapter
+    CodeExecutionAdapter --> AICodeEditing
 ```
 
 ## Functional Requirements
 
 ### Core Capabilities
-1. **Agent Framework Integration**: Integrate with Jules CLI, Claude API, and OpenAI Codex
+1. **Agent Framework Integration**: Integrate with multiple agent frameworks:
+   - CLI-based: Jules, Gemini, OpenCode, Mistral Vibe, Every Code
+   - API-based: Claude, Codex
 2. **Unified Interface**: Provide consistent interface across all agent frameworks
 3. **Code Generation**: Generate code using various agent frameworks
 4. **Code Editing**: Edit and refactor code using agents
 5. **Streaming Support**: Support streaming responses where available
-6. **Multi-Agent Orchestration**: Coordinate multiple agents for complex tasks
+6. **Multi-Agent Orchestration**: Coordinate multiple agents for complex tasks (via Every Code and AgentOrchestrator)
 
 ### Quality Standards
 - **Deterministic Output Structure**: All responses follow `AgentResponse` structure
@@ -109,7 +131,9 @@ graph TD
 - `AgentConfig`: Configuration management
 - `BaseAgent`: Base implementation class
 - `AgentOrchestrator`: Multi-agent coordination
-- Framework-specific clients: `JulesClient`, `ClaudeClient`, `CodexClient`
+- Framework-specific clients:
+  - CLI-based: `JulesClient`, `GeminiClient`, `OpenCodeClient`, `MistralVibeClient`, `EveryCodeClient`
+  - API-based: `ClaudeClient`, `CodexClient`
 
 ### Dependencies
 - `codomyrmex.logging_monitoring`: For structured logging
@@ -121,12 +145,17 @@ graph TD
 
 ### Usage Patterns
 - Use `AgentInterface` for type hints and abstract operations
-- Use framework-specific clients (`JulesClient`, `ClaudeClient`, `CodexClient`) for direct operations
+- Use framework-specific clients for direct operations:
+  - CLI-based agents: `JulesClient`, `GeminiClient`, `OpenCodeClient`, `MistralVibeClient`, `EveryCodeClient`
+  - API-based agents: `ClaudeClient`, `CodexClient`
 - Use integration adapters for Codomyrmex module integration
-- Use `AgentOrchestrator` for multi-agent workflows
+- Use `AgentOrchestrator` or `EveryCodeClient` for multi-agent workflows
 
 ### Error Handling
-- Catch module-specific exceptions (`AgentError`, `JulesError`, `ClaudeError`, `CodexError`)
+- Catch module-specific exceptions:
+  - Base: `AgentError`, `AgentTimeoutError`, `AgentConfigurationError`
+  - CLI-based: `JulesError`, `GeminiError`, `OpenCodeError`, `MistralVibeError`, `EveryCodeError`
+  - API-based: `ClaudeError`, `CodexError`
 - Log errors using `logging_monitoring`
 - Return informative error messages in `AgentResponse`
 

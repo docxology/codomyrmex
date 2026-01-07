@@ -4,6 +4,7 @@
 - **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [ollama](ollama/README.md)
+    - [fabric](fabric/README.md)
     - [outputs](outputs/README.md)
     - [prompt_templates](prompt_templates/README.md)
 - **Key Artifacts**:
@@ -22,6 +23,7 @@ Language model integration, prompt management, and output handling for the Codom
 - `__init__.py` – File
 - `config.py` – File
 - `ollama/` – Subdirectory
+- `fabric/` – Subdirectory
 - `outputs/` – Subdirectory
 - `prompt_templates/` – Subdirectory
 
@@ -36,11 +38,35 @@ Language model integration, prompt management, and output handling for the Codom
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.llm import main_component
+from codomyrmex.llm import (
+    OllamaManager,
+    ModelRunner,
+    get_config,
+    set_config,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Configure LLM
+set_config({
+    "provider": "ollama",
+    "model": "llama2",
+    "temperature": 0.7
+})
+
+# Use Ollama manager
+manager = OllamaManager()
+models = manager.list_models()
+print(f"Available models: {[m.name for m in models]}")
+
+# Run model
+runner = ModelRunner(model_name="llama2")
+result = runner.generate(
+    prompt="Explain quantum computing",
+    max_tokens=100
+)
+print(f"Response: {result.content}")
+
+# Get current config
+config = get_config()
+print(f"Current provider: {config.provider}")
 ```
 

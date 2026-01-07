@@ -34,11 +34,33 @@ API infrastructure including OpenAPI specification generation, API documentation
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.api import main_component
+from codomyrmex.api import (
+    RESTAPI,
+    GraphQLAPI,
+    OpenAPIGenerator,
+    APIVersionManager,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create REST API
+api = RESTAPI()
+api.add_endpoint("/users", method="GET", handler=get_users)
+api.add_endpoint("/users", method="POST", handler=create_user)
+
+# Create GraphQL API
+graphql = GraphQLAPI()
+graphql.add_query("users", resolver=get_users)
+graphql.add_mutation("createUser", resolver=create_user)
+
+# Generate OpenAPI spec
+openapi_gen = OpenAPIGenerator()
+spec = openapi_gen.generate_from_routes(api.routes)
+openapi_gen.save_spec(spec, "openapi.json")
+
+# Version API
+version_mgr = APIVersionManager()
+versioned_api = version_mgr.create_versioned_endpoint(
+    endpoint="/users",
+    version="v1"
+)
 ```
 

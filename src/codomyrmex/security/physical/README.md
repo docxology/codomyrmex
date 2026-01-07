@@ -1,7 +1,7 @@
 # physical
 
 ## Signposting
-- **Parent**: [physical](../README.md)
+- **Parent**: [security](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -35,11 +35,25 @@ Physical security including access control, asset inventory, perimeter managemen
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.security.physical import main_component
+from codomyrmex.security.physical import (
+    AccessControlManager,
+    AssetInventory,
+    PerimeterManager,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Manage access control
+access_control = AccessControlManager()
+access_control.grant_access(user_id="user123", resource="server_room")
+has_access = access_control.check_access(user_id="user123", resource="server_room")
+
+# Track assets
+inventory = AssetInventory()
+inventory.add_asset(asset_id="server_01", location="data_center", type="server")
+assets = inventory.list_assets()
+
+# Manage perimeter
+perimeter = PerimeterManager()
+perimeter.set_zone(zone_id="zone_1", access_level="restricted")
+status = perimeter.get_zone_status("zone_1")
 ```
 

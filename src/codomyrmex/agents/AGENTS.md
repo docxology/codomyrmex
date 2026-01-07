@@ -8,20 +8,25 @@
     - [claude](claude/AGENTS.md)
     - [codex](codex/AGENTS.md)
     - [droid](droid/AGENTS.md)
+    - [every_code](every_code/AGENTS.md)
     - [gemini](gemini/AGENTS.md)
     - [generic](generic/AGENTS.md)
     - [jules](jules/AGENTS.md)
+    - [mistral_vibe](mistral_vibe/AGENTS.md)
     - [opencode](opencode/AGENTS.md)
     - [tests](tests/AGENTS.md)
     - [theory](theory/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
+    - [Agent Comparison](AGENT_COMPARISON.md)
+    - [Test Coverage](TEST_COVERAGE.md)
+    - [Agent Comparison](AGENT_COMPARISON.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, and Gemini CLI. Includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules. Provides unified interface for all agents through `AgentInterface` abstract base class.
+Integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, Gemini CLI, Mistral Vibe CLI, and Every Code CLI. Includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules. Provides unified interface for all agents through `AgentInterface` abstract base class.
 
 ## Active Components
 - `README.md` – Project file
@@ -33,10 +38,12 @@ Integration with various agentic frameworks including Jules CLI, Claude API, Ope
 - `config.py` – Configuration management
 - `core.py` – Core interfaces and base classes
 - `droid/` – Directory containing Droid task management components
+- `every_code/` – Directory containing Every Code CLI integration
 - `exceptions.py` – Custom exceptions
 - `gemini/` – Directory containing Gemini CLI integration
 - `generic/` – Directory containing generic base agent classes and utilities
 - `jules/` – Directory containing Jules CLI integration
+- `mistral_vibe/` – Directory containing Mistral Vibe CLI integration
 - `opencode/` – Directory containing OpenCode CLI integration
 - `tests/` – Directory containing tests components
 - `theory/` – Directory containing theoretical foundations for agentic systems
@@ -85,6 +92,15 @@ Integration with various agentic frameworks including Jules CLI, Claude API, Ope
 - `AgentResponse` – Response data structure
 - `AgentConfig` – Configuration management
 - `get_config`, `set_config`, `reset_config` – Configuration functions
+
+### Framework-Specific Clients
+- `JulesClient` – Jules CLI integration
+- `ClaudeClient` – Claude API integration
+- `CodexClient` – OpenAI Codex API integration
+- `OpenCodeClient` – OpenCode CLI integration
+- `GeminiClient` – Gemini CLI integration
+- `MistralVibeClient` – Mistral Vibe CLI integration
+- `EveryCodeClient` – Every Code CLI integration
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

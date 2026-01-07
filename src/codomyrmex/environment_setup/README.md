@@ -42,11 +42,30 @@ Ensures the Codomyrmex platform runs in a deterministic, validated environment. 
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.environment_setup import main_component
+from codomyrmex.environment_setup import (
+    validate_python_version,
+    check_and_setup_env_vars,
+    ensure_dependencies_installed,
+    is_uv_available,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Validate Python version
+if not validate_python_version(min_version="3.10"):
+    raise RuntimeError("Python 3.10+ required")
+
+# Check if uv is available
+if is_uv_available():
+    print("Using uv for dependency management")
+else:
+    print("uv not available, using pip")
+
+# Setup environment variables
+check_and_setup_env_vars({
+    "CODOMYRMEX_LOG_LEVEL": "INFO",
+    "CODOMYRMEX_CACHE_DIR": ".cache"
+})
+
+# Ensure dependencies are installed
+ensure_dependencies_installed(["requests", "pydantic"])
 ```
 

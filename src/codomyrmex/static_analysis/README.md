@@ -41,11 +41,26 @@ Automated code quality assessment without execution. Orchestrates parsers and an
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.static_analysis import main_component
+from codomyrmex.static_analysis import (
+    StaticAnalyzer,
+    analyze_file,
+    analyze_project,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Analyze a single file
+analyzer = StaticAnalyzer()
+result = analyze_file("src/my_module.py")
+print(f"Issues found: {len(result.issues)}")
+for issue in result.issues:
+    print(f"  {issue.severity}: {issue.message} at line {issue.line}")
+
+# Analyze entire project
+project_result = analyze_project("src/")
+print(f"Total issues: {project_result.summary.total_issues}")
+print(f"Code quality score: {project_result.summary.quality_score}")
+
+# Get available analysis tools
+tools = analyzer.get_available_tools()
+print(f"Available tools: {tools}")
 ```
 

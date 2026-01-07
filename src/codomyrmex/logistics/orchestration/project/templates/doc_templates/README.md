@@ -1,7 +1,7 @@
 # doc_templates
 
 ## Signposting
-- **Parent**: [doc_templates](../README.md)
+- **Parent**: [templates](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -26,18 +26,22 @@ Documentation files and guides for doc_templates.
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [templates](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: [README](../../../../../../../README.md)
 
 ## Getting Started
 
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.project_orchestration.templates.doc_templates import main_component
+# Documentation templates for generating project documentation
+# These templates are used by the DocumentationGenerator to create
+# README.md, AGENTS.md, and SPEC.md files for projects and nested directories.
 
-def example():
-    
-    print(f"Result: {result}")
+from codomyrmex.logistics.orchestration.project import DocumentationGenerator
+from pathlib import Path
+
+generator = DocumentationGenerator()
+project_path = Path("my_project")
+generator.generate_project_docs(project_path)
 ```
 

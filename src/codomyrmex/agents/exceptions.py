@@ -121,3 +121,37 @@ class GeminiError(AgentError):
         if exit_code is not None:
             self.context["exit_code"] = exit_code
 
+
+class MistralVibeError(AgentError):
+    """Raised when Mistral Vibe CLI operations fail."""
+
+    def __init__(
+        self,
+        message: str = "Mistral Vibe operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
+        super().__init__(message, **kwargs)
+        if command:
+            self.context["command"] = command
+        if exit_code is not None:
+            self.context["exit_code"] = exit_code
+
+
+class EveryCodeError(AgentError):
+    """Raised when Every Code CLI operations fail."""
+
+    def __init__(
+        self,
+        message: str = "Every Code operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
+        super().__init__(message, **kwargs)
+        if command:
+            self.context["command"] = command
+        if exit_code is not None:
+            self.context["exit_code"] = exit_code
+

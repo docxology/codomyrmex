@@ -1,7 +1,7 @@
 # four_d
 
 ## Signposting
-- **Parent**: [four_d](../README.md)
+- **Parent**: [spatial](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -28,11 +28,27 @@
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.spatial.four_d import main_component
+from codomyrmex.spatial.four_d import (
+    QuadrayCoordinate,
+    IsotropicVectorMatrix,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Work with Quadray coordinates (4D)
+coord = QuadrayCoordinate(a=1, b=2, c=3, d=4)
+print(f"Quadray: {coord}")
+print(f"Magnitude: {coord.magnitude()}")
+
+# Use Isotropic Vector Matrix for 4D transformations
+ivm = IsotropicVectorMatrix()
+transformed = ivm.transform(coord, transformation="rotation")
+print(f"Transformed: {transformed}")
+
+# Temporal interpolation
+from codomyrmex.spatial.four_d import interpolate_temporal
+result = interpolate_temporal(
+    start_state=coord,
+    end_state=QuadrayCoordinate(a=2, b=3, c=4, d=5),
+    t=0.5
+)
 ```
 

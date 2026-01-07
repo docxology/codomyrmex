@@ -5,6 +5,7 @@
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [ollama](ollama/AGENTS.md)
+    - [fabric](fabric/AGENTS.md)
     - [outputs](outputs/AGENTS.md)
     - [prompt_templates](prompt_templates/AGENTS.md)
 - **Key Artifacts**:
@@ -22,6 +23,7 @@ Language model integration, prompt management, and output handling for the Codom
 - `__init__.py` – Module exports and public API
 - `config.py` – LLM configuration management (LLMConfig, LLMConfigPresets)
 - `ollama/` – Directory containing Ollama integration (OllamaManager, ModelRunner, OutputManager, ConfigManager)
+- `fabric/` – Directory containing Fabric integration (FabricManager, FabricOrchestrator, FabricConfigManager)
 - `outputs/` – Directory containing output handling components
 - `prompt_templates/` – Directory containing prompt template management
 
@@ -47,6 +49,19 @@ Language model integration, prompt management, and output handling for the Codom
 ### LLMConfig (`config.py`)
 - `LLMConfig` – Configuration class for LLM operations
 - `LLMConfigPresets` – Preset configurations for common use cases
+
+### FabricManager (`fabric/fabric_manager.py`)
+- `FabricManager(fabric_binary: str = "fabric")` – Main Fabric integration manager
+- `list_patterns() -> List[str]` – Retrieve available Fabric patterns
+- `run_pattern(pattern: str, input_text: str, additional_args: Optional[List[str]] = None) -> Dict[str, Any]` – Execute Fabric pattern
+
+### FabricOrchestrator (`fabric/fabric_orchestrator.py`)
+- `FabricOrchestrator(fabric_binary: str = "fabric")` – Orchestrates workflows combining Fabric patterns with Codomyrmex capabilities
+- `analyze_code(code_content: str, analysis_type: str = "comprehensive") -> Dict[str, Any]` – Analyze code using appropriate Fabric patterns
+
+### FabricConfigManager (`fabric/fabric_config_manager.py`)
+- `FabricConfigManager(config_dir: Optional[str] = None)` – Manages Fabric configuration and integration settings
+- `create_codomyrmex_patterns() -> bool` – Create Codomyrmex-specific Fabric patterns
 
 ### Module Functions (`__init__.py`)
 - `get_config() -> LLMConfig` – Get current LLM configuration

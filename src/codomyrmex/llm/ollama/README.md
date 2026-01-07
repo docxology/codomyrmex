@@ -1,7 +1,7 @@
 # ollama
 
 ## Signposting
-- **Parent**: [ollama](../README.md)
+- **Parent**: [llm](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -39,11 +39,21 @@ Integration with Ollama local Large Language Models. Provides comprehensive mode
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.llm.ollama import main_component
+from codomyrmex.llm.ollama import OllamaManager, ModelRunner
 
-def example():
-    
-    print(f"Result: {result}")
+# Initialize Ollama manager
+manager = OllamaManager()
+
+# List available models
+models = manager.list_models()
+print(f"Available models: {[m.name for m in models]}")
+
+# Run a model
+runner = ModelRunner(model_name="llama2")
+result = runner.generate(
+    prompt="Explain quantum computing",
+    max_tokens=100
+)
+print(f"Response: {result.content}")
 ```
 

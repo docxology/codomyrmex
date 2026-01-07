@@ -5,7 +5,7 @@ Get up and running with Fabric + Codomyrmex integration in under 5 minutes!
 ## ⚡ One-Command Setup
 
 ```bash
-cd scripts/output/fabric-integration
+cd scripts/fabric
 python3 setup_fabric_env.py
 ```
 
@@ -77,7 +77,8 @@ Or check the [full README.md](README.md) for comprehensive documentation.
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
+- **Parent**: [scripts](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+- **Core Module**: [src/codomyrmex/llm/fabric](../../../src/codomyrmex/llm/fabric/README.md)

@@ -45,11 +45,29 @@ Unified interface for code execution, sandboxing, review, and monitoring. Consol
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.coding import main_component
+from codomyrmex.coding.execution import execute_code
+from codomyrmex.coding.sandbox import run_code_in_docker, ExecutionLimits
+from codomyrmex.coding.review import CodeReviewer, analyze_file
+from codomyrmex.coding.monitoring import ExecutionMonitor
 
-def example():
-    
-    print(f"Result: {result}")
+# Execute code in sandbox
+limits = ExecutionLimits(cpu_time=5.0, memory_mb=512)
+result = execute_code(
+    code="print('Hello, World!')",
+    language="python",
+    limits=limits
+)
+print(f"Output: {result.output}")
+
+# Review code
+reviewer = CodeReviewer()
+review = analyze_file("src/my_module.py")
+print(f"Issues: {len(review.issues)}")
+
+# Monitor execution
+monitor = ExecutionMonitor()
+with monitor.track_execution("my_function"):
+    result = my_function()
+print(f"Execution time: {monitor.get_metrics().execution_time}s")
 ```
 

@@ -1,7 +1,7 @@
 # prompt_templates
 
 ## Signposting
-- **Parent**: [prompt_templates](../README.md)
+- **Parent**: [llm](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -29,14 +29,23 @@ Prompt templates for LLM interactions including system templates, context templa
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+Prompt templates are stored as markdown files and loaded when needed:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.llm.prompt_templates import main_component
+from pathlib import Path
+from codomyrmex.llm.prompt_templates import (
+    load_system_template,
+    load_context_template,
+    load_task_template,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Load templates
+template_dir = Path(__file__).parent
+system_prompt = load_system_template(template_dir / "system_template.md")
+context_prompt = load_context_template(template_dir / "context_template.md")
+task_prompt = load_task_template(template_dir / "task_template.md")
+
+# Use templates in LLM interactions
+full_prompt = f"{system_prompt}\n\n{context_prompt}\n\n{task_prompt}"
 ```
 

@@ -39,11 +39,35 @@ Container management including Docker image building, container orchestration, K
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.containerization import main_component
+from codomyrmex.containerization import (
+    DockerManager,
+    KubernetesOrchestrator,
+    ContainerSecurityScanner,
+    ContainerRegistry,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Build Docker image
+docker = DockerManager()
+image = docker.build_image(
+    dockerfile="Dockerfile",
+    tag="myapp:latest"
+)
+
+# Deploy to Kubernetes
+k8s = KubernetesOrchestrator()
+deployment = k8s.deploy(
+    image="myapp:latest",
+    replicas=3,
+    namespace="production"
+)
+
+# Scan for security issues
+scanner = ContainerSecurityScanner()
+scan_result = scanner.scan_image("myapp:latest")
+print(f"Vulnerabilities: {len(scan_result.vulnerabilities)}")
+
+# Manage container registry
+registry = ContainerRegistry()
+registry.push_image("myapp:latest", "registry.example.com")
 ```
 

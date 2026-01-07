@@ -43,11 +43,26 @@ Security scanning and threat assessment across cognitive, digital, and physical 
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.security import main_component
+from codomyrmex.security import (
+    SecurityScanner,
+    ThreatModeler,
+    VulnerabilityDetector,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Scan for vulnerabilities
+scanner = SecurityScanner()
+vulnerabilities = scanner.scan_codebase("src/")
+print(f"Found {len(vulnerabilities)} vulnerabilities")
+
+# Perform threat modeling
+threat_modeler = ThreatModeler()
+threats = threat_modeler.assess_threats(
+    system_architecture={"components": ["api", "database"]}
+)
+print(f"Identified {len(threats)} threats")
+
+# Detect vulnerabilities
+detector = VulnerabilityDetector()
+issues = detector.check_vulnerabilities(dependencies={"requests": "2.28.0"})
 ```
 

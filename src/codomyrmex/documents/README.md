@@ -54,11 +54,34 @@ Robust, abstractable methods for reading and writing various document formats. H
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.documents import main_component
+from codomyrmex.documents import (
+    read_document,
+    write_document,
+    parse_document,
+    convert_document,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Read a document
+doc = read_document("example.md", format="markdown")
+print(f"Content: {doc.content[:100]}...")
+
+# Write a document
+write_document(
+    content="# Hello World\n\nThis is a test.",
+    path="output.md",
+    format="markdown"
+)
+
+# Parse document
+parsed = parse_document("example.json", format="json")
+print(f"Parsed data: {parsed.data}")
+
+# Convert between formats
+convert_document(
+    input_path="example.md",
+    output_path="example.html",
+    input_format="markdown",
+    output_format="html"
+)
 ```
 

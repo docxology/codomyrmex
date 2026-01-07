@@ -40,11 +40,28 @@ Code analysis through AST parsing, pattern recognition, and embedding generation
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.pattern_matching import main_component
+from codomyrmex.pattern_matching import (
+    analyze_repository_path,
+    run_full_analysis,
+    get_embedding_function,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Analyze repository
+results = analyze_repository_path("src/")
+print(f"Patterns found: {len(results.patterns)}")
+print(f"Dependencies: {len(results.dependencies)}")
+
+# Run full analysis
+analysis = run_full_analysis(
+    repo_path="src/",
+    include_dependencies=True,
+    include_text_search=True
+)
+print(f"Analysis complete: {analysis.summary}")
+
+# Get embedding function for semantic search
+embed_fn = get_embedding_function()
+embedding = embed_fn("function to calculate fibonacci")
+print(f"Embedding dimension: {len(embedding)}")
 ```
 

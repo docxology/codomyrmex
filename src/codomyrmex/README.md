@@ -33,14 +33,13 @@
     - [performance](performance/README.md)
     - [physical_management](physical_management/README.md)
     - [plugin_system](plugin_system/README.md)
-    - [project_orchestration](project_orchestration/README.md)
+    - [logistics](logistics/README.md)
     - [scrape](scrape/README.md)
     - [security](security/README.md)
     - [serialization](serialization/README.md)
     - [spatial](spatial/README.md)
     - [static_analysis](static_analysis/README.md)
     - [system_discovery](system_discovery/README.md)
-    - [task_queue](task_queue/README.md)
     - [template](template/README.md)
     - [templating](templating/README.md)
     - [terminal_interface](terminal_interface/README.md)
@@ -48,6 +47,8 @@
     - [tools](tools/README.md)
     - [utils](utils/README.md)
     - [validation](validation/README.md)
+    - [website](website/README.md)
+    - [skills](skills/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -95,14 +96,13 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 - `performance/` – Subdirectory
 - `physical_management/` – Subdirectory
 - `plugin_system/` – Subdirectory
-- `project_orchestration/` – Subdirectory
+- `logistics/` – Subdirectory (orchestration, task, schedule)
 - `scrape/` – Subdirectory
 - `security/` – Subdirectory
 - `serialization/` – Subdirectory
 - `spatial/` – Subdirectory
 - `static_analysis/` – Subdirectory
 - `system_discovery/` – Subdirectory
-- `task_queue/` – Subdirectory
 - `template/` – Subdirectory
 - `templating/` – Subdirectory
 - `terminal_interface/` – Subdirectory
@@ -110,6 +110,8 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 - `tools/` – Subdirectory
 - `utils/` – Subdirectory
 - `validation/` – Subdirectory
+- `website/` – Subdirectory
+- `skills/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
@@ -119,14 +121,32 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+The Codomyrmex package provides a comprehensive set of modules for AI development workflows. Each module can be imported and used independently:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex import main_component
+# Example: Using multiple modules together
+from codomyrmex.logging_monitoring import setup_logging, get_logger
+from codomyrmex.environment_setup import validate_python_version
+from codomyrmex.agents import AgentInterface
+from codomyrmex.coding import execute_code
 
-def example():
-    
-    print(f"Result: {result}")
+# Setup logging
+setup_logging(level="INFO")
+logger = get_logger(__name__)
+
+# Validate environment
+if validate_python_version(min_version="3.10"):
+    logger.info("Python version validated")
+
+# Use agents
+from codomyrmex.agents.claude import ClaudeClient
+client = ClaudeClient()
+response = client.execute(AgentRequest(task="Generate code"))
+
+# Execute code safely
+result = execute_code(code="print('Hello')", language="python")
+logger.info(f"Code execution result: {result.output}")
 ```
+
+See individual module README files for specific usage examples.
 

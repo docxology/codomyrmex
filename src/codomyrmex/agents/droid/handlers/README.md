@@ -1,7 +1,7 @@
 # handlers
 
 ## Signposting
-- **Parent**: [handlers](../README.md)
+- **Parent**: [droid](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -26,14 +26,20 @@ Task handlers for Droid autonomous agents. Provides specialized handlers for dif
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+Task handlers are used internally by Droid agents to execute specific task types. Handlers are registered dynamically and invoked based on task requirements:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.agents.droid.handlers import main_component
-
-def example():
-    
-    print(f"Result: {result}")
+# Handlers are typically registered and used by the Droid system
+# Example handler registration (internal to Droid system):
+# 
+# from codomyrmex.agents.droid.handlers import register_handler
+# 
+# @register_handler("code_generation")
+# def handle_code_generation(task):
+#     # Handler implementation
+#     return result
+#
+# Handlers are automatically discovered and used by Droid controllers
+# when executing tasks that match their registered task types.
 ```
 

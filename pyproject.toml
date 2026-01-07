@@ -85,6 +85,8 @@ dependencies = [
     "tiktoken>=0.5.0",
     # For syntax highlighting (often a dependency for other tools)
     "Pygments>=2.15.0",
+    # For YAML parsing (used in skills, config_management, documents)
+    "pyyaml>=6.0.2",
     # For progress bars
     "tqdm>=4.65.0",
     # For graph structures (used in cerebrum)

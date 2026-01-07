@@ -41,11 +41,30 @@
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.spatial.three_d import main_component
+from codomyrmex.spatial.three_d import (
+    Scene3D,
+    Object3D,
+    Camera3D,
+    ARSession,
+    VRRenderer,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create a 3D scene
+scene = Scene3D()
+cube = Object3D(position=(0, 0, 0), mesh="cube", scale=(1, 1, 1))
+scene.add_object(cube)
+
+# Set up camera
+camera = Camera3D(position=(5, 5, 5), target=(0, 0, 0), fov=60)
+image = scene.render(camera)
+
+# AR support
+ar_session = ARSession()
+ar_session.initialize()
+tracking = ar_session.track_pose()
+
+# VR rendering
+vr_renderer = VRRenderer()
+vr_renderer.render_scene(scene, stereo=True)
 ```
 

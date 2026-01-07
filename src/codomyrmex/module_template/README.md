@@ -36,14 +36,19 @@ Scaffolding and generation logic for creating new Codomyrmex modules. Ensures al
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+This module is used internally by Codomyrmex to generate new modules. To create a new module:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.module_template import main_component
+# This module provides scaffolding tools for creating new Codomyrmex modules
+# Typically used via CLI or internal tooling
 
-def example():
-    
-    print(f"Result: {result}")
+# Example: Generate a new module structure
+# (This would typically be done via a CLI command or script)
+# The module_template ensures all new modules have:
+# - Proper directory structure
+# - Required documentation files (README.md, AGENTS.md, SPEC.md)
+# - Standard __init__.py with proper exports
+# - Test directory structure
+# - Documentation templates
 ```
 

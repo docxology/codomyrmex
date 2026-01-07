@@ -42,11 +42,42 @@ Physical system simulation and management including system monitoring, resource 
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.physical_management import main_component
+from codomyrmex.physical_management import (
+    PhysicalObjectManager,
+    PhysicalObject,
+    SensorManager,
+    PhysicsSimulator,
+    StreamingAnalytics,
+    ObjectType,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Manage physical objects
+obj_manager = PhysicalObjectManager()
+obj = obj_manager.create_object(
+    object_id="sensor_01",
+    name="Temperature Sensor",
+    object_type=ObjectType.SENSOR,
+    x=0.0, y=0.0, z=0.0
+)
+status = obj_manager.get_object_status("sensor_01")
+print(f"Object status: {status}")
+
+# Integrate with sensors
+sensor_mgr = SensorManager()
+reading = sensor_mgr.read_sensor("sensor_01")
+print(f"Temperature: {reading.value}°C")
+
+# Run physics simulation
+simulator = PhysicsSimulator()
+simulator.add_object(obj)
+simulator.step(dt=0.1)
+state = simulator.get_object_state("sensor_01")
+
+# Analyze data streams
+analytics = StreamingAnalytics()
+data_stream = analytics.create_stream("sensor_data")
+analytics.add_data_point(data_stream, value=25.5, timestamp=time.time())
+metrics = analytics.get_metrics(data_stream)
+print(f"Average: {metrics.average}")
 ```
 

@@ -35,11 +35,23 @@
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.spatial import main_component
+from codomyrmex.spatial.three_d import Scene3D, Object3D, Camera3D
+from codomyrmex.spatial.four_d import QuadrayCoordinate
+from codomyrmex.spatial.world_models import WorldModel
 
-def example():
-    
-    print(f"Result: {result}")
+# Create a 3D scene
+scene = Scene3D()
+obj = Object3D(position=(0, 0, 0), mesh="cube")
+scene.add_object(obj)
+camera = Camera3D(position=(5, 5, 5), target=(0, 0, 0))
+image = scene.render(camera)
+
+# Work with 4D coordinates
+coord = QuadrayCoordinate(a=1, b=2, c=3, d=4)
+print(f"4D coordinate: {coord}")
+
+# Create a world model
+world = WorldModel()
+world.add_environment(env_id="test_env", properties={...})
 ```
 

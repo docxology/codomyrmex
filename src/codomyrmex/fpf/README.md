@@ -51,11 +51,31 @@ Functional interface for working with the First Principles Framework specificati
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.fpf import main_component
+from codomyrmex.fpf import FPFClient, FPFParser, FPFExporter
 
-def example():
-    
-    print(f"Result: {result}")
+# Use high-level client
+client = FPFClient()
+spec = client.load_from_file("FPF-Spec.md")
+
+# Search for patterns
+patterns = client.search("testing", filters={"status": "active"})
+print(f"Found {len(patterns)} patterns")
+
+# Get specific pattern
+pattern = client.get_pattern("T001")
+print(f"Pattern: {pattern.name}")
+
+# Build context for prompt engineering
+context = client.build_context(pattern_id="T001")
+print(f"Context length: {len(context)}")
+
+# Export to JSON
+client.export_json("fpf_spec.json")
+
+# Or use lower-level components
+parser = FPFParser()
+spec = parser.parse_spec(content)
+exporter = FPFExporter()
+exporter.export_json(spec, output_path)
 ```
 

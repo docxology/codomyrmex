@@ -1,4 +1,4 @@
-# project_orchestration - Functional Specification
+# project - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
@@ -20,7 +20,7 @@ Coordinates complex workflows involving multiple modules (e.g., "Build -> Test -
 ## Navigation
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [../SPEC.md](../SPEC.md)
+- **Parent**: [../../SPEC.md](../../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
 

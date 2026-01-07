@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/project_orchestration/templates
+# Codomyrmex Agents — src/codomyrmex/logistics/orchestration/project/templates
 
 ## Signposting
 - **Parent**: [project](../AGENTS.md)
@@ -40,5 +40,5 @@ Project orchestration templates for common project types. Provides pre-configure
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [project_orchestration](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [project](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation

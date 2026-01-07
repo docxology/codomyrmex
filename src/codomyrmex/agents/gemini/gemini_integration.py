@@ -3,9 +3,6 @@
 from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter, AgentInterface
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
 
 
 class GeminiIntegrationAdapter(AgentIntegrationAdapter):

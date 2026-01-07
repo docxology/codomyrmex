@@ -1,7 +1,7 @@
 # droid
 
 ## Signposting
-- **Parent**: [droid](../README.md)
+- **Parent**: [agents](../README.md)
 - **Children**:
     - [handlers](handlers/README.md)
 - **Key Artifacts**:
@@ -36,11 +36,28 @@ Autonomous Agent abstraction for persisted or ephemeral agentic sessions that ma
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.agents.droid import main_component
+from codomyrmex.agents.droid import (
+    DroidController,
+    DroidConfig,
+    create_default_controller,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create a Droid controller
+config = DroidConfig(
+    mode="autonomous",
+    persona="RefactoringDroid",
+    max_iterations=10
+)
+controller = create_default_controller(config)
+
+# Execute a task
+result = controller.execute_task(
+    task="Refactor the authentication module to use async/await",
+    context={"module_path": "src/auth.py"}
+)
+
+# Check status
+status = controller.get_status()
+print(f"Droid status: {status}")
 ```
 

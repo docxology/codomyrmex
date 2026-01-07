@@ -1,7 +1,7 @@
-# Codomyrmex Agents — src/codomyrmex/project_orchestration/templates/doc_templates
+# Codomyrmex Agents — src/codomyrmex/logistics/orchestration/project/templates/doc_templates
 
 ## Signposting
-- **Parent**: [Doc Templates](../AGENTS.md)
+- **Parent**: [templates](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -31,4 +31,4 @@ Documentation files and guides for doc_templates.
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [templates](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **🏠 Project Root**: [README](../../../../../../../README.md) - Main project documentation

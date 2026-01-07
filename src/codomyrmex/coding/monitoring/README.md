@@ -1,7 +1,7 @@
 # monitoring
 
 ## Signposting
-- **Parent**: [monitoring](../README.md)
+- **Parent**: [coding](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -32,11 +32,27 @@ Code execution monitoring including execution monitoring, metrics collection, an
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.coding.monitoring import main_component
+from codomyrmex.coding.monitoring import (
+    ExecutionMonitor,
+    MetricsCollector,
+    ResourceMonitor,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Monitor code execution
+monitor = ExecutionMonitor()
+with monitor.track_execution("my_function"):
+    result = my_function()
+
+# Collect metrics
+collector = MetricsCollector()
+metrics = collector.collect_metrics()
+print(f"Execution time: {metrics.execution_time}s")
+print(f"Memory usage: {metrics.memory_usage_mb}MB")
+
+# Monitor resources
+resource_monitor = ResourceMonitor()
+snapshot = resource_monitor.get_snapshot()
+print(f"CPU: {snapshot.cpu_percent}%")
+print(f"Memory: {snapshot.memory_mb}MB")
 ```
 

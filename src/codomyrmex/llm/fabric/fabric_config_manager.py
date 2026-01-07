@@ -1,65 +1,87 @@
-#!/usr/bin/env python3
 """
 Fabric Configuration Manager for Codomyrmex Integration
 
 Manages Fabric configuration, patterns, and integration settings.
 """
 
-import os
 import json
-import shutil
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from codomyrmex.logging_monitoring import get_logger
+
+
 class FabricConfigManager:
     """Manages Fabric configuration and integration settings."""
-    
+
     def __init__(self, config_dir: Optional[str] = None):
+        """
+        Initialize Fabric configuration manager.
+
+        Args:
+            config_dir: Custom configuration directory (default: ~/.config/fabric)
+        """
         self.config_dir = Path(config_dir) if config_dir else Path.home() / ".config" / "fabric"
         self.patterns_dir = self.config_dir / "patterns"
         self.contexts_dir = self.config_dir / "contexts"
-        
-    def ensure_directories(self):
+        self.logger = get_logger(__name__)
+
+    def ensure_directories(self) -> bool:
         """Ensure all required directories exist."""
         dirs = [self.config_dir, self.patterns_dir, self.contexts_dir]
         for dir_path in dirs:
             dir_path.mkdir(parents=True, exist_ok=True)
-        print(f"✅ Fabric directories ensured at: {self.config_dir}")
-    
+        self.logger.info(f"Fabric directories ensured at: {self.config_dir}")
+        return True
+
     def list_available_patterns(self) -> List[str]:
         """List all available Fabric patterns."""
         if not self.patterns_dir.exists():
             return []
-        
+
         patterns = []
         for item in self.patterns_dir.iterdir():
             if item.is_dir() and (item / "system.md").exists():
                 patterns.append(item.name)
-        
+
         return sorted(patterns)
-    
-    def create_custom_pattern(self, name: str, system_prompt: str, description: str = "") -> bool:
-        """Create a custom Fabric pattern."""
+
+    def create_custom_pattern(
+        self,
+        name: str,
+        system_prompt: str,
+        description: str = ""
+    ) -> bool:
+        """
+        Create a custom Fabric pattern.
+
+        Args:
+            name: Pattern name
+            system_prompt: System prompt content
+            description: Optional description
+
+        Returns:
+            True if successful
+        """
         pattern_dir = self.patterns_dir / name
         pattern_dir.mkdir(exist_ok=True)
-        
+
         # Create system.md file
         system_file = pattern_dir / "system.md"
         with open(system_file, 'w') as f:
             f.write(system_prompt)
-        
+
         # Create README.md if description provided
         if description:
             readme_file = pattern_dir / "README.md"
             with open(readme_file, 'w') as f:
                 f.write(f"# {name}\n\n{description}\n")
-        
-        print(f"✅ Created custom pattern: {name}")
+
+        self.logger.info(f"Created custom pattern: {name}")
         return True
-    
-    def create_codomyrmex_patterns(self):
+
+    def create_codomyrmex_patterns(self) -> bool:
         """Create Codomyrmex-specific Fabric patterns."""
-        
         # Pattern for code analysis integration
         code_analysis_prompt = """# IDENTITY and PURPOSE
 You are an expert code analyst working with the Codomyrmex framework. Your role is to analyze code and provide insights that integrate well with Codomyrmex's static analysis and visualization capabilities.
@@ -104,7 +126,7 @@ You are an expert code analyst working with the Codomyrmex framework. Your role 
             code_analysis_prompt,
             "Code analysis pattern optimized for Codomyrmex integration"
         )
-        
+
         # Pattern for workflow orchestration
         workflow_prompt = """# IDENTITY and PURPOSE
 You are a workflow orchestration expert specializing in AI-augmented development processes. You help design and optimize workflows that combine multiple AI tools and development modules.
@@ -131,15 +153,24 @@ Provide a structured workflow plan with:
 """
 
         self.create_custom_pattern(
-            "codomyrmex_workflow_design", 
+            "codomyrmex_workflow_design",
             workflow_prompt,
             "Workflow design pattern for AI-augmented development processes"
         )
-        
-        print("✅ Created Codomyrmex-specific Fabric patterns")
-    
+
+        self.logger.info("Created Codomyrmex-specific Fabric patterns")
+        return True
+
     def export_configuration(self, output_file: str) -> bool:
-        """Export current Fabric configuration."""
+        """
+        Export current Fabric configuration.
+
+        Args:
+            output_file: Path to output JSON file
+
+        Returns:
+            True if successful
+        """
         config_data = {
             "config_dir": str(self.config_dir),
             "patterns": self.list_available_patterns(),
@@ -148,41 +179,13 @@ Provide a structured workflow plan with:
                 "contexts": str(self.contexts_dir)
             }
         }
-        
+
         try:
             with open(output_file, 'w') as f:
                 json.dump(config_data, f, indent=2)
-            print(f"✅ Configuration exported to: {output_file}")
+            self.logger.info(f"Configuration exported to: {output_file}")
             return True
         except Exception as e:
-            print(f"❌ Failed to export configuration: {e}")
+            self.logger.error(f"Failed to export configuration: {e}")
             return False
 
-def main():
-    """Main configuration management function."""
-    print("🔧 Fabric Configuration Manager for Codomyrmex")
-    print("=" * 50)
-    
-    manager = FabricConfigManager()
-    
-    # Ensure directories exist
-    manager.ensure_directories()
-    
-    # List existing patterns
-    patterns = manager.list_available_patterns()
-    print(f"📋 Found {len(patterns)} existing patterns")
-    if patterns:
-        print("   Sample patterns:", patterns[:5])
-    
-    # Create Codomyrmex-specific patterns
-    print("\n🎨 Creating Codomyrmex-specific patterns...")
-    manager.create_codomyrmex_patterns()
-    
-    # Export configuration
-    print("\n📤 Exporting configuration...")
-    manager.export_configuration("fabric_config_export.json")
-    
-    print("\n✅ Fabric configuration management completed!")
-
-if __name__ == "__main__":
-    main()

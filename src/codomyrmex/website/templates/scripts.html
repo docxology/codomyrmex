@@ -5,13 +5,18 @@
 {% block content %}
 <h1>Script Orchestration</h1>
 
-<div class="grid">
+<div class="search-container">
+    <input type="text" id="script-search" class="search-input" placeholder="🔍 Filter scripts by name...">
+</div>
+
+<div class="grid" id="scripts-grid">
     {% for script in scripts %}
-    <div class="card">
+    <div class="card script-card" data-script-name="{{ script.path|lower }}">
         <div class="card-title">
-            {{ script.name }}
+            <span class="script-name">{{ script.path.split('/')[-1] }}</span>
         </div>
-        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+        <span class="script-path" title="{{ script.path }}">{{ script.path }}</span>
+        <p class="script-description">
             {{ script.description }}
         </p>
 
@@ -27,9 +32,31 @@
     {% endfor %}
 
     {% if not scripts %}
-    <div class="card" style="grid-column: 1 / -1;">
+    <div class="card empty-state" style="grid-column: 1 / -1;">
+        <div class="empty-state-icon">📜</div>
         <p>No scripts found in <code>scripts/</code> directory.</p>
     </div>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('script-search');
+    const cards = document.querySelectorAll('.script-card');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            cards.forEach(card => {
+                const name = card.dataset.scriptName;
+                if (name.includes(query)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+</script>
 {% endblock %}

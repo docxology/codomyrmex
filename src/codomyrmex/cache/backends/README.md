@@ -31,11 +31,16 @@ Cache backend implementations including in-memory, file-based, and Redis backend
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.cache.backends import main_component
+from codomyrmex.cache.backends import InMemoryCache, FileBasedCache
 
-def example():
-    
-    print(f"Result: {result}")
+# Use in-memory cache for fast access
+memory_cache = InMemoryCache()
+memory_cache.set("key1", "value1", ttl=300)
+value = memory_cache.get("key1")
+
+# Use file-based cache for persistence
+file_cache = FileBasedCache(cache_dir="./cache")
+file_cache.set("key2", {"data": "value"}, ttl=600)
+cached_data = file_cache.get("key2")
 ```
 

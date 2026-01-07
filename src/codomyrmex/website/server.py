@@ -162,41 +162,49 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         
         ollama_url = "http://localhost:11434/api/chat"
         
+        # Get the message from frontend
+        user_message = data.get('message', '')
+        model = data.get('model', 'llama3')  # Default to llama3
+        
+        # Format for Ollama API
+        ollama_payload = {
+            "model": model,
+            "messages": [
+                {"role": "user", "content": user_message}
+            ],
+            "stream": False  # Non-streaming for simplicity
+        }
+        
+        # If the frontend already sends proper format, use it
+        if 'messages' in data:
+            ollama_payload = {
+                "model": data.get('model', 'llama3'),
+                "messages": data['messages'],
+                "stream": False
+            }
+        
         try:
-            # Proxy request to Ollama
-            ollama_resp = requests.post(ollama_url, json=data)
+            ollama_resp = requests.post(ollama_url, json=ollama_payload, timeout=60)
             
             if ollama_resp.status_code == 200:
-                # Stream it back or send full response? 
-                # For simplicity, send full response for now.
-                # Ollama response is a stream of JSON objects if stream=True (default)
-                # But requests.post waits unless stream=True.
-                # If the frontend expects streaming, we need to handle that.
-                # Let's assume non-streaming for MVP stability, enforce stream=false
+                result = ollama_resp.json()
+                # Extract the assistant's message
+                response_text = result.get('message', {}).get('content', 'No response')
                 
-                if data.get('stream'):
-                     # TODO: Implement streaming proxy
-                     pass
-                
-                # If we modify existing data to force stream=False
-                if 'stream' not in data:
-                    data['stream'] = False
-                    ollama_resp = requests.post(ollama_url, json=data)
-
-                # Collect NDJSON if streaming was on, or just JSON if not
-                response_content = ollama_resp.text
-                
-                # If it's single JSON (stream=false)
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(response_content.encode('utf-8'))
-                
+                self.send_json_response({
+                    "response": response_text,
+                    "model": model,
+                    "success": True
+                })
             else:
-                 self.send_json_response({"error": f"Ollama error: {ollama_resp.status_code}"}, status=502)
+                self.send_json_response({
+                    "error": f"Ollama error: {ollama_resp.status_code} - {ollama_resp.text[:200]}"
+                }, status=502)
 
         except requests.exceptions.ConnectionError:
             self.send_json_response({"error": "Ollama service not reachable. Is it running?"}, status=503)
+        except requests.exceptions.Timeout:
+            self.send_json_response({"error": "Ollama request timed out"}, status=504)
         except Exception as e:
             self.send_json_response({"error": str(e)}, status=500)
 

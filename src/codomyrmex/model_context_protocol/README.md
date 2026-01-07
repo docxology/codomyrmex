@@ -40,11 +40,31 @@ Defines the standard schemas (Model Context Protocol) for communication between 
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.model_context_protocol import main_component
+from codomyrmex.model_context_protocol import (
+    MCPToolCall,
+    MCPToolResult,
+    MCPErrorDetail,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create a tool call
+tool_call = MCPToolCall(
+    tool_name="read_file",
+    arguments={"path": "example.txt"}
+)
+
+# Create a tool result
+tool_result = MCPToolResult(
+    tool_call_id=tool_call.id,
+    content="File contents here",
+    is_error=False
+)
+
+# Handle errors
+if tool_result.is_error:
+    error = MCPErrorDetail(
+        code="FILE_NOT_FOUND",
+        message="File does not exist"
+    )
+    tool_result.error = error
 ```
 

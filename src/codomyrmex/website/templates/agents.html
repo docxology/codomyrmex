@@ -3,21 +3,36 @@
 {% block title %}Agents - Codomyrmex{% endblock %}
 
 {% block content %}
-<h1>System Agents</h1>
+<h1>AI Agent Integrations</h1>
+
+<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+    {{ agents|length }} agent frameworks and integrations available in the Codomyrmex agents module.
+</p>
 
 <div class="grid">
     {% for agent in agents %}
     <div class="card">
         <div class="card-title">
             {{ agent.name }}
-            <span class="status-badge active">Active</span>
+            <span
+                class="status-badge {% if agent.type == 'CLI Integration' %}active{% elif agent.type == 'API Integration' %}running{% else %}pending{% endif %}">
+                {{ agent.type }}
+            </span>
         </div>
-        <p style="margin-bottom: 1rem;">{{ agent.description }}</p>
+        <p style="margin-bottom: 0.75rem;">{{ agent.description[:250] }}{% if agent.description|length > 250 %}...{%
+            endif %}</p>
         <p class="console"
             style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
-            Path: {{ agent.path }}
+            {{ agent.path }}
         </p>
     </div>
     {% endfor %}
 </div>
+
+{% if not agents %}
+<div class="empty-state">
+    <div class="empty-state-icon">🤖</div>
+    <p>No agent integrations found in src/codomyrmex/agents/</p>
+</div>
+{% endif %}
 {% endblock %}

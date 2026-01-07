@@ -13,11 +13,20 @@
     </div>
 
     <div class="card">
-        <div class="card-title">Agents <span class="status-badge">{{ system.agent_count }} Active</span></div>
-        <p><strong>Total Agents:</strong> {{ system.agent_count }}</p>
+        <div class="card-title">Modules <span class="status-badge">{{ system.module_count }} Active</span></div>
+        <p><strong>Total Packages:</strong> {{ system.module_count }}</p>
+        <a href="modules.html"
+            style="color: var(--accent-color); font-size: 0.9rem; text-decoration: none; display: inline-block; margin-top: 0.5rem;">Browse
+            Modules &rarr;</a>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Agent Integrations <span class="status-badge running">{{ system.agent_count }}</span>
+        </div>
+        <p><strong>AI Frameworks:</strong> {{ system.agent_count }}</p>
         <a href="agents.html"
             style="color: var(--accent-color); font-size: 0.9rem; text-decoration: none; display: inline-block; margin-top: 0.5rem;">View
-            All Agents &rarr;</a>
+            Agents &rarr;</a>
     </div>
 
     <div class="card">
@@ -26,6 +35,4 @@
             style="text-decoration: none; width: 100%; text-align: center;">Run Scripts</a>
     </div>
 </div>
-
-<!-- Potential Metrics Graph could go here -->
 {% endblock %}

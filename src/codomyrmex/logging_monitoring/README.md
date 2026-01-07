@@ -40,11 +40,28 @@ Centralized logging infrastructure for the Codomyrmex platform. Implements unifi
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.logging_monitoring import main_component
+from codomyrmex.logging_monitoring import (
+    setup_logging,
+    get_logger,
+    log_context,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Setup logging
+setup_logging(
+    level="INFO",
+    format="json",  # or "text"
+    output="console"  # or "file"
+)
+
+# Get logger
+logger = get_logger(__name__)
+logger.info("Application started")
+logger.debug("Debug information")
+logger.error("Error occurred", exc_info=True)
+
+# Use log context
+with log_context(operation="process_data", user_id="123"):
+    logger.info("Processing data")
+    # All logs within this context will include operation and user_id
 ```
 

@@ -32,11 +32,20 @@ Firecrawl scraping provider integration. Provides adapter and client for Firecra
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.scrape.firecrawl import main_component
+from codomyrmex.scrape.firecrawl import FirecrawlClient, FirecrawlAdapter
 
-def example():
-    
-    print(f"Result: {result}")
+# Initialize Firecrawl client
+client = FirecrawlClient(api_key="your-api-key")
+
+# Use adapter for scraping
+adapter = FirecrawlAdapter(client=client)
+
+# Scrape a URL
+result = adapter.scrape(url="https://example.com")
+print(f"Scraped content: {result.content[:100]}...")
+
+# Crawl a website
+crawl_result = adapter.crawl(url="https://example.com", max_depth=2)
+print(f"Crawled {len(crawl_result.pages)} pages")
 ```
 

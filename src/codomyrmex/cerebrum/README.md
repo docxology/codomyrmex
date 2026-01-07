@@ -57,11 +57,38 @@ Case-Enabled Reasoning Engine with Bayesian Representations for Unified Modeling
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.cerebrum import main_component
+from codomyrmex.cerebrum import (
+    CerebrumEngine,
+    Case,
+    CaseBase,
+    BayesianNetwork,
+    InferenceEngine,
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Create a cerebrum engine
+engine = CerebrumEngine()
+
+# Create and add cases
+case = Case(
+    features={"complexity": 0.8, "size": 100},
+    solution="Use caching",
+    outcome="success"
+)
+case_base = CaseBase()
+case_base.add_case(case)
+
+# Create Bayesian network
+network = BayesianNetwork()
+network.add_node("complexity", prior=0.5)
+network.add_node("performance", parents=["complexity"])
+
+# Perform inference
+inference = InferenceEngine(network)
+result = inference.infer(evidence={"complexity": 0.8})
+print(f"Inference result: {result}")
+
+# Use reasoning engine
+reasoning = engine.reason(case, context={})
+print(f"Reasoning result: {reasoning.confidence}")
 ```
 

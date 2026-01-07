@@ -115,7 +115,7 @@ OrchestrationEngine
 ### Project Structure
 
 ```
-src/codomyrmex/project_orchestration/
+src/codomyrmex/logistics/orchestration/project/
 ├── __init__.py
 ├── workflow_manager.py
 ├── task_orchestrator.py
@@ -155,8 +155,8 @@ pip install -r requirements-dev.txt
 pytest
 
 # Run linting
-flake8 src/codomyrmex/project_orchestration/
-black src/codomyrmex/project_orchestration/
+flake8 src/codomyrmex/logistics/orchestration/project/
+black src/codomyrmex/logistics/orchestration/project/
 
 # Generate documentation
 sphinx-build docs/ docs/_build/
@@ -547,7 +547,7 @@ pytest
 pytest tests/unit/test_workflow_manager.py
 
 # Run with coverage
-pytest --cov=src/codomyrmex.project_orchestration --cov-report=html
+pytest --cov=src/codomyrmex.logistics.orchestration.project --cov-report=html
 
 # Run performance tests
 pytest -m performance

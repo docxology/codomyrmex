@@ -1,10 +1,10 @@
-# scripts/fabric_integration - Functional Specification
+# scripts/fabric - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
-This module contains the **automation scripts** and **CLI entry points** for the `fabric_integration` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/fabric_integration`) to the terminal and CI/CD pipelines.
+This module contains the **automation scripts** and **CLI entry points** for the Fabric integration system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/llm/fabric`) to the terminal and CI/CD pipelines.
 
 ## Design Principles
 
@@ -13,7 +13,7 @@ This module contains the **automation scripts** and **CLI entry points** for the
 - **CLI Standard**: Uses `argparse` or `click` (via `kit`) for consistent flag handling.
 
 ### Internal Coherence
-- **Reflection**: The directory structure mirrors `src/codomyrmex` to make finding the "executable version" of a library intuitive.
+- **Reflection**: The directory structure mirrors `src/codomyrmex/llm/fabric` to make finding the "executable version" of a library intuitive.
 
 ## Functional Requirements
 
@@ -27,7 +27,7 @@ This module contains the **automation scripts** and **CLI entry points** for the
 - Check `AGENTS.md` or run with `--help` for specific command usage.
 
 ### Dependencies
-- **Core Library**: `codomyrmex.fabric_integration`.
+- **Core Library**: `codomyrmex.llm.fabric`.
 
 ## Navigation
 
@@ -48,3 +48,4 @@ The implementation of this component follows the core principles of the Codomyrm
 
 ### Technical Implementation
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
