@@ -6,6 +6,8 @@
 
 The CEREBRUM orchestration module provides comprehensive automation for applying CEREBRUM methods to the First Principles Framework specification. It coordinates case-based reasoning, Bayesian inference, active inference, and combinatorics analysis into a single, configurable pipeline.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Design Principles
 
 ### Thin Orchestration

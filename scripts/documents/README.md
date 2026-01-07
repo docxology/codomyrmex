@@ -19,6 +19,7 @@ Documentation files and guides for documents.
 - `SPEC.md` – File
 - `orchestrate.py` – File
 
+- `scripts/` – Subdirectory containing example implementations
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)

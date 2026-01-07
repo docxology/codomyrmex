@@ -10,7 +10,7 @@ REPO_ROOT = Path(__file__).parent.parent.parent
 
 def fix_examples_readme():
     """Remove broken references to code_execution_sandbox and code_review in examples/README.md"""
-    file_path = REPO_ROOT / "examples/README.md"
+    file_path = REPO_ROOT / "scripts/README.md"
     content = file_path.read_text()
     
     # Remove the broken child references
@@ -22,7 +22,7 @@ def fix_examples_readme():
 
 def fix_examples_agents():
     """Remove broken references in examples/AGENTS.md"""
-    file_path = REPO_ROOT / "examples/AGENTS.md"
+    file_path = REPO_ROOT / "scripts/AGENTS.md"
     content = file_path.read_text()
     
     content = re.sub(r'\s+- \[code_execution_sandbox\]\(code_execution_sandbox/AGENTS\.md\)\n', '\n', content)
@@ -167,10 +167,10 @@ LLM automation scripts for managing language model operations.
 def fix_examples_code_review_refs():
     """Fix references to code.review in examples"""
     files_to_fix = [
-        REPO_ROOT / "examples/documentation/README.md",
-        REPO_ROOT / "examples/pattern_matching/README.md",
-        REPO_ROOT / "examples/ai_code_editing/README.md",
-        REPO_ROOT / "examples/coding/README.md"
+        REPO_ROOT / "scripts/documentation/README.md",
+        REPO_ROOT / "scripts/pattern_matching/README.md",
+        REPO_ROOT / "scripts/ai_code_editing/README.md",
+        REPO_ROOT / "scripts/coding/README.md"
     ]
     
     for file_path in files_to_fix:

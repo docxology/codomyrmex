@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 # Paths to search
-SEARCH_DIRS = ["src", "scripts", "docs", "config", "cursorrules", "projects", "examples"]
+SEARCH_DIRS = ["src", "scripts", "docs", "config", "cursorrules", "projects"]
 ROOT_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 
 # Path mappings

@@ -8,6 +8,8 @@ Pattern matching automation scripts providing command-line interfaces for code a
 
 The pattern_matching scripts serve as the primary interface for developers and analysts performing code pattern analysis and structural insights.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Overview
 
 Pattern matching automation scripts providing command-line tools for code analysis, pattern detection, and structural insights within the Codomyrmex platform.

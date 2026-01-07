@@ -4,7 +4,7 @@
 - **Parent**: [Tests](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [examples](examples/AGENTS.md)
+    - [examples](scripts/examples/AGENTS.md)
     - [fixtures](fixtures/AGENTS.md)
     - [integration](integration/AGENTS.md)
     - [output](output/AGENTS.md)

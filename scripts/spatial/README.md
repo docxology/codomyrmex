@@ -20,6 +20,7 @@ Automation and utility scripts.
 - `modeling_3d/` – Subdirectory
 - `orchestrate.py` – File
 
+- `scripts/` – Subdirectory containing example implementations
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)

@@ -231,7 +231,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
     - [src](src/AGENTS.md)
     - [docs](docs/AGENTS.md)
     - [scripts](scripts/AGENTS.md)
-    - [examples](examples/AGENTS.md)
+    - [examples](scripts/AGENTS.md)
     - [config](config/AGENTS.md)
     - [cursorrules](cursorrules/AGENTS.md)
     - [projects](projects/AGENTS.md)

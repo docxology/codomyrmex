@@ -8,6 +8,8 @@ API documentation automation scripts providing command-line interfaces for gener
 
 The api_documentation scripts serve as the primary interface for developers and automated systems to manage API documentation workflows.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Overview
 
 API documentation automation scripts providing command-line tools for generating, extracting, and validating API specifications within the Codomyrmex platform.

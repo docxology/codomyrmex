@@ -59,6 +59,7 @@ SKIP_DIRS = {
     'node_modules',
     '.DS_Store',
     'tests',  # Skip test subdirectories within script folders
+    'examples',  # Skip examples subdirectories (they're not orchestration scripts)
 }
 
 # Script patterns to skip

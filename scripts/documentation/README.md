@@ -102,6 +102,7 @@ Documentation files and guides for documentation.
 - `verify_api_specs.py` – File
 - `verify_module_docs.py` – File
 
+- `scripts/` – Subdirectory containing example implementations
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)

@@ -4,7 +4,7 @@
 - **Parent**: [Parent](../README.md)
 - **Children**:
     - [docs](docs/README.md)
-    - [examples](examples/README.md)
+    - [examples](scripts/examples/README.md)
     - [tests](tests/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)

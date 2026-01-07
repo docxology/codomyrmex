@@ -907,9 +907,9 @@ graph TD
     end
 
     subgraph examplesOutput ["Examples & Output"]
-        Examples["examples/ Usage Demonstrations"]
+        ModuleExamples["scripts/[module]/examples/ Module Examples"]
         Output["output/ Generated Reports"]
-        ScriptsExamples["scripts/examples/ Executable Demos"]
+        ScriptsExamples["scripts/examples/ General Examples"]
     end
 
     CoreSrc --> Docs
@@ -1318,9 +1318,9 @@ pie title Module Development Status (December 2025)
 
 ## Key Metrics
 
-- **Lines of Code**: ~50K+ across 33 modules
+- **Lines of Code**: ~50K+ across 40+ modules
 - **Test Coverage**: ≥80% target (currently 75%)
-- **Module Count**: 33 core modules
+- **Module Count**: 40+ core modules
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

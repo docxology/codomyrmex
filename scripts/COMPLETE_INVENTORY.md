@@ -159,10 +159,10 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 **Priority**: HIGH  
 **Effort**: 5-8 hours
 
-- [ ] `src/codomyrmex/tests/examples/test_example_execution.py` - Execute all examples
-- [ ] `src/codomyrmex/tests/examples/test_config_validation.py` - Validate config files
-- [ ] `src/codomyrmex/tests/examples/test_output_validation.py` - Validate output formats
-- [ ] `src/codomyrmex/tests/examples/__init__.py` - Package initialization
+- [ ] `src/codomyrmex/tests/scripts/test_example_execution.py` - Execute all examples
+- [ ] `src/codomyrmex/tests/scripts/test_config_validation.py` - Validate config files
+- [ ] `src/codomyrmex/tests/scripts/test_output_validation.py` - Validate output formats
+- [ ] `src/codomyrmex/tests/scripts/__init__.py` - Package initialization
 
 **Features**:
 - Automated execution of all examples
@@ -176,12 +176,12 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 **Priority**: MEDIUM  
 **Effort**: 3-5 hours
 
-- [ ] `examples/_templates/example_basic_template.py` - Basic template
-- [ ] `examples/_templates/config_template.yaml` - Config YAML template
-- [ ] `examples/_templates/config_template.json` - Config JSON template
-- [ ] `examples/_templates/README_template.md` - README template
-- [ ] `examples/_templates/async_example_template.py` - Async patterns
-- [ ] `examples/_templates/integration_example_template.py` - Integration patterns
+- [ ] `scripts/_templates/example_basic_template.py` - Basic template
+- [ ] `scripts/_templates/config_template.yaml` - Config YAML template
+- [ ] `scripts/_templates/config_template.json` - Config JSON template
+- [ ] `scripts/_templates/README_template.md` - README template
+- [ ] `scripts/_templates/async_example_template.py` - Async patterns
+- [ ] `scripts/_templates/integration_example_template.py` - Integration patterns
 
 **Features**:
 - Advanced error recovery patterns
@@ -194,9 +194,9 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 **Priority**: MEDIUM  
 **Effort**: 2-3 hours
 
-- [ ] `scripts/examples/validate_all_examples.py` - Validate all examples
-- [ ] `scripts/examples/validate_configs.py` - Validate config files
-- [ ] `scripts/examples/check_example_coverage.py` - Check coverage
+- [ ] `scripts/validate_all_examples.py` - Validate all examples
+- [ ] `scripts/validate_configs.py` - Validate config files
+- [ ] `scripts/check_example_coverage.py` - Check coverage
 
 **Features**:
 - Validate all example scripts
@@ -210,9 +210,9 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 **Priority**: MEDIUM  
 **Effort**: 4-6 hours
 
-- [ ] `examples/TROUBLESHOOTING.md` - Troubleshooting guide
-- [ ] `examples/BEST_PRACTICES.md` - Best practices guide
-- [ ] `examples/TUTORIALS.md` - Tutorial series
+- [ ] `scripts/TROUBLESHOOTING.md` - Troubleshooting guide
+- [ ] `scripts/BEST_PRACTICES.md` - Best practices guide
+- [ ] `scripts/TUTORIALS.md` - Tutorial series
 
 **Content**:
 - Beginner tutorials
@@ -226,11 +226,11 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 **Priority**: LOW  
 **Effort**: 2-3 hours
 
-- [ ] `examples/_configs/environment_dev.yaml` - Development config
-- [ ] `examples/_configs/environment_staging.yaml` - Staging config
-- [ ] `examples/_configs/environment_prod.yaml` - Production config
-- [ ] `examples/_configs/config_inheritance_example.yaml` - Inheritance pattern
-- [ ] `examples/_configs/secret_management_example.yaml` - Secret management
+- [ ] `scripts/_configs/environment_dev.yaml` - Development config
+- [ ] `scripts/_configs/environment_staging.yaml` - Staging config
+- [ ] `scripts/_configs/environment_prod.yaml` - Production config
+- [ ] `scripts/_configs/config_inheritance_example.yaml` - Inheritance pattern
+- [ ] `scripts/_configs/secret_management_example.yaml` - Secret management
 
 **Features**:
 - Environment-specific configs
@@ -245,7 +245,7 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
 Every module example follows this exact structure:
 
 ```
-examples/{module_name}/
+scripts/{module_name}/
 ├── example_basic.py      # Main example script (~150-300 lines)
 ├── config.yaml           # YAML configuration (~50-150 lines)
 ├── config.json           # JSON configuration (~50-150 lines)
@@ -351,7 +351,7 @@ logging:
 Every workflow follows this exact structure:
 
 ```
-examples/multi_module/
+scripts/multi_module/
 ├── example_workflow_{name}.py      # Workflow script (~200-400 lines)
 ├── config_workflow_{name}.yaml     # Workflow YAML config (~100-200 lines)
 ├── config_workflow_{name}.json     # Workflow JSON config (~100-200 lines)

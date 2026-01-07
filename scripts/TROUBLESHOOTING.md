@@ -71,7 +71,7 @@ python -c "import sys; print('src' in str(sys.path))"
 
 4. **Run from correct directory**:
    ```bash
-   cd examples/{module_name}
+   cd scripts/{module_name}
    PYTHONPATH=../../src python example_basic.py
    ```
 
@@ -94,7 +94,7 @@ python -c "import sys; print('src' in str(sys.path))"
 1. **Check if module uses mocks**:
    ```python
    # Look for mock usage in the example
-   grep -n "mock" examples/{module}/example_basic.py
+   grep -n "mock" scripts/{module}/example_basic.py
    ```
 
 2. **Install missing dependencies**:
@@ -117,7 +117,7 @@ python -c "import sys; print('src' in str(sys.path))"
 
 1. **Check file exists**:
    ```bash
-   cd examples/{module_name}
+   cd scripts/{module_name}
    ls -la config.yaml config.json
    ```
 
@@ -175,20 +175,20 @@ python -c "import sys; print('src' in str(sys.path))"
 
 1. **Check directory permissions**:
    ```bash
-   ls -ld examples/{module}/output/
-   ls -ld examples/{module}/logs/
+   ls -ld scripts/{module}/output/
+   ls -ld scripts/{module}/logs/
    ```
 
 2. **Create directories if missing**:
    ```bash
-   mkdir -p examples/{module}/output
-   mkdir -p examples/{module}/logs
+   mkdir -p scripts/{module}/output
+   mkdir -p scripts/{module}/logs
    ```
 
 3. **Fix permissions**:
    ```bash
-   chmod 755 examples/{module}/output
-   chmod 755 examples/{module}/logs
+   chmod 755 scripts/{module}/output
+   chmod 755 scripts/{module}/logs
    ```
 
 4. **Run with sudo if necessary** (not recommended):
@@ -231,7 +231,7 @@ python -c "import sys; print('src' in str(sys.path))"
 1. **Check database server**:
    ```bash
    # SQLite (file-based, usually works)
-   ls -la examples/database_management/databases/
+   ls -la scripts/database_management/databases/
 
    # PostgreSQL
    pg_isready -h localhost
@@ -245,12 +245,12 @@ python -c "import sys; print('src' in str(sys.path))"
    # In config
    database:
      type: sqlite
-     database: examples/database_management/databases/api.db
+     database: scripts/database_management/databases/api.db
    ```
 
 3. **Check database permissions**:
    ```bash
-   chmod 644 examples/database_management/databases/*.db
+   chmod 644 scripts/database_management/databases/*.db
    ```
 
 ### 4. Output Generation Issues
@@ -263,7 +263,7 @@ python -c "import sys; print('src' in str(sys.path))"
 
 1. **Check output directories exist**:
    ```bash
-   ls -la examples/{module}/output/
+   ls -la scripts/{module}/output/
    ```
 
 2. **Verify example completed successfully**:
@@ -275,7 +275,7 @@ python -c "import sys; print('src' in str(sys.path))"
 
 4. **Review log files**:
    ```bash
-   cat examples/{module}/logs/*.log
+   cat scripts/{module}/logs/*.log
    ```
 
 #### Invalid JSON Output
@@ -286,12 +286,12 @@ python -c "import sys; print('src' in str(sys.path))"
 
 1. **Validate JSON syntax**:
    ```bash
-   python -m json.tool examples/{module}/output/results.json
+   python -m json.tool scripts/{module}/output/results.json
    ```
 
 2. **Check for special characters**:
    ```bash
-   cat examples/{module}/output/results.json | grep -P '[^\x00-\x7F]'
+   cat scripts/{module}/output/results.json | grep -P '[^\x00-\x7F]'
    ```
 
 3. **Fix encoding issues**:
@@ -408,8 +408,8 @@ python -c "import sys; print('src' in str(sys.path))"
 
 1. **Check database file permissions**:
    ```bash
-   ls -la examples/database_management/databases/
-   chmod 644 examples/database_management/databases/*.db
+   ls -la scripts/database_management/databases/
+   chmod 644 scripts/database_management/databases/*.db
    ```
 
 2. **Verify SQLite installation**:
@@ -504,7 +504,7 @@ python -c "import sys; print('src' in str(sys.path))"
 
 2. **Verify test structure**:
    ```bash
-   python -m pytest --collect-only src/codomyrmex/tests/examples/
+   python -m pytest --collect-only src/codomyrmex/tests/scripts/
    ```
 
 3. **Check imports** in test files.
@@ -606,7 +606,7 @@ echo $http_proxy $https_proxy
 3. **Include error logs**:
    ```bash
    # Run with verbose logging
-   PYTHONPATH=src python examples/{module}/example_basic.py 2>&1 | tee error.log
+   PYTHONPATH=src python scripts/{module}/example_basic.py 2>&1 | tee error.log
    ```
 
 ### Reporting Issues
@@ -638,7 +638,7 @@ When reporting issues, include:
 
 3. **Test examples regularly**:
    ```bash
-   python -m pytest src/codomyrmex/tests/examples/
+   python -m pytest src/codomyrmex/tests/scripts/
    ```
 
 4. **Use version control** for configuration changes.
@@ -762,15 +762,15 @@ for stat in snapshot.statistics('lineno')[:10]:
 pkill -f python
 
 # Clean up generated files
-find examples/ -name "*.log" -delete
-find examples/ -name "*_results.json" -delete
+find scripts/ -name "*.log" -delete
+find scripts/ -name "*_results.json" -delete
 
 # Reset example state
-rm -rf examples/*/output/*
-rm -rf examples/*/logs/*
+rm -rf scripts/*/output/*
+rm -rf scripts/*/logs/*
 
 # Full system reset (use with caution)
-git clean -fdx examples/
+git clean -fdx scripts/
 ```
 
 ---

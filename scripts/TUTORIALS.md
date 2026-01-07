@@ -34,7 +34,7 @@ ls -la logging_monitoring/
 
 ### Step 2: Understand the Basic Template
 
-Open `examples/logging_monitoring/example_basic.py`:
+Open `scripts/logging_monitoring/example_basic.py`:
 
 ```python
 #!/usr/bin/env python3
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
 ### Step 3: Examine Configuration Files
 
-Open `examples/logging_monitoring/config.yaml`:
+Open `scripts/logging_monitoring/config.yaml`:
 
 ```yaml
 output:
@@ -106,7 +106,7 @@ module:
 
 ```bash
 # Navigate to the logging example
-cd examples/logging_monitoring
+cd scripts/logging_monitoring
 
 # Run the example
 python example_basic.py
@@ -152,7 +152,7 @@ Master configuration management with environment variables, validation, and inhe
 
 ```bash
 # Navigate to the config management example
-cd examples/config_management
+cd scripts/config_management
 
 # Examine the files
 ls -la
@@ -160,7 +160,7 @@ ls -la
 
 ### Step 2: Study Configuration Loading
 
-Open `examples/config_management/example_basic.py` and examine the configuration loading:
+Open `scripts/config_management/example_basic.py` and examine the configuration loading:
 
 ```python
 from codomyrmex.config_management.config_loader import Configuration
@@ -289,7 +289,7 @@ Let's use the analysis workflow as our example:
 
 ```bash
 # Navigate to the multi-module workflows
-cd examples/multi_module
+cd scripts/multi_module
 
 # List available workflows
 ls -la example_workflow_*.py
@@ -421,7 +421,7 @@ Examine the workflow configuration:
 analysis:
   target_paths:
     - "src/"
-    - "examples/"
+    - "scripts/"
   analysis_types:
     - "complexity"
     - "style"
@@ -494,13 +494,13 @@ Select a module you want to demonstrate. Let's use `pattern_matching` as an exam
 
 ```bash
 # Create the example directory
-mkdir -p examples/pattern_matching
+mkdir -p scripts/pattern_matching
 
 # Create the required files
-touch examples/pattern_matching/example_basic.py
-touch examples/pattern_matching/config.yaml
-touch examples/pattern_matching/config.json
-touch examples/pattern_matching/README.md
+touch scripts/pattern_matching/example_basic.py
+touch scripts/pattern_matching/config.yaml
+touch scripts/pattern_matching/config.json
+touch scripts/pattern_matching/README.md
 ```
 
 ### Step 3: Study the Module's Tests
@@ -588,7 +588,7 @@ logging:
 module:
   target_paths:
     - "src/codomyrmex/pattern_matching/"
-    - "examples/"
+    - "scripts/"
   patterns:
     - "function_calls"
     - "class_definitions"
@@ -624,7 +624,7 @@ This example demonstrates Codomyrmex's pattern matching capabilities for analyzi
 
 ## Usage
 ```bash
-cd examples/pattern_matching
+cd scripts/pattern_matching
 python example_basic.py
 ```
 
@@ -1066,7 +1066,7 @@ Run comprehensive tests before submission:
 
 ```bash
 # Run your example
-cd examples/your_module
+cd scripts/your_module
 python example_basic.py
 
 # Test with different configs
@@ -1094,13 +1094,13 @@ Ensure documentation is complete:
 
 ```bash
 # Check README completeness
-grep -E "(Overview|Features|Configuration|Usage|Output|Tested)" examples/your_module/README.md
+grep -E "(Overview|Features|Configuration|Usage|Output|Tested)" scripts/your_module/README.md
 
 # Validate links
-find examples/your_module -name "*.md" -exec markdown-link-check {} \;
+find scripts/your_module -name "*.md" -exec markdown-link-check {} \;
 
 # Check for broken references
-grep -r "test_" examples/your_module/README.md
+grep -r "test_" scripts/your_module/README.md
 ```
 
 ### Step 4: Git Workflow for Contribution
@@ -1124,7 +1124,7 @@ git checkout -b feature/add-your-module-example
 ./run_tests.sh
 
 # Commit your changes
-git add examples/your_module/
+git add scripts/your_module/
 git commit -m "Add comprehensive example for your_module
 
 - Implements basic usage demonstration
@@ -1150,10 +1150,10 @@ Create an effective pull request:
 Adds a complete example for the [module_name] module, demonstrating core functionality and integration patterns.
 
 ## Changes
-- `examples/[module_name]/example_basic.py` - Main example script
-- `examples/[module_name]/config.yaml` - YAML configuration
-- `examples/[module_name]/config.json` - JSON configuration
-- `examples/[module_name]/README.md` - Documentation
+- `scripts/[module_name]/example_basic.py` - Main example script
+- `scripts/[module_name]/config.yaml` - YAML configuration
+- `scripts/[module_name]/config.json` - JSON configuration
+- `scripts/[module_name]/README.md` - Documentation
 
 ## Features Demonstrated
 - [Feature 1]

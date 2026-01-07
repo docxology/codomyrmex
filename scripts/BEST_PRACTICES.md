@@ -12,7 +12,7 @@ This guide outlines best practices for creating, maintaining, and using Codomyrm
 
 **✅ Do:**
 ```bash
-examples/{module_name}/
+scripts/{module_name}/
 ├── example_basic.py      # Main example script
 ├── config.yaml          # Primary configuration
 ├── config.json          # Alternative JSON config
@@ -21,7 +21,7 @@ examples/{module_name}/
 
 **❌ Don't:**
 ```bash
-examples/{module_name}/
+scripts/{module_name}/
 ├── main.py              # Non-standard naming
 ├── settings.txt         # Non-standard config format
 ├── docs.md              # Non-standard documentation
@@ -376,7 +376,7 @@ Brief description of what the example demonstrates.
 
 ## Usage
 ```bash
-cd examples/{module_name}
+cd scripts/{module_name}
 python example_basic.py
 ```
 

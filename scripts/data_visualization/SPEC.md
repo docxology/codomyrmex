@@ -6,6 +6,8 @@
 
 This module contains the **automation scripts** and **CLI entry points** for the `data_visualization` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/data_visualization`) to the terminal and CI/CD pipelines.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Design Principles
 
 ### Modularity

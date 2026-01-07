@@ -8,6 +8,8 @@ Physical management automation scripts providing command-line interfaces for har
 
 The physical_management scripts serve as the primary interface for system administrators and DevOps teams to monitor and manage physical computing resources.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Overview
 
 Automation and utility scripts.

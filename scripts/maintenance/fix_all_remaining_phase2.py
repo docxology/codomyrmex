@@ -11,7 +11,7 @@ REPO_ROOT = Path(__file__).parent.parent.parent
 
 def fix_examples_documentation_readme():
     """Fix broken references in examples/documentation/README.md"""
-    file_path = REPO_ROOT / "examples/documentation/README.md"
+    file_path = REPO_ROOT / "scripts/documentation/README.md"
     if file_path.exists():
         content = file_path.read_text()
         content = content.replace("../code.review/", "../code_review/")
@@ -21,7 +21,7 @@ def fix_examples_documentation_readme():
 
 def fix_examples_database_readme():
     """Fix broken references in examples/database_management/README.md"""
-    file_path = REPO_ROOT / "examples/database_management/README.md"
+    file_path = REPO_ROOT / "scripts/database_management/README.md"
     if file_path.exists():
         content = file_path.read_text()
         content = content.replace("../api/standardization/", "../api_standardization/")

@@ -6,6 +6,8 @@
 
 The FPF orchestration module provides end-to-end automation for processing the First Principles Framework specification. It coordinates all FPF operations into a single, configurable pipeline.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Design Principles
 
 ### Thin Orchestration

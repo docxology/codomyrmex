@@ -19,6 +19,7 @@ Automation and utility scripts.
 - `SPEC.md` – File
 - `orchestrate.py` – File
 
+- `scripts/` – Subdirectory containing example implementations
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)

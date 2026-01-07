@@ -1,9 +1,9 @@
 # ollama_integration
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [ollama_integration](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](../README.md)
     - [output](output/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -26,6 +26,6 @@ Example implementations and demonstrations.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [examples](../README.md)
+- **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../README.md)
 

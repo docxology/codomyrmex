@@ -23,7 +23,7 @@
     - [documents](documents/README.md)
     - [environment_setup](environment_setup/README.md)
     - [events](events/README.md)
-    - [examples](examples/README.md)
+    - [examples](scripts/examples/README.md)
     - [fabric_integration](fabric_integration/README.md)
     - [fpf](fpf/README.md)
     - [git_operations](git_operations/README.md)

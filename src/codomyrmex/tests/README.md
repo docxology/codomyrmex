@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](scripts/examples/README.md)
     - [fixtures](fixtures/README.md)
     - [integration](integration/README.md)
     - [output](output/README.md)

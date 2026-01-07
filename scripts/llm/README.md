@@ -18,6 +18,7 @@ Automation and utility scripts.
 - `README.md` – File
 - `ollama/` – Subdirectory
 
+- `scripts/` – Subdirectory containing example implementations
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)

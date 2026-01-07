@@ -6,6 +6,8 @@
 
 Tools automation scripts for the Codomyrmex platform.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Commands
 
 ### basic-operation

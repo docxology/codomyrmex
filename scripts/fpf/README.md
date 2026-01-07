@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](scripts/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -17,7 +17,7 @@ Automation and utility scripts.
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
-- `examples/` – Subdirectory
+- `scripts/` – Subdirectory
 - `orchestrate.py` – File
 
 ## Navigation

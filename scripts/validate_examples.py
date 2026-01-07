@@ -24,7 +24,7 @@ Usage:
 
 Options:
     --parallel N    Number of parallel processes (default: 4)
-    --output-dir    Output directory for reports (default: validation_reports)
+    --output-dir    Output directory for reports (default: output/validation_reports)
     --verbose       Enable verbose output
     --fix           Attempt to fix common issues automatically
     --modules       Comma-separated list of modules to validate (default: all)
@@ -158,15 +158,16 @@ class ExamplesValidator:
     def _discover_modules(self) -> List[str]:
         """Discover all module directories with examples."""
         modules = []
-        exclude_dirs = {'__pycache__', '_common', '_templates', 'multi_module'}
+        exclude_dirs = {'__pycache__', '_common', '_templates', '_configs', 'multi_module', 'examples', 'validation_reports', 'output'}
 
         for item in self.examples_root.iterdir():
             if item.is_dir() and item.name not in exclude_dirs:
-                if (item / "example_basic.py").exists():
+                # Look for examples in module/examples/ subdirectory
+                if (item / "examples" / "example_basic.py").exists():
                     modules.append(item.name)
 
         # Add multi_module examples
-        multi_module_dir = self.examples_root / "multi_module"
+        multi_module_dir = self.examples_root / "multi_module" / "examples"
         if multi_module_dir.exists():
             for item in multi_module_dir.iterdir():
                 if item.is_file() and item.name.startswith("example_workflow_") and item.name.endswith(".py"):
@@ -262,10 +263,10 @@ class ExamplesValidator:
         try:
             if module.startswith("multi_module/"):
                 # Multi-module workflow
-                script_path = self.examples_root / "multi_module" / f"{module.split('/', 1)[1]}.py"
+                script_path = self.examples_root / "multi_module" / "examples" / f"{module.split('/', 1)[1]}.py"
             else:
-                # Regular module example
-                script_path = self.examples_root / module / "example_basic.py"
+                # Regular module example - now in module/examples/ subdirectory
+                script_path = self.examples_root / module / "examples" / "example_basic.py"
 
             if not script_path.exists():
                 result.add_issue(ValidationIssue(
@@ -355,12 +356,12 @@ class ExamplesValidator:
         try:
             if module.startswith("multi_module/"):
                 # Multi-module workflow configs
-                config_dir = self.examples_root / "multi_module"
+                config_dir = self.examples_root / "multi_module" / "examples"
                 yaml_file = config_dir / f"config_{module.split('/', 1)[1]}.yaml"
                 json_file = config_dir / f"config_{module.split('/', 1)[1]}.json"
             else:
-                # Regular module configs
-                config_dir = self.examples_root / module
+                # Regular module configs - now in module/examples/ subdirectory
+                config_dir = self.examples_root / module / "examples"
                 yaml_file = config_dir / "config.yaml"
                 json_file = config_dir / "config.json"
 
@@ -469,7 +470,7 @@ class ExamplesValidator:
                 # Multi-module workflow - might not have individual README
                 return
 
-            readme_file = self.examples_root / module / "README.md"
+            readme_file = self.examples_root / module / "examples" / "README.md"
 
             if not readme_file.exists():
                 result.add_issue(ValidationIssue(
@@ -536,7 +537,7 @@ class ExamplesValidator:
                 # Multi-module workflows might not reference specific tests
                 return
 
-            example_file = self.examples_root / module / "example_basic.py"
+            example_file = self.examples_root / module / "examples" / "example_basic.py"
 
             if not example_file.exists():
                 return
@@ -610,10 +611,10 @@ class ExamplesValidator:
         try:
             if module.startswith("multi_module/"):
                 # Multi-module workflow outputs
-                output_dir = self.examples_root / "multi_module" / "output"
+                output_dir = self.examples_root / "multi_module" / "examples" / "output"
             else:
-                # Regular module outputs
-                output_dir = self.examples_root / module / "output"
+                # Regular module outputs - now in module/examples/ subdirectory
+                output_dir = self.examples_root / module / "examples" / "output"
 
             if not output_dir.exists():
                 result.metrics["output_dir_exists"] = False
@@ -986,8 +987,8 @@ Examples:
     parser.add_argument(
         "--output-dir", "-o",
         type=Path,
-        default=Path("validation_reports"),
-        help="Output directory for reports (default: validation_reports)"
+        default=Path("output/validation_reports"),
+        help="Output directory for reports (default: output/validation_reports)"
     )
 
     parser.add_argument(

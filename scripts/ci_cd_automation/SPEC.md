@@ -6,6 +6,8 @@
 
 This module contains the **automation scripts** and **CLI entry points** for the `ci_cd_automation` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/ci_cd_automation`) to the terminal and CI/CD pipelines.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Design Principles
 
 ### Modularity

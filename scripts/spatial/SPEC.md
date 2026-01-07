@@ -13,6 +13,8 @@
 
 Define the functional requirements and behavior of spatial modeling orchestration scripts, providing CLI access to 3D/4D spatial operations, scene management, and world model functionality.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Scope
 
 ### In Scope

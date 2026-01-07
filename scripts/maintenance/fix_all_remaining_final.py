@@ -30,40 +30,40 @@ def fix_examples_test_refs():
     """Fix test file references in examples to point to correct test locations"""
     # Map of example files to fix and their test file references
     fixes = [
-        ("examples/static_analysis/README.md", 
+        ("scripts/static_analysis/README.md", 
          "../../src/codomyrmex/tests/unit/test_static_analysis.py",
          "../../src/codomyrmex/tests/unit/static_analysis/test_static_analysis.py"),
-        ("examples/containerization/README.md",
+        ("scripts/containerization/README.md",
          "../../src/codomyrmex/tests/unit/test_containerization.py",
          "../../src/codomyrmex/tests/unit/containerization/test_containerization.py"),
-        ("examples/containerization/README.md",
+        ("scripts/containerization/README.md",
          "../../src/codomyrmex/tests/unit/test_containerization_enhanced.py",
          "../../src/codomyrmex/tests/unit/containerization/test_containerization_enhanced.py"),
-        ("examples/environment_setup/README.md",
+        ("scripts/environment_setup/README.md",
          "../../src/codomyrmex/tests/unit/test_environment_setup.py",
          "../../src/codomyrmex/tests/unit/environment_setup/test_environment_setup.py"),
-        ("examples/modeling_3d/README.md",
+        ("scripts/modeling_3d/README.md",
          "../../src/codomyrmex/tests/unit/test_spatial/three_d.py",
          "../../src/codomyrmex/tests/unit/spatial/test_three_d.py"),
-        ("examples/data_visualization/README.md",
+        ("scripts/data_visualization/README.md",
          "../../src/codomyrmex/tests/unit/test_data_visualization.py",
          "../../src/codomyrmex/tests/unit/data_visualization/test_data_visualization.py"),
-        ("examples/logging_monitoring/README.md",
+        ("scripts/logging_monitoring/README.md",
          "../../src/codomyrmex/tests/unit/test_logging_monitoring.py",
          "../../src/codomyrmex/tests/unit/logging_monitoring/test_logging_monitoring.py"),
-        ("examples/security_audit/README.md",
+        ("scripts/security_audit/README.md",
          "../../../src/codomyrmex/tests/unit/test_security.py",
          "../../src/codomyrmex/tests/unit/security/test_security.py"),
-        ("examples/config_management/README.md",
+        ("scripts/config_management/README.md",
          "../../src/codomyrmex/tests/unit/test_config_management.py",
          "../../src/codomyrmex/tests/unit/config_management/test_config_management.py"),
-        ("examples/config_management/README.md",
+        ("scripts/config_management/README.md",
          "../../src/codomyrmex/tests/unit/test_config_management_enhanced.py",
          "../../src/codomyrmex/tests/unit/config_management/test_config_management_enhanced.py"),
-        ("examples/physical_management/README.md",
+        ("scripts/physical_management/README.md",
          "../../src/codomyrmex/tests/unit/test_physical_management.py",
          "../../src/codomyrmex/tests/unit/physical_management/test_physical_management.py"),
-        ("examples/performance/README.md",
+        ("scripts/performance/README.md",
          "../../src/codomyrmex/tests/unit/test_performance_comprehensive.py",
          "../../src/codomyrmex/tests/unit/performance/test_performance_comprehensive.py"),
     ]
@@ -104,7 +104,7 @@ def fix_template_placeholders():
 
 def fix_tutorial_template():
     """Fix module placeholder in tutorial template"""
-    file_path = REPO_ROOT / "examples/_templates/tutorial_template_README.md"
+    file_path = REPO_ROOT / "scripts/_templates/tutorial_template_README.md"
     if file_path.exists():
         content = file_path.read_text()
         # Replace the dynamic module reference with a comment

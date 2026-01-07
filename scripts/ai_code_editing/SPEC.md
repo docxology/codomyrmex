@@ -8,6 +8,8 @@ AI Code Editing automation scripts providing CLI access to AI-powered code assis
 
 The ai_code_editing scripts serve as the primary interface for developers and automated systems to leverage AI capabilities for code-related tasks.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Overview
 
 Automation and utility scripts.

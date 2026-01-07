@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 # Paths to search
-SEARCH_DIRS = ["src", "scripts", "docs", "config", "cursorrules", "projects", "examples"]
+SEARCH_DIRS = ["src", "scripts", "docs", "config", "cursorrules", "projects", ]
 ROOT_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 
 # Module consolidation mappings
@@ -59,11 +59,11 @@ def fix_content(content, file_path, repo_root):
         if link.startswith("testing/") or "/testing/" in link:
             link = link.replace("testing/", "src/codomyrmex/tests/")
             
-        # 3. Handle 'examples/' -> 'scripts/examples/' for top-level links in coordinate scripts
-        if "examples/" in link and "scripts/examples/" not in link:
-            # Audit suggested this for 'examples/README.md', 'examples/AGENTS.md'
-            if any(term in link for term in ["examples/README.md", "examples/AGENTS.md", "examples/SPEC.md"]):
-                link = link.replace("examples/", "scripts/examples/")
+        # 3. Handle "scripts/' -> 'scripts/examples/' for top-level links in coordinate scripts
+        if "scripts/" in link and "scripts/examples/" not in link:
+            # Audit suggested this for "scripts/README.md', "scripts/AGENTS.md'
+            if any(term in link for term in ["scripts/README.md", "scripts/AGENTS.md", "scripts/SPEC.md"]):
+                link = link.replace("scripts/", "scripts/examples/")
 
         # 4. Resolve relative links
         current_dir = file_path.parent
@@ -73,7 +73,7 @@ def fix_content(content, file_path, repo_root):
             while stripped_link.startswith("../"):
                 stripped_link = stripped_link[3:]
             
-            for root_dir in ["docs", "scripts", "examples", "config", "src", "projects"]:
+            for root_dir in ["docs", "scripts", "config", "src", "projects"]:
                 if stripped_link.startswith(root_dir + "/"):
                     try:
                         abs_target = repo_root / stripped_link

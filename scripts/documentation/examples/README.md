@@ -1,9 +1,9 @@
 # documentation
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [documentation](../README.md)
 - **Children**:
-    - [examples](examples/README.md)
+    - [examples](../README.md)
     - [output](output/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -26,6 +26,6 @@ Documentation files and guides for documentation.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [examples](../README.md)
+- **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../README.md)
 

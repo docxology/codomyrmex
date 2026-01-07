@@ -18,7 +18,10 @@ Automation utilities directory providing executable scripts for development work
   - `src/codomyrmex/tests/` - Testing automation and verification scripts
   - `development/` - Development workflow scripts
   - `maintenance/` - System maintenance utilities
-  - `[module_name]/` - Module-specific orchestration scripts
+  - `[module_name]/` - Module-specific orchestration scripts and examples
+    - `[module_name]/orchestrate.py` - Module orchestration script
+    - `[module_name]/examples/` - Module-specific example implementations
+  - `examples/` - General examples and demonstrations (not module-specific)
 - No standalone utility scripts in root `scripts/` directory (only `_orchestrator_utils.py`)
 
 ### Internal Coherence
@@ -91,7 +94,8 @@ graph TD
 3. **Testing Scripts**: Test automation, verification, test suite generation (in `src/codomyrmex/tests/`)
 4. **Maintenance Scripts**: Cleanup, organization, system maintenance (in `maintenance/`)
 5. **Module Scripts**: Module-specific automation and orchestration (in module-specific subdirectories)
-6. **Example Scripts**: Demonstrations and tutorials (in `examples/`)
+6. **Module Examples**: Module-specific example implementations (in `[module]/examples/` subdirectories)
+7. **General Examples**: General demonstrations and tutorials (in `examples/`)
 
 ### Script Standards
 - Idempotent operations where applicable

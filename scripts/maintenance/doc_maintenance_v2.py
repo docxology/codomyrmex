@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 # Paths to search
-SEARCH_DIRS = ["src", "scripts", "docs", "config", "cursorrules", "projects", "examples", "output"]
+SEARCH_DIRS = ["src", "scripts", "docs", "config", "cursorrules", "projects", , "output"]
 ROOT_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 
 # Module consolidation mappings
@@ -39,7 +39,7 @@ def fix_content(content, file_path, repo_root):
         if link.startswith("testing/") or "/testing/" in link:
             link = link.replace("testing/", "src/codomyrmex/tests/")
             
-        # 3. Handle common depth errors for 'docs/', 'scripts/', 'examples/'
+        # 3. Handle common depth errors for 'docs/', 'scripts/', "scripts/'
         # If a link starts with ../docs/ but doesn't exist, try adding more ../
         current_dir = file_path.parent
         
@@ -53,7 +53,7 @@ def fix_content(content, file_path, repo_root):
                 stripped_link = stripped_link[3:]
             
             # Common root-level dirs
-            for root_dir in ["docs", "scripts", "examples", "config", "src", "projects"]:
+            for root_dir in ["docs", "scripts", "config", "src", "projects"]:
                 if stripped_link.startswith(root_dir + "/"):
                     # Calculate correct relative path from current_dir to repo_root/stripped_link
                     try:

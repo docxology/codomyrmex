@@ -1,7 +1,7 @@
 # multi_module
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [multi_module](../README.md)
 - **Children**:
     - [output](output/README.md)
 - **Key Artifacts**:
@@ -34,6 +34,6 @@ Example implementations and demonstrations.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [examples](../README.md)
+- **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../README.md)
 

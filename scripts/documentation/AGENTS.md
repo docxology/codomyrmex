@@ -1,19 +1,8 @@
 # Codomyrmex Agents — scripts/documentation
 
-## Signposting
-- **Parent**: [Documentation](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - None
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
-
-## Purpose
-Documentation files and guides for documentation.
-
+## Active Components
+- `examples/` – Directory containing example implementations
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
@@ -102,13 +91,47 @@ Documentation files and guides for documentation.
 - `verify_api_specs.py` – Project file
 - `verify_module_docs.py` – Project file
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
 
+- `config.json` – Project file
+- `config.yaml` – Project file
+- `example_basic.py` – Project file
+- `scripts/` – Directory containing examples components
+
+## Navigation Links
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [README](../../README.md) - Main project documentation
+
+- **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
+
+## Operating Contracts
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+
+
+## Purpose
+## Purpose
+Documentation files and guides for documentation.
+
+
+
+## Signposting
+## Signposting
+- **Parent**: [Documentation](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+
+
+    - [examples](scripts/AGENTS.md)
+    - [output](output/AGENTS.md)

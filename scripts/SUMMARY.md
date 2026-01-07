@@ -197,7 +197,7 @@ Explore multi-module workflows:
 ## 📚 Documentation Structure
 
 ```
-examples/
+scripts/
 ├── README.md          # Main examples guide
 ├── AGENTS.md          # Agent coordination
 ├── ASSESSMENT.md      # Gap analysis

@@ -8,6 +8,8 @@ Terminal interface automation scripts providing command-line interfaces for inte
 
 The terminal_interface scripts serve as the primary interface for developers and testers to validate terminal interface functionality and formatting capabilities.
 
+
+Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Overview
 
 Terminal interface automation scripts providing command-line tools for interactive shell operations and terminal formatting management within the Codomyrmex platform.
