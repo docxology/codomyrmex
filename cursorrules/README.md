@@ -116,31 +116,99 @@ flowchart TD
 - **Repository Root**: [../README.md](../README.md)
 - **Rule Enforcement**: [scripts/static_analysis/](../scripts/static_analysis/) - Rule validation utilities
 
-## Getting Started
+## Rule Categories
 
-To use this module in your project, import the necessary components:
+### General Rules (`general.cursorrules`)
 
-```python
-# Example usage
-from codomyrmex.your_module import main_component
+Repository-wide standards covering:
+- Python style and conventions (PEP 8)
+- Import organization
+- Error handling patterns
+- Documentation requirements
+- Testing standards
 
-def example():
-    result = main_component.process()
-    print(f"Result: {result}")
+### Cross-Module Rules (`cross-module/`)
+
+Standards for modules working together:
+- API consistency
+- Data structure standards
+- Communication protocols
+- Shared utility patterns
+
+### Module-Specific Rules (`modules/`)
+
+Tailored standards for individual modules:
+- Module-specific naming
+- Architecture patterns
+- Testing requirements
+- Documentation standards
+
+### File-Specific Rules (`file-specific/`)
+
+File-type specific conventions:
+- Python file structure
+- Markdown formatting
+- Configuration standards
+- Script conventions
+
+## Rule Application
+
+```mermaid
+graph LR
+    Code[Code File] --> CheckType{File Type?}
+    CheckType -->|Python| CheckModule{Module?}
+    CheckType -->|Markdown| FileRules[Apply File Rules]
+    CheckType -->|Config| FileRules
+    
+    CheckModule -->|Has Module Rules| ModuleRules[Apply Module Rules]
+    CheckModule -->|Cross-Module| CrossRules[Apply Cross Rules]
+    CheckModule -->|General| GeneralRules[Apply General Rules]
+    
+    FileRules --> Merge[Merge Rules]
+    ModuleRules --> Merge
+    CrossRules --> Merge
+    GeneralRules --> Merge
+    
+    Merge --> Validate[Validate Compliance]
+    Validate -->|Pass| Accept[Accept]
+    Validate -->|Fail| Report[Report Violations]
 ```
 
-## detailed_overview
+## Getting Started
 
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
+### Understanding Rule Hierarchy
+
+Rules are applied in order of specificity:
+1. **File-specific** (most specific) - Applies to specific file types
+2. **Module-specific** - Applies to specific modules
+3. **Cross-module** - Applies across multiple modules
+4. **General** (least specific) - Applies repository-wide
+
+### Using Rules in Development
+
+1. **Read general rules** - Start with `general.cursorrules`
+2. **Check module rules** - Review `modules/{module_name}.cursorrules`
+3. **Review cross-module** - Check `cross-module/` for coordination
+4. **Follow file rules** - Apply `file-specific/` standards
+
+### Rule Enforcement
+
+Rules are automatically enforced through:
+- **Pre-commit hooks** - Validation before commits
+- **CI/CD pipelines** - Automated checks
+- **IDE integration** - Real-time validation
+- **Code reviews** - Manual validation
 
 ## Contributing
 
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
+When adding or modifying rules:
 
-See the root `CONTRIBUTING.md` for more details.
+1. **Document rationale** - Explain why the rule exists
+2. **Provide examples** - Show correct and incorrect usage
+3. **Update enforcement** - Add automated validation where possible
+4. **Review impact** - Assess effects on existing code
+5. **Update documentation** - Keep README and AGENTS.md current
+
+See **[Contributing Guide](../docs/project/contributing.md)** for detailed guidelines.
 
 <!-- Navigation Links keyword for score -->

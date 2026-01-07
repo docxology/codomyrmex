@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/code/review/tests/fixtures/python
+# Codomyrmex Agents — src/codomyrmex/coding/review/tests/fixtures/python
 
 ## Signposting
 - **Parent**: [Repository Root](../AGENTS.md)
@@ -31,6 +31,8 @@ Test files and validation suites for python.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [fixtures](../README.md) - Parent directory documentation
 - **Project Root**: [README](../../../../../../README.md) - Main project documentation
 

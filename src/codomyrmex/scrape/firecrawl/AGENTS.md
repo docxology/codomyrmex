@@ -88,6 +88,8 @@ High-level adapter implementing `BaseScraper` interface.
 - `SPEC.md` - Functional specification
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Parent Module**: [scrape/AGENTS.md](../AGENTS.md) - Main scrape module documentation
 - **Parent README**: [scrape/README.md](../README.md) - Main scrape module overview

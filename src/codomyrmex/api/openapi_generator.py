@@ -454,7 +454,7 @@ class StandardizationOpenAPIGenerator:
         Args:
             api: REST API instance
         """
-        if RESTAPI is None:
+        if RESTAPI is None or not hasattr(api, 'get_endpoints'):
             raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
 
         for endpoint in api.get_endpoints():

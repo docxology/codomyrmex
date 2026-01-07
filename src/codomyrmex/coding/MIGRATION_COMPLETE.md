@@ -10,7 +10,7 @@ Successfully consolidated `code_execution_sandbox` and `code_review` modules int
 ## New Structure
 
 ```
-src/codomyrmex/code/
+src/codomyrmex/coding/
 ├── __init__.py          # Unified exports
 ├── README.md            # Module overview
 ├── AGENTS.md            # Agent documentation
@@ -85,8 +85,8 @@ src/codomyrmex/code/
 - ✅ Updated cursorrules documentation
 
 ### 7. Cleanup
-- ✅ Deleted `src/codomyrmex/code/sandbox/`
-- ✅ Deleted `src/codomyrmex/code/review/`
+- ✅ Deleted `src/codomyrmex/coding/sandbox/`
+- ✅ Deleted `src/codomyrmex/coding/review/`
 - ✅ Deleted `scripts/code_execution_sandbox/`
 - ✅ Deleted `scripts/code_review/`
 - ✅ Deleted `examples/code_execution_sandbox/`

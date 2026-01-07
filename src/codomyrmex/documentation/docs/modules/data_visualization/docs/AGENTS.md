@@ -31,6 +31,8 @@ Documentation files and guides for data_visualization.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
 - **Project Root**: [README](../../../../../../../README.md) - Main project documentation
 ## Detailed Architecture and Implementation

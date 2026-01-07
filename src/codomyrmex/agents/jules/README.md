@@ -128,8 +128,6 @@ for chunk in jules.stream(request):
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent Module**: [agents](../README.md)
 
-
-
 ## Capabilities
 
 JulesClient supports the following agent capabilities:
@@ -187,15 +185,6 @@ Jules integrates seamlessly with Codomyrmex modules:
 - **Code Execution** (`code`): Code analysis and validation
 
 All integrations use the `JulesIntegrationAdapter` which provides a consistent interface across modules.
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->
 

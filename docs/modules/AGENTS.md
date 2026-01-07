@@ -105,7 +105,7 @@ graph TD
     D --> X[config_management]
     D --> Y[project_orchestration]
 
-    E --> Z[modeling_3d]
+    E --> Z[spatial]
     E --> AA[physical_management]
     E --> BB[system_discovery]
     E --> CC[performance]

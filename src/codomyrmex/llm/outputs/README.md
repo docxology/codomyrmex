@@ -29,6 +29,8 @@ Persistence layer for LLM interaction traces, test results, and performance metr
 - `test_results/` – Subdirectory
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [llm](../README.md)
 - **Src Hub**: [src](../../../../src/README.md)

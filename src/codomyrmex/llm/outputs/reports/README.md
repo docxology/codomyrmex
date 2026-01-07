@@ -18,6 +18,8 @@ Aggregated analysis reports from LLM usage (cost summaries, security audits).
 - `security_input_length_limits.json` – File
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [outputs](../README.md)
 - **Src Hub**: [src](../../../../../src/README.md)

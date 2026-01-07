@@ -30,7 +30,8 @@ class TestTerminalInterface:
         assert shell is not None
         assert hasattr(shell, "do_explore")
         # SystemDiscovery may or may not be available, but shell should still instantiate
-        assert shell.discovery is None or hasattr(shell.discovery, "discover_modules")
+        # SystemDiscovery has run_full_discovery method, not discover_modules
+        assert shell.discovery is None or hasattr(shell.discovery, "run_full_discovery")
 
     def test_formatter_methods(self, terminal_formatter):
         msg = terminal_formatter.success("test")

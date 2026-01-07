@@ -23,6 +23,8 @@ Raw LLM response logs for debugging, analysis, and regression testing.
 - `text_generation_with_options.md` – File
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [outputs](../README.md)
 - **Src Hub**: [src](../../../../../src/README.md)

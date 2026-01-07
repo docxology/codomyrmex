@@ -336,7 +336,7 @@ manager.registry.add_event_handler(EventType.CREATED, on_object_created)
 
 ---
 
-For more examples, see the `examples/` directory and the comprehensive test suite in `tests/`.
+For more examples, see the `scripts/examples/` directory and the comprehensive test suite in `tests/`.
 
 ## Navigation Links
 

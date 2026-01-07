@@ -56,6 +56,7 @@ class SignpostingIssue:
 @dataclass
 class StructureIssue:
     """Represents a folder structure issue."""
+    file_path: str
     documented_path: str
     actual_path: Optional[str]
     issue_type: str  # 'missing', 'extra', 'mismatch'
@@ -479,6 +480,7 @@ class ComprehensiveFilepathAuditor:
                                 
                                 if not target.exists():
                                     self.structure_issues.append(StructureIssue(
+                                        file_path=str(readme_file.relative_to(self.repo_root)),
                                         documented_path=str(target.relative_to(self.repo_root)),
                                         actual_path=None,
                                         issue_type='missing',

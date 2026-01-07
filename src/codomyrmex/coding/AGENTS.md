@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/code
+# Codomyrmex Agents — src/codomyrmex/coding
 
 ## Signposting
 - **Parent**: [codomyrmex](../AGENTS.md)

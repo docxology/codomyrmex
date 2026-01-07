@@ -58,6 +58,8 @@ archive_manager.extract_archive("archive.zip", output_dir="./extracted")
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
@@ -75,15 +77,6 @@ from codomyrmex.compression import Compressor, ArchiveManager
 compressor = Compressor()
 # Use compressor for data compression/decompression
 ```
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1. Follow the project coding standards.
-2. Add tests for new functionality.
-3. Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->
 

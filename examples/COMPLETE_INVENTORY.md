@@ -106,9 +106,9 @@ This document provides a complete, exhaustive inventory of ALL examples and addi
     - **Test File**: `test_model_context_protocol.py`
     - **Effort**: 3-4 hours
 
-13. ⏳ `modeling_3d/` - 3D visualization
+13. ⏳ `spatial/` - 3D visualization
     - **Files**: 4
-    - **Test File**: `test_modeling_3d.py`
+    - **Test File**: `test_spatial.py`
     - **Effort**: 2-4 hours
 
 14. ⏳ `physical_management/` - Hardware management

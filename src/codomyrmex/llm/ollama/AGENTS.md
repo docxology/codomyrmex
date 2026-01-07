@@ -678,5 +678,5 @@ All Ollama integration within the Codomyrmex platform must:
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **Project Root**: [README](../../../../README.md) - Main project documentation
 - **Source Root**: [src](../../README.md) - Source code documentation

@@ -17,7 +17,7 @@ class TestCodeExecutionSandboxComprehensive:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.code.execution import executor
+            from codomyrmex.coding.execution import executor
             assert executor is not None
         except ImportError as e:
             pytest.fail(f"Failed to import executor: {e}")
@@ -27,7 +27,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.sandbox.container import check_docker_available
+        from codomyrmex.coding.sandbox.container import check_docker_available
 
         result = check_docker_available()
         assert isinstance(result, bool)
@@ -39,7 +39,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution.language_support import validate_language
+        from codomyrmex.coding.execution.language_support import validate_language
 
         # Test supported languages
         supported_languages = ['python', 'javascript', 'java', 'cpp', 'c', 'go', 'rust']
@@ -51,7 +51,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution.language_support import validate_language
+        from codomyrmex.coding.execution.language_support import validate_language
 
         result = validate_language("unsupported_lang")
         assert result is False
@@ -61,7 +61,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution.executor import validate_timeout
+        from codomyrmex.coding.execution.executor import validate_timeout
 
         assert validate_timeout(10) == 10
         assert validate_timeout(1) == 1
@@ -72,7 +72,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution.executor import validate_timeout
+        from codomyrmex.coding.execution.executor import validate_timeout
 
         # Test that values are clamped to valid range
         assert validate_timeout(0) == 1  # MIN_TIMEOUT
@@ -85,7 +85,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution.executor import prepare_code_file
+        from codomyrmex.coding.execution.executor import prepare_code_file
 
         code = "print('Hello, World!')"
         language = "python"
@@ -109,7 +109,7 @@ class TestCodeExecutionSandboxComprehensive:
         if not real_docker_available:
             pytest.skip("Docker not available - install Docker to run this test")
 
-        from codomyrmex.code.sandbox.container import run_code_in_docker
+        from codomyrmex.coding.sandbox.container import run_code_in_docker
 
         # Create real code file
         code_file = tmp_path / "code.py"
@@ -143,7 +143,7 @@ class TestCodeExecutionSandboxComprehensive:
         if not real_docker_available:
             pytest.skip("Docker not available - install Docker to run this test")
 
-        from codomyrmex.code.execution.executor import execute_code
+        from codomyrmex.coding.execution.executor import execute_code
 
         result = execute_code(
             language="python",
@@ -169,7 +169,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution.language_support import SUPPORTED_LANGUAGES
+        from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES
 
         # Check that language configurations exist
         assert SUPPORTED_LANGUAGES is not None
@@ -188,7 +188,7 @@ class TestCodeExecutionSandboxComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution.executor import DEFAULT_TIMEOUT, MAX_TIMEOUT, MIN_TIMEOUT
+        from codomyrmex.coding.execution.executor import DEFAULT_TIMEOUT, MAX_TIMEOUT, MIN_TIMEOUT
 
         assert DEFAULT_TIMEOUT == 30
         assert MAX_TIMEOUT == 300

@@ -4,13 +4,13 @@
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Security Agents](AGENTS.md)
 - **Children**:
-    - [Cognitive Security Agents](cognitive/AGENTS.md)
-    - [Digital Security Agents](digital/AGENTS.md)
+    - [cognitive](cognitive/AGENTS.md)
+    - [digital](digital/AGENTS.md)
     - [docs](docs/AGENTS.md)
-    - [Physical Security Agents](physical/AGENTS.md)
-    - [Security Theory Agents](security_theory/AGENTS.md)
+    - [physical](physical/AGENTS.md)
+    - [security_theory](security_theory/AGENTS.md)
     - [tests](tests/AGENTS.md)
-    - [Theory Agents](theory/AGENTS.md)
+    - [theory](theory/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)

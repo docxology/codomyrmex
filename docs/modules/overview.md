@@ -151,7 +151,7 @@ graph TD
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
-| **`modeling_3d`** | 3D modeling and visualization | 3D model creation, manipulation, rendering |
+| **`spatial`** | 3D modeling and visualization | 3D model creation, manipulation, rendering |
 | **`physical_management`** | Physical system simulation | Physical system modeling, simulation management |
 
 ## 🔄 Module Communication Patterns

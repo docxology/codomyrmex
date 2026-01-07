@@ -31,7 +31,7 @@ The source code follows a hierarchical module organization:
 **Core Layer** - Primary development capabilities:
 - `ai_code_editing/` - AI-powered code assistance
 - `static_analysis/` - Code quality and security analysis
-- `code/` - Code execution, sandboxing, review, and monitoring
+- [coding](codomyrmex/coding/AGENTS.md) - Code execution, sandboxing, review, and monitoring
 - `data_visualization/` - Charts, plots, and visualizations
 - `pattern_matching/` - Code pattern recognition
 - `git_operations/` - Version control automation
@@ -179,8 +179,8 @@ Package dependencies organized by purpose:
 - **Parent**: [Root](../AGENTS.md)
 - **Self**: [Source Agents](AGENTS.md)
 - **Children**:
-    - [Codomyrmex Package](codomyrmex/AGENTS.md)
-    - [Template Package](template/AGENTS.md)
+    - [codomyrmex](codomyrmex/AGENTS.md)
+    - [template](template/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)

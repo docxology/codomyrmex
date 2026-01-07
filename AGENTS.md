@@ -23,8 +23,8 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **config/** | Configuration templates and examples | [config/README.md](config/README.md) |
 | **cursorrules/** | Coding standards and automation rules | [cursorrules/README.md](cursorrules/README.md) |
 | **projects/** | Project workspace and templates | [projects/README.md](projects/README.md) |
-| **examples/** | Example scripts and demonstrations | [examples/README.md](scripts/examples/README.md) |
 | **scripts/examples/** | Executable examples and demos | [scripts/examples/README.md](scripts/examples/README.md) |
+| **output/** | Generated reports and documentation artifacts | [output/README.md](output/README.md) |
 
 ### Repository Root Files
 
@@ -114,7 +114,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `static_analysis/` - Code quality analysis
   - Key Classes: `CodeAnalyzer`, `LintRunner`, `ComplexityCalculator`
   - Key Functions: `analyze_file(filepath: str) -> dict`, `calculate_complexity(code: str) -> float`
-- `code/` - Code execution & review
+- `coding/` - Code interaction and sandboxing
   - Key Submodules: `sandbox/`, `review/`, `execution/`
   - Key Classes: `SandboxExecutor`, `CodeReviewer`, `ExecutionContext`
   - Key Functions: `execute_code(code: str, language: str) -> ExecutionResult`, `review_code(code: str) -> dict`
@@ -128,8 +128,9 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `GitManager`, `CommitBuilder`, `BranchManager`
   - Key Functions: `commit_changes(message: str, files: list = None) -> str`, `create_branch(name: str) -> bool`
 - `security/` - Security scanning and threat assessment
+  - Key Submodules: `cognitive/`, `digital/`, `physical/`, `theory/`
   - Key Classes: `SecurityScanner`, `VulnerabilityDetector`, `ComplianceChecker`, `ThreatModeler`
-  - Key Functions: `scan_codebase(path: str) -> list`, `check_vulnerabilities(dependencies: dict) -> list`, `assess_threats(system: dict) -> ThreatAssessment`
+  - Key Functions: `scan_codebase(path: str) -> dict`, `check_vulnerabilities(dependencies: dict) -> list`, `assess_threats(system: dict) -> ThreatAssessment`
 - `llm/` - LLM infrastructure and integration
   - Key Submodules: `ollama/`, `outputs/`, `prompt_templates/`
   - Key Classes: `OllamaClient`, `ModelManager`, `InferenceEngine`
@@ -227,14 +228,13 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Parent**: [Repository Root](README.md)
 - **Self**: [Codomyrmex Root](AGENTS.md)
 - **Children**:
-    - [Source Code](src/AGENTS.md)
-    - [Documentation](docs/AGENTS.md)
-    - [Scripts](scripts/AGENTS.md)
-    - [Tests](src/codomyrmex/tests/AGENTS.md)
-    - [Config](config/AGENTS.md)
-    - [Cursor Rules](cursorrules/AGENTS.md)
-    - [Examples](scripts/examples/AGENTS.md)
-    - [Projects](projects/AGENTS.md)
+    - [src](src/AGENTS.md)
+    - [docs](docs/AGENTS.md)
+    - [scripts](scripts/AGENTS.md)
+    - [config](config/AGENTS.md)
+    - [cursorrules](cursorrules/AGENTS.md)
+    - [projects](projects/AGENTS.md)
+    - [output](output/AGENTS.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -246,20 +246,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Documentation Guide**: [docs/development/documentation.md](docs/development/documentation.md)
 
 ## Active Components
-- `@output/` – Committed reports and documentation artifacts
-- `AGENTS.md` – This file: agent coordination and navigation
-- `LICENSE` – MIT License
-- `Makefile` – Build and automation tasks
-- `README.md` – Primary entry point for users and contributors
-- `SECURITY.md` – Security policies and vulnerability reporting
-- `.editorconfig` – Editor configuration standards
-- `.pre-commit-config.yaml` – Pre-commit hook configuration
-- `config/` – Configuration templates and examples
-- `cursorrules/` – Coding standards and automation rules
-- `docs/` – Project documentation (about Codomyrmex)
-- `examples/` – Example scripts and demonstrations
-- `general.cursorrules` – General coding standards
-- `output/` – Runtime-generated outputs and working files
+- `@output/` – Legacy output directory (see output/)
 - `package.json` – Node.js package configuration
 - `projects/` – Project workspace and templates
 - `pyproject.toml` – Python package configuration
@@ -271,6 +258,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - `test.db` – Test database file
 - `src/codomyrmex/tests/` – Test suites (unit and integration)
 - `workflow.db` – Workflow database file
+- `output/` – Generated reports and documentation artifacts
 
 
 ## Navigation Links
@@ -282,7 +270,6 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Configuration**: [config/README.md](config/README.md) - Configuration templates
 - **Cursor Rules**: [cursorrules/README.md](cursorrules/README.md) - Coding standards
 - **Projects**: [projects/README.md](projects/README.md) - Projects workspace
-- **Examples**: [examples/README.md](scripts/examples/README.md) - Example implementations
 - **Scripts Examples**: [scripts/examples/README.md](scripts/examples/README.md) - Executable examples and demos
 - **Source Agents**: [src/AGENTS.md](src/AGENTS.md) - Source code agent coordination
 - **Docs Agents**: [docs/AGENTS.md](docs/AGENTS.md) - Documentation agent coordination

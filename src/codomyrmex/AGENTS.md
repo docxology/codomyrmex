@@ -4,57 +4,50 @@
 - **Parent**: [src](../AGENTS.md)
 - **Self**: [Package Agents](AGENTS.md)
 - **Children**:
-    - **Foundation Layer**:
-        - [Logging Monitoring Agents](logging_monitoring/AGENTS.md)
-        - [Environment Setup Agents](environment_setup/AGENTS.md)
-        - [Model Context Protocol Agents](model_context_protocol/AGENTS.md)
-        - [Terminal Interface Agents](terminal_interface/AGENTS.md)
-        - [Validation Agents](validation/AGENTS.md)
-    - **Core Layer**:
-        - [Static Analysis Agents](static_analysis/AGENTS.md)
-        - [Code Agents](code/AGENTS.md) - Code execution, sandboxing, review, and monitoring
-        - [Data Visualization Agents](data_visualization/AGENTS.md)
-        - [Pattern Matching Agents](pattern_matching/AGENTS.md)
-        - [Git Operations Agents](git_operations/AGENTS.md)
-        - [Scrape Agents](scrape/AGENTS.md)
-        - [Security Agents](security/AGENTS.md)
-        - [Documents Agents](documents/AGENTS.md)
-        - [LLM Agents](llm/AGENTS.md)
-        - [Performance Agents](performance/AGENTS.md)
-        - [Cache Agents](cache/AGENTS.md)
-        - [Serialization Agents](serialization/AGENTS.md)
-        - [Metrics Agents](metrics/AGENTS.md)
-    - **Service Layer**:
-        - [Build Synthesis Agents](build_synthesis/AGENTS.md)
-        - [Documentation Agents](documentation/AGENTS.md)
-        - [API Documentation Agents](api/documentation/AGENTS.md)
-        - [CI/CD Automation Agents](ci_cd_automation/AGENTS.md)
-        - [Containerization Agents](containerization/AGENTS.md)
-        - [Database Management Agents](database_management/AGENTS.md)
-        - [Config Management Agents](config_management/AGENTS.md)
-        - [Project Orchestration Agents](project_orchestration/AGENTS.md)
-        - [Networking Agents](networking/AGENTS.md)
-        - [Queue Agents](queue/AGENTS.md)
-        - [Auth Agents](auth/AGENTS.md)
-    - **Specialized Layer**:
-        - [Spatial Agents](spatial/AGENTS.md)
-        - [Physical Management Agents](physical_management/AGENTS.md)
-        - [System Discovery Agents](system_discovery/AGENTS.md)
-        - [Module Template Agents](module_template/AGENTS.md)
-        - [Template Agents](template/AGENTS.md)
-        - [Templating Agents](templating/AGENTS.md)
-        - [Events Agents](events/AGENTS.md)
-        - [API Standardization Agents](api/standardization/AGENTS.md)
-        - [Plugin System Agents](plugin_system/AGENTS.md)
-        - [Tools Agents](tools/AGENTS.md)
-        - [FPF Agents](fpf/AGENTS.md)
-        - [CEREBRUM Agents](cerebrum/AGENTS.md)
-        - [Agents Agents](agents/AGENTS.md)
-            - [AI Code Editing Agents](agents/ai_code_editing/AGENTS.md)
-            - [Droid Agents](agents/droid/AGENTS.md)
-        - [Compression Agents](compression/AGENTS.md)
-        - [Encryption Agents](encryption/AGENTS.md)
-        - [Tests Agents](tests/AGENTS.md)
+    - [logging_monitoring](logging_monitoring/AGENTS.md)
+    - [environment_setup](environment_setup/AGENTS.md)
+    - [model_context_protocol](model_context_protocol/AGENTS.md)
+    - [terminal_interface](terminal_interface/AGENTS.md)
+    - [validation](validation/AGENTS.md)
+    - [static_analysis](static_analysis/AGENTS.md)
+    - [coding](coding/AGENTS.md)
+    - [data_visualization](data_visualization/AGENTS.md)
+    - [pattern_matching](pattern_matching/AGENTS.md)
+    - [git_operations](git_operations/AGENTS.md)
+    - [security](security/AGENTS.md)
+    - [documents](documents/AGENTS.md)
+    - [llm](llm/AGENTS.md)
+    - [performance](performance/AGENTS.md)
+    - [cache](cache/AGENTS.md)
+    - [serialization](serialization/AGENTS.md)
+    - [metrics](metrics/AGENTS.md)
+    - [build_synthesis](build_synthesis/AGENTS.md)
+    - [documentation](documentation/AGENTS.md)
+    - [api](api/AGENTS.md)
+    - [ci_cd_automation](ci_cd_automation/AGENTS.md)
+    - [containerization](containerization/AGENTS.md)
+    - [database_management](database_management/AGENTS.md)
+    - [config_management](config_management/AGENTS.md)
+    - [project_orchestration](project_orchestration/AGENTS.md)
+    - [networking](networking/AGENTS.md)
+    - [task_queue](task_queue/AGENTS.md)
+    - [auth](auth/AGENTS.md)
+    - [spatial](spatial/AGENTS.md)
+    - [physical_management](physical_management/AGENTS.md)
+    - [system_discovery](system_discovery/AGENTS.md)
+    - [module_template](module_template/AGENTS.md)
+    - [template](template/AGENTS.md)
+    - [templating](templating/AGENTS.md)
+    - [events](events/AGENTS.md)
+    - [plugin_system](plugin_system/AGENTS.md)
+    - [tools](tools/AGENTS.md)
+    - [fpf](fpf/AGENTS.md)
+    - [cerebrum](cerebrum/AGENTS.md)
+    - [agents](agents/AGENTS.md)
+    - [compression](compression/AGENTS.md)
+    - [encryption](encryption/AGENTS.md)
+    - [tests](tests/AGENTS.md)
+    - [scrape](scrape/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -82,11 +75,11 @@ Modules are organized into functional layers:
 
 **Core Layer** - Primary development capabilities:
 - `static_analysis/` - Code quality and security analysis
-- `code/` - Code execution, sandboxing, review, and monitoring
-  - `code/execution/` - Code execution engine
-  - `code/sandbox/` - Sandboxed execution environment
-  - `code/review/` - Code review and analysis
-  - `code/monitoring/` - Execution monitoring and metrics
+- `coding/` - Code interaction, sandboxing, review, and execution
+  - `coding/execution/` - Code execution engine
+  - `coding/sandbox/` - Sandboxed execution environment
+  - `coding/review/` - Code review and analysis
+  - `coding/monitoring/` - Execution monitoring and metrics
 - `data_visualization/` - Charts, plots, and visualizations
 - `pattern_matching/` - Code pattern recognition
 - `git_operations/` - Version control automation
@@ -168,10 +161,10 @@ Modules are organized into functional layers:
 - `exceptions.py` – Platform-wide exception definitions
 
 ### Module Directories
-- `api/` – API documentation and standardization (with `documentation/` and `standardization/` submodules)
+- `api/` – API documentation and standardization
 - `build_synthesis/` – Build orchestration and automation
 - `ci_cd_automation/` – CI/CD pipeline management
-- `code/` – Code execution, sandboxing, review, and monitoring
+- `coding/` – Code interaction and sandboxing
 - `config_management/` – Configuration management and validation
 - `containerization/` – Container lifecycle management
 - `data_visualization/` – Data plotting and visualization
@@ -191,8 +184,8 @@ Modules are organized into functional layers:
 - `security/` – Security module (physical, digital, cognitive, theory)
 - `documents/` – Document I/O operations
 - `static_analysis/` – Code quality analysis
-- `system_discovery/` – System exploration and discovery
-- `template/` – Code generation templates
+- `task_queue/` – Task queue management
+- `template/` – Code generation templates (link to module_template)
 - `terminal_interface/` – Rich terminal UI components
 - `tests/` – Cross-module integration tests
 - `tools/` – Utility tools and helpers
@@ -317,28 +310,28 @@ def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict
 def analyze_codebase(*args, **kwargs) -> AnalysisSummary
 ```
 
-#### code
+#### coding
 
-**Execution** (`code/execution/`):
+**Execution** (`coding/execution/`):
 ```python
 def execute_code(language: str, code: str, stdin: Optional[str] = None, timeout: Optional[int] = None, session_id: Optional[str] = None) -> dict[str, Any]
 ```
 
-**Sandbox** (`code/sandbox/`):
+**Sandbox** (`coding/sandbox/`):
 ```python
 def run_code_in_docker(code: str, language: str, limits: ExecutionLimits) -> dict[str, Any]
 def sandbox_process_isolation(code: str, language: str) -> dict[str, Any]
 def check_docker_available() -> bool
 ```
 
-**Review** (`code/review/`):
+**Review** (`coding/review/`):
 ```python
 def analyze_file(file_path: str, analysis_types: list[str] = None) -> list[AnalysisResult]
 def analyze_project(project_root: str, target_paths: list[str] = None, analysis_types: list[str] = None) -> AnalysisSummary
 def check_quality_gates(project_root: str, thresholds: dict[str, int] = None) -> QualityGateResult
 ```
 
-**Monitoring** (`code/monitoring/`):
+**Monitoring** (`coding/monitoring/`):
 ```python
 def monitor_execution(session_id: str) -> ExecutionMonitor
 def collect_metrics(session_id: str) -> MetricsCollector

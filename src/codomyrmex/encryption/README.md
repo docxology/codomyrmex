@@ -54,6 +54,8 @@ retrieved_key = key_manager.get_key("key_id")
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
@@ -74,16 +76,7 @@ encryptor = Encryptor()
 
 ## Security Considerations
 
-This module handles sensitive cryptographic operations. Please review [SECURITY.md](SECURITY.md) for security best practices and considerations.
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1. Follow the project coding standards.
-2. Add tests for new functionality.
-3. Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
+This module handles sensitive cryptographic operations. Please review [SECURITY.md](../../../SECURITY.md) for security best practices and considerations.
 
 <!-- Navigation Links keyword for score -->
 

@@ -23,6 +23,8 @@ Latency, token speed, and consistency benchmarks for LLM calls.
 - `token_generation_speed.json` – File
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [outputs](../README.md)
 - **Src Hub**: [src](../../../../../src/README.md)

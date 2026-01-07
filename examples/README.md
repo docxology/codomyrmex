@@ -11,7 +11,8 @@
     - [api_standardization](api_standardization/README.md)
     - [build_synthesis](build_synthesis/README.md)
     - [ci_cd_automation](ci_cd_automation/README.md)
-    - [code](code/README.md)    - [config_management](config_management/README.md)
+    - [coding](coding/README.md) - Code execution, sandboxing, review, and monitoring
+    - [config_management](config_management/README.md)
     - [containerization](containerization/README.md)
     - [data_visualization](data_visualization/README.md)
     - [database_management](database_management/README.md)
@@ -22,7 +23,7 @@
     - [language_models](language_models/README.md)
     - [logging_monitoring](logging_monitoring/README.md)
     - [model_context_protocol](model_context_protocol/README.md)
-    - [modeling_3d](modeling_3d/README.md)
+    - [spatial](spatial/README.md)
     - [multi_module](multi_module/README.md)
     - [ollama_integration](ollama_integration/README.md)
     - [output](output/README.md)
@@ -134,7 +135,7 @@ Higher-level orchestration and services:
 
 Domain-specific capabilities:
 
-- **[modeling_3d/](modeling_3d)** - 3D modeling and visualization ✅
+- **[spatial/](spatial)** - 3D modeling and visualization ✅
 - **[physical_management/](physical_management)** - Hardware management ✅
 - **[system_discovery/](system_discovery)** - System exploration ✅
 - **[performance/](performance)** - Performance monitoring ✅
@@ -344,31 +345,58 @@ To add a new example:
 - **Repository Root**: [../README.md](../README.md)
 - **Repository SPEC**: [../SPEC.md](../SPEC.md)
 
-## Getting Started
+## Example Execution Flow
 
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.your_module import main_component
-
-def example():
-    result = main_component.process()
-    print(f"Result: {result}")
+```mermaid
+flowchart TD
+    Start([User Runs Example]) --> LoadConfig[Load Configuration<br/>YAML or JSON]
+    LoadConfig --> InitRunner[Initialize ExampleRunner<br/>Setup logging & paths]
+    InitRunner --> ExecuteModule[Execute Module<br/>Call tested methods]
+    ExecuteModule --> ValidateResults[Validate Results<br/>Check output format]
+    ValidateResults --> SaveOutput[Save Output<br/>JSON results & logs]
+    SaveOutput --> Complete([Example Complete])
+    
+    ExecuteModule -->|Error| HandleError[Handle Error<br/>Log & report]
+    HandleError --> Complete
 ```
 
-## detailed_overview
+## Example Categories
 
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
+```mermaid
+graph TD
+    subgraph "Example Types"
+        Basic[Basic Examples<br/>Single module<br/>Simple usage]
+        Multi[Multi-Module<br/>Integration<br/>Workflows]
+        Common[Common Utilities<br/>Shared<br/>Infrastructure]
+    end
+    
+    subgraph "Module Examples"
+        Foundation[Foundation Layer<br/>logging, environment, MCP]
+        Core[Core Layer<br/>analysis, execution, visualization]
+        Service[Service Layer<br/>build, docs, CI/CD]
+        Specialized[Specialized Layer<br/>spatial, physical, discovery]
+    end
+    
+    Basic --> Foundation
+    Basic --> Core
+    Basic --> Service
+    Basic --> Specialized
+    
+    Multi --> Common
+    Common --> Basic
+```
 
-## Contributing
+## Contributing Examples
 
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
+When adding new examples:
 
-See the root `CONTRIBUTING.md` for more details.
+1. **Follow the template structure** - Use `_templates/` as reference
+2. **Reference tested methods** - Document which unit tests verify functionality
+3. **Include both YAML and JSON** - Support both configuration formats
+4. **Add clear documentation** - Explain what the example demonstrates
+5. **Test thoroughly** - Ensure example runs successfully
+6. **Update navigation** - Add to this README and AGENTS.md
+
+See **[Contributing Guide](../docs/project/contributing.md)** for detailed guidelines.
 
 <!-- Navigation Links keyword for score -->

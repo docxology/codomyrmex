@@ -25,3 +25,11 @@ python orchestrate.py process --file <file_path>
 - Integrates with `logging_monitoring` for logging
 - Uses shared `_orchestrator_utils` for common functionality
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

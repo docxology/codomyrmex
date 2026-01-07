@@ -138,3 +138,11 @@ class FirecrawlAdapter(BaseScraper):
 - Integration tests with real Firecrawl SDK (when API key available)
 - Error handling test cases (real error propagation)
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [scrape](../README.md)
+- **Repository Root**: [../../../../README.md](../../../../README.md)
+- **Repository SPEC**: [../../../../SPEC.md](../../../../SPEC.md)

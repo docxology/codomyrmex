@@ -111,6 +111,8 @@ The Security module integrates with:
 - **Static Analysis** - Integrates for code security analysis
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
@@ -119,8 +121,6 @@ The Security module integrates with:
 - **Physical Security**: [physical/](physical/)
 - **Cognitive Security**: [cognitive/](cognitive/)
 - **Theory**: [theory/](theory/)
-
-
 
 ## Getting Started
 
@@ -131,22 +131,8 @@ To use this module in your project, import the necessary components:
 from codomyrmex.codomyrmex.security import main_component
 
 def example():
-    result = main_component.process()
+    
     print(f"Result: {result}")
 ```
-
-## detailed_overview
-
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->

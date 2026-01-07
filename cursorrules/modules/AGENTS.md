@@ -101,7 +101,7 @@ This directory contains module-specific coding standards and conventions for eac
 - Standards for chart generation and data presentation
 - Key Functions: `validate_visualization_config(config: dict) -> bool`, `standardize_chart_formats(charts: list) -> StandardizedCharts`
 
-**3D Modeling** (`modeling_3d.cursorrules`)
+**3D Modeling** (`spatial.cursorrules`)
 - Standards for 3D scene creation and rendering
 - Key Functions: `validate_3d_config(config: dict) -> bool`, `standardize_3d_formats(models: list) -> StandardizedModels`
 
@@ -147,7 +147,7 @@ This directory contains module-specific coding standards and conventions for eac
 - `language_models.cursorrules` – Language model integration standards (function: validate_llm_config(config: dict) -> ValidationResult)
 - `logging_monitoring.cursorrules` – Logging standards (function: validate_logging_config(config: dict) -> ValidationResult)
 - `model_context_protocol.cursorrules` – MCP implementation standards (function: validate_mcp_config(config: dict) -> ValidationResult)
-- `modeling_3d.cursorrules` – 3D modeling standards (function: validate_3d_config(config: dict) -> ValidationResult)
+- `spatial.cursorrules` – 3D modeling standards (function: validate_3d_config(config: dict) -> ValidationResult)
 - `module_template.cursorrules` – Module template standards (function: validate_template_config(config: dict) -> ValidationResult)
 - `ollama_integration.cursorrules` – Ollama integration standards (function: validate_ollama_config(config: dict) -> ValidationResult)
 - `pattern_matching.cursorrules` – Pattern matching standards (function: validate_pattern_config(config: dict) -> ValidationResult)

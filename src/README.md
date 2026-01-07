@@ -61,7 +61,7 @@ graph TB
     end
 
     subgraph "Specialized Layer<br/>(Domain-Specific)"
-        MODELING[modeling_3d<br/>3D visualization]
+        MODELING[spatial<br/>3D visualization]
         PHYSICAL[physical_management<br/>Hardware management]
         DISCOVERY[system_discovery<br/>Module discovery]
         PERF[performance<br/>Performance monitoring]
@@ -194,7 +194,7 @@ graph TD
     end
 
     subgraph "Specialized Layer"
-        MODELING_3D[modeling_3d]
+        MODELING_3D[spatial]
         PHYSICAL_MGMT[physical_management]
         SYSTEM_DISCOVERY[system_discovery]
         MODULE_TEMPLATE[module_template]
@@ -329,7 +329,7 @@ pie title Module Development Status (December 2025)
 |----------------|-------------|--------------|----------|
 | **Production Ready** | Fully tested, stable APIs, production use | 12 | logging_monitoring, environment_setup, terminal_interface |
 | **Beta** | Core functionality complete, API stabilization | 8 | ai_code_editing, static_analysis, code |
-| **Alpha** | Basic functionality, APIs may change | 6 | modeling_3d, physical_management, system_discovery |
+| **Alpha** | Basic functionality, APIs may change | 6 | spatial, physical_management, system_discovery |
 | **Planning** | Requirements gathering, initial design | 4 | Future specialized modules |
 
 ## Testing Architecture
@@ -415,7 +415,6 @@ graph TD
 - **API Reference**: [docs/reference/api.md](../docs/reference/api.md)
 - **Testing**: [src/codomyrmex/tests/README.md](../src/codomyrmex/tests/README.md)
 
-
 ## Getting Started
 
 To use this module in your project, import the necessary components:
@@ -425,22 +424,8 @@ To use this module in your project, import the necessary components:
 from codomyrmex. import main_component
 
 def example():
-    result = main_component.process()
+    
     print(f"Result: {result}")
 ```
-
-## detailed_overview
-
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->

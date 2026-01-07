@@ -147,6 +147,8 @@ All operations use structured logging:
 - `examples/` - Example scripts
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Parent**: [scripts/AGENTS.md](../AGENTS.md)
 - **Self**: [AGENTS.md](AGENTS.md)

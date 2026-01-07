@@ -15,24 +15,24 @@ class TestCodeReview:
 
         try:
             from codomyrmex import coding
-            assert code is not None
+            assert coding is not None
         except ImportError as e:
             pytest.fail(f"Failed to import code_review: {e}")
 
     def test_code_review_module_exists(self, code_dir):
         """Test that code_review module directory exists."""
-        code_review_path = code_dir / "codomyrmex" / "code" / "review"
+        code_review_path = code_dir / "codomyrmex" / "coding" / "review"
         assert code_review_path.exists()
         assert code_review_path.is_dir()
 
     def test_code_review_init_file(self, code_dir):
         """Test that code_review has __init__.py."""
-        init_path = code_dir / "codomyrmex" / "code" / "review" / "__init__.py"
+        init_path = code_dir / "codomyrmex" / "coding" / "review" / "__init__.py"
         assert init_path.exists()
 
     def test_code_review_main_module(self, code_dir):
         """Test that code_review has main module file."""
-        main_path = code_dir / "codomyrmex" / "code" / "review" / "reviewer.py"
+        main_path = code_dir / "codomyrmex" / "coding" / "review" / "reviewer.py"
         assert main_path.exists()
 
     def test_code_reviewer_class_import(self, code_dir):
@@ -41,7 +41,7 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.code.review import CodeReviewer
+            from codomyrmex.coding.review import CodeReviewer
             assert CodeReviewer is not None
         except ImportError as e:
             pytest.fail(f"Failed to import CodeReviewer: {e}")
@@ -52,7 +52,7 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.code.review import PyscnAnalyzer
+            from codomyrmex.coding.review import PyscnAnalyzer
             assert PyscnAnalyzer is not None
         except ImportError as e:
             pytest.fail(f"Failed to import PyscnAnalyzer: {e}")
@@ -63,7 +63,7 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.code.review import AnalysisType, SeverityLevel, Language
+            from codomyrmex.coding.review import AnalysisType, SeverityLevel, Language
             assert AnalysisType is not None
             assert SeverityLevel is not None
             assert Language is not None
@@ -76,7 +76,7 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.code.review import (
+            from codomyrmex.coding.review import (
                 AnalysisResult,
                 AnalysisSummary,
                 CodeMetrics,
@@ -95,7 +95,7 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.code.review import (
+            from codomyrmex.coding.review import (
                 CodeReviewError,
                 PyscnError,
                 ToolNotFoundError,
@@ -114,7 +114,7 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.code.review import (
+            from codomyrmex.coding.review import (
                 analyze_file,
                 analyze_project,
                 check_quality_gates,

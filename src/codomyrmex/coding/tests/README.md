@@ -29,12 +29,12 @@ Tests for automated code review, analysis, and quality metrics.
 
 ```bash
 # Run all code module tests
-pytest src/codomyrmex/code/tests/
+pytest src/codomyrmex/coding/tests/
 
 # Run specific test category
-pytest src/codomyrmex/code/tests/sandbox/
-pytest src/codomyrmex/code/tests/execution/
-pytest src/codomyrmex/code/tests/review/
+pytest src/codomyrmex/coding/tests/sandbox/
+pytest src/codomyrmex/coding/tests/execution/
+pytest src/codomyrmex/coding/tests/review/
 ```
 
 ## Navigation Links

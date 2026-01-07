@@ -52,35 +52,43 @@ The static analysis pipeline processes source code through multiple stages: pars
 - `tests/` – Subdirectory
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Src Hub**: [src](../../../src/README.md)
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+### Basic Usage
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.static_analysis import main_component
+from codomyrmex.static_analysis import StaticAnalyzer
 
-def example():
-    result = main_component.process()
-    print(f"Result: {result}")
+# Initialize analyzer
+analyzer = StaticAnalyzer()
+
+# Analyze a file
+results = analyzer.analyze_file("path/to/file.py")
+
+# Check results
+if results.has_issues:
+    for issue in results.issues:
+        print(f"{issue.severity}: {issue.message}")
 ```
 
-## detailed_overview
+### Analysis Types
 
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
+The module supports multiple analysis types:
+- **Syntax Analysis**: Validates code syntax
+- **Security Scanning**: Detects security vulnerabilities
+- **Complexity Metrics**: Calculates cyclomatic complexity
+- **Quality Metrics**: Assesses code maintainability
 
-## Contributing
+See **[Usage Examples](USAGE_EXAMPLES.md)** for detailed examples.
 
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
+## Related Documentation
 
-See the root `CONTRIBUTING.md` for more details.
-
-<!-- Navigation Links keyword for score -->
+- **[API Specification](API_SPECIFICATION.md)** - Complete API reference
+- **[Agent Guide](AGENTS.md)** - Technical documentation
+- **[Security Considerations](SECURITY.md)** - Security implications

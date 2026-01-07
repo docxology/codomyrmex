@@ -1,4 +1,4 @@
-# src/codomyrmex/code
+# src/codomyrmex/coding
 
 ## Signposting
 - **Parent**: [codomyrmex](../README.md)
@@ -77,37 +77,65 @@ The execution flow ensures secure code execution through multiple security layer
 - `tests/` – Test suite
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Src Hub**: [src](../../../src/README.md)
 
-
-
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+### Code Execution
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.code import main_component
+from codomyrmex.coding.execution import execute_code
 
-def example():
-    result = main_component.process()
-    print(f"Result: {result}")
+# Execute Python code
+result = execute_code(
+    language="python",
+    code="print('Hello, World!')",
+    timeout=30
+)
+
+if result.success:
+    print(result.stdout)
+else:
+    print(f"Error: {result.stderr}")
 ```
 
-## detailed_overview
+### Sandboxed Execution
 
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
+```python
+from codomyrmex.coding.sandbox import SandboxExecutor
 
-## Contributing
+executor = SandboxExecutor()
+result = executor.execute(
+    code="import os; print(os.getcwd())",
+    language="python",
+    timeout=10
+)
+```
 
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
+### Code Review
 
-See the root `CONTRIBUTING.md` for more details.
+```python
+from codomyrmex.coding.review import CodeReviewer
 
-<!-- Navigation Links keyword for score -->
+reviewer = CodeReviewer()
+results = reviewer.analyze_file("path/to/file.py")
+
+for issue in results.issues:
+    print(f"{issue.severity}: {issue.message} at line {issue.line}")
+```
+
+## Submodule Documentation
+
+- **[Execution](execution/README.md)** - Code execution capabilities
+- **[Sandbox](sandbox/README.md)** - Secure sandboxing
+- **[Review](review/README.md)** - Code review and analysis
+- **[Monitoring](monitoring/README.md)** - Execution monitoring
+
+## Related Documentation
+
+- **[Agent Guide](AGENTS.md)** - Technical documentation
+- **[Functional Spec](SPEC.md)** - Module specification

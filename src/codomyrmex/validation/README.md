@@ -16,6 +16,83 @@ Validation module providing unified input validation framework with support for 
 
 The validation module serves as the validation layer, providing schema-agnostic validation interfaces with support for multiple validation libraries.
 
+## Validation Architecture
+
+```mermaid
+graph TD
+    subgraph "Input Sources"
+        ConfigData[Configuration Data<br/>JSON, YAML, TOML]
+        APIData[API Request/Response<br/>JSON Payloads]
+        DocumentData[Document Data<br/>Structured Content]
+        UserInput[User Input<br/>Forms, CLI Args]
+    end
+    
+    subgraph "Validation Layer"
+        ValidatorFactory[Validator Factory<br/>Select Validator Type]
+        JSONSchemaValidator[JSON Schema Validator<br/>jsonschema library]
+        PydanticValidator[Pydantic Validator<br/>Pydantic models]
+        CustomValidator[Custom Validator<br/>User-defined functions]
+    end
+    
+    subgraph "Validation Manager"
+        ValidationManager[Validation Manager<br/>Orchestration]
+        SchemaRegistry[Schema Registry<br/>Schema Storage]
+        ErrorAggregator[Error Aggregator<br/>Collect & Format]
+    end
+    
+    subgraph "Output"
+        ValidationResult[Validation Result<br/>is_valid, errors]
+        ErrorReport[Error Report<br/>Structured Messages]
+        ValidatedData[Validated Data<br/>Type-checked Output]
+    end
+    
+    ConfigData --> ValidatorFactory
+    APIData --> ValidatorFactory
+    DocumentData --> ValidatorFactory
+    UserInput --> ValidatorFactory
+    
+    ValidatorFactory --> JSONSchemaValidator
+    ValidatorFactory --> PydanticValidator
+    ValidatorFactory --> CustomValidator
+    
+    JSONSchemaValidator --> ValidationManager
+    PydanticValidator --> ValidationManager
+    CustomValidator --> ValidationManager
+    
+    ValidationManager --> SchemaRegistry
+    ValidationManager --> ErrorAggregator
+    
+    SchemaRegistry --> ValidationResult
+    ErrorAggregator --> ErrorReport
+    ValidationResult --> ValidatedData
+```
+
+## Validation Flow
+
+```mermaid
+flowchart TD
+    Start([Validation Request]) --> SelectValidator{Select<br/>Validator Type}
+    
+    SelectValidator -->|JSON Schema| LoadSchema[Load Schema<br/>from Registry]
+    SelectValidator -->|Pydantic| LoadModel[Load Pydantic<br/>Model]
+    SelectValidator -->|Custom| LoadCustom[Load Custom<br/>Validator Function]
+    
+    LoadSchema --> Validate[Execute Validation]
+    LoadModel --> Validate
+    LoadCustom --> Validate
+    
+    Validate --> CheckResult{Valid?}
+    
+    CheckResult -->|Yes| ReturnValid[Return Validated Data<br/>with Type Info]
+    CheckResult -->|No| CollectErrors[Collect Validation Errors]
+    
+    CollectErrors --> FormatErrors[Format Error Messages<br/>Structured Output]
+    FormatErrors --> ReturnInvalid[Return Validation Result<br/>with Error Details]
+    
+    ReturnValid --> End([Validation Complete])
+    ReturnInvalid --> End
+```
+
 ## Key Features
 
 - **Multiple Validators**: Support for JSON Schema, Pydantic, and custom validators
@@ -63,6 +140,8 @@ result = manager.validate(data, schema, validator_type="custom")
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
@@ -80,15 +159,6 @@ from codomyrmex.validation import Validator, ValidationResult
 validator = Validator()
 # Use validator for data validation
 ```
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1. Follow the project coding standards.
-2. Add tests for new functionality.
-3. Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->
 

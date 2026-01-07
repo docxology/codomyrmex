@@ -39,12 +39,13 @@ graph TB
 
     subgraph "Core Layer"
         STATIC_ANALYSIS[static_analysis/<br/>Code quality analysis<br/>Linting & metrics]
-        CODE[code/<br/>Code execution, sandboxing,<br/>review, and monitoring]
+        CODING[coding/<br/>Code interaction, sandboxing,<br/>review, and execution]
         DATA_VIZ[data_visualization/<br/>Charts & plots<br/>Multiple formats]
         PATTERN_MATCH[pattern_matching/<br/>Code pattern analysis<br/>AST processing]
         GIT_OPS[git_operations/<br/>Version control<br/>Git workflow automation]
-        SECURITY[security/<br/>Security module<br/>Physical, digital, cognitive, theory]<br/>DOCUMENTS[documents/<br/>Document I/O<br/>Multi-format support]
-        LLM[llm/<br/>LLM integration<br/>Ollama client in llm/ollama/]
+        SECURITY[security/<br/>Security module<br/>Physical, digital, cognitive, theory]
+        DOCUMENTS[documents/<br/>Document I/O<br/>Multi-format support]
+        LLM[llm/<br/>LLM integration<br/>Model infrastructure]
         PERFORMANCE[performance/<br/>Performance monitoring<br/>Benchmarking]
     end
 
@@ -79,13 +80,13 @@ graph TB
     MCP --> AGENTS
     TERMINAL --> AGENTS
 
-    AGENTS --> CODE_EXEC
+    AGENTS --> CODING_EXEC[coding/execution]
     AGENTS --> PATTERN_MATCH
     STATIC_ANALYSIS --> PATTERN_MATCH
-    STATIC_ANALYSIS --> CODE_REVIEW
+    STATIC_ANALYSIS --> CODING
     BUILD_SYNTHESIS --> STATIC_ANALYSIS
     BUILD_SYNTHESIS --> GIT_OPS
-    CODE_REVIEW --> STATIC_ANALYSIS
+    CODING --> STATIC_ANALYSIS
     CI_CD --> BUILD_SYNTHESIS
     CI_CD --> SECURITY
     CONTAINER --> PHYSICAL_MGMT
@@ -98,8 +99,8 @@ graph TB
     CEREBRUM --> AGENTS
     CEREBRUM --> PATTERN_MATCH
     CEREBRUM --> DATA_VIZ
-    AGENTS --> LANG_MODELS
-    AGENTS --> CODE_EXEC
+    AGENTS --> LLM
+    AGENTS --> CODING
 ```
 
 ## Module Interface Standards
@@ -121,7 +122,7 @@ classDiagram
         +get_supported_languages() -> list
     }
 
-    class CodeExecutor {
+    class Coding {
         +execute_code(code: str, language: str, timeout: int) -> ExecutionResult
         +validate_code(code: str, language: str) -> bool
         +get_supported_languages() -> list
@@ -143,7 +144,7 @@ classDiagram
     }
 
     ModuleInterface <|-- AICodeEditor
-    ModuleInterface <|-- CodeExecutor
+    ModuleInterface <|-- Coding
     ModuleInterface <|-- DataVisualizer
     ModuleInterface <|-- BuildOrchestrator
 ```
@@ -333,15 +334,15 @@ flowchart TD
 
 ### Core Layer Modules
 - `static_analysis/` – Code quality analysis and linting
-- `code/` – Code execution, sandboxing, review, and monitoring
+- `coding/` – Code interaction, sandboxing, review, and execution
 - `data_visualization/` – Chart generation and data plotting
 - `pattern_matching/` – Code pattern recognition and analysis
 - `git_operations/` – Git workflow automation and management
-- `scrape/` – Web scraping and data extraction
 - `security/` – Security module (physical, digital, cognitive, theory)
 - `documents/` – Document I/O operations (read/write markdown, JSON, PDF, etc.)
 - `llm/` – LLM integration (with `ollama/` submodule for local LLM integration)
 - `performance/` – Performance monitoring and benchmarking
+- `task_queue/` - Task management and execution tracking
 
 ### Service Layer Modules
 - `build_synthesis/` – Multi-language build orchestration
@@ -358,8 +359,11 @@ flowchart TD
 - `physical_management/` – Hardware resource monitoring
 - `system_discovery/` – Module discovery and health monitoring
 - `module_template/` – Module creation templates and scaffolding
-- `template/` – Code generation templates and utilities
+- `template/` – (Link to module_template) Code generation utilities
+- `templating/` - Standalone templating engine
+- `cerebrum/` - Case-based reasoning and active inference
 - `agents/` – Agentic framework integrations (includes `ai_code_editing/` and `droid/`)
+- `fpf/` - Functional Programming Framework
 
 ### Testing and Utilities
 - `tests/` – Cross-module integration tests
@@ -370,12 +374,7 @@ flowchart TD
 ### Core Module Functions
 
 ```python
-# ai_code_editing
-def generate_code(prompt: str, language: str = "python", context: dict = None) -> str
-def refactor_code(code: str, instructions: str, language: str = "python") -> str
-def analyze_code_quality(code: str, language: str) -> dict[str, Any]
-
-# code
+# coding
 # Execution
 def execute_code(language: str, code: str, stdin: Optional[str] = None, timeout: Optional[int] = None, session_id: Optional[str] = None) -> dict[str, Any]
 # Review
@@ -435,14 +434,14 @@ def merge_configs(base: dict, overrides: dict) -> dict
 
 ### Architecture Diagrams
 
-#### Codomyrmex Module
+#### Codomyrmex Package Layers
 
 ```mermaid
 graph TD
-    A["Module 'codomyrmex' not found"]
+    Foundation --> Core
+    Core --> Service
+    Service --> Specialized
 ```
-
-
 
 ## Getting Started
 
@@ -453,22 +452,8 @@ To use this module in your project, import the necessary components:
 from codomyrmex.codomyrmex import main_component
 
 def example():
-    result = main_component.process()
+    
     print(f"Result: {result}")
 ```
-
-## detailed_overview
-
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->

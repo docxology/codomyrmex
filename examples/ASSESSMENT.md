@@ -38,7 +38,7 @@ This document provides a comprehensive assessment of the Codomyrmex examples str
 
 **Specialized Layer** (6/6 = 100%):
 - ✅ `performance/` - Complete with profiling & benchmarks
-- ✅ `modeling_3d/` - Complete (3D scene creation, rendering, animation, physics)
+- ✅ `spatial/` - Complete (3D scene creation, rendering, animation, physics)
 - ✅ `physical_management/` - Complete (Physical objects, sensors, physics simulation, analytics)
 - ✅ `system_discovery/` - Complete (Module discovery and health checking)
 - ✅ `ollama_integration/` - Complete (Local LLM integration, model management, execution)

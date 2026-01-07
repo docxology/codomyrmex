@@ -28,6 +28,8 @@ Documentation subdirectory for the scrape module, containing detailed API refere
 4. **Versioning** - Update version when API changes
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Main Module**: [../README.md](../README.md) - Module overview
 - **Technical Docs**: [../AGENTS.md](../AGENTS.md) - Agent documentation

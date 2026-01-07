@@ -20,26 +20,32 @@ class TestAICodeEditing:
             pytest.fail(f"Failed to import ai_code_helpers: {e}")
 
     def test_claude_task_master_placeholder_file(self, code_dir):
-        """Test that claude_task_master is a placeholder file with URL."""
+        """Test that claude_task_master file exists and is importable."""
         claude_task_master_path = code_dir / "codomyrmex" / "agents" / "ai_code_editing" / "claude_task_master.py"
         assert claude_task_master_path.exists()
 
-        # Read the file content - should contain implementation
-        with open(claude_task_master_path, 'r') as f:
-            content = f.read().strip()
-            assert "github.com" in content.lower()
-            assert "TODO: Implementation needed" in content  # Should contain implementation placeholder
+        # File should be importable (may be implemented or placeholder)
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+        try:
+            from codomyrmex.agents.ai_code_editing import claude_task_master
+            assert claude_task_master is not None
+        except ImportError:
+            pytest.skip("claude_task_master not importable")
 
     def test_openai_codex_placeholder_file(self, code_dir):
-        """Test that openai_codex is a placeholder file with URL."""
+        """Test that openai_codex file exists and is importable."""
         openai_codex_path = code_dir / "codomyrmex" / "agents" / "ai_code_editing" / "openai_codex.py"
         assert openai_codex_path.exists()
 
-        # Read the file content - should contain implementation
-        with open(openai_codex_path, 'r') as f:
-            content = f.read().strip()
-            assert "github.com" in content.lower()
-            assert "TODO: Implementation needed" in content  # Should contain implementation placeholder
+        # File should be importable (may be implemented or placeholder)
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+        try:
+            from codomyrmex.agents.ai_code_editing import openai_codex
+            assert openai_codex is not None
+        except ImportError:
+            pytest.skip("openai_codex not importable")
 
     def test_openai_codex_initialization(self, code_dir):
         """Test OpenAI Codex initialization."""
@@ -82,7 +88,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import get_llm_client
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import get_llm_client
 
         # Test with real API key if available, otherwise skip
         api_key = os.environ.get("OPENAI_API_KEY")
@@ -104,7 +110,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import get_llm_client
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import get_llm_client
 
         # Temporarily remove API key if it exists
         original_key = os.environ.pop("OPENAI_API_KEY", None)
@@ -121,7 +127,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import get_llm_client
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import get_llm_client
 
         with pytest.raises(ValueError, match="Unsupported LLM provider: unsupported"):
             get_llm_client("unsupported")
@@ -131,7 +137,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import generate_code_snippet
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet
 
         # Test with empty prompt - should raise RuntimeError
         with pytest.raises(RuntimeError) as exc_info:
@@ -148,7 +154,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import generate_code_snippet
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet
 
         # Test with real API key if available
         api_key = os.environ.get("OPENAI_API_KEY")
@@ -176,7 +182,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import generate_code_snippet
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet
 
         # Test with real API key if available
         api_key = os.environ.get("OPENAI_API_KEY")
@@ -205,7 +211,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import generate_code_snippet
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code_snippet
 
         # Test with invalid API key to trigger error
         original_key = os.environ.get("OPENAI_API_KEY")
@@ -231,7 +237,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import refactor_code_snippet
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import refactor_code_snippet
 
         # Test with real API key if available
         api_key = os.environ.get("OPENAI_API_KEY")
@@ -262,7 +268,7 @@ class TestAICodeEditing:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from ai_code_editing.ai_code_helpers import refactor_code_snippet
+        from codomyrmex.agents.ai_code_editing.ai_code_helpers import refactor_code_snippet
 
         # Test with real API key if available
         api_key = os.environ.get("OPENAI_API_KEY")

@@ -10,7 +10,7 @@
     - [build_synthesis](build_synthesis/AGENTS.md)
     - [cerebrum](cerebrum/AGENTS.md)
     - [ci_cd_automation](ci_cd_automation/AGENTS.md)
-    - [code](code/AGENTS.md)
+    - [coding](coding/AGENTS.md)
     - [config_management](config_management/AGENTS.md)
     - [containerization](containerization/AGENTS.md)
     - [data_visualization](data_visualization/AGENTS.md)
@@ -26,11 +26,10 @@
     - [fabric_integration](fabric_integration/AGENTS.md)
     - [fpf](fpf/AGENTS.md)
     - [git_operations](git_operations/AGENTS.md)
-    - [language_models](language_models/AGENTS.md)
+    - [llm](llm/AGENTS.md)
     - [logging_monitoring](logging_monitoring/AGENTS.md)
     - [maintenance](maintenance/AGENTS.md)
     - [model_context_protocol](model_context_protocol/AGENTS.md)
-    - [modeling_3d](modeling_3d/AGENTS.md)
     - [module_template](module_template/AGENTS.md)
     - [pattern_matching](pattern_matching/AGENTS.md)
     - [performance](performance/AGENTS.md)
@@ -43,8 +42,10 @@
     - [system_discovery](system_discovery/AGENTS.md)
     - [template](template/AGENTS.md)
     - [terminal_interface](terminal_interface/AGENTS.md)
-    - [testing](../src/codomyrmex/tests/AGENTS.md)
+    - [testing](testing/AGENTS.md)
     - [tools](tools/AGENTS.md)
+    - [language_models](language_models/AGENTS.md)
+    - [modeling_3d](modeling_3d/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -89,7 +90,7 @@ The following folders are utility/automation folders, not direct module mappings
 - `fabric_integration/` - Fabric AI framework integration
 - `language_models/` - Language model management (separate from `llm/`)
 - `maintenance/` - System maintenance and cleanup
-- `modeling_3d/` - 3D modeling utilities (related to `spatial/` module)
+- `spatial/` - 3D modeling utilities (related to `spatial/` module)
 - `src/codomyrmex/tests/` - Testing automation and verification scripts
 - `template/` - Template generation scripts (separate from module `template/`)
 
@@ -537,7 +538,7 @@ No standalone utility scripts remain in the root `scripts/` directory. This orga
 - `logging_monitoring/` – Logging system configuration
 - `maintenance/` – System maintenance utilities
 - `model_context_protocol/` – MCP tool management
-- `modeling_3d/` – 3D modeling utilities
+- `spatial/` – 3D modeling utilities
 - `module_template/` – Module creation templates
 - `pattern_matching/` – Pattern analysis automation
 - `performance/` – Performance monitoring tools
@@ -583,7 +584,7 @@ No standalone utility scripts remain in the root `scripts/` directory. This orga
 - `logging_monitoring` – Logging Monitoring
 - `maintenance` – Maintenance
 - `model_context_protocol` – Model Context Protocol
-- `modeling_3d` – Modeling 3D
+- `spatial` – Modeling 3D
 - `module_template` – Module Template
 - `plugin_system` – Plugin System
 - `template` – Template

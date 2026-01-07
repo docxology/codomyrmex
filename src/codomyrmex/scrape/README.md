@@ -287,6 +287,8 @@ except ScrapeError as e:
 See the [docs](docs/USAGE_EXAMPLES.md) directory for more detailed examples.
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Technical Docs**: [AGENTS.md](AGENTS.md) - Agent documentation
 - **Specification**: [SPEC.md](SPEC.md) - Functional specification

@@ -95,6 +95,8 @@ All API development within the Codomyrmex platform must:
 - Generate accurate OpenAPI documentation
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation

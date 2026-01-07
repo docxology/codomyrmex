@@ -9,7 +9,7 @@
     - [build_synthesis](build_synthesis/README.md)
     - [cerebrum](cerebrum/README.md)
     - [ci_cd_automation](ci_cd_automation/README.md)
-    - [code](code/README.md)
+    - [coding](coding/README.md) - Code execution, sandboxing, review, and monitoring
     - [config_management](config_management/README.md)
     - [containerization](containerization/README.md)
     - [data_visualization](data_visualization/README.md)
@@ -29,7 +29,7 @@
     - [logging_monitoring](logging_monitoring/README.md)
     - [maintenance](maintenance/README.md)
     - [model_context_protocol](model_context_protocol/README.md)
-    - [modeling_3d](modeling_3d/README.md)
+    - [spatial](spatial/README.md)
     - [module_template](module_template/README.md)
     - [pattern_matching](pattern_matching/README.md)
     - [performance](performance/README.md)
@@ -86,7 +86,7 @@ graph TB
         LANG_SCRIPTS[language_models/<br/>LLM management<br/>Model operations]
         LOG_SCRIPTS[logging_monitoring/<br/>Logging configuration<br/>Telemetry setup]
         MCP_SCRIPTS[model_context_protocol/<br/>MCP management<br/>Tool specifications]
-        MODELING_SCRIPTS[modeling_3d/<br/>3D modeling<br/>Visualization workflows]
+        MODELING_SCRIPTS[spatial/<br/>3D modeling<br/>Visualization workflows]
         MODULE_SCRIPTS[module_template/<br/>Module creation<br/>Scaffolding tools]
         PATTERN_SCRIPTS[pattern_matching/<br/>Pattern analysis<br/>Code analysis]
         PERF_SCRIPTS[performance/<br/>Performance monitoring<br/>Benchmarking]
@@ -379,7 +379,7 @@ No standalone utility scripts remain in the root `scripts/` directory. This ensu
 - `project_orchestration/` – Workflow orchestration and task management
 
 #### Specialized Layer Scripts
-- `modeling_3d/` – 3D modeling and visualization workflows
+- `spatial/` – 3D modeling and visualization workflows
 - `spatial/` – Spatial modeling and visualization (3D, 4D, World Models)
 - `physical_management/` – Hardware resource monitoring
 - `system_discovery/` – Module discovery and system exploration
@@ -468,32 +468,5 @@ def monitor_container_health(container_ids: list[str]) -> dict[str, dict]
 - **Scripts Hub**: [Scripts](README.md)
 - **Development Scripts**: [development/README.md](development/README.md)
 - **Examples**: [examples/README.md](examples/README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.your_module import main_component
-
-def example():
-    result = main_component.process()
-    print(f"Result: {result}")
-```
-
-## detailed_overview
-
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->

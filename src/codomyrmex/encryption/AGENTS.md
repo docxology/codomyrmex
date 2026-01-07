@@ -183,7 +183,7 @@ When integrating with other modules:
 
 ### Module Documentation
 - **Module Overview**: [README.md](README.md) - Complete module documentation
-- **Security Guide**: [SECURITY.md](SECURITY.md) - Security best practices
+- **Security Guide**: [../../../SECURITY.md](../../../SECURITY.md) - Security best practices (root)
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview

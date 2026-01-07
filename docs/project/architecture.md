@@ -169,7 +169,7 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 ### Advanced Modules
 **Purpose**: Specialized capabilities for advanced use cases
 
-- **`modeling_3d`**: 3D modeling and visualization
+- **`spatial`**: 3D modeling and visualization
 - **`physical_management`**: Physical system simulation and management
 
 ## Data Flow Patterns

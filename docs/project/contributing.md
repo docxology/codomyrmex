@@ -76,7 +76,7 @@ The Codomyrmex project uses **pyproject.toml as the single source of truth** for
 
 3.  **Installing Dependencies**:
     *   **Core dependencies**: `uv sync` (installs all core dependencies)
-    *   **Module-specific dependencies**: `uv sync --extra <module-name>` (e.g., `uv sync --extra modeling_3d`)
+    *   **Module-specific dependencies**: `uv sync --extra <module-name>` (e.g., `uv sync --extra spatial`)
     *   **All optional dependencies**: `uv sync --all-extras`
     *   **Development dependencies**: Automatically included with `uv sync --dev`
 

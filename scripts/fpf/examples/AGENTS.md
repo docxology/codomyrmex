@@ -35,6 +35,8 @@ orchestrator.run_full_pipeline(source="FPF-Spec.md")
 ```
 
 ## Navigation
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Parent**: [fpf/AGENTS.md](../AGENTS.md)
 - **Examples**: [examples/](README.md)

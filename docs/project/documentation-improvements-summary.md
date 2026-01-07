@@ -30,7 +30,7 @@ Comprehensive improvements to the Codomyrmex documentation system, including sta
 
 **Created**:
 - `code_review/docs/index.md`
-- `modeling_3d/docs/index.md`
+- `spatial/docs/index.md`
 - `physical_management/docs/index.md`
 - `ollama_integration/README.md` and `AGENTS.md`
 - `physical_management/SECURITY.md`

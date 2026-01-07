@@ -187,6 +187,8 @@ except FirecrawlError as e:
 - `firecrawl-py`: Firecrawl Python SDK (install with `pip install firecrawl-py`)
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Parent**: [scrape](../README.md) - Main scrape module
 - **Technical Docs**: [AGENTS.md](AGENTS.md) - Agent documentation

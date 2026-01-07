@@ -116,7 +116,7 @@ File-type specific guidance:
 - `language_models.cursorrules` - Language model integration standards
 - `logging_monitoring.cursorrules` - Logging and monitoring standards
 - `model_context_protocol.cursorrules` - Model context protocol standards
-- `modeling_3d.cursorrules` - 3D modeling standards
+- `spatial.cursorrules` - 3D modeling standards
 - `module_template.cursorrules` - Module template standards
 - `ollama_integration.cursorrules` - Ollama integration standards
 - `pattern_matching.cursorrules` - Pattern matching standards

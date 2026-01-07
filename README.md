@@ -39,7 +39,7 @@ graph TB
     subgraph "Module Layer - Analysis & Quality"
         StaticAnalysis["Static<br/>Analysis"]
         PatternMatch["Pattern<br/>Matching"]
-        Code["Code Execution<br/>& Review"]
+        Coding["Coding &<br/>Review"]
         Security["Security"]
         Perf["Performance<br/>Monitoring"]
     end
@@ -92,17 +92,17 @@ graph TB
     Terminal --> Shell
 
     %% Module interconnections
-    AICode --> CodeExec
+    AICode --> Coding
     AICode --> MCP
     AICode --> Ollama
-    AICode --> LangModels
+    AICode --> LLM
     StaticAnalysis --> Build
     StaticAnalysis --> PatternMatch
-    StaticAnalysis --> CodeReview
-    StaticAnalysis --> SecurityAudit
+    StaticAnalysis --> Coding
+    StaticAnalysis --> Security
     PatternMatch --> AICode
-    PatternMatch --> CodeReview
-    Perf --> CodeExec
+    PatternMatch --> Coding
+    Perf --> Coding
     Perf --> Build
     Perf --> CICDAuto
     Build --> Git
@@ -114,10 +114,10 @@ graph TB
     Docs --> StaticAnalysis
     APIDocs --> APIStd
     CICDAuto --> Build
-    CICDAuto --> SecurityAudit
+    CICDAuto --> Security
     Container --> PhysMgmt
     Container --> Events
-    DataViz --> Modeling3D
+    DataViz --> Spatial
     Database --> Build
     Database --> Events
     ConfigMgmt --> Environment
@@ -125,13 +125,18 @@ graph TB
     PluginSys --> ModTemplate
     SysDiscovery --> ModTemplate
     SysDiscovery --> Tools
+    DataViz --> Spatial
+    DataViz --> Spatial
+    DataViz --> Spatial
+    DataViz --> Spatial
+    DataViz --> Spatial
 
     %% Foundation connections (all modules depend on foundation)
     AICode -.-> Logging
     StaticAnalysis -.-> Logging
-    CodeExec -.-> Logging
-    CodeReview -.-> Logging
-    SecurityAudit -.-> Logging
+    Coding -.-> Logging
+    Coding -.-> Logging
+    Security -.-> Logging
     Perf -.-> Logging
     Build -.-> Logging
     Git -.-> Logging
@@ -141,7 +146,7 @@ graph TB
     CICDAuto -.-> Logging
     Container -.-> Logging
     DataViz -.-> Logging
-    Modeling3D -.-> Logging
+    Spatial -.-> Logging
     Database -.-> Logging
     ConfigMgmt -.-> Logging
     PhysMgmt -.-> Logging
@@ -156,9 +161,9 @@ graph TB
 
     AICode -.-> Environment
     StaticAnalysis -.-> Environment
-    CodeExec -.-> Environment
-    CodeReview -.-> Environment
-    SecurityAudit -.-> Environment
+    Coding -.-> Environment
+    Coding -.-> Environment
+    Security -.-> Environment
     Perf -.-> Environment
     Build -.-> Environment
     Git -.-> Environment
@@ -168,7 +173,7 @@ graph TB
     CICDAuto -.-> Environment
     Container -.-> Environment
     DataViz -.-> Environment
-    Modeling3D -.-> Environment
+    Spatial -.-> Environment
     Database -.-> Environment
     ConfigMgmt -.-> Environment
     PhysMgmt -.-> Environment
@@ -184,7 +189,7 @@ graph TB
     AICode -.-> TerminalInterface
     MCP -.-> TerminalInterface
     Ollama -.-> TerminalInterface
-    LangModels -.-> TerminalInterface
+    LLM -.-> TerminalInterface
     Discovery -.-> TerminalInterface
     Status -.-> TerminalInterface
     Terminal -.-> TerminalInterface
@@ -207,7 +212,7 @@ graph TD
     subgraph core ["Core Layer"]
         Agents["agents"]
         StaticAnalysis["static_analysis"]
-        Code["code"]
+        Coding["coding"]
         DataViz["data_visualization"]
         PatternMatch["pattern_matching"]
         GitOps["git_operations"]
@@ -243,7 +248,7 @@ graph TD
     %% Core layer dependencies
     Logging --> Agents
     Logging --> StaticAnalysis
-    Logging --> Code
+    Logging --> Coding
     Logging --> DataViz
     Logging --> PatternMatch
     Logging --> GitOps
@@ -252,7 +257,7 @@ graph TD
     Logging --> Performance
 
     Env --> Agents
-    Env --> Code
+    Env --> Coding
     Env --> Security
     Env --> Performance
 
@@ -260,11 +265,11 @@ graph TD
     MCP --> LLM
 
     Terminal --> Agents
-    Terminal --> Code
+    Terminal --> Coding
 
-    StaticAnalysis --> Code
-    PatternMatch --> Code
-    Security --> Code
+    StaticAnalysis --> Coding
+    PatternMatch --> Coding
+    Security --> Coding
 
     %% Service layer dependencies
     Logging --> BuildSynth
@@ -292,7 +297,8 @@ graph TD
     StaticAnalysis --> CICD
 
     Code --> BuildSynth
-    Code --> CICD
+    Coding --> BuildSynth
+    Coding --> CICD
 
     DataViz --> Documentation
     DataViz --> API
@@ -530,7 +536,7 @@ graph TD
         LanguageModels["Language<br/>Models"]
         SecurityAudit["Security<br/>Audit"]
         Performance["Performance<br/>Monitoring"]
-        Modeling3D["3D<br/>Modeling"]
+        Spatial["Spatial<br/>(3D/4D)"]
         PhysicalManagement["Physical<br/>Management"]
     end
 
@@ -600,7 +606,7 @@ graph TD
     LanguageModels -.-> EnvironmentSetup
     SecurityAudit -.-> LoggingMonitoring
     Performance -.-> LoggingMonitoring
-    Modeling3D -.-> LoggingMonitoring
+    Spatial -.-> LoggingMonitoring
     PhysicalManagement -.-> LoggingMonitoring
 ```
 
@@ -621,7 +627,7 @@ Primary capabilities for development workflows:
 |--------|---------|-------------|
 | [**agents**](src/codomyrmex/agents/) | Agentic framework integrations | AI code editing, task management, various providers |
 | [**static_analysis**](src/codomyrmex/static_analysis/) | Code quality analysis | Linting, security scanning, complexity metrics |
-| [**code**](src/codomyrmex/coding/) | Code execution & review | Safe sandbox execution, automated code review |
+| [**coding**](src/codomyrmex/coding/) | Code execution & review | Safe sandbox execution, automated code review |
 | [**data_visualization**](src/codomyrmex/data_visualization/) | Charts and plots | Static/interactive plots, multiple formats |
 | [**pattern_matching**](src/codomyrmex/pattern_matching/) | Code pattern analysis | Pattern recognition, dependency analysis |
 | [**git_operations**](src/codomyrmex/git_operations/) | Version control automation | Git workflows, branch management, commit automation |
@@ -667,7 +673,7 @@ Advanced capabilities for specific domains:
 | **Visualization** | [data_visualization](src/codomyrmex/data_visualization/) • [spatial](src/codomyrmex/spatial/) |
 | **Infrastructure** | [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [physical_management](src/codomyrmex/physical_management/) |
 | **Orchestration** | [documentation](src/codomyrmex/documentation/) • [api](src/codomyrmex/api/) • [project_orchestration](src/codomyrmex/project_orchestration/) • [system_discovery](src/codomyrmex/system_discovery/) |
-| **Execution** | [code](src/codomyrmex/coding/) • [performance](src/codomyrmex/performance/) |
+| **Execution** | [coding](src/codomyrmex/coding/) • [performance](src/codomyrmex/performance/) |
 | **Extensions** | [events](src/codomyrmex/events/) • [plugin_system](src/codomyrmex/plugin_system/) • [module_template](src/codomyrmex/module_template/) • [tools](src/codomyrmex/tools/) |
 
 ## Common Use Cases
@@ -678,7 +684,7 @@ Advanced capabilities for specific domains:
 - **Build & Deploy**: [Build synthesis](src/codomyrmex/build_synthesis/) → [CI/CD automation](src/codomyrmex/ci_cd_automation/) → [Container management](src/codomyrmex/containerization/)
 
 ### Research & Analysis
-- **Data Science Workflow**: [Code execution](src/codomyrmex/coding/sandbox/) → [Data visualization](src/codomyrmex/data_visualization/) → [Performance monitoring](src/codomyrmex/performance/)
+- **Data Science Workflow**: [Coding](src/codomyrmex/coding/sandbox/) → [Data visualization](src/codomyrmex/data_visualization/) → [Performance monitoring](src/codomyrmex/performance/)
 - **System Exploration**: [System discovery](src/codomyrmex/system_discovery/) → [Pattern analysis](src/codomyrmex/pattern_matching/) → [Documentation generation](src/codomyrmex/documentation/)
 
 ### Production Operations
@@ -691,36 +697,35 @@ See **[executable examples](scripts/examples/)** for working demonstrations of t
 
 ```
 codomyrmex/
-├── src/codomyrmex/          # Core source modules
-│   ├── ai_code_editing/     # AI-powered code assistance
-│   ├── static_analysis/     # Code quality analysis
-│   ├── logging_monitoring/  # Centralized logging
-│   └── ...                  # 27 additional modules
-├── scripts/                 # Maintenance and automation utilities
-│   ├── documentation/       # Documentation maintenance scripts
-│   ├── development/         # Development utilities
-│   ├── examples/            # Example scripts and demonstrations
+├── /src/codomyrmex/          # Core source modules
+│   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
+│   ├── /src/codomyrmex/static_analysis/     # Code quality analysis
+│   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
+│   └── ...                  # 40+ additional modules
+├── /scripts/                 # Maintenance and automation utilities
+│   ├── /scripts/documentation/       # Documentation maintenance scripts
+│   ├── /scripts/development/         # Development utilities
+│   ├── /scripts/examples/            # Example scripts and demonstrations
 │   └── ...                  # 30+ module orchestrators
-├── docs/                    # Project documentation
-│   ├── getting-started/     # Installation and quickstart guides
-│   ├── modules/             # Module system documentation
-│   ├── project/             # Architecture and contributing guides
-│   └── reference/           # API reference and troubleshooting
-├── src/codomyrmex/tests/    # Test suites
-│   ├── unit/                # Unit tests
-│   └── integration/         # Integration tests
-├── config/                  # Configuration templates and examples
-│   ├── examples/            # Configuration examples
-│   └── templates/           # Configuration templates
-├── cursorrules/             # Coding standards and automation rules
-│   ├── modules/             # Module-specific rules
-│   ├── cross-module/        # Cross-module coordination rules
-│   └── file-specific/       # File-specific rules
-├── projects/                # Project workspace and templates
-│   └── test_project/        # Example project structure
-├── examples/                # Example scripts and demonstrations
-├── src/template/            # Code generation templates
-└── @output/                 # Generated output and reports
+├── /docs/                    # Project documentation
+│   ├── /docs/getting-started/     # Installation and quickstart guides
+│   ├── /docs/modules/             # Module system documentation
+│   ├── /docs/project/             # Architecture and contributing guides
+│   └── /docs/reference/           # API reference and troubleshooting
+├── /src/codomyrmex/tests/    # Test suites
+│   ├── /src/codomyrmex/tests/unit/                # Unit tests
+│   └── /src/codomyrmex/tests/integration/         # Integration tests
+├── /config/                  # Configuration templates and examples
+│   ├── /config/examples/            # Configuration examples
+│   └── /config/templates/           # Configuration templates
+├── /cursorrules/             # Coding standards and automation rules
+│   ├── /cursorrules/modules/             # Module-specific rules
+│   ├── /cursorrules/cross-module/        # Cross-module coordination rules
+│   └── /cursorrules/file-specific/       # File-specific rules
+├── /projects/                # Project workspace and templates
+│   └── /projects/test_project/        # Example project structure
+├── /src/template/            # Code generation templates
+└── /output/                 # Generated output and reports
 ```
 
 ### Repository Organization
@@ -795,7 +800,6 @@ Modules organized to prevent circular dependencies:
     - [Source Code](src/README.md)
     - [Documentation](docs/README.md)
     - [Scripts](scripts/README.md)
-
 
 ## Documentation
 

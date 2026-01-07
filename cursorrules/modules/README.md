@@ -31,7 +31,7 @@ Contains components for the cursorrules system.
 - `language_models.cursorrules` – File
 - `logging_monitoring.cursorrules` – File
 - `model_context_protocol.cursorrules` – File
-- `modeling_3d.cursorrules` – File
+- `spatial.cursorrules` – File
 - `module_template.cursorrules` – File
 - `ollama_integration.cursorrules` – File
 - `pattern_matching.cursorrules` – File
@@ -64,7 +64,7 @@ Module-specific coding standards and conventions for individual Codomyrmex modul
 - `language_models.cursorrules` – Language models module rules
 - `logging_monitoring.cursorrules` – Logging monitoring module rules
 - `model_context_protocol.cursorrules` – Model context protocol rules
-- `modeling_3d.cursorrules` – 3D modeling module rules
+- `spatial.cursorrules` – 3D modeling module rules
 - `module_template.cursorrules` – Module template rules
 - `ollama_integration.cursorrules` – Ollama integration rules
 - `pattern_matching.cursorrules` – Pattern matching module rules
@@ -81,32 +81,5 @@ Module-specific coding standards and conventions for individual Codomyrmex modul
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cursorrules](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.your_module import main_component
-
-def example():
-    result = main_component.process()
-    print(f"Result: {result}")
-```
-
-## detailed_overview
-
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->

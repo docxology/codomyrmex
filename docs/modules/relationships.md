@@ -32,7 +32,7 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 | **`system_discovery`** | System exploration | introspection | logging_monitoring | Application modules |
 | **`cli`** | Command-line interface | click, argparse | logging_monitoring, all modules | Users |
 | **`module_template`** | Module creation template | None | None | Developers |
-| **`modeling_3d`** | 3D modeling and visualization | Open3D, Trimesh | logging_monitoring | Specialized use cases |
+| **`spatial`** | 3D modeling and visualization | Open3D, Trimesh | logging_monitoring | Specialized use cases |
 | **`physical_management`** | Physical system simulation | Physics engines | logging_monitoring | Specialized use cases |
 
 ## 🔄 Core Data Flow Patterns
@@ -377,7 +377,7 @@ graph LR
 | **system_discovery** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **cli** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **module_template** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **modeling_3d** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **spatial** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **physical_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 **Legend:**

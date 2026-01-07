@@ -4,8 +4,8 @@
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Scrape Agents](AGENTS.md)
 - **Children**:
-    - [Firecrawl Integration Agents](firecrawl/AGENTS.md)
-    - [Documentation Agents](docs/AGENTS.md)
+    - [firecrawl](firecrawl/AGENTS.md)
+    - [docs](docs/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -129,6 +129,8 @@ Configuration management for scraping operations.
 - `tests/integration/` - Integration test suites
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Parent**: [codomyrmex/AGENTS.md](../AGENTS.md) - Package overview
 - **Firecrawl Integration**: [firecrawl/AGENTS.md](firecrawl/AGENTS.md) - Firecrawl submodule

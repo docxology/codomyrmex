@@ -55,6 +55,8 @@ exported = metrics.export()
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
@@ -72,15 +74,6 @@ from codomyrmex.metrics import Metrics, Counter, Gauge, Histogram
 metrics = Metrics()
 # Use metrics for collecting and exporting metrics
 ```
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1. Follow the project coding standards.
-2. Add tests for new functionality.
-3. Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->
 

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/code/review/tests
+# Codomyrmex Agents — src/codomyrmex/coding/review/tests
 
 ## Signposting
 - **Parent**: [Code Review](../AGENTS.md)
@@ -41,6 +41,8 @@ Test files and validation suites for review.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [code_review](../README.md) - Parent directory documentation
 - **Project Root**: [README](../../../../README.md) - Main project documentation
 ## Detailed Architecture and Implementation

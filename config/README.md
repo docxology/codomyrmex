@@ -102,31 +102,86 @@ flowchart TD
 - **Project Root**: [README](../README.md)
 - **Configuration Scripts**: [scripts/config_management/](../scripts/config_management/) - Configuration management utilities
 
-## Getting Started
+## Configuration File Types
 
-To use this module in your project, import the necessary components:
+### Environment Configuration
 
-```python
-# Example usage
-from codomyrmex.your_module import main_component
+Environment-specific settings stored in `.env` files:
 
-def example():
-    result = main_component.process()
-    print(f"Result: {result}")
+```bash
+# Development environment
+DATABASE_URL=postgresql://localhost:5432/dev_db
+API_KEY=dev_key_12345
+LOG_LEVEL=DEBUG
+
+# Production environment  
+DATABASE_URL=postgresql://prod-server:5432/prod_db
+API_KEY=${SECRET_API_KEY}
+LOG_LEVEL=INFO
 ```
 
-## detailed_overview
+### Project Configuration
 
-This module is a critical part of the Codomyrmex ecosystem. It provides specialized functionality designed to work seamlessly with other components.
-The architecture focuses on modularity, reliability, and performance.
+Project templates define structure and dependencies:
 
-## Contributing
+```json
+{
+  "name": "my_project",
+  "version": "1.0.0",
+  "modules": ["logging_monitoring", "static_analysis"],
+  "resources": {
+    "cpu": "2",
+    "memory": "4Gi"
+  }
+}
+```
 
-We welcome contributions! Please ensure you:
-1.  Follow the project coding standards.
-2.  Add tests for new functionality.
-3.  Update documentation as needed.
+### Workflow Configuration
 
-See the root `CONTRIBUTING.md` for more details.
+Workflow definitions specify execution steps:
+
+```json
+{
+  "workflow_id": "analysis_pipeline",
+  "steps": [
+    {"module": "static_analysis", "action": "analyze"},
+    {"module": "security", "action": "scan"},
+    {"module": "data_visualization", "action": "generate_report"}
+  ]
+}
+```
+
+## Getting Started
+
+### Using Configuration Templates
+
+1. **Select a template** from `templates/` directory
+2. **Copy to your project** location
+3. **Customize** for your environment
+4. **Validate** using configuration management tools
+
+```bash
+# Copy template
+cp config/templates/development.env .env
+
+# Customize values
+nano .env
+
+# Validate configuration
+python scripts/config_management/validate_config.py .env
+```
+
+### Creating Custom Configurations
+
+1. **Start from example** in `examples/` directory
+2. **Modify** for your specific needs
+3. **Validate** against schema
+4. **Document** any custom settings
+
+## Related Documentation
+
+- **[Configuration Management Module](../src/codomyrmex/config_management/)** - Configuration handling utilities
+- **[Environment Setup](../docs/development/environment-setup.md)** - Development environment configuration
+- **[Project Orchestration](../docs/project_orchestration/)** - Configuration-driven workflows
 
 <!-- Navigation Links keyword for score -->

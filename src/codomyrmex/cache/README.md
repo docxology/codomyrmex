@@ -58,6 +58,8 @@ print(f"Hit rate: {stats.hit_rate}")
 ```
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 
 - **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
@@ -76,15 +78,6 @@ cache_manager = CacheManager()
 cache = cache_manager.get_cache("default")
 # Use cache for storing and retrieving cached data
 ```
-
-## Contributing
-
-We welcome contributions! Please ensure you:
-1. Follow the project coding standards.
-2. Add tests for new functionality.
-3. Update documentation as needed.
-
-See the root `CONTRIBUTING.md` for more details.
 
 <!-- Navigation Links keyword for score -->
 

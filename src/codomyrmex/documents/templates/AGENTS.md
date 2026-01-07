@@ -21,3 +21,12 @@
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update task queues when necessary.
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [documents](../README.md)
+- **Repository Root**: [../../../../README.md](../../../../README.md)
+- **Repository SPEC**: [../../../../SPEC.md](../../../../SPEC.md)

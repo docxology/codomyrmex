@@ -125,3 +125,11 @@ pytest src/codomyrmex/scrape/tests/integration/
 - **Error Cases**: Comprehensively tested with real error propagation.
 - **Edge Cases**: Boundary conditions and edge cases are covered with real data.
 
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [scrape](../README.md)
+- **Repository Root**: [../../../../README.md](../../../../README.md)
+- **Repository SPEC**: [../../../../SPEC.md](../../../../SPEC.md)

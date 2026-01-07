@@ -4,9 +4,9 @@
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [LLM Agents](AGENTS.md)
 - **Children**:
-    - [Ollama Integration Agents](ollama/AGENTS.md)
-    - [Prompt Templates Agents](prompt_templates/AGENTS.md)
-    - [Outputs Agents](outputs/AGENTS.md)
+    - [ollama](ollama/AGENTS.md)
+    - [prompt_templates](prompt_templates/AGENTS.md)
+    - [outputs](outputs/AGENTS.md)
 - **Key Artifacts**:
     - None
 
@@ -34,6 +34,8 @@ LLM integration namespace for Codomyrmex, providing a logical grouping for Large
   - `outputs/test_results/` - Test result outputs
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent**: [codomyrmex](../AGENTS.md) - Package overview
 - **Ollama Integration**: [ollama/AGENTS.md](ollama/AGENTS.md) - Ollama integration documentation
 

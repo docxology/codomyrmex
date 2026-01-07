@@ -13,9 +13,12 @@ class TestCodeExecutionSandbox:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.code.execution import executor
-            assert code_executor is not None
+            from codomyrmex.coding.execution import executor
+            assert executor is not None
         except ImportError as e:
+            # psutil may be missing - that's acceptable for basic tests
+            if "psutil" in str(e):
+                pytest.skip(f"psutil not available: {e}")
             pytest.fail(f"Failed to import code_executor: {e}")
 
     def test_code_executor_structure_and_functions(self, code_dir):
@@ -23,9 +26,9 @@ class TestCodeExecutionSandbox:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution import executor
-        from codomyrmex.code.execution.executor import execute_code, DEFAULT_TIMEOUT, MAX_TIMEOUT, MIN_TIMEOUT
-        from codomyrmex.code.execution.language_support import SUPPORTED_LANGUAGES
+        from codomyrmex.coding.execution import executor
+        from codomyrmex.coding.execution.executor import execute_code, DEFAULT_TIMEOUT, MAX_TIMEOUT, MIN_TIMEOUT
+        from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES
 
         # Test basic module structure
         assert hasattr(executor, '__file__')
@@ -49,7 +52,7 @@ class TestCodeExecutionSandbox:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution.language_support import SUPPORTED_LANGUAGES
+        from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES
         languages = SUPPORTED_LANGUAGES
 
         # Test that each language has required configuration
@@ -69,9 +72,9 @@ class TestCodeExecutionSandbox:
             sys.path.insert(0, str(code_dir))
 
         import inspect
-        from codomyrmex.code.execution import executor
+        from codomyrmex.coding.execution import executor
 
-        from codomyrmex.code.execution.executor import execute_code
+        from codomyrmex.coding.execution.executor import execute_code
         sig = inspect.signature(execute_code)
 
         # Test required parameters
@@ -94,7 +97,7 @@ class TestCodeExecutionSandbox:
 
     def test_safe_code_execution_validation(self, real_docker_available):
         """Test code execution parameter validation without actual execution."""
-        from codomyrmex.code.execution.executor import execute_code
+        from codomyrmex.coding.execution.executor import execute_code
 
         # Test with safe Python code that should work (if Docker is available)
         safe_code = 'print("Hello, World!")'
@@ -119,7 +122,7 @@ class TestCodeExecutionSandbox:
 
     def test_docker_availability_check(self, real_docker_available):
         """Test real Docker availability checking."""
-        from codomyrmex.code.sandbox.container import check_docker_available
+        from codomyrmex.coding.sandbox.container import check_docker_available
 
         # Test that the function returns a boolean
         result = check_docker_available()
@@ -133,18 +136,18 @@ class TestCodeExecutionSandbox:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.code.execution import executor
+        from codomyrmex.coding.execution import executor
 
         # Test timeout constants are reasonable
-        from codomyrmex.code.execution.executor import DEFAULT_TIMEOUT, MAX_TIMEOUT, MIN_TIMEOUT
+        from codomyrmex.coding.execution.executor import DEFAULT_TIMEOUT, MAX_TIMEOUT, MIN_TIMEOUT
         assert 0 < MIN_TIMEOUT <= DEFAULT_TIMEOUT <= MAX_TIMEOUT
 
         # Test that timeout validation would work (without actual execution)
         # This tests the logic without running Docker
         safe_code = 'print("test")'
 
-        from codomyrmex.code.sandbox.container import check_docker_available
-        from codomyrmex.code.execution.executor import execute_code
+        from codomyrmex.coding.sandbox.container import check_docker_available
+        from codomyrmex.coding.execution.executor import execute_code
         if check_docker_available():
             # Test valid timeout
             result = execute_code('python', safe_code, timeout=5)
@@ -156,7 +159,7 @@ class TestCodeExecutionSandbox:
 
     def test_execution_limits_dataclass(self):
         """Test ExecutionLimits dataclass functionality."""
-        from codomyrmex.code.sandbox.isolation import ExecutionLimits
+        from codomyrmex.coding.sandbox.isolation import ExecutionLimits
 
         # Test default limits
         limits = ExecutionLimits()
@@ -201,7 +204,7 @@ class TestCodeExecutionSandbox:
 
     def test_resource_monitor(self):
         """Test ResourceMonitor functionality."""
-        from codomyrmex.code.monitoring.resource_tracker import ResourceMonitor
+        from codomyrmex.coding.monitoring.resource_tracker import ResourceMonitor
 
         monitor = ResourceMonitor()
 
@@ -230,7 +233,7 @@ class TestCodeExecutionSandbox:
 
     def test_execute_with_limits(self):
         """Test execute_with_limits function."""
-        from codomyrmex.code.sandbox.isolation import execute_with_limits, ExecutionLimits
+        from codomyrmex.coding.sandbox.isolation import execute_with_limits, ExecutionLimits
 
         # Simple Python code for testing
         test_code = "print('Hello from limits test')"
@@ -256,7 +259,7 @@ class TestCodeExecutionSandbox:
 
     def test_sandbox_process_isolation(self):
         """Test sandbox_process_isolation function."""
-        from codomyrmex.code.sandbox.isolation import sandbox_process_isolation, ExecutionLimits
+        from codomyrmex.coding.sandbox.isolation import sandbox_process_isolation, ExecutionLimits
 
         # Simple Python code for testing
         test_code = "print('Hello from isolation test')"

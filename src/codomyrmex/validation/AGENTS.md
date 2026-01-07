@@ -35,25 +35,26 @@ The validation module serves as the validation layer, providing schema-agnostic 
 
 ## Function Signatures
 
-### Validation Functions
+### Core Functions
 
 ```python
-def validate(data: Any, schema: Any) -> ValidationResult
+def validate(data: Any, schema: Any, validator_type: str = "json_schema") -> ValidationResult
 ```
 
-Validate data against a schema.
+Validate data against a schema using the specified validator type.
 
 **Parameters:**
 - `data` (Any): Data to validate
-- `schema` (Any): Validation schema (JSON Schema, Pydantic model, etc.)
+- `schema` (Any): Validation schema (JSON Schema dict, Pydantic model, or custom schema)
+- `validator_type` (str): Type of validator to use ("json_schema", "pydantic", "custom"). Defaults to "json_schema"
 
-**Returns:** `ValidationResult` - Validation result with status and errors
+**Returns:** `ValidationResult` - Validation result with `is_valid` boolean, `errors` list, and `warnings` list
 
 **Raises:**
 - `ValidationError`: If validation process fails
 
 ```python
-def is_valid(data: Any, schema: Any) -> bool
+def is_valid(data: Any, schema: Any, validator_type: str = "json_schema") -> bool
 ```
 
 Check if data is valid against a schema.
@@ -61,11 +62,12 @@ Check if data is valid against a schema.
 **Parameters:**
 - `data` (Any): Data to validate
 - `schema` (Any): Validation schema
+- `validator_type` (str): Type of validator to use. Defaults to "json_schema"
 
 **Returns:** `bool` - True if valid, False otherwise
 
 ```python
-def get_errors(data: Any, schema: Any) -> list[ValidationError]
+def get_errors(data: Any, schema: Any, validator_type: str = "json_schema") -> list[ValidationError]
 ```
 
 Get validation errors for data.
@@ -73,23 +75,59 @@ Get validation errors for data.
 **Parameters:**
 - `data` (Any): Data to validate
 - `schema` (Any): Validation schema
+- `validator_type` (str): Type of validator to use. Defaults to "json_schema"
 
 **Returns:** `list[ValidationError]` - List of validation errors
 
-### Custom Validator Functions
+### Validator Class
 
 ```python
-def register_validator(name: str, validator: callable) -> None
+class Validator:
+    def __init__(self, validator_type: str = "json_schema") -> None
+```
+
+Base validator interface supporting multiple validation backends.
+
+**Parameters:**
+- `validator_type` (str): Type of validator ("json_schema", "pydantic", "custom"). Defaults to "json_schema"
+
+**Methods:**
+
+```python
+def validate(self, data: Any, schema: Any) -> ValidationResult
+```
+
+Validate data against a schema using the configured validator type.
+
+**Parameters:**
+- `data` (Any): Data to validate
+- `schema` (Any): Validation schema
+
+**Returns:** `ValidationResult` - Validation result with status and errors
+
+### ValidationManager Class
+
+```python
+class ValidationManager:
+    def __init__(self) -> None
+```
+
+Manager for validation operations and custom validator registration.
+
+**Methods:**
+
+```python
+def register_validator(self, name: str, validator: Callable) -> None
 ```
 
 Register a custom validator function.
 
 **Parameters:**
 - `name` (str): Validator name
-- `validator` (callable): Validator function
+- `validator` (Callable): Validator function that takes (data, schema) and returns ValidationResult or bool
 
 ```python
-def get_validator(name: str) -> Optional[callable]
+def get_validator(self, name: str) -> Optional[Callable]
 ```
 
 Get a registered validator.
@@ -97,7 +135,20 @@ Get a registered validator.
 **Parameters:**
 - `name` (str): Validator name
 
-**Returns:** `Optional[callable]` - Validator function if found
+**Returns:** `Optional[Callable]` - Validator function if found, None otherwise
+
+```python
+def validate(self, data: Any, schema: Any, validator_type: str = "json_schema") -> ValidationResult
+```
+
+Validate data against a schema using the specified validator type.
+
+**Parameters:**
+- `data` (Any): Data to validate
+- `schema` (Any): Validation schema
+- `validator_type` (str): Type of validator to use. Defaults to "json_schema"
+
+**Returns:** `ValidationResult` - Validation result
 
 ### Validation Result
 

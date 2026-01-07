@@ -51,7 +51,7 @@
 10. ✅ `system_discovery/` - System exploration
 11. ✅ `ollama_integration/` - Local LLM integration
 12. ✅ `language_models/` - LLM infrastructure
-13. ✅ `modeling_3d/` - 3D modeling and visualization
+13. ✅ `spatial/` - 3D modeling and visualization
 14. ✅ `physical_management/` - Hardware management
 
 **New Modules** (3/3 = 100%):

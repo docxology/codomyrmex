@@ -4,8 +4,8 @@
 - **Parent**: [agents](../AGENTS.md)
 - **Self**: [AI Code Editing Agents](AGENTS.md)
 - **Children**:
-    - [Docs Agents](docs/AGENTS.md)
-    - [Tests Agents](tests/AGENTS.md)
+    - [docs](docs/AGENTS.md)
+    - [tests](tests/AGENTS.md)
 - **Sibling Modules**:
     - [Droid Agents](../droid/AGENTS.md)
     - [Template Agents](../../llm/prompt_templates/AGENTS.md)
@@ -454,7 +454,7 @@ All AI code assistance within the Codomyrmex platform must:
 
 ### Platform Navigation
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **Project Root**: [README](../../../../README.md) - Main project documentation
 - **Source Root**: [src](../../README.md) - Source code documentation
 ## Agent Coordination
 

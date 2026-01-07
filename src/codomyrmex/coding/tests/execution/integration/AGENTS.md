@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/code/tests/execution/integration
+# Codomyrmex Agents — src/codomyrmex/coding/tests/execution/integration
 
 ## Signposting
 - **Parent**: [Code Execution Sandbox Tests](../AGENTS.md)
@@ -27,6 +27,8 @@ Test files and validation suites for integration.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+- **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [tests](../README.md) - Parent directory documentation
 - **Project Root**: [README](../../../../../README.md) - Main project documentation
 ## Detailed Architecture and Implementation
