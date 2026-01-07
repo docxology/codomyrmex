@@ -4,32 +4,76 @@
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/codomyrmex/codomyrmex)
 
-**Version**: 0.1.0 | **License**: MIT | **Python**: ≥3.10
+> **A modular, extensible coding workspace designed for AI development workflows**
 
-A modular, extensible coding workspace designed for AI development workflows. Codomyrmex integrates tools for building, documenting, analyzing, executing, and visualizing code across multiple languages.
+Codomyrmex integrates tools for building, documenting, analyzing, executing, and visualizing code across multiple languages. Built with modularity and AI integration at its core, it provides a comprehensive platform for modern software development.
 
-## Overview
+## What is Codomyrmex?
 
-Codomyrmex provides a suite of development tools organized as independent, composable modules. Each module offers specific functionality while maintaining clear interfaces and minimal coupling, enabling flexible composition and easy extensibility.
+Codomyrmex is a **modular development platform** that brings together 30+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
-**Key Design Principles**:
-- **Modularity First**: Self-contained modules with clear boundaries
-- **AI Integration**: Built-in support for Large Language Models via Model Context Protocol (MCP)
-- **Polyglot Support**: Language-agnostic interfaces with pluggable implementations
-- **Professional Quality**: Testing, documentation, and security practices
+### Key Features
+
+- 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
+- 🧩 **Modular Architecture** - 30+ independent, composable modules with clear interfaces
+- 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
+- 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
+- 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
+- 📚 **Documentation** - Automated documentation generation, API specs, and tutorials
+- 🔒 **Security First** - Built-in security scanning, vulnerability detection, and compliance checking
+- 🌐 **Polyglot Support** - Language-agnostic interfaces supporting Python, JavaScript, Go, Rust, Java
+
+### Why Codomyrmex?
+
+- **Modularity First**: Self-contained modules with clear boundaries - use what you need, when you need it
+- **AI Integration**: Seamless integration with LLMs through standardized Model Context Protocol
+- **Professional Quality**: Comprehensive testing (≥80% coverage), documentation, and security practices
+- **Easy to Extend**: Well-documented module system makes it simple to add new capabilities
+- **Production Ready**: Battle-tested modules with stable APIs and comprehensive error handling
+
+## Quick Start
+
+Get started with Codomyrmex in minutes:
+
+```bash
+# Clone the repository
+git clone https://github.com/codomyrmex/codomyrmex.git
+cd codomyrmex
+
+# Install with uv (recommended)
+uv sync
+
+# Launch interactive shell
+./start_here.sh
+```
+
+**New to Codomyrmex?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or explore [executable examples](scripts/examples/).
+
+## Navigation
+
+**Quick Links:**
+- 📚 **[Source Code](src/README.md)** - Browse all 30+ modules and implementations
+- 📖 **[Documentation Hub](docs/README.md)** - Comprehensive user and developer guides
+- 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
+- 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
+- 🎯 **[Architecture Guide](docs/project/architecture.md)** - System design and principles
+- 💻 **[Examples](scripts/examples/)** - Working code examples and demonstrations
+- 🤝 **[Contributing](docs/project/contributing.md)** - How to contribute to Codomyrmex
 
 <details>
-<summary><strong>Table of Contents</strong></summary>
+<summary><strong>📑 Table of Contents</strong></summary>
 
-- [Quick Navigation](#quick-navigation)
+- [What is Codomyrmex?](#what-is-codomyrmex)
+  - [Key Features](#key-features)
+  - [Why Codomyrmex?](#why-codomyrmex)
+- [Quick Start](#quick-start)
+- [Navigation](#navigation)
+- [Installation & Setup](#installation--setup)
 - [System Architecture](#system-architecture)
   - [Module Dependency Graph](#module-dependency-graph)
   - [Workflow Execution Architecture](#workflow-execution-architecture)
   - [Multi-Stage Build Architecture](#multi-stage-build-architecture)
-- [Quick Start](#quick-start)
-  - [Installation](#installation)
-  - [Basic Usage](#basic-usage)
-  - [Getting Started Workflow](#getting-started-workflow)
+- [Getting Started Workflow](#getting-started-workflow)
 - [Architecture](#architecture)
   - [Layered Design Principles](#layered-design-principles)
 - [Core Modules](#core-modules)
@@ -57,14 +101,16 @@ Codomyrmex provides a suite of development tools organized as independent, compo
 
 </details>
 
-## Quick Navigation
+## Navigation
 
-**Get Started Quickly:**
-- 📚 **[Source Code](src/README.md)** - Browse all modules and implementations
-- 📖 **[Documentation Hub](docs/README.md)** - User guides and developer documentation
+**Quick Links:**
+- 📚 **[Source Code](src/README.md)** - Browse all 30+ modules and implementations
+- 📖 **[Documentation Hub](docs/README.md)** - Comprehensive user and developer guides
 - 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
-- 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system
+- 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
 - 🎯 **[Architecture Guide](docs/project/architecture.md)** - System design and principles
+- 💻 **[Examples](scripts/examples/)** - Working code examples and demonstrations
+- 🤝 **[Contributing](docs/project/contributing.md)** - How to contribute to Codomyrmex
 
 ## System Architecture
 
@@ -348,7 +394,6 @@ graph TD
     StaticAnalysis --> BuildSynth
     StaticAnalysis --> CICD
 
-    Code --> BuildSynth
     Coding --> BuildSynth
     Coding --> CICD
 
@@ -429,19 +474,19 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph "Source Code"
-        AppCode[📁 Application Code]
-        Dependencies[📦 Dependencies]
-        ConfigFiles[⚙️ Configuration]
+    subgraph sourceCode ["Source Code"]
+        AppCode["Application Code"]
+        Dependencies["Dependencies"]
+        ConfigFiles["Configuration"]
     end
 
-    subgraph "Build Stages"
-        Builder["🏗️ Builder Stage<br/>- Install dependencies<br/>- Compile code<br/>- Run tests<br/>- Create artifacts"]
-        Runtime["🚀 Runtime Stage<br/>- Copy artifacts<br/>- Configure runtime<br/>- Set permissions<br/>- Define entrypoint"]
+    subgraph buildStages ["Build Stages"]
+        Builder["Builder Stage: Install dependencies, Compile code, Run tests, Create artifacts"]
+        Runtime["Runtime Stage: Copy artifacts, Configure runtime, Set permissions, Define entrypoint"]
     end
 
-    subgraph "Output"
-        OptimizedImage["📦 Optimized Image<br/>- Minimal layers<br/>- Security hardened<br/>- Cached efficiently"]
+    subgraph output ["Output"]
+        OptimizedImage["Optimized Image: Minimal layers, Security hardened, Cached efficiently"]
     end
 
     AppCode --> Builder
@@ -452,24 +497,34 @@ graph TD
     Builder --> Runtime
     Runtime --> OptimizedImage
 
-    Builder -.->|"Remove build tools<br/>Clean cache"| OptimizedImage
-    Runtime -.->|"Add runtime deps<br/>Configure app"| OptimizedImage
+    Builder -.->|"Remove build tools, Clean cache"| OptimizedImage
+    Runtime -.->|"Add runtime deps, Configure app"| OptimizedImage
 ```
 
-## Quick Start
+## Installation & Setup
 
-### Installation
+### Prerequisites
 
+- Python ≥3.10
+- [uv](https://github.com/astral-sh/uv) (recommended) or pip
+
+### Installation Options
+
+**Option 1: Using uv (Recommended)**
 ```bash
-# Clone the repository
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-
-# Install with uv (recommended)
 uv sync
 ```
 
-### Basic Usage
+**Option 2: Using pip**
+```bash
+git clone https://github.com/codomyrmex/codomyrmex.git
+cd codomyrmex
+pip install -e .
+```
+
+### Verify Installation
 
 ```bash
 # Launch interactive shell
@@ -482,49 +537,51 @@ codomyrmex --help
 uv run python -c "from codomyrmex.system_discovery import SystemDiscovery; SystemDiscovery().discover_modules()"
 ```
 
+For detailed installation instructions, see the [Installation Guide](docs/getting-started/installation.md).
+
 ## Getting Started Workflow
 
 Typical user journey with Codomyrmex:
 
 ```mermaid
 flowchart TD
-    Start([Start]) --> Install{Install<br/>Codomyrmex}
+    Start([Start]) --> Install{Install Codomyrmex}
 
-    Install -->|uv sync| Config[Configure<br/>Environment]
+    Install -->|uv sync| Config["Configure Environment"]
     Install -->|pip install| Config
 
-    Config --> Setup[Environment<br/>Setup]
-    Setup --> Discover[Discover<br/>Modules]
+    Config --> Setup["Environment Setup"]
+    Setup --> Discover["Discover Modules"]
 
-    Discover --> Choose{Choose<br/>Workflow}
+    Discover --> Choose{Choose Workflow}
 
-    Choose -->|CLI Usage| CLI[Use CLI<br/>Commands]
-    Choose -->|Interactive| Interactive[Launch<br/>Interactive Shell]
-    Choose -->|API| API[Use REST<br/>API]
+    Choose -->|CLI Usage| CLI["Use CLI Commands"]
+    Choose -->|Interactive| Interactive["Launch Interactive Shell"]
+    Choose -->|API| API["Use REST API"]
 
-    CLI --> Modules[Work with<br/>Modules]
+    CLI --> Modules["Work with Modules"]
     Interactive --> Modules
     API --> Modules
 
-    Modules --> Dev{Development<br/>Tasks}
+    Modules --> Dev{Development Tasks}
 
-    Dev -->|Code Analysis| Analysis[Static Analysis<br/>Code Review]
-    Dev -->|Build & Deploy| Build[Build Synthesis<br/>CI/CD Automation]
-    Dev -->|AI Assistance| AI[AI Code Editing<br/>Pattern Matching]
-    Dev -->|Visualization| Viz[Data Visualization<br/>3D Modeling]
-    Dev -->|Infrastructure| Infra[Container Management<br/>Database Operations]
+    Dev -->|Code Analysis| Analysis["Static Analysis Code Review"]
+    Dev -->|Build & Deploy| Build["Build Synthesis CI/CD Automation"]
+    Dev -->|AI Assistance| AI["AI Code Editing Pattern Matching"]
+    Dev -->|Visualization| Viz["Data Visualization 3D Modeling"]
+    Dev -->|Infrastructure| Infra["Container Management Database Operations"]
 
-    Analysis --> Extend[Extend &<br/>Customize]
+    Analysis --> Extend["Extend & Customize"]
     Build --> Extend
     AI --> Extend
     Viz --> Extend
     Infra --> Extend
 
-    Extend --> Contrib{Contribute<br/>Back}
+    Extend --> Contrib{Contribute Back}
 
-    Contrib -->|Bug Reports| Issues[File Issues<br/>in GitHub]
-    Contrib -->|Features| PR[Create Pull<br/>Requests]
-    Contrib -->|Documentation| Docs[Improve<br/>Documentation]
+    Contrib -->|Bug Reports| Issues["File Issues in GitHub"]
+    Contrib -->|Features| PR["Create Pull Requests"]
+    Contrib -->|Documentation| Docs["Improve Documentation"]
 
     Issues --> End([End])
     PR --> End
@@ -559,44 +616,44 @@ Codomyrmex modules are organized in a layered architecture where higher layers d
 
 ```mermaid
 graph TD
-    subgraph "Application Layer"
-        InteractiveShell["Interactive<br/>Shell"]
-        SystemDiscovery["System Discovery<br/>& Orchestration"]
-        CLI["Command Line<br/>Interface"]
+    subgraph applicationLayer ["Application Layer"]
+        InteractiveShell["Interactive Shell"]
+        SystemDiscovery["System Discovery & Orchestration"]
+        CLI["Command Line Interface"]
     end
 
-    subgraph "Service Layer"
-        AICodeEditing["AI Code<br/>Editing"]
-        Documentation["Documentation<br/>Generation"]
-        BuildSynthesis["Build<br/>Synthesis"]
-        StaticAnalysis["Static Analysis<br/>& Quality"]
-        ProjectOrchestration["Project<br/>Orchestration"]
-        CICDAutomation["CI/CD<br/>Automation"]
-        APIDocumentation["API<br/>Documentation"]
-        Containerization["Container<br/>Management"]
-        DatabaseManagement["Database<br/>Management"]
-        ConfigManagement["Config<br/>Management"]
+    subgraph serviceLayer ["Service Layer"]
+        AICodeEditing["AI Code Editing"]
+        Documentation["Documentation Generation"]
+        BuildSynthesis["Build Synthesis"]
+        StaticAnalysis["Static Analysis & Quality"]
+        ProjectOrchestration["Project Orchestration"]
+        CICDAutomation["CI/CD Automation"]
+        APIDocumentation["API Documentation"]
+        Containerization["Container Management"]
+        DatabaseManagement["Database Management"]
+        ConfigManagement["Config Management"]
     end
 
-    subgraph "Core Layer"
-        CodeExecution["Code Execution<br/>Sandbox"]
-        DataVisualization["Data Visualization<br/>& Plotting"]
-        PatternMatching["Pattern<br/>Matching"]
-        GitOperations["Git Operations<br/>& Version Control"]
-        CodeReview["Code<br/>Review"]
-        OllamaIntegration["Ollama<br/>Integration"]
-        LanguageModels["Language<br/>Models"]
-        SecurityAudit["Security<br/>Audit"]
-        Performance["Performance<br/>Monitoring"]
-        Spatial["Spatial<br/>(3D/4D)"]
-        PhysicalManagement["Physical<br/>Management"]
+    subgraph coreLayer ["Core Layer"]
+        CodeExecution["Code Execution Sandbox"]
+        DataVisualization["Data Visualization & Plotting"]
+        PatternMatching["Pattern Matching"]
+        GitOperations["Git Operations & Version Control"]
+        CodeReview["Code Review"]
+        OllamaIntegration["Ollama Integration"]
+        LanguageModels["Language Models"]
+        SecurityAudit["Security Audit"]
+        Performance["Performance Monitoring"]
+        Spatial["Spatial (3D/4D)"]
+        PhysicalManagement["Physical Management"]
     end
 
-    subgraph "Foundation Layer"
-        LoggingMonitoring["Logging &<br/>Monitoring"]
-        EnvironmentSetup["Environment<br/>Setup"]
-        ModelContextProtocol["Model Context<br/>Protocol"]
-        TerminalInterface["Terminal<br/>Interface"]
+    subgraph foundationLayer ["Foundation Layer"]
+        LoggingMonitoring["Logging & Monitoring"]
+        EnvironmentSetup["Environment Setup"]
+        ModelContextProtocol["Model Context Protocol"]
+        TerminalInterface["Terminal Interface"]
     end
 
     %% Dependencies flow upward (dotted lines show "depends on")
@@ -714,13 +771,65 @@ Advanced capabilities for specific domains:
 | [**plugin_system**](src/codomyrmex/plugin_system/) | Plugin architecture | Extension loading, plugin management, interfaces |
 | [**tools**](src/codomyrmex/tools/) | Utility tools | Development helpers, analysis utilities |
 
+## Explore Modules
+
+Codomyrmex includes **30+ modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+
+Browse all available modules organized by layer and category:
+
+### Foundation Layer
+Essential infrastructure used by all other modules:
+
+- **[logging_monitoring](src/codomyrmex/logging_monitoring/)** - Centralized logging system with structured logging, multiple formats, and aggregation
+- **[environment_setup](src/codomyrmex/environment_setup/)** - Environment validation, dependency checking, API key management, and setup automation
+- **[model_context_protocol](src/codomyrmex/model_context_protocol/)** - AI communication standard with standardized LLM interfaces and tool specifications
+- **[terminal_interface](src/codomyrmex/terminal_interface/)** - Rich terminal interactions with colored output, progress bars, and interactive prompts
+
+### Core Layer
+Primary capabilities for development workflows:
+
+- **[agents](src/codomyrmex/agents/)** - Agentic framework integrations with AI code editing, task management, and various providers
+- **[static_analysis](src/codomyrmex/static_analysis/)** - Code quality analysis with linting, security scanning, and complexity metrics
+- **[coding](src/codomyrmex/coding/)** - Code execution and review with safe sandbox execution and automated code review
+- **[data_visualization](src/codomyrmex/data_visualization/)** - Charts and plots with static/interactive plots and multiple formats
+- **[pattern_matching](src/codomyrmex/pattern_matching/)** - Code pattern analysis with pattern recognition and dependency analysis
+- **[git_operations](src/codomyrmex/git_operations/)** - Version control automation with Git workflows, branch management, and commit automation
+- **[security](src/codomyrmex/security/)** - Security scanning with vulnerability detection, compliance checking, and threat assessment
+- **[llm](src/codomyrmex/llm/)** - LLM infrastructure with model management, local/remote providers (Ollama), and benchmarking
+- **[performance](src/codomyrmex/performance/)** - Performance monitoring with profiling, optimization, and benchmarking
+
+### Service Layer
+Higher-level services that orchestrate core modules:
+
+- **[build_synthesis](src/codomyrmex/build_synthesis/)** - Build automation with multi-language builds, artifact generation, and pipelines
+- **[documentation](src/codomyrmex/documentation/)** - Documentation generation with website generation, API docs, and tutorial creation
+- **[api](src/codomyrmex/api/)** - API infrastructure with OpenAPI/Swagger specs, standardization, and documentation
+- **[ci_cd_automation](src/codomyrmex/ci_cd_automation/)** - CI/CD pipeline management with pipeline orchestration and deployment automation
+- **[containerization](src/codomyrmex/containerization/)** - Container management with Docker lifecycle and Kubernetes orchestration
+- **[database_management](src/codomyrmex/database_management/)** - Database operations with schema management, migrations, and backups
+- **[config_management](src/codomyrmex/config_management/)** - Configuration management with environment setup, secret management, and validation
+- **[project_orchestration](src/codomyrmex/project_orchestration/)** - Workflow orchestration with workflow management and task coordination
+
+### Specialized Layer
+Advanced capabilities for specific domains:
+
+- **[spatial](src/codomyrmex/spatial/)** - Spatial modeling (3D/4D) with scene creation, rendering, geometric operations, and world models
+- **[physical_management](src/codomyrmex/physical_management/)** - Physical system simulation with hardware monitoring and resource management
+- **[system_discovery](src/codomyrmex/system_discovery/)** - System exploration with module discovery, capability detection, and health monitoring
+- **[module_template](src/codomyrmex/module_template/)** - Module creation templates with scaffold generation and template management
+- **[events](src/codomyrmex/events/)** - Event system with message passing, pub/sub patterns, and event logging
+- **[plugin_system](src/codomyrmex/plugin_system/)** - Plugin architecture with extension loading, plugin management, and interfaces
+- **[tools](src/codomyrmex/tools/)** - Utility tools with development helpers and analysis utilities
+
+**See [Source Code Index](src/README.md) for complete module listing and [Module System Overview](docs/modules/overview.md) for detailed architecture.**
+
 ## Module Quick Reference
 
 | Category | Modules |
 |----------|---------|
 | **Foundation** | [logging_monitoring](src/codomyrmex/logging_monitoring/) • [environment_setup](src/codomyrmex/environment_setup/) • [model_context_protocol](src/codomyrmex/model_context_protocol/) • [terminal_interface](src/codomyrmex/terminal_interface/) |
 | **AI & Intelligence** | [agents](src/codomyrmex/agents/) • [llm](src/codomyrmex/llm/) |
-| **Analysis & Quality** | [static_analysis](src/codomyrmex/static_analysis/) • [code](src/codomyrmex/coding/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) |
+| **Analysis & Quality** | [static_analysis](src/codomyrmex/static_analysis/) • [coding](src/codomyrmex/coding/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) |
 | **Build & Deploy** | [build_synthesis](src/codomyrmex/build_synthesis/) • [git_operations](src/codomyrmex/git_operations/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) |
 | **Visualization** | [data_visualization](src/codomyrmex/data_visualization/) • [spatial](src/codomyrmex/spatial/) |
 | **Infrastructure** | [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [physical_management](src/codomyrmex/physical_management/) |
@@ -784,23 +893,23 @@ codomyrmex/
 
 ```mermaid
 graph TD
-    subgraph "Core Platform"
-        CoreSrc["src/codomyrmex/<br/>30+ Modules"]
-        CoreScripts["scripts/<br/>Automation & Orchestration"]
-        CoreTests["src/codomyrmex/tests/<br/>Unit & Integration Tests"]
+    subgraph corePlatform ["Core Platform"]
+        CoreSrc["src/codomyrmex/ 30+ Modules"]
+        CoreScripts["scripts/ Automation & Orchestration"]
+        CoreTests["src/codomyrmex/tests/ Unit & Integration Tests"]
     end
 
-    subgraph "Documentation & Config"
-        Docs["docs/<br/>User & Developer Guides"]
-        Config["config/<br/>Templates & Examples"]
-        Rules["cursorrules/<br/>Coding Standards"]
-        Projects["projects/<br/>Project Templates"]
+    subgraph docsConfig ["Documentation & Config"]
+        Docs["docs/ User & Developer Guides"]
+        Config["config/ Templates & Examples"]
+        Rules["cursorrules/ Coding Standards"]
+        Projects["projects/ Project Templates"]
     end
 
-    subgraph "Examples & Output"
-        Examples["examples/<br/>Usage Demonstrations"]
-        Output["@output/<br/>Generated Reports"]
-        ScriptsExamples["scripts/examples/<br/>Executable Demos"]
+    subgraph examplesOutput ["Examples & Output"]
+        Examples["examples/ Usage Demonstrations"]
+        Output["output/ Generated Reports"]
+        ScriptsExamples["scripts/examples/ Executable Demos"]
     end
 
     CoreSrc --> Docs
@@ -843,24 +952,72 @@ Modules organized to prevent circular dependencies:
 - **Service Layer**: Orchestration and integration
 - **Application Layer**: User interfaces (CLI, interactive shell)
 
+---
+
 ## Signposting
+
+**Navigation Links:**
 - **Self**: [Codomyrmex Root](README.md)
 - **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
+    - [Agent Guide](AGENTS.md) - Technical documentation for AI agents
+    - [Functional Spec](SPEC.md) - Functional specification
 - **Children**:
-    - [Source Code](src/README.md)
-    - [Documentation](docs/README.md)
-    - [Scripts](scripts/README.md)
+    - [Source Code](src/README.md) - All modules and implementations
+    - [Documentation](docs/README.md) - User and developer guides
+    - [Scripts](scripts/README.md) - Automation and orchestration utilities
 
 ## Documentation
 
-- **[Getting Started Guide](docs/getting-started/quickstart.md)** - Quick introduction and setup
+Comprehensive documentation for users, developers, and contributors. All documentation is organized in the [docs/](docs/README.md) directory.
+
+### Getting Started
+- **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
+- **[Installation Guide](docs/getting-started/installation.md)** - Detailed installation instructions
+- **[Setup Guide](docs/getting-started/setup.md)** - Environment configuration and setup
+- **[Tutorials](docs/getting-started/tutorials/)** - Step-by-step tutorials including [Creating a Module](docs/getting-started/tutorials/creating-a-module.md)
+
+### Architecture & Design
 - **[Architecture Overview](docs/project/architecture.md)** - System design and principles
 - **[Module System](docs/modules/overview.md)** - Module architecture and relationships
-- **[Contributing Guide](docs/project/contributing.md)** - Development guidelines
-- **[API Reference](docs/reference/api.md)** - API documentation
+- **[Module Dependencies](docs/modules/dependency-graph.md)** - Dependency graph and relationships
+- **[Module Relationships](docs/modules/relationships.md)** - How modules interact
+
+### Development
+- **[Contributing Guide](docs/project/contributing.md)** - Development guidelines and workflow
+- **[Development Environment](docs/development/environment-setup.md)** - Setting up your development environment
+- **[Testing Strategy](docs/development/testing-strategy.md)** - Testing approaches and best practices
+- **[Documentation Guide](docs/development/documentation.md)** - How to write and maintain documentation
+- **[UV Usage Guide](docs/development/uv-usage-guide.md)** - Using uv for package management
+
+### Integration
+- **[Integration Guide](docs/integration/)** - Integrating Codomyrmex with other systems
+- **[External Systems](docs/integration/external-systems.md)** - Integration with external services
+- **[Fabric AI Integration](docs/integration/fabric-ai-integration.md)** - AI integration patterns
+
+### Reference
+- **[API Reference](docs/reference/api.md)** - Complete API documentation
+- **[CLI Reference](docs/reference/cli.md)** - Command-line interface documentation
 - **[Troubleshooting](docs/reference/troubleshooting.md)** - Common issues and solutions
+- **[Migration Guide](docs/reference/migration-guide.md)** - Upgrading and migrating
+- **[Performance Guide](docs/reference/performance.md)** - Performance optimization
+- **[Security Guide](docs/reference/security.md)** - Security best practices
+
+### Deployment
+- **[Deployment Guide](docs/deployment/)** - Production deployment instructions
+- **[Production Setup](docs/deployment/production.md)** - Production environment configuration
+
+### Project Orchestration
+- **[Project Lifecycle](docs/project_orchestration/project-lifecycle-guide.md)** - Managing project workflows
+- **[Workflow Configuration](docs/project_orchestration/workflow-configuration-schema.md)** - Workflow schemas
+- **[Task Orchestration](docs/project_orchestration/task-orchestration-guide.md)** - Task management
+
+### Examples
+- **[Example Scripts](docs/examples/)** - Working examples and demonstrations
+- **[Basic Examples](docs/examples/basic-examples.md)** - Simple usage examples
+- **[Integration Examples](docs/examples/integration-examples.md)** - Integration patterns
+- **[Orchestration Examples](docs/examples/orchestration-examples.md)** - Workflow examples
+
+**See [Documentation Hub](docs/README.md) for complete documentation index.**
 
 ## Development
 
@@ -921,30 +1078,30 @@ Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
 
 ```mermaid
 graph TD
-    subgraph "Data Sources"
-        UserInput[👤 User Input<br/>Commands, Code, Config]
-        FileSystem[💾 File System<br/>Source Code, Data Files]
-        APIs[🔗 External APIs<br/>GitHub, Docker Hub, PyPI]
-        Databases[🗄️ Databases<br/>Local/Remote DBs]
+    subgraph dataSources ["Data Sources"]
+        UserInput["User Input: Commands, Code, Config"]
+        FileSystem["File System: Source Code, Data Files"]
+        APIs["External APIs: GitHub, Docker Hub, PyPI"]
+        Databases["Databases: Local/Remote DBs"]
     end
 
-    subgraph "Processing Pipeline"
-        InputParser[📥 Input Parser<br/>CLI Args, Config Files]
-        ModuleOrchestrator[🎯 Module Orchestrator<br/>Workflow Coordination]
-        DataTransformers[🔄 Data Transformers<br/>Analysis, Processing]
-        OutputGenerators[📤 Output Generators<br/>Reports, Visualizations]
+    subgraph processingPipeline ["Processing Pipeline"]
+        InputParser["Input Parser: CLI Args, Config Files"]
+        ModuleOrchestrator["Module Orchestrator: Workflow Coordination"]
+        DataTransformers["Data Transformers: Analysis, Processing"]
+        OutputGenerators["Output Generators: Reports, Visualizations"]
     end
 
-    subgraph "Storage & Persistence"
-        LocalStorage[💿 Local Storage<br/>JSON, CSV, Images]
-        RemoteStorage[☁️ Remote Storage<br/>Cloud Services, Git]
-        CacheLayer[⚡ Cache Layer<br/>In-Memory, Redis]
+    subgraph storagePersistence ["Storage & Persistence"]
+        LocalStorage["Local Storage: JSON, CSV, Images"]
+        RemoteStorage["Remote Storage: Cloud Services, Git"]
+        CacheLayer["Cache Layer: In-Memory, Redis"]
     end
 
-    subgraph "Consumption"
-        TerminalOutput[🖥️ Terminal Display<br/>Rich Text, Tables]
-        FileOutputs[📄 File Outputs<br/>Reports, Exports]
-        WebInterfaces[🌐 Web Interfaces<br/>Dashboards, APIs]
+    subgraph consumption ["Consumption"]
+        TerminalOutput["Terminal Display: Rich Text, Tables"]
+        FileOutputs["File Outputs: Reports, Exports"]
+        WebInterfaces["Web Interfaces: Dashboards, APIs"]
     end
 
     UserInput --> InputParser
@@ -973,37 +1130,37 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph "Entry Points"
-        CLI[📟 CLI Command]
-        InteractiveShell[🐚 Interactive Shell]
-        APIEndpoint[🔌 REST API]
-        ConfigFile[⚙️ Config File]
+    subgraph entryPoints ["Entry Points"]
+        CLI["CLI Command"]
+        InteractiveShell["Interactive Shell"]
+        APIEndpoint["REST API"]
+        ConfigFile["Config File"]
     end
 
-    subgraph "Orchestration Layer"
-        SystemDiscovery[🔍 System Discovery<br/>Module Loading]
-        ProjectOrchestrator[🎯 Project Orchestrator<br/>Workflow Planning]
-        TaskScheduler[📅 Task Scheduler<br/>Parallel Execution]
+    subgraph orchestrationLayer ["Orchestration Layer"]
+        SystemDiscovery["System Discovery: Module Loading"]
+        ProjectOrchestrator["Project Orchestrator: Workflow Planning"]
+        TaskScheduler["Task Scheduler: Parallel Execution"]
     end
 
-    subgraph "Core Processing Modules"
-        AICode[🤖 AI Code Editing<br/>Generation, Refactoring]
-        StaticAnalysis[🔬 Static Analysis<br/>Quality Metrics]
-        Code[⚙️ Code Execution<br/>& Review]
-        Security[🛡️ Security<br/>Vulnerability Scanning]
+    subgraph coreProcessing ["Core Processing Modules"]
+        AICode["AI Code Editing: Generation, Refactoring"]
+        StaticAnalysis["Static Analysis: Quality Metrics"]
+        Code["Code Execution & Review"]
+        Security["Security: Vulnerability Scanning"]
     end
 
-    subgraph "Infrastructure Modules"
-        GitOps[🔀 Git Operations<br/>Version Control]
-        BuildSynth[🏗️ Build Synthesis<br/>Multi-Language Builds]
-        ContainerMgmt[🐳 Container Management<br/>Docker, K8s]
-        DatabaseMgmt[🗄️ Database Management<br/>Migrations, Queries]
+    subgraph infrastructureModules ["Infrastructure Modules"]
+        GitOps["Git Operations: Version Control"]
+        BuildSynth["Build Synthesis: Multi-Language Builds"]
+        ContainerMgmt["Container Management: Docker, K8s"]
+        DatabaseMgmt["Database Management: Migrations, Queries"]
     end
 
-    subgraph "Output & Visualization"
-        DataVisualization[📊 Data Visualization<br/>Charts, Plots]
-        Documentation[📚 Documentation<br/>API Docs, Guides]
-        Reporting[📋 Reporting<br/>Status, Metrics]
+    subgraph outputVisualization ["Output & Visualization"]
+        DataVisualization["Data Visualization: Charts, Plots"]
+        Documentation["Documentation: API Docs, Guides"]
+        Reporting["Reporting: Status, Metrics"]
     end
 
     CLI --> SystemDiscovery
@@ -1043,31 +1200,31 @@ graph TD
 
 ```mermaid
 flowchart TD
-    subgraph "Planning Phase"
-        Requirements[📋 Requirements<br/>Analysis]
-        Design[🎨 Design<br/>Architecture]
-        Planning[📅 Planning<br/>Task Breakdown]
+    subgraph planningPhase ["Planning Phase"]
+        Requirements["Requirements Analysis"]
+        Design["Design Architecture"]
+        Planning["Planning Task Breakdown"]
     end
 
-    subgraph "Development Phase"
-        CodeGeneration[🤖 Code Generation<br/>AI-Assisted]
-        Implementation[💻 Implementation<br/>Manual Coding]
-        Testing[🧪 Testing<br/>Unit & Integration]
-        CodeReview[🔍 Code Review<br/>Automated & Manual]
+    subgraph developmentPhase ["Development Phase"]
+        CodeGeneration["Code Generation AI-Assisted"]
+        Implementation["Implementation Manual Coding"]
+        Testing["Testing Unit & Integration"]
+        CodeReview["Code Review Automated & Manual"]
     end
 
-    subgraph "Quality Assurance"
-        StaticAnalysis[🔬 Static Analysis<br/>Linting, Metrics]
-        Security[🛡️ Security<br/>Vulnerability Checks]
-        PerformanceTesting[⚡ Performance Testing<br/>Benchmarking]
-        Documentation[📚 Documentation<br/>API Docs, Guides]
+    subgraph qualityAssurance ["Quality Assurance"]
+        StaticAnalysis["Static Analysis Linting, Metrics"]
+        Security["Security Vulnerability Checks"]
+        PerformanceTesting["Performance Testing Benchmarking"]
+        Documentation["Documentation API Docs, Guides"]
     end
 
-    subgraph "Integration Phase"
-        BuildProcess[🏗️ Build Process<br/>Compilation, Packaging]
-        Deployment[🚀 Deployment<br/>Container, Cloud]
-        Monitoring[📊 Monitoring<br/>Logs, Metrics]
-        FeedbackLoop[🔄 Feedback Loop<br/>Issue Tracking]
+    subgraph integrationPhase ["Integration Phase"]
+        BuildProcess["Build Process Compilation, Packaging"]
+        Deployment["Deployment Container, Cloud"]
+        Monitoring["Monitoring Logs, Metrics"]
+        FeedbackLoop["Feedback Loop Issue Tracking"]
     end
 
     Requirements --> Design
@@ -1103,29 +1260,29 @@ flowchart TD
 
 ```mermaid
 graph TD
-    subgraph "Core Dependencies"
-        CorePy["Python ≥3.10<br/>Runtime Environment"]
-        CoreUV["uv<br/>Package Manager"]
-        CorePyTest["pytest<br/>Testing Framework"]
+    subgraph coreDeps ["Core Dependencies"]
+        CorePy["Python ≥3.10 Runtime Environment"]
+        CoreUV["uv Package Manager"]
+        CorePyTest["pytest Testing Framework"]
     end
 
-    subgraph "AI/ML Dependencies"
-        AIDocker["Docker<br/>Container Runtime"]
-        AIModels["Ollama<br/>Local Models"]
-        AIAPI["OpenAI/Anthropic<br/>API Keys"]
+    subgraph aiMLDeps ["AI/ML Dependencies"]
+        AIDocker["Docker Container Runtime"]
+        AIModels["Ollama Local Models"]
+        AIAPI["OpenAI/Anthropic API Keys"]
     end
 
-    subgraph "Development Dependencies"
-        DevBlack["Black<br/>Code Formatter"]
-        DevRuff["Ruff<br/>Linter"]
-        DevMyPy["MyPy<br/>Type Checker"]
-        DevPreCommit["Pre-commit<br/>Hooks"]
+    subgraph devDeps ["Development Dependencies"]
+        DevBlack["Black Code Formatter"]
+        DevRuff["Ruff Linter"]
+        DevMyPy["MyPy Type Checker"]
+        DevPreCommit["Pre-commit Hooks"]
     end
 
-    subgraph "Optional Dependencies"
-        OptKubernetes["Kubernetes<br/>Orchestration"]
-        OptDatabases["PostgreSQL/MySQL<br/>Database Servers"]
-        OptCloud["AWS/GCP/Azure<br/>Cloud Providers"]
+    subgraph optDeps ["Optional Dependencies"]
+        OptKubernetes["Kubernetes Orchestration"]
+        OptDatabases["PostgreSQL/MySQL Database Servers"]
+        OptCloud["AWS/GCP/Azure Cloud Providers"]
     end
 
     CorePy --> CoreUV

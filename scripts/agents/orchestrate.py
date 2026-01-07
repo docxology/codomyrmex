@@ -11,6 +11,7 @@ See also: src/codomyrmex/cli.py for main CLI integration
 import argparse
 import json
 import sys
+from dataclasses import fields
 from pathlib import Path
 from typing import Any, Optional
 
@@ -2040,6 +2041,7 @@ def handle_config_set(args):
     """Handle config set command."""
     try:
         from codomyrmex.agents.config import AgentConfig
+        from dataclasses import fields
         
         config = get_config()
         overrides = {}
@@ -2064,25 +2066,15 @@ def handle_config_set(args):
             except Exception:
                 overrides[key] = value
         
-        # Update config attributes directly
-        for key, value in overrides.items():
-            if hasattr(config, key):
-                setattr(config, key, value)
-            else:
-                print_warning(f"Unknown configuration key: {key}")
-        
-        # Re-initialize to apply environment variables
-        # Create new config with current values as defaults, then apply overrides
+        # Get current config values
         config_dict = {}
-        for field_name in dir(config):
-            if not field_name.startswith('_') and field_name not in ['to_dict', 'validate', '__post_init__']:
-                try:
-                    config_dict[field_name] = getattr(config, field_name)
-                except:
-                    pass
+        for field in fields(AgentConfig):
+            config_dict[field.name] = getattr(config, field.name)
         
         # Apply overrides
         config_dict.update(overrides)
+        
+        # Create new config with overrides
         new_config = AgentConfig(**config_dict)
         set_config(new_config)
         

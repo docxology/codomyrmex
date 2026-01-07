@@ -15,7 +15,7 @@ We take the security of Codomyrmex seriously. If you discover a security vulnera
 ### 🔒 Private Disclosure Process
 
 1. **Do NOT create a public GitHub issue** for security vulnerabilities
-2. Email security details to: `security@codomyrmex.org` (or create a private GitHub security advisory)
+2. Email security details to: `danielarifriedman@gmail.com` (or create a private GitHub security advisory)
 3. Include the following information:
    - Description of the vulnerability
    - Steps to reproduce the issue
