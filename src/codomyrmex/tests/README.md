@@ -1,52 +1,41 @@
-# tests
-
-## Signposting
-- **Parent**: [codomyrmex](../README.md)
-- **Children**:
-    - [examples](scripts/examples/README.md)
-    - [fixtures](fixtures/README.md)
-    - [integration](integration/README.md)
-    - [output](output/README.md)
-    - [performance](performance/README.md)
-    - [unit](unit/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
+# Codomyrmex Unified Testing Architecture
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Test files and validation suites.
+This directory contains the unified testing architecture for Codomyrmex. All unit and integration tests are organized here to maintain a clean and modular source directory.
 
-## Directory Contents
-- `README.md` – File
-- `RUNNING_TESTS.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `conftest.py` – File
-- `examples/` – Subdirectory
-- `fixtures/` – Subdirectory
-- `integration/` – Subdirectory
-- `performance/` – Subdirectory
-- `unit/` – Subdirectory
+## Structure
 
-## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
+- `unit/` - Unit tests organized by module (e.g., `unit/fpf/`, `unit/website/`, `unit/agents/`).
+- `integration/` - End-to-end and cross-module integration tests.
+- `fixtures/` - Shared test data and mock resources.
+- `performance/` - Benchmarks and performance tests.
+- `conftest.py` - Root pytest configuration and shared fixtures.
 
-## Getting Started
+## Running Tests
 
-To use this module in your project, import the necessary components:
+To run the full test suite, ensure you are in the project root and set the `PYTHONPATH`:
 
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests import main_component
-
-def example():
-    
-    print(f"Result: {result}")
+```bash
+export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+pytest src/codomyrmex/tests
 ```
 
+To run tests for a specific module:
+
+```bash
+pytest src/codomyrmex/tests/unit/website
+```
+
+## Signposting
+- **Parent**: [codomyrmex](../README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+    - [Running Tests Detailed Guide](RUNNING_TESTS.md)
+
+## Navigation
+- **Project Root**: [README](../../../README.md)
+- **Source Root**: [src](../../README.md)

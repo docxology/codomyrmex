@@ -16,9 +16,6 @@ from codomyrmex.agents.core import (
 )
 from codomyrmex.agents.exceptions import ClaudeError
 from codomyrmex.agents.generic import BaseAgent
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
 
 
 class ClaudeClient(BaseAgent):
@@ -97,6 +94,16 @@ class ClaudeClient(BaseAgent):
             # Convert request to Claude messages
             messages = self._build_messages(request)
 
+            self.logger.debug(
+                "Executing Claude API request",
+                extra={
+                    "agent": "claude",
+                    "model": self.model,
+                    "message_count": len(messages),
+                    "prompt_length": len(request.prompt),
+                },
+            )
+
             # Call Claude API
             response = self.client.messages.create(
                 model=self.model,
@@ -115,6 +122,22 @@ class ClaudeClient(BaseAgent):
                     if hasattr(block, "text"):
                         content += block.text
 
+            tokens_used = response.usage.input_tokens + response.usage.output_tokens
+
+            self.logger.info(
+                "Claude API request completed",
+                extra={
+                    "agent": "claude",
+                    "model": self.model,
+                    "execution_time": execution_time,
+                    "input_tokens": response.usage.input_tokens,
+                    "output_tokens": response.usage.output_tokens,
+                    "total_tokens": tokens_used,
+                    "content_length": len(content),
+                    "stop_reason": response.stop_reason,
+                },
+            )
+
             return AgentResponse(
                 content=content,
                 metadata={
@@ -125,19 +148,41 @@ class ClaudeClient(BaseAgent):
                     },
                     "stop_reason": response.stop_reason,
                 },
-                tokens_used=response.usage.input_tokens + response.usage.output_tokens,
+                tokens_used=tokens_used,
                 execution_time=execution_time,
             )
 
         except anthropic.APIError as e:
             execution_time = time.time() - start_time
+            status_code = getattr(e, "status_code", None)
+            self.logger.error(
+                "Claude API error",
+                exc_info=True,
+                extra={
+                    "agent": "claude",
+                    "model": self.model,
+                    "error": str(e),
+                    "status_code": status_code,
+                    "execution_time": execution_time,
+                },
+            )
             raise ClaudeError(
                 f"Claude API error: {str(e)}",
                 api_error=str(e),
-                status_code=getattr(e, "status_code", None),
+                status_code=status_code,
             ) from e
         except Exception as e:
             execution_time = time.time() - start_time
+            self.logger.error(
+                "Unexpected error in Claude API request",
+                exc_info=True,
+                extra={
+                    "agent": "claude",
+                    "model": self.model,
+                    "error": str(e),
+                    "execution_time": execution_time,
+                },
+            )
             raise ClaudeError(
                 f"Unexpected error: {str(e)}",
                 api_error=str(e),
@@ -156,6 +201,16 @@ class ClaudeClient(BaseAgent):
         try:
             messages = self._build_messages(request)
 
+            self.logger.debug(
+                "Starting Claude API stream",
+                extra={
+                    "agent": "claude",
+                    "model": self.model,
+                    "message_count": len(messages),
+                },
+            )
+
+            chunk_count = 0
             with self.client.messages.stream(
                 model=self.model,
                 max_tokens=self.max_tokens,
@@ -164,11 +219,39 @@ class ClaudeClient(BaseAgent):
                 timeout=self.timeout,
             ) as stream:
                 for text in stream.text_stream:
+                    chunk_count += 1
                     yield text
 
+            self.logger.debug(
+                "Claude API stream completed",
+                extra={
+                    "agent": "claude",
+                    "model": self.model,
+                    "chunk_count": chunk_count,
+                },
+            )
+
         except anthropic.APIError as e:
+            self.logger.error(
+                "Claude API streaming error",
+                exc_info=True,
+                extra={
+                    "agent": "claude",
+                    "model": self.model,
+                    "error": str(e),
+                },
+            )
             yield f"Error: Claude API error: {str(e)}"
         except Exception as e:
+            self.logger.error(
+                "Unexpected error in Claude API stream",
+                exc_info=True,
+                extra={
+                    "agent": "claude",
+                    "model": self.model,
+                    "error": str(e),
+                },
+            )
             yield f"Error: {str(e)}"
 
     def _build_messages(self, request: AgentRequest) -> list[dict[str, str]]:

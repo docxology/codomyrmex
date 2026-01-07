@@ -130,18 +130,19 @@ from codomyrmex.environment_setup import validate_python_version
 from codomyrmex.agents import AgentInterface
 from codomyrmex.coding import execute_code
 
-# Setup logging
-setup_logging(level="INFO")
+# Setup logging (reads from environment variables)
+setup_logging()
 logger = get_logger(__name__)
 
 # Validate environment
-if validate_python_version(min_version="3.10"):
+if validate_python_version(required=">=3.10"):
     logger.info("Python version validated")
 
 # Use agents
+from codomyrmex.agents import AgentRequest
 from codomyrmex.agents.claude import ClaudeClient
 client = ClaudeClient()
-response = client.execute(AgentRequest(task="Generate code"))
+response = client.execute(AgentRequest(prompt="Generate code"))
 
 # Execute code safely
 result = execute_code(code="print('Hello')", language="python")

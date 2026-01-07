@@ -3,6 +3,7 @@ import socketserver
 import json
 import subprocess
 import os
+import sys
 import requests
 from pathlib import Path
 from typing import Optional
@@ -124,22 +125,24 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         scripts_root = (self.root_dir / "scripts").resolve()
         
         if not str(script_path).startswith(str(scripts_root)) or not script_path.exists():
-            self.send_error(403, "Invalid script path")
+            self.send_error(403, f"Invalid script path: {script_name}")
             return
 
         try:
-            # Run the script
-            # Using stdbuf to unbuffer output could be useful, or PAGER=cat
-            cmd = ["python3", str(script_path)] + args
+            # Run the script using the current python executable
+            cmd = [sys.executable, str(script_path)] + args
             env = os.environ.copy()
             env["PYTHONUNBUFFERED"] = "1"
             
+            # Ensure we capture both stdout and stderr
             result = subprocess.run(
                 cmd,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 text=True,
                 env=env,
-                cwd=self.root_dir # Run from project root
+                cwd=self.root_dir, # Run from project root
+                timeout=300 # 5 minute timeout safety
             )
             
             response = {
@@ -151,6 +154,12 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             
             self.send_json_response(response)
             
+        except subprocess.TimeoutExpired:
+            self.send_json_response({
+                "success": False, 
+                "error": "Script execution timed out after 300 seconds",
+                "stderr": "TimeoutExpired"
+            }, status=504)
         except Exception as e:
             self.send_json_response({"success": False, "error": str(e)}, status=500)
 

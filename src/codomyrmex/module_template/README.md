@@ -13,7 +13,7 @@
 
 ## Overview
 
-Scaffolding and generation logic for creating new Codomyrmex modules. Ensures all new modules start with required structure, documentation files (README, AGENTS, SPEC), and configuration, enforcing Internal Coherence design principle. Uses template-driven approach with Jinja2 for generating files from templates. Supports idempotent module creation and upgrading existing folders to modules.
+Template engine support (Jinja2, Mako) for code generation, documentation templates, and dynamic content. Provides template rendering, template loading, filter registration, and template management capabilities.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -36,19 +36,14 @@ Scaffolding and generation logic for creating new Codomyrmex modules. Ensures al
 
 ## Getting Started
 
-This module is used internally by Codomyrmex to generate new modules. To create a new module:
+To use this module in your project, import the necessary components:
 
 ```python
-# This module provides scaffolding tools for creating new Codomyrmex modules
-# Typically used via CLI or internal tooling
+# Example usage
+from codomyrmex.codomyrmex.module_template import main_component
 
-# Example: Generate a new module structure
-# (This would typically be done via a CLI command or script)
-# The module_template ensures all new modules have:
-# - Proper directory structure
-# - Required documentation files (README.md, AGENTS.md, SPEC.md)
-# - Standard __init__.py with proper exports
-# - Test directory structure
-# - Documentation templates
+def example():
+    
+    print(f"Result: {result}")
 ```
 

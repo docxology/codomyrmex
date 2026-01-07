@@ -50,6 +50,7 @@ from codomyrmex.fpf import (
     FPFVisualizerPNG,
     ReportGenerator,
     SectionExporter,
+    SectionManager,
 )
 
 logger = get_logger(__name__)
@@ -181,7 +182,8 @@ class FPFOrchestrator:
 
         try:
             if "png" in formats:
-                visualizer = FPFVisualizerPNG(self.spec)
+                # Initialize visualizer with defaults (figsize, dpi)
+                visualizer = FPFVisualizerPNG()
                 # Generate various visualizations
                 visualizer.visualize_pattern_dependencies(
                     self.spec,
@@ -204,6 +206,8 @@ class FPFOrchestrator:
             return True
         except Exception as e:
             logger.error(f"Visualization generation failed: {e}")
+            import traceback
+            traceback.print_exc()
             return False
 
     def export_sections(self) -> bool:
@@ -251,7 +255,7 @@ class FPFOrchestrator:
         try:
             report_gen = ReportGenerator(self.spec)
             report_path = self.reports_dir / "fpf_report.html"
-            report_gen.generate_report(str(report_path))
+            report_gen.generate_report(report_path)
             logger.info(f"Report generated at {report_path}")
             return True
         except Exception as e:
@@ -441,8 +445,9 @@ Examples:
     args = parser.parse_args()
 
     if not args.command:
-        parser.print_help()
-        return 1
+        # Default to info command if no arguments provided
+        args.command = "info"
+
 
     # Route to appropriate handler
     handlers = {

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/module_template
+# Codomyrmex Agents — src/codomyrmex/template
 
 ## Signposting
 - **Parent**: [codomyrmex](../AGENTS.md)
@@ -13,7 +13,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Scaffolding and generation logic for creating new Codomyrmex modules. Ensures all new modules start with required structure, documentation files (README, AGENTS, SPEC), and configuration, enforcing Internal Coherence design principle. Uses template-driven approach with Jinja2 for generating files from templates. Supports idempotent module creation and upgrading existing folders to modules.
+Template engine support (Jinja2, Mako) for code generation, documentation templates, and dynamic content. Provides template rendering, template loading, filter registration, and template management capabilities.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Detailed API specification
@@ -30,21 +30,17 @@ Scaffolding and generation logic for creating new Codomyrmex modules. Ensures al
 
 ## Key Classes and Functions
 
-### ModuleGenerator (`__init__.py`)
-- `ModuleGenerator()` – Module generation and scaffolding
-- `create_module(name: str, human_name: str, **kwargs) -> bool` – Create new module with required structure
-- `upgrade_module(module_path: str, force: bool = False) -> bool` – Upgrade existing folder to module (idempotent)
-- `generate_scaffold(config: dict) -> dict` – Generate module scaffold from configuration
-
-### TemplateRenderer (`__init__.py`)
-- `TemplateRenderer()` – Template rendering for module files
-- `render_template(template_name: str, context: dict) -> str` – Render template with context
+### TemplateEngine (`__init__.py`)
+- `TemplateEngine(engine_type: str = "jinja2")` – Template engine (Jinja2 or Mako)
+- `render(template: str, context: dict) -> str` – Render template with context
 - `load_template(template_path: str) -> Template` – Load template from file
+- `register_filter(name: str, filter_func: callable) -> None` – Register custom filter
+- `get_filter(name: str) -> Optional[callable]` – Get filter by name
 
-### ScaffoldBuilder (`__init__.py`)
-- `ScaffoldBuilder()` – Build module scaffold structure
-- `create_structure(module_name: str, base_path: str) -> dict` – Create folder structure
-- `generate_files(module_name: str, config: dict) -> list[str]` – Generate required files
+### TemplateManager (`__init__.py`)
+- `TemplateManager()` – Template management
+- `register_template(name: str, template: Template) -> None` – Register template
+- `get_template(name: str) -> Optional[Template]` – Get template by name
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

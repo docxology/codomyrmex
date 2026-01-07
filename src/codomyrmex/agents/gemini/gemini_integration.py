@@ -42,8 +42,26 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
         response = self.agent.execute(request)
 
         if not response.is_success():
-            logger.error(f"Gemini code generation failed: {response.error}")
+            self.logger.error(
+                "Gemini code generation failed",
+                extra={
+                    "agent": "gemini",
+                    "language": language,
+                    "error": response.error,
+                    "execution_time": response.execution_time,
+                },
+            )
             raise RuntimeError(f"Code generation failed: {response.error}")
+
+        self.logger.debug(
+            "Gemini code generation succeeded",
+            extra={
+                "agent": "gemini",
+                "language": language,
+                "content_length": len(response.content),
+                "execution_time": response.execution_time,
+            },
+        )
 
         return response.content
 

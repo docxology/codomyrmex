@@ -26,7 +26,7 @@ class ReportGenerator:
         self.analyzer = FPFAnalyzer(spec)
         self.term_analyzer = TermAnalyzer()
 
-    def generate_html_report(self, output_path: Path, include_analysis: bool = True) -> None:
+    def generate_report(self, output_path: Path, include_analysis: bool = True) -> None:
         """Generate comprehensive HTML report.
 
         Args:

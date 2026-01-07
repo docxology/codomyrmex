@@ -16,9 +16,6 @@ from codomyrmex.agents.core import (
 )
 from codomyrmex.agents.exceptions import CodexError
 from codomyrmex.agents.generic import BaseAgent
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
 
 
 class CodexClient(BaseAgent):
@@ -92,6 +89,15 @@ class CodexClient(BaseAgent):
             # Build prompt
             prompt = self._build_prompt(request)
 
+            self.logger.debug(
+                "Executing Codex API request",
+                extra={
+                    "agent": "codex",
+                    "model": self.model,
+                    "prompt_length": len(prompt),
+                },
+            )
+
             # Call Codex API
             response = self.client.completions.create(
                 model=self.model,
@@ -105,6 +111,24 @@ class CodexClient(BaseAgent):
 
             # Extract content
             content = response.choices[0].text if response.choices else ""
+            tokens_used = response.usage.prompt_tokens + response.usage.completion_tokens
+            finish_reason = (
+                response.choices[0].finish_reason if response.choices else None
+            )
+
+            self.logger.info(
+                "Codex API request completed",
+                extra={
+                    "agent": "codex",
+                    "model": self.model,
+                    "execution_time": execution_time,
+                    "prompt_tokens": response.usage.prompt_tokens,
+                    "completion_tokens": response.usage.completion_tokens,
+                    "total_tokens": tokens_used,
+                    "content_length": len(content),
+                    "finish_reason": finish_reason,
+                },
+            )
 
             return AgentResponse(
                 content=content,
@@ -114,24 +138,43 @@ class CodexClient(BaseAgent):
                         "prompt_tokens": response.usage.prompt_tokens,
                         "completion_tokens": response.usage.completion_tokens,
                     },
-                    "finish_reason": response.choices[0].finish_reason
-                    if response.choices
-                    else None,
+                    "finish_reason": finish_reason,
                 },
-                tokens_used=response.usage.prompt_tokens
-                + response.usage.completion_tokens,
+                tokens_used=tokens_used,
                 execution_time=execution_time,
             )
 
         except openai.APIError as e:
             execution_time = time.time() - start_time
+            status_code = getattr(e, "status_code", None)
+            self.logger.error(
+                "Codex API error",
+                exc_info=True,
+                extra={
+                    "agent": "codex",
+                    "model": self.model,
+                    "error": str(e),
+                    "status_code": status_code,
+                    "execution_time": execution_time,
+                },
+            )
             raise CodexError(
                 f"Codex API error: {str(e)}",
                 api_error=str(e),
-                status_code=getattr(e, "status_code", None),
+                status_code=status_code,
             ) from e
         except Exception as e:
             execution_time = time.time() - start_time
+            self.logger.error(
+                "Unexpected error in Codex API request",
+                exc_info=True,
+                extra={
+                    "agent": "codex",
+                    "model": self.model,
+                    "error": str(e),
+                    "execution_time": execution_time,
+                },
+            )
             raise CodexError(
                 f"Unexpected error: {str(e)}",
                 api_error=str(e),
@@ -150,6 +193,16 @@ class CodexClient(BaseAgent):
         try:
             prompt = self._build_prompt(request)
 
+            self.logger.debug(
+                "Starting Codex API stream",
+                extra={
+                    "agent": "codex",
+                    "model": self.model,
+                    "prompt_length": len(prompt),
+                },
+            )
+
+            chunk_count = 0
             stream = self.client.completions.create(
                 model=self.model,
                 prompt=prompt,
@@ -163,11 +216,39 @@ class CodexClient(BaseAgent):
                 if chunk.choices:
                     content = chunk.choices[0].text
                     if content:
+                        chunk_count += 1
                         yield content
 
+            self.logger.debug(
+                "Codex API stream completed",
+                extra={
+                    "agent": "codex",
+                    "model": self.model,
+                    "chunk_count": chunk_count,
+                },
+            )
+
         except openai.APIError as e:
+            self.logger.error(
+                "Codex API streaming error",
+                exc_info=True,
+                extra={
+                    "agent": "codex",
+                    "model": self.model,
+                    "error": str(e),
+                },
+            )
             yield f"Error: Codex API error: {str(e)}"
         except Exception as e:
+            self.logger.error(
+                "Unexpected error in Codex API stream",
+                exc_info=True,
+                extra={
+                    "agent": "codex",
+                    "model": self.model,
+                    "error": str(e),
+                },
+            )
             yield f"Error: {str(e)}"
 
     def _build_prompt(self, request: AgentRequest) -> str:

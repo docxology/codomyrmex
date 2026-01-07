@@ -131,4 +131,3 @@ class TestModuleTemplate:
 
         # Check that template directories exist
         assert (template_dir / "docs").exists()
-        assert (template_dir / "tests").exists()

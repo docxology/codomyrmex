@@ -18,12 +18,16 @@ from pathlib import Path
 from typing import Dict, Any
 
 # Add src to path for importing Codomyrmex modules
-current_dir = Path(__file__).parent
-project_root = current_dir.parent.parent
-# Setup paths
-root_dir = Path(__file__).resolve().parents[4]
+# Add src to path for importing Codomyrmex modules
+current_dir = Path(__file__).resolve().parent
+# Setup paths: scripts/fpf/examples -> scripts/fpf -> scripts -> root
+# So root is 3 levels up from current_dir
+root_dir = current_dir.parent.parent.parent
+
 sys.path.insert(0, str(root_dir / "src"))
 sys.path.insert(0, str(root_dir / "scripts"))
+# Add common tools to path
+sys.path.insert(0, str(root_dir / "scripts/tools/_common"))
 
 # Import common utilities
 from config_loader import load_config

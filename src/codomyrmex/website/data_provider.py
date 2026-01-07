@@ -34,11 +34,15 @@ class DataProvider:
 
         for item in src_path.iterdir():
             if item.is_dir() and (item / "__init__.py").exists():
+                description = self._get_description(item)
+                if description == "No description available":
+                    description = self._get_description_from_markdown(item)
+
                 modules.append({
                     "name": item.name,
                     "status": "Active",
                     "path": str(item.relative_to(self.root_dir)),
-                    "description": self._get_description(item),
+                    "description": description,
                     "submodules": self._get_submodules(item)
                 })
         
@@ -73,11 +77,15 @@ class DataProvider:
                 # Skip non-agent directories like 'tests'
                 if item.name in ["tests", "__pycache__"]:
                     continue
+                description = self._get_description(item)
+                if description == "No description available":
+                    description = self._get_description_from_markdown(item)
+                
                 agents.append({
                     "name": item.name,
                     "status": "Available",
                     "path": str(item.relative_to(self.root_dir)),
-                    "description": self._get_description(item),
+                    "description": description,
                     "type": self._get_agent_type(item.name)
                 })
         
@@ -125,12 +133,14 @@ class DataProvider:
                 continue
                 
             rel_path = path.relative_to(scripts_dir)
+            title, description = self._get_script_metadata(path)
             
             scripts.append({
                 "name": str(rel_path),
+                "title": title,
                 "path": str(rel_path),
                 "full_path": str(path),
-                "description": self._get_script_docstring(path)
+                "description": description
             })
             
         return sorted(scripts, key=lambda x: x["name"])
@@ -150,25 +160,54 @@ class DataProvider:
             except Exception:
                 pass
         return "No description available"
-
-    def _get_script_docstring(self, script_path: Path) -> str:
-        """Extracts the docstring from a python script."""
+        
+    def _get_script_metadata(self, script_path: Path) -> tuple[str, str]:
+        """Extracts title and description from script."""
+        title = script_path.name
+        description = "No description available"
+        
         try:
             content = script_path.read_text(encoding="utf-8")
-            # Very basic parsing
+            
+            # Extract docstring
+            docstring = None
             if '"""' in content:
                 start = content.find('"""') + 3
                 end = content.find('"""', start)
                 if end != -1:
-                    return content[start:end].strip()
-            if "'''" in content:
+                    docstring = content[start:end].strip()
+            elif "'''" in content:
                 start = content.find("'''") + 3
                 end = content.find("'''", start)
                 if end != -1:
-                    return content[start:end].strip()
+                    docstring = content[start:end].strip()
+            
+            if docstring:
+                lines = docstring.split('\n')
+                # Try to find a title
+                # 1. explicit "Title: ..."
+                for line in lines:
+                    if line.strip().lower().startswith("title:"):
+                        title = line.split(":", 1)[1].strip()
+                        break
+                else:
+                    # 2. First non-empty line
+                    for line in lines:
+                        if line.strip():
+                            title = line.strip()
+                            break
+                
+                description = docstring
+                
         except Exception:
             pass
-        return "No description available"
+            
+        return title, description
+
+    def _get_script_docstring(self, script_path: Path) -> str:
+        """Deprecated: use _get_script_metadata instead."""
+        _, desc = self._get_script_metadata(script_path)
+        return desc
 
     def _get_description_from_markdown(self, agent_dir: Path) -> str:
         """Attempts to read the description from AGENTS.md or README.md."""

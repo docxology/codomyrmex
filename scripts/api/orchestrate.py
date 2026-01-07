@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+Title: API Module CLI
 API Module Orchestrator
 
 Thin orchestrator script providing CLI access to api module functionality.

@@ -13,9 +13,11 @@
     {% for script in scripts %}
     <div class="card script-card" data-script-name="{{ script.path|lower }}">
         <div class="card-title">
-            <span class="script-name">{{ script.path.split('/')[-1] }}</span>
+            <span class="script-name">{{ script.title }}</span>
         </div>
-        <span class="script-path" title="{{ script.path }}">{{ script.path }}</span>
+        <div class="script-meta">
+            <code class="script-path" title="{{ script.path }}">{{ script.path }}</code>
+        </div>
         <p class="script-description">
             {{ script.description }}
         </p>
@@ -40,23 +42,23 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('script-search');
-    const cards = document.querySelectorAll('.script-card');
-    
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            cards.forEach(card => {
-                const name = card.dataset.scriptName;
-                if (name.includes(query)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('script-search');
+        const cards = document.querySelectorAll('.script-card');
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                cards.forEach(card => {
+                    const name = card.dataset.scriptName;
+                    if (name.includes(query)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
-        });
-    }
-});
+        }
+    });
 </script>
 {% endblock %}

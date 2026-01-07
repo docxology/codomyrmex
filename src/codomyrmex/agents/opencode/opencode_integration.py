@@ -3,9 +3,6 @@
 from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
 
 
 class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
@@ -38,8 +35,26 @@ class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
         response = self.agent.execute(request)
 
         if not response.is_success():
-            logger.error(f"OpenCode code generation failed: {response.error}")
+            self.logger.error(
+                "OpenCode code generation failed",
+                extra={
+                    "agent": "opencode",
+                    "language": language,
+                    "error": response.error,
+                    "execution_time": response.execution_time,
+                },
+            )
             raise RuntimeError(f"Code generation failed: {response.error}")
+
+        self.logger.debug(
+            "OpenCode code generation succeeded",
+            extra={
+                "agent": "opencode",
+                "language": language,
+                "content_length": len(response.content),
+                "execution_time": response.execution_time,
+            },
+        )
 
         return response.content
 

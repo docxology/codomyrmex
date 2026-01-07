@@ -3,9 +3,6 @@
 from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
 
 
 class CodexIntegrationAdapter(AgentIntegrationAdapter):
@@ -38,8 +35,27 @@ class CodexIntegrationAdapter(AgentIntegrationAdapter):
         response = self.agent.execute(request)
 
         if not response.is_success():
-            logger.error(f"Codex code generation failed: {response.error}")
+            self.logger.error(
+                "Codex code generation failed",
+                extra={
+                    "agent": "codex",
+                    "language": language,
+                    "error": response.error,
+                    "execution_time": response.execution_time,
+                },
+            )
             raise RuntimeError(f"Code generation failed: {response.error}")
+
+        self.logger.debug(
+            "Codex code generation succeeded",
+            extra={
+                "agent": "codex",
+                "language": language,
+                "content_length": len(response.content),
+                "execution_time": response.execution_time,
+                "tokens_used": response.tokens_used,
+            },
+        )
 
         return response.content
 

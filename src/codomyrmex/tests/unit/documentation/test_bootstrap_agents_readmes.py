@@ -8,10 +8,7 @@ import tempfile
 from pathlib import Path
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
-# Import the bootstrapper
-import sys
-sys.path.insert(0, str(Path(__file__).resolve().parents[5] / 'scripts' / 'documentation'))
-from bootstrap_agents_readmes import DocumentationBootstrapper
+from codomyrmex.documentation.scripts.bootstrap_agents_readmes import DocumentationBootstrapper
 
 
 class TestDocumentationBootstrapper:

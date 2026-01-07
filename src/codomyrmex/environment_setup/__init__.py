@@ -14,6 +14,7 @@ Available functions:
 - is_uv_environment
 - ensure_dependencies_installed
 - check_and_setup_env_vars
+- validate_python_version
 """
 
 from .env_checker import (
@@ -21,6 +22,7 @@ from .env_checker import (
     ensure_dependencies_installed,
     is_uv_available,
     is_uv_environment,
+    validate_python_version,
 )
 
 __all__ = [
@@ -28,4 +30,5 @@ __all__ = [
     "is_uv_environment",
     "ensure_dependencies_installed",
     "check_and_setup_env_vars",
+    "validate_python_version",
 ]

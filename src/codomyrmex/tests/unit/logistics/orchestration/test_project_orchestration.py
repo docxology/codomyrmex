@@ -209,9 +209,8 @@ class TestProjectOrchestration:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex import logistics
-            from codomyrmex.logistics.orchestration.project import __version__
-            assert __version__ == "0.1.0"
+        from codomyrmex.logistics.orchestration.project import __version__
+        assert __version__ == "0.1.0"
 
     def test_project_orchestration_all_exports(self, code_dir):
         """Test that project_orchestration exports all expected symbols."""
