@@ -1,0 +1,41 @@
+{
+  "analysis": {
+    "target_file": "src/codomyrmex/__init__.py",
+    "project_path": "src/",
+    "analysis_types": [
+      "basic",
+      "style",
+      "complexity"
+    ],
+    "severity_filter": "all",
+    "include_patterns": [
+      "*.py"
+    ],
+    "exclude_patterns": [
+      "*/tests/*",
+      "*/__pycache__/*",
+      "*/node_modules/*"
+    ]
+  },
+  "tools": {
+    "python": {
+      "pylint": true,
+      "flake8": true,
+      "mypy": false
+    },
+    "general": {
+      "complexity": true,
+      "maintainability": true
+    }
+  },
+  "output": {
+    "format": "json",
+    "file": "output/static_analysis_results.json",
+    "include_details": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/static_analysis_example.log"
+  }
+}
+

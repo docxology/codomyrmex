@@ -1,0 +1,25 @@
+# examples
+
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [output](output/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+
+## Overview
+
+Example implementations and demonstrations.
+
+## Directory Contents
+No files or subdirectories.
+
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [ollama_integration](../README.md)
+- **Project Root**: [README](../../../README.md)
+

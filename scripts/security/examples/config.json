@@ -1,0 +1,52 @@
+{
+  "audit": {
+    "target_path": "src/",
+    "scan_types": [
+      "vulnerabilities",
+      "secrets",
+      "compliance"
+    ],
+    "vulnerabilities": {
+      "min_severity": "low",
+      "categories": [
+        "injection",
+        "xss",
+        "authentication",
+        "authorization"
+      ]
+    },
+    "secrets": {
+      "patterns": [
+        "*.py",
+        "*.js",
+        "*.json",
+        "*.yaml",
+        "*.yml"
+      ],
+      "exclude_patterns": [
+        "*/node_modules/*",
+        "*/__pycache__/*"
+      ]
+    },
+    "compliance_standards": [
+      "OWASP",
+      "NIST",
+      "CWE"
+    ]
+  },
+  "reporting": {
+    "format": "detailed",
+    "include_recommendations": true,
+    "risk_threshold": "medium"
+  },
+  "output": {
+    "format": "json",
+    "file": "output/security_audit_results.json",
+    "include_details": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/security_audit_example.log"
+  }
+}
+

@@ -1,0 +1,78 @@
+{
+  "model_name": "rnj-1:8b",
+  "description": "Configuration for rnj-1:8b model with 32K context window",
+  "context_window": 32768,
+  "execution_options": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": 40,
+    "repeat_penalty": 1.1,
+    "max_tokens": 2048,
+    "timeout": 300
+  },
+  "presets": {
+    "fast": {
+      "temperature": 0.1,
+      "top_p": 0.5,
+      "max_tokens": 512,
+      "timeout": 60
+    },
+    "creative": {
+      "temperature": 0.9,
+      "top_p": 0.95,
+      "max_tokens": 2048,
+      "timeout": 300
+    },
+    "balanced": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_tokens": 1024,
+      "timeout": 180
+    },
+    "precise": {
+      "temperature": 0.3,
+      "top_p": 0.7,
+      "max_tokens": 2048,
+      "timeout": 300
+    },
+    "long_form": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_tokens": 4096,
+      "timeout": 600
+    }
+  },
+  "recommended_settings": {
+    "code_generation": {
+      "temperature": 0.2,
+      "top_p": 0.8,
+      "max_tokens": 2048,
+      "format": "text"
+    },
+    "creative_writing": {
+      "temperature": 0.9,
+      "top_p": 0.95,
+      "max_tokens": 2048,
+      "format": "text"
+    },
+    "analysis": {
+      "temperature": 0.5,
+      "top_p": 0.9,
+      "max_tokens": 2048,
+      "format": "json"
+    },
+    "conversation": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_tokens": 1024,
+      "format": "text"
+    }
+  },
+  "notes": [
+    "Model supports 32K context window",
+    "All parameters are modular and independently configurable",
+    "Use context_window=32768 for full context capability",
+    "Recommended max_tokens: 2048 for balanced performance"
+  ]
+}
+

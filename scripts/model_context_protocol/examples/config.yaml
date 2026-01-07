@@ -1,0 +1,79 @@
+# Model Context Protocol Example Configuration
+# Demonstrates configuration options for MCP tool calls and validation
+
+# Output settings
+output:
+  format: json
+  file: output/model_context_protocol_results.json
+  directory: output/model_context_protocol
+
+# Logging configuration
+logging:
+  level: INFO
+  file: logs/model_context_protocol_example.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# MCP Configuration
+mcp:
+  # Validation settings
+  strict_validation: true
+  validate_schemas: true
+  allow_extra_fields: true
+
+  # Tool call settings
+  max_arguments: 50
+  max_argument_depth: 10
+  supported_tools:
+    - file_reader
+    - code_analyzer
+    - database_query
+    - api_request
+    - system_info
+    - file_operation
+
+  # Error handling
+  include_error_details: true
+  error_detail_depth: 5
+  standardize_error_types: true
+
+# Demonstration settings
+demonstration:
+  # Sample data
+  tool_calls_count: 4
+  tool_results_count: 4
+  error_details_count: 4
+
+  # Validation
+  validate_all_calls: true
+  validate_all_results: true
+  test_error_scenarios: true
+
+  # Workflow simulation
+  simulate_workflows: true
+  workflow_steps: 4
+
+  # Export settings
+  export_examples: true
+  export_schema_docs: true
+  include_validation_results: true
+
+# Schema settings
+schema:
+  # Pydantic model configuration
+  validate_assignment: true
+  extra_fields_policy: allow
+  strict_mode: false
+
+  # Serialization
+  json_encoders: {}
+  json_schema_mode: validation
+
+# Integration settings
+integration:
+  # Codomyrmex module integration
+  use_logging_monitoring: true
+  use_environment_setup: true
+
+  # Tool execution simulation
+  simulate_tool_execution: true
+  mock_external_dependencies: false

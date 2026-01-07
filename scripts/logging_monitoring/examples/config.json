@@ -1,0 +1,21 @@
+{
+  "logging": {
+    "level": "INFO",
+    "file": "logs/logging_monitoring_example.log",
+    "output_type": "TEXT",
+    "format": "DETAILED"
+  },
+  "output": {
+    "format": "json",
+    "file": "output/logging_monitoring_results.json"
+  },
+  "module": {
+    "logger_prefix": "example",
+    "components": [
+      "main",
+      "component1",
+      "component2"
+    ]
+  }
+}
+

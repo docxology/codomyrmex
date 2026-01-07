@@ -1,0 +1,111 @@
+{
+  "output": {
+    "format": "json",
+    "file": "output/modeling_3d_results.json",
+    "directory": "output/modeling_3d"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/modeling_3d_example.log",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  },
+  "scene": {
+    "name": "demo_scene",
+    "background_color": [0.2, 0.3, 0.4],
+    "ambient_light": [0.1, 0.1, 0.1],
+    "fog_enabled": false,
+    "fog_color": [0.5, 0.5, 0.5],
+    "fog_density": 0.01,
+    "default_material": "default",
+    "cast_shadows": true,
+    "receive_shadows": true,
+    "wireframe_mode": false
+  },
+  "rendering": {
+    "renderer": "opengl",
+    "antialiasing": true,
+    "shadows_enabled": true,
+    "reflections_enabled": false,
+    "post_processing": true,
+    "resolution_x": 1920,
+    "resolution_y": 1080,
+    "output_format": "png",
+    "save_intermediate_frames": false,
+    "max_fps": 60,
+    "vsync": true,
+    "gpu_acceleration": true
+  },
+  "camera": {
+    "fov": 60,
+    "near_clip": 0.1,
+    "far_clip": 1000.0,
+    "aspect_ratio": 1.777,
+    "movement_speed": 5.0,
+    "rotation_speed": 2.0,
+    "zoom_speed": 10.0
+  },
+  "lighting": {
+    "ambient_intensity": 0.2,
+    "shadow_map_size": 2048,
+    "shadow_cascades": 4,
+    "directional_lights": 1,
+    "point_lights": 2,
+    "spot_lights": 1
+  },
+  "materials": {
+    "library_path": "materials/",
+    "default_diffuse": [0.8, 0.8, 0.8],
+    "default_specular": [0.1, 0.1, 0.1],
+    "default_shininess": 32,
+    "texture_filtering": "linear",
+    "mipmapping": true,
+    "anisotropy": 4
+  },
+  "mesh": {
+    "supported_formats": ["obj", "stl", "ply", "fbx", "dae", "gltf"],
+    "auto_triangulate": true,
+    "calculate_normals": true,
+    "optimize_geometry": true,
+    "merge_vertices": true,
+    "generate_uvs": true,
+    "flip_uvs": false
+  },
+  "animation": {
+    "frame_rate": 30,
+    "interpolation": "linear",
+    "loop_animations": true,
+    "auto_keyframe": false,
+    "keyframe_reduction": true
+  },
+  "physics": {
+    "gravity": [0, -9.81, 0],
+    "fixed_timestep": 0.016,
+    "max_substeps": 10,
+    "collision_margin": 0.04,
+    "broadphase_algorithm": "dbvt",
+    "narrowphase_algorithm": "gjk"
+  },
+  "demonstration": {
+    "create_sample_scene": true,
+    "demonstrate_rendering": true,
+    "show_mesh_operations": true,
+    "enable_animations": true,
+    "run_physics_simulation": true,
+    "geometry_objects": 4,
+    "material_types": 4,
+    "light_sources": 3,
+    "camera_positions": 3,
+    "measure_render_times": true,
+    "track_frame_rates": true,
+    "monitor_memory_usage": true
+  },
+  "integration": {
+    "use_logging_monitoring": true,
+    "use_performance_monitoring": true,
+    "export_scene_data": true,
+    "export_render_results": true,
+    "save_screenshots": true,
+    "graceful_failures": true,
+    "detailed_error_reporting": true
+  }
+}
