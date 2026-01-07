@@ -256,7 +256,7 @@ class WorkflowManager:
 
         Args:
             config_dir (Optional[Path]): Directory for storing workflow definitions.
-                Defaults to .codomyrmex/workflows in current directory.
+                Defaults to config/workflows/production in current directory.
             enable_performance_monitoring (bool): Whether to enable performance monitoring.
                 Defaults to True if performance monitoring is available.
 
@@ -274,7 +274,11 @@ class WorkflowManager:
             # Disable performance monitoring
             manager = WorkflowManager(enable_performance_monitoring=False)
         """
-        self.config_dir = config_dir or Path.cwd() / ".codomyrmex" / "workflows"
+        if config_dir is None:
+            self.config_dir = Path.cwd() / "config" / "workflows" / "production"
+        else:
+            self.config_dir = Path(config_dir)
+        
         self.config_dir.mkdir(parents=True, exist_ok=True)
 
         # Workflow storage

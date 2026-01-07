@@ -19,13 +19,16 @@ import time
 from pathlib import Path
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from codomyrmex.performance.performance_monitor import profile_function, get_system_metrics
 from codomyrmex.performance.resource_tracker import ResourceTracker
-from examples._common.config_loader import load_config
-from examples._common.example_runner import ExampleRunner
-from examples._common.utils import print_section, print_results
+from _common.config_loader import load_config
+from _common.example_runner import ExampleRunner
+from _common.utils import print_section, print_results
 
 def sample_function(n):
     """Sample function to profile."""

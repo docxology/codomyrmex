@@ -17,14 +17,17 @@ import sys
 from pathlib import Path
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from codomyrmex.config_management.config_loader import Configuration
 from codomyrmex.config_management.config_validator import ConfigSchema
 from codomyrmex.config_management.config_migrator import ConfigMigrator
-from examples._common.config_loader import load_config
-from examples._common.example_runner import ExampleRunner
-from examples._common.utils import print_section, print_results
+from _common.config_loader import load_config
+from _common.example_runner import ExampleRunner
+from _common.utils import print_section, print_results
 
 def main():
     """Run the config management example."""

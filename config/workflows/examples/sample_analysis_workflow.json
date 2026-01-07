@@ -1,0 +1,66 @@
+{
+  "name": "sample_analysis_workflow",
+  "steps": [
+    {
+      "name": "data_analysis",
+      "module": "data_visualization",
+      "action": "create_bar_chart",
+      "parameters": {
+        "data": {
+          "A": 10,
+          "B": 20,
+          "C": 15
+        },
+        "title": "Sample Data"
+      },
+      "dependencies": [],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    },
+    {
+      "name": "report_generation",
+      "module": "documentation",
+      "action": "generate_docs",
+      "parameters": {
+        "source_path": ".",
+        "output_path": "./output"
+      },
+      "dependencies": [
+        "data_analysis"
+      ],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    },
+    {
+      "name": "security_scan",
+      "module": "security_audit",
+      "action": "scan_codebase",
+      "parameters": {
+        "path": "."
+      },
+      "dependencies": [],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    },
+    {
+      "name": "final_report",
+      "module": "documentation",
+      "action": "generate_docs",
+      "parameters": {
+        "source_path": "./output",
+        "output_path": "./final"
+      },
+      "dependencies": [
+        "report_generation",
+        "security_scan"
+      ],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    }
+  ]
+}
+

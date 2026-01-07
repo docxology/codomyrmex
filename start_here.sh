@@ -134,10 +134,10 @@ run_quick_demo() {
     echo -e "\n${CYAN}🏃 Running Codomyrmex Quick Demo...${NC}"
     check_uv
 
-    if [[ -f "scripts/development/example_usage.py" ]]; then
-        uv run python scripts/development/example_usage.py
+    if [[ -f "scripts/tools/example_usage.py" ]]; then
+        uv run python scripts/tools/example_usage.py
     else
-        echo -e "${YELLOW}⚠️  scripts/development/example_usage.py not found. Running basic demo...${NC}"
+        echo -e "${YELLOW}⚠️  scripts/tools/example_usage.py not found. Running basic demo...${NC}"
         uv run python -c "
 import sys
 sys.path.insert(0, 'src')
@@ -568,25 +568,25 @@ run_examples_tutorials() {
     
     case $ex_choice in
         1)
-            if [[ -f "scripts/development/example_usage.py" ]]; then
-                uv run python scripts/development/example_usage.py
+            if [[ -f "scripts/tools/example_usage.py" ]]; then
+                uv run python scripts/tools/example_usage.py
             else
                 echo -e "${YELLOW}⚠️  Example script not found${NC}"
             fi
             ;;
         2)
-            if [[ -d "scripts/examples" ]]; then
+            if [[ -d "scripts/documentation/examples" ]]; then
                 echo -e "${CYAN}Available example scripts:${NC}"
-                find scripts/examples -name "*.sh" -o -name "*.py" | head -20
+                find scripts/documentation/examples -name "*.sh" -o -name "*.py" | head -20
                 echo ""
-                echo -e "${YELLOW}To run an example, navigate to scripts/examples/ and execute the script${NC}"
+                echo -e "${YELLOW}To run an example, navigate to scripts/documentation/examples/ and execute the script${NC}"
             else
-                echo -e "${YELLOW}⚠️  Examples directory not found${NC}"
+                echo -e "${YELLOW}⚠️  Examples directory not found at scripts/documentation/examples${NC}"
             fi
             ;;
         3)
-            if [[ -f "scripts/development/select_example.sh" ]]; then
-                bash scripts/development/select_example.sh
+            if [[ -f "scripts/tools/select_example.sh" ]]; then
+                bash scripts/tools/select_example.sh
             else
                 echo -e "${YELLOW}⚠️  Example selector not found${NC}"
             fi

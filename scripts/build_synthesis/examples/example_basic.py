@@ -29,8 +29,10 @@ from pathlib import Path
 # Add src to path
 current_dir = Path(__file__).parent
 project_root = current_dir.parent.parent
-sys.path.insert(0, str(project_root / "src"))
-sys.path.insert(0, str(project_root / "examples" / "_common"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from codomyrmex.build_synthesis import (
     BuildManager,

@@ -226,7 +226,7 @@ def custom_validation(self) -> List[str]:
 
 ### Hook Configuration
 
-Modify `.githooks/pre-commit` to adjust validation behavior:
+Modify `scripts/git-hooks/pre-commit` to adjust validation behavior:
 
 ```bash
 # Add custom validation commands

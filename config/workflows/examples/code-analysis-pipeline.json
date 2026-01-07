@@ -1,0 +1,42 @@
+{
+  "name": "code-analysis-pipeline",
+  "steps": [
+    {
+      "name": "analyze_code",
+      "module": "static_analysis",
+      "action": "analyze_code_quality",
+      "parameters": {
+        "path": "."
+      },
+      "dependencies": [],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    },
+    {
+      "name": "generate_insights",
+      "module": "ai_code_editing",
+      "action": "generate_code_insights",
+      "parameters": {
+        "analysis_data": "{{analyze_code.output}}"
+      },
+      "dependencies": [],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    },
+    {
+      "name": "create_visualization",
+      "module": "data_visualization",
+      "action": "create_analysis_chart",
+      "parameters": {
+        "data": "{{generate_insights.output}}"
+      },
+      "dependencies": [],
+      "timeout": null,
+      "retry_count": 0,
+      "max_retries": 3
+    }
+  ]
+}
+

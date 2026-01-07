@@ -1,0 +1,123 @@
+# API Keys Configuration Template
+# Defines API key templates, validation rules, and rotation policies
+# Use environment variables for actual keys: ${API_KEY_NAME}
+
+# API Key Definitions
+api_keys:
+  # LLM Provider API Keys
+  openai_api_key:
+    description: "OpenAI API key for GPT models"
+    env_var: "OPENAI_API_KEY"
+    required: true
+    validation:
+      pattern: "^sk-[a-zA-Z0-9]{32,}$"
+      min_length: 20
+    rotation:
+      enabled: true
+      schedule: "90_days"
+      advance_notice_days: 7
+
+  anthropic_api_key:
+    description: "Anthropic API key for Claude models"
+    env_var: "ANTHROPIC_API_KEY"
+    required: false
+    validation:
+      pattern: "^sk-ant-[a-zA-Z0-9_-]{32,}$"
+      min_length: 20
+    rotation:
+      enabled: true
+      schedule: "90_days"
+
+  google_api_key:
+    description: "Google API key for Gemini models"
+    env_var: "GOOGLE_API_KEY"
+    required: false
+    validation:
+      pattern: "^AIzaSy[a-zA-Z0-9_-]{35}$"
+      min_length: 39
+    rotation:
+      enabled: true
+      schedule: "90_days"
+
+  # Service API Keys
+  github_token:
+    description: "GitHub personal access token"
+    env_var: "GITHUB_TOKEN"
+    required: true
+    validation:
+      pattern: "^ghp_[a-zA-Z0-9]{36}$|^github_pat_[a-zA-Z0-9_]{82}$"
+      min_length: 40
+    rotation:
+      enabled: true
+      schedule: "90_days"
+
+  slack_webhook:
+    description: "Slack webhook URL for notifications"
+    env_var: "SLACK_WEBHOOK_URL"
+    required: false
+    validation:
+      pattern: "^https://hooks\\.slack\\.com/services/[A-Z0-9]+/[A-Z0-9]+/[a-zA-Z0-9]+$"
+    rotation:
+      enabled: false
+
+# API Key Validation Rules
+validation:
+  # Format validation patterns
+  patterns:
+    api_keys:
+      pattern: "^[a-zA-Z0-9_-]{20,}$"
+      description: "API keys should be at least 20 characters"
+    tokens:
+      pattern: "^[a-zA-Z0-9_-]{32,}$"
+      description: "Tokens should be at least 32 characters"
+    webhooks:
+      pattern: "^https://[a-zA-Z0-9.-]+/[a-zA-Z0-9/_-]+$"
+      description: "Webhook URLs must be valid HTTPS URLs"
+
+  # Required keys by environment
+  required_by_environment:
+    development:
+      - openai_api_key
+      - github_token
+    staging:
+      - openai_api_key
+      - github_token
+    production:
+      - openai_api_key
+      - github_token
+
+# API Key Rotation Configuration
+rotation:
+  enabled: true
+  default_schedule: "90_days"
+  advance_notice_days: 7
+  
+  schedules:
+    api_keys: "90_days"
+    service_tokens: "60_days"
+    webhooks: "365_days"
+
+  notifications:
+    enabled: true
+    channels:
+      - email
+      - slack
+    advance_notice_days: 7
+
+# API Key Storage
+storage:
+  primary:
+    type: "environment"
+    description: "Environment variables (most secure for containers)"
+  
+  backup:
+    - type: "aws_secrets_manager"
+      region: "${AWS_REGION}"
+      enabled: "${USE_AWS_SECRETS:true}"
+    - type: "azure_key_vault"
+      vault_url: "${AZURE_VAULT_URL}"
+      enabled: "${USE_AZURE_VAULT:false}"
+    - type: "gcp_secret_manager"
+      project_id: "${GCP_PROJECT_ID}"
+      enabled: "${USE_GCP_SECRETS:false}"
+

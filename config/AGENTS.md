@@ -6,6 +6,7 @@
 - **Children**:
     - [examples](examples/AGENTS.md)
     - [templates](templates/AGENTS.md)
+    - [workflows](workflows/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -13,13 +14,14 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Configuration templates and examples.
+Configuration templates, examples, and workflow definitions.
 
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `examples/` – Directory containing examples components
 - `templates/` – Directory containing templates components
+- `workflows/` – Directory containing workflow definitions
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

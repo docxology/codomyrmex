@@ -4,7 +4,7 @@ This document describes the JSON schema for workflow definitions, parameter subs
 
 ## Overview
 
-Workflows in Codomyrmex are defined as JSON files that specify a sequence of steps, each representing an action to be executed in a Codomyrmex module. Workflows are stored in `.codomyrmex/workflows/` directory and loaded automatically when the WorkflowManager is initialized.
+Workflows in Codomyrmex are defined as JSON files that specify a sequence of steps, each representing an action to be executed in a Codomyrmex module. Workflows are stored in `config/workflows/production/` directory and loaded automatically when the WorkflowManager is initialized.
 
 ## JSON Schema
 
@@ -254,7 +254,7 @@ manager.create_workflow("invalid_workflow", steps)  # Will fail
 
 ## Workflow File Location
 
-Workflows are stored in JSON files in the `.codomyrmex/workflows/` directory. The filename should match the workflow name (e.g., `ai_analysis_workflow.json`).
+Workflows are stored in JSON files in the `config/workflows/production/` directory. The filename should match the workflow name (e.g., `ai_analysis_workflow.json`).
 
 ### Loading Workflows
 
@@ -263,7 +263,7 @@ Workflows are automatically loaded when WorkflowManager is initialized:
 ```python
 from codomyrmex.project_orchestration import WorkflowManager
 
-# Workflows are loaded from .codomyrmex/workflows/ automatically
+# Workflows are loaded from config/workflows/production/ automatically
 manager = WorkflowManager()
 
 # List all loaded workflows
@@ -275,7 +275,7 @@ workflows = manager.list_workflows()
 Workflows are automatically saved when created with `save=True` (default):
 
 ```python
-manager.create_workflow("my_workflow", steps, save=True)  # Saved to .codomyrmex/workflows/my_workflow.json
+manager.create_workflow("my_workflow", steps, save=True)  # Saved to config/workflows/production/my_workflow.json
 ```
 
 ## Error Handling and Retry Logic

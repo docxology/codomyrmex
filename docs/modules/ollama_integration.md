@@ -269,7 +269,7 @@ config_manager.import_config("backup_config.json")
   "auto_start_server": true,
   "server_host": "localhost",
   "server_port": 11434,
-  "base_output_dir": "examples/output/ollama",
+  "base_output_dir": "scripts/output/examples/ollama",
   "save_all_outputs": true,
   "save_configs": true,
   "auto_cleanup_days": 30,
@@ -451,7 +451,7 @@ print(f"Average tokens/sec: {benchmark['avg_tokens_per_second']:.1f}")
 ## 📁 Output Structure
 
 ```
-examples/output/ollama/
+scripts/output/examples/ollama/
 ├── outputs/           # Model execution outputs
 │   ├── llama3.1:latest/
 │   │   ├── response_001.txt

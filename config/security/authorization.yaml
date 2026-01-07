@@ -1,0 +1,199 @@
+# Authorization Configuration Template
+# Defines permission and role definitions for access control
+
+# Roles Definition
+roles:
+  # Developer role
+  developer:
+    description: "Standard developer with read and limited write access"
+    permissions:
+      read:
+        - "projects"
+        - "workflows"
+        - "code_analysis"
+        - "documentation"
+        - "api_keys"  # Own keys only
+      write:
+        - "projects"  # Own projects only
+        - "workflows"  # Own workflows only
+      execute:
+        - "workflows"  # Own workflows only
+    restrictions:
+      - "Cannot access production resources"
+      - "Cannot modify system configuration"
+
+  # Admin role
+  admin:
+    description: "Administrator with full system access"
+    permissions:
+      read:
+        - "*"  # All resources
+      write:
+        - "*"  # All resources
+      execute:
+        - "*"  # All operations
+      delete:
+        - "*"  # All resources
+    restrictions: []
+
+  # Service role
+  service:
+    description: "Service account for automated operations"
+    permissions:
+      read:
+        - "workflows"
+        - "projects"
+        - "system_status"
+      write:
+        - "workflows"  # Limited to service workflows
+      execute:
+        - "workflows"  # Service workflows only
+    restrictions:
+      - "Cannot access user data"
+      - "Cannot modify user permissions"
+
+  # Viewer role
+  viewer:
+    description: "Read-only access for viewing resources"
+    permissions:
+      read:
+        - "projects"
+        - "workflows"
+        - "code_analysis"
+        - "documentation"
+      write: []
+      execute: []
+    restrictions:
+      - "Cannot modify any resources"
+      - "Cannot execute workflows"
+
+# Permission Definitions
+permissions:
+  # Resource permissions
+  resources:
+    projects:
+      actions:
+        - "create"
+        - "read"
+        - "update"
+        - "delete"
+        - "list"
+      scopes:
+        - "own"  # Own projects only
+        - "team"  # Team projects
+        - "all"  # All projects
+
+    workflows:
+      actions:
+        - "create"
+        - "read"
+        - "update"
+        - "delete"
+        - "execute"
+        - "list"
+      scopes:
+        - "own"
+        - "team"
+        - "all"
+
+    api_keys:
+      actions:
+        - "create"
+        - "read"
+        - "update"
+        - "delete"
+        - "list"
+      scopes:
+        - "own"  # Only own keys
+        - "all"  # All keys (admin only)
+
+    system:
+      actions:
+        - "read"
+        - "update"
+        - "configure"
+      scopes:
+        - "all"  # Admin only
+
+# Access Control Policies
+policies:
+  # Resource access policies
+  resource_access:
+    - name: "project_isolation"
+      description: "Users can only access their own projects by default"
+      rule: "user_id == resource.owner_id"
+      exceptions:
+        - role: "admin"
+        - role: "service"
+          condition: "resource.type == 'service_project'"
+
+    - name: "workflow_execution"
+      description: "Users can execute workflows they own or have been granted access"
+      rule: "user_id in resource.allowed_users or user_id == resource.owner_id"
+      exceptions:
+        - role: "admin"
+
+    - name: "api_key_management"
+      description: "Users can only manage their own API keys"
+      rule: "user_id == resource.owner_id"
+      exceptions:
+        - role: "admin"
+
+  # Operation policies
+  operation_policies:
+    - name: "rate_limiting"
+      description: "Rate limiting based on role"
+      rules:
+        developer:
+          requests_per_minute: 60
+          requests_per_hour: 1000
+        admin:
+          requests_per_minute: 300
+          requests_per_hour: 10000
+        service:
+          requests_per_minute: 100
+          requests_per_hour: 5000
+
+    - name: "resource_limits"
+      description: "Resource limits based on role"
+      rules:
+        developer:
+          max_projects: 10
+          max_workflows: 50
+          max_api_keys: 5
+        admin:
+          max_projects: -1  # Unlimited
+          max_workflows: -1
+          max_api_keys: -1
+
+# Role Assignment
+role_assignment:
+  # Default role for new users
+  default_role: "developer"
+  
+  # Role assignment rules
+  assignment_rules:
+    - condition: "user.email ends with '@admin.example.com'"
+      role: "admin"
+    - condition: "user.service_account == true"
+      role: "service"
+    - condition: "user.organization == 'viewers'"
+      role: "viewer"
+
+# Authorization Events
+events:
+  # Events to log
+  log_events:
+    - "permission_granted"
+    - "permission_denied"
+    - "role_assigned"
+    - "role_revoked"
+    - "resource_access_granted"
+    - "resource_access_denied"
+
+  # Events to alert on
+  alert_events:
+    - "unauthorized_access_attempt"
+    - "privilege_escalation_attempt"
+    - "suspicious_permission_change"
+

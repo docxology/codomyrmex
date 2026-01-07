@@ -41,7 +41,7 @@ class DocumentationBootstrapper:
     EXCLUDED_FILES = {
         'AGENTS.md',  # Don't include ourselves, but do include README.md
         '.git', '.gitignore', '.gitattributes', '.pre-commit-config.yaml',
-        '.editorconfig', '.githooks', '.encryption_key'
+        '.editorconfig', '.encryption_key'
     }
 
     def __init__(self, repo_root: Path):

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — examples/documentation/examples
+# Codomyrmex Agents — scripts/documentation/examples/examples
 
 ## Signposting
 - **Parent**: [Examples Root](../AGENTS.md)

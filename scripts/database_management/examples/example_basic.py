@@ -24,8 +24,10 @@ import tempfile
 import os
 
 # Add src and examples to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "examples"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from codomyrmex.database_management import (
     DatabaseManager,

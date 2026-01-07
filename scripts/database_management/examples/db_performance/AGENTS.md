@@ -1,4 +1,4 @@
-# Codomyrmex Agents — examples/database_management/db_performance
+# Codomyrmex Agents — scripts/database_management/examples/db_performance
 
 ## Signposting
 - **Parent**: [Db Performance](../AGENTS.md)

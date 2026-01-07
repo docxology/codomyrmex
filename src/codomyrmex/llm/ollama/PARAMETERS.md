@@ -136,7 +136,7 @@ The `OllamaConfig` dataclass provides modular configuration for the entire Ollam
 
 #### base_output_dir
 - **Type**: `str`
-- **Default**: "examples/output/ollama"
+- **Default**: "scripts/output/examples/ollama"
 - **Description**: Base directory for all output files.
 
 #### save_all_outputs

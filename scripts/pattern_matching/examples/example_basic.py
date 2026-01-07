@@ -42,8 +42,10 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 
 # Add src and examples to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "examples"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 # Using real pattern matching techniques with Python AST and regex
 # The advanced pattern_matching module has external dependencies, so this example

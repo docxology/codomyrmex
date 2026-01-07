@@ -1,4 +1,4 @@
-# Codomyrmex Agents — examples/ci_cd_automation/optimization_data
+# Codomyrmex Agents — scripts/ci_cd_automation/examples/optimization_data
 
 ## Signposting
 - **Parent**: [Optimization Data](../AGENTS.md)

@@ -5,6 +5,7 @@
 - **Children**:
     - [examples](examples/README.md)
     - [templates](templates/README.md)
+    - [workflows](workflows/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -13,13 +14,14 @@
 
 ## Overview
 
-Configuration templates and examples.
+Configuration templates, examples, and workflow definitions.
 
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
 - `examples/` – Subdirectory
 - `templates/` – Subdirectory
+- `workflows/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)

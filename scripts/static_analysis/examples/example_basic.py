@@ -41,7 +41,10 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from codomyrmex.static_analysis import (
     analyze_file,
@@ -55,9 +58,9 @@ from codomyrmex.static_analysis import (
     AnalysisResult,
     AnalysisSummary
 )
-from examples._common.config_loader import load_config
-from examples._common.example_runner import ExampleRunner
-from examples._common.utils import print_section, print_results, print_success, print_error, print_warning, ensure_output_dir
+from _common.config_loader import load_config
+from _common.example_runner import ExampleRunner
+from _common.utils import print_section, print_results, print_success, print_error, print_warning, ensure_output_dir
 
 
 def demonstrate_analysis_types_and_tools():

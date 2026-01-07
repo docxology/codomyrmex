@@ -305,7 +305,7 @@ class AgentsStructureValidator:
                 # Standard hidden directories/files to exclude from validation
                 standard_hidden = {
                     '.git', '.github', '.gitignore', '.gitattributes',
-                    '.pre-commit-config.yaml', '.editorconfig', '.githooks',
+                    '.pre-commit-config.yaml', '.editorconfig',
                     '.encryption_key'  # This might be sensitive
                 }
 

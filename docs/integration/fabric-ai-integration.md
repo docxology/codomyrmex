@@ -107,7 +107,7 @@ This commit adds comprehensive integration between Codomyrmex and Fabric AI fram
 
 ### **Interactive Setup**
 ```bash
-cd examples/output/fabric-integration
+cd scripts/output/examples/fabric-integration
 python3 setup_fabric_env.py
 ```
 

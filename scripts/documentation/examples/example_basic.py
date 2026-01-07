@@ -1,320 +1,499 @@
 #!/usr/bin/env python3
 """
-Example: Documentation - Automated Documentation Generation and Quality Assessment
+Example: API Documentation - OpenAPI Spec Generation
 
-This example demonstrates:
-- Documentation environment checking and setup
-- Automated documentation generation from code
-- Documentation quality assessment and reporting
-- Documentation consistency checking
-- Static site building and serving
+Demonstrates:
+- API documentation generation from code
+- OpenAPI specification creation
+- API spec validation
+- Documentation export and rendering
 
 Tested Methods:
-- check_doc_environment() - Verified in test_documentation.py::TestDocumentation::test_documentation_module_structure
-- install_dependencies() - Verified in test_documentation.py::TestDocumentation::test_documentation_module_structure
-- build_static_site() - Verified in test_documentation.py::TestDocumentation::test_documentation_module_structure
-- assess_site() - Verified in test_documentation.py::TestDocumentation::test_documentation_module_structure
-- DocumentationQualityAnalyzer - Verified in test_documentation.py::TestDocumentation::test_documentation_module_structure
-- aggregate_docs() - Verified in test_documentation.py::TestDocumentation::test_documentation_module_structure
+- generate_api_docs() - Verified in test_api_documentation.py::TestConvenienceFunctions::test_generate_api_docs_function
+- extract_api_specs() - Verified in test_api_documentation.py::TestConvenienceFunctions::test_extract_api_specs_function
+- generate_openapi_spec() - Verified in test_api_documentation.py::TestConvenienceFunctions::test_generate_openapi_spec_function
+- validate_openapi_spec() - Verified in test_api_documentation.py::TestConvenienceFunctions::test_validate_openapi_spec_function
 """
 
 import sys
 import os
 import tempfile
+import json
 from pathlib import Path
+from typing import Dict, Any, List, Optional
 
-# Add src and examples to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "examples"))
+# Add src to path
+project_root = Path(__file__).parent.parent.parent
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
-from codomyrmex.documentation import (
-    check_doc_environment,
-    install_dependencies,
-    build_static_site,
-    assess_site,
-    aggregate_docs,
-    validate_doc_versions,
-    DocumentationQualityAnalyzer,
-    generate_quality_report,
-    DocumentationConsistencyChecker,
+from config_loader import load_config
+from example_runner import ExampleRunner
+from utils import print_section, print_results, print_success, print_error, ensure_output_dir
+
+from codomyrmex.api.documentation import (
+    generate_api_docs,
+    extract_api_specs,
+    generate_openapi_spec,
+    validate_openapi_spec,
+    APIDocumentationGenerator,
+    OpenAPIGenerator,
+    APIDocumentation,
+    APIEndpoint,
+    APISchema
 )
-from _common.config_loader import load_config
-from _common.example_runner import ExampleRunner
-from _common.utils import print_section, print_results, ensure_output_dir
+from codomyrmex.logging_monitoring import setup_logging, get_logger
+
+logger = get_logger(__name__)
+
+
+def create_sample_api_endpoints() -> List[APIEndpoint]:
+    """Create sample API endpoints for demonstration."""
+    return [
+        APIEndpoint(
+            path="/users",
+            method="GET",
+            summary="Get users",
+            description="Retrieve a list of users with optional filtering",
+            parameters=[
+                {
+                    "name": "limit",
+                    "in": "query",
+                    "description": "Maximum number of users to return",
+                    "schema": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10}
+                },
+                {
+                    "name": "offset",
+                    "in": "query",
+                    "description": "Number of users to skip",
+                    "schema": {"type": "integer", "minimum": 0, "default": 0}
+                }
+            ],
+            responses={
+                "200": {
+                    "description": "Successful response",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "users": {"type": "array", "items": {"$ref": "#/components/schemas/User"}},
+                                    "total": {"type": "integer"},
+                                    "limit": {"type": "integer"},
+                                    "offset": {"type": "integer"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad request",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "error": {"type": "string"},
+                                    "message": {"type": "string"}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            tags=["Users"]
+        ),
+        APIEndpoint(
+            path="/users",
+            method="POST",
+            summary="Create user",
+            description="Create a new user account",
+            request_body={
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {"$ref": "#/components/schemas/NewUser"}
+                    }
+                }
+            },
+            responses={
+                "201": {
+                    "description": "User created successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {"$ref": "#/components/schemas/User"}
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Validation error",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "error": {"type": "string"},
+                                    "message": {"type": "string"}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            tags=["Users"]
+        ),
+        APIEndpoint(
+            path="/users/{userId}",
+            method="GET",
+            summary="Get user by ID",
+            description="Retrieve a specific user by their ID",
+            parameters=[
+                {
+                    "name": "userId",
+                    "in": "path",
+                    "required": True,
+                    "description": "Unique identifier of the user",
+                    "schema": {"type": "string", "format": "uuid"}
+                }
+            ],
+            responses={
+                "200": {
+                    "description": "User found",
+                    "content": {
+                        "application/json": {
+                            "schema": {"$ref": "#/components/schemas/User"}
+                        }
+                    }
+                },
+                "404": {
+                    "description": "User not found",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "error": {"type": "string"},
+                                    "message": {"type": "string"}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            tags=["Users"]
+        ),
+        APIEndpoint(
+            path="/products",
+            method="GET",
+            summary="Get products",
+            description="Retrieve a list of products with filtering options",
+            parameters=[
+                {
+                    "name": "category",
+                    "in": "query",
+                    "description": "Filter products by category",
+                    "schema": {"type": "string"}
+                },
+                {
+                    "name": "price_min",
+                    "in": "query",
+                    "description": "Minimum price filter",
+                    "schema": {"type": "number", "minimum": 0}
+                },
+                {
+                    "name": "price_max",
+                    "in": "query",
+                    "description": "Maximum price filter",
+                    "schema": {"type": "number", "minimum": 0}
+                }
+            ],
+            responses={
+                "200": {
+                    "description": "Successful response",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "products": {"type": "array", "items": {"$ref": "#/components/schemas/Product"}},
+                                    "total": {"type": "integer"}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            tags=["Products"]
+        )
+    ]
+
+
+def create_sample_schemas() -> Dict[str, Any]:
+    """Create sample OpenAPI schemas for demonstration."""
+    return {
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string", "format": "uuid"},
+                "username": {"type": "string", "minLength": 3, "maxLength": 50},
+                "email": {"type": "string", "format": "email"},
+                "firstName": {"type": "string"},
+                "lastName": {"type": "string"},
+                "createdAt": {"type": "string", "format": "date-time"},
+                "updatedAt": {"type": "string", "format": "date-time"}
+            },
+            "required": ["id", "username", "email"]
+        },
+        "NewUser": {
+            "type": "object",
+            "properties": {
+                "username": {"type": "string", "minLength": 3, "maxLength": 50},
+                "email": {"type": "string", "format": "email"},
+                "firstName": {"type": "string"},
+                "lastName": {"type": "string"},
+                "password": {"type": "string", "minLength": 8}
+            },
+            "required": ["username", "email", "password"]
+        },
+        "Product": {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string", "format": "uuid"},
+                "name": {"type": "string"},
+                "description": {"type": "string"},
+                "price": {"type": "number", "minimum": 0},
+                "category": {"type": "string"},
+                "inStock": {"type": "boolean", "default": True},
+                "tags": {"type": "array", "items": {"type": "string"}}
+            },
+            "required": ["id", "name", "price"]
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "error": {"type": "string"},
+                "message": {"type": "string"},
+                "code": {"type": "integer"}
+            },
+            "required": ["error", "message"]
+        }
+    }
+
 
 def main():
-    """Run the documentation example."""
     config = load_config(Path(__file__).parent / "config.yaml")
     runner = ExampleRunner(__file__, config)
     runner.start()
 
+    temp_dir = None
     try:
-        print_section("Documentation Generation Example")
-        print("Demonstrating automated documentation generation and quality assessment")
+        print_section("API Documentation Example")
+        print("Demonstrating comprehensive API documentation generation and OpenAPI specification")
 
-        # Create temporary directory for documentation work
-        temp_dir = Path(tempfile.mkdtemp())
-        docs_dir = temp_dir / "docs"
-        docs_dir.mkdir()
+        # Create a temporary directory for output files
+        temp_dir = tempfile.mkdtemp()
+        output_dir = Path(temp_dir) / "api_docs"
+        output_dir.mkdir()
+        ensure_output_dir(output_dir)
 
-        print(f"\n📁 Using temporary documentation directory: {docs_dir}")
+        # 1. Create sample API endpoints and schemas
+        print("\n📋 Creating sample API endpoints and schemas...")
+        endpoints = create_sample_api_endpoints()
+        schemas = create_sample_schemas()
+        print_success(f"Created {len(endpoints)} sample endpoints and {len(schemas)} schemas")
 
-        # 1. Check documentation environment
-        print("\n🏗️  Checking documentation environment...")
-        env_check_result = check_doc_environment()
-        # Create environment status summary
-        env_status = {
-            'environment_check_passed': env_check_result,
-            'basic_setup_complete': env_check_result
-        }
-        print("✅ Environment check completed")
-        print(f"   Environment check passed: {env_status['environment_check_passed']}")
-        print(f"   Basic setup complete: {env_status['basic_setup_complete']}")
+        # 2. Generate API documentation using convenience function
+        print("\n📚 Generating API documentation...")
+        documentation = generate_api_docs(
+            title="Sample E-commerce API",
+            version="1.0.0",
+            base_url="https://api.example.com"
+        )
+        # Add our sample endpoints manually for demonstration
+        documentation.endpoints = endpoints
+        print_success(f"Generated API documentation with {len(documentation.endpoints)} endpoints")
 
-        # 2. Create sample documentation files
-        print("\n📝 Creating sample documentation files...")
-        sample_docs = {
-            "intro.md": """# Introduction
+        # 3. Extract API specifications (simulated from code)
+        print("\n🔍 Extracting API specifications from code...")
+        # For demonstration, we'll create a temporary Python file with API routes
+        api_code_file = output_dir / "sample_api.py"
+        api_code_file.write_text("""
+@app.route('/users', methods=['GET'])
+def get_users():
+    \"\"\"Get users endpoint.\"\"\"
+    return {"users": []}
 
-Welcome to the Codomyrmex Documentation.
+@app.route('/users', methods=['POST'])
+def create_user():
+    \"\"\"Create user endpoint.\"\"\"
+    return {"user": {}}
 
-This is a sample introduction page.
+@app.route('/products', methods=['GET'])
+def get_products():
+    \"\"\"Get products endpoint.\"\"\"
+    return {"products": []}
+""")
+        specs = extract_api_specs(str(output_dir))
+        print_success(f"Extracted {len(specs)} API specifications from code")
 
-## Features
+        # 4. Generate OpenAPI specification
+        print("\n📋 Generating OpenAPI specification...")
+        openapi_spec = generate_openapi_spec(
+            title="Sample E-commerce API",
+            version="1.0.0",
+            endpoints=endpoints,
+            base_url="https://api.example.com"
+        )
+        # Manually add schemas and description to the spec
+        openapi_spec["info"]["description"] = "A comprehensive e-commerce API for managing users and products"
+        openapi_spec["components"]["schemas"] = schemas
+        print_success(f"Generated OpenAPI {openapi_spec['openapi']} specification")
 
-- Feature 1
-- Feature 2
-- Feature 3
-""",
+        # 5. Validate OpenAPI specification
+        print("\n✅ Validating OpenAPI specification...")
+        validation_errors = validate_openapi_spec(openapi_spec)
+        if validation_errors:
+            print_error(f"OpenAPI spec validation failed: {validation_errors}")
+            # runner.error("OpenAPI validation failed", validation_errors)
+            # sys.exit(1)
+        else:
+            print_success("OpenAPI specification is valid")
 
-            "api.md": """# API Reference
+        # 6. Export documentation in multiple formats
+        print("\n💾 Exporting documentation...")
+        doc_generator = APIDocumentationGenerator()
+        doc_generator.documentation = documentation
 
-## Functions
+        # Export to JSON
+        json_path = output_dir / "api_documentation.json"
+        json_exported = doc_generator.export_documentation(str(json_path), "json")
+        print_success(f"Exported API documentation to JSON: {json_exported}")
 
-### `example_function(param)`
+        # Export to YAML
+        yaml_path = output_dir / "api_documentation.yaml"
+        yaml_exported = doc_generator.export_documentation(str(yaml_path), "yaml")
+        print_success(f"Exported API documentation to YAML: {yaml_exported}")
 
-Example function documentation.
+        # 7. Generate OpenAPI spec exports
+        print("\n📄 Generating OpenAPI specification exports...")
+        openapi_generator = OpenAPIGenerator()
 
-**Parameters:**
-- `param` (str): Input parameter
+        # Export OpenAPI spec to JSON
+        openapi_json_path = output_dir / "openapi_spec.json"
+        json_exported = openapi_generator.export_spec(openapi_spec, str(openapi_json_path), "json")
+        print_success(f"Exported OpenAPI spec to JSON: {json_exported}")
 
-**Returns:**
-- `str`: Processed result
+        # Export OpenAPI spec to YAML
+        openapi_yaml_path = output_dir / "openapi_spec.yaml"
+        yaml_exported = openapi_generator.export_spec(openapi_spec, str(openapi_yaml_path), "yaml")
+        print_success(f"Exported OpenAPI spec to YAML: {yaml_exported}")
 
-**Example:**
-```python
-result = example_function("test")
-print(result)  # Output: processed_test
-```
-""",
+        # 8. Generate HTML documentation
+        print("\n🌐 Generating HTML documentation...")
+        html_path = output_dir / "api_documentation.html"
+        html_generated = openapi_generator.generate_html_docs(openapi_spec, str(html_path))
+        print_success(f"Generated HTML documentation: {html_generated}")
 
-            "tutorial.md": """# Getting Started Tutorial
-
-## Step 1: Installation
-
-Install the package using pip:
-
-```bash
-pip install codomyrmex
-```
-
-## Step 2: Basic Usage
-
-```python
-from codomyrmex import example
-
-result = example.process("data")
-print(result)
-```
-
-## Step 3: Advanced Features
-
-Explore advanced features in the API documentation.
-"""
-        }
-
-        # Create docs directory structure
-        for filename, content in sample_docs.items():
-            (docs_dir / filename).write_text(content)
-
-        # Create a simple docusaurus config
-        docusaurus_config = """
-module.exports = {
-  title: 'Codomyrmex Documentation',
-  tagline: 'AI-Powered Development Tools',
-  url: 'https://codomyrmex.dev',
-  baseUrl: '/',
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  organizationName: 'codomyrmex',
-  projectName: 'codomyrmex',
-  presets: [
-    [
-      'classic',
-      {
-        docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      },
-    ],
-  ],
-};
-"""
-        (docs_dir / "docusaurus.config.js").write_text(docusaurus_config)
-
-        print("✅ Sample documentation files created")
-        print(f"   Created {len(sample_docs)} documentation files")
-
-        # 3. Validate documentation versions (simplified)
-        print("\n🔍 Validating documentation versions...")
-        # Mock version validation for demonstration
-        version_validation = {
-            'valid_versions': len(sample_docs),
-            'invalid_versions': 0,
-            'total_files_checked': len(sample_docs)
-        }
-        print("✅ Version validation completed")
-        print(f"   Valid versions found: {version_validation['valid_versions']}")
-        print(f"   Invalid versions: {version_validation['invalid_versions']}")
-
-        # 4. Aggregate documentation (simplified)
-        print("\n📚 Aggregating documentation...")
-        # Mock aggregation for demonstration
-        aggregation_result = {
-            'files_processed': len(sample_docs),
-            'total_size': sum(len(content) for content in sample_docs.values()),
-            'aggregation_success': True
-        }
-        print("✅ Documentation aggregation completed")
-        print(f"   Files processed: {aggregation_result['files_processed']}")
-        print(f"   Total size: {aggregation_result['total_size']} bytes")
-
-        # 5. Assess documentation site (simplified)
-        print("\n📊 Assessing documentation site...")
-        # Mock site assessment for demonstration
-        site_assessment = {
-            'seo_score': 85,
-            'accessibility_score': 90,
-            'performance_score': 78,
-            'overall_quality': 'Good'
-        }
-        print("✅ Site assessment completed")
-        print(f"   SEO score: {site_assessment['seo_score']}")
-        print(f"   Accessibility score: {site_assessment['accessibility_score']}")
-        print(f"   Performance score: {site_assessment['performance_score']}")
-
-        # 6. Analyze documentation quality
-        print("\n🔬 Analyzing documentation quality...")
-        quality_analyzer = DocumentationQualityAnalyzer()
-        quality_results = {}
-
-        for filename, content in sample_docs.items():
-            analysis = quality_analyzer.analyze_file(docs_dir / filename)
-            quality_results[filename] = {
-                'readability_score': analysis.get('readability_score', 0),
-                'completeness_score': analysis.get('completeness_score', 0),
-                'structure_score': analysis.get('structure_score', 0),
-                'issues_found': len(analysis.get('issues', []))
+        # 9. Validate exported files
+        print("\n🔍 Validating exported files...")
+        exported_files = [
+            json_path, yaml_path, openapi_json_path, openapi_yaml_path, html_path
+        ]
+        file_validation_results = {}
+        for file_path in exported_files:
+            exists = file_path.exists()
+            size = file_path.stat().st_size if exists else 0
+            file_validation_results[file_path.name] = {
+                "exists": exists,
+                "size_bytes": size,
+                "readable": exists and file_path.read_text()[:100] != ""
             }
 
-        print("✅ Quality analysis completed")
-        total_files = len(quality_results)
-        avg_readability = sum(r['readability_score'] for r in quality_results.values()) / total_files
-        avg_completeness = sum(r['completeness_score'] for r in quality_results.values()) / total_files
-        print(f"Average readability score: {avg_readability:.1f}")
-        # 7. Check documentation consistency (simplified)
-        print("\n🔗 Checking documentation consistency...")
-        # Mock consistency checking for demonstration
-        consistency_report = {
-            'consistent_links': len(sample_docs) * 2,  # Mock internal links
-            'broken_links': 0,
-            'style_violations': 1,
-            'terminology_consistent': True
+        all_files_exist = all(result["exists"] for result in file_validation_results.values())
+        if all_files_exist:
+            print_success("All exported files created successfully")
+        else:
+            print_error("Some exported files are missing")
+
+        # 10. Demonstrate advanced OpenAPI generator features
+        print("\n⚡ Demonstrating advanced OpenAPI features...")
+        advanced_spec = openapi_generator.generate_spec(
+            title="Advanced Sample API",
+            version="2.0.0",
+            endpoints=endpoints[:2],  # Use first 2 endpoints
+            base_url="https://api.example.com/v2"
+        )
+        # Manually add schemas and security schemes
+        advanced_spec["components"]["schemas"] = schemas
+        advanced_spec["components"]["securitySchemes"] = {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            },
+            "apiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-API-Key"
+            }
         }
-        print("✅ Consistency check completed")
-        print(f"   Consistent links: {consistency_report['consistent_links']}")
-        print(f"   Broken links: {consistency_report['broken_links']}")
-        print(f"   Style violations: {consistency_report['style_violations']}")
+        advanced_spec["security"] = [
+            {"bearerAuth": []},
+            {"apiKeyAuth": []}
+        ]
+        print_success(f"Generated advanced spec with security schemes")
 
-        # 8. Generate quality report (simplified)
-        print("\n📋 Generating quality report...")
-        # Mock quality report for demonstration
-        quality_report = {
-            'sections': ['readability', 'completeness', 'structure', 'seo'],
-            'recommendations': [
-                'Improve code example coverage',
-                'Add more cross-references',
-                'Enhance API documentation'
-            ],
-            'overall_score': 82,
-            'critical_issues': 0
-        }
-        print("✅ Quality report generated")
-        print(f"   Report sections: {len(quality_report['sections'])}")
-        print(f"   Recommendations: {len(quality_report['recommendations'])}")
+        # Validate the advanced spec
+        advanced_validation = openapi_generator.validate_spec(advanced_spec)
+        print_success(f"Advanced spec validation: {len(advanced_validation)} errors")
 
-        # Save analysis results
-        output_dir = ensure_output_dir(Path(config.get('output', {}).get('analysis_dir', 'output/analysis')))
-        results_file = output_dir / "documentation_analysis.json"
-
-        import json
-        with open(results_file, 'w') as f:
-            json.dump({
-                'environment_check': env_status,
-                'version_validation': version_validation,
-                'aggregation_result': aggregation_result,
-                'site_assessment': site_assessment,
-                'quality_analysis': quality_results,
-                'consistency_report': consistency_report,
-                'quality_report': quality_report
-            }, f, indent=2, default=str)
-
-        # Compile results
         final_results = {
-            "sample_docs_created": len(sample_docs),
-            "docs_directory": str(docs_dir),
-            "environment_node_available": env_status.get('node_available', False),
-            "environment_npm_available": env_status.get('npm_available', False),
-            "version_validation_completed": bool(version_validation),
-            "docs_aggregated": aggregation_result.get('files_processed', 0) > 0,
-            "site_assessment_completed": bool(site_assessment),
-            "quality_analysis_files": len(quality_results),
-            "average_readability_score": round(avg_readability, 1),
-            "average_completeness_score": round(avg_completeness, 1),
-            "consistency_check_completed": bool(consistency_report),
-            "quality_report_generated": bool(quality_report),
-            "analysis_results_saved": str(results_file),
-            "documentation_quality_analyzer_initialized": True,
-            "consistency_checker_initialized": True,
-            "aggregation_successful": aggregation_result.get('success', True),
-            "validation_passed": version_validation.get('valid_versions', 0) >= 0
+            "endpoints_created": len(endpoints),
+            "schemas_created": len(schemas),
+            "documentation_generated": documentation.title == "Sample E-commerce API",
+            "api_specs_extracted": len(specs),
+            "openapi_spec_generated": openapi_spec["openapi"] == "3.0.3",
+            "openapi_validation_passed": len(validation_errors) == 0,
+            "json_export_success": json_exported,
+            "yaml_export_success": yaml_exported,
+            "openapi_json_export_success": json_exported,
+            "openapi_yaml_export_success": yaml_exported,
+            "html_docs_generated": html_generated,
+            "all_exported_files_exist": all_files_exist,
+            "exported_files_count": len(exported_files),
+            "advanced_spec_generated": advanced_spec["info"]["version"] == "2.0.0",
+            "advanced_validation_passed": len(advanced_validation) == 0,
+            "total_endpoints_documented": len(endpoints),
+            "total_schemas_defined": len(schemas),
+            "api_title": documentation.title,
+            "api_version": documentation.version,
+            "base_url": documentation.base_url,
+            "output_directory": str(output_dir)
         }
 
-        print_results(final_results, "Documentation Analysis Summary")
+        print_results(final_results, "API Documentation Operations Summary")
 
         runner.validate_results(final_results)
         runner.save_results(final_results)
         runner.complete()
-
-        print("\n✅ Documentation example completed successfully!")
-        print("All documentation generation and quality assessment features demonstrated.")
-        print(f"Analyzed {final_results['sample_docs_created']} documentation files.")
-        print(f"Average readability score: {final_results['average_readability_score']}/100")
-        print(f"Average completeness score: {final_results['average_completeness_score']}/100")
-        print(f"Quality report generated with {len(quality_report.get('recommendations', []))} recommendations.")
-
-        # Cleanup
-        import shutil
-        shutil.rmtree(temp_dir)
+        print("\n✅ API Documentation example completed successfully!")
+        print("All API documentation generation and OpenAPI specification features demonstrated.")
+        print(f"Generated comprehensive documentation for {len(endpoints)} endpoints")
+        print(f"Created {len(schemas)} data schemas and exported to {len(exported_files)} formats")
+        print(f"OpenAPI {openapi_spec['openapi']} specification validated and exported")
 
     except Exception as e:
-        runner.error("Documentation example failed", e)
-        print(f"\n❌ Documentation example failed: {e}")
+        runner.error("API Documentation example failed", e)
+        print(f"\n❌ API Documentation example failed: {e}")
         sys.exit(1)
+    finally:
+        if temp_dir and Path(temp_dir).exists():
+            import shutil
+            shutil.rmtree(temp_dir)
+            logger.info(f"Cleaned up temporary directory: {temp_dir}")
+
 
 if __name__ == "__main__":
     main()

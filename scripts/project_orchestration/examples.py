@@ -6,8 +6,8 @@ This file demonstrates the full capabilities of the Codomyrmex orchestration sys
 including workflow creation, project management, task orchestration, and resource management.
 
 Configuration Files:
-- Workflow configurations can be loaded from .codomyrmex/workflows/*.json
-- Example configurations are available in config/examples/
+- Workflow configurations are loaded from config/workflows/production/*.json
+- Example workflows are available in config/workflows/examples/
 - Project templates are in src/codomyrmex/project_orchestration/templates/
 
 Documentation:

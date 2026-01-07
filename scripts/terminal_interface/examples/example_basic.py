@@ -44,8 +44,10 @@ from typing import Dict, Any, List, Optional
 
 # Add src to path
 project_root = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(project_root / "src"))
-sys.path.insert(0, str(project_root / "examples" / "_common")) # Added for common utilities
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from config_loader import load_config
 from example_runner import ExampleRunner

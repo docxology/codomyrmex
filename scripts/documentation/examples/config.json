@@ -1,143 +1,46 @@
 {
-  "environment": {
-    "node_version": ">=16.0.0",
-    "npm_version": ">=7.0.0",
-    "python_version": ">=3.8.0",
-    "dependencies": [
-      "docusaurus",
-      "nodejs",
-      "npm"
-    ]
+  "output": {
+    "format": "json",
+    "file": "output/api_documentation_results.json",
+    "directory": "output/api_documentation"
   },
-  "generation": {
-    "source_dirs": [
-      "docs/",
-      "src/",
-      "examples/"
-    ],
-    "output_dir": "build/",
-    "formats": [
-      "html",
-      "pdf",
-      "markdown"
-    ],
-    "include_api_docs": true,
+  "logging": {
+    "level": "INFO",
+    "file": "logs/api_documentation_example.log",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  },
+  "api_documentation": {
+    "title": "Sample E-commerce API",
+    "version": "1.0.0",
+    "description": "A comprehensive e-commerce API for managing users and products",
+    "base_url": "https://api.example.com",
+    "include_schemas": true,
     "include_examples": true,
-    "generate_toc": true
-  },
-  "quality": {
-    "metrics": [
-      "readability",
-      "completeness",
-      "structure",
-      "consistency",
-      "accuracy"
-    ],
-    "readability_thresholds": {
-      "excellent": 90,
-      "good": 75,
-      "fair": 60,
-      "poor": 45
-    },
-    "completeness_requirements": [
-      "title",
-      "description",
-      "examples",
-      "api_reference"
-    ],
-    "structure_rules": [
-      "headings_hierarchy",
-      "code_block_formatting",
-      "link_validity",
-      "table_formatting"
-    ]
-  },
-  "consistency": {
-    "check_broken_links": true,
-    "check_terminology": true,
-    "check_style": true,
-    "check_versions": true,
-    "custom_rules": [
-      {
-        "max_line_length": 100
-      },
-      {
-        "heading_case": "title"
-      },
-      {
-        "code_language_specified": true
-      }
-    ]
-  },
-  "aggregation": {
-    "enable_aggregation": true,
-    "source_repos": [],
-    "rules": [
-      {
-        "merge_similar_topics": true
-      },
-      {
-        "resolve_conflicts": "latest"
-      },
-      {
-        "maintain_hierarchy": true
-      }
-    ]
-  },
-  "site": {
-    "docusaurus": {
-      "title": "Codomyrmex Documentation",
-      "tagline": "AI-Powered Development Tools",
-      "url": "https://codomyrmex.dev",
-      "base_url": "/"
-    },
-    "theme": {
-      "primary_color": "#2E8555",
-      "secondary_color": "#6C757D",
-      "font_family": "system-ui, sans-serif"
-    },
-    "navigation": {
-      "main": [
-        "Home",
-        "Docs",
-        "API",
-        "Examples"
-      ],
-      "footer": [
-        "GitHub",
-        "Issues",
-        "Contributing"
-      ]
+    "include_security": true,
+    "export_formats": ["json", "yaml", "html"],
+    "openapi": {
+      "version": "3.0.3",
+      "include_servers": true,
+      "include_security_schemes": true,
+      "validate_spec": true
     }
+  },
+  "sample_data": {
+    "endpoints_count": 4,
+    "schemas_count": 4,
+    "include_responses": true,
+    "include_parameters": true
   },
   "validation": {
     "strict_mode": false,
-    "rules": [
-      {
-        "required_fields": true
-      },
-      {
-        "link_validation": true
-      },
-      {
-        "syntax_checking": true
-      }
-    ],
-    "error_reporting": {
-      "fail_on_warnings": false,
-      "fail_on_errors": true,
-      "generate_report": true
-    }
+    "check_required_fields": true,
+    "validate_responses": true,
+    "validate_schemas": true
   },
-  "output": {
-    "format": "json",
-    "file": "output/documentation_results.json",
-    "analysis_dir": "output/analysis"
-  },
-  "performance": {
-    "enable_caching": true,
-    "cache_dir": ".cache/",
-    "parallel_processing": true,
-    "max_workers": 4
+  "export": {
+    "json_indent": 2,
+    "yaml_indent": 2,
+    "include_metadata": true,
+    "compress_output": false
   }
 }

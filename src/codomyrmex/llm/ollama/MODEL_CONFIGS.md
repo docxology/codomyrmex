@@ -118,7 +118,7 @@ import json
 config_manager = ConfigManager()
 
 # Load model-specific config
-with open("examples/llm/ollama/rnj_1_8b_config.json") as f:
+with open("scripts/llm/examples/ollama/rnj_1_8b_config.json") as f:
     config = json.load(f)
 
 # Save for use with ConfigManager

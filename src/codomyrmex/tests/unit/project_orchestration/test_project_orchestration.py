@@ -627,4 +627,78 @@ class TestWorkflowManagerEnhancements:
         assert task_levels["report"] < task_levels["notify"]
 
 
+class TestWorkflowManagerLocation:
+    """Test cases for WorkflowManager directory location."""
+
+    def test_default_location(self, tmp_path, monkeypatch):
+        """Test that WorkflowManager defaults to config/workflows/production."""
+        try:
+            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+        except ImportError:
+            pytest.skip("WorkflowManager not available")
+
+        # Change to temp directory
+        monkeypatch.chdir(tmp_path)
+
+        manager = WorkflowManager()
+
+        # Should use default location
+        expected_location = tmp_path / "config" / "workflows" / "production"
+        assert manager.config_dir == expected_location
+        assert manager.config_dir.exists()
+
+    def test_custom_config_dir(self, tmp_path):
+        """Test that custom config_dir parameter is respected."""
+        try:
+            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+        except ImportError:
+            pytest.skip("WorkflowManager not available")
+
+        custom_dir = tmp_path / "custom" / "workflows"
+        manager = WorkflowManager(config_dir=custom_dir)
+
+        # Should use custom directory
+        assert manager.config_dir == custom_dir
+        assert manager.config_dir.exists()
+
+    def test_load_workflows_from_production(self, tmp_path, monkeypatch):
+        """Test loading workflows from production directory."""
+        try:
+            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+            import json
+        except ImportError:
+            pytest.skip("WorkflowManager not available")
+
+        # Create production location with a test workflow
+        production_location = tmp_path / "config" / "workflows" / "production"
+        production_location.mkdir(parents=True, exist_ok=True)
+
+        # Create a test workflow file
+        test_workflow = {
+            "name": "test_workflow",
+            "steps": [
+                {
+                    "name": "test_step",
+                    "module": "environment_setup",
+                    "action": "check_environment",
+                    "parameters": {},
+                    "dependencies": [],
+                    "timeout": 60,
+                    "max_retries": 3
+                }
+            ]
+        }
+
+        workflow_file = production_location / "test_workflow.json"
+        with open(workflow_file, "w") as f:
+            json.dump(test_workflow, f)
+
+        # Change to temp directory
+        monkeypatch.chdir(tmp_path)
+
+        manager = WorkflowManager()
+
+        # Should load workflow from production directory
+        workflows = manager.list_workflows()
+        assert "test_workflow" in workflows
 

@@ -46,7 +46,10 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from codomyrmex.data_visualization import (
     create_bar_chart,
@@ -70,9 +73,9 @@ from codomyrmex.data_visualization import (
     create_commit_timeline_diagram,
     create_repository_structure_diagram
 )
-from examples._common.config_loader import load_config
-from examples._common.example_runner import ExampleRunner
-from examples._common.utils import print_section, print_results, print_success, print_error, print_warning, ensure_output_dir
+from _common.config_loader import load_config
+from _common.example_runner import ExampleRunner
+from _common.utils import print_section, print_results, print_success, print_error, print_warning, ensure_output_dir
 
 
 def demonstrate_chart_types_and_styling(output_dir: Path) -> Dict[str, Any]:

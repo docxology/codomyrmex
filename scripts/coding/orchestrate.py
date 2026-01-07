@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-Code Module Orchestrator
+AI Code Editing Orchestrator
 
-Thin orchestrator script providing CLI access to code module functionality.
-Calls actual module functions from codomyrmex.coding (execution, sandbox, review, monitoring).
+Thin orchestrator script providing CLI access to ai_code_editing module functionality.
+Calls actual module functions from codomyrmex.agents.ai_code_editing.
 
 See also: src/codomyrmex/cli.py for main CLI integration
 """
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -16,233 +17,251 @@ from pathlib import Path
 from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
 
 # Import module-specific exceptions
-from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.exceptions import (
+    AIProviderError,
+    CodeEditingError,
+    CodeGenerationError,
+    CodomyrmexError,
+)
 
 # Import shared utilities
 try:
     from _orchestrator_utils import (
         determine_language_from_file,
-        ensure_output_directory,
         format_output,
         print_error,
+        print_info,
         print_section,
         print_success,
-        save_json_file,
         validate_file_path,
     )
 except ImportError:
+    # Fallback if running from different directory
     import sys
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).parent.parent))
     from _orchestrator_utils import (
         determine_language_from_file,
-        ensure_output_directory,
         format_output,
         print_error,
+        print_info,
         print_section,
         print_success,
-        save_json_file,
         validate_file_path,
     )
 
-# Import module functions and exceptions
-from codomyrmex.coding import (
-    CodeReviewError,
-    analyze_file,
-    analyze_project,
-    execute_code,
-    generate_report,
+# Import module functions
+from codomyrmex.agents.ai_code_editing import (
+    analyze_code_quality,
+    generate_code_snippet,
+    get_available_models,
+    get_supported_languages,
+    get_supported_providers,
+    refactor_code_snippet,
+    validate_api_keys,
 )
 
 logger = get_logger(__name__)
 
 
-def handle_execute(args):
-    """Handle code execution command."""
+def handle_generate(args):
+    """Handle code generation command."""
     try:
-        # Read code from file or use provided code
-        if args.file:
-            file_path = validate_file_path(args.file, must_exist=True, must_be_file=True)
-            with open(file_path, encoding="utf-8") as f:
-                code = f.read()
-        elif args.code:
-            code = args.code
-        else:
-            print_error("Either --file or --code must be provided")
-            return False
-
-        # Determine language from file extension or argument
-        language = args.language
-        if not language and args.file:
-            language = determine_language_from_file(file_path)
-
-        if not language:
-            language = "python"  # Default
-
         if getattr(args, "verbose", False):
-            logger.info(f"Executing {language} code (timeout: {args.timeout}s)")
+            logger.info(f"Generating code with prompt: {args.prompt[:50]}...")
+            logger.info(f"Language: {args.language}, Provider: {args.provider}")
 
-        result = execute_code(
-            language=language,
-            code=code,
-            timeout=args.timeout,
+        result = generate_code_snippet(
+            prompt=args.prompt,
+            language=args.language,
+            provider=args.provider,
         )
 
-        print_section("Execution Results")
         if result.get("status") == "success":
-            print_success("Execution succeeded")
-            if result.get("stdout"):
-                print("\nOutput:")
-                print(result["stdout"])
-            if result.get("exit_code") is not None:
-                print(f"\nExit Code: {result['exit_code']}")
+            print_section("Generated code")
+            print(result.get("generated_code", ""))
+            print_section("", separator="")
+            print_success(f"Code generated successfully")
+            return True
         else:
-            print_error("Execution failed")
-            if result.get("error_message"):
-                print(f"\nError: {result['error_message']}")
-            if result.get("stderr"):
-                print(f"\nStderr: {result['stderr']}")
-            if result.get("exit_code") is not None:
-                print(f"\nExit Code: {result['exit_code']}")
+            error_msg = result.get("error_message", "Unknown error")
+            logger.error(f"Code generation failed: {error_msg}")
+            print_error("Code generation failed", context=error_msg)
+            return False
+
+    except (CodeGenerationError, AIProviderError) as e:
+        logger.error(f"Code generation error: {str(e)}")
+        print_error("Code generation error", context=str(e), exception=e)
+        return False
+    except Exception as e:
+        logger.exception("Unexpected error during code generation")
+        print_error("Unexpected error during code generation", exception=e)
+        return False
+
+
+def handle_refactor(args):
+    """Handle code refactoring command."""
+    try:
+        # Validate and read the file
+        file_path = validate_file_path(args.file, must_exist=True, must_be_file=True)
+
+        if getattr(args, "verbose", False):
+            logger.info(f"Refactoring file: {file_path}")
+            logger.info(f"Instruction: {args.instruction}")
+
+        with open(file_path, encoding="utf-8") as f:
+            code = f.read()
+
+        # Determine language from file extension
+        language = determine_language_from_file(file_path)
+
+        if getattr(args, "dry_run", False):
+            print_info(f"Dry run: Would refactor {file_path} with language {language}")
+            return True
+
+        result = refactor_code_snippet(
+            code_snippet=code,
+            refactoring_instruction=args.instruction,
+            language=language,
+        )
+
+        if result.get("status") in ["success", "no_change_needed"]:
+            print_section("Refactored code")
+            print(result.get("refactored_code", ""))
+            print_section("", separator="")
+            if result.get("explanation"):
+                print(f"Explanation: {result['explanation']}")
+            print_success(f"Code refactored successfully")
+            return True
+        else:
+            error_msg = result.get("error_message", "Unknown error")
+            logger.error(f"Refactoring failed: {error_msg}")
+            print_error("Refactoring failed", context=error_msg)
+            return False
+
+    except FileNotFoundError as e:
+        logger.error(f"File not found: {args.file}")
+        print_error("File not found", context=str(args.file))
+        return False
+    except (CodeEditingError, AIProviderError) as e:
+        logger.error(f"Refactoring error: {str(e)}")
+        print_error("Refactoring error", context=str(e), exception=e)
+        return False
+    except Exception as e:
+        logger.exception("Unexpected error during refactoring")
+        print_error("Unexpected error during refactoring", exception=e)
+        return False
+
+
+def handle_analyze(args):
+    """Handle code analysis command."""
+    try:
+        file_path = validate_file_path(args.file, must_exist=True, must_be_file=True)
+
+        if getattr(args, "verbose", False):
+            logger.info(f"Analyzing file: {file_path}")
+
+        with open(file_path, encoding="utf-8") as f:
+            code = f.read()
+
+        result = analyze_code_quality(code)
+
+        print_section("Code Analysis Results")
+        print(format_output(result, format_type="json"))
         print_section("", separator="")
 
-        if args.output:
+        # Save output if requested
+        if hasattr(args, "output") and args.output:
+            from _orchestrator_utils import save_json_file
             output_path = save_json_file(result, args.output)
             print_success(f"Results saved to {output_path}")
 
-        return result.get("status") == "success"
+        return True
 
     except FileNotFoundError as e:
         logger.error(f"File not found: {args.file}")
         print_error("File not found", context=str(args.file))
         return False
     except Exception as e:
-        logger.exception("Unexpected error during code execution")
-        print_error("Unexpected error during code execution", exception=e)
+        logger.exception("Unexpected error during analysis")
+        print_error("Unexpected error during analysis", exception=e)
         return False
 
 
-def handle_analyze_file(args):
-    """Handle analyze file command."""
+def handle_validate_api_keys(args):
+    """Handle API key validation command."""
     try:
-        # Validate file exists
-        file_path = validate_file_path(args.file, must_exist=True, must_be_file=True)
+        result = validate_api_keys()
 
-        if getattr(args, "verbose", False):
-            logger.info(f"Analyzing file: {file_path}")
-
-        result = analyze_file(str(file_path))
-
-        print_section("Code Review Results")
-        print(format_output(result, format_type="json"))
+        print_section("API Key Validation Results")
+        all_valid = True
+        for provider, status in result.items():
+            is_valid = status.get("valid", False)
+            message = status.get("message", "Unknown")
+            if is_valid:
+                print_success(f"{provider}: {message}")
+            else:
+                print_error(f"{provider}: {message}")
+                all_valid = False
         print_section("", separator="")
 
-        print_success("File analysis completed")
+        if all_valid:
+            print_success("All API keys are valid")
+        else:
+            print_error("Some API keys are invalid or missing")
+        return all_valid
+
+    except Exception as e:
+        logger.exception("Unexpected error during API key validation")
+        print_error("Unexpected error during API key validation", exception=e)
+        return False
+
+
+def handle_list_providers(args):
+    """Handle list providers command."""
+    try:
+        providers = get_supported_providers()
+        print_section("Supported LLM Providers")
+        for provider in providers:
+            print(f"  • {provider}")
+        print_section("", separator="")
         return True
 
-    except CodeReviewError as e:
-        logger.error(f"Code review error: {str(e)}")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("Code review error", context=str(e), exception=e)
-        return False
-    except FileNotFoundError as e:
-        logger.error(f"File not found: {args.file}")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("File not found", context=args.file, exception=e)
-        return False
     except Exception as e:
-        logger.exception("Unexpected error during code review")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("Unexpected error during code review", exception=e)
+        logger.exception("Unexpected error listing providers")
+        print_error("Unexpected error listing providers", exception=e)
         return False
 
 
-def handle_analyze_project(args):
-    """Handle analyze project command."""
+def handle_list_languages(args):
+    """Handle list languages command."""
     try:
-        # Validate project path exists
-        project_path = validate_file_path(args.path, must_exist=True, must_be_dir=True)
-
-        if getattr(args, "verbose", False):
-            logger.info(f"Analyzing project: {project_path}")
-
-        result = analyze_project(path=str(project_path))
-
-        print_section("Project Code Review Results")
-        print(format_output(result, format_type="json"))
+        languages = get_supported_languages()
+        print_section("Supported Programming Languages")
+        for language in languages:
+            print(f"  • {language}")
         print_section("", separator="")
-
-        print_success("Project analysis completed")
         return True
 
-    except CodeReviewError as e:
-        logger.error(f"Code review error: {str(e)}")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("Code review error", context=str(e), exception=e)
-        return False
-    except FileNotFoundError as e:
-        logger.error(f"Project path not found: {args.path}")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("Project path not found", context=args.path, exception=e)
-        return False
     except Exception as e:
-        logger.exception("Unexpected error during project review")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("Unexpected error during project review", exception=e)
+        logger.exception("Unexpected error listing languages")
+        print_error("Unexpected error listing languages", exception=e)
         return False
 
 
-def handle_generate_report(args):
-    """Handle generate report command."""
+def handle_list_models(args):
+    """Handle list models command."""
     try:
-        # Validate project path exists
-        project_path = validate_file_path(args.path, must_exist=True, must_be_dir=True)
-        # Ensure output directory exists
-        output_path = ensure_output_directory(args.output)
-
-        if getattr(args, "verbose", False):
-            logger.info(f"Generating code review report from {project_path} to {output_path}")
-
-        result = generate_report(path=str(project_path), output=str(output_path))
-
-        print_section("Code Review Report")
-        if isinstance(result, dict):
-            print(format_output(result, format_type="json"))
-            success = result.get("success", False)
-        else:
-            print(format_output(result))
-            success = bool(result)
+        models = get_available_models(provider=args.provider)
+        print_section(f"Available Models for {args.provider}")
+        for model in models:
+            print(f"  • {model}")
         print_section("", separator="")
+        return True
 
-        if success:
-            print_success("Report generated", context=str(output_path))
-        else:
-            print_error("Report generation failed")
-        return success
-
-    except CodeReviewError as e:
-        logger.error(f"Code review error: {str(e)}")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("Code review error", context=str(e), exception=e)
-        return False
-    except FileNotFoundError as e:
-        logger.error(f"Project path not found: {args.path}")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("Project path not found", context=args.path, exception=e)
-        return False
     except Exception as e:
-        logger.exception("Unexpected error generating report")
-        if getattr(args, "verbose", False):
-            logger.exception("Detailed error information:")
-        print_error("Unexpected error generating report", exception=e)
+        logger.exception("Unexpected error listing models")
+        print_error("Unexpected error listing models", exception=e)
         return False
 
 
@@ -250,15 +269,17 @@ def main():
     """Main CLI entry point."""
     setup_logging()
     parser = argparse.ArgumentParser(
-        description="Code Module operations (execution, sandbox, review, monitoring)",
+        description="AI Code Editing operations",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s execute --file script.py
-  %(prog)s execute --code "print('Hello, World!')" --language python
-  %(prog)s analyze-file file.py
-  %(prog)s analyze-project --path src/
-  %(prog)s generate-report --path src/ --output report.json
+  %(prog)s generate "create a fibonacci function" --language python
+  %(prog)s refactor file.py "optimize for performance"
+  %(prog)s analyze file.py
+  %(prog)s validate-api-keys
+  %(prog)s list-providers
+  %(prog)s list-languages
+  %(prog)s list-models --provider openai
         """,
     )
 
@@ -266,39 +287,47 @@ Examples:
     parser.add_argument(
         "--verbose", "-v", action="store_true", help="Verbose output"
     )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Dry run mode (no changes)"
+    )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-    # Execute command
-    exec_parser = subparsers.add_parser("execute", help="Execute code in sandbox")
-    exec_parser.add_argument(
-        "--file", "-f", help="File containing code to execute"
+    # Generate command
+    gen_parser = subparsers.add_parser("generate", help="Generate code snippet")
+    gen_parser.add_argument("prompt", help="Code generation prompt")
+    gen_parser.add_argument(
+        "--language", "-l", default="python", help="Programming language"
     )
-    exec_parser.add_argument(
-        "--code", "-c", help="Code to execute (inline)"
-    )
-    exec_parser.add_argument(
-        "--language", "-l", help="Programming language (python, javascript, etc.)"
-    )
-    exec_parser.add_argument(
-        "--timeout", "-t", type=int, default=30, help="Execution timeout in seconds"
-    )
-    exec_parser.add_argument(
-        "--output", "-o", help="Output file path for results (JSON)"
+    gen_parser.add_argument(
+        "--provider", "-p", default="openai", help="LLM provider"
     )
 
-    # Analyze file command
-    file_parser = subparsers.add_parser("analyze-file", help="Analyze a single file")
-    file_parser.add_argument("file", help="File to analyze")
+    # Refactor command
+    ref_parser = subparsers.add_parser("refactor", help="Refactor code")
+    ref_parser.add_argument("file", help="File to refactor")
+    ref_parser.add_argument("instruction", help="Refactoring instruction")
+    ref_parser.add_argument("--output", "-o", help="Output file path (optional)")
 
-    # Analyze project command
-    project_parser = subparsers.add_parser("analyze-project", help="Analyze a project")
-    project_parser.add_argument("--path", "-p", default=".", help="Project path")
+    # Analyze command
+    analyze_parser = subparsers.add_parser("analyze", help="Analyze code quality")
+    analyze_parser.add_argument("file", help="File to analyze")
+    analyze_parser.add_argument("--output", "-o", help="Output file path for results (JSON)")
 
-    # Generate report command
-    report_parser = subparsers.add_parser("generate-report", help="Generate review report")
-    report_parser.add_argument("--path", "-p", default=".", help="Project path")
-    report_parser.add_argument("--output", "-o", required=True, help="Output file")
+    # Validate API keys command
+    subparsers.add_parser("validate-api-keys", help="Validate API keys")
+
+    # List providers command
+    subparsers.add_parser("list-providers", help="List supported providers")
+
+    # List languages command
+    subparsers.add_parser("list-languages", help="List supported languages")
+
+    # List models command
+    models_parser = subparsers.add_parser("list-models", help="List available models")
+    models_parser.add_argument(
+        "--provider", "-p", default="openai", help="LLM provider"
+    )
 
     args = parser.parse_args()
 
@@ -308,10 +337,13 @@ Examples:
 
     # Route to appropriate handler
     handlers = {
-        "execute": handle_execute,
-        "analyze-file": handle_analyze_file,
-        "analyze-project": handle_analyze_project,
-        "generate-report": handle_generate_report,
+        "generate": handle_generate,
+        "refactor": handle_refactor,
+        "analyze": handle_analyze,
+        "validate-api-keys": handle_validate_api_keys,
+        "list-providers": handle_list_providers,
+        "list-languages": handle_list_languages,
+        "list-models": handle_list_models,
     }
 
     handler = handlers.get(args.command)

@@ -23,7 +23,7 @@
     - [documents](documents/README.md)
     - [environment_setup](environment_setup/README.md)
     - [events](events/README.md)
-    - [examples](scripts/examples/README.md)
+    - [examples](examples/README.md)
     - [fabric_integration](fabric_integration/README.md)
     - [fpf](fpf/README.md)
     - [git_operations](git_operations/README.md)
@@ -48,7 +48,7 @@
     - [system_discovery](system_discovery/README.md)
     - [template](template/README.md)
     - [terminal_interface](terminal_interface/README.md)
-    - [testing](testing/README.md)
+    - [testing](scripts/tests/README.md)
     - [tools](tools/README.md)
     - [validation](validation/README.md)
 - **Key Artifacts**:
@@ -59,13 +59,16 @@
 
 ## Overview
 
-Maintenance and automation utilities for project management.
+Maintenance, automation utilities, and module examples for project management.
 
 ## Directory Contents
 - `ORGANIZATION_SUMMARY.md` – File
 - `README.md` – File
 - `SPEC.md` – File
+- `_common/` – Subdirectory (Shared example utilities)
+- `_configs/` – Subdirectory (Example configurations)
 - `_orchestrator_utils.py` – File
+- `_templates/` – Subdirectory (Example templates)
 - `agents/` – Subdirectory
 - `ai_code_editing/` – Subdirectory
 - `api/` – Subdirectory
@@ -112,7 +115,7 @@ Maintenance and automation utilities for project management.
 - `system_discovery/` – Subdirectory
 - `template/` – Subdirectory
 - `terminal_interface/` – Subdirectory
-- `testing/` – Subdirectory
+- `scripts/tests/` – Subdirectory
 - `tools/` – Subdirectory
 - `validation/` – Subdirectory
 

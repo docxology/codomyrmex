@@ -1,0 +1,140 @@
+# Authentication Configuration Template
+# Defines authentication provider configurations
+# Supports OAuth, API key, and token-based authentication
+
+# Authentication Providers
+providers:
+  # API Key Authentication
+  api_key:
+    enabled: true
+    header_name: "X-API-Key"
+    query_param: "api_key"
+    validation:
+      required: true
+      key_source: "environment"
+      key_env_var: "API_KEY"
+
+  # OAuth 2.0 Authentication
+  oauth2:
+    enabled: false
+    providers:
+      google:
+        enabled: false
+        client_id: "${GOOGLE_CLIENT_ID}"
+        client_secret: "${GOOGLE_CLIENT_SECRET}"
+        redirect_uri: "${GOOGLE_REDIRECT_URI}"
+        scopes:
+          - "openid"
+          - "email"
+          - "profile"
+      
+      github:
+        enabled: false
+        client_id: "${GITHUB_CLIENT_ID}"
+        client_secret: "${GITHUB_CLIENT_SECRET}"
+        redirect_uri: "${GITHUB_REDIRECT_URI}"
+        scopes:
+          - "read:user"
+          - "user:email"
+
+  # Token-based Authentication
+  token:
+    enabled: true
+    token_type: "Bearer"
+    header_name: "Authorization"
+    validation:
+      algorithm: "HS256"
+      secret: "${JWT_SECRET}"
+      expiration: 3600  # seconds
+      refresh_enabled: true
+      refresh_expiration: 86400  # 24 hours
+
+  # Session-based Authentication
+  session:
+    enabled: false
+    cookie_name: "session_id"
+    secure: true
+    http_only: true
+    same_site: "strict"
+    max_age: 3600  # seconds
+
+# Authentication Methods
+methods:
+  # Primary authentication method
+  primary: "api_key"
+  
+  # Fallback methods (in order)
+  fallback:
+    - "token"
+    - "oauth2"
+
+# Authentication Settings
+settings:
+  # Session management
+  session:
+    timeout: 3600  # seconds
+    max_concurrent_sessions: 5
+    enforce_single_session: false
+
+  # Token management
+  token:
+    issuer: "codomyrmex"
+    audience: "codomyrmex-api"
+    algorithm: "HS256"
+    secret_rotation: true
+    rotation_interval: "30_days"
+
+  # Password policies (if using password auth)
+  password:
+    min_length: 12
+    require_uppercase: true
+    require_lowercase: true
+    require_numbers: true
+    require_special: true
+    max_age_days: 90
+    history_count: 5
+
+  # Multi-factor authentication
+  mfa:
+    enabled: false
+    methods:
+      - "totp"
+      - "sms"
+    required_for_admin: true
+    required_for_api: false
+
+# Authentication Events
+events:
+  # Events to log
+  log_events:
+    - "login_success"
+    - "login_failure"
+    - "logout"
+    - "token_refresh"
+    - "password_change"
+    - "mfa_enabled"
+    - "mfa_disabled"
+
+  # Events to alert on
+  alert_events:
+    - "login_failure_threshold"  # Multiple failures
+    - "suspicious_activity"
+    - "token_compromise"
+
+# Integration Settings
+integrations:
+  # LDAP/Active Directory
+  ldap:
+    enabled: false
+    server: "${LDAP_SERVER}"
+    base_dn: "${LDAP_BASE_DN}"
+    bind_dn: "${LDAP_BIND_DN}"
+    bind_password: "${LDAP_BIND_PASSWORD}"
+
+  # SAML
+  saml:
+    enabled: false
+    idp_metadata_url: "${SAML_IDP_METADATA_URL}"
+    entity_id: "${SAML_ENTITY_ID}"
+    certificate: "${SAML_CERTIFICATE}"
+

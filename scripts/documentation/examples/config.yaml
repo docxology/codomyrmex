@@ -1,174 +1,61 @@
-# Example Configuration for Documentation
-# This config demonstrates documentation generation and quality assessment settings
+# API Documentation Example Configuration
+# Demonstrates configuration options for API documentation generation
 
-# Documentation environment settings
-environment:
-  # Node.js version requirements
-  node_version: ">=16.0.0"
+# Output settings
+output:
+  format: json
+  file: output/api_documentation_results.json
+  directory: output/api_documentation
 
-  # npm version requirements
-  npm_version: ">=7.0.0"
+# Logging configuration
+logging:
+  level: INFO
+  file: logs/api_documentation_example.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-  # Python version requirements
-  python_version: ">=3.8.0"
+# API Documentation settings
+api_documentation:
+  # API metadata
+  title: "Sample E-commerce API"
+  version: "1.0.0"
+  description: "A comprehensive e-commerce API for managing users and products"
+  base_url: "https://api.example.com"
 
-  # Required dependencies
-  dependencies:
-    - docusaurus
-    - nodejs
-    - npm
-
-# Documentation generation settings
-generation:
-  # Source directories for documentation
-  source_dirs:
-    - docs/
-    - src/
-    - examples/
-
-  # Output directory for generated docs
-  output_dir: build/
-
-  # Documentation formats to generate
-  formats:
-    - html
-    - pdf
-    - markdown
-
-  # Include API documentation
-  include_api_docs: true
-
-  # Include code examples
+  # Documentation generation options
+  include_schemas: true
   include_examples: true
+  include_security: true
 
-  # Generate table of contents
-  generate_toc: true
+  # Export formats
+  export_formats:
+    - json
+    - yaml
+    - html
 
-# Quality assessment settings
-quality:
-  # Quality metrics to evaluate
-  metrics:
-    - readability
-    - completeness
-    - structure
-    - consistency
-    - accuracy
+  # OpenAPI specification settings
+  openapi:
+    version: "3.0.3"
+    include_servers: true
+    include_security_schemes: true
+    validate_spec: true
 
-  # Readability thresholds
-  readability_thresholds:
-    excellent: 90
-    good: 75
-    fair: 60
-    poor: 45
-
-  # Completeness requirements
-  completeness_requirements:
-    - title
-    - description
-    - examples
-    - api_reference
-
-  # Structure validation rules
-  structure_rules:
-    - headings_hierarchy
-    - code_block_formatting
-    - link_validity
-    - table_formatting
-
-# Consistency checking settings
-consistency:
-  # Check for broken links
-  check_broken_links: true
-
-  # Check for consistent terminology
-  check_terminology: true
-
-  # Check for style consistency
-  check_style: true
-
-  # Check for version consistency
-  check_versions: true
-
-  # Custom consistency rules
-  custom_rules:
-    - max_line_length: 100
-    - heading_case: title
-    - code_language_specified: true
-
-# Aggregation settings
-aggregation:
-  # Aggregate documentation from multiple sources
-  enable_aggregation: true
-
-  # Source repositories for aggregation
-  source_repos: []
-
-  # Aggregation rules
-  rules:
-    - merge_similar_topics: true
-    - resolve_conflicts: latest
-    - maintain_hierarchy: true
-
-# Site building settings
-site:
-  # Docusaurus configuration
-  docusaurus:
-    title: "Codomyrmex Documentation"
-    tagline: "AI-Powered Development Tools"
-    url: "https://codomyrmex.dev"
-    base_url: "/"
-
-  # Theme configuration
-  theme:
-    primary_color: "#2E8555"
-    secondary_color: "#6C757D"
-    font_family: "system-ui, sans-serif"
-
-  # Navigation configuration
-  navigation:
-    main:
-      - Home
-      - Docs
-      - API
-      - Examples
-    footer:
-      - GitHub
-      - Issues
-      - Contributing
+# Sample data settings
+sample_data:
+  endpoints_count: 4
+  schemas_count: 4
+  include_responses: true
+  include_parameters: true
 
 # Validation settings
 validation:
-  # Enable strict validation
   strict_mode: false
+  check_required_fields: true
+  validate_responses: true
+  validate_schemas: true
 
-  # Validation rules
-  rules:
-    - required_fields: true
-    - link_validation: true
-    - syntax_checking: true
-
-  # Error reporting
-  error_reporting:
-    fail_on_warnings: false
-    fail_on_errors: true
-    generate_report: true
-
-# Output settings for example results
-output:
-  format: json
-  file: output/documentation_results.json
-  analysis_dir: output/analysis
-
-# Performance settings
-performance:
-  # Enable caching
-  enable_caching: true
-
-  # Cache directory
-  cache_dir: .cache/
-
-  # Parallel processing
-  parallel_processing: true
-
-  # Max workers for parallel processing
-  max_workers: 4
+# Export settings
+export:
+  json_indent: 2
+  yaml_indent: 2
+  include_metadata: true
+  compress_output: false

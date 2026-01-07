@@ -1,4 +1,4 @@
-# Codomyrmex Agents — examples/llm/ollama
+# Codomyrmex Agents — scripts/llm/examples/ollama
 
 ## Signposting
 - **Parent**: [Ollama](../AGENTS.md)

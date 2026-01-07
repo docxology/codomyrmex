@@ -47,7 +47,7 @@ uv sync
 ./start_here.sh
 ```
 
-**New to Codomyrmex?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or explore [executable examples](scripts/examples/).
+**New to Codomyrmex?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or explore [executable examples](scripts/documentation/examples/).
 
 ## Navigation
 
@@ -57,7 +57,7 @@ uv sync
 - 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
 - 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
 - 🎯 **[Architecture Guide](docs/project/architecture.md)** - System design and principles
-- 💻 **[Examples](scripts/examples/)** - Working code examples and demonstrations
+- 💻 **[Examples](scripts/documentation/examples/)** - Working code examples and demonstrations
 - 🤝 **[Contributing](docs/project/contributing.md)** - How to contribute to Codomyrmex
 
 <details>
@@ -109,7 +109,7 @@ uv sync
 - 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
 - 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
 - 🎯 **[Architecture Guide](docs/project/architecture.md)** - System design and principles
-- 💻 **[Examples](scripts/examples/)** - Working code examples and demonstrations
+- 💻 **[Examples](scripts/documentation/examples/)** - Working code examples and demonstrations
 - 🤝 **[Contributing](docs/project/contributing.md)** - How to contribute to Codomyrmex
 
 ## System Architecture

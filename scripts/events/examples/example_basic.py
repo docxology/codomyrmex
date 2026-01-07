@@ -114,10 +114,12 @@ from typing import Dict, Any, Optional, List
 # Add src to path for importing Codomyrmex modules
 current_dir = Path(__file__).parent
 project_root = current_dir.parent.parent
-sys.path.insert(0, str(project_root / "src"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 # Import common utilities
-sys.path.insert(0, str(project_root / "examples" / "_common"))
 from config_loader import load_config
 from example_runner import ExampleRunner
 from utils import print_section, print_results, print_success, print_error

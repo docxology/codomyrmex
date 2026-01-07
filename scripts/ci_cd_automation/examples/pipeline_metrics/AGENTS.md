@@ -1,4 +1,4 @@
-# Codomyrmex Agents — examples/ci_cd_automation/pipeline_metrics
+# Codomyrmex Agents — scripts/ci_cd_automation/examples/pipeline_metrics
 
 ## Signposting
 - **Parent**: [Pipeline Metrics](../AGENTS.md)

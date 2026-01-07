@@ -183,11 +183,11 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
   ```
 - **docs/project/documentation-audit-report.md** (line 101):
   ```
-  - Explore the [Examples](../../../examples/physical_management/) directory for usage examples..........
+  - Explore the [Examples](../../../scripts/physical_management/examples/) directory for usage examples..........
   ```
 - **docs/project/documentation-audit-report.md** (line 105):
   ```
-  - [Examples](../../../examples/physical_management/) - Usage examples and demonstrations.........
+  - [Examples](../../../scripts/physical_management/examples/) - Usage examples and demonstrations.........
   ```
 - **docs/project/documentation-audit-report.md** (line 109):
   ```
@@ -199,11 +199,11 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
   ```
 - **docs/project/documentation-audit-report.md** (line 117):
   ```
-  - Explore the [Examples](../../../examples/physical_management/) directory for usage examples..........
+  - Explore the [Examples](../../../scripts/physical_management/examples/) directory for usage examples..........
   ```
 - **docs/project/documentation-audit-report.md** (line 121):
   ```
-  - [Examples](../../../examples/physical_management/) - Usage examples and demonstrations............
+  - [Examples](../../../scripts/physical_management/examples/) - Usage examples and demonstrations............
   ```
 - **docs/project/documentation-audit-report.md** (line 125):
   ```

@@ -24,22 +24,24 @@ Core Code Review Concepts:
 - **Trend Analysis**: Historical review data analysis and quality improvement tracking
 
 Tested Methods:
-- CodeReviewer.__init__() - Verified in test_code_review.py::TestCodeReview::test_code_reviewer_class_import
-- analyze_file() - Verified in test_code_review.py::TestCodeReview::test_code_review_all_exports
-- analyze_project() - Verified in test_code_review.py::TestCodeReview::test_code_review_all_exports
-- check_quality_gates() - Verified in test_code_review.py::TestCodeReview::test_code_review_all_exports
-- generate_report() - Verified in test_code_review.py::TestCodeReview::test_code_review_all_exports
-- CodeReviewer.generate_review_comments() - Verified in test_code_review.py::TestCodeReview::test_review_comment_generation
-- CodeReviewer.analyze_pull_request() - Verified in test_code_review.py::TestCodeReview::test_pull_request_analysis
-- CodeReviewer.check_quality_gates() - Verified in test_code_review.py::TestCodeReview::test_quality_gate_enforcement
+- CodeReviewer.__init__() - Verified in test_code.review.py::TestCodeReview::test_code.reviewer_class_import
+- analyze_file() - Verified in test_code.review.py::TestCodeReview::test_code.review_all_exports
+- analyze_project() - Verified in test_code.review.py::TestCodeReview::test_code.review_all_exports
+- check_quality_gates() - Verified in test_code.review.py::TestCodeReview::test_code.review_all_exports
+- generate_report() - Verified in test_code.review.py::TestCodeReview::test_code.review_all_exports
+- CodeReviewer.generate_review_comments() - Verified in test_code.review.py::TestCodeReview::test_review_comment_generation
+- CodeReviewer.analyze_pull_request() - Verified in test_code.review.py::TestCodeReview::test_pull_request_analysis
+- CodeReviewer.check_quality_gates() - Verified in test_code.review.py::TestCodeReview::test_quality_gate_enforcement
 """
 
 import sys
 from pathlib import Path
 
 # Add src and examples to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "examples"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from codomyrmex.coding.review import (
     CodeReviewer,
@@ -1124,7 +1126,7 @@ def function_with_complex_logic(a, b, c, d, e, f, g):
 
         # 5. Generate  report
         print("\n📋 Generating analysis report...")
-        report_path = Path("output/code_review_report.html")
+        report_path = Path("output/code.review_report.html")
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_success = reviewer.generate_report(
             str(report_path),

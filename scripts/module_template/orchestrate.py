@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """
-Module Template Orchestrator
+Template Module Orchestrator
 
-Thin orchestrator script providing CLI access to module_template functionality.
-The module_template is a template for creating new modules, so this orchestrator
-provides information about using the template.
+Thin orchestrator script providing CLI access to template module functionality.
+Calls actual module functions from codomyrmex.template.
 
 See also: src/codomyrmex/cli.py for main CLI integration
 """
@@ -16,6 +15,9 @@ from pathlib import Path
 # Import logging setup
 from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
 
+# Import module-specific exceptions
+from codomyrmex.exceptions import CodomyrmexError
+
 # Import shared utilities
 try:
     from _orchestrator_utils import (
@@ -23,7 +25,6 @@ try:
         print_error,
         print_section,
         print_success,
-        save_json_file,
     )
 except ImportError:
     import sys
@@ -34,7 +35,6 @@ except ImportError:
         print_error,
         print_section,
         print_success,
-        save_json_file,
     )
 
 logger = get_logger(__name__)
@@ -44,39 +44,23 @@ def handle_info(args):
     """Handle info command."""
     try:
         if getattr(args, "verbose", False):
-            logger.info("Retrieving module template information")
+            logger.info("Retrieving template module information")
 
         info = {
-            "module": "module_template",
-            "description": "Template for creating new Codomyrmex modules",
-            "instructions": [
-                "Copy the module_template directory",
-                "Rename it to your module name",
-                "Update the __init__.py and other files",
-                "Follow the module structure guidelines",
-            ],
-            "location": "src/codomyrmex/module_template/",
+            "module": "template",
+            "description": "Template generation and processing",
         }
 
-        print_section("Module Template Information")
-        print("The module_template is a template for creating new Codomyrmex modules.")
-        print("")
-        print("To create a new module:")
-        for i, instruction in enumerate(info["instructions"], 1):
-            print(f"{i}. {instruction}")
-        print("")
-        print(f"See: {info['location']} for the template")
+        print_section("Template Module Information")
+        print(format_output(info, format_type="json"))
         print_section("", separator="")
 
-        if args.output:
-            output_path = save_json_file(info, args.output)
-            print_success(f"Information saved to {output_path}")
-
+        print_success("Information retrieved")
         return True
 
     except Exception as e:
-        logger.exception("Unexpected error retrieving module template information")
-        print_error("Unexpected error retrieving module template information", exception=e)
+        logger.exception("Unexpected error retrieving information")
+        print_error("Unexpected error retrieving information", exception=e)
         return False
 
 
@@ -84,7 +68,7 @@ def main():
     """Main CLI entry point."""
     setup_logging()
     parser = argparse.ArgumentParser(
-        description="Module Template operations",
+        description="Template operations",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -100,10 +84,7 @@ Examples:
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Info command
-    info_parser = subparsers.add_parser("info", help="Show module template information")
-    info_parser.add_argument(
-        "--output", "-o", help="Output file path for results (JSON)"
-    )
+    info_parser = subparsers.add_parser("info", help="Get template module information")
 
     args = parser.parse_args()
 

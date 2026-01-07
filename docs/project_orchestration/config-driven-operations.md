@@ -10,7 +10,7 @@ Codomyrmex supports fully configuration-driven operations, allowing you to defin
 
 ### Workflow Configurations
 
-- **Location**: `.codomyrmex/workflows/*.json`
+- **Location**: `config/workflows/production/*.json`
 - **Auto-loaded**: Yes, when WorkflowManager initializes
 - **Format**: JSON workflow definitions
 
@@ -30,7 +30,7 @@ Codomyrmex supports fully configuration-driven operations, allowing you to defin
 
 ### Creating Workflow Configurations
 
-Create a JSON file in `.codomyrmex/workflows/`:
+Create a JSON file in `config/workflows/production/`:
 
 ```json
 {
@@ -320,7 +320,7 @@ import os
 # Load configuration from environment
 config = {
     "max_workers": int(os.getenv("CODOMYRMEX_MAX_WORKERS", "4")),
-    "workflows_dir": os.getenv("CODOMYRMEX_WORKFLOWS_DIR", ".codomyrmex/workflows"),
+    "workflows_dir": os.getenv("CODOMYRMEX_WORKFLOWS_DIR", "config/workflows/production"),
     "projects_dir": os.getenv("CODOMYRMEX_PROJECTS_DIR", "projects"),
     "templates_dir": os.getenv("CODOMYRMEX_TEMPLATES_DIR", None),  # Use default
     "resource_config": os.getenv("CODOMYRMEX_RESOURCE_CONFIG", "resources.json"),
@@ -376,7 +376,7 @@ resources = rm.list_resources()  # Only valid resources
 
 ### 1. Create Workflow Configuration
 
-`.codomyrmex/workflows/data_analysis.json`:
+`config/workflows/production/data_analysis.json`:
 ```json
 {
   "name": "data_analysis",

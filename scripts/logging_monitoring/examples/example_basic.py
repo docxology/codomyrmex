@@ -85,12 +85,15 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 # Add src to path for importing Codomyrmex modules
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+# Setup paths
+root_dir = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(root_dir / "src"))
+sys.path.insert(0, str(root_dir / "scripts"))
 
 from codomyrmex.logging_monitoring import setup_logging, get_logger
-from examples._common.config_loader import load_config
-from examples._common.example_runner import ExampleRunner
-from examples._common.utils import print_section, ensure_output_dir, print_success, print_error
+from _common.config_loader import load_config
+from _common.example_runner import ExampleRunner
+from _common.utils import print_section, ensure_output_dir, print_success, print_error
 
 def main():
     """

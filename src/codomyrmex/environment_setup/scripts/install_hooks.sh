@@ -36,11 +36,14 @@ fi
 if [ ! -d "$PROJECT_HOOKS_DIR" ]; then
     echo_info "Creating directory for project Git hooks: '$PROJECT_HOOKS_DIR'"
     mkdir -p "$PROJECT_HOOKS_DIR"
-    echo_info "Please add your hook scripts (e.g., pre-commit, prepare-commit-msg) to '$PROJECT_HOOKS_DIR' directory."
-    echo_info "For now, a sample pre-commit hook will be created."
+    
+    # Only create sample hook if no hooks exist
+    if [ -z "$(ls -A "$PROJECT_HOOKS_DIR" 2>/dev/null)" ]; then
+        echo_info "No hooks found. Creating sample pre-commit hook..."
+        echo_info "Please customize it or add your own hook scripts to '$PROJECT_HOOKS_DIR' directory."
 
-    # Create a sample pre-commit hook
-    cat << 'EOF' > "$PROJECT_HOOKS_DIR/pre-commit"
+        # Create a sample pre-commit hook
+        cat << 'EOF' > "$PROJECT_HOOKS_DIR/pre-commit"
 #!/bin/bash
 # Sample pre-commit hook for Codomyrmex
 
@@ -58,8 +61,11 @@ echo "[HOOK] Running pre-commit checks..."
 echo "[HOOK] Pre-commit checks passed."
 exit 0
 EOF
-    chmod +x "$PROJECT_HOOKS_DIR/pre-commit"
-    echo_info "Sample pre-commit hook created at '$PROJECT_HOOKS_DIR/pre-commit'. Customize it as needed."
+        chmod +x "$PROJECT_HOOKS_DIR/pre-commit"
+        echo_info "Sample pre-commit hook created at '$PROJECT_HOOKS_DIR/pre-commit'. Customize it as needed."
+    else
+        echo_info "Hooks directory exists with hooks. Skipping sample hook creation."
+    fi
 fi
 
 # 3. For each hook in our project's hook directory, create a symlink in .git/hooks

@@ -7,7 +7,7 @@
     "serve": "cd documentation && npm run serve",
     "start": "cd documentation && npm run start",
     "build": "cd documentation && npm run build",
-    "test": "pytest testing/unit"
+    "test": "pytest src/codomyrmex/tests/unit"
   },
   "repository": {
     "type": "git",
