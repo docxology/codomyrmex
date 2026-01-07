@@ -108,11 +108,15 @@ show_menu() {
     echo -e "${GREEN}7)${NC} 🎮 ${CYAN}Interactive Shell${NC} - Enter interactive exploration mode"
     echo -e "${GREEN}8)${NC} 📋 ${CYAN}Export Inventory${NC} - Generate complete system inventory report"
     echo -e "${GREEN}9)${NC} 🌐 ${CYAN}Git Repository Status${NC} - Check all Git repos and dependencies"
+    echo -e "${GREEN}W)${NC} ⚙️  ${CYAN}Workflow Management${NC} - Create, list, and run workflows"
+    echo -e "${GREEN}P)${NC} 📁 ${CYAN}Project Management${NC} - Create and manage projects"
+    echo -e "${GREEN}C)${NC} 💻 ${CYAN}CLI Access${NC} - Access Codomyrmex command-line interface"
+    echo -e "${GREEN}E)${NC} 📝 ${CYAN}Examples & Tutorials${NC} - Browse and run example scripts"
     echo -e "${GREEN}A)${NC} 🚀 ${CYAN}Install/Update Codomyrmex${NC} - Run UV-optimized installation script"
     echo -e "${GREEN}B)${NC} 🤖 ${CYAN}LLM API Configuration${NC} - Configure AI/LLM API keys and settings"
     echo -e "${GREEN}0)${NC} 🚪 ${CYAN}Exit${NC} - Return to the outside world"
     echo ""
-    echo -e "${PURPLE}Choose your path (0-9, A, B):${NC} "
+    echo -e "${PURPLE}Choose your path (0-9, W, P, C, E, A, B):${NC} "
 }
 
 # Run system discovery
@@ -120,7 +124,8 @@ run_system_discovery() {
     echo -e "\n${CYAN}🔍 Scanning the Codomyrmex ecosystem...${NC}"
     PYTHON_CMD=$(get_python_cmd)
 
-    $PYTHON_CMD -c "
+    if command -v uv &> /dev/null; then
+        uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
@@ -128,6 +133,16 @@ from codomyrmex.system_discovery import SystemDiscovery
 discovery = SystemDiscovery()
 discovery.run_full_discovery()
 "
+    else
+        $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.system_discovery import SystemDiscovery
+
+discovery = SystemDiscovery()
+discovery.run_full_discovery()
+"
+    fi
 }
 
 # Run status dashboard
@@ -135,7 +150,8 @@ run_status_dashboard() {
     echo -e "\n${CYAN}📊 Codomyrmex System Status Dashboard${NC}"
     PYTHON_CMD=$(get_python_cmd)
 
-    $PYTHON_CMD -c "
+    if command -v uv &> /dev/null; then
+        uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
@@ -143,6 +159,16 @@ from codomyrmex.system_discovery import SystemDiscovery
 discovery = SystemDiscovery()
 discovery.show_status_dashboard()
 "
+    else
+        $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.system_discovery import SystemDiscovery
+
+discovery = SystemDiscovery()
+discovery.show_status_dashboard()
+"
+    fi
 }
 
 # Run quick demo
@@ -151,10 +177,15 @@ run_quick_demo() {
     PYTHON_CMD=$(get_python_cmd)
 
     if [[ -f "scripts/development/example_usage.py" ]]; then
-        $PYTHON_CMD scripts/development/example_usage.py
+        if command -v uv &> /dev/null; then
+            uv run python scripts/development/example_usage.py
+        else
+            $PYTHON_CMD scripts/development/example_usage.py
+        fi
     else
         echo -e "${YELLOW}⚠️  scripts/development/example_usage.py not found. Running basic demo...${NC}"
-        $PYTHON_CMD -c "
+        if command -v uv &> /dev/null; then
+            uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
@@ -162,6 +193,16 @@ from codomyrmex.system_discovery import SystemDiscovery
 discovery = SystemDiscovery()
 discovery.run_demo_workflows()
 "
+        else
+            $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.system_discovery import SystemDiscovery
+
+discovery = SystemDiscovery()
+discovery.run_demo_workflows()
+"
+        fi
     fi
 }
 
@@ -230,7 +271,8 @@ run_interactive_shell() {
     echo -e "\n${CYAN}🎮 Entering Interactive Codomyrmex Shell...${NC}"
     PYTHON_CMD=$(get_python_cmd)
 
-    $PYTHON_CMD -c "
+    if command -v uv &> /dev/null; then
+        uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.terminal_interface import InteractiveShell
@@ -238,6 +280,16 @@ from codomyrmex.terminal_interface import InteractiveShell
 shell = InteractiveShell()
 shell.run()
 "
+    else
+        $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.terminal_interface import InteractiveShell
+
+shell = InteractiveShell()
+shell.run()
+"
+    fi
 }
 
 # Export inventory
@@ -245,7 +297,8 @@ export_inventory() {
     echo -e "\n${CYAN}📋 Generating System Inventory...${NC}"
     PYTHON_CMD=$(get_python_cmd)
 
-    $PYTHON_CMD -c "
+    if command -v uv &> /dev/null; then
+        uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
@@ -253,6 +306,16 @@ from codomyrmex.system_discovery import SystemDiscovery
 discovery = SystemDiscovery()
 discovery.export_full_inventory()
 "
+    else
+        $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.system_discovery import SystemDiscovery
+
+discovery = SystemDiscovery()
+discovery.export_full_inventory()
+"
+    fi
 }
 
 # Git repository status
@@ -260,7 +323,8 @@ check_git_status() {
     echo -e "\n${CYAN}🌐 Git Repository Status${NC}"
     PYTHON_CMD=$(get_python_cmd)
 
-    $PYTHON_CMD -c "
+    if command -v uv &> /dev/null; then
+        uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
@@ -268,6 +332,16 @@ from codomyrmex.system_discovery import SystemDiscovery
 discovery = SystemDiscovery()
 discovery.check_git_repositories()
 "
+    else
+        $PYTHON_CMD -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.system_discovery import SystemDiscovery
+
+discovery = SystemDiscovery()
+discovery.check_git_repositories()
+"
+    fi
 }
 
 # Run installation script

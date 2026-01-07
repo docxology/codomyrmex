@@ -7,6 +7,7 @@
     - [_configs](_configs/README.md)
     - [_templates](_templates/README.md)
     - [ai_code_editing](ai_code_editing/README.md)
+    - [api](api/README.md)
     - [api_documentation](api_documentation/README.md)
     - [api_standardization](api_standardization/README.md)
     - [build_synthesis](build_synthesis/README.md)
@@ -21,6 +22,7 @@
     - [documentation](documentation/README.md)
     - [environment_setup](environment_setup/README.md)
     - [events](events/README.md)
+    - [fpf](fpf/README.md)
     - [git_operations](git_operations/README.md)
     - [llm](llm/README.md)
     - [logging_monitoring](logging_monitoring/README.md)
@@ -38,6 +40,7 @@
     - [static_analysis](static_analysis/README.md)
     - [system_discovery](system_discovery/README.md)
     - [terminal_interface](terminal_interface/README.md)
+    - [validation](validation/README.md)
     - [validation_reports](validation_reports/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -63,6 +66,7 @@ Example implementations and demonstrations.
 - `_configs/` – Subdirectory
 - `_templates/` – Subdirectory
 - `ai_code_editing/` – Subdirectory
+- `api/` – Subdirectory
 - `api_documentation/` – Subdirectory
 - `api_standardization/` – Subdirectory
 - `build_synthesis/` – Subdirectory

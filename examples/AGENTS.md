@@ -8,9 +8,10 @@
     - [_configs](_configs/AGENTS.md)
     - [_templates](_templates/AGENTS.md)
     - [ai_code_editing](ai_code_editing/AGENTS.md)
+    - [api](api/AGENTS.md)
     - [api_documentation](api_documentation/AGENTS.md)
-    - [auth](auth/AGENTS.md)
     - [api_standardization](api_standardization/AGENTS.md)
+    - [auth](auth/AGENTS.md)
     - [build_synthesis](build_synthesis/AGENTS.md)
     - [cache](cache/AGENTS.md)
     - [cerebrum](cerebrum/AGENTS.md)
@@ -28,6 +29,7 @@
     - [encryption](encryption/AGENTS.md)
     - [environment_setup](environment_setup/AGENTS.md)
     - [events](events/AGENTS.md)
+    - [fpf](fpf/AGENTS.md)
     - [git_operations](git_operations/AGENTS.md)
     - [llm](llm/AGENTS.md)
     - [logging_monitoring](logging_monitoring/AGENTS.md)
@@ -54,6 +56,7 @@
     - [templating](templating/AGENTS.md)
     - [terminal_interface](terminal_interface/AGENTS.md)
     - [tools](tools/AGENTS.md)
+    - [validation](validation/AGENTS.md)
     - [validation_reports](validation_reports/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
@@ -78,9 +81,10 @@ Example implementations and demonstrations.
 - `_configs/` – Directory containing _configs components
 - `_templates/` – Directory containing _templates components
 - `ai_code_editing/` – Directory containing ai_code_editing components
+- `api/` – Directory containing api components
 - `api_documentation/` – Directory containing api_documentation components
-- `auth/` – Directory containing auth components
 - `api_standardization/` – Directory containing api_standardization components
+- `auth/` – Directory containing auth components
 - `build_synthesis/` – Directory containing build_synthesis components
 - `cache/` – Directory containing cache components
 - `cerebrum/` – Directory containing cerebrum components
@@ -98,6 +102,7 @@ Example implementations and demonstrations.
 - `encryption/` – Directory containing encryption components
 - `environment_setup/` – Directory containing environment_setup components
 - `events/` – Directory containing events components
+- `fpf/` – Directory containing fpf components
 - `git_operations/` – Directory containing git_operations components
 - `llm/` – Directory containing llm components
 - `logging_monitoring/` – Directory containing logging_monitoring components
@@ -124,6 +129,7 @@ Example implementations and demonstrations.
 - `terminal_interface/` – Directory containing terminal_interface components
 - `tools/` – Directory containing tools components
 - `validate_examples.py` – Project file
+- `validation/` – Directory containing validation components
 - `validation_reports/` – Directory containing validation_reports components
 
 ## Operating Contracts
