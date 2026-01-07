@@ -1,47 +1,34 @@
-# cursorrules/cross-module
+# cross-module
 
 ## Signposting
-- **Parent**: [Cursor Rules](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Cross-module coding rules and coordination standards for Codomyrmex. These rules define how modules interact, coordinate operations, and maintain consistency across module boundaries.
+Contains components for the cursorrules system.
 
 ## Directory Contents
-- `build_synthesis.cursorrules` – Build synthesis module rules
-- `code.cursorrules` – Code execution sandbox rules
-- `data_visualization.cursorrules` – Data visualization module rules
-- `logging_monitoring.cursorrules` – Logging and monitoring rules
-- `model_context_protocol.cursorrules` – MCP coordination rules
-- `output_module.cursorrules` – Output module rules
-- `pattern_matching.cursorrules` – Pattern matching rules
-- `static_analysis.cursorrules` – Static analysis rules
-- `template_module.cursorrules` – Template module rules
+- `README.md` – File
+- `SPEC.md` – File
+- `build_synthesis.cursorrules` – File
+- `data_visualization.cursorrules` – File
+- `logging_monitoring.cursorrules` – File
+- `model_context_protocol.cursorrules` – File
+- `output_module.cursorrules` – File
+- `pattern_matching.cursorrules` – File
+- `static_analysis.cursorrules` – File
+- `template_module.cursorrules` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cursorrules](../README.md)
-- **Repository Root**: [../../README.md](../../README.md)
+- **Project Root**: [README](../../README.md)
 
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.

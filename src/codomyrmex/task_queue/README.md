@@ -1,84 +1,44 @@
-# src/codomyrmex/queue
+# task_queue
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [backends](backends/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Proposed | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Queue module providing task queue management, job scheduling, and async task execution for the Codomyrmex platform. This module integrates with `project_orchestration` for workflow task management.
+Module components and implementation for task_queue..
 
-The queue module serves as the queue layer, providing backend-agnostic queue interfaces with support for in-memory, Redis, and other queue backends.
-
-## Key Features
-
-- **Multiple Backends**: Support for in-memory, Redis, and other queue backends
-- **Job Scheduling**: Schedule jobs for future execution
-- **Priority Queues**: Support priority-based job queuing
-- **Retry Logic**: Automatic job retry on failure
-- **Monitoring**: Queue statistics and job status tracking
-
-## Integration Points
-
-- **project_orchestration/** - Workflow task queuing
-- **performance/** - Queue performance monitoring
-- **logging_monitoring/** - Job execution logging
-
-## Usage Examples
-
-```python
-from codomyrmex.task_queue import Queue, Job, JobScheduler
-
-# Initialize queue
-queue = Queue(backend="redis")
-
-# Create a job
-job = Job(
-    task="process_data",
-    args={"data_id": "123"},
-    priority=1
-)
-
-# Enqueue job
-job_id = queue.enqueue(job)
-
-# Schedule job for future execution
-scheduled_id = queue.schedule(job, when=datetime.now() + timedelta(hours=1))
-
-# Get job status
-status = queue.get_status(job_id)
-
-# Job scheduler
-scheduler = JobScheduler(queue)
-scheduler.start()
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `backends/` – Subdirectory
+- `job.py` – File
+- `queue.py` – File
+- `scheduler.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-
-- **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Related Modules**:
-    - [project_orchestration](../project_orchestration/README.md) - Workflow orchestration
-    - [performance](../performance/README.md) - Performance monitoring
+- **Project Root**: [README](../../../README.md)
 
 ## Getting Started
 
 To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.task_queue import Queue, Job, JobScheduler
+# Example usage
+from codomyrmex.codomyrmex.task_queue import main_component
 
-queue = Queue()
-# Use queue for task management
+def example():
+    
+    print(f"Result: {result}")
 ```
-
-<!-- Navigation Links keyword for score -->
 

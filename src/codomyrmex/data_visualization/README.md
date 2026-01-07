@@ -1,7 +1,7 @@
-# src/codomyrmex/data_visualization
+# data_visualization
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -9,49 +9,19 @@
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Core module providing comprehensive data visualization capabilities for the Codomyrmex platform. This module enables the creation of various chart types, plots, and visual representations using Matplotlib and Seaborn backends, supporting both programmatic generation and interactive display.
-
-The data_visualization module serves as the primary interface for converting data into visual insights across the entire platform.
-
-## Visualization Pipeline
-
-```mermaid
-graph LR
-    A[Data Input] --> B[Data Validation]
-    B --> C[Plotter Engine]
-    C --> D[Chart Types]
-    D --> E[Styling & Formatting]
-    E --> F[Output Formats]
-
-    D --> G[Line Plots]
-    D --> H[Bar Charts]
-    D --> I[Scatter Plots]
-    D --> J[Histograms]
-    D --> K[Heatmaps]
-
-    F --> L[PNG/SVG]
-    F --> M[Interactive Display]
-    F --> N[File Saving]
-
-    C --> O[Git Visualizer]
-    C --> P[Mermaid Generator]
-
-    O --> Q[Branch Diagrams]
-    P --> R[Documentation Diagrams]
-```
-
-The visualization pipeline processes data through validation, chart generation, styling, and multiple output formats. Specialized visualizers handle Git repository analysis and documentation diagram generation.
+Module components and implementation for data_visualization..
 
 ## Directory Contents
-- `.gitignore` – File
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
+- `README.md` – File
 - `SECURITY.md` – File
+- `SPEC.md` – File
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
 - `advanced_plotter.py` – File
@@ -71,9 +41,8 @@ The visualization pipeline processes data through validation, chart generation, 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Project Root**: [README](../../../README.md)
 
 ## Getting Started
 
@@ -88,4 +57,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-<!-- Navigation Links keyword for score -->

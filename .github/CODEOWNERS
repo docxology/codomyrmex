@@ -1,0 +1,49 @@
+# CODEOWNERS file for Codomyrmex
+# This file defines code ownership for automatic PR review requests
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners - all files default to these owners
+* @docxology/codomyrmex-maintainers
+
+# GitHub configuration and workflows
+/.github/ @docxology/codomyrmex-maintainers
+/.github/workflows/ @docxology/codomyrmex-maintainers
+/.github/ISSUE_TEMPLATE/ @docxology/codomyrmex-maintainers
+/.github/PULL_REQUEST_TEMPLATE.md @docxology/codomyrmex-maintainers
+/.github/CODEOWNERS @docxology/codomyrmex-maintainers
+/.github/dependabot.yml @docxology/codomyrmex-maintainers
+
+# Core source code
+/src/ @docxology/codomyrmex-maintainers
+/src/codomyrmex/ @docxology/codomyrmex-maintainers
+
+# Documentation
+/docs/ @docxology/codomyrmex-maintainers
+/README.md @docxology/codomyrmex-maintainers
+/AGENTS.md @docxology/codomyrmex-maintainers
+/SECURITY.md @docxology/codomyrmex-maintainers
+
+# Configuration files
+/pyproject.toml @docxology/codomyrmex-maintainers
+/uv.lock @docxology/codomyrmex-maintainers
+/requirements.txt @docxology/codomyrmex-maintainers
+/pytest.ini @docxology/codomyrmex-maintainers
+/Makefile @docxology/codomyrmex-maintainers
+
+# Scripts and automation
+/scripts/ @docxology/codomyrmex-maintainers
+
+# Testing
+/testing/ @docxology/codomyrmex-maintainers
+/tests/ @docxology/codomyrmex-maintainers
+
+# CI/CD and build configuration
+/.github/ @docxology/codomyrmex-maintainers
+/.cursorrules/ @docxology/codomyrmex-maintainers
+
+# Note: Replace @docxology/codomyrmex-maintainers with actual GitHub usernames or team names
+# Example formats:
+# * @username
+# * @org/team-name
+# * @username1 @username2
+

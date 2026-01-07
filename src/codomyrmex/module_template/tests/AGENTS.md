@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/module_template/tests
 
 ## Signposting
-- **Parent**: [Module Template](../AGENTS.md)
+- **Parent**: [Tests](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [integration](integration/AGENTS.md)
@@ -10,21 +10,16 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 Test files and validation suites.
 
 ## Active Components
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `integration/` – Directory containing integration components
 - `unit/` – Directory containing unit components
-
-
-### Additional Files
-- `SPEC.md` – Spec Md
-- `integration` – Integration
-- `unit` – Unit
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -34,5 +29,5 @@ Test files and validation suites.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [module_template](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [module_template](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

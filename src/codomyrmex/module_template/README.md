@@ -1,7 +1,7 @@
-# src/codomyrmex/module_template
+# module_template
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,33 +13,15 @@
 
 ## Overview
 
-The `module_template` module allows developers to quickly scaffold new modules within the Codomyrmex ecosystem. By standardizing the creation process, it ensures that every new component adheres to the project's architectural guidelines, including directory structure, documentation standards, and testing setups.
-
-## Key Features
-
-- **Standardized Scaffolding**: Generates the complete folder hierarchy required for a compliant module.
-- **Documentation Bootstrapping**: Automatically creates `README.md`, `AGENTS.md`, and `SPEC.md` with appropriate templates.
-- **Boilerplate generation**: Creates initial `__init__.py`, `requirements.txt`, and test files.
-
-## Usage
-
-```python
-from codomyrmex.module_template import create_module
-
-# Create a new module named 'quantum_entangler'
-create_module(
-    name="quantum_entangler",
-    description="Handles quantum state synchronization."
-)
-```
+Module components and implementation for module_template..
 
 ## Directory Contents
-- `.cursor/` – Subdirectory
-- `.gitignore` – File
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
+- `README.md` – File
 - `SECURITY.md` – File
+- `SPEC.md` – File
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
 - `docs/` – Subdirectory
@@ -49,9 +31,8 @@ create_module(
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Project Root**: [README](../../../README.md)
 
 ## Getting Started
 

@@ -1,79 +1,41 @@
-# src/codomyrmex/metrics
+# metrics
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Proposed | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Metrics module providing metrics collection, aggregation, and Prometheus integration for the Codomyrmex platform. This module integrates with `performance` and `logging_monitoring` modules to provide comprehensive metrics tracking.
+Module components and implementation for metrics..
 
-The metrics module serves as the metrics layer, providing backend-agnostic metrics interfaces with support for Prometheus and other metrics backends.
-
-## Key Features
-
-- **Multiple Backends**: Support for Prometheus, in-memory, and other metrics backends
-- **Metric Types**: Counters, gauges, histograms, and summaries
-- **Label Support**: Label-based metric organization
-- **Export**: Export metrics to various backends
-- **Aggregation**: Automatic metric aggregation and reporting
-
-## Integration Points
-
-- **performance/** - Performance metrics collection
-- **logging_monitoring/** - Metrics logging integration
-- **system_discovery/** - System metrics collection
-
-## Usage Examples
-
-```python
-from codomyrmex.metrics import Metrics, Counter, Gauge
-
-# Initialize metrics
-metrics = Metrics(backend="prometheus")
-
-# Create a counter
-counter = metrics.counter("requests_total", labels={"method": "GET"})
-counter.inc()
-
-# Create a gauge
-gauge = metrics.gauge("memory_usage", labels={"host": "server1"})
-gauge.set(1024)
-
-# Create a histogram
-histogram = metrics.histogram("request_duration", labels={"endpoint": "/api"})
-histogram.observe(0.5)
-
-# Export metrics
-exported = metrics.export()
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `metrics.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-
-- **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Related Modules**:
-    - [performance](../performance/README.md) - Performance monitoring
-    - [logging_monitoring](../logging_monitoring/README.md) - Logging system
+- **Project Root**: [README](../../../README.md)
 
 ## Getting Started
 
 To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.metrics import Metrics, Counter, Gauge, Histogram
+# Example usage
+from codomyrmex.codomyrmex.metrics import main_component
 
-metrics = Metrics()
-# Use metrics for collecting and exporting metrics
+def example():
+    
+    print(f"Result: {result}")
 ```
-
-<!-- Navigation Links keyword for score -->
 

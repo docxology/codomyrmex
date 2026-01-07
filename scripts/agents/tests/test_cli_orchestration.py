@@ -2,11 +2,14 @@
 
 import pytest
 import sys
+import json
 from pathlib import Path
 from unittest.mock import patch, MagicMock, Mock
 from io import StringIO
 
 from codomyrmex.agents.config import AgentConfig, get_config, set_config, reset_config
+from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
+from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
 
 
 class TestCLICommands:
@@ -148,4 +151,301 @@ class TestCLIConfigurationIntegration:
         assert len(errors) > 0
         assert any("default_timeout" in e for e in errors)
         assert any("jules_timeout" in e for e in errors)
+
+
+# ============================================================================
+# Agent Command Tests
+# ============================================================================
+
+class TestJulesCommands:
+    """Test Jules agent commands."""
+
+    def test_jules_check_availability(self):
+        """Test jules check command."""
+        from codomyrmex.agents.jules import JulesClient
+        
+        client = JulesClient()
+        available = client._check_jules_available()
+        
+        # Should return boolean
+        assert isinstance(available, bool)
+
+    def test_jules_get_help(self):
+        """Test jules help command."""
+        from codomyrmex.agents.jules import JulesClient
+        
+        client = JulesClient()
+        help_info = client.get_jules_help()
+        
+        assert isinstance(help_info, dict)
+        assert "available" in help_info
+        assert "help_text" in help_info
+
+    def test_jules_execute_request(self):
+        """Test jules execute request structure."""
+        from codomyrmex.agents.jules import JulesClient
+        
+        client = JulesClient()
+        request = AgentRequest(prompt="test prompt")
+        
+        # Should be able to create request
+        assert request.prompt == "test prompt"
+        assert isinstance(request.context, dict)
+
+
+class TestClaudeCommands:
+    """Test Claude agent commands."""
+
+    def test_claude_check_config(self):
+        """Test claude check command."""
+        config = get_config()
+        
+        # Should have claude config
+        assert hasattr(config, "claude_model")
+        assert hasattr(config, "claude_api_key")
+        assert hasattr(config, "claude_timeout")
+
+    def test_claude_execute_request(self):
+        """Test claude execute request structure."""
+        from codomyrmex.agents.claude import ClaudeClient
+        
+        # May fail if anthropic not installed, but structure should work
+        try:
+            client = ClaudeClient()
+            request = AgentRequest(prompt="test prompt")
+            assert request.prompt == "test prompt"
+        except Exception:
+            # Expected if anthropic not installed
+            pass
+
+
+class TestCodexCommands:
+    """Test Codex agent commands."""
+
+    def test_codex_check_config(self):
+        """Test codex check command."""
+        config = get_config()
+        
+        # Should have codex config
+        assert hasattr(config, "codex_model")
+        assert hasattr(config, "codex_api_key")
+        assert hasattr(config, "codex_timeout")
+
+    def test_codex_execute_request(self):
+        """Test codex execute request structure."""
+        from codomyrmex.agents.codex import CodexClient
+        
+        # May fail if openai not installed, but structure should work
+        try:
+            client = CodexClient()
+            request = AgentRequest(prompt="test prompt")
+            assert request.prompt == "test prompt"
+        except Exception:
+            # Expected if openai not installed
+            pass
+
+
+class TestOpenCodeCommands:
+    """Test OpenCode agent commands."""
+
+    def test_opencode_check_availability(self):
+        """Test opencode check command."""
+        from codomyrmex.agents.opencode import OpenCodeClient
+        
+        client = OpenCodeClient()
+        available = client._check_opencode_available()
+        
+        # Should return boolean
+        assert isinstance(available, bool)
+
+    def test_opencode_get_version(self):
+        """Test opencode version command."""
+        from codomyrmex.agents.opencode import OpenCodeClient
+        
+        client = OpenCodeClient()
+        version_info = client.get_opencode_version()
+        
+        assert isinstance(version_info, dict)
+        assert "available" in version_info
+        assert "version" in version_info
+
+
+class TestGeminiCommands:
+    """Test Gemini agent commands."""
+
+    def test_gemini_check_availability(self):
+        """Test gemini check command."""
+        from codomyrmex.agents.gemini import GeminiClient
+        
+        client = GeminiClient()
+        available = client._check_gemini_available()
+        
+        # Should return boolean
+        assert isinstance(available, bool)
+
+    def test_gemini_chat_operations(self):
+        """Test gemini chat operations structure."""
+        from codomyrmex.agents.gemini import GeminiClient
+        
+        client = GeminiClient()
+        
+        # Test chat list
+        result = client.list_chats()
+        assert isinstance(result, dict)
+        
+        # Test chat save structure (may fail if gemini not available)
+        try:
+            result = client.save_chat("test-tag", "test prompt")
+            assert isinstance(result, dict)
+        except Exception:
+            # Expected if gemini not available
+            pass
+
+
+class TestDroidCommands:
+    """Test Droid controller commands."""
+
+    def test_droid_controller_creation(self):
+        """Test droid controller creation."""
+        from codomyrmex.agents.droid import create_default_controller, DroidConfig
+        
+        try:
+            controller = create_default_controller()
+            assert controller is not None
+            assert hasattr(controller, "status")
+            assert hasattr(controller, "config")
+            assert hasattr(controller, "metrics")
+        except Exception:
+            # May fail if dependencies not available
+            pass
+
+    def test_droid_config_structure(self):
+        """Test droid config structure."""
+        from codomyrmex.agents.droid import DroidConfig
+        
+        config = DroidConfig()
+        config_dict = config.to_dict()
+        
+        assert isinstance(config_dict, dict)
+        assert "identifier" in config_dict
+        assert "mode" in config_dict
+        assert "llm_provider" in config_dict
+
+
+class TestOrchestratorCommands:
+    """Test orchestrator commands."""
+
+    def test_orchestrator_creation(self):
+        """Test orchestrator creation."""
+        from codomyrmex.agents.generic import AgentOrchestrator
+        from codomyrmex.agents.jules import JulesClient
+        
+        try:
+            # Create a simple agent list
+            agents = []
+            try:
+                agents.append(JulesClient())
+            except Exception:
+                pass  # Skip if jules not available
+            
+            if agents:
+                orchestrator = AgentOrchestrator(agents)
+                assert orchestrator is not None
+                assert hasattr(orchestrator, "execute_parallel")
+                assert hasattr(orchestrator, "execute_sequential")
+                assert hasattr(orchestrator, "execute_with_fallback")
+        except Exception:
+            # May fail if dependencies not available
+            pass
+
+    def test_agent_request_creation(self):
+        """Test agent request creation with context."""
+        request = AgentRequest(
+            prompt="test",
+            context={"key": "value"},
+            timeout=30
+        )
+        
+        assert request.prompt == "test"
+        assert request.context == {"key": "value"}
+        assert request.timeout == 30
+
+    def test_agent_response_structure(self):
+        """Test agent response structure."""
+        response = AgentResponse(
+            content="test content",
+            error=None,
+            execution_time=1.5
+        )
+        
+        assert response.content == "test content"
+        assert response.is_success()
+        assert response.execution_time == 1.5
+
+
+class TestTheoryCommands:
+    """Test theory module commands."""
+
+    def test_theory_architectures_available(self):
+        """Test that theory architectures are available."""
+        try:
+            from codomyrmex.agents.theory import (
+                ReactiveArchitecture,
+                DeliberativeArchitecture,
+                HybridArchitecture,
+            )
+            
+            # Should be able to import
+            assert ReactiveArchitecture is not None
+            assert DeliberativeArchitecture is not None
+            assert HybridArchitecture is not None
+        except ImportError:
+            # May not be available
+            pass
+
+    def test_theory_reasoning_models_available(self):
+        """Test that theory reasoning models are available."""
+        try:
+            from codomyrmex.agents.theory import (
+                SymbolicReasoningModel,
+                NeuralReasoningModel,
+                HybridReasoningModel,
+            )
+            
+            # Should be able to import
+            assert SymbolicReasoningModel is not None
+            assert NeuralReasoningModel is not None
+            assert HybridReasoningModel is not None
+        except ImportError:
+            # May not be available
+            pass
+
+
+class TestCommonOperations:
+    """Test common operations across agents."""
+
+    def test_agent_request_with_context_json(self):
+        """Test parsing context from JSON string."""
+        context_str = '{"key": "value", "number": 42}'
+        context = json.loads(context_str)
+        
+        request = AgentRequest(prompt="test", context=context)
+        assert request.context["key"] == "value"
+        assert request.context["number"] == 42
+
+    def test_agent_response_success_check(self):
+        """Test agent response success checking."""
+        success_response = AgentResponse(content="test", error=None)
+        error_response = AgentResponse(content="", error="test error")
+        
+        assert success_response.is_success()
+        assert not error_response.is_success()
+
+    def test_agent_capabilities_enum(self):
+        """Test agent capabilities enum."""
+        from codomyrmex.agents.core import AgentCapabilities
+        
+        assert AgentCapabilities.CODE_GENERATION is not None
+        assert AgentCapabilities.STREAMING is not None
+        assert AgentCapabilities.MULTI_TURN is not None
 

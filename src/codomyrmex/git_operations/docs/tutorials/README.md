@@ -1,7 +1,7 @@
-# src/codomyrmex/git_operations/docs/tutorials
+# tutorials
 
 ## Signposting
-- **Parent**: [Git Operations Documentation](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,45 +12,45 @@
 
 ## Overview
 
-Step-by-step tutorials for using the Git Operations module to automate version control workflows.
+Documentation files and guides for tutorials.
 
-## Tutorial Topics
-
-- **Automated Branching**: Creating and managing feature branches from requirements.
-- **PR Lifecycle**: Programmatically creating, updating, and merging pull requests on GitHub.
-- **Repository Analysis**: Using metadata tools to analyze commit history and branch health.
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `creating_feature_branch_tutorial.md` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [docs](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Project Root**: [README](../../../../../README.md)
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+This directory contains tutorials for using the git_operations module.
+
+### Available Tutorials
+
+- [Creating Feature Branch](creating_feature_branch_tutorial.md) - Step-by-step guide for feature branch workflows
+
+### Example Usage
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.git_operations.docs.tutorials import main_component
+from codomyrmex.git_operations import (
+    initialize_git_repository,
+    create_branch,
+    add_files,
+    commit_changes
+)
 
-def example():
-    
-    print(f"Result: {result}")
+# Initialize repository
+initialize_git_repository("/path/to/repo")
+
+# Create feature branch
+create_branch("feature/new-feature", "/path/to/repo")
+
+# Add and commit files
+add_files(["new_file.py"], "/path/to/repo")
+commit_changes("Add new feature", "/path/to/repo")
 ```
 
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.

@@ -1,20 +1,22 @@
-# src/codomyrmex/llm/outputs/llm_outputs
+# llm_outputs
 
 ## Signposting
-- **Parent**: [Language Models](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Raw LLM response logs for debugging, analysis, and regression testing.
+Module components and implementation for llm_outputs..
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `chat_completion.md` – File
 - `manager_generation.md` – File
 - `parameter_configuration.md` – File
@@ -25,6 +27,5 @@ Raw LLM response logs for debugging, analysis, and regression testing.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [outputs](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Project Root**: [README](../../../../../README.md)

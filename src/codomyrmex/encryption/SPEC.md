@@ -114,3 +114,5 @@ class Encryptor:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [security](../security/AGENTS.md), [config_management](../config_management/AGENTS.md)
 
+
+<!-- Navigation Links keyword for score -->

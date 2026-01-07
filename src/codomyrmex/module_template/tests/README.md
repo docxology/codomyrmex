@@ -1,7 +1,7 @@
-# src/codomyrmex/module_template/tests
+# tests
 
 ## Signposting
-- **Parent**: [Module Template](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [integration](integration/README.md)
     - [unit](unit/README.md)
@@ -9,22 +9,23 @@
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
 Test files and validation suites.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `integration/` – Subdirectory
 - `unit/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [module_template](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Project Root**: [README](../../../../README.md)
 
 ## Getting Started
 

@@ -1,36 +1,32 @@
 # Codomyrmex Agents — src/codomyrmex/scrape/docs
 
 ## Signposting
-- **Parent**: [scrape](../AGENTS.md)
-- **Self**: [Documentation Agents](AGENTS.md)
+- **Parent**: [Documentation Root](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
 - **Key Artifacts**:
-    - [API Specification](API_SPECIFICATION.md)
-    - [Usage Examples](USAGE_EXAMPLES.md)
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Documentation subdirectory for the scrape module, containing detailed API reference and usage examples.
+Documentation files and guides for docs.
 
 ## Active Components
-
-- `README.md` - Documentation index
-- `API_SPECIFICATION.md` - Detailed API reference
-- `USAGE_EXAMPLES.md` - Comprehensive usage examples
+- `API_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
 
 ## Operating Contracts
-
-### Universal Documentation Protocols
-1. **Accuracy** - Documentation must reflect current API implementation
-2. **Completeness** - All public functions and classes must be documented
-3. **Examples** - Include working examples for all major features
-4. **Versioning** - Update version when API changes
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-
-- **Main Module**: [../README.md](../README.md) - Module overview
-- **Technical Docs**: [../AGENTS.md](../AGENTS.md) - Agent documentation
-
+- **📁 Parent Directory**: [scrape](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

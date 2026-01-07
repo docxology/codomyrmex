@@ -1,33 +1,30 @@
 # Codomyrmex Agents — examples/llm/ollama
 
 ## Signposting
-- **Parent**: [LLM Examples](../AGENTS.md)
+- **Parent**: [Ollama](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
 - **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-This directory contains examples demonstrating local LLM integration using Ollama.
+Example implementations and demonstrations.
 
 ## Active Components
-
-### Configuration Files
-- `rnj_1_8b_config.json` – Configuration for RNJ 1.8B model
+- `README.md` – Project file
+- `rnj_1_8b_config.json` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-All Ollama examples must:
-1. Check Ollama service availability before execution
-2. Handle model loading gracefully
-3. Provide clear timeout configurations
-
-## Navigation
+## Navigation Links
 - **Human Documentation**: [README.md](README.md)
-- **Parent**: [LLM Examples](../AGENTS.md)
-
-<!-- Navigation Links keyword for score -->
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [llm](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

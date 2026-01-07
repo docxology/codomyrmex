@@ -1,0 +1,72 @@
+# Dependabot configuration for Codomyrmex
+# See: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+
+updates:
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    groups:
+      github-actions:
+        patterns:
+          - "actions/*"
+          - "astral-sh/*"
+          - "github/*"
+          - "semgrep/*"
+          - "pypa/*"
+          - "peter-evans/*"
+          - "peaceiris/*"
+          - "trufflesecurity/*"
+          - "Mattraks/*"
+          - "dorny/*"
+    reviewers:
+      - "docxology/codomyrmex-maintainers"
+    assignees:
+      - "docxology/codomyrmex-maintainers"
+
+  # Python dependencies (using uv.lock)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+      - "automated"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    # Focus on security updates for Python
+    allow:
+      - dependency-type: "direct"
+    ignore:
+      # Ignore major version updates (require manual review)
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    reviewers:
+      - "docxology/codomyrmex-maintainers"
+    assignees:
+      - "docxology/codomyrmex-maintainers"
+
+  # Note: If using npm/Node.js dependencies in the future, add:
+  # - package-ecosystem: "npm"
+  #   directory: "/src/codomyrmex/documentation"
+  #   schedule:
+  #     interval: "weekly"
+

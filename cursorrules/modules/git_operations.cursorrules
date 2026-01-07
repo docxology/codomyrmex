@@ -5,66 +5,71 @@ These rules are specific to the `git_operations` module and supplement `general.
 
 ## 1. Module Purpose & Context
 -   **Core Functionality**: Provides a Python API for programmatic Git operations, abstracting direct CLI calls and promoting consistent, secure, and logged version control interactions. Aims to support automation of Git workflows within Codomyrmex.
--   **Key Technologies/Tools**: Python, `git` CLI, potentially `GitPython` library.
+-   **Key Technologies/Tools**: Python, `git` CLI via `subprocess` module.
 -   Refer to this module's `README.md` for a comprehensive overview of its intended scope and design.
 
 ## 2. Key Files & Structure
 When working within this module, pay close attention to:
--   `README.md`: Overview, workflow context, and development guidelines.
--   `API_SPECIFICATION.md`: Defines the public Python API for Git functions (e.g., `get_repository_status`, `commit_changes`). This is the primary contract for users of the module.
+-   `README.md`: Comprehensive module overview, quick start guide, and feature list.
+-   `API_SPECIFICATION.md`: Defines the public Python API for Git functions (e.g., `get_status`, `commit_changes`). This is the primary contract for users of the module.
+-   `COMPLETE_API_DOCUMENTATION.md`: Detailed documentation with examples for all functions.
 -   `MCP_TOOL_SPECIFICATION.md`: (Currently N/A) Would define any MCP tools for AI-driven Git operations.
 -   `SECURITY.md`: Critical security considerations for automating Git operations, especially credential handling and command execution.
--   `USAGE_EXAMPLES.md`: Conceptual examples of how to use the Python API.
--   `git_wrapper.py` (or `git_utils.py`): (Future implementation) Core Python functions wrapping Git commands.
--   `repository.py` / `exceptions.py`: (Future implementation) Supporting data models and custom exceptions.
+-   `USAGE_EXAMPLES.md` and `COMPREHENSIVE_USAGE_EXAMPLES.md`: Examples of how to use the Python API.
+-   `git_manager.py`: Core Python functions wrapping Git commands via subprocess.
+-   `github_api.py`: GitHub API integration for repository and PR management.
+-   `repository_manager.py`: Repository library management and bulk operations.
+-   `repository_metadata.py`: Metadata tracking system for repositories.
+-   `visualization_integration.py`: Optional visualization features (requires data_visualization module).
 -   `docs/technical_overview.md`: In-depth technical design of the Git interaction logic.
 -   `docs/tutorials/`: How-to guides for using the module's API for specific project workflows.
--   `requirements.txt`: Lists specific Python dependencies (e.g., `GitPython`), though versioning is managed by the root `requirements.txt`.
 
-## 3. Coding Standards & Practices (for future implementation)
+## 3. Coding Standards & Practices
 
-### For Python API (`git_wrapper.py`, etc.):
+### For Python API (`git_manager.py`, etc.):
 -   Follow Python PEP 8 guidelines.
--   **Prioritize `GitPython`**: Use `GitPython` library for interacting with `git` CLI where possible, as it provides a more robust and Pythonic interface than raw `subprocess` calls.
--   **Secure `subprocess` Usage**: If `subprocess` must be used directly:
+-   **Subprocess Implementation**: The module uses `subprocess.run()` for all Git operations. This is the current implementation approach.
     -   Always pass commands and arguments as a list (e.g., `subprocess.run(["git", "status"], ...)`).
     -   Never use `shell=True` with user-supplied input.
-    -   Carefully sanitize any user-provided strings that might become part of command arguments if not directly handled by `GitPython`.
--   **Comprehensive Error Handling**: Catch exceptions from `GitPython` or `subprocess` and raise module-specific, informative exceptions (defined in `exceptions.py`) as per `API_SPECIFICATION.md`.
--   **Structured Output**: Return structured data (e.g., custom data classes like `RepositoryStatus`, `CommitInfo`) rather than raw string output from Git commands.
+    -   All user-provided strings are passed as list elements, preventing command injection.
+    -   Use `cwd` parameter to specify repository path rather than changing directories.
+-   **Comprehensive Error Handling**: Catch exceptions from `subprocess` and return typed results (bool, None, empty dict/list) rather than raising exceptions. Errors are logged via `logging_monitoring` module.
+-   **Structured Output**: Return structured data (dictionaries, lists) rather than raw string output from Git commands where applicable.
 -   **Logging**: Integrate with the `logging_monitoring` module to log all significant Git operations, their parameters (excluding sensitive ones), and their success/failure status.
--   **Clear Docstrings**: All public API functions must have comprehensive docstrings explaining parameters, return values, raised exceptions, and behavior, consistent with `API_SPECIFICATION.md`.
+-   **Clear Docstrings**: All public API functions must have comprehensive docstrings explaining parameters, return values, and behavior, consistent with `API_SPECIFICATION.md`.
 -   **Idempotency where applicable**: Design functions to be idempotent if the underlying Git command supports it and it makes sense for the use case.
+-   **Performance Monitoring**: Use `@monitor_performance` decorator from `performance` module when available for tracking operation latency.
 
 ### For Documentation (Markdown):
 -   Ensure `API_SPECIFICATION.md` is the source of truth for the Python API.
 -   Keep tutorials and usage examples aligned with the implemented API.
 -   Clearly document security implications and prerequisites (like Git authentication setup) for using the API.
 
-## 4. Testing (for future implementation)
+## 4. Testing
 -   **Unit Tests (`tests/unit/`)**: 
-    -   Focus on the logic within wrapper functions (argument parsing, mapping to `GitPython` calls, processing of `GitPython` results).
-    -   Extensively mock `GitPython` library calls (e.g., `Repo` objects, `git.execute()`) to simulate various Git responses (success, errors, different repository states).
-    -   Test custom exception raising.
+    -   Focus on the logic within wrapper functions (argument parsing, subprocess calls, output parsing).
+    -   Mock `subprocess.run()` calls to simulate various Git responses (success, errors, different repository states).
+    -   Test error handling and return value types.
 -   **Integration Tests (`tests/integration/`)**: 
     -   These tests should interact with actual (temporary, locally created) Git repositories.
     -   Create a temporary directory, initialize a Git repo (`git init`).
-    -   Perform sequences of API calls (e.g., `checkout_branch`, `commit_changes`, `get_status`) and then assert the state of the local Git repository (e.g., by calling `git` CLI directly via `subprocess` to check current branch, log, status, or by using other API functions from the module).
+    -   Perform sequences of API calls (e.g., `create_branch`, `commit_changes`, `get_status`) and then assert the state of the local Git repository.
     -   Clean up temporary repositories after tests.
     -   These tests will be slower and should be marked appropriately if needed.
--   **Security**: Consider tests that try to misuse API functions with unusual inputs (though `GitPython` should handle much of the low-level Git command sanitization).
+-   **Security**: Consider tests that try to misuse API functions with unusual inputs to verify subprocess safety.
 
 ## 5. Documentation (Meta-Documentation for this Module)
 -   Keep this module's `README.md` and `docs/technical_overview.md` accurately reflecting the design and implementation of the Git automation tools.
 
 ## 6. Specific Considerations for `git_operations`
--   **Cross-Platform Compatibility**: Be mindful of how Git behaves on different OS (Windows, Linux, macOS), especially regarding paths, line endings, and credential helpers. `GitPython` helps abstract some of this.
+-   **Cross-Platform Compatibility**: Be mindful of how Git behaves on different OS (Windows, Linux, macOS), especially regarding paths, line endings, and credential helpers. The subprocess approach works across platforms.
 -   **Security is Paramount**: Given that this module interacts with source code and potentially credentials, all design and implementation choices must prioritize security. Refer to `SECURITY.md` frequently.
 -   **User Experience for API Consumers**: Design the Python API to be intuitive and easy to use correctly.
+-   **Error Handling Philosophy**: Functions return False/None/empty collections on error rather than raising exceptions. This allows callers to check results without try/except blocks, but requires careful checking of return values.
 
 ## 7. Final Check (when implementing features)
 -   Verify that API functions behave as described in `API_SPECIFICATION.md`.
--   Ensure all operations are logged appropriately.
+-   Ensure all operations are logged appropriately via `logging_monitoring`.
 -   Confirm that error handling is robust and user-friendly.
 -   Update this module's `CHANGELOG.md` for any changes to the API or significant functionality.
-
+-   Ensure subprocess calls use list arguments and never shell=True.

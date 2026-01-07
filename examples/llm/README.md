@@ -1,7 +1,7 @@
-# LLM Examples
+# llm
 
 ## Signposting
-- **Parent**: [Examples](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [ollama](ollama/README.md)
 - **Key Artifacts**:
@@ -12,34 +12,16 @@
 
 ## Overview
 
-This directory contains examples demonstrating LLM (Large Language Model) integration with Codomyrmex.
+Example implementations and demonstrations.
 
-## Available Examples
-
-### Language Models
-Examples for language model client integration and usage patterns.
-
-### Ollama
-Examples for local LLM integration using Ollama.
-
-## Quick Start
-
-```bash
-# Navigate to specific example
-cd examples/llm/language_models
-python example_basic.py
-
-# Or for Ollama examples
-cd examples/llm/ollama
-python example_basic.py
-```
-
-## Related Documentation
-- **[LLM Module](../../src/codomyrmex/llm/)** - LLM module implementation
-- **[Ollama Integration](../ollama_integration/)** - Ollama integration examples
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `ollama/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [Examples](../README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [examples](../README.md)
+- **Project Root**: [README](../../README.md)
 
-<!-- Navigation Links keyword for score -->

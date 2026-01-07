@@ -30,7 +30,7 @@ try:
 except ImportError:
     import sys
     from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).parent))
+    sys.path.insert(0, str(Path(__file__).parent.parent))
     from _orchestrator_utils import (
         format_output,
         print_error,
@@ -39,33 +39,58 @@ except ImportError:
         validate_file_path,
     )
 
-# Import module functions
-from codomyrmex.documents import process_document
+# Import module functions - use available functions
+try:
+    from codomyrmex.documents import read_document, write_document, CORE_AVAILABLE
+    if not CORE_AVAILABLE:
+        raise ImportError("Core documents functions not available")
+except ImportError:
+    # Fallback: provide a simple info command only
+    read_document = None
+    write_document = None
 
 logger = get_logger(__name__)
 
 
-def handle_process(args):
-    """Handle document processing command."""
+def handle_read(args):
+    """Handle document reading command."""
+    if not read_document:
+        print_error("Document reading not available - core module failed to import")
+        return False
     try:
         file_path = validate_file_path(args.file, must_exist=True, must_be_file=True)
 
         if getattr(args, "verbose", False):
-            logger.info(f"Processing document: {file_path}")
+            logger.info(f"Reading document: {file_path}")
 
-        result = process_document(str(file_path))
+        result = read_document(str(file_path))
 
-        print_section("Document Processing Results")
-        print(format_output(result, format_type="json"))
+        print_section("Document Contents")
+        print(format_output({"content": result[:500] + "..." if len(str(result)) > 500 else result}, format_type="json"))
         print_section("", separator="")
 
-        print_success("Document processed successfully")
+        print_success("Document read successfully")
         return True
 
     except Exception as e:
-        logger.exception("Unexpected error processing document")
-        print_error("Unexpected error processing document", exception=e)
+        logger.exception("Unexpected error reading document")
+        print_error("Unexpected error reading document", exception=e)
         return False
+
+
+def handle_info(args):
+    """Handle info command."""
+    info = {
+        "module": "documents",
+        "core_available": read_document is not None,
+        "write_available": write_document is not None,
+        "description": "Document reading and writing utilities",
+    }
+    print_section("Documents Module Information")
+    print(format_output(info, format_type="json"))
+    print_section("", separator="")
+    print_success("Information retrieved")
+    return True
 
 
 def main():
@@ -76,7 +101,8 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s process --file document.pdf
+  %(prog)s read --file document.md
+  %(prog)s info
         """,
     )
 
@@ -87,9 +113,12 @@ Examples:
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-    # Process command
-    process_parser = subparsers.add_parser("process", help="Process a document")
-    process_parser.add_argument("--file", "-f", required=True, help="Document file path")
+    # Read command
+    read_parser = subparsers.add_parser("read", help="Read a document")
+    read_parser.add_argument("--file", "-f", required=True, help="Document file path")
+    
+    # Info command
+    subparsers.add_parser("info", help="Get module information")
 
     args = parser.parse_args()
 
@@ -99,7 +128,8 @@ Examples:
 
     # Route to appropriate handler
     handlers = {
-        "process": handle_process,
+        "read": handle_read,
+        "info": handle_info,
     }
 
     handler = handlers.get(args.command)

@@ -1,0 +1,19 @@
+# Cache System Configuration
+# Demonstrates caching functionality
+
+cache:
+  backend: memory
+  ttl_seconds: 3600
+  max_size: 1000
+  enable_stats: true
+
+output:
+  format: json
+  file: output/cache_results.json
+  include_details: true
+
+logging_config:
+  level: INFO
+  file: logs/cache_example.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+

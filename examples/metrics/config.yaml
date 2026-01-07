@@ -1,0 +1,15 @@
+# Metrics System Configuration
+# Demonstrates metrics functionality
+
+metrics:
+  enabled: true
+
+output:
+  format: json
+  file: output/metrics_results.json
+  include_details: true
+
+logging_config:
+  level: INFO
+  file: logs/metrics_example.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

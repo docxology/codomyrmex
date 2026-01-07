@@ -1,44 +1,45 @@
 # spatial
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - [three_d](three_d/README.md)- **Key Artifacts**:
+    - [four_d](four_d/README.md)
+    - [three_d](three_d/README.md)
+    - [world_models](world_models/README.md)
+- **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-The spatial module provides 3D/4D visualization, modeling, and world model capabilities for the Codomyrmex platform. It consolidates all spatial computing functionality into a unified module.
+Module components and implementation for spatial..
 
-## Submodules
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `four_d/` – Subdirectory
+- `three_d/` – Subdirectory
+- `world_models/` – Subdirectory
 
-### three_d/
-Core 3D modeling and visualization. Includes scene building, mesh generation, and rendering capabilities.
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: [README](../../../README.md)
 
-### four_d/
-Temporal (4D) modeling for time-series spatial data. Currently in planning.
+## Getting Started
 
-### world_models/
-World model representations and simulations. Currently in planning.
-
-## Usage
+To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.spatial.three_d import SceneBuilder, MeshGenerator
+# Example usage
+from codomyrmex.codomyrmex.spatial import main_component
 
-# Create a scene
-scene = SceneBuilder()
-mesh = MeshGenerator.create_cube(size=1.0)
-scene.add_mesh(mesh)
-
-# Render
-image = scene.render()
+def example():
+    
+    print(f"Result: {result}")
 ```
 
-## Navigation Links
-
-- **Parent**: [codomyrmex](../README.md)
-- **3D Documentation**: [three_d/README.md](three_d/README.md)

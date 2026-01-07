@@ -142,7 +142,8 @@ options = ScrapeOptions(
 search_result = scraper.search("python web scraping", options)
 
 for result in search_result.results:
-    print(f"\n{result.url}")
+    print(f"
+{result.url}")
     print(result.content[:200])  # First 200 chars
 ```
 
@@ -338,3 +339,10 @@ options = ScrapeOptions(timeout=120.0)  # 2 minute timeout
 result = scraper.scrape("https://slow-site.com", options)
 ```
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

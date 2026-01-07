@@ -1,42 +1,42 @@
-# Code Execution Submodule
+# execution
 
 ## Signposting
-- **Parent**: [Code Module](../README.md)
-- **Siblings**: [sandbox](../sandbox/), [review](../review/), [monitoring](../monitoring/)
-- **Key Artifacts**: [AGENTS.md](AGENTS.md)
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-The execution submodule provides core code execution capabilities for the Codomyrmex code module. It handles language detection, session management, and safe code execution across multiple programming languages.
+Module components and implementation for execution..
 
-## Key Components
+## Directory Contents
+- `README.md` – File
+- `__init__.py` – File
+- `executor.py` – File
+- `language_support.py` – File
+- `session_manager.py` – File
 
-### executor.py
-Main code execution engine supporting multiple languages with configurable timeouts and resource limits.
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [coding](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
-### language_support.py
-Language detection and validation utilities. Supports Python, JavaScript, Go, Rust, and more.
+## Getting Started
 
-### session_manager.py
-Execution session lifecycle management for stateful code execution scenarios.
-
-## Usage
+To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.coding.execution import execute_code
-from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES
+# Example usage
+from codomyrmex.codomyrmex.coding.execution import main_component
 
-# Execute Python code
-result = execute_code("print('Hello, World!')", language="python")
-
-# Check supported languages
-print(SUPPORTED_LANGUAGES)
+def example():
+    
+    print(f"Result: {result}")
 ```
 
-## Navigation Links
-
-- **Parent**: [Code Module](../README.md)
-- **Code AGENTS**: [../AGENTS.md](../AGENTS.md)
-- **Source Root**: [src/codomyrmex](../../README.md)

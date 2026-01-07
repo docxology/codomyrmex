@@ -90,18 +90,34 @@ jobs:
   coordinate-ci:
     name: Trigger CI Workflow
     needs: changes
+    runs-on: ubuntu-latest
     if: |
       needs.changes.outputs.source == 'true' ||
       needs.changes.outputs.tests == 'true' ||
       needs.changes.outputs.dependencies == 'true' ||
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'push' && github.ref == 'refs/heads/main')
-    uses: ./.github/workflows/ci.yml
-    secrets: inherit
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      contains(github.event.inputs.workflows, 'ci') ||
+      contains(github.event.inputs.workflows, 'all')
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Trigger CI Workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'ci.yml',
+              ref: context.ref.replace('refs/heads/', '') || 'main'
+            });
 
   coordinate-security:
     name: Trigger Security Workflow
     needs: changes
+    runs-on: ubuntu-latest
     if: |
       needs.changes.outputs.source == 'true' ||
       needs.changes.outputs.security == 'true' ||
@@ -109,29 +125,67 @@ jobs:
       github.event_name == 'schedule' ||
       contains(github.event.inputs.workflows, 'security') ||
       contains(github.event.inputs.workflows, 'all')
-    uses: ./.github/workflows/security.yml
-    secrets: inherit
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Trigger Security Workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'security.yml',
+              ref: context.ref.replace('refs/heads/', '') || 'main'
+            });
 
   coordinate-docs:
     name: Trigger Documentation Workflow
     needs: changes
+    runs-on: ubuntu-latest
     if: |
       needs.changes.outputs.docs == 'true' ||
       contains(github.event.inputs.workflows, 'docs') ||
       contains(github.event.inputs.workflows, 'all')
-    uses: ./.github/workflows/documentation.yml
-    secrets: inherit
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Trigger Documentation Workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'documentation.yml',
+              ref: context.ref.replace('refs/heads/', '') || 'main'
+            });
 
   coordinate-benchmarks:
     name: Trigger Benchmarks
     needs: changes
+    runs-on: ubuntu-latest
     if: |
       (needs.changes.outputs.source == 'true' && github.ref == 'refs/heads/main') ||
       github.event_name == 'schedule' ||
       contains(github.event.inputs.workflows, 'benchmarks') ||
       contains(github.event.inputs.workflows, 'all')
-    uses: ./.github/workflows/benchmarks.yml
-    secrets: inherit
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Trigger Benchmarks Workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'benchmarks.yml',
+              ref: context.ref.replace('refs/heads/', '') || 'main'
+            });
 
   smart-testing:
     name: Smart Testing Strategy

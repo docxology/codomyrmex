@@ -43,4 +43,8 @@ logs/
 # Coverage reports
 coverage/
 .coverage
-.pytest_cache/ 
+.pytest_cache
+
+# Backup files
+*.backup.*
+repository_metadata.json.backup.*/ 

@@ -39,7 +39,7 @@ except ImportError:
     # Fallback if running from different directory
     import sys
     from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).parent))
+    sys.path.insert(0, str(Path(__file__).parent.parent))
     from _orchestrator_utils import (
         determine_language_from_file,
         format_output,

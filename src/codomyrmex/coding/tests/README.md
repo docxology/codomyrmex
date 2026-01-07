@@ -1,43 +1,46 @@
-# code/tests
+# tests
 
 ## Signposting
-- **Parent**: [Code Module](../README.md)
-- **Siblings**: [execution](../execution/), [sandbox](../sandbox/), [review](../review/), [monitoring](../monitoring/)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - [execution](execution/)
-    - [sandbox](sandbox/)
-    - [review](review/)
+    - [execution](execution/README.md)
+    - [monitoring](monitoring/README.md)
+    - [review](review/README.md)
+    - [sandbox](sandbox/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Test suite for the code module, providing comprehensive unit and integration tests for execution, sandboxing, review, and monitoring components.
+Test files and validation suites.
 
-## Test Categories
+## Directory Contents
+- `README.md` – File
+- `execution/` – Subdirectory
+- `monitoring/` – Subdirectory
+- `review/` – Subdirectory
+- `sandbox/` – Subdirectory
+- `test_debugging.py` – File
 
-### execution/
-Tests for the code execution engine including language support, session management, and executor functionality.
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [coding](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
-### sandbox/
-Tests for sandbox isolation, container management, resource limits, and security controls.
+## Getting Started
 
-### review/
-Tests for automated code review, analysis, and quality metrics.
+To use this module in your project, import the necessary components:
 
-## Running Tests
+```python
+# Example usage
+from codomyrmex.codomyrmex.coding.tests import main_component
 
-```bash
-# Run all code module tests
-pytest src/codomyrmex/coding/tests/
-
-# Run specific test category
-pytest src/codomyrmex/coding/tests/sandbox/
-pytest src/codomyrmex/coding/tests/execution/
-pytest src/codomyrmex/coding/tests/review/
+def example():
+    
+    print(f"Result: {result}")
 ```
 
-## Navigation Links
-
-- **Parent**: [Code Module](../README.md)
-- **Code AGENTS**: [../AGENTS.md](../AGENTS.md)

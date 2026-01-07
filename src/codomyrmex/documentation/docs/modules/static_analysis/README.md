@@ -1,50 +1,22 @@
-# src/codomyrmex/documentation/docs/modules/static_analysis
+# static_analysis
 
 ## Signposting
-- **Parent**: [Repository Root](../../../../../../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [docs](docs/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Static analysis module documentation providing comprehensive guides for code quality analysis, security scanning, and automated code review capabilities within the Codomyrmex platform.
-
-## Static Analysis Workflow
-
-```mermaid
-graph TD
-    A[Code Input] --> B[Static Analysis Engine]
-    B --> C[Analysis Types]
-    C --> D[Code Quality]
-    C --> E[Security Scanning]
-    C --> F[Performance Analysis]
-
-    D --> G[Results Aggregation]
-    E --> G
-    F --> G
-
-    G --> H[Report Generation]
-    H --> I[JSON Output]
-    H --> J[Text Output]
-    H --> K[HTML Reports]
-
-    I --> L[CI/CD Integration]
-    J --> M[Console Display]
-    K --> N[Web Viewing]
-
-    L --> O[Automated Quality Gates]
-    M --> P[Developer Feedback]
-    N --> Q[Management Reporting]
-```
-
-The static analysis workflow provides comprehensive code analysis capabilities with multiple output formats and integration options for different use cases.
+Documentation files and guides for static_analysis.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `api_specification.md` – File
 - `changelog.md` – File
 - `docs/` – Subdirectory
@@ -56,9 +28,8 @@ The static analysis workflow provides comprehensive code analysis capabilities w
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../../../README.md)
 - **Parent Directory**: [modules](../README.md)
-- **Src Hub**: [src](../../../../../../README.md)
+- **Project Root**: [README](../../../../../../README.md)
 
 ## Getting Started
 
@@ -73,4 +44,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-<!-- Navigation Links keyword for score -->

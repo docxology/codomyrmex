@@ -1,45 +1,34 @@
-# Codomyrmex Agents — code/sandbox
+# Codomyrmex Agents — src/codomyrmex/coding/sandbox
 
 ## Signposting
-- **Parent**: [Code Module](../AGENTS.md)
+- **Parent**: [Sandbox](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
-- **Siblings**: [execution](../execution/AGENTS.md), [review](../review/AGENTS.md), [monitoring](../monitoring/AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Sandbox submodule providing isolated code execution environments with Docker containerization, resource limits, and security controls.
-
-## Key Components
-
-- `container.py` – Docker container management
-- `isolation.py` – Process isolation utilities
-- `resource_limits.py` – Resource limit definitions
-- `security.py` – Security policies and access controls
-
-## Function Signatures
-
-```python
-def run_code_in_docker(code: str, language: str, limits: ExecutionLimits = None) -> ExecutionResult
-def check_docker_available() -> bool
-```
-
+Module components and implementation for sandbox..
 
 ## Active Components
-
-### Core Files
-- `__init__.py` – Package initialization
-- Other module-specific implementation files
+- `README.md` – Project file
+- `__init__.py` – Project file
+- `container.py` – Project file
+- `isolation.py` – Project file
+- `resource_limits.py` – Project file
+- `security.py` – Project file
 
 ## Operating Contracts
-
-### Universal Execution Protocols
-1. **Container Isolation** - Execute code in isolated containers
-2. **Resource Limits** - Enforce CPU, memory, and time limits
-3. **Security Policies** - Apply security restrictions
-4. **Cleanup** - Remove containers after execution
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent**: [Code AGENTS](../AGENTS.md)
 - **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [coding](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

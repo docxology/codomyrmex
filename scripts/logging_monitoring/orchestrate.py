@@ -27,7 +27,7 @@ try:
 except ImportError:
     import sys
     from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).parent))
+    sys.path.insert(0, str(Path(__file__).parent.parent))
     from _orchestrator_utils import (
         print_error,
         print_section,

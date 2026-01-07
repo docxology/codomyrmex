@@ -1,42 +1,43 @@
-# Code Review Submodule
+# review
 
 ## Signposting
-- **Parent**: [Code Module](../README.md)
-- **Siblings**: [execution](../execution/), [sandbox](../sandbox/), [monitoring](../monitoring/)
-- **Key Artifacts**: [AGENTS.md](AGENTS.md)
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-The review submodule provides automated code review capabilities including quality analysis, best practices checking, and comprehensive code metrics.
+Module components and implementation for review..
 
-## Key Components
+## Directory Contents
+- `README.md` – File
+- `__init__.py` – File
+- `analyzer.py` – File
+- `demo_review.py` – File
+- `models.py` – File
+- `reviewer.py` – File
 
-### reviewer.py
-Main code review engine with comprehensive analysis capabilities.
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [coding](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
-### analyzer.py
-Code analysis utilities for metrics, complexity, and quality assessment.
+## Getting Started
 
-### models.py
-Data models for review results, analysis summaries, and code metrics.
-
-## Usage
+To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.coding.review import CodeReviewer, analyze_file
+# Example usage
+from codomyrmex.codomyrmex.coding.review import main_component
 
-# Analyze a single file
-result = analyze_file("path/to/file.py")
-
-# Create reviewer instance
-reviewer = CodeReviewer()
-review_result = reviewer.review_code(code_content)
+def example():
+    
+    print(f"Result: {result}")
 ```
 
-## Navigation Links
-
-- **Parent**: [Code Module](../README.md)
-- **Code AGENTS**: [../AGENTS.md](../AGENTS.md)
-- **Source Root**: [src/codomyrmex](../../README.md)

@@ -1,68 +1,31 @@
-# src/codomyrmex/agents/theory
+# theory
 
 ## Signposting
-- **Parent**: [agents](../README.md)
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Theory submodule providing theoretical foundations for agentic systems. This includes agent architecture patterns and reasoning models.
+Module components and implementation for theory..
 
-## Key Components
-
-- **Agent Architectures**: Reactive, deliberative, and hybrid architectures
-- **Reasoning Models**: Symbolic, neural, and hybrid reasoning models
-
-## Usage
-
-### Agent Architectures
-
-```python
-from codomyrmex.agents.theory import ReactiveArchitecture
-
-# Create reactive agent
-agent = ReactiveArchitecture()
-
-# Add rules
-agent.add_rule(
-    condition=lambda env: env.get("temperature") > 30,
-    action=lambda env: {"action": "cool_down"}
-)
-
-# Perceive, decide, act
-perception = agent.perceive({"temperature": 35})
-decision = agent.decide(perception)
-result = agent.act(decision)
-```
-
-### Reasoning Models
-
-```python
-from codomyrmex.agents.theory import SymbolicReasoningModel
-
-# Create reasoning model
-model = SymbolicReasoningModel()
-
-# Add rules and facts
-model.add_rule({
-    "conditions": [{"fact": "temperature", "operator": ">", "value": 30}],
-    "conclusion": {"action": "cool"}
-})
-model.add_fact("temperature", 35)
-
-# Reason
-result = model.reason({"temperature": 35})
-explanation = model.explain(result)
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `agent_architectures.py` – File
+- `reasoning_models.py` – File
 
 ## Navigation
-
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Module**: [agents](../README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
 ## Getting Started
 
@@ -77,4 +40,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-<!-- Navigation Links keyword for score -->

@@ -1,7 +1,7 @@
-# src/codomyrmex/static_analysis
+# static_analysis
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -9,40 +9,19 @@
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Core module providing static code analysis capabilities for the Codomyrmex platform. This module performs automated code quality assessment, security scanning, and complexity analysis across multiple programming languages without executing the code.
-
-The static_analysis module serves as the foundation for code quality assurance, enabling early detection of issues and enforcement of coding standards.
-
-## Analysis Pipeline
-
-```mermaid
-graph LR
-    A[File Input] --> B[Parser]
-    B --> C[Analyzers]
-    C --> D[Results]
-    D --> E[Reports]
-
-    B --> F[AST Analysis]
-    B --> G[Security Scan]
-    B --> H[Complexity Check]
-
-    C --> I[Quality Metrics]
-    C --> J[Security Findings]
-    C --> K[Maintainability Score]
-```
-
-The static analysis pipeline processes source code through multiple stages: parsing, analysis, result aggregation, and reporting. Each analyzer focuses on specific aspects of code quality including syntax validation, security vulnerabilities, and maintainability metrics.
+Module components and implementation for static_analysis..
 
 ## Directory Contents
-- `.gitignore` – File
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
+- `README.md` – File
 - `SECURITY.md` – File
+- `SPEC.md` – File
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
 - `docs/` – Subdirectory
@@ -54,41 +33,19 @@ The static analysis pipeline processes source code through multiple stages: pars
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Src Hub**: [src](../../../src/README.md)
+- **Project Root**: [README](../../../README.md)
 
 ## Getting Started
 
-### Basic Usage
+To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.static_analysis import StaticAnalyzer
+# Example usage
+from codomyrmex.codomyrmex.static_analysis import main_component
 
-# Initialize analyzer
-analyzer = StaticAnalyzer()
-
-# Analyze a file
-results = analyzer.analyze_file("path/to/file.py")
-
-# Check results
-if results.has_issues:
-    for issue in results.issues:
-        print(f"{issue.severity}: {issue.message}")
+def example():
+    
+    print(f"Result: {result}")
 ```
 
-### Analysis Types
-
-The module supports multiple analysis types:
-- **Syntax Analysis**: Validates code syntax
-- **Security Scanning**: Detects security vulnerabilities
-- **Complexity Metrics**: Calculates cyclomatic complexity
-- **Quality Metrics**: Assesses code maintainability
-
-See **[Usage Examples](USAGE_EXAMPLES.md)** for detailed examples.
-
-## Related Documentation
-
-- **[API Specification](API_SPECIFICATION.md)** - Complete API reference
-- **[Agent Guide](AGENTS.md)** - Technical documentation
-- **[Security Considerations](SECURITY.md)** - Security implications

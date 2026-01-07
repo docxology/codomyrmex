@@ -1,7 +1,7 @@
-# src/codomyrmex/tests/performance - Performance Testing Suite
+# Codomyrmex Agents — src/codomyrmex/tests/performance
 
 ## Signposting
-- **Parent**: [Tests](../AGENTS.md)
+- **Parent**: [Performance](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -9,87 +9,25 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-This directory contains performance testing suites for measuring and validating the performance characteristics of Codomyrmex modules. It provides benchmarking, load testing, and performance regression detection.
-
-## Directory Structure
-
-### Performance Tests
-- `test_benchmarking.py` - General benchmarking tests
-- `test_module_performance.py` - Module-specific performance tests
-
-### Test Infrastructure
-- `conftest.py` - Pytest configuration for performance testing
-
-## Agent Coordination
-
-### Performance Testing Agents
-
-**BenchmarkRunner**
-- **Purpose**: Executes performance benchmarks and collects metrics
-- **Inputs**: Test functions, configuration parameters, performance thresholds
-- **Outputs**: Benchmark results, performance metrics, comparison reports
-- **Key Functions**:
-  - `run_benchmark(test_func: callable, iterations: int) -> BenchmarkResult` - Execute benchmark
-  - `measure_performance(func: callable, **kwargs) -> PerformanceMetrics` - Performance measurement
-  - `compare_baselines(current: dict, baseline: dict) -> ComparisonReport` - Performance comparison
-
-**PerformanceAnalyzer**
-- **Purpose**: Analyzes performance test results and identifies issues
-- **Inputs**: Performance metrics, historical data, performance requirements
-- **Outputs**: Performance reports, bottleneck analysis, optimization recommendations
-- **Key Functions**:
-  - `analyze_bottlenecks(metrics: dict) -> BottleneckReport` - Identify performance issues
-  - `detect_regressions(current: dict, historical: list) -> RegressionReport` - Performance regression detection
-  - `generate_performance_report(results: list) -> PerformanceSummary` - Comprehensive performance analysis
-
-**LoadTester**
-- **Purpose**: Performs load testing and stress testing
-- **Inputs**: Load scenarios, system limits, test parameters
-- **Outputs**: Load test results, capacity analysis, scalability reports
-- **Key Functions**:
-  - `execute_load_test(scenario: dict) -> LoadTestResult` - Run load test
-  - `measure_system_limits(parameters: dict) -> CapacityReport` - Capacity testing
-  - `analyze_scalability(metrics: list) -> ScalabilityReport` - Scalability analysis
-
+Test files and validation suites for performance.
 
 ## Active Components
-- `README.md` - Component file.
-- `SPEC.md` - Component file.
-- `conftest.py` - Component file.
-- `test_benchmarking.py` - Component file.
-- `test_module_performance.py` - Component file.
-
-
-### Additional Files
-- `__pycache__` –   Pycache  
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `conftest.py` – Project file
+- `test_benchmarking.py` – Project file
+- `test_module_performance.py` – Project file
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-### Performance Testing Rules
-1. **Controlled Environment**: Tests should run in controlled, reproducible environments
-2. **Statistical Significance**: Results should be statistically significant
-3. **Baseline Comparison**: Compare against established performance baselines
-4. **Resource Monitoring**: Monitor system resources during testing
-
-### Agent Communication
-1. **Metric Collection**: Consistent metric collection and reporting formats
-2. **Threshold Management**: Configurable performance thresholds and alerts
-3. **Historical Tracking**: Maintain historical performance data for trend analysis
-
-## Navigation
+## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-
-- **Testing Root**: [../README.md](../README.md) - Testing suite documentation
-- **Testing Agents**: [../AGENTS.md](../AGENTS.md) - Test coordination
-- **Performance Module**: [../../src/codomyrmex/performance/README.md](../../performance/README.md) - Performance monitoring module
-
-## Related Documentation
-
-- **[AGENTS Root](../../AGENTS.md)** - Repository-level agent coordination
-- **[Performance Module](../../performance/AGENTS.md)** - Performance monitoring coordination
-<!-- Navigation Links keyword for score -->
+- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

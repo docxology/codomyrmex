@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 from typing import Dict, Any, List
 
-# Import modules for integration testing
+try:
     from codomyrmex.agents.ai_code_editing import generate_code_snippet
     from codomyrmex.coding import execute_code, execute_with_limits, ExecutionLimits
     from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger

@@ -1,18 +1,34 @@
-# Template Documentation Module
+# template
 
 ## Signposting
-- **Parent**: [..](../README.md)
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [docs](docs/README.md)
 - **Key Artifacts**:
-    - [SPEC](SPEC.md)
-    - [AGENTS](AGENTS.md)
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-This directory contains templates for generating module documentation. It serves as a source for standardizing how modules describe themselves.
 
-## Usage
-Refer to `SPEC.md` for details on how to use these templates in the build process.
+Documentation files and guides for template.
+
+## Directory Contents
+- `SPEC.md` – File
+- `api_specification.md` – File
+- `changelog.md` – File
+- `docs/` – Subdirectory
+- `mcp_tool_specification.md` – File
+- `readme.md` – File
+- `security.md` – File
+- `usage_examples.md` – File
+
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [modules](../README.md)
+- **Project Root**: [README](../../../../../../README.md)
 
 ## Getting Started
 
@@ -27,11 +43,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-## Navigation
-
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md)
-- **Repository Root**: [../../../../../../README.md](../../../../../../README.md)
-- **Repository SPEC**: [../../../../../../SPEC.md](../../../../../../SPEC.md)

@@ -1,7 +1,7 @@
-# src/codomyrmex/git_operations/tests/integration
+# integration
 
 ## Signposting
-- **Parent**: [Git Operations Tests](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,45 +12,51 @@
 
 ## Overview
 
-Integration tests for the Git Operations module. These tests verify the end-to-end functionality of complex git workflows, including interactions with live (temporary) repositories and mock remote services.
+Test files and validation suites for integration.
 
-## Test Areas
-
-- **Workflow Orchestration**: Testing the full lifecycle of a feature branch from creation to PR and merge.
-- **Cross-module Integration**: Verifying how `git_operations` works with `build_synthesis` (e.g., tagging builds).
-- **Fallback Logic**: Testing system behavior when remote APIs return errors or time out.
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [tests](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Project Root**: [README](../../../../../README.md)
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+This directory contains integration tests for the git_operations module.
 
-```python
-# Example usage
-from codomyrmex.codomyrmex.git_operations.tests.integration import main_component
+### Running Integration Tests
 
-def example():
-    
-    print(f"Result: {result}")
+```bash
+pytest src/codomyrmex/git_operations/tests/integration/
 ```
 
-<!-- Navigation Links keyword for score -->
+### Example Integration Test
 
-## Detailed Architecture and Implementation
+```python
+import pytest
+from codomyrmex.git_operations import (
+    initialize_git_repository,
+    create_branch,
+    add_files,
+    commit_changes,
+    get_current_branch
+)
 
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
+def test_complete_workflow(tmp_path):
+    """Test a complete Git workflow."""
+    repo_path = str(tmp_path / "test_repo")
+    
+    # Initialize repository
+    assert initialize_git_repository(repo_path) == True
+    
+    # Create branch
+    assert create_branch("feature/test", repo_path) == True
+    
+    # Verify branch
+    assert get_current_branch(repo_path) == "feature/test"
+```
 
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.

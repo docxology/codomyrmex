@@ -1,17 +1,26 @@
-# scripts/llm
+# llm
 
 ## Signposting
-- **Parent**: [Scripts](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [ollama](ollama/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-LLM automation scripts for managing language model integrations.
+Automation and utility scripts.
 
-## Navigation Links
+## Directory Contents
+- `README.md` – File
+- `ollama/` – Subdirectory
 
-- **Parent**: [Scripts](../README.md)
-- **Ollama Scripts**: [ollama/README.md](ollama/README.md)
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: [README](../../README.md)
+

@@ -113,3 +113,10 @@ uv run python scripts/llm/ollama/test_configuration_patterns.py
 - Extend with new patterns as they emerge
 - Update documentation as features evolve
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

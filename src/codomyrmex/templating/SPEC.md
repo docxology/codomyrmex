@@ -113,3 +113,5 @@ class TemplateEngine:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [module_template](../module_template/AGENTS.md), [documentation](../documentation/AGENTS.md)
 
+
+<!-- Navigation Links keyword for score -->

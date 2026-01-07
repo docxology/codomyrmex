@@ -1,7 +1,7 @@
-# src/codomyrmex/agents/ai_code_editing/docs
+# docs
 
 ## Signposting
-- **Parent.*AI Code Editing](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [tutorials](tutorials/README.md)
 - **Key Artifacts**:
@@ -12,25 +12,20 @@
 
 ## Overview
 
-This directory contains comprehensive documentation and guides for the AI Code Editing module. It includes technical specifications, agent coordination guidelines, and step-by-step tutorials to help developers integrate and use AI power correctly.
-
-## Key Resources
-
-- **tutorials/**: Detailed walkthroughs for common tasks (generating functions, refactoring legacy code).
-- **AGENTS.md**: Coordination protocols for AI droids working within this module.
-- **SPEC.md**: Functional and technical specifications for code editing handlers.
+Documentation files and guides.
 
 ## Directory Contents
-- `index.md` – Central entry point for technical guides.
-- `technical_overview.md` – Deep dive into prompt engineering and provider integration.
-- `tutorials/` – Practical, hands-on learning materials.
+- `README.md` – File
+- `SPEC.md` – File
+- `index.md` – File
+- `technical_overview.md` – File
+- `tutorials/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [ai_code_editing](../README.md)
-- **Src Hub**: [src](../../../../README.md)
+- **Project Root**: [README](../../../../../README.md)
 
 ## Getting Started
 
@@ -45,17 +40,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.

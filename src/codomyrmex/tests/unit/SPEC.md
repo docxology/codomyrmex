@@ -66,9 +66,9 @@ Implementation guidelines for working within unit including best practices and p
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [testing](../README.md)
-- **Repository Root**: [../../README.md](../../README.md)
-- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+- **Parent Directory**: [tests](../README.md)
+- **Repository Root**: [../../../../README.md](../../../../README.md)
+- **Repository SPEC**: [../../../../SPEC.md](../../../../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
 

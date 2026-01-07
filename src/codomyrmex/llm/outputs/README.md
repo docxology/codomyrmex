@@ -1,7 +1,7 @@
-# src/codomyrmex/llm/outputs
+# outputs
 
 ## Signposting
-- **Parent**: [Language Models](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [integration](integration/README.md)
     - [llm_outputs](llm_outputs/README.md)
@@ -12,13 +12,15 @@
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Persistence layer for LLM interaction traces, test results, and performance metrics.
+Module components and implementation for outputs..
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `config.json` – File
 - `integration/` – Subdirectory
 - `llm_outputs/` – Subdirectory
@@ -31,6 +33,5 @@ Persistence layer for LLM interaction traces, test results, and performance metr
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [llm](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Project Root**: [README](../../../../README.md)

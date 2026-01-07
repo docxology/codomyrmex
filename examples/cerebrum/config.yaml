@@ -1,0 +1,16 @@
+# Cerebrum System Configuration
+# Demonstrates case-based reasoning and Bayesian inference functionality
+
+cerebrum:
+  enabled: true
+
+output:
+  format: json
+  file: output/cerebrum_results.json
+  include_details: true
+
+logging_config:
+  level: INFO
+  file: logs/cerebrum_example.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+

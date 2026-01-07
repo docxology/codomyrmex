@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/template/docs
 
 ## Signposting
-- **Parent**: [Repository Root](../AGENTS.md)
+- **Parent**: [Documentation Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [tutorials](tutorials/AGENTS.md)
@@ -9,21 +9,17 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 Documentation files and guides for template.
 
 ## Active Components
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `index.md` – Project file
 - `technical_overview.md` – Project file
 - `tutorials/` – Directory containing tutorials components
-
-
-### Additional Files
-- `SPEC.md` – Spec Md
-- `tutorials` – Tutorials
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -33,5 +29,5 @@ Documentation files and guides for template.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [template](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [template](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../../README.md) - Main project documentation

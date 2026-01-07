@@ -1,8 +1,8 @@
 # Codomyrmex Agents — src/codomyrmex/static_analysis
 
 ## Signposting
-- **Parent**: [codomyrmex](../AGENTS.md)
-- **Self**: [Static Analysis Agents](AGENTS.md)
+- **Parent**: [Static Analysis](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [docs](docs/AGENTS.md)
     - [tests](tests/AGENTS.md)
@@ -10,204 +10,33 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Core module providing static code analysis capabilities for the Codomyrmex platform. This module performs automated code quality assessment, security scanning, and complexity analysis across multiple programming languages without executing the code.
-
-The static_analysis module serves as the foundation for code quality assurance, enabling early detection of issues and enforcement of coding standards.
-
-## Module Overview
-
-### Key Capabilities
-- **Code Quality Metrics**: Complexity analysis, maintainability scoring, and style checking
-- **Security Scanning**: Vulnerability detection and security best practice validation
-- **Language Support**: Multi-language analysis with language-specific rules
-- **Automated Reporting**: Structured analysis results with actionable recommendations
-- **Integration Ready**: Designed for CI/CD pipeline integration
-
-### Key Features
-- Comprehensive linting and code quality analysis
-- Security vulnerability detection and reporting
-- Cyclomatic complexity and maintainability metrics
-- Multi-language support with extensible rule system
-- Integration with logging and reporting systems
-
-## Function Signatures
-
-### Core Functions
-
-```python
-def analyze_file(
-    file_path: str,
-    analysis_types: list[AnalysisType] = None
-) -> list[AnalysisResult]
-```
-
-Analyzes a single file for code quality, security, and maintainability issues.
-
-**Parameters:**
-- `file_path` (str): Path to the file to analyze
-- `analysis_types` (list[AnalysisType], optional): Types of analysis to perform. If None, performs all available analyses
-
-**Returns:** List of `AnalysisResult` objects containing issues found
-
-```python
-def analyze_project(
-    project_root: str,
-    target_paths: list[str] = None,
-    analysis_types: list[AnalysisType] = None
-) -> AnalysisSummary
-```
-
-Analyzes an entire project or specified paths within a project.
-
-**Parameters:**
-- `project_root` (str): Root directory of the project to analyze
-- `target_paths` (list[str], optional): Specific paths within the project to analyze. If None, analyzes the entire project
-- `analysis_types` (list[AnalysisType], optional): Types of analysis to perform. If None, performs all available analyses
-
-**Returns:** `AnalysisSummary` object containing aggregated analysis results
-
-```python
-def get_available_tools() -> dict[str, bool]
-```
-
-Returns the availability status of all supported analysis tools.
-
-**Returns:** Dictionary mapping tool names to boolean availability status
-
-```python
-def parse_pyrefly_output(output: str, project_root: str) -> list
-```
-
-Parses raw Pyrefly static analysis output into structured error information.
-
-**Parameters:**
-- `output` (str): Raw output from Pyrefly analysis
-- `project_root` (str): Root directory of the project for path resolution
-
-**Returns:** List of parsed error/issue dictionaries
-
-```python
-def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict
-```
-
-Runs Pyrefly static type checker on specified paths.
-
-**Parameters:**
-- `target_paths` (list[str]): File or directory paths to analyze
-- `project_root` (str): Root directory of the project for configuration and path resolution
-
-**Returns:** Dictionary containing analysis results and metadata
-
-```python
-def analyze_codebase(*args, **kwargs) -> AnalysisSummary
-```
-
-Alias for `analyze_project()` for backward compatibility.
-
-**Returns:** Same as `analyze_project()`
-
-### Data Structures
-
-```python
-class AnalysisType(Enum):
-    """Types of static analysis available."""
-    QUALITY = "quality"
-    SECURITY = "security"
-    PERFORMANCE = "performance"
-    MAINTAINABILITY = "maintainability"
-    COMPLEXITY = "complexity"
-    STYLE = "style"
-    DOCUMENTATION = "documentation"
-    TESTING = "testing"
-
-class SeverityLevel(Enum):
-    """Severity levels for analysis results."""
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    CRITICAL = "critical"
-
-class Language(Enum):
-    """Supported programming languages for analysis."""
-    PYTHON = "python"
-    JAVASCRIPT = "javascript"
-    TYPESCRIPT = "typescript"
-    JAVA = "java"
-    CPP = "cpp"
-    CSHARP = "csharp"
-    GO = "go"
-    RUST = "rust"
-    PHP = "php"
-    RUBY = "ruby"
-```
+Module components and implementation for static_analysis..
 
 ## Active Components
-
-### Core Implementation
-- `__init__.py` – Module initialization and public API exports
-- `static_analyzer.py` – Main analysis engine and rule processing
-- `pyrefly_runner.py` – Python-specific analysis runner
-
-### Documentation
-- `README.md` – Module usage and overview
-- `API_SPECIFICATION.md` – Complete API documentation
-- `USAGE_EXAMPLES.md` – Practical usage demonstrations
-- `MCP_TOOL_SPECIFICATION.md` – AI agent tool specifications
-- `SECURITY.md` – Security considerations for code analysis
-- `CHANGELOG.md` – Version history and updates
-
-### Supporting Files
-- `requirements.txt` – Module dependencies (linting tools, security scanners)
-- `docs/` – Additional documentation
-- `tests/` – Comprehensive test suite
-
-
-### Additional Files
-- `SPEC.md` – Spec Md
-- `__pycache__` –   Pycache  
-- `docs` – Docs
-- `tests` – Tests
+- `API_SPECIFICATION.md` – Project file
+- `CHANGELOG.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `USAGE_EXAMPLES.md` – Project file
+- `__init__.py` – Project file
+- `docs/` – Directory containing docs components
+- `pyrefly_runner.py` – Project file
+- `requirements.txt` – Project file
+- `static_analyzer.py` – Project file
+- `tests/` – Directory containing tests components
 
 ## Operating Contracts
-
-### Universal Analysis Protocols
-
-All static analysis within the Codomyrmex platform must:
-
-1. **Non-Intrusive** - Analysis should not modify source code or affect runtime behavior
-2. **Consistent Rules** - Apply uniform standards across all analyzed codebases
-3. **Actionable Results** - Provide specific, fixable recommendations
-4. **Performance Aware** - Optimize analysis for speed and resource efficiency
-5. **Extensible Design** - Support addition of new rules and languages
-
-### Module-Specific Guidelines
-
-#### Analysis Execution
-- Support analysis of individual files and entire codebases
-- Provide configurable rule sets for different project types
-- Generate structured reports suitable for CI/CD integration
-- Handle analysis failures gracefully without stopping pipelines
-
-#### Quality Metrics
-- Calculate and report code complexity metrics
-- Identify security vulnerabilities with severity levels
-- Provide maintainability and readability assessments
-- Support custom quality thresholds and policies
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-
-### Module Documentation
-- **Module Overview**: [README.md](README.md) - Complete module documentation
-- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md) - Detailed API specification (if applicable)
-- **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md) - Practical usage demonstrations (if applicable)
-
-### Platform Navigation
-- **Parent Directory**: [codomyrmex](../README.md) - Package overview
-- **Project Root**: [README](../../../README.md) - Main project documentation
-- **Source Root**: [src](../../README.md) - Source code documentation
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

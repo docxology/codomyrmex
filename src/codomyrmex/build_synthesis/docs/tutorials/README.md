@@ -1,7 +1,7 @@
-# src/codomyrmex/build_synthesis/docs/tutorials
+# tutorials
 
 ## Signposting
-- **Parent**: [Build Synthesis Documentation](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,20 +12,21 @@
 
 ## Overview
 
-Step-by-step tutorials for using the Build Synthesis module. These guides cover the end-to-end process of generating artifacts and creating new modules from specifications.
+Documentation files and guides for tutorials.
 
-## Tutorial Topics
-
-- **First Build**: How to use MCP tools to trigger your first component build.
-- **Custom Synthesis**: Modifying templates to synthesize specialized module types.
-- **Profile Management**: Creating and using custom build profiles (release, debug, etc.).
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `docker_build_tutorial.md` – File
+- `python_wheel_build_tutorial.md` – File
+- `synthesize_code_component_tutorial.md` – File
+- `trigger_build_tutorial.md` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [docs](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Project Root**: [README](../../../../../README.md)
 
 ## Getting Started
 
@@ -40,17 +41,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.

@@ -136,3 +136,10 @@ pytest src/codomyrmex/scrape/tests/integration/ -v
 - ✅ **Type Safety**: Type hints and conversions verified.
 - ✅ **Integration Tests**: End-to-end validation with real API calls (when API key available).
 
+
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

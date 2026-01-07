@@ -43,16 +43,34 @@ from .advanced_plotter import (
     Dataset,
     PlotConfig,
     PlotType,
-    create_bar_chart,
-    create_dashboard,
-    create_heatmap,
-    create_histogram,
-    create_line_plot,
-    create_scatter_plot,
-    get_available_palettes,
-    get_available_plot_types,
-    get_available_styles,
+    create_advanced_bar_chart,
+    create_advanced_dashboard,
+    create_advanced_heatmap,
+    create_advanced_histogram,
+    create_advanced_line_plot,
+    create_advanced_scatter_plot,
 )
+
+# Create simpler aliases for advanced functions
+create_line_plot = create_advanced_line_plot
+create_scatter_plot = create_advanced_scatter_plot
+create_bar_chart = create_advanced_bar_chart
+create_histogram = create_advanced_histogram
+create_heatmap_advanced = create_advanced_heatmap
+create_dashboard = create_advanced_dashboard
+
+# Helper functions - these are methods on AdvancedPlotter
+def get_available_styles():
+    """Get available chart styles."""
+    return [s.value for s in ChartStyle]
+
+def get_available_palettes():
+    """Get available color palettes."""
+    return [p.value for p in ColorPalette]
+
+def get_available_plot_types():
+    """Get available plot types."""
+    return [t.value for t in PlotType]
 from .git_visualizer import (
     GitVisualizer,
     create_git_tree_mermaid,

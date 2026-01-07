@@ -50,9 +50,14 @@ graph TD
 ## Interface Contracts
 
 ### Public API
-- `git_manager.clone_repository(url: str, dest: str) -> bool`
-- `git_manager.commit_changes(message: str, stage_all: bool=True) -> Optional[str]`
-- `git_manager.create_branch(name: str) -> bool`
+The module exports 40+ functions covering all Git operations. Key examples:
+- `git_manager.clone_repository(url: str, dest: str, branch: str = None) -> bool`
+- `git_manager.commit_changes(message: str, repository_path: str = None, ...) -> Optional[str]`
+- `git_manager.create_branch(branch_name: str, repository_path: str = None) -> bool`
+- `git_manager.get_status(repository_path: str = None) -> dict[str, Any]`
+- `git_manager.get_commit_history(limit: int = 10, repository_path: str = None) -> list[dict]`
+
+See [API_SPECIFICATION.md](API_SPECIFICATION.md) and [COMPLETE_API_DOCUMENTATION.md](COMPLETE_API_DOCUMENTATION.md) for complete function list.
 
 ### Dependencies
 - **System**: `git` executable must be in PATH.

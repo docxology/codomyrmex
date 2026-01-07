@@ -1,7 +1,7 @@
-# templates Agents
+# Codomyrmex Agents — src/codomyrmex/documents/templates
 
 ## Signposting
-- **Parent**: [Documents](../AGENTS.md)
+- **Parent**: [Templates](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -9,24 +9,22 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-## Purpose
-[DESCRIBE THE COORDINATION ROLE OF THIS DIRECTORY FOR AI AGENTS]
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
+## Purpose
+Documentation files and guides for templates.
 
 ## Active Components
-- `README.md` - Component file.
-- `SPEC.md` - Component file.
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update task queues when necessary.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation
-
+## Navigation Links
 - **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [documents](../README.md)
-- **Repository Root**: [../../../../README.md](../../../../README.md)
-- **Repository SPEC**: [../../../../SPEC.md](../../../../SPEC.md)
+- **📁 Parent Directory**: [documents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

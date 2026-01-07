@@ -1,0 +1,15 @@
+{
+  "documents": {
+    "enabled": true
+  },
+  "output": {
+    "format": "json",
+    "file": "output/documents_results.json",
+    "include_details": true
+  },
+  "logging_config": {
+    "level": "INFO",
+    "file": "logs/documents_example.log",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  }
+}

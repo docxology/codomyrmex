@@ -1,38 +1,120 @@
 {
-  "contributing_refs": [],
+  "contributing_refs": [
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/css-loader/README.md",
+      "line": 2049,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/copy-webpack-plugin/README.md",
+      "line": 1297,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/terser-webpack-plugin/README.md",
+      "line": 917,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/url-loader/README.md",
+      "line": 417,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/null-loader/README.md",
+      "line": 56,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/webpack-dev-middleware/README.md",
+      "line": 518,
+      "link_url": "./CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/schema-utils/README.md",
+      "line": 300,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/css-minimizer-webpack-plugin/README.md",
+      "line": 607,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/utility-types/README.md",
+      "line": 77,
+      "link_url": "/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/webpack-bundle-analyzer/README.md",
+      "line": 221,
+      "link_url": "./CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/mini-css-extract-plugin/README.md",
+      "line": 1279,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/postcss-loader/README.md",
+      "line": 1156,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/ajv/README.md",
+      "line": 31,
+      "link_url": "./CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/react-fast-compare/README.md",
+      "line": 149,
+      "link_url": "./CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/file-loader/README.md",
+      "line": 744,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/file-loader/node_modules/schema-utils/README.md",
+      "line": 271,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/fork-ts-checker-webpack-plugin/node_modules/schema-utils/README.md",
+      "line": 257,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/null-loader/node_modules/schema-utils/README.md",
+      "line": 271,
+      "link_url": "./.github/CONTRIBUTING.md"
+    },
+    {
+      "module": "documentation",
+      "file": "src/codomyrmex/documentation/node_modules/url-loader/node_modules/schema-utils/README.md",
+      "line": 271,
+      "link_url": "./.github/CONTRIBUTING.md"
+    }
+  ],
   "example_tutorial_refs": [],
-  "missing_doc_files": {
-    "ai_code_editing": [
-      "API_SPECIFICATION.md",
-      "USAGE_EXAMPLES.md"
-    ],
-    "build_synthesis": [
-      "API_SPECIFICATION.md",
-      "USAGE_EXAMPLES.md"
-    ],
-    "code_execution_sandbox": [
-      "API_SPECIFICATION.md",
-      "USAGE_EXAMPLES.md"
-    ],
-    "data_visualization": [
-      "API_SPECIFICATION.md",
-      "MCP_TOOL_SPECIFICATION.md",
-      "USAGE_EXAMPLES.md"
-    ],
-    "documentation": [
-      "API_SPECIFICATION.md",
-      "MCP_TOOL_SPECIFICATION.md",
-      "USAGE_EXAMPLES.md"
-    ],
-    "git_operations": [
-      "API_SPECIFICATION.md",
-      "USAGE_EXAMPLES.md"
-    ],
-    "logging_monitoring": [
-      "API_SPECIFICATION.md"
-    ],
-    "model_context_protocol": [
-      "API_SPECIFICATION.md"
-    ]
-  }
+  "missing_doc_files": {}
 }

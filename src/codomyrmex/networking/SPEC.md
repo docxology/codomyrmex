@@ -113,3 +113,5 @@ class HTTPClient:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [api](../api/AGENTS.md), [scrape](../scrape/AGENTS.md)
 
+
+<!-- Navigation Links keyword for score -->

@@ -2,109 +2,148 @@
 Generated: comprehensive_audit.py
 ================================================================================
 ## Summary
-**Total Issues Found**: 409
+**Total Issues Found**: 775
 
 ### Issue Breakdown
-- **Examples Migration**: 43
-- **Placeholders**: 366
+- **Broken Links**: 7
+- **Examples Migration**: 30
+- **Agents Structure**: 59
+- **Navigation Issues**: 1
+- **Placeholders**: 678
+
+## Broken Links
+- **src/codomyrmex/scrape/CHANGELOG.md** (line 57): `../../docs/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/docs/README.md`
+- **src/codomyrmex/scrape/TESTING.md** (line 144): `../../docs/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/docs/README.md`
+- **src/codomyrmex/scrape/NO_MOCKS_VERIFICATION.md** (line 100): `../../docs/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/docs/README.md`
+- **src/codomyrmex/scrape/SECURITY.md** (line 210): `../../docs/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/docs/README.md`
+- **src/codomyrmex/scrape/docs/USAGE_EXAMPLES.md** (line 346): `../../docs/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/docs/README.md`
+- **src/codomyrmex/scrape/docs/API_SPECIFICATION.md** (line 250): `../../docs/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/docs/README.md`
+- **src/codomyrmex/tests/unit/TEST_SUITE_SUMMARY.md** (line 121): `../../docs/README.md`
+  - Resolved to: `/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/docs/README.md`
 
 ## Placeholders Found
+- **config/AGENTS.md** (line 27): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
 - **plugins/SPEC.md** (line 3): `Core Concept`
   - Content: `## Core Concept...`
+- **cursorrules/AGENTS.md** (line 30): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **projects/AGENTS.md** (line 25): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **docs/AGENTS.md** (line 41): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **testing/SPEC.md** (line 3): `Core Concept`
+  - Content: `## Core Concept...`
+- **testing/AGENTS.md** (line 23): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **examples/AGENTS.md** (line 102): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **scripts/AGENTS.md** (line 122): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/AGENTS.md** (line 28): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/AGENTS.md** (line 115): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
 - **src/template/AGENTS_ROOT_TEMPLATE.md** (line 25): `TODO`
   - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
 - **src/template/AGENTS_TEMPLATE.md** (line 27): `TODO`
   - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
-- **src/template/AGENTS.md** (line 29): `TODO`
+- **src/template/AGENTS.md** (line 26): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/encryption/AGENTS.md** (line 27): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/metrics/AGENTS.md** (line 26): `TODO`
   - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
 - **src/codomyrmex/documentation/coverage_assessment.md** (line 81): `TODO`
   - Content: `1. **Placeholder Content**: 554 TODO/FIXME markers need completion...`
 - **src/codomyrmex/documentation/USAGE_EXAMPLES.md** (line 5): `TODO`
   - Content: `<!-- TODO: Ensure all examples are tested and accurately reflect the script's ca...`
-- **src/codomyrmex/tools/AGENTS.md** (line 36): `TODO`
+- **src/codomyrmex/documentation/AGENTS.md** (line 50): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/tools/AGENTS.md** (line 32): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/llm/AGENTS.md** (line 31): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/terminal_interface/AGENTS.md** (line 30): `TODO`
   - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
 - **src/codomyrmex/pattern_matching/MCP_TOOL_SPECIFICATION.md** (line 27): `TODO`
   - Content: `| `query`           | `string`      | Yes      | The literal string or regular e...`
-- **src/codomyrmex/environment_setup/USAGE_EXAMPLES.md** (line 214): `example.com`
-  - Content: `pip install git+https://example.com/vendor/special_xyz_python_lib.git#egg=specia...`
-- **src/codomyrmex/plugin_system/README.md** (line 346): `example.com`
-  - Content: `'integration_plugin': {'endpoint': 'https://api.example.com'}...`
-- **src/codomyrmex/scrape/README.md** (line 69): `example.com`
-  - Content: `result = scraper.scrape("https://example.com", options)...`
-- **src/codomyrmex/scrape/README.md** (line 103): `example.com`
-  - Content: `crawl_result = scraper.crawl("https://example.com", options)...`
-- **src/codomyrmex/scrape/README.md** (line 122): `example.com`
-  - Content: `map_result = scraper.map("https://example.com")...`
-- **src/codomyrmex/scrape/README.md** (line 126): `example.com`
-  - Content: `search_result = scraper.map("https://example.com", search="docs")...`
-- **src/codomyrmex/scrape/README.md** (line 174): `example.com`
-  - Content: `urls=["https://example.com/article"],...`
-- **src/codomyrmex/scrape/README.md** (line 183): `example.com`
-  - Content: `urls=["https://example.com/article"],...`
-- **src/codomyrmex/scrape/README.md** (line 263): `example.com`
-  - Content: `result = scraper.scrape("https://example.com")...`
-- **src/codomyrmex/module_template/SPEC.md** (line 63): `TODO`
-  - Content: `- **Documentation**: Generated docs must represent the "Ideal" state (no "Requir...`
-- **src/codomyrmex/module_template/SPEC.md** (line 63): `Requirement 1`
-  - Content: `- **Documentation**: Generated docs must represent the "Ideal" state (no "Requir...`
-- **src/codomyrmex/api/README.md** (line 64): `example.com`
-  - Content: `docs = generate_api_docs("My API", "1.0.0", base_url="https://api.example.com")...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 1): `Core Concept`
-  - Content: `# First Principles Framework (FPF) — Core Conceptual Specification...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 12041): `TBD`
-  - Content: `**DRR pointer:** **REQUIRED before Core admission.** `DRR‑SERV‑POLYSEMY‑<id>` (T...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 22086): `TBD`
-  - Content: `**SoTA pack binding note.** If a SoTA Synthesis Pack exists for KD‑CAL reliabili...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 22199): `TBD`
-  - Content: `* **F2 — Structured outline.** Template present; coherent sections; criteria mos...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 22244): `TBD`
-  - Content: `**Inclusion criteria.** All expected sections exist; cross‑references are consis...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 22510): `TBD`
-  - Content: `* **F2?** Template is complete; terms don’t drift; “TBD” acceptance is explicitl...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 22691): `Core Concept`
-  - Content: `### C.3:6 - Core Concepts (informative summary; authoritative norms live in C.3....`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 26296): `TBD`
-  - Content: `* **MethodDescription.** “JTBD interviews + onboarding flow experiments.”...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 30789): `Core Concept`
-  - Content: `*   **Core Concept:** The HF-Loop is a formal method of inquiry designed to dist...`
-- **src/codomyrmex/fpf/FPF-Spec.md** (line 32963): `TODO`
-  - Content: `| **CC‑MVPK‑4b (Lean assurance)** | If `AssuranceLane‑Lite` is used, presence bi...`
+- **src/codomyrmex/pattern_matching/AGENTS.md** (line 35): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/cache/AGENTS.md** (line 29): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/security/AGENTS.md** (line 38): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/auth/AGENTS.md** (line 28): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/static_analysis/AGENTS.md** (line 36): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/networking/AGENTS.md** (line 27): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
+- **src/codomyrmex/serialization/AGENTS.md** (line 27): `TODO`
+  - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
 
-*... and 336 more placeholders*
+*... and 648 more placeholders*
 
 ## Examples Migration Issues
 Found references to old `examples/` paths that should be updated to `scripts/examples/`:
+- **AGENTS.md** (line 234):
+  ```
+  - [examples](../../scripts/examples/AGENTS.md)...
+  ```
+- **config/README.md** (line 6):
+  ```
+  - [examples](../../scripts/examples/README.md)...
+  ```
 - **config/AGENTS.md** (line 7):
   ```
   - [examples](../../scripts/examples/AGENTS.md)...
   ```
-- **config/AGENTS.md** (line 154):
-  ```
-  - **Quick Start**: [examples/workflow-basic.json](../../scripts/examples/workflow-basic.json) - Basic configuratio...
-  ```
-- **config/AGENTS.md** (line 155):
-  ```
-  - **Docker Setup**: [examples/docker-compose.yml](../../scripts/examples/docker-compose.yml) - Container deploymen...
-  ```
-- **scripts/README.md** (line 24):
+- **docs/README.md** (line 8):
   ```
   - [examples](../../scripts/examples/README.md)...
   ```
-- **scripts/README.md** (line 470):
-  ```
-  - **Examples**: [examples/README.md](../../scripts/examples/README.md)...
-  ```
-- **scripts/AGENTS.md** (line 25):
+- **docs/AGENTS.md** (line 9):
   ```
   - [examples](../../scripts/examples/AGENTS.md)...
   ```
-- **src/codomyrmex/physical_management/docs/index.md** (line 18):
+- **scripts/README.md** (line 26):
   ```
-  - Explore the [Examples](../../../examples/physical_management/) directory for usage examples....
+  - [examples](../../scripts/examples/README.md)...
   ```
-- **src/codomyrmex/physical_management/docs/index.md** (line 24):
+- **scripts/AGENTS.md** (line 27):
   ```
-  - [Examples](../../../examples/physical_management/) - Usage examples and demonstrations...
+  - [examples](../../scripts/examples/AGENTS.md)...
+  ```
+- **src/codomyrmex/tests/README.md** (line 6):
+  ```
+  - [examples](../../scripts/examples/README.md)...
+  ```
+- **src/codomyrmex/tests/AGENTS.md** (line 7):
+  ```
+  - [examples](../../scripts/examples/AGENTS.md)...
+  ```
+- **src/codomyrmex/physical_management/README.md** (line 7):
+  ```
+  - [examples](../../scripts/examples/README.md)...
+  ```
+- **src/codomyrmex/physical_management/AGENTS.md** (line 8):
+  ```
+  - [examples](../../scripts/examples/AGENTS.md)...
+  ```
+- **src/codomyrmex/spatial/three_d/README.md** (line 7):
+  ```
+  - [examples](../../scripts/examples/README.md)...
+  ```
+- **src/codomyrmex/spatial/three_d/AGENTS.md** (line 8):
+  ```
+  - [examples](../../scripts/examples/AGENTS.md)...
   ```
 - **scripts/project_orchestration/README.md** (line 6):
   ```
@@ -114,88 +153,131 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
   ```
   - [examples](../../scripts/examples/AGENTS.md)...
   ```
-- **scripts/project_orchestration/AGENTS.md** (line 510):
-  ```
-  - **Comprehensive Demo**: [examples/comprehensive_workflow_demo.py](../../scripts/examples/comprehensive_workflow_...
-  ```
 - **scripts/fpf/README.md** (line 6):
   ```
-  - [examples](../examples/README.md)...
+  - [examples](../../scripts/examples/README.md)...
   ```
 - **scripts/fpf/AGENTS.md** (line 7):
   ```
-  - [examples](../examples/AGENTS.md)...
+  - [examples](../../scripts/examples/AGENTS.md)...
   ```
-- **docs/project/documentation-audit-report.md** (line 79):
+- **examples/documentation/README.md** (line 6):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)......
+  - [examples](../../scripts/examples/README.md)...
   ```
-- **docs/project/documentation-audit-report.md** (line 83):
+- **examples/documentation/AGENTS.md** (line 7):
   ```
-  - **Quick Start**: [examples/workflow-basic.json](../../scripts/examples/workflow-basic.json) - Basic configuratio...
+  - [examples](../../scripts/examples/AGENTS.md)...
   ```
-- **docs/project/documentation-audit-report.md** (line 87):
+- **examples/ollama_integration/README.md** (line 6):
   ```
-  - **Docker Setup**: [examples/docker-compose.yml](../../scripts/examples/docker-compose.yml) - Container deploymen...
+  - [examples](../../scripts/examples/README.md)...
   ```
-- **docs/project/documentation-audit-report.md** (line 91):
+- **examples/ollama_integration/AGENTS.md** (line 7):
   ```
-  - [examples](../../scripts/examples/README.md)......
+  - [examples](../../scripts/examples/AGENTS.md)...
   ```
-- **docs/project/documentation-audit-report.md** (line 95):
-  ```
-  - **Examples**: [examples/README.md](../../scripts/examples/README.md)......
-  ```
-- **docs/project/documentation-audit-report.md** (line 99):
+- **docs/project/documentation-audit-report.md** (line 97):
   ```
   - [examples](../../scripts/examples/AGENTS.md)......
   ```
-- **docs/project/documentation-audit-report.md** (line 103):
+- **docs/project/documentation-audit-report.md** (line 101):
   ```
-  - Explore the [Examples](../../../examples/physical_management/) directory for usage examples.......
+  - Explore the [Examples](../../../examples/physical_management/) directory for usage examples..........
   ```
-- **docs/project/documentation-audit-report.md** (line 107):
+- **docs/project/documentation-audit-report.md** (line 105):
   ```
-  - [Examples](../../../examples/physical_management/) - Usage examples and demonstrations......
+  - [Examples](../../../examples/physical_management/) - Usage examples and demonstrations.........
   ```
-- **docs/project/documentation-audit-report.md** (line 111):
+- **docs/project/documentation-audit-report.md** (line 109):
   ```
-  - [examples](../../scripts/examples/README.md)......
+  - [examples](../examples/README.md).........
   ```
-- **docs/project/documentation-audit-report.md** (line 115):
+- **docs/project/documentation-audit-report.md** (line 113):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)......
+  - [examples](../examples/AGENTS.md).........
   ```
-- **docs/project/documentation-audit-report.md** (line 119):
+- **docs/project/documentation-audit-report.md** (line 117):
   ```
-  - **Comprehensive Demo**: [examples/comprehensive_workflow_demo.py](../../scripts/examples/comprehensive_workflow_...
+  - Explore the [Examples](../../../examples/physical_management/) directory for usage examples..........
   ```
-- **docs/project/documentation-audit-report.md** (line 123):
+- **docs/project/documentation-audit-report.md** (line 121):
   ```
-  - [examples](../examples/README.md)......
+  - [Examples](../../../examples/physical_management/) - Usage examples and demonstrations............
   ```
-- **docs/project/documentation-audit-report.md** (line 127):
+- **docs/project/documentation-audit-report.md** (line 125):
   ```
-  - [examples](../examples/AGENTS.md)......
+  - [examples](../examples/README.md)............
   ```
-- **docs/project/documentation-audit-report.md** (line 131):
+- **docs/project/documentation-audit-report.md** (line 129):
   ```
-  - [examples](../../scripts/examples/AGENTS.md).........
-  ```
-- **docs/project/documentation-audit-report.md** (line 135):
-  ```
-  - **Quick Start**: [examples/workflow-basic.json](../../scripts/examples/workflow-basic.json) - Basic configuratio...
-  ```
-- **docs/project/documentation-audit-report.md** (line 139):
-  ```
-  - **Docker Setup**: [examples/docker-compose.yml](../../scripts/examples/docker-compose.yml) - Container deploymen...
-  ```
-- **docs/project/documentation-audit-report.md** (line 143):
-  ```
-  - [examples](../../scripts/examples/README.md).........
+  - [examples](../examples/AGENTS.md)............
   ```
 
-*... and 13 more examples migration issues*
+## AGENTS.md Structure Issues
+- **plugins/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/build_synthesis/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/project_orchestration/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/examples/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/examples/output/ollama/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/examples/output/ollama/logs/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/examples/output/ollama/configs/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/examples/output/ollama/outputs/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/examples/output/ollama/reports/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/output/ollama_integration/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ollama_integration/output/ollama_integration/ollama_integration/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/spatial/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/spatial/output/modeling_3d/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/spatial/output/modeling_3d/modeling_3d/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/database_management/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/database_management/output/schemas/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/system_discovery/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/ci_cd_automation/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/physical_management/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/physical_management/output/physical_management/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/physical_management/output/physical_management/physical_management/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/plugin_system/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/multi_module/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/multi_module/output/workflow_build/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/multi_module/output/workflow_build/workflow_build/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/api_documentation/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/documentation/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **examples/documentation/output/analysis/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **testing/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **testing/output/ollama_tests/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **testing/output/ollama_tests/custom/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **testing/output/ollama_tests/custom/configs/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **testing/output/ollama_tests/custom/configs/gemma3:4b/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/ollama_verification/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/agents/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/testing/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/ollama/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/validation/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/reports/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/reports/final_verify_audit.json/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/reports/remediation_verify_audit.json/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/documentation/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/cache/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/auth/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/development/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/ai_code_editing/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/containerization/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/agents/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/data_visualization/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/config_management/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/api/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/ci_cd_automation/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/coding/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/database_management/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/build_synthesis/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/script_logs/20260107_045635/cerebrum/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+
+## Navigation Issues
+- **docs/README.md**: Broken link `../../../README.md`
+  - Resolved to: `/Users/mini/Documents/README.md`
 
 ## Recommendations
 1. Fix all broken links identified above

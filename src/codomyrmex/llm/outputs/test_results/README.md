@@ -1,26 +1,27 @@
-# src/codomyrmex/llm/outputs/test_results
+# test_results
 
 ## Signposting
-- **Parent**: [Language Models](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
 Test files and validation suites.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `model_listing.json` – File
 - `ollama_connection.json` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../../README.md)
 - **Parent Directory**: [outputs](../README.md)
-- **Src Hub**: [src](../../../../../src/README.md)
+- **Project Root**: [README](../../../../../README.md)

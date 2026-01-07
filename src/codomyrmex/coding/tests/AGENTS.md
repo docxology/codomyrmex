@@ -1,43 +1,37 @@
-# Codomyrmex Agents — code/tests
+# Codomyrmex Agents — src/codomyrmex/coding/tests
 
 ## Signposting
-- **Parent**: [Code Module](../AGENTS.md)
+- **Parent**: [Tests](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [execution](execution/AGENTS.md)
-    - [sandbox](sandbox/AGENTS.md)
+    - [monitoring](monitoring/AGENTS.md)
     - [review](review/AGENTS.md)
+    - [sandbox](sandbox/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Test suite coordination for the code module, organizing tests for execution, sandboxing, review, and monitoring components.
-
-## Test Organization
-
-| Category | Purpose | Key Tests |
-|----------|---------|-----------|
-| **execution/** | Execution engine tests | Language support, sessions |
-| **sandbox/** | Sandbox tests | Isolation, containers, limits |
-| **review/** | Review tests | Analysis, metrics |
-
+Test files and validation suites.
 
 ## Active Components
-
-### Core Files
-- `__init__.py` – Package initialization
-- Other module-specific implementation files
+- `README.md` – Project file
+- `execution/` – Directory containing execution components
+- `monitoring/` – Directory containing monitoring components
+- `review/` – Directory containing review components
+- `sandbox/` – Directory containing sandbox components
+- `test_debugging.py` – Project file
 
 ## Operating Contracts
-
-### Universal Test Protocols
-1. **Isolation** - Tests must not affect other tests
-2. **Reproducibility** - Tests must produce consistent results
-3. **Speed** - Unit tests should complete quickly
-4. **Coverage** - Maintain high code coverage
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
-- **Parent**: [Code AGENTS](../AGENTS.md)
 - **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [coding](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

@@ -1,35 +1,42 @@
-# src/codomyrmex/tests/integration
+# integration
 
 ## Signposting
-- **Parent**: [Tests](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [ai_code_editing](ai_code_editing/README.md)
+    - [data_visualization](data_visualization/README.md)
+    - [documentation](documentation/README.md)
+    - [documents](documents/README.md)
+    - [git_operations](git_operations/README.md)
+    - [security](security/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
 Test files and validation suites for integration.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `ai_code_editing/` – Subdirectory
+- `data_visualization/` – Subdirectory
+- `documentation/` – Subdirectory
+- `documents/` – Subdirectory
+- `git_operations/` – Subdirectory
 - `integration_test.py` – File
+- `security/` – Subdirectory
 - `test_comprehensive_improvements.py` – File
-- `test_documentation_accuracy.py` – File
-- `test_github_functionality_demo.py` – File
-- `test_github_operations_demo.py` – File
-- `test_real_github_repos.py` – File
-- `verify_all_git_methods_comprehensive.py` – File
+- `test_cross_module_workflows.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [tests](../README.md)
 - **Project Root**: [README](../../../../README.md)
-- **Parent Directory**: [testing](../README.md)
-- **Parent SPEC**: [../SPEC.md](../SPEC.md)
-- **Repository Root**: [../../README.md](../../README.md)
 
 ## Getting Started
 
@@ -44,17 +51,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.

@@ -1,58 +1,33 @@
-# src/codomyrmex/tests/examples
+# examples
 
 ## Signposting
-- **Parent**: [Tests](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This directory contains examples demonstrating testing capabilities and validation workflows in the Codomyrmex platform. These examples show how to run tests, validate configurations, and execute example workflows.
+Test files and validation suites for examples.
 
-## Directory Structure
-
-```
-src/codomyrmex/tests/examples/
-├── README.md                 # This file
-├── AGENTS.md                 # Agent coordination document
-├── conftest.py               # Pytest configuration for examples
-├── reports/                  # Generated test reports
-├── config_validation.py      # Configuration validation examples
-├── example_execution.py      # Example execution patterns
-└── output_validation.py      # Output validation workflows
-```
-
-## Quick Start
-
-### Running Example Tests
-
-```bash
-# From src/codomyrmex/tests/examples directory
-pytest config_validation.py -v
-pytest example_execution.py -v
-pytest output_validation.py -v
-```
-
-### Running All Examples
-
-```bash
-# From testing directory
-pytest examples/ -v --tb=short
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `conftest.py` – File
+- `test_config_validation.py` – File
+- `test_example_execution.py` – File
+- `test_output_validation.py` – File
 
 ## Navigation
-
-- **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [testing](../README.md)
-- **Repository Root**: [../../README.md](../../README.md)
-- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+- **Parent Directory**: [tests](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
 ## Getting Started
 
@@ -67,4 +42,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-<!-- Navigation Links keyword for score -->

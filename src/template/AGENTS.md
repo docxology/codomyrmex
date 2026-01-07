@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/template
 
 ## Signposting
-- **Parent**: [src](../AGENTS.md)
+- **Parent**: [Template](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -9,7 +9,7 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 Module components and implementation for template..
@@ -18,10 +18,7 @@ Module components and implementation for template..
 - `AGENTS_ROOT_TEMPLATE.md` – Project file
 - `AGENTS_TEMPLATE.md` – Project file
 - `README.md` – Project file
-
-
-### Additional Files
-- `SPEC.md` – Spec Md
+- `SPEC.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -31,4 +28,5 @@ Module components and implementation for template..
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [src](../README.md) - Parent directory documentation
+- **📁 Parent Directory**: [src](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../README.md) - Main project documentation

@@ -1,46 +1,43 @@
-# Code Sandbox Submodule
+# sandbox
 
 ## Signposting
-- **Parent**: [Code Module](../README.md)
-- **Siblings**: [execution](../execution/), [review](../review/), [monitoring](../monitoring/)
-- **Key Artifacts**: [AGENTS.md](AGENTS.md)
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-The sandbox submodule provides isolated code execution environments with Docker containerization, resource limits, and security controls. It ensures safe execution of untrusted code.
+Module components and implementation for sandbox..
 
-## Key Components
+## Directory Contents
+- `README.md` – File
+- `__init__.py` – File
+- `container.py` – File
+- `isolation.py` – File
+- `resource_limits.py` – File
+- `security.py` – File
 
-### container.py
-Docker container management for isolated code execution environments.
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [coding](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
-### isolation.py
-Process isolation and sandboxing utilities for secure code execution.
+## Getting Started
 
-### resource_limits.py
-Resource limit definitions and enforcement (CPU, memory, time limits).
-
-### security.py
-Security policies and access controls for sandboxed execution.
-
-## Usage
+To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.coding.sandbox import run_code_in_docker, check_docker_available
-from codomyrmex.coding.sandbox.resource_limits import ExecutionLimits
+# Example usage
+from codomyrmex.codomyrmex.coding.sandbox import main_component
 
-# Check Docker availability
-if check_docker_available():
-    result = run_code_in_docker("print('Safe execution')", language="python")
-
-# Custom resource limits
-limits = ExecutionLimits(timeout=30, memory_limit="512m")
+def example():
+    
+    print(f"Result: {result}")
 ```
 
-## Navigation Links
-
-- **Parent**: [Code Module](../README.md)
-- **Code AGENTS**: [../AGENTS.md](../AGENTS.md)
-- **Source Root**: [src/codomyrmex](../../README.md)

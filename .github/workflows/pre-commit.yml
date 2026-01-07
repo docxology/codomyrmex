@@ -110,7 +110,7 @@ repos:
         pass_filenames: false
         always_run: true
         args: [testing/unit/, --tb=short, --maxfail=1, -q]
-EOL
+EOF
             pre-commit install
             echo "✅ Basic pre-commit configuration created and hooks installed"
           fi

@@ -49,8 +49,20 @@ graph TD
     Review --> Tools[Traditional Tools]
     Analyzer --> Quality[Quality Assessment]
     Tools --> Quality
+    Monitor --> Result[Execution Result]
+    
+    Code[Code Changes] --> Review[Review Submodule]
+    Review --> Analyzer[Pyscn Analyzer]
+    Review --> Tools[Traditional Tools]
+    Analyzer --> Quality[Quality Assessment]
+    Tools --> Quality
     Quality --> Report[Review Report]
-```
+
+    Result -->|Failure| Debugger[Debugging Submodule]
+    Debugger --> ErrorAnalyzer[Error Analyzer]
+    ErrorAnalyzer --> PatchGen[Patch Generator]
+    PatchGen --> Verifier[Fix Verifier]
+    Verifier -->|Success| Result
 
 ## Functional Requirements
 
@@ -71,6 +83,12 @@ graph TD
 1. **Resource Tracking**: Monitor CPU, memory, execution time
 2. **Execution Monitoring**: Track execution status and completion
 3. **Metrics Collection**: Aggregate metrics for analysis
+
+### Autonomous Debugging
+1. **Error Analysis**: Parse execution outputs to identify error types and locations
+2. **Patch Generation**: Generate potential fixes for identified errors
+3. **Fix Verification**: Verify patches in a sandboxed environment
+4. **Closed Loop**: Orchestrate the cycle of execution -> failure -> diagnosis -> patch -> verify
 
 ### Quality Standards
 - **Security**: "Secure by Design". Default to least privilege
@@ -94,6 +112,12 @@ graph TD
 - `ResourceMonitor` - Track resource usage
 - `ExecutionMonitor` - Monitor execution status
 - `MetricsCollector` - Collect and aggregate metrics
+
+**Debugging:**
+- `Debugger` - Main orchestration for the debug loop
+- `ErrorAnalyzer` - Parse and diagnose errors
+- `PatchGenerator` - Generate code patches
+- `FixVerifier` - Verify patches in sandbox
 
 ### Dependencies
 - **Modules**: `containerization`, `logging_monitoring`

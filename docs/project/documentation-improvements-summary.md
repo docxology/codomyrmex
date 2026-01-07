@@ -55,7 +55,7 @@ Comprehensive improvements to the Codomyrmex documentation system, including sta
 ### 5. CI/CD Integration ✅
 
 **Created**:
-- `.github/workflows/validate-docs.yml` - Automated validation workflow
+- `.github/workflows/documentation-validation.yml` - Automated validation workflow
 - Documentation for pre-commit hooks
 - CI/CD integration guide
 
@@ -132,7 +132,7 @@ Comprehensive improvements to the Codomyrmex documentation system, including sta
 ### Enhanced Files (3)
 - `docs/development/documentation.md` - Standards update
 - `scripts/documentation/README.md` - New documentation
-- `.github/workflows/validate-docs.yml` - CI/CD integration
+- `.github/workflows/documentation-validation.yml` - CI/CD integration
 
 ## Validation Results
 
@@ -175,7 +175,7 @@ python3 scripts/documentation/comprehensive_fix.py
 The validation system is ready for CI/CD integration:
 
 ```yaml
-# .github/workflows/validate-docs.yml
+# .github/workflows/documentation-validation.yml
 - name: Validate Module Documentation
   run: python3 scripts/documentation/validate_module_docs.py
 ```

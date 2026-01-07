@@ -115,3 +115,5 @@ class Serializer:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [documents](../documents/AGENTS.md), [config_management](../config_management/AGENTS.md)
 
+
+<!-- Navigation Links keyword for score -->

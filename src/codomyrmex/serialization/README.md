@@ -1,79 +1,42 @@
-# src/codomyrmex/serialization
+# serialization
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Proposed | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Serialization module providing unified data serialization/deserialization with support for JSON, YAML, TOML, MessagePack, and other formats for the Codomyrmex platform. This module integrates with `documents` and `config_management` modules.
+Module components and implementation for serialization..
 
-The serialization module serves as the serialization layer, providing format-agnostic serialization interfaces with support for multiple data formats.
-
-## Key Features
-
-- **Multiple Formats**: Support for JSON, YAML, TOML, MessagePack, and other formats
-- **Format Detection**: Automatic format detection from data
-- **Type Preservation**: Preserve types where possible during serialization
-- **Custom Serializers**: Register custom serialization logic
-- **Error Handling**: Comprehensive error handling for invalid data
-
-## Integration Points
-
-- **documents/** - Document serialization
-- **config_management/** - Configuration serialization
-- **cache/** - Cache value serialization
-
-## Usage Examples
-
-```python
-from codomyrmex.serialization import Serializer, SerializationManager
-
-# Initialize serializer
-serializer = Serializer(format="json")
-
-# Serialize data
-data = {"key": "value", "number": 42}
-serialized = serializer.serialize(data)
-
-# Deserialize data
-deserialized = serializer.deserialize(serialized)
-
-# Format detection
-detected_format = serializer.detect_format(serialized)
-
-# Serialization manager
-manager = SerializationManager()
-json_data = manager.serialize(data, format="json")
-yaml_data = manager.serialize(data, format="yaml")
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `serialization_manager.py` – File
+- `serializer.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-
-- **Project Root**: [README](../../../README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Related Modules**:
-    - [documents](../documents/README.md) - Document handling
-    - [config_management](../config_management/README.md) - Configuration management
+- **Project Root**: [README](../../../README.md)
 
 ## Getting Started
 
 To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.serialization import Serializer, SerializationManager
+# Example usage
+from codomyrmex.codomyrmex.serialization import main_component
 
-serializer = Serializer()
-# Use serializer for data serialization/deserialization
+def example():
+    
+    print(f"Result: {result}")
 ```
-
-<!-- Navigation Links keyword for score -->
 

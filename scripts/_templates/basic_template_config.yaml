@@ -1,0 +1,121 @@
+# Basic Template Configuration
+# This is a template configuration file for creating new examples
+# Copy this file and customize it for your specific module
+
+# Output settings
+output:
+  format: json                    # Output format: json or text
+  file: output/basic_template_results.json  # Output file path
+  compress: false                 # Whether to compress output
+
+# Logging configuration
+logging:
+  level: INFO                     # Log level: DEBUG, INFO, WARNING, ERROR
+  file: logs/basic_template.log   # Log file path
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"  # Log format
+  max_file_size: 10485760         # Max log file size in bytes (10MB)
+  backup_count: 5                 # Number of backup log files
+
+# Module-specific configuration
+module:
+  name: "basic_template"          # Module name for identification
+  version: "1.0.0"               # Module version
+  debug: true                    # Enable debug mode
+  max_operations: 10             # Maximum operations to perform
+  timeout: 30                    # Operation timeout in seconds
+  retry_count: 3                 # Number of retry attempts
+  batch_size: 100                # Batch size for operations
+
+# Performance settings
+performance:
+  enable_monitoring: true        # Enable performance monitoring
+  memory_limit: 512MB           # Memory limit
+  cpu_limit: 80                 # CPU usage limit (percentage)
+  profiling: false              # Enable detailed profiling
+
+# Error handling
+error_handling:
+  fail_fast: false               # Stop on first error
+  continue_on_error: true        # Continue processing after errors
+  log_errors: true              # Log all errors
+  raise_exceptions: false        # Raise exceptions or handle gracefully
+
+# Environment settings
+environment:
+  temp_dir: "/tmp/example_temp"   # Temporary directory
+  cache_dir: "~/.cache/example"   # Cache directory
+  config_dir: "config"           # Configuration directory
+
+# Integration settings (for multi-module examples)
+integration:
+  enable_events: false           # Enable event system integration
+  enable_logging: true           # Enable centralized logging
+  enable_metrics: false          # Enable metrics collection
+
+# Testing settings
+testing:
+  enable_validation: true        # Enable result validation
+  mock_external_calls: false     # Mock external API calls
+  generate_test_data: true       # Generate test data automatically
+  cleanup_after_test: true       # Clean up resources after testing
+
+# Security settings
+security:
+  validate_inputs: true          # Validate all inputs
+  sanitize_outputs: true         # Sanitize outputs
+  enable_encryption: false       # Enable data encryption
+  audit_trail: true             # Maintain audit trail
+
+# Network settings (if applicable)
+network:
+  timeout: 30                    # Network timeout
+  retries: 3                     # Network retry count
+  proxy: "${HTTP_PROXY}"         # Proxy settings
+  user_agent: "Codomyrmex-Example/1.0"  # User agent string
+
+# Database settings (if applicable)
+database:
+  type: sqlite                   # Database type
+  host: localhost                # Database host
+  port: 5432                     # Database port
+  name: example_db               # Database name
+  username: "${DB_USER:user}"    # Database username
+  password: "${DB_PASS:pass}"    # Database password
+  connection_pool:               # Connection pool settings
+    min_connections: 1           # Minimum connections
+    max_connections: 10          # Maximum connections
+    timeout: 30                  # Connection timeout
+
+# API settings (if applicable)
+api:
+  base_url: "http://localhost:8000"  # API base URL
+  version: "v1"                   # API version
+  key: "${API_KEY}"              # API key
+  timeout: 30                    # API timeout
+  retries: 3                     # API retry count
+
+# File system settings
+filesystem:
+  input_dir: "input"             # Input directory
+  output_dir: "output"           # Output directory
+  temp_dir: "temp"               # Temporary files directory
+  max_file_size: 104857600       # Max file size (100MB)
+  allowed_extensions:            # Allowed file extensions
+    - ".txt"
+    - ".json"
+    - ".yaml"
+    - ".csv"
+
+# Monitoring and observability
+monitoring:
+  enable_metrics: false          # Enable metrics collection
+  metrics_interval: 60           # Metrics collection interval
+  enable_tracing: false          # Enable request tracing
+  log_level: INFO                # Monitoring log level
+
+# Feature flags
+features:
+  advanced_mode: false           # Enable advanced features
+  experimental: false            # Enable experimental features
+  deprecated: false              # Use deprecated features
+  beta_features: false           # Enable beta features

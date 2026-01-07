@@ -1,28 +1,30 @@
 # Codomyrmex Agents — scripts/llm
 
 ## Signposting
-- **Parent**: [Scripts](../AGENTS.md)
+- **Parent**: [Llm](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [ollama](ollama/AGENTS.md)
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-LLM automation scripts for managing language model operations.
+Automation and utility scripts.
 
 ## Active Components
-
-- `ollama/` - Ollama local LLM integration scripts
+- `README.md` – Project file
+- `ollama/` – Directory containing ollama components
 
 ## Operating Contracts
-
-### Universal Execution Protocols
-1. **API Key Security** - Never expose API keys in logs
-2. **Rate Limiting** - Respect provider rate limits
-3. **Error Handling** - Handle API errors gracefully
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
-- **Parent**: [Scripts AGENTS](../AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../README.md) - Main project documentation

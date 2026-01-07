@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules
 
 ## Signposting
-- **Parent**: [Documentation Documentation](../AGENTS.md)
+- **Parent**: [Modules](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [ai_code_editing](ai_code_editing/AGENTS.md)
@@ -19,16 +19,16 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 Documentation files and guides for modules.
 
 ## Active Components
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `ai_code_editing/` – Directory containing ai_code_editing components
 - `build_synthesis/` – Directory containing build_synthesis components
-- `code/` – Directory containing code module components
 - `data_visualization/` – Directory containing data_visualization components
 - `environment_setup/` – Directory containing environment_setup components
 - `git_operations/` – Directory containing git_operations components
@@ -39,22 +39,6 @@ Documentation files and guides for modules.
 - `static_analysis/` – Directory containing static_analysis components
 - `template/` – Directory containing template components
 
-
-### Additional Files
-- `SPEC.md` – Spec Md
-- `ai_code_editing` – Ai Code Editing
-- `build_synthesis` – Build Synthesis
-- `code` – Code module (execution, sandboxing, review, monitoring)
-- `data_visualization` – Data Visualization
-- `environment_setup` – Environment Setup
-- `git_operations` – Git Operations
-- `logging_monitoring` – Logging Monitoring
-- `model_context_protocol` – Model Context Protocol
-- `module_template` – Module Template
-- `pattern_matching` – Pattern Matching
-- `static_analysis` – Static Analysis
-- `template` – Template
-
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
@@ -63,5 +47,5 @@ Documentation files and guides for modules.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation

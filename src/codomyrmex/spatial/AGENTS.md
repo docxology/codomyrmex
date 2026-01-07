@@ -1,56 +1,36 @@
-# Codomyrmex Agents — spatial
+# Codomyrmex Agents — src/codomyrmex/spatial
 
 ## Signposting
-- **Parent**: [codomyrmex](../AGENTS.md)
+- **Parent**: [Spatial](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [three_d](three_d/AGENTS.md)- **Key Artifacts**:
+    - [four_d](four_d/AGENTS.md)
+    - [three_d](three_d/AGENTS.md)
+    - [world_models](world_models/AGENTS.md)
+- **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Spatial module providing 3D/4D visualization, modeling, and world model capabilities for the Codomyrmex platform. This module consolidates spatial computing functionality.
-
-## Module Overview
-
-### Submodules
-
-| Submodule | Purpose | Status |
-|-----------|---------|--------|
-| **three_d/** | 3D modeling and visualization | Active |
-| **four_d/** | 4D (temporal) modeling | Planning |
-| **world_models/** | World model representations | Planning |
-
-## Key Capabilities
-
-- **3D Scene Building** - Create and manipulate 3D scenes
-- **Mesh Generation** - Generate 3D meshes programmatically
-- **Rendering** - Render 3D scenes to images
-- **Temporal Modeling** - 4D time-series spatial data
-
+Module components and implementation for spatial..
 
 ## Active Components
-
-### Core Files
-- `__init__.py` – Package initialization
-- Other module-specific implementation files
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `four_d/` – Directory containing four_d components
+- `three_d/` – Directory containing three_d components
+- `world_models/` – Directory containing world_models components
 
 ## Operating Contracts
-
-### Universal Spatial Protocols
-
-All spatial operations must:
-
-1. **Coordinate Systems** - Use consistent coordinate systems
-2. **Unit Consistency** - Maintain consistent units across operations
-3. **Performance** - Optimize for real-time rendering when possible
-4. **Error Handling** - Handle geometry errors gracefully
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
-- **Parent**: [codomyrmex](../AGENTS.md)
-- **3D Module**: [three_d/AGENTS.md](three_d/AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

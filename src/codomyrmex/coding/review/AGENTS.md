@@ -1,44 +1,34 @@
-# Codomyrmex Agents — code/review
+# Codomyrmex Agents — src/codomyrmex/coding/review
 
 ## Signposting
-- **Parent**: [Code Module](../AGENTS.md)
+- **Parent**: [Review](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
-- **Siblings**: [execution](../execution/AGENTS.md), [sandbox](../sandbox/AGENTS.md), [monitoring](../monitoring/AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Code review submodule providing automated code review capabilities including quality analysis, best practices checking, and comprehensive code metrics.
-
-## Key Components
-
-- `reviewer.py` – Main code review engine
-- `analyzer.py` – Code analysis utilities
-- `models.py` – Data models for review results
-
-## Function Signatures
-
-```python
-def analyze_file(filepath: str) -> AnalysisResult
-def review_code(code: str) -> ReviewResult
-```
-
+Module components and implementation for review..
 
 ## Active Components
-
-### Core Files
-- `__init__.py` – Package initialization
-- Other module-specific implementation files
+- `README.md` – Project file
+- `__init__.py` – Project file
+- `analyzer.py` – Project file
+- `demo_review.py` – Project file
+- `models.py` – Project file
+- `reviewer.py` – Project file
 
 ## Operating Contracts
-
-### Universal Execution Protocols
-1. **Comprehensive Analysis** - Analyze all relevant code aspects
-2. **Structured Results** - Return structured analysis data
-3. **Best Practices** - Check against coding standards
-4. **Performance** - Complete analysis within reasonable time
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Parent**: [Code AGENTS](../AGENTS.md)
 - **Human Documentation**: [README.md](README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [coding](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

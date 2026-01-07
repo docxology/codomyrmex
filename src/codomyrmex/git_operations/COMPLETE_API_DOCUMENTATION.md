@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Git Operations module provides a comprehensive, production-ready interface for all Git operations within the Codomyrmex ecosystem. This module supports complete fractal Git workflows with 22 operations covering all aspects of Git repository management.
+The Git Operations module provides a comprehensive, production-ready interface for all Git operations within the Codomyrmex ecosystem. This module supports complete Git workflows with 40+ operations covering all aspects of Git repository management.
 
 ## Quick Start
 

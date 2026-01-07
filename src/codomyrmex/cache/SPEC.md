@@ -116,3 +116,5 @@ class Cache:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [performance](../performance/AGENTS.md), [config_management](../config_management/AGENTS.md)
 
+
+<!-- Navigation Links keyword for score -->

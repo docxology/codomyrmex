@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document specifies the Application Programming Interface (API) for the `git_operations` module. The module provides a comprehensive, production-ready interface for all Git operations within the Codomyrmex ecosystem, supporting complete Git workflows with 22+ operations covering all aspects of Git repository management.
+This document specifies the Application Programming Interface (API) for the `git_operations` module. The module provides a comprehensive, production-ready interface for all Git operations within the Codomyrmex ecosystem, supporting complete Git workflows with 40+ operations covering all aspects of Git repository management.
 
 **Note**: For complete detailed API documentation with all function signatures, parameters, return types, and examples, see [COMPLETE_API_DOCUMENTATION.md](./COMPLETE_API_DOCUMENTATION.md).
 

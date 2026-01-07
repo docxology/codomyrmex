@@ -1,65 +1,26 @@
-# examples/documentation/examples
+# examples
 
 ## Signposting
-- **Parent**: [Examples](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This directory contains examples demonstrating documentation generation capabilities in the Codomyrmex platform. These examples show how to generate API documentation, create technical guides, and automate documentation workflows.
+Documentation files and guides for examples.
 
-## Directory Structure
-
-```
-examples/documentation/examples/
-├── README.md                 # This file
-├── AGENTS.md                 # Agent coordination document
-├── config.json               # Configuration examples
-├── config.yaml               # YAML configuration
-└── example_basic.py          # Basic documentation generation
-```
-
-## Quick Start
-
-### Running Documentation Examples
-
-```bash
-# From examples/documentation/examples directory
-python example_basic.py
-```
-
-### Configuration Options
-
-```yaml
-# config.yaml
-output_format: "markdown"
-source_paths:
-  - "src/codomyrmex/"
-include_private: false
-generate_index: true
-```
-
-## Example Output
-
-The examples generate documentation in various formats:
-- API reference documentation
-- Module usage guides
-- Integration examples
-- Technical specifications
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [documentation](../README.md)
-- **Repository Root**: [../../../README.md](../../../README.md)
-- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
+- **Project Root**: [README](../../../README.md)
 
-<!-- Navigation Links keyword for score -->

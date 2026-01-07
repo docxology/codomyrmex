@@ -7,13 +7,13 @@ This documentation provides in-depth information beyond the main `README.md` for
 ## Table of Contents
 
 - [Architecture](./architecture.md) (3D engine architecture and design)
-- [API Specification](../API_SPECIFICATION.md) (Link to the main API spec)
+- [API Specification](../README.md#api-reference) (Link to the main API spec)
 - [Contributing Guidelines](../../../../../docs/project/contributing.md) (Link to contribution guide)
 
 ## How to Use This Documentation
 
 - Start with the [Architecture](./architecture.md) for a high-level understanding of the module's 3D engine design.
-- Refer to the [API Specification](../API_SPECIFICATION.md) for details on how to interact with the module programmatically.
+- Refer to the [API Specification](../README.md#api-reference) for details on how to interact with the module programmatically.
 - Explore the [Examples](../../../../../examples/spatial/) directory for usage examples.
 
 ## Related Documentation

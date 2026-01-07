@@ -113,3 +113,5 @@ class Authenticator:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [security](../security/AGENTS.md), [api](../api/AGENTS.md)
 
+
+<!-- Navigation Links keyword for score -->

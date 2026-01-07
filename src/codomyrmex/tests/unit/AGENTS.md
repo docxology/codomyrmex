@@ -1,126 +1,111 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit
 
 ## Signposting
-- **Parent**: [Tests](../AGENTS.md)
+- **Parent**: [Unit](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [agents](agents/AGENTS.md)
+    - [ai_code_editing](ai_code_editing/AGENTS.md)
+    - [api_documentation](api_documentation/AGENTS.md)
+    - [api_standardization](api_standardization/AGENTS.md)
+    - [auth](auth/AGENTS.md)
+    - [build_synthesis](build_synthesis/AGENTS.md)
+    - [cache](cache/AGENTS.md)
+    - [cerebrum](cerebrum/AGENTS.md)
+    - [ci_cd_automation](ci_cd_automation/AGENTS.md)
+    - [cli](cli/AGENTS.md)
+    - [config_management](config_management/AGENTS.md)
+    - [containerization](containerization/AGENTS.md)
+    - [data_visualization](data_visualization/AGENTS.md)
+    - [database_management](database_management/AGENTS.md)
+    - [documentation](documentation/AGENTS.md)
+    - [documents](documents/AGENTS.md)
+    - [environment_setup](environment_setup/AGENTS.md)
+    - [events](events/AGENTS.md)
+    - [exceptions](exceptions/AGENTS.md)
+    - [fpf](fpf/AGENTS.md)
+    - [git_operations](git_operations/AGENTS.md)
+    - [llm](llm/AGENTS.md)
+    - [logging_monitoring](logging_monitoring/AGENTS.md)
+    - [metrics](metrics/AGENTS.md)
+    - [model_context_protocol](model_context_protocol/AGENTS.md)
+    - [module_template](module_template/AGENTS.md)
+    - [networking](networking/AGENTS.md)
+    - [pattern_matching](pattern_matching/AGENTS.md)
+    - [performance](performance/AGENTS.md)
+    - [physical_management](physical_management/AGENTS.md)
+    - [plugin_system](plugin_system/AGENTS.md)
+    - [project_orchestration](project_orchestration/AGENTS.md)
+    - [scrape](scrape/AGENTS.md)
+    - [security](security/AGENTS.md)
+    - [serialization](serialization/AGENTS.md)
+    - [spatial](spatial/AGENTS.md)
+    - [static_analysis](static_analysis/AGENTS.md)
+    - [system_discovery](system_discovery/AGENTS.md)
+    - [task_queue](task_queue/AGENTS.md)
+    - [template](template/AGENTS.md)
+    - [terminal_interface](terminal_interface/AGENTS.md)
+    - [tools](tools/AGENTS.md)
+    - [validation](validation/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Unit test files and validation suites for individual components. This directory contains centralized unit tests for most modules, with some modules maintaining tests in their own `tests/` subdirectories.
-
-## Module Test Organization
-
-### Test Location Patterns
-
-**Centralized Pattern** (28 modules): Tests in `src/codomyrmex/tests/unit/<module_name>/`
-- Most modules follow this pattern for centralized test management
-
-**Module-Local Pattern** (3 modules): Tests in `src/codomyrmex/<module>/tests/`
-- `agents/` - Has tests in `src/codomyrmex/agents/tests/`
-- `fpf/` - Has tests in `src/codomyrmex/fpf/tests/`
-- `spatial/` - Has tests in `src/codomyrmex/spatial/three_d/tests/` (submodule)
-
-### Submodule Test Mappings
-
-Some modules have submodules with dedicated test folders in this directory:
-- `agents/ai_code_editing/` → `tests/unit/ai_code_editing/`
-- `api/documentation/` → `tests/unit/api_documentation/`
-- `api/standardization/` → `tests/unit/api_standardization/`
-- `code/sandbox/` → `tests/unit/code_execution_sandbox/`
-- `code/review/` → `tests/unit/code_review/`
-
-### Special Test Cases
-
-- `cli/` - Tests for `cli.py` file (not a module directory)
-- `exceptions/` - Tests for `exceptions.py` file (not a module directory)
+Test files and validation suites for unit.
 
 ## Active Components
 - `README.md` – Project file
-- `test_ai_code_editing.py` – Project file
-- `test_api_documentation.py` – Project file (tests api.documentation)
-- `test_bootstrap_agents_readmes.py` – Project file
-- `test_build_synthesis.py` – Project file
-- `test_ci_cd_automation.py` – Project file
-- `test_cli_comprehensive.py` – Project file
-- `test_cli_simple.py` – Project file
-- `test_code.py` – Project file (if exists, tests code module)
-- `test_code_review.py` – Project file
-- `test_config_management.py` – Project file
-- `test_containerization.py` – Project file
-- `test_data_visualization.py` – Project file
-- `test_database_management.py` – Project file
-- `test_documentation.py` – Project file
-- `test_environment_setup.py` – Project file
-- `test_environment_setup_comprehensive.py` – Project file
-- `test_exceptions.py` – Project file
-- `test_git_operations.py` – Project file
-- `test_git_operations_advanced.py` – Project file
-- `test_git_operations_comprehensive.py` – Project file
-- `test_github_operations_comprehensive.py` – Project file
-- `test_llm.py` – Project file
-- `test_logging_monitoring.py` – Project file
-- `test_model_context_protocol.py` – Project file
-- `test_spatial.three_d.py` – Project file
-- `test_module_template.py` – Project file
-- `test_ollama_integration.py` – Project file (tests llm.ollama)
-- `test_pattern_matching.py` – Project file
-- `test_performance_comprehensive.py` – Project file
-- `test_physical_management.py` – Project file
-- `test_project_orchestration.py` – Project file
-- `test_repository_manager.py` – Project file
-- `test_security_audit.py` – Project file
-- `test_static_analysis.py` – Project file
-- `test_static_analysis_comprehensive.py` – Project file
-- `test_system_discovery_comprehensive.py` – Project file
-- `test_template.py` – Project file
-- `test_terminal_interface_comprehensive.py` – Project file
-
-
-### Additional Files
-- `SPEC.md` – Spec Md
-- `__pycache__` –   Pycache  
-- `ai_code_editing` – Ai Code Editing
-- `api` – API module (with documentation and standardization submodules)
-- `api_standardization` – Api Standardization
-- `build_synthesis` – Build Synthesis
-- `ci_cd_automation` – Ci Cd Automation
-- `cli` – Cli
-- `code` – Code module (execution, sandboxing, review, monitoring)
-- `code_review` – Code Review
-- `config_management` – Config Management
-- `containerization` – Containerization
-- `data_visualization` – Data Visualization
-- `database_management` – Database Management
-- `documentation` – Documentation
-- `documents` – Documents
-- `environment_setup` – Environment Setup
-- `events` – Events
-- `exceptions` – Exceptions
-- `git_operations` – Git Operations
-- `llm` – Language Models
-- `llm` – Llm
-- `logging_monitoring` – Logging Monitoring
-- `model_context_protocol` – Model Context Protocol
-- `spatial.three_d` – Modeling 3D
-- `module_template` – Module Template
-- `pattern_matching` – Pattern Matching
-- `performance` – Performance
-- `physical_management` – Physical Management
-- `plugin_system` – Plugin System
-- `project_orchestration` – Project Orchestration
-- `security` – Security
-- `static_analysis` – Static Analysis
-- `system_discovery` – System Discovery
-- `template` – Template
-- `terminal_interface` – Terminal Interface
-- `tools` – Tools
+- `SPEC.md` – Project file
+- `TEST_SUITE_SUMMARY.md` – Project file
+- `agents/` – Directory containing agents components
+- `ai_code_editing/` – Directory containing ai_code_editing components
+- `api_documentation/` – Directory containing api_documentation components
+- `api_standardization/` – Directory containing api_standardization components
+- `auth/` – Directory containing auth components
+- `build_synthesis/` – Directory containing build_synthesis components
+- `cache/` – Directory containing cache components
+- `cerebrum/` – Directory containing cerebrum components
+- `ci_cd_automation/` – Directory containing ci_cd_automation components
+- `cli/` – Directory containing cli components
+- `config_management/` – Directory containing config_management components
+- `containerization/` – Directory containing containerization components
+- `data_visualization/` – Directory containing data_visualization components
+- `database_management/` – Directory containing database_management components
+- `documentation/` – Directory containing documentation components
+- `documents/` – Directory containing documents components
+- `environment_setup/` – Directory containing environment_setup components
+- `events/` – Directory containing events components
+- `exceptions/` – Directory containing exceptions components
+- `fpf/` – Directory containing fpf components
+- `git_operations/` – Directory containing git_operations components
+- `llm/` – Directory containing llm components
+- `logging_monitoring/` – Directory containing logging_monitoring components
+- `metrics/` – Directory containing metrics components
+- `model_context_protocol/` – Directory containing model_context_protocol components
+- `module_template/` – Directory containing module_template components
+- `networking/` – Directory containing networking components
+- `ollama_test_helpers.py` – Project file
+- `pattern_matching/` – Directory containing pattern_matching components
+- `performance/` – Directory containing performance components
+- `physical_management/` – Directory containing physical_management components
+- `plugin_system/` – Directory containing plugin_system components
+- `project_orchestration/` – Directory containing project_orchestration components
+- `scrape/` – Directory containing scrape components
+- `security/` – Directory containing security components
+- `serialization/` – Directory containing serialization components
+- `spatial/` – Directory containing spatial components
+- `static_analysis/` – Directory containing static_analysis components
+- `system_discovery/` – Directory containing system_discovery components
+- `task_queue/` – Directory containing task_queue components
+- `template/` – Directory containing template components
+- `terminal_interface/` – Directory containing terminal_interface components
+- `test_ollama_integration_README.md` – Project file
+- `test_ollama_integration_comprehensive.py` – Project file
+- `tools/` – Directory containing tools components
+- `validation/` – Directory containing validation components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -130,4 +115,5 @@ Some modules have submodules with dedicated test folders in this directory:
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [testing](../README.md) - Parent directory documentation
+- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

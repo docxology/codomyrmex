@@ -1,7 +1,7 @@
-# src/codomyrmex/git_operations/tests
+# tests
 
 ## Signposting
-- **Parent**: [Git Operations](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [integration](integration/README.md)
     - [unit](unit/README.md)
@@ -13,44 +13,48 @@
 
 ## Overview
 
-Test suites for the Git Operations module, covering local repository manipulation and remote API interactions.
+Test files and validation suites.
 
-## Testing Structure
-
-- **unit/**: Isolated tests for git manager logic, command parsing, and metadata handling.
-- **integration/**: End-to-end tests involving temporary local repositories and mock GitHub API responses.
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `integration/` – Subdirectory
+- `unit/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [git_operations](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Project Root**: [README](../../../../README.md)
 
 ## Getting Started
 
-To use this module in your project, import the necessary components:
+This directory contains test suites for the git_operations module.
 
-```python
-# Example usage
-from codomyrmex.codomyrmex.git_operations.tests import main_component
+### Running Tests
 
-def example():
-    
-    print(f"Result: {result}")
+```bash
+# Run all tests
+pytest src/codomyrmex/git_operations/tests/
+
+# Run only unit tests
+pytest src/codomyrmex/git_operations/tests/unit/
+
+# Run only integration tests
+pytest src/codomyrmex/git_operations/tests/integration/
 ```
 
-<!-- Navigation Links keyword for score -->
+### Test Structure
 
-## Detailed Architecture and Implementation
+- `unit/` - Unit tests for individual functions
+- `integration/` - Integration tests for complete workflows
 
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
+### Example Test
 
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+```python
+from codomyrmex.git_operations import check_git_availability
 
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+def test_git_availability():
+    assert check_git_availability() == True
+```
+

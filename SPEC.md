@@ -1,5 +1,6 @@
 # Codomyrmex Functional Specification
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 ## System Concept
 Codomyrmex is an idealized modular workspace designed to facilitate interaction between (pairwise) and among (multiple) humans, people, agents, synthetic systems, embodiments tools, and things most broadly. 
 

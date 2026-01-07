@@ -1,20 +1,22 @@
-# src/codomyrmex/module_template/docs
+# docs
 
 ## Signposting
-- **Parent**: [Module Template](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [tutorials](tutorials/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
 Documentation files and guides.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `index.md` – File
 - `technical_overview.md` – File
 - `tutorials/` – Subdirectory
@@ -22,9 +24,8 @@ Documentation files and guides.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [module_template](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Project Root**: [README](../../../../README.md)
 
 ## Getting Started
 

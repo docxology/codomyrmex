@@ -1,100 +1,33 @@
-# src/codomyrmex/agents/generic
+# generic
 
 ## Signposting
-- **Parent**: [agents](../README.md)
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Generic submodule providing shared functionality used across all agent implementations. This includes base agent classes, multi-agent orchestration, inter-agent communication, and task planning utilities.
+Module components and implementation for generic..
 
-## Key Components
-
-- **BaseAgent**: Base implementation of `AgentInterface` with common functionality
-- **AgentOrchestrator**: Coordinate multiple agents for complex tasks
-- **MessageBus**: Inter-agent communication system
-- **TaskPlanner**: Task planning and decomposition utilities
-
-## Usage
-
-### BaseAgent
-
-```python
-from codomyrmex.agents.generic import BaseAgent
-from codomyrmex.agents.core import AgentCapabilities, AgentRequest, AgentResponse
-
-class MyAgent(BaseAgent):
-    def _execute_impl(self, request):
-        # Implement agent logic
-        return AgentResponse(content="Response")
-    
-    def _stream_impl(self, request):
-        # Implement streaming logic
-        yield "chunk1"
-        yield "chunk2"
-
-agent = MyAgent(
-    name="my_agent",
-    capabilities=[AgentCapabilities.CODE_GENERATION]
-)
-```
-
-### AgentOrchestrator
-
-```python
-from codomyrmex.agents.generic import AgentOrchestrator
-
-orchestrator = AgentOrchestrator([agent1, agent2, agent3])
-
-# Parallel execution
-responses = orchestrator.execute_parallel(request)
-
-# Sequential execution with fallback
-response = orchestrator.execute_with_fallback(request)
-```
-
-### MessageBus
-
-```python
-from codomyrmex.agents.generic import MessageBus, Message
-
-bus = MessageBus()
-
-def handle_message(message: Message):
-    print(f"Received: {message.content}")
-
-bus.subscribe("task_complete", handle_message)
-bus.publish(Message(message_type="task_complete", content="Done"))
-```
-
-### TaskPlanner
-
-```python
-from codomyrmex.agents.generic import TaskPlanner
-
-planner = TaskPlanner()
-
-# Create main task
-main_task = planner.create_task("Build application")
-
-# Decompose into subtasks
-subtasks = planner.decompose_task(
-    main_task,
-    ["Design database", "Implement API", "Create frontend"]
-)
-
-# Get execution order
-execution_order = planner.get_task_execution_order()
-```
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `agent_orchestrator.py` – File
+- `base_agent.py` – File
+- `message_bus.py` – File
+- `task_planner.py` – File
 
 ## Navigation
-
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Module**: [agents](../README.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
 ## Getting Started
 
@@ -109,4 +42,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-<!-- Navigation Links keyword for score -->

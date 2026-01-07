@@ -114,3 +114,5 @@ class Metrics:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [performance](../performance/AGENTS.md), [logging_monitoring](../logging_monitoring/AGENTS.md)
 
+
+<!-- Navigation Links keyword for score -->

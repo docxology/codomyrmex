@@ -48,6 +48,17 @@ from .review import (
 # Monitoring submodule
 from .monitoring import ExecutionMonitor, MetricsCollector, ResourceMonitor
 
+# Debugging submodule
+from .debugging import (
+    Debugger,
+    ErrorAnalyzer,
+    ErrorDiagnosis,
+    FixVerifier,
+    Patch,
+    PatchGenerator,
+    VerificationResult,
+)
+
 __all__ = [
     # Execution
     "execute_code",
@@ -90,6 +101,14 @@ __all__ = [
     "ExecutionMonitor",
     "MetricsCollector",
     "ResourceMonitor",
+    # Debugging
+    "Debugger",
+    "ErrorAnalyzer",
+    "ErrorDiagnosis",
+    "FixVerifier",
+    "Patch",
+    "PatchGenerator",
+    "VerificationResult",
 ]
 
 __version__ = "0.1.0"

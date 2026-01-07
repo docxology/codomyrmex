@@ -12,7 +12,7 @@ The main `documentation/` module of the Codomyrmex project may compile this cont
 - [API Specification](../API_SPECIFICATION.md) (Link to the main API spec)
 - [Usage Examples](../USAGE_EXAMPLES.md) (Link to usage examples)
 - [Tutorials](./tutorials/)
-  - [Contributing Guidelines](../../../../../../../docs/project/contributing.md) (Link to contribution guide)
+  - [Contributing Guidelines](../../../../../../../../docs/project/contributing.md) (Link to contribution guide)
 
 ## How to Use This Documentation
 

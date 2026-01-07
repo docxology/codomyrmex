@@ -14,7 +14,7 @@ class TestCodeExecutionSandbox:
 
         try:
             from codomyrmex.coding.execution import executor
-            assert code_executor is not None
+            assert executor is not None
         except ImportError as e:
             pytest.fail(f"Failed to import code_executor: {e}")
 

@@ -1,76 +1,31 @@
 # Codomyrmex Agents — scripts/documents
 
 ## Signposting
-- **Parent**: [Scripts](../AGENTS.md)
+- **Parent**: [Documents](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
 - **Key Artifacts**:
-  - [Functional Spec](SPEC.md)
-  - [Human Readme](README.md)
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Document processing automation scripts providing command-line interfaces for document management, processing, and analysis. This script module enables automated document workflows for the Codomyrmex platform.
-
-## Module Overview
-
-### Key Capabilities
-- **Document Processing**: Process and analyze documents
-- **Metadata Extraction**: Extract document metadata
-- **Search**: Search across document corpus
-- **Transformation**: Transform documents between formats
-
-### Key Features
-- Command-line interface with argument parsing
-- Integration with core documents modules
-- Structured output formatting (JSON, text, verbose)
-- Error handling and validation
-- Logging integration for operation tracking
-
-## Function Signatures
-
-### Core CLI Functions
-
-```python
-def main() -> None
-```
-
-Main CLI entry point for the documents orchestrator.
-
-**Command-line Usage:**
-```bash
-python orchestrate.py [command] [options]
-```
-
-**Available Commands:**
-- `process` - Process a document
-
-**Global Options:**
-- `--verbose, -v` - Enable verbose output
+Documentation files and guides for documents.
 
 ## Active Components
-
-### Core Implementation
-- `orchestrate.py` – Main CLI orchestrator script
-
-### Documentation
-- `README.md` – Script usage and overview
-- `AGENTS.md` – This coordination document
-- `SPEC.md` – Functional specification
-
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `orchestrate.py` – Project file
 
 ## Operating Contracts
-
-### Universal Execution Protocols
-1. **Tool Integrity** - Ensure all tools are correctly configured before execution.
-2. **Resource Management** - Monitor system resources during long-running tool operations.
-3. **Error Reporting** - Provide detailed error information and remediation steps.
-4. **Configuration Validation** - Validate all input configurations before processing.
-5. **Observability** - Log all tool operations for auditability and troubleshooting.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Scripts Directory**: [../README.md](../README.md)
-
+- **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../README.md) - Main project documentation

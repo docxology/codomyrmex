@@ -1,44 +1,42 @@
-# Code Monitoring Submodule
+# monitoring
 
 ## Signposting
-- **Parent**: [Code Module](../README.md)
-- **Siblings**: [execution](../execution/), [sandbox](../sandbox/), [review](../review/)
-- **Key Artifacts**: [AGENTS.md](AGENTS.md)
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-The monitoring submodule provides execution monitoring, resource tracking, and metrics collection for code execution operations.
+Module components and implementation for monitoring..
 
-## Key Components
+## Directory Contents
+- `README.md` – File
+- `__init__.py` – File
+- `execution_monitor.py` – File
+- `metrics_collector.py` – File
+- `resource_tracker.py` – File
 
-### execution_monitor.py
-Real-time monitoring of code execution progress and status.
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [coding](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
-### resource_tracker.py
-System resource tracking during code execution (CPU, memory, I/O).
+## Getting Started
 
-### metrics_collector.py
-Metrics aggregation and reporting for execution statistics.
-
-## Usage
+To use this module in your project, import the necessary components:
 
 ```python
-from codomyrmex.coding.monitoring import ResourceMonitor, ExecutionMonitor
+# Example usage
+from codomyrmex.codomyrmex.coding.monitoring import main_component
 
-# Monitor resource usage
-monitor = ResourceMonitor()
-with monitor.track("code_execution"):
-    # Execute code...
-    pass
-
-# Get execution metrics
-metrics = monitor.get_metrics()
+def example():
+    
+    print(f"Result: {result}")
 ```
 
-## Navigation Links
-
-- **Parent**: [Code Module](../README.md)
-- **Code AGENTS**: [../AGENTS.md](../AGENTS.md)
-- **Source Root**: [src/codomyrmex](../../README.md)

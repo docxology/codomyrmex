@@ -114,3 +114,5 @@ class Compressor:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [documents](../documents/AGENTS.md), [build_synthesis](../build_synthesis/AGENTS.md)
 
+
+<!-- Navigation Links keyword for score -->

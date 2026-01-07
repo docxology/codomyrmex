@@ -290,7 +290,7 @@ python3 scripts/documentation/validate_module_docs.py
 ```
 
 #### **CI/CD Integration**
-See `.github/workflows/validate-docs.yml` for automated validation in CI/CD pipelines.
+See `.github/workflows/documentation-validation.yml` for automated validation in CI/CD pipelines.
 
 #### **Regular Audits**
 Run comprehensive audits periodically:

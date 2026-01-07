@@ -1,20 +1,22 @@
-# src/codomyrmex/project_orchestration/templates
+# templates
 
 ## Signposting
-- **Parent**: [Project Orchestration](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [doc_templates](doc_templates/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-JSON/Jinja templates for project scaffolding and workflow definitions.
+Module components and implementation for templates..
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `ai_analysis.json` – File
 - `data_pipeline.json` – File
 - `doc_templates/` – Subdirectory
@@ -23,9 +25,8 @@ JSON/Jinja templates for project scaffolding and workflow definitions.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../../../../README.md)
 - **Parent Directory**: [project_orchestration](../README.md)
-- **Src Hub**: [src](../../../../src/README.md)
+- **Project Root**: [README](../../../../README.md)
 
 ## Getting Started
 

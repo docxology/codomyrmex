@@ -1,15 +1,28 @@
 # templates
 
 ## Signposting
-- **Parent**: [Documents](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+
 ## Overview
-[DESCRIBE THE PURPOSE AND SCOPE OF THE templates DIRECTORY]
+
+Documentation files and guides for templates.
+
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [documents](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
 ## Getting Started
 
@@ -24,11 +37,3 @@ def example():
     print(f"Result: {result}")
 ```
 
-## Navigation
-
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [documents](../README.md)
-- **Repository Root**: [../../../../README.md](../../../../README.md)
-- **Repository SPEC**: [../../../../SPEC.md](../../../../SPEC.md)

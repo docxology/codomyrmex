@@ -247,7 +247,6 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Documentation Guide**: [docs/development/documentation.md](docs/development/documentation.md)
 
 ## Active Components
-- `@output/` – Legacy output directory (see output/)
 - `package.json` – Node.js package configuration
 - `projects/` – Project workspace and templates
 - `pyproject.toml` – Python package configuration

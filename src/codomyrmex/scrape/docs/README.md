@@ -1,17 +1,41 @@
-# Scrape Module Documentation
+# docs
 
-This directory contains additional documentation for the scrape module.
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
-## Contents
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-- **API_SPECIFICATION.md**: Detailed API reference documentation
-- **USAGE_EXAMPLES.md**: Comprehensive usage examples and patterns
+## Overview
+
+Documentation files and guides.
+
+## Directory Contents
+- `API_SPECIFICATION.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `USAGE_EXAMPLES.md` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [scrape](../README.md)
+- **Project Root**: [README](../../../../README.md)
 
-- **Main Module**: [../README.md](../README.md) - Module overview
-- **Technical Docs**: [../AGENTS.md](../AGENTS.md) - Agent documentation
-- **Specification**: [../SPEC.md](../SPEC.md) - Functional specification
+## Getting Started
+
+To use this module in your project, import the necessary components:
+
+```python
+# Example usage
+from codomyrmex.codomyrmex.scrape.docs import main_component
+
+def example():
+    
+    print(f"Result: {result}")
+```
 

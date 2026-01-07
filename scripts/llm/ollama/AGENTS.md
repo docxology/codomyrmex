@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/llm/ollama
 
 ## Signposting
-- **Parent**: [Scripts LLM](../AGENTS.md)
+- **Parent**: [Ollama](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -9,21 +9,25 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 Automation and utility scripts.
 
 ## Active Components
 - `README.md` – Project file
+- `SPEC.md` – Project file
+- `analyze_model_tracking.py` – Project file
 - `basic_usage.py` – Project file
 - `integration_demo.py` – Project file
 - `model_management.py` – Project file
 - `orchestrate.py` – Project file
-
-
-### Additional Files
-- `SPEC.md` – Spec Md
+- `test_all_parameters_rnj.py` – Project file
+- `test_configuration_patterns.py` – Project file
+- `test_error_scenarios.py` – Project file
+- `test_nemotron.py` – Project file
+- `test_usage_patterns.py` – Project file
+- `verify_integration.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -33,16 +37,5 @@ Automation and utility scripts.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [scripts](../README.md) - Parent directory documentation
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **📁 Parent Directory**: [llm](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
