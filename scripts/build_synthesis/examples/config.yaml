@@ -1,0 +1,267 @@
+# Build Synthesis Configuration
+# This configuration demonstrates multi-language build automation settings including
+# build commands, artifact management, pipeline orchestration, and validation rules.
+
+logging:
+  level: INFO
+  file: logs/build_synthesis_example.log
+  output_type: TEXT
+
+output:
+  format: json
+  file: output/build_synthesis_results.json
+
+build_synthesis:
+  # Build environment settings
+  environment:
+    python_versions: ["3.8", "3.9", "3.10", "3.11"]
+    node_versions: ["16", "18", "20"]
+    docker_versions: ["20.10", "23.0", "24.0"]
+    required_tools: ["git", "make", "docker"]
+
+  # Build types and capabilities
+  build_types:
+    supported:
+      - python
+      - docker
+      - static
+      - nodejs
+      - go
+      - rust
+      - java
+    default_build_type: python
+
+  # Artifact management
+  artifacts:
+    output_directory: "./dist"
+    artifact_patterns:
+      python: ["*.tar.gz", "*.whl", "dist/**/*"]
+      docker: ["*.tar.gz", "images/*.tar"]
+      static: ["build/**/*", "_site/**/*", "dist/**/*"]
+    compression_formats: ["tar.gz", "zip", "tar.bz2"]
+    retention_policy:
+      max_age_days: 30
+      max_count: 10
+
+  # Dependency management
+  dependencies:
+    python_package_index: "https://pypi.org/simple/"
+    npm_registry: "https://registry.npmjs.org/"
+    docker_registry: "docker.io"
+    cache_dependencies: true
+    offline_mode: false
+
+  # Build pipeline settings
+  pipeline:
+    parallel_execution: true
+    fail_fast: true
+    max_concurrent_builds: 3
+    timeout_minutes: 30
+    retry_attempts: 2
+    enable_caching: true
+
+  # Validation settings
+  validation:
+    strict_mode: false
+    check_file_sizes: true
+    validate_checksums: true
+    verify_dependencies: true
+    run_tests: true
+
+# Build commands for different languages and frameworks
+build_commands:
+  python:
+    - "python -m pip install --upgrade pip"
+    - "python -m pip install -r requirements.txt"
+    - "python -m pytest tests/ -v --tb=short"
+    - "python setup.py build"
+    - "python setup.py sdist bdist_wheel"
+
+  docker:
+    - "docker build -t myapp:latest ."
+    - "docker run --rm myapp:latest python -c 'print(\"Build test passed\")'"
+    - "docker save myapp:latest > myapp.tar"
+
+  nodejs:
+    - "npm ci"
+    - "npm run lint"
+    - "npm test"
+    - "npm run build"
+    - "npm pack"
+
+  static_jekyll:
+    - "bundle install"
+    - "bundle exec jekyll build --safe"
+    - "bundle exec htmlproofer _site --check-html --disable-external"
+
+  static_hugo:
+    - "hugo version"
+    - "hugo --minify"
+    - "hugo server --buildDrafts=false"
+
+# Artifact specifications
+artifacts:
+  python_package:
+    type: "python"
+    files:
+      - "dist/*.tar.gz"
+      - "dist/*.whl"
+    metadata:
+      version: "1.0.0"
+      python_requires: ">=3.8"
+      license: "MIT"
+
+  docker_image:
+    type: "docker"
+    image_name: "myapp"
+    tags: ["latest", "v1.0.0"]
+    platforms: ["linux/amd64", "linux/arm64"]
+    metadata:
+      base_image: "python:3.9-slim"
+      exposed_ports: [8000]
+
+  static_website:
+    type: "static"
+    root_directory: "_site"
+    files:
+      - "_site/**/*"
+      - "assets/**/*"
+    metadata:
+      framework: "jekyll"
+      build_time: "2025-12-25T10:00:00Z"
+
+# Pipeline orchestration examples
+pipeline:
+  examples:
+    simple_app:
+      stages:
+        - name: "setup"
+          commands: ["echo 'Setting up environment'"]
+        - name: "build"
+          commands: ["python setup.py build"]
+          dependencies: ["setup"]
+        - name: "test"
+          commands: ["python -m pytest"]
+          dependencies: ["build"]
+        - name: "package"
+          commands: ["python setup.py sdist"]
+          dependencies: ["test"]
+
+    microservice:
+      stages:
+        - name: "backend_build"
+          commands: ["cd backend", "python setup.py build"]
+        - name: "frontend_build"
+          commands: ["cd frontend", "npm run build"]
+        - name: "docker_build"
+          commands: ["docker build -t microservice ."]
+          dependencies: ["backend_build", "frontend_build"]
+        - name: "integration_test"
+          commands: ["docker run --rm microservice npm test"]
+          dependencies: ["docker_build"]
+
+  orchestration:
+    parallel_execution: true
+    fail_fast: false
+    max_workers: 4
+    artifact_collection: true
+    cleanup_on_failure: true
+
+# Environment-specific configurations
+environments:
+  development:
+    debug_mode: true
+    install_dev_dependencies: true
+    run_tests: true
+    generate_coverage: true
+    build_docs: false
+
+  staging:
+    debug_mode: false
+    install_dev_dependencies: false
+    run_tests: true
+    generate_coverage: true
+    build_docs: true
+
+  production:
+    debug_mode: false
+    install_dev_dependencies: false
+    run_tests: true
+    generate_coverage: false
+    build_docs: true
+    optimize_build: true
+    minify_assets: true
+
+# Build optimization settings
+optimization:
+  enable_caching: true
+  cache_strategy: "content_based"
+  parallel_builds: true
+  incremental_builds: true
+  artifact_reuse: true
+
+  performance_targets:
+    max_build_time_minutes: 30
+    target_test_coverage: 80
+    max_bundle_size_mb: 50
+
+# Quality assurance settings
+quality:
+  code_quality:
+    enable_linting: true
+    enable_static_analysis: true
+    check_security: true
+
+  testing:
+    run_unit_tests: true
+    run_integration_tests: true
+    run_performance_tests: false
+    generate_coverage_reports: true
+    coverage_threshold: 80
+
+  documentation:
+    generate_api_docs: true
+    generate_user_docs: false
+    validate_links: true
+
+# Integration settings
+integrations:
+  artifact_stores:
+    - type: "local"
+      path: "./artifacts"
+    - type: "s3"
+      bucket: "my-build-artifacts"
+      region: "us-east-1"
+
+  notification_channels:
+    - type: "slack"
+      webhook_url: "${SLACK_WEBHOOK_URL}"
+      channel: "#builds"
+    - type: "email"
+      recipients: ["dev-team@company.com"]
+
+  ci_cd_systems:
+    - type: "github_actions"
+      repository: "myorg/myrepo"
+      workflow_file: ".github/workflows/build.yml"
+    - type: "jenkins"
+      server_url: "https://jenkins.company.com"
+      job_name: "build-pipeline"
+
+# Monitoring and observability
+monitoring:
+  enable_build_metrics: true
+  enable_performance_monitoring: true
+  log_build_events: true
+  collect_system_metrics: true
+
+  metrics:
+    build_duration: true
+    resource_usage: true
+    success_rate: true
+    artifact_sizes: true
+
+  alerts:
+    on_build_failure: true
+    on_performance_degradation: true
+    on_resource_exhaustion: true

@@ -1,14 +1,14 @@
-# fpf - Functional Specification
+# examples - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
 
-Directory: fpf
+This is the agent coordination document for documentation generation examples. It defines the workflows that demonstrate Codomyrmex documentation capabilities.
 
 ## Overview
 
-This example demonstrates First Principles Framework (FPF) functionality using the Codomyrmex `fpf` module. It showcases how to fetch FPF specifications from GitHub, parse them, search for patterns, and build context strings for prompt engineering.
+This directory contains examples demonstrating documentation generation capabilities in the Codomyrmex platform. These examples show how to generate API documentation, create technical gu
 
 ## Design Principles
 
@@ -48,7 +48,7 @@ Architecture description with component relationships and data flow patterns.
 
 ## Functional Requirements
 
-Functional requirements for fpf including core capabilities and standards.
+Functional requirements for examples including core capabilities and standards.
 
 ## Quality Standards
 
@@ -60,15 +60,15 @@ API interfaces, data structure definitions, and communication patterns.
 
 ## Implementation Guidelines
 
-Implementation guidelines for working within fpf including best practices and patterns.
+Implementation guidelines for working within examples including best practices and patterns.
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [examples](../README.md)
-- **Repository Root**: [../../README.md](../../README.md)
-- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+- **Parent Directory**: [documentation](../README.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
 
@@ -84,4 +84,3 @@ The implementation of this component follows the core principles of the Codomyrm
 
 ### Technical Implementation
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-

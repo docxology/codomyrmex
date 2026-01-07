@@ -1,10 +1,11 @@
-# Codomyrmex Agents — examples/fpf
+# Codomyrmex Agents — examples/documentation
 
 ## Signposting
-- **Parent**: [FPF](../AGENTS.md)
+- **Parent**: [Documentation](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [examples](examples/AGENTS.md)
+    - [output](output/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -12,7 +13,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Example implementations and demonstrations.
+Documentation files and guides for documentation.
 
 ## Active Components
 - `README.md` – Project file
@@ -20,6 +21,7 @@ Example implementations and demonstrations.
 - `config.json` – Project file
 - `config.yaml` – Project file
 - `example_basic.py` – Project file
+- `examples/` – Directory containing examples components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -31,4 +33,3 @@ Example implementations and demonstrations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [README](../../README.md) - Main project documentation
-

@@ -1,14 +1,14 @@
-# fpf - Functional Specification
+# auth - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
 
-Directory: fpf
+Directory: auth
 
 ## Overview
 
-This example demonstrates First Principles Framework (FPF) functionality using the Codomyrmex `fpf` module. It showcases how to fetch FPF specifications from GitHub, parse them, search for patterns, and build context strings for prompt engineering.
+This example demonstrates authentication and authorization functionality using the Codomyrmex `auth` module.
 
 ## Design Principles
 
@@ -48,7 +48,7 @@ Architecture description with component relationships and data flow patterns.
 
 ## Functional Requirements
 
-Functional requirements for fpf including core capabilities and standards.
+Functional requirements for auth including core capabilities and standards.
 
 ## Quality Standards
 
@@ -60,7 +60,7 @@ API interfaces, data structure definitions, and communication patterns.
 
 ## Implementation Guidelines
 
-Implementation guidelines for working within fpf including best practices and patterns.
+Implementation guidelines for working within auth including best practices and patterns.
 
 ## Navigation
 

@@ -1,4 +1,4 @@
-# fpf
+# examples
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
@@ -12,18 +12,15 @@
 
 ## Overview
 
-Example implementations and demonstrations.
+Documentation files and guides for examples.
 
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
-- `config.json` – File
-- `config.yaml` – File
-- `example_basic.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [examples](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Parent Directory**: [documentation](../README.md)
+- **Project Root**: [README](../../../README.md)
 

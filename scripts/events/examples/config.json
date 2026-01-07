@@ -1,0 +1,174 @@
+{
+  "event_bus": {
+    "max_queue_size": 1000,
+    "enable_async_processing": true,
+    "thread_pool_size": 4
+  },
+  "logging": {
+    "enable_event_logging": true,
+    "log_level": "INFO",
+    "retention_days": 7,
+    "max_log_entries": 10000
+  },
+  "events": {
+    "user_actions": [
+      {
+        "action": "login",
+        "user_id": "demo_user",
+        "metadata": {
+          "source": "web_app",
+          "ip_address": "192.168.1.100"
+        }
+      },
+      {
+        "action": "file_upload",
+        "user_id": "demo_user",
+        "file_name": "report.pdf",
+        "file_size": 2048576
+      },
+      {
+        "action": "logout",
+        "user_id": "demo_user",
+        "session_duration": 1800
+      }
+    ],
+    "system_events": [
+      {
+        "status": "healthy",
+        "metrics": {
+          "cpu_percent": 45.2,
+          "memory_percent": 67.8,
+          "disk_percent": 72.1
+        }
+      },
+      {
+        "status": "warning",
+        "component": "database",
+        "message": "Connection pool nearing capacity"
+      },
+      {
+        "status": "maintenance",
+        "scheduled": true,
+        "duration_minutes": 30,
+        "reason": "Security updates"
+      }
+    ],
+    "error_events": [
+      {
+        "level": "warning",
+        "component": "memory_manager",
+        "message": "Memory usage above 80%",
+        "threshold": 80,
+        "current_value": 85.3
+      },
+      {
+        "level": "error",
+        "component": "database",
+        "message": "Connection timeout",
+        "retry_count": 3,
+        "last_error": "Connection refused"
+      }
+    ]
+  },
+  "emitter": {
+    "events_to_emit": [
+      {
+        "type": "data_processed",
+        "data": {
+          "records_processed": 1500,
+          "processing_time": 2.3,
+          "success_rate": 98.5
+        }
+      },
+      {
+        "type": "model_trained",
+        "data": {
+          "model_name": "sentiment_classifier",
+          "accuracy": 0.92,
+          "training_time": 45.7
+        }
+      }
+    ]
+  },
+  "listeners": {
+    "active_listeners": [
+      {
+        "name": "user_activity_monitor",
+        "events": ["user_action", "user_login", "user_logout"]
+      },
+      {
+        "name": "system_health_monitor",
+        "events": ["system_status", "error_alert"]
+      },
+      {
+        "name": "performance_tracker",
+        "events": ["data_processed", "model_trained"]
+      }
+    ]
+  },
+  "auto_listeners": {
+    "enabled": true,
+    "auto_register_patterns": [
+      {
+        "pattern": "system_*",
+        "priority": "high"
+      },
+      {
+        "pattern": "error_*",
+        "priority": "critical"
+      },
+      {
+        "pattern": "user_*",
+        "priority": "normal"
+      }
+    ]
+  },
+  "filtering": {
+    "priority_levels": ["low", "normal", "high", "critical"],
+    "event_types": [
+      "user_action",
+      "system_status",
+      "error_alert",
+      "data_processed",
+      "model_trained",
+      "maintenance"
+    ]
+  },
+  "monitoring": {
+    "enable_statistics": true,
+    "enable_performance_tracking": true,
+    "enable_error_tracking": true,
+    "metrics": {
+      "events_per_second": true,
+      "average_processing_time": true,
+      "error_rate": true,
+      "queue_size": true
+    }
+  },
+  "output": {
+    "format": "json",
+    "file": "output/events_results.json",
+    "include_event_details": true,
+    "include_statistics": true,
+    "include_performance_metrics": true
+  },
+  "logging_config": {
+    "level": "INFO",
+    "file": "logs/events_example.log",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  },
+  "demo": {
+    "enable_sync_events": true,
+    "enable_async_events": true,
+    "simulate_delays": false,
+    "event_generation_rate": 10,
+    "total_events_to_generate": 20
+  },
+  "performance": {
+    "enable_benchmarking": false,
+    "concurrent_publishers": 5,
+    "events_per_publisher": 100,
+    "measure_latency": true,
+    "measure_throughput": true
+  }
+}

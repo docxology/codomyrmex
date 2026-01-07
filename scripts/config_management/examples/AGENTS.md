@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/fpf
+# Codomyrmex Agents — examples/config_management
 
 ## Signposting
-- **Parent**: [FPF](../AGENTS.md)
+- **Parent**: [Config Management](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -19,6 +19,7 @@ Example implementations and demonstrations.
 - `SPEC.md` – Project file
 - `config.json` – Project file
 - `config.yaml` – Project file
+- `config_overrides.yaml` – Project file
 - `example_basic.py` – Project file
 
 ## Operating Contracts
@@ -31,4 +32,3 @@ Example implementations and demonstrations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [README](../../README.md) - Main project documentation
-

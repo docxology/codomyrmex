@@ -1,0 +1,143 @@
+{
+  "environment": {
+    "node_version": ">=16.0.0",
+    "npm_version": ">=7.0.0",
+    "python_version": ">=3.8.0",
+    "dependencies": [
+      "docusaurus",
+      "nodejs",
+      "npm"
+    ]
+  },
+  "generation": {
+    "source_dirs": [
+      "docs/",
+      "src/",
+      "examples/"
+    ],
+    "output_dir": "build/",
+    "formats": [
+      "html",
+      "pdf",
+      "markdown"
+    ],
+    "include_api_docs": true,
+    "include_examples": true,
+    "generate_toc": true
+  },
+  "quality": {
+    "metrics": [
+      "readability",
+      "completeness",
+      "structure",
+      "consistency",
+      "accuracy"
+    ],
+    "readability_thresholds": {
+      "excellent": 90,
+      "good": 75,
+      "fair": 60,
+      "poor": 45
+    },
+    "completeness_requirements": [
+      "title",
+      "description",
+      "examples",
+      "api_reference"
+    ],
+    "structure_rules": [
+      "headings_hierarchy",
+      "code_block_formatting",
+      "link_validity",
+      "table_formatting"
+    ]
+  },
+  "consistency": {
+    "check_broken_links": true,
+    "check_terminology": true,
+    "check_style": true,
+    "check_versions": true,
+    "custom_rules": [
+      {
+        "max_line_length": 100
+      },
+      {
+        "heading_case": "title"
+      },
+      {
+        "code_language_specified": true
+      }
+    ]
+  },
+  "aggregation": {
+    "enable_aggregation": true,
+    "source_repos": [],
+    "rules": [
+      {
+        "merge_similar_topics": true
+      },
+      {
+        "resolve_conflicts": "latest"
+      },
+      {
+        "maintain_hierarchy": true
+      }
+    ]
+  },
+  "site": {
+    "docusaurus": {
+      "title": "Codomyrmex Documentation",
+      "tagline": "AI-Powered Development Tools",
+      "url": "https://codomyrmex.dev",
+      "base_url": "/"
+    },
+    "theme": {
+      "primary_color": "#2E8555",
+      "secondary_color": "#6C757D",
+      "font_family": "system-ui, sans-serif"
+    },
+    "navigation": {
+      "main": [
+        "Home",
+        "Docs",
+        "API",
+        "Examples"
+      ],
+      "footer": [
+        "GitHub",
+        "Issues",
+        "Contributing"
+      ]
+    }
+  },
+  "validation": {
+    "strict_mode": false,
+    "rules": [
+      {
+        "required_fields": true
+      },
+      {
+        "link_validation": true
+      },
+      {
+        "syntax_checking": true
+      }
+    ],
+    "error_reporting": {
+      "fail_on_warnings": false,
+      "fail_on_errors": true,
+      "generate_report": true
+    }
+  },
+  "output": {
+    "format": "json",
+    "file": "output/documentation_results.json",
+    "analysis_dir": "output/analysis"
+  },
+  "performance": {
+    "enable_caching": true,
+    "cache_dir": ".cache/",
+    "parallel_processing": true,
+    "max_workers": 4
+  }
+}

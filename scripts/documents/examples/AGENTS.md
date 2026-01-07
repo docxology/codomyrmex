@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/fpf
+# Codomyrmex Agents — examples/documents
 
 ## Signposting
-- **Parent**: [FPF](../AGENTS.md)
+- **Parent**: [Documents](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -31,4 +31,3 @@ Example implementations and demonstrations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [README](../../README.md) - Main project documentation
-

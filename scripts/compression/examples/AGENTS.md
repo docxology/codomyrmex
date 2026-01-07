@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/fpf
+# Codomyrmex Agents — examples/compression
 
 ## Signposting
-- **Parent**: [FPF](../AGENTS.md)
+- **Parent**: [Compression](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

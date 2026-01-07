@@ -1,9 +1,10 @@
-# fpf
+# database_management
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [db_performance](db_performance/README.md)
+    - [output](output/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -19,6 +20,7 @@ Example implementations and demonstrations.
 - `SPEC.md` – File
 - `config.json` – File
 - `config.yaml` – File
+- `db_performance/` – Subdirectory
 - `example_basic.py` – File
 
 ## Navigation

@@ -1,9 +1,12 @@
-# fpf
+# ci_cd_automation
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [optimization_data](optimization_data/README.md)
+    - [output](output/README.md)
+    - [pipeline_metrics](pipeline_metrics/README.md)
+    - [pipeline_reports](pipeline_reports/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -20,6 +23,9 @@ Example implementations and demonstrations.
 - `config.json` – File
 - `config.yaml` – File
 - `example_basic.py` – File
+- `optimization_data/` – Subdirectory
+- `pipeline_metrics/` – Subdirectory
+- `pipeline_reports/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)

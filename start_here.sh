@@ -14,14 +14,12 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# Helper function to get Python command
-get_python_cmd() {
-    if [[ -f ".venv/bin/python" ]]; then
-        echo ".venv/bin/python"
-    elif [[ -f "venv/bin/python" ]]; then
-        echo "venv/bin/python"
-    else
-        echo "python3"
+# Helper function to check if uv is available
+check_uv() {
+    if ! command -v uv &> /dev/null; then
+        echo -e "${RED}❌ Error: uv is required but not found!${NC}"
+        echo -e "${YELLOW}Please install uv: curl -LsSf https://astral.sh/uv/install.sh | sh${NC}"
+        exit 1
     fi
 }
 
@@ -50,47 +48,29 @@ check_environment() {
 
 # Activate virtual environment if it exists
 activate_venv() {
+    check_uv
     if [[ -d ".venv" ]]; then
-        echo -e "${GREEN}🔄 Activating virtual environment...${NC}"
-        source .venv/bin/activate
-    elif [[ -d "venv" ]]; then
-        echo -e "${GREEN}🔄 Activating virtual environment...${NC}"
-        source venv/bin/activate
+        echo -e "${GREEN}🔄 Virtual environment detected${NC}"
     else
-        echo -e "${YELLOW}⚠️  No virtual environment found. Consider creating one:${NC}"
-        PYTHON_CMD=$(get_python_cmd)
-        echo -e "${CYAN}   uv venv .venv && source .venv/bin/activate${NC}"
+        echo -e "${YELLOW}📦 Creating virtual environment...${NC}"
+        uv venv .venv || {
+            echo -e "${RED}❌ Failed to create virtual environment${NC}"
+            exit 1
+        }
     fi
 }
 
 # Install dependencies if needed
 ensure_dependencies() {
     echo -e "${BLUE}🔍 Checking dependencies...${NC}"
-    PYTHON_CMD=$(get_python_cmd)
+    check_uv
 
-    if ! $PYTHON_CMD -c "import sys; sys.path.insert(0, 'src'); from codomyrmex.system_discovery import SystemDiscovery" 2>/dev/null; then
+    if ! uv run python -c "import sys; sys.path.insert(0, 'src'); from codomyrmex.system_discovery import SystemDiscovery" 2>/dev/null; then
         echo -e "${YELLOW}📦 Installing dependencies...${NC}"
-        if command -v uv &> /dev/null; then
             uv sync || {
                 echo -e "${RED}❌ Failed to install dependencies. Please run: uv sync${NC}"
                 exit 1
             }
-        elif [[ -f ".venv/bin/pip" ]]; then
-            .venv/bin/pip install -e . || {
-                echo -e "${RED}❌ Failed to install dependencies. Please run: uv sync${NC}"
-                exit 1
-            }
-        elif [[ -f "venv/bin/pip" ]]; then
-            venv/bin/pip install -e . || {
-                echo -e "${RED}❌ Failed to install dependencies. Please run: uv sync${NC}"
-                exit 1
-            }
-        else
-            pip install -e . || {
-                echo -e "${RED}❌ Failed to install dependencies. Please run: uv sync${NC}"
-                exit 1
-            }
-        fi
     else
         echo -e "${GREEN}✅ All dependencies are properly installed${NC}"
     fi
@@ -122,10 +102,9 @@ show_menu() {
 # Run system discovery
 run_system_discovery() {
     echo -e "\n${CYAN}🔍 Scanning the Codomyrmex ecosystem...${NC}"
-    PYTHON_CMD=$(get_python_cmd)
+    check_uv
 
-    if command -v uv &> /dev/null; then
-        uv run python -c "
+    uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
@@ -133,91 +112,49 @@ from codomyrmex.system_discovery import SystemDiscovery
 discovery = SystemDiscovery()
 discovery.run_full_discovery()
 "
-    else
-        $PYTHON_CMD -c "
-import sys
-sys.path.insert(0, 'src')
-from codomyrmex.system_discovery import SystemDiscovery
-
-discovery = SystemDiscovery()
-discovery.run_full_discovery()
-"
-    fi
 }
 
 # Run status dashboard
 run_status_dashboard() {
     echo -e "\n${CYAN}📊 Codomyrmex System Status Dashboard${NC}"
-    PYTHON_CMD=$(get_python_cmd)
+    check_uv
 
-    if command -v uv &> /dev/null; then
+    uv run python -c "
+import sys
+sys.path.insert(0, 'src')
+from codomyrmex.system_discovery import SystemDiscovery
+
+discovery = SystemDiscovery()
+discovery.show_status_dashboard()
+"
+}
+
+# Run quick demo
+run_quick_demo() {
+    echo -e "\n${CYAN}🏃 Running Codomyrmex Quick Demo...${NC}"
+    check_uv
+
+    if [[ -f "scripts/development/example_usage.py" ]]; then
+        uv run python scripts/development/example_usage.py
+    else
+        echo -e "${YELLOW}⚠️  scripts/development/example_usage.py not found. Running basic demo...${NC}"
         uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
 
 discovery = SystemDiscovery()
-discovery.show_status_dashboard()
-"
-    else
-        $PYTHON_CMD -c "
-import sys
-sys.path.insert(0, 'src')
-from codomyrmex.system_discovery import SystemDiscovery
-
-discovery = SystemDiscovery()
-discovery.show_status_dashboard()
-"
-    fi
-}
-
-# Run quick demo
-run_quick_demo() {
-    echo -e "\n${CYAN}🏃 Running Codomyrmex Quick Demo...${NC}"
-    PYTHON_CMD=$(get_python_cmd)
-
-    if [[ -f "scripts/development/example_usage.py" ]]; then
-        if command -v uv &> /dev/null; then
-            uv run python scripts/development/example_usage.py
-        else
-            $PYTHON_CMD scripts/development/example_usage.py
-        fi
-    else
-        echo -e "${YELLOW}⚠️  scripts/development/example_usage.py not found. Running basic demo...${NC}"
-        if command -v uv &> /dev/null; then
-            uv run python -c "
-import sys
-sys.path.insert(0, 'src')
-from codomyrmex.system_discovery import SystemDiscovery
-
-discovery = SystemDiscovery()
 discovery.run_demo_workflows()
 "
-        else
-            $PYTHON_CMD -c "
-import sys
-sys.path.insert(0, 'src')
-from codomyrmex.system_discovery import SystemDiscovery
-
-discovery = SystemDiscovery()
-discovery.run_demo_workflows()
-"
-        fi
     fi
 }
 
 # Run test suite
 run_test_suite() {
     echo -e "\n${CYAN}🧪 Running Codomyrmex Test Suite...${NC}"
-    if command -v uv &> /dev/null; then
-        uv run pytest testing/ -v --tb=short
-    elif command -v pytest &> /dev/null; then
-        pytest testing/ -v --tb=short
-    else
-        echo -e "${YELLOW}⚠️  pytest not found. Installing...${NC}"
-        uv pip install pytest
-        uv run pytest testing/ -v --tb=short
-    fi
+    check_uv
+    
+    uv run pytest src/codomyrmex/tests/ -v --tb=short
 }
 
 # Browse documentation
@@ -240,25 +177,25 @@ browse_documentation() {
 # Development tools
 run_dev_tools() {
     echo -e "\n${CYAN}🔧 Development Tools${NC}"
-    echo -e "${GREEN}1) Run linting (pylint, flake8)${NC}"
-    echo -e "${GREEN}2) Format code (black)${NC}"
+    check_uv
+    
+    echo -e "${GREEN}1) Run linting (ruff)${NC}"
+    echo -e "${GREEN}2) Format code (ruff format)${NC}"
     echo -e "${GREEN}3) Type checking (mypy)${NC}"
     echo -e "${GREEN}4) Security scan (bandit)${NC}"
     echo -e "${GREEN}5) All of the above${NC}"
     echo ""
     read -p "Choose option (1-5): " dev_choice
 
-    PYTHON_CMD=$(get_python_cmd)
-
     case $dev_choice in
-        1) uv run pylint src/codomyrmex/ --disable=C0114,C0116 ;;
-        2) uv run black src/ testing/ ;;
+        1) uv run ruff check src/codomyrmex/ ;;
+        2) uv run ruff format src/codomyrmex/ ;;
         3) uv run mypy src/codomyrmex/ ;;
         4) uv run bandit -r src/codomyrmex/ ;;
         5)
             echo -e "${CYAN}Running all development tools...${NC}"
-            uv run black src/ testing/
-            uv run pylint src/codomyrmex/ --disable=C0114,C0116
+            uv run ruff format src/codomyrmex/
+            uv run ruff check src/codomyrmex/
             uv run mypy src/codomyrmex/
             uv run bandit -r src/codomyrmex/
             ;;
@@ -269,10 +206,9 @@ run_dev_tools() {
 # Interactive shell
 run_interactive_shell() {
     echo -e "\n${CYAN}🎮 Entering Interactive Codomyrmex Shell...${NC}"
-    PYTHON_CMD=$(get_python_cmd)
+    check_uv
 
-    if command -v uv &> /dev/null; then
-        uv run python -c "
+    uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.terminal_interface import InteractiveShell
@@ -280,25 +216,14 @@ from codomyrmex.terminal_interface import InteractiveShell
 shell = InteractiveShell()
 shell.run()
 "
-    else
-        $PYTHON_CMD -c "
-import sys
-sys.path.insert(0, 'src')
-from codomyrmex.terminal_interface import InteractiveShell
-
-shell = InteractiveShell()
-shell.run()
-"
-    fi
 }
 
 # Export inventory
 export_inventory() {
     echo -e "\n${CYAN}📋 Generating System Inventory...${NC}"
-    PYTHON_CMD=$(get_python_cmd)
+    check_uv
 
-    if command -v uv &> /dev/null; then
-        uv run python -c "
+    uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
@@ -306,25 +231,14 @@ from codomyrmex.system_discovery import SystemDiscovery
 discovery = SystemDiscovery()
 discovery.export_full_inventory()
 "
-    else
-        $PYTHON_CMD -c "
-import sys
-sys.path.insert(0, 'src')
-from codomyrmex.system_discovery import SystemDiscovery
-
-discovery = SystemDiscovery()
-discovery.export_full_inventory()
-"
-    fi
 }
 
 # Git repository status
 check_git_status() {
     echo -e "\n${CYAN}🌐 Git Repository Status${NC}"
-    PYTHON_CMD=$(get_python_cmd)
+    check_uv
 
-    if command -v uv &> /dev/null; then
-        uv run python -c "
+    uv run python -c "
 import sys
 sys.path.insert(0, 'src')
 from codomyrmex.system_discovery import SystemDiscovery
@@ -332,16 +246,6 @@ from codomyrmex.system_discovery import SystemDiscovery
 discovery = SystemDiscovery()
 discovery.check_git_repositories()
 "
-    else
-        $PYTHON_CMD -c "
-import sys
-sys.path.insert(0, 'src')
-from codomyrmex.system_discovery import SystemDiscovery
-
-discovery = SystemDiscovery()
-discovery.check_git_repositories()
-"
-    fi
 }
 
 # Run installation script
@@ -362,24 +266,31 @@ run_installation() {
 # LLM API Configuration
 configure_llm_apis() {
     echo -e "\n${CYAN}🤖 LLM API Configuration${NC}"
-    PYTHON_CMD=$(get_python_cmd)
+    check_uv
     
     # Check current API key status
     echo -e "${YELLOW}Checking current API key status...${NC}"
-    $PYTHON_CMD -c "
+    uv run python -c "
 import sys
 sys.path.insert(0, 'src')
-from codomyrmex.agents.ai_code_editing import validate_api_keys, get_supported_providers
-
-print('\\nCurrent API Key Status:')
-providers = get_supported_providers()
-api_status = validate_api_keys()
-
-for provider in providers:
-    status = '✅ Available' if api_status[provider] else '❌ Missing'
-    print(f'  {provider.upper()}: {status}')
-
-print('\\nSupported Providers:', ', '.join(providers))
+try:
+    from codomyrmex.agents.ai_code_editing import validate_api_keys, get_supported_providers
+    
+    print('\\nCurrent API Key Status:')
+    providers = get_supported_providers()
+    api_status = validate_api_keys()
+    
+    for provider in providers:
+        status = '✅ Available' if api_status[provider] else '❌ Missing'
+        print(f'  {provider.upper()}: {status}')
+    
+    print('\\nSupported Providers:', ', '.join(providers))
+except ImportError as e:
+    print(f'⚠️  AI code editing module not available: {e}')
+    print('\\nYou can still set API keys manually in your .env file:')
+    print('  OPENAI_API_KEY=sk-...')
+    print('  ANTHROPIC_API_KEY=sk-ant-...')
+    print('  GOOGLE_API_KEY=...')
 "
     
     echo -e "\n${GREEN}API Key Configuration Options:${NC}"
@@ -459,60 +370,237 @@ print('\\nSupported Providers:', ', '.join(providers))
             ;;
         5)
             echo -e "\n${YELLOW}Testing API connections...${NC}"
-            $PYTHON_CMD -c "
+            uv run python -c "
 import sys
 sys.path.insert(0, 'src')
-from codomyrmex.agents.ai_code_editing import validate_api_keys, get_llm_client
-
-api_status = validate_api_keys()
-print('\\nTesting API connections...')
-
-for provider, available in api_status.items():
-    if available:
-        try:
-            client, model = get_llm_client(provider)
-            print(f'✅ {provider.upper()}: Connection successful (model: {model})')
-        except Exception as e:
-            print(f'❌ {provider.upper()}: Connection failed - {e}')
-    else:
-        print(f'⚠️  {provider.upper()}: No API key configured')
+try:
+    from codomyrmex.agents.ai_code_editing import validate_api_keys, get_llm_client
+    
+    api_status = validate_api_keys()
+    print('\\nTesting API connections...')
+    
+    for provider, available in api_status.items():
+        if available:
+            try:
+                client, model = get_llm_client(provider)
+                print(f'✅ {provider.upper()}: Connection successful (model: {model})')
+            except Exception as e:
+                print(f'❌ {provider.upper()}: Connection failed - {e}')
+        else:
+            print(f'⚠️  {provider.upper()}: No API key configured')
+except ImportError as e:
+    print(f'⚠️  AI code editing module not available: {e}')
 "
             ;;
         6)
             echo -e "\n${YELLOW}API Usage Examples:${NC}"
-            $PYTHON_CMD -c "
+            uv run python -c "
 import sys
 sys.path.insert(0, 'src')
-from codomyrmex.agents.ai_code_editing import generate_code_snippet, get_supported_languages, get_available_models
-
-print('\\nExample: Generate Python code')
-print('=' * 50)
 try:
-    result = generate_code_snippet(
-        prompt='Create a function that calculates fibonacci numbers',
-        language='python',
-        provider='openai'
-    )
-    print('Generated code:')
-    print(result['generated_code'])
-    print(f'\\nExecution time: {result[\"execution_time\"]:.2f}s')
-    print(f'Tokens used: {result.get(\"tokens_used\", \"N/A\")}')
-except Exception as e:
-    print(f'Error: {e}')
-    print('\\nMake sure you have set up your API keys first!')
-
-print('\\n\\nSupported Languages:')
-languages = get_supported_languages()
-for i, lang in enumerate(languages[:10]):  # Show first 10
-    print(f'  {lang.value}')
-if len(languages) > 10:
-    print(f'  ... and {len(languages) - 10} more')
-
-print('\\n\\nAvailable Models:')
-for provider in ['openai', 'anthropic', 'google']:
-    models = get_available_models(provider)
-    print(f'{provider.upper()}: {', '.join(models)}')
+    from codomyrmex.agents.ai_code_editing import generate_code_snippet, get_supported_languages, get_available_models
+    
+    print('\\nExample: Generate Python code')
+    print('=' * 50)
+    try:
+        result = generate_code_snippet(
+            prompt='Create a function that calculates fibonacci numbers',
+            language='python',
+            provider='openai'
+        )
+        print('Generated code:')
+        print(result['generated_code'])
+        print(f'\\nExecution time: {result[\"execution_time\"]:.2f}s')
+        print(f'Tokens used: {result.get(\"tokens_used\", \"N/A\")}')
+    except Exception as e:
+        print(f'Error: {e}')
+        print('\\nMake sure you have set up your API keys first!')
+    
+    print('\\n\\nSupported Languages:')
+    languages = get_supported_languages()
+    for i, lang in enumerate(languages[:10]):  # Show first 10
+        print(f'  {lang.value}')
+    if len(languages) > 10:
+        print(f'  ... and {len(languages) - 10} more')
+    
+    print('\\n\\nAvailable Models:')
+    for provider in ['openai', 'anthropic', 'google']:
+        models = get_available_models(provider)
+        print(f'{provider.upper()}: {', '.join(models)}')
+except ImportError as e:
+    print(f'⚠️  AI code editing module not available: {e}')
+    print('\\nSee docs/getting-started/quickstart.md for setup instructions')
 "
+            ;;
+        0)
+            return
+            ;;
+        *)
+            echo -e "${RED}Invalid choice${NC}"
+            ;;
+    esac
+    
+    echo -e "\n${PURPLE}Press Enter to continue...${NC}"
+    read
+}
+
+# Workflow management
+run_workflow_management() {
+    echo -e "\n${CYAN}⚙️  Workflow Management${NC}"
+    check_uv
+    
+    echo -e "${GREEN}1)${NC} List available workflows"
+    echo -e "${GREEN}2)${NC} Create a new workflow"
+    echo -e "${GREEN}3)${NC} Run a workflow"
+    echo -e "${GREEN}4)${NC} Show orchestration status"
+    echo -e "${GREEN}0)${NC} Return to main menu"
+    echo ""
+    read -p "Choose option (0-4): " wf_choice
+    
+    case $wf_choice in
+        1)
+            uv run codomyrmex workflow list
+            ;;
+        2)
+            read -p "Enter workflow name: " wf_name
+            read -p "Enter template (optional, press Enter to skip): " wf_template
+            if [[ -n "$wf_template" ]]; then
+                uv run codomyrmex workflow create "$wf_name" --template "$wf_template"
+            else
+                uv run codomyrmex workflow create "$wf_name"
+            fi
+            ;;
+        3)
+            read -p "Enter workflow name to run: " wf_name
+            uv run codomyrmex workflow run "$wf_name"
+            ;;
+        4)
+            uv run codomyrmex orchestration status
+            ;;
+        0)
+            return
+            ;;
+        *)
+            echo -e "${RED}Invalid choice${NC}"
+            ;;
+    esac
+    
+    echo -e "\n${PURPLE}Press Enter to continue...${NC}"
+    read
+}
+
+# Project management
+run_project_management() {
+    echo -e "\n${CYAN}📁 Project Management${NC}"
+    check_uv
+    
+    echo -e "${GREEN}1)${NC} List available projects"
+    echo -e "${GREEN}2)${NC} Create a new project"
+    echo -e "${GREEN}0)${NC} Return to main menu"
+    echo ""
+    read -p "Choose option (0-2): " proj_choice
+    
+    case $proj_choice in
+        1)
+            uv run codomyrmex project list
+            ;;
+        2)
+            read -p "Enter project name: " proj_name
+            read -p "Enter template (ai_analysis, web_application, data_pipeline) [default: ai_analysis]: " proj_template
+            proj_template=${proj_template:-ai_analysis}
+            
+            uv run codomyrmex project create "$proj_name" --template "$proj_template"
+            ;;
+        0)
+            return
+            ;;
+        *)
+            echo -e "${RED}Invalid choice${NC}"
+            ;;
+    esac
+    
+    echo -e "\n${PURPLE}Press Enter to continue...${NC}"
+    read
+}
+
+# CLI access
+run_cli_access() {
+    echo -e "\n${CYAN}💻 Codomyrmex CLI Access${NC}"
+    check_uv
+    
+    echo -e "${GREEN}Available CLI commands:${NC}"
+    echo -e "  ${CYAN}codomyrmex check${NC} - Check environment setup"
+    echo -e "  ${CYAN}codomyrmex info${NC} - Show project information"
+    echo -e "  ${CYAN}codomyrmex modules${NC} - List all available modules"
+    echo -e "  ${CYAN}codomyrmex status${NC} - Show system status dashboard"
+    echo -e "  ${CYAN}codomyrmex shell${NC} - Launch interactive shell"
+    echo -e "  ${CYAN}codomyrmex workflow list${NC} - List workflows"
+    echo -e "  ${CYAN}codomyrmex project list${NC} - List projects"
+    echo -e "  ${CYAN}codomyrmex ai generate \"prompt\"${NC} - Generate code with AI"
+    echo ""
+    echo -e "${YELLOW}Enter a CLI command (or 'help' for full help, 'exit' to return):${NC}"
+    
+    while true; do
+        read -p "${CYAN}codomyrmex>${NC} " cli_cmd
+        
+        if [[ "$cli_cmd" == "exit" || "$cli_cmd" == "quit" || "$cli_cmd" == "q" ]]; then
+            break
+        elif [[ "$cli_cmd" == "help" || "$cli_cmd" == "h" ]]; then
+            uv run codomyrmex --help
+        elif [[ -n "$cli_cmd" ]]; then
+            uv run codomyrmex $cli_cmd
+        fi
+    done
+}
+
+# Examples and tutorials
+run_examples_tutorials() {
+    echo -e "\n${CYAN}📝 Examples & Tutorials${NC}"
+    check_uv
+    
+    echo -e "${GREEN}1)${NC} Run example usage script"
+    echo -e "${GREEN}2)${NC} Browse example scripts directory"
+    echo -e "${GREEN}3)${NC} Run example selector"
+    echo -e "${GREEN}4)${NC} View tutorials documentation"
+    echo -e "${GREEN}0)${NC} Return to main menu"
+    echo ""
+    read -p "Choose option (0-4): " ex_choice
+    
+    case $ex_choice in
+        1)
+            if [[ -f "scripts/development/example_usage.py" ]]; then
+                uv run python scripts/development/example_usage.py
+            else
+                echo -e "${YELLOW}⚠️  Example script not found${NC}"
+            fi
+            ;;
+        2)
+            if [[ -d "scripts/examples" ]]; then
+                echo -e "${CYAN}Available example scripts:${NC}"
+                find scripts/examples -name "*.sh" -o -name "*.py" | head -20
+                echo ""
+                echo -e "${YELLOW}To run an example, navigate to scripts/examples/ and execute the script${NC}"
+            else
+                echo -e "${YELLOW}⚠️  Examples directory not found${NC}"
+            fi
+            ;;
+        3)
+            if [[ -f "scripts/development/select_example.sh" ]]; then
+                bash scripts/development/select_example.sh
+            else
+                echo -e "${YELLOW}⚠️  Example selector not found${NC}"
+            fi
+            ;;
+        4)
+            if [[ -f "scripts/TUTORIALS.md" ]]; then
+                if command -v less &> /dev/null; then
+                    less scripts/TUTORIALS.md
+                else
+                    cat scripts/TUTORIALS.md
+                fi
+            else
+                echo -e "${YELLOW}⚠️  Tutorials documentation not found${NC}"
+            fi
             ;;
         0)
             return
@@ -530,6 +618,7 @@ for provider in ['openai', 'anthropic', 'google']:
 main() {
     show_banner
     check_environment
+    check_uv
     activate_venv
     ensure_dependencies
     
@@ -547,6 +636,10 @@ main() {
             7) run_interactive_shell ;;
             8) export_inventory ;;
             9) check_git_status ;;
+            W|w) run_workflow_management ;;
+            P|p) run_project_management ;;
+            C|c) run_cli_access ;;
+            E|e) run_examples_tutorials ;;
             A|a) run_installation ;;
             B|b) configure_llm_apis ;;
             0) 
@@ -555,7 +648,7 @@ main() {
                 exit 0
                 ;;
             *) 
-                echo -e "${RED}Invalid choice. Please select 0-9, A, or B.${NC}"
+                echo -e "${RED}Invalid choice. Please select 0-9, W, P, C, E, A, or B.${NC}"
                 sleep 1
                 ;;
         esac

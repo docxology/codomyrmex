@@ -81,6 +81,7 @@ Example implementations and demonstrations.
 - `documentation/` – Subdirectory
 - `environment_setup/` – Subdirectory
 - `events/` – Subdirectory
+- `fpf/` – Subdirectory
 - `git_operations/` – Subdirectory
 - `llm/` – Subdirectory
 - `logging_monitoring/` – Subdirectory
@@ -98,6 +99,7 @@ Example implementations and demonstrations.
 - `system_discovery/` – Subdirectory
 - `terminal_interface/` – Subdirectory
 - `validate_examples.py` – File
+- `validation/` – Subdirectory
 - `validation_reports/` – Subdirectory
 
 ## Navigation

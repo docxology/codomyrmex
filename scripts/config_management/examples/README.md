@@ -1,4 +1,4 @@
-# fpf
+# config_management
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
@@ -19,6 +19,7 @@ Example implementations and demonstrations.
 - `SPEC.md` – File
 - `config.json` – File
 - `config.yaml` – File
+- `config_overrides.yaml` – File
 - `example_basic.py` – File
 
 ## Navigation

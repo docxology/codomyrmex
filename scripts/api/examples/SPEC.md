@@ -1,14 +1,14 @@
-# fpf - Functional Specification
+# api - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
 
-Directory: fpf
+Directory: api
 
 ## Overview
 
-This example demonstrates First Principles Framework (FPF) functionality using the Codomyrmex `fpf` module. It showcases how to fetch FPF specifications from GitHub, parse them, search for patterns, and build context strings for prompt engineering.
+This example demonstrates OpenAPI specification generation and API management using the Codomyrmex `api` module. It showcases how to generate OpenAPI 3.0 specifications, define API schemas, and export specifications in JSON and YAML formats.
 
 ## Design Principles
 
@@ -48,7 +48,7 @@ Architecture description with component relationships and data flow patterns.
 
 ## Functional Requirements
 
-Functional requirements for fpf including core capabilities and standards.
+Functional requirements for api including core capabilities and standards.
 
 ## Quality Standards
 
@@ -60,7 +60,7 @@ API interfaces, data structure definitions, and communication patterns.
 
 ## Implementation Guidelines
 
-Implementation guidelines for working within fpf including best practices and patterns.
+Implementation guidelines for working within api including best practices and patterns.
 
 ## Navigation
 

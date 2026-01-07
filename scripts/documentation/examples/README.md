@@ -1,9 +1,10 @@
-# fpf
+# documentation
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [examples](examples/README.md)
+    - [output](output/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -12,7 +13,7 @@
 
 ## Overview
 
-Example implementations and demonstrations.
+Documentation files and guides for documentation.
 
 ## Directory Contents
 - `README.md` – File
@@ -20,6 +21,7 @@ Example implementations and demonstrations.
 - `config.json` – File
 - `config.yaml` – File
 - `example_basic.py` – File
+- `examples/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)

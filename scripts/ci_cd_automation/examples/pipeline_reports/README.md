@@ -1,4 +1,4 @@
-# fpf
+# pipeline_reports
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
@@ -15,15 +15,11 @@
 Example implementations and demonstrations.
 
 ## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `config.json` – File
-- `config.yaml` – File
-- `example_basic.py` – File
+No files or subdirectories.
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [examples](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Parent Directory**: [ci_cd_automation](../README.md)
+- **Project Root**: [README](../../../README.md)
 

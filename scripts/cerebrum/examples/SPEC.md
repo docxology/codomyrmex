@@ -1,14 +1,14 @@
-# fpf - Functional Specification
+# cerebrum - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 
 ## Purpose
 
-Directory: fpf
+Directory: cerebrum
 
 ## Overview
 
-This example demonstrates First Principles Framework (FPF) functionality using the Codomyrmex `fpf` module. It showcases how to fetch FPF specifications from GitHub, parse them, search for patterns, and build context strings for prompt engineering.
+This example demonstrates case-based reasoning and Bayesian inference functionality using the Codomyrmex `cerebrum` module.
 
 ## Design Principles
 
@@ -48,7 +48,7 @@ Architecture description with component relationships and data flow patterns.
 
 ## Functional Requirements
 
-Functional requirements for fpf including core capabilities and standards.
+Functional requirements for cerebrum including core capabilities and standards.
 
 ## Quality Standards
 
@@ -60,7 +60,7 @@ API interfaces, data structure definitions, and communication patterns.
 
 ## Implementation Guidelines
 
-Implementation guidelines for working within fpf including best practices and patterns.
+Implementation guidelines for working within cerebrum including best practices and patterns.
 
 ## Navigation
 
@@ -84,4 +84,3 @@ The implementation of this component follows the core principles of the Codomyrm
 
 ### Technical Implementation
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-

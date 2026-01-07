@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/fpf
+# Codomyrmex Agents — examples/api
 
 ## Signposting
-- **Parent**: [FPF](../AGENTS.md)
+- **Parent**: [API](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

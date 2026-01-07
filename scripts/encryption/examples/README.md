@@ -1,4 +1,4 @@
-# fpf
+# encryption
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
@@ -26,4 +26,3 @@ Example implementations and demonstrations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [examples](../README.md)
 - **Project Root**: [README](../../README.md)
-

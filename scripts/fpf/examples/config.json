@@ -1,0 +1,23 @@
+{
+  "fpf": {
+    "use_local_file": false,
+    "local_file_path": null,
+    "repo": "ailev/FPF",
+    "branch": "main",
+    "search_query": "pattern",
+    "pattern_id": null,
+    "build_context": true,
+    "context_filters": null
+  },
+  "output": {
+    "format": "json",
+    "file": "output/fpf_results.json",
+    "include_details": true
+  },
+  "logging_config": {
+    "level": "INFO",
+    "file": "logs/fpf_example.log",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  }
+}
+

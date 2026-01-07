@@ -1,10 +1,11 @@
-# Codomyrmex Agents — examples/fpf
+# Codomyrmex Agents — examples/database_management
 
 ## Signposting
-- **Parent**: [FPF](../AGENTS.md)
+- **Parent**: [Database Management](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [db_performance](db_performance/AGENTS.md)
+    - [output](output/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -19,6 +20,7 @@ Example implementations and demonstrations.
 - `SPEC.md` – Project file
 - `config.json` – Project file
 - `config.yaml` – Project file
+- `db_performance/` – Directory containing db_performance components
 - `example_basic.py` – Project file
 
 ## Operating Contracts
@@ -31,4 +33,3 @@ Example implementations and demonstrations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [README](../../README.md) - Main project documentation
-

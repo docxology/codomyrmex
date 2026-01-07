@@ -1,0 +1,66 @@
+# Containerization Configuration
+# Demonstrate Docker image management and optimization
+
+# Containerization settings
+containerization:
+  # Images to analyze for size and layers
+  images_to_analyze:
+    - name: python:3.9-slim
+    - name: node:16-alpine
+    - name: ubuntu:20.04
+
+  # Build configurations for generating Dockerfiles
+  build_configs:
+    # Python web application
+    - base_image: python:3.9-slim
+      app_files: [app.py, requirements.txt]
+      dependencies:
+        - python3-dev
+        - build-essential
+      ports: [8000]
+
+    # Node.js application
+    - base_image: node:16-alpine
+      app_files: [package.json, app.js]
+      dependencies:
+        - git
+      ports: [3000]
+
+  # Optimization configurations
+  optimization_configs:
+    - image: python:3.9
+      target_size_mb: 100
+      remove_packages: [curl, wget]
+      use_multi_stage: true
+    - image: node:16
+      target_size_mb: 150
+      compress_layers: true
+
+# Docker settings
+docker:
+  # Build arguments
+  build_args:
+    BUILDKIT: "1"
+    DOCKER_BUILDKIT: "1"
+
+  # Registry settings
+  registry:
+    url: docker.io
+    namespace: codomyrmex
+
+  # Image tags
+  tags:
+    - latest
+    - ${GIT_COMMIT:dev}
+
+# Output settings
+output:
+  format: json
+  file: output/containerization_results.json
+  save_generated_files: true
+
+# Logging
+logging:
+  level: INFO
+  file: logs/containerization_example.log
+

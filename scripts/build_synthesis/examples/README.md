@@ -1,9 +1,9 @@
-# fpf
+# build_synthesis
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [output](output/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)

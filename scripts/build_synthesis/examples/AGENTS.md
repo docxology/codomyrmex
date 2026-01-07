@@ -1,10 +1,10 @@
-# Codomyrmex Agents — examples/fpf
+# Codomyrmex Agents — examples/build_synthesis
 
 ## Signposting
-- **Parent**: [FPF](../AGENTS.md)
+- **Parent**: [Build Synthesis](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [output](output/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -31,4 +31,3 @@ Example implementations and demonstrations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [README](../../README.md) - Main project documentation
-

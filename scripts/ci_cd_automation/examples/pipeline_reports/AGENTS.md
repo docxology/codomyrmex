@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/fpf
+# Codomyrmex Agents — examples/ci_cd_automation/pipeline_reports
 
 ## Signposting
-- **Parent**: [FPF](../AGENTS.md)
+- **Parent**: [Pipeline Reports](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -15,11 +15,7 @@
 Example implementations and demonstrations.
 
 ## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `config.json` – Project file
-- `config.yaml` – Project file
-- `example_basic.py` – Project file
+- No active components documented
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -29,6 +25,5 @@ Example implementations and demonstrations.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../README.md) - Main project documentation
-
+- **📁 Parent Directory**: [ci_cd_automation](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
