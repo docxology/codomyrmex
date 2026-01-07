@@ -1,7 +1,7 @@
 # generic
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [generic](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for generic..
+Base agent classes and utilities. Provides abstract base classes for all agents, agent orchestration, message bus for inter-agent communication, and task planning capabilities. Serves as the foundation for all agent implementations.
 
 ## Directory Contents
 - `README.md` – File

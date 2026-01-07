@@ -1,0 +1,28 @@
+# Logging Configuration Example
+# Development environment logging setup
+
+logging:
+  level: "DEBUG"
+  format: "TEXT"
+  text_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  outputs:
+    - type: "console"
+      enabled: true
+      level: "DEBUG"
+    - type: "file"
+      enabled: true
+      path: "codomyrmex_dev.log"
+      level: "INFO"
+
+rotation:
+  enabled: true
+  max_file_size: 10485760  # 10MB
+  backup_count: 5
+
+modules:
+  codomyrmex:
+    level: "INFO"
+  codomyrmex.llm:
+    level: "DEBUG"
+

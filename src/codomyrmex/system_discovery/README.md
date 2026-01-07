@@ -1,7 +1,7 @@
 # system_discovery
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for system_discovery..
+System Discovery Engine for Codomyrmex. Provides comprehensive system discovery capabilities, scanning all modules, methods, classes, and functions to create a complete map of the Codomyrmex ecosystem capabilities. Includes health checking, capability scanning, and system status reporting.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

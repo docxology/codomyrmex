@@ -1,7 +1,7 @@
 # documents
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [core](core/README.md)
     - [docs](docs/README.md)
@@ -21,7 +21,7 @@
 
 ## Overview
 
-Documentation files and guides for documents.
+Robust, abstractable methods for reading and writing various document formats. Handles the mechanics of document I/O operations with support for multiple formats (markdown, JSON, PDF, YAML, XML, CSV, HTML, text), document operations (read, write, parse, validate, convert, merge, split), metadata extraction, document search and indexing, and document versioning.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

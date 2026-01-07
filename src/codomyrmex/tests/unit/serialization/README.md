@@ -1,7 +1,7 @@
 # serialization
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [serialization](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

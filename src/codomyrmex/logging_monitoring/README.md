@@ -1,7 +1,7 @@
 # logging_monitoring
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for logging_monitoring..
+Centralized logging infrastructure for the Codomyrmex platform. Implements unified logging system with consistent formatting, configurable output destinations (console, file), configurable log levels, JSON and text formatters, and proper log level management. Provides singleton-like configuration ensuring logging is set up once for the entire application.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -1,0 +1,41 @@
+# PostgreSQL Database Configuration Example
+# Production database configuration
+
+connections:
+  postgresql_prod:
+    type: "postgresql"
+    host: "${POSTGRES_HOST:localhost}"
+    port: "${POSTGRES_PORT:5432}"
+    database: "${POSTGRES_DB:codomyrmex}"
+    username: "${POSTGRES_USER:postgres}"
+    password: "${POSTGRES_PASSWORD}"
+    ssl_mode: "require"
+    description: "PostgreSQL production database"
+
+pools:
+  production:
+    min_connections: 5
+    max_connections: 20
+    connection_timeout: 30
+    idle_timeout: 600
+    max_lifetime: 7200
+
+migrations:
+  directory: "migrations"
+  naming_pattern: "{timestamp}_{name}.sql"
+  auto_rollback: true
+  timeout: 300
+  require_backup: true
+
+backups:
+  directory: "backups"
+  naming_pattern: "{database}_{timestamp}.backup"
+  compression:
+    enabled: true
+    algorithm: "gzip"
+    level: 6
+  retention:
+    keep_daily: 30
+    keep_weekly: 12
+    keep_monthly: 24
+

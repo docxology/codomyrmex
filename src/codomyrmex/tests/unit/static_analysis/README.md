@@ -1,7 +1,7 @@
 # static_analysis
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [static_analysis](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

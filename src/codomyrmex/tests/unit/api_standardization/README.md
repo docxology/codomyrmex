@@ -1,7 +1,7 @@
 # api_standardization
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [api_standardization](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

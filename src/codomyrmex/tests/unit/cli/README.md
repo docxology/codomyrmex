@@ -1,7 +1,7 @@
 # cli
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [cli](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

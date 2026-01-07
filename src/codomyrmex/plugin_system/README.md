@@ -1,7 +1,7 @@
 # plugin_system
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for plugin_system..
+Plugin architecture and management system. Provides pluggable architecture for extending Codomyrmex functionality with dynamic plugin loading, plugin registration and discovery, plugin validation, lifecycle management, and dependency resolution.
 
 ## Directory Contents
 - `README.md` – File

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/spatial/world_models
 
 ## Signposting
-- **Parent**: [World Models](../AGENTS.md)
+- **Parent**: [spatial](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,10 +12,16 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for world_models..
+World model and simulation including environment representation, physics simulation, and agent-environment interaction. Provides comprehensive world modeling capabilities for spatial computing.
 
 ## Active Components
-- `__init__.py` – Project file
+- `__init__.py` – Module exports and public API
+
+## Key Classes and Functions
+
+### WorldModel (`__init__.py`)
+- `WorldModel()` – Environment representation and world model
+- Provides physics simulation and agent-environment interaction
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

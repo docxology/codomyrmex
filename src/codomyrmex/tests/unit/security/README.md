@@ -1,7 +1,7 @@
 # security
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [security](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

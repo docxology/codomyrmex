@@ -1,7 +1,7 @@
 # droid
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [droid](../README.md)
 - **Children**:
     - [handlers](handlers/README.md)
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for droid..
+Autonomous Agent abstraction for persisted or ephemeral agentic sessions that maintain state, execute multi-step reasoning, and use tools. Follows the `Think -> Act -> Observe` loop with support for personas (e.g., "RefactoringDroid", "DocsDroid"), tool execution, and conversation history.
 
 ## Directory Contents
 - `README.md` – File

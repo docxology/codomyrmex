@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Agents - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>System Agents</h1>
+
+<div class="grid">
+    {% for agent in agents %}
+    <div class="card">
+        <div class="card-title">
+            {{ agent.name }}
+            <span class="status-badge active">Active</span>
+        </div>
+        <p style="margin-bottom: 1rem;">{{ agent.description }}</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            Path: {{ agent.path }}
+        </p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

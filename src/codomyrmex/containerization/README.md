@@ -1,7 +1,7 @@
 # containerization
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for containerization..
+Container management including Docker image building, container orchestration, Kubernetes integration, container registry management, image optimization, security scanning, and performance optimization. Provides comprehensive container lifecycle management.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

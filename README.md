@@ -327,7 +327,7 @@ graph TD
         Container["containerization"]
         ConfigMgmt["config_management"]
         Database["database_management"]
-        ProjectOrch["project_orchestration"]
+        Logistics["logistics"]
         PhysMgmt["physical_management"]
     end
 
@@ -756,7 +756,7 @@ Higher-level services that orchestrate core modules:
 | [**containerization**](src/codomyrmex/containerization/) | Container management | Docker lifecycle, Kubernetes orchestration |
 | [**database_management**](src/codomyrmex/database_management/) | Database operations | Schema management, migrations, backups |
 | [**config_management**](src/codomyrmex/config_management/) | Configuration management | Environment setup, secret management, validation |
-| [**project_orchestration**](src/codomyrmex/project_orchestration/) | Workflow orchestration | Workflow management, task coordination |
+| [**logistics**](src/codomyrmex/logistics/) | Logistics and orchestration | Workflow orchestration, task management, scheduling |
 
 ### Specialized Modules
 Advanced capabilities for specific domains:
@@ -808,7 +808,7 @@ Higher-level services that orchestrate core modules:
 - **[containerization](src/codomyrmex/containerization/)** - Container management with Docker lifecycle and Kubernetes orchestration
 - **[database_management](src/codomyrmex/database_management/)** - Database operations with schema management, migrations, and backups
 - **[config_management](src/codomyrmex/config_management/)** - Configuration management with environment setup, secret management, and validation
-- **[project_orchestration](src/codomyrmex/project_orchestration/)** - Workflow orchestration with workflow management and task coordination
+- **[logistics](src/codomyrmex/logistics/)** - Logistics module with orchestration, task management, and scheduling
 
 ### Specialized Layer
 Advanced capabilities for specific domains:
@@ -833,7 +833,7 @@ Advanced capabilities for specific domains:
 | **Build & Deploy** | [build_synthesis](src/codomyrmex/build_synthesis/) • [git_operations](src/codomyrmex/git_operations/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) |
 | **Visualization** | [data_visualization](src/codomyrmex/data_visualization/) • [spatial](src/codomyrmex/spatial/) |
 | **Infrastructure** | [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [physical_management](src/codomyrmex/physical_management/) |
-| **Orchestration** | [documentation](src/codomyrmex/documentation/) • [api](src/codomyrmex/api/) • [project_orchestration](src/codomyrmex/project_orchestration/) • [system_discovery](src/codomyrmex/system_discovery/) |
+| **Orchestration** | [documentation](src/codomyrmex/documentation/) • [api](src/codomyrmex/api/) • [logistics](src/codomyrmex/logistics/) • [system_discovery](src/codomyrmex/system_discovery/) |
 | **Execution** | [coding](src/codomyrmex/coding/) • [performance](src/codomyrmex/performance/) |
 | **Extensions** | [events](src/codomyrmex/events/) • [plugin_system](src/codomyrmex/plugin_system/) • [module_template](src/codomyrmex/module_template/) • [tools](src/codomyrmex/tools/) |
 
@@ -1010,6 +1010,7 @@ Comprehensive documentation for users, developers, and contributors. All documen
 - **[Project Lifecycle](docs/project_orchestration/project-lifecycle-guide.md)** - Managing project workflows
 - **[Workflow Configuration](docs/project_orchestration/workflow-configuration-schema.md)** - Workflow schemas
 - **[Task Orchestration](docs/project_orchestration/task-orchestration-guide.md)** - Task management
+- **[Logistics Module](src/codomyrmex/logistics/)** - Orchestration, task management, and scheduling
 
 ### Examples
 - **[Example Scripts](docs/examples/)** - Working examples and demonstrations

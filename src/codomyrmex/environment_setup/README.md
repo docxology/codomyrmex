@@ -1,7 +1,7 @@
 # environment_setup
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [scripts](scripts/README.md)
@@ -14,7 +14,7 @@
 
 ## Overview
 
-Module components and implementation for environment_setup..
+Ensures the Codomyrmex platform runs in a deterministic, validated environment. Acts as the "gatekeeper" at startup, verifying dependencies, Python versions, and configuration integrity before any other module is allowed to execute. Provides fail-fast validation with helpful error messages guiding users to solutions.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

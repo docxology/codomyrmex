@@ -13,7 +13,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for git_operations. Provides comprehensive Git operations API with 40+ functions covering repository management, branching, commits, remotes, GitHub API integration, and optional visualization features.
+Comprehensive Git operations API with 40+ functions covering repository management, branching, commits, remotes, GitHub API integration, and optional visualization features. Provides programmatic Python interface for Git interactions, abstracting raw subprocess calls into typed, error-handling functions for initializing, managing, and synchronizing repositories. Foundation for automated code modification and version control within Codomyrmex.
 
 ## Active Components
 

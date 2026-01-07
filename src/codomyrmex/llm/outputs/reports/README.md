@@ -1,7 +1,7 @@
 # reports
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [reports](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for reports..
+Structured analysis reports from LLM interactions. Stores structured reports with security input length limits and other analysis metadata for debugging and analysis of LLM interactions.
 
 ## Directory Contents
 - `README.md` – File

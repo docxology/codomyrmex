@@ -1,7 +1,7 @@
 # physical_management
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [examples](scripts/examples/README.md)
@@ -14,7 +14,7 @@
 
 ## Overview
 
-Module components and implementation for physical_management..
+Physical system simulation and management including system monitoring, resource management, performance tracking, sensor integration, object management, analytics, and simulation engine. Provides comprehensive physical system lifecycle management.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

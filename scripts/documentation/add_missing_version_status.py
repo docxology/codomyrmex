@@ -1,83 +1,31 @@
 #!/usr/bin/env python3
-"""Add missing version/status information to documentation files."""
+"""
+Thin wrapper for add_missing_version_status.py.
+Logic migrated to codomyrmex.documentation.scripts.add_missing_version_status.
+"""
 
-import re
+import sys
 from pathlib import Path
 
-def has_version_status(content: str) -> bool:
-    """Check if file has version/status information."""
-    patterns = [
-        r'\*\*Version\*\*',
-        r'\*\*Status\*\*',
-        r'Version.*Status',
-        r'v0\.1\.0.*Active'
-    ]
-    for pattern in patterns:
-        if re.search(pattern, content, re.IGNORECASE):
-            return True
-    return False
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-def add_version_status(file_path: Path) -> bool:
-    """Add version/status information to a file."""
-    if not file_path.exists():
-        return False
-    
-    try:
-        content = file_path.read_text(encoding='utf-8')
-        
-        if has_version_status(content):
-            return False
-        
-        # Find the title line (first line starting with #)
-        lines = content.split('\n')
-        title_idx = -1
-        for i, line in enumerate(lines):
-            if line.strip().startswith('#'):
-                title_idx = i
-                break
-        
-        if title_idx == -1:
-            return False
-        
-        # Insert version/status after title
-        version_line = "**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025"
-        
-        # Check if there's already a blank line after title
-        if title_idx + 1 < len(lines) and lines[title_idx + 1].strip() == '':
-            # Insert after blank line
-            lines.insert(title_idx + 2, version_line)
-        else:
-            # Insert after title with blank line
-            lines.insert(title_idx + 1, '')
-            lines.insert(title_idx + 2, version_line)
-        
-        new_content = '\n'.join(lines)
-        file_path.write_text(new_content, encoding='utf-8')
-        return True
-    except Exception as e:
-        print(f"Error processing {file_path}: {e}")
-        return False
-
-def main():
-    """Add version/status to all documentation files."""
-    base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
-    fixed_count = 0
-    
-    for root, dirs, files in os.walk(base_path):
-        dirs[:] = [d for d in dirs if not d.startswith('.') and 
-                   d not in ['__pycache__', 'node_modules', 'venv', '.venv', '.git', '@output']]
-        
-        for file in ['README.md', 'AGENTS.md', 'SPEC.md']:
-            file_path = Path(root) / file
-            if file_path.exists():
-                if add_version_status(file_path):
-                    fixed_count += 1
-                    if fixed_count % 20 == 0:
-                        print(f"Fixed {fixed_count} files...")
-    
-    print(f"\nCompleted: Fixed {fixed_count} files with version/status")
-
-if __name__ == "__main__":
-    import os
-    main()
-
+try:
+    from codomyrmex.documentation.scripts import add_missing_version_status
+    if hasattr(add_missing_version_status, 'main'):
+        sys.exit(add_missing_version_status.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module add_missing_version_status does not have a main function or failed to execute.")
+    sys.exit(1)

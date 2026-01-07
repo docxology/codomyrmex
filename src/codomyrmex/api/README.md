@@ -1,7 +1,7 @@
 # api
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [documentation](documentation/README.md)
     - [standardization](standardization/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for api..
+API infrastructure including OpenAPI specification generation, API documentation, and API standardization. Provides tools for generating OpenAPI specifications from code, standardizing API interfaces, and maintaining API documentation.
 
 ## Directory Contents
 - `README.md` – File

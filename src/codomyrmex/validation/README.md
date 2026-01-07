@@ -1,7 +1,7 @@
 # validation
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for validation..
+Unified input validation framework with support for JSON Schema, Pydantic models, and custom validators. Provides structured error reporting, nested validation support, and a pluggable validator system for consolidating validation logic across the Codomyrmex ecosystem.
 
 ## Directory Contents
 - `README.md` – File
@@ -32,11 +32,33 @@ Module components and implementation for validation..
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.validation import main_component
+from codomyrmex.validation import validate, is_valid, ValidationError, Validator, ValidationManager
 
-def example():
-    
-    print(f"Result: {result}")
+# Basic validation with JSON Schema
+schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "age": {"type": "integer"}
+    },
+    "required": ["name"]
+}
+
+data = {"name": "Alice", "age": 30}
+result = validate(data, schema)
+if result.is_valid:
+    print("Validation passed")
+else:
+    for error in result.errors:
+        print(f"Error: {error.message}")
+
+# Quick validation check
+if is_valid(data, schema):
+    print("Data is valid")
+
+# Using ValidationManager for custom validators
+manager = ValidationManager()
+manager.register_validator("custom", lambda d, s: len(d) > 0)
+result = manager.validate(data, schema, validator_type="custom")
 ```
 

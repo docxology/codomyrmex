@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>Documentation Browser</h1>
+
+<div style="display: flex; gap: 2rem;">
+    <div style="width: 300px; border-right: 1px solid var(--border-color);">
+        <ul class="doc-tree">
+            {% macro render_tree(node) %}
+            <li>
+                {% if node.children %}
+                <span class="folder">{{ node.name }}</span>
+                <ul>
+                    {% for child in node.children %}
+                    {{ render_tree(child) }}
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <a href="#" class="doc-link" data-path="{{ node.path }}">
+                    {{ node.name }}
+                </a>
+                {% endif %}
+            </li>
+            {% endmacro %}
+
+            {% for root_node in doc_tree.children %}
+            {{ render_tree(root_node) }}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div style="flex: 1;">
+        <div id="doc-content" class="markdown-body">
+            <h3>Select a document to view</h3>
+        </div>
+    </div>
+</div>
+
+<style>
+    .doc-tree,
+    .doc-tree ul {
+        list-style: none;
+        padding-left: 1rem;
+    }
+
+    .doc-tree {
+        padding-left: 0;
+    }
+
+    .folder {
+        font-weight: 600;
+        color: var(--text-primary);
+        display: block;
+        margin-top: 0.5rem;
+    }
+
+    .doc-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: block;
+        padding: 0.25rem 0;
+    }
+
+    .doc-link:hover {
+        color: var(--accent-color);
+    }
+
+    .markdown-body {
+        padding: 2rem;
+        background-color: var(--bg-secondary);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+    }
+</style>
+{% endblock %}

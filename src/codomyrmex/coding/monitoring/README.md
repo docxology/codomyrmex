@@ -1,7 +1,7 @@
 # monitoring
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [monitoring](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for monitoring..
+Code execution monitoring including execution monitoring, metrics collection, and resource tracking. Provides comprehensive monitoring capabilities for code execution in sandboxed environments.
 
 ## Directory Contents
 - `README.md` – File

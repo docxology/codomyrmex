@@ -1,7 +1,7 @@
 # tutorials
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [tutorials](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

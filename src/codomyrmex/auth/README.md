@@ -1,7 +1,7 @@
 # auth
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for auth..
+Authentication and authorization with API key management, OAuth integration, and access control. Provides provider-agnostic auth interface with support for username/password, API key, and token-based authentication with permission checking and token refresh capabilities.
 
 ## Directory Contents
 - `README.md` – File
@@ -33,11 +33,25 @@ Module components and implementation for auth..
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.auth import main_component
+from codomyrmex.auth import Authenticator, APIKeyManager, TokenManager
 
-def example():
-    
-    print(f"Result: {result}")
+# Authentication
+authenticator = Authenticator()
+token = authenticator.authenticate({"username": "user", "password": "pass"})
+token = authenticator.authenticate({"api_key": "codomyrmex_..."})
+
+# Authorization
+is_authorized = authenticator.authorize(token, "resource", "read")
+
+# API key management
+api_key_manager = APIKeyManager()
+api_key = api_key_manager.generate_api_key("user123", permissions=["read", "write"])
+user_info = api_key_manager.validate_api_key(api_key)
+
+# Token management
+token_manager = TokenManager()
+new_token = token_manager.create_token("user123", permissions=["read"], ttl=3600)
+is_valid = token_manager.validate_token(new_token)
+refreshed = token_manager.refresh_token(new_token)
 ```
 

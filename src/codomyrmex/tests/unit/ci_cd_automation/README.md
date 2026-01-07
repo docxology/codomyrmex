@@ -1,7 +1,7 @@
 # ci_cd_automation
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [ci_cd_automation](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

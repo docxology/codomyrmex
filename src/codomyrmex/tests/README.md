@@ -1,7 +1,7 @@
 # tests
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [examples](scripts/examples/README.md)
     - [fixtures](fixtures/README.md)

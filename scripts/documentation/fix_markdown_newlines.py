@@ -1,26 +1,31 @@
-import os
+#!/usr/bin/env python3
+"""
+Thin wrapper for fix_markdown_newlines.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_markdown_newlines.
+"""
 
-def fix_newlines(directory):
-    for root, dirs, files in os.walk(directory):
-        if any(exclude in root for exclude in ['.git', 'venv', 'node_modules', '__pycache__']):
-            continue
-        for file in files:
-            if file.endswith('.md'):
-                path = os.path.join(root, file)
-                try:
-                    with open(path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                    
-                    if '\\n' in content:
-                        print(f"Fixing {path}")
-                        # Be careful not to replace legitimate code examples that might have \\n
-                        # But in this case, the whole file is likely one line.
-                        # The doc_scaffolder bug writes the whole file with \\n instead of \n
-                        new_content = content.replace('\\n', '\n')
-                        with open(path, 'w', encoding='utf-8') as f:
-                            f.write(new_content)
-                except Exception as e:
-                    print(f"Error processing {path}: {e}")
+import sys
+from pathlib import Path
 
-if __name__ == "__main__":
-    fix_newlines(".")
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
+
+try:
+    from codomyrmex.documentation.scripts import fix_markdown_newlines
+    if hasattr(fix_markdown_newlines, 'main'):
+        sys.exit(fix_markdown_newlines.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_markdown_newlines does not have a main function or failed to execute.")
+    sys.exit(1)

@@ -1,7 +1,7 @@
 # models
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [models](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

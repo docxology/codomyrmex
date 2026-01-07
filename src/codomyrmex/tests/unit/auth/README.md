@@ -1,7 +1,7 @@
 # auth
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [auth](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

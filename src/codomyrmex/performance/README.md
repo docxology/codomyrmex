@@ -1,7 +1,7 @@
 # performance
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for performance..
+Performance optimization utilities including lazy loading, intelligent caching, and comprehensive performance monitoring. Manages resource usage, caching, and lazy loading to ensure system responsiveness with execution time tracking, memory usage monitoring, and CPU profiling.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -38,11 +38,28 @@ Module components and implementation for performance..
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.performance import main_component
+from codomyrmex.performance import lazy_import, cached_function, PerformanceMonitor
 
-def example():
-    
-    print(f"Result: {result}")
+# Lazy loading - defer expensive imports until needed
+pandas = lazy_import("pandas")
+# pandas is not imported yet, only when first accessed
+df = pandas.DataFrame()  # Now pandas is imported
+
+# Function caching - cache expensive function results
+@cached_function(ttl_seconds=300, max_size=128)
+def expensive_computation(data):
+    # This result will be cached for 5 minutes
+    return process_data(data)
+
+# Performance monitoring
+monitor = PerformanceMonitor()
+
+@monitor.monitor
+def my_function():
+    # This function's performance will be tracked
+    return do_work()
+
+result, metrics = monitor.track_execution(my_function)
+print(f"Execution time: {metrics.execution_time}s")
 ```
 

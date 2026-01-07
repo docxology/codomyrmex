@@ -1,66 +1,31 @@
 #!/usr/bin/env python3
-"""Fix src/README.md links in deeply nested documentation directories."""
+"""
+Thin wrapper for fix_deep_nested_src_links.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_deep_nested_src_links.
+"""
 
-import re
+import sys
 from pathlib import Path
 
-def calculate_correct_path(from_file: Path, base_path: Path) -> str:
-    """Calculate correct relative path to src/README.md."""
-    # Calculate depth from root
-    rel_path = from_file.parent.relative_to(base_path)
-    depth = len(rel_path.parts)
-    
-    # Build correct path: go up depth levels, then to src/README.md
-    return "../" * depth + "src/README.md"
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-def fix_src_links(file_path: Path, base_path: Path) -> bool:
-    """Fix src/README.md links in a file."""
-    if not file_path.exists():
-        return False
-    
-    try:
-        content = file_path.read_text(encoding='utf-8')
-        original = content
-        
-        # Calculate correct path
-        correct_path = calculate_correct_path(file_path, base_path)
-        
-        # Fix the link pattern [src](../../src/README.md)
-        # Match various patterns
-        patterns = [
-            (r'\[src\]\(\.\./\.\./src/README\.md\)', f'[src]({correct_path})'),
-            (r'\[src\]\(\.\./\.\./\.\./src/README\.md\)', f'[src]({correct_path})'),
-            (r'\[src\]\(\.\./\.\./\.\./\.\./src/README\.md\)', f'[src]({correct_path})'),
-            (r'\[src\]\(\.\./\.\./\.\./\.\./\.\./src/README\.md\)', f'[src]({correct_path})'),
-            (r'\[src\]\(\.\./\.\./\.\./\.\./\.\./\.\./src/README\.md\)', f'[src]({correct_path})'),
-            (r'\[src\]\(\.\./\.\./\.\./\.\./\.\./\.\./\.\./src/README\.md\)', f'[src]({correct_path})'),
-            (r'\[src\]\(\.\./\.\./\.\./\.\./\.\./\.\./\.\./\.\./src/README\.md\)', f'[src]({correct_path})'),
-        ]
-        
-        for pattern, replacement in patterns:
-            content = re.sub(pattern, replacement, content)
-        
-        if content != original:
-            file_path.write_text(content, encoding='utf-8')
-            return True
-        return False
-    except Exception as e:
-        print(f"Error processing {file_path}: {e}")
-        return False
-
-def main():
-    """Fix src links in documentation directory."""
-    base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
-    doc_dir = base_path / "src/codomyrmex/documentation"
-    fixed_count = 0
-    
-    for readme in doc_dir.rglob("README.md"):
-        if fix_src_links(readme, base_path):
-            fixed_count += 1
-            print(f"Fixed: {readme.relative_to(base_path)}")
-    
-    print(f"\nCompleted: Fixed {fixed_count} files")
-
-if __name__ == "__main__":
-    main()
-
+try:
+    from codomyrmex.documentation.scripts import fix_deep_nested_src_links
+    if hasattr(fix_deep_nested_src_links, 'main'):
+        sys.exit(fix_deep_nested_src_links.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_deep_nested_src_links does not have a main function or failed to execute.")
+    sys.exit(1)

@@ -1,7 +1,7 @@
 # database_management
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [database_management](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Config - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>Configuration Management</h1>
+
+<div style="display: flex; gap: 2rem; height: 70vh;">
+    <div style="width: 300px; border-right: 1px solid var(--border-color); overflow-y: auto;">
+        <h3 style="margin-bottom: 1rem;">Files</h3>
+        <ul class="file-list" id="config-file-list">
+            {% for config in config_files %}
+            <li>
+                <a href="#" class="config-file-link" data-filename="{{ config.name }}">
+                    {{ config.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column;">
+        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="current-config-file">Select a file</h3>
+            <button id="save-config-btn" class="btn btn-primary" disabled>Save Changes</button>
+        </div>
+        <textarea id="config-editor"
+            style="flex: 1; font-family: 'Fira Code', monospace; padding: 1rem; line-height: 1.5; resize: none; border-color: var(--border-color); background-color: var(--bg-tertiary); color: var(--text-primary);"
+            spellcheck="false"></textarea>
+    </div>
+</div>
+
+<style>
+    .file-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .file-list li {
+        margin-bottom: 0.5rem;
+    }
+
+    .file-list a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        display: block;
+        padding: 0.5rem;
+        border-radius: 6px;
+        transition: var(--transition);
+    }
+
+    .file-list a:hover,
+    .file-list a.active {
+        background-color: var(--bg-tertiary);
+        color: var(--text-primary);
+    }
+</style>
+{% endblock %}

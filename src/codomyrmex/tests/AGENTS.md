@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/tests
 
 ## Signposting
-- **Parent**: [Tests](../AGENTS.md)
+- **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [examples](scripts/examples/AGENTS.md)

@@ -1,7 +1,7 @@
 # validation
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [validation](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

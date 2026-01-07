@@ -1,0 +1,236 @@
+# Security Policies Configuration Template
+# Defines security policies including input validation, output sanitization, audit logging, and compliance
+
+# Input Validation Policies
+input_validation:
+  enabled: true
+  strict_mode: true
+  
+  # Validation rules
+  rules:
+    - name: "sql_injection_prevention"
+      description: "Prevent SQL injection attacks"
+      enabled: true
+      patterns:
+        - "(?i)(union|select|insert|update|delete|drop|create|alter|exec|execute)"
+      action: "reject"
+    
+    - name: "xss_prevention"
+      description: "Prevent cross-site scripting attacks"
+      enabled: true
+      patterns:
+        - "(?i)(<script|javascript:|onerror=|onload=)"
+      action: "sanitize"
+    
+    - name: "path_traversal_prevention"
+      description: "Prevent path traversal attacks"
+      enabled: true
+      patterns:
+        - "(\.\./|\.\.\\\\)"
+      action: "reject"
+    
+    - name: "command_injection_prevention"
+      description: "Prevent command injection attacks"
+      enabled: true
+      patterns:
+        - "(;|\\||&|`|\\$\\()"
+      action: "reject"
+
+  # Field validation
+  field_validation:
+    email:
+      pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      max_length: 254
+    
+    url:
+      pattern: "^https?://[a-zA-Z0-9.-]+(/[a-zA-Z0-9._~:/?#\\[\\]@!$&'()*+,;=-]*)?$"
+      max_length: 2048
+    
+    api_key:
+      pattern: "^[a-zA-Z0-9_-]{20,}$"
+      min_length: 20
+      max_length: 256
+
+# Output Sanitization Policies
+output_sanitization:
+  enabled: true
+  
+  # Sanitization rules
+  rules:
+    - name: "remove_sensitive_data"
+      description: "Remove sensitive data from output"
+      enabled: true
+      patterns:
+        - "(?i)(password|secret|api_key|token|credential)"
+      action: "mask"
+      replacement: "***REDACTED***"
+    
+    - name: "sanitize_html"
+      description: "Sanitize HTML in output"
+      enabled: true
+      allowed_tags:
+        - "p"
+        - "br"
+        - "strong"
+        - "em"
+      action: "strip_unsafe"
+    
+    - name: "remove_pii"
+      description: "Remove personally identifiable information"
+      enabled: true
+      patterns:
+        - "\\b\\d{3}-\\d{2}-\\d{4}\\b"  # SSN
+        - "\\b\\d{16}\\b"  # Credit card
+      action: "mask"
+
+# Audit Logging Policies
+audit_logging:
+  enabled: true
+  log_level: "INFO"
+  log_destination: "security_audit.log"
+  
+  # Events to audit
+  events:
+    - "authentication_success"
+    - "authentication_failure"
+    - "authorization_granted"
+    - "authorization_denied"
+    - "resource_access"
+    - "resource_modification"
+    - "secret_access"
+    - "secret_rotation"
+    - "configuration_change"
+    - "security_policy_violation"
+  
+  # Audit fields
+  fields:
+    - "timestamp"
+    - "user_id"
+    - "action"
+    - "resource"
+    - "result"
+    - "ip_address"
+    - "user_agent"
+    - "request_id"
+
+# Compliance Policies
+compliance:
+  # GDPR compliance
+  gdpr:
+    enabled: true
+    data_retention_days: 2555  # 7 years
+    right_to_erasure: true
+    data_portability: true
+    privacy_by_design: true
+  
+  # HIPAA compliance
+  hipaa:
+    enabled: false
+    encryption_required: true
+    audit_logging: true
+    access_controls: true
+  
+  # SOC 2 compliance
+  soc2:
+    enabled: true
+    security_controls: true
+    availability_controls: true
+    processing_integrity: true
+    confidentiality: true
+    privacy: true
+
+# Security Monitoring
+monitoring:
+  enabled: true
+  
+  # Monitoring checks
+  checks:
+    - name: "failed_login_threshold"
+      description: "Alert on multiple failed login attempts"
+      threshold: 5
+      time_window: 300  # 5 minutes
+      action: "alert"
+    
+    - name: "unusual_access_pattern"
+      description: "Alert on unusual access patterns"
+      threshold: "statistical_anomaly"
+      action: "alert"
+    
+    - name: "privilege_escalation"
+      description: "Alert on privilege escalation attempts"
+      threshold: 1
+      action: "alert_and_block"
+    
+    - name: "data_exfiltration"
+      description: "Alert on potential data exfiltration"
+      threshold: "large_data_transfer"
+      action: "alert"
+
+# Security Headers
+security_headers:
+  enabled: true
+  headers:
+    - name: "X-Content-Type-Options"
+      value: "nosniff"
+    - name: "X-Frame-Options"
+      value: "DENY"
+    - name: "X-XSS-Protection"
+      value: "1; mode=block"
+    - name: "Strict-Transport-Security"
+      value: "max-age=31536000; includeSubDomains"
+    - name: "Content-Security-Policy"
+      value: "default-src 'self'"
+    - name: "Referrer-Policy"
+      value: "strict-origin-when-cross-origin"
+
+# Rate Limiting
+rate_limiting:
+  enabled: true
+  
+  # Rate limits
+  limits:
+    authentication:
+      requests_per_minute: 5
+      requests_per_hour: 20
+      block_duration: 3600  # 1 hour
+    
+    api:
+      requests_per_minute: 60
+      requests_per_hour: 1000
+      block_duration: 300  # 5 minutes
+    
+    general:
+      requests_per_minute: 100
+      requests_per_hour: 5000
+      block_duration: 60  # 1 minute
+
+# Incident Response
+incident_response:
+  enabled: true
+  
+  # Response procedures
+  procedures:
+    - name: "security_breach"
+      severity: "critical"
+      steps:
+        - "Isolate affected systems"
+        - "Preserve evidence"
+        - "Notify security team"
+        - "Assess impact"
+        - "Remediate"
+        - "Document incident"
+  
+  # Notification channels
+  notifications:
+    channels:
+      - email
+      - slack
+      - pager_duty
+    escalation:
+      - delay: 0
+        channels: ["email"]
+      - delay: 300
+        channels: ["slack"]
+      - delay: 600
+        channels: ["pager_duty"]
+

@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for digital..
+Digital security including vulnerability scanning, encryption management, certificate validation, secrets detection, compliance checking, security analysis, monitoring, and reporting. Provides comprehensive digital security capabilities.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -1,48 +1,31 @@
 #!/usr/bin/env python3
-"""Fix src/README.md links in documentation subdirectories."""
+"""
+Thin wrapper for fix_documentation_src_links.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_documentation_src_links.
+"""
 
-import re
+import sys
 from pathlib import Path
 
-def fix_src_links(file_path: Path) -> bool:
-    """Fix links to src/README.md."""
-    if not file_path.exists():
-        return False
-    
-    try:
-        content = file_path.read_text(encoding='utf-8')
-        original = content
-        
-        # Fix ../../../src/README.md - calculate correct depth
-        # From src/codomyrmex/documentation/*, src/README.md is at ../../src/README.md
-        # But the pattern might vary, so let's be more specific
-        content = re.sub(
-            r'\[src\]\(\.\./\.\./\.\./src/README\.md\)',
-            r'[src](../../src/README.md)',
-            content
-        )
-        
-        if content != original:
-            file_path.write_text(content, encoding='utf-8')
-            return True
-        return False
-    except Exception as e:
-        print(f"Error processing {file_path}: {e}")
-        return False
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-def main():
-    """Fix src links in documentation directory."""
-    base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
-    doc_dir = base_path / "src/codomyrmex/documentation"
-    fixed_count = 0
-    
-    for readme in doc_dir.rglob("README.md"):
-        if fix_src_links(readme):
-            fixed_count += 1
-            print(f"Fixed: {readme.relative_to(base_path)}")
-    
-    print(f"\nCompleted: Fixed {fixed_count} files")
-
-if __name__ == "__main__":
-    main()
-
+try:
+    from codomyrmex.documentation.scripts import fix_documentation_src_links
+    if hasattr(fix_documentation_src_links, 'main'):
+        sys.exit(fix_documentation_src_links.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_documentation_src_links does not have a main function or failed to execute.")
+    sys.exit(1)

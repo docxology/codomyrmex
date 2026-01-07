@@ -1,7 +1,7 @@
 # data_visualization
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [data_visualization](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

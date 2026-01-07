@@ -1,7 +1,7 @@
 # pattern_matching
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [pattern_matching](../README.md)
 - **Children**:
     - [docs](docs/README.md)
 - **Key Artifacts**:

@@ -1,7 +1,7 @@
 # git_operations
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [git_operations](../README.md)
 - **Children**:
     - [docs](docs/README.md)
 - **Key Artifacts**:

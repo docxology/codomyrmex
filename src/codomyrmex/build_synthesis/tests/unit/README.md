@@ -1,7 +1,7 @@
 # unit
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [unit](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

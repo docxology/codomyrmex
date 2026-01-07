@@ -1,26 +1,31 @@
-import os
+#!/usr/bin/env python3
+"""
+Thin wrapper for doc_auditor.py.
+Logic migrated to codomyrmex.documentation.scripts.doc_auditor.
+"""
+
+import sys
 from pathlib import Path
 
-def audit_docs(root_dir):
-    root = Path(root_dir)
-    missing_docs = []
-    
-    for path in root.rglob("*"):
-        if path.is_dir() and not path.name.startswith(('.', '__')):
-            # Check if it's a python module (has __init__.py) or a significant directory
-            if (path / "__init__.py").exists() or (path.parent.name == "codomyrmex" and path.name != "tests"):
-                required = ["README.md", "AGENTS.md", "SPEC.md"]
-                for req in required:
-                    if not (path / req).exists():
-                        missing_docs.append(str(path / req))
-    
-    return missing_docs
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-if __name__ == "__main__":
-    missing = audit_docs("src/codomyrmex")
-    if missing:
-        print("Missing Documentation Files:")
-        for m in missing:
-            print(m)
+try:
+    from codomyrmex.documentation.scripts import doc_auditor
+    if hasattr(doc_auditor, 'main'):
+        sys.exit(doc_auditor.main())
     else:
-        print("No missing documentation files found!")
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module doc_auditor does not have a main function or failed to execute.")
+    sys.exit(1)

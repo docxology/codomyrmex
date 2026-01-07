@@ -1,7 +1,7 @@
 # world_models
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [world_models](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for world_models..
+World model and simulation including environment representation, physics simulation, and agent-environment interaction. Provides comprehensive world modeling capabilities for spatial computing.
 
 ## Directory Contents
 - `__init__.py` – File

@@ -1,7 +1,7 @@
 # tests
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [tests](../README.md)
 - **Children**:
     - [integration](integration/README.md)
     - [unit](unit/README.md)

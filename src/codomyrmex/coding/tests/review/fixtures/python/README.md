@@ -1,7 +1,7 @@
 # python
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [python](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

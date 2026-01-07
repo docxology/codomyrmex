@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/documentation
 
 ## Signposting
-- **Parent**: [Documentation](../AGENTS.md)
+- **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [docs](docs/AGENTS.md)
@@ -16,7 +16,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Documentation files and guides for documentation.
+Documentation generation tools including API documentation, markdown rendering, documentation website generation, consistency checking, quality assessment, and coverage analysis. Provides comprehensive documentation automation and management.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file

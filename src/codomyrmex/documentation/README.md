@@ -1,7 +1,7 @@
 # documentation
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [scripts](scripts/README.md)

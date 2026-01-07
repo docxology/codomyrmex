@@ -73,6 +73,7 @@ graph TD
         DB[database_management]
         Config[config_management]
         Orchestration[project_orchestration]
+        Website[website]
     end
 
     Logging --> AI

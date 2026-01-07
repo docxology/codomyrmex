@@ -1,7 +1,7 @@
 # module_template
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [module_template](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

@@ -1,7 +1,7 @@
 # coding
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [debugging](debugging/README.md)
     - [docs](docs/README.md)
@@ -18,7 +18,7 @@
 
 ## Overview
 
-Module components and implementation for coding..
+Unified interface for code execution, sandboxing, review, and monitoring. Consolidates secure code execution and automated code review capabilities into a cohesive structure with support for multiple programming languages, Docker-based sandboxing, resource limits, quality gates, and comprehensive analysis types (quality, security, performance, maintainability).
 
 ## Directory Contents
 - `MIGRATION_COMPLETE.md` – File

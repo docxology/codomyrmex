@@ -1,7 +1,7 @@
 # database_management
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for database_management..
+Database operations including database connection management, query execution, schema management, migration handling, backup and restore, and performance monitoring. Provides unified interface for database operations across different database backends.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

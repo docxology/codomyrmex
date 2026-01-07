@@ -1,0 +1,38 @@
+# API Keys Configuration Example
+# Demonstrates API key configuration with validation and rotation
+
+api_keys:
+  openai_api_key:
+    description: "OpenAI API key for GPT models"
+    env_var: "OPENAI_API_KEY"
+    required: true
+    validation:
+      pattern: "^sk-[a-zA-Z0-9]{32,}$"
+      min_length: 20
+    rotation:
+      enabled: true
+      schedule: "90_days"
+      advance_notice_days: 7
+
+  github_token:
+    description: "GitHub personal access token"
+    env_var: "GITHUB_TOKEN"
+    required: true
+    validation:
+      pattern: "^ghp_[a-zA-Z0-9]{36}$"
+      min_length: 40
+    rotation:
+      enabled: true
+      schedule: "90_days"
+
+validation:
+  required_by_environment:
+    development:
+      - openai_api_key
+      - github_token
+
+rotation:
+  enabled: true
+  default_schedule: "90_days"
+  advance_notice_days: 7
+

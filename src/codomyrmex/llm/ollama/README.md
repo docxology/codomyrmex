@@ -1,7 +1,7 @@
 # ollama
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [ollama](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for ollama..
+Integration with Ollama local Large Language Models. Provides comprehensive model management, execution, and output handling optimized for the Codomyrmex ecosystem. Supports model listing, pulling, execution, configuration management, and output persistence.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

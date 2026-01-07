@@ -260,7 +260,7 @@ def run_interactive_shell():
 def list_workflows():
     """List available workflows and orchestration templates."""
     try:
-        from codomyrmex.project_orchestration import get_workflow_manager
+        from codomyrmex.logistics.orchestration.project import get_workflow_manager
 
         manager = get_workflow_manager()
         workflows = manager.list_workflows()
@@ -303,7 +303,7 @@ def list_workflows():
 def run_workflow(workflow_name: str, **kwargs):
     """Run a specific workflow."""
     try:
-        from codomyrmex.project_orchestration import get_orchestration_engine
+        from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
         engine = get_orchestration_engine()
 
@@ -1078,7 +1078,7 @@ def demo_git_operations() -> bool:
 def handle_workflow_create(name: str, template: Optional[str] = None) -> bool:
     """Handle workflow creation command."""
     try:
-        from codomyrmex.project_orchestration import WorkflowStep, get_workflow_manager
+        from codomyrmex.logistics.orchestration.project import WorkflowStep, get_workflow_manager
 
         manager = get_workflow_manager()
 
@@ -1156,7 +1156,7 @@ def handle_workflow_create(name: str, template: Optional[str] = None) -> bool:
 def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) -> bool:
     """Handle project creation command."""
     try:
-        from codomyrmex.project_orchestration import get_project_manager
+        from codomyrmex.logistics.orchestration.project import get_project_manager
 
         manager = get_project_manager()
 
@@ -1180,7 +1180,7 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
 def handle_project_list() -> bool:
     """Handle project listing command."""
     try:
-        from codomyrmex.project_orchestration import get_project_manager
+        from codomyrmex.logistics.orchestration.project import get_project_manager
 
         manager = get_project_manager()
         projects = manager.list_projects()
@@ -1230,7 +1230,7 @@ def handle_project_list() -> bool:
 def handle_orchestration_status() -> bool:
     """Handle orchestration status command."""
     try:
-        from codomyrmex.project_orchestration import get_orchestration_engine
+        from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
         engine = get_orchestration_engine()
         status = engine.get_system_status()
@@ -1280,7 +1280,7 @@ def handle_orchestration_status() -> bool:
 def handle_orchestration_health() -> bool:
     """Handle orchestration health check command."""
     try:
-        from codomyrmex.project_orchestration import get_orchestration_engine
+        from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
         engine = get_orchestration_engine()
         health = engine.health_check()

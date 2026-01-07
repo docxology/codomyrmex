@@ -1,7 +1,7 @@
 # review
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [review](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for review..
+Code review and analysis capabilities. Provides automated code review, quality analysis, security analysis, performance analysis, and maintainability assessment using PySCN and other analysis tools.
 
 ## Directory Contents
 - `README.md` – File

@@ -1,7 +1,7 @@
 # standardization
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [standardization](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for standardization..
+API standardization including REST API, GraphQL API, and API versioning. Provides tools for standardizing API interfaces, validation, and compliance checking across different API types.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

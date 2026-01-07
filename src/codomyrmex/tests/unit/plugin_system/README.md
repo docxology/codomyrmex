@@ -1,7 +1,7 @@
 # plugin_system
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [plugin_system](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

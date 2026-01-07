@@ -1,0 +1,120 @@
+# Database Connections Configuration Template
+# Defines database connection templates for different database types
+# Use environment variables for credentials: ${DB_PASSWORD}
+
+# Database Connection Definitions
+connections:
+  # SQLite Database (Development/Testing)
+  sqlite_dev:
+    type: "sqlite"
+    database: "${SQLITE_DB_PATH:dev.db}"
+    description: "SQLite database for development"
+    options:
+      timeout: 30
+      check_same_thread: false
+      foreign_keys: true
+
+  # PostgreSQL Database
+  postgresql_prod:
+    type: "postgresql"
+    host: "${POSTGRES_HOST:localhost}"
+    port: "${POSTGRES_PORT:5432}"
+    database: "${POSTGRES_DB:codomyrmex}"
+    username: "${POSTGRES_USER:postgres}"
+    password: "${POSTGRES_PASSWORD}"
+    ssl_mode: "${POSTGRES_SSL_MODE:require}"
+    description: "PostgreSQL production database"
+    options:
+      connect_timeout: 30
+      application_name: "codomyrmex"
+
+  # MySQL Database
+  mysql_prod:
+    type: "mysql"
+    host: "${MYSQL_HOST:localhost}"
+    port: "${MYSQL_PORT:3306}"
+    database: "${MYSQL_DB:codomyrmex}"
+    username: "${MYSQL_USER:root}"
+    password: "${MYSQL_PASSWORD}"
+    ssl_mode: "${MYSQL_SSL_MODE:require}"
+    description: "MySQL production database"
+    options:
+      connect_timeout: 30
+      charset: "utf8mb4"
+
+  # MongoDB Database
+  mongodb_prod:
+    type: "mongodb"
+    host: "${MONGODB_HOST:localhost}"
+    port: "${MONGODB_PORT:27017}"
+    database: "${MONGODB_DB:codomyrmex}"
+    username: "${MONGODB_USER:admin}"
+    password: "${MONGODB_PASSWORD}"
+    auth_source: "${MONGODB_AUTH_SOURCE:admin}"
+    ssl: true
+    description: "MongoDB production database"
+    options:
+      connect_timeout: 30
+      server_selection_timeout: 30
+
+  # Redis Database
+  redis_cache:
+    type: "redis"
+    host: "${REDIS_HOST:localhost}"
+    port: "${REDIS_PORT:6379}"
+    database: "${REDIS_DB:0}"
+    password: "${REDIS_PASSWORD:}"
+    ssl: false
+    description: "Redis cache database"
+    options:
+      socket_timeout: 30
+      socket_connect_timeout: 30
+      retry_on_timeout: true
+      health_check_interval: 30
+
+# Connection String Templates
+connection_strings:
+  sqlite: "sqlite:///{database}"
+  postgresql: "postgresql://{username}:{password}@{host}:{port}/{database}?sslmode={ssl_mode}"
+  mysql: "mysql://{username}:{password}@{host}:{port}/{database}?ssl_mode={ssl_mode}"
+  mongodb: "mongodb://{username}:{password}@{host}:{port}/{database}?authSource={auth_source}&ssl={ssl}"
+  redis: "redis://:{password}@{host}:{port}/{database}"
+
+# Default Connection Settings
+defaults:
+  connection_timeout: 30
+  max_retries: 3
+  retry_delay: 1
+  ssl_mode: "prefer"
+  application_name: "codomyrmex"
+
+# Environment-Specific Connections
+environments:
+  development:
+    primary: "sqlite_dev"
+    fallback: []
+  
+  staging:
+    primary: "postgresql_prod"
+    fallback: ["sqlite_dev"]
+  
+  production:
+    primary: "postgresql_prod"
+    fallback: []
+
+# Connection Health Checks
+health_checks:
+  enabled: true
+  interval: 60  # seconds
+  timeout: 5  # seconds
+  retries: 3
+  
+  checks:
+    - name: "connection_test"
+      query: "SELECT 1"
+      expected_result: 1
+    
+    - name: "ping_test"
+      type: "ping"
+      timeout: 5
+

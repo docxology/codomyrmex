@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/coding/monitoring
 
 ## Signposting
-- **Parent**: [Monitoring](../AGENTS.md)
+- **Parent**: [coding](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,14 +12,31 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for monitoring..
+Code execution monitoring including execution monitoring, metrics collection, and resource tracking. Provides comprehensive monitoring capabilities for code execution in sandboxed environments.
 
 ## Active Components
 - `README.md` – Project file
-- `__init__.py` – Project file
-- `execution_monitor.py` – Project file
-- `metrics_collector.py` – Project file
-- `resource_tracker.py` – Project file
+- `__init__.py` – Module exports and public API
+- `execution_monitor.py` – Execution monitoring
+- `metrics_collector.py` – Metrics collection
+- `resource_tracker.py` – Resource tracking
+
+## Key Classes and Functions
+
+### ExecutionMonitor (`execution_monitor.py`)
+- `ExecutionMonitor()` – Monitor code execution
+- `monitor_execution(execution_id: str) -> ExecutionMetrics` – Monitor execution
+- `get_execution_status(execution_id: str) -> ExecutionStatus` – Get execution status
+
+### MetricsCollector (`metrics_collector.py`)
+- `MetricsCollector()` – Collect execution metrics
+- `collect_metrics(execution_id: str) -> Metrics` – Collect metrics
+- `get_metrics_summary() -> MetricsSummary` – Get metrics summary
+
+### ResourceMonitor (`resource_tracker.py`)
+- `ResourceMonitor()` – Monitor resource usage
+- `track_resources(execution_id: str) -> ResourceUsage` – Track resource usage
+- `get_resource_stats() -> ResourceStats` – Get resource statistics
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

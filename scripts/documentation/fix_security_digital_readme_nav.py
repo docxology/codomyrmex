@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
-"""Fix security/digital/README.md navigation section."""
+"""
+Thin wrapper for fix_security_digital_readme_nav.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_security_digital_readme_nav.
+"""
 
+import sys
 from pathlib import Path
 
-def main():
-    """Fix the README.md file."""
-    file_path = Path("/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/README.md")
-    
-    content = file_path.read_text(encoding='utf-8')
-    
-    # Fix navigation section - replace the old one
-    old_pattern = "- **Project Root**: [README](../../../README.md)\n- **Parent Directory**: [codomyrmex](../README.md)\n- **Src Hub**: [src](../../../src/README.md)"
-    new_pattern = "- **Project Root**: [README](../../../../README.md)\n- **Parent Directory**: [security](../README.md)\n- **Codomyrmex**: [codomyrmex](../../README.md)\n- **Src Hub**: [src](../../../../src/README.md)"
-    
-    content = content.replace(old_pattern, new_pattern)
-    
-    file_path.write_text(content, encoding='utf-8')
-    print(f"Fixed: {file_path}")
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-if __name__ == "__main__":
-    main()
-
+try:
+    from codomyrmex.documentation.scripts import fix_security_digital_readme_nav
+    if hasattr(fix_security_digital_readme_nav, 'main'):
+        sys.exit(fix_security_digital_readme_nav.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_security_digital_readme_nav does not have a main function or failed to execute.")
+    sys.exit(1)

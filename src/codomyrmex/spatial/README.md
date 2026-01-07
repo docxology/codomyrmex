@@ -1,7 +1,7 @@
 # spatial
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [four_d](four_d/README.md)
     - [three_d](three_d/README.md)
@@ -14,7 +14,7 @@
 
 ## Overview
 
-Module components and implementation for spatial..
+3D/4D visualization, modeling, and world model capabilities for spatial computing. Provides scene creation and manipulation, mesh generation, camera and lighting control, image rendering, time-series spatial data, animation sequences, temporal interpolation, environment representation, physics simulation, and agent-environment interaction. Supports AR/VR/XR capabilities with pluggable rendering backends.
 
 ## Directory Contents
 - `README.md` – File

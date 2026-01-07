@@ -1,7 +1,7 @@
 # search
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [search](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

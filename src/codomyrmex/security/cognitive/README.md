@@ -1,7 +1,7 @@
 # cognitive
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [cognitive](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for cognitive..
+Cognitive security including phishing analysis, social engineering detection, behavior analysis, cognitive threat assessment, and awareness training. Focuses on human-factor security threats and cognitive vulnerabilities.
 
 ## Directory Contents
 - `README.md` – File

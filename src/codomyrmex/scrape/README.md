@@ -1,7 +1,7 @@
 # scrape
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [firecrawl](firecrawl/README.md)
@@ -14,7 +14,7 @@
 
 ## Overview
 
-Module components and implementation for scrape..
+Web data extraction engine providing a unified interface for scraping web content, crawling websites, mapping site structures, and extracting structured data. Abstracts different scraping providers (e.g., Firecrawl) behind a consistent Pythonic interface with support for multiple formats (markdown, HTML, JSON, screenshots, metadata), batch operations, JavaScript-rendered content, and LLM-powered structured data extraction.
 
 ## Directory Contents
 - `CHANGELOG.md` – File

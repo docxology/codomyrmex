@@ -1,56 +1,31 @@
 #!/usr/bin/env python3
-"""Fix relative paths in all examples/{module}/README.md files."""
+"""
+Thin wrapper for fix_examples_module_readmes.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_examples_module_readmes.
+"""
 
-import os
-import re
+import sys
 from pathlib import Path
 
-def fix_examples_module_readme(file_path: Path) -> bool:
-    """Fix relative paths in an examples module README."""
-    if not file_path.exists():
-        return False
-    
-    try:
-        content = file_path.read_text(encoding='utf-8')
-        original = content
-        
-        # Fix common broken patterns
-        # ../src/ should be ../../src/ (examples/{module} is 2 levels from root)
-        content = re.sub(r'\(\.\./src/', r'(../../src/', content)
-        
-        # ../../../src/ should be ../../src/
-        content = re.sub(r'\(\.\./\.\./\.\./src/', r'(../../src/', content)
-        
-        # ../examples/ should be ../ (same level)
-        content = re.sub(r'\(\.\./examples/', r'(../', content)
-        
-        # ../../multi_module/ should be ../multi_module/
-        content = re.sub(r'\(\.\./\.\./multi_module/', r'(../multi_module/', content)
-        
-        if content != original:
-            file_path.write_text(content, encoding='utf-8')
-            return True
-        return False
-    except Exception as e:
-        print(f"Error processing {file_path}: {e}")
-        return False
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-def main():
-    """Fix all examples module READMEs."""
-    base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
-    examples_dir = base_path / "examples"
-    fixed_count = 0
-    
-    for module_dir in examples_dir.iterdir():
-        if module_dir.is_dir() and not module_dir.name.startswith('_'):
-            readme = module_dir / "README.md"
-            if readme.exists():
-                if fix_examples_module_readme(readme):
-                    fixed_count += 1
-                    print(f"Fixed: {readme.relative_to(base_path)}")
-    
-    print(f"\nCompleted: Fixed {fixed_count} examples module README files")
-
-if __name__ == "__main__":
-    main()
-
+try:
+    from codomyrmex.documentation.scripts import fix_examples_module_readmes
+    if hasattr(fix_examples_module_readmes, 'main'):
+        sys.exit(fix_examples_module_readmes.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_examples_module_readmes does not have a main function or failed to execute.")
+    sys.exit(1)

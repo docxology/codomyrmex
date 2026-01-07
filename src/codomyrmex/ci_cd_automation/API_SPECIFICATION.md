@@ -241,7 +241,7 @@ pipeline = create_pipeline("app_pipeline", [
 
 ### With Project Orchestration
 ```python
-from codomyrmex.project_orchestration import execute_workflow
+from codomyrmex.logistics.orchestration.project import execute_workflow
 from codomyrmex.ci_cd_automation import run_pipeline
 
 # Execute full CI/CD workflow

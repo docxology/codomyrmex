@@ -1,7 +1,7 @@
 # sandbox
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [sandbox](../README.md)
 - **Children**:
     - [integration](integration/README.md)
     - [unit](unit/README.md)

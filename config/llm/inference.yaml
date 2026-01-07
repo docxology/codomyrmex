@@ -1,0 +1,126 @@
+# Inference Parameters Configuration Template
+# Defines inference parameters for text generation
+
+# Default Inference Parameters
+defaults:
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 40
+  max_tokens: 1000
+  timeout: 30
+  stream: false
+
+# Parameter Presets
+presets:
+  # Creative generation
+  creative:
+    temperature: 0.9
+    top_p: 0.95
+    top_k: 50
+    max_tokens: 2000
+    description: "High creativity, diverse outputs"
+
+  # Balanced generation
+  balanced:
+    temperature: 0.7
+    top_p: 0.9
+    top_k: 40
+    max_tokens: 1000
+    description: "Balanced creativity and consistency"
+
+  # Precise generation
+  precise:
+    temperature: 0.2
+    top_p: 0.9
+    top_k: 20
+    max_tokens: 500
+    description: "Low temperature, focused outputs"
+
+  # Code generation
+  code:
+    temperature: 0.2
+    top_p: 0.95
+    top_k: 40
+    max_tokens: 2048
+    description: "Optimized for code generation"
+
+# Parameter Constraints
+constraints:
+  temperature:
+    min: 0.0
+    max: 2.0
+    default: 0.7
+    description: "Controls randomness in generation"
+
+  top_p:
+    min: 0.0
+    max: 1.0
+    default: 0.9
+    description: "Nucleus sampling parameter"
+
+  top_k:
+    min: 1
+    max: 100
+    default: 40
+    description: "Top-k sampling parameter"
+
+  max_tokens:
+    min: 1
+    max: 8192
+    default: 1000
+    description: "Maximum tokens to generate"
+
+  timeout:
+    min: 1
+    max: 600
+    default: 30
+    description: "Request timeout in seconds"
+
+# Task-Specific Parameters
+task_parameters:
+  text_generation:
+    temperature: 0.7
+    top_p: 0.9
+    top_k: 40
+    max_tokens: 1000
+
+  code_generation:
+    temperature: 0.2
+    top_p: 0.95
+    top_k: 40
+    max_tokens: 2048
+
+  conversation:
+    temperature: 0.7
+    top_p: 0.9
+    top_k: 40
+    max_tokens: 500
+
+  analysis:
+    temperature: 0.3
+    top_p: 0.9
+    top_k: 30
+    max_tokens: 2000
+
+# Provider-Specific Parameters
+provider_parameters:
+  ollama:
+    repeat_penalty: 1.1
+    repeat_last_n: 64
+    seed: null
+    stop: []
+
+  openai:
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+    stop: null
+    logit_bias: {}
+
+  anthropic:
+    stop_sequences: []
+    metadata: {}
+
+  google:
+    candidate_count: 1
+    stop_sequences: []
+

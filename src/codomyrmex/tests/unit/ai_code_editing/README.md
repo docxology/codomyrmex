@@ -1,7 +1,7 @@
 # ai_code_editing
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [ai_code_editing](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

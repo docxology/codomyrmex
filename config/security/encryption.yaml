@@ -1,0 +1,145 @@
+# Encryption Configuration Template
+# Defines encryption algorithms, key management, and key rotation
+
+# Encryption Algorithms
+algorithms:
+  # Data encryption at rest
+  data_encryption:
+    algorithm: "AES-256-GCM"
+    key_size: 256
+    iv_size: 96
+    tag_size: 128
+    description: "AES-256-GCM for data encryption at rest"
+
+  # Secret encryption
+  secret_encryption:
+    algorithm: "AES-256"
+    key_size: 256
+    mode: "CBC"
+    padding: "PKCS7"
+    description: "AES-256-CBC for secret encryption"
+
+  # Transit encryption
+  transit_encryption:
+    tls_version: "1.3"
+    cipher_suites:
+      - "TLS_AES_256_GCM_SHA384"
+      - "TLS_CHACHA20_POLY1305_SHA256"
+      - "TLS_AES_128_GCM_SHA256"
+    certificate_validation: true
+    description: "TLS 1.3 for transit encryption"
+
+# Key Management
+key_management:
+  # Primary key source
+  primary:
+    type: "aws_kms"
+    region: "${AWS_REGION}"
+    key_id: "${AWS_KMS_KEY_ID}"
+    enabled: "${USE_AWS_KMS:true}"
+
+  # Backup key sources
+  backup:
+    - type: "local"
+      path: "${ENCRYPTION_KEY_PATH}"
+      enabled: "${USE_LOCAL_KEYS:false}"
+      description: "Local key file (development only)"
+    
+    - type: "azure_key_vault"
+      vault_url: "${AZURE_VAULT_URL}"
+      key_name: "${AZURE_KEY_NAME}"
+      enabled: "${USE_AZURE_VAULT:false}"
+    
+    - type: "gcp_kms"
+      project_id: "${GCP_PROJECT_ID}"
+      location: "${GCP_KMS_LOCATION}"
+      key_ring: "${GCP_KEY_RING}"
+      key_name: "${GCP_KEY_NAME}"
+      enabled: "${USE_GCP_KMS:false}"
+
+# Key Rotation
+rotation:
+  enabled: true
+  
+  # Rotation schedules
+  schedules:
+    data_encryption_keys: "30_days"
+    secret_encryption_keys: "90_days"
+    tls_certificates: "365_days"
+    api_keys: "90_days"
+
+  # Rotation settings
+  settings:
+    advance_notice_days: 7
+    automatic_rotation: true
+    backup_old_keys: true
+    key_retention_days: 90
+
+  # Notifications
+  notifications:
+    enabled: true
+    channels:
+      - email
+      - slack
+    advance_notice_days: 7
+
+# Encryption Settings
+settings:
+  # Data encryption
+  data:
+    encrypt_at_rest: true
+    encrypt_in_transit: true
+    algorithm: "AES-256-GCM"
+    key_rotation: true
+
+  # Secret encryption
+  secrets:
+    encrypt_at_rest: true
+    algorithm: "AES-256"
+    key_source: "aws_kms"
+    key_rotation: true
+
+  # Transit encryption
+  transit:
+    tls_required: true
+    tls_version: "1.3"
+    certificate_validation: true
+    hsts_enabled: true
+    hsts_max_age: 31536000  # 1 year
+
+# Key Storage
+storage:
+  # Key storage location
+  location: "${ENCRYPTION_KEY_STORAGE}"
+  
+  # Key backup
+  backup:
+    enabled: true
+    schedule: "daily"
+    retention: "90_days"
+    encryption: true
+    location: "${ENCRYPTION_KEY_BACKUP}"
+
+# Compliance
+compliance:
+  # Encryption standards
+  standards:
+    - "FIPS 140-2"
+    - "Common Criteria"
+  
+  # Compliance requirements
+  requirements:
+    gdpr:
+      encryption_required: true
+      key_management: "certified"
+    
+    hipaa:
+      encryption_required: true
+      key_management: "certified"
+      audit_logging: true
+    
+    pci_dss:
+      encryption_required: true
+      key_management: "certified"
+      key_rotation: "annually"
+

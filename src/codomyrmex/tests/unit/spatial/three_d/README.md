@@ -1,7 +1,7 @@
 # three_d
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [three_d](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

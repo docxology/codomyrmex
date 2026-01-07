@@ -1,7 +1,7 @@
 # terminal_interface
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for terminal_interface..
+Rich CLI capabilities including colored output, progress bars, interactive prompts, and a custom shell (`codomyrmex>`). Provides cross-platform terminal interface (macOS, Linux, Windows) with table generation, command execution, and beautiful presentation using the `rich` library for consistent terminal rendering.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

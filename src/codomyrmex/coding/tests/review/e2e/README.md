@@ -1,7 +1,7 @@
 # e2e
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [e2e](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

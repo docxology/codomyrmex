@@ -1,7 +1,7 @@
 # metrics
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [metrics](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

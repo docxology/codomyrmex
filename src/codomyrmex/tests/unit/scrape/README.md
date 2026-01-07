@@ -1,7 +1,7 @@
 # scrape
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [scrape](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

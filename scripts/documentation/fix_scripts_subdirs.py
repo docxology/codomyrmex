@@ -1,57 +1,31 @@
 #!/usr/bin/env python3
-"""Fix relative paths in scripts/*/README.md files."""
+"""
+Thin wrapper for fix_scripts_subdirs.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_scripts_subdirs.
+"""
 
-import os
-import re
+import sys
 from pathlib import Path
 
-def fix_scripts_subdir_readme(file_path: Path) -> bool:
-    """Fix relative paths in a scripts subdirectory README."""
-    if not file_path.exists():
-        return False
-    
-    try:
-        content = file_path.read_text(encoding='utf-8')
-        original = content
-        
-        # Fix common broken patterns
-        # ../../../scripts/README.md should be ../README.md (scripts/{subdir} is 1 level below scripts)
-        content = re.sub(r'\(\.\./\.\./\.\./scripts/README\.md\)', r'(../README.md)', content)
-        content = re.sub(r'\[scripts\]\(\.\./\.\./\.\./scripts/README\.md\)', r'[scripts](../README.md)', content)
-        
-        # ../../../cursorrules/ should be ../cursorrules/
-        content = re.sub(r'\(\.\./\.\./\.\./cursorrules/', r'(../cursorrules/', content)
-        
-        # ../../../docs/ should be ../docs/
-        content = re.sub(r'\(\.\./\.\./\.\./docs/', r'(../docs/', content)
-        
-        # ../../../testing/ should be ../testing/
-        content = re.sub(r'\(\.\./\.\./\.\./testing/', r'(../testing/', content)
-        
-        if content != original:
-            file_path.write_text(content, encoding='utf-8')
-            return True
-        return False
-    except Exception as e:
-        print(f"Error processing {file_path}: {e}")
-        return False
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-def main():
-    """Fix all scripts subdirectory READMEs."""
-    base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
-    scripts_dir = base_path / "scripts"
-    fixed_count = 0
-    
-    for subdir in scripts_dir.iterdir():
-        if subdir.is_dir() and not subdir.name.startswith('_'):
-            readme = subdir / "README.md"
-            if readme.exists():
-                if fix_scripts_subdir_readme(readme):
-                    fixed_count += 1
-                    print(f"Fixed: {readme.relative_to(base_path)}")
-    
-    print(f"\nCompleted: Fixed {fixed_count} scripts subdirectory README files")
-
-if __name__ == "__main__":
-    main()
-
+try:
+    from codomyrmex.documentation.scripts import fix_scripts_subdirs
+    if hasattr(fix_scripts_subdirs, 'main'):
+        sys.exit(fix_scripts_subdirs.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_scripts_subdirs does not have a main function or failed to execute.")
+    sys.exit(1)

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Scripts - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>Script Orchestration</h1>
+
+<div class="grid">
+    {% for script in scripts %}
+    <div class="card">
+        <div class="card-title">
+            {{ script.name }}
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+            {{ script.description }}
+        </p>
+
+        <form class="script-form" data-script-name="{{ script.path }}" data-script-id="{{ loop.index }}">
+            <div style="margin-bottom: 1rem;">
+                <input type="text" name="args" placeholder="Arguments (optional)" style="width: 100%;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Run Script</button>
+        </form>
+
+        <div id="output-{{ loop.index }}" class="console hidden"></div>
+    </div>
+    {% endfor %}
+
+    {% if not scripts %}
+    <div class="card" style="grid-column: 1 / -1;">
+        <p>No scripts found in <code>scripts/</code> directory.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,7 +1,7 @@
 # tools
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for tools..
+Utility tools and helpers for project analysis, dependency management, and validation. Provides dependency analysis, consolidation, validation, project analysis, and deprecation notice management.
 
 ## Directory Contents
 - `README.md` – File

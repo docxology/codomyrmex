@@ -1,7 +1,7 @@
 # fpf
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [tests](tests/README.md)
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for fpf..
+Functional interface for working with the First Principles Framework specification. Transforms the static FPF markdown specification into a machine-readable, queryable, and exportable format for use in prompt/context engineering and other applications. Provides fetching, parsing, extraction, indexing, search, export, and visualization capabilities.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

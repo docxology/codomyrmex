@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 # Import Codomyrmex orchestration components
-from codomyrmex.project_orchestration import (
+from codomyrmex.logistics.orchestration.project import (
     get_orchestration_engine,
     get_workflow_manager,
     get_task_orchestrator,

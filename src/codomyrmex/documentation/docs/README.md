@@ -1,7 +1,7 @@
 # docs
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [documentation](../README.md)
 - **Children**:
     - [development](development/README.md)
     - [modules](modules/README.md)

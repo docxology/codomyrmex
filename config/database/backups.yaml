@@ -1,0 +1,157 @@
+# Backup Configuration Template
+# Defines backup settings and retention policies
+
+# Backup Settings
+backups:
+  # Backup directory
+  directory: "${BACKUP_DIR:backups}"
+  
+  # Backup naming pattern
+  naming_pattern: "{database}_{timestamp}.backup"
+  timestamp_format: "%Y%m%d_%H%M%S"
+  
+  # Backup format
+  format: "sql"  # sql, dump, custom
+  
+  # Compression
+  compression:
+    enabled: true
+    algorithm: "gzip"  # gzip, bzip2, xz
+    level: 6  # 1-9 for gzip
+  
+  # Encryption
+  encryption:
+    enabled: false
+    algorithm: "aes256"
+    key_source: "${BACKUP_ENCRYPTION_KEY}"
+
+# Backup Schedules
+schedules:
+  # Daily backups
+  daily:
+    enabled: true
+    time: "02:00"
+    retention:
+      keep_days: 7
+  
+  # Weekly backups
+  weekly:
+    enabled: true
+    day: "sunday"
+    time: "02:00"
+    retention:
+      keep_weeks: 4
+  
+  # Monthly backups
+  monthly:
+    enabled: true
+    day: 1
+    time: "02:00"
+    retention:
+      keep_months: 12
+
+# Retention Policies
+retention:
+  # Default retention
+  default:
+    keep_daily: 7
+    keep_weekly: 4
+    keep_monthly: 12
+  
+  # Environment-specific retention
+  environments:
+    development:
+      keep_daily: 3
+      keep_weekly: 2
+      keep_monthly: 3
+    
+    staging:
+      keep_daily: 7
+      keep_weekly: 4
+      keep_monthly: 6
+    
+    production:
+      keep_daily: 30
+      keep_weekly: 12
+      keep_monthly: 24
+
+# Backup Storage
+storage:
+  # Local storage
+  local:
+    enabled: true
+    directory: "${BACKUP_DIR:backups}"
+    max_size: "100GB"
+  
+  # Remote storage
+  remote:
+    enabled: false
+    providers:
+      - type: "s3"
+        bucket: "${S3_BACKUP_BUCKET}"
+        region: "${AWS_REGION}"
+        enabled: "${USE_S3_BACKUP:false}"
+      
+      - type: "azure_blob"
+        container: "${AZURE_BACKUP_CONTAINER}"
+        account: "${AZURE_STORAGE_ACCOUNT}"
+        enabled: "${USE_AZURE_BACKUP:false}"
+      
+      - type: "gcp_storage"
+        bucket: "${GCP_BACKUP_BUCKET}"
+        project: "${GCP_PROJECT_ID}"
+        enabled: "${USE_GCP_BACKUP:false}"
+
+# Backup Verification
+verification:
+  enabled: true
+  
+  # Verify backup integrity
+  integrity_check: true
+  
+  # Verify backup restore
+  restore_test: false
+  restore_test_interval: "weekly"
+  
+  # Backup validation
+  validation:
+    enabled: true
+    check_file_size: true
+    check_file_checksum: true
+
+# Backup Monitoring
+monitoring:
+  enabled: true
+  
+  # Monitor backup success
+  success_monitoring: true
+  
+  # Monitor backup failures
+  failure_monitoring: true
+  
+  # Alert on backup failures
+  alerts:
+    enabled: true
+    channels:
+      - email
+      - slack
+    threshold: 1  # Alert after 1 failure
+
+# Backup Recovery
+recovery:
+  # Recovery procedures
+  procedures:
+    - name: "full_restore"
+      description: "Full database restore from backup"
+      steps:
+        - "Stop database connections"
+        - "Restore backup file"
+        - "Verify database integrity"
+        - "Restart database connections"
+  
+  # Recovery testing
+  testing:
+    enabled: false
+    schedule: "monthly"
+    test_database: "${TEST_DATABASE_URL}"
+

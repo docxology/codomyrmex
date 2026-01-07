@@ -1,73 +1,31 @@
-
-import os
-from pathlib import Path
-
-WRAPPER_TEMPLATE = """# scripts/{module_name} - Functional Specification
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
-
-## Purpose
-
-This module contains the **automation scripts** and **CLI entry points** for the `{module_name}` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/{module_name}`) to the terminal and CI/CD pipelines.
-
-## Design Principles
-
-### Modularity
-- **Thin Wrapper**: Scripts should contain minimal business logic, delegating immediately to `src` modules.
-- **CLI Standard**: Uses `argparse` or `click` (via `kit`) for consistent flag handling.
-
-### Internal Coherence
-- **Reflection**: The directory structure mirrors `src/codomyrmex` to make finding the "executable version" of a library intuitive.
-
-## Functional Requirements
-
-### Core Capabilities
-1.  **Orchestration**: CLI signals triggering library logic.
-2.  **Output formatting**: JSON/Text output modes for machine/human consumption.
-
-## Interface Contracts
-
-### Public API
-- Check `AGENTS.md` or run with `--help` for specific command usage.
-
-### Dependencies
-- **Core Library**: `codomyrmex.{module_name}`.
-
-## Navigation
-
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Library Spec**: [../../src/codomyrmex/{module_name}/SPEC.md](../../src/codomyrmex/{module_name}/SPEC.md)
+#!/usr/bin/env python3
+"""
+Thin wrapper for fix_script_specs.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_script_specs.
 """
 
-def fix_script_specs(root_dir):
-    root = Path(root_dir)
-    count = 0
-    
-    for path in root.iterdir():
-        if path.is_dir() and not path.name.startswith(('.', '__')):
-            spec_path = path / "SPEC.md"
-            module_name = path.name
-            
-            # Check if it needs fixing (small size or placeholder text)
-            should_fix = False
-            if not spec_path.exists():
-                print(f"Missing SPEC.md in {module_name}")
-                should_fix = True
-            else:
-                content = spec_path.read_text(encoding='utf-8')
-                if "Functional requirements for" in content and len(content) < 2000:
-                    should_fix = True
-                elif len(content) < 500: # Very small files
-                    should_fix = True
-            
-            if should_fix:
-                print(f"Fixing {module_name} SPEC.md...")
-                new_content = WRAPPER_TEMPLATE.format(module_name=module_name)
-                spec_path.write_text(new_content, encoding='utf-8')
-                count += 1
-    
-    print(f"Fixed {count} files.")
+import sys
+from pathlib import Path
 
-if __name__ == "__main__":
-    fix_script_specs("scripts")
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
+
+try:
+    from codomyrmex.documentation.scripts import fix_script_specs
+    if hasattr(fix_script_specs, 'main'):
+        sys.exit(fix_script_specs.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_script_specs does not have a main function or failed to execute.")
+    sys.exit(1)

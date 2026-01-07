@@ -1,7 +1,7 @@
 # encryption
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for encryption..
+Encryption/decryption utilities and key management. Provides algorithm-agnostic encryption interface with support for AES and RSA algorithms, key derivation from passwords, digital signatures, and secure key storage with restrictive file permissions.
 
 ## Directory Contents
 - `README.md` – File
@@ -32,11 +32,27 @@ Module components and implementation for encryption..
 To use this module in your project, import the necessary components:
 
 ```python
-# Example usage
-from codomyrmex.codomyrmex.encryption import main_component
+from codomyrmex.encryption import Encryptor, KeyManager, encrypt, decrypt, generate_key
 
-def example():
-    
-    print(f"Result: {result}")
+# Basic encryption/decryption
+encryptor = Encryptor(algorithm="AES")
+key = encryptor.generate_key()
+data = b"Secret data"
+encrypted = encryptor.encrypt(data, key)
+decrypted = encryptor.decrypt(encrypted, key)
+
+# Key derivation from password
+salt = os.urandom(16)
+derived_key = encryptor.derive_key("my_password", salt)
+
+# Digital signatures
+private_key = encryptor.generate_key()  # For RSA
+signature = encryptor.sign(data, private_key)
+is_valid = encryptor.verify(data, signature, public_key)
+
+# Key management
+key_manager = KeyManager()
+key_manager.store_key("my_key_id", key)
+retrieved_key = key_manager.get_key("my_key_id")
 ```
 

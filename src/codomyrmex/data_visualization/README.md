@@ -1,7 +1,7 @@
 # data_visualization
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for data_visualization..
+Charts and plots generation for data visualization. Provides comprehensive visualization capabilities including various chart types (bar, line, scatter, pie, histogram), advanced plotting features, Mermaid diagram generation, and Git visualization. Supports multiple output formats and integration with data analysis workflows.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

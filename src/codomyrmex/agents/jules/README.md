@@ -1,7 +1,7 @@
 # jules
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [jules](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for jules..
+Integration with Jules CLI tool. Provides client wrapper for executing jules commands, handles command failures and timeouts gracefully, and provides integration adapters for Codomyrmex modules. Supports code generation, code editing, code analysis, text completion, and streaming capabilities.
 
 ## Directory Contents
 - `README.md` – File

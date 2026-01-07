@@ -1,7 +1,7 @@
 # claude
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [claude](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for claude..
+Integration with Claude API (Anthropic). Provides client for interacting with Claude API, streaming support, multi-turn conversations, and integration adapters for Codomyrmex modules. Supports code generation, code editing, code analysis, and text completion capabilities.
 
 ## Directory Contents
 - `README.md` – File

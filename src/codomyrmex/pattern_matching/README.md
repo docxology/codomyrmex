@@ -1,7 +1,7 @@
 # pattern_matching
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for pattern_matching..
+Code analysis through AST parsing, pattern recognition, and embedding generation for semantic search and similarity. Provides multi-step pipeline (Parse -> Recognize -> Embed -> Analyze) with configurable patterns for code smells and other patterns. Utilizes the `cased/kit` toolkit for code analysis and pattern recognition.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

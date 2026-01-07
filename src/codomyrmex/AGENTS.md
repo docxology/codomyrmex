@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex
 
 ## Signposting
-- **Parent**: [Source Root](../AGENTS.md)
+- **Parent**: [src](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [agents](agents/AGENTS.md)
@@ -34,20 +34,21 @@
     - [performance](performance/AGENTS.md)
     - [physical_management](physical_management/AGENTS.md)
     - [plugin_system](plugin_system/AGENTS.md)
-    - [project_orchestration](project_orchestration/AGENTS.md)
+    - [logistics](logistics/AGENTS.md)
     - [scrape](scrape/AGENTS.md)
     - [security](security/AGENTS.md)
     - [serialization](serialization/AGENTS.md)
     - [spatial](spatial/AGENTS.md)
     - [static_analysis](static_analysis/AGENTS.md)
     - [system_discovery](system_discovery/AGENTS.md)
-    - [task_queue](task_queue/AGENTS.md)
-    - [template](module_template/AGENTS.md)
+    - [template](template/AGENTS.md)
     - [templating](templating/AGENTS.md)
     - [terminal_interface](terminal_interface/AGENTS.md)
     - [tests](tests/AGENTS.md)
     - [tools](tools/AGENTS.md)
+    - [utils](utils/AGENTS.md)
     - [validation](validation/AGENTS.md)
+    - [website](website/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -55,7 +56,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for codomyrmex..
+Core Codomyrmex package containing all functional modules. Provides modular coding workspace enabling AI development workflows with comprehensive capabilities including agents, code execution, security, LLM integration, spatial computing, and more. This is the root package that coordinates all submodules.
 
 ## Active Components
 - `README.md` – Project file
@@ -107,7 +108,9 @@ Module components and implementation for codomyrmex..
 - `terminal_interface/` – Directory containing terminal_interface components
 - `tests/` – Directory containing tests components
 - `tools/` – Directory containing tools components
+- `utils/` – Directory containing utils components
 - `validation/` – Directory containing validation components
+- `website/` – Directory containing website components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

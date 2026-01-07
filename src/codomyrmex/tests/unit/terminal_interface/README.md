@@ -1,7 +1,7 @@
 # terminal_interface
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [terminal_interface](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

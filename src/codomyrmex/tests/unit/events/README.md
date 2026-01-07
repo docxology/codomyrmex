@@ -1,7 +1,7 @@
 # events
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [events](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

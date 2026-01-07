@@ -1,7 +1,7 @@
 # static_analysis
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for static_analysis..
+Automated code quality assessment without execution. Orchestrates parsers and analyzers to detect syntax errors, security vulnerabilities, complexity issues, and code quality problems. Provides language-agnostic architecture allowing plugging in analyzers for any language with graceful failure handling.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

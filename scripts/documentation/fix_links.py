@@ -1,39 +1,31 @@
-import os
-import re
+#!/usr/bin/env python3
+"""
+Thin wrapper for fix_links.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_links.
+"""
+
+import sys
 from pathlib import Path
 
-def fix_documentation(root_dir):
-    root_path = Path(root_dir).absolute()
-    
-    # regexes
-    example_tutorial_pattern = re.compile(r'- \[Example Tutorial\]\(\./tutorials/example_tutorial\.md\)\n?')
-    contributing_pattern = re.compile(r'\[Contributing Guidelines\]\(\.\./\.\./\.\./\.\./\.\./\.\./docs/project/contributing\.md\)')
-    
-    for root, dirs, files in os.walk(root_path):
-        for file in files:
-            if file.endswith(".md"):
-                filepath = Path(root) / file
-                with open(filepath, "r", encoding="utf-8") as f:
-                    content = f.read()
-                
-                # Fix example tutorial links
-                new_content = example_tutorial_pattern.sub('', content)
-                
-                # Fix contributing links (add one more level or fix relative path)
-                # For files in src/codomyrmex/documentation/docs/modules/*/docs/index.md
-                if "src/codomyrmex/documentation/docs/modules" in str(filepath):
-                    depth = len(filepath.relative_to(root_path).parts) - 1
-                    dots = "../" * depth
-                    new_contributing = f"[Contributing Guidelines]({dots}docs/project/contributing.md)"
-                    # This is a bit complex to do with regex if there are many different depths, 
-                    # but most are at the same depth.
-                    # Let's just do a generic replacement if it matches the broken one.
-                    new_content = new_content.replace("../../../../../../docs/project/contributing.md", "../../../../../../../docs/project/contributing.md")
-                
-                if new_content != content:
-                    with open(filepath, "w", encoding="utf-8") as f:
-                        f.write(new_content)
-                    print(f"Fixed {filepath.relative_to(root_path)}")
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-if __name__ == "__main__":
-    fix_documentation(os.getcwd())
+try:
+    from codomyrmex.documentation.scripts import fix_links
+    if hasattr(fix_links, 'main'):
+        sys.exit(fix_links.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_links does not have a main function or failed to execute.")
+    sys.exit(1)

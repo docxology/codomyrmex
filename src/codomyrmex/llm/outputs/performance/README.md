@@ -1,7 +1,7 @@
 # performance
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [performance](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for performance..
+Performance metrics and benchmarks for LLM interactions. Stores latency benchmarks, token generation speed, response quality evaluations, consistency evaluations, edge case handling, and model health checks.
 
 ## Directory Contents
 - `README.md` – File

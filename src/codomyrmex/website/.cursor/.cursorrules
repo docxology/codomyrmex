@@ -1,0 +1,47 @@
+# Cursor Rules for the template/module_template Module
+
+## 0. Preamble
+These rules are specific to the `template/module_template` directory itself (the actual template files and structure) and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+**Note**: For rules about working with templates *across the project* or using the template system, see `cross-module/template_module.cursorrules`. This file focuses on *developing and maintaining* the `module_template` template itself.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides the standard skeleton for creating new Codomyrmex modules. It enforces consistency in file structure and documentation.
+-   **Key Technologies/Tools**: Markdown, standard file formats (e.g., .gitignore, requirements.txt templates).
+-   Refer to this module's `README.md` for a comprehensive overview.
+
+## 2. Key Files & Structure
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage.
+-   `API_SPECIFICATION.md`: Details for any programmatic interfaces provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: Specifications for tools exposed via the Model Context Protocol.
+-   `CHANGELOG.md`: All notable changes must be logged here.
+-   `SECURITY.md`: Specific security considerations for this module.
+-   `requirements.txt` (or `package.json`, etc.): Module-specific dependencies.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials.
+-   `src/` or primary source code files (e.g., ``README.md`, `API_SPECIFICATION.md` (as templates themselves).``): Core logic of the module.
+-   `tests/`: Unit and integration tests.
+
+## 3. Coding Standards & Practices
+-   **Consistency**: Adhere strictly to the existing coding style, naming conventions, and architectural patterns found within the `template/module_template` module.
+-   **Language Specifics**: The templates themselves are language-agnostic or provide specific language examples (e.g., Python `__init__.py`). Focus on placeholders and clear instructions within the templates.
+-   **Dependencies**:
+    -   Any new dependencies must be justified and added to this module's specific requirements file (e.g., `requirements.txt`).
+    -   Prefer to use dependencies already available in the project if suitable.
+-   **Error Handling**: Implement robust error handling specific to the operations of this module. Log errors using the `logging_monitoring` module.
+
+## 4. Testing
+-   New features or bug fixes MUST be accompanied by corresponding tests in `tests/unit/` and/or `tests/integration/`.
+-   Run existing tests to ensure no regressions are introduced. Refer to `tests/README.md`.
+
+## 5. Documentation
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date with any changes.
+-   Ensure clear and concise code comments for complex or non-obvious logic.
+
+## 6. Specific Considerations for `template/module_template`
+-   When modifying files within `template/module_template/`, you are changing the blueprint for all future modules. Changes should be well-considered, generic, and improve project-wide consistency. Do NOT add module-specific logic here; keep it a template. When creating a new module *from* this template, these rules apply to how you *use* the template.
+
+## 7. Final Check for `template/module_template`
+-   Before finalizing changes, ensure all module-specific documentation (`README.md`, `API_SPECIFICATION.md`, `CHANGELOG.md`, etc.) is updated.
+-   Verify that all tests for this module pass.
+

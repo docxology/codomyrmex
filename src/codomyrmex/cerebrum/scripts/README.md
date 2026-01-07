@@ -1,7 +1,7 @@
 # scripts
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [scripts](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

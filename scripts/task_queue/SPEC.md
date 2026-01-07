@@ -20,7 +20,7 @@ python orchestrate.py basic-operation
 
 ## Integration
 
-- Uses `codomyrmex.task_queue` module for tool functionality
+- Uses `codomyrmex.logistics.task` module for tool functionality
 - Integrates with `logging_monitoring` for logging
 - Uses shared `_orchestrator_utils` for common functionality
 

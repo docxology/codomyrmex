@@ -1,7 +1,7 @@
 # integration
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [integration](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for integration..
+Integration test results and validation for LLM interactions. Stores full ecosystem validation results and production deployment simulation results for testing LLM integration across the Codomyrmex platform.
 
 ## Directory Contents
 - `README.md` – File

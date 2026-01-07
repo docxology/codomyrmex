@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/llm
 
 ## Signposting
-- **Parent**: [Llm](../AGENTS.md)
+- **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [ollama](ollama/AGENTS.md)
@@ -14,16 +14,44 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for llm..
+Language model integration, prompt management, and output handling for the Codomyrmex platform. Provides multi-provider support (Ollama, OpenAI, Anthropic, local models), prompt template management, output parsing and validation, and streaming response support.
 
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `config.py` – Project file
-- `ollama/` – Directory containing ollama components
-- `outputs/` – Directory containing outputs components
-- `prompt_templates/` – Directory containing prompt_templates components
+- `__init__.py` – Module exports and public API
+- `config.py` – LLM configuration management (LLMConfig, LLMConfigPresets)
+- `ollama/` – Directory containing Ollama integration (OllamaManager, ModelRunner, OutputManager, ConfigManager)
+- `outputs/` – Directory containing output handling components
+- `prompt_templates/` – Directory containing prompt template management
+
+## Key Classes and Functions
+
+### OllamaManager (`ollama/ollama_manager.py`)
+- `OllamaManager(ollama_binary: str = "ollama", auto_start_server: bool = True, base_url: str = "http://localhost:11434", use_http_api: bool = True)` – Main Ollama integration manager
+- `list_models() -> List[Dict]` – Retrieve available Ollama models
+- `pull_model(model_name: str, **kwargs) -> Dict` – Download and install Ollama model
+- `run_model(model_name: str, prompt: str, **kwargs) -> Dict` – Execute model inference with prompt
+- `get_model_info(model_name: str) -> Dict` – Retrieve detailed model information
+
+### ModelRunner (`ollama/model_runner.py`)
+- `ModelRunner(ollama_manager: OllamaManager)` – Specialized model execution with performance optimization
+- `execute(prompt: str, model: str, **kwargs) -> Dict` – Execute model inference with optimized performance
+
+### OutputManager (`ollama/output_manager.py`)
+- `OutputManager()` – Manages output formatting and processing
+
+### ConfigManager (`ollama/config_manager.py`)
+- `ConfigManager()` – Manages Ollama-specific configuration
+
+### LLMConfig (`config.py`)
+- `LLMConfig` – Configuration class for LLM operations
+- `LLMConfigPresets` – Preset configurations for common use cases
+
+### Module Functions (`__init__.py`)
+- `get_config() -> LLMConfig` – Get current LLM configuration
+- `set_config(config: LLMConfig) -> None` – Set LLM configuration
+- `reset_config() -> None` – Reset configuration to defaults
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

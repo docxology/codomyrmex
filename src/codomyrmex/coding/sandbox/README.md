@@ -1,7 +1,7 @@
 # sandbox
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [coding](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for sandbox..
+Sandboxing and isolation for secure code execution. Provides Docker container management, process isolation, resource limits enforcement, and security measures for safe code execution.
 
 ## Directory Contents
 - `README.md` – File

@@ -35,7 +35,7 @@ from config_loader import load_config
 from example_runner import ExampleRunner
 from utils import print_section, print_results
 
-from codomyrmex.project_orchestration import (
+from codomyrmex.logistics.orchestration.project import (
     WorkflowManager,
     WorkflowStep,
     get_workflow_manager,

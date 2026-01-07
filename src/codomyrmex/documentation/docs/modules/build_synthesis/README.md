@@ -1,7 +1,7 @@
 # build_synthesis
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [build_synthesis](../README.md)
 - **Children**:
     - [docs](docs/README.md)
 - **Key Artifacts**:

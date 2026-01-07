@@ -1,7 +1,7 @@
 # src
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [src](../README.md)
 - **Children**:
     - [css](css/README.md)
 - **Key Artifacts**:

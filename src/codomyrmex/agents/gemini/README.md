@@ -1,7 +1,7 @@
 # gemini
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [gemini](../README.md)
 - **Children**:
     - [tests](tests/README.md)
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for gemini..
+Integration with Google Gemini API. Provides client for interacting with Gemini API, supports code generation and completion, and provides integration adapters for Codomyrmex modules.
 
 ## Directory Contents
 - `README.md` – File

@@ -1,7 +1,7 @@
 # integration
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [integration](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

@@ -1,7 +1,7 @@
 # backends
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [backends](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for backends..
+Cache backend implementations including in-memory, file-based, and Redis backends. Provides pluggable cache backends for different storage requirements and performance characteristics.
 
 ## Directory Contents
 - `__init__.py` – File

@@ -1,7 +1,7 @@
 # firecrawl
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [firecrawl](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for firecrawl..
+Firecrawl scraping provider integration. Provides adapter and client for Firecrawl API, enabling web scraping, crawling, and content extraction through the Firecrawl service.
 
 ## Directory Contents
 - `README.md` – File

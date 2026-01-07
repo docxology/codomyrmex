@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Codomyrmex{% endblock %}</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <span style="color: var(--accent-color)">◆</span> Codomyrmex
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="scripts.html" class="nav-link">Scripts</a>
+                <a href="pipelines.html" class="nav-link">Pipelines</a>
+                <a href="config.html" class="nav-link">Config</a>
+                <a href="docs.html" class="nav-link">Docs</a>
+                <a href="chat.html" class="nav-link">Chat</a>
+                <a href="agents.html" class="nav-link">Agents</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 # agents
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [agents](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

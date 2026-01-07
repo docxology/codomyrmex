@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/physical_management
 
 ## Signposting
-- **Parent**: [Physical Management](../AGENTS.md)
+- **Parent**: [codomyrmex](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [docs](docs/AGENTS.md)
@@ -14,22 +14,54 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for physical_management..
+Physical system simulation and management including system monitoring, resource management, performance tracking, sensor integration, object management, analytics, and simulation engine. Provides comprehensive physical system lifecycle management.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
+- `API_SPECIFICATION.md` – Detailed API specification
 - `README.md` – Project file
-- `SECURITY.md` – Project file
+- `SECURITY.md` – Security considerations
 - `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `analytics.py` – Project file
+- `__init__.py` – Module exports and public API
+- `analytics.py` – Analytics and reporting
 - `docs/` – Directory containing docs components
 - `examples/` – Directory containing examples components
-- `object_manager.py` – Project file
+- `object_manager.py` – Object lifecycle management
 - `requirements.txt` – Project file
-- `sensor_integration.py` – Project file
-- `simulation_engine.py` – Project file
+- `sensor_integration.py` – Sensor data integration
+- `simulation_engine.py` – Simulation engine
 - `tests/` – Directory containing tests components
+
+## Key Classes and Functions
+
+### SystemMonitor (`__init__.py`)
+- `SystemMonitor()` – Monitor system resources and performance
+- `get_system_info() -> dict` – Get system information
+- `monitor_resources(interval: int) -> Iterator[dict]` – Monitor resources over time
+
+### ResourceManager (`__init__.py`)
+- `ResourceManager()` – Manage system resources
+- `allocate_resource(resource_type: str, amount: int) -> ResourceAllocation` – Allocate resource
+- `release_resource(allocation_id: str) -> bool` – Release resource
+
+### PerformanceTracker (`__init__.py`)
+- `PerformanceTracker()` – Track system performance
+- `track_metric(metric_name: str, value: float) -> None` – Track performance metric
+- `get_performance_report() -> PerformanceReport` – Get performance report
+
+### SimulationEngine (`simulation_engine.py`)
+- `SimulationEngine()` – Physical system simulation
+- `run_simulation(config: dict) -> SimulationResult` – Run simulation
+- `step_simulation() -> SimulationState` – Step simulation forward
+
+### SensorIntegration (`sensor_integration.py`)
+- `SensorIntegration()` – Sensor data integration
+- `read_sensor(sensor_id: str) -> SensorReading` – Read sensor data
+- `calibrate_sensor(sensor_id: str) -> bool` – Calibrate sensor
+
+### ObjectManager (`object_manager.py`)
+- `ObjectManager()` – Object lifecycle management
+- `create_object(object_type: str, config: dict) -> PhysicalObject` – Create physical object
+- `update_object(object_id: str, state: dict) -> bool` – Update object state
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

@@ -1,7 +1,7 @@
 # exceptions
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [exceptions](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

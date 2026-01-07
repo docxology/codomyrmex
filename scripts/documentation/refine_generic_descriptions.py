@@ -1,46 +1,31 @@
 #!/usr/bin/env python3
 """
-Refine Generic Descriptions in AGENTS.md.
-
-Replaces "Documentation files and guides." with context-aware descriptions.
+Thin wrapper for refine_generic_descriptions.py.
+Logic migrated to codomyrmex.documentation.scripts.refine_generic_descriptions.
 """
 
-import os
+import sys
 from pathlib import Path
 
-def refine_descriptions(root_dir):
-    root = Path(root_dir)
-    count = 0
-    target_phrase = "Documentation files and guides."
-    
-    for path in root.rglob("AGENTS.md"):
-        try:
-            content = path.read_text(encoding="utf-8")
-            if target_phrase in content:
-                # Find the module name from the path
-                # e.g., src/codomyrmex/documentation/docs/modules/git_operations/docs/AGENTS.md
-                # We want "git_operations" or similar.
-                
-                parts = path.parts
-                module_name = "the module"
-                
-                # Try to find a meaningful parent name
-                if "modules" in parts:
-                    idx = parts.index("modules")
-                    if idx + 1 < len(parts):
-                        module_name = parts[idx + 1]
-                elif len(parts) > 2:
-                    module_name = parts[-2]
-                
-                replacement = f"Documentation files and guides for {module_name}."
-                new_content = content.replace(target_phrase, replacement)
-                path.write_text(new_content, encoding="utf-8")
-                print(f"Refined {path} -> {replacement}")
-                count += 1
-        except Exception as e:
-            print(f"Error reading {path}: {e}")
-            
-    print(f"Refined {count} files.")
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-if __name__ == "__main__":
-    refine_descriptions(".")
+try:
+    from codomyrmex.documentation.scripts import refine_generic_descriptions
+    if hasattr(refine_generic_descriptions, 'main'):
+        sys.exit(refine_generic_descriptions.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module refine_generic_descriptions does not have a main function or failed to execute.")
+    sys.exit(1)

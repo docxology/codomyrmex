@@ -1,7 +1,7 @@
 # logging_monitoring
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [logging_monitoring](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

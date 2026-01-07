@@ -1,7 +1,7 @@
 # system_discovery
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [system_discovery](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

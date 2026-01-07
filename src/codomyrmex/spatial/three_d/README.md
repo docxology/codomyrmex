@@ -1,7 +1,7 @@
 # three_d
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [spatial](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [examples](scripts/examples/README.md)
@@ -14,7 +14,7 @@
 
 ## Overview
 
-Module components and implementation for three_d..
+3D modeling, rendering, and AR/VR/XR capabilities for spatial computing. Provides scene creation and manipulation, mesh generation, camera and lighting control, image rendering, AR tracking and world understanding, stereo rendering for VR, and unified interface for AR/VR/XR experiences.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

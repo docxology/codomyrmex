@@ -1,0 +1,126 @@
+# Connection Pool Configuration Template
+# Defines connection pool settings for database connections
+
+# Connection Pool Definitions
+pools:
+  # Default Pool Configuration
+  default:
+    min_connections: 1
+    max_connections: 10
+    connection_timeout: 30
+    idle_timeout: 300
+    max_lifetime: 3600
+    retry_on_failure: true
+    max_retries: 3
+    retry_delay: 1
+
+  # Development Pool (Small)
+  development:
+    min_connections: 1
+    max_connections: 5
+    connection_timeout: 30
+    idle_timeout: 300
+    max_lifetime: 3600
+    retry_on_failure: true
+    max_retries: 3
+
+  # Production Pool (Larger)
+  production:
+    min_connections: 5
+    max_connections: 20
+    connection_timeout: 30
+    idle_timeout: 600
+    max_lifetime: 7200
+    retry_on_failure: true
+    max_retries: 5
+    retry_delay: 2
+
+  # High-Traffic Pool
+  high_traffic:
+    min_connections: 10
+    max_connections: 50
+    connection_timeout: 30
+    idle_timeout: 600
+    max_lifetime: 7200
+    retry_on_failure: true
+    max_retries: 5
+
+# Pool Settings by Database Type
+database_specific:
+  sqlite:
+    min_connections: 1
+    max_connections: 1
+    connection_timeout: 30
+    description: "SQLite uses file locking, single connection recommended"
+
+  postgresql:
+    min_connections: 5
+    max_connections: 20
+    connection_timeout: 30
+    idle_timeout: 600
+    max_lifetime: 7200
+    description: "PostgreSQL connection pool settings"
+
+  mysql:
+    min_connections: 5
+    max_connections: 20
+    connection_timeout: 30
+    idle_timeout: 600
+    max_lifetime: 7200
+    description: "MySQL connection pool settings"
+
+  mongodb:
+    min_connections: 5
+    max_connections: 20
+    connection_timeout: 30
+    max_idle_time: 600
+    max_lifetime: 7200
+    description: "MongoDB connection pool settings"
+
+  redis:
+    min_connections: 2
+    max_connections: 10
+    connection_timeout: 30
+    max_idle_time: 300
+    max_lifetime: 3600
+    description: "Redis connection pool settings"
+
+# Pool Monitoring
+monitoring:
+  enabled: true
+  interval: 60  # seconds
+  
+  metrics:
+    - "active_connections"
+    - "idle_connections"
+    - "total_connections"
+    - "connection_wait_time"
+    - "connection_errors"
+    - "pool_utilization"
+
+  thresholds:
+    max_utilization: 0.8  # Alert if pool > 80% utilized
+    min_available: 2  # Alert if fewer than 2 connections available
+    max_wait_time: 5  # Alert if wait time > 5 seconds
+
+# Pool Retry Policies
+retry_policies:
+  default:
+    max_retries: 3
+    retry_delay: 1
+    backoff_multiplier: 2
+    max_retry_delay: 10
+
+  production:
+    max_retries: 5
+    retry_delay: 2
+    backoff_multiplier: 2
+    max_retry_delay: 30
+
+# Connection Pool Cleanup
+cleanup:
+  enabled: true
+  interval: 300  # seconds
+  idle_timeout: 600  # seconds
+  max_lifetime: 7200  # seconds
+

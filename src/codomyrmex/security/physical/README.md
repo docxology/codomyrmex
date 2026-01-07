@@ -1,7 +1,7 @@
 # physical
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [physical](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for physical..
+Physical security including access control, asset inventory, perimeter management, physical vulnerability assessment, and surveillance. Focuses on physical security threats and infrastructure protection.
 
 ## Directory Contents
 - `README.md` – File

@@ -1,59 +1,31 @@
 #!/usr/bin/env python3
-import os
-import re
+"""
+Thin wrapper for check_links.py.
+Logic migrated to codomyrmex.documentation.scripts.check_links.
+"""
+
+import sys
 from pathlib import Path
 
-def find_markdown_files(root_dir):
-    for root, dirs, files in os.walk(root_dir):
-        for file in files:
-            if file.endswith(".md"):
-                yield Path(root) / file
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-def check_links(root_dir):
-    root_path = Path(root_dir).absolute()
-    link_pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
-    broken_links = []
-    
-    for md_file in find_markdown_files(root_path):
-        with open(md_file, "r", encoding="utf-8") as f:
-            content = f.read()
-            
-        for match in link_pattern.finditer(content):
-            text, link = match.groups()
-            
-            # Skip external links
-            if link.startswith("http") or link.startswith("mailto:"):
-                continue
-            
-            # Skip anchor links within same file (simplified)
-            if link.startswith("#"):
-                continue
-                
-            # Handle links with anchors
-            clean_link = link.split("#")[0]
-            if not clean_link:
-                continue
-                
-            # Resolve target path relative to current markdown file
-            target = (md_file.parent / clean_link).resolve()
-            
-            if not target.exists():
-                broken_links.append({
-                    "file": str(md_file.relative_to(root_path)),
-                    "link": link,
-                    "text": text,
-                    "target": str(target)
-                })
-                
-    return broken_links
-
-if __name__ == "__main__":
-    root = os.getcwd()
-    print(f"Checking links in {root}...")
-    broken = check_links(root)
-    if broken:
-        print(f"Found {len(broken)} broken links:")
-        for b in broken:
-            print(f"- {b['file']}: [{b['text']}]({b['link']}) -> {b['target']}")
+try:
+    from codomyrmex.documentation.scripts import check_links
+    if hasattr(check_links, 'main'):
+        sys.exit(check_links.main())
     else:
-        print("No broken links found!")
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module check_links does not have a main function or failed to execute.")
+    sys.exit(1)

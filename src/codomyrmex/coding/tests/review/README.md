@@ -1,7 +1,7 @@
 # review
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [review](../README.md)
 - **Children**:
     - [e2e](e2e/README.md)
     - [fixtures](fixtures/README.md)

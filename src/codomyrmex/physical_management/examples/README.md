@@ -1,7 +1,7 @@
 # examples
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [examples](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

@@ -1,7 +1,7 @@
 # theory
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [theory](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for theory..
+Security theory including architecture patterns, best practices, security frameworks, security principles, risk assessment, and threat modeling. Provides theoretical foundations and methodologies for security analysis.
 
 ## Directory Contents
 - `README.md` – File

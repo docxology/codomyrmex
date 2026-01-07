@@ -1,7 +1,7 @@
 # droid
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [droid](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

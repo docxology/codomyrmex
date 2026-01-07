@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/coding/execution
 
 ## Signposting
-- **Parent**: [Execution](../AGENTS.md)
+- **Parent**: [coding](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,14 +12,30 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for execution..
+Code execution capabilities including language support and session management. Provides execution of code snippets in sandboxed environments with support for multiple programming languages, session management for persistent environments, and timeout handling.
 
 ## Active Components
 - `README.md` – Project file
-- `__init__.py` – Project file
-- `executor.py` – Project file
-- `language_support.py` – Project file
-- `session_manager.py` – Project file
+- `__init__.py` – Module exports and public API
+- `executor.py` – Code execution engine
+- `language_support.py` – Programming language support definitions
+- `session_manager.py` – Session management for persistent environments
+
+## Key Classes and Functions
+
+### execute_code (`executor.py`)
+- `execute_code(language: str, code: str, stdin: Optional[str] = None, timeout: Optional[int] = None, session_id: Optional[str] = None) -> dict[str, Any]` – Execute a code snippet in a sandboxed environment
+- Returns dictionary with: stdout, stderr, exit_code, execution_time, status
+
+### validate_timeout (`executor.py`)
+- `validate_timeout(timeout: Optional[int]) -> int` – Validate and normalize timeout value (default: 30, max: 300, min: 1)
+
+### Language Support (`language_support.py`)
+- `SUPPORTED_LANGUAGES` – Dictionary of supported programming languages and their configurations
+- `validate_language(language: str) -> bool` – Validate if language is supported
+
+### Session Management (`session_manager.py`)
+- `validate_session_id(session_id: str | None) -> str | None` – Validate session ID format
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

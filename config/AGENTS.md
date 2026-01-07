@@ -4,7 +4,13 @@
 - **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
+    - [api](api/AGENTS.md)
+    - [cache](cache/AGENTS.md)
+    - [database](database/AGENTS.md)
     - [examples](examples/AGENTS.md)
+    - [llm](llm/AGENTS.md)
+    - [monitoring](monitoring/AGENTS.md)
+    - [security](security/AGENTS.md)
     - [templates](templates/AGENTS.md)
     - [workflows](workflows/AGENTS.md)
 - **Key Artifacts**:
@@ -19,7 +25,13 @@ Configuration templates, examples, and workflow definitions.
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
+- `api/` – API and service configuration
+- `cache/` – Cache configuration
+- `database/` – Database connection and configuration
 - `examples/` – Directory containing examples components
+- `llm/` – LLM and AI model configuration
+- `monitoring/` – Monitoring and telemetry configuration
+- `security/` – Security and authentication configuration
 - `templates/` – Directory containing templates components
 - `workflows/` – Directory containing workflow definitions
 

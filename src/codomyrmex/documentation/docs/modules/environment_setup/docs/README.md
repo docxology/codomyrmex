@@ -1,7 +1,7 @@
 # docs
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [environment_setup](../README.md)
 - **Children**:
     - [tutorials](tutorials/README.md)
 - **Key Artifacts**:

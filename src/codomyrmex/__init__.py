@@ -54,7 +54,7 @@ __all__ = [
     "containerization",
     "database_management",
     "config_management",
-    "project_orchestration",
+    "logistics",
     # Specialized Layer
     "spatial",
     "physical_management",
@@ -63,8 +63,9 @@ __all__ = [
     "template",
     "events",
     "plugin_system",
-    "tools",
-    "fpf",
+    "utils",
+    "validation",
+    "website",
     "cerebrum",
     "agents",
     # Infrastructure

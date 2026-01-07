@@ -3,7 +3,7 @@
 Project Orchestration Orchestrator
 
 Thin orchestrator script providing CLI access to project_orchestration module functionality.
-Calls actual module functions from codomyrmex.project_orchestration.
+Calls actual module functions from codomyrmex.logistics.orchestration.project.
 
 See also: src/codomyrmex/cli.py for main CLI integration
 """
@@ -44,7 +44,7 @@ except ImportError:
     )
 
 # Import module functions
-from codomyrmex.project_orchestration import (
+from codomyrmex.logistics.orchestration.project import (
     get_workflow_manager,
     get_project_manager,
     get_orchestration_engine,

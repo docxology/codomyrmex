@@ -1,7 +1,7 @@
 # cache
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [cache](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

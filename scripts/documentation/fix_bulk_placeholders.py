@@ -1,60 +1,31 @@
 #!/usr/bin/env python3
 """
-Bulk Fix Documentation Placeholders.
-
-Replaces generic placeholders in SECURITY.md and AGENTS.md with more specific,
-albeit still generic, descriptions to clear "Placeholder" audits.
+Thin wrapper for fix_bulk_placeholders.py.
+Logic migrated to codomyrmex.documentation.scripts.fix_bulk_placeholders.
 """
 
-import os
-import re
+import sys
 from pathlib import Path
 
-def fix_security_md(root_dir):
-    """Replace [Brief Description] in SECURITY.md."""
-    print("Fixing SECURITY.md files...")
-    count = 0
-    for path in Path(root_dir).rglob("SECURITY.md"):
-        if "template" in str(path):
-            continue
-            
-        try:
-            content = path.read_text(encoding="utf-8")
-            if "[Brief Description]" in content:
-                # Replace with a sensible default based on the module name if possible, or just "Security Issue"
-                new_content = content.replace("[Brief Description]", "Security Issue")
-                path.write_text(new_content, encoding="utf-8")
-                print(f"  Fixed {path.relative_to(root_dir)}")
-                count += 1
-        except Exception as e:
-            print(f"  Error reading {path}: {e}")
-    print(f"Fixed {count} SECURITY.md files.")
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-def fix_agents_md(root_dir):
-    """Replace [Brief description] in AGENTS.md."""
-    print("Fixing AGENTS.md files...")
-    count = 0
-    pattern = re.compile(r"\[Brief description.*?\]", re.IGNORECASE)
-    
-    for path in Path(root_dir).rglob("AGENTS.md"):
-        if "template" in str(path):
-            continue
-            
-        try:
-            content = path.read_text(encoding="utf-8")
-            if pattern.search(content):
-                module_name = path.parent.name
-                replacement = f"Documentation and agents for the {module_name} module."
-                
-                new_content = pattern.sub(replacement, content)
-                path.write_text(new_content, encoding="utf-8")
-                print(f"  Fixed {path.relative_to(root_dir)}")
-                count += 1
-        except Exception as e:
-            print(f"  Error reading {path}: {e}")
-    print(f"Fixed {count} AGENTS.md files.")
-
-if __name__ == "__main__":
-    root = Path.cwd()
-    fix_security_md(root)
-    fix_agents_md(root)
+try:
+    from codomyrmex.documentation.scripts import fix_bulk_placeholders
+    if hasattr(fix_bulk_placeholders, 'main'):
+        sys.exit(fix_bulk_placeholders.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module fix_bulk_placeholders does not have a main function or failed to execute.")
+    sys.exit(1)

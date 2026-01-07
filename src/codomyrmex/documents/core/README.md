@@ -1,7 +1,7 @@
 # core
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [core](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

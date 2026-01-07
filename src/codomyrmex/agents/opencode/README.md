@@ -1,7 +1,7 @@
 # opencode
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [opencode](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for opencode..
+Integration with OpenCode CLI tool. Provides client wrapper for executing opencode commands, handles command failures and timeouts gracefully, and provides integration adapters for Codomyrmex modules.
 
 ## Directory Contents
 - `README.md` – File

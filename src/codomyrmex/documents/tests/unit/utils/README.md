@@ -1,7 +1,7 @@
 # utils
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [utils](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

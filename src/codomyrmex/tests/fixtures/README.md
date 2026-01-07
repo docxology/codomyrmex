@@ -1,7 +1,7 @@
 # fixtures
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [fixtures](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

@@ -1,7 +1,7 @@
 # debugging
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [debugging](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for debugging..
+Code debugging including error analysis, patch generation, and fix verification. Provides comprehensive debugging capabilities for code execution errors.
 
 ## Directory Contents
 - `__init__.py` – File

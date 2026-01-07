@@ -1,0 +1,12 @@
+# API Versioning Configuration Template
+
+versions:
+  current: "v1"
+  supported:
+    - "v1"
+  default: "v1"
+  
+  deprecation:
+    enabled: true
+    notice_period_days: 90
+

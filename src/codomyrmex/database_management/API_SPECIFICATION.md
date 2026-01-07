@@ -243,7 +243,7 @@ All functions follow consistent error handling patterns:
 ### With Project Orchestration
 ```python
 from codomyrmex.database_management import run_migrations
-from codomyrmex.project_orchestration import execute_workflow
+from codomyrmex.logistics.orchestration.project import execute_workflow
 
 # Run database migrations as part of deployment workflow
 result = execute_workflow("database_deployment", {

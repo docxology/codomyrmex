@@ -1,0 +1,25 @@
+# Redis Database Configuration Example
+# Cache and session storage configuration
+
+connections:
+  redis_cache:
+    type: "redis"
+    host: "${REDIS_HOST:localhost}"
+    port: "${REDIS_PORT:6379}"
+    database: "${REDIS_DB:0}"
+    password: "${REDIS_PASSWORD:}"
+    ssl: false
+    description: "Redis cache database"
+    options:
+      socket_timeout: 30
+      socket_connect_timeout: 30
+      retry_on_timeout: true
+
+pools:
+  redis:
+    min_connections: 2
+    max_connections: 10
+    connection_timeout: 30
+    max_idle_time: 300
+    max_lifetime: 3600
+

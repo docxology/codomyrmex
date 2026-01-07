@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>System Dashboard</h1>
+
+<div class="grid">
+    <div class="card">
+        <div class="card-title">System Status <span class="status-badge active">Online</span></div>
+        <p><strong>Environment:</strong> {{ system.environment }}</p>
+        <p><strong>Version:</strong> {{ system.version }}</p>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Agents <span class="status-badge">{{ system.agent_count }} Active</span></div>
+        <p><strong>Total Agents:</strong> {{ system.agent_count }}</p>
+        <a href="agents.html"
+            style="color: var(--accent-color); font-size: 0.9rem; text-decoration: none; display: inline-block; margin-top: 0.5rem;">View
+            All Agents &rarr;</a>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Quick Actions</div>
+        <a href="scripts.html" class="btn btn-primary"
+            style="text-decoration: none; width: 100%; text-align: center;">Run Scripts</a>
+    </div>
+</div>
+
+<!-- Potential Metrics Graph could go here -->
+{% endblock %}

@@ -1,7 +1,7 @@
 # execution
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [execution](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for execution..
+Code execution capabilities including language support and session management. Provides execution of code snippets in sandboxed environments with support for multiple programming languages, session management for persistent environments, and timeout handling.
 
 ## Directory Contents
 - `README.md` – File

@@ -1,7 +1,7 @@
 # cerebrum
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [cerebrum](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

@@ -1,0 +1,133 @@
+# LLM Provider Configuration Template
+# Defines provider configurations, API endpoints, and authentication
+
+# Provider Definitions
+providers:
+  # Ollama Provider
+  ollama:
+    enabled: true
+    type: "local"
+    base_url: "${OLLAMA_BASE_URL:http://localhost:11434}"
+    timeout: 300
+    max_retries: 3
+    authentication:
+      type: "none"
+    rate_limits:
+      requests_per_minute: 60
+      requests_per_hour: 1000
+    features:
+      streaming: true
+      function_calling: false
+      vision: false
+    model_cache_dir: "${OLLAMA_MODEL_CACHE:~/.ollama/models}"
+
+  # OpenAI Provider
+  openai:
+    enabled: false
+    type: "api"
+    base_url: "${OPENAI_BASE_URL:https://api.openai.com/v1}"
+    api_key: "${OPENAI_API_KEY}"
+    timeout: 60
+    max_retries: 3
+    authentication:
+      type: "api_key"
+      header: "Authorization"
+      prefix: "Bearer"
+    rate_limits:
+      requests_per_minute: 60
+      requests_per_hour: 10000
+      tokens_per_minute: 90000
+    features:
+      streaming: true
+      function_calling: true
+      vision: true
+    organization: "${OPENAI_ORG_ID:}"
+
+  # Anthropic Provider
+  anthropic:
+    enabled: false
+    type: "api"
+    base_url: "${ANTHROPIC_BASE_URL:https://api.anthropic.com/v1}"
+    api_key: "${ANTHROPIC_API_KEY}"
+    timeout: 60
+    max_retries: 3
+    authentication:
+      type: "api_key"
+      header: "x-api-key"
+      prefix: ""
+    rate_limits:
+      requests_per_minute: 50
+      requests_per_hour: 5000
+      tokens_per_minute: 1000000
+    features:
+      streaming: true
+      function_calling: true
+      vision: true
+    version: "2023-06-01"
+
+  # Google Provider
+  google:
+    enabled: false
+    type: "api"
+    base_url: "${GOOGLE_BASE_URL:https://generativelanguage.googleapis.com/v1}"
+    api_key: "${GOOGLE_API_KEY}"
+    timeout: 60
+    max_retries: 3
+    authentication:
+      type: "api_key"
+      header: "x-goog-api-key"
+      prefix: ""
+    rate_limits:
+      requests_per_minute: 60
+      requests_per_hour: 10000
+    features:
+      streaming: true
+      function_calling: false
+      vision: true
+
+# Default Provider
+default_provider: "ollama"
+
+# Provider Selection
+provider_selection:
+  # Automatic provider selection based on model
+  auto_select: true
+  
+  # Provider priority (in order)
+  priority:
+    - "ollama"
+    - "openai"
+    - "anthropic"
+    - "google"
+
+# Provider Health Checks
+health_checks:
+  enabled: true
+  interval: 60  # seconds
+  timeout: 10  # seconds
+  
+  checks:
+    - name: "provider_availability"
+      type: "ping"
+      endpoint: "/health"
+    
+    - name: "model_availability"
+      type: "model_list"
+      timeout: 30
+
+# Provider Monitoring
+monitoring:
+  enabled: true
+  
+  metrics:
+    - "request_count"
+    - "response_time"
+    - "error_rate"
+    - "token_usage"
+    - "cost"
+  
+  thresholds:
+    max_error_rate: 0.05  # 5%
+    max_response_time: 30  # seconds
+    max_cost_per_hour: 100  # dollars
+

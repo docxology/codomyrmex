@@ -1,7 +1,7 @@
 # performance
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [performance](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

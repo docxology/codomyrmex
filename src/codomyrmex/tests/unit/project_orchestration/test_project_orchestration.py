@@ -15,14 +15,14 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex import project_orchestration
+            from codomyrmex import logistics
             assert project_orchestration is not None
         except ImportError as e:
             pytest.fail(f"Failed to import project_orchestration: {e}")
 
     def test_project_orchestration_module_exists(self, code_dir):
         """Test that project_orchestration module directory exists."""
-        po_path = code_dir / "codomyrmex" / "project_orchestration"
+        po_path = code_dir / "codomyrmex" / "logistics" / "orchestration" / "project"
         assert po_path.exists()
         assert po_path.is_dir()
 
@@ -62,7 +62,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import WorkflowManager
+            from codomyrmex.logistics.orchestration.project import WorkflowManager
             assert WorkflowManager is not None
         except ImportError as e:
             pytest.fail(f"Failed to import WorkflowManager: {e}")
@@ -73,7 +73,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import TaskOrchestrator
+            from codomyrmex.logistics.orchestration.project import TaskOrchestrator
             assert TaskOrchestrator is not None
         except ImportError as e:
             pytest.fail(f"Failed to import TaskOrchestrator: {e}")
@@ -84,7 +84,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import ProjectManager
+            from codomyrmex.logistics.orchestration.project import ProjectManager
             assert ProjectManager is not None
         except ImportError as e:
             pytest.fail(f"Failed to import ProjectManager: {e}")
@@ -95,7 +95,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import ResourceManager
+            from codomyrmex.logistics.orchestration.project import ResourceManager
             assert ResourceManager is not None
         except ImportError as e:
             pytest.fail(f"Failed to import ResourceManager: {e}")
@@ -106,7 +106,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import OrchestrationEngine
+            from codomyrmex.logistics.orchestration.project import OrchestrationEngine
             assert OrchestrationEngine is not None
         except ImportError as e:
             pytest.fail(f"Failed to import OrchestrationEngine: {e}")
@@ -117,7 +117,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import WorkflowStep
+            from codomyrmex.logistics.orchestration.project import WorkflowStep
             assert WorkflowStep is not None
         except ImportError as e:
             pytest.fail(f"Failed to import WorkflowStep: {e}")
@@ -128,7 +128,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import Task
+            from codomyrmex.logistics.orchestration.project import Task
             assert Task is not None
         except ImportError as e:
             pytest.fail(f"Failed to import Task: {e}")
@@ -139,7 +139,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import Project
+            from codomyrmex.logistics.orchestration.project import Project
             assert Project is not None
         except ImportError as e:
             pytest.fail(f"Failed to import Project: {e}")
@@ -150,7 +150,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import Resource
+            from codomyrmex.logistics.orchestration.project import Resource
             assert Resource is not None
         except ImportError as e:
             pytest.fail(f"Failed to import Resource: {e}")
@@ -161,7 +161,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import (
+            from codomyrmex.logistics.orchestration.project import (
                 WorkflowStatus,
                 TaskStatus,
                 ProjectStatus,
@@ -182,7 +182,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import (
+            from codomyrmex.logistics.orchestration.project import (
                 get_mcp_tools,
                 get_mcp_tool_definitions,
                 execute_mcp_tool,
@@ -199,7 +199,7 @@ class TestProjectOrchestration:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.project_orchestration import DocumentationGenerator
+            from codomyrmex.logistics.orchestration.project import DocumentationGenerator
             assert DocumentationGenerator is not None
         except ImportError as e:
             pytest.fail(f"Failed to import DocumentationGenerator: {e}")
@@ -209,7 +209,7 @@ class TestProjectOrchestration:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex import project_orchestration
+        from codomyrmex import logistics
         assert hasattr(project_orchestration, "__version__")
         assert project_orchestration.__version__ == "0.1.0"
 
@@ -218,7 +218,7 @@ class TestProjectOrchestration:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex import project_orchestration
+        from codomyrmex import logistics
 
         expected_exports = [
             "WorkflowManager",
@@ -261,7 +261,7 @@ class TestWorkflowDAG:
     def test_workflow_dag_creation(self):
         """Test creating a basic workflow DAG."""
         try:
-            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
         except ImportError:
             pytest.skip("WorkflowDAG not available")
 
@@ -281,7 +281,7 @@ class TestWorkflowDAG:
     def test_dag_validation_valid(self):
         """Test DAG validation with valid DAG."""
         try:
-            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
         except ImportError:
             pytest.skip("WorkflowDAG not available")
 
@@ -301,7 +301,7 @@ class TestWorkflowDAG:
     def test_dag_validation_cycle(self):
         """Test DAG validation with cycle detection."""
         try:
-            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
         except ImportError:
             pytest.skip("WorkflowDAG not available")
 
@@ -321,7 +321,7 @@ class TestWorkflowDAG:
     def test_dag_execution_order(self):
         """Test getting execution order from DAG."""
         try:
-            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
         except ImportError:
             pytest.skip("WorkflowDAG not available")
 
@@ -350,7 +350,7 @@ class TestWorkflowDAG:
     def test_dag_dependency_queries(self):
         """Test dependency query methods."""
         try:
-            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
         except ImportError:
             pytest.skip("WorkflowDAG not available")
 
@@ -373,7 +373,7 @@ class TestWorkflowDAG:
     def test_dag_visualization(self):
         """Test DAG visualization generation."""
         try:
-            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
         except ImportError:
             pytest.skip("WorkflowDAG not available")
 
@@ -398,7 +398,7 @@ class TestParallelExecutor:
     def test_parallel_executor_creation(self):
         """Test creating a parallel executor."""
         try:
-            from codomyrmex.project_orchestration.parallel_executor import ParallelExecutor
+            from codomyrmex.logistics.orchestration.project.parallel_executor import ParallelExecutor
         except ImportError:
             pytest.skip("ParallelExecutor not available")
 
@@ -411,7 +411,7 @@ class TestParallelExecutor:
     def test_execute_task_group(self):
         """Test executing a group of independent tasks."""
         try:
-            from codomyrmex.project_orchestration.parallel_executor import ParallelExecutor
+            from codomyrmex.logistics.orchestration.project.parallel_executor import ParallelExecutor
         except ImportError:
             pytest.skip("ParallelExecutor not available")
 
@@ -432,7 +432,7 @@ class TestParallelExecutor:
     def test_dependency_management(self):
         """Test dependency checking in executor."""
         try:
-            from codomyrmex.project_orchestration.parallel_executor import ParallelExecutor
+            from codomyrmex.logistics.orchestration.project.parallel_executor import ParallelExecutor
         except ImportError:
             pytest.skip("ParallelExecutor not available")
 
@@ -456,7 +456,7 @@ class TestParallelExecutor:
     def test_workflow_validation_functions(self):
         """Test workflow validation utility functions."""
         try:
-            from codomyrmex.project_orchestration.parallel_executor import (
+            from codomyrmex.logistics.orchestration.project.parallel_executor import (
                 validate_workflow_dependencies,
                 get_workflow_execution_order
             )
@@ -493,7 +493,7 @@ class TestWorkflowManagerEnhancements:
     def test_create_workflow_dag(self):
         """Test creating workflow DAG through manager."""
         try:
-            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+            from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager
         except ImportError:
             pytest.skip("WorkflowManager not available")
 
@@ -512,7 +512,7 @@ class TestWorkflowManagerEnhancements:
     def test_validate_workflow_dependencies(self):
         """Test workflow dependency validation through manager."""
         try:
-            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+            from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager
         except ImportError:
             pytest.skip("WorkflowManager not available")
 
@@ -538,7 +538,7 @@ class TestWorkflowManagerEnhancements:
     def test_get_workflow_execution_order(self):
         """Test getting workflow execution order through manager."""
         try:
-            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+            from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager
         except ImportError:
             pytest.skip("WorkflowManager not available")
 
@@ -559,8 +559,8 @@ class TestWorkflowManagerEnhancements:
     def test_execute_parallel_workflow(self):
         """Test parallel workflow execution through manager with real ParallelExecutor."""
         try:
-            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
-            from codomyrmex.project_orchestration.parallel_executor import ParallelExecutor
+            from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager
+            from codomyrmex.logistics.orchestration.project.parallel_executor import ParallelExecutor
         except ImportError:
             pytest.skip("WorkflowManager not available")
 
@@ -587,8 +587,8 @@ class TestWorkflowManagerEnhancements:
     def test_workflow_dag_integration(self):
         """Test integration between WorkflowManager and WorkflowDAG."""
         try:
-            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
-            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+            from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager
+            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
         except ImportError:
             pytest.skip("Required modules not available")
 
@@ -633,7 +633,7 @@ class TestWorkflowManagerLocation:
     def test_default_location(self, tmp_path, monkeypatch):
         """Test that WorkflowManager defaults to config/workflows/production."""
         try:
-            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+            from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager
         except ImportError:
             pytest.skip("WorkflowManager not available")
 
@@ -650,7 +650,7 @@ class TestWorkflowManagerLocation:
     def test_custom_config_dir(self, tmp_path):
         """Test that custom config_dir parameter is respected."""
         try:
-            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+            from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager
         except ImportError:
             pytest.skip("WorkflowManager not available")
 
@@ -664,7 +664,7 @@ class TestWorkflowManagerLocation:
     def test_load_workflows_from_production(self, tmp_path, monkeypatch):
         """Test loading workflows from production directory."""
         try:
-            from codomyrmex.project_orchestration.workflow_manager import WorkflowManager
+            from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowManager
             import json
         except ImportError:
             pytest.skip("WorkflowManager not available")

@@ -1,7 +1,7 @@
 # four_d
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [four_d](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for four_d..
+4D modeling (Synergetics) including time-series spatial data, animation sequences, temporal interpolation, and four-dimensional coordinate systems (Quadray coordinates, Isotropic Vector Matrix).
 
 ## Directory Contents
 - `__init__.py` – File

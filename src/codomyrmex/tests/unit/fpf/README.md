@@ -1,7 +1,7 @@
 # fpf
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [fpf](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

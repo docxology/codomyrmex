@@ -91,6 +91,8 @@ dependencies = [
     "networkx>=3.0.0",
     # For scientific computing (used in cerebrum)
     "scipy>=1.7.0",
+    # For timezone support (used in logistics.schedule)
+    "pytz>=2024.1",
 ]
 
 [project.optional-dependencies]

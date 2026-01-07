@@ -1,7 +1,7 @@
 # llm
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [llm](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

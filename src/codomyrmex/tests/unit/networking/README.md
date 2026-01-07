@@ -1,7 +1,7 @@
 # networking
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [networking](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

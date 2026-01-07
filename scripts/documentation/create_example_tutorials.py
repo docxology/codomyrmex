@@ -1,120 +1,31 @@
 #!/usr/bin/env python3
 """
-Create placeholder example_tutorial.md files for modules that reference them.
-
-Creates a standard template that modules can customize with their own examples.
+Thin wrapper for create_example_tutorials.py.
+Logic migrated to codomyrmex.documentation.scripts.create_example_tutorials.
 """
 
-import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-EXAMPLE_TUTORIAL_TEMPLATE = """# Example Tutorial
-
-This is a placeholder tutorial file for the {module_name} module.
-
-## Overview
-
-This tutorial demonstrates how to use the {module_name} module with practical examples.
-
-## Prerequisites
-
-- Basic understanding of Python
-- Codomyrmex installed and configured
-- Appropriate API keys/credentials (if required)
-
-## Basic Usage
-
-```python
-from codomyrmex.{module_name} import main_function
-
-# Example usage
-result = main_function("example_input")
-print(result)
-```
-
-## Advanced Examples
-
-### Example 1: Basic Operation
-
-```python
-# Add module-specific examples here
-```
-
-### Example 2: Advanced Configuration
-
-```python
-# Add advanced usage examples here
-```
-
-## Integration with Other Modules
-
-```python
-# Show how this module integrates with others
-```
-
-## Next Steps
-
-- Review the [Module README](../README.md) for complete documentation
-- Check the [Technical Overview](../technical_overview.md) for architecture details (if available)
-
-## Related Documentation
-
-- [Module README](../README.md) - Complete module documentation
-- [Technical Overview](../technical_overview.md) - Architecture details (if available)
-
----
-
-**Note**: This is a template file. Please customize it with module-specific examples and use cases.
-"""
-
-
-def create_example_tutorials():
-    """Create placeholder example_tutorial.md files."""
-    script_dir = Path(__file__).parent
-    repo_root = script_dir.parent.parent
-    
-    # Load audit data
-    audit_data_path = script_dir / 'module_audit_data.json'
-    if not audit_data_path.exists():
-        print("Error: module_audit_data.json not found. Run module_docs_auditor.py first.")
-        return 1
-    
-    with open(audit_data_path, 'r') as f:
-        audit_data = json.load(f)
-    
-    example_tutorial_refs = audit_data['example_tutorial_refs']
-    
-    print(f"Creating {len(example_tutorial_refs)} example_tutorial.md files...\n")
-    
-    created_count = 0
-    skipped_count = 0
-    
-    for ref in example_tutorial_refs:
-        tutorial_path = Path(ref['resolved'])
-        module_name = ref['module']
-        
-        # Check if file already exists
-        if tutorial_path.exists():
-            print(f"⏭️  Already exists: {tutorial_path.relative_to(repo_root)}")
-            skipped_count += 1
-            continue
-        
-        # Ensure tutorials directory exists
-        tutorial_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        # Create the template
-        content = EXAMPLE_TUTORIAL_TEMPLATE.format(module_name=module_name)
-        tutorial_path.write_text(content, encoding='utf-8')
-        
-        print(f"✅ Created: {tutorial_path.relative_to(repo_root)}")
-        created_count += 1
-    
-    print(f"\n✅ Created {created_count} files, skipped {skipped_count} existing files")
-    return 0
-
-
-if __name__ == '__main__':
-    sys.exit(create_example_tutorials())
-
+try:
+    from codomyrmex.documentation.scripts import create_example_tutorials
+    if hasattr(create_example_tutorials, 'main'):
+        sys.exit(create_example_tutorials.main())
+    else:
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module create_example_tutorials does not have a main function or failed to execute.")
+    sys.exit(1)

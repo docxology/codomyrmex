@@ -1,7 +1,7 @@
 # build_synthesis
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for build_synthesis..
+Build automation, dependency management, artifact synthesis, and deployment orchestration. Takes raw source code, configuration, and assets, and transforms them into deployable artifacts (Python packages, Docker images, static sites). Abstracts complexities of different build systems (pip, docker, npm) behind a unified Pythonic interface with support for cross-language builds and parallel execution.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

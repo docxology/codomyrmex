@@ -334,7 +334,7 @@ class HealthChecker:
         result.checks_performed.extend(["workflow_creation", "dag_validation"])
 
         try:
-            from codomyrmex.project_orchestration.workflow_dag import WorkflowDAG
+            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
 
             # Test DAG creation
             tasks = [

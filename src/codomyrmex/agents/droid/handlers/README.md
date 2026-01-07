@@ -1,7 +1,7 @@
 # handlers
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [handlers](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for handlers..
+Task handlers for Droid autonomous agents. Provides specialized handlers for different task types that droids can execute, enabling modular task execution with specific personas and capabilities.
 
 ## Directory Contents
 - `README.md` – File

@@ -1,7 +1,7 @@
 # agents
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [ai_code_editing](ai_code_editing/README.md)
     - [claude](claude/README.md)
@@ -21,7 +21,7 @@
 
 ## Overview
 
-Module components and implementation for agents..
+Integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, and Gemini CLI. Includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules. Provides unified interface for all agents through `AgentInterface` abstract base class.
 
 ## Directory Contents
 - `README.md` – File

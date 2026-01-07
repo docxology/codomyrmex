@@ -1,7 +1,7 @@
 # module_template
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for module_template..
+Scaffolding and generation logic for creating new Codomyrmex modules. Ensures all new modules start with required structure, documentation files (README, AGENTS, SPEC), and configuration, enforcing Internal Coherence design principle. Uses template-driven approach with Jinja2 for generating files from templates. Supports idempotent module creation and upgrading existing folders to modules.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

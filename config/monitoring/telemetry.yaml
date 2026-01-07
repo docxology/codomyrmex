@@ -1,0 +1,94 @@
+# Telemetry Configuration Template
+# Defines distributed tracing and observability settings
+
+# Telemetry Configuration
+telemetry:
+  # Enable telemetry
+  enabled: true
+  
+  # Service name
+  service_name: "codomyrmex"
+  
+  # Service version
+  service_version: "${SERVICE_VERSION:1.0.0}"
+
+# Distributed Tracing
+tracing:
+  enabled: false
+  provider: "opentelemetry"  # opentelemetry, jaeger, zipkin
+  
+  # OpenTelemetry configuration
+  opentelemetry:
+    endpoint: "${OTEL_EXPORTER_OTLP_ENDPOINT}"
+    headers: {}
+    insecure: false
+  
+  # Sampling
+  sampling:
+    type: "probabilistic"  # always, never, probabilistic
+    rate: 0.1  # 10% of traces
+  
+  # Trace context propagation
+  propagation:
+    enabled: true
+    formats:
+      - "tracecontext"
+      - "baggage"
+
+# Performance Monitoring
+performance:
+  enabled: true
+  
+  # Performance metrics
+  metrics:
+    - "request_duration"
+    - "request_count"
+    - "error_count"
+    - "database_query_duration"
+    - "cache_hit_rate"
+  
+  # Performance thresholds
+  thresholds:
+    slow_request: 1.0  # seconds
+    slow_query: 0.5  # seconds
+
+# Observability
+observability:
+  enabled: true
+  
+  # Health checks
+  health_checks:
+    enabled: true
+    endpoint: "/health"
+    interval: 30
+  
+  # Service discovery
+  service_discovery:
+    enabled: false
+    provider: "consul"  # consul, etcd, kubernetes
+
+# Export Configuration
+export:
+  # Export to external systems
+  external:
+    enabled: false
+    
+    # Prometheus
+    prometheus:
+      enabled: false
+      port: 9090
+      path: "/metrics"
+    
+    # Grafana
+    grafana:
+      enabled: false
+      endpoint: "${GRAFANA_ENDPOINT}"
+      api_key: "${GRAFANA_API_KEY}"
+
+# Resource Attributes
+resource_attributes:
+  service.name: "codomyrmex"
+  service.version: "${SERVICE_VERSION:1.0.0}"
+  deployment.environment: "${ENVIRONMENT:development}"
+  deployment.region: "${DEPLOYMENT_REGION:us-east-1}"
+

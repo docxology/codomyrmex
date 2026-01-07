@@ -1,0 +1,31 @@
+# Ollama Provider Configuration Example
+# Local LLM server configuration
+
+providers:
+  ollama:
+    enabled: true
+    type: "local"
+    base_url: "http://localhost:11434"
+    timeout: 300
+    max_retries: 3
+    rate_limits:
+      requests_per_minute: 60
+    features:
+      streaming: true
+
+models:
+  llama3.1:
+    provider: "ollama"
+    name: "llama3.1:latest"
+    context_window: 128000
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.9
+      top_k: 40
+
+inference:
+  defaults:
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 1000
+

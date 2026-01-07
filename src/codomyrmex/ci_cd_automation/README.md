@@ -1,7 +1,7 @@
 # ci_cd_automation
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for ci_cd_automation..
+CI/CD pipeline management including pipeline creation, execution, monitoring, deployment orchestration, performance optimization, and rollback management. Provides comprehensive automation for continuous integration and deployment workflows.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

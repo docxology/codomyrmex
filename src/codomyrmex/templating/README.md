@@ -1,7 +1,7 @@
 # templating
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for templating..
+Template engine support (Jinja2, Mako) for code generation, documentation templates, and dynamic content. Provides engine-agnostic template interface with support for template inheritance, custom filters, template caching, and loading templates from files or strings.
 
 ## Directory Contents
 - `README.md` – File

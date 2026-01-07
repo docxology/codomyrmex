@@ -1,7 +1,7 @@
 # cerebrum
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [scripts](scripts/README.md)
@@ -14,7 +14,7 @@
 
 ## Overview
 
-Module components and implementation for cerebrum..
+Case-Enabled Reasoning Engine with Bayesian Representations for Unified Modeling. Provides case-based reasoning combined with Bayesian probabilistic inference for cognitive modeling, code reasoning, and AI enhancement. Integrates case-based reasoning, Bayesian inference, and active inference based on free energy principle.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

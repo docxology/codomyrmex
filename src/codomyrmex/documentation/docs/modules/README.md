@@ -1,7 +1,7 @@
 # modules
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [docs](../README.md)
 - **Children**:
     - [ai_code_editing](ai_code_editing/README.md)
     - [build_synthesis](build_synthesis/README.md)

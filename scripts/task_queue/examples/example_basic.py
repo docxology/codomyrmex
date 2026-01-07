@@ -9,7 +9,7 @@ CORE FUNCTIONALITY:
 
 USAGE EXAMPLES:
     # Basic task_queue
-    from codomyrmex.task_queue import Queue, Job
+    from codomyrmex.logistics.task import Queue, Job
     instance = Queue()
 """
 import sys
@@ -29,7 +29,7 @@ from example_runner import ExampleRunner
 from utils import print_section, print_results, print_success, print_error
 
 try:
-    from codomyrmex.task_queue import Queue, Job
+    from codomyrmex.logistics.task import Queue, Job
 except ImportError:
     print("Module task_queue not yet fully implemented")
 

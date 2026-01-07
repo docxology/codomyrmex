@@ -3,7 +3,7 @@
 Task Queue Module Orchestrator
 
 Thin orchestrator script providing CLI access to task queue module functionality.
-Calls actual module functions from codomyrmex.task_queue.
+Calls actual module functions from codomyrmex.logistics.task.
 
 See also: src/codomyrmex/cli.py for main CLI integration
 """
@@ -39,7 +39,7 @@ except ImportError:
 
 # Import module functions
 try:
-    from codomyrmex.task_queue import Queue
+    from codomyrmex.logistics.task import Queue
 except ImportError:
     Queue = None
 

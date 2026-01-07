@@ -197,7 +197,7 @@ build_result = build_static_site(output_dir="docs/build")
 ### With Project Orchestration
 ```python
 from codomyrmex.documentation import aggregate_docs, validate_doc_versions
-from codomyrmex.project_orchestration import execute_workflow
+from codomyrmex.logistics.orchestration.project import execute_workflow
 
 # Aggregate documentation from multiple modules
 aggregation_result = aggregate_docs(

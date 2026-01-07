@@ -1,7 +1,7 @@
 # codomyrmex
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [src](../README.md)
 - **Children**:
     - [agents](agents/README.md)
     - [api](api/README.md)
@@ -41,11 +41,12 @@
     - [static_analysis](static_analysis/README.md)
     - [system_discovery](system_discovery/README.md)
     - [task_queue](task_queue/README.md)
-    - [template](module_template/README.md)
+    - [template](template/README.md)
     - [templating](templating/README.md)
     - [terminal_interface](terminal_interface/README.md)
     - [tests](tests/README.md)
     - [tools](tools/README.md)
+    - [utils](utils/README.md)
     - [validation](validation/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -55,7 +56,7 @@
 
 ## Overview
 
-Module components and implementation for codomyrmex..
+Core Codomyrmex package containing all functional modules. Provides modular coding workspace enabling AI development workflows with comprehensive capabilities including agents, code execution, security, LLM integration, spatial computing, and more. This is the root package that coordinates all submodules.
 
 ## Directory Contents
 - `README.md` – File
@@ -107,6 +108,7 @@ Module components and implementation for codomyrmex..
 - `terminal_interface/` – Subdirectory
 - `tests/` – Subdirectory
 - `tools/` – Subdirectory
+- `utils/` – Subdirectory
 - `validation/` – Subdirectory
 
 ## Navigation

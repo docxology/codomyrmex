@@ -1,7 +1,7 @@
 # spatial
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [spatial](../README.md)
 - **Children**:
     - [three_d](three_d/README.md)
 - **Key Artifacts**:

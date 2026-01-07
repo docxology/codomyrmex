@@ -1,0 +1,153 @@
+# LLM Models Configuration Template
+# Defines model definitions, capabilities, and default parameters
+
+# Model Definitions
+models:
+  # Ollama Models
+  llama3.1:
+    provider: "ollama"
+    name: "llama3.1:latest"
+    description: "Meta Llama 3.1 model"
+    context_window: 128000
+    max_tokens: 8192
+    capabilities:
+      - "text_generation"
+      - "code_generation"
+      - "conversation"
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.9
+      top_k: 40
+      repeat_penalty: 1.1
+
+  codellama:
+    provider: "ollama"
+    name: "codellama:latest"
+    description: "Code Llama model for code generation"
+    context_window: 16384
+    max_tokens: 4096
+    capabilities:
+      - "code_generation"
+      - "code_completion"
+      - "code_explanation"
+    default_parameters:
+      temperature: 0.2
+      top_p: 0.9
+      top_k: 40
+
+  # OpenAI Models
+  gpt-4:
+    provider: "openai"
+    name: "gpt-4"
+    description: "OpenAI GPT-4 model"
+    context_window: 8192
+    max_tokens: 4096
+    capabilities:
+      - "text_generation"
+      - "code_generation"
+      - "conversation"
+      - "analysis"
+    default_parameters:
+      temperature: 0.7
+      top_p: 1.0
+      frequency_penalty: 0.0
+      presence_penalty: 0.0
+
+  gpt-3.5-turbo:
+    provider: "openai"
+    name: "gpt-3.5-turbo"
+    description: "OpenAI GPT-3.5 Turbo model"
+    context_window: 16385
+    max_tokens: 4096
+    capabilities:
+      - "text_generation"
+      - "conversation"
+    default_parameters:
+      temperature: 0.7
+      top_p: 1.0
+
+  # Anthropic Models
+  claude-3-opus:
+    provider: "anthropic"
+    name: "claude-3-opus-20240229"
+    description: "Anthropic Claude 3 Opus model"
+    context_window: 200000
+    max_tokens: 4096
+    capabilities:
+      - "text_generation"
+      - "code_generation"
+      - "conversation"
+      - "analysis"
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.9
+
+  claude-3-sonnet:
+    provider: "anthropic"
+    name: "claude-3-sonnet-20240229"
+    description: "Anthropic Claude 3 Sonnet model"
+    context_window: 200000
+    max_tokens: 4096
+    capabilities:
+      - "text_generation"
+      - "conversation"
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.9
+
+  # Google Models
+  gemini-pro:
+    provider: "google"
+    name: "gemini-pro"
+    description: "Google Gemini Pro model"
+    context_window: 32768
+    max_tokens: 2048
+    capabilities:
+      - "text_generation"
+      - "conversation"
+    default_parameters:
+      temperature: 0.7
+      top_p: 0.95
+      top_k: 40
+
+# Default Model Selection
+defaults:
+  provider: "ollama"
+  model: "llama3.1:latest"
+  fallback_model: "gpt-3.5-turbo"
+
+# Model Capabilities
+capabilities:
+  text_generation:
+    description: "Generate text based on prompts"
+    supported_models:
+      - "llama3.1"
+      - "gpt-4"
+      - "gpt-3.5-turbo"
+      - "claude-3-opus"
+      - "claude-3-sonnet"
+      - "gemini-pro"
+
+  code_generation:
+    description: "Generate code based on specifications"
+    supported_models:
+      - "codellama"
+      - "gpt-4"
+      - "claude-3-opus"
+
+  conversation:
+    description: "Engage in conversational interactions"
+    supported_models:
+      - "llama3.1"
+      - "gpt-4"
+      - "gpt-3.5-turbo"
+      - "claude-3-opus"
+      - "claude-3-sonnet"
+      - "gemini-pro"
+
+  analysis:
+    description: "Analyze and reason about complex topics"
+    supported_models:
+      - "gpt-4"
+      - "claude-3-opus"
+

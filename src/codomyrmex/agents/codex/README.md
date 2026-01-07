@@ -1,7 +1,7 @@
 # codex
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codex](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for codex..
+Integration with OpenAI Codex API. Provides client for interacting with Codex API, supports code generation and completion, and provides integration adapters for Codomyrmex modules.
 
 ## Directory Contents
 - `README.md` – File

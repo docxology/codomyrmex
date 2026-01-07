@@ -1,7 +1,7 @@
 # theory
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [theory](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for theory..
+Theoretical foundations for agentic systems including agent architectures, reasoning models, and theoretical frameworks. Provides theoretical basis for understanding and designing agentic systems.
 
 ## Directory Contents
 - `README.md` – File

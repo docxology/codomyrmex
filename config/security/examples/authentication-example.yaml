@@ -1,0 +1,32 @@
+# Authentication Configuration Example
+# Demonstrates authentication provider setup
+
+providers:
+  api_key:
+    enabled: true
+    header_name: "X-API-Key"
+    validation:
+      required: true
+      key_source: "environment"
+      key_env_var: "API_KEY"
+
+  token:
+    enabled: true
+    token_type: "Bearer"
+    header_name: "Authorization"
+    validation:
+      algorithm: "HS256"
+      secret: "${JWT_SECRET}"
+      expiration: 3600
+      refresh_enabled: true
+
+methods:
+  primary: "api_key"
+  fallback:
+    - "token"
+
+settings:
+  session:
+    timeout: 3600
+    max_concurrent_sessions: 5
+

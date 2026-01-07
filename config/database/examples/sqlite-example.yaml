@@ -1,0 +1,35 @@
+# SQLite Database Configuration Example
+# Development and testing database configuration
+
+connections:
+  sqlite_dev:
+    type: "sqlite"
+    database: "dev.db"
+    description: "SQLite database for development"
+    options:
+      timeout: 30
+      check_same_thread: false
+      foreign_keys: true
+
+pools:
+  sqlite:
+    min_connections: 1
+    max_connections: 1
+    connection_timeout: 30
+
+migrations:
+  directory: "migrations"
+  naming_pattern: "{timestamp}_{name}.sql"
+  auto_rollback: true
+  timeout: 300
+
+backups:
+  directory: "backups"
+  naming_pattern: "{database}_{timestamp}.backup"
+  compression:
+    enabled: true
+    algorithm: "gzip"
+  retention:
+    keep_daily: 3
+    keep_weekly: 2
+

@@ -1,7 +1,7 @@
 # ai_code_editing
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [ai_code_editing](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for ai_code_editing..
+Semantic intelligence layer for AI-powered code generation, editing, and analysis. Abstracts complexity of interacting with various LLM providers (OpenAI, Anthropic, Google) to provide high-level code manipulation capabilities: generation, refactoring, analysis, and documentation. Provider-agnostic with unified prompting and standardized context.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

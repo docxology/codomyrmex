@@ -1,0 +1,113 @@
+# Migration Configuration Template
+# Defines migration settings and policies
+
+# Migration Settings
+migrations:
+  # Migration directory
+  directory: "${MIGRATIONS_DIR:migrations}"
+  
+  # Migration file naming pattern
+  naming_pattern: "{timestamp}_{name}.sql"
+  timestamp_format: "%Y%m%d_%H%M%S"
+  
+  # Auto-generate rollback migrations
+  auto_rollback: true
+  
+  # Migration timeout (seconds)
+  timeout: 300
+  
+  # Dry run mode (validate without executing)
+  dry_run: false
+  
+  # Transaction mode
+  use_transactions: true
+  
+  # Migration validation
+  validation:
+    enabled: true
+    check_syntax: true
+    check_dependencies: true
+    check_rollback: true
+
+# Migration Policies
+policies:
+  # Allow destructive operations
+  allow_destructive: false
+  
+  # Require backup before migration
+  require_backup: true
+  
+  # Migration approval
+  require_approval: false
+  
+  # Environment restrictions
+  environments:
+    development:
+      allow_destructive: true
+      require_backup: false
+      require_approval: false
+    
+    staging:
+      allow_destructive: false
+      require_backup: true
+      require_approval: false
+    
+    production:
+      allow_destructive: false
+      require_backup: true
+      require_approval: true
+
+# Migration Execution
+execution:
+  # Execution order
+  order: "sequential"  # sequential or parallel
+  
+  # Parallel execution settings
+  parallel:
+    enabled: false
+    max_workers: 4
+  
+  # Error handling
+  error_handling:
+    stop_on_error: true
+    rollback_on_error: true
+    continue_on_warning: true
+
+# Migration Tracking
+tracking:
+  # Track migration history
+  enabled: true
+  
+  # Migration history table
+  history_table: "migration_history"
+  
+  # Track execution time
+  track_execution_time: true
+  
+  # Track migration dependencies
+  track_dependencies: true
+
+# Migration Rollback
+rollback:
+  # Enable rollback
+  enabled: true
+  
+  # Rollback timeout
+  timeout: 300
+  
+  # Rollback validation
+  validation:
+    enabled: true
+    check_data_integrity: true
+
+# Migration Testing
+testing:
+  # Test migrations before applying
+  enabled: true
+  
+  # Test database
+  test_database: "${TEST_DATABASE_URL}"
+  
+  # Test timeout
+  timeout: 300
+

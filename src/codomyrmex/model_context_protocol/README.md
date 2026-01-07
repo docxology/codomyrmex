@@ -1,7 +1,7 @@
 # model_context_protocol
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [docs](docs/README.md)
     - [tests](tests/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Module components and implementation for model_context_protocol..
+Defines the standard schemas (Model Context Protocol) for communication between AI agents and platform tools. Provides the syntax layer of the agent system with strict JSON schemas for `ToolCall` and `ToolResult`, ensuring interoperability and agnosticism to underlying LLM providers. Includes Pydantic models for validating and constructing MCP messages.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

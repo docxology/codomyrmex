@@ -1,7 +1,7 @@
 # model_context_protocol
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [model_context_protocol](../README.md)
 - **Children**:
     - [docs](docs/README.md)
 - **Key Artifacts**:

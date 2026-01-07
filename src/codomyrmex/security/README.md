@@ -1,7 +1,7 @@
 # security
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [cognitive](cognitive/README.md)
     - [digital](digital/README.md)
@@ -18,7 +18,7 @@
 
 ## Overview
 
-Module components and implementation for security..
+Security scanning and threat assessment across cognitive, digital, and physical domains. Provides comprehensive security analysis including vulnerability scanning, compliance checking, threat modeling, and security monitoring. Integrates cognitive security (phishing, social engineering), digital security (vulnerabilities, encryption, certificates), and physical security assessments.
 
 ## Directory Contents
 - `README.md` – File

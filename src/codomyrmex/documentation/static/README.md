@@ -1,7 +1,7 @@
 # static
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [static](../README.md)
 - **Children**:
     - [img](img/README.md)
 - **Key Artifacts**:

@@ -1,164 +1,31 @@
 #!/usr/bin/env python3
-import os
+"""
+Thin wrapper for doc_scaffolder.py.
+Logic migrated to codomyrmex.documentation.scripts.doc_scaffolder.
+"""
+
 import sys
+from pathlib import Path
 
-EXCLUDE_DIRS = {
-    '__pycache__', '.git', '.github', '.idea', '.vscode', 'venv', 'env', 'node_modules', 
-    '__init__.py', '.DS_Store', 'dist', 'build', 'egg-info', '.mypy_cache', '.pytest_cache',
-    '@output'
-}
+# Ensure src is in python path
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root / "src") not in sys.path:
+    sys.path.insert(0, str(project_root / "src"))
 
-EXCLUDE_FILES = {
-    '__init__.py', '.DS_Store'
-}
-
-TEMPLATE_README = """# {name}
-
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-{children_links}
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
-## Overview
-[DESCRIBE THE PURPOSE AND SCOPE OF THE {name} DIRECTORY]
-"""
-
-TEMPLATE_AGENTS = """# {name} Agents
-
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-{children_links}
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
-## Purpose
-[DESCRIBE THE COORDINATION ROLE OF THIS DIRECTORY FOR AI AGENTS]
-"""
-
-TEMPLATE_SPEC = """# {name} Functional Specification
-
-## Core Concept
-[DESCRIBE THE CORE ARCHITECTURAL OR FUNCTIONAL CONCEPT OF {name}]
-
-## Functional Requirements
-- [REQUIREMENT 1: Describe a specific capability]
-- [REQUIREMENT 2: Describe another specific capability]
-
-## Modularity & Interfaces
-- Inputs: [DESCRIBE INPUTS]
-- Outputs: [DESCRIBE OUTPUTS]
-- Dependencies: [LIST DEPENDENCIES]
-
-## Coherence
-[DESCRIBE HOW THIS COMPONENT FITS INTO THE LARGER CODOMYRMEX SYSTEM]
-"""
-
-def get_children_links(root, dirs, filename="README.md"):
-    links = []
-    for d in sorted(dirs):
-        if d in EXCLUDE_DIRS or d.startswith('.'):
-            continue
-        links.append(f"    - [{d}]({d}/{filename})")
-    
-    if not links:
-        links.append("    - None")
-    
-    return "\n".join(links)
-
-def update_file_with_signposting(path, name, children_links, file_type="README.md"):
-    with open(path, "r") as f:
-        content = f.read()
-    
-    if "## Signposting" in content:
-        return
-
-    print(f"Updating {path} with Signposting")
-    
-    if file_type == "README.md":
-        signposting = f"""
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-{children_links}
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-"""
-    else: # AGENTS.md
-        signposting = f"""
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-{children_links}
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-"""
-
-    lines = content.splitlines()
-    # Find first header
-    insert_idx = 0
-    for i, line in enumerate(lines):
-        if line.startswith("# "):
-            insert_idx = i + 1
-            break
-    
-    new_lines = lines[:insert_idx] + signposting.splitlines() + lines[insert_idx:]
-    with open(path, "w") as f:
-        f.write("\n".join(new_lines))
-
-def process_directory(root, dirs):
-    name = os.path.basename(root)
-    if not name:
-        name = "Root"
-
-    # README
-    readme_path = os.path.join(root, "README.md")
-    children_readme = get_children_links(root, dirs, "README.md")
-    if not os.path.exists(readme_path):
-        print(f"Creating README.md in {root}")
-        content = TEMPLATE_README.format(name=name, children_links=children_readme)
-        with open(readme_path, "w") as f:
-            f.write(content)
+try:
+    from codomyrmex.documentation.scripts import doc_scaffolder
+    if hasattr(doc_scaffolder, 'main'):
+        sys.exit(doc_scaffolder.main())
     else:
-        update_file_with_signposting(readme_path, name, children_readme, "README.md")
-    
-    # AGENTS
-    agents_path = os.path.join(root, "AGENTS.md")
-    children_agents = get_children_links(root, dirs, "AGENTS.md")
-    if not os.path.exists(agents_path):
-        print(f"Creating AGENTS.md in {root}")
-        content = TEMPLATE_AGENTS.format(name=name, children_links=children_agents)
-        with open(agents_path, "w") as f:
-            f.write(content)
-    else:
-        update_file_with_signposting(agents_path, name, children_agents, "AGENTS.md")
-
-    # SPEC
-    spec_path = os.path.join(root, "SPEC.md")
-    if not os.path.exists(spec_path):
-        print(f"Creating SPEC.md in {root}")
-        content = TEMPLATE_SPEC.format(name=name)
-        with open(spec_path, "w") as f:
-            f.write(content)
-
-
-def main():
-    start_dir = sys.argv[1] if len(sys.argv) > 1 else "."
-    start_dir = os.path.abspath(start_dir)
-
-    for root, dirs, files in os.walk(start_dir):
-        # Modify dirs in-place to exclude unwanted directories
-        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not d.startswith('.')]
-        
-        process_directory(root, dirs)
-
-if __name__ == "__main__":
-    main()
+        # If no main, just running the module might have been the original behavior
+        # But importing it effectively runs top-level code if not guarded.
+        # Most scripts here likely have "if __name__ == '__main__': main()"
+        # But if we import it, the name is not main.
+        # So we might need to explicitly run main().
+        pass
+except ImportError as e:
+    print(f"Error importing module: {e}")
+    sys.exit(1)
+except AttributeError:
+    print(f"Module doc_scaffolder does not have a main function or failed to execute.")
+    sys.exit(1)

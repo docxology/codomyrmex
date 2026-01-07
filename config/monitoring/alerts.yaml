@@ -1,0 +1,114 @@
+# Alerting Configuration Template
+# Defines alerting rules and thresholds
+
+# Alert Configuration
+alerts:
+  # Enable alerting
+  enabled: true
+  
+  # Alert evaluation interval (seconds)
+  evaluation_interval: 60
+  
+  # Alert cooldown period (seconds)
+  cooldown_period: 300
+
+# Alert Rules
+rules:
+  # System alerts
+  system:
+    - name: "high_cpu_usage"
+      condition: "cpu_usage > 80"
+      duration: "5m"
+      severity: "warning"
+      description: "CPU usage exceeds 80% for 5 minutes"
+    
+    - name: "high_memory_usage"
+      condition: "memory_usage > 90"
+      duration: "5m"
+      severity: "critical"
+      description: "Memory usage exceeds 90% for 5 minutes"
+    
+    - name: "disk_space_low"
+      condition: "disk_usage > 85"
+      duration: "1m"
+      severity: "warning"
+      description: "Disk usage exceeds 85%"
+  
+  # Application alerts
+  application:
+    - name: "high_error_rate"
+      condition: "error_rate > 0.05"
+      duration: "5m"
+      severity: "critical"
+      description: "Error rate exceeds 5% for 5 minutes"
+    
+    - name: "slow_response_time"
+      condition: "request_duration_p95 > 2.0"
+      duration: "10m"
+      severity: "warning"
+      description: "95th percentile response time exceeds 2 seconds"
+    
+    - name: "high_request_rate"
+      condition: "request_count_per_minute > 1000"
+      duration: "1m"
+      severity: "info"
+      description: "Request rate exceeds 1000 per minute"
+  
+  # Database alerts
+  database:
+    - name: "high_connection_count"
+      condition: "connection_count > 80"
+      duration: "5m"
+      severity: "warning"
+      description: "Database connection count exceeds 80"
+    
+    - name: "slow_queries"
+      condition: "query_duration_p95 > 1.0"
+      duration: "10m"
+      severity: "warning"
+      description: "95th percentile query duration exceeds 1 second"
+
+# Alert Severities
+severities:
+  critical:
+    priority: 1
+    notify_immediately: true
+    channels: ["email", "slack", "pager_duty"]
+  
+  warning:
+    priority: 2
+    notify_immediately: false
+    channels: ["email", "slack"]
+  
+  info:
+    priority: 3
+    notify_immediately: false
+    channels: ["slack"]
+
+# Notification Channels
+channels:
+  email:
+    enabled: true
+    smtp_server: "${SMTP_SERVER}"
+    smtp_port: "${SMTP_PORT:587}"
+    from_address: "${ALERT_FROM_EMAIL}"
+    to_addresses:
+      - "${ALERT_TO_EMAIL}"
+  
+  slack:
+    enabled: true
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+    channel: "#alerts"
+  
+  pager_duty:
+    enabled: false
+    integration_key: "${PAGER_DUTY_KEY}"
+
+# Alert Grouping
+grouping:
+  enabled: true
+  group_by: ["severity", "module"]
+  group_wait: "30s"
+  group_interval: "5m"
+  repeat_interval: "12h"
+

@@ -230,7 +230,7 @@ security_scan = scan_security(config.data)
 ### With Project Orchestration
 ```python
 from codomyrmex.config_management import deploy_configuration
-from codomyrmex.project_orchestration import execute_workflow
+from codomyrmex.logistics.orchestration.project import execute_workflow
 
 # Deploy configuration as part of workflow
 result = execute_workflow("config_deployment", {

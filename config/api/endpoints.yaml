@@ -1,0 +1,18 @@
+# API Endpoints Configuration Template
+
+endpoints:
+  base_url: "${API_BASE_URL:http://localhost:8000}"
+  api_prefix: "/api/v1"
+  
+  health:
+    path: "/health"
+    methods: ["GET"]
+  
+  projects:
+    path: "/projects"
+    methods: ["GET", "POST", "PUT", "DELETE"]
+  
+  workflows:
+    path: "/workflows"
+    methods: ["GET", "POST", "PUT", "DELETE", "POST"]
+

@@ -1,0 +1,116 @@
+# Logging Configuration Template
+# Defines logging levels, formats, and output destinations
+
+# Logging Configuration
+logging:
+  # Log level
+  level: "${LOG_LEVEL:INFO}"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  
+  # Log format
+  format: "${LOG_FORMAT:TEXT}"  # TEXT or JSON
+  text_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  detailed_format: "%(asctime)s - %(name)s - %(levelname)s - %(pathname)s:%(lineno)d - %(message)s"
+  
+  # Output destinations
+  outputs:
+    - type: "console"
+      enabled: true
+      level: "${LOG_LEVEL:INFO}"
+    
+    - type: "file"
+      enabled: true
+      path: "${LOG_FILE:codomyrmex.log}"
+      level: "${LOG_LEVEL:INFO}"
+      mode: "a"  # append
+    
+    - type: "syslog"
+      enabled: false
+      address: "/dev/log"
+      facility: "local0"
+      level: "WARNING"
+
+# Log Rotation
+rotation:
+  enabled: true
+  max_file_size: "${LOG_MAX_SIZE:10485760}"  # 10MB in bytes
+  backup_count: "${LOG_BACKUP_COUNT:5}"
+  when: "midnight"  # midnight, interval
+  interval: 1  # days
+  compress: true
+
+# Module-Specific Logging
+modules:
+  # Default module settings
+  default:
+    level: "${LOG_LEVEL:INFO}"
+    propagate: true
+  
+  # Specific module overrides
+  codomyrmex:
+    level: "INFO"
+  
+  codomyrmex.llm:
+    level: "DEBUG"
+  
+  codomyrmex.database_management:
+    level: "INFO"
+  
+  # Third-party library logging
+  httpx:
+    level: "WARNING"
+  httpcore:
+    level: "WARNING"
+
+# Structured Logging
+structured:
+  enabled: true
+  format: "json"
+  fields:
+    - "timestamp"
+    - "level"
+    - "logger"
+    - "message"
+    - "module"
+    - "function"
+    - "line"
+    - "exception"
+    - "context"
+
+# Log Filtering
+filtering:
+  enabled: false
+  filters:
+    - name: "exclude_sensitive"
+      pattern: "(password|secret|api_key|token)"
+      action: "mask"
+      replacement: "***REDACTED***"
+
+# Environment-Specific Settings
+environments:
+  development:
+    level: "DEBUG"
+    outputs:
+      - type: "console"
+        enabled: true
+      - type: "file"
+        enabled: true
+        path: "codomyrmex_dev.log"
+  
+  staging:
+    level: "INFO"
+    outputs:
+      - type: "file"
+        enabled: true
+        path: "/var/log/codomyrmex/staging.log"
+      - type: "syslog"
+        enabled: true
+  
+  production:
+    level: "WARNING"
+    outputs:
+      - type: "file"
+        enabled: true
+        path: "/var/log/codomyrmex/production.log"
+      - type: "syslog"
+        enabled: true
+

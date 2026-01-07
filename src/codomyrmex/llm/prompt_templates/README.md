@@ -1,7 +1,7 @@
 # prompt_templates
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [prompt_templates](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Module components and implementation for prompt_templates..
+Prompt templates for LLM interactions including system templates, context templates, and task templates. Provides standardized prompt structures for consistent LLM interactions across the Codomyrmex platform.
 
 ## Directory Contents
 - `README.md` – File

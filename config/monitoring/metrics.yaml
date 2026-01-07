@@ -1,0 +1,100 @@
+# Metrics Configuration Template
+# Defines metrics collection settings
+
+# Metrics Configuration
+metrics:
+  # Enable metrics collection
+  enabled: true
+  
+  # Collection interval (seconds)
+  interval: 60
+  
+  # Metrics storage
+  storage:
+    type: "memory"  # memory, file, database, prometheus
+    path: "${METRICS_STORAGE_PATH:metrics.db}"
+    retention: "7_days"
+
+# Metric Definitions
+definitions:
+  # System metrics
+  system:
+    cpu_usage:
+      type: "gauge"
+      description: "CPU usage percentage"
+      unit: "percent"
+      interval: 60
+    
+    memory_usage:
+      type: "gauge"
+      description: "Memory usage in bytes"
+      unit: "bytes"
+      interval: 60
+    
+    disk_usage:
+      type: "gauge"
+      description: "Disk usage in bytes"
+      unit: "bytes"
+      interval: 300
+  
+  # Application metrics
+  application:
+    request_count:
+      type: "counter"
+      description: "Total number of requests"
+      labels: ["method", "endpoint", "status"]
+    
+    request_duration:
+      type: "histogram"
+      description: "Request duration in seconds"
+      buckets: [0.1, 0.5, 1.0, 2.0, 5.0]
+      labels: ["method", "endpoint"]
+    
+    error_count:
+      type: "counter"
+      description: "Total number of errors"
+      labels: ["error_type", "module"]
+  
+  # Database metrics
+  database:
+    connection_count:
+      type: "gauge"
+      description: "Active database connections"
+      interval: 60
+    
+    query_duration:
+      type: "histogram"
+      description: "Query duration in seconds"
+      buckets: [0.01, 0.1, 0.5, 1.0, 5.0]
+    
+    query_count:
+      type: "counter"
+      description: "Total number of queries"
+      labels: ["query_type"]
+
+# Metrics Export
+export:
+  # Prometheus export
+  prometheus:
+    enabled: false
+    port: 9090
+    path: "/metrics"
+  
+  # StatsD export
+  statsd:
+    enabled: false
+    host: "${STATSD_HOST:localhost}"
+    port: 8125
+    prefix: "codomyrmex"
+
+# Metrics Aggregation
+aggregation:
+  enabled: true
+  window: 300  # seconds
+  functions:
+    - "mean"
+    - "min"
+    - "max"
+    - "sum"
+    - "count"
+

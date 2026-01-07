@@ -1,7 +1,7 @@
 # src
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [Repository Root](../README.md)
 - **Children**:
     - [codomyrmex](codomyrmex/README.md)
     - [template](template/README.md)

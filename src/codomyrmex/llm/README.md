@@ -1,7 +1,7 @@
 # llm
 
 ## Signposting
-- **Parent**: [Parent](../README.md)
+- **Parent**: [codomyrmex](../README.md)
 - **Children**:
     - [ollama](ollama/README.md)
     - [outputs](outputs/README.md)
@@ -14,7 +14,7 @@
 
 ## Overview
 
-Module components and implementation for llm..
+Language model integration, prompt management, and output handling for the Codomyrmex platform. Provides multi-provider support (Ollama, OpenAI, Anthropic, local models), prompt template management, output parsing and validation, and streaming response support.
 
 ## Directory Contents
 - `README.md` – File
