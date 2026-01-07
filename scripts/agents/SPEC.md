@@ -302,6 +302,73 @@ Reset droid metrics.
 python orchestrate.py droid metrics reset
 ```
 
+#### droid config save
+Save droid configuration to file.
+
+**Usage:**
+```bash
+python orchestrate.py droid config save <file>
+```
+
+#### droid config load
+Load droid configuration from file.
+
+**Usage:**
+```bash
+python orchestrate.py droid config load <file>
+```
+
+#### droid execute-task
+Execute a specific task.
+
+**Usage:**
+```bash
+python orchestrate.py droid execute-task <operation_id> [--handler <path>]
+```
+
+#### droid todo load
+Load TODO list.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo load [--file <path>]
+```
+
+**Options:**
+- `--file`: TODO file path (default: todo_list.txt)
+
+#### droid todo save
+Save TODO list.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo save [--file <path>]
+```
+
+#### droid todo validate
+Validate TODO file format.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo validate [--file <path>]
+```
+
+#### droid todo migrate
+Migrate TODO file to 3-column format.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo migrate [--file <path>]
+```
+
+#### droid todo list
+List TODO items.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo list [--file <path>]
+```
+
 ### Orchestrator (`orchestrate`)
 
 #### orchestrate parallel
@@ -350,6 +417,23 @@ List available agents.
 python orchestrate.py orchestrate list [--format json]
 ```
 
+#### orchestrate select
+Select agents by capability.
+
+**Usage:**
+```bash
+python orchestrate.py orchestrate select --capability <cap> [--agents <agent1,agent2,...>]
+```
+
+**Options:**
+- `--capability`: Capability to filter by (required)
+- `--agents`: Comma-separated list of agents to check (default: all)
+
+**Example:**
+```bash
+python orchestrate.py orchestrate select --capability streaming --agents jules,claude
+```
+
 ### Theory Module (`theory`)
 
 #### theory info
@@ -374,6 +458,379 @@ Show reasoning models.
 **Usage:**
 ```bash
 python orchestrate.py theory reasoning [--format json]
+```
+
+## Configuration Management (`config`)
+
+#### config show
+Show current agent configuration.
+
+**Usage:**
+```bash
+python orchestrate.py config show [--format json]
+```
+
+#### config set
+Set configuration values.
+
+**Usage:**
+```bash
+python orchestrate.py config set <key=value> [key=value...]
+```
+
+**Example:**
+```bash
+python orchestrate.py config set default_timeout=60 log_level=DEBUG
+```
+
+#### config reset
+Reset configuration to defaults.
+
+**Usage:**
+```bash
+python orchestrate.py config reset
+```
+
+#### config validate
+Validate current configuration.
+
+**Usage:**
+```bash
+python orchestrate.py config validate
+```
+
+## Task Planner (`task`)
+
+#### task create
+Create a new task.
+
+**Usage:**
+```bash
+python orchestrate.py task create <description> [--dependencies <id1,id2,...>] [--metadata <json>]
+```
+
+**Example:**
+```bash
+python orchestrate.py task create "Process data" --dependencies task_1,task_2
+```
+
+#### task list
+List all tasks.
+
+**Usage:**
+```bash
+python orchestrate.py task list [--format json]
+```
+
+#### task get
+Get task details.
+
+**Usage:**
+```bash
+python orchestrate.py task get <id> [--format json]
+```
+
+#### task update
+Update task status.
+
+**Usage:**
+```bash
+python orchestrate.py task update <id> --status <status> [--result <value>] [--error <message>]
+```
+
+**Status values:** `pending`, `in_progress`, `completed`, `failed`, `cancelled`
+
+#### task ready
+Get ready tasks (dependencies completed).
+
+**Usage:**
+```bash
+python orchestrate.py task ready [--format json]
+```
+
+#### task order
+Get tasks in execution order.
+
+**Usage:**
+```bash
+python orchestrate.py task order [--format json]
+```
+
+#### task clear
+Clear all tasks.
+
+**Usage:**
+```bash
+python orchestrate.py task clear
+```
+
+## Message Bus (`message`)
+
+#### message subscribe
+Subscribe to message type.
+
+**Usage:**
+```bash
+python orchestrate.py message subscribe <type> [--handler <path>]
+```
+
+#### message publish
+Publish a message.
+
+**Usage:**
+```bash
+python orchestrate.py message publish <type> <content> [--sender <name>] [--metadata <json>]
+```
+
+#### message send
+Send message to recipient.
+
+**Usage:**
+```bash
+python orchestrate.py message send <sender> <recipient> <type> <content> [--metadata <json>]
+```
+
+#### message broadcast
+Broadcast message to all subscribers.
+
+**Usage:**
+```bash
+python orchestrate.py message broadcast <sender> <type> <content> [--metadata <json>]
+```
+
+#### message history
+Get message history.
+
+**Usage:**
+```bash
+python orchestrate.py message history [--type <type>] [--limit <n>] [--format json]
+```
+
+## Configuration Management (`config`)
+
+#### config show
+Show current agent configuration.
+
+**Usage:**
+```bash
+python orchestrate.py config show [--format json]
+```
+
+#### config set
+Set configuration values.
+
+**Usage:**
+```bash
+python orchestrate.py config set <key=value> [key=value...]
+```
+
+**Example:**
+```bash
+python orchestrate.py config set default_timeout=60 log_level=DEBUG
+```
+
+#### config reset
+Reset configuration to defaults.
+
+**Usage:**
+```bash
+python orchestrate.py config reset
+```
+
+#### config validate
+Validate current configuration.
+
+**Usage:**
+```bash
+python orchestrate.py config validate
+```
+
+## Task Planner (`task`)
+
+#### task create
+Create a new task.
+
+**Usage:**
+```bash
+python orchestrate.py task create <description> [--dependencies <id1,id2,...>] [--metadata <json>]
+```
+
+**Example:**
+```bash
+python orchestrate.py task create "Process data" --dependencies task_1,task_2
+```
+
+#### task list
+List all tasks.
+
+**Usage:**
+```bash
+python orchestrate.py task list [--format json]
+```
+
+#### task get
+Get task details.
+
+**Usage:**
+```bash
+python orchestrate.py task get <id> [--format json]
+```
+
+#### task update
+Update task status.
+
+**Usage:**
+```bash
+python orchestrate.py task update <id> --status <status> [--result <value>] [--error <message>]
+```
+
+**Status values:** `pending`, `in_progress`, `completed`, `failed`, `cancelled`
+
+#### task ready
+Get ready tasks (dependencies completed).
+
+**Usage:**
+```bash
+python orchestrate.py task ready [--format json]
+```
+
+#### task order
+Get tasks in execution order.
+
+**Usage:**
+```bash
+python orchestrate.py task order [--format json]
+```
+
+#### task clear
+Clear all tasks.
+
+**Usage:**
+```bash
+python orchestrate.py task clear
+```
+
+## Message Bus (`message`)
+
+#### message subscribe
+Subscribe to message type.
+
+**Usage:**
+```bash
+python orchestrate.py message subscribe <type> [--handler <path>]
+```
+
+#### message publish
+Publish a message.
+
+**Usage:**
+```bash
+python orchestrate.py message publish <type> <content> [--sender <name>] [--metadata <json>]
+```
+
+#### message send
+Send message to recipient.
+
+**Usage:**
+```bash
+python orchestrate.py message send <sender> <recipient> <type> <content> [--metadata <json>]
+```
+
+#### message broadcast
+Broadcast message to all subscribers.
+
+**Usage:**
+```bash
+python orchestrate.py message broadcast <sender> <type> <content> [--metadata <json>]
+```
+
+#### message history
+Get message history.
+
+**Usage:**
+```bash
+python orchestrate.py message history [--type <type>] [--limit <n>] [--format json]
+```
+
+## Enhanced Droid Commands
+
+#### droid config save
+Save droid configuration to file.
+
+**Usage:**
+```bash
+python orchestrate.py droid config save <file>
+```
+
+#### droid config load
+Load droid configuration from file.
+
+**Usage:**
+```bash
+python orchestrate.py droid config load <file>
+```
+
+#### droid execute-task
+Execute a specific task.
+
+**Usage:**
+```bash
+python orchestrate.py droid execute-task <operation_id> [--handler <path>]
+```
+
+#### droid todo load
+Load TODO list.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo load [--file <path>]
+```
+
+#### droid todo save
+Save TODO list.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo save [--file <path>]
+```
+
+#### droid todo validate
+Validate TODO file format.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo validate [--file <path>]
+```
+
+#### droid todo migrate
+Migrate TODO file to 3-column format.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo migrate [--file <path>]
+```
+
+#### droid todo list
+List TODO items.
+
+**Usage:**
+```bash
+python orchestrate.py droid todo list [--file <path>]
+```
+
+## Enhanced Orchestrator Commands
+
+#### orchestrate select
+Select agents by capability.
+
+**Usage:**
+```bash
+python orchestrate.py orchestrate select --capability <cap> [--agents <agent1,agent2,...>]
+```
+
+**Example:**
+```bash
+python orchestrate.py orchestrate select --capability streaming --agents jules,claude
 ```
 
 ## Integration

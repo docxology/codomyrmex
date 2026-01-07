@@ -1,5 +1,9 @@
 # Codomyrmex
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/codomyrmex/codomyrmex)
+
 **Version**: 0.1.0 | **License**: MIT | **Python**: ≥3.10
 
 A modular, extensible coding workspace designed for AI development workflows. Codomyrmex integrates tools for building, documenting, analyzing, executing, and visualizing code across multiple languages.
@@ -14,69 +18,117 @@ Codomyrmex provides a suite of development tools organized as independent, compo
 - **Polyglot Support**: Language-agnostic interfaces with pluggable implementations
 - **Professional Quality**: Testing, documentation, and security practices
 
+<details>
+<summary><strong>Table of Contents</strong></summary>
+
+- [Quick Navigation](#quick-navigation)
+- [System Architecture](#system-architecture)
+  - [Module Dependency Graph](#module-dependency-graph)
+  - [Workflow Execution Architecture](#workflow-execution-architecture)
+  - [Multi-Stage Build Architecture](#multi-stage-build-architecture)
+- [Quick Start](#quick-start)
+  - [Installation](#installation)
+  - [Basic Usage](#basic-usage)
+  - [Getting Started Workflow](#getting-started-workflow)
+- [Architecture](#architecture)
+  - [Layered Design Principles](#layered-design-principles)
+- [Core Modules](#core-modules)
+  - [Foundation Layer](#foundation-layer)
+  - [Core Functional Modules](#core-functional-modules)
+  - [Service Modules](#service-modules)
+  - [Specialized Modules](#specialized-modules)
+- [Explore Modules](#explore-modules)
+- [Module Quick Reference](#module-quick-reference)
+- [Common Use Cases](#common-use-cases)
+- [Project Structure](#project-structure)
+- [Key Concepts](#key-concepts)
+- [Documentation](#documentation)
+- [Development](#development)
+- [Contributing](#contributing)
+- [Security](#security)
+- [License](#license)
+- [Data Flow Architecture](#data-flow-architecture)
+- [Module Interaction Workflow](#module-interaction-workflow)
+- [Development Workflow Architecture](#development-workflow-architecture)
+- [Dependencies Overview](#dependencies-overview)
+- [Module Maturity Levels](#module-maturity-levels)
+- [Key Metrics](#key-metrics)
+- [Links](#links)
+
+</details>
+
+## Quick Navigation
+
+**Get Started Quickly:**
+- 📚 **[Source Code](src/README.md)** - Browse all modules and implementations
+- 📖 **[Documentation Hub](docs/README.md)** - User guides and developer documentation
+- 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
+- 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system
+- 🎯 **[Architecture Guide](docs/project/architecture.md)** - System design and principles
+
 ## System Architecture
 
 ```mermaid
 graph TB
-    subgraph "User Interfaces"
-        CLI["CLI<br/>(codomyrmex)"]
-        Shell["Interactive<br/>Shell"]
-        API["API Endpoints<br/>(FastAPI)"]
+    subgraph userInterfaces ["User Interfaces"]
+        CLI["CLI (codomyrmex)"]
+        Shell["Interactive Shell"]
+        API["API Endpoints (FastAPI)"]
     end
 
-    subgraph "Core Services Layer"
-        Discovery["System<br/>Discovery"]
-        Status["Status<br/>Reporting"]
-        Terminal["Interactive<br/>Terminal"]
+    subgraph coreServices ["Core Services Layer"]
+        Discovery["System Discovery"]
+        Status["Status Reporting"]
+        Terminal["Interactive Terminal"]
     end
 
-    subgraph "Module Layer - AI & Intelligence"
-        AICode["AI Code<br/>Editing"]
-        MCP["Model Context<br/>Protocol"]
-        LLM["LLM<br/>Infrastructure"]
+    subgraph aiIntelligence ["Module Layer - AI & Intelligence"]
+        AICode["AI Code Editing"]
+        MCP["Model Context Protocol"]
+        LLM["LLM Infrastructure"]
     end
 
-    subgraph "Module Layer - Analysis & Quality"
-        StaticAnalysis["Static<br/>Analysis"]
-        PatternMatch["Pattern<br/>Matching"]
-        Coding["Coding &<br/>Review"]
+    subgraph analysisQuality ["Module Layer - Analysis & Quality"]
+        StaticAnalysis["Static Analysis"]
+        PatternMatch["Pattern Matching"]
+        Coding["Coding & Review"]
         Security["Security"]
-        Perf["Performance<br/>Monitoring"]
+        Perf["Performance Monitoring"]
     end
 
-    subgraph "Module Layer - Build & Deploy"
-        Build["Build<br/>Synthesis"]
-        Git["Git<br/>Operations"]
-        Docs["Documentation<br/>Generation"]
-        APIDocs["API<br/>Documentation"]
-        APIStd["API<br/>Standardization"]
-        CICDAuto["CI/CD<br/>Automation"]
-        Container["Container<br/>Management"]
+    subgraph buildDeploy ["Module Layer - Build & Deploy"]
+        Build["Build Synthesis"]
+        Git["Git Operations"]
+        Docs["Documentation Generation"]
+        APIDocs["API Documentation"]
+        APIStd["API Standardization"]
+        CICDAuto["CI/CD Automation"]
+        Container["Container Management"]
     end
 
-    subgraph "Module Layer - Visualization & Data"
-        DataViz["Data<br/>Visualization"]
-        Spatial["Spatial<br/>(3D/4D)"]
+    subgraph visualizationData ["Module Layer - Visualization & Data"]
+        DataViz["Data Visualization"]
+        Spatial["Spatial (3D/4D)"]
     end
 
-    subgraph "Module Layer - Infrastructure"
-        Database["Database<br/>Management"]
-        ConfigMgmt["Config<br/>Management"]
-        PhysMgmt["Physical<br/>Management"]
-        Events["Event<br/>System"]
-        PluginSys["Plugin<br/>System"]
+    subgraph infrastructure ["Module Layer - Infrastructure"]
+        Database["Database Management"]
+        ConfigMgmt["Config Management"]
+        PhysMgmt["Physical Management"]
+        Events["Event System"]
+        PluginSys["Plugin System"]
     end
 
-    subgraph "Module Layer - Extensions"
-        ModTemplate["Module<br/>Template"]
-        Tools["Utility<br/>Tools"]
-        SysDiscovery["System<br/>Discovery"]
+    subgraph extensions ["Module Layer - Extensions"]
+        ModTemplate["Module Template"]
+        Tools["Utility Tools"]
+        SysDiscovery["System Discovery"]
     end
 
-    subgraph "Foundation Layer"
-        Logging["Logging &<br/>Monitoring"]
-        Environment["Environment<br/>Setup"]
-        TerminalInterface["Terminal<br/>Interface"]
+    subgraph foundation ["Foundation Layer"]
+        Logging["Logging & Monitoring"]
+        Environment["Environment Setup"]
+        TerminalInterface["Terminal Interface"]
     end
 
     %% User Interface connections

@@ -37,10 +37,24 @@ The orchestrator provides commands for the following agent types:
 - **Metrics**: `metrics`, `metrics reset`
 
 ### Orchestration Commands
-- **Multi-agent**: `parallel`, `sequential`, `fallback`, `list`
+- **Multi-agent**: `parallel`, `sequential`, `fallback`, `list`, `select`
 
 ### Theory Module Commands
 - **Information**: `info`, `architectures`, `reasoning`
+
+### Configuration Management Commands
+- **Config**: `show`, `set`, `reset`, `validate`
+
+### Task Planner Commands
+- **Task Management**: `create`, `list`, `get`, `update`, `ready`, `order`, `clear`
+
+### Message Bus Commands
+- **Messaging**: `subscribe`, `publish`, `send`, `broadcast`, `history`
+
+### Enhanced Droid Commands
+- **Config Management**: `config save`, `config load`
+- **Task Execution**: `execute-task`
+- **TODO Management**: `todo load`, `todo save`, `todo validate`, `todo migrate`, `todo list`
 
 ## Key Functions
 
@@ -56,9 +70,12 @@ The orchestrator provides commands for the following agent types:
 - `handle_codex_*`: Codex API operations
 - `handle_opencode_*`: OpenCode CLI operations (init, version)
 - `handle_gemini_*`: Gemini CLI operations (chat management)
-- `handle_droid_*`: Droid controller operations
-- `handle_orchestrate_*`: Multi-agent orchestration
+- `handle_droid_*`: Droid controller operations (including TODO management)
+- `handle_orchestrate_*`: Multi-agent orchestration (including capability selection)
 - `handle_theory_*`: Theory module information
+- `handle_config_*`: Configuration management
+- `handle_task_*`: Task planner operations
+- `handle_message_*`: Message bus operations
 
 ## Dependencies
 
@@ -69,8 +86,9 @@ The orchestrator provides commands for the following agent types:
 - `codomyrmex.agents.opencode`: OpenCodeClient
 - `codomyrmex.agents.gemini`: GeminiClient
 - `codomyrmex.agents.droid`: DroidController, DroidConfig
-- `codomyrmex.agents.generic`: AgentOrchestrator
+- `codomyrmex.agents.generic`: AgentOrchestrator, TaskPlanner, MessageBus
 - `codomyrmex.agents.theory`: Theory module components
+- `codomyrmex.agents.droid`: TodoManager, TodoItem, save_config_to_file, load_config_from_file
 - `codomyrmex.logging_monitoring`: Logging infrastructure
 - `_orchestrator_utils`: Shared CLI utilities
 

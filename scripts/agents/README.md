@@ -160,6 +160,98 @@ python orchestrate.py theory architectures
 python orchestrate.py theory reasoning
 ```
 
+### Configuration Management
+
+```bash
+# Show configuration
+python orchestrate.py config show
+
+# Set configuration values
+python orchestrate.py config set default_timeout=60 log_level=DEBUG
+
+# Reset to defaults
+python orchestrate.py config reset
+
+# Validate configuration
+python orchestrate.py config validate
+```
+
+### Task Planner
+
+```bash
+# Create a task
+python orchestrate.py task create "Process data" --dependencies task_1,task_2
+
+# List all tasks
+python orchestrate.py task list
+
+# Get task details
+python orchestrate.py task get task_1
+
+# Update task status
+python orchestrate.py task update task_1 --status completed --result "Success"
+
+# Get ready tasks
+python orchestrate.py task ready
+
+# Get execution order
+python orchestrate.py task order
+
+# Clear all tasks
+python orchestrate.py task clear
+```
+
+### Message Bus
+
+```bash
+# Subscribe to messages
+python orchestrate.py message subscribe task_completed
+
+# Publish a message
+python orchestrate.py message publish task_completed "Task finished" --sender worker1
+
+# Send message to recipient
+python orchestrate.py message send worker1 worker2 request "Process this"
+
+# Broadcast message
+python orchestrate.py message broadcast system shutdown "System shutting down"
+
+# Get message history
+python orchestrate.py message history --type task_completed --limit 10
+```
+
+### Enhanced Droid Operations
+
+```bash
+# Save configuration
+python orchestrate.py droid config save droid_config.json
+
+# Load configuration
+python orchestrate.py droid config load droid_config.json
+
+# Execute a task
+python orchestrate.py droid execute-task my_operation
+
+# Load TODO list
+python orchestrate.py droid todo load --file my_todos.txt
+
+# Validate TODO file
+python orchestrate.py droid todo validate
+
+# Migrate TODO format
+python orchestrate.py droid todo migrate
+
+# List TODO items
+python orchestrate.py droid todo list
+```
+
+### Enhanced Orchestration
+
+```bash
+# Select agents by capability
+python orchestrate.py orchestrate select --capability streaming --agents jules,claude
+```
+
 ## Global Options
 
 All commands support:
