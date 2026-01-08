@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 # Add Codomyrmex to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "..", "src"))
 
 try:
     from codomyrmex.llm.fabric import FabricConfigManager as CoreFabricConfigManager

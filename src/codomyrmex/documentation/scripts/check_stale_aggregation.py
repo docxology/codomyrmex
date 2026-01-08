@@ -9,6 +9,28 @@ import filecmp
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Check for stale aggregation: ensure aggregated docs mirror module docs.
 

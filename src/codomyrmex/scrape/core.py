@@ -10,6 +10,28 @@ from enum import Enum
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Core scraping abstractions and data structures.
 
 This module defines the core abstractions for the scrape module,

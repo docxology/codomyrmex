@@ -8,6 +8,17 @@ from codomyrmex.agents.generic import CLIAgentBase
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 """Mistral Vibe CLI client wrapper."""
 
 

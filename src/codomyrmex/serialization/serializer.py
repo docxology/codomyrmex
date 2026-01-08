@@ -18,6 +18,28 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 Base serializer interface and implementations.
 """

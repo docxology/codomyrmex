@@ -293,7 +293,7 @@ def main():
             analyzer.analyze_file(target_path)
     elif target_path.is_dir():
         analyzer.process_directory(target_path, args.recursive)
-        else:
+    else:
         print(f"❌ Path not found: {args.path}")
         return 1
 

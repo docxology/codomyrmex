@@ -10,6 +10,17 @@ from codomyrmex.agents.generic.base_agent import BaseAgent
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 """Base class for CLI-based agents with common subprocess patterns."""
 
 

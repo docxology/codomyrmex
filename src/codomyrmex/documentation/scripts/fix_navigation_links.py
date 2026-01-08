@@ -6,6 +6,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix navigation links in AGENTS.md files that point to non-existent files.

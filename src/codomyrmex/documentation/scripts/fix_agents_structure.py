@@ -4,6 +4,17 @@ import os
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix AGENTS.md Structure

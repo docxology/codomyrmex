@@ -7,6 +7,17 @@ from codomyrmex.agents.core import AgentRequest
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 """Mistral Vibe integration adapters for Codomyrmex modules."""
 
 

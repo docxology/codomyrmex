@@ -6,6 +6,17 @@ from codomyrmex.{module_name} import main_function
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Create placeholder example_tutorial.md files for modules that reference them.

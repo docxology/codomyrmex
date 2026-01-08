@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 
 # Add Codomyrmex to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'src'))
 
 try:
     from codomyrmex.logging_monitoring import get_logger

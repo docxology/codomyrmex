@@ -19,6 +19,28 @@ from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Interactive Shell for Codomyrmex
@@ -36,10 +58,7 @@ except ImportError:
 
     logger = logging.getLogger(__name__)
 
-try:
-except ImportError:
-    logger.warning("Could not import SystemDiscovery - running in limited mode")
-    SystemDiscovery = None
+
 
 
 class InteractiveShell(cmd.Cmd):

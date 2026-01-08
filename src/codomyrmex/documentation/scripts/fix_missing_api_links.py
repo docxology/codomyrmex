@@ -4,6 +4,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Fix or remove links to non-existent API_SPECIFICATION.md and USAGE_EXAMPLES.md files."""
 

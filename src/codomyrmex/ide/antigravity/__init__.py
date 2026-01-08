@@ -1,19 +1,3 @@
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional, Dict, List, Callable
-import json
-import os
-import time
-
-from dataclasses import dataclass, field
-
-from codomyrmex.ide import (
-
-
-
-
-
-
 """Antigravity IDE Integration
 
 Integration with Google DeepMind's Antigravity IDE - the agentic AI coding
@@ -27,7 +11,15 @@ Example:
     >>> capabilities = client.get_capabilities()
 """
 
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional, Dict, List, Callable
+import json
+import os
+import time
+from dataclasses import dataclass, field
 
+from codomyrmex.ide import (
     IDEClient, 
     IDEStatus,
     IDECommand,
@@ -39,7 +31,6 @@ Example:
     SessionError,
     ArtifactError,
 )
-
 
 @dataclass
 class Artifact:
@@ -60,7 +51,6 @@ class Artifact:
             "modified": self.modified,
         }
 
-
 @dataclass
 class ConversationContext:
     """Represents the current Antigravity conversation context."""
@@ -78,7 +68,6 @@ class ConversationContext:
             "mode": self.mode,
             "artifacts": [a.to_dict() for a in self.artifacts],
         }
-
 
 class AntigravityClient(IDEClient):
     """Client for interacting with Antigravity IDE.
@@ -640,7 +629,6 @@ class AntigravityClient(IDEClient):
             "success_rate": self.get_success_rate(),
             "last_command": self.get_last_command().to_dict() if self.get_last_command() else None,
         }
-
 
 __all__ = [
     "AntigravityClient",

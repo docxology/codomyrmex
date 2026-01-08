@@ -5,6 +5,17 @@ import os
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Generate missing README.md and AGENTS.md files."""
 

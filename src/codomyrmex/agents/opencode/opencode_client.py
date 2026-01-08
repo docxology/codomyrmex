@@ -8,6 +8,17 @@ from codomyrmex.agents.generic import CLIAgentBase
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 """OpenCode CLI client wrapper."""
 
 

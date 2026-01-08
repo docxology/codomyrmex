@@ -7,6 +7,17 @@ import os
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 REQUIRED_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 IGNORE_DIRS = [
     ".git", ".github", ".venv", "__pycache__", ".pytest_cache", 

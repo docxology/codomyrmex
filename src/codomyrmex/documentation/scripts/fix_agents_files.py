@@ -7,6 +7,17 @@ import os
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Batch fix AGENTS.md files throughout the repository.

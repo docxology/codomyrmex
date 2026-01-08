@@ -11,7 +11,7 @@ import time
 from pathlib import Path
 
 # Add src to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "src"))
 
 try:
     from codomyrmex.llm.ollama import OllamaManager, ModelRunner, OutputManager, ConfigManager

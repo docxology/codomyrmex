@@ -33,7 +33,13 @@ SKIP_DIRS = {
     "build",
     "dist",
     "egg-info",
-    "output"
+    "output",
+    "_templates",
+    "module_template",
+    "examples",
+    "tests",
+    ".cursor",
+    ".DS_Store"
 }
 
 SKIP_PATTERNS = {
@@ -106,23 +112,7 @@ except ImportError:
     def print_warning(msg, **kwargs): print(f"⚠️  {msg}")
     def print_with_color(msg, color=None, **kwargs): print(msg)
 
-# Directories to skip when discovering scripts
-SKIP_DIRS = {
-    '__pycache__',
-    '.git',
-    '.cursor',
-    'node_modules',
-    '.DS_Store',
-    'tests',  # Skip test subdirectories within script folders
-    'examples',  # Skip examples subdirectories (they're not orchestration scripts)
-}
 
-# Script patterns to skip
-SKIP_PATTERNS = {
-    '__init__.py',
-    'conftest.py',
-    '_orchestrator_utils.py',  # Shared utilities, not runnable
-}
 
 
 def discover_scripts(
@@ -232,7 +222,10 @@ def run_script(
     src_path = project_root / "src"
     if src_path.exists():
         pythonpath = run_env.get("PYTHONPATH", "")
-        run_env["PYTHONPATH"] = f"{src_path}:{pythonpath}" if pythonpath else str(src_path)
+        # Add both src and scripts root to path
+        scripts_root = project_root / "scripts"
+        new_path = f"{src_path}:{scripts_root}"
+        run_env["PYTHONPATH"] = f"{new_path}:{pythonpath}" if pythonpath else new_path
     
     try:
         process = subprocess.run(

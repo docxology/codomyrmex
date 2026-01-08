@@ -12,6 +12,28 @@ from dataclasses import dataclass
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @dataclass
 class ErrorDiagnosis:
     """Represents a diagnosed error from execution output."""

@@ -5,6 +5,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Remove or fix links to missing files."""
 

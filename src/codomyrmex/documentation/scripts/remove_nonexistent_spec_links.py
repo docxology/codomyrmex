@@ -4,6 +4,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Remove links to non-existent SPEC.md files in scripts/."""
 

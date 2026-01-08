@@ -4,6 +4,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Remove placeholder content from README.md files.

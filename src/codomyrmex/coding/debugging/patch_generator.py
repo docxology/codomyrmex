@@ -13,6 +13,28 @@ from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # We define a minimal interface for the LLM to avoid circular hard dependencies 
 # or complex setup if the user hasn't configured 'codomyrmex.llm' yet.
 # In a real scenario, this would import from codomyrmex.llm.

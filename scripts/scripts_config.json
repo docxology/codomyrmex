@@ -43,6 +43,9 @@
             "skip": true,
             "skip_reason": "Interactive/Service script"
         },
+        "fabric/fabric_config_manager.py": {
+            "skip": true
+        },
         "tools/run_quality_checks.py": {
             "allowed_exit_codes": [
                 0,
@@ -70,6 +73,10 @@
         },
         "ollama/serve_model.py": {
             "skip": true
+        },
+        "scrape/scrape_gemini_docs.py": {
+            "skip": true,
+            "skip_reason": "Missing optional dependency: markdownify"
         },
         "ollama/chat_cli.py": {
             "skip": true

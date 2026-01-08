@@ -7,6 +7,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Comprehensive triple-check of all SPEC, AGENTS, and README files."""
 

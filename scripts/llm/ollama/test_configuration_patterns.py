@@ -22,7 +22,7 @@ import json
 import tempfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "src"))
 
 from codomyrmex.llm.ollama import ConfigManager, OllamaManager, ModelRunner
 from codomyrmex.llm.ollama.model_runner import ExecutionOptions

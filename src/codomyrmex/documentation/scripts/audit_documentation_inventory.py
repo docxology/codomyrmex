@@ -7,6 +7,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Audit all README.md and AGENTS.md files in the repository.

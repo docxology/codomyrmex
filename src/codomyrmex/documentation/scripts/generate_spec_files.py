@@ -5,6 +5,17 @@ import os
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Generate SPEC.md files for all directories missing them."""
 

@@ -5,6 +5,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Fix relative paths in scripts/*/README.md files."""
 

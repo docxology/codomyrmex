@@ -9,6 +9,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Bootstrap script to create AGENTS.md and README.md files for every directory

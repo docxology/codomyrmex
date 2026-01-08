@@ -5,6 +5,17 @@ import sys
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Script to check documentation status across the entire repository.

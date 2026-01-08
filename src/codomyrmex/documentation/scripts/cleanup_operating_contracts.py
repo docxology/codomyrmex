@@ -4,6 +4,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Clean up AGENTS.md files by removing incorrectly added items from Operating Contracts sections.

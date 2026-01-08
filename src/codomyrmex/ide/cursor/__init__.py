@@ -6,6 +6,17 @@ from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutio
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 """Cursor IDE Integration
 
 Integration with Cursor IDE - the AI-first code editor. Provides programmatic

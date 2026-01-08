@@ -5,6 +5,17 @@ from codomyrmex.{module_parts} import main_component
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Enhance Stub READMEs.

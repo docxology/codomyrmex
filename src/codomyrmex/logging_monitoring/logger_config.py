@@ -7,7 +7,7 @@ import sys
 import time
 
 from contextlib import contextmanager
-from dotenv import load_dotenv
+
 import threading
 import uuid
 
@@ -19,10 +19,18 @@ import uuid
 
 
 try:
-
     DOTENV_AVAILABLE = True
 except ImportError:
     DOTENV_AVAILABLE = False
+    def load_dotenv(): pass
+
+try:
+    # Double check in case it was set above
+    if 'DOTENV_AVAILABLE' not in locals():
+        DOTENV_AVAILABLE = True
+except ImportError:
+    DOTENV_AVAILABLE = False
+    def load_dotenv(): pass
 
 # Default log format
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

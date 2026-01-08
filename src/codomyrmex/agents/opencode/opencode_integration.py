@@ -7,6 +7,17 @@ from codomyrmex.agents.core import AgentRequest
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 """OpenCode integration adapters for Codomyrmex modules."""
 
 

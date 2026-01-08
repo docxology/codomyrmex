@@ -7,6 +7,17 @@ from codomyrmex.{module_name} import register_tools
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Create missing documentation files that are referenced but don't exist.

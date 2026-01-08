@@ -9,6 +9,28 @@ import mimetypes
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """MIME type and format detection utilities."""
 
 

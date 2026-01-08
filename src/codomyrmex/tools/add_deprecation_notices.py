@@ -4,6 +4,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Add deprecation notices to all requirements.txt files."""
 

@@ -6,6 +6,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Audit all AGENTS.md files for filepath and signpost issues.

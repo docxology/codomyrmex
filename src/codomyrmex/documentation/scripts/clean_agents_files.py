@@ -10,6 +10,28 @@ from Active Components sections, while preserving the actual file listings.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Clean AGENTS.md files by removing conceptual items from Active Components.

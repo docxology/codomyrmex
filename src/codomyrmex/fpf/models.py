@@ -11,6 +11,28 @@ from pydantic import BaseModel, Field, validator as field_validator
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Data models for FPF specification parsing and analysis.
 
 This module defines Pydantic models for representing the First Principles

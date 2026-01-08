@@ -5,6 +5,17 @@ import sys
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix template/module_template path references to point to correct location.

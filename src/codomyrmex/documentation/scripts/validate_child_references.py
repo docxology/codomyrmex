@@ -6,6 +6,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Validate all child references in AGENTS.md files.

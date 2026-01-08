@@ -10,6 +10,28 @@ from fix_src_doubling import FunctionName, ClassName
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Core functionality module
 
 This module provides fix_src_doubling functionality including:

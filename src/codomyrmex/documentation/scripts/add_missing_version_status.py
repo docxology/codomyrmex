@@ -6,6 +6,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Add missing version/status information to documentation files."""
 

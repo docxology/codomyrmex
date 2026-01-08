@@ -5,6 +5,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Validate all internal links in README.md and AGENTS.md files.

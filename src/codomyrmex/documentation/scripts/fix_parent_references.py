@@ -5,6 +5,17 @@ import re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix all generic [Parent] references in AGENTS.md files with descriptive labels.
