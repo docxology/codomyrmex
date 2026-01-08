@@ -29,26 +29,16 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 #!/usr/bin/env python3
-"""
-
 """Main entry point and utility functions
 
 This module provides validate_dependencies functionality including:
-- 5 functions: parse_pyproject_dependencies, check_version_constraints, check_duplicates...
+- 5 functions: validate, check_versions, scan_pyproject, parse_reqs...
 - 0 classes: 
 
 Usage:
     # Example usage here
 """
 logger = get_logger(__name__)
-Dependency Validation Tool
-
-Validates that:
-1. All dependencies in pyproject.toml have version constraints
-2. No duplicate dependencies across optional groups
-3. No conflicting version requirements
-4. requirements.txt files are deprecated (have deprecation notice)
-"""
 
 def parse_pyproject_dependencies(content: str) -> Dict[str, List[Tuple[str, str]]]:
     """

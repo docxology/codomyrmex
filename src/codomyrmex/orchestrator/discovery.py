@@ -25,9 +25,9 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-"""
+"""Script Discovery.
 
-"""Core functionality module
+Handles finding scripts to run based on criteria.
 
 This module provides discovery functionality including:
 - 1 functions: discover_scripts
@@ -38,10 +38,6 @@ Usage:
     # Example usage here
 """
 logger = get_logger(__name__)
-Script Discovery
-
-Handles finding scripts to run based on criteria.
-"""
 
 
 # Constants
@@ -57,9 +53,6 @@ SKIP_DIRS = {
     "egg-info",
     "output",
     "_templates",
-    "module_template",
-    "examples",
-    "tests",
     ".cursor",
     ".DS_Store"
 }

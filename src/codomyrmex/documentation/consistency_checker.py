@@ -31,8 +31,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """Documentation Consistency Checker Module.
 
-
-"""Testing utilities and test helpers
+Testing utilities and test helpers
 
 This module provides consistency_checker functionality including:
 - 8 functions: generate_quality_tests, __init__, check_project_consistency...

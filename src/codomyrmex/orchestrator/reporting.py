@@ -1,7 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
-"""
+"""Orchestrator Reporting.
 
-"""Core functionality module
+Handles logging, summary generation, and documentation.
 
 This module provides reporting functionality including:
 - 3 functions: save_log, generate_report, generate_script_documentation
@@ -12,10 +12,6 @@ Usage:
     # Example usage here
 """
 logger = get_logger(__name__)
-Orchestrator Reporting
-
-Handles logging, summary generation, and documentation.
-"""
 
 import json
 import os

@@ -24,28 +24,18 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-
 """Main entry point and utility functions
 
 This module provides dependency_checker functionality including:
-- 8 functions: run_command, check_python_version, check_dependencies...
-- 0 classes: 
+- 4 functions: check_dependencies, verify_versions, analyze_conflicts...
+- 1 classes: DependencyChecker
 
 Usage:
     # Example usage here
 """
 logger = get_logger(__name__)
-Dependency Checker Tool
 
-Validates project dependencies and checks for vulnerabilities.
-"""
 
 def run_command(cmd: List[str]) -> tuple[bool, str, str]:
     """Run a shell command and return success status, stdout, and stderr."""

@@ -14,6 +14,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 logger = get_logger(__name__)
+
 class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     """
     Enhanced HTTP server that supports API endpoints for dynamic functionality.
@@ -29,13 +30,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         # but SimpleHTTPRequestHandler defaults to cwd using os.getcwd() if not specified in newer pythons
         # or just os.getcwd() in older ones. 
         # For this implementation, we expect the cwd to be set to the website output directory by the caller.
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
+        """Brief description of __init__."""
         super().__init__(*args, **kwargs)
 
     def do_POST(self):
@@ -60,7 +55,7 @@ Args:
         if parsed_path.path == "/api/config":
             self.handle_config_list()
         elif parsed_path.path.startswith("/api/config/"):
-             self.handle_config_get(parsed_path.path)
+            self.handle_config_get(parsed_path.path)
         elif parsed_path.path == "/api/docs":
             self.handle_docs_list()
         elif parsed_path.path.startswith("/api/docs/"):
@@ -72,90 +67,54 @@ Args:
             super().do_GET()
 
     def handle_config_list(self):
-        """Brief description of handle_config_list.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Brief description of handle_config_list."""
         if self.data_provider:
-             data = self.data_provider.get_config_files()
-             self.send_json_response(data)
+            data = self.data_provider.get_config_files()
+            self.send_json_response(data)
         else:
-             self.send_error(500)
+            self.send_error(500)
 
     def handle_config_get(self, path: str):
-        """Brief description of handle_config_get.
-        
-        Args:
-            self : Description of self
-            path : Description of path
-        
-            Returns: Description of return value
-        """
-"""
-         filename = path.replace("/api/config/", "")
-         if self.data_provider:
-             try:
-                 content = self.data_provider.get_config_content(filename)
-                 self.send_json_response({"content": content})
-             except Exception as e:
-                 self.send_error(404, str(e))
+        """Brief description of handle_config_get."""
+        filename = path.replace("/api/config/", "")
+        if self.data_provider:
+            try:
+                content = self.data_provider.get_config_content(filename)
+                self.send_json_response({"content": content})
+            except Exception as e:
+                self.send_error(404, str(e))
 
     def handle_config_save(self):
-        """Brief description of handle_config_save.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
-         parsed_path = urlparse(self.path)
-         filename = parsed_path.path.replace("/api/config/", "")
+        """Brief description of handle_config_save."""
+        parsed_path = urlparse(self.path)
+        filename = parsed_path.path.replace("/api/config/", "")
          
-         content_length = int(self.headers['Content-Length'])
-         post_data = self.rfile.read(content_length)
-         data = json.loads(post_data.decode('utf-8'))
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+        data = json.loads(post_data.decode('utf-8'))
          
-         if self.data_provider:
-             try:
-                 self.data_provider.save_config_content(filename, data.get('content'))
-                 self.send_json_response({"success": True})
-             except Exception as e:
-                 self.send_json_response({"error": str(e)}, status=500)
+        if self.data_provider:
+            try:
+                self.data_provider.save_config_content(filename, data.get('content'))
+                self.send_json_response({"success": True})
+            except Exception as e:
+                self.send_json_response({"error": str(e)}, status=500)
 
     def handle_docs_list(self):
-        """Brief description of handle_docs_list.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Brief description of handle_docs_list."""
         if self.data_provider:
-             data = self.data_provider.get_doc_tree()
-             self.send_json_response(data)
+            data = self.data_provider.get_doc_tree()
+            self.send_json_response(data)
         else:
-             self.send_error(500)
+            self.send_error(500)
 
     def handle_pipelines_list(self):
-        """Brief description of handle_pipelines_list.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Brief description of handle_pipelines_list."""
         if self.data_provider:
-             data = self.data_provider.get_pipeline_status()
-             self.send_json_response(data)
+            data = self.data_provider.get_pipeline_status()
+            self.send_json_response(data)
         else:
-             self.send_error(500)
+            self.send_error(500)
 
 
     def handle_execute(self):
@@ -271,26 +230,17 @@ Args:
     def handle_refresh(self):
         """Refresh system data."""
         if self.data_provider:
-             data = {
-                 "system": self.data_provider.get_system_summary(),
-                 "agents": self.data_provider.get_agents_status(),
-                 "scripts": self.data_provider.get_available_scripts()
-             }
-             self.send_json_response(data)
+            data = {
+                "system": self.data_provider.get_system_summary(),
+                "agents": self.data_provider.get_agents_status(),
+                "scripts": self.data_provider.get_available_scripts()
+            }
+            self.send_json_response(data)
         else:
-             self.send_error(500, "Data provider not initialized")
+            self.send_error(500, "Data provider not initialized")
 
     def send_json_response(self, data, status=200):
-        """Brief description of send_json_response.
-        
-        Args:
-            self : Description of self
-            data : Description of data
-            status : Description of status
-        
-            Returns: Description of return value
-        """
-"""
+        """Brief description of send_json_response."""
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.end_headers()

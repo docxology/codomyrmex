@@ -8,15 +8,6 @@ import jsonschema
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-
-
-
-
-
-
-Base validator interface and implementations.
-"""
-
 logger = get_logger(__name__)
 
 class ValidationError(CodomyrmexError):
@@ -34,7 +25,6 @@ class ValidationError(CodomyrmexError):
         
             Returns: Description of return value
         """
-"""
         super().__init__(message)
         self.field = field
         self.code = code
@@ -65,7 +55,6 @@ class ValidationResult:
         
             Returns: Description of return value (type: bool)
         """
-"""
         return self.is_valid
 
 class Validator:
@@ -197,4 +186,3 @@ class Validator:
         """Get validation errors for data."""
         result = self.validate(data, schema)
         return result.errors
-

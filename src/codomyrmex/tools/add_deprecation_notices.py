@@ -31,19 +31,10 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 #!/usr/bin/env python3
-"""Add deprecation notices to all requirements.txt files."""
+"""Add deprecation notices to all requirements.txt files.
 
-"""Main entry point and utility functions
+Main entry point and utility functions
 
-"""Main entry point and utility functions
-
-This module provides add_deprecation_notices functionality including:
-- 4 functions: get_module_name, get_dependency_location, add_deprecation_notice...
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
 This module provides add_deprecation_notices functionality including:
 - 4 functions: get_module_name, get_dependency_location, add_deprecation_notice...
 - 0 classes: 

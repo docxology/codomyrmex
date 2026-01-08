@@ -41,7 +41,7 @@ class DataProvider:
         
             Returns: Description of return value
         """
-"""
+
         self.root_dir = root_dir
 
     def get_system_summary(self) -> Dict[str, Any]:
@@ -154,7 +154,7 @@ class DataProvider:
         
             Returns: Description of return value (type: int)
         """
-"""
+
         return len(self.get_actual_agents())
 
     
@@ -360,7 +360,7 @@ class DataProvider:
         
             Returns: Description of return value (type: Any)
         """
-"""
+
         node = {"name": path.name, "children": []}
         
         # Files first, then dirs

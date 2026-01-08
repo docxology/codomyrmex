@@ -40,7 +40,7 @@ class ValidationError(CodomyrmexError):
         
             Returns: Description of return value
         """
-"""
+
         super().__init__(message)
         self.field = field
         self.code = code

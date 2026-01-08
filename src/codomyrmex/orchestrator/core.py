@@ -1,8 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Orchestrator Core.
 
-
-"""Main entry point and utility functions
+Main entry point and utility functions.
 
 This module provides core functionality including:
 - 1 functions: main
@@ -11,7 +10,7 @@ This module provides core functionality including:
 Usage:
     from core import FunctionName, ClassName
     # Example usage here
-"""
+
 Main entry point and execution loop.
 """
 

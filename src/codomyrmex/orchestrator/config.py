@@ -26,9 +26,9 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-"""
+"""Orchestrator Configuration.
 
-"""Core functionality module
+Handles loading and parsing of script configurations.
 
 This module provides config functionality including:
 - 2 functions: load_config, get_script_config
@@ -39,10 +39,6 @@ Usage:
     # Example usage here
 """
 logger = get_logger(__name__)
-Orchestrator Configuration
-
-Handles loading and parsing of script configurations.
-"""
 
 
 def load_config(scripts_dir: Path) -> Dict[str, Any]:

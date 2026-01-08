@@ -23,7 +23,7 @@ class WebsiteGenerator:
         
             Returns: Description of return value
         """
-"""
+
         self.output_dir = Path(output_dir)
         # Assuming we are running from project root, or passing it in.
         # Default to finding the project root relative to this file if not provided.
@@ -84,7 +84,7 @@ class WebsiteGenerator:
         
             Returns: Description of return value
         """
-"""
+
         template = self.env.get_template(template_name)
         output = template.render(**context)
         output_path = self.output_dir / template_name
@@ -92,14 +92,7 @@ class WebsiteGenerator:
         print(f"Rendered {template_name}")
 
     def _copy_assets(self):
-        """Brief description of _copy_assets.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Brief description of _copy_assets."""
         if self.assets_dir.exists():
             shutil.copytree(self.assets_dir, self.output_dir / "assets")
             print("Copied assets")

@@ -30,8 +30,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 
 #!/usr/bin/env python3
-"""
-
 """Main entry point and utility functions
 
 This module provides dependency_analyzer functionality including:
@@ -41,14 +39,7 @@ This module provides dependency_analyzer functionality including:
 Usage:
     # Example usage here
 """
-Dependency Analyzer for Codomyrmex Modules.
 
-This tool analyzes module dependencies to:
-- Detect circular import dependencies
-- Validate dependency hierarchy
-- Generate dependency graph visualizations
-- Enforce module boundaries
-"""
 
 
 try:

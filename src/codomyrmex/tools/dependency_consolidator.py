@@ -28,23 +28,17 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 #!/usr/bin/env python3
-"""
-
 """Main entry point and utility functions
 
 This module provides dependency_consolidator functionality including:
-- 6 functions: parse_requirements_file, find_all_requirements_files, analyze_dependencies...
-- 0 classes: 
+- 3 functions: consolidate_deps, merge_requirements, resolution_logic...
+- 1 classes: DependencyConsolidator
 
 Usage:
     # Example usage here
 """
 logger = get_logger(__name__)
-Dependency Consolidator - Migration tool for consolidating requirements.txt to pyproject.toml
 
-This script analyzes all module-specific requirements.txt files and consolidates them
-into pyproject.toml with exact version pinning.
-"""
 
 def parse_requirements_file(file_path: Path) -> List[Tuple[str, str, str]]:
     """

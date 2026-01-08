@@ -34,4 +34,6 @@ if __name__ == "__main__":
     # We pass the directory of this script so the orchestrator knows where to start searching
     # (The orchestrator will fall back to heuristic discovery, but explicit is better)
     sys.argv.append(f"--scripts-dir={Path(__file__).parent}")
+    if "--timeout" not in sys.argv:
+        sys.argv.extend(["--timeout", "120"])
     sys.exit(main())

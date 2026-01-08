@@ -30,9 +30,9 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-"""
+"""Script Runner.
 
-"""Core functionality module
+Handles the actual execution of Python scripts.
 
 This module provides runner functionality including:
 - 1 functions: run_script
@@ -43,10 +43,6 @@ Usage:
     # Example usage here
 """
 logger = get_logger(__name__)
-Script Runner
-
-Handles the actual execution of Python scripts.
-"""
 
 
 def run_script(
