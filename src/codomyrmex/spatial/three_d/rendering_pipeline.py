@@ -11,14 +11,8 @@ class ShaderManager:
     """Manages 3D shaders."""
 
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Initialize the shader manager."""
+
         self.shaders: dict[str, str] = {}
 
     def load_shader(self, name: str, vertex_code: str, fragment_code: str) -> None:
@@ -30,14 +24,8 @@ class TextureManager:
     """Manages 3D textures."""
 
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Initialize the texture manager."""
+
         self.textures: dict[str, Any] = {}
 
     def load_texture(self, name: str, file_path: str) -> bool:
@@ -50,14 +38,8 @@ class RenderPipeline:
     """Main rendering pipeline."""
 
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Initialize the render pipeline."""
+
         self.shader_manager = ShaderManager()
         self.texture_manager = TextureManager()
 

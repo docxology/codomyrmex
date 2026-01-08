@@ -9,8 +9,7 @@ import pytest
 import yaml
 import yaml
 
-from codomyrmex.logging_monitoring import get_logger, setup_logging
-from codomyrmex.logging_monitoring import get_logger, setup_logging
+
 
 
 
@@ -71,6 +70,7 @@ except ImportError:
     YAML_AVAILABLE = False
 
 try:
+    from codomyrmex.logging_monitoring import get_logger, setup_logging
 except ImportError:
     get_logger = None
     setup_logging = None

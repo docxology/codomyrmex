@@ -14,6 +14,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+"""
 Event Schema for Codomyrmex Event System
 
 This module defines event types, schemas, and validation for the Codomyrmex

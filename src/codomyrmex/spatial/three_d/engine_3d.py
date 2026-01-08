@@ -59,15 +59,8 @@ class Vector3D:
     z: float = 0.0
 
     def __add__(self, other: "Vector3D") -> "Vector3D":
-        """Brief description of __add__.
-        
-        Args:
-            self : Description of self
-            other : Description of other
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+        """Add two vectors."""
+
         self.animations: dict[str, Any] = {}
 
     def play_animation(self, name: str) -> None:
@@ -83,14 +76,8 @@ class PhysicsEngine:
     """Basic physics simulation for 3D objects."""
 
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Initialize physics engine."""
+
         self.gravity = Vector3D(0.0, -9.81, 0.0)
 
     def update_physics(self, objects: list[Object3D], delta_time: float) -> None:

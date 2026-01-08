@@ -35,15 +35,7 @@ from codomyrmex.git_operations import (
 
 
 
-"""Main entry point and utility functions
 
-This module provides verify_all_git_methods_comprehensive functionality including:
-- 51 functions: main, __init__, log...
-- 1 classes: ComprehensiveGitVerifier
-
-Usage:
-    # Example usage here
-"""
         check_git_availability,
         is_git_repository,
         initialize_git_repository,

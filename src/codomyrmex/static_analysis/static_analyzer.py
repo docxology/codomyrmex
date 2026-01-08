@@ -11,7 +11,8 @@ import time
 
 from dataclasses import dataclass, field
 from enum import Enum
-from performance import monitor_performance, performance_context
+# from performance import monitor_performance, performance_context # Moved to try/except
+
 import csv
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -142,7 +143,7 @@ logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-
+    from codomyrmex.performance import monitor_performance, performance_context
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     logger.warning("Performance monitoring not available - decorators will be no-op")
@@ -155,6 +156,7 @@ except ImportError:
         return decorator
 
     class performance_context:
+        def __init__(self, *args, **kwargs):
             pass
 
         def __enter__(self):

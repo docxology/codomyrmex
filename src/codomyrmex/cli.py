@@ -105,18 +105,9 @@ from codomyrmex.terminal_interface.terminal_utils import CommandRunner, Terminal
 
 
 #!/usr/bin/env python3
-"""
 
-"""Main entry point and utility functions
+"""Codomyrmex CLI - Command Line Interface for Codomyrmex
 
-This module provides cli functionality including:
-- 37 functions: check_environment, show_info, show_modules...
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-Codomyrmex CLI - Command Line Interface for Codomyrmex
 
 A comprehensive command-line interface for the Codomyrmex modular coding workspace.
 Provides access to all package functionality through intuitive commands for building,

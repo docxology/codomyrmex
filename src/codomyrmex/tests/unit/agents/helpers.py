@@ -26,16 +26,7 @@ import subprocess
 """Helper functions for agent tests.
 
 
-"""Core functionality module
 
-This module provides helpers functionality including:
-- 2 functions: check_tool_available, get_tool_version
-- 0 classes: 
-
-Usage:
-    from helpers import FunctionName, ClassName
-    # Example usage here
-"""
 Tests use real implementations only. When CLI tools are not available,
 tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.

@@ -5,9 +5,8 @@ import re
 import subprocess
 import sys
 
-from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-from codomyrmex.performance import monitor_performance, performance_context
+# Imports moved to try/except block below
+
 
 
 
@@ -45,9 +44,12 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
+    from codomyrmex.logging_monitoring import get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 except ImportError:
     # Fallback for environments where logging_monitoring might not be discoverable
     # This is less ideal but provides a basic operational mode.
+    import logging
 
     print(
         "Warning: Could not import Codomyrmex logging. Using standard Python logging.",

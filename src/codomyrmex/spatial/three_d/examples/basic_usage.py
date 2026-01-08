@@ -1,7 +1,6 @@
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.spatial.three_d import (
-logger = get_logger(__name__)
 try:
+    from codomyrmex.spatial.three_d import (
         ARSession,
         Camera3D,
         Light3D,

@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Any, Optional, Union
 import ast
 import datetime
-import datetime
+
 import inspect
 import json
 import logging
@@ -19,14 +19,14 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-#!/usr/bin/env python3
-
+"""
 Capability Scanner for Codomyrmex System Discovery
 
 Scans and analyzes capabilities across the Codomyrmex ecosystem, providing
 detailed information about functions, classes, methods, and other exportable
 functionality.
 """
+
 
 try:
 

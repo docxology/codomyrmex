@@ -22,7 +22,7 @@ from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
 
 #!/usr/bin/env python3
 
-Interactive Shell for Codomyrmex
+"""Interactive Shell for Codomyrmex
 
 Provides an engaging, interactive terminal interface for exploring the
 Codomyrmex ecosystem - like being an epistemic forager in a vast,

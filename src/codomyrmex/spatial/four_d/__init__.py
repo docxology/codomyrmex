@@ -6,18 +6,8 @@ Includes support for Quadrays, Isotropic Vector Matrix, and Close Packed Spheres
 class QuadrayCoordinate:
     """Represents a coordinate in the Quadray system (4-vector)."""
     def __init__(self, a: float = 0, b: float = 0, c: float = 0, d: float = 0):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-            a : Description of a
-            b : Description of b
-            c : Description of c
-            d : Description of d
-        
-            Returns: Description of return value
-        """
-"""
+        """Initialize Quadray coordinate."""
+
         self.coords = (a, b, c, d)
 
 class IsotropicVectorMatrix:

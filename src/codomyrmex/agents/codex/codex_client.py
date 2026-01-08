@@ -1,65 +1,20 @@
 from typing import Any, Iterator, Optional
 import time
 
-import openai
-
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.agents.exceptions import CodexError
-from codomyrmex.agents.generic.api_agent_base import APIAgentBase
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    openai = None
-
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
+from codomyrmex.agents.exceptions import CodexError
+from codomyrmex.agents.generic.api_agent_base import APIAgentBase
+from codomyrmex.logging_monitoring import get_logger
+
 try:
+    import openai
 except ImportError:
+    openai = None
 
 
 class CodexClient(APIAgentBase):

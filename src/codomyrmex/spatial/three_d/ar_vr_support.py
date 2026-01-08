@@ -12,14 +12,8 @@ class ARSession:
     """Augmented Reality session manager."""
 
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Initialize AR session."""
+
         self.is_active = False
         self.tracking_quality = "unknown"
 
@@ -60,14 +54,8 @@ class XRInterface:
     """Extended Reality interface combining AR and VR."""
 
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+        """Initialize XR interface."""
+
         self.ar_session = ARSession()
         self.vr_renderer = VRRenderer()
 

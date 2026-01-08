@@ -7,74 +7,8 @@ import time
 
 from dataclasses import dataclass
 
-from codomyrmex.llm.ollama import (
-from codomyrmex.llm.ollama import (
-from codomyrmex.llm.ollama.model_runner import ExecutionOptions
-from codomyrmex.llm.ollama.ollama_manager import (
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-    OllamaAttributes,
-    OllamaModel,
-    OllamaResponse,
-    OllamaRunner,
-)
-"""
-Test Utilities and Helpers for Ollama Integration Tests
-
-Provides reusable utilities, fixtures, and helpers for comprehensive
-Ollama integration testing. All utilities use real Ollama API calls (no mocks).
-"""
-
 try:
+    from codomyrmex.llm.ollama import (
         OllamaManager,
         ModelRunner,
         OllamaAttributes,
@@ -82,69 +16,28 @@ try:
         OllamaResponse,
         OllamaRunner,
     )
-        OutputManager,
-        ConfigManager,
-    )
+    from codomyrmex.llm.ollama.model_runner import ExecutionOptions
+    from codomyrmex.llm.ollama.output_manager import OutputManager
+    from codomyrmex.llm.ollama.config_manager import ConfigManager
     OLLAMA_AVAILABLE = True
 except ImportError:
     OLLAMA_AVAILABLE = False
     OllamaManager = None
     ModelRunner = None
+    OllamaAttributes = None
+    OllamaModel = None
+    OllamaResponse = None
+    OllamaRunner = None
+    ExecutionOptions = None
     OutputManager = None
     ConfigManager = None
-    ExecutionOptions = None
-    OllamaModel = None
 
+"""
+Test Utilities and Helpers for Ollama Integration Tests
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Provides reusable utilities, fixtures, and helpers for comprehensive
+Ollama integration testing. All utilities use real Ollama API calls (no mocks).
+"""
 
 @dataclass
 class TestModel:
@@ -529,5 +422,3 @@ def cleanup_test_resources(path: Path):
             path.unlink()
         else:
             shutil.rmtree(path, ignore_errors=True)
-
-

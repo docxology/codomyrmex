@@ -116,21 +116,12 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 #!/usr/bin/env python3
-"""
-"""Core business logic and data management
-
-This module provides rollback_manager functionality including:
-- 17 functions: handle_rollback, __init__, _ensure_directories...
-- 5 classes: RollbackStrategy, RollbackStep, RollbackPlan...
-
-Usage:
-    # Example usage here
-"""
-Rollback Management Module for Codomyrmex CI/CD Automation.
+"""Rollback Management Module for Codomyrmex CI/CD Automation.
 
 This module provides comprehensive rollback capabilities for failed deployments,
 including rollback strategies, execution tracking, and recovery mechanisms.
 """
+
 
 
 

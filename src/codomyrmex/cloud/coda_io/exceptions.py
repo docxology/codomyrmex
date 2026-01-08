@@ -85,11 +85,7 @@ class CodaAPIError(Exception):
         self.response_body = response_body
     
     def __str__(self) -> str:
-        self,
-        message: str = "The API token is invalid or has expired",
-        response_body: Optional[Dict[str, Any]] = None,
-    ):
-        super().__init__(message, status_code=401, response_body=response_body)
+        return f"{self.message} (Status: {self.status_code})"
 
 
 class CodaForbiddenError(CodaAPIError):

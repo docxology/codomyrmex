@@ -313,6 +313,7 @@ def performance_baseline_data() -> Dict[str, Any]:
 def mock_performance_logger():
     """Mock performance logger for testing."""
     class MockPerformanceLogger:
+        def __init__(self, name="perf_test"):
             self.name = name
             self.operations = []
 

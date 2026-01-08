@@ -90,7 +90,7 @@ class IDECommand:
         
             Returns: Description of return value (type: Any)
         """
-"""
+
         return {"name": self.name, "args": self.args, "timeout": self.timeout}
 
 
@@ -111,7 +111,7 @@ class IDECommandResult:
         
             Returns: Description of return value (type: Any)
         """
-"""
+
         return {
             "success": self.success,
             "command": self.command,
@@ -138,7 +138,7 @@ class FileInfo:
         
             Returns: Description of return value (type: Any)
         """
-"""
+
         return {
             "path": self.path,
             "name": self.name,

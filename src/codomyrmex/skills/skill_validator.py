@@ -50,17 +50,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """Skill Validator Module
 
-
-"""Core functionality module
-
-This module provides skill_validator functionality including:
-- 4 functions: __init__, validate_skill, validate_file...
-- 1 classes: SkillValidator
-
-Usage:
-    from skill_validator import FunctionName, ClassName
-    # Example usage here
-"""
 Validates YAML skill files against schema.
 """
 

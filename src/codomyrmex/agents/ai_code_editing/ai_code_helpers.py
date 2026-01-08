@@ -1123,7 +1123,7 @@ def validate_api_keys() -> dict[str, bool]:
 
 
 def setup_environment() -> bool:
-    """Setup environment variables and check dependencies."""
+    # Setup environment variables and check dependencies.
     try:
         # Check and setup environment variables if available
         if check_and_setup_env_vars:

@@ -421,17 +421,7 @@ class EventOperationContext:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Brief description of __exit__.
-        
-        Args:
-            self : Description of self
-            exc_type : Description of exc_type
-            exc_val : Description of exc_val
-            exc_tb : Description of exc_tb
-        
-            Returns: Description of return value
-        """
-"""
+
         import time
         end_time = time.time()
         duration = end_time - (self.start_time or end_time)

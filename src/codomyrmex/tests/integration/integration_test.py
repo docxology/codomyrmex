@@ -8,8 +8,8 @@ import unittest
 
 import threading
 
-from codomyrmex.logistics.orchestration.project import (
 from codomyrmex.monitoring.performance import PerformanceMonitor
+from codomyrmex.logistics.orchestration.project import (
 
 
 
@@ -78,9 +78,7 @@ try:
 except ImportError:
     ORCHESTRATION_AVAILABLE = False
 
-try:
-except ImportError:
-    PerformanceMonitor = None
+
 
 
 

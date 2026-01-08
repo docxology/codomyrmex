@@ -19,7 +19,7 @@ from codomyrmex.terminal_interface.terminal_utils import TerminalFormatter
 
 #!/usr/bin/env python3
 
-Status Reporter for Codomyrmex System Discovery
+"""Status Reporter for Codomyrmex System Discovery
 
 Provides detailed status reporting capabilities for the Codomyrmex ecosystem,
 including health checks, dependency analysis, and system diagnostics.

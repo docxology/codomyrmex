@@ -532,28 +532,17 @@ class HealthChecker:
     # Code review is now part of code module, checked in _check_code
 
     def _check_ollama_integration(self, result: HealthCheckResult) -> None:
-            try:
-                importlib.import_module(f"codomyrmex.{module_name}")
-                return True
-            except ImportError:
-                return False
-
-        # Profile the import
-        result = profile_function(test_module_import)
-
-        return {
-            "import_time": result.get("execution_time", 0),
-            "success": result.get("result", False),
-            "memory_usage": result.get("memory_usage", 0)
-        }
-
-    except Exception as e:
-        logger.error(f"Performance check failed for {module_name}: {e}")
-        return {
-            "error": str(e),
-            "import_time": 0,
-            "success": False
-        }
+        """Check Ollama integration module health."""
+        result.checks_performed.append("llm_availability")
+        
+        try:
+            # Check if LLM module is available
+            importlib.import_module("codomyrmex.llm")
+            result.add_metric("llm_module_available", True)
+        except ImportError:
+            result.add_issue("LLM module not importable", "Check installation")
+        except Exception as e:
+            result.add_issue(f"LLM check failed: {e}")
 
 
 def check_module_availability(module_name: str) -> bool:

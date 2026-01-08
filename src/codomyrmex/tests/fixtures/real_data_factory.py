@@ -59,15 +59,7 @@ import yaml
 """Real data factory for generating test fixtures without mocks.
 
 
-"""Testing utilities and test helpers
 
-This module provides real_data_factory functionality including:
-- 12 functions: create_valid_python_code, create_invalid_python_code, create_sample_config...
-- 1 classes: RealDataFactory
-
-Usage:
-    # Example usage here
-"""
 This module provides utilities for creating real test data, files, and structures
 that can be used in place of mocked objects. Following the repository's TDD principle
 of "no mock methods, always do real data analysis."

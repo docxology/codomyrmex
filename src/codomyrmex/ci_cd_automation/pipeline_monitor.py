@@ -18,11 +18,12 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 #!/usr/bin/env python3
 
-Pipeline Monitoring Module for Codomyrmex CI/CD Automation.
+"""Pipeline Monitoring Module for Codomyrmex CI/CD Automation.
 
 This module provides comprehensive pipeline monitoring, health checks,
 and reporting capabilities for CI/CD pipelines.
 """
+
 
 logger = get_logger(__name__)
 

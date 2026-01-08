@@ -14,7 +14,7 @@ from codomyrmex.git_operations import initialize_git_repository
 
 
 
-Pytest configuration and shared fixtures for git_operations tests.
+"""Pytest configuration and shared fixtures for git_operations tests.
 """
 
 @pytest.fixture

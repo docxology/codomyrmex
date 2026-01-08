@@ -12,7 +12,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 #!/usr/bin/env python3
 
-Terminal Utilities for Codomyrmex
+"""Terminal Utilities for Codomyrmex
 
 Provides utilities for creating engaging terminal interfaces, formatting
 output, and running commands with beautiful presentation.

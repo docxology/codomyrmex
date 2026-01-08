@@ -403,13 +403,7 @@ class PipelineManager:
                 # If loop is running, we need to handle differently
 
                 def run_async():
-    """Brief description of run_async.
 
-Args:
-
-
-    Returns: Description of return value
-"""
                     new_loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(new_loop)
                     try:
@@ -538,13 +532,7 @@ Args:
         """Run a command asynchronously."""
 
         def run_cmd():
-    """Brief description of run_cmd.
 
-Args:
-
-
-    Returns: Description of return value
-"""
             try:
                 env = os.environ.copy()
                 env.update(env_vars)
@@ -1061,13 +1049,7 @@ Args:
         rec_stack = set()
 
         def has_cycle(node: str) -> bool:
-    """Brief description of has_cycle.
 
-Args:
-    node : Description of node
-
-    Returns: Description of return value (type: bool)
-"""
             visited.add(node)
             rec_stack.add(node)
 

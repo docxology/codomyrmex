@@ -10,7 +10,7 @@ import hashlib
 
 
 
-Python file with security issues for testing security analysis.
+"""Python file with security issues for testing security analysis.
 """
 
 def insecure_function(user_input):
@@ -61,7 +61,7 @@ class InsecureClass:
         
             Returns: Description of return value
         """
-"""
+
         self.api_key = "sk-1234567890abcdef"  # Hardcoded API key
         self.debug_mode = True  # Debug mode enabled by default
 
