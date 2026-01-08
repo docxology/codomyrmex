@@ -4,6 +4,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -21,6 +39,16 @@ import re
 """Validate links in documentation files."""
 
 
+"""Main entry point and utility functions
+
+This module provides validate_documentation_links functionality including:
+- 4 functions: find_markdown_links, validate_link, validate_file_links...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def find_markdown_links(content: str) -> List[Tuple[str, str]]:
     """Find all markdown links in content."""
     # Pattern for markdown links: [text](path)

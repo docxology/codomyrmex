@@ -4,13 +4,14 @@ import json
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, JulesError
-from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
+    AgentCapabilities,
+    AgentRequest,
+    AgentResponse,
+)
 
 
 
@@ -21,12 +22,6 @@ from codomyrmex.agents.generic import CLIAgentBase
 
 
 """Jules CLI client wrapper."""
-
-
-    AgentCapabilities,
-    AgentRequest,
-    AgentResponse,
-)
 
 
 class JulesClient(CLIAgentBase):
@@ -217,4 +212,3 @@ class JulesClient(CLIAgentBase):
             jules_args.extend(args)
 
         return self._execute_command(args=jules_args)
-

@@ -5,12 +5,55 @@ import subprocess
 import sys
 import tempfile
 
-from src.main import main
-import nonexistent_module
 import pytest
+import yaml
 import yaml
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
+from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+
+
+
+
+
+"""Shared pytest fixtures and configuration for Codomyrmex testing."""
+
+
+try:
+    YAML_AVAILABLE = True
+except ImportError:
+    yaml = None
+    YAML_AVAILABLE = False
+
+try:
+except ImportError:
+    get_logger = None
+    setup_logging = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -160,8 +203,7 @@ def setup_test_environment():
 @pytest.fixture
 def real_logger_fixture(tmp_path):
     """Create a real logger instance with actual file output."""
-    try:
-    except ImportError:
+    if get_logger is None or setup_logging is None:
         pytest.skip("logging_monitoring module not available")
 
     # Set up real logging configuration

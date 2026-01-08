@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Context builder for prompt engineering.
 
+"""Core functionality module
+
+This module provides context_builder functionality including:
+- 6 functions: __init__, build_context_for_pattern, build_context_for_concept...
+- 1 classes: ContextBuilder
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to build context strings
 from FPF specifications for use in prompt engineering.
 """

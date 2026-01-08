@@ -3,6 +3,39 @@ import math
 
 from dataclasses import dataclass, field
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,6 +68,16 @@ from dataclasses import dataclass, field
 
 
 
+"""Core functionality module
+
+This module provides simulation_engine functionality including:
+- 27 functions: __add__, __sub__, __mul__...
+- 4 classes: Vector3D, ForceField, Constraint...
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 @dataclass
 class Vector3D:
     """3D vector for physics calculations."""
@@ -44,12 +87,36 @@ class Vector3D:
     z: float = 0.0
 
     def __add__(self, other: "Vector3D") -> "Vector3D":
+    """Brief description of __add__.
+
+Args:
+    self : Description of self
+    other : Description of other
+
+    Returns: Description of return value (type: str)
+"""
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: "Vector3D") -> "Vector3D":
+    """Brief description of __sub__.
+
+Args:
+    self : Description of self
+    other : Description of other
+
+    Returns: Description of return value (type: str)
+"""
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar: float) -> "Vector3D":
+    """Brief description of __mul__.
+
+Args:
+    self : Description of self
+    scalar : Description of scalar
+
+    Returns: Description of return value (type: str)
+"""
         return Vector3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
     def magnitude(self) -> float:

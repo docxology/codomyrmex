@@ -2,7 +2,39 @@ from pathlib import Path
 import os
 import re
 
-from check_links import FunctionName, ClassName
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -36,6 +68,16 @@ from check_links import FunctionName, ClassName
 
 """Core functionality module
 
+"""Core functionality module
+
+This module provides check_links functionality including:
+- 2 functions: find_markdown_files, check_links
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides check_links functionality including:
 - 2 functions: find_markdown_files, check_links
 - 0 classes: 

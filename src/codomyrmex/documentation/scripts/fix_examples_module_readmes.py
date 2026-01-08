@@ -3,6 +3,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import re
 """Fix relative paths in all examples/{module}/README.md files."""
 
 
+"""Main entry point and utility functions
+
+This module provides fix_examples_module_readmes functionality including:
+- 2 functions: fix_examples_module_readme, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def fix_examples_module_readme(file_path: Path) -> bool:
     """Fix relative paths in an examples module README."""
     if not file_path.exists():

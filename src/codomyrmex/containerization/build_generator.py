@@ -36,6 +36,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides build_generator functionality including:
+- 14 functions: to_dockerfile, to_dockerfile, to_shell_script...
+- 4 classes: BuildStage, MultiStageBuild, BuildScript...
+
+Usage:
+    # Example usage here
 """
 Build Generator for Codomyrmex Containerization
 

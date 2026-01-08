@@ -1,17 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit/documents/unit
 
-## Signposting
-- **Parent**: [Unit](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [core](core/AGENTS.md)
-    - [formats](formats/AGENTS.md)
-    - [models](models/AGENTS.md)
-    - [utils](utils/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

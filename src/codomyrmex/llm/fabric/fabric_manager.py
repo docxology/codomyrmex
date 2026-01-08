@@ -5,6 +5,7 @@ import os
 import subprocess
 import tempfile
 
+
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -20,6 +21,31 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core business logic and data management
+
+This module provides fabric_manager functionality including:
+- 6 functions: __init__, _check_fabric_availability, list_patterns...
+- 1 classes: FabricManager
+
+Usage:
+    # Example usage here
 """
 Fabric Manager - Main integration class for Codomyrmex
 

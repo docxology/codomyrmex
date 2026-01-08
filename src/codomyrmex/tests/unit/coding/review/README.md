@@ -1,17 +1,5 @@
 # review
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [e2e](e2e/README.md)
-    - [fixtures](fixtures/README.md)
-    - [integration](integration/README.md)
-    - [performance](performance/README.md)
-    - [unit](unit/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview

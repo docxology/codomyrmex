@@ -1,9 +1,27 @@
 from typing import Any
 
+
 from codomyrmex.agents.core import AgentIntegrationAdapter, AgentInterface
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.core import AgentRequest
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -23,6 +41,15 @@ from codomyrmex.agents.core import AgentRequest
 
 
 
+"""Core functionality module
+
+This module provides mistral_vibe_integration functionality including:
+- 3 functions: adapt_for_ai_code_editing, adapt_for_llm, adapt_for_code_execution
+- 1 classes: MistralVibeIntegrationAdapter
+
+Usage:
+    # Example usage here
+"""
 class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Mistral Vibe with Codomyrmex modules."""
 

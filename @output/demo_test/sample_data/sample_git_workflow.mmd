@@ -1,0 +1,15 @@
+flowchart TD
+    Start([Start]) --> Start([Start Development])
+    Start([Start Development]) --> Clone[git clone repository]
+    Clone[git clone repository] --> Branch[git checkout -b feature/name]
+    Branch[git checkout -b feature/name] --> Code[Write code & tests]
+    Code[Write code & tests] --> Test{Tests pass??}
+    Test{Tests pass??} --> Fix[Fix issues]
+    Fix[Fix issues] --> Stage[git add .]
+    Stage[git add .] --> Commit[git commit -m 'message']
+    Commit[git commit -m 'message'] --> Push[git push origin feature/name]
+    Push[git push origin feature/name] --> PR[Create Pull Request]
+    PR[Create Pull Request] --> Review{Code Review Pass??}
+    Review{Code Review Pass??} --> Merge[Merge to main]
+    Merge[Merge to main] --> Deploy[Deploy to production]
+    Deploy[Deploy to production] --> End([Complete])

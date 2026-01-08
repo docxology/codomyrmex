@@ -1,3 +1,59 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional, Dict, List, Callable
+import json
+import os
+import time
+
+from dataclasses import dataclass, field
+
+from codomyrmex.ide import (
+
+
+
+
+
+
+try:
+        IDEClient, 
+        IDEStatus,
+        IDECommand,
+        IDECommandResult,
+    )
+except ImportError:
+    # Fallback if ide module not available
+    IDEClient = object
+    IDEStatus = None
+    IDECommand = None
+    IDECommandResult = None
+    FileInfo = None
+    IDEError = Exception
+    ConnectionError = Exception
+    CommandExecutionError = Exception
+    SessionError = Exception
+    ArtifactError = Exception
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Antigravity IDE Integration
 
 Integration with Google DeepMind's Antigravity IDE - the agentic AI coding
@@ -10,27 +66,6 @@ Example:
     >>> client.connect()
     >>> capabilities = client.get_capabilities()
 """
-
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional, Dict, List, Callable
-import json
-import os
-import time
-from dataclasses import dataclass, field
-
-from codomyrmex.ide import (
-    IDEClient, 
-    IDEStatus,
-    IDECommand,
-    IDECommandResult,
-    FileInfo,
-    IDEError, 
-    ConnectionError, 
-    CommandExecutionError,
-    SessionError,
-    ArtifactError,
-)
 
 @dataclass
 class Artifact:

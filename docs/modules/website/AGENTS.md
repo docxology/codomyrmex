@@ -1,14 +1,5 @@
 # Codomyrmex Agents — docs/modules/website
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [tutorials](tutorials/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

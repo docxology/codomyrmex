@@ -5,6 +5,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -22,6 +40,16 @@ import re
 """Generate comprehensive documentation verification report."""
 
 
+"""Main entry point and utility functions
+
+This module provides generate_doc_verification_report functionality including:
+- 3 functions: analyze_all_docs, generate_report, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def analyze_all_docs(base_path: Path) -> dict:
     """Analyze all documentation files."""
     results = {

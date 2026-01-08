@@ -1,6 +1,24 @@
 from typing import Optional, Dict, Any
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -15,6 +33,16 @@ from typing import Optional, Dict, Any
 
 
 """
+"""Core functionality module
+
+This module provides exceptions functionality including:
+- 10 functions: raise_for_status, __init__, __str__...
+- 8 classes: CodaAPIError, CodaAuthenticationError, CodaForbiddenError...
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Custom exceptions for Coda.io API errors.
 
 These exceptions map to HTTP status codes returned by the Coda API
@@ -33,6 +61,16 @@ class CodaAPIError(Exception):
     """
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    status_code : Description of status_code
+    response_body : Description of response_body
+
+    Returns: Description of return value
+"""
         self,
         message: str,
         status_code: Optional[int] = None,
@@ -44,6 +82,13 @@ class CodaAPIError(Exception):
         self.response_body = response_body
     
     def __str__(self) -> str:
+    """Brief description of __str__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value (type: str)
+"""
         if self.status_code:
             return f"[{self.status_code}] {self.message}"
         return self.message
@@ -61,6 +106,15 @@ class CodaAuthenticationError(CodaAPIError):
     """
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    response_body : Description of response_body
+
+    Returns: Description of return value
+"""
         self,
         message: str = "The API token is invalid or has expired",
         response_body: Optional[Dict[str, Any]] = None,
@@ -80,6 +134,15 @@ class CodaForbiddenError(CodaAPIError):
     """
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    response_body : Description of response_body
+
+    Returns: Description of return value
+"""
         self,
         message: str = "The API token does not grant access to this resource",
         response_body: Optional[Dict[str, Any]] = None,
@@ -99,6 +162,15 @@ class CodaNotFoundError(CodaAPIError):
     """
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    response_body : Description of response_body
+
+    Returns: Description of return value
+"""
         self,
         message: str = "The resource could not be located with the current API token",
         response_body: Optional[Dict[str, Any]] = None,
@@ -116,6 +188,15 @@ class CodaGoneError(CodaAPIError):
     """
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    response_body : Description of response_body
+
+    Returns: Description of return value
+"""
         self,
         message: str = "The resource has been deleted",
         response_body: Optional[Dict[str, Any]] = None,
@@ -138,6 +219,15 @@ class CodaRateLimitError(CodaAPIError):
     """
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    response_body : Description of response_body
+
+    Returns: Description of return value
+"""
         self,
         message: str = "The client has sent too many requests",
         response_body: Optional[Dict[str, Any]] = None,
@@ -157,6 +247,15 @@ class CodaValidationError(CodaAPIError):
     """
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    response_body : Description of response_body
+
+    Returns: Description of return value
+"""
         self,
         message: str = "The request parameters did not conform to expectations",
         response_body: Optional[Dict[str, Any]] = None,
@@ -175,6 +274,15 @@ class CodaUnprocessableError(CodaAPIError):
     """
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    response_body : Description of response_body
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Unable to process the request",
         response_body: Optional[Dict[str, Any]] = None,

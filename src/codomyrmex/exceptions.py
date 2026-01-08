@@ -3,6 +3,25 @@ from typing import Any, Optional, Union
 
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -18,6 +37,15 @@ from typing import Any, Optional, Union
 
 
 """Codomyrmex Exception Classes
+
+Core functionality module
+
+This module provides exceptions functionality including:
+- 9 functions: format_exception_chain, create_error_context, __init__...
+- 48 classes: CodomyrmexError, ConfigurationError, EnvironmentError...
+
+Usage:
+    # Example usage here
 
 This module defines all the exception classes used throughout the Codomyrmex
 package. It provides a hierarchical structure of exceptions to handle various
@@ -155,6 +183,16 @@ class CodomyrmexError(Exception):
         context: Optional[dict[str, Any]] = None,
         error_code: Optional[str] = None,
     ):
+        """Brief description of __init__.
+
+        Args:
+            self : Description of self
+            message : Description of message
+            context : Description of context
+            error_code : Description of error_code
+
+            Returns: Description of return value
+        """
         super().__init__(message)
         self.message = message
         self.context = context or {}
@@ -204,6 +242,15 @@ class FileOperationError(CodomyrmexError):
     def __init__(
         self, message: str, file_path: Optional[Union[str, Path]] = None, **kwargs: Any
     ) -> None:
+        """Brief description of __init__.
+
+        Args:
+            self : Description of self
+            message : Description of message
+            file_path : Description of file_path
+
+            Returns: Description of return value (type: Any)
+        """
         super().__init__(message, **kwargs)
         if file_path:
             self.context["file_path"] = str(file_path)
@@ -271,6 +318,17 @@ class CodeExecutionError(CodomyrmexError):
         stderr: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
+        """Brief description of __init__.
+
+        Args:
+            self : Description of self
+            message : Description of message
+            exit_code : Description of exit_code
+            stdout : Description of stdout
+            stderr : Description of stderr
+
+            Returns: Description of return value (type: Any)
+        """
         super().__init__(message, **kwargs)
         if exit_code is not None:
             self.context["exit_code"] = exit_code
@@ -316,6 +374,16 @@ class GitOperationError(CodomyrmexError):
         repository_path: Optional[Union[str, Path]] = None,
         **kwargs: Any,
     ) -> None:
+        """Brief description of __init__.
+
+        Args:
+            self : Description of self
+            message : Description of message
+            git_command : Description of git_command
+            repository_path : Description of repository_path
+
+            Returns: Description of return value (type: Any)
+        """
         super().__init__(message, **kwargs)
         if git_command:
             self.context["git_command"] = git_command
@@ -491,6 +559,15 @@ class TimeoutError(CodomyrmexError):
     def __init__(
         self, message: str, timeout_seconds: Optional[float] = None, **kwargs: Any
     ) -> None:
+        """Brief description of __init__.
+
+        Args:
+            self : Description of self
+            message : Description of message
+            timeout_seconds : Description of timeout_seconds
+
+            Returns: Description of return value (type: Any)
+        """
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
             self.context["timeout_seconds"] = timeout_seconds

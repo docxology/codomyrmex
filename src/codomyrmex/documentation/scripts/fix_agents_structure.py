@@ -2,6 +2,24 @@ from pathlib import Path
 import os
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -17,6 +35,16 @@ import os
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides fix_agents_structure functionality including:
+- 4 functions: get_default_contracts, get_active_components, fix_agents_file...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Fix AGENTS.md Structure
 
 This script iterates through all AGENTS.md files and ensures they have the required sections:
@@ -29,6 +57,13 @@ If sections are missing, it adds them with intelligent default content.
 
 
 def get_default_contracts():
+    """Brief description of get_default_contracts.
+
+Args:
+
+
+    Returns: Description of return value
+"""
     return """
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -58,6 +93,13 @@ def get_active_components(dir_path):
     return "\n## Active Components\n" + "\n".join(sorted(components)) + "\n"
 
 def fix_agents_file(file_path):
+    """Brief description of fix_agents_file.
+
+Args:
+    file_path : Description of file_path
+
+    Returns: Description of return value
+"""
     try:
         content = file_path.read_text(encoding='utf-8')
         modified = False
@@ -94,6 +136,13 @@ def fix_agents_file(file_path):
     return False
 
 def main():
+    """Brief description of main.
+
+Args:
+
+
+    Returns: Description of return value
+"""
     root = Path(__file__).parent.parent.parent
     print(f"Scanning {root} for AGENTS.md files...")
     

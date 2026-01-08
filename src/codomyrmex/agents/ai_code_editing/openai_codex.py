@@ -35,8 +35,49 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """OpenAI Codex Integration Module.
 
+"""Core functionality module
+
+This module provides openai_codex functionality including:
+- 14 functions: generate_code, complete_code, edit_code...
+- 3 classes: CodexRequest, CodexResponse, OpenAICodex
+
+Usage:
+    # Example usage here
+"""
 This module provides integration with OpenAI's API for advanced code
 generation, completion, and editing capabilities using GPT-4 and other
 code-capable models.

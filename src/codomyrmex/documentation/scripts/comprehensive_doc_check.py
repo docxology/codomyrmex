@@ -5,6 +5,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -22,6 +40,16 @@ import re
 """Comprehensive documentation verification script."""
 
 
+"""Main entry point and utility functions
+
+This module provides comprehensive_doc_check functionality including:
+- 6 functions: check_placeholder_content, check_navigation_links, check_version_status...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def check_placeholder_content(content: str) -> List[str]:
     """Check for placeholder content."""
     issues = []

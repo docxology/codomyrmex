@@ -1,6 +1,38 @@
 from typing import Optional
 
-from prompt_composition import FunctionName, ClassName
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,6 +67,16 @@ from prompt_composition import FunctionName, ClassName
 
 """Core functionality module
 
+"""Core functionality module
+
+This module provides prompt_composition functionality including:
+- 1 functions: compose_prompt
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides prompt_composition functionality including:
 - 1 functions: compose_prompt
 - 0 classes: 

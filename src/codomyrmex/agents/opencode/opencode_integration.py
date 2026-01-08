@@ -1,9 +1,27 @@
 from typing import Any
 
+
 from codomyrmex.agents.core import AgentIntegrationAdapter
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.core import AgentRequest
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -23,6 +41,15 @@ from codomyrmex.agents.core import AgentRequest
 
 
 
+"""Core functionality module
+
+This module provides opencode_integration functionality including:
+- 3 functions: adapt_for_ai_code_editing, adapt_for_llm, adapt_for_code_execution
+- 1 classes: OpenCodeIntegrationAdapter
+
+Usage:
+    # Example usage here
+"""
 class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for OpenCode with Codomyrmex modules."""
 

@@ -14,8 +14,11 @@ from dataclasses import dataclass, field
 from enum import Enum
 import importlib.util
 import yaml
+import yaml
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.utils.cli_helpers import (
 from codomyrmex.utils.cli_helpers import (
 
 
@@ -23,47 +26,102 @@ from codomyrmex.utils.cli_helpers import (
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-Comprehensive validation logic for Codomyrmex examples.
-
-This module contains the core logic for validating examples, moved from the standalone script.
-"""
-
-
-# Use the new location for shared utilities
-    ensure_output_directory,
     format_output,
     print_error,
     print_info,
-    print_section,
     print_success,
-    validate_file_path,
-    determine_language_from_file,
 )
 
-logger = get_logger(__name__)
+try:
+except ImportError:
+    yaml = None
+
+try:
+except ImportError:
+    get_logger = lambda name: None
+    setup_logging = lambda: None
+
+try:
+        ensure_output_directory,
+        format_output,
+        print_error,
+        print_info,
+        print_section,
+        print_success,
+        validate_file_path,
+        determine_language_from_file,
+    )
+except ImportError:
+    # Define fallback functions
+    def ensure_output_directory(path):
+        Path(path).mkdir(parents=True, exist_ok=True)
+    def format_output(text):
+        return text
+    def print_error(msg):
+        print(f"Error: {msg}")
+    def print_info(msg):
+        print(f"Info: {msg}")
+    def print_section(msg):
+        print(f"\n=== {msg} ===")
+    def print_success(msg):
+        print(f"Success: {msg}")
+    def validate_file_path(path):
+        return Path(path).exists()
+    def determine_language_from_file(path):
+        return "python" if str(path).endswith(".py") else "unknown"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+logger = get_logger(__name__) if get_logger else None
 
 
 class ValidationSeverity(str, Enum):

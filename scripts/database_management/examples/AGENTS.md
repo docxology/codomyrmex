@@ -1,15 +1,5 @@
 # Codomyrmex Agents — scripts/database_management/examples
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [db_performance](db_performance/AGENTS.md)
-    - [output](output/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

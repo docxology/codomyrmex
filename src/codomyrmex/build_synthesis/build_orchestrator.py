@@ -1,50 +1,31 @@
 from pathlib import Path
 import os
-import os
-import shutil
 import shutil
 import subprocess
 import sys
-import sys
 
-from {source_path.stem} import main
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
+"""
+"""Core functionality module
+
+This module provides build_orchestrator functionality including:
+- 8 functions: check_build_environment, run_build_command, synthesize_build_artifact...
+- 0 classes: 
+
+Usage:
+    # Example usage here
 """
 Build Orchestrator for Codomyrmex Build Synthesis.
 
 This module provides build orchestration and synthesis capabilities for
 automating build processes and artifact generation.
 """
+
 
 
 # Add project root for sibling module imports if run directly

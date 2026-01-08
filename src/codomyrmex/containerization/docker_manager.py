@@ -35,6 +35,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core business logic and data management
+
+This module provides docker_manager functionality including:
+- 20 functions: build_containers, manage_containers, get_full_image_name...
+- 2 classes: ContainerConfig, DockerManager
+
+Usage:
+    # Example usage here
 """
 Docker Manager for Codomyrmex Containerization Module.
 

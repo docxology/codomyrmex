@@ -42,7 +42,48 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Core functionality module
+
+This module provides container_registry functionality including:
+- 15 functions: manage_container_registry, get_auth_header, __init__...
+- 3 classes: ContainerImage, RegistryCredentials, ContainerRegistry
+
+Usage:
+    # Example usage here
 """
 Container Registry Module for Codomyrmex Containerization.
 

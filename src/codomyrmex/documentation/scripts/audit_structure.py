@@ -1,7 +1,32 @@
 from pathlib import Path
 import os
 
-from audit_structure import FunctionName, ClassName
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,6 +60,16 @@ from audit_structure import FunctionName, ClassName
 
 """Core functionality module
 
+"""Core functionality module
+
+This module provides audit_structure functionality including:
+- 2 functions: is_python_module, check_structure
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides audit_structure functionality including:
 - 2 functions: is_python_module, check_structure
 - 0 classes: 

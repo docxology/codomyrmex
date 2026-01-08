@@ -35,6 +35,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides plugin_registry functionality including:
+- 35 functions: create_plugin_info, get_registry, to_dict...
+- 6 classes: PluginState, PluginType, PluginInfo...
+
+Usage:
+    # Example usage here
 """
 Plugin Registry for Codomyrmex Plugin System
 
@@ -416,6 +457,13 @@ class PluginRegistry:
         visited = set()
 
         def build_graph(name: str) -> None:
+    """Brief description of build_graph.
+
+Args:
+    name : Description of name
+
+    Returns: Description of return value (type: Any)
+"""
             if name in visited:
                 return
 

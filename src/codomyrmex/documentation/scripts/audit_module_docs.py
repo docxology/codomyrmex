@@ -2,6 +2,24 @@ from pathlib import Path
 import json
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ import json
 """Audit module documentation completeness."""
 
 
+"""Core functionality module
+
+This module provides audit_module_docs functionality including:
+- 1 functions: audit_modules
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def audit_modules(base_path: Path) -> dict:
     """Audit all modules for documentation completeness."""
     results = {

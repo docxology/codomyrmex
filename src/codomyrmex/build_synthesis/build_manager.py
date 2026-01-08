@@ -9,12 +9,12 @@ import time
 
 from dataclasses import dataclass, field
 from enum import Enum
-from performance import monitor_performance, performance_context
 import shlex
 import tarfile
 import yaml
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.performance import monitor_performance, performance_context
 
 
 
@@ -43,6 +43,46 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core business logic and data management
+
+This module provides build_manager functionality including:
+- 27 functions: create_python_build_target, create_docker_build_target, create_static_build_target...
+- 10 classes: BuildType, BuildStatus, BuildEnvironment...
+
+Usage:
+    # Example usage here
 """
 Advanced build management functionality for Codomyrmex.
 
@@ -66,7 +106,6 @@ logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     logger.warning("Performance monitoring not available - decorators will be no-op")
@@ -75,6 +114,13 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value
+"""
             return func
 
         return decorator
@@ -89,11 +135,28 @@ except ImportError:
             self.start_time = 0
 
         def __enter__(self):
+    """Brief description of __enter__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
             self.start_time = time.time()
             logger.debug(f"Entering performance context: {self.context_name}")
             return self
 
         def __exit__(self, exc_type, exc_val, exc_tb):
+    """Brief description of __exit__.
+
+Args:
+    self : Description of self
+    exc_type : Description of exc_type
+    exc_val : Description of exc_val
+    exc_tb : Description of exc_tb
+
+    Returns: Description of return value
+"""
             duration = time.time() - self.start_time
             logger.debug(f"Exiting performance context: {self.context_name} (Duration: {duration:.4f}s)")
 

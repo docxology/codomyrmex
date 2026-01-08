@@ -32,6 +32,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core business logic and data management
+
+This module provides timezone functionality including:
+- 4 functions: __init__, now, to_timezone...
+- 1 classes: TimezoneManager
+
+Usage:
+    # Example usage here
 """
 Timezone-aware scheduling.
 """

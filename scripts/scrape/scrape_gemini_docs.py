@@ -101,6 +101,15 @@ def scrape_url(url):
         return []
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Scrape Gemini Docs")
+    parser.add_argument("--check", action="store_true", help="Run in check mode (verify imports only)")
+    args = parser.parse_args()
+
+    if args.check:
+        print("✅ Check mode: Imports and setup successful")
+        return
+
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
         

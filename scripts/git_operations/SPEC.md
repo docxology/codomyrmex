@@ -1,18 +1,18 @@
 # scripts/git_operations - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
 This module contains the **automation scripts** and **CLI entry points** for the `git_operations` system. Its primary function is to expose the core library functionality (located in `src/codomyrmex/git_operations`) to the terminal and CI/CD pipelines.
 
-
-Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Design Principles
 
 ### Modularity
 - **Thin Wrapper**: Scripts should contain minimal business logic, delegating immediately to `src` modules.
-- **CLI Standard**: Uses `argparse` or `click` (via `kit`) for consistent flag handling.
+    - `orchestrate.py` delegates to `codomyrmex.git_operations`.
+    - `visualization_demo.py` delegates to `codomyrmex.git_operations.demo`.
+- **CLI Standard**: Uses `argparse` for consistent flag handling.
 
 ### Internal Coherence
 - **Reflection**: The directory structure mirrors `src/codomyrmex` to make finding the "executable version" of a library intuitive.
@@ -20,16 +20,31 @@ Examples and demonstrations are provided in the `scripts/` subdirectory.
 ## Functional Requirements
 
 ### Core Capabilities
-1.  **Orchestration**: CLI signals triggering library logic.
-2.  **Output formatting**: JSON/Text output modes for machine/human consumption.
+1.  **Git Orchestration**: `orchestrate.py` supports:
+    - Status, Add, Commit, Push, Pull, Fetch
+    - Branch Management (Create, Switch, Current)
+    - Merge, Rebase, Cherry-pick, Amend
+    - Tag and Stash Operations
+    - Remote Management
+    - Clone and Init
+2.  **Visualization Demo**: `visualization_demo.py` demonstrates:
+    - Repository Analysis (Branches, Commits)
+    - Workflow Diagrams (Mermaid)
+    - Interactive Reporting
+
+### Output Formatting
+- **JSON**: For machine consumption (where applicable).
+- **Text**: For human-readable CLI output, using shared utility functions.
 
 ## Interface Contracts
 
 ### Public API
-- Check `AGENTS.md` or run with `--help` for specific command usage.
+- **orchestrate.py**: Run `python3 scripts/git_operations/orchestrate.py --help` for full command list.
+- **visualization_demo.py**: Run `python3 scripts/git_operations/visualization_demo.py --help` for usage.
 
 ### Dependencies
-- **Core Library**: `codomyrmex.git_operations`.
+- **Core Library**: `codomyrmex.git_operations`
+- **Visualization Library**: `codomyrmex.data_visualization` (optional, for demo)
 
 ## Navigation
 

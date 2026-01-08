@@ -120,6 +120,20 @@ def print_error(message: str):
         print(f"✗ {message}")
 
 
+def print_warning(message: str):
+    """
+    Print a warning message with yellow color.
+
+    Args:
+        message: Warning message
+    """
+    try:
+        # Try to use color if available
+        print(f"\033[93m! {message}\033[0m")
+    except:
+        print(f"! {message}")
+
+
 def print_results(results: Dict[str, Any], title: str = "Results"):
     """
     Print results in a formatted way.
@@ -227,4 +241,3 @@ def get_module_info(module_name: str) -> Dict[str, Any]:
                 pass
     
     return info
-

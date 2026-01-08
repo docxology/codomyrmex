@@ -38,9 +38,50 @@ import threading
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Core physical object management system."""
 
 
+"""Core business logic and data management
+
+This module provides object_manager functionality including:
+- 62 functions: from_material_type, add_object, remove_object...
+- 10 classes: ObjectType, ObjectStatus, MaterialType...
+
+Usage:
+    # Example usage here
+"""
 logger = logging.getLogger(__name__)
 
 
@@ -752,6 +793,13 @@ class PhysicalObjectManager:
     """Main manager for physical object operations."""
 
     def __init__(self):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         self.registry = ObjectRegistry()
         self._active_simulations = set()
 

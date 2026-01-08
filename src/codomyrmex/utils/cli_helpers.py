@@ -5,6 +5,7 @@ import json
 import sys
 import time
 
+
 from contextlib import contextmanager
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, LogContext
@@ -36,12 +37,48 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, LogContext
 
 
 
-"""
-Shared utilities for Codomyrmex orchestrator scripts.
 
-This module provides common functions and patterns used across all
-orchestrator scripts to ensure consistency and reduce code duplication.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides cli_helpers functionality including:
+- 28 functions: format_table, print_progress_bar, validate_dry_run...
+- 1 classes: ProgressReporter
+
+Usage:
+    # Example usage here
 """
+
 
 
 # Import logging setup

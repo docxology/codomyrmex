@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Parser for FPF specification markdown.
 
+"""Core functionality module
+
+This module provides parser functionality including:
+- 9 functions: __init__, parse_spec, extract_table_of_contents...
+- 1 classes: FPFParser
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to parse the FPF specification markdown
 file into structured data models.
 """

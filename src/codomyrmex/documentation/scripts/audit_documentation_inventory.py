@@ -5,6 +5,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import re
 
 #!/usr/bin/env python3
 """
+"""Core functionality module
+
+This module provides audit_documentation_inventory functionality including:
+- 4 functions: check_file_content, find_doc_files, audit_all_files...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Audit all README.md and AGENTS.md files in the repository.
 Creates a comprehensive inventory with current state assessment.
 """

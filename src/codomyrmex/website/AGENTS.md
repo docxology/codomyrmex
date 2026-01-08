@@ -1,15 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/website
 
-## Signposting
-- **Parent**: [Repository Root](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [assets](assets/AGENTS.md)
-    - [templates](templates/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

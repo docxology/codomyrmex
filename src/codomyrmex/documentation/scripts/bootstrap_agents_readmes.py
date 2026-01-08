@@ -5,6 +5,7 @@ import argparse
 import logging
 import sys
 
+
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 
@@ -20,7 +21,32 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Main entry point and utility functions
+
+This module provides bootstrap_agents_readmes functionality including:
+- 10 functions: main, __init__, should_process_directory...
+- 1 classes: DocumentationBootstrapper
+
+Usage:
+    # Example usage here
 """
 Bootstrap script to create AGENTS.md and README.md files for every directory
 under the allowed surfaces in the Codomyrmex repository.

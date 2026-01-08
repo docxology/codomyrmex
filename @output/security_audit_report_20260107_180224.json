@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-01-07T18:02:24.447545",
+  "results": {
+    "pip_audit": {
+      "tool": "pip-audit",
+      "available": false,
+      "vulnerabilities": []
+    },
+    "safety": {
+      "tool": "safety",
+      "available": false,
+      "vulnerabilities": [],
+      "total_vulnerabilities": 0,
+      "note": "safety not installed. Install with: pip install safety"
+    }
+  },
+  "categorized": {
+    "critical": [],
+    "high": [],
+    "medium": [],
+    "low": []
+  },
+  "summary": {
+    "total": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  }
+}

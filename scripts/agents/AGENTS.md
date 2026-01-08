@@ -1,14 +1,5 @@
 # Codomyrmex Agents — scripts/agents
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - None
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
@@ -19,7 +10,7 @@ Automation and utility scripts.
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `orchestrate.py` – Project file
-- `verify_gemini_real.py` – Project file
+- `verify_gemini.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

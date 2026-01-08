@@ -12,6 +12,11 @@ import argparse
 import sys
 from pathlib import Path
 
+# Setup path to include src
+# scripts/git_operations/orchestrate.py -> git_operations -> scripts -> codomyrmex (root)
+root_dir = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(root_dir / "src"))
+
 # Import logging setup
 from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
 
@@ -46,11 +51,13 @@ from codomyrmex.git_operations import (
     add_files,
     add_remote,
     amend_commit,
+    apply_stash,
     check_git_availability,
     cherry_pick,
     clone_repository,
     commit_changes,
     create_branch,
+    create_tag,
     fetch_changes,
     get_config,
     get_commit_history,
@@ -60,10 +67,15 @@ from codomyrmex.git_operations import (
     initialize_git_repository,
     is_git_repository,
     list_remotes,
+    list_stashes,
+    list_tags,
+    merge_branch,
     pull_changes,
     push_changes,
+    rebase_branch,
     remove_remote,
     set_config,
+    stash_changes,
     switch_branch,
 )
 
@@ -546,6 +558,129 @@ def handle_amend(args):
         return False
 
 
+def handle_merge(args):
+    """Handle merge command."""
+    try:
+        if getattr(args, "dry_run", False):
+            print_info(f"Dry run: Would merge {args.branch} into current branch")
+            return True
+
+        result = merge_branch(
+            source_branch=args.branch,
+            strategy=getattr(args, "strategy", None)
+        )
+
+        if result:
+            print_success(f"Merged {args.branch} successfully")
+            return True
+        else:
+            print_error("Failed to merge branch")
+            return False
+            
+    except Exception as e:
+        logger.exception("Unexpected error during merge")
+        print_error("Unexpected error during merge", exception=e)
+        return False
+
+
+def handle_rebase(args):
+    """Handle rebase command."""
+    try:
+        if getattr(args, "dry_run", False):
+            print_info(f"Dry run: Would rebase on {args.upstream}")
+            return True
+
+        result = rebase_branch(
+            target_branch=args.upstream,
+            interactive=getattr(args, "interactive", False)
+        )
+
+        if result:
+            print_success(f"Rebased on {args.upstream} successfully")
+            return True
+        else:
+            print_error("Failed to rebase")
+            return False
+            
+    except Exception as e:
+        logger.exception("Unexpected error during rebase")
+        print_error("Unexpected error during rebase", exception=e)
+        return False
+
+
+def handle_tag(args):
+    """Handle tag operations."""
+    try:
+        if args.action == "list":
+            tags = list_tags()
+            print_section("Git Tags")
+            if tags:
+                for tag in tags:
+                    print(f"  {tag}")
+            else:
+                print("  No tags found")
+            print_section("", separator="")
+            return True
+        elif args.action == "create":
+            if getattr(args, "dry_run", False):
+                print_info(f"Dry run: Would create tag '{args.name}'")
+                return True
+            result = create_tag(args.name, message=getattr(args, "message", None))
+            if result:
+                print_success(f"Created tag: {args.name}")
+                return True
+            else:
+                print_error("Failed to create tag")
+                return False
+                
+    except Exception as e:
+        logger.exception("Unexpected error during tag operation")
+        print_error("Unexpected error during tag operation", exception=e)
+        return False
+
+
+def handle_stash(args):
+    """Handle stash operations."""
+    try:
+        if args.action == "list":
+            stashes = list_stashes()
+            print_section("Git Stashes")
+            if stashes:
+                for stash in stashes:
+                    print(f"  {stash}")
+            else:
+                print("  No stashes found")
+            print_section("", separator="")
+            return True
+        elif args.action == "save":
+            if getattr(args, "dry_run", False):
+                print_info("Dry run: Would stash changes")
+                return True
+            result = stash_changes(message=getattr(args, "message", None))
+            if result:
+                print_success("Saved stash")
+                return True
+            else:
+                print_error("Failed to save stash")
+                return False
+        elif args.action == "apply":
+            if getattr(args, "dry_run", False):
+                print_info("Dry run: Would apply last stash")
+                return True
+            result = apply_stash()
+            if result:
+                print_success("Applied stash")
+                return True
+            else:
+                print_error("Failed to apply stash")
+                return False
+                
+    except Exception as e:
+        logger.exception("Unexpected error during stash operation")
+        print_error("Unexpected error during stash operation", exception=e)
+        return False
+
+
 def main():
     """Main CLI entry point."""
     setup_logging()
@@ -556,16 +691,11 @@ def main():
 Examples:
   %(prog)s status
   %(prog)s branch current
-  %(prog)s branch create feature/new-feature
-  %(prog)s branch switch main
-  %(prog)s add file1.py file2.py
   %(prog)s commit -m "Add new feature"
-  %(prog)s push --branch main --remote origin
-  %(prog)s pull --remote origin --branch main
-  %(prog)s clone https://github.com/user/repo.git --destination ./repo
-  %(prog)s init --path .
-  %(prog)s history --limit 10
-  %(prog)s check
+  %(prog)s merge feature-branch
+  %(prog)s rebase main
+  %(prog)s tag create v1.0.0 -m "Release v1.0.0"
+  %(prog)s stash save -m "WIP"
         """,
     )
 
@@ -678,6 +808,32 @@ Examples:
     amend_parser.add_argument("--author-email", help="Override author email")
     amend_parser.add_argument("--no-edit", action="store_true", help="Don't edit commit message")
 
+    # Merge command
+    merge_parser = subparsers.add_parser("merge", help="Merge a branch")
+    merge_parser.add_argument("branch", help="Branch to merge")
+    merge_parser.add_argument("--strategy", help="Merge strategy")
+
+    # Rebase command
+    rebase_parser = subparsers.add_parser("rebase", help="Rebase on upstream")
+    rebase_parser.add_argument("upstream", help="Upstream branch")
+    rebase_parser.add_argument("--interactive", "-i", action="store_true", help="Interactive rebase")
+
+    # Tag commands
+    tag_parser = subparsers.add_parser("tag", help="Tag operations")
+    tag_subparsers = tag_parser.add_subparsers(dest="action", help="Tag action", required=True)
+    tag_subparsers.add_parser("list", help="List tags")
+    tag_create = tag_subparsers.add_parser("create", help="Create tag")
+    tag_create.add_argument("name", help="Tag name")
+    tag_create.add_argument("-m", "--message", help="Tag message")
+
+    # Stash commands
+    stash_parser = subparsers.add_parser("stash", help="Stash operations")
+    stash_subparsers = stash_parser.add_subparsers(dest="action", help="Stash action", required=True)
+    stash_subparsers.add_parser("list", help="List stashes")
+    stash_save = stash_subparsers.add_parser("save", help="Save stash")
+    stash_save.add_argument("-m", "--message", help="Stash message")
+    stash_subparsers.add_parser("apply", help="Apply last stash")
+
     # Check command
     subparsers.add_parser("check", help="Check git availability")
 
@@ -704,6 +860,10 @@ Examples:
         "config": handle_config,
         "cherry-pick": handle_cherry_pick,
         "amend": handle_amend,
+        "merge": handle_merge,
+        "rebase": handle_rebase,
+        "tag": handle_tag,
+        "stash": handle_stash,
     }
 
     handler = handlers.get(args.command)
@@ -717,4 +877,3 @@ Examples:
 
 if __name__ == "__main__":
     sys.exit(main())
-

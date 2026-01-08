@@ -2,6 +2,24 @@ from pathlib import Path
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ import re
 """Fix or remove links to non-existent API_SPECIFICATION.md and USAGE_EXAMPLES.md files."""
 
 
+"""Main entry point and utility functions
+
+This module provides fix_missing_api_links functionality including:
+- 2 functions: fix_missing_api_links, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def fix_missing_api_links(file_path: Path) -> bool:
     """Fix links to missing API/Usage files."""
     if not file_path.exists():

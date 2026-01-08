@@ -11,41 +11,31 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Skill Validator Module
 
+"""Core functionality module
+
+This module provides skill_validator functionality including:
+- 4 functions: __init__, validate_skill, validate_file...
+- 1 classes: SkillValidator
+
+Usage:
+    # Example usage here
+"""
 Validates YAML skill files against schema.
 """
 
+try:
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
+    yaml = None
 
 try:
+    logger = get_logger(__name__)
 except ImportError:
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-
-logger = get_logger(__name__)
 
 
 class SkillValidator:
@@ -130,8 +120,7 @@ class SkillValidator:
         if not file_path.exists():
             return False, [f"File does not exist: {file_path}"]
 
-        try:
-        except ImportError:
+        if not HAS_YAML:
             return False, ["PyYAML not installed. Install with: pip install pyyaml"]
 
         try:

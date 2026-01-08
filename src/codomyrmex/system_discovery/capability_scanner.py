@@ -40,7 +40,48 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Core functionality module
+
+This module provides capability_scanner functionality including:
+- 16 functions: __init__, scan_all_modules, scan_module...
+- 4 classes: FunctionCapability, ClassCapability, ModuleCapability...
+
+Usage:
+    # Example usage here
 """
 Capability Scanner for Codomyrmex System Discovery
 

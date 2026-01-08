@@ -1,32 +1,5 @@
 # Codomyrmex Agents — docs/modules
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [agents_ai_code_editing](agents_agents/ai_code_editing/AGENTS.md)
-    - [build_synthesis](build_synthesis/AGENTS.md)
-    - [cerebrum](cerebrum/AGENTS.md)
-    - [coding](coding/AGENTS.md)
-    - [data_visualization](data_visualization/AGENTS.md)
-    - [documents](documents/AGENTS.md)
-    - [environment_setup](environment_setup/AGENTS.md)
-    - [git_operations](git_operations/AGENTS.md)
-    - [logging_monitoring](logging_monitoring/AGENTS.md)
-    - [model_context_protocol](model_context_protocol/AGENTS.md)
-    - [module_template](module_template/AGENTS.md)
-    - [pattern_matching](pattern_matching/AGENTS.md)
-    - [physical_management](physical_management/AGENTS.md)
-    - [scrape](scrape/AGENTS.md)
-    - [security](security/AGENTS.md)
-    - [skills](skills/AGENTS.md)
-    - [spatial_three_d](spatial_three_d/AGENTS.md)
-    - [static_analysis](static_analysis/AGENTS.md)
-    - [website](website/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

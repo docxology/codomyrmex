@@ -34,6 +34,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides config_validator functionality including:
+- 18 functions: get_logging_config_schema, get_database_config_schema, get_ai_model_config_schema...
+- 5 classes: ValidationSeverity, ValidationIssue, ValidationResult...
+
+Usage:
+    # Example usage here
 """
 Configuration Validator for Codomyrmex
 

@@ -1,6 +1,6 @@
 # Documentation Scan and Improvement Report
 
-Generated: 2026-01-07T16:19:56.878830
+Generated: 2026-01-08T08:38:21.804141
 
 Repository: /Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex
 
@@ -8,9 +8,9 @@ Repository: /Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex
 
 ## Phase 1: Discovery and Inventory
 
-- Total Markdown Files: 2818
-- AGENTS.md Files: 279
-- README.md Files: 1560
+- Total Markdown Files: 2815
+- AGENTS.md Files: 278
+- README.md Files: 1559
 - Configuration Files: 2118
 - Documentation Categories: 5
 - Validation Tools Found: 0
@@ -53,7 +53,7 @@ Repository: /Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex
 
 ### Summary Statistics
 
-- Total Files Scanned: 2818
+- Total Files Scanned: 2815
 - Issues by Category:
   - broken_links: 0
   - missing_documentation: 0

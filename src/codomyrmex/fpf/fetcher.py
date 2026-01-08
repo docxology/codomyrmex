@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Fetcher for FPF specification from GitHub.
 
+"""Testing utilities and test helpers
+
+This module provides fetcher functionality including:
+- 5 functions: __init__, fetch_latest, check_for_updates...
+- 1 classes: FPFFetcher
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to fetch the latest FPF specification
 from GitHub and manage local caching.
 """

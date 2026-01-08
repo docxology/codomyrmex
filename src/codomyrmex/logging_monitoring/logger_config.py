@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Any, Optional, Iterator
 import json
 import logging
@@ -7,6 +8,7 @@ import sys
 import time
 
 from contextlib import contextmanager
+from dotenv import load_dotenv
 
 import threading
 import uuid
@@ -18,21 +20,62 @@ import uuid
 
 
 
+
+
+# Optional dotenv import
+"""Core functionality module
+
+This module provides logger_config functionality including:
+- 14 functions: setup_logging, get_logger, log_with_context...
+- 3 classes: JsonFormatter, LogContext, PerformanceLogger
+
+Usage:
+    # Example usage here
+"""
 try:
     DOTENV_AVAILABLE = True
 except ImportError:
     DOTENV_AVAILABLE = False
     def load_dotenv(): pass
 
-try:
-    # Double check in case it was set above
-    if 'DOTENV_AVAILABLE' not in locals():
-        DOTENV_AVAILABLE = True
-except ImportError:
-    DOTENV_AVAILABLE = False
-    def load_dotenv(): pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Default log format
+    """Brief description of load_dotenv.
+
+Args:
+
+
+    Returns: Description of return value
+"""
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 # More detailed log format for debug purposes, can be set via env variable
 DETAILED_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"
@@ -42,6 +85,16 @@ _logging_configured = False
 
 # Custom JSON Formatter
 class JsonFormatter(logging.Formatter):
+    """Brief description of JsonFormatter.
+
+This class provides functionality for...
+
+Attributes:
+    # Add attribute descriptions here
+
+Methods:
+    # Method descriptions will be added automatically
+"""
     def format(self, record):
         """Format.
 
@@ -271,11 +324,23 @@ class LogContext:
         self.previous_context = getattr(_correlation_context, 'correlation_id', None)
 
     def __enter__(self):
+        """Enter the context manager.
+
+        Returns:
+            LogContext: The context manager instance
+        """
         _correlation_context.correlation_id = self.correlation_id
         _correlation_context.additional_context = self.additional_context
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit the context manager.
+
+        Args:
+            exc_type: Exception type
+            exc_val: Exception value
+            exc_tb: Exception traceback
+        """
         if self.previous_context is not None:
             _correlation_context.correlation_id = self.previous_context
         else:

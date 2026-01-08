@@ -36,7 +36,48 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Main entry point and utility functions
+
+This module provides auto_generate_docs functionality including:
+- 6 functions: main, __init__, find_modules...
+- 1 classes: AutoDocumentationGenerator
+
+Usage:
+    # Example usage here
 """
 Automatic Documentation Generator for Codomyrmex.
 

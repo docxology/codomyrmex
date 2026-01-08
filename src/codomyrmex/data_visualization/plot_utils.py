@@ -1,6 +1,7 @@
 import logging
 import os
 
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
@@ -16,6 +17,31 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides plot_utils functionality including:
+- 3 functions: get_codomyrmex_logger, save_plot, apply_common_aesthetics
+- 0 classes: 
+
+Usage:
+    # Example usage here
 """
 Utility functions for the Data Visualization module.
 

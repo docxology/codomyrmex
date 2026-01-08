@@ -13,11 +13,21 @@ import argparse
 import sys
 from pathlib import Path
 
+# Add project root and src to path for imports
+project_root = Path(__file__).parent.parent.parent
+src_path = project_root / "src"
+sys.path.insert(0, str(src_path))
+sys.path.insert(0, str(project_root))
+
+# Import shared utilities
 # Import logging setup
 from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
-from codomyrmex.utils.cli_helpers import print_error
-
-# Import handlers
+from codomyrmex.utils.cli_helpers import (
+    format_output,
+    print_error,
+    print_section,
+    print_success,
+)
 try:
     from codomyrmex.agents.cli_handlers import (
         handle_info,

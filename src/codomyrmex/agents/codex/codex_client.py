@@ -3,43 +3,14 @@ import time
 
 import openai
 
+from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.agents.exceptions import CodexError
-from codomyrmex.agents.generic import APIAgentBase
+from codomyrmex.logging_monitoring import get_logger
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""OpenAI Codex API client."""
-
-
-try:
-except ImportError:
-    openai = None
 
     AgentCapabilities,
     AgentRequest,
@@ -244,10 +215,9 @@ class CodexClient(APIAgentBase):
 
         # Add context if provided
         if request.context:
-            context_str = "\n".join(
+            context_str = "\\n".join(
                 f"{k}: {v}" for k, v in request.context.items()
             )
-            prompt = f"{context_str}\n\n{prompt}"
+            prompt = f"{context_str}\\n\\n{prompt}"
 
         return prompt
-

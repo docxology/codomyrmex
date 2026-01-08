@@ -5,6 +5,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -23,6 +41,16 @@ import re
 
 
 # Placeholder patterns
+"""Main entry point and utility functions
+
+This module provides comprehensive_triple_check functionality including:
+- 5 functions: find_placeholders, verify_relative_path, check_file_completeness...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 PLACEHOLDER_PATTERNS = [
     (r'\[Architecture description[^\]]*\]', 'Architecture description placeholder'),
     (r'\[Functional requirements[^\]]*\]', 'Functional requirements placeholder'),

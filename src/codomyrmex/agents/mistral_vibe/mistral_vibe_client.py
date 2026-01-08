@@ -3,23 +3,8 @@ from typing import Any, Iterator, Optional
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, MistralVibeError
-from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Mistral Vibe CLI client wrapper."""
 
 
     AgentCapabilities,
@@ -181,15 +166,15 @@ class MistralVibeClient(CLIAgentBase):
         if "files" in context:
             for file_path in context["files"]:
                 if Path(file_path).exists():
-                    input_parts.insert(0, f"@{file_path}\n")
+                    input_parts.insert(0, f"@{file_path}\\n")
 
         if "directories" in context:
             for dir_path in context["directories"]:
                 if Path(dir_path).is_dir():
-                    input_parts.insert(0, f"@directory {dir_path}\n")
+                    input_parts.insert(0, f"@directory {dir_path}\\n")
 
         # Join all parts
-        return "\n".join(input_parts)
+        return "\\n".join(input_parts)
 
 
     def execute_vibe_command(
@@ -211,7 +196,7 @@ class MistralVibeClient(CLIAgentBase):
         if args:
             cmd_input += " " + " ".join(args)
         if input_text:
-            cmd_input += "\n" + input_text
+            cmd_input += "\\n" + input_text
 
         return self._execute_command(input_text=cmd_input)
 
@@ -240,4 +225,3 @@ class MistralVibeClient(CLIAgentBase):
                 "available": False,
                 "error": str(e),
             }
-

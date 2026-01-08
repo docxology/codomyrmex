@@ -4,6 +4,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -21,6 +39,16 @@ import re
 """Fix common documentation issues intelligently."""
 
 
+"""Main entry point and utility functions
+
+This module provides fix_common_doc_issues functionality including:
+- 7 functions: calculate_correct_path, fix_broken_root_links, fix_parent_links...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def calculate_correct_path(from_file: Path, to_file: Path) -> str:
     """Calculate correct relative path."""
     try:

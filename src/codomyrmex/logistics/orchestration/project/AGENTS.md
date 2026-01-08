@@ -1,14 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/logistics/orchestration/project
 
-## Signposting
-- **Parent**: [Project](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [templates](templates/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

@@ -1,13 +1,5 @@
 # website
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [output](output/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
@@ -19,6 +11,7 @@ Automation and utility scripts.
 - `SPEC.md` – File
 - `__init__.py` – File
 - `generate.py` – File
+- `orchestrate.py` – File
 - `serve.py` – File
 
 ## Navigation

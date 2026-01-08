@@ -2,40 +2,17 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, Callable
 import json
+import logging
 import os
 import time
 
 from __future__ import annotations
 from dataclasses import asdict, dataclass, replace
 from enum import Enum
-from performance import monitor_performance, performance_context
 from threading import RLock
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from codomyrmex.performance import monitor_performance, performance_context
 
 
 
@@ -43,31 +20,30 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 """Droid controller and configuration utilities."""
 
 
-
-
-logger = get_logger(__name__)
-
-
+# Optional performance monitoring import
 try:
-except ImportError:  # pragma: no cover
-
-    def monitor_performance(*_args, **_kwargs):  # type: ignore
+except ImportError:
+    def monitor_performance(*_args, **_kwargs):
         def decorator(func: Callable):
             return func
-
         return decorator
 
-
-class performance_context:  # type: ignore
+    class performance_context:
         def __init__(self, *_, **__):
             pass
-
         def __enter__(self):
             return self
-
         def __exit__(self, *_):
             return None
 
+# Optional logger import
+try:
+except ImportError:
+    def get_logger(name):
+        return logging.getLogger(name)
+
+
+"""Droid controller and configuration utilities."""
 
 logger = get_logger(__name__)
 

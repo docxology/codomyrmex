@@ -3,6 +3,24 @@ import re
 import sys
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -18,6 +36,16 @@ import sys
 
 #!/usr/bin/env python3
 """
+"""Core functionality module
+
+This module provides fix_tutorial_references functionality including:
+- 1 functions: fix_tutorial_references
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Fix broken references in example_tutorial.md files.
 
 Updates references to API_SPECIFICATION.md and USAGE_EXAMPLES.md

@@ -1,24 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules
 
-## Signposting
-- **Parent**: [Modules](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [ai_code_editing](agents/ai_code_editing/AGENTS.md)
-    - [build_synthesis](build_synthesis/AGENTS.md)
-    - [data_visualization](data_visualization/AGENTS.md)
-    - [environment_setup](environment_setup/AGENTS.md)
-    - [git_operations](git_operations/AGENTS.md)
-    - [logging_monitoring](logging_monitoring/AGENTS.md)
-    - [model_context_protocol](model_context_protocol/AGENTS.md)
-    - [module_template](module_template/AGENTS.md)
-    - [pattern_matching](pattern_matching/AGENTS.md)
-    - [static_analysis](static_analysis/AGENTS.md)
-    - [template](template/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

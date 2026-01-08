@@ -47,9 +47,11 @@ from pathlib import Path
 current_dir = Path(__file__).parent
 project_root = current_dir.parent.parent
 # Setup paths
-root_dir = Path(__file__).resolve().parents[4]
+# scripts/git_operations/examples
+root_dir = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(root_dir / "src"))
 sys.path.insert(0, str(root_dir / "scripts"))
+sys.path.insert(0, str(root_dir / "scripts" / "tools" / "_common"))
 
 from codomyrmex.git_operations import (
     # Core operations
@@ -779,7 +781,7 @@ def main():
                 os.chdir(original_cwd)
 
             # Execute all demonstration sections
-_branching = demonstrate__branching_and_rebase(repo_path)
+            _branching = demonstrate_branching_and_rebase(repo_path)
             stash_and_tags = demonstrate_stash_and_tag_operations(repo_path)
             error_handling = demonstrate_error_handling_edge_cases(repo_path)
             release_workflow = demonstrate_realistic_release_workflow(repo_path)
@@ -821,20 +823,20 @@ _branching = demonstrate__branching_and_rebase(repo_path)
         print(f"✓ Error Handling: Tested {len(error_handling)} edge cases with {sum(1 for case in error_handling.values() if case is True)} handled correctly")
         print(f"✓ Release Workflow: Completed {release_workflow.get('workflow_steps_completed', 0)} steps, implemented {release_workflow.get('features_implemented', 0)} features, created {release_workflow.get('release_tags_created', 0)} release tags")
         print("\n🚀 Git Operations Features Demonstrated:")
-            print("  • Advanced branching strategies with merge vs rebase workflows")
-            print("  • Interactive rebase and conflict resolution techniques")
-            print("  • Cherry-pick operations for selective commit application")
-            print("  • Stash management for work-in-progress preservation")
-            print("  • Tag management with annotated and lightweight tags")
-            print("  • Comprehensive error handling for merge conflicts and repository issues")
-            print("  • Edge case handling for corrupted repos, network failures, and concurrent operations")
-            print("  • Realistic release workflow automation with feature branches and hotfixes")
-            print("  • Multi-developer collaboration patterns and branch management")
+        print("  • Advanced branching strategies with merge vs rebase workflows")
+        print("  • Interactive rebase and conflict resolution techniques")
+        print("  • Cherry-pick operations for selective commit application")
+        print("  • Stash management for work-in-progress preservation")
+        print("  • Tag management with annotated and lightweight tags")
+        print("  • Comprehensive error handling for merge conflicts and repository issues")
+        print("  • Edge case handling for corrupted repos, network failures, and concurrent operations")
+        print("  • Realistic release workflow automation with feature branches and hotfixes")
+        print("  • Multi-developer collaboration patterns and branch management")
 
-            # Cleanup
-            if repo_path.exists():
-                import shutil
-                shutil.rmtree(repo_path)
+        # Cleanup
+        if 'repo_path' in locals() and repo_path.exists():
+            import shutil
+            shutil.rmtree(repo_path, ignore_errors=True)
 
     except Exception as e:
         runner.error("Comprehensive Git Operations example failed", e)

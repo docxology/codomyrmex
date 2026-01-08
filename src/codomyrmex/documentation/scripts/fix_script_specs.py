@@ -1,7 +1,39 @@
 from pathlib import Path
 import os
 
-from fix_script_specs import FunctionName, ClassName
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,6 +67,16 @@ from fix_script_specs import FunctionName, ClassName
 
 """Core functionality module
 
+"""Core functionality module
+
+This module provides fix_script_specs functionality including:
+- 1 functions: fix_script_specs
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides fix_script_specs functionality including:
 - 1 functions: fix_script_specs
 - 0 classes: 

@@ -1,0 +1,23 @@
+gitGraph
+    commit id: "Initial"
+    branch develop
+    checkout develop
+    commit id: "Update documentation"
+    branch feature/user-auth
+    checkout feature/user-auth
+    commit id: "Start user authentic"
+    commit id: "Implement login syst"
+    commit id: "Add password validat"
+    checkout main
+    merge feature/user-auth
+    branch feature/api-endpoints
+    checkout feature/api-endpoints
+    commit id: "Create API endpoints"
+    commit id: "Add request validati"
+    checkout main
+    merge feature/api-endpoints
+    branch hotfix/security-fix
+    checkout hotfix/security-fix
+    commit id: "Fix security vulnera"
+    checkout main
+    merge hotfix/security-fix

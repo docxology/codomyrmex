@@ -1,60 +1,5 @@
 # Codomyrmex Agents — scripts
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [agents](agents/AGENTS.md)
-    - [api](api/AGENTS.md)
-    - [auth](auth/AGENTS.md)
-    - [build_synthesis](build_synthesis/AGENTS.md)
-    - [cache](cache/AGENTS.md)
-    - [cerebrum](cerebrum/AGENTS.md)
-    - [ci_cd_automation](ci_cd_automation/AGENTS.md)
-    - [cloud](cloud/AGENTS.md)
-    - [coding](coding/AGENTS.md)
-    - [compression](compression/AGENTS.md)
-    - [config_management](config_management/AGENTS.md)
-    - [containerization](containerization/AGENTS.md)
-    - [data_visualization](data_visualization/AGENTS.md)
-    - [database_management](database_management/AGENTS.md)
-    - [docs](docs/AGENTS.md)
-    - [documentation](documentation/AGENTS.md)
-    - [documents](documents/AGENTS.md)
-    - [encryption](encryption/AGENTS.md)
-    - [environment_setup](environment_setup/AGENTS.md)
-    - [events](events/AGENTS.md)
-    - [examples](examples/AGENTS.md)
-    - [fpf](fpf/AGENTS.md)
-    - [git-hooks](git-hooks/AGENTS.md)
-    - [git_operations](git_operations/AGENTS.md)
-    - [ide](ide/AGENTS.md)
-    - [llm](llm/AGENTS.md)
-    - [logging_monitoring](logging_monitoring/AGENTS.md)
-    - [logistics](logistics/AGENTS.md)
-    - [metrics](metrics/AGENTS.md)
-    - [model_context_protocol](model_context_protocol/AGENTS.md)
-    - [module_template](module_template/AGENTS.md)
-    - [networking](networking/AGENTS.md)
-    - [pattern_matching](pattern_matching/AGENTS.md)
-    - [performance](performance/AGENTS.md)
-    - [physical_management](physical_management/AGENTS.md)
-    - [plugin_system](plugin_system/AGENTS.md)
-    - [scrape](scrape/AGENTS.md)
-    - [security](security/AGENTS.md)
-    - [serialization](serialization/AGENTS.md)
-    - [skills](skills/AGENTS.md)
-    - [spatial](spatial/AGENTS.md)
-    - [static_analysis](static_analysis/AGENTS.md)
-    - [system_discovery](system_discovery/AGENTS.md)
-    - [templating](templating/AGENTS.md)
-    - [terminal_interface](terminal_interface/AGENTS.md)
-    - [tests](tests/AGENTS.md)
-    - [tools](tools/AGENTS.md)
-    - [utils](utils/AGENTS.md)
-    - [validation](validation/AGENTS.md)
-    - [website](website/AGENTS.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
@@ -100,6 +45,7 @@ Maintenance and automation utilities for project management.
 - `model_context_protocol/` – Directory containing model_context_protocol components
 - `module_template/` – Directory containing module_template components
 - `networking/` – Directory containing networking components
+- `output/` – Directory containing output components
 - `pattern_matching/` – Directory containing pattern_matching components
 - `performance/` – Directory containing performance components
 - `physical_management/` – Directory containing physical_management components
@@ -122,6 +68,7 @@ Maintenance and automation utilities for project management.
 ## Operating Contracts
 - `.DS_Store` – Project file
 - `__pycache__/` – Directory for __pycache__ components.
+- `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

@@ -5,42 +5,12 @@ import anthropic
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.agents.exceptions import ClaudeError
-from codomyrmex.agents.generic import APIAgentBase
+from codomyrmex.logging_monitoring import get_logger
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Claude API client."""
-
-
-try:
-except ImportError:
-    anthropic = None
 
     AgentCapabilities,
     AgentRequest,
@@ -243,7 +213,7 @@ class ClaudeClient(APIAgentBase):
 
         # Add context as system message if provided
         if request.context:
-            system_message = "\n".join(
+            system_message = "\\n".join(
                 f"{k}: {v}" for k, v in request.context.items()
             )
             messages.append({"role": "user", "content": system_message})
@@ -252,4 +222,3 @@ class ClaudeClient(APIAgentBase):
         messages.append({"role": "user", "content": request.prompt})
 
         return messages
-

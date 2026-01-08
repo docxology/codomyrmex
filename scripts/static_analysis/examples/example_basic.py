@@ -251,7 +251,7 @@ def demonstrate_batch_analysis_and_progress():
 
         print()  # New line after progress
         print_success(f"✓ Batch analysis complete: {total_issues} total issues across {len(python_files)} files")
-        print(".2f"
+        print(f"   Average issues per file: {total_issues / len(python_files):.2f}")
         return {
             "files_analyzed": len(python_files),
             "total_issues": total_issues,

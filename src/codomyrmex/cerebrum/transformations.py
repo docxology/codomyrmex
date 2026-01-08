@@ -34,10 +34,51 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Model transformation and adaptation algorithms."""
 
 
 
+"""Core business logic and data management
+
+This module provides transformations functionality including:
+- 13 functions: __init__, transform, __init__...
+- 4 classes: ModelTransformer, AdaptationTransformer, LearningTransformer...
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 

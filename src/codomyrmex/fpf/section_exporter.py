@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Section exporter for FPF sections.
 
+"""Core functionality module
+
+This module provides section_exporter functionality including:
+- 9 functions: __init__, export_part, export_pattern_group...
+- 1 classes: SectionExporter
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to export individual parts, pattern groups,
 and concept clusters to separate JSON files.
 """

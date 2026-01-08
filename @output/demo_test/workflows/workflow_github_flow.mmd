@@ -1,0 +1,10 @@
+flowchart TD
+    Start([Start]) --> Start([Start])
+    Start([Start]) --> Main[main branch]
+    Main[main branch] --> Branch[Create topic branch]
+    Branch[Create topic branch] --> Commit[Add commits]
+    Commit[Add commits] --> PR[Open Pull Request]
+    PR[Open Pull Request] --> Discuss[Discuss & review]
+    Discuss[Discuss & review] --> Test{Tests pass?}
+    Test{Tests pass?} --> Merge[Merge & deploy]
+    Merge[Merge & deploy] --> End([Complete])

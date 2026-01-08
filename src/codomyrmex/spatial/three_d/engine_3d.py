@@ -31,9 +31,50 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Core 3D Engine for modeling and rendering."""
 
 
+"""Core functionality module
+
+This module provides engine_3d functionality including:
+- 17 functions: __add__, __mul__, __init__...
+- 10 classes: Vector3D, Quaternion, Scene3D...
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 
@@ -47,9 +88,25 @@ class Vector3D:
     z: float = 0.0
 
     def __add__(self, other: "Vector3D") -> "Vector3D":
+    """Brief description of __add__.
+
+Args:
+    self : Description of self
+    other : Description of other
+
+    Returns: Description of return value (type: str)
+"""
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __mul__(self, scalar: float) -> "Vector3D":
+    """Brief description of __mul__.
+
+Args:
+    self : Description of self
+    scalar : Description of scalar
+
+    Returns: Description of return value (type: str)
+"""
         return Vector3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
 
@@ -173,6 +230,13 @@ class AnimationController:
     """Controller for 3D animations."""
 
     def __init__(self):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         self.animations: dict[str, Any] = {}
 
     def play_animation(self, name: str) -> None:
@@ -188,6 +252,13 @@ class PhysicsEngine:
     """Basic physics simulation for 3D objects."""
 
     def __init__(self):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         self.gravity = Vector3D(0.0, -9.81, 0.0)
 
     def update_physics(self, objects: list[Object3D], delta_time: float) -> None:

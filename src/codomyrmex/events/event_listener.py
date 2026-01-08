@@ -105,6 +105,13 @@ class EventListener:
             Handler name
         """
         def one_time_handler(event: Event):
+    """Brief description of one_time_handler.
+
+Args:
+    event : Description of event
+
+    Returns: Description of return value
+"""
             try:
                 # Call the original handler
                 result = handler(event)
@@ -161,6 +168,13 @@ class EventListener:
         start_time = time.time()
 
         def event_handler(event: Event):
+    """Brief description of event_handler.
+
+Args:
+    event : Description of event
+
+    Returns: Description of return value
+"""
             nonlocal received_event
             if filter_func is None or filter_func(event):
                 received_event = event
@@ -201,6 +215,13 @@ class EventListener:
         event_received = asyncio.Event()
 
         def event_handler(event: Event):
+    """Brief description of event_handler.
+
+Args:
+    event : Description of event
+
+    Returns: Description of return value
+"""
             nonlocal received_event
             if filter_func is None or filter_func(event):
                 received_event = event
@@ -362,6 +383,13 @@ def event_handler(event_types: Union[EventType, List[EventType]],
         Decorated function
     """
     def decorator(func: Callable[[Event], Any]) -> Callable[[Event], Any]:
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value (type: Any)
+"""
         func._event_types = event_types if isinstance(event_types, list) else [event_types]
         func._event_filter = filter_func
         func._event_priority = priority

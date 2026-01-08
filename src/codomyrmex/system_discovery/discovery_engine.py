@@ -44,7 +44,48 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Testing utilities and test helpers
+
+This module provides discovery_engine functionality including:
+- 23 functions: __init__, run_full_discovery, _discover_modules...
+- 3 classes: ModuleCapability, ModuleInfo, SystemDiscovery
+
+Usage:
+    # Example usage here
 """
 System Discovery Engine for Codomyrmex
 

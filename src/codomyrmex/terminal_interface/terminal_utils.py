@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
@@ -20,7 +21,32 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Core functionality module
+
+This module provides terminal_utils functionality including:
+- 18 functions: create_ascii_art, __init__, _supports_color...
+- 2 classes: TerminalFormatter, CommandRunner
+
+Usage:
+    # Example usage here
 """
 Terminal Utilities for Codomyrmex
 

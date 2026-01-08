@@ -3,6 +3,39 @@ import json
 
 import hashlib
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,6 +68,16 @@ import hashlib
 
 
 
+"""Core functionality module
+
+This module provides utils functionality including:
+- 5 functions: compute_hash, normalize_features, compute_euclidean_distance...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def compute_hash(data: Any) -> str:
     """Compute a hash for the given data.
 

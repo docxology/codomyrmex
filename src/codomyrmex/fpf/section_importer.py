@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Section importer for merging FPF sections.
 
+"""Core functionality module
+
+This module provides section_importer functionality including:
+- 9 functions: __init__, import_part, import_pattern_group...
+- 1 classes: SectionImporter
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to import and merge sections
 from separate JSON files into a unified FPF specification.
 """

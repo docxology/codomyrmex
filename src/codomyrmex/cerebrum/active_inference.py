@@ -35,11 +35,52 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Active inference implementation based on the free energy principle."""
 
 
 
 
+"""Core functionality module
+
+This module provides active_inference functionality including:
+- 19 functions: normalize, entropy, to_dict...
+- 4 classes: BeliefState, VariationalFreeEnergy, PolicySelector...
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 

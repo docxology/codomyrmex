@@ -1,5 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Optional
+import logging
 import os
 import sys
 import time
@@ -9,10 +10,72 @@ from dataclasses import dataclass
 from enum import Enum
 from environment_setup.env_checker import check_and_setup_env_vars
 from openai import OpenAI
-from performance import monitor_performance
 import google.generativeai as genai
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.performance import monitor_performance
+
+
+
+
+
+
+# Optional LLM client imports
+try:
+except ImportError:
+    Anthropic = None
+
+try:
+except ImportError:
+    OpenAI = None
+
+try:
+except ImportError:
+    genai = None
+
+# Optional environment setup
+try:
+except ImportError:
+    check_and_setup_env_vars = None
+
+# Optional performance monitoring
+try:
+except ImportError:
+    def monitor_performance(*args, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+
+try:
+except ImportError:
+    def get_logger(name):
+        return logging.getLogger(name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -88,12 +151,7 @@ except ImportError:
 
 
 # Import environment setup utilities if available
-try:
-except ImportError:
-    logger.warning(
-        "Could not import from environment_setup.env_checker. Environment variables may need to be set manually."
-    )
-    check_and_setup_env_vars = None
+# Already imported at module level (if available)
 
 
 # Enums for better type safety

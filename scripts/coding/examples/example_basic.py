@@ -998,13 +998,15 @@ class TestNewFeature:
 
             print(f"✓ PR Review Summary:")
             print(f"   Status: {pr_summary['pr_status']}")
-            print(".1f"            print(f"   CI/CD: {pr_summary['ci_cd_status']}")
+            print(f"   Quality Score: {pr_summary['quality_score']:.1f}/100")
+            print(f"   CI/CD: {pr_summary['ci_cd_status']}")
             print(f"   Review Comments: {pr_summary['review_comments']}")
             print(f"   Critical Issues: {pr_summary['critical_issues']}")
             print(f"   Recommendations: {len(pr_summary['recommendations'])}")
 
             if pr_summary['recommendations']:
-                print("   Key Recommendations:"                for rec in pr_summary['recommendations']:
+                print("   Key Recommendations:")
+                for rec in pr_summary['recommendations']:
                     print(f"     • {rec}")
 
         finally:

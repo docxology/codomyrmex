@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Indexer for FPF specification search and relationship traversal.
 
+"""Core functionality module
+
+This module provides indexer functionality including:
+- 5 functions: __init__, build_index, search_patterns...
+- 1 classes: FPFIndexer
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides indexing and search capabilities for FPF patterns
 and concepts.
 """

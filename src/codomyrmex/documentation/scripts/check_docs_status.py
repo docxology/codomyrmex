@@ -3,6 +3,24 @@ import os
 import sys
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -18,6 +36,16 @@ import sys
 
 #!/usr/bin/env python3
 """
+"""Core functionality module
+
+This module provides check_docs_status functionality including:
+- 2 functions: check_documentation_status, print_report
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Script to check documentation status across the entire repository.
 Checks for README.md and AGENTS.md files in all directories.
 """

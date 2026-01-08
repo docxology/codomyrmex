@@ -32,10 +32,51 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Security best practices."""
 
 
 
+"""Core functionality module
+
+This module provides best_practices functionality including:
+- 6 functions: get_best_practices, get_practice, get_practices_by_priority...
+- 3 classes: PracticeCategory, PracticePriority, SecurityBestPractice
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 

@@ -2,8 +2,27 @@ from pathlib import Path
 import json
 import sys
 
-from codomyrmex.{module_name} import function_name
-from codomyrmex.{module_name} import register_tools
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+# Template variables (used in string templates below):
+# from codomyrmex.{module_name} import function_name
+# from codomyrmex.{module_name} import register_tools
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +39,16 @@ from codomyrmex.{module_name} import register_tools
 
 #!/usr/bin/env python3
 """
+"""Core functionality module
+
+This module provides create_missing_doc_files functionality including:
+- 1 functions: create_missing_doc_files
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Create missing documentation files that are referenced but don't exist.
 
 Creates placeholder API_SPECIFICATION.md and MCP_TOOL_SPECIFICATION.md files

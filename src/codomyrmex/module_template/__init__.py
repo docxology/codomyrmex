@@ -1,37 +1,6 @@
-from __init__ import FunctionName, ClassName
-from __init__ import FunctionName, ClassName
+"""Module Template Package
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Core functionality module
-
-"""Core functionality module
-
-This module provides __init__ functionality including:
-- 0 functions: 
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-This module provides __init__ functionality including:
-- 0 functions: 
-- 0 classes: 
-
-Usage:
-    # Example usage here
+This module provides a template for creating new Codomyrmex modules.
+When using this template, ensure this file is present in the new module directory.
 """
 # This file makes the 'module_template' directory a Python package.
-# When using this template, ensure this file is present in the new module directory.

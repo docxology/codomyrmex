@@ -13,8 +13,22 @@ import json
 import sys
 from pathlib import Path
 
+# Add src to Python path for codomyrmex imports
+_SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPT_DIR.parent.parent
+_SRC_DIR = _REPO_ROOT / "src"
+if str(_SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(_SRC_DIR))
+
 # Import logging setup
-from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+try:
+    from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+except ImportError:
+    # Fallback if module not available
+    def setup_logging(): pass
+    def get_logger(name):
+        import logging
+        return logging.getLogger(name)
 
 # Import module-specific exceptions
 from codomyrmex.exceptions import (

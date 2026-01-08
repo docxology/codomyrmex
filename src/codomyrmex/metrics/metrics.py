@@ -31,6 +31,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides metrics functionality including:
+- 18 functions: inc, get, set...
+- 5 classes: Counter, Gauge, Histogram...
+
+Usage:
+    # Example usage here
 """
 Metrics collection and aggregation.
 """

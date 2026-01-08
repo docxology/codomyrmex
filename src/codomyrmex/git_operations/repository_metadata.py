@@ -9,7 +9,6 @@ from enum import Enum
 import requests
 
 from codomyrmex.git_operations.git_manager import (
-from codomyrmex.git_operations.git_manager import (
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -17,48 +16,17 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-Repository Metadata Management System
-
-This module provides comprehensive metadata tracking for repositories including
-clone status, permissions, versions, dates, and other structured information.
-"""
-
+    get_commit_history,
+    get_current_branch,
+    get_status as get_git_status,
+    is_git_repository,
+)
 
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
 # sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
-
-    get_commit_history,
-    get_current_branch,
-    is_git_repository,
-)
-    get_status as get_git_status,
-)
 
 logger = get_logger(__name__)
 

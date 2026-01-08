@@ -32,10 +32,51 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Model base classes and implementations for CEREBRUM."""
 
 
 
+"""Core functionality module
+
+This module provides models functionality including:
+- 7 functions: to_dict, from_dict, to_dict...
+- 3 classes: Model, ReasoningResult, ModelBase
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 

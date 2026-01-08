@@ -23,7 +23,7 @@ except ImportError:
 if not CORE_AVAILABLE:
     # Fallback implementation
     class FabricConfigManager:
-    """Manages Fabric configuration and integration settings."""
+        """Manages Fabric configuration and integration settings."""
     
     def __init__(self, config_dir: Optional[str] = None):
         self.config_dir = Path(config_dir) if config_dir else Path.home() / ".config" / "fabric"
@@ -171,6 +171,11 @@ Provide a structured workflow plan with:
 
 def main():
     """Main configuration management function."""
+    import argparse
+    parser = argparse.ArgumentParser(description="Fabric Configuration Manager")
+    parser.add_argument("--check", action="store_true", help="Run in check mode (verify imports and basic setup)")
+    args = parser.parse_args()
+
     print("🔧 Fabric Configuration Manager for Codomyrmex")
     print("=" * 50)
     
@@ -178,7 +183,11 @@ def main():
         manager = CoreFabricConfigManager()
     else:
         manager = FabricConfigManager()
-    
+        
+    if args.check:
+        print("✅ Check mode: Manager initialized successfully")
+        return
+
     # Ensure directories exist
     manager.ensure_directories()
     

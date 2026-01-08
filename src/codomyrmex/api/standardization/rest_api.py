@@ -38,6 +38,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides rest_api functionality including:
+- 31 functions: create_api, create_router, json_body...
+- 7 classes: HTTPMethod, HTTPStatus, APIRequest...
+
+Usage:
+    # Example usage here
 """
 REST API Implementation for Codomyrmex
 
@@ -228,6 +269,13 @@ class APIRouter:
                          tags: Optional[List[str]] = None, **kwargs) -> Callable:
         """Create a decorator for the specified HTTP method."""
         def decorator(func: Callable[[APIRequest], APIResponse]) -> Callable[[APIRequest], APIResponse]:
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value (type: Any)
+"""
             endpoint = APIEndpoint(
                 path=self._normalize_path(path),
                 method=method,

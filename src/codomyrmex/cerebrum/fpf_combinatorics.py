@@ -3,57 +3,30 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import itertools
 import json
-import json
 
-from matplotlib.patches import Patch
 from matplotlib.patches import Patch
 import csv
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
-import networkx as nx
-import networkx as nx
-import networkx as nx
 import networkx as nx
 import numpy as np
 
 from codomyrmex.cerebrum import (
+from codomyrmex.cerebrum import (
 from codomyrmex.cerebrum.visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
-from codomyrmex.cerebrum.visualization_base import BaseHeatmapVisualizer
-from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
-from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
-from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
-from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
-from codomyrmex.logging_monitoring import get_logger, setup_logging
+from codomyrmex.logging_monitoring import get_logger
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    ActiveInferenceAgent,
+    BayesianNetwork,
+    CaseRetriever,
+    CerebrumConfig,
+    InferenceEngine,
+    Model,
+)
 """Comprehensive combinatorics analysis using CEREBRUM on FPF.
 
 This module generates all possible combinations and analyses of FPF patterns
@@ -64,6 +37,13 @@ using CEREBRUM methods, including:
 - Cross-part relationships
 - Term network analysis
 """
+
+try:
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+    plt = None
+    nx = None
 
 
     BayesianNetwork,

@@ -4,9 +4,27 @@ import os
 import subprocess
 import time
 
+
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError
 from codomyrmex.agents.generic.base_agent import BaseAgent
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -26,6 +44,15 @@ from codomyrmex.agents.generic.base_agent import BaseAgent
 
 
 
+"""Core functionality module
+
+This module provides cli_agent_base functionality including:
+- 6 functions: __init__, _check_command_available, _build_env...
+- 1 classes: CLIAgentBase
+
+Usage:
+    # Example usage here
+"""
 class CLIAgentBase(BaseAgent):
     """Base class for CLI-based agents with common subprocess execution patterns."""
 

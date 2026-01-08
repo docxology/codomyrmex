@@ -37,6 +37,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides doc_generator functionality including:
+- 21 functions: generate_api_docs, extract_api_specs, to_dict...
+- 3 classes: APIEndpoint, APIDocumentation, APIDocumentationGenerator
+
+Usage:
+    # Example usage here
 """
 API Documentation Generator for Codomyrmex API Documentation Module.
 
@@ -103,6 +144,13 @@ class APIDocumentation:
     license_info: dict[str, str] = field(default_factory=dict)
 
     def __post_init__(self):
+    """Brief description of __post_init__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         if self.generated_at is None:
             self.generated_at = datetime.now(timezone.utc)
 

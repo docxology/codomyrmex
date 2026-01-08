@@ -35,6 +35,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides event_schema functionality including:
+- 17 functions: create_system_startup_event, create_module_load_event, create_analysis_start_event...
+- 4 classes: EventPriority, EventType, Event...
+
+Usage:
+    # Example usage here
 """
 Event Schema for Codomyrmex Event System
 

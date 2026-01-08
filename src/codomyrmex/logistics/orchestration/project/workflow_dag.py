@@ -34,6 +34,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides workflow_dag functionality including:
+- 16 functions: to_dict, __init__, add_task...
+- 5 classes: DAGValidationError, CycleDetectedError, TaskStatus...
+
+Usage:
+    # Example usage here
 """
 Workflow DAG (Directed Acyclic Graph) Implementation for Codomyrmex
 

@@ -3,6 +3,24 @@ from typing import List, Tuple
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -18,6 +36,16 @@ import re
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides validate_links functionality including:
+- 4 functions: find_markdown_links, resolve_link, validate_file...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Validate all internal links in README.md and AGENTS.md files.
 """
 

@@ -1,7 +1,39 @@
 import os
 import sys
 
-from doc_scaffolder import FunctionName, ClassName
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,6 +67,16 @@ from doc_scaffolder import FunctionName, ClassName
 
 """Main entry point and utility functions
 
+"""Main entry point and utility functions
+
+This module provides doc_scaffolder functionality including:
+- 4 functions: get_children_links, update_file_with_signposting, process_directory...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides doc_scaffolder functionality including:
 - 4 functions: get_children_links, update_file_with_signposting, process_directory...
 - 0 classes: 

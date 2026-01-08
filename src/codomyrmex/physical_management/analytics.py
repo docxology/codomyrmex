@@ -37,9 +37,50 @@ import threading
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Advanced analytics and data streaming for physical management."""
 
 
+"""Core functionality module
+
+This module provides analytics functionality including:
+- 29 functions: add_point, is_complete, calculate_metrics...
+- 7 classes: AnalyticsMetric, StreamingMode, DataPoint...
+
+Usage:
+    # Example usage here
+"""
 logger = logging.getLogger(__name__)
 
 
@@ -458,6 +499,14 @@ class PredictiveAnalytics:
     """Simple predictive analytics using statistical methods."""
 
     def __init__(self, min_data_points: int = 10):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    min_data_points : Description of min_data_points
+
+    Returns: Description of return value
+"""
         self.min_data_points = min_data_points
 
     def predict_linear_trend(

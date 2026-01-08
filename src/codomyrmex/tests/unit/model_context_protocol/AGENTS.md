@@ -1,15 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit/model_context_protocol
 
-## Signposting
-- **Parent**: [Model Context Protocol](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [integration](integration/AGENTS.md)
-    - [unit](unit/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

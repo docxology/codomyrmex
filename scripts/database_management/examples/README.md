@@ -1,14 +1,5 @@
 # examples
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [db_performance](db_performance/README.md)
-    - [output](output/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview

@@ -40,11 +40,16 @@
             ]
         },
         "fabric/fabric_orchestrator.py": {
-            "skip": true,
-            "skip_reason": "Interactive/Service script"
+            "skip": false,
+            "args": [
+                "--check"
+            ]
         },
         "fabric/fabric_config_manager.py": {
-            "skip": true
+            "skip": false,
+            "args": [
+                "--check"
+            ]
         },
         "tools/run_quality_checks.py": {
             "allowed_exit_codes": [
@@ -59,27 +64,11 @@
                 1
             ]
         },
-        "fabric/verify_api_specs.py": {
-            "skip": true
-        },
-        "fabric/start_fabric.py": {
-            "skip": true
-        },
-        "fabric/verify_api_specs.py": {
-            "skip": true
-        },
-        "fabric/start_fabric.py": {
-            "skip": true
-        },
-        "ollama/serve_model.py": {
-            "skip": true
-        },
         "scrape/scrape_gemini_docs.py": {
-            "skip": true,
-            "skip_reason": "Missing optional dependency: markdownify"
-        },
-        "ollama/chat_cli.py": {
-            "skip": true
+            "skip": false,
+            "args": [
+                "--check"
+            ]
         }
     }
 }

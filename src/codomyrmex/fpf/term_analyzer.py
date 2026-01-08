@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Term analyzer for extracting shared terms and variables across FPF sections.
 
+"""Core functionality module
+
+This module provides term_analyzer functionality including:
+- 8 functions: __init__, extract_terms_from_pattern, build_term_cooccurrence_matrix...
+- 1 classes: TermAnalyzer
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to analyze terms, variables, and concepts
 that appear across different patterns and sections of the FPF specification.
 """

@@ -37,7 +37,48 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Main entry point and utility functions
+
+This module provides validate_agents_structure functionality including:
+- 20 functions: extract_orchestrator_commands, fix_script_orchestrator_agents, main...
+- 4 classes: ValidationIssue, AgentsFileValidation, StructureValidationReport...
+
+Usage:
+    # Example usage here
 """
 AGENTS.md Structure Validator for Codomyrmex Documentation.
 

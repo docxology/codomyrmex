@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Graph generator for FPF visualizations using NetworkX and Matplotlib.
 
+"""Core functionality module
+
+This module provides graph_generator functionality including:
+- 10 functions: __init__, create_pattern_dependency_graph, create_term_cooccurrence_graph...
+- 1 classes: GraphGenerator
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides graph generation utilities for creating various
 types of network visualizations from FPF specifications.
 """

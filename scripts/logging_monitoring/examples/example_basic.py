@@ -114,7 +114,7 @@ def main():
 
     # Load configuration with error handling
     try:
-    config = load_config(Path(__file__).parent / "config.yaml")
+        config = load_config(Path(__file__).parent / "config.yaml")
         print_success("Configuration loaded successfully")
     except Exception as e:
         print_error(f"Failed to load configuration: {e}")
@@ -151,7 +151,7 @@ def main():
         try:
             # Setup logging based on configuration
             # This initializes the logging system with proper formatters and handlers
-        setup_logging()
+            setup_logging()
             print_success("✓ Logging system initialized successfully")
             print(f"  - Output format: {config.get('logging', {}).get('output_type', 'TEXT')}")
             print(f"  - Log level: {config.get('logging', {}).get('level', 'INFO')}")

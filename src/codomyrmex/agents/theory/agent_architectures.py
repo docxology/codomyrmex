@@ -32,10 +32,51 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Agent architecture patterns and implementations."""
 
 
 
+"""Core functionality module
+
+This module provides agent_architectures functionality including:
+- 20 functions: __init__, perceive, decide...
+- 5 classes: ArchitectureType, AgentArchitecture, ReactiveArchitecture...
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 

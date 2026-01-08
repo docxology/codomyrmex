@@ -14,11 +14,26 @@ Usage:
 
 import argparse
 import json
-import sys
-from pathlib import Path
-
-# Add src to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+# Import shared utilities
+try:
+    from _orchestrator_utils import (
+        format_output,
+        print_error,
+        print_section,
+        print_success,
+        print_warning,
+    )
+except ImportError:
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from _orchestrator_utils import (
+        format_output,
+        print_error,
+        print_section,
+        print_success,
+        print_warning,
+    )
 
 from codomyrmex.ide.antigravity import AntigravityClient 
 from codomyrmex.ide.cursor import CursorClient

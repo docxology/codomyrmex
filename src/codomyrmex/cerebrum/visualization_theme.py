@@ -38,8 +38,49 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Professional academic visualization theme system for CEREBRUM.
 
+"""Core functionality module
+
+This module provides visualization_theme functionality including:
+- 14 functions: get_default_theme, set_default_theme, __post_init__...
+- 6 classes: FontConfig, ColorPalette, FigureConfig...
+
+Usage:
+    # Example usage here
+"""
 This module provides a centralized theme system for consistent, publication-quality
 visualizations with professional fonts, colorblind-safe palettes, and standardized styling.
 """

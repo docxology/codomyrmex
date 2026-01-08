@@ -39,6 +39,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides plugin_validator functionality including:
+- 15 functions: validate_plugin, check_plugin_security, validate_plugin_metadata...
+- 2 classes: ValidationResult, PluginValidator
+
+Usage:
+    # Example usage here
 """
 Plugin Validator for Codomyrmex Plugin System
 

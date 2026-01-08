@@ -1,19 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/tests/integration
 
-## Signposting
-- **Parent**: [Integration](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [ai_code_editing](agents/ai_code_editing/AGENTS.md)
-    - [data_visualization](data_visualization/AGENTS.md)
-    - [documentation](documentation/AGENTS.md)
-    - [documents](documents/AGENTS.md)
-    - [git_operations](git_operations/AGENTS.md)
-    - [security](security/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

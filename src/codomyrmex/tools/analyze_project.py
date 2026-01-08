@@ -7,6 +7,39 @@ import sys
 
 import tomllib
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -37,6 +70,16 @@ import tomllib
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides analyze_project functionality including:
+- 5 functions: analyze_project_structure, analyze_dependencies, analyze_code_quality...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Comprehensive Project Analysis Tool
 
 Analyzes the Codomyrmex project structure, dependencies, and code quality.

@@ -19,12 +19,74 @@ except ImportError:
     PSUTIL_AVAILABLE = False
     # Create a dummy psutil module for type hints
     class _DummyPSUtil:
+    """Brief description of _DummyPSUtil.
+
+This class provides functionality for...
+
+Attributes:
+    # Add attribute descriptions here
+
+Methods:
+    # Method descriptions will be added automatically
+"""
         class Process:
+    """Brief description of Process.
+
+This class provides functionality for...
+
+Attributes:
+    # Add attribute descriptions here
+
+Methods:
+    # Method descriptions will be added automatically
+"""
             def memory_info(self): return type('obj', (object,), {'rss': 0})()
+    """Brief description of memory_info.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
             def cpu_percent(self, interval=None): return 0.0
+    """Brief description of cpu_percent.
+
+Args:
+    self : Description of self
+    interval : Description of interval
+
+    Returns: Description of return value
+"""
         class NoSuchProcess(Exception): pass
+    """Brief description of NoSuchProcess.
+
+This class provides functionality for...
+
+Attributes:
+    # Add attribute descriptions here
+
+Methods:
+    # Method descriptions will be added automatically
+"""
         class AccessDenied(Exception): pass
+    """Brief description of AccessDenied.
+
+This class provides functionality for...
+
+Attributes:
+    # Add attribute descriptions here
+
+Methods:
+    # Method descriptions will be added automatically
+"""
         def Process(self): return self.Process()
+    """Brief description of Process.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
     psutil = _DummyPSUtil()
 
 from codomyrmex.logging_monitoring.logger_config import get_logger

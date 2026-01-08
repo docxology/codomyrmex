@@ -432,7 +432,7 @@ for f in files[:5]:
     print(f"  Submissions processed: {service_results['submissions_processed']}")
     print(f"  Successful executions: {service_results['successful_executions']}")
     print(f"  Blocked attempts: {service_results['blocked_attempts']}")
-    print(".2f"    print(".1f"
+    print(f"  Average execution time: {service_results['average_execution_time']:.2f}s")
     print_success("🎉 Untrusted code execution service simulation completed!")
     return service_results
 

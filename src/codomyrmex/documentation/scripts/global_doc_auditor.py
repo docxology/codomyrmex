@@ -3,6 +3,7 @@ from typing import List, Tuple
 import os
 
 
+from codomyrmex.logging_monitoring import get_logger
 
 
 
@@ -18,6 +19,33 @@ import os
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides global_doc_auditor functionality including:
+- 2 functions: is_relevant_dir, audit_directory
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 REQUIRED_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 IGNORE_DIRS = [
     ".git", ".github", ".venv", "__pycache__", ".pytest_cache", 
@@ -25,6 +53,13 @@ IGNORE_DIRS = [
 ]
 
 def is_relevant_dir(path: Path) -> bool:
+    """Brief description of is_relevant_dir.
+
+Args:
+    path : Description of path
+
+    Returns: Description of return value (type: bool)
+"""
     if any(part in IGNORE_DIRS or part.startswith('.') for part in path.parts):
         return False
     # If it's a leaf node containing code or if it previously had docs
@@ -32,6 +67,13 @@ def is_relevant_dir(path: Path) -> bool:
     return True
 
 def audit_directory(root_path: Path) -> Tuple[int, int, List[str]]:
+    """Brief description of audit_directory.
+
+Args:
+    root_path : Description of root_path
+
+    Returns: Description of return value (type: Any)
+"""
     total_dirs = 0
     compliant_dirs = 0
     issues = []

@@ -6,13 +6,13 @@ import warnings
 
 from dataclasses import dataclass
 from enum import Enum
-from performance import monitor_performance, performance_context
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.performance import monitor_performance, performance_context
 
 
 
@@ -41,6 +41,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides advanced_plotter functionality including:
+- 35 functions: create_advanced_line_plot, create_advanced_scatter_plot, create_advanced_bar_chart...
+- 8 classes: PlotType, ChartStyle, ColorPalette...
+
+Usage:
+    # Example usage here
 """
 Advanced data visualization functionality for Codomyrmex.
 
@@ -71,19 +112,64 @@ except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
+    """Brief description of monitor_performance.
+
+Args:
+
+
+    Returns: Description of return value
+"""
         def decorator(func):
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value
+"""
             return func
 
         return decorator
 
     class performance_context:
+    """Brief description of performance_context.
+
+This class provides functionality for...
+
+Attributes:
+    # Add attribute descriptions here
+
+Methods:
+    # Method descriptions will be added automatically
+"""
         def __init__(self, *args, **kwargs):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
             pass
 
         def __enter__(self):
+    """Brief description of __enter__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
             return self
 
         def __exit__(self, *args):
+    """Brief description of __exit__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
             pass
 
 

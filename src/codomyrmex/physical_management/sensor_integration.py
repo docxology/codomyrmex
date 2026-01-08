@@ -35,9 +35,50 @@ from enum import Enum
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Sensor integration and device management."""
 
 
+"""Core business logic and data management
+
+This module provides sensor_integration functionality including:
+- 22 functions: to_dict, __init__, register_device...
+- 8 classes: SensorType, DeviceStatus, SensorReading...
+
+Usage:
+    # Example usage here
+"""
 logger = logging.getLogger(__name__)
 
 

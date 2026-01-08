@@ -1,18 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit/agents
 
-## Signposting
-- **Parent**: [Agents](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [ai_code_editing](agents/ai_code_editing/AGENTS.md)
-    - [every_code](every_code/AGENTS.md)
-    - [gemini](gemini/AGENTS.md)
-    - [generic](generic/AGENTS.md)
-    - [mistral_vibe](mistral_vibe/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

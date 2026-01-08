@@ -44,6 +44,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides env_checker functionality including:
+- 8 functions: is_uv_available, is_uv_environment, ensure_dependencies_installed...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 try:
     METADATA_AVAILABLE = True
 except ImportError:

@@ -9,7 +9,34 @@ import unittest
 import threading
 
 from codomyrmex.logistics.orchestration.project import (
-from codomyrmex.performance import PerformanceMonitor
+from codomyrmex.monitoring.performance import PerformanceMonitor
+
+
+
+
+
+try:
+        get_orchestration_engine,
+        get_workflow_manager,
+        get_task_orchestrator,
+        get_project_manager,
+        get_resource_manager,
+        WorkflowStep,
+        Task,
+        TaskPriority,
+        TaskStatus,
+        TaskResource,
+        ResourceType,
+        ProjectType,
+        ProjectStatus,
+    )
+    ORCHESTRATION_AVAILABLE = True
+except ImportError:
+    ORCHESTRATION_AVAILABLE = False
+
+try:
+except ImportError:
+    PerformanceMonitor = None
 
 
 
@@ -38,30 +65,28 @@ from codomyrmex.performance import PerformanceMonitor
 
 
 
-#!/usr/bin/env python3
-"""
-Integration Test Suite for Codomyrmex Orchestration
-
-This file provides comprehensive integration tests for all orchestration components,
-ensuring they work together properly and handle edge cases correctly.
-"""
 
 
-# Import Codomyrmex orchestration components
-    get_orchestration_engine,
-    get_workflow_manager,
-    get_task_orchestrator,
-    get_project_manager,
-    get_resource_manager,
-    WorkflowStep,
-    Task,
-    TaskPriority,
-    TaskStatus,
-    TaskResource,
-    ResourceType,
-    ProjectType,
-    ProjectStatus
-)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class TestOrchestrationIntegration(unittest.TestCase):

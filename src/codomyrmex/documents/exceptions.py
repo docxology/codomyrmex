@@ -1,9 +1,21 @@
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring import get_logger
 """Documents Module Exception Classes
 
+"""Core functionality module
+
+This module provides exceptions functionality including:
+- 4 functions: __init__, __init__, __init__...
+- 9 classes: DocumentsError, DocumentReadError, DocumentWriteError...
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module defines all exception classes used within the Documents module.
 """
 
-from codomyrmex.exceptions import CodomyrmexError
 
 
 class DocumentsError(CodomyrmexError):
@@ -15,6 +27,15 @@ class DocumentReadError(DocumentsError):
     """Raised when document reading fails."""
     
     def __init__(self, message: str, file_path: str = None, **kwargs):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    file_path : Description of file_path
+
+    Returns: Description of return value
+"""
         super().__init__(message, **kwargs)
         if file_path:
             self.context["file_path"] = file_path
@@ -24,6 +45,15 @@ class DocumentWriteError(DocumentsError):
     """Raised when document writing fails."""
     
     def __init__(self, message: str, file_path: str = None, **kwargs):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    file_path : Description of file_path
+
+    Returns: Description of return value
+"""
         super().__init__(message, **kwargs)
         if file_path:
             self.context["file_path"] = file_path
@@ -38,6 +68,15 @@ class DocumentValidationError(DocumentsError):
     """Raised when document validation fails."""
     
     def __init__(self, message: str, validation_errors: list = None, **kwargs):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    validation_errors : Description of validation_errors
+
+    Returns: Description of return value
+"""
         super().__init__(message, **kwargs)
         if validation_errors:
             self.context["validation_errors"] = validation_errors
@@ -52,6 +91,15 @@ class UnsupportedFormatError(DocumentsError):
     """Raised when an unsupported document format is requested."""
     
     def __init__(self, message: str, format: str = None, **kwargs):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    format : Description of format
+
+    Returns: Description of return value
+"""
         super().__init__(message, **kwargs)
         if format:
             self.context["format"] = format

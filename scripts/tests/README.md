@@ -1,13 +1,5 @@
 # tests
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [output](output/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
@@ -27,7 +19,7 @@ Test files and validation suites.
 - `run_tests_batched.sh` – File
 - `test_jules_authenticated.py` – File
 - `test_jules_functionality.py` – File
-- `test_jules_real_task.py` – File
+- `test_jules_task.py` – File
 - `test_summary.py` – File
 - `testing_AGENTS.md` – File
 - `testing_README.md` – File

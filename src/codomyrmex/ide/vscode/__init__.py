@@ -2,7 +2,24 @@ from pathlib import Path
 from typing import Any, Optional, Dict, List
 import json
 
+
 from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutionError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +36,15 @@ from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutio
 
 """VS Code IDE Integration
 
+"""Core functionality module
+
+This module provides __init__ functionality including:
+- 15 functions: __init__, connect, disconnect...
+- 1 classes: VSCodeClient
+
+Usage:
+    # Example usage here
+"""
 Integration with Visual Studio Code. Provides programmatic access to
 the Extension API, workspace management, and debugging capabilities.
 

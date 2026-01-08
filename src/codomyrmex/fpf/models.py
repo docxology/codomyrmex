@@ -3,30 +3,8 @@ from typing import Any, Dict, List, Optional, Union
 
 from enum import Enum
 from pydantic import BaseModel, Field, field_validator
-from pydantic import BaseModel, Field, validator as field_validator
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from codomyrmex.logging_monitoring import get_logger
 
 
 
@@ -40,10 +18,11 @@ Framework specification structure, including patterns, concepts, relationships,
 and the overall specification.
 """
 
+logger = get_logger(__name__)
 
 try:
 except ImportError:
-    # Fallback for older Pydantic versions
+    parser = None
 
 
 class PatternStatus(str, Enum):

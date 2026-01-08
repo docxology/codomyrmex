@@ -1,14 +1,5 @@
 # Codomyrmex Agents — scripts/website
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [output](output/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
@@ -19,6 +10,7 @@ Automation and utility scripts.
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
 - `generate.py` – Project file
+- `orchestrate.py` – Project file
 - `serve.py` – Project file
 
 ## Operating Contracts

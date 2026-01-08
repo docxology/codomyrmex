@@ -1,14 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/static_analysis
 
-## Signposting
-- **Parent**: [Static Analysis](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [docs](docs/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Section manager for extracting and managing FPF sections.
 
+"""Core business logic and data management
+
+This module provides section_manager functionality including:
+- 8 functions: __init__, extract_part, extract_pattern_group...
+- 1 classes: SectionManager
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to extract individual parts, pattern groups,
 and concept clusters from FPF specifications.
 """

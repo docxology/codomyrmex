@@ -259,6 +259,11 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 
 
 ## Navigation Links
+- `check_all_syntax.py` – Python module
+- `example_bar_chart.png` – Image file
+- `example_scatter_plot.png` – Image file
+- `example_sine_plot.png` – Image file
+- `fix_events_indentation.py` – Python module
 - `.ruff_cache/` – Directory for .ruff_cache components.
 - `@output/` – Directory for @output components.
 - `examples/` – Directory for examples components.

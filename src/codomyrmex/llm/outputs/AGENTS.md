@@ -1,18 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/llm/outputs
 
-## Signposting
-- **Parent**: [Outputs](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [integration](integration/AGENTS.md)
-    - [llm_outputs](llm_outputs/AGENTS.md)
-    - [performance](performance/AGENTS.md)
-    - [reports](reports/AGENTS.md)
-    - [test_results](test_results/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

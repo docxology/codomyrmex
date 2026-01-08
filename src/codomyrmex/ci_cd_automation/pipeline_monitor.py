@@ -37,7 +37,48 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Core functionality module
+
+This module provides pipeline_monitor functionality including:
+- 11 functions: monitor_pipeline_health, generate_pipeline_reports, __init__...
+- 4 classes: ReportType, PipelineMetrics, PipelineReport...
+
+Usage:
+    # Example usage here
 """
 Pipeline Monitoring Module for Codomyrmex CI/CD Automation.
 

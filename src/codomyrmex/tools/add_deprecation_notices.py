@@ -2,6 +2,24 @@ from pathlib import Path
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import re
 
 
 
+"""Main entry point and utility functions
+
+This module provides add_deprecation_notices functionality including:
+- 4 functions: get_module_name, get_dependency_location, add_deprecation_notice...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def get_module_name(file_path: Path) -> str:
     """Extract module name from file path."""
     match = re.search(r"codomyrmex/([^/]+)/requirements\.txt", str(file_path))

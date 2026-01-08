@@ -3,23 +3,8 @@ from typing import Any, Iterator, Optional
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, OpenCodeError
-from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""OpenCode CLI client wrapper."""
 
 
     AgentCapabilities,
@@ -256,4 +241,3 @@ class OpenCodeClient(CLIAgentBase):
                 "available": False,
                 "error": str(e),
             }
-

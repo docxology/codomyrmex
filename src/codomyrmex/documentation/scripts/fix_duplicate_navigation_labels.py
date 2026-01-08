@@ -2,6 +2,24 @@ from pathlib import Path
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ import re
 """Fix duplicate navigation labels in AGENTS.md files."""
 
 
+"""Main entry point and utility functions
+
+This module provides fix_duplicate_navigation_labels functionality including:
+- 2 functions: fix_duplicate_labels, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def fix_duplicate_labels(content: str) -> str:
     """Fix duplicate navigation labels."""
     # Fix "Parent Directory: Parent Directory" -> "Parent Directory"

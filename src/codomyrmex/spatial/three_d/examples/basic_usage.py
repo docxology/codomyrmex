@@ -1,16 +1,27 @@
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.spatial.three_d import (
-from codomyrmex.spatial.three_d import ARSession
-from codomyrmex.spatial.three_d import Scene3D, VRRenderer
-"""Basic usage examples for the Spatial Spatial 3D Modeling module."""
-
-    Camera3D,
-    Light3D,
-    Material3D,
-    Object3D,
-    RenderPipeline,
-    Scene3D,
-    Vector3D,
-)
+logger = get_logger(__name__)
+try:
+        ARSession,
+        Camera3D,
+        Light3D,
+        Material3D,
+        Object3D,
+        RenderPipeline,
+        Scene3D,
+        Vector3D,
+        VRRenderer,
+    )
+except ImportError:
+    ARSession = None
+    Camera3D = None
+    Light3D = None
+    Material3D = None
+    Object3D = None
+    RenderPipeline = None
+    Scene3D = None
+    Vector3D = None
+    VRRenderer = None
 
 
 def basic_scene_example():

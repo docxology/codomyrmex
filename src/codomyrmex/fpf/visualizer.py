@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Visualizer for FPF specification.
 
+"""Core functionality module
+
+This module provides visualizer functionality including:
+- 5 functions: __init__, visualize_pattern_hierarchy, visualize_dependencies...
+- 1 classes: FPFVisualizer
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to generate visualizations
 and reports from FPF specifications.
 """

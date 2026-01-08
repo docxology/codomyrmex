@@ -156,8 +156,8 @@ class LoggingInjector:
 
     def print_summary(self):
         """Print processing summary."""
-        print("
-📊 Logging Injection Summary:"        print(f"  Files processed: {self.stats['files_processed']}")
+        print("📊 Logging Injection Summary:")
+        print(f"  Files processed: {self.stats['files_processed']}")
         print(f"  Files modified: {self.stats['files_modified']}")
         print(f"  Imports added: {self.stats['imports_added']}")
         print(f"  Loggers added: {self.stats['loggers_added']}")
@@ -195,9 +195,8 @@ def main():
     injector.print_summary()
 
     if args.dry_run:
-        print("
-💡 Run without --dry-run to apply changes"    return 0
-
+        print("\n💡 Run without --dry-run to apply changes")
+    
     return 0
 
 

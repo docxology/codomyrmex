@@ -1,5 +1,6 @@
 import argparse
 import glob
+import logging
 import os
 import shutil  # For checking if command exists
 import subprocess
@@ -37,9 +38,50 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Standard logging import kept for compatibility with basicConfig structure
 
 # --- Determine project structure and add appropriate path to sys.path for package import ---
+"""Main entry point and utility functions
+
+This module provides documentation_website functionality including:
+- 12 functions: command_exists, check_doc_environment, run_command_stream_output...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 _codomyrmex_dir_for_import_msg = "Unknown"
 _path_added_for_import_msg = "Unknown"
 
@@ -576,6 +618,13 @@ def assess_site():
 
 
 def main():
+    """Brief description of main.
+
+Args:
+
+
+    Returns: Description of return value
+"""
     parser = argparse.ArgumentParser(
         description=(
             "Manage and assess the Codomyrmex documentation website. "

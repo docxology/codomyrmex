@@ -1,14 +1,5 @@
 # Codomyrmex Agents — scripts/cerebrum
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [examples](examples/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
@@ -19,6 +10,8 @@ Automation and utility scripts.
 - `SPEC.md` – Project file
 - `examples/` – Directory containing examples components
 - `orchestrate.py` – Project file
+- `run_comprehensive_fpf_analysis.py` – Project file
+- `run_fpf_analysis.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

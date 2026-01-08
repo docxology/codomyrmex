@@ -2,6 +2,24 @@ from pathlib import Path
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ import re
 """Remove links to non-existent SPEC.md files in scripts/."""
 
 
+"""Main entry point and utility functions
+
+This module provides remove_nonexistent_spec_links functionality including:
+- 2 functions: remove_nonexistent_spec_links, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def remove_nonexistent_spec_links(file_path: Path, base_path: Path) -> bool:
     """Remove links to non-existent SPEC.md files."""
     if not file_path.exists():

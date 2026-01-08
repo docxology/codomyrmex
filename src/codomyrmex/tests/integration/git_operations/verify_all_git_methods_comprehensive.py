@@ -12,6 +12,36 @@ from codomyrmex.git_operations import (
 
 
 
+try:
+        check_git_availability,
+        is_git_repository,
+        initialize_git_repository,
+        clone_repository,
+        create_branch,
+        switch_branch,
+        get_current_branch,
+        merge_branch,
+        get_diff,
+        reset_changes,
+        push_changes,
+        pull_changes,
+        get_commit_history,
+        create_tag,
+        list_tags,
+        stash_changes,
+        apply_stash,
+        list_stashes,
+        create_github_repository,
+        delete_github_repository,
+        create_pull_request,
+        get_pull_requests,
+        get_pull_request,
+        get_repository_info,
+        GitHubAPIError
+    )
+    GIT_OPERATIONS_AVAILABLE = True
+except ImportError:
+    GIT_OPERATIONS_AVAILABLE = False
 
 
 
@@ -23,81 +53,19 @@ from codomyrmex.git_operations import (
 
 
 
-#!/usr/bin/env python3
-"""
-Comprehensive Git Methods Verification Script
-
-This script systematically tests ALL Git methods to confirm they are:
-- Real (actual Git commands, not mocks)
-- Reproducible (consistent results)
-- Documented (complete coverage)
-- Logged (detailed execution records)
-
-Based on comprehensive Git command reference and web research,
-this covers all major Git operations categories:
-1. Configuration
-2. Repository Initialization  
-3. Basic Snapshotting
-4. Branching and Merging
-5. Remote Repositories
-6. Undoing Changes
-7. Stashing
-8. Tagging
-9. Logging and Inspection
-10. Advanced Operations
-"""
 
 
-# Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-    # Configuration and Setup
-    check_git_availability,
-    
-    # Repository Operations
-    is_git_repository,
-    initialize_git_repository,
-    clone_repository,
-    
-    # Branch Operations
-    create_branch,
-    switch_branch,
-    get_current_branch,
-    merge_branch,
-    rebase_branch,
-    
-    # File Operations
-    add_files,
-    commit_changes,
-    get_status,
-    get_diff,
-    reset_changes,
-    
-    # Remote Operations
-    push_changes,
-    pull_changes,
-    
-    # History & Information
-    get_commit_history,
-    
-    # Tag Operations
-    create_tag,
-    list_tags,
-    
-    # Stash Operations
-    stash_changes,
-    apply_stash,
-    list_stashes,
-    
-    # GitHub API Operations
-    create_github_repository,
-    delete_github_repository,
-    create_pull_request,
-    get_pull_requests,
-    get_pull_request,
-    get_repository_info,
-    GitHubAPIError
-)
+
+
+
+
+
+
+
+
+
+
 
 
 class ComprehensiveGitVerifier:

@@ -2,6 +2,24 @@ from pathlib import Path
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ import re
 """Fix broken SPEC.md links in documentation subdirectories."""
 
 
+"""Main entry point and utility functions
+
+This module provides fix_documentation_spec_links functionality including:
+- 3 functions: calculate_correct_path, fix_spec_links, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def calculate_correct_path(from_file: Path, base_path: Path) -> str:
     """Calculate correct relative path from documentation SPEC to module SPEC."""
     # From: src/codomyrmex/documentation/docs/modules/{module}/SPEC.md

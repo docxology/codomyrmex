@@ -3,6 +3,24 @@ from typing import Optional
 import os
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import os
 """Generate SPEC.md files for all directories missing them."""
 
 
+"""Main entry point and utility functions
+
+This module provides generate_spec_files functionality including:
+- 3 functions: get_directory_purpose, create_spec_content, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def get_directory_purpose(dir_path: Path) -> str:
     """Try to infer directory purpose from README.md or AGENTS.md."""
     readme = dir_path / "README.md"

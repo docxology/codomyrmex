@@ -15,42 +15,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-Repository Manager for Codomyrmex Git Operations
-
-This module provides functionality to manage a library of GitHub repositories,
-supporting both development repositories (for commits/PRs) and usage repositories
-(for reference/tools).
-"""
-
-
-# Add src to path for imports
-current_dir = Path(__file__).parent
-src_dir = current_dir.parent.parent.parent / "src"
-# sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
-
     clone_repository,
     create_branch,
     get_current_branch,
@@ -58,9 +22,15 @@ src_dir = current_dir.parent.parent.parent / "src"
     is_git_repository,
     pull_changes,
 )
-    CloneStatus,
     RepositoryMetadataManager,
+    CloneStatus,
 )
+
+
+# Add src to path for imports
+current_dir = Path(__file__).parent
+src_dir = current_dir.parent.parent.parent / "src"
+# sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
 logger = get_logger(__name__)
 

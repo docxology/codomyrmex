@@ -53,6 +53,47 @@ from codomyrmex.static_analysis import analyze_file
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Testing utilities and test helpers
+
+This module provides health_checker functionality including:
+- 39 functions: perform_health_check, check_module_dependencies, check_module_performance...
+- 3 classes: HealthStatus, HealthCheckResult, HealthChecker
+
+Usage:
+    # Example usage here
 """
 Health Checker for Codomyrmex System Discovery
 
@@ -352,6 +393,13 @@ class HealthChecker:
             # Test performance profiling
             @profile_function
             def test_func():
+    """Brief description of test_func.
+
+Args:
+
+
+    Returns: Description of return value
+"""
                 return sum(range(100))
 
             test_func()
@@ -456,33 +504,113 @@ class HealthChecker:
     # Code review is now part of code module, checked in _check_code
 
     def _check_ollama_integration(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_ollama_integration.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("ollama_connection")
 
     def _check_build_synthesis(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_build_synthesis.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("build_tools")
 
     def _check_documentation(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_documentation.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("documentation_generation")
 
     def _check_api(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_api.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("api_docs")
 
     def _check_ci_cd_automation(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_ci_cd_automation.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("pipeline_execution")
 
     def _check_config_management(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_config_management.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("config_validation")
 
     def _check_database_management(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_database_management.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("database_connectivity")
 
     def _check_physical_management(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_physical_management.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("system_monitoring")
 
     def _check_system_discovery(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_system_discovery.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("module_discovery")
 
     def _check_module_template(self, result: HealthCheckResult) -> None:
+    """Brief description of _check_module_template.
+
+Args:
+    self : Description of self
+    result : Description of result
+
+    Returns: Description of return value (type: Any)
+"""
         result.checks_performed.append("template_generation")
 
     def _check_spatial(self, result: HealthCheckResult) -> None:
@@ -545,6 +673,13 @@ def check_module_performance(module_name: str) -> Dict[str, Any]:
 
         # Create a simple test function for the module
         def test_module_import():
+    """Brief description of test_module_import.
+
+Args:
+
+
+    Returns: Description of return value
+"""
             try:
                 importlib.import_module(f"codomyrmex.{module_name}")
                 return True

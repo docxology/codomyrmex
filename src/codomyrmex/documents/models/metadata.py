@@ -3,6 +3,39 @@ from typing import Any, Optional
 
 from dataclasses import dataclass
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,6 +68,16 @@ from dataclasses import dataclass
 
 
 
+"""Core functionality module
+
+This module provides metadata functionality including:
+- 3 functions: __post_init__, to_dict, from_dict
+- 2 classes: MetadataField, DocumentMetadata
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 @dataclass
 class MetadataField:
     """A single metadata field."""
@@ -58,6 +101,13 @@ class DocumentMetadata:
     custom_fields: dict[str, Any] = None
     
     def __post_init__(self):
+    """Brief description of __post_init__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         if self.tags is None:
             self.tags = []
         if self.custom_fields is None:

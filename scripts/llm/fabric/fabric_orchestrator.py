@@ -166,12 +166,22 @@ class DataManager:
 
 def main():
     """Main demonstration function."""
+    import argparse
+    parser = argparse.ArgumentParser(description="Fabric + Codomyrmex Integration Orchestrator")
+    parser.add_argument("--check", action="store_true", help="Run in non-interactive check mode (verify imports and setup only)")
+    args = parser.parse_args()
     
     print("🐜 Fabric + Codomyrmex Integration Orchestrator")
     print("=" * 50)
     
     # Initialize orchestrator
     orchestrator = FabricCodomyrmexOrchestrator()
+    
+    if args.check:
+        print("✅ Check mode: Import and initialization successful")
+        if not orchestrator.fabric_available:
+            print("⚠️  Fabric binary not available (expected in check mode if not installed)")
+        return 0
     
     if not orchestrator.fabric_available:
         print("❌ Fabric binary not available. Please install Fabric first.")

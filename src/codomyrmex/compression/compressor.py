@@ -36,6 +36,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides compressor functionality including:
+- 6 functions: __init__, compress, decompress...
+- 2 classes: CompressionError, Compressor
+
+Usage:
+    # Example usage here
 """
 Compression utilities.
 """

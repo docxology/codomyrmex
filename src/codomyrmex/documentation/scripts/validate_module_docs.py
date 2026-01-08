@@ -4,6 +4,24 @@ import os
 import sys
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ import sys
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides validate_module_docs functionality including:
+- 6 functions: main, __init__, find_modules...
+- 1 classes: ModuleDocsValidator
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Module Documentation Validator
 
 Validates module documentation structure and consistency.
@@ -28,7 +56,25 @@ Can be run as part of CI/CD to ensure documentation standards are maintained.
 
 
 class ModuleDocsValidator:
+    """Brief description of ModuleDocsValidator.
+
+This class provides functionality for...
+
+Attributes:
+    # Add attribute descriptions here
+
+Methods:
+    # Method descriptions will be added automatically
+"""
     def __init__(self, repo_root: Path):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    repo_root : Description of repo_root
+
+    Returns: Description of return value
+"""
         self.repo_root = repo_root.resolve()
         self.modules_dir = self.repo_root / 'src' / 'codomyrmex'
         self.errors = []

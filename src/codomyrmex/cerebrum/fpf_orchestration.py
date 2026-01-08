@@ -5,15 +5,10 @@ import json
 
 import csv
 import matplotlib
-import matplotlib
-import matplotlib
-import matplotlib
 import matplotlib.pyplot as plt
 
 from codomyrmex.cerebrum import (
 from codomyrmex.cerebrum.bayesian import Distribution
-from codomyrmex.cerebrum.composition_visualizer import CompositionVisualizer
-from codomyrmex.cerebrum.concordance_visualizer import ConcordanceVisualizer
 from codomyrmex.cerebrum.visualization import (
 from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
 from codomyrmex.logging_monitoring import get_logger, setup_logging
@@ -23,28 +18,17 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    ActiveInferenceAgent,
+    BayesianNetwork,
+    CaseRetriever,
+    CerebrumConfig,
+    InferenceEngine,
+    Model,
+    Case,
+    CaseBase,
+    CerebrumEngine,
+    ReasoningResult,
+)
 """CEREBRUM orchestration for FPF analysis.
 
 This script demonstrates comprehensive application of CEREBRUM methods
@@ -52,28 +36,18 @@ This script demonstrates comprehensive application of CEREBRUM methods
 and reason about the First Principles Framework specification.
 """
 
-
-    ActiveInferenceAgent,
-    BayesianNetwork,
-    Case,
-    CaseBase,
-    CerebrumEngine,
-    CerebrumConfig,
-    InferenceEngine,
-    ReasoningResult,
-)
-    CaseVisualizer,
-    InferenceVisualizer,
-    ModelVisualizer,
-)
-
-# Import matplotlib with non-interactive backend
 try:
     matplotlib.use('Agg')  # Use non-interactive backend
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
     plt = None
+
+
+    CaseVisualizer,
+    InferenceVisualizer,
+    ModelVisualizer,
+)
 
 logger = get_logger(__name__)
 

@@ -5,18 +5,9 @@ import re
 import subprocess
 import sys
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 from codomyrmex.performance import monitor_performance, performance_context
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -66,7 +57,6 @@ logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     logger.warning("Performance monitoring not available - decorators will be no-op")

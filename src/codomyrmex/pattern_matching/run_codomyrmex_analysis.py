@@ -5,13 +5,82 @@ import shutil
 import sys
 
 from dotenv import load_dotenv
-from kit import (
+from dotenv import load_dotenv
+from kit import DocstringIndexer, OpenAIConfig, Repository
+from kit import DocstringIndexer, OpenAIConfig, Repository
 from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer
+from tqdm import tqdm
 from tqdm import tqdm  # Added tqdm
 
 from codomyrmex.environment_setup.env_checker import (
-from codomyrmex.environment_setup.env_checker import (
+from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 from codomyrmex.logging_monitoring import get_logger, setup_logging
+from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+
+
+
+
+
+
+try:
+except ImportError:
+    load_dotenv = None
+
+try:
+except ImportError:
+    DocstringIndexer = None
+    OpenAIConfig = None
+    Repository = None
+
+try:
+except ImportError:
+    SentenceTransformer = None
+
+try:
+except ImportError:
+    def tqdm(iterable, **kwargs):
+        return iterable
+
+try:
+        check_and_setup_env_vars,
+        ensure_dependencies_installed as ensure_core_deps_installed,
+    )
+except ImportError:
+    def check_and_setup_env_vars(): pass
+    def ensure_core_deps_installed(): pass
+    check_and_setup_env_vars = None
+    ensure_core_deps_installed = None
+
+try:
+except ImportError:
+    get_logger = None
+    setup_logging = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -45,48 +114,12 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 # Add project root to Python path to allow sibling module imports
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
-# Add project root to Python path to allow sibling module imports
-# SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-# PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 # Note: sys.path manipulation removed in favor of proper package installation
 
-    DocstringIndexer,
-    OpenAIConfig,
-    Repository,
-)  # Summarizer is accessed via repo.get_summarizer()
-
-# Attempt to import SentenceTransformer for explicit embedding function
-try:
-except ImportError:
-    # This print will be visible if the script is run and the import fails
-    # The logger might not be initialized yet.
-    print(
-        "[CRITICAL SETUP ERROR] `sentence-transformers` package not found. DocstringIndexer will likely fail. Please install it: pip install sentence-transformers"
-    )
-    SentenceTransformer = (
-        None  # Allow script to proceed but DocstringIndexer will fail if used
-    )
-
-# Attempt to import the new environment setup function
-try:
-        check_and_setup_env_vars,
-    )
-        ensure_dependencies_installed as ensure_core_deps_installed,
-    )
-except ImportError:
-    # This initial print might be okay if logger isn't set up yet, or handle differently
-    print(
-        "[ERROR] Could not import from codomyrmex.environment_setup.env_checker. Please ensure the module exists and is in the Python path."
-    )
-    sys.exit(1)
-
-# Import logging setup
-try:
-except ImportError:
-    print(
-        "[ERROR] Could not import from codomyrmex.logging_monitoring. Please ensure the module exists and is in the Python path."
-    )
-    sys.exit(1)
+# Initialize logger after imports and before it's used globally
+# setup_logging() is called in run_full_analysis
+logger = None  # Will be initialized in run_full_analysis
+PRINTED_ONCE_KEYS = set()  # For print_once utility
 
 # --- Script Configuration ---
 

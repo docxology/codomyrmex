@@ -1,13 +1,5 @@
 # git_operations
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - None
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
@@ -28,6 +20,7 @@ Module components and implementation for git_operations..
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
 - `auto_generated_library.txt` – File
+- `demo.py` – File
 - `docxology_repository_library.txt` – File
 - `git_manager.py` – File
 - `github_api.py` – File

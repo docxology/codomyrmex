@@ -32,10 +32,51 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Security awareness training."""
 
 
 
+"""Core functionality module
+
+This module provides awareness_training functionality including:
+- 5 functions: create_training_module, assess_training_effectiveness, __init__...
+- 3 classes: TrainingModule, TrainingResult, AwarenessTrainer
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 
@@ -66,6 +107,13 @@ class AwarenessTrainer:
     """Manages security awareness training."""
     
     def __init__(self):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         self.modules: dict[str, TrainingModule] = {}
         self.results: list[TrainingResult] = []
         logger.info("AwarenessTrainer initialized")

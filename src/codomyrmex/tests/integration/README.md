@@ -1,18 +1,5 @@
 # integration
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [ai_code_editing](agents/ai_code_editing/README.md)
-    - [data_visualization](data_visualization/README.md)
-    - [documentation](documentation/README.md)
-    - [documents](documents/README.md)
-    - [git_operations](git_operations/README.md)
-    - [security](security/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview

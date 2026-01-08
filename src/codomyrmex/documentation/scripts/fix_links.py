@@ -2,7 +2,39 @@ from pathlib import Path
 import os
 import re
 
-from fix_links import FunctionName, ClassName
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,6 +67,16 @@ from fix_links import FunctionName, ClassName
 
 """Core functionality module
 
+"""Core functionality module
+
+This module provides fix_links functionality including:
+- 1 functions: fix_documentation
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides fix_links functionality including:
 - 1 functions: fix_documentation
 - 0 classes: 

@@ -11,6 +11,25 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+    AdaptationTransformer,
+    LearningTransformer,
+    TransformationManager,
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -24,11 +43,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Main CEREBRUM engine that orchestrates case-based reasoning and Bayesian inference."""
 
-
-    AdaptationTransformer,
-    LearningTransformer,
-    TransformationManager,
-)
 
 logger = get_logger(__name__)
 

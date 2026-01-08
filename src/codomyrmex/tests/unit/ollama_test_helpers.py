@@ -8,36 +8,20 @@ import time
 from dataclasses import dataclass
 
 from codomyrmex.llm.ollama import (
+from codomyrmex.llm.ollama import (
 from codomyrmex.llm.ollama.model_runner import ExecutionOptions
-from codomyrmex.llm.ollama.ollama_manager import OllamaModel
+from codomyrmex.llm.ollama.ollama_manager import (
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    OllamaAttributes,
+    OllamaModel,
+    OllamaResponse,
+    OllamaRunner,
+)
 """
 Test Utilities and Helpers for Ollama Integration Tests
 
@@ -45,16 +29,76 @@ Provides reusable utilities, fixtures, and helpers for comprehensive
 Ollama integration testing. All utilities use real Ollama API calls (no mocks).
 """
 
-
 try:
         OllamaManager,
         ModelRunner,
+        OllamaAttributes,
+        OllamaModel,
+        OllamaResponse,
+        OllamaRunner,
+    )
         OutputManager,
-        ConfigManager
+        ConfigManager,
     )
     OLLAMA_AVAILABLE = True
 except ImportError:
     OLLAMA_AVAILABLE = False
+    OllamaManager = None
+    ModelRunner = None
+    OutputManager = None
+    ConfigManager = None
+    ExecutionOptions = None
+    OllamaModel = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @dataclass

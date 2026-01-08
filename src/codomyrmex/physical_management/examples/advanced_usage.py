@@ -1,11 +1,39 @@
 import math
-import math  # For thermal calculations
 import random
 import time
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.physical_management import (
-from codomyrmex.physical_management import (
+
+
+
+try:
+        EventType,
+        ForceField,
+        MaterialType,
+        ObjectType,
+        PhysicalObjectManager,
+        PhysicsSimulator,
+        PredictiveAnalytics,
+        SensorManager,
+        SensorReading,
+        SensorType,
+        StreamingAnalytics,
+        Vector3D,
+    )
+except ImportError:
+    EventType = None
+    ForceField = None
+    MaterialType = None
+    ObjectType = None
+    PhysicalObjectManager = None
+    PhysicsSimulator = None
+    PredictiveAnalytics = None
+    SensorManager = None
+    SensorReading = None
+    SensorType = None
+    StreamingAnalytics = None
+    Vector3D = None
 
 
 
@@ -20,26 +48,16 @@ from codomyrmex.physical_management import (
 
 
 
-"""Advanced usage examples for Physical Management module."""
 
 
-    EventType,
-    MaterialType,
-    ObjectType,
-    PhysicalObjectManager,
-)
 
-logger = get_logger(__name__)
 
-    ForceField,
-    PhysicsSimulator,
-    PredictiveAnalytics,
-    SensorManager,
-    SensorReading,
-    SensorType,
-    StreamingAnalytics,
-    Vector3D,
-)
+
+
+
+
+
+
 
 
 def example_smart_factory_monitoring():

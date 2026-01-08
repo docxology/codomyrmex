@@ -9,18 +9,6 @@ from codomyrmex.git_operations.repository_metadata import (
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """
 Repository Metadata CLI - Command Line Interface for Repository Metadata Management
@@ -29,9 +17,9 @@ This script provides a command-line interface for managing repository metadata,
 including status tracking, permissions, versions, and comprehensive reporting.
 """
 
-
-
-logger = get_logger(__name__)
+    CloneStatus,
+    RepositoryMetadataManager,
+)
 
 
 # Add src to path for imports
@@ -39,9 +27,7 @@ current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
 # sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
-    CloneStatus,
-    RepositoryMetadataManager,
-)
+logger = get_logger(__name__)
 
 
 def cmd_update_metadata(manager: RepositoryMetadataManager, args) -> None:

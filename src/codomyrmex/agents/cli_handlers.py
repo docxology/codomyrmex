@@ -4,53 +4,11 @@ import json
 
 from dataclasses import fields
 
-from codomyrmex.agents import  get_config, AgentRequest
+from codomyrmex.agents import get_config, AgentRequest
 from codomyrmex.agents.claude import ClaudeClient
 from codomyrmex.agents.codex import CodexClient
-from codomyrmex.agents.droid import (
+from codomyrmex.agents.droid import DroidController, create_default_controller
 from codomyrmex.agents.exceptions import (
-from codomyrmex.agents.gemini import GeminiClient
-from codomyrmex.agents.jules import JulesClient
-from codomyrmex.agents.opencode import OpenCodeClient
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.utils.cli_helpers import (
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-CLI Handlers for Agents Module
-
-This module contains the logic for handling CLI commands for the agents module.
-It is intended to be called by the thin orchestrator script.
-"""
-
-
     AgentError,
     ClaudeError,
     CodexError,
@@ -58,6 +16,8 @@ It is intended to be called by the thin orchestrator script.
     JulesError,
     OpenCodeError,
 )
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.utils.cli_helpers import (
     format_output,
     print_error,
     print_info,
@@ -66,36 +26,22 @@ It is intended to be called by the thin orchestrator script.
     print_warning,
 )
 
-# Import agent clients
+# Optional droid import
 try:
-except ImportError:
-    JulesClient = None
-
-try:
-except ImportError:
-    ClaudeClient = None
-
-try:
-except ImportError:
-    CodexClient = None
-
-try:
-except ImportError:
-    OpenCodeClient = None
-
-try:
-except ImportError:
-    GeminiClient = None
-
-try:
-        DroidController,
-        create_default_controller,
-    )
+    from codomyrmex.agents.droid import DroidController, create_default_controller
 except ImportError:
     DroidController = None
     create_default_controller = None
 
+"""
+CLI Handlers for Agents Module
+
+This module contains the logic for handling CLI commands for the agents module.
+It is intended to be called by the thin orchestrator script.
+"""
+
 logger = get_logger(__name__)
+
 
 def handle_info(args):
     """Handle info command."""

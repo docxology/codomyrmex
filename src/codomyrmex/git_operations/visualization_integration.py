@@ -28,7 +28,7 @@ try:
         create_git_branch_diagram,
         create_git_tree_mermaid,
         create_git_tree_png,
-        create_git_workflow_diagram,
+        create_git_workflow_diagram as generate_git_workflow_diagram,
     )
 
     VISUALIZATION_AVAILABLE = True
@@ -333,7 +333,7 @@ def create_git_workflow_diagram(
     steps = workflow_steps.get(workflow_type, workflow_steps["feature_branch"])
 
     try:
-        content = create_git_workflow_diagram(
+        content = generate_git_workflow_diagram(
             workflow_steps=steps, title=title, output_path=output_path
         )
 
@@ -465,6 +465,14 @@ def _analyze_directory_structure(path: str, max_depth: int = 3) -> dict[str, Any
     path_obj = Path(path)
 
     def scan_directory(current_path: Path, current_depth: int = 0) -> dict[str, Any]:
+    """Brief description of scan_directory.
+
+Args:
+    current_path : Description of current_path
+    current_depth : Description of current_depth
+
+    Returns: Description of return value (type: Any)
+"""
         if current_depth >= max_depth:
             return {}
 
@@ -492,6 +500,13 @@ def _get_structure_stats(structure: dict[str, Any]) -> dict[str, int]:
     stats = {"directories": 0, "files": 0}
 
     def count_items(items: dict[str, Any]):
+    """Brief description of count_items.
+
+Args:
+    items : Description of items
+
+    Returns: Description of return value
+"""
         for _name, content in items.items():
             if isinstance(content, dict):
                 stats["directories"] += 1

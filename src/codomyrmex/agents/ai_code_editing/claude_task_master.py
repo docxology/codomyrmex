@@ -36,8 +36,49 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Claude Task Master Integration Module.
 
+"""Core functionality module
+
+This module provides claude_task_master functionality including:
+- 14 functions: execute_task, decompose_task, analyze_task...
+- 5 classes: TaskPriority, TaskStatus, Task...
+
+Usage:
+    # Example usage here
+"""
 This module provides integration with Anthropic's Claude API for
 advanced AI-powered task orchestration, code generation, and
 task decomposition capabilities.

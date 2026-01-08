@@ -2,7 +2,25 @@ from pathlib import Path
 import json
 import sys
 
-from codomyrmex.{module_name} import main_function
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+# Template variable: from codomyrmex.{module_name} import main_function
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ from codomyrmex.{module_name} import main_function
 
 #!/usr/bin/env python3
 """
+"""Core functionality module
+
+This module provides create_example_tutorials functionality including:
+- 1 functions: create_example_tutorials
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Create placeholder example_tutorial.md files for modules that reference them.
 
 Creates a standard template that modules can customize with their own examples.

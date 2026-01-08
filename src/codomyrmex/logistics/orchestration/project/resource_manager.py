@@ -41,6 +41,47 @@ from codomyrmex.performance import monitor_performance
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core business logic and data management
+
+This module provides resource_manager functionality including:
+- 27 functions: get_resource_manager, __init__, to_dict...
+- 7 classes: ResourceType, ResourceStatus, ResourceLimits...
+
+Usage:
+    # Example usage here
 """
 Resource Management System for Codomyrmex
 
@@ -66,6 +107,13 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value
+"""
             return func
 
         return decorator
@@ -147,6 +195,22 @@ class Resource:
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    id : Description of id
+    name : Description of name
+    resource_type : Description of resource_type
+    type : Description of type
+    capacity : Description of capacity
+    unit : Description of unit
+    description : Description of description
+    status : Description of status
+    metadata : Description of metadata
+
+    Returns: Description of return value
+"""
         self,
         id: str,
         name: str,
@@ -191,6 +255,13 @@ class Resource:
         self.updated_at = kwargs.get("updated_at", datetime.now(timezone.utc))
 
     def to_dict(self) -> dict[str, Any]:
+    """Brief description of to_dict.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value (type: Any)
+"""
         data = {
             "id": self.id,
             "name": self.name,
@@ -254,6 +325,13 @@ class Resource:
         return inst
 
     def is_available(self) -> bool:
+    """Brief description of is_available.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value (type: bool)
+"""
         return self.status == ResourceStatus.AVAILABLE
 
     def can_allocate(self, requested: dict[str, Any], user_id: str) -> bool:

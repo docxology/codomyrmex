@@ -4,6 +4,39 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -33,6 +66,16 @@ from codomyrmex.exceptions import CodomyrmexError
 
 
 """
+"""Core functionality module
+
+This module provides models functionality including:
+- 0 functions: 
+- 15 classes: AnalysisType, SeverityLevel, Language...
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Review Models
 
 Data classes and enums for code review operations.

@@ -407,12 +407,29 @@ class EventOperationContext:
         self.start_time: Optional[float] = None
 
     def __enter__(self):
+    """Brief description of __enter__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         import time
         self.start_time = time.time()
         self.correlation_id = self.emitter.start_operation(self.operation_name, self.operation_data)
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+    """Brief description of __exit__.
+
+Args:
+    self : Description of self
+    exc_type : Description of exc_type
+    exc_val : Description of exc_val
+    exc_tb : Description of exc_tb
+
+    Returns: Description of return value
+"""
         import time
         end_time = time.time()
         duration = end_time - (self.start_time or end_time)

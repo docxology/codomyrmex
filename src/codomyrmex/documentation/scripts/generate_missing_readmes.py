@@ -5,6 +5,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import re
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides generate_missing_readmes functionality including:
+- 4 functions: parse_agents_file, generate_readme_content, generate_navigation_links...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Script to generate README.md files for directories that have AGENTS.md but no README.md.
 Uses AGENTS.md content as a template and enhances with technical details.
 """

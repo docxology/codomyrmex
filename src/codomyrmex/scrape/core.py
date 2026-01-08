@@ -4,6 +4,39 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -34,6 +67,16 @@ from enum import Enum
 
 """Core scraping abstractions and data structures.
 
+"""Core functionality module
+
+This module provides core functionality including:
+- 9 functions: get_format, has_format, to_dict...
+- 8 classes: ScrapeFormat, ScrapeResult, ScrapeOptions...
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module defines the core abstractions for the scrape module,
 including result types, configuration options, and abstract base classes.
 """

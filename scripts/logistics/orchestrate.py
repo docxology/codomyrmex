@@ -1,36 +1,104 @@
-#!/usr/bin/env python3
-"""Logistics module orchestrator script.
+"""
+Logistics module orchestrator script.
 
-This is a thin orchestrator that delegates to the logistics module
-in src/codomyrmex/logistics/ which includes orchestration and task management.
+Thin orchestrator script providing CLI access to logistics module functionality.
+Calls actual module functions from codomyrmex.logistics.
 """
 
+import argparse
 import sys
 from pathlib import Path
 
-# Add src to path for imports
-src_path = Path(__file__).parent.parent.parent / "src"
-sys.path.insert(0, str(src_path))
+# Import shared utilities
+try:
+    from _orchestrator_utils import (
+        format_output,
+        print_error,
+        print_section,
+        print_success,
+    )
+except ImportError:
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from _orchestrator_utils import (
+        format_output,
+        print_error,
+        print_section,
+        print_success,
+    )
+
+# Import logging setup
+from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+
+logger = get_logger(__name__)
+
+
+def handle_info(args):
+    """Handle info command."""
+    try:
+        from codomyrmex import logistics
+        
+        if getattr(args, "verbose", False):
+            logger.info("Retrieving logistics module information")
+
+        info = {
+            "module": "logistics",
+            "description": "Logistics operations and management",
+            "path": getattr(logistics, "__path__", ["unknown"])[0],
+        }
+
+        print_section("Logistics Module Information")
+        print(format_output(info, format_type="json"))
+        print_section("", separator="")
+        return True
+    
+    except Exception as e:
+        logger.exception("Unexpected error retrieving information")
+        print_error("Unexpected error retrieving information", exception=e)
+        return False
 
 
 def main():
-    """Main entry point for logistics orchestration."""
-    print("Logistics module orchestrator")
-    print("=" * 40)
-    
-    try:
-        from codomyrmex import logistics
-        print(f"Logistics module loaded: {logistics.__name__}")
-        
-        # List available submodules
-        print("\nAvailable submodules:")
-        print("  - orchestration/project: Project orchestration and workflow management")
-        print("  - task: Task queue and job scheduling")
-    except ImportError as e:
-        print(f"Error importing logistics module: {e}")
+    """Main CLI entry point."""
+    setup_logging()
+    parser = argparse.ArgumentParser(
+        description="Logistics operations",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s info
+        """,
+    )
+
+    # Global options
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
+    )
+
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    # Info command
+    subparsers.add_parser("info", help="Get logistics module information")
+
+    args = parser.parse_args()
+
+    if not args.command:
+        parser.print_help()
+        return 0
+
+    # Route to appropriate handler
+    handlers = {
+        "info": handle_info,
+    }
+
+    handler = handlers.get(args.command)
+    if handler:
+        success = handler(args)
+        return 0 if success else 1
+    else:
+        print_error("Unknown command", context=args.command)
         return 1
-    
-    return 0
 
 
 if __name__ == "__main__":

@@ -27,7 +27,8 @@ from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 from codomyrmex.build_synthesis import orchestrate_build_pipeline
 from codomyrmex.coding import execute_code
 from codomyrmex.data_visualization import create_bar_chart, create_line_plot
-from codomyrmex.data_visualization.git_visualizer import (
+from codomyrmex.data_visualization.git_visualizer import create_git_workflow_diagram
+from codomyrmex.data_visualization.git_visualizer import visualize_git_repository
 from codomyrmex.fpf import FPFClient
 from codomyrmex.fpf import FPFClient
 from codomyrmex.fpf import FPFClient
@@ -43,7 +44,6 @@ from codomyrmex.fpf.section_exporter import SectionExporter
 from codomyrmex.fpf.section_manager import SectionManager
 from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
 from codomyrmex.git_operations import get_current_branch, get_status
-from codomyrmex.logging_monitoring.logger_config import (
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 from codomyrmex.logistics.orchestration.project import WorkflowStep, get_workflow_manager
 from codomyrmex.logistics.orchestration.project import get_orchestration_engine
@@ -52,7 +52,7 @@ from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 from codomyrmex.logistics.orchestration.project import get_project_manager
 from codomyrmex.logistics.orchestration.project import get_project_manager
 from codomyrmex.logistics.orchestration.project import get_workflow_manager
-from codomyrmex.performance.performance_monitor import (
+from codomyrmex.performance.performance_monitor import PerformanceMonitor, monitor_performance
 from codomyrmex.skills import get_skills_manager
 from codomyrmex.skills import get_skills_manager
 from codomyrmex.skills import get_skills_manager
@@ -60,7 +60,38 @@ from codomyrmex.skills import get_skills_manager
 from codomyrmex.static_analysis import analyze_project
 from codomyrmex.system_discovery import StatusReporter
 from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
-from codomyrmex.terminal_interface.terminal_utils import (
+from codomyrmex.terminal_interface.terminal_utils import CommandRunner, TerminalFormatter
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -90,6 +121,15 @@ from codomyrmex.terminal_interface.terminal_utils import (
 
 
 #!/usr/bin/env python3
+"""
+"""Main entry point and utility functions
+
+This module provides cli functionality including:
+- 37 functions: check_environment, show_info, show_modules...
+- 0 classes: 
+
+Usage:
+    # Example usage here
 """
 Codomyrmex CLI - Command Line Interface for Codomyrmex
 
@@ -197,41 +237,29 @@ if str(src_dir) not in sys.path:
 
 # Import core logging
 try:
-
     logger = get_logger(__name__)
 except ImportError:
-    try:
-        # Try importing from installed package
-            get_logger,
-            setup_logging,
-        )
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-    except ImportError:
-        # Fallback logging - should not happen in normal operation
-        # This is a fallback for edge cases, but we should always use get_logger
-        logging.basicConfig(level=logging.INFO)
-        logger = logging.getLogger(__name__)
-
-# Import terminal interface for better UX
+# Set availability flags
 try:
-        CommandRunner,
-        TerminalFormatter,
-    )
-
+    TerminalFormatter  # Check if imported
     TERMINAL_INTERFACE_AVAILABLE = True
-except ImportError:
+except NameError:
     TERMINAL_INTERFACE_AVAILABLE = False
+    TerminalFormatter = None
+    CommandRunner = None
     logger.warning("Terminal interface not available - using basic output")
 
 # Import performance monitoring
 try:
-        PerformanceMonitor,
-        monitor_performance,
-    )
-
+    PerformanceMonitor  # Check if imported
     PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
+except NameError:
     PERFORMANCE_MONITORING_AVAILABLE = False
+    PerformanceMonitor = None
+    monitor_performance = None
 
 
 def check_environment():
@@ -1057,8 +1085,6 @@ def handle_code_analysis(path: str, output_dir: Optional[str]) -> bool:
 def handle_git_analysis(repo_path: str) -> bool:
     """Handle git repository analysis command."""
     try:
-            visualize_git_repository,
-        )
 
         result = visualize_git_repository(repo_path, output_dir="./git_analysis")
 

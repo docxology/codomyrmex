@@ -1,15 +1,5 @@
 # logistics
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [orchestration](orchestration/README.md)
-    - [schedule](schedule/README.md)
-    - [task](task/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview

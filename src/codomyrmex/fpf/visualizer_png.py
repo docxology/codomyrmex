@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """PNG visualization engine for FPF specifications.
 
+"""Core functionality module
+
+This module provides visualizer_png functionality including:
+- 6 functions: __init__, visualize_shared_terms_network, visualize_pattern_dependencies...
+- 1 classes: FPFVisualizerPNG
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to generate high-quality PNG visualizations
 of FPF patterns, concepts, relationships, and shared terms with professional
 academic styling.

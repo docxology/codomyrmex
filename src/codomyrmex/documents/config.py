@@ -3,6 +3,24 @@ from typing import Optional
 import os
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,10 +38,32 @@ import os
 
 
 
+"""Core functionality module
+
+This module provides config functionality including:
+- 3 functions: get_config, set_config, __init__
+- 1 classes: DocumentsConfig
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 class DocumentsConfig:
     """Configuration for document operations."""
     
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    default_encoding : Description of default_encoding
+    max_file_size : Description of max_file_size
+    enable_caching : Description of enable_caching
+    cache_directory : Description of cache_directory
+    strict_validation : Description of strict_validation
+
+    Returns: Description of return value
+"""
         self,
         default_encoding: str = "utf-8",
         max_file_size: int = 100 * 1024 * 1024,  # 100MB

@@ -3,6 +3,7 @@ from typing import Any, Optional
 import logging
 import re
 
+
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -18,6 +19,31 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides documentation_generator functionality including:
+- 14 functions: __init__, _load_template, _substitute_variables...
+- 1 classes: DocumentationGenerator
+
+Usage:
+    # Example usage here
 """
 Documentation Generator for Codomyrmex Projects
 

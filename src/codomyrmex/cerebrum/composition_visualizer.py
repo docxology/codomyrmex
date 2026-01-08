@@ -39,8 +39,49 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Composition visualizations: graphical abstracts and multi-panel compositions.
 
+"""Core functionality module
+
+This module provides composition_visualizer functionality including:
+- 4 functions: __init__, create_analysis_overview_dashboard, create_pattern_landscape_map...
+- 1 classes: CompositionVisualizer
+
+Usage:
+    # Example usage here
+"""
 This module provides composite visualizations that combine multiple analyses
 into summary dashboards, overview panels, and graphical abstracts suitable
 for presentations and reports.

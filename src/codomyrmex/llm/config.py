@@ -5,6 +5,24 @@ import json
 import os
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -22,6 +40,16 @@ import os
 
 
 
+"""Core functionality module
+
+This module provides config functionality including:
+- 18 functions: get_config, set_config, reset_config...
+- 2 classes: LLMConfig, LLMConfigPresets
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 class LLMConfig:
     """
     Configuration manager for LLM parameters and settings.

@@ -1,7 +1,36 @@
 from pathlib import Path
 import os
 
-from refine_generic_descriptions import FunctionName, ClassName
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -41,6 +70,7 @@ This module provides refine_generic_descriptions functionality including:
 Usage:
     # Example usage here
 """
+logger = get_logger(__name__)
 Refine Generic Descriptions in AGENTS.md.
 
 Replaces "Documentation files and guides." with context-aware descriptions.

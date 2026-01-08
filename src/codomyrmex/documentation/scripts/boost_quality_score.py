@@ -2,7 +2,36 @@ from pathlib import Path
 import os
 import re
 
-from boost_quality_score import FunctionName, ClassName
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -42,6 +71,7 @@ This module provides boost_quality_score functionality including:
 Usage:
     # Example usage here
 """
+logger = get_logger(__name__)
 Boost Documentation Quality Score to 99%.
 
 This script standardizes markdown files to meet all criteria of the 

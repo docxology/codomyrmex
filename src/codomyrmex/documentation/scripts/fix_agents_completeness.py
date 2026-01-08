@@ -6,6 +6,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -21,6 +39,16 @@ import re
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides fix_agents_completeness functionality including:
+- 8 functions: get_file_description, load_validation_report, get_missing_items...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 AGENTS.md Completeness Fixer for Codomyrmex
 
 Automatically fixes AGENTS.md files to include missing directory contents

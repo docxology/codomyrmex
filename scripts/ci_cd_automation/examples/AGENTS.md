@@ -1,17 +1,5 @@
 # Codomyrmex Agents — scripts/ci_cd_automation/examples
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [optimization_data](optimization_data/AGENTS.md)
-    - [output](output/AGENTS.md)
-    - [pipeline_metrics](pipeline_metrics/AGENTS.md)
-    - [pipeline_reports](pipeline_reports/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

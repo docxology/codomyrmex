@@ -4,29 +4,38 @@ import subprocess
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, EveryCodeError
-from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Every Code CLI client wrapper."""
 
 
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class EveryCodeClient(CLIAgentBase):

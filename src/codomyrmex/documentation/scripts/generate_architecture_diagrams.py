@@ -38,7 +38,48 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/usr/bin/env python3
+"""
+"""Main entry point and utility functions
+
+This module provides generate_architecture_diagrams functionality including:
+- 17 functions: generate_module_diagram, generate_dependency_graph, generate_workflow_diagram...
+- 3 classes: ModuleInfo, WorkflowStep, ArchitectureDiagramGenerator
+
+Usage:
+    # Example usage here
 """
 Architecture Diagram Generation Tool
 

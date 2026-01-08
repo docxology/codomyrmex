@@ -1,14 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/agents/droid
 
-## Signposting
-- **Parent**: [Droid](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [handlers](handlers/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

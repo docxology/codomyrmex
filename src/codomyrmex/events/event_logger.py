@@ -106,6 +106,13 @@ class EventLogger:
     def _subscribe_to_events(self) -> None:
         """Subscribe to all events for logging."""
         def log_event_handler(event: Event) -> None:
+    """Brief description of log_event_handler.
+
+Args:
+    event : Description of event
+
+    Returns: Description of return value (type: Any)
+"""
             start_time = time.time()
             try:
                 # Log the event

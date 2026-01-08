@@ -1,14 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/git_operations
 
-## Signposting
-- **Parent**: [Repository Root](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - None
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
@@ -28,6 +19,7 @@ Module components and implementation for git_operations..
 - `USAGE_EXAMPLES.md` – Project file
 - `__init__.py` – Project file
 - `auto_generated_library.txt` – Project file
+- `demo.py` – Project file
 - `docxology_repository_library.txt` – Project file
 - `git_manager.py` – Project file
 - `github_api.py` – Project file

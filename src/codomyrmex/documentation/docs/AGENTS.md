@@ -1,17 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs
 
-## Signposting
-- **Parent**: [Documentation Root](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [development](development/AGENTS.md)
-    - [modules](modules/AGENTS.md)
-    - [project](project/AGENTS.md)
-    - [tutorials](tutorials/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

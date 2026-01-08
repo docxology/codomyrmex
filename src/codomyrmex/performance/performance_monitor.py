@@ -38,6 +38,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides performance_monitor functionality including:
+- 28 functions: monitor_performance, performance_context, get_performance_stats...
+- 4 classes: PerformanceMetrics, PerformanceMonitor, SystemMetrics...
+
+Usage:
+    # Example usage here
 """
 Performance monitoring utilities for Codomyrmex modules.
 
@@ -257,6 +298,13 @@ def monitor_performance(
     """
 
     def decorator(func: Callable) -> Callable:
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value (type: Callable)
+"""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper.
@@ -566,6 +614,13 @@ def monitor_system_resources(interval: float = 1.0):
         Context manager that yields a SystemMonitor instance
     """
     def _context_manager():
+    """Brief description of _context_manager.
+
+Args:
+
+
+    Returns: Description of return value
+"""
         monitor = SystemMonitor(interval=interval)
         monitor.start_monitoring()
         try:
@@ -588,6 +643,13 @@ def profile_memory_usage(func: Callable) -> Callable:
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
+    """Brief description of wrapper.
+
+Args:
+
+
+    Returns: Description of return value
+"""
         if not HAS_PSUTIL:
             logger.warning("psutil not available, memory profiling disabled")
             return func(*args, **kwargs)

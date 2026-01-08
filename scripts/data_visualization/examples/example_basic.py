@@ -100,7 +100,7 @@ def demonstrate_chart_types_and_styling(output_dir: Path) -> Dict[str, Any]:
         # 1. Advanced Bar Chart
         print("📊 Creating  bar chart...")
         bar_path = output_dir / "_bar_chart.png"
-_bar_config = {
+        _bar_config = {
             "data": sales_data,
             "title": "Quarterly Sales Performance",
             "style": "modern",
@@ -426,7 +426,7 @@ def demonstrate_interactive_visualizations(output_dir: Path) -> Dict[str, Any]:
         # Demonstrate  plotting with custom configuration
         print("\n🎛️ Demonstrating  plotting configuration...")
 
-_config = PlotConfig(
+        _config = PlotConfig(
             title="Advanced Custom Visualization",
             width=12,
             height=8,
@@ -446,8 +446,8 @@ _config = PlotConfig(
             ]
         )
 
-_plotter = AdvancedPlotter()
-_file = _plotter.create_plot(
+        _plotter = AdvancedPlotter()
+        _file = _plotter.create_plot(
             datasets=[custom_dataset],
             config=_config,
             output_file=str(output_dir / "_custom_plot.png")

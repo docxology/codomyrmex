@@ -1,10 +1,22 @@
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring import get_logger
 """CEREBRUM Module Exception Classes.
 
+"""Core functionality module
+
+This module provides exceptions functionality including:
+- 0 functions: 
+- 11 classes: CerebrumError, CaseError, BayesianInferenceError...
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module defines exception classes specific to the CEREBRUM module for
 case-based reasoning and Bayesian inference operations.
 """
 
-from codomyrmex.exceptions import CodomyrmexError
 
 
 class CerebrumError(CodomyrmexError):

@@ -2,6 +2,24 @@ from pathlib import Path
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ import re
 """Fix src/README.md links in deeply nested documentation directories."""
 
 
+"""Main entry point and utility functions
+
+This module provides fix_deep_nested_src_links functionality including:
+- 3 functions: calculate_correct_path, fix_src_links, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def calculate_correct_path(from_file: Path, base_path: Path) -> str:
     """Calculate correct relative path to src/README.md."""
     # Calculate depth from root

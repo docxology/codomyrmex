@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Extractor for FPF patterns, concepts, and relationships.
 
+"""Core functionality module
+
+This module provides extractor functionality including:
+- 10 functions: __init__, extract_patterns, extract_concepts...
+- 1 classes: FPFExtractor
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to extract structured information
 from parsed FPF specifications.
 """

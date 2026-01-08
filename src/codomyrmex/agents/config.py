@@ -4,6 +4,39 @@ import os
 
 from dataclasses import dataclass, field
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -36,6 +69,16 @@ from dataclasses import dataclass, field
 
 
 
+"""Core functionality module
+
+This module provides config functionality including:
+- 6 functions: get_config, set_config, reset_config...
+- 1 classes: AgentConfig
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 @dataclass
 class AgentConfig:
     """Configuration for agent framework integrations."""

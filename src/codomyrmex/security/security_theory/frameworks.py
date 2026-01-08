@@ -31,10 +31,51 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Security frameworks (OWASP, NIST, etc.)."""
 
 
 
+"""Core functionality module
+
+This module provides frameworks functionality including:
+- 2 functions: get_framework, apply_framework
+- 1 classes: SecurityFramework
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 

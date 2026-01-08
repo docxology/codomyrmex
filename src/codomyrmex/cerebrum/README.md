@@ -1,13 +1,5 @@
 # cerebrum
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [scripts](../../../scripts/examples/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
@@ -35,7 +27,6 @@ Module components and implementation for cerebrum..
 - `fpf_combinatorics.py` – File
 - `fpf_orchestration.py` – File
 - `models.py` – File
-- `scripts/` – Subdirectory
 - `transformations.py` – File
 - `utils.py` – File
 - `visualization.py` – File

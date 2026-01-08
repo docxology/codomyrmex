@@ -322,7 +322,7 @@ if __name__ == "__main__":
 
         print_success("✓ Advanced AST analysis completed")
         print(f"   Found {total_classes} classes and {total_functions} functions")
-        print(".1f"        print(f"   Maximum nesting depth: {visitor.max_nesting}")
+        print(f"   Maximum nesting depth: {visitor.max_nesting}")
         print(f"   Total imports: {len(analysis['imports'])}")
 
         return {
@@ -562,7 +562,8 @@ def demonstrate_error_handling_edge_cases():
         # Count functions
         function_count = len([node for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)])
 
-        print_success(".2f"        edge_cases['large_file_handled'] = True
+        print(f"   Parse time: {(parse_time):.2f}s")
+        edge_cases['large_file_handled'] = True
         edge_cases['large_file_functions'] = function_count
         edge_cases['large_file_parse_time'] = round(parse_time, 3)
 
@@ -731,7 +732,10 @@ def demonstrate_realistic_codebase_analysis():
 
             print(f"\n📊 Quality Metrics:")
             metrics = analysis_results['code_quality_metrics']
-            print(".1f"            print(".1f"            print(".1f"            print(f"   Test coverage estimate: {metrics['test_coverage_estimate']}%")
+            print(f"   Functions per file: {metrics['functions_per_file']:.1f}")
+            print(f"   Classes per file: {metrics['classes_per_file']:.1f}")
+            print(f"   Async ratio: {metrics['async_ratio']:.1f}%")
+            print(f"   Test coverage estimate: {metrics['test_coverage_estimate']}%")
 
             if analysis_results['refactoring_opportunities']:
                 print(f"\n🔧 Refactoring Opportunities ({len(analysis_results['refactoring_opportunities'])}):")

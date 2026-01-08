@@ -1,14 +1,5 @@
 # Codomyrmex Agents — scripts/tests
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [output](output/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
@@ -27,7 +18,7 @@ Test files and validation suites.
 - `run_tests_batched.sh` – Project file
 - `test_jules_authenticated.py` – Project file
 - `test_jules_functionality.py` – Project file
-- `test_jules_real_task.py` – Project file
+- `test_jules_task.py` – Project file
 - `test_summary.py` – Project file
 - `testing_AGENTS.md` – Project file
 - `testing_README.md` – Project file

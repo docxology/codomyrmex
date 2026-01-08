@@ -9,6 +9,7 @@ from google.genai import types
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
 from codomyrmex.agents.exceptions import AgentError, GeminiError
+from codomyrmex.agents.generic import BaseAgent
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -16,41 +17,27 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Gemini API client wrapper using google-genai SDK."""
-
-
-# Try to import google-genai, handle if not installed yet
-try:
-except ImportError:
-    genai = None
-
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
-    BaseAgent,
 )
+
+try:
+    # This import is likely for type hinting or direct use if PIL is available
+    # If Image is not imported here, the try/except block below for Image will be redundant
+    # Assuming Image is used later, and this block is for handling its absence.
+    pass
+except ImportError:
+    Image = None
+
+try:
+    # These imports are already at the top, this block is for handling their absence
+    pass
+except ImportError:
+    pass
+except ImportError:
+    genai = None
+    types = None
 
 logger = get_logger(__name__)
 
@@ -174,7 +161,7 @@ class GeminiClient(BaseAgent):
                     yield chunk.text
         except Exception as e:
             logger.error(f"Gemini streaming failed: {e}")
-            yield f"\n[Error: {e}]"
+            yield f"\\n[Error: {e}]"
 
     def _build_contents(self, prompt: str, context: Dict[str, Any]) -> List[Any]:
         if "contents" in context: return context["contents"]
@@ -203,11 +190,11 @@ class GeminiClient(BaseAgent):
                  if part.text:
                      content += part.text
                  if part.function_call:
-                     content += f"\n[Function Call]: {part.function_call.name}({part.function_call.args})"
+                     content += f"\\n[Function Call]: {part.function_call.name}({part.function_call.args})"
                  if part.executable_code:
-                     content += f"\n[Executable Code]:\n{part.executable_code.code}"
+                     content += f"\\n[Executable Code]:\\n{part.executable_code.code}"
                  if part.code_execution_result:
-                     content += f"\n[Code Execution Result]: {part.code_execution_result.output}"
+                     content += f"\\n[Code Execution Result]: {part.code_execution_result.output}"
 
         return AgentResponse(
             request_id=request.id,

@@ -1,22 +1,5 @@
 # Codomyrmex Agents — config
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [api](api/AGENTS.md)
-    - [cache](cache/AGENTS.md)
-    - [database](database/AGENTS.md)
-    - [examples](examples/AGENTS.md)
-    - [llm](llm/AGENTS.md)
-    - [monitoring](monitoring/AGENTS.md)
-    - [security](security/AGENTS.md)
-    - [templates](templates/AGENTS.md)
-    - [workflows](workflows/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

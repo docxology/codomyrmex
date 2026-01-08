@@ -42,6 +42,47 @@ from codomyrmex.performance import PerformanceMonitor, monitor_performance
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core business logic and data management
+
+This module provides task_orchestrator functionality including:
+- 37 functions: get_task_orchestrator, to_dict, from_dict...
+- 9 classes: TaskStatus, TaskPriority, ResourceType...
+
+Usage:
+    # Example usage here
 """
 Task Orchestration System for Codomyrmex
 
@@ -67,6 +108,13 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value
+"""
             return func
 
         return decorator

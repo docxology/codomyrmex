@@ -1,14 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit/spatial
 
-## Signposting
-- **Parent**: [Spatial](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [three_d](three_d/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

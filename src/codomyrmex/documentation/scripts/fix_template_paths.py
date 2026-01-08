@@ -3,6 +3,24 @@ import re
 import sys
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -18,6 +36,16 @@ import sys
 
 #!/usr/bin/env python3
 """
+"""Core functionality module
+
+This module provides fix_template_paths functionality including:
+- 3 functions: fix_template_paths, calculate_correct_path, calculate_correct_path_text
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Fix template/module_template path references to point to correct location.
 """
 

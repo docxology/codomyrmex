@@ -19,28 +19,9 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    VisualizationTheme,
+    get_default_theme,
+)
 """Base visualization classes for modular, reusable visualization components.
 
 This module provides base classes for network, chart, and heatmap visualizations
@@ -48,10 +29,23 @@ with shared utilities for legends, axes, titles, color mapping, and node sizing.
 """
 
 
+try:
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+    Figure = Any
+    Axes = Any
+
+try:
+except ImportError:
+    nx = None
+
+
+
 if TYPE_CHECKING:
+    pass
 else:
-    try:
-    except ImportError:
+    if nx is None:
         # Create a dummy type for nx when not available
         class _DummyGraph:
             pass
@@ -59,18 +53,6 @@ else:
             Graph = _DummyGraph
             DiGraph = _DummyGraph
         nx = _DummyNX()
-
-try:
-
-    HAS_MATPLOTLIB = True
-except ImportError:
-    HAS_MATPLOTLIB = False
-    Figure = Any
-    Axes = Any
-
-    VisualizationTheme,
-    get_default_theme,
-)
 
 logger = get_logger(__name__)
 

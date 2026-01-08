@@ -1,22 +1,5 @@
 # Codomyrmex Agents — docs
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [deployment](deployment/AGENTS.md)
-    - [development](development/AGENTS.md)
-    - [examples](examples/AGENTS.md)
-    - [getting-started](getting-started/AGENTS.md)
-    - [integration](integration/AGENTS.md)
-    - [modules](modules/AGENTS.md)
-    - [project](project/AGENTS.md)
-    - [project_orchestration](project_orchestration/AGENTS.md)
-    - [reference](reference/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

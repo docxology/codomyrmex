@@ -1,9 +1,9 @@
 {
   "phase1": {
     "files_found": {
-      "total_markdown": 2818,
-      "agents_files": 279,
-      "readme_files": 1560,
+      "total_markdown": 2815,
+      "agents_files": 278,
+      "readme_files": 1559,
       "all_md_paths": [
         "README.md",
         "SPEC.md",
@@ -258,9 +258,6 @@
         "git_operations/AGENTS.md",
         "git_operations/COMPREHENSIVE_USAGE_EXAMPLES.md",
         "git_operations/SECURITY.md",
-        "cerebrum/scripts/README.md",
-        "cerebrum/scripts/SPEC.md",
-        "cerebrum/scripts/AGENTS.md",
         "logistics/schedule/README.md",
         "logistics/schedule/SPEC.md",
         "logistics/schedule/AGENTS.md",
@@ -2876,7 +2873,6 @@
         "validation/AGENTS.md",
         "fpf/AGENTS.md",
         "git_operations/AGENTS.md",
-        "cerebrum/scripts/AGENTS.md",
         "logistics/schedule/AGENTS.md",
         "logistics/task/AGENTS.md",
         "logistics/orchestration/AGENTS.md",
@@ -3157,7 +3153,6 @@
         "validation/README.md",
         "fpf/README.md",
         "git_operations/README.md",
-        "cerebrum/scripts/README.md",
         "logistics/schedule/README.md",
         "logistics/task/README.md",
         "logistics/orchestration/README.md",
@@ -7132,7 +7127,7 @@
   },
   "phase7": {
     "summary_stats": {
-      "total_files_scanned": 2818,
+      "total_files_scanned": 2815,
       "issues_by_category": {
         "broken_links": 0,
         "missing_documentation": 0,

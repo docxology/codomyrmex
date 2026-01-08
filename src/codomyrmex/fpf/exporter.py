@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Exporter for FPF specification to JSON and other formats.
 
+"""Core functionality module
+
+This module provides exporter functionality including:
+- 8 functions: __init__, export_json, export_patterns_json...
+- 1 classes: FPFExporter
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to export FPF specifications
 to structured formats for use in context engineering.
 """

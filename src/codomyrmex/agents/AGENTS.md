@@ -1,24 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/agents
 
-## Signposting
-- **Parent**: [Repository Root](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [ai_code_editing](agents/ai_code_editing/AGENTS.md)
-    - [claude](claude/AGENTS.md)
-    - [codex](codex/AGENTS.md)
-    - [droid](droid/AGENTS.md)
-    - [every_code](every_code/AGENTS.md)
-    - [gemini](gemini/AGENTS.md)
-    - [generic](generic/AGENTS.md)
-    - [jules](jules/AGENTS.md)
-    - [mistral_vibe](mistral_vibe/AGENTS.md)
-    - [opencode](opencode/AGENTS.md)
-    - [theory](theory/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

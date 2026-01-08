@@ -1,6 +1,7 @@
 from typing import Any, Dict, Optional
 import time
 
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
@@ -16,6 +17,31 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides execution_monitor functionality including:
+- 4 functions: __init__, start_execution, end_execution...
+- 1 classes: ExecutionMonitor
+
+Usage:
+    # Example usage here
 """
 Execution Monitoring
 

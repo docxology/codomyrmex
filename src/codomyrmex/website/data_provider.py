@@ -3,6 +3,7 @@ from typing import Any, Dict, List
 import os
 
 
+from codomyrmex.logging_monitoring import get_logger
 
 
 
@@ -17,12 +18,47 @@ import os
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides data_provider functionality including:
+- 19 functions: __init__, get_system_summary, get_modules...
+- 1 classes: DataProvider
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 class DataProvider:
     """
     Aggregates data from various system modules to populate the website.
     """
     
     def __init__(self, root_dir: Path):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    root_dir : Description of root_dir
+
+    Returns: Description of return value
+"""
         self.root_dir = root_dir
 
     def get_system_summary(self) -> Dict[str, Any]:
@@ -128,6 +164,13 @@ class DataProvider:
         return self.get_modules()
 
     def _count_agents(self) -> int:
+    """Brief description of _count_agents.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value (type: int)
+"""
         return len(self.get_actual_agents())
 
     
@@ -325,6 +368,14 @@ class DataProvider:
         return tree
 
     def _scan_directory_for_docs(self, path: Path) -> Dict[str, Any]:
+    """Brief description of _scan_directory_for_docs.
+
+Args:
+    self : Description of self
+    path : Description of path
+
+    Returns: Description of return value (type: Any)
+"""
         node = {"name": path.name, "children": []}
         
         # Files first, then dirs

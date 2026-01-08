@@ -6,18 +6,6 @@ from codomyrmex.git_operations.repository_manager import (
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """
 Repository CLI - Command Line Interface for Repository Management
@@ -26,7 +14,9 @@ This script provides a command-line interface for managing the repository librar
 making it easy to clone, update, and manage GitHub repositories.
 """
 
-
+    RepositoryManager,
+    RepositoryType,
+)
 
 logger = get_logger(__name__)
 
@@ -35,10 +25,6 @@ logger = get_logger(__name__)
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
 # sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
-
-    RepositoryManager,
-    RepositoryType,
-)
 
 
 def cmd_list(manager: RepositoryManager, args) -> None:

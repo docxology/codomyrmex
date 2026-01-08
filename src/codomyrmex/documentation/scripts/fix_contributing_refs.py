@@ -4,6 +4,24 @@ import re
 import sys
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -19,6 +37,16 @@ import sys
 
 #!/usr/bin/env python3
 """
+"""Core functionality module
+
+This module provides fix_contributing_refs functionality including:
+- 2 functions: calculate_relative_path, fix_contributing_refs
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Fix CONTRIBUTING.md references in module documentation.
 
 Updates all references to CONTRIBUTING.md in modules to point to

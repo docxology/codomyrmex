@@ -3,6 +3,24 @@ from pathlib import Path
 import json
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import json
 """Verify all modules have required documentation files."""
 
 
+"""Core functionality module
+
+This module provides verify_module_docs functionality including:
+- 1 functions: verify_modules
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def verify_modules(base_path: Path) -> dict:
     """Verify all modules have README.md, AGENTS.md, and SPEC.md."""
     results = {

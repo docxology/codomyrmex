@@ -5,6 +5,24 @@ import json
 import os
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import os
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides fix_agents_files functionality including:
+- 8 functions: main, __init__, find_agents_files...
+- 1 classes: AgentsFileFixer
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Batch fix AGENTS.md files throughout the repository.
 
 This script identifies and fixes common issues with AGENTS.md files:
@@ -34,6 +62,14 @@ class AgentsFileFixer:
     """Fix AGENTS.md files throughout the repository."""
 
     def __init__(self, repo_root: Path):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    repo_root : Description of repo_root
+
+    Returns: Description of return value
+"""
         self.repo_root = repo_root
         self.fixed_count = 0
         self.error_count = 0

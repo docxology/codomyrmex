@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Report generator for FPF specifications.
 
+"""Core functionality module
+
+This module provides report_generator functionality including:
+- 9 functions: __init__, generate_report, _get_css_styles...
+- 1 classes: ReportGenerator
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides functionality to generate comprehensive HTML reports
 with analysis, statistics, and visualizations.
 """

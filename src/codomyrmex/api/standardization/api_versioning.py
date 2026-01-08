@@ -35,6 +35,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core business logic and data management
+
+This module provides api_versioning functionality including:
+- 31 functions: version, deprecated_version, create_version_manager...
+- 5 classes: SimpleVersion, VersionFormat, APIVersion...
+
+Usage:
+    # Example usage here
 """
 API Versioning Implementation for Codomyrmex
 
@@ -49,6 +90,14 @@ class SimpleVersion:
     """Simple semantic version implementation."""
 
     def __init__(self, version_str: str):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    version_str : Description of version_str
+
+    Returns: Description of return value
+"""
         parts = version_str.split('.')
         if len(parts) != 3:
             raise ValueError(f"Invalid semantic version format: {version_str}")
@@ -61,14 +110,37 @@ class SimpleVersion:
             raise ValueError(f"Invalid semantic version numbers: {version_str}")
 
     def __str__(self):
+    """Brief description of __str__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         return f"{self.major}.{self.minor}.{self.patch}"
 
     def __lt__(self, other):
+    """Brief description of __lt__.
+
+Args:
+    self : Description of self
+    other : Description of other
+
+    Returns: Description of return value
+"""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
         return (self.major, self.minor, self.patch) < (other.major, other.minor, other.patch)
 
     def __eq__(self, other):
+    """Brief description of __eq__.
+
+Args:
+    self : Description of self
+    other : Description of other
+
+    Returns: Description of return value
+"""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
         return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
@@ -470,6 +542,13 @@ def version(version_str: str):
         Decorated function
     """
     def decorator(func: Callable) -> Callable:
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value (type: Callable)
+"""
         func._api_version = version_str
         return func
     return decorator
@@ -486,6 +565,13 @@ def deprecated_version(version_str: str):
         Decorated function
     """
     def decorator(func: Callable) -> Callable:
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value (type: Callable)
+"""
         func._deprecated_version = version_str
         return func
     return decorator

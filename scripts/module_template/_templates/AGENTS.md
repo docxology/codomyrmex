@@ -1,14 +1,5 @@
 # Codomyrmex Agents — scripts/module_template/_templates
 
-## Signposting
-- **Parent**: [Parent](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - None
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
@@ -17,16 +8,16 @@ Automation and utility scripts.
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
-- `async_template.py` – Project file
+- `async_template.py.template` – Project file
 - `async_template_README.md` – Project file
 - `async_template_config.yaml` – Project file
-- `basic_template.py` – Project file
+- `basic_template.py.template` – Project file
 - `basic_template_README.md` – Project file
 - `basic_template_config.yaml` – Project file
-- `integration_template.py` – Project file
+- `integration_template.py.template` – Project file
 - `integration_template_README.md` – Project file
 - `integration_template_config.yaml` – Project file
-- `tutorial_template.py` – Project file
+- `tutorial_template.py.template` – Project file
 - `tutorial_template_README.md` – Project file
 - `tutorial_template_config.yaml` – Project file
 

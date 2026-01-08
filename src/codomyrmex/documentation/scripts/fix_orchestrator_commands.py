@@ -5,6 +5,24 @@ import re
 import subprocess
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import subprocess
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides fix_orchestrator_commands functionality including:
+- 5 functions: main, __init__, extract_commands_from_orchestrator...
+- 1 classes: OrchestratorCommandFixer
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Add orchestrator commands to AGENTS.md Active Components sections.
 
 This script detects CLI commands from orchestrator scripts and adds them
@@ -32,6 +60,14 @@ class OrchestratorCommandFixer:
     """Fix orchestrator commands in AGENTS.md files."""
 
     def __init__(self, repo_root: Path):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    repo_root : Description of repo_root
+
+    Returns: Description of return value
+"""
         self.repo_root = repo_root
         self.fixed_count = 0
 

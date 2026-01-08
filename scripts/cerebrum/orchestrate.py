@@ -24,29 +24,16 @@ sys.path.insert(0, str(project_root))
 from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
 
 # Import shared utilities
-try:
-    from _orchestrator_utils import (
-        format_output,
-        print_error,
-        print_section,
-        print_success,
-        ProgressReporter,
-        add_common_arguments,
-        validate_dry_run,
-    )
-except ImportError:
-    import sys
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    from _orchestrator_utils import (
-        format_output,
-        print_error,
-        print_section,
-        print_success,
-        ProgressReporter,
-        add_common_arguments,
-        validate_dry_run,
-    )
+# Import shared utilities
+from codomyrmex.utils.cli_helpers import (
+    format_output,
+    print_error,
+    print_section,
+    print_success,
+    ProgressReporter,
+    add_common_arguments,
+    validate_dry_run,
+)
 
 # Import CEREBRUM-FPF modules
 from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator

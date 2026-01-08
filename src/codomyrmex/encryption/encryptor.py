@@ -47,6 +47,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides encryptor functionality including:
+- 11 functions: __init__, encrypt, decrypt...
+- 2 classes: EncryptionError, Encryptor
+
+Usage:
+    # Example usage here
 """
 Encryption utilities.
 """

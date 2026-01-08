@@ -1,35 +1,111 @@
 #!/usr/bin/env python3
-"""Cloud module orchestrator script.
+"""
+Cloud Module Orchestrator
 
-This is a thin orchestrator that delegates to the cloud module
-in src/codomyrmex/cloud/.
+Thin orchestrator script providing CLI access to cloud module functionality.
+Calls actual module functions from codomyrmex.cloud.
+
+See also: src/codomyrmex/cli.py for main CLI integration
 """
 
+import argparse
 import sys
 from pathlib import Path
 
-# Add src to path for imports
-src_path = Path(__file__).parent.parent.parent / "src"
-sys.path.insert(0, str(src_path))
+# Import logging setup
+from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+
+# Import shared utilities
+try:
+    from _orchestrator_utils import (
+        format_output,
+        print_error,
+        print_section,
+        print_success,
+    )
+except ImportError:
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from _orchestrator_utils import (
+        format_output,
+        print_error,
+        print_section,
+        print_success,
+    )
+
+# Import module functions
+from codomyrmex import cloud
+
+logger = get_logger(__name__)
+
+
+def handle_info(args):
+    """Handle info command."""
+    try:
+        if getattr(args, "verbose", False):
+            logger.info("Retrieving cloud module information")
+
+        info = {
+            "module": "cloud",
+            "description": "Cloud infrastructure integration",
+            "path": getattr(cloud, "__path__", ["unknown"])[0],
+            "exports": getattr(cloud, "__all__", []),
+        }
+
+        print_section("Cloud Module Information")
+        print(format_output(info, format_type="json"))
+        print_section("", separator="")
+
+        print_success("Information retrieved")
+        return True
+
+    except Exception as e:
+        logger.exception("Unexpected error retrieving information")
+        print_error("Unexpected error retrieving information", exception=e)
+        return False
 
 
 def main():
-    """Main entry point for cloud orchestration."""
-    print("Cloud module orchestrator")
-    print("=" * 40)
-    
-    try:
-        from codomyrmex import cloud
-        print(f"Cloud module loaded: {cloud.__name__}")
-        
-        # List available functionality
-        if hasattr(cloud, '__all__'):
-            print(f"Available exports: {cloud.__all__}")
-    except ImportError as e:
-        print(f"Error importing cloud module: {e}")
+    """Main CLI entry point."""
+    setup_logging()
+    parser = argparse.ArgumentParser(
+        description="Cloud operations",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s info
+        """,
+    )
+
+    # Global options
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
+    )
+
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    # Info command
+    subparsers.add_parser("info", help="Get cloud module information")
+
+    args = parser.parse_args()
+
+    if not args.command:
+        parser.print_help()
+        return 0
+
+    # Route to appropriate handler
+    handlers = {
+        "info": handle_info,
+    }
+
+    handler = handlers.get(args.command)
+    if handler:
+        success = handler(args)
+        return 0 if success else 1
+    else:
+        print_error("Unknown command", context=args.command)
         return 1
-    
-    return 0
 
 
 if __name__ == "__main__":

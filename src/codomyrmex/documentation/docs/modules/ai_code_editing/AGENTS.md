@@ -1,14 +1,5 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/ai_code_editing
 
-## Signposting
-- **Parent**: [Ai Code Editing](../AGENTS.md)
-- **Self**: [Agents](AGENTS.md)
-- **Children**:
-    - [docs](docs/AGENTS.md)
-- **Key Artifacts**:
-    - [Functional Spec](SPEC.md)
-    - [Human Readme](README.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose

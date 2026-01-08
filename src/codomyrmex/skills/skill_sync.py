@@ -9,33 +9,13 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-"""Skill Sync Module
-
-Handles syncing with the upstream vibeship-spawner-skills repository.
-"""
-
-
 try:
         clone_repository,
         is_git_repository,
         pull_changes,
     )
 except ImportError:
-
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
+    # Fallback functions defined below
     def clone_repository(url: str, destination: str, branch: Optional[str] = None) -> bool:
         """Fallback clone function."""
         try:

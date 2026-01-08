@@ -1,5 +1,16 @@
+from codomyrmex.logging_monitoring import get_logger
 """Analyzer for FPF specifications.
 
+"""Core functionality module
+
+This module provides analyzer functionality including:
+- 12 functions: __init__, calculate_pattern_importance, calculate_concept_centrality...
+- 1 classes: FPFAnalyzer
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 This module provides intelligent analysis capabilities including
 importance scoring, centrality analysis, and relationship strength calculation.
 """
@@ -124,6 +135,14 @@ class FPFAnalyzer:
         depths = {}
 
         def calculate_depth(node: str, visited: set) -> int:
+    """Brief description of calculate_depth.
+
+Args:
+    node : Description of node
+    visited : Description of visited
+
+    Returns: Description of return value (type: int)
+"""
             if node in visited:
                 return 0
             visited.add(node)

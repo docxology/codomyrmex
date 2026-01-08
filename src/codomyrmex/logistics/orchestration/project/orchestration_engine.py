@@ -33,6 +33,13 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value
+"""
             return func
 
         return decorator
@@ -98,6 +105,13 @@ class OrchestrationSession:
     status: SessionStatus = SessionStatus.PENDING
 
     def to_dict(self) -> dict[str, Any]:
+    """Brief description of to_dict.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value (type: Any)
+"""
         data = {
             "session_id": self.session_id,
             "name": self.name,

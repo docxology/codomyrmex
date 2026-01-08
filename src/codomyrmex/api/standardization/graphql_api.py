@@ -35,6 +35,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides graphql_api functionality including:
+- 26 functions: resolver, mutation, create_schema...
+- 8 classes: GraphQLType, GraphQLField, GraphQLObjectType...
+
+Usage:
+    # Example usage here
 """
 GraphQL API Implementation for Codomyrmex
 
@@ -471,6 +512,13 @@ def resolver(field_name: str, complexity: int = 1):
         Decorated function
     """
     def decorator(func: Callable) -> GraphQLResolver:
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value (type: GraphQLResolver)
+"""
         return GraphQLResolver(
             field_name=field_name,
             resolver_func=func,
@@ -495,6 +543,13 @@ def mutation(name: str, input_type: GraphQLObjectType,
         Decorated function
     """
     def decorator(func: Callable) -> GraphQLMutation:
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value (type: GraphQLMutation)
+"""
         return GraphQLMutation(
             name=name,
             input_type=input_type,

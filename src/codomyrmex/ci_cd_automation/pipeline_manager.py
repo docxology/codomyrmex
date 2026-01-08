@@ -44,6 +44,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core business logic and data management
+
+This module provides pipeline_manager functionality including:
+- 30 functions: create_pipeline, run_pipeline, to_dict...
+- 7 classes: PipelineStatus, StageStatus, JobStatus...
+
+Usage:
+    # Example usage here
 """
 Pipeline Manager for Codomyrmex CI/CD Automation Module.
 
@@ -179,6 +220,13 @@ class Pipeline:
     duration: float = 0.0
 
     def __post_init__(self):
+    """Brief description of __post_init__.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value
+"""
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
 
@@ -372,6 +420,13 @@ class PipelineManager:
                 # If loop is running, we need to handle differently
 
                 def run_async():
+    """Brief description of run_async.
+
+Args:
+
+
+    Returns: Description of return value
+"""
                     new_loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(new_loop)
                     try:
@@ -500,6 +555,13 @@ class PipelineManager:
         """Run a command asynchronously."""
 
         def run_cmd():
+    """Brief description of run_cmd.
+
+Args:
+
+
+    Returns: Description of return value
+"""
             try:
                 env = os.environ.copy()
                 env.update(env_vars)
@@ -1016,6 +1078,13 @@ class PipelineManager:
         rec_stack = set()
 
         def has_cycle(node: str) -> bool:
+    """Brief description of has_cycle.
+
+Args:
+    node : Description of node
+
+    Returns: Description of return value (type: bool)
+"""
             visited.add(node)
             rec_stack.add(node)
 

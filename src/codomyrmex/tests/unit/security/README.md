@@ -1,14 +1,5 @@
 # security
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [integration](integration/README.md)
-    - [unit](unit/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
@@ -19,8 +10,6 @@ Test files and validation suites for security.
 - `README.md` – File
 - `SPEC.md` – File
 - `integration/` – Subdirectory
-- `test_security_audit.py` – File
-- `test_security_audit_enhanced.py` – File
 - `test_security_cognitive.py` – File
 - `test_security_digital.py` – File
 - `test_security_physical.py` – File

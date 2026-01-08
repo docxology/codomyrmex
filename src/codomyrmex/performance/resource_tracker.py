@@ -36,6 +36,47 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides resource_tracker functionality including:
+- 15 functions: track_memory_usage, create_resource_report, benchmark_resource_usage...
+- 3 classes: ResourceSnapshot, ResourceTrackingResult, ResourceTracker
+
+Usage:
+    # Example usage here
 """
 Resource Tracker for Codomyrmex Performance Monitoring
 
@@ -336,6 +377,13 @@ def track_memory_usage(func: Callable):
     tracker = ResourceTracker()
 
     def wrapper(*args, **kwargs):
+    """Brief description of wrapper.
+
+Args:
+
+
+    Returns: Description of return value
+"""
         tracker.start_tracking(func.__name__, {"args_count": len(args), "kwargs_count": len(kwargs)})
 
         try:

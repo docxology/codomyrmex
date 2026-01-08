@@ -35,6 +35,47 @@ from codomyrmex.git_operations import initialize_git_repository
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Core functionality module
+
+This module provides conftest functionality including:
+- 4 functions: temp_dir, temp_git_repo, temp_git_repo_no_commit...
+- 0 classes: 
+
+Usage:
+    # Example usage here
 """
 Pytest configuration and shared fixtures for git_operations tests.
 """

@@ -3,6 +3,24 @@ import os
 import re
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import re
 """Fix broken links in SPEC.md files."""
 
 
+"""Main entry point and utility functions
+
+This module provides fix_spec_links functionality including:
+- 3 functions: calculate_relative_path, fix_spec_file, main
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 def calculate_relative_path(from_dir: Path, to_file: Path) -> str:
     """Calculate relative path from directory to file."""
     try:

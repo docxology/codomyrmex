@@ -34,6 +34,47 @@ import pytest
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+"""Testing utilities and test helpers
+
+This module provides conftest functionality including:
+- 6 functions: project_root, examples_dir, testing_dir...
+- 0 classes: 
+
+Usage:
+    # Example usage here
 """
 Pytest configuration and fixtures for example testing.
 

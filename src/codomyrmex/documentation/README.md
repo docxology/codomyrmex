@@ -1,16 +1,5 @@
 # documentation
 
-## Signposting
-- **Parent**: [Parent](../README.md)
-- **Children**:
-    - [docs](docs/README.md)
-    - [scripts](../../../scripts/examples/README.md)
-    - [src](src/README.md)
-    - [static](static/README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview

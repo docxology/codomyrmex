@@ -5,6 +5,24 @@ import re
 import sys
 
 
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,6 +38,16 @@ import sys
 
 #!/usr/bin/env python3
 """
+"""Main entry point and utility functions
+
+This module provides check_doc_links functionality including:
+- 5 functions: find_markdown_files, extract_links, resolve_link...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Documentation Link Validation Script
 
 This script validates all internal markdown links in the documentation directory,
