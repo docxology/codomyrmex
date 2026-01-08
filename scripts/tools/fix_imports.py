@@ -260,8 +260,8 @@ class AdvancedImportAnalyzer:
 
     def print_summary(self):
         """Print analysis summary."""
-        print(f"Fixing imports in {target_dir}")
-📊 Advanced Import Analysis Summary:"        print(f"  Files analyzed: {self.stats['files_analyzed']}")
+        print("-" * 50)
+        print("📊 Advanced Import Analysis Summary:")
         print(f"  Unused imports found: {self.stats['unused_imports_found']}")
         print(f"  Missing imports found: {self.stats['missing_imports_found']}")
         print(f"  Potential circular imports: {self.stats['circular_imports_found']}")

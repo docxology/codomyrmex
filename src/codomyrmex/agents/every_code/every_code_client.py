@@ -8,6 +8,7 @@ from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, EveryCod
 from codomyrmex.agents.generic import CLIAgentBase
 
 
+
 """Every Code CLI client wrapper."""
 
 
