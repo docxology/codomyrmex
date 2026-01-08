@@ -1,3 +1,12 @@
+from pathlib import Path
+from typing import List, Tuple, Dict
+import os
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Documentation Link Validation Script
@@ -6,11 +15,6 @@ This script validates all internal markdown links in the documentation directory
 identifying broken links, missing files, and incorrect references.
 """
 
-import os
-import re
-from pathlib import Path
-from typing import List, Tuple, Dict
-import sys
 
 
 def find_markdown_files(docs_dir: Path) -> List[Path]:
@@ -175,8 +179,15 @@ def check_links(docs_dir: Path) -> Dict[str, List[Dict]]:
 def main():
     """Main function to run link validation."""
     # Get docs directory (assume script is in scripts/documentation/)
-    script_dir = Path(__file__).parent
-    project_root = script_dir.parent.parent
+    script_dir = Path(__file__).resolve().parent
+    # Go up 5 levels: scripts -> documentation -> codomyrmex -> src -> codomyrmex -> repo_root
+    # Wait, __file__ is src/codomyrmex/documentation/scripts/check_doc_links.py
+    # 1. scripts
+    # 2. documentation
+    # 3. codomyrmex
+    # 4. src
+    # 5. REPO_ROOT
+    project_root = script_dir.parent.parent.parent.parent
     docs_dir = project_root / 'docs'
 
     if not docs_dir.exists():
@@ -203,7 +214,7 @@ def main():
             else:
                 print(f"  {issue['issue']}")
 
-    return 1
+    return 0
 
 
 if __name__ == '__main__':

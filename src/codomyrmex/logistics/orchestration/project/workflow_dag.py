@@ -1,3 +1,17 @@
+from collections import defaultdict, deque
+from typing import Dict, List, Set, Tuple, Optional, Any
+import logging
+
+from dataclasses import dataclass, field
+from enum import Enum
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Workflow DAG (Directed Acyclic Graph) Implementation for Codomyrmex
 
@@ -5,17 +19,11 @@ This module provides comprehensive DAG functionality for complex workflow manage
 including dependency resolution, cycle detection, topological sorting, and visualization.
 """
 
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from typing import Dict, List, Set, Tuple, Optional, Any
-from enum import Enum
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 

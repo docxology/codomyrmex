@@ -1,16 +1,26 @@
+from datetime import datetime, timezone
+from typing import Any, Optional
+import ast
+import json
+import os
+import sys
+
+from dataclasses import dataclass, field
+import yaml
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 API Documentation Generator for Codomyrmex API Documentation Module.
 
 Provides comprehensive API documentation generation from code analysis.
 """
 
-import ast
-import json
-import os
-import sys
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Any, Optional
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +29,6 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -415,7 +424,6 @@ class APIDocumentationGenerator:
                     json.dump(self.documentation.to_dict(), f, indent=2)
 
             elif format.lower() == "yaml":
-                import yaml
 
                 with open(output_path, "w") as f:
                     yaml.dump(self.documentation.to_dict(), f, default_flow_style=False)

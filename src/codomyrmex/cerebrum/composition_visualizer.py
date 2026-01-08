@@ -1,3 +1,22 @@
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+from matplotlib.figure import Figure
+from matplotlib.gridspec import GridSpec
+from matplotlib.patches import Patch
+import matplotlib.pyplot as plt
+import numpy as np
+
+from codomyrmex.cerebrum.exceptions import VisualizationError
+from codomyrmex.cerebrum.visualization_base import BaseChartVisualizer, BaseNetworkVisualizer
+from codomyrmex.cerebrum.visualization_theme import VisualizationTheme, get_default_theme
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
 """Composition visualizations: graphical abstracts and multi-panel compositions.
 
 This module provides composite visualizations that combine multiple analyses
@@ -5,24 +24,14 @@ into summary dashboards, overview panels, and graphical abstracts suitable
 for presentations and reports.
 """
 
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 
 try:
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from matplotlib.figure import Figure
-    from matplotlib.gridspec import GridSpec
 
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
     Figure = Any
 
-from codomyrmex.cerebrum.exceptions import VisualizationError
-from codomyrmex.cerebrum.visualization_base import BaseChartVisualizer, BaseNetworkVisualizer
-from codomyrmex.cerebrum.visualization_theme import VisualizationTheme, get_default_theme
-from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -261,7 +270,6 @@ class CompositionVisualizer:
 
         # Add legend for status
         if pattern_metadata:
-            from matplotlib.patches import Patch
             statuses = ["Stable", "Draft", "Stub", "New"]
             legend_elements = [
                 Patch(facecolor=self.theme.get_status_color(s), edgecolor="black", label=s, alpha=0.7)
@@ -346,5 +354,6 @@ class CompositionVisualizer:
         else:
             plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
             return fig
+
 
 

@@ -1,12 +1,21 @@
-"""Document model definitions."""
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
+import json
+
+from __future__ import annotations
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+
+
+
+
+
+"""Document model definitions."""
+
+
 
 
 class DocumentType(Enum):
@@ -76,12 +85,12 @@ class Document:
         if isinstance(self.content, str):
             return self.content
         elif isinstance(self.content, dict):
-            import json
             return json.dumps(self.content, indent=2)
         elif isinstance(self.content, bytes):
             encoding = self.encoding or "utf-8"
             return self.content.decode(encoding)
         else:
             return str(self.content)
+
 
 

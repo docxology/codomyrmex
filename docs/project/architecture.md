@@ -285,7 +285,7 @@ Source Code → Static Analysis → Testing → Build Validation → Deployment
 ### **Source Code Navigation**
 - **[Source Overview](../../README.md)**: Source code organization
 - **[Package Overview](../../src/codomyrmex/README.md)**: Main package structure
-- **[Module Template](../../src/template/README.md)**: Template for new modules
+- **[Module Template](../../src/codomyrmex/module_template/README.md)**: Template for new modules
 
 ### **Orchestration and Coordination**
 - **[Task Orchestration Guide](../project_orchestration/task-orchestration-guide.md)**: Complete task orchestration guide
@@ -312,4 +312,4 @@ This architecture provides a solid foundation for extensible, maintainable code 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

@@ -1,3 +1,21 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Set
+import argparse
+import json
+import logging
+import re
+import sys
+
+from dataclasses import dataclass, asdict
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Content Quality Analyzer for Codomyrmex Documentation.
@@ -5,20 +23,11 @@ Content Quality Analyzer for Codomyrmex Documentation.
 Analyzes documentation content for completeness, quality metrics, and placeholder content.
 """
 
-import json
-import re
-import sys
-from pathlib import Path
-from typing import Dict, List, Set
-from dataclasses import dataclass, asdict
-from collections import defaultdict
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -484,7 +493,6 @@ class ContentQualityAnalyzer:
 
 def main():
     """Main entry point."""
-    import argparse
     
     parser = argparse.ArgumentParser(description="Analyze documentation content quality")
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

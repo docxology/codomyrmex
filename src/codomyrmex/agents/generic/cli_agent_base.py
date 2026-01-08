@@ -1,14 +1,18 @@
-"""Base class for CLI-based agents with common subprocess patterns."""
-
+from pathlib import Path
+from typing import Any, Iterator, Optional
 import os
 import subprocess
 import time
-from pathlib import Path
-from typing import Any, Iterator, Optional
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError
 from codomyrmex.agents.generic.base_agent import BaseAgent
+
+
+
+"""Base class for CLI-based agents with common subprocess patterns."""
+
+
 
 
 class CLIAgentBase(BaseAgent):
@@ -364,4 +368,5 @@ class CLIAgentBase(BaseAgent):
             metadata=metadata,
             execution_time=exec_time,
         )
+
 

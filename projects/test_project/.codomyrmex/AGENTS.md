@@ -1,6 +1,6 @@
 # Codomyrmex Agents — projects/test_project/.codomyrmex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Signposting
 - **Parent**: [test_project](../AGENTS.md)
@@ -102,4 +102,4 @@ Regular maintenance should include:
 
 ## Version History
 
-- **v0.1.0** (December 2025) - Initial project-specific configuration directory structure
+- **v0.1.0** (January 2026) - Initial project-specific configuration directory structure

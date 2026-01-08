@@ -1,33 +1,31 @@
 # Codomyrmex Agents — config/monitoring/examples
 
 ## Signposting
-- **Parent**: [monitoring](../AGENTS.md)
-- **Self**: [examples Agents](AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
 - **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Example monitoring configurations demonstrating best practices for logging, metrics, alerting, and telemetry.
+Example implementations and demonstrations.
 
 ## Active Components
-
-- `README.md` – Examples documentation
-- `logging-example.yaml` – Example logging configuration
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `logging-example.yaml` – Project file
 
 ## Operating Contracts
-
-- Maintain alignment between examples and actual configuration templates.
-- Ensure examples demonstrate best practices for each environment.
-- Use environment variable references where appropriate.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
-- **Parent**: [monitoring](../AGENTS.md)
-- **Project Root**: [README](../../../README.md)
-
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [monitoring](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

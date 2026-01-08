@@ -118,3 +118,4 @@ health_checks:
       type: "ping"
       timeout: 5
 
+

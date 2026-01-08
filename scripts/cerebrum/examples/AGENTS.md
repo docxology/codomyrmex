@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/cerebrum
+# Codomyrmex Agents — scripts/cerebrum/examples
 
 ## Signposting
-- **Parent**: [Cerebrum](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -29,5 +29,5 @@ Example implementations and demonstrations.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../README.md) - Main project documentation
+- **📁 Parent Directory**: [cerebrum](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

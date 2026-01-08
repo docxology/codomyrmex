@@ -1,14 +1,22 @@
-"""Active inference implementation based on the free energy principle."""
-
-import math
-from dataclasses import dataclass, field
 from typing import Any, Optional
+import math
 
+from dataclasses import dataclass, field
 import numpy as np
 
 from codomyrmex.cerebrum.exceptions import ActiveInferenceError
 from codomyrmex.cerebrum.utils import softmax
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+"""Active inference implementation based on the free energy principle."""
+
+
+
 
 logger = get_logger(__name__)
 
@@ -402,5 +410,6 @@ class ActiveInferenceAgent:
         self.beliefs.states = {state: uniform_prob for state in self.states}
         self.beliefs.observations = {}
         self.logger.debug("Reset agent")
+
 
 

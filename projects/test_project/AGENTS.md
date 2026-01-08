@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects/test_project
 
 ## Signposting
-- **Parent**: [Test Project](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [config](config/AGENTS.md)
@@ -26,6 +26,7 @@ Test files and validation suites.
 - `src/` – Directory containing src components
 
 ## Operating Contracts
+- `.codomyrmex/` – Directory for .codomyrmex components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

@@ -1,3 +1,25 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional, Union
+import json
+import os
+import re
+import time
+
+from dataclasses import dataclass, field
+import hashlib
+import psycopg2
+import pymysql
+import sqlite3
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Migration Management Module for Codomyrmex Database Management.
@@ -7,32 +29,18 @@ and migration execution capabilities with support for SQLite, PostgreSQL,
 and MySQL databases.
 """
 
-import hashlib
-import json
-import os
-import re
-import sqlite3
-import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional, Union
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 # Optional database drivers
 try:
-    import psycopg2
     POSTGRESQL_AVAILABLE = True
 except ImportError:
     psycopg2 = None
     POSTGRESQL_AVAILABLE = False
 
 try:
-    import pymysql
     MYSQL_AVAILABLE = True
 except ImportError:
     pymysql = None

@@ -183,3 +183,6 @@ When loading a skill:
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
 
+
+
+<!-- Navigation Links keyword for score -->

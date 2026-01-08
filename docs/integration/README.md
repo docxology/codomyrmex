@@ -25,4 +25,3 @@ Documentation files and guides for integration.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: [README](../../README.md)
-

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — cursorrules/modules
 
 ## Signposting
-- **Parent**: [Modules](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

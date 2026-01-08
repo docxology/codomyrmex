@@ -222,7 +222,7 @@ If you encounter issues:
 ## Related Resources
 
 - **[Basic Example](example_basic.py)** - Comprehensive logging example
-- **[Logging Documentation](../../src/codomyrmex/logging_monitoring/README.md)** - Full API documentation
+- **[Logging Documentation](../../../src/codomyrmex/logging_monitoring/README.md)** - Full API documentation
 - **[Configuration Guide](../../docs/)** - Documentation site
 - **[Best Practices](../BEST_PRACTICES.md)** - Example best practices
 

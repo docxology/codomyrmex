@@ -1,10 +1,14 @@
+from pathlib import Path
+from typing import Optional
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix common documentation issues intelligently."""
 
-import os
-import re
-from pathlib import Path
-from typing import Optional
 
 def calculate_correct_path(from_file: Path, to_file: Path) -> str:
     """Calculate correct relative path."""

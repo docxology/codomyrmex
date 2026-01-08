@@ -1,3 +1,19 @@
+from pathlib import Path
+from typing import Any, Dict, Optional, Union, List
+import argparse
+import json
+import sys
+import time
+
+from contextlib import contextmanager
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, LogContext
+
+
+
+
+
+
 """
 Shared utilities for Codomyrmex orchestrator scripts.
 
@@ -5,16 +21,8 @@ This module provides common functions and patterns used across all
 orchestrator scripts to ensure consistency and reduce code duplication.
 """
 
-import json
-import sys
-import time
-import argparse
-from pathlib import Path
-from typing import Any, Dict, Optional, Union, List
-from contextlib import contextmanager
 
 # Import logging setup
-from codomyrmex.logging_monitoring.logger_config import get_logger, LogContext
 
 logger = get_logger(__name__)
 

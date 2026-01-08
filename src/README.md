@@ -1,10 +1,9 @@
 # src
 
 ## Signposting
-- **Parent**: [Repository Root](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [codomyrmex](codomyrmex/README.md)
-    - [template](template/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -20,23 +19,8 @@ Hosts core source code and agent-enabled services for the Codomyrmex platform.
 - `SPEC.md` – File
 - `__init__.py` – File
 - `codomyrmex/` – Subdirectory
-- `template/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex. import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

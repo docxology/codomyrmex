@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/logistics/orchestration/project/templates/doc_templates
 
 ## Signposting
-- **Parent**: [templates](../AGENTS.md)
+- **Parent**: [Doc Templates](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

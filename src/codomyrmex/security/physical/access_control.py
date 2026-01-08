@@ -1,10 +1,18 @@
-"""Physical access control systems."""
-
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Physical access control systems."""
+
+
 
 logger = get_logger(__name__)
 
@@ -109,5 +117,6 @@ def revoke_access(
     if access_control is None:
         access_control = AccessControlSystem()
     return access_control.revoke_access(user_id, resource)
+
 
 

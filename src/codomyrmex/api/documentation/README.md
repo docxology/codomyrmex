@@ -1,7 +1,7 @@
 # documentation
 
 ## Signposting
-- **Parent**: [documentation](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -28,17 +28,3 @@ Documentation files and guides for documentation.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [api](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.api.documentation import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

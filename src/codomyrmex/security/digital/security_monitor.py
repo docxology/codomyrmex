@@ -1,19 +1,30 @@
+from datetime import datetime, timezone
+from typing import Any, Callable, Optional
+import json
+import logging
+import os
+import re
+import sys
+import time
+
+from dataclasses import dataclass, field
+from enum import Enum
+import hashlib
+import threading
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Security Monitor for Codomyrmex Security Audit Module.
 
 Provides real-time security monitoring, alerting, and audit logging capabilities.
 """
 
-import json
-import os
-import re
-import sys
-import threading
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Callable, Optional
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -23,11 +34,9 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 
@@ -296,7 +305,6 @@ class SecurityMonitor:
         critical_files = ["/etc/passwd", "/etc/hosts", "/etc/resolv.conf"]
         
         try:
-            import hashlib
             
             if not hasattr(self, '_file_hashes'):
                 self._file_hashes = {}

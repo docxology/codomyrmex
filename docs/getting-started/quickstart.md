@@ -317,7 +317,7 @@ EOF
 
 ---
 
-**📝 Documentation Status**: ✅ **Verified & Signed** | _Last reviewed: January 2025_ | _Maintained by: Codomyrmex Documentation Team_ | _Version: v0.1.0_
+**📝 Documentation Status**: ✅ **Verified & Signed** | _Last reviewed: January 2026_ | _Maintained by: Codomyrmex Documentation Team_ | _Version: v0.1.0_
 
 ## 🎓 Common Workflows
 
@@ -462,7 +462,7 @@ uv run python -c "import matplotlib; print(matplotlib.get_backend())"
 
 ### **Next Steps**
 
-1. **🎮 [Interactive Examples](../../scripts/examples/README.md)** - Try hands-on demonstrations
+1. **🎮 [Interactive Examples](../examples/basic-examples.md)** - Try hands-on demonstrations
 2. **📚 [Full Documentation](../README.md)** - Complete documentation hub
 3. **🏗️ [Architecture Guide](../project/architecture.md)** - Understand system design
 4. **🤝 [Contributing Guide](../project/contributing.md)** - Join development
@@ -486,7 +486,7 @@ cd ../integration && ./ai-enhanced-analysis.sh
 
 ### **Dive Deeper**
 
-1. **🎮 [Interactive Examples](../../scripts/examples/README.md)** - Hands-on demonstrations
+1. **🎮 [Interactive Examples](../examples/basic-examples.md)** - Hands-on demonstrations
 2. **📖 [Module Overview](../modules/overview.md)** - Understand the module system
 3. **🎯 [Tutorials](tutorials/)** - Step-by-step guides for specific tasks
 4. **🔗 [Module Relationships](../modules/relationships.md)** - How modules work together
@@ -553,4 +553,4 @@ if result["status"] == "success":
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

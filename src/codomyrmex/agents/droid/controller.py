@@ -1,24 +1,30 @@
-"""Droid controller and configuration utilities."""
-
-from __future__ import annotations
-
+from collections.abc import Iterable
+from pathlib import Path
+from typing import Any, Callable
 import json
 import os
 import time
-from collections.abc import Iterable
+
+from __future__ import annotations
 from dataclasses import asdict, dataclass, replace
 from enum import Enum
-from pathlib import Path
+from performance import monitor_performance, performance_context
 from threading import RLock
-from typing import Any, Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+"""Droid controller and configuration utilities."""
+
+
+
 
 logger = get_logger(__name__)
 
 
 try:
-    from performance import monitor_performance, performance_context
 except ImportError:  # pragma: no cover
 
     def monitor_performance(*_args, **_kwargs):  # type: ignore

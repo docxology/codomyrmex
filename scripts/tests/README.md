@@ -1,9 +1,9 @@
-# testing
+# tests
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [output](output/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -29,6 +29,9 @@ Test files and validation suites.
 - `test_jules_functionality.py` – File
 - `test_jules_real_task.py` – File
 - `test_summary.py` – File
+- `testing_AGENTS.md` – File
+- `testing_README.md` – File
+- `testing_SPEC.md` – File
 - `verify_modular_testing.py` – File
 
 ## Navigation
@@ -36,4 +39,3 @@ Test files and validation suites.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../README.md)
-

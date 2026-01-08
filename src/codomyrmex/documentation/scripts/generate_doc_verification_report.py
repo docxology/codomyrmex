@@ -1,11 +1,15 @@
+from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Generate comprehensive documentation verification report."""
 
-import os
-import re
-from pathlib import Path
-from collections import defaultdict
-from datetime import datetime
 
 def analyze_all_docs(base_path: Path) -> dict:
     """Analyze all documentation files."""

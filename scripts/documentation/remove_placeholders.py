@@ -30,3 +30,4 @@ if __name__ == "__main__":
     except AttributeError:
         print(f"Module remove_placeholders does not have a main function or failed to execute.")
         sys.exit(1)
+

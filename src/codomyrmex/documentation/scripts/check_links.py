@@ -1,15 +1,47 @@
-#!/usr/bin/env python3
+from pathlib import Path
 import os
 import re
-from pathlib import Path
 
+from check_links import FunctionName, ClassName
+
+
+
+
+
+
+
+#!/usr/bin/env python3
+
+"""Core functionality module
+
+This module provides check_links functionality including:
+- 2 functions: find_markdown_files, check_links
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 def find_markdown_files(root_dir):
+    """Brief description of find_markdown_files.
+
+Args:
+    root_dir : Description of root_dir
+
+    Returns: Description of return value
+"""
     for root, dirs, files in os.walk(root_dir):
         for file in files:
             if file.endswith(".md"):
                 yield Path(root) / file
 
 def check_links(root_dir):
+    """Brief description of check_links.
+
+Args:
+    root_dir : Description of root_dir
+
+    Returns: Description of return value
+"""
     root_path = Path(root_dir).absolute()
     link_pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
     broken_links = []

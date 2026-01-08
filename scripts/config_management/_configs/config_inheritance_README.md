@@ -418,5 +418,5 @@ def load_inherited_config(config_path: str) -> dict:
 ---
 
 **Status**: Example Configuration
-**Last Updated**: December 2025
+**Last Updated**: January 2026
 **Compatibility**: Any configuration loader with inheritance support

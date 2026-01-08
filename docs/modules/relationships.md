@@ -12,28 +12,48 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 | **`terminal_interface`** | Rich terminal interactions | Rich, prompt-toolkit | None | Application modules |
 | **`config_management`** | Configuration management | PyYAML, configparser | logging_monitoring | All modules |
 | **`database_management`** | Data persistence | SQLAlchemy, asyncpg | logging_monitoring | All modules |
-| **`language_models`** | LLM infrastructure | OpenAI, Anthropic | logging_monitoring, model_context_protocol | AI modules |
+| **`llm`** | LLM infrastructure | OpenAI, Anthropic, Ollama | logging_monitoring, model_context_protocol | AI modules |
 | **`performance`** | Performance monitoring | psutil, cProfile | logging_monitoring | All modules |
-| **`ai_code_editing`** | AI-powered code generation/refactoring | OpenAI, Anthropic | logging_monitoring, environment_setup, language_models | All modules |
+| **`metrics`** | Metrics collection and reporting | prometheus_client | logging_monitoring | All modules |
+| **`coding`** | Code execution & review | subprocess, security | logging_monitoring | All modules |
 | **`data_visualization`** | Charting and plotting utilities | matplotlib, seaborn | logging_monitoring | All modules |
-| **`static_analysis`** | Code quality and security analysis | pylint, flake8, bandit | logging_monitoring | build_synthesis, security_audit |
+| **`static_analysis`** | Code quality and security analysis | pylint, flake8, bandit | logging_monitoring | build_synthesis, security |
 | **`pattern_matching`** | Code analysis and pattern recognition | cased/kit | logging_monitoring, environment_setup | All modules |
-| **`code`** | Secure code execution | Docker | logging_monitoring | All modules |
-| **`code_review`** | Automated code review | AI providers | logging_monitoring, ai_code_editing, static_analysis | All modules |
-| **`security_audit`** | Security scanning | bandit, semgrep, cryptography | logging_monitoring, static_analysis | All modules |
-| **`llm/ollama`** | Local LLM integration | Ollama | logging_monitoring, model_context_protocol | AI modules |
+| **`security`** | Security scanning and threat modeling | bandit, semgrep, cryptography | logging_monitoring, static_analysis | All modules |
+| **`scrape`** | Web scraping and content extraction | BeautifulSoup, requests | logging_monitoring | All modules |
+| **`documents`** | Document processing and management | parsers, extractors | logging_monitoring | All modules |
+| **`cache`** | Caching infrastructure | redis, memory | logging_monitoring | All modules |
+| **`compression`** | Data compression | zlib, gzip, lz4 | None | All modules |
+| **`encryption`** | Encryption utilities | cryptography | logging_monitoring | All modules |
+| **`networking`** | Network utilities | aiohttp, requests | logging_monitoring | All modules |
+| **`serialization`** | Data serialization | json, yaml, msgpack | None | All modules |
+| **`validation`** | Data validation | pydantic, jsonschema | logging_monitoring | All modules |
 | **`build_synthesis`** | Build automation and scaffolding | build tools | static_analysis, logging_monitoring | All modules |
 | **`git_operations`** | Git workflow automation | GitPython | logging_monitoring | All modules |
 | **`documentation`** | Documentation generation | Docusaurus | All modules | All modules |
-| **`api_documentation`** | API documentation generation | OpenAPI, code analysis | logging_monitoring, static_analysis | All modules |
+| **`api`** | API infrastructure | OpenAPI, FastAPI | logging_monitoring, static_analysis | All modules |
 | **`ci_cd_automation`** | CI/CD pipeline management | Docker, Kubernetes | logging_monitoring, build_synthesis, containerization | All modules |
 | **`containerization`** | Container management | Docker, Kubernetes | logging_monitoring | ci_cd_automation, build_synthesis |
-| **`project_orchestration`** | Workflow orchestration | All modules | logging_monitoring, all modules | Application modules |
+| **`logistics`** | Orchestration and scheduling | schedulers | logging_monitoring, all modules | Application modules |
+| **`cloud`** | Cloud integrations | cloud SDKs | logging_monitoring, config_management | All modules |
+| **`auth`** | Authentication | OAuth, JWT | logging_monitoring | All modules |
 | **`system_discovery`** | System exploration | introspection | logging_monitoring | Application modules |
 | **`cli`** | Command-line interface | click, argparse | logging_monitoring, all modules | Users |
+| **`website`** | Website generation | Jinja2, Flask | logging_monitoring | Users |
 | **`module_template`** | Module creation template | None | None | Developers |
-| **`spatial`** | 3D modeling and visualization | Open3D, Trimesh | logging_monitoring | Specialized use cases |
+| **`events`** | Event system and pub/sub | asyncio | logging_monitoring | All modules |
+| **`plugin_system`** | Plugin architecture | importlib | logging_monitoring | All modules |
+| **`agents`** | Agentic framework integrations | AI providers | logging_monitoring, llm | All modules |
+| **`ide`** | IDE integrations | IDE APIs | logging_monitoring, agents | Developers |
+| **`cerebrum`** | Case-based reasoning | numpy, scipy | logging_monitoring | AI modules |
+| **`fpf`** | Functional Programming Framework | None | logging_monitoring | All modules |
+| **`skills`** | Skills framework | None | logging_monitoring, agents | All modules |
+| **`spatial`** | 3D/4D modeling and visualization | Open3D, Trimesh | logging_monitoring | Specialized use cases |
 | **`physical_management`** | Physical system simulation | Physics engines | logging_monitoring | Specialized use cases |
+| **`utils`** | Common utilities | None | None | All modules |
+| **`tools`** | Utility tools | None | logging_monitoring | All modules |
+| **`templating`** | Template engine | Jinja2 | None | All modules |
+| **`tests`** | Test infrastructure | pytest | All modules | Developers |
 
 ## 🔄 Core Data Flow Patterns
 
@@ -483,4 +503,4 @@ This comprehensive integration guide shows how Codomyrmex modules work together 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

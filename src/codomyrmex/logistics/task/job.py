@@ -1,11 +1,20 @@
+from datetime import datetime
+from typing import Any, Optional
+
+from dataclasses import dataclass, field
+from enum import Enum
+import uuid
+
+
+
+
+
+
+
 """
 Job data structures for queue module.
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any, Optional
 
 
 class JobStatus(Enum):
@@ -36,7 +45,6 @@ class Job:
     def __post_init__(self):
         """Initialize job after creation."""
         if self.job_id is None:
-            import uuid
             self.job_id = str(uuid.uuid4())
         if self.created_at is None:
             self.created_at = datetime.now()

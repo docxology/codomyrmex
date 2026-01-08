@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/spatial/modeling_3d
 
 ## Signposting
-- **Parent**: [Modeling 3D](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

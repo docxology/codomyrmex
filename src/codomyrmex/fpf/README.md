@@ -1,9 +1,9 @@
 # fpf
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - [tests](tests/README.md)
+    - None
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Functional interface for working with the First Principles Framework specification. Transforms the static FPF markdown specification into a machine-readable, queryable, and exportable format for use in prompt/context engineering and other applications. Provides fetching, parsing, extraction, indexing, search, export, and visualization capabilities.
+Module components and implementation for fpf..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -36,7 +36,6 @@ Functional interface for working with the First Principles Framework specificati
 - `section_importer.py` – File
 - `section_manager.py` – File
 - `term_analyzer.py` – File
-- `tests/` – Subdirectory
 - `visualizer.py` – File
 - `visualizer_png.py` – File
 
@@ -45,37 +44,3 @@ Functional interface for working with the First Principles Framework specificati
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.fpf import FPFClient, FPFParser, FPFExporter
-
-# Use high-level client
-client = FPFClient()
-spec = client.load_from_file("FPF-Spec.md")
-
-# Search for patterns
-patterns = client.search("testing", filters={"status": "active"})
-print(f"Found {len(patterns)} patterns")
-
-# Get specific pattern
-pattern = client.get_pattern("T001")
-print(f"Pattern: {pattern.name}")
-
-# Build context for prompt engineering
-context = client.build_context(pattern_id="T001")
-print(f"Context length: {len(context)}")
-
-# Export to JSON
-client.export_json("fpf_spec.json")
-
-# Or use lower-level components
-parser = FPFParser()
-spec = parser.parse_spec(content)
-exporter = FPFExporter()
-exporter.export_json(spec, output_path)
-```
-

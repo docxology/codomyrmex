@@ -1,0 +1,11 @@
+flowchart TD
+    Start([Start]) --> Clone[git clone]
+    Clone --> Branch[git checkout -b feature]
+    Branch --> Code[Write Code]
+    Code --> Add[git add .]
+    Add --> Commit[git commit -m 'message']
+    Commit --> Push[git push origin feature]
+    Push --> PR[Create Pull Request]
+    PR --> Review[Code Review]
+    Review --> Merge[Merge to main]
+    Merge --> End([End])

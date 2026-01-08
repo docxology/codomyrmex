@@ -1,11 +1,15 @@
+from pathlib import Path
+from typing import List, Tuple
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Validate all internal links in README.md and AGENTS.md files.
 """
 
-import re
-from pathlib import Path
-from typing import List, Tuple
 
 REPO_ROOT = Path(__file__).parent.parent.parent
 

@@ -1,17 +1,34 @@
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+
+from abc import ABC, abstractmethod
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
+import matplotlib
+import matplotlib.colors
+import matplotlib.pyplot as plt
+import networkx as nx
+import networkx as nx
+import numpy as np
+
+from codomyrmex.cerebrum.exceptions import VisualizationError
+from codomyrmex.cerebrum.visualization_theme import (
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
 """Base visualization classes for modular, reusable visualization components.
 
 This module provides base classes for network, chart, and heatmap visualizations
 with shared utilities for legends, axes, titles, color mapping, and node sizing.
 """
 
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 if TYPE_CHECKING:
-    import networkx as nx
 else:
     try:
-        import networkx as nx
     except ImportError:
         # Create a dummy type for nx when not available
         class _DummyGraph:
@@ -22,12 +39,6 @@ else:
         nx = _DummyNX()
 
 try:
-    import matplotlib
-    import matplotlib.colors
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from matplotlib.axes import Axes
-    from matplotlib.figure import Figure
 
     HAS_MATPLOTLIB = True
 except ImportError:
@@ -35,12 +46,9 @@ except ImportError:
     Figure = Any
     Axes = Any
 
-from codomyrmex.cerebrum.exceptions import VisualizationError
-from codomyrmex.cerebrum.visualization_theme import (
     VisualizationTheme,
     get_default_theme,
 )
-from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

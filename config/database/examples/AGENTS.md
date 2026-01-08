@@ -1,36 +1,33 @@
 # Codomyrmex Agents — config/database/examples
 
 ## Signposting
-- **Parent**: [database](../AGENTS.md)
-- **Self**: [examples Agents](AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
 - **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Example database configurations demonstrating best practices for database connections, connection pools, migrations, and backups across different database types.
+Example implementations and demonstrations.
 
 ## Active Components
-
-- `README.md` – Examples documentation
-- `sqlite-example.yaml` – Example SQLite configuration
-- `postgresql-example.yaml` – Example PostgreSQL configuration
-- `redis-example.yaml` – Example Redis configuration
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `postgresql-example.yaml` – Project file
+- `redis-example.yaml` – Project file
+- `sqlite-example.yaml` – Project file
 
 ## Operating Contracts
-
-- Maintain alignment between examples and actual configuration templates.
-- Ensure examples demonstrate best practices for each database type.
-- Use environment variable references for all credentials.
-- Never include actual database passwords in examples.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
-- **Parent**: [database](../AGENTS.md)
-- **Project Root**: [README](../../../README.md)
-
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [database](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

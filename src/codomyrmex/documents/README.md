@@ -1,16 +1,14 @@
 # documents
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [core](core/README.md)
-    - [docs](docs/README.md)
     - [formats](formats/README.md)
     - [metadata](metadata/README.md)
     - [models](models/README.md)
     - [search](search/README.md)
     - [templates](templates/README.md)
-    - [tests](tests/README.md)
     - [transformation](transformation/README.md)
     - [utils](utils/README.md)
 - **Key Artifacts**:
@@ -21,7 +19,7 @@
 
 ## Overview
 
-Robust, abstractable methods for reading and writing various document formats. Handles the mechanics of document I/O operations with support for multiple formats (markdown, JSON, PDF, YAML, XML, CSV, HTML, text), document operations (read, write, parse, validate, convert, merge, split), metadata extraction, document search and indexing, and document versioning.
+Documentation files and guides for documents.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -31,7 +29,6 @@ Robust, abstractable methods for reading and writing various document formats. H
 - `__init__.py` – File
 - `config.py` – File
 - `core/` – Subdirectory
-- `docs/` – Subdirectory
 - `exceptions.py` – File
 - `formats/` – Subdirectory
 - `metadata/` – Subdirectory
@@ -39,7 +36,6 @@ Robust, abstractable methods for reading and writing various document formats. H
 - `requirements.txt` – File
 - `search/` – Subdirectory
 - `templates/` – Subdirectory
-- `tests/` – Subdirectory
 - `transformation/` – Subdirectory
 - `utils/` – Subdirectory
 
@@ -48,40 +44,3 @@ Robust, abstractable methods for reading and writing various document formats. H
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.documents import (
-    read_document,
-    write_document,
-    parse_document,
-    convert_document,
-)
-
-# Read a document
-doc = read_document("example.md", format="markdown")
-print(f"Content: {doc.content[:100]}...")
-
-# Write a document
-write_document(
-    content="# Hello World\n\nThis is a test.",
-    path="output.md",
-    format="markdown"
-)
-
-# Parse document
-parsed = parse_document("example.json", format="json")
-print(f"Parsed data: {parsed.data}")
-
-# Convert between formats
-convert_document(
-    input_path="example.md",
-    output_path="example.html",
-    input_format="markdown",
-    output_format="html"
-)
-```
-

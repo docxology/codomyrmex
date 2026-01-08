@@ -1,3 +1,13 @@
+from pathlib import Path
+from typing import List, Dict, Any
+import argparse
+import json
+import subprocess
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Dependency Checker Tool
@@ -5,11 +15,6 @@ Dependency Checker Tool
 Validates project dependencies and checks for vulnerabilities.
 """
 
-import argparse
-import subprocess
-import sys
-from pathlib import Path
-from typing import List, Dict, Any
 
 
 def run_command(cmd: List[str]) -> tuple[bool, str, str]:
@@ -101,7 +106,6 @@ def check_security() -> Dict[str, Any]:
         ])
         if success:
             try:
-                import json
                 vulnerabilities = json.loads(stdout)
                 security["vulnerabilities"].extend(vulnerabilities)
             except:

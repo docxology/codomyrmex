@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/ci_cd_automation
+# Codomyrmex Agents — scripts/ci_cd_automation/examples
 
 ## Signposting
-- **Parent**: [Ci Cd Automation](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [optimization_data](optimization_data/AGENTS.md)
@@ -28,6 +28,8 @@ Example implementations and demonstrations.
 - `pipeline_reports/` – Directory containing pipeline_reports components
 
 ## Operating Contracts
+- `.pipelines/` – Directory for .pipelines components.
+- `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
@@ -35,5 +37,5 @@ Example implementations and demonstrations.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../README.md) - Main project documentation
+- **📁 Parent Directory**: [ci_cd_automation](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

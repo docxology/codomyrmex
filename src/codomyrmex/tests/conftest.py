@@ -1,15 +1,26 @@
+from pathlib import Path
+import json
+import os
+import subprocess
+import sys
+import tempfile
+
+from src.main import main
+import nonexistent_module
+import pytest
+import yaml
+
+from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+
+
+
+
+
 """Shared pytest fixtures and configuration for Codomyrmex testing."""
 
-import pytest
-import sys
-import os
-import tempfile
-import subprocess
-import json
-from pathlib import Path
 
 try:
-    import yaml
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
@@ -128,7 +139,6 @@ def setup_test_environment():
 def real_logger_fixture(tmp_path):
     """Create a real logger instance with actual file output."""
     try:
-        from codomyrmex.logging_monitoring import get_logger, setup_logging
     except ImportError:
         pytest.skip("logging_monitoring module not available")
 
@@ -167,7 +177,6 @@ if __name__ == "__main__":
     (project_dir / "tests" / "__init__.py").write_text("")
     (project_dir / "tests" / "test_main.py").write_text("""
 def test_main():
-    from src.main import main
     # Test would go here
     assert True
 """)
@@ -220,7 +229,6 @@ def problematic_function():
     # Code with import issues
     import_error_code = tmp_path / "import_error.py"
     import_error_code.write_text("""
-import nonexistent_module
 print("This should not execute")
 """)
     samples["import_error"] = import_error_code

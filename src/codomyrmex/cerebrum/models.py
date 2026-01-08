@@ -1,10 +1,18 @@
-"""Model base classes and implementations for CEREBRUM."""
+from typing import Any, Optional
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+"""Model base classes and implementations for CEREBRUM."""
+
+
 
 logger = get_logger(__name__)
 
@@ -107,5 +115,6 @@ class ModelBase(ABC):
             "name": self.name,
             "config": self.config,
         }
+
 
 

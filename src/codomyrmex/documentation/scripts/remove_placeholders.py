@@ -1,10 +1,14 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Remove placeholder content from README.md files.
 """
 
-import re
-from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent.parent
 

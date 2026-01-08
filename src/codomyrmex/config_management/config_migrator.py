@@ -1,3 +1,17 @@
+from typing import Dict, List, Any, Optional, Callable, Tuple
+import copy
+import logging
+
+from dataclasses import dataclass, field
+from enum import Enum
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Configuration Migrator for Codomyrmex
 
@@ -5,17 +19,11 @@ This module provides configuration migration capabilities to handle version upgr
 deprecated field handling, and automatic configuration updates.
 """
 
-import copy
-from typing import Dict, List, Any, Optional, Callable, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 

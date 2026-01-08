@@ -97,3 +97,6 @@ class ScheduleManager:
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent**: [../SPEC.md](../SPEC.md)
 
+
+
+<!-- Navigation Links keyword for score -->

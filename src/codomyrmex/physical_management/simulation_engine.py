@@ -1,8 +1,16 @@
+from typing import Any, Optional
+import math
+
+from dataclasses import dataclass, field
+
+
+
+
+
+
+
 """Physical simulation engine for object interactions."""
 
-import math
-from dataclasses import dataclass, field
-from typing import Any, Optional
 
 
 @dataclass

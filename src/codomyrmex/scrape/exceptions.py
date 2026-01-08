@@ -78,3 +78,4 @@ class FirecrawlError(ScrapeError):
             self.context["firecrawl_error_type"] = type(firecrawl_error).__name__
             self.context["firecrawl_error_message"] = str(firecrawl_error)
 
+

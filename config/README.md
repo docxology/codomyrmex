@@ -1,7 +1,7 @@
 # config
 
 ## Signposting
-- **Parent**: [Repository Root](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [api](api/README.md)
     - [cache](cache/README.md)
@@ -20,18 +20,18 @@
 
 ## Overview
 
-Configuration templates, examples, and workflow definitions.
+Configuration templates and examples.
 
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
-- `api/` – API and service configuration
-- `cache/` – Cache configuration
-- `database/` – Database connection and configuration
+- `api/` – Subdirectory
+- `cache/` – Subdirectory
+- `database/` – Subdirectory
 - `examples/` – Subdirectory
-- `llm/` – LLM and AI model configuration
-- `monitoring/` – Monitoring and telemetry configuration
-- `security/` – Security and authentication configuration
+- `llm/` – Subdirectory
+- `monitoring/` – Subdirectory
+- `security/` – Subdirectory
 - `templates/` – Subdirectory
 - `workflows/` – Subdirectory
 
@@ -39,4 +39,3 @@ Configuration templates, examples, and workflow definitions.
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
-

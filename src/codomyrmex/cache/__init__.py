@@ -42,3 +42,4 @@ def get_cache(name: str = "default", backend: str = "in_memory") -> Cache:
     manager = CacheManager()
     return manager.get_cache(name, backend)
 
+

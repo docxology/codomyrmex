@@ -15,6 +15,8 @@
 Documentation files and guides for remediation_check.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `comprehensive_filepath_audit.html` – File
 - `comprehensive_filepath_audit.json` – File
 
@@ -23,4 +25,3 @@ Documentation files and guides for remediation_check.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [audit_results](../README.md)
 - **Project Root**: [README](../../../../README.md)
-

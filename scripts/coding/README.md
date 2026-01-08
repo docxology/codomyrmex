@@ -3,7 +3,9 @@
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [examples](examples/README.md)
+    - [review](review/README.md)
+    - [sandbox](sandbox/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -17,12 +19,19 @@ Automation and utility scripts.
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
+- `ai_code_editing_AGENTS.md` – File
+- `ai_code_editing_README.md` – File
+- `ai_code_editing_SPEC.md` – File
+- `code_review_AGENTS.md` – File
+- `code_review_README.md` – File
+- `code_review_SPEC.md` – File
+- `examples/` – Subdirectory
 - `orchestrate.py` – File
+- `review/` – Subdirectory
+- `sandbox/` – Subdirectory
 
-- `scripts/` – Subdirectory containing example implementations
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../README.md)
-

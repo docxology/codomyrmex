@@ -45,7 +45,7 @@ try:
     )
 except ImportError:
     # Fallback if running from different directory
-    sys.path.insert(0, str(Path(__file__).parent.parent))
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
     from _orchestrator_utils import (
         format_output,
         print_error,
@@ -146,7 +146,7 @@ Examples:
 
     if not args.command:
         parser.print_help()
-        return 1
+        return 0
 
     # Route to appropriate handler
     handlers = {

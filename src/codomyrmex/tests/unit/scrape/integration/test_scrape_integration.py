@@ -79,8 +79,21 @@ class TestScrapeIntegration:
         assert len(result.urls) == 1
 
 
+
+# Check if firecrawl-py is available
+try:
+    from firecrawl import Firecrawl
+    FIRECRAWL_AVAILABLE = True
+except ImportError:
+    FIRECRAWL_AVAILABLE = False
+
+
+@pytest.mark.skipif(not FIRECRAWL_AVAILABLE, reason="firecrawl-py not installed")
 class TestScrapeErrorHandling:
-    """Test error handling in integration scenarios."""
+    """Test error handling in integration scenarios.
+    
+    Requires firecrawl-py to be installed.
+    """
 
     @pytest.fixture
     def scraper(self):
@@ -103,4 +116,3 @@ class TestScrapeErrorHandling:
 
         with pytest.raises(ScrapeValidationError):
             scraper.scrape("not-a-url")
-

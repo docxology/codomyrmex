@@ -46,3 +46,4 @@ def detect_encoding(file_path: Path, sample_size: int = 8192) -> Optional[str]:
         return get_config().default_encoding
 
 
+

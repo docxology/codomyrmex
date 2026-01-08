@@ -1,15 +1,33 @@
-# LLM Examples
+# examples
+
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [examples](examples/README.md)
+    - [ollama](ollama/README.md)
+    - [output](output/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This directory contains example implementations demonstrating the LLM module functionality.
+Example implementations and demonstrations.
 
-## Contents
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.json` – File
+- `config.yaml` – File
+- `example_basic.py` – File
+- `examples/` – Subdirectory
+- `examples_README.md` – File
+- `ollama/` – Subdirectory
 
-Example files for LLM module integration and usage.
-
-## See Also
-
-- [Module Documentation](../README.md)
-- [Module Specification](../SPEC.md)
-- [Module Agents Guide](../AGENTS.md)
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [llm](../README.md)
+- **Project Root**: [README](../../../README.md)

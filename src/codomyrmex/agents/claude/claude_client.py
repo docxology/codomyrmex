@@ -1,24 +1,30 @@
-"""Claude API client."""
-
-import time
 from typing import Any, Iterator, Optional
+import time
 
-try:
-    import anthropic
-except ImportError:
-    anthropic = None
+import anthropic
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
+from codomyrmex.agents.exceptions import ClaudeError
+from codomyrmex.agents.generic import APIAgentBase
+
+
+
+
+"""Claude API client."""
+
+
+try:
+except ImportError:
+    anthropic = None
+
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.exceptions import ClaudeError
-from codomyrmex.agents.generic import BaseAgent
 
 
-class ClaudeClient(BaseAgent):
+class ClaudeClient(APIAgentBase):
     """Client for interacting with Claude API."""
 
     def __init__(self, config: Optional[dict[str, Any]] = None):
@@ -28,12 +34,6 @@ class ClaudeClient(BaseAgent):
         Args:
             config: Optional configuration override
         """
-        if anthropic is None:
-            raise ClaudeError(
-                "anthropic package not installed. Install with: pip install anthropic"
-            )
-
-        agent_config = get_config()
         super().__init__(
             name="claude",
             capabilities=[
@@ -44,39 +44,16 @@ class ClaudeClient(BaseAgent):
                 AgentCapabilities.STREAMING,
                 AgentCapabilities.MULTI_TURN,
             ],
-            config=config or {},
+            api_key_config_key="claude_api_key",
+            model_config_key="claude_model",
+            timeout_config_key="claude_timeout",
+            max_tokens_config_key="claude_max_tokens",
+            temperature_config_key="claude_temperature",
+            client_class=anthropic,
+            client_init_func=lambda api_key: anthropic.Anthropic(api_key=api_key),
+            error_class=ClaudeError,
+            config=config,
         )
-
-        api_key = (
-            config.get("claude_api_key")
-            if config
-            else agent_config.claude_api_key
-        )
-        if not api_key:
-            raise ClaudeError("Claude API key not configured")
-
-        self.model = (
-            config.get("claude_model")
-            if config
-            else agent_config.claude_model
-        )
-        self.timeout = (
-            config.get("claude_timeout")
-            if config
-            else agent_config.claude_timeout
-        )
-        self.max_tokens = (
-            config.get("claude_max_tokens")
-            if config
-            else agent_config.claude_max_tokens
-        )
-        self.temperature = (
-            config.get("claude_temperature")
-            if config
-            else agent_config.claude_temperature
-        )
-
-        self.client = anthropic.Anthropic(api_key=api_key)
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """
@@ -122,7 +99,11 @@ class ClaudeClient(BaseAgent):
                     if hasattr(block, "text"):
                         content += block.text
 
-            tokens_used = response.usage.input_tokens + response.usage.output_tokens
+            # Extract tokens using base class helper
+            input_tokens, output_tokens = self._extract_tokens_from_response(
+                response, "anthropic"
+            )
+            tokens_used = input_tokens + output_tokens
 
             self.logger.info(
                 "Claude API request completed",
@@ -130,21 +111,20 @@ class ClaudeClient(BaseAgent):
                     "agent": "claude",
                     "model": self.model,
                     "execution_time": execution_time,
-                    "input_tokens": response.usage.input_tokens,
-                    "output_tokens": response.usage.output_tokens,
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
                     "total_tokens": tokens_used,
                     "content_length": len(content),
                     "stop_reason": response.stop_reason,
                 },
             )
 
-            return AgentResponse(
+            return self._build_agent_response(
                 content=content,
                 metadata={
-                    "model": self.model,
                     "usage": {
-                        "input_tokens": response.usage.input_tokens,
-                        "output_tokens": response.usage.output_tokens,
+                        "input_tokens": input_tokens,
+                        "output_tokens": output_tokens,
                     },
                     "stop_reason": response.stop_reason,
                 },
@@ -154,39 +134,10 @@ class ClaudeClient(BaseAgent):
 
         except anthropic.APIError as e:
             execution_time = time.time() - start_time
-            status_code = getattr(e, "status_code", None)
-            self.logger.error(
-                "Claude API error",
-                exc_info=True,
-                extra={
-                    "agent": "claude",
-                    "model": self.model,
-                    "error": str(e),
-                    "status_code": status_code,
-                    "execution_time": execution_time,
-                },
-            )
-            raise ClaudeError(
-                f"Claude API error: {str(e)}",
-                api_error=str(e),
-                status_code=status_code,
-            ) from e
+            self._handle_api_error(e, execution_time, anthropic.APIError)
         except Exception as e:
             execution_time = time.time() - start_time
-            self.logger.error(
-                "Unexpected error in Claude API request",
-                exc_info=True,
-                extra={
-                    "agent": "claude",
-                    "model": self.model,
-                    "error": str(e),
-                    "execution_time": execution_time,
-                },
-            )
-            raise ClaudeError(
-                f"Unexpected error: {str(e)}",
-                api_error=str(e),
-            ) from e
+            self._handle_api_error(e, execution_time)
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """

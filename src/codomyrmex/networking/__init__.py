@@ -29,3 +29,4 @@ def get_http_client() -> HTTPClient:
     """Get an HTTP client instance."""
     return HTTPClient()
 
+

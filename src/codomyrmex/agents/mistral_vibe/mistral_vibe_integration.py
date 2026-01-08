@@ -1,8 +1,15 @@
-"""Mistral Vibe integration adapters for Codomyrmex modules."""
-
 from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter, AgentInterface
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.core import AgentRequest
+
+
+
+"""Mistral Vibe integration adapters for Codomyrmex modules."""
+
+
 
 
 class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
@@ -22,7 +29,6 @@ class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Generated code
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Build prompt with language context
         full_prompt = f"Generate {language} code: {prompt}"
@@ -79,7 +85,6 @@ class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Completion result dictionary
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Convert messages to prompt
         prompt_parts = []
@@ -133,7 +138,6 @@ class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Analysis result dictionary
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Use Mistral Vibe to analyze or validate code
         prompt = f"Analyze this {language} code:\n\n```{language}\n{code}\n```"

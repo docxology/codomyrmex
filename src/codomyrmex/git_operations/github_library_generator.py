@@ -1,3 +1,18 @@
+from datetime import datetime
+from typing import Optional
+import argparse
+import os
+import sys
+
+import requests
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 GitHub Repository Library Generator
@@ -6,14 +21,8 @@ This script automatically generates a repository library file by fetching
 repositories from the GitHub API for a specified user.
 """
 
-import os
-import sys
-from datetime import datetime
-from typing import Optional
 
-import requests
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -328,7 +337,6 @@ USE|vinta|awesome-python|https://github.com/vinta/awesome-python.git|Awesome Pyt
 
 def main():
     """Main function for command-line usage."""
-    import argparse
 
     parser = argparse.ArgumentParser(
         description="Generate repository library from GitHub API",

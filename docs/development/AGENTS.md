@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/development
 
 ## Signposting
-- **Parent**: [Development](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

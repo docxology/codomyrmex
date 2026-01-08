@@ -1,26 +1,36 @@
-"""
-Comprehensive validation logic for Codomyrmex examples.
-
-This module contains the core logic for validating examples, moved from the standalone script.
-"""
-
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
 import argparse
 import ast
 import concurrent.futures
-import importlib.util
 import json
 import os
 import re
 import subprocess
 import sys
 import time
+
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+import importlib.util
+import yaml
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.utils.cli_helpers import (
+
+
+
+
+
+
+"""
+Comprehensive validation logic for Codomyrmex examples.
+
+This module contains the core logic for validating examples, moved from the standalone script.
+"""
+
 
 # Use the new location for shared utilities
-from codomyrmex.utils.cli_helpers import (
     ensure_output_directory,
     format_output,
     print_error,
@@ -30,7 +40,6 @@ from codomyrmex.utils.cli_helpers import (
     validate_file_path,
     determine_language_from_file,
 )
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 logger = get_logger(__name__)
 
@@ -251,7 +260,6 @@ class ExamplesValidator:
         # basic check for yaml/json validity
         for config_file in path.glob("*.yaml"):
             try:
-                import yaml
                 with open(config_file, 'r') as f:
                     yaml.safe_load(f)
             except Exception as e:

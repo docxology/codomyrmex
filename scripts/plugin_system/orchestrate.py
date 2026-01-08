@@ -96,7 +96,7 @@ Examples:
 
     if not args.command:
         parser.print_help()
-        return 1
+        return 0
 
     # Route to appropriate handler
     handlers = {
@@ -114,4 +114,5 @@ Examples:
 
 if __name__ == "__main__":
     sys.exit(main())
+
 

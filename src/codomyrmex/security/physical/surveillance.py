@@ -1,10 +1,18 @@
-"""Physical surveillance monitoring."""
-
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Physical surveillance monitoring."""
+
+
 
 logger = get_logger(__name__)
 
@@ -80,5 +88,6 @@ def log_physical_event(
     if monitor is None:
         monitor = SurveillanceMonitor()
     return monitor.log_event(event_type, location, description, severity)
+
 
 

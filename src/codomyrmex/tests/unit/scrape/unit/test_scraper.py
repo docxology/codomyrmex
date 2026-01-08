@@ -62,12 +62,12 @@ class TestScraper:
         """Test initializing Scraper with config only (uses default adapter if available)."""
         config = ScrapeConfig(api_key="test-key")
         # This will try to create FirecrawlAdapter if firecrawl-py is available
-        # Otherwise will raise ScrapeValidationError
+        # Otherwise will raise ScrapeValidationError or ScrapeError
         try:
             scraper = Scraper(config=config)
             assert scraper.config == config
             assert scraper.adapter is not None
-        except ScrapeValidationError:
+        except (ScrapeValidationError, ScrapeError):
             # Expected if firecrawl-py is not installed
             pytest.skip("firecrawl-py not installed, cannot test default adapter")
 
@@ -83,7 +83,7 @@ class TestScraper:
             # If firecrawl-py is available, it will try to initialize
             # This will fail at validation
             pytest.skip("firecrawl-py may be available, cannot test error case")
-        except ScrapeValidationError:
+        except (ScrapeValidationError, ScrapeError):
             # Expected when no adapter can be created
             pass
 

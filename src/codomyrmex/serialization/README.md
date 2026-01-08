@@ -1,7 +1,7 @@
 # serialization
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Unified data serialization/deserialization with support for JSON, YAML, TOML, MessagePack, and other formats. Provides format-agnostic serialization interface with automatic format detection and custom serializer registration.
+Module components and implementation for serialization..
 
 ## Directory Contents
 - `README.md` – File
@@ -26,31 +26,3 @@ Unified data serialization/deserialization with support for JSON, YAML, TOML, Me
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.serialization import serialize, deserialize, Serializer, SerializationManager
-
-# Basic serialization
-data = {"name": "Alice", "age": 30}
-json_str = serialize(data, format="json")
-yaml_str = serialize(data, format="yaml")
-
-# Deserialization with auto-detection
-obj = deserialize(json_str)  # Auto-detects JSON
-obj = deserialize(yaml_str, format="yaml")  # Explicit format
-
-# Using Serializer directly
-serializer = Serializer(format="json")
-json_data = serializer.serialize(data)
-obj = serializer.deserialize(json_data)
-
-# Using SerializationManager
-manager = SerializationManager()
-json_str = manager.serialize(data, format="json")
-obj = manager.deserialize(json_str)  # Auto-detects format
-```
-

@@ -1,3 +1,24 @@
+from pathlib import Path
+from typing import Any, Optional
+import json
+
+from dataclasses import fields
+
+from codomyrmex.agents import  get_config, AgentRequest
+from codomyrmex.agents.claude import ClaudeClient
+from codomyrmex.agents.codex import CodexClient
+from codomyrmex.agents.droid import (
+from codomyrmex.agents.exceptions import (
+from codomyrmex.agents.gemini import GeminiClient
+from codomyrmex.agents.jules import JulesClient
+from codomyrmex.agents.opencode import OpenCodeClient
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.utils.cli_helpers import (
+
+
+
+
 """
 CLI Handlers for Agents Module
 
@@ -5,14 +26,7 @@ This module contains the logic for handling CLI commands for the agents module.
 It is intended to be called by the thin orchestrator script.
 """
 
-import json
-from dataclasses import fields
-from pathlib import Path
-from typing import Any, Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.agents.exceptions import (
     AgentError,
     ClaudeError,
     CodexError,
@@ -20,8 +34,6 @@ from codomyrmex.agents.exceptions import (
     JulesError,
     OpenCodeError,
 )
-from codomyrmex.agents import  get_config, AgentRequest
-from codomyrmex.utils.cli_helpers import (
     format_output,
     print_error,
     print_info,
@@ -32,32 +44,26 @@ from codomyrmex.utils.cli_helpers import (
 
 # Import agent clients
 try:
-    from codomyrmex.agents.jules import JulesClient
 except ImportError:
     JulesClient = None
 
 try:
-    from codomyrmex.agents.claude import ClaudeClient
 except ImportError:
     ClaudeClient = None
 
 try:
-    from codomyrmex.agents.codex import CodexClient
 except ImportError:
     CodexClient = None
 
 try:
-    from codomyrmex.agents.opencode import OpenCodeClient
 except ImportError:
     OpenCodeClient = None
 
 try:
-    from codomyrmex.agents.gemini import GeminiClient
 except ImportError:
     GeminiClient = None
 
 try:
-    from codomyrmex.agents.droid import (
         DroidController,
         create_default_controller,
     )

@@ -1,14 +1,22 @@
-from __future__ import annotations
-
-from dataclasses import dataclass
 from typing import Optional, List
 import logging
+
+from __future__ import annotations
+from dataclasses import dataclass
+
+from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
+
+
+
+
+
+
+
 
 # We define a minimal interface for the LLM to avoid circular hard dependencies 
 # or complex setup if the user hasn't configured 'codomyrmex.llm' yet.
 # In a real scenario, this would import from codomyrmex.llm.
 
-from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
 
 logger = logging.getLogger(__name__)
 

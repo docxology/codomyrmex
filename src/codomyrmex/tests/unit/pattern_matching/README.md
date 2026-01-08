@@ -1,9 +1,10 @@
 # pattern_matching
 
 ## Signposting
-- **Parent**: [pattern_matching](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [integration](integration/README.md)
+    - [unit](unit/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -15,24 +16,14 @@
 Test files and validation suites for pattern_matching.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `integration/` – Subdirectory
 - `test_pattern_matching.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.pattern_matching import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

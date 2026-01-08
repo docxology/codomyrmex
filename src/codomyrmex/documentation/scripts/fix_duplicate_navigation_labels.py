@@ -1,8 +1,12 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix duplicate navigation labels in AGENTS.md files."""
 
-import re
-from pathlib import Path
 
 def fix_duplicate_labels(content: str) -> str:
     """Fix duplicate navigation labels."""

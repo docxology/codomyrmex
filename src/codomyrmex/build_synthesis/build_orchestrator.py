@@ -1,3 +1,21 @@
+from pathlib import Path
+import os
+import os
+import shutil
+import shutil
+import subprocess
+import sys
+import sys
+
+from {source_path.stem} import main
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Build Orchestrator for Codomyrmex Build Synthesis.
@@ -6,10 +24,6 @@ This module provides build orchestration and synthesis capabilities for
 automating build processes and artifact generation.
 """
 
-import os
-import subprocess
-import sys
-from pathlib import Path
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,7 +32,6 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 logger = get_logger(__name__)
 
@@ -158,10 +171,7 @@ def _create_python_executable(source_path: Path, output_path: Path) -> bool:
     try:
         # Create a simple wrapper script
         wrapper_content = f"""#!/usr/bin/env python3
-import sys
-import os
 # sys.path.insert(0, os.path.dirname(__file__))  # Removed sys.path manipulation
-from {source_path.stem} import main
 if __name__ == "__main__":
     main()
 """
@@ -184,13 +194,11 @@ def _create_python_package(source_path: Path, output_path: Path) -> bool:
         # This would typically use setuptools or similar
         # For now, just copy the source
         if source_path.is_dir():
-            import shutil
 
             if output_path.exists():
                 shutil.rmtree(output_path)
             shutil.copytree(source_path, output_path)
         else:
-            import shutil
 
             shutil.copy2(source_path, output_path)
 

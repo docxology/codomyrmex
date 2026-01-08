@@ -12,7 +12,7 @@
 
 ## Overview
 
-Digital security including vulnerability scanning, encryption management, certificate validation, secrets detection, compliance checking, security analysis, monitoring, and reporting. Provides comprehensive digital security capabilities.
+Module components and implementation for digital..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -36,36 +36,3 @@ Digital security including vulnerability scanning, encryption management, certif
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.security.digital import (
-    VulnerabilityScanner,
-    SecretsDetector,
-    ComplianceChecker,
-    EncryptionManager,
-)
-
-# Scan for vulnerabilities
-scanner = VulnerabilityScanner()
-vulns = scanner.scan("src/")
-print(f"Vulnerabilities: {len(vulns)}")
-
-# Detect secrets
-detector = SecretsDetector()
-secrets = detector.scan_codebase("src/")
-print(f"Secrets found: {len(secrets)}")
-
-# Check compliance
-checker = ComplianceChecker()
-compliance = checker.check_compliance(standard="OWASP")
-print(f"Compliant: {compliance.passed}")
-
-# Manage encryption
-encryption = EncryptionManager()
-encrypted = encryption.encrypt("sensitive_data", algorithm="AES-256")
-```
-

@@ -1,7 +1,7 @@
-# Codomyrmex Agents — scripts/examples/integration
+# Codomyrmex Agents — scripts/documentation/integration
 
 ## Signposting
-- **Parent**: [Integration](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,7 +12,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Example implementations and demonstrations.
+Documentation files and guides for integration.
 
 ## Active Components
 - `README.md` – Project file
@@ -36,5 +36,5 @@ Example implementations and demonstrations.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
+- **📁 Parent Directory**: [documentation](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [README](../../../README.md) - Main project documentation

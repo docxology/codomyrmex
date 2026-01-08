@@ -1,3 +1,10 @@
+from pathlib import Path
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Bulk Fix Documentation Placeholders.
@@ -6,9 +13,6 @@ Replaces generic placeholders in SECURITY.md and AGENTS.md with more specific,
 albeit still generic, descriptions to clear "Placeholder" audits.
 """
 
-import os
-import re
-from pathlib import Path
 
 def fix_security_md(root_dir):
     """Replace [Brief Description] in SECURITY.md."""

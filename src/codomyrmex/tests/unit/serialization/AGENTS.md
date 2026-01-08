@@ -15,9 +15,12 @@
 Test files and validation suites for serialization.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_serialization.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

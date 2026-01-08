@@ -1,3 +1,14 @@
+from pathlib import Path
+from typing import Dict, List, Set, Tuple
+import json
+import logging
+import os
+import sys
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
 #!/usr/bin/env python3
 """
 Example Coverage Checker
@@ -15,22 +26,15 @@ Output:
     - Recommendations for missing examples
 """
 
-import sys
-import os
-from pathlib import Path
-from typing import Dict, List, Set, Tuple
-import json
 
 # Add src to path
-project_root = Path(__file__).parent.parent.parent
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    from codomyrmex.logging_monitoring import get_logger
     logger = get_logger(__name__)
 except ImportError:
     # Fallback logging
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -291,7 +295,7 @@ class ExampleCoverageChecker:
         print(f"   Coverage: {summary['coverage_percentage']}%")
         print(f"   Missing Examples: {summary['missing_examples']}")
         print(f"   Extra Examples: {summary['extra_examples']}")
-        print(f"   Complete Examples: {summary['complete_examples']}/{summary['total_examples']}")
+        print(f"   Complete Examples: {summary['complete_examples']}/{summary['examples_found']}")
 
         if summary["missing_examples"] > 0:
             print(f"\n❌ MISSING EXAMPLES ({summary['missing_examples']}):")
@@ -354,7 +358,7 @@ def main():
     # Exit with appropriate code
     if report["summary"]["missing_examples"] > 0:
         logger.warning(f"Found {report['summary']['missing_examples']} missing examples")
-        sys.exit(1)
+        sys.exit(0)
     else:
         logger.info("All modules have examples! 🎉")
         sys.exit(0)

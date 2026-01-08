@@ -1,7 +1,7 @@
 # unit
 
 ## Signposting
-- **Parent**: [unit](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [core](core/README.md)
     - [formats](formats/README.md)
@@ -28,19 +28,5 @@ Test files and validation suites for unit.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [tests](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documents.tests.unit import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [documents](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

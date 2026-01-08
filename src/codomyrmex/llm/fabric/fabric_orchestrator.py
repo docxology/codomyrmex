@@ -161,3 +161,4 @@ class FabricOrchestrator:
         """Get list of available Fabric patterns."""
         return self.fabric_manager.list_patterns()
 
+

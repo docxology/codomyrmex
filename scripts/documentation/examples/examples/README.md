@@ -21,6 +21,5 @@ Documentation files and guides for examples.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [documentation](../README.md)
-- **Project Root**: [README](../../../README.md)
-
+- **Parent Directory**: [examples](../README.md)
+- **Project Root**: [README](../../../../README.md)

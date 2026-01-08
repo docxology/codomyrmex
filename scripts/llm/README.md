@@ -3,6 +3,8 @@
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
+    - [examples](examples/README.md)
+    - [fabric](fabric/README.md)
     - [ollama](ollama/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -16,12 +18,16 @@ Automation and utility scripts.
 
 ## Directory Contents
 - `README.md` – File
+- `SPEC.md` – File
+- `examples/` – Subdirectory
+- `fabric/` – Subdirectory
 - `ollama/` – Subdirectory
+- `ollama_integration_AGENTS.md` – File
+- `ollama_integration_README.md` – File
+- `ollama_integration_SPEC.md` – File
 
-- `scripts/` – Subdirectory containing example implementations
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../README.md)
-

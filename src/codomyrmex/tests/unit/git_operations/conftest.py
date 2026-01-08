@@ -1,16 +1,24 @@
-"""
-Pytest configuration and shared fixtures for git_operations tests.
-"""
-
+from pathlib import Path
+from typing import Generator
 import os
 import shutil
 import tempfile
-from pathlib import Path
-from typing import Generator
 
 import pytest
 
 from codomyrmex.git_operations import initialize_git_repository
+
+
+
+
+
+
+"""
+Pytest configuration and shared fixtures for git_operations tests.
+"""
+
+
+
 
 
 @pytest.fixture

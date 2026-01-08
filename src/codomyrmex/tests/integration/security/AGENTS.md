@@ -15,6 +15,8 @@
 Test files and validation suites for security.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_analysis_security_cicd.py` – Project file
 - `test_security_integration.py` – Project file
 

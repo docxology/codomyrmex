@@ -1,3 +1,19 @@
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Optional
+import json
+import time
+
+from dataclasses import dataclass, field
+import statistics
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Pipeline Performance Optimization Module for Codomyrmex CI/CD Automation.
@@ -6,15 +22,7 @@ This module provides performance optimization capabilities for CI/CD pipelines,
 including bottleneck identification, resource optimization, and performance tuning.
 """
 
-import json
-import statistics
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

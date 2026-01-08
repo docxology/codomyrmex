@@ -1,14 +1,18 @@
+from pathlib import Path
+from typing import Dict, List, Optional
+import json
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
 """
 Fabric Configuration Manager for Codomyrmex Integration
 
 Manages Fabric configuration, patterns, and integration settings.
 """
 
-import json
-from pathlib import Path
-from typing import Dict, List, Optional
 
-from codomyrmex.logging_monitoring import get_logger
 
 
 class FabricConfigManager:
@@ -188,4 +192,5 @@ Provide a structured workflow plan with:
         except Exception as e:
             self.logger.error(f"Failed to export configuration: {e}")
             return False
+
 

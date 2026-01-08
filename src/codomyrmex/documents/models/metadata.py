@@ -1,8 +1,16 @@
-"""Document metadata models."""
-
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Optional
+
+from dataclasses import dataclass
+
+
+
+
+
+
+
+"""Document metadata models."""
+
 
 
 @dataclass
@@ -65,5 +73,6 @@ class DocumentMetadata:
             tags=data.get("tags", []),
             custom_fields=data.get("custom_fields", {}),
         )
+
 
 

@@ -1,7 +1,7 @@
-# Codomyrmex Agents — scripts/ollama_integration/examples/examples
+# Codomyrmex Agents — scripts/llm/examples/examples
 
 ## Signposting
-- **Parent**: [Examples Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [output](output/AGENTS.md)
@@ -15,9 +15,11 @@
 Example implementations and demonstrations.
 
 ## Active Components
-- No active components documented
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
+- `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
@@ -25,5 +27,5 @@ Example implementations and demonstrations.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [ollama_integration](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

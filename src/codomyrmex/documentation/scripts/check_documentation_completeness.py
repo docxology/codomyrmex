@@ -1,3 +1,21 @@
+from pathlib import Path
+from typing import Dict, List, Set, Tuple, Optional
+import argparse
+import json
+import logging
+import os
+import re
+import sys
+
+from dataclasses import dataclass, field
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Documentation Completeness Checking Tool
@@ -6,13 +24,6 @@ This script checks the completeness of documentation across the Codomyrmex proje
 ensuring all modules have appropriate documentation and required files are present.
 """
 
-import os
-import re
-import sys
-import json
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
-from dataclasses import dataclass, field
 
 # Add project root to path
 SCRIPT_DIR = Path(__file__).parent.parent.parent
@@ -20,10 +31,8 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 
@@ -387,7 +396,6 @@ def generate_completeness_report() -> str:
 
 def main():
     """Main CLI entry point."""
-    import argparse
 
     parser = argparse.ArgumentParser(
         description="Check documentation completeness",

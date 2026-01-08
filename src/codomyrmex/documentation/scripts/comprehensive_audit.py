@@ -1,3 +1,13 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Set, Tuple, Optional
+import os
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Comprehensive Documentation and Signposting Audit Script
@@ -12,12 +22,6 @@ checking for:
 - Navigation and cross-reference issues
 """
 
-import os
-import re
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
-from collections import defaultdict
-import sys
 
 
 class DocumentationAudit:

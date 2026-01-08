@@ -1,6 +1,8 @@
+from codomyrmex.spatial.three_d import (
+from codomyrmex.spatial.three_d import ARSession
+from codomyrmex.spatial.three_d import Scene3D, VRRenderer
 """Basic usage examples for the Spatial Spatial 3D Modeling module."""
 
-from codomyrmex.spatial.three_d import (
     Camera3D,
     Light3D,
     Material3D,
@@ -49,7 +51,6 @@ def basic_scene_example():
 def ar_example():
     """Demonstrate AR capabilities."""
 
-    from codomyrmex.spatial.three_d import ARSession
 
     ar_session = ARSession()
 
@@ -64,7 +65,6 @@ def ar_example():
 def vr_example():
     """Demonstrate VR rendering."""
 
-    from codomyrmex.spatial.three_d import Scene3D, VRRenderer
 
     scene = Scene3D()
     vr_renderer = VRRenderer()

@@ -1,3 +1,24 @@
+from datetime import datetime
+from typing import Any, Optional, Union
+import os
+import sys
+import warnings
+
+from dataclasses import dataclass
+from enum import Enum
+from performance import monitor_performance, performance_context
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Advanced data visualization functionality for Codomyrmex.
 
@@ -5,18 +26,7 @@ This module provides comprehensive plotting capabilities including statistical p
 interactive visualizations, dashboard generation, and data analysis charts.
 """
 
-import os
-import sys
-import warnings
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-from typing import Any, Optional, Union
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,14 +36,12 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 # Import logger setup
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Get module logger
 logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-    from performance import monitor_performance, performance_context
 
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:

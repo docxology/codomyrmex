@@ -48,3 +48,4 @@ def get_authenticator() -> Authenticator:
     """Get an authenticator instance."""
     return Authenticator()
 
+

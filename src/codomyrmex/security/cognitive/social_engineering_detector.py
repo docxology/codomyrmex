@@ -1,9 +1,17 @@
-"""Social engineering detection."""
-
-from dataclasses import dataclass
 from typing import List
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Social engineering detection."""
+
+
 
 logger = get_logger(__name__)
 
@@ -81,5 +89,6 @@ def analyze_communication(
     if detector is None:
         detector = SocialEngineeringDetector()
     return detector.analyze_communication(communication)
+
 
 

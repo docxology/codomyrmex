@@ -1,3 +1,15 @@
+from functools import wraps
+from typing import Any, Callable, Optional
+
+import importlib
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Lazy loading utilities for Codomyrmex modules.
 
@@ -5,11 +17,7 @@ This module provides lazy loading capabilities to improve startup time
 by deferring module imports until they are actually needed.
 """
 
-import importlib
-from functools import wraps
-from typing import Any, Callable, Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

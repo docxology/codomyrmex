@@ -1,17 +1,21 @@
-"""Jules CLI client wrapper."""
-
-import json
 from pathlib import Path
 from typing import Any, Iterator, Optional
+import json
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
+from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, JulesError
+from codomyrmex.agents.generic import CLIAgentBase
+
+
+
+"""Jules CLI client wrapper."""
+
+
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, JulesError
-from codomyrmex.agents.generic import CLIAgentBase
 
 
 class JulesClient(CLIAgentBase):
@@ -24,24 +28,9 @@ class JulesClient(CLIAgentBase):
         Args:
             config: Optional configuration override
         """
-        agent_config = get_config()
-        jules_command = (
-            config.get("jules_command") if config else agent_config.jules_command
-        )
-        timeout = (
-            config.get("jules_timeout") if config else agent_config.jules_timeout
-        )
-        working_dir = (
-            Path(config.get("jules_working_dir"))
-            if config and config.get("jules_working_dir")
-            else Path(agent_config.jules_working_dir)
-            if agent_config.jules_working_dir
-            else None
-        )
-
         super().__init__(
             name="jules",
-            command=jules_command,
+            command="jules",
             capabilities=[
                 AgentCapabilities.CODE_GENERATION,
                 AgentCapabilities.CODE_EDITING,
@@ -50,9 +39,18 @@ class JulesClient(CLIAgentBase):
                 AgentCapabilities.STREAMING,
             ],
             config=config or {},
-            timeout=timeout,
-            working_dir=working_dir,
+            timeout=30,
+            working_dir=None,
         )
+        
+        jules_command = self.get_config_value("jules_command", config=config)
+        timeout = self.get_config_value("jules_timeout", config=config)
+        working_dir_str = self.get_config_value("jules_working_dir", config=config)
+        working_dir = Path(working_dir_str) if working_dir_str else None
+
+        self.command = jules_command
+        self.timeout = timeout
+        self.working_dir = working_dir
 
         # Verify jules is available
         if not self._check_command_available(check_args=["help"]):

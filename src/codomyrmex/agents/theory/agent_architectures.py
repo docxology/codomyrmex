@@ -1,10 +1,18 @@
-"""Agent architecture patterns and implementations."""
+from typing import Any, Optional
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+"""Agent architecture patterns and implementations."""
+
+
 
 logger = get_logger(__name__)
 
@@ -274,4 +282,5 @@ class HybridArchitecture(AgentArchitecture):
             return self.reactive.act(decision)
         else:
             return self.deliberative.act(decision)
+
 

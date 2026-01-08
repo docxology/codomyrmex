@@ -1,3 +1,11 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Set, Tuple
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Dependency Consolidator - Migration tool for consolidating requirements.txt to pyproject.toml
@@ -6,10 +14,6 @@ This script analyzes all module-specific requirements.txt files and consolidates
 into pyproject.toml with exact version pinning.
 """
 
-import re
-from pathlib import Path
-from typing import Dict, List, Set, Tuple
-from collections import defaultdict
 
 
 def parse_requirements_file(file_path: Path) -> List[Tuple[str, str, str]]:

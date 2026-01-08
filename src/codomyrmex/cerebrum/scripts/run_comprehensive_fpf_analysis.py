@@ -1,3 +1,13 @@
+from pathlib import Path
+import argparse
+import sys
+
+from codomyrmex.cerebrum.fpf_combinatorics import FPFCombinatoricsAnalyzer
+from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator
+from codomyrmex.logging_monitoring import setup_logging
+
+
+
 #!/usr/bin/env python3
 """Comprehensive FPF analysis using all CEREBRUM methods.
 
@@ -10,22 +20,16 @@ This script runs the complete analysis pipeline:
 6. Comprehensive reports
 """
 
-import sys
-from pathlib import Path
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from codomyrmex.cerebrum.fpf_combinatorics import FPFCombinatoricsAnalyzer
-from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator
-from codomyrmex.logging_monitoring import setup_logging
 
 setup_logging()
 
 
 def main():
     """Run comprehensive FPF-CEREBRUM analysis."""
-    import argparse
 
     parser = argparse.ArgumentParser(
         description="Comprehensive CEREBRUM analysis of FPF specification"
@@ -100,5 +104,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 

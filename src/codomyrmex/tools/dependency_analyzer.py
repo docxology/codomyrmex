@@ -1,3 +1,14 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Set, Tuple
+import ast
+import logging
+import sys
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
 #!/usr/bin/env python3
 """
 Dependency Analyzer for Codomyrmex Modules.
@@ -9,19 +20,12 @@ This tool analyzes module dependencies to:
 - Enforce module boundaries
 """
 
-import ast
-import sys
-from collections import defaultdict
-from pathlib import Path
-from typing import Dict, List, Set, Tuple
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)

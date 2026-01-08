@@ -1,3 +1,19 @@
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Optional
+import json
+import time
+
+from dataclasses import dataclass
+import statistics
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Container Performance Optimization Module for Codomyrmex Containerization.
@@ -6,15 +22,7 @@ This module provides container performance optimization, resource monitoring,
 and efficiency improvements.
 """
 
-import json
-import statistics
-import time
-from dataclasses import dataclass
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

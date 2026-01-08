@@ -1,7 +1,11 @@
+from pathlib import Path
+
+
+
+
 #!/usr/bin/env python3
 """Fix security/digital/README.md navigation section."""
 
-from pathlib import Path
 
 def main():
     """Fix the README.md file."""

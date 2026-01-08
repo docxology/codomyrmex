@@ -1,6 +1,10 @@
+from typing import List, Optional
+
+
+
+
 """Query builder for document search."""
 
-from typing import List, Optional
 
 
 class QueryBuilder:
@@ -53,5 +57,6 @@ def build_query(terms: List[str], filters: dict = None, sort_by: str = None) -> 
     if sort_by:
         builder.set_sort(sort_by)
     return builder.build()
+
 
 

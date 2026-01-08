@@ -1,3 +1,11 @@
+from pathlib import Path
+import json
+import sys
+
+from codomyrmex.{module_name} import main_function
+
+
+
 #!/usr/bin/env python3
 """
 Create placeholder example_tutorial.md files for modules that reference them.
@@ -5,9 +13,6 @@ Create placeholder example_tutorial.md files for modules that reference them.
 Creates a standard template that modules can customize with their own examples.
 """
 
-import json
-from pathlib import Path
-import sys
 
 
 EXAMPLE_TUTORIAL_TEMPLATE = """# Example Tutorial
@@ -27,7 +32,6 @@ This tutorial demonstrates how to use the {module_name} module with practical ex
 ## Basic Usage
 
 ```python
-from codomyrmex.{module_name} import main_function
 
 # Example usage
 result = main_function("example_input")

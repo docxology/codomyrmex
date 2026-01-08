@@ -1,7 +1,7 @@
 # networking
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-HTTP client utilities, WebSocket support, and API client generation. Provides protocol-agnostic networking interface with retry support, timeout handling, and authentication capabilities for integrating with external services.
+Module components and implementation for networking..
 
 ## Directory Contents
 - `README.md` – File
@@ -26,28 +26,3 @@ HTTP client utilities, WebSocket support, and API client generation. Provides pr
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.networking import HTTPClient, WebSocketClient, get_http_client
-
-# HTTP client with retry support
-client = HTTPClient(timeout=30, max_retries=3)
-response = client.get("https://api.example.com/data")
-print(f"Status: {response.status_code}")
-print(f"Data: {response.json()}")
-
-# POST request
-response = client.post("https://api.example.com/data", data={"key": "value"})
-
-# WebSocket client
-ws = WebSocketClient("wss://example.com/ws")
-if ws.connect():
-    ws.send("Hello, server!")
-    message = ws.receive()
-    ws.close()
-```
-

@@ -1,3 +1,21 @@
+from pathlib import Path
+from typing import Any, Callable, Optional, Union
+import functools
+import json
+import time
+
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+import psutil
+import threading
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Performance monitoring utilities for Codomyrmex modules.
 
@@ -5,21 +23,12 @@ This module provides performance monitoring capabilities to track
 execution times, memory usage, and other performance metrics.
 """
 
-import functools
-import json
-import time
-from contextlib import contextmanager
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Callable, Optional, Union
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 
 try:
-    import psutil
 
     HAS_PSUTIL = True
 except ImportError:
@@ -346,7 +355,6 @@ def export_performance_metrics(file_path: Union[str, Path]) -> None:
 
 # System-wide monitoring classes and functions
 
-import threading
 
 @dataclass
 class SystemMetrics:

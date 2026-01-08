@@ -1,15 +1,27 @@
+from pathlib import Path
+from typing import Dict, Any, Generator
+import math
+import os
+import random
+import shutil
+import tempfile
+import time
+
+import pytest
+
+from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+
+
+
+
+
+
 """
 Shared fixtures and configuration for performance tests.
 """
 
-import pytest
-import tempfile
-import os
-from pathlib import Path
-from typing import Dict, Any, Generator
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -32,7 +44,6 @@ def temp_performance_dir() -> Generator[Path, None, None]:
     yield Path(temp_dir)
 
     # Cleanup
-    import shutil
     shutil.rmtree(temp_dir, ignore_errors=True)
 
 
@@ -54,7 +65,6 @@ print(result)
     # Medium Python file with more complexity
     medium_file = temp_performance_dir / "medium.py"
     medium_file.write_text('''
-import math
 
 def calculate_statistics(numbers):
     """Calculate basic statistics for a list of numbers."""
@@ -83,8 +93,6 @@ print(f"Statistics: {stats}")
     # Large Python file with algorithms
     large_file = temp_performance_dir / "large.py"
     large_content = '''
-import random
-import time
 
 def bubble_sort(arr):
     """Bubble sort implementation."""

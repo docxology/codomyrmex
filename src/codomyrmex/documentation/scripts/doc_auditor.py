@@ -1,7 +1,32 @@
-import os
 from pathlib import Path
+import os
 
+from doc_auditor import FunctionName, ClassName
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides doc_auditor functionality including:
+- 1 functions: audit_docs
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 def audit_docs(root_dir):
+    """Brief description of audit_docs.
+
+Args:
+    root_dir : Description of root_dir
+
+    Returns: Description of return value
+"""
     root = Path(root_dir)
     missing_docs = []
     

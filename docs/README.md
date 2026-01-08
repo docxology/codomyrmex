@@ -5,7 +5,7 @@
 - **Children**:
     - [deployment](deployment/README.md)
     - [development](development/README.md)
-    - [examples](../scripts/examples/README.md)
+    - [examples](examples/README.md)
     - [getting-started](getting-started/README.md)
     - [integration](integration/README.md)
     - [modules](modules/README.md)
@@ -39,4 +39,3 @@ Documentation components and guides for the Codomyrmex platform.
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
-

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/documents/tests/unit/utils
+# Codomyrmex Agents — src/codomyrmex/tests/unit/documents/unit/utils
 
 ## Signposting
 - **Parent**: [Utils](../AGENTS.md)
@@ -15,9 +15,12 @@
 Test files and validation suites for utils.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_encoding_detector.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
@@ -26,4 +29,4 @@ Test files and validation suites for utils.
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation
+- **🏠 Project Root**: [README](../../../../../../../README.md) - Main project documentation

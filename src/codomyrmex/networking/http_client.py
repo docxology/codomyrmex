@@ -1,21 +1,30 @@
+from typing import Any, Optional
+import json
+import time
+
+from dataclasses import dataclass
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+import requests
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 HTTP client implementation.
 """
 
-import time
-from dataclasses import dataclass
-from typing import Any, Optional
 
 try:
-    import requests
-    from requests.adapters import HTTPAdapter
-    from urllib3.util.retry import Retry
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -39,7 +48,6 @@ class Response:
     def json(self) -> dict:
         """Get JSON data from response."""
         if self.json_data is None:
-            import json
             self.json_data = json.loads(self.text)
         return self.json_data
 

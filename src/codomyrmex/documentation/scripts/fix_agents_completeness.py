@@ -1,3 +1,13 @@
+from pathlib import Path
+from typing import Dict, List, Set
+import argparse
+import json
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 AGENTS.md Completeness Fixer for Codomyrmex
@@ -6,11 +16,6 @@ Automatically fixes AGENTS.md files to include missing directory contents
 based on validation report analysis.
 """
 
-import json
-import re
-from pathlib import Path
-from typing import Dict, List, Set
-import os
 
 
 def get_file_description(filename: str) -> str:
@@ -220,7 +225,6 @@ def fix_agents_completeness(report_path: Path, repo_root: Path) -> int:
 
 def main():
     """Main entry point."""
-    import argparse
 
     parser = argparse.ArgumentParser(description="Fix AGENTS.md completeness issues")
     parser.add_argument('--report', type=Path, default=Path('output/agents_structure_validation.json'),

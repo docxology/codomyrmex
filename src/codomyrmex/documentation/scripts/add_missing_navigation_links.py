@@ -1,8 +1,14 @@
+from pathlib import Path
+import os
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Add missing navigation links to documentation files."""
 
-import re
-from pathlib import Path
 
 def calculate_paths(file_path: Path, base_path: Path) -> dict:
     """Calculate all necessary relative paths."""
@@ -120,6 +126,5 @@ def main():
     print(f"\nCompleted: Fixed {fixed_count} files with navigation links")
 
 if __name__ == "__main__":
-    import os
     main()
 

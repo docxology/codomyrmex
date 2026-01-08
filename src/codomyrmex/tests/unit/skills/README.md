@@ -1,25 +1,29 @@
-# skills - Tests
+# skills
+
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Test suite for the skills module, covering skill loading, syncing, registry, and management operations.
+Test files and validation suites for skills.
 
-## Test Files
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `test_skill_loader.py` – File
+- `test_skill_sync.py` – File
+- `test_skills_manager.py` – File
 
-- `test_skill_loader.py` - Tests for SkillLoader
-- `test_skill_sync.py` - Tests for SkillSync
-- `test_skills_manager.py` - Tests for SkillsManager
-
-## Running Tests
-
-```bash
-# Run all skills tests
-pytest src/codomyrmex/skills/tests/
-
-# Run specific test file
-pytest src/codomyrmex/skills/tests/test_skill_loader.py
-
-# Run with coverage
-pytest src/codomyrmex/skills/tests/ --cov=codomyrmex.skills
-```
-
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: [README](../../../../../README.md)

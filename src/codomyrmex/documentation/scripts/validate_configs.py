@@ -1,3 +1,21 @@
+from pathlib import Path
+from typing import Dict, Any, List, Tuple, Optional
+import argparse
+import json
+import logging
+import os
+import re
+import sys
+
+import yaml
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Configuration Validator for Codomyrmex Examples
@@ -18,16 +36,8 @@ Output:
     - Suggestions for fixes
 """
 
-import sys
-import os
-import argparse
-from pathlib import Path
-from typing import Dict, Any, List, Tuple, Optional
-import json
-import re
 
 try:
-    import yaml
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
@@ -38,11 +48,9 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    from codomyrmex.logging_monitoring import get_logger
     logger = get_logger(__name__)
 except ImportError:
     # Fallback logging
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 

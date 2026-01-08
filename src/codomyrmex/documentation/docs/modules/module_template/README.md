@@ -1,7 +1,7 @@
 # module_template
 
 ## Signposting
-- **Parent**: [module_template](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [docs](docs/README.md)
 - **Key Artifacts**:
@@ -29,17 +29,3 @@ Documentation files and guides for module_template.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: [README](../../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documentation.docs.modules.module_template import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

@@ -1,3 +1,10 @@
+from pathlib import Path
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix broken references in example_tutorial.md files.
@@ -6,9 +13,6 @@ Updates references to API_SPECIFICATION.md and USAGE_EXAMPLES.md
 to point to existing files or remove references if files don't exist.
 """
 
-import re
-from pathlib import Path
-import sys
 
 
 def fix_tutorial_references():

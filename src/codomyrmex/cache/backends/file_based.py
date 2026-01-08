@@ -163,3 +163,4 @@ class FileBasedCache(Cache):
         self._stats.size = len(list(self.cache_dir.glob("*.cache")))
         return self._stats
 
+

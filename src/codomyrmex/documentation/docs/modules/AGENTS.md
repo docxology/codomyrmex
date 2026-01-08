@@ -4,7 +4,7 @@
 - **Parent**: [Modules](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [ai_code_editing](ai_code_editing/AGENTS.md)
+    - [ai_code_editing](agents/ai_code_editing/AGENTS.md)
     - [build_synthesis](build_synthesis/AGENTS.md)
     - [data_visualization](data_visualization/AGENTS.md)
     - [environment_setup](environment_setup/AGENTS.md)

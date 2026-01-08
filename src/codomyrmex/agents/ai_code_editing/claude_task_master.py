@@ -1,3 +1,17 @@
+from typing import Any, Optional
+import os
+import re
+import time
+
+from anthropic import Anthropic
+from dataclasses import dataclass, field
+from enum import Enum
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
 """Claude Task Master Integration Module.
 
 This module provides integration with Anthropic's Claude API for
@@ -7,13 +21,7 @@ task decomposition capabilities.
 Reference: https://docs.anthropic.com/claude/docs
 """
 
-import os
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -93,7 +101,6 @@ class ClaudeTaskMaster:
                 raise ValueError("ANTHROPIC_API_KEY environment variable not set")
 
             try:
-                from anthropic import Anthropic
                 self._client = Anthropic(api_key=self.api_key)
             except ImportError as e:
                 raise ImportError(
@@ -411,7 +418,6 @@ class ClaudeTaskMaster:
 
     def _parse_subtasks(self, response: str) -> list[dict[str, str]]:
         """Parse subtasks from Claude's response."""
-        import re
 
         subtasks = []
         lines = response.strip().split('\n')

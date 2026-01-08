@@ -1,17 +1,26 @@
+from typing import Any, Iterator, Optional
+import time
+
+import uuid
+
+from codomyrmex.agents.config import get_config
+from codomyrmex.agents.core import (
+from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
 """Base agent implementation."""
 
-import time
-import uuid
-from typing import Any, Iterator, Optional
 
-from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentInterface,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError
-from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -302,7 +311,7 @@ class BaseAgent(AgentInterface):
         """
         Get configuration value with fallback chain.
 
-        Checks in order: provided config dict, instance config, default value.
+        Checks in order: provided config dict → instance config → AgentConfig global → default value.
 
         Args:
             key: Configuration key
@@ -312,10 +321,24 @@ class BaseAgent(AgentInterface):
         Returns:
             Configuration value or default
         """
+
+        # Check provided config dict first
         if config and key in config:
             return config[key]
+        
+        # Check instance config
         if key in self.config:
             return self.config[key]
+        
+        # Check AgentConfig global
+        try:
+            agent_config = get_config()
+            if hasattr(agent_config, key):
+                return getattr(agent_config, key)
+        except Exception:
+            # If AgentConfig access fails, continue to default
+            pass
+        
         return default
 
     def get_metrics(self) -> dict[str, Any]:

@@ -1,10 +1,10 @@
-# Codomyrmex Agents — scripts/testing
+# Codomyrmex Agents — scripts/tests
 
 ## Signposting
-- **Parent**: [Testing Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [output](output/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -29,9 +29,14 @@ Test files and validation suites.
 - `test_jules_functionality.py` – Project file
 - `test_jules_real_task.py` – Project file
 - `test_summary.py` – Project file
+- `testing_AGENTS.md` – Project file
+- `testing_README.md` – Project file
+- `testing_SPEC.md` – Project file
 - `verify_modular_testing.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
+- `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

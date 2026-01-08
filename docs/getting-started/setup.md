@@ -550,18 +550,18 @@ Include:
 **Setup complete!** You're ready to start using Codomyrmex's powerful modular toolkit for code analysis, generation, and workflow automation.
 
 **Next Steps:**
-1. **🎮 Try Interactive Examples**: [scripts/examples/README.md](../../scripts/examples/README.md)
+1. **🎮 Try Interactive Examples**: [Examples Documentation](../examples/README.md)
 2. **📚 Explore Documentation**: [docs/README.md](../README.md)
 3. **🏗️ Understand Architecture**: [docs/project/architecture.md](../project/architecture.md)
 4. **🤝 Join Development**: [docs/project/contributing.md](../project/contributing.md)
 
 ---
 
-**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: January 2025* | *Maintained by: Codomyrmex Documentation Team* | *Version: v0.1.0*
+**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: January 2026* | *Maintained by: Codomyrmex Documentation Team* | *Version: v0.1.0*
 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

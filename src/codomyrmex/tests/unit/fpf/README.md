@@ -1,7 +1,7 @@
-# tests
+# fpf
 
 ## Signposting
-- **Parent**: [tests](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Test files and validation suites for fpf.
 
 ## Directory Contents
 - `README.md` – File
@@ -23,6 +23,7 @@ Test files and validation suites.
 - `test_exporter.py` – File
 - `test_extractor.py` – File
 - `test_fetcher.py` – File
+- `test_fpf.py` – File
 - `test_indexer.py` – File
 - `test_integration.py` – File
 - `test_parser.py` – File
@@ -31,19 +32,5 @@ Test files and validation suites.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [fpf](../README.md)
-- **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.fpf.tests import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: [README](../../../../../README.md)

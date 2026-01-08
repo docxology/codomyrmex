@@ -1,13 +1,17 @@
+from pathlib import Path
+import re
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
 """Documentation Quality Assessment Module.
 
 This module provides tools for assessing documentation quality,
 consistency, and technical accuracy across the Codomyrmex platform.
 """
 
-import re
-from pathlib import Path
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

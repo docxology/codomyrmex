@@ -32,4 +32,3 @@ Documentation files and guides for reference.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: [README](../../README.md)
-

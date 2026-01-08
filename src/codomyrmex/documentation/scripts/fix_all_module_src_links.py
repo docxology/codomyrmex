@@ -1,8 +1,12 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix all src/README.md links in module subdirectories."""
 
-import re
-from pathlib import Path
 
 def calculate_correct_path(from_file: Path, base_path: Path) -> str:
     """Calculate correct relative path to src/README.md."""

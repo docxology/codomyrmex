@@ -374,7 +374,7 @@ if result['success']:
 
 - [Project Template Schema](./project-template-schema.md)
 - [Config-Driven Operations](./config-driven-operations.md)
-- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
 
 
 ## Navigation Links
@@ -382,4 +382,4 @@ if result['success']:
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

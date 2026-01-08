@@ -6,6 +6,7 @@ Logic migrated to codomyrmex.documentation.scripts.add_missing_version_status.
 
 if __name__ == "__main__":
     import sys
+    import os
     from pathlib import Path
 
     # Ensure src is in python path

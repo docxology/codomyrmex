@@ -1,9 +1,9 @@
-# project_orchestration
+# orchestration
 
 ## Signposting
-- **Parent**: [project_orchestration](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [project](project/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -12,27 +12,16 @@
 
 ## Overview
 
-Test files and validation suites for project_orchestration.
+Test files and validation suites for orchestration.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `project/` – Subdirectory
 - `test_project_orchestration.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.project_orchestration import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [logistics](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

@@ -1,3 +1,21 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
+import json
+import logging
+import subprocess
+import sys
+
+import importlib
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.terminal_interface.terminal_utils import TerminalFormatter
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Status Reporter for Codomyrmex System Discovery
@@ -6,20 +24,11 @@ Provides detailed status reporting capabilities for the Codomyrmex ecosystem,
 including health checks, dependency analysis, and system diagnostics.
 """
 
-import importlib
-import json
-import subprocess
-import sys
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 
@@ -39,7 +48,6 @@ class StatusReporter:
 
         # Import terminal formatter if available
         try:
-            from codomyrmex.terminal_interface.terminal_utils import TerminalFormatter
 
             self.formatter = TerminalFormatter()
         except ImportError:

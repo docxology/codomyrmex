@@ -1,3 +1,22 @@
+from pathlib import Path
+from typing import Dict, List, Set, Tuple, Optional, Any
+import argparse
+import ast
+import json
+import logging
+import re
+import sys
+import time
+
+from dataclasses import dataclass, asdict
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Comprehensive Filepath and Signpost Audit for Codomyrmex Repository.
@@ -13,21 +32,11 @@ This script performs a complete repository-wide audit of:
 Generates comprehensive reports for all audit areas.
 """
 
-import ast
-import json
-import re
-import sys
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional, Any
-import time
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -929,7 +938,6 @@ class ComprehensiveFilepathAuditor:
 
 def main():
     """Main entry point."""
-    import argparse
     
     parser = argparse.ArgumentParser(
         description="Comprehensive filepath and signpost audit for Codomyrmex repository"

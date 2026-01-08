@@ -1,7 +1,7 @@
 # terminal_interface
 
 ## Signposting
-- **Parent**: [terminal_interface](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,6 +15,8 @@
 Test files and validation suites for terminal_interface.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_terminal_interface.py` – File
 - `test_terminal_interface_comprehensive.py` – File
 
@@ -23,17 +25,3 @@ Test files and validation suites for terminal_interface.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.terminal_interface import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

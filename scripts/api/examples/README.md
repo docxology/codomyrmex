@@ -1,7 +1,7 @@
-# api
+# examples
 
 ## Signposting
-- **Parent**: [api](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -20,10 +20,12 @@ Example implementations and demonstrations.
 - `config.json` – File
 - `config.yaml` – File
 - `example_basic.py` – File
+- `examples_AGENTS.md` – File
+- `examples_README.md` – File
+- `examples_SPEC.md` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [scripts](../README.md)
-- **Project Root**: [README](../../README.md)
-
+- **Parent Directory**: [api](../README.md)
+- **Project Root**: [README](../../../README.md)

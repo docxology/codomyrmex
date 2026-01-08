@@ -1,14 +1,12 @@
 # security
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [cognitive](cognitive/README.md)
     - [digital](digital/README.md)
-    - [docs](docs/README.md)
     - [physical](physical/README.md)
     - [security_theory](security_theory/README.md)
-    - [tests](tests/README.md)
     - [theory](theory/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
@@ -18,7 +16,7 @@
 
 ## Overview
 
-Security scanning and threat assessment across cognitive, digital, and physical domains. Provides comprehensive security analysis including vulnerability scanning, compliance checking, threat modeling, and security monitoring. Integrates cognitive security (phishing, social engineering), digital security (vulnerabilities, encryption, certificates), and physical security assessments.
+Module components and implementation for security..
 
 ## Directory Contents
 - `README.md` – File
@@ -26,10 +24,8 @@ Security scanning and threat assessment across cognitive, digital, and physical 
 - `__init__.py` – File
 - `cognitive/` – Subdirectory
 - `digital/` – Subdirectory
-- `docs/` – Subdirectory
 - `physical/` – Subdirectory
 - `security_theory/` – Subdirectory
-- `tests/` – Subdirectory
 - `theory/` – Subdirectory
 
 ## Navigation
@@ -37,32 +33,3 @@ Security scanning and threat assessment across cognitive, digital, and physical 
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.security import (
-    SecurityScanner,
-    ThreatModeler,
-    VulnerabilityDetector,
-)
-
-# Scan for vulnerabilities
-scanner = SecurityScanner()
-vulnerabilities = scanner.scan_codebase("src/")
-print(f"Found {len(vulnerabilities)} vulnerabilities")
-
-# Perform threat modeling
-threat_modeler = ThreatModeler()
-threats = threat_modeler.assess_threats(
-    system_architecture={"components": ["api", "database"]}
-)
-print(f"Identified {len(threats)} threats")
-
-# Detect vulnerabilities
-detector = VulnerabilityDetector()
-issues = detector.check_vulnerabilities(dependencies={"requests": "2.28.0"})
-```
-

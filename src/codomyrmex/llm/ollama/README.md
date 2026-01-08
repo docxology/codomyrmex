@@ -1,7 +1,7 @@
 # ollama
 
 ## Signposting
-- **Parent**: [llm](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Integration with Ollama local Large Language Models. Provides comprehensive model management, execution, and output handling optimized for the Codomyrmex ecosystem. Supports model listing, pulling, execution, configuration management, and output persistence.
+Module components and implementation for ollama..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -33,27 +33,3 @@ Integration with Ollama local Large Language Models. Provides comprehensive mode
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [llm](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.llm.ollama import OllamaManager, ModelRunner
-
-# Initialize Ollama manager
-manager = OllamaManager()
-
-# List available models
-models = manager.list_models()
-print(f"Available models: {[m.name for m in models]}")
-
-# Run a model
-runner = ModelRunner(model_name="llama2")
-result = runner.generate(
-    prompt="Explain quantum computing",
-    max_tokens=100
-)
-print(f"Response: {result.content}")
-```
-

@@ -1,9 +1,14 @@
+from pathlib import Path
+from typing import List, Tuple
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Validate links in documentation files."""
 
-import re
-from pathlib import Path
-from typing import List, Tuple
 
 def find_markdown_links(content: str) -> List[Tuple[str, str]]:
     """Find all markdown links in content."""
@@ -80,7 +85,6 @@ def main():
     return len(broken_links) == 0
 
 if __name__ == "__main__":
-    import os
     success = main()
     exit(0 if success else 1)
 

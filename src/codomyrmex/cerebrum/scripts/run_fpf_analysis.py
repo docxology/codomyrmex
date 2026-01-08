@@ -1,18 +1,35 @@
+from pathlib import Path
+import sys
+
+from run_fpf_analysis import FunctionName, ClassName
+
+from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator
+
+
+
+
+
 #!/usr/bin/env python3
 """Script to run comprehensive CEREBRUM analysis on FPF specification.
 
+"""Core functionality module
+
+This module provides run_fpf_analysis functionality including:
+- 0 functions: 
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 This script orchestrates all CEREBRUM methods (case-based reasoning,
 Bayesian inference, active inference) to analyze the First Principles
 Framework specification comprehensively.
 """
 
-import sys
-from pathlib import Path
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator
 
 if __name__ == "__main__":
     # Default: fetch from GitHub, output to output/fpf_cerebrum
@@ -32,5 +49,6 @@ if __name__ == "__main__":
     print(f"   - comprehensive_analysis.json")
     print(f"   - comprehensive_analysis.md")
     print(f"   - visualizations/")
+
 
 

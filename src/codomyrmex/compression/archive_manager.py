@@ -1,14 +1,22 @@
+from pathlib import Path
+from typing import Optional
+
+import tarfile
+import zipfile
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Archive management for creating and extracting archives.
 """
 
-import tarfile
-import zipfile
-from pathlib import Path
-from typing import Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -86,4 +94,5 @@ class ArchiveManager:
         except Exception as e:
             logger.error(f"Archive extraction error: {e}")
             raise CompressionError(f"Failed to extract archive: {str(e)}") from e
+
 

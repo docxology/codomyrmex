@@ -1,3 +1,21 @@
+from pathlib import Path
+from typing import Dict, Any, List
+from unittest.mock import Mock, patch
+import asyncio
+import json
+import time
+import unittest
+
+import threading
+
+from codomyrmex.logistics.orchestration.project import (
+from codomyrmex.performance import PerformanceMonitor
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Integration Test Suite for Codomyrmex Orchestration
@@ -6,17 +24,8 @@ This file provides comprehensive integration tests for all orchestration compone
 ensuring they work together properly and handle edge cases correctly.
 """
 
-import asyncio
-import json
-import time
-import threading
-from pathlib import Path
-from typing import Dict, Any, List
-import unittest
-from unittest.mock import Mock, patch
 
 # Import Codomyrmex orchestration components
-from codomyrmex.logistics.orchestration.project import (
     get_orchestration_engine,
     get_workflow_manager,
     get_task_orchestrator,
@@ -254,7 +263,6 @@ class TestOrchestrationIntegration(unittest.TestCase):
     def test_performance_monitoring_integration(self):
         """Test performance monitoring integration."""
         try:
-            from codomyrmex.performance import PerformanceMonitor
             
             # Create performance monitor
             monitor = PerformanceMonitor()

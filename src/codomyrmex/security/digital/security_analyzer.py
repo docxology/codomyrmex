@@ -1,3 +1,20 @@
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Set, Tuple
+import ast
+import logging
+import os
+import re
+
+from dataclasses import dataclass
+from enum import Enum
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Security Analyzer for Codomyrmex Security Audit Module.
 
@@ -9,17 +26,10 @@ Provides advanced security analysis capabilities including:
 - Security best practices validation
 """
 
-import ast
-import re
-from typing import List, Dict, Any, Optional, Set, Tuple
-from dataclasses import dataclass
-from enum import Enum
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 
@@ -286,8 +296,6 @@ class SecurityAnalyzer:
         Returns:
             List of all security findings
         """
-        import os
-        from pathlib import Path
 
         all_findings = []
         directory_path = Path(directory)

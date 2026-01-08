@@ -44,3 +44,4 @@ def search_index(query: str, index_path: Path) -> List[dict]:
     return []
 
 
+

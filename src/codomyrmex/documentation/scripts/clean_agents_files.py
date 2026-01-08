@@ -1,13 +1,22 @@
+from pathlib import Path
+import argparse
+import re
+
+from Active Components sections, while preserving the actual file listings.
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Clean AGENTS.md files by removing conceptual items from Active Components.
 
 This script identifies and removes items that are not actual files/directories
-from Active Components sections, while preserving the actual file listings.
 """
 
-import re
-from pathlib import Path
 
 
 class AgentsCleaner:
@@ -138,7 +147,6 @@ class AgentsCleaner:
 
 def main():
     """Main entry point."""
-    import argparse
 
     parser = argparse.ArgumentParser(description='Clean AGENTS.md files by removing conceptual items')
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

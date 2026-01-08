@@ -1,7 +1,7 @@
 # unit
 
 ## Signposting
-- **Parent**: [unit](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [droid](droid/README.md)
 - **Key Artifacts**:
@@ -22,19 +22,5 @@ Test files and validation suites for unit.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [tests](../README.md)
-- **Project Root**: [README](../../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.agents.ai_code_editing.tests.unit import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [ai_code_editing](../README.md)
+- **Project Root**: [README](../../../../../../../README.md)

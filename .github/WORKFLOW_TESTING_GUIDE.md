@@ -349,6 +349,6 @@ After successful testing:
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Module Index**: [All Agents](../AGENTS.md)
+- **Documentation**: [Reference Guides](../docs/README.md)
+- **Home**: [Repository Root](../../README.md)

@@ -1,3 +1,36 @@
+from typing import Dict, List, Any, Optional, Callable
+import inspect
+import logging
+import os
+import os
+import os
+import tempfile
+import tempfile
+import time
+
+from dataclasses import dataclass, field
+from enum import Enum
+import docker
+import importlib
+import matplotlib
+
+from codomyrmex.coding.execution.executor import execute_code
+from codomyrmex.environment_setup.env_checker import validate_environment_completeness
+from codomyrmex.git_operations.git_manager import check_git_availability
+from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring.logger_config import log_with_context
+from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
+from codomyrmex.performance import profile_function
+from codomyrmex.performance import profile_function, get_system_metrics
+from codomyrmex.security.digital import analyze_file_security
+from codomyrmex.static_analysis import analyze_file
+
+
+
+
+
+
 """
 Health Checker for Codomyrmex System Discovery
 
@@ -6,19 +39,11 @@ Codomyrmex modules, including dependency validation, performance monitoring,
 and system health assessment.
 """
 
-import time
-import importlib
-import inspect
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Any, Optional, Callable
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 
@@ -202,14 +227,12 @@ class HealthChecker:
         result.checks_performed.extend(["logger_creation", "structured_logging"])
 
         try:
-            from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
             # Test logger creation
             test_logger = get_logger("health_check_test")
             test_logger.info("Health check test message")
 
             # Test structured logging
-            from codomyrmex.logging_monitoring.logger_config import log_with_context
             log_with_context("INFO", "Structured logging test", {"test": True})
 
             result.add_metric("logger_available", True)
@@ -222,10 +245,8 @@ class HealthChecker:
         result.checks_performed.extend(["dependency_check", "python_version"])
 
         try:
-            from codomyrmex.environment_setup.env_checker import validate_environment_completeness
 
             # Get the project root (assuming we're in the project)
-            import os
             project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
             is_complete, report = validate_environment_completeness(project_root)
@@ -244,7 +265,6 @@ class HealthChecker:
         result.checks_performed.extend(["docker_availability", "sandbox_execution", "code_review"])
 
         try:
-            from codomyrmex.coding.execution.executor import execute_code
 
             # Test basic execution (this might require Docker)
             test_result = execute_code("python", "print('test')", timeout=5)
@@ -262,11 +282,8 @@ class HealthChecker:
         result.checks_performed.extend(["tool_availability", "analysis_execution"])
 
         try:
-            from codomyrmex.static_analysis import analyze_file
 
             # Create a simple test file
-            import tempfile
-            import os
 
             with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
                 f.write("def test(): pass\n")
@@ -287,11 +304,8 @@ class HealthChecker:
         result.checks_performed.extend(["vulnerability_scanning", "secrets_detection"])
 
         try:
-            from codomyrmex.security.digital import analyze_file_security
 
             # Create a test file with potential security issues
-            import tempfile
-            import os
 
             with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
                 f.write("import os\nos.system('ls')  # Potential security issue\n")
@@ -312,7 +326,6 @@ class HealthChecker:
         result.checks_performed.extend(["performance_monitoring", "resource_tracking"])
 
         try:
-            from codomyrmex.performance import profile_function, get_system_metrics
 
             # Test performance profiling
             @profile_function
@@ -334,7 +347,6 @@ class HealthChecker:
         result.checks_performed.extend(["workflow_creation", "dag_validation"])
 
         try:
-            from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
 
             # Test DAG creation
             tasks = [
@@ -359,7 +371,6 @@ class HealthChecker:
         result.checks_performed.extend(["docker_client", "image_management"])
 
         try:
-            import docker
 
             # Test Docker client
             client = docker.from_env()
@@ -398,7 +409,6 @@ class HealthChecker:
         result.checks_performed.append("plotting_libraries")
 
         try:
-            import matplotlib
             result.add_metric("matplotlib_available", True)
         except ImportError:
             result.add_issue("Matplotlib not available", "Install matplotlib for plotting")
@@ -413,7 +423,6 @@ class HealthChecker:
         result.checks_performed.append("git_availability")
 
         try:
-            from codomyrmex.git_operations.git_manager import check_git_availability
             git_available = check_git_availability()
             result.add_metric("git_available", git_available)
 
@@ -511,7 +520,6 @@ def check_module_performance(module_name: str) -> Dict[str, Any]:
     """
     try:
         # Import performance monitoring
-        from codomyrmex.performance import profile_function
 
         # Create a simple test function for the module
         def test_module_import():

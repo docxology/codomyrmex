@@ -1,9 +1,17 @@
-"""Phishing detection and analysis."""
-
-from dataclasses import dataclass
 from typing import Optional
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Phishing detection and analysis."""
+
+
 
 logger = get_logger(__name__)
 
@@ -81,5 +89,6 @@ def detect_phishing_attempt(
         analyzer = PhishingAnalyzer()
     analysis = analyzer.analyze(email_content, sender)
     return analysis.is_phishing
+
 
 

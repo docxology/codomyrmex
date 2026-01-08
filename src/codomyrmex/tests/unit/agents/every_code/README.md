@@ -1,7 +1,7 @@
-# tests
+# every_code
 
 ## Signposting
-- **Parent**: [every_code](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,9 +12,11 @@
 
 ## Overview
 
-Test files and validation suites for Every Code agent integration.
+Test files and validation suites for every_code.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `__init__.py` – File
 - `test_every_code_client.py` – File
 - `test_every_code_integration.py` – File
@@ -22,21 +24,5 @@ Test files and validation suites for Every Code agent integration.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [every_code](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To run the tests:
-
-```bash
-# Run all tests
-pytest src/codomyrmex/agents/every_code/tests/
-
-# Run specific test file
-pytest src/codomyrmex/agents/every_code/tests/test_every_code_client.py
-
-# Run with verbose output
-pytest -v src/codomyrmex/agents/every_code/tests/
-```
-
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

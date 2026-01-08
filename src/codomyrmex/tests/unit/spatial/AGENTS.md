@@ -15,6 +15,8 @@
 Test files and validation suites for spatial.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `three_d/` – Directory containing three_d components
 
 ## Operating Contracts

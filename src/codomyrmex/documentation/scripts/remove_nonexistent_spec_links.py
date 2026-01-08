@@ -1,8 +1,12 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Remove links to non-existent SPEC.md files in scripts/."""
 
-import re
-from pathlib import Path
 
 def remove_nonexistent_spec_links(file_path: Path, base_path: Path) -> bool:
     """Remove links to non-existent SPEC.md files."""

@@ -1,3 +1,14 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Any
+import os
+import subprocess
+import tempfile
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
 """
 Fabric Manager - Main integration class for Codomyrmex
 
@@ -5,14 +16,7 @@ Provides comprehensive Fabric pattern management, execution, and integration
 with the Codomyrmex ecosystem.
 """
 
-import os
-import subprocess
-import tempfile
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 
-from codomyrmex.logging_monitoring import get_logger
 
 
 class FabricManager:
@@ -172,4 +176,5 @@ class FabricManager:
     def get_results_history(self) -> List[Dict[str, Any]]:
         """Get history of pattern execution results."""
         return self.results_history.copy()
+
 

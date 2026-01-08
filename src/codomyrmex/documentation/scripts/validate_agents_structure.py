@@ -1,3 +1,20 @@
+from pathlib import Path
+from typing import Dict, List, Set, Optional
+import argparse
+import json
+import logging
+import re
+import sys
+
+from dataclasses import dataclass, asdict
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 AGENTS.md Structure Validator for Codomyrmex Documentation.
@@ -5,19 +22,11 @@ AGENTS.md Structure Validator for Codomyrmex Documentation.
 Validates that all AGENTS.md files follow the standardized structure.
 """
 
-import json
-import re
-import sys
-from pathlib import Path
-from typing import Dict, List, Set, Optional
-from dataclasses import dataclass, asdict
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -994,7 +1003,6 @@ def fix_script_orchestrator_agents(repo_root: Path, orchestrator_dir: Path) -> b
 
 def main():
     """Main entry point."""
-    import argparse
     
     parser = argparse.ArgumentParser(description="Validate AGENTS.md file structure")
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

@@ -1,3 +1,21 @@
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Optional
+import json
+import re
+import time
+
+from dataclasses import dataclass, field
+import hashlib
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Configuration Monitoring Module for Codomyrmex Configuration Management.
@@ -6,16 +24,7 @@ This module provides configuration monitoring, change tracking, drift detection,
 and compliance auditing for configuration management.
 """
 
-import hashlib
-import json
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -366,7 +375,6 @@ class ConfigurationMonitor:
             r'token\s*[:=]\s*["\'][^"\']+["\']',
         ]
 
-        import re
         for pattern in sensitive_patterns:
             if re.search(pattern, content, re.IGNORECASE):
                 return True

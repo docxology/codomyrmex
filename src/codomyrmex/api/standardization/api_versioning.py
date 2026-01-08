@@ -1,3 +1,18 @@
+from datetime import datetime
+from typing import Dict, List, Any, Optional, Callable, Union, Type
+import logging
+import re
+
+from dataclasses import dataclass, field
+from enum import Enum
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 API Versioning Implementation for Codomyrmex
 
@@ -5,11 +20,6 @@ This module provides API versioning capabilities with version management,
 backward compatibility, and migration support.
 """
 
-import re
-from typing import Dict, List, Any, Optional, Callable, Union, Type
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 
 
 # Simple semantic version implementation (no external dependencies)
@@ -47,10 +57,8 @@ class SimpleVersion:
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 

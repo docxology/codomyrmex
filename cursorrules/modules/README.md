@@ -49,4 +49,3 @@ Contains components for the cursorrules system.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cursorrules](../README.md)
 - **Project Root**: [README](../../README.md)
-

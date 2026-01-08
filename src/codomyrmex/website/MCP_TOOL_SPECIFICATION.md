@@ -1,16 +1,16 @@
-# [Module Name] - MCP Tool Specification Template
+# Standard Implementation Details - MCP Tool Specification Template
 
-This document serves as a template for defining tools within the `[Module Name]` module that are intended to be integrated with the Model Context Protocol (MCP).
+This document serves as a template for defining tools within the `Standard Implementation Details` module that are intended to be integrated with the Model Context Protocol (MCP).
 
 **Instructions for Use:**
-1.  Replace `[Module Name]` in the title above and throughout this document with the actual name of your module.
+1.  Replace `Standard Implementation Details` in the title above and throughout this document with the actual name of your module.
 2.  For each tool you define, copy the "Tool: `[YourToolName]`" section.
-3.  Replace all bracketed placeholders (e.g., `[YourToolName]`, `[Brief description...]`, `[ParameterName]`, `[DataType]`, etc.) with specific details for your tool.
+3.  Replace all bracketed placeholders (e.g., `[YourToolName]`, `Standard Implementation Details`, `[ParameterName]`, `[DataType]`, etc.) with specific details for your tool.
 4.  Provide concrete examples for Input/Output schemas and MCP usage.
 5.  If a section (like Idempotency or specific Security Considerations beyond general file path validation) is not applicable, clearly state "N/A" or provide a relevant explanation.
 6.  Refer to the `model_context_protocol` module's documentation for overarching MCP guidelines and schema definitions.
 
-## General Considerations for [Module Name] Tools
+## General Considerations for Standard Implementation Details Tools
 
 - **Dependencies**: Clearly list any other Codomyrmex modules or significant external libraries required by the tools in this module. (e.g., "All tools require the `logging_monitoring` module. Ensure `setup_logging()` is called.")
 - **Initialization**: Specify any module-level initialization required before tools can be invoked.
@@ -23,11 +23,11 @@ This document serves as a template for defining tools within the `[Module Name]`
 
 ### 1. Tool Purpose and Description
 
-[Brief description of what the tool does, its primary function, and its intended use case within the MCP framework.]
+Standard Implementation Details
 
 ### 2. Invocation Name
 
-`[your_tool_invocation_name]`
+`Standard Implementation Details`
 (This should be a unique, descriptive name, typically in snake_case, used to call the tool via MCP.)
 
 ### 3. Input Schema (Parameters)
@@ -80,7 +80,7 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 
 ```json
 {
-  "tool_name": "[your_tool_invocation_name]",
+  "tool_name": "Standard Implementation Details",
   "arguments": {
     "[Parameter1Name]": "[ExampleValue1]",
     "[Parameter2Name]": "[ExampleValue2]"
@@ -99,3 +99,9 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 
 ---
 <!-- Add more tool specifications below by copying the "Tool: `[YourToolName]`" section. --> 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

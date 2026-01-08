@@ -1,6 +1,6 @@
 # core Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 ## Core Concept
 Core I/O and processing abstractions for document handling, providing a unified interface for reading, writing, parsing, and validating diverse file formats.
 

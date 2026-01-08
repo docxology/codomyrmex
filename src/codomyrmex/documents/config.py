@@ -1,7 +1,12 @@
-"""Configuration management for the Documents module."""
-
 from pathlib import Path
 from typing import Optional
+import os
+
+
+
+
+"""Configuration management for the Documents module."""
+
 
 
 class DocumentsConfig:
@@ -15,7 +20,6 @@ class DocumentsConfig:
         cache_directory: Optional[Path] = None,
         strict_validation: bool = False,
     ):
-        import os
         self.default_encoding = default_encoding
         self.max_file_size = max_file_size
         self.enable_caching = enable_caching

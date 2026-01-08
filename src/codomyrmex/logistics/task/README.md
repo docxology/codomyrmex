@@ -1,7 +1,7 @@
-# task_queue
+# task
 
 ## Signposting
-- **Parent**: [logistics](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [backends](backends/README.md)
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Task queue management and job execution. Provides backend-agnostic queue interface with support for priority queues, job retries, and scheduling. Integrates with logistics.orchestration for workflow task management.
+Module components and implementation for task..
 
 ## Directory Contents
 - `README.md` – File
@@ -28,25 +28,3 @@ Task queue management and job execution. Provides backend-agnostic queue interfa
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [logistics](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.logistics.task import Queue, Job, JobScheduler
-
-# Create a queue
-queue = Queue(backend="in_memory")
-
-# Create a job
-job = Job(task="my_task", args={}, kwargs={})
-
-# Enqueue the job
-job_id = queue.enqueue(job, priority=1)
-
-# Create a scheduler
-scheduler = JobScheduler(queue, check_interval=1)
-scheduler.start()
-```
-

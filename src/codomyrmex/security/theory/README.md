@@ -1,7 +1,7 @@
 # theory
 
 ## Signposting
-- **Parent**: [security](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Security theory including architecture patterns, best practices, security frameworks, security principles, risk assessment, and threat modeling. Provides theoretical foundations and methodologies for security analysis.
+Module components and implementation for theory..
 
 ## Directory Contents
 - `README.md` – File
@@ -30,29 +30,3 @@ Security theory including architecture patterns, best practices, security framew
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-This module provides theoretical foundations for security analysis:
-
-```python
-from codomyrmex.security.theory import (
-    SecurityPrinciples,
-    ThreatModelingFramework,
-    RiskAssessmentMethodology,
-)
-
-# Access security principles
-principles = SecurityPrinciples()
-print(f"Defense in depth: {principles.defense_in_depth}")
-
-# Use threat modeling
-threat_model = ThreatModelingFramework()
-threats = threat_model.identify_threats(system_architecture={...})
-
-# Perform risk assessment
-risk_assessment = RiskAssessmentMethodology()
-risk = risk_assessment.assess_risk(threats, vulnerabilities)
-print(f"Risk level: {risk.level}")
-```
-

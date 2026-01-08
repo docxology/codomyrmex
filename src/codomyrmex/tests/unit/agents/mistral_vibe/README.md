@@ -1,7 +1,7 @@
-# tests
+# mistral_vibe
 
 ## Signposting
-- **Parent**: [mistral_vibe](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,9 +12,11 @@
 
 ## Overview
 
-Test files and validation suites for Mistral Vibe agent integration.
+Test files and validation suites for mistral_vibe.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `__init__.py` – File
 - `test_mistral_vibe_client.py` – File
 - `test_mistral_vibe_integration.py` – File
@@ -22,21 +24,5 @@ Test files and validation suites for Mistral Vibe agent integration.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [mistral_vibe](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To run the tests:
-
-```bash
-# Run all tests
-pytest src/codomyrmex/agents/mistral_vibe/tests/
-
-# Run specific test file
-pytest src/codomyrmex/agents/mistral_vibe/tests/test_mistral_vibe_client.py
-
-# Run with verbose output
-pytest -v src/codomyrmex/agents/mistral_vibe/tests/
-```
-
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

@@ -1,7 +1,7 @@
 # tutorials
 
 ## Signposting
-- **Parent**: [docs](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -29,17 +29,3 @@ Documentation files and guides for tutorials.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: [README](../../../../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documentation.docs.modules.data_visualization.docs.tutorials import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

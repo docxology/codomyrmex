@@ -1,14 +1,23 @@
+from pathlib import Path
+from typing import Dict, Any, Generator
+import shutil
+import sys
+import tempfile
+
+import pytest
+
+
+
+
+
+
+
 """
 Pytest configuration and fixtures for example testing.
 
 Provides shared fixtures and configuration for testing Codomyrmex examples.
 """
 
-import pytest
-import tempfile
-import shutil
-from pathlib import Path
-from typing import Dict, Any, Generator
 
 
 @pytest.fixture(scope="session")
@@ -57,7 +66,6 @@ def mock_config() -> Dict[str, Any]:
 @pytest.fixture(autouse=True)
 def setup_test_environment(project_root: Path):
     """Setup test environment by adding project paths."""
-    import sys
     src_path = str(project_root / "src")
     examples_path = str(project_root / "examples")
     tests_path = str(project_root / "src" / "codomyrmex" / "tests")

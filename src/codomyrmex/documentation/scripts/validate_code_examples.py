@@ -1,3 +1,20 @@
+from pathlib import Path
+from typing import List, Dict, Tuple, Any
+import ast
+import json
+import os
+import os
+import re
+import sys
+
+from dataclasses import dataclass, asdict
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Code Example Validation Script
@@ -6,13 +23,6 @@ This script extracts code examples from documentation files,
 validates their syntax, and checks if they match actual API signatures.
 """
 
-import ast
-import re
-import sys
-from pathlib import Path
-from typing import List, Dict, Tuple, Any
-import json
-from dataclasses import dataclass, asdict
 
 
 @dataclass
@@ -113,7 +123,6 @@ def validate_code_example(example: CodeExample) -> CodeExample:
 
 def find_all_documentation_files(docs_dir: Path) -> List[Path]:
     """Find all markdown documentation files."""
-    import os
     markdown_files = []
     for root, dirs, files in os.walk(docs_dir):
         dirs[:] = [d for d in dirs if not d.startswith('.')]
@@ -125,7 +134,6 @@ def find_all_documentation_files(docs_dir: Path) -> List[Path]:
 
 def main():
     """Main function."""
-    import os
 
     script_dir = Path(__file__).parent
     project_root = script_dir.parent.parent

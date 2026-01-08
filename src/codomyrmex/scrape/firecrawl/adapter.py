@@ -290,8 +290,10 @@ class FirecrawlAdapter(BaseScraper):
             if hasattr(firecrawl_data, "metadata"):
                 metadata = firecrawl_data.metadata if isinstance(firecrawl_data.metadata, dict) else {}
         elif isinstance(firecrawl_data, dict):
-            # Dict response
-            data = firecrawl_data.get("data", {})
+            # Dict response - handle both nested (data.markdown) and flat (markdown) structures
+            data = firecrawl_data.get("data", firecrawl_data)
+            if not isinstance(data, dict):
+                data = firecrawl_data
             content = data.get("markdown", data.get("content", ""))
             formats = {}
             if "markdown" in data:

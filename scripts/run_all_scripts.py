@@ -22,6 +22,61 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
+# Constants
+SKIP_DIRS = {
+    "__pycache__",
+    ".git",
+    ".pytest_cache",
+    "venv", 
+    ".venv", 
+    "node_modules",
+    "build",
+    "dist",
+    "egg-info",
+    "output"
+}
+
+SKIP_PATTERNS = {
+    "__init__.py",
+    "conftest.py",
+    "_orchestrator_utils.py",
+    "run_all_scripts.py"
+}
+
+def load_config(scripts_dir: Path) -> Dict[str, Any]:
+    """Load script configuration."""
+    config_path = scripts_dir / "scripts_config.json"
+    if config_path.exists():
+        try:
+            with open(config_path, "r") as f:
+                return json.load(f)
+        except Exception as e:
+            pass
+    return {"default": {}, "scripts": {}}
+
+def get_script_config(script_path: Path, scripts_dir: Path, global_config: Dict[str, Any]) -> Dict[str, Any]:
+    """Get configuration for a specific script."""
+    rel_path = str(script_path.relative_to(scripts_dir))
+    
+    # Try alternate path separator for windows compatibility/robustness if needed, 
+    # but here just ensure we match the json keys
+    
+    config = global_config.get("default", {}).copy()
+    
+    # Direct match
+    if rel_path in global_config.get("scripts", {}):
+        config.update(global_config["scripts"][rel_path])
+        return config
+        
+    # Check if any key in config ends with the script name or relative path
+    # This handles "tools/audit_methods.py" key matching "scripts/tools/audit_methods.py" if needed
+    for key, val in global_config.get("scripts", {}).items():
+        if rel_path.endswith(key):
+            config.update(val)
+            return config
+            
+    return config
+
 # Add scripts directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -129,6 +184,7 @@ def run_script(
     timeout: int = 60,
     env: Optional[Dict[str, str]] = None,
     cwd: Optional[Path] = None,
+    config: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
     Run a single script and capture output.
@@ -138,10 +194,15 @@ def run_script(
         timeout: Timeout in seconds
         env: Environment variables
         cwd: Working directory
+        config: Script configuration
         
     Returns:
         Execution result dictionary
     """
+    script_config = config or {}
+    timeout = script_config.get("timeout", timeout)
+    allowed_exit_codes = script_config.get("allowed_exit_codes", [0])
+    
     result = {
         "script": str(script_path),
         "name": script_path.name,
@@ -162,6 +223,10 @@ def run_script(
     if env:
         run_env.update(env)
     
+    # Merge env from config
+    if "env" in script_config:
+        run_env.update(script_config["env"])
+    
     # Add project src to PYTHONPATH
     project_root = script_path.parent.parent.parent
     src_path = project_root / "src"
@@ -177,12 +242,17 @@ def run_script(
             timeout=timeout,
             cwd=cwd or script_path.parent,
             env=run_env,
+            stdin=subprocess.DEVNULL,
         )
         
         result["exit_code"] = process.returncode
         result["stdout"] = process.stdout
         result["stderr"] = process.stderr
-        result["status"] = "passed" if process.returncode == 0 else "failed"
+        result["status"] = "passed" if process.returncode in allowed_exit_codes else "failed"
+        
+        if result["status"] == "passed" and process.returncode != 0:
+             # Annotate passed (non-zero)
+             result["stdout"] += f"\n[INFO] Script exited with code {process.returncode} (ALLOWED)"
         
     except subprocess.TimeoutExpired as e:
         result["status"] = "timeout"
@@ -288,6 +358,117 @@ def generate_report(
     return summary
 
 
+def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
+    """
+    Generate Markdown documentation for all discovered scripts.
+
+    Args:
+        scripts_dir: Directory containing scripts
+        output_file: Path to write Markdown output
+
+    Returns:
+        True if generation was successful
+    """
+    scripts = discover_scripts(scripts_dir)
+    total_scripts = len(scripts)
+    
+    print_section("Generating Script Documentation")
+    print_info(f"Target: {output_file}")
+    print_info(f"Scripts to process: {total_scripts}")
+    
+    with open(output_file, "w") as f:
+        # Write Header
+        f.write("# Codomyrmex Script Reference\n\n")
+        f.write(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        f.write("This document contains auto-generated documentation for all scripts in the `scripts/` directory.\n\n")
+        
+        # Table of Contents
+        f.write("## Table of Contents\n\n")
+        categories = {}
+        for script in scripts:
+            rel_path = script.relative_to(scripts_dir)
+            category = rel_path.parts[0] if len(rel_path.parts) > 1 else "_root"
+            if category not in categories:
+                categories[category] = []
+            categories[category].append(script)
+            
+        for category in sorted(categories.keys()):
+            f.write(f"- [{category}](#{category.lower()})\n")
+            
+        f.write("\n---\n\n")
+        
+        success_count = 0
+        fail_count = 0
+        
+        # Process Categories
+        for category in sorted(categories.keys()):
+            f.write(f"## {category}\n\n")
+            
+            for script in sorted(categories[category]):
+                rel_path = script.relative_to(scripts_dir)
+                script_name = script.name
+                
+                print(f"Processing: {rel_path}...", end="", flush=True)
+                
+                # Get Help Text
+                try:
+                    # Run with --help
+                    # Using same environment as main execution
+                    env = os.environ.copy()
+                    # Add project src to PYTHONPATH
+                    project_root = script.parent.parent.parent
+                    src_path = project_root / "src"
+                    if src_path.exists():
+                        pythonpath = env.get("PYTHONPATH", "")
+                        env["PYTHONPATH"] = f"{src_path}:{pythonpath}" if pythonpath else str(src_path)
+                    
+                    cmd = [sys.executable, str(script), "--help"]
+                    
+                    process = subprocess.run(
+                        cmd,
+                        capture_output=True,
+                        text=True,
+                        timeout=5,
+                        env=env,
+                        cwd=script.parent,
+                        stdin=subprocess.DEVNULL
+                    )
+                    
+                    if process.returncode == 0:
+                        help_text = process.stdout
+                        success_count += 1
+                        print(" ✅")
+                    else:
+                        help_text = f"Failed to get help text (Exit Code: {process.returncode})\n\nStderr:\n{process.stderr}"
+                        fail_count += 1
+                        print(" ❌")
+                        
+                except subprocess.TimeoutExpired:
+                    help_text = "Timed out getting help text"
+                    fail_count += 1
+                    print(" ⏰")
+                except Exception as e:
+                    help_text = f"Error generating docs: {str(e)}"
+                    fail_count += 1
+                    print(" 💥")
+                
+                # Write Entry
+                f.write(f"### {script_name}\n\n")
+                f.write(f"**Path**: `{rel_path}`\n\n")
+                f.write("```text\n")
+                f.write(help_text.strip())
+                f.write("\n```\n\n")
+                
+            f.write("---\n\n")
+            
+    print_section("Documentation Generation Complete")
+    print_info(f"Successful: {success_count}")
+    print_info(f"Failed: {fail_count}")
+    print_success(f"Documentation written to {output_file}")
+    
+    return True
+
+
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
@@ -300,6 +481,7 @@ Examples:
   %(prog)s --subdirs documentation      # Run only documentation scripts
   %(prog)s --filter audit               # Run scripts containing 'audit'
   %(prog)s --verbose                    # Show detailed output
+  %(prog)s --generate-docs docs/scripts.md # Generate Markdown documentation
         """,
     )
     
@@ -347,10 +529,24 @@ Examples:
         help="Maximum directory depth to search (default: 2)",
     )
     
+    parser.add_argument(
+        "--generate-docs",
+        help="Generate Markdown documentation to this file path",
+    )
+    
     args = parser.parse_args()
     
     # Setup paths
-    scripts_dir = Path(__file__).parent
+    scripts_dir = Path(__file__).parent.resolve()
+    
+    # Load configuration
+    config = load_config(scripts_dir)
+    
+    # Handle Doc Generation
+    if args.generate_docs:
+        output_file = Path(args.generate_docs).resolve()
+        success = generate_script_documentation(scripts_dir, output_file)
+        return 0 if success else 1
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     print_section("SCRIPT ORCHESTRATOR")
@@ -392,6 +588,16 @@ Examples:
         print_section("DRY RUN MODE", separator="=")
         print_info("Scripts would be executed in the order shown above")
         print_info(f"Total: {len(scripts)} scripts")
+        
+        # Show skip status from config
+        skipped_count = 0
+        for script in scripts:
+            script_config = get_script_config(script, scripts_dir, config)
+            if script_config.get("skip"):
+                 print(f"⚠️  WOULD SKIP: {script.name} ({script_config.get('skip_reason', 'Configured to skip')})")
+                 skipped_count += 1
+        
+        print(f"ℹ️  Skipped by config: {skipped_count}")
         return 0
     
     # Execute scripts
@@ -408,11 +614,33 @@ Examples:
         
         if args.verbose:
             print(f"\n[{i}/{len(scripts)}] Running: {relative_path}")
+            
+        # Get script config
+        script_config = get_script_config(script, scripts_dir, config)
+        
+        # Check if skipped
+        if script_config.get("skip"):
+            # Add skipped result
+            results.append({
+                "script": str(script),
+                "name": script.name,
+                "subdirectory": script.parent.name,
+                "status": "skipped",
+                "execution_time": 0.0,
+                "start_time": datetime.now().isoformat(),
+                "end_time": datetime.now().isoformat(),
+                "error": script_config.get('skip_reason', 'Configured to skip'),
+                "stdout": "",
+                "stderr": "", 
+                "exit_code": None
+            })
+            continue
         
         result = run_script(
             script,
             timeout=args.timeout,
             cwd=scripts_dir.parent,  # Run from project root
+            config=script_config
         )
         
         # Save individual log

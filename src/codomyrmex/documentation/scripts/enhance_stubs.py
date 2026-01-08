@@ -1,3 +1,10 @@
+from pathlib import Path
+import os
+
+from codomyrmex.{module_parts} import main_component
+
+
+
 #!/usr/bin/env python3
 """
 Enhance Stub READMEs.
@@ -6,8 +13,6 @@ Adds "Getting Started" and "Contributing" sections to short READMEs
 to improve quality scores by increasing word count, section count, and code examples.
 """
 
-import os
-from pathlib import Path
 
 STANDARD_CONTENT = """
 
@@ -17,7 +22,6 @@ To use this module in your project, import the necessary components:
 
 ```python
 # Example usage
-from codomyrmex.{module_parts} import main_component
 
 def example():
     result = main_component.process()

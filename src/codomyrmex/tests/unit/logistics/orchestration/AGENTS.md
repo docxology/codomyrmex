@@ -1,10 +1,10 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/project_orchestration
+# Codomyrmex Agents — src/codomyrmex/tests/unit/logistics/orchestration
 
 ## Signposting
-- **Parent**: [Project Orchestration](../AGENTS.md)
+- **Parent**: [Orchestration](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [project](project/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -12,12 +12,16 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Test files and validation suites for project_orchestration.
+Test files and validation suites for orchestration.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `project/` – Directory containing project components
 - `test_project_orchestration.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
@@ -25,5 +29,5 @@ Test files and validation suites for project_orchestration.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [logistics](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation

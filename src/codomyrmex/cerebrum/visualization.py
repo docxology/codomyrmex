@@ -1,35 +1,43 @@
+from typing import Any, Dict, List, Optional, Tuple
+
+from matplotlib.figure import Figure
+from matplotlib.patches import Patch
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+
+from codomyrmex.cerebrum.bayesian import BayesianNetwork
+from codomyrmex.cerebrum.cases import Case
+from codomyrmex.cerebrum.exceptions import VisualizationError
+from codomyrmex.cerebrum.visualization_base import (
+from codomyrmex.cerebrum.visualization_theme import (
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
 """Visualization tools for CEREBRUM models and inference results.
 
 Enhanced with professional academic styling, modular architecture, and comprehensive
 legends and axes formatting.
 """
 
-from typing import Any, Dict, List, Optional, Tuple
 
 try:
-    import matplotlib.pyplot as plt
-    import networkx as nx
-    import numpy as np
-    from matplotlib.figure import Figure
-    from matplotlib.patches import Patch
 
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
     Figure = Any
 
-from codomyrmex.cerebrum.bayesian import BayesianNetwork
-from codomyrmex.cerebrum.cases import Case
-from codomyrmex.cerebrum.exceptions import VisualizationError
-from codomyrmex.cerebrum.visualization_base import (
     BaseChartVisualizer,
     BaseNetworkVisualizer,
 )
-from codomyrmex.cerebrum.visualization_theme import (
     VisualizationTheme,
     get_default_theme,
 )
-from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

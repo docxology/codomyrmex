@@ -1,7 +1,25 @@
-#!/usr/bin/env python3
 import os
 import sys
 
+from doc_scaffolder import FunctionName, ClassName
+
+
+
+
+
+
+
+#!/usr/bin/env python3
+
+"""Main entry point and utility functions
+
+This module provides doc_scaffolder functionality including:
+- 4 functions: get_children_links, update_file_with_signposting, process_directory...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 EXCLUDE_DIRS = {
     '__pycache__', '.git', '.github', '.idea', '.vscode', 'venv', 'env', 'node_modules', 
     '__init__.py', '.DS_Store', 'dist', 'build', 'egg-info', '.mypy_cache', '.pytest_cache',
@@ -60,6 +78,15 @@ TEMPLATE_SPEC = """# {name} Functional Specification
 """
 
 def get_children_links(root, dirs, filename="README.md"):
+    """Brief description of get_children_links.
+
+Args:
+    root : Description of root
+    dirs : Description of dirs
+    filename : Description of filename
+
+    Returns: Description of return value
+"""
     links = []
     for d in sorted(dirs):
         if d in EXCLUDE_DIRS or d.startswith('.'):
@@ -72,6 +99,16 @@ def get_children_links(root, dirs, filename="README.md"):
     return "\n".join(links)
 
 def update_file_with_signposting(path, name, children_links, file_type="README.md"):
+    """Brief description of update_file_with_signposting.
+
+Args:
+    path : Description of path
+    name : Description of name
+    children_links : Description of children_links
+    file_type : Description of file_type
+
+    Returns: Description of return value
+"""
     with open(path, "r") as f:
         content = f.read()
     
@@ -115,6 +152,14 @@ def update_file_with_signposting(path, name, children_links, file_type="README.m
         f.write("\n".join(new_lines))
 
 def process_directory(root, dirs):
+    """Brief description of process_directory.
+
+Args:
+    root : Description of root
+    dirs : Description of dirs
+
+    Returns: Description of return value
+"""
     name = os.path.basename(root)
     if not name:
         name = "Root"
@@ -151,6 +196,13 @@ def process_directory(root, dirs):
 
 
 def main():
+    """Brief description of main.
+
+Args:
+
+
+    Returns: Description of return value
+"""
     start_dir = sys.argv[1] if len(sys.argv) > 1 else "."
     start_dir = os.path.abspath(start_dir)
 

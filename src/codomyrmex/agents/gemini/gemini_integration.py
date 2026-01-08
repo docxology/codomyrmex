@@ -1,8 +1,15 @@
-"""Gemini integration adapters for Codomyrmex modules."""
-
 from typing import Any
 
-from codomyrmex.agents.core import AgentIntegrationAdapter, AgentInterface
+from codomyrmex.agents.core import AgentIntegrationAdapter
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.core import AgentRequest
+
+
+
+"""Gemini integration adapters for Codomyrmex modules."""
+
+
 
 
 class GeminiIntegrationAdapter(AgentIntegrationAdapter):
@@ -22,7 +29,6 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Generated code
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Build prompt with language context
         full_prompt = f"Generate {language} code: {prompt}"
@@ -33,6 +39,10 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
             context["files"] = kwargs["files"]
         if "directories" in kwargs:
             context["directories"] = kwargs["directories"]
+        
+        # Forward multimodal data if present
+        if "images" in kwargs:
+            context["images"] = kwargs["images"]
 
         request = AgentRequest(
             prompt=full_prompt,
@@ -79,41 +89,44 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Completion result dictionary
         """
-        from codomyrmex.agents.core import AgentRequest
 
-        # Convert messages to prompt
+        # Convert messages to prompt (naive implementation for now, 
+        # ideally we should map to history or structured content if supported)
         prompt_parts = []
         for msg in messages:
             role = msg.get("role", "user")
             content = msg.get("content", "")
             if role == "user":
-                prompt_parts.append(content)
+                prompt_parts.append(f"User: {content}")
             elif role == "assistant":
-                prompt_parts.append(f"Assistant: {content}")
+                prompt_parts.append(f"Model: {content}")
             elif role == "system":
                 prompt_parts.append(f"System: {content}")
 
         prompt = "\n".join(prompt_parts)
 
-        # If model is specified, use /model command
+        # Context setup
+        context = kwargs.copy()
         if model:
-            prompt = f"/model {model}\n{prompt}"
+            context["model"] = model
 
-        request = AgentRequest(prompt=prompt, context=kwargs)
+        request = AgentRequest(prompt=prompt, context=context)
 
         response = self.agent.execute(request)
 
-        # Estimate token usage (rough approximation)
-        prompt_tokens = len(prompt.split())
-        completion_tokens = len(response.content.split()) if response.content else 0
+        # Token usage from metadata if available
+        usage = response.metadata.get("usage", {})
+        prompt_tokens = usage.get("prompt_token_count", 0)
+        completion_tokens = usage.get("candidates_token_count", 0)
+        total_tokens = usage.get("total_token_count", 0)
 
         return {
             "content": response.content,
-            "model": model or "gemini",
+            "model": model or response.metadata.get("model", "gemini"),
             "usage": {
                 "prompt_tokens": prompt_tokens,
                 "completion_tokens": completion_tokens,
-                "total_tokens": prompt_tokens + completion_tokens,
+                "total_tokens": total_tokens,
             },
             "metadata": response.metadata,
         }
@@ -123,16 +136,7 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
     ) -> dict[str, Any]:
         """
         Adapt Gemini for code execution sandbox.
-
-        Args:
-            code: Code to analyze
-            language: Programming language
-            **kwargs: Additional parameters
-
-        Returns:
-            Analysis result dictionary
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Use gemini to analyze or validate code
         prompt = f"Analyze this {language} code:\n\n```{language}\n{code}\n```"
@@ -150,4 +154,3 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
             "error": response.error,
             "metadata": response.metadata,
         }
-

@@ -1,6 +1,6 @@
 # Pattern Matching - Module Doc Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 This directory mirrors `src/codomyrmex/pattern_matching`.
 
 ## Navigation

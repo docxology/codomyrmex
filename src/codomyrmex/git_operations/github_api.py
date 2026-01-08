@@ -1,3 +1,18 @@
+from datetime import datetime
+from typing import Optional
+import json
+import os
+import sys
+
+import requests
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 GitHub API Operations for Codomyrmex Git Operations Module.
@@ -6,13 +21,7 @@ This module provides GitHub API integration for repository creation,
 pull request management, and other GitHub-specific operations.
 """
 
-import json
-import os
-import sys
-from datetime import datetime
-from typing import Optional
 
-import requests
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,7 +30,6 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

@@ -1,14 +1,24 @@
+from typing import IO, Optional
+
+from io import BytesIO
+import gzip
+import zipfile
+import zipfile
+import zlib
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Compression utilities.
 """
 
-import gzip
-import zlib
-from io import BytesIO
-from typing import IO, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -49,7 +59,6 @@ class Compressor:
             elif self.format == "zlib":
                 return zlib.compress(data, level=level)
             elif self.format == "zip":
-                import zipfile
                 buffer = BytesIO()
                 with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=level) as zf:
                     zf.writestr("data", data)
@@ -78,7 +87,6 @@ class Compressor:
             elif self.format == "zlib":
                 return zlib.decompress(data)
             elif self.format == "zip":
-                import zipfile
                 with zipfile.ZipFile(BytesIO(data), "r") as zf:
                     return zf.read("data")
             else:
@@ -127,4 +135,5 @@ class Compressor:
         elif len(data) > 2 and data[:2] in [b"\x78\x01", b"\x78\x9c", b"\x78\xda"]:
             return "zlib"
         return None
+
 

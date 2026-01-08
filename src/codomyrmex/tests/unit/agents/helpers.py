@@ -1,3 +1,9 @@
+from typing import Optional
+import subprocess
+
+
+
+
 """Helper functions for agent tests.
 
 Tests use real implementations only. When CLI tools are not available,
@@ -5,8 +11,6 @@ tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
 
-import subprocess
-from typing import Optional
 
 
 def check_tool_available(command: str, help_flag: str = "--help") -> bool:

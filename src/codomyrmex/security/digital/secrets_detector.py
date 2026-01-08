@@ -1,3 +1,18 @@
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Set
+import logging
+import os
+import re
+
+import hashlib
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Secrets Detector for Codomyrmex Security Audit Module.
 
@@ -9,17 +24,10 @@ Provides comprehensive detection of potential secrets exposure including:
 - Cloud service credentials
 """
 
-import os
-import re
-import hashlib
-from typing import List, Dict, Any, Optional, Set
-from pathlib import Path
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 

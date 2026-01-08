@@ -1,16 +1,24 @@
-"""
-WebSocket client implementation.
-"""
-
 from typing import Optional, Union
+
+import websocket
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
+
+
+
+
+
+"""
+WebSocket client implementation.
+"""
+
+
+
 logger = get_logger(__name__)
 
 try:
-    import websocket
     WEBSOCKET_AVAILABLE = True
 except ImportError:
     WEBSOCKET_AVAILABLE = False
@@ -103,4 +111,5 @@ class WebSocketClient:
             finally:
                 self.ws = None
                 self.connected = False
+
 

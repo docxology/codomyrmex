@@ -1,7 +1,7 @@
 # containerization
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Container management including Docker image building, container orchestration, Kubernetes integration, container registry management, image optimization, security scanning, and performance optimization. Provides comprehensive container lifecycle management.
+Module components and implementation for containerization..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -33,41 +33,3 @@ Container management including Docker image building, container orchestration, K
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.containerization import (
-    DockerManager,
-    KubernetesOrchestrator,
-    ContainerSecurityScanner,
-    ContainerRegistry,
-)
-
-# Build Docker image
-docker = DockerManager()
-image = docker.build_image(
-    dockerfile="Dockerfile",
-    tag="myapp:latest"
-)
-
-# Deploy to Kubernetes
-k8s = KubernetesOrchestrator()
-deployment = k8s.deploy(
-    image="myapp:latest",
-    replicas=3,
-    namespace="production"
-)
-
-# Scan for security issues
-scanner = ContainerSecurityScanner()
-scan_result = scanner.scan_image("myapp:latest")
-print(f"Vulnerabilities: {len(scan_result.vulnerabilities)}")
-
-# Manage container registry
-registry = ContainerRegistry()
-registry.push_image("myapp:latest", "registry.example.com")
-```
-

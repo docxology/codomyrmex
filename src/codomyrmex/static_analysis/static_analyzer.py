@@ -1,10 +1,5 @@
-"""
-Comprehensive static analysis functionality for Codomyrmex.
-
-This module provides advanced static analysis capabilities including code quality,
-security analysis, performance analysis, and maintainability assessment.
-"""
-
+from pathlib import Path
+from typing import Optional
 import ast
 import json
 import math
@@ -13,10 +8,27 @@ import re
 import subprocess
 import sys
 import time
+
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
-from typing import Optional
+from performance import monitor_performance, performance_context
+import csv
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+
+
+
+
+
+
+"""
+Comprehensive static analysis functionality for Codomyrmex.
+
+This module provides advanced static analysis capabilities including code quality,
+security analysis, performance analysis, and maintainability assessment.
+"""
+
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,14 +38,12 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 # Import logger setup
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Get module logger
 logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-    from performance import monitor_performance, performance_context
 
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
@@ -572,7 +582,6 @@ class StaticAnalyzer:
 
         try:
             # Import pyrefly_runner here to avoid circular imports
-            from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
             # Run Pyrefly analysis on the file
             pyrefly_result = run_pyrefly_analysis(
@@ -1011,7 +1020,6 @@ class StaticAnalyzer:
                     )
 
             elif format.lower() == "csv":
-                import csv
 
                 with open(output_path, "w", newline="") as f:
                     writer = csv.writer(f)

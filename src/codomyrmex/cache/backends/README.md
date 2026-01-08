@@ -1,7 +1,7 @@
 # backends
 
 ## Signposting
-- **Parent**: [backends](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,9 +12,11 @@
 
 ## Overview
 
-Cache backend implementations including in-memory, file-based, and Redis backends. Provides pluggable cache backends for different storage requirements and performance characteristics.
+Module components and implementation for backends..
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `__init__.py` – File
 - `file_based.py` – File
 - `in_memory.py` – File
@@ -25,22 +27,3 @@ Cache backend implementations including in-memory, file-based, and Redis backend
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cache](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.cache.backends import InMemoryCache, FileBasedCache
-
-# Use in-memory cache for fast access
-memory_cache = InMemoryCache()
-memory_cache.set("key1", "value1", ttl=300)
-value = memory_cache.get("key1")
-
-# Use file-based cache for persistence
-file_cache = FileBasedCache(cache_dir="./cache")
-file_cache.set("key2", {"data": "value"}, ttl=600)
-cached_data = file_cache.get("key2")
-```
-

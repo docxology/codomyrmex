@@ -1,7 +1,7 @@
-# database_management
+# examples
 
 ## Signposting
-- **Parent**: [database_management](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [db_performance](db_performance/README.md)
     - [output](output/README.md)
@@ -26,6 +26,5 @@ Example implementations and demonstrations.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [scripts](../README.md)
-- **Project Root**: [README](../../README.md)
-
+- **Parent Directory**: [database_management](../README.md)
+- **Project Root**: [README](../../../README.md)

@@ -1,3 +1,10 @@
+from pathlib import Path
+from typing import List, Tuple
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix broken links in documentation files.
@@ -5,9 +12,6 @@ Fix broken links in documentation files.
 This script fixes common broken link patterns found during documentation scanning.
 """
 
-import re
-from pathlib import Path
-from typing import List, Tuple
 
 
 def fix_links_in_file(file_path: Path, repo_root: Path) -> List[str]:

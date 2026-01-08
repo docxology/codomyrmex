@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/llm/outputs/integration
 
 ## Signposting
-- **Parent**: [outputs](../AGENTS.md)
+- **Parent**: [Integration](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,19 +12,13 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Integration test results and validation for LLM interactions. Stores full ecosystem validation results and production deployment simulation results for testing LLM integration across the Codomyrmex platform.
+Module components and implementation for integration..
 
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
-- `full_ecosystem_validation.json` – Full ecosystem validation results
-- `production_deployment_simulation.json` – Production deployment simulation results
-
-## Key Data
-
-### Integration Tests
-- **Full Ecosystem Validation**: Complete ecosystem integration test results
-- **Production Deployment Simulation**: Production deployment simulation results
+- `full_ecosystem_validation.json` – Project file
+- `production_deployment_simulation.json` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

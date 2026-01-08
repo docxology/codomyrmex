@@ -1,8 +1,12 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix broken SPEC.md links in documentation subdirectories."""
 
-import re
-from pathlib import Path
 
 def calculate_correct_path(from_file: Path, base_path: Path) -> str:
     """Calculate correct relative path from documentation SPEC to module SPEC."""

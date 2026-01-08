@@ -16,7 +16,8 @@ if __name__ == "__main__":
     try:
         from codomyrmex.documentation.scripts import audit_agents_filepaths
         if hasattr(audit_agents_filepaths, 'main'):
-            sys.exit(audit_agents_filepaths.main())
+            audit_agents_filepaths.main()
+            sys.exit(0)
         else:
             # If no main, just running the module might have been the original behavior
             # But importing it effectively runs top-level code if not guarded.

@@ -1,8 +1,15 @@
 import json
+import logging
 import os
 import re
 import subprocess
 import sys
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.performance import monitor_performance, performance_context
+
+
+
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -14,11 +21,9 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 except ImportError:
     # Fallback for environments where logging_monitoring might not be discoverable
     # This is less ideal but provides a basic operational mode.
-    import logging
 
     print(
         "Warning: Could not import Codomyrmex logging. Using standard Python logging.",
@@ -50,7 +55,6 @@ logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-    from codomyrmex.performance import monitor_performance, performance_context
 
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:

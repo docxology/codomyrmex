@@ -1,8 +1,12 @@
+from dataclasses import dataclass
+
+
+
+
 """
 Cache statistics data structures.
 """
 
-from dataclasses import dataclass
 
 
 @dataclass
@@ -35,4 +39,5 @@ class CacheStats:
         if self.max_size == 0:
             return 0.0
         return (self.size / self.max_size) * 100
+
 

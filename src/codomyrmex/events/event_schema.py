@@ -1,3 +1,18 @@
+from typing import Dict, List, Any, Optional, Union, Tuple
+import json
+import logging
+
+from dataclasses import dataclass, field
+from enum import Enum
+import jsonschema
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Event Schema for Codomyrmex Event System
 
@@ -5,18 +20,11 @@ This module defines event types, schemas, and validation for the Codomyrmex
 event-driven architecture.
 """
 
-import json
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Union, Tuple
-from enum import Enum
-import jsonschema
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 

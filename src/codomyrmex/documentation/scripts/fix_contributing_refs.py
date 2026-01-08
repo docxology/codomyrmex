@@ -1,3 +1,11 @@
+from pathlib import Path
+import json
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix CONTRIBUTING.md references in module documentation.
@@ -6,10 +14,6 @@ Updates all references to CONTRIBUTING.md in modules to point to
 the correct location at docs/project/contributing.md
 """
 
-import json
-import re
-from pathlib import Path
-import sys
 
 
 def calculate_relative_path(from_file: Path, to_file: Path, repo_root: Path) -> str:

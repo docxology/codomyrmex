@@ -1,3 +1,15 @@
+from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Set, Tuple, Optional
+import json
+import os
+import re
+import subprocess
+
+
+
+
 #!/usr/bin/env python3
 """
 Comprehensive Documentation Scan and Improvement Tool
@@ -6,14 +18,6 @@ This script implements a 7-phase approach to scan, verify, and improve
 all documentation across the Codomyrmex repository.
 """
 
-import os
-import re
-import json
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
-from collections import defaultdict
-from datetime import datetime
-import subprocess
 
 
 class DocumentationScanner:

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/coding/tests/review
+# Codomyrmex Agents — src/codomyrmex/tests/unit/coding/review
 
 ## Signposting
 - **Parent**: [Review](../AGENTS.md)
@@ -29,6 +29,7 @@ Test files and validation suites for review.
 - `unit/` – Directory containing unit components
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
@@ -36,5 +37,5 @@ Test files and validation suites for review.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [coding](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation

@@ -1,3 +1,16 @@
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
+
+from enum import Enum
+from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, validator as field_validator
+
+
+
+
+
+
+
 """Data models for FPF specification parsing and analysis.
 
 This module defines Pydantic models for representing the First Principles
@@ -5,15 +18,10 @@ Framework specification structure, including patterns, concepts, relationships,
 and the overall specification.
 """
 
-from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
 
 try:
-    from pydantic import BaseModel, Field, field_validator
 except ImportError:
     # Fallback for older Pydantic versions
-    from pydantic import BaseModel, Field, validator as field_validator
 
 
 class PatternStatus(str, Enum):

@@ -1,3 +1,24 @@
+from collections import defaultdict
+from datetime import datetime, timezone
+from typing import Any, Optional
+import json
+import logging
+import os
+import time
+
+from dataclasses import asdict, dataclass, field
+from enum import Enum
+import psutil
+import threading
+
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.performance import monitor_performance
+
+
+
+
+
+
 """
 Resource Management System for Codomyrmex
 
@@ -5,28 +26,16 @@ This module provides resource allocation, dependency management, and coordinatio
 for tasks and workflows across the Codomyrmex ecosystem.
 """
 
-import json
-import os
-import threading
-import time
-from collections import defaultdict
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Optional
 
 # Import Codomyrmex modules
 try:
-    from codomyrmex.logging_monitoring import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 
 try:
-    from codomyrmex.performance import monitor_performance
 
     PERFORMANCE_AVAILABLE = True
 except ImportError:
@@ -369,7 +378,6 @@ class ResourceManager:
 
         # Memory resource
         try:
-            import psutil
 
             memory_gb = psutil.virtual_memory().total / (1024**3)
         except ImportError:

@@ -1,14 +1,23 @@
+from typing import Any, Dict
+import time
+
+import psutil
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Resource Tracking
 
 Monitors resource usage during code execution.
 """
 
-import time
-from typing import Any, Dict
 
 try:
-    import psutil
     PSUTIL_AVAILABLE = True
 except ImportError:
     PSUTIL_AVAILABLE = False
@@ -19,7 +28,6 @@ except ImportError:
         virtual_memory = lambda: type('obj', (object,), {'used': 0, 'total': 0})()
     psutil = _DummyPSUtil()
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

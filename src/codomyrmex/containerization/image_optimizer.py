@@ -1,3 +1,20 @@
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple
+import json
+import logging
+import os
+import re
+
+from dataclasses import dataclass, field
+import docker
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Image Optimizer for Codomyrmex Containerization
 
@@ -5,24 +22,15 @@ This module provides comprehensive Docker image optimization capabilities,
 including size reduction, layer optimization, and multi-stage build generation.
 """
 
-import os
-import re
-import json
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Tuple
-from pathlib import Path
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 # Import Docker client
 try:
-    import docker
     HAS_DOCKER = True
 except ImportError:
     docker = None

@@ -1,41 +1,38 @@
-# Codomyrmex Unified Testing Architecture
+# tests
+
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - [examples](examples/README.md)
+    - [fixtures](fixtures/README.md)
+    - [integration](integration/README.md)
+    - [output](output/README.md)
+    - [performance](performance/README.md)
+    - [unit](unit/README.md)
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This directory contains the unified testing architecture for Codomyrmex. All unit and integration tests are organized here to maintain a clean and modular source directory.
+Test files and validation suites.
 
-## Structure
-
-- `unit/` - Unit tests organized by module (e.g., `unit/fpf/`, `unit/website/`, `unit/agents/`).
-- `integration/` - End-to-end and cross-module integration tests.
-- `fixtures/` - Shared test data and mock resources.
-- `performance/` - Benchmarks and performance tests.
-- `conftest.py` - Root pytest configuration and shared fixtures.
-
-## Running Tests
-
-To run the full test suite, ensure you are in the project root and set the `PYTHONPATH`:
-
-```bash
-export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-pytest src/codomyrmex/tests
-```
-
-To run tests for a specific module:
-
-```bash
-pytest src/codomyrmex/tests/unit/website
-```
-
-## Signposting
-- **Parent**: [codomyrmex](../README.md)
-- **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-    - [Running Tests Detailed Guide](RUNNING_TESTS.md)
+## Directory Contents
+- `README.md` – File
+- `RUNNING_TESTS.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `conftest.py` – File
+- `examples/` – Subdirectory
+- `fixtures/` – Subdirectory
+- `integration/` – Subdirectory
+- `performance/` – Subdirectory
+- `unit/` – Subdirectory
 
 ## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-- **Source Root**: [src](../../README.md)

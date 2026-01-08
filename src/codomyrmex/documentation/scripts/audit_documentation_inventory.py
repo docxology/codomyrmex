@@ -1,14 +1,18 @@
+from pathlib import Path
+from typing import Dict, List, Tuple
+import json
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Audit all README.md and AGENTS.md files in the repository.
 Creates a comprehensive inventory with current state assessment.
 """
 
-import os
-import re
-from pathlib import Path
-from typing import Dict, List, Tuple
-import json
 
 REPO_ROOT = Path(__file__).parent.parent.parent
 

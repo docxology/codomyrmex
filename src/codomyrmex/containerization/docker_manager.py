@@ -1,16 +1,25 @@
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
+import os
+import sys
+
+from dataclasses import dataclass, field
+import docker
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Docker Manager for Codomyrmex Containerization Module.
 
 Provides comprehensive Docker container management and orchestration.
 """
 
-import os
-import sys
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
 
-import docker
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +28,6 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

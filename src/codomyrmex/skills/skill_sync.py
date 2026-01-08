@@ -1,21 +1,26 @@
+from pathlib import Path
+from typing import Optional
+import logging
+import shutil
+import subprocess
+
+from codomyrmex.git_operations.git_manager import (
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
 """Skill Sync Module
 
 Handles syncing with the upstream vibeship-spawner-skills repository.
 """
 
-import subprocess
-from pathlib import Path
-from typing import Optional
 
 try:
-    from codomyrmex.git_operations.git_manager import (
         clone_repository,
         is_git_repository,
         pull_changes,
     )
-    from codomyrmex.logging_monitoring.logger_config import get_logger
 except ImportError:
-    import logging
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -98,7 +103,6 @@ class SkillSync:
         if self.upstream_dir.exists():
             if force:
                 logger.info(f"Removing existing upstream directory: {self.upstream_dir}")
-                import shutil
 
                 shutil.rmtree(self.upstream_dir)
             else:
@@ -239,4 +243,5 @@ class SkillSync:
         except Exception as e:
             logger.warning(f"Error getting upstream version: {e}")
             return None
+
 

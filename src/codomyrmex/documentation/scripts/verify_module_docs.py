@@ -1,9 +1,13 @@
+from collections import defaultdict
+from pathlib import Path
+import json
+
+
+
+
 #!/usr/bin/env python3
 """Verify all modules have required documentation files."""
 
-import json
-from pathlib import Path
-from collections import defaultdict
 
 def verify_modules(base_path: Path) -> dict:
     """Verify all modules have README.md, AGENTS.md, and SPEC.md."""

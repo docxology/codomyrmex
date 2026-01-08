@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/project
 
 ## Signposting
-- **Parent**: [Project](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [audit_results](audit_results/AGENTS.md)
@@ -24,6 +24,7 @@ Documentation files and guides for project.
 - `coverage-report.md` – Project file
 - `documentation-audit-report.md` – Project file
 - `documentation-audit-summary.md` – Project file
+- `documentation-completeness.md` – Project file
 - `documentation-improvements-summary.md` – Project file
 - `documentation-reorganization-summary.md` – Project file
 - `implementation-status.md` – Project file

@@ -1,3 +1,10 @@
+from pathlib import Path
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Comprehensive fixer for all documentation issues.
@@ -8,9 +15,6 @@ Fixes:
 3. Ensures all broken links are resolved
 """
 
-import re
-from pathlib import Path
-import sys
 
 
 def fix_example_tutorial_references():

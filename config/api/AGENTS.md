@@ -1,8 +1,8 @@
 # Codomyrmex Agents — config/api
 
 ## Signposting
-- **Parent**: [config](../AGENTS.md)
-- **Self**: [api Agents](AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [examples](examples/AGENTS.md)
 - **Key Artifacts**:
@@ -12,29 +12,23 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-API and service configuration templates for API endpoints, service URLs, API versions, and rate limiting. Used across `api/`, `networking/`, and `project_orchestration/` modules.
+Configuration files and templates.
 
 ## Active Components
-
-- `README.md` – API configuration documentation
-- `SPEC.md` – Functional specification
-- `endpoints.yaml` – API endpoint definitions
-- `rate-limiting.yaml` – Rate limiting configurations
-- `versions.yaml` – API versioning configurations
-- `examples/` – Example API configs
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `endpoints.yaml` – Project file
+- `examples/` – Directory containing examples components
+- `rate-limiting.yaml` – Project file
+- `versions.yaml` – Project file
 
 ## Operating Contracts
-
-- Maintain alignment between code, documentation, and API configurations.
+- Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Examples**: [examples/](examples/README.md)
-- **Parent**: [config](../AGENTS.md)
-- **Project Root**: [README](../../README.md)
-
+- **📁 Parent Directory**: [config](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../README.md) - Main project documentation

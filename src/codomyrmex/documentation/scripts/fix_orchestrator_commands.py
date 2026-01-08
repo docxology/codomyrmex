@@ -1,3 +1,12 @@
+from pathlib import Path
+from typing import List, Set
+import argparse
+import re
+import subprocess
+
+
+
+
 #!/usr/bin/env python3
 """
 Add orchestrator commands to AGENTS.md Active Components sections.
@@ -6,10 +15,6 @@ This script detects CLI commands from orchestrator scripts and adds them
 to the corresponding AGENTS.md files.
 """
 
-import re
-import subprocess
-from pathlib import Path
-from typing import List, Set
 
 
 class OrchestratorCommandFixer:
@@ -156,7 +161,6 @@ class OrchestratorCommandFixer:
 
 def main():
     """Main entry point."""
-    import argparse
 
     parser = argparse.ArgumentParser(description='Fix orchestrator commands in AGENTS.md files')
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

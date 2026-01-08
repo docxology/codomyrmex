@@ -1,8 +1,12 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix src/README.md links in documentation subdirectories."""
 
-import re
-from pathlib import Path
 
 def fix_src_links(file_path: Path) -> bool:
     """Fix links to src/README.md."""

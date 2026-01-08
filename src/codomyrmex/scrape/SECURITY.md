@@ -1,6 +1,6 @@
 # Security Considerations for Scrape Module
 
-**Version**: v0.1.0 | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Last Updated**: January 2026
 
 ## Overview
 

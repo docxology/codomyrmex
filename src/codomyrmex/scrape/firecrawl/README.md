@@ -1,7 +1,7 @@
 # firecrawl
 
 ## Signposting
-- **Parent**: [firecrawl](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Firecrawl scraping provider integration. Provides adapter and client for Firecrawl API, enabling web scraping, crawling, and content extraction through the Firecrawl service.
+Module components and implementation for firecrawl..
 
 ## Directory Contents
 - `README.md` – File
@@ -26,26 +26,3 @@ Firecrawl scraping provider integration. Provides adapter and client for Firecra
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [scrape](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.scrape.firecrawl import FirecrawlClient, FirecrawlAdapter
-
-# Initialize Firecrawl client
-client = FirecrawlClient(api_key="your-api-key")
-
-# Use adapter for scraping
-adapter = FirecrawlAdapter(client=client)
-
-# Scrape a URL
-result = adapter.scrape(url="https://example.com")
-print(f"Scraped content: {result.content[:100]}...")
-
-# Crawl a website
-crawl_result = adapter.crawl(url="https://example.com", max_depth=2)
-print(f"Crawled {len(crawl_result.pages)} pages")
-```
-

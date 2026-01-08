@@ -32,6 +32,7 @@ Documentation files and guides for pattern_matching.
 - `usage_examples.md` – Project file
 
 ## Operating Contracts
+- `.placeholder` – Project file
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

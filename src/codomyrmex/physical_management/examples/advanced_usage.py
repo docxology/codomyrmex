@@ -1,10 +1,17 @@
-"""Advanced usage examples for Physical Management module."""
-
+import math
+import math  # For thermal calculations
 import random
 import time
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.physical_management import (
+from codomyrmex.physical_management import (
+
+
+
+"""Advanced usage examples for Physical Management module."""
+
+
     EventType,
     MaterialType,
     ObjectType,
@@ -13,7 +20,6 @@ from codomyrmex.physical_management import (
 
 logger = get_logger(__name__)
 
-from codomyrmex.physical_management import (
     ForceField,
     PhysicsSimulator,
     PredictiveAnalytics,
@@ -362,7 +368,6 @@ def example_thermal_management():
     # Simulate thermal equilibration
     print("Simulating thermal equilibration...")
 
-    import math  # For thermal calculations
 
     for minute in range(5):  # 5 minutes of thermal simulation
         for second in range(60):
@@ -624,7 +629,6 @@ def example_distributed_sensor_calibration():
 
 if __name__ == "__main__":
     # Run all examples
-    import math
 
     print("Running Physical Management Advanced Examples")
     print("=" * 50)

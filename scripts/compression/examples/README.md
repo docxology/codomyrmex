@@ -1,7 +1,7 @@
-# compression
+# examples
 
 ## Signposting
-- **Parent**: [compression](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -24,6 +24,5 @@ Example implementations and demonstrations.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [scripts](../README.md)
-- **Project Root**: [README](../../README.md)
-
+- **Parent Directory**: [compression](../README.md)
+- **Project Root**: [README](../../../README.md)

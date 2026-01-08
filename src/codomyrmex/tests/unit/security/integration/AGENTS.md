@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/security/tests/integration
+# Codomyrmex Agents — src/codomyrmex/tests/unit/security/integration
 
 ## Signposting
 - **Parent**: [Integration](../AGENTS.md)
@@ -26,5 +26,5 @@ Test files and validation suites for integration.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [security](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation

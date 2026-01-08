@@ -1,3 +1,28 @@
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+import argparse
+import json
+
+import csv
+import matplotlib
+import matplotlib
+import matplotlib
+import matplotlib
+import matplotlib.pyplot as plt
+
+from codomyrmex.cerebrum import (
+from codomyrmex.cerebrum.bayesian import Distribution
+from codomyrmex.cerebrum.composition_visualizer import CompositionVisualizer
+from codomyrmex.cerebrum.concordance_visualizer import ConcordanceVisualizer
+from codomyrmex.cerebrum.visualization import (
+from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
+from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+
+
+
+
+
 """CEREBRUM orchestration for FPF analysis.
 
 This script demonstrates comprehensive application of CEREBRUM methods
@@ -5,12 +30,7 @@ This script demonstrates comprehensive application of CEREBRUM methods
 and reason about the First Principles Framework specification.
 """
 
-import csv
-import json
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 
-from codomyrmex.cerebrum import (
     ActiveInferenceAgent,
     BayesianNetwork,
     Case,
@@ -20,19 +40,14 @@ from codomyrmex.cerebrum import (
     InferenceEngine,
     ReasoningResult,
 )
-from codomyrmex.cerebrum.visualization import (
     CaseVisualizer,
     InferenceVisualizer,
     ModelVisualizer,
 )
-from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
-from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 # Import matplotlib with non-interactive backend
 try:
-    import matplotlib
     matplotlib.use('Agg')  # Use non-interactive backend
-    import matplotlib.pyplot as plt
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
@@ -429,7 +444,6 @@ class FPFOrchestrator:
         # Visualize Bayesian network
         if self.cerebrum.bayesian_network:
             try:
-                import matplotlib
                 matplotlib.use('Agg')  # Use non-interactive backend
                 visualizer = ModelVisualizer(figure_size=(14, 10), dpi=300)
                 fig = visualizer.visualize_network(
@@ -513,7 +527,6 @@ class FPFOrchestrator:
                 inference_rows = []
                 for pattern_id, result in list(analysis_results["bayesian_inference"]["inference_results"].items())[:5]:
                     if "importance_distribution" in result:
-                        from codomyrmex.cerebrum.bayesian import Distribution
                         dist = Distribution(
                             values=["high", "medium", "low"],
                             probabilities=[
@@ -566,8 +579,6 @@ class FPFOrchestrator:
             viz_dir: Visualization directory
         """
         try:
-            from codomyrmex.cerebrum.concordance_visualizer import ConcordanceVisualizer
-            import matplotlib
             matplotlib.use('Agg')
 
             concordance_viz = ConcordanceVisualizer(figure_size=(14, 10), dpi=300)
@@ -620,8 +631,6 @@ class FPFOrchestrator:
             viz_dir: Visualization directory
         """
         try:
-            from codomyrmex.cerebrum.composition_visualizer import CompositionVisualizer
-            import matplotlib
             matplotlib.use('Agg')
 
             composition_viz = CompositionVisualizer(figure_size=(20, 14), dpi=300)
@@ -810,7 +819,6 @@ class FPFOrchestrator:
 
 def main():
     """Main entry point for FPF-CEREBRUM orchestration."""
-    import argparse
 
     parser = argparse.ArgumentParser(description="CEREBRUM orchestration for FPF analysis")
     parser.add_argument(

@@ -1,7 +1,7 @@
 # three_d
 
 ## Signposting
-- **Parent**: [three_d](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,6 +15,8 @@
 Test files and validation suites for three_d.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_three_d.py` – File
 
 ## Navigation
@@ -22,17 +24,3 @@ Test files and validation suites for three_d.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [spatial](../README.md)
 - **Project Root**: [README](../../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.spatial.three_d import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

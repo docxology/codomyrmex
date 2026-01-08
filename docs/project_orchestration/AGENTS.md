@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/project_orchestration
 
 ## Signposting
-- **Parent**: [Project Orchestration](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

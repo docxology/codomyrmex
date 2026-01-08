@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/logistics/task/backends
 
 ## Signposting
-- **Parent**: [task](../AGENTS.md)
+- **Parent**: [Backends](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,22 +12,16 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Task queue backend implementations. Provides pluggable queue backends including in-memory queue for development and testing. Supports backend-agnostic queue interface for different storage requirements.
+Module components and implementation for backends..
 
 ## Active Components
-- `__init__.py` – Module exports and public API
-- `in_memory_queue.py` – In-memory queue backend implementation
-
-## Key Classes and Functions
-
-### InMemoryQueue (`in_memory_queue.py`)
-- `InMemoryQueue()` – In-memory queue backend
-- `enqueue(job: Job) -> str` – Add job to queue
-- `dequeue() -> Optional[Job]` – Remove and return next job
-- `get_queue_size() -> int` – Get queue size
-- `clear() -> None` – Clear all jobs from queue
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `in_memory_queue.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

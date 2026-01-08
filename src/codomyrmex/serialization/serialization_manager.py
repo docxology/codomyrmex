@@ -64,3 +64,4 @@ class SerializationManager:
         serializer = self.get_serializer(format)
         return serializer.deserialize(data, format)
 
+

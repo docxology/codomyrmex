@@ -1,3 +1,25 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
+import json
+import os
+import subprocess
+
+from dataclasses import dataclass, field
+from docker.errors import APIError, DockerException, ImageNotFound
+import base64
+import docker
+import hashlib
+import requests
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Container Registry Module for Codomyrmex Containerization.
@@ -6,25 +28,12 @@ This module provides container registry management, image storage,
 and distribution capabilities using Docker SDK and registry APIs.
 """
 
-import base64
-import hashlib
-import json
-import os
-import subprocess
-from dataclasses import dataclass, field
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 # Try to import Docker SDK
 try:
-    import docker
-    from docker.errors import APIError, DockerException, ImageNotFound
     DOCKER_AVAILABLE = True
 except ImportError:
     docker = None
@@ -36,7 +45,6 @@ except ImportError:
 
 # Try to import requests for registry API calls
 try:
-    import requests
     REQUESTS_AVAILABLE = True
 except ImportError:
     requests = None

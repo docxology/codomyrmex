@@ -15,11 +15,11 @@
 Example implementations and demonstrations.
 
 ## Directory Contents
-No files or subdirectories.
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [ci_cd_automation](../README.md)
-- **Project Root**: [README](../../../README.md)
-
+- **Parent Directory**: [examples](../README.md)
+- **Project Root**: [README](../../../../README.md)

@@ -1,7 +1,7 @@
 # git_operations
 
 ## Signposting
-- **Parent**: [git_operations](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,6 +15,8 @@
 Test files and validation suites for git_operations.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_github_functionality_demo.py` – File
 - `test_github_operations_demo.py` – File
 - `test_real_github_repos.py` – File
@@ -25,17 +27,3 @@ Test files and validation suites for git_operations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [integration](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.integration.git_operations import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

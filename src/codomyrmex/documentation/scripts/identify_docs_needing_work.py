@@ -1,10 +1,14 @@
+from pathlib import Path
+from typing import List, Dict
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Identify documentation files needing improvement."""
 
-import os
-import re
-from pathlib import Path
-from typing import List, Dict
 
 def check_placeholder_content(content: str) -> bool:
     """Check if content has placeholder text."""

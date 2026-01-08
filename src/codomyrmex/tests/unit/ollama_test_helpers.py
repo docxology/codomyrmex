@@ -1,3 +1,21 @@
+from pathlib import Path
+from typing import Optional, List, Dict, Any
+import json
+import shutil
+import tempfile
+import time
+
+from dataclasses import dataclass
+
+from codomyrmex.llm.ollama import (
+from codomyrmex.llm.ollama.model_runner import ExecutionOptions
+from codomyrmex.llm.ollama.ollama_manager import OllamaModel
+
+
+
+
+
+
 """
 Test Utilities and Helpers for Ollama Integration Tests
 
@@ -5,22 +23,13 @@ Provides reusable utilities, fixtures, and helpers for comprehensive
 Ollama integration testing. All utilities use real Ollama API calls (no mocks).
 """
 
-import time
-import tempfile
-import shutil
-from pathlib import Path
-from typing import Optional, List, Dict, Any
-from dataclasses import dataclass
 
 try:
-    from codomyrmex.llm.ollama import (
         OllamaManager,
         ModelRunner,
         OutputManager,
         ConfigManager
     )
-    from codomyrmex.llm.ollama.model_runner import ExecutionOptions
-    from codomyrmex.llm.ollama.ollama_manager import OllamaModel
     OLLAMA_AVAILABLE = True
 except ImportError:
     OLLAMA_AVAILABLE = False
@@ -388,7 +397,6 @@ def create_test_config(output_dir: Path) -> Dict[str, Any]:
     }
     
     config_path = output_dir / "test_config.json"
-    import json
     with open(config_path, 'w') as f:
         json.dump(config, f, indent=2)
     
@@ -410,4 +418,5 @@ def cleanup_test_resources(path: Path):
             path.unlink()
         else:
             shutil.rmtree(path, ignore_errors=True)
+
 

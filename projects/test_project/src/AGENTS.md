@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects/test_project/src
 
 ## Signposting
-- **Parent**: [Source Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

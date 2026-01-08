@@ -1,10 +1,24 @@
+from typing import Callable, Optional  # Added Optional for type hinting embed_fn
 import json
 import os
 import shutil
 import sys
-from typing import Callable, Optional  # Added Optional for type hinting embed_fn
 
+from dotenv import load_dotenv
+from kit import (
+from sentence_transformers import SentenceTransformer
 from tqdm import tqdm  # Added tqdm
+
+from codomyrmex.environment_setup.env_checker import (
+from codomyrmex.environment_setup.env_checker import (
+from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+
+
+
+
+
+
 
 # Add project root to Python path to allow sibling module imports
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -14,8 +28,6 @@ PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 # PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 # Note: sys.path manipulation removed in favor of proper package installation
 
-from dotenv import load_dotenv
-from kit import (
     DocstringIndexer,
     OpenAIConfig,
     Repository,
@@ -23,7 +35,6 @@ from kit import (
 
 # Attempt to import SentenceTransformer for explicit embedding function
 try:
-    from sentence_transformers import SentenceTransformer
 except ImportError:
     # This print will be visible if the script is run and the import fails
     # The logger might not be initialized yet.
@@ -36,10 +47,8 @@ except ImportError:
 
 # Attempt to import the new environment setup function
 try:
-    from codomyrmex.environment_setup.env_checker import (
         check_and_setup_env_vars,
     )
-    from codomyrmex.environment_setup.env_checker import (
         ensure_dependencies_installed as ensure_core_deps_installed,
     )
 except ImportError:
@@ -51,7 +60,6 @@ except ImportError:
 
 # Import logging setup
 try:
-    from codomyrmex.logging_monitoring import get_logger, setup_logging
 except ImportError:
     print(
         "[ERROR] Could not import from codomyrmex.logging_monitoring. Please ensure the module exists and is in the Python path."

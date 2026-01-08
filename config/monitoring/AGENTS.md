@@ -1,8 +1,8 @@
 # Codomyrmex Agents — config/monitoring
 
 ## Signposting
-- **Parent**: [config](../AGENTS.md)
-- **Self**: [monitoring Agents](AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [examples](examples/AGENTS.md)
 - **Key Artifacts**:
@@ -12,32 +12,24 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Monitoring and telemetry configuration templates for logging, metrics, alerting, and observability settings. Used across `logging_monitoring/`, `performance/`, `metrics/`, and all modules for logging.
+Configuration files and templates.
 
 ## Active Components
-
-- `README.md` – Monitoring configuration documentation
-- `SPEC.md` – Functional specification
-- `logging.yaml` – Logging configuration templates
-- `metrics.yaml` – Metrics collection settings
-- `alerts.yaml` – Alerting rules and thresholds
-- `telemetry.yaml` – Telemetry configuration
-- `examples/` – Example monitoring configs
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `alerts.yaml` – Project file
+- `examples/` – Directory containing examples components
+- `logging.yaml` – Project file
+- `metrics.yaml` – Project file
+- `telemetry.yaml` – Project file
 
 ## Operating Contracts
-
-- Maintain alignment between code, documentation, and monitoring configurations.
+- Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Support multiple logging formats and output destinations.
-- Enable consistent observability across all modules.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Examples**: [examples/](examples/README.md)
-- **Parent**: [config](../AGENTS.md)
-- **Project Root**: [README](../../README.md)
-
+- **📁 Parent Directory**: [config](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../README.md) - Main project documentation

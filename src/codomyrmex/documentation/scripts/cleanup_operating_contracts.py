@@ -1,10 +1,14 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Clean up AGENTS.md files by removing incorrectly added items from Operating Contracts sections.
 """
 
-import re
-from pathlib import Path
 
 
 def cleanup_operating_contracts(agents_path: Path) -> bool:

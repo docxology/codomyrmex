@@ -52,3 +52,4 @@ def get_errors(data: Any, schema: Any, validator_type: str = "json_schema") -> l
     result = validate(data, schema, validator_type)
     return result.errors
 
+

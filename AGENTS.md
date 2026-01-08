@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
@@ -17,7 +17,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 | Surface | Purpose | Documentation |
 |---------|---------|---------------|
 | **src/** | Core source modules implementing functionality | [src/README.md](src/README.md) |
-| **scripts/** | Maintenance and automation utilities | [scripts/README.md](scripts/README.md) |
+| **scripts/** | Maintenance and automation utilities | [scripts/README.md](scripts/examples/README.md) |
 | **docs/** | Project documentation (about Codomyrmex) | [docs/README.md](docs/README.md) |
 | **src/codomyrmex/tests/** | Test suites (unit and integration) | [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) |
 | **config/** | Configuration templates and examples | [config/README.md](config/README.md) |
@@ -204,9 +204,6 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `module_template/` - Module creation templates and scaffolding
   - Key Classes: `ModuleGenerator`, `TemplateRenderer`, `ScaffoldBuilder`
   - Key Functions: `create_module(name: str, template: str) -> bool`, `generate_scaffold(config: dict) -> dict`
-- `template/` - Code generation templates
-  - Key Classes: `TemplateEngine`, `CodeTemplate`, `SnippetGenerator`
-  - Key Functions: `render_template(template_name: str, context: dict) -> str`
 
 See [docs/modules/overview.md](docs/modules/overview.md) for module documentation.
 
@@ -230,8 +227,8 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Children**:
     - [src](src/AGENTS.md)
     - [docs](docs/AGENTS.md)
-    - [scripts](scripts/AGENTS.md)
-    - [examples](scripts/AGENTS.md)
+    - [scripts](scripts/examples/AGENTS.md)
+    - [examples](scripts/examples/AGENTS.md)
     - [config](config/AGENTS.md)
     - [cursorrules](cursorrules/AGENTS.md)
     - [projects](projects/AGENTS.md)
@@ -262,10 +259,27 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 
 
 ## Navigation Links
+- `.ruff_cache/` – Directory for .ruff_cache components.
+- `@output/` – Directory for @output components.
+- `examples/` – Directory for examples components.
+- `.pytest_cache/` – Directory for .pytest_cache components.
+- `.venv/` – Directory for .venv components.
+- `LICENSE` – Project license file
+- `Makefile` – Build automation file
+- `PATH_FIXES_SUMMARY.md` – Documentation file
+- `README.md` – Documentation file
+- `SECURITY.md` – Security policy and vulnerability reporting
+- `SPEC.md` – Documentation file
+- `check_env.py` – Python module
+- `config/` – Directory for config components.
+- `cursorrules/` – Directory for cursorrules components.
+- `docs/` – Directory for docs components.
+- `general.cursorrules` – Project file
+- `uv.lock` – UV dependency lock file
 - **Main Documentation**: [README.md](README.md) - Main project README
 - **Documentation Hub**: [docs/README.md](docs/README.md) - Documentation structure
 - **Source Code**: [src/README.md](src/README.md) - Source code structure
-- **Scripts**: [scripts/README.md](scripts/README.md) - Scripts directory
+- **Scripts**: [scripts/README.md](scripts/examples/README.md) - Scripts directory
 - **Testing**: [src/codomyrmex/tests/README.md](src/codomyrmex/tests/README.md) - Testing suite
 - **Configuration**: [config/README.md](config/README.md) - Configuration templates
 - **Cursor Rules**: [cursorrules/README.md](cursorrules/README.md) - Coding standards
@@ -273,7 +287,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Scripts Examples**: [scripts/examples/README.md](scripts/examples/README.md) - Executable examples and demos
 - **Source Agents**: [src/AGENTS.md](src/AGENTS.md) - Source code agent coordination
 - **Docs Agents**: [docs/AGENTS.md](docs/AGENTS.md) - Documentation agent coordination
-- **Scripts Agents**: [scripts/AGENTS.md](scripts/AGENTS.md) - Scripts agent coordination
+- **Scripts Agents**: [scripts/AGENTS.md](scripts/examples/AGENTS.md) - Scripts agent coordination
 - **Testing Agents**: [src/codomyrmex/tests/AGENTS.md](src/codomyrmex/tests/AGENTS.md) - Testing agent coordination
 - **Config Agents**: [config/AGENTS.md](config/AGENTS.md) - Configuration agents
 - **Rules Agents**: [cursorrules/AGENTS.md](cursorrules/AGENTS.md) - Cursor rules agents
@@ -310,7 +324,7 @@ Before completing significant changes:
 
 ## Version History
 
-- **v0.1.0** (December 2025) - Initial repository structure and agent coordination framework
+- **v0.1.0** (January 2026) - Initial repository structure and agent coordination framework
 
 ## Related Documentation
 

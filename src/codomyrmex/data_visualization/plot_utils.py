@@ -1,3 +1,10 @@
+import logging
+import os
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
 """
 Utility functions for the Data Visualization module.
 
@@ -5,8 +12,6 @@ Utility functions for the Data Visualization module.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-import logging
-import os
 
 
 def get_codomyrmex_logger(name: str) -> logging.Logger:
@@ -15,7 +20,6 @@ def get_codomyrmex_logger(name: str) -> logging.Logger:
     Falls back to standard Python logging if the Codomyrmex module is not found.
     """
     try:
-        from codomyrmex.logging_monitoring.logger_config import get_logger
 
         logger_instance = get_logger(name)
     except ImportError:

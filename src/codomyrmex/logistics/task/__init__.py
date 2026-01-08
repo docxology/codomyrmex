@@ -42,3 +42,4 @@ def get_queue(backend: str = "in_memory") -> Queue:
     """
     return Queue(backend=backend)
 
+

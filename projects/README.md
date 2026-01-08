@@ -23,4 +23,3 @@ Project workspace and templates.
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Project Root**: [README](../README.md)
-

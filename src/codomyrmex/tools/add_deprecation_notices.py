@@ -1,8 +1,12 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Add deprecation notices to all requirements.txt files."""
 
-from pathlib import Path
-import re
 
 
 def get_module_name(file_path: Path) -> str:

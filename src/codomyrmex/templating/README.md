@@ -1,7 +1,7 @@
 # templating
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Template engine support (Jinja2, Mako) for code generation, documentation templates, and dynamic content. Provides engine-agnostic template interface with support for template inheritance, custom filters, template caching, and loading templates from files or strings.
+Module components and implementation for templating..
 
 ## Directory Contents
 - `README.md` – File
@@ -26,34 +26,3 @@ Template engine support (Jinja2, Mako) for code generation, documentation templa
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.templating import (
-    TemplateEngine,
-    TemplateManager,
-    render,
-)
-
-# Render template string
-result = render(
-    template="Hello, {{ name }}!",
-    context={"name": "World"},
-    engine="jinja2"
-)
-print(result)  # "Hello, World!"
-
-# Use template engine
-engine = TemplateEngine(engine="jinja2")
-template = engine.load_template("template.j2")
-output = template.render(context={"variable": "value"})
-
-# Use template manager
-manager = TemplateManager()
-manager.register_template("my_template", "path/to/template.j2")
-rendered = manager.render("my_template", context={...})
-```
-

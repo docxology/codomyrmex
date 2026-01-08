@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs
 
 ## Signposting
-- **Parent**: [Repository Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [deployment](deployment/AGENTS.md)
@@ -36,6 +36,7 @@ Documentation components and guides for the Codomyrmex platform.
 - `reference/` – Directory containing reference components
 
 ## Operating Contracts
+- `.DS_Store` – Project file
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

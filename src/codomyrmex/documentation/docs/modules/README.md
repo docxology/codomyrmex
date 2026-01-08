@@ -1,9 +1,9 @@
 # modules
 
 ## Signposting
-- **Parent**: [docs](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - [ai_code_editing](ai_code_editing/README.md)
+    - [ai_code_editing](agents/ai_code_editing/README.md)
     - [build_synthesis](build_synthesis/README.md)
     - [data_visualization](data_visualization/README.md)
     - [environment_setup](environment_setup/README.md)
@@ -44,17 +44,3 @@ Documentation files and guides for modules.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documentation.docs.modules import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

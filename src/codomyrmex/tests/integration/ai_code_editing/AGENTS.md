@@ -15,6 +15,8 @@
 Test files and validation suites for ai_code_editing.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_ai_code_execution_flow.py` – Project file
 
 ## Operating Contracts

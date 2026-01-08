@@ -1,7 +1,7 @@
 # environment_setup
 
 ## Signposting
-- **Parent**: [environment_setup](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [docs](docs/README.md)
 - **Key Artifacts**:
@@ -30,17 +30,3 @@ Documentation files and guides for environment_setup.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: [README](../../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documentation.docs.modules.environment_setup import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

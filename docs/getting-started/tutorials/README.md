@@ -24,4 +24,3 @@ Documentation files and guides for tutorials.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [getting-started](../README.md)
 - **Project Root**: [README](../../../README.md)
-

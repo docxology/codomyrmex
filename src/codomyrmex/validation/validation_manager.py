@@ -59,3 +59,4 @@ class ValidationManager:
             validator = Validator(validator_type=validator_type)
             return validator.validate(data, schema)
 
+

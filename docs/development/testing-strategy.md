@@ -480,7 +480,7 @@ def test_error_handling_comprehensive():
 - **[Module Creation Tutorial](../getting-started/tutorials/creating-a-module.md)**: Testing new modules
 - **[Performance Guide](../reference/performance.md)**: Performance optimization and testing
 - **[Development Setup](environment-setup.md)**: Development environment configuration
-- **[Examples](../../scripts/examples/README.md)**: Executable test examples
+- **[Examples Documentation](../examples/README.md)**: Executable test examples
 
 ---
 
@@ -491,4 +491,4 @@ def test_error_handling_comprehensive():
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

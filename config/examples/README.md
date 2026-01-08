@@ -28,4 +28,3 @@ Example implementations and demonstrations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [config](../README.md)
 - **Project Root**: [README](../../README.md)
-

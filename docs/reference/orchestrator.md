@@ -219,7 +219,7 @@ start_here.sh (Main Orchestrator)
 - [Workflow Configuration Schema](../project_orchestration/workflow-configuration-schema.md) - Workflow JSON schema
 - [Project Template Schema](../project_orchestration/project-template-schema.md) - Project template structure
 - [Resource Configuration](../project_orchestration/resource-configuration.md) - Resource management
-- [Examples Documentation](../../scripts/examples/README.md) - Complete examples guide
+- [Examples Documentation](../examples/README.md) - Complete examples guide
 
 ---
 
@@ -232,4 +232,4 @@ start_here.sh (Main Orchestrator)
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

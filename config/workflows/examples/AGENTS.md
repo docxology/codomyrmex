@@ -1,34 +1,34 @@
 # Codomyrmex Agents — config/workflows/examples
 
 ## Signposting
-- **Parent**: [workflows](../AGENTS.md)
-- **Self**: [examples Agents](AGENTS.md)
-- **Children**: None
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
 - **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Example workflow implementations for reference and learning. These workflows demonstrate common patterns and best practices.
+Example implementations and demonstrations.
 
 ## Active Components
-
-- `basic-analysis.json` – Simple two-step workflow example
-- `complex-analysis.json` – Multi-step workflow with dependencies
-- `code-analysis-pipeline.json` – Code analysis and visualization pipeline
-- `sample_analysis_workflow.json` – Complete analysis workflow with reporting
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `basic-analysis.json` – Project file
+- `code-analysis-pipeline.json` – Project file
+- `complex-analysis.json` – Project file
+- `sample_analysis_workflow.json` – Project file
 
 ## Operating Contracts
-
-- Examples are for reference only, not automatically loaded
-- Users should copy examples to `production/` directory to use them
-- Examples demonstrate best practices and common patterns
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
-- **Parent**: [workflows](../AGENTS.md)
-- **Project Root**: [README](../../../../README.md)
-
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [workflows](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

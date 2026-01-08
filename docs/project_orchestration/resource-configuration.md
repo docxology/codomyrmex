@@ -501,7 +501,7 @@ rm.remove_resource("custom_api")
 
 - [Task Orchestration Guide](./task-orchestration-guide.md)
 - [Dispatch and Coordination](./dispatch-coordination.md)
-- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
 
 
 ## Navigation Links
@@ -509,4 +509,4 @@ rm.remove_resource("custom_api")
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

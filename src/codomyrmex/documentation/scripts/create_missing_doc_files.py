@@ -1,3 +1,12 @@
+from pathlib import Path
+import json
+import sys
+
+from codomyrmex.{module_name} import function_name
+from codomyrmex.{module_name} import register_tools
+
+
+
 #!/usr/bin/env python3
 """
 Create missing documentation files that are referenced but don't exist.
@@ -6,9 +15,6 @@ Creates placeholder API_SPECIFICATION.md and MCP_TOOL_SPECIFICATION.md files
 for modules that reference them but don't have them.
 """
 
-import json
-from pathlib import Path
-import sys
 
 
 API_SPEC_TEMPLATE = """# {module_name} - API Specification
@@ -37,7 +43,6 @@ The `{module_name}` module provides [brief description of module purpose].
 
 **Example**:
 ```python
-from codomyrmex.{module_name} import function_name
 
 result = function_name(param1="value")
 ```
@@ -119,7 +124,6 @@ This document specifies the Model Context Protocol (MCP) tools provided by the `
 Tools are automatically registered when the module is imported:
 
 ```python
-from codomyrmex.{module_name} import register_tools
 
 register_tools()
 ```

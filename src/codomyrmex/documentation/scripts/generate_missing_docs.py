@@ -1,9 +1,13 @@
+from pathlib import Path
+from typing import Optional
+import os
+
+
+
+
 #!/usr/bin/env python3
 """Generate missing README.md and AGENTS.md files."""
 
-import os
-from pathlib import Path
-from typing import Optional
 
 def get_directory_info(dir_path: Path) -> dict:
     """Get directory information from existing files."""

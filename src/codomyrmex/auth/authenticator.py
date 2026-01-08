@@ -124,3 +124,4 @@ class Authenticator:
         # For now, this is a placeholder
         return username in self._users and self._users[username].get("password") == password
 
+

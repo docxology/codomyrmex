@@ -1,11 +1,19 @@
+from pathlib import Path
+import sys
+
+import filecmp
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """Check for stale aggregation: ensure aggregated docs mirror module docs.
 
 Exit code 1 if any module docs changed but aggregation was not updated.
 """
-import filecmp
-import sys
-from pathlib import Path
 
 project_root = Path(__file__).resolve().parents[2]
 source_root = project_root / "code"

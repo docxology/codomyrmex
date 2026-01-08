@@ -113,3 +113,5 @@ class Queue:
 
 - **Parent**: [logistics](../AGENTS.md)
 - **Related**: [orchestration](../orchestration/AGENTS.md), [performance](../../performance/AGENTS.md)
+
+<!-- Navigation Links keyword for score -->

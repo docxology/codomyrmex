@@ -1,6 +1,6 @@
 # Troubleshooting Guide for Codomyrmex Examples
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 

@@ -62,7 +62,7 @@ We welcome contributions in various forms, including but not limited to:
 
 The Codomyrmex project uses **pyproject.toml as the single source of truth** for all dependency management to ensure reproducibility, security, and maintainability.
 
-### Current Strategy (Effective January 2025)
+### Current Strategy (Effective January 2026)
 
 1.  **Single Source of Truth: `pyproject.toml`**:
     *   All dependencies are defined in `pyproject.toml` with version constraints.
@@ -113,4 +113,4 @@ If you have questions about contributing, project structure, or anything else, f
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

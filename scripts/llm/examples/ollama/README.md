@@ -16,11 +16,11 @@ Example implementations and demonstrations.
 
 ## Directory Contents
 - `README.md` – File
+- `SPEC.md` – File
 - `rnj_1_8b_config.json` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [llm](../README.md)
-- **Project Root**: [README](../../../README.md)
-
+- **Parent Directory**: [examples](../README.md)
+- **Project Root**: [README](../../../../README.md)

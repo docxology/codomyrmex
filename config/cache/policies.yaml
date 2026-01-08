@@ -18,3 +18,4 @@ eviction:
   strategy: "lru"  # lru, lfu, fifo
   max_memory: "512MB"
 
+

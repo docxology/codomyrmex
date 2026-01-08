@@ -1,3 +1,26 @@
+from datetime import datetime
+from typing import Any, Optional
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+
+from dataclasses import dataclass, field
+from enum import Enum
+from performance import monitor_performance, performance_context
+import shlex
+import tarfile
+import yaml
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Advanced build management functionality for Codomyrmex.
 
@@ -5,20 +28,7 @@ This module provides comprehensive build orchestration, dependency management,
 artifact synthesis, and deployment automation capabilities.
 """
 
-import json
-import os
-import shlex
-import shutil
-import subprocess
-import sys
-import tarfile
-import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any, Optional
 
-import yaml
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -28,14 +38,12 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 # Import logger setup
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Get module logger
 logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-    from performance import monitor_performance, performance_context
 
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:

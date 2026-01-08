@@ -1,8 +1,14 @@
-"""Every Code integration adapters for Codomyrmex modules."""
-
 from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter, AgentInterface
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.core import AgentRequest
+
+
+"""Every Code integration adapters for Codomyrmex modules."""
+
+
 
 
 class EveryCodeIntegrationAdapter(AgentIntegrationAdapter):
@@ -22,7 +28,6 @@ class EveryCodeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Generated code
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Use /code command for code generation
         full_prompt = f"/code Generate {language} code: {prompt}"
@@ -79,7 +84,6 @@ class EveryCodeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Completion result dictionary
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Convert messages to prompt
         prompt_parts = []
@@ -135,7 +139,6 @@ class EveryCodeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Analysis result dictionary
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Use Every Code to analyze or validate code
         prompt = f"Analyze this {language} code:\n\n```{language}\n{code}\n```"

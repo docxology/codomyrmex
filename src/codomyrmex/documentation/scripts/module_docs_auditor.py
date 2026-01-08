@@ -1,3 +1,14 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Set, Tuple, Optional
+import json
+import os
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Module Documentation Auditor
@@ -9,13 +20,6 @@ Scans all modules in src/codomyrmex/ to identify:
 - Issues categorized by severity and fix complexity
 """
 
-import os
-import re
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
-from collections import defaultdict
-import sys
-import json
 
 
 class ModuleDocsAuditor:

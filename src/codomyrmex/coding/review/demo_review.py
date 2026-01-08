@@ -1,3 +1,10 @@
+import os
+import sys
+
+from codomyrmex.coding.review import CodeReviewer
+
+
+
 #!/usr/bin/env python3
 """
 Enhanced Code Review Module Demonstration
@@ -7,13 +14,10 @@ including complexity analysis, dead code detection, architecture compliance chec
 and automated refactoring suggestions.
 """
 
-import os
-import sys
 
 # Add the src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from codomyrmex.coding.review import CodeReviewer
 
 
 def main():

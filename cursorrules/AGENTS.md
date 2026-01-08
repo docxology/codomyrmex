@@ -1,7 +1,7 @@
 # Codomyrmex Agents — cursorrules
 
 ## Signposting
-- **Parent**: [Repository Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [cross-module](cross-module/AGENTS.md)
@@ -25,6 +25,7 @@ Coding standards and automation rules.
 - `modules/` – Directory containing modules components
 
 ## Operating Contracts
+- `.DS_Store` – Project file
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

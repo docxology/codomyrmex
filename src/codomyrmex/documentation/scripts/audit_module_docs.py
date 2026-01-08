@@ -1,8 +1,12 @@
+from pathlib import Path
+import json
+
+
+
+
 #!/usr/bin/env python3
 """Audit module documentation completeness."""
 
-import json
-from pathlib import Path
 
 def audit_modules(base_path: Path) -> dict:
     """Audit all modules for documentation completeness."""

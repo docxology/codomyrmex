@@ -1,6 +1,31 @@
 import os
 
+from fix_markdown_newlines import FunctionName, ClassName
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides fix_markdown_newlines functionality including:
+- 1 functions: fix_newlines
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 def fix_newlines(directory):
+    """Brief description of fix_newlines.
+
+Args:
+    directory : Description of directory
+
+    Returns: Description of return value
+"""
     for root, dirs, files in os.walk(directory):
         if any(exclude in root for exclude in ['.git', 'venv', 'node_modules', '__pycache__']):
             continue

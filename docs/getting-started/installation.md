@@ -563,11 +563,11 @@ Once installed successfully:
 
 ---
 
-**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: January 2025* | *Maintained by: Codomyrmex Documentation Team* | *Version: v0.1.0*
+**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: January 2026* | *Maintained by: Codomyrmex Documentation Team* | *Version: v0.1.0*
 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

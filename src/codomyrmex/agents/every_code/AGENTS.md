@@ -1,10 +1,10 @@
 # Codomyrmex Agents — src/codomyrmex/agents/every_code
 
 ## Signposting
-- **Parent**: [agents](../AGENTS.md)
+- **Parent**: [Every Code](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [tests](tests/AGENTS.md)
+    - None
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -12,34 +12,17 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Integration with Every Code CLI tool. Every Code is a fork of the Codex CLI that provides validation, automation, browser integration, multi-agents, theming, and more. It can orchestrate agents from OpenAI, Claude, Gemini, or any provider.
+Module components and implementation for every_code..
 
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
-- `__init__.py` – Module exports and public API
-- `every_code_client.py` – Every Code CLI client implementation
-- `every_code_integration.py` – Integration adapters for Codomyrmex modules
-- `tests/` – Directory containing tests components
-
-## Key Classes and Functions
-
-### EveryCodeClient (`every_code_client.py`)
-- `EveryCodeClient(config: Optional[dict[str, Any]] = None)` – Client for interacting with Every Code CLI (extends BaseAgent)
-- `execute(request: AgentRequest) -> AgentResponse` – Execute an agent request
-- `stream(request: AgentRequest) -> Iterator[str]` – Stream response from agent
-- `get_capabilities() -> list[AgentCapabilities]` – Get supported capabilities
-- `execute_code_command(command: str, args: Optional[list[str]] = None, input_text: Optional[str] = None) -> dict[str, Any]` – Execute a code command (e.g., /plan, /solve, /code, /auto)
-- `get_code_help() -> dict[str, Any]` – Get code help information
-- `get_code_version() -> dict[str, Any]` – Get code version information
-
-### EveryCodeIntegrationAdapter (`every_code_integration.py`)
-- `EveryCodeIntegrationAdapter()` – Integration adapter for Codomyrmex modules (extends AgentIntegrationAdapter)
-- `adapt_for_ai_code_editing(prompt: str, language: str = "python", **kwargs) -> str` – Adapt for AI code editing module
-- `adapt_for_llm(messages: list[dict], model: str = None, **kwargs) -> dict` – Adapt for LLM module
-- `adapt_for_code_execution(code: str, language: str = "python", **kwargs) -> dict[str, Any]` – Adapt for code execution sandbox
+- `__init__.py` – Project file
+- `every_code_client.py` – Project file
+- `every_code_integration.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
@@ -49,4 +32,3 @@ Integration with Every Code CLI tool. Every Code is a fork of the Codex CLI that
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
 - **🏠 Project Root**: [README](../../../../README.md) - Main project documentation
-

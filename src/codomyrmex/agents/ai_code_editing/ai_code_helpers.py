@@ -1,18 +1,30 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Any, Optional
+import os
+import sys
+import time
+
+from anthropic import Anthropic
+from dataclasses import dataclass
+from enum import Enum
+from environment_setup.env_checker import check_and_setup_env_vars
+from openai import OpenAI
+from performance import monitor_performance
+import google.generativeai as genai
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
 """
 Core implementation of AI code editing functionality.
 
 This module contains functions for generating and refactoring code using LLMs.
 """
 
-import os
-import sys
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Optional
 
 # Import logger setup (must be at top level)
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 # Add project root to Python path to allow sibling module imports if needed
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +39,6 @@ logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-    from performance import monitor_performance
 
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
@@ -54,7 +65,6 @@ except ImportError:
 
 # Import environment setup utilities if available
 try:
-    from environment_setup.env_checker import check_and_setup_env_vars
 except ImportError:
     logger.warning(
         "Could not import from environment_setup.env_checker. Environment variables may need to be set manually."
@@ -196,7 +206,6 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any
 
     if provider == "openai":
         try:
-            from openai import OpenAI
 
             # Check for API key
             api_key = os.environ.get("OPENAI_API_KEY")
@@ -214,7 +223,6 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any
 
     elif provider == "anthropic":
         try:
-            from anthropic import Anthropic
 
             # Check for API key
             api_key = os.environ.get("ANTHROPIC_API_KEY")
@@ -232,7 +240,6 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any
 
     elif provider == "google":
         try:
-            import google.generativeai as genai
 
             # Check for API key
             api_key = os.environ.get("GOOGLE_API_KEY")
@@ -693,7 +700,6 @@ def generate_code_batch(
             )
 
     if parallel and len(requests) > 1:
-        from concurrent.futures import ThreadPoolExecutor, as_completed
 
         logger.info(f"Processing {len(requests)} requests in parallel with {max_workers} workers")
         results_dict: dict[int, CodeGenerationResult] = {}

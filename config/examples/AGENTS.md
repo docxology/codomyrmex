@@ -1,7 +1,7 @@
 # Codomyrmex Agents — config/examples
 
 ## Signposting
-- **Parent**: [Examples Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

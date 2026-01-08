@@ -15,6 +15,8 @@
 Test files and validation suites for data_visualization.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_visualization_performance.py` – Project file
 
 ## Operating Contracts

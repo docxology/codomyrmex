@@ -1,3 +1,25 @@
+from datetime import datetime, timezone
+from typing import Any, Optional, Union
+import logging
+import os
+import sys
+
+from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from dataclasses import dataclass
+import base64
+import hashlib
+import secrets
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Encryption Manager for Codomyrmex Security Audit Module.
 
@@ -5,19 +27,7 @@ Provides secure encryption and decryption capabilities for sensitive data,
 passwords, and configuration files.
 """
 
-import base64
-import hashlib
-import os
-import secrets
-import sys
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from typing import Any, Optional, Union
 
-from cryptography.fernet import Fernet
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -27,11 +37,9 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 

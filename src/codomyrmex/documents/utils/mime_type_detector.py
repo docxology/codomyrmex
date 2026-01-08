@@ -1,7 +1,16 @@
-"""MIME type and format detection utilities."""
-
 from pathlib import Path
 from typing import Optional
+
+import mimetypes
+
+
+
+
+
+
+
+"""MIME type and format detection utilities."""
+
 
 
 def detect_format_from_path(file_path: Path) -> str:
@@ -48,10 +57,10 @@ def detect_mime_type(file_path: Path) -> Optional[str]:
         MIME type string or None if detection fails
     """
     try:
-        import mimetypes
         mime_type, _ = mimetypes.guess_type(str(file_path))
         return mime_type
     except Exception:
         return None
+
 
 

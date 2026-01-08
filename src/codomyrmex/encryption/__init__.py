@@ -51,3 +51,4 @@ def get_encryptor(algorithm: str = "AES") -> Encryptor:
     """Get an encryptor instance."""
     return Encryptor(algorithm=algorithm)
 
+

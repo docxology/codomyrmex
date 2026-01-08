@@ -1,0 +1,35 @@
+{
+  "total_files_checked": 4,
+  "total_links_found": 12,
+  "broken_internal_links": [],
+  "broken_external_links": [],
+  "valid_links": 12,
+  "skipped_external": 0,
+  "file_results": {
+    "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/README.md": {
+      "file": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/README.md",
+      "total_links": 2,
+      "valid_links": 2,
+      "broken_internal": [],
+      "broken_external": [],
+      "skipped_external": 0
+    },
+    "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/SPEC.md": {
+      "file": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/SPEC.md",
+      "total_links": 6,
+      "valid_links": 6,
+      "broken_internal": [],
+      "broken_external": [],
+      "skipped_external": 0
+    },
+    "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/AGENTS.md": {
+      "file": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/AGENTS.md",
+      "total_links": 2,
+      "valid_links": 2,
+      "broken_internal": [],
+      "broken_external": [],
+      "skipped_external": 0
+    }
+  },
+  "success_rate": 100.0
+}

@@ -1,7 +1,7 @@
 # docs
 
 ## Signposting
-- **Parent**: [documentation](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [development](development/README.md)
     - [modules](modules/README.md)
@@ -33,17 +33,3 @@ Documentation files and guides.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [documentation](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documentation.docs import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

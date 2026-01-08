@@ -50,3 +50,4 @@ def set_document_version(file_path: str | Path, version: str) -> None:
         raise MetadataError(f"Failed to set version: {str(e)}") from e
 
 
+

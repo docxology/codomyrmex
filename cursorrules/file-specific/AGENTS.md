@@ -1,7 +1,7 @@
 # Codomyrmex Agents — cursorrules/file-specific
 
 ## Signposting
-- **Parent**: [File-Specific](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/agents/ai_code_editing/tests/unit/droid
+# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/ai_code_editing/unit/droid
 
 ## Signposting
 - **Parent**: [Droid](../AGENTS.md)
@@ -27,4 +27,4 @@ Test files and validation suites for droid.
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../../../README.md) - Main project documentation
+- **🏠 Project Root**: [README](../../../../../../../../README.md) - Main project documentation

@@ -1,3 +1,11 @@
+from pathlib import Path
+from typing import Dict, List, Tuple
+import os
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Module Documentation Validator
@@ -6,10 +14,6 @@ Validates module documentation structure and consistency.
 Can be run as part of CI/CD to ensure documentation standards are maintained.
 """
 
-import os
-from pathlib import Path
-from typing import Dict, List, Tuple
-import sys
 
 
 class ModuleDocsValidator:

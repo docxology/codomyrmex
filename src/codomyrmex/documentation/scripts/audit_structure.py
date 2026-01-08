@@ -1,11 +1,43 @@
-
-import os
 from pathlib import Path
+import os
 
+from audit_structure import FunctionName, ClassName
+
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides audit_structure functionality including:
+- 2 functions: is_python_module, check_structure
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 def is_python_module(path):
+    """Brief description of is_python_module.
+
+Args:
+    path : Description of path
+
+    Returns: Description of return value
+"""
     return (path / "__init__.py").exists()
 
 def check_structure(root_path):
+    """Brief description of check_structure.
+
+Args:
+    root_path : Description of root_path
+
+    Returns: Description of return value
+"""
     root = Path(root_path)
     modules = []
     errors = []

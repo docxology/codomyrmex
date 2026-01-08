@@ -1,6 +1,6 @@
-# Security Policy for [Module Name]
+# Security Policy for Standard Implementation Details
 
-This document outlines security procedures and policies for the [Module Name] module.
+This document outlines security procedures and policies for the Standard Implementation Details module.
 
 ## Reporting a Vulnerability
 
@@ -9,8 +9,8 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email [YOUR_MODULE_SECURITY_CONTACT_EMAIL_OR_DEFAULT_PROJECT_EMAIL] with the subject line: "SECURITY Vulnerability Report: [Module Name] - [Brief Description]".
-<!-- IMPORTANT: When using this template for a new module, replace [YOUR_MODULE_SECURITY_CONTACT_EMAIL_OR_DEFAULT_PROJECT_EMAIL] and [Module Name] above. Ensure the email is appropriate for security disclosures. -->
+Instead, please email Standard Implementation Details with the subject line: "SECURITY Vulnerability Report: Standard Implementation Details - Standard Implementation Details".
+<!-- IMPORTANT: When using this template for a new module, replace Standard Implementation Details and Standard Implementation Details above. Ensure the email is appropriate for security disclosures. -->
 
 Please include the following information in your report:
 
@@ -30,7 +30,7 @@ Security patches and updates for this module will be documented in the module ch
 
 ## Scope
 
-This security policy applies only to the `[Module Name]` module within the Codomyrmex project. For project-wide security concerns, please refer to the main project's security policy (if available) or contact the core project maintainers.
+This security policy applies only to the `Standard Implementation Details` module within the Codomyrmex project. For project-wide security concerns, please refer to the main project's security policy (if available) or contact the core project maintainers.
 
 ## Best Practices for Using This Module
 
@@ -38,4 +38,10 @@ This security policy applies only to the `[Module Name]` module within the Codom
 - Follow the principle of least privilege when configuring access or permissions related to this module.
 - Regularly review configurations and logs for suspicious activity.
 
-Thank you for helping keep Codomyrmex and the [Module Name] module secure. 
+Thank you for helping keep Codomyrmex and the Standard Implementation Details module secure. 
+## Navigation Links
+
+- **Parent**: [Project Overview](../README.md)
+- **Module Index**: [All Agents](../../AGENTS.md)
+- **Documentation**: [Reference Guides](../../../docs/README.md)
+- **Home**: [Root README](../../../README.md)

@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/agents/ai_code_editing/tests/integration
+# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/ai_code_editing/integration
 
 ## Signposting
 - **Parent**: [Integration](../AGENTS.md)
@@ -19,6 +19,7 @@ Test files and validation suites for integration.
 - `SPEC.md` – Project file
 
 ## Operating Contracts
+- `.gitkeep` – Project file
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
@@ -26,5 +27,5 @@ Test files and validation suites for integration.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [ai_code_editing](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../../README.md) - Main project documentation

@@ -98,3 +98,4 @@ class Cache(ABC):
         # This is a basic implementation - subclasses should override
         return 0
 
+

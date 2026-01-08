@@ -1,10 +1,18 @@
-"""Security awareness training."""
-
-from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Security awareness training."""
+
+
 
 logger = get_logger(__name__)
 
@@ -107,5 +115,6 @@ def assess_training_effectiveness(
     if trainer is None:
         trainer = AwarenessTrainer()
     return trainer.assess_effectiveness(user_id)
+
 
 

@@ -1,0 +1,29 @@
+# tutorials
+
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+
+## Overview
+
+Documentation files and guides for tutorials.
+
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `docker_build_tutorial.md` – File
+- `python_wheel_build_tutorial.md` – File
+- `synthesize_code_component_tutorial.md` – File
+- `trigger_build_tutorial.md` – File
+
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [build_synthesis](../README.md)
+- **Project Root**: [README](../../../../README.md)

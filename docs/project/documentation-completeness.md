@@ -40,15 +40,7 @@
 |------|------|---------|
 | 61 | placeholder text | `**Note**: This is a placeholder file. Please update it with the actual MCP tool specifications for t` |
 
-## project_orchestration
-
-### API_SPECIFICATION.md
-
-| Line | Type | Content |
-|------|------|---------|
-| 937 | placeholder text | `"data": "placeholder",  # In practice, pass actual data or reference` |
-
-## template
+## website
 
 ### API_SPECIFICATION.md
 
@@ -60,4 +52,4 @@
 
 | Line | Type | Content |
 |------|------|---------|
-| 8 | placeholder text | `3.  Replace all bracketed placeholders (e.g., `[YourToolName]`, `[Brief description...]`, `[Paramete` |
+| 8 | placeholder text | `3.  Replace all bracketed placeholders (e.g., `[YourToolName]`, `Standard Implementation Details`, `` |

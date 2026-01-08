@@ -4,7 +4,8 @@
 - **Parent**: [Documents](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [integration](integration/AGENTS.md)
+    - [unit](unit/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -15,9 +16,14 @@
 Test files and validation suites for documents.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `integration/` – Directory containing integration components
 - `test_documents.py` – Project file
+- `unit/` – Directory containing unit components
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

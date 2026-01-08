@@ -1,10 +1,18 @@
-"""Physical asset inventory management."""
-
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Physical asset inventory management."""
+
+
 
 logger = get_logger(__name__)
 
@@ -100,5 +108,6 @@ def get_asset_status(
     if inventory is None:
         inventory = AssetInventory()
     return inventory.get_asset_status(asset_id)
+
 
 

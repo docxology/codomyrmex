@@ -4,7 +4,11 @@
 - **Parent**: [Agents](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [ai_code_editing](agents/ai_code_editing/AGENTS.md)
+    - [every_code](every_code/AGENTS.md)
+    - [gemini](gemini/AGENTS.md)
+    - [generic](generic/AGENTS.md)
+    - [mistral_vibe](mistral_vibe/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -15,9 +19,30 @@
 Test files and validation suites for agents.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `ai_code_editing/` – Directory containing ai_code_editing components
+- `every_code/` – Directory containing every_code components
+- `gemini/` – Directory containing gemini components
+- `generic/` – Directory containing generic components
+- `helpers.py` – Project file
+- `mistral_vibe/` – Directory containing mistral_vibe components
 - `test_agents.py` – Project file
+- `test_cli_configurations.py` – Project file
+- `test_cli_orchestration.py` – Project file
+- `test_configuration.py` – Project file
+- `test_error_handling.py` – Project file
+- `test_integrations.py` – Project file
+- `test_jules_integration.py` – Project file
+- `test_modularity.py` – Project file
+- `test_opencode_integration.py` – Project file
+- `test_orchestration.py` – Project file
+- `test_orchestration_advanced.py` – Project file
+- `test_real_world_scenarios.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

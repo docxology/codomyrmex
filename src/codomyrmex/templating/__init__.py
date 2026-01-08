@@ -37,3 +37,4 @@ def get_template_engine(engine: str = "jinja2") -> TemplateEngine:
     """Get a template engine instance."""
     return TemplateEngine(engine=engine)
 
+

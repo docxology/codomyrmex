@@ -1,7 +1,7 @@
 # review
 
 ## Signposting
-- **Parent**: [review](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [e2e](e2e/README.md)
     - [fixtures](fixtures/README.md)
@@ -31,19 +31,5 @@ Test files and validation suites for review.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [tests](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.coding.tests.review import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [coding](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

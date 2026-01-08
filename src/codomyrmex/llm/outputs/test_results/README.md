@@ -1,7 +1,7 @@
 # test_results
 
 ## Signposting
-- **Parent**: [test_results](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:

@@ -1,9 +1,13 @@
+from pathlib import Path
+from typing import Optional
+import os
+
+
+
+
 #!/usr/bin/env python3
 """Generate SPEC.md files for all directories missing them."""
 
-import os
-from pathlib import Path
-from typing import Optional
 
 def get_directory_purpose(dir_path: Path) -> str:
     """Try to infer directory purpose from README.md or AGENTS.md."""

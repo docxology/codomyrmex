@@ -1,3 +1,22 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
+import os
+import time
+
+from dataclasses import dataclass, field
+from kubernetes import client, config
+from kubernetes.client.rest import ApiException
+import yaml
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Kubernetes Orchestration Module for Codomyrmex Containerization.
@@ -7,23 +26,12 @@ and container orchestration capabilities using the official Kubernetes
 Python client.
 """
 
-import os
-import time
-import yaml
-from dataclasses import dataclass, field
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 # Try to import kubernetes client
 try:
-    from kubernetes import client, config
-    from kubernetes.client.rest import ApiException
     KUBERNETES_AVAILABLE = True
 except ImportError:
     client = None

@@ -30,4 +30,3 @@ Documentation files and guides for project_orchestration.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: [README](../../README.md)
-

@@ -1,3 +1,14 @@
+from pathlib import Path
+from typing import Any, Optional
+import os
+import shutil
+import subprocess
+import sys
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
 #!/usr/bin/env python3
 """
 Terminal Utilities for Codomyrmex
@@ -6,14 +17,7 @@ Provides utilities for creating engaging terminal interfaces, formatting
 output, and running commands with beautiful presentation.
 """
 
-import os
-import shutil
-import subprocess
-import sys
-from pathlib import Path
-from typing import Any, Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

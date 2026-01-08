@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/getting-started/tutorials
 
 ## Signposting
-- **Parent**: [Tutorials](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

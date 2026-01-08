@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/cerebrum/tests/integration
+# Codomyrmex Agents — src/codomyrmex/tests/unit/cerebrum/integration
 
 ## Signposting
 - **Parent**: [Integration](../AGENTS.md)
@@ -21,6 +21,7 @@ Test files and validation suites for integration.
 - `test_integration.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
@@ -28,5 +29,5 @@ Test files and validation suites for integration.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [cerebrum](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation

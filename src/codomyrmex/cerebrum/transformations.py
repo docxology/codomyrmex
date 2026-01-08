@@ -1,12 +1,20 @@
-"""Model transformation and adaptation algorithms."""
+from typing import Any, Optional
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
 
 from codomyrmex.cerebrum.cases import Case
 from codomyrmex.cerebrum.exceptions import TransformationError
 from codomyrmex.cerebrum.models import Model, ModelBase
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+"""Model transformation and adaptation algorithms."""
+
+
 
 logger = get_logger(__name__)
 
@@ -275,5 +283,6 @@ class TransformationManager:
                 raise TransformationError(f"No transformer found for type: {transformation_type}")
 
         return transformer.transform(model, transformation_type, **kwargs)
+
 
 

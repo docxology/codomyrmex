@@ -1,3 +1,22 @@
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+import json
+import logging
+import os
+import re
+
+from dataclasses import dataclass, field
+import hashlib
+import importlib.util
+import yaml
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Plugin Validator for Codomyrmex Plugin System
 
@@ -5,20 +24,11 @@ This module provides validation and security scanning
 for plugins before they are loaded into the system.
 """
 
-import os
-import re
-import hashlib
-import importlib.util
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple, Set
-from dataclasses import dataclass, field
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 
@@ -348,11 +358,9 @@ class PluginValidator:
 
                 try:
                     if metadata_file.endswith('.json'):
-                        import json
                         with open(metadata_path, 'r') as f:
                             metadata = json.load(f)
                     elif metadata_file.endswith(('.yaml', '.yml')):
-                        import yaml
                         with open(metadata_path, 'r') as f:
                             metadata = yaml.safe_load(f)
                     elif metadata_file == 'setup.py':

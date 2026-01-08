@@ -70,3 +70,4 @@ class TemplateManager:
 
         return template.render(context)
 
+

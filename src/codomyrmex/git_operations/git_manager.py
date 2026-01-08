@@ -1,3 +1,14 @@
+from typing import Optional
+import os
+import subprocess
+import sys
+import time
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.performance import monitor_performance, performance_context
+
+
+
 #!/usr/bin/env python3
 """
 Git Operations Manager for Codomyrmex.
@@ -6,11 +17,6 @@ This module provides a standardized interface and a set of tools for performing
 common Git actions programmatically within the Codomyrmex ecosystem.
 """
 
-import os
-import subprocess
-import sys
-import time
-from typing import Optional
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -19,13 +25,11 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 logger = get_logger(__name__)
 
 # Import performance monitoring
 try:
-    from codomyrmex.performance import monitor_performance, performance_context
 
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:

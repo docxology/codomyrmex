@@ -1,3 +1,19 @@
+from pathlib import Path
+from typing import List, Optional
+import argparse
+import json
+import logging
+import sys
+
+from smart_template_engine import SmartTemplateEngine
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Automatic Documentation Generator for Codomyrmex.
@@ -5,23 +21,16 @@ Automatic Documentation Generator for Codomyrmex.
 Uses smart template engine to automatically regenerate documentation for modules.
 """
 
-import sys
-from pathlib import Path
-from typing import List, Optional
-import json
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
 # Import smart template engine
 sys.path.insert(0, str(Path(__file__).parent))
-from smart_template_engine import SmartTemplateEngine
 
 
 class AutoDocumentationGenerator:
@@ -216,7 +225,6 @@ For complete documentation, see:
 
 def main():
     """Main entry point."""
-    import argparse
     
     parser = argparse.ArgumentParser(description="Automatically generate module documentation")
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

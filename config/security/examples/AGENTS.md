@@ -1,35 +1,32 @@
 # Codomyrmex Agents — config/security/examples
 
 ## Signposting
-- **Parent**: [security](../AGENTS.md)
-- **Self**: [examples Agents](AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
 - **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Example security configurations demonstrating best practices for API keys, authentication, authorization, encryption, and security policies.
+Example implementations and demonstrations.
 
 ## Active Components
-
-- `README.md` – Examples documentation
-- `api-keys-example.yaml` – Example API key configuration
-- `authentication-example.yaml` – Example authentication configuration
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `api-keys-example.yaml` – Project file
+- `authentication-example.yaml` – Project file
 
 ## Operating Contracts
-
-- Maintain alignment between examples and actual configuration templates.
-- Ensure examples demonstrate best practices.
-- Use environment variable references for all sensitive values.
-- Never include actual secrets or API keys in examples.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
-- **Parent**: [security](../AGENTS.md)
-- **Project Root**: [README](../../../README.md)
-
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [security](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

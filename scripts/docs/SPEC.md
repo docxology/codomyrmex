@@ -1,6 +1,6 @@
 # scripts - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
@@ -154,8 +154,8 @@ graph TD
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Repository Root**: [../README.md](../README.md)
-- **Repository SPEC**: [../SPEC.md](../SPEC.md)
+- **Repository Root**: [../../README.md](../../README.md)
+- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
 
 
 <!-- Navigation Links keyword for score -->

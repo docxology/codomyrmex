@@ -1,3 +1,22 @@
+from pathlib import Path
+from typing import Dict, List, Set, Tuple, Optional
+import argparse
+import json
+import logging
+import os
+import re
+import sys
+
+from urllib.parse import urlparse
+import requests
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Link Checker for Codomyrmex Examples Documentation
@@ -20,17 +39,8 @@ Output:
     - Suggestions for fixes
 """
 
-import sys
-import os
-import re
-import argparse
-from pathlib import Path
-from urllib.parse import urlparse
-from typing import Dict, List, Set, Tuple, Optional
-import json
 
 try:
-    import requests
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False
@@ -40,11 +50,9 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    from codomyrmex.logging_monitoring import get_logger
     logger = get_logger(__name__)
 except ImportError:
     # Fallback logging
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 

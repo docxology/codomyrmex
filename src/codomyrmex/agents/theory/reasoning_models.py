@@ -1,10 +1,18 @@
-"""Reasoning model theories and implementations."""
+from typing import Any, Optional
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+"""Reasoning model theories and implementations."""
+
+
 
 logger = get_logger(__name__)
 
@@ -281,4 +289,5 @@ class HybridReasoningModel(ReasoningModel):
         neural_explanation = self.neural.explain(result.get("neural", {}))
 
         return f"Symbolic Reasoning:\n{symbolic_explanation}\n\nNeural Reasoning:\n{neural_explanation}"
+
 

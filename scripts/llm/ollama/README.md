@@ -3,7 +3,7 @@
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [examples](examples/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -19,6 +19,7 @@ Automation and utility scripts.
 - `SPEC.md` – File
 - `analyze_model_tracking.py` – File
 - `basic_usage.py` – File
+- `examples/` – Subdirectory
 - `integration_demo.py` – File
 - `model_management.py` – File
 - `orchestrate.py` – File
@@ -34,4 +35,3 @@ Automation and utility scripts.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [llm](../README.md)
 - **Project Root**: [README](../../../README.md)
-

@@ -1,7 +1,7 @@
 # system_discovery
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-System Discovery Engine for Codomyrmex. Provides comprehensive system discovery capabilities, scanning all modules, methods, classes, and functions to create a complete map of the Codomyrmex ecosystem capabilities. Includes health checking, capability scanning, and system status reporting.
+Module components and implementation for system_discovery..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -32,30 +32,3 @@ System Discovery Engine for Codomyrmex. Provides comprehensive system discovery 
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.system_discovery import (
-    SystemDiscovery,
-    CapabilityScanner,
-    StatusReporter,
-)
-
-# Run full system discovery
-discovery = SystemDiscovery()
-discovery.run_full_discovery()
-
-# Scan module capabilities
-scanner = CapabilityScanner()
-capabilities = scanner.scan_all_capabilities()
-print(f"Found {len(capabilities)} capabilities")
-
-# Check system health
-reporter = StatusReporter()
-health_report = reporter.generate_status_report()
-print(f"System health: {health_report['status']}")
-```
-

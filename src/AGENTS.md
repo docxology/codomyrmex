@@ -1,11 +1,10 @@
 # Codomyrmex Agents — src
 
 ## Signposting
-- **Parent**: [Repository Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [codomyrmex](codomyrmex/AGENTS.md)
-    - [template](template/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -20,9 +19,10 @@ Hosts core source code and agent-enabled services for the Codomyrmex platform.
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
 - `codomyrmex/` – Directory containing codomyrmex components
-- `template/` – Directory containing template components
 
 ## Operating Contracts
+- `.DS_Store` – Project file
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

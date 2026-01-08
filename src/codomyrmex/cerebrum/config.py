@@ -1,7 +1,15 @@
-"""Configuration management for CEREBRUM module."""
+from typing import Any, Optional
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+
+
+
+
+
+
+
+"""Configuration management for CEREBRUM module."""
+
 
 
 @dataclass
@@ -73,5 +81,6 @@ class CerebrumConfig:
     def from_dict(cls, config_dict: dict[str, Any]) -> "CerebrumConfig":
         """Create config from dictionary."""
         return cls(**config_dict)
+
 
 

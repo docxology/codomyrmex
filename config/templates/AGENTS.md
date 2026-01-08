@@ -1,7 +1,7 @@
 # Codomyrmex Agents — config/templates
 
 ## Signposting
-- **Parent**: [Templates](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

@@ -1,3 +1,21 @@
+from typing import Dict, List, Any, Optional, Callable, Union, Type
+import inspect
+import json
+import logging
+import re
+import time
+
+from dataclasses import dataclass, field
+from enum import Enum
+from urllib.parse import urlparse, parse_qs
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 REST API Implementation for Codomyrmex
 
@@ -5,21 +23,11 @@ This module provides a standardized REST API framework with automatic routing,
 middleware support, and comprehensive error handling.
 """
 
-import json
-import time
-from typing import Dict, List, Any, Optional, Callable, Union, Type
-from dataclasses import dataclass, field
-from enum import Enum
-import inspect
-from urllib.parse import urlparse, parse_qs
-import re
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 

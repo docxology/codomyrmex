@@ -1,12 +1,21 @@
 import argparse
 import glob
-
-# Standard logging import kept for compatibility with basicConfig structure
 import os
 import shutil  # For checking if command exists
 import subprocess
 import sys
+
 import webbrowser
+
+from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+
+
+
+
+
+
+# Standard logging import kept for compatibility with basicConfig structure
 
 # --- Determine project structure and add appropriate path to sys.path for package import ---
 _codomyrmex_dir_for_import_msg = "Unknown"
@@ -39,7 +48,6 @@ if PATH_TO_ADD_FOR_MODULE_IMPORT not in sys.path:
 logger = None
 
 try:
-    from codomyrmex.logging_monitoring import get_logger, setup_logging
 
     # Call setup_logging() which reads .env from the project root and configures handlers.
     # This should be called once, early in the application.

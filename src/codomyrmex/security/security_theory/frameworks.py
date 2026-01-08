@@ -1,9 +1,17 @@
-"""Security frameworks (OWASP, NIST, etc.)."""
-
-from dataclasses import dataclass
 from typing import List, Optional
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Security frameworks (OWASP, NIST, etc.)."""
+
+
 
 logger = get_logger(__name__)
 
@@ -63,5 +71,6 @@ def apply_framework(framework_name: str, context: dict) -> dict:
         "framework": framework_name,
         "context": context,
     }
+
 
 

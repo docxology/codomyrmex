@@ -1,8 +1,16 @@
-"""Utility functions for CEREBRUM module."""
+from typing import Any
+import json
 
 import hashlib
-import json
-from typing import Any
+
+
+
+
+
+
+
+"""Utility functions for CEREBRUM module."""
+
 
 
 def compute_hash(data: Any) -> str:
@@ -101,5 +109,6 @@ def softmax(values: list[float], temperature: float = 1.0) -> list[float]:
         return [1.0 / len(values)] * len(values)
 
     return [v / sum_exp for v in exp_values]
+
 
 

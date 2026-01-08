@@ -1,7 +1,7 @@
 # monitoring
 
 ## Signposting
-- **Parent**: [monitoring](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,24 +15,11 @@
 Test files and validation suites for monitoring.
 
 ## Directory Contents
-No files or subdirectories.
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [tests](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.coding.tests.monitoring import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [coding](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

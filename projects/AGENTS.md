@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects
 
 ## Signposting
-- **Parent**: [Repository Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [test_project](test_project/AGENTS.md)

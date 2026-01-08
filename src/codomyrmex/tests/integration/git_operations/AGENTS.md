@@ -15,6 +15,8 @@
 Test files and validation suites for git_operations.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_github_functionality_demo.py` – Project file
 - `test_github_operations_demo.py` – Project file
 - `test_real_github_repos.py` – Project file

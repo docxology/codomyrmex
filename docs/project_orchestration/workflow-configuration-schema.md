@@ -311,7 +311,7 @@ Each step can specify:
 
 ## Related Documentation
 
-- [API Specification](../../src/codomyrmex/project_orchestration/API_SPECIFICATION.md)
+- [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
 - [Task Orchestration Guide](./task-orchestration-guide.md)
 - [Dispatch and Coordination](./dispatch-coordination.md)
 - [Config-Driven Operations](./config-driven-operations.md)
@@ -322,4 +322,4 @@ Each step can specify:
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

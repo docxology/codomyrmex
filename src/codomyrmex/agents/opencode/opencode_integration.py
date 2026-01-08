@@ -1,8 +1,15 @@
-"""OpenCode integration adapters for Codomyrmex modules."""
-
 from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.core import AgentRequest
+
+
+
+"""OpenCode integration adapters for Codomyrmex modules."""
+
+
 
 
 class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
@@ -22,7 +29,6 @@ class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Generated code
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Build prompt with language context
         full_prompt = f"Generate {language} code: {prompt}"
@@ -72,7 +78,6 @@ class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Completion result dictionary
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Convert messages to prompt
         prompt = "\n".join(
@@ -108,7 +113,6 @@ class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
         Returns:
             Execution result dictionary
         """
-        from codomyrmex.agents.core import AgentRequest
 
         # Use OpenCode to analyze or validate code
         prompt = f"Analyze this {language} code:\n\n{code}"

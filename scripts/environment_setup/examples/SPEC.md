@@ -1,6 +1,6 @@
 # environment_setup - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
@@ -66,9 +66,9 @@ Implementation guidelines for working within environment_setup including best pr
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [examples](../README.md)
-- **Repository Root**: [../../README.md](../../README.md)
-- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+- **Parent Directory**: [environment_setup](../README.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
 

@@ -1,3 +1,27 @@
+from pathlib import Path
+from typing import Any, Optional
+import ast
+import datetime
+import inspect
+import json
+import logging
+import subprocess
+import sys
+
+from dataclasses import asdict, dataclass
+import importlib
+import numpy as np
+
+from codomyrmex.coding import execute_code
+from codomyrmex.data_visualization import create_line_plot
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 System Discovery Engine for Codomyrmex
@@ -7,23 +31,12 @@ modules, methods, classes, and functions to create a complete map of the
 Codomyrmex ecosystem capabilities.
 """
 
-import ast
-import importlib
-import inspect
-import json
-import subprocess
-import sys
-from dataclasses import asdict, dataclass
-from pathlib import Path
-from typing import Any, Optional
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -446,7 +459,6 @@ class SystemDiscovery:
                     latest_time = mtime
 
             if latest_time > 0:
-                import datetime
 
                 return datetime.datetime.fromtimestamp(latest_time).strftime(
                     "%Y-%m-%d %H:%M:%S"
@@ -624,9 +636,7 @@ class SystemDiscovery:
         ):
             print("\n📊 Testing Data Visualization...")
             try:
-                import numpy as np
 
-                from codomyrmex.data_visualization import create_line_plot
 
                 x = np.linspace(0, 4 * np.pi, 100)
                 y = np.sin(x)
@@ -652,7 +662,6 @@ class SystemDiscovery:
         ):
             print("\n📋 Testing Logging System...")
             try:
-                from codomyrmex.logging_monitoring import get_logger
 
                 demo_logger = get_logger("demo")
                 demo_logger.info("Demo logging message - system working!")
@@ -668,7 +677,6 @@ class SystemDiscovery:
         ):
             print("\n🏃 Testing Code Execution...")
             try:
-                from codomyrmex.coding import execute_code
 
                 result = execute_code(
                     language="python", code="print('Hello from Codomyrmex sandbox!')"

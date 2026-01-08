@@ -1,7 +1,7 @@
-# Codomyrmex Agents — src/codomyrmex/agents/ai_code_editing/tests
+# Codomyrmex Agents — src/codomyrmex/tests/unit/agents/ai_code_editing
 
 ## Signposting
-- **Parent**: [Tests](../AGENTS.md)
+- **Parent**: [Ai Code Editing](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [integration](integration/AGENTS.md)
@@ -13,7 +13,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Test files and validation suites.
+Test files and validation suites for ai_code_editing.
 
 ## Active Components
 - `README.md` – Project file
@@ -29,5 +29,5 @@ Test files and validation suites.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [ai_code_editing](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation

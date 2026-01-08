@@ -1,3 +1,18 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
+
+from cryptography.fernet import Fernet
+import secrets
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Secret Management Module for Codomyrmex Configuration Management.
@@ -6,15 +21,8 @@ This module provides secure secret management, encryption, and key rotation
 capabilities for configuration management.
 """
 
-import secrets
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional
 
-from cryptography.fernet import Fernet
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

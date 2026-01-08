@@ -1,10 +1,18 @@
-"""Security frameworks (OWASP, NIST, ISO 27001, etc.)."""
+from typing import List, Optional, Dict, Any
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
 from enum import Enum
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Security frameworks (OWASP, NIST, ISO 27001, etc.)."""
+
+
 
 logger = get_logger(__name__)
 

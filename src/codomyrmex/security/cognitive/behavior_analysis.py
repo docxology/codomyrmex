@@ -1,9 +1,17 @@
-"""User behavior analysis for security."""
-
-from dataclasses import dataclass
 from typing import List, Optional
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""User behavior analysis for security."""
+
+
 
 logger = get_logger(__name__)
 
@@ -81,5 +89,6 @@ def detect_anomalous_behavior(
     if analyzer is None:
         analyzer = BehaviorAnalyzer()
     return analyzer.detect_anomalies(user_id, current_behavior)
+
 
 

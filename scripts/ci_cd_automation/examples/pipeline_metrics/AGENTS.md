@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/ci_cd_automation/examples/pipeline_metrics
 
 ## Signposting
-- **Parent**: [Pipeline Metrics](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -15,7 +15,8 @@
 Example implementations and demonstrations.
 
 ## Active Components
-- No active components documented
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -25,5 +26,5 @@ Example implementations and demonstrations.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [ci_cd_automation](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

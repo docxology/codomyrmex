@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/agents/codex
 
 ## Signposting
-- **Parent**: [agents](../AGENTS.md)
+- **Parent**: [Codex](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,29 +12,17 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Integration with OpenAI Codex API. Provides client for interacting with Codex API, supports code generation and completion, and provides integration adapters for Codomyrmex modules.
+Module components and implementation for codex..
 
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
-- `__init__.py` – Module exports and public API
-- `codex_client.py` – Codex API client implementation
-- `codex_integration.py` – Integration adapters for Codomyrmex modules
-
-## Key Classes and Functions
-
-### CodexClient (`codex_client.py`)
-- `CodexClient(config: Optional[dict[str, Any]] = None)` – Client for interacting with OpenAI Codex API (extends BaseAgent)
-- `execute(request: AgentRequest) -> AgentResponse` – Execute an agent request
-- `get_capabilities() -> list[AgentCapabilities]` – Get supported capabilities
-
-### CodexIntegrationAdapter (`codex_integration.py`)
-- `CodexIntegrationAdapter(agent: AgentInterface)` – Integration adapter for Codomyrmex modules (extends AgentIntegrationAdapter)
-- `adapt_for_ai_code_editing(prompt: str, language: str = "python", **kwargs) -> str` – Adapt for AI code editing module
-- `adapt_for_llm(messages: list[dict], model: str = None, **kwargs) -> dict` – Adapt for LLM module
-- `adapt_for_code_execution(code: str, language: str = "python", **kwargs) -> dict[str, Any]` – Adapt for code execution sandbox
+- `__init__.py` – Project file
+- `codex_client.py` – Project file
+- `codex_integration.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

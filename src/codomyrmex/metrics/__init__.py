@@ -37,3 +37,4 @@ def get_metrics(backend: str = "in_memory") -> Metrics:
     """
     return Metrics(backend=backend)
 
+

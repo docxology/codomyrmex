@@ -1,3 +1,15 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List
+import argparse
+import json
+import logging
+import sys
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
 #!/usr/bin/env python3
 """
 Documentation Health Monitoring for Codomyrmex.
@@ -5,18 +17,11 @@ Documentation Health Monitoring for Codomyrmex.
 Continuous monitoring of documentation quality with alerting and reporting.
 """
 
-import sys
-from pathlib import Path
-from datetime import datetime
-import json
-from typing import Dict, List
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -164,7 +169,6 @@ class DocumentationHealthMonitor:
 
 def main():
     """Main entry point."""
-    import argparse
     
     parser = argparse.ArgumentParser(description="Monitor documentation health")
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

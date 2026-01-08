@@ -41,6 +41,7 @@ dependencies = [
     "openai>=1.0.0",
     "anthropic>=0.64.0",
     "google-generativeai>=0.3.0",
+    "google-genai>=0.1.0",
     # For semantic search and embedding
     "sentence-transformers>=2.0.0",
     "chromadb>=0.4.0",
@@ -95,6 +96,8 @@ dependencies = [
     "scipy>=1.7.0",
     # For timezone support (used in logistics.schedule)
     "pytz>=2024.1",
+    "beautifulsoup4>=4.14.3",
+    "markdownify>=1.2.2",
 ]
 
 [project.optional-dependencies]

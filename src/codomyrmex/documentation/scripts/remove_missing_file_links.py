@@ -1,9 +1,13 @@
+from pathlib import Path
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Remove or fix links to missing files."""
 
-import os
-import re
-from pathlib import Path
 
 def check_and_fix_missing_links(file_path: Path, base_path: Path) -> bool:
     """Check and fix links to missing files."""

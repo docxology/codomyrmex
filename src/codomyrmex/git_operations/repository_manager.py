@@ -1,3 +1,20 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Optional
+import os
+
+from dataclasses import dataclass
+from enum import Enum
+
+from codomyrmex.git_operations.git_manager import (
+from codomyrmex.git_operations.repository_metadata import (
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
 """
 Repository Manager for Codomyrmex Git Operations
 
@@ -6,19 +23,12 @@ supporting both development repositories (for commits/PRs) and usage repositorie
 (for reference/tools).
 """
 
-import os
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-from pathlib import Path
-from typing import Optional
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
 # sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
-from codomyrmex.git_operations.git_manager import (
     clone_repository,
     create_branch,
     get_current_branch,
@@ -26,11 +36,9 @@ from codomyrmex.git_operations.git_manager import (
     is_git_repository,
     pull_changes,
 )
-from codomyrmex.git_operations.repository_metadata import (
     CloneStatus,
     RepositoryMetadataManager,
 )
-from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

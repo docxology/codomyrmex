@@ -1,15 +1,24 @@
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+import logging
+
+import yaml
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """Skill Validator Module
 
 Validates YAML skill files against schema.
 """
 
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
 except ImportError:
-    import logging
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -100,7 +109,6 @@ class SkillValidator:
             return False, [f"File does not exist: {file_path}"]
 
         try:
-            import yaml
         except ImportError:
             return False, ["PyYAML not installed. Install with: pip install pyyaml"]
 

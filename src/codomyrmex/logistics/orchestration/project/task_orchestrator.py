@@ -1,3 +1,25 @@
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+from typing import Any, Optional
+import logging
+import time
+
+from dataclasses import asdict, dataclass, field
+from enum import Enum
+from queue import PriorityQueue as StdPriorityQueue
+import signal
+import threading
+import uuid
+
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol import MCPErrorDetail, MCPToolResult
+from codomyrmex.performance import PerformanceMonitor, monitor_performance
+
+
+
+
+
+
 """
 Task Orchestration System for Codomyrmex
 
@@ -5,28 +27,16 @@ This module provides task-level orchestration capabilities, handling individual
 task execution, dependency management, and coordination across Codomyrmex modules.
 """
 
-import threading
-import time
-import uuid
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
-from queue import PriorityQueue as StdPriorityQueue
-from typing import Any, Optional
 
 # Import Codomyrmex modules
 try:
-    from codomyrmex.logging_monitoring import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 
 try:
-    from codomyrmex.performance import PerformanceMonitor, monitor_performance
 
     PERFORMANCE_AVAILABLE = True
 except ImportError:
@@ -41,7 +51,6 @@ except ImportError:
 
 
 try:
-    from codomyrmex.model_context_protocol import MCPErrorDetail, MCPToolResult
 
     MCP_AVAILABLE = True
 except ImportError:
@@ -521,7 +530,6 @@ class TaskOrchestrator:
 
             # Execute with timeout if specified
             if task.timeout:
-                import signal
 
                 def timeout_handler(signum, frame):
                     """Handle task timeout signal."""

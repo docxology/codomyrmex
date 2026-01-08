@@ -1,7 +1,7 @@
 # ci_cd_automation
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-CI/CD pipeline management including pipeline creation, execution, monitoring, deployment orchestration, performance optimization, and rollback management. Provides comprehensive automation for continuous integration and deployment workflows.
+Module components and implementation for ci_cd_automation..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -31,45 +31,3 @@ CI/CD pipeline management including pipeline creation, execution, monitoring, de
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.ci_cd_automation import (
-    PipelineManager,
-    DeploymentOrchestrator,
-    PipelineMonitor,
-    RollbackManager,
-)
-
-# Create pipeline
-pipeline_mgr = PipelineManager()
-pipeline = pipeline_mgr.create_pipeline(
-    name="deploy",
-    stages=["build", "test", "deploy"]
-)
-
-# Run pipeline
-result = pipeline_mgr.run_pipeline(pipeline.id)
-print(f"Pipeline status: {result.status}")
-
-# Deploy to environment
-deploy = DeploymentOrchestrator()
-deployment = deploy.deploy(
-    app="myapp",
-    environment="production",
-    version="1.2.3"
-)
-
-# Monitor pipeline
-monitor = PipelineMonitor()
-health = monitor.get_pipeline_health(pipeline.id)
-print(f"Health: {health.status}")
-
-# Rollback if needed
-rollback = RollbackManager()
-rollback.rollback(deployment.id, reason="deployment_failed")
-```
-

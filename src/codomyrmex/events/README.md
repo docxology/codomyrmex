@@ -1,7 +1,7 @@
 # events
 
 ## Signposting
-- **Parent**: [codomyrmex](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Event-Driven Architecture for Codomyrmex. Provides an asynchronous event bus for decoupling system components, implementing the Publish-Subscribe pattern with support for synchronous and asynchronous event handling, filtering, prioritization, and event logging.
+Module components and implementation for events..
 
 ## Directory Contents
 - `README.md` – File
@@ -29,39 +29,3 @@ Event-Driven Architecture for Codomyrmex. Provides an asynchronous event bus for
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.events import (
-    EventBus, EventEmitter, EventListener, Event, EventType,
-    publish_event, subscribe_to_events
-)
-
-# Using EventEmitter to publish events
-emitter = EventEmitter(source="my_module")
-emitter.emit(EventType.MODULE_LOAD, data={"module": "example"})
-
-# Using EventListener to receive events
-listener = EventListener(listener_id="my_listener")
-
-def handle_event(event: Event):
-    print(f"Received event: {event.event_type.value}")
-
-listener.on(EventType.MODULE_LOAD, handle_event)
-
-# Using global functions
-publish_event(Event(
-    event_type=EventType.SYSTEM_STARTUP,
-    source="system",
-    data={"version": "1.0.0"}
-))
-
-subscribe_to_events(
-    event_types=[EventType.MODULE_LOAD],
-    handler=handle_event
-)
-```
-

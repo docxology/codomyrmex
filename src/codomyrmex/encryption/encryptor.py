@@ -1,21 +1,39 @@
-"""
-Encryption utilities.
-"""
-
-import hashlib
-import os
 from typing import Optional
+import os
+
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes, padding
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
+from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
+from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
+from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import hashlib
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
+
+
+
+
+
+"""
+Encryption utilities.
+"""
+
+
+
 logger = get_logger(__name__)
 
 try:
-    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-    from cryptography.hazmat.primitives import hashes, padding
-    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-    from cryptography.hazmat.backends import default_backend
     CRYPTOGRAPHY_AVAILABLE = True
 except ImportError:
     CRYPTOGRAPHY_AVAILABLE = False
@@ -98,8 +116,6 @@ class Encryptor:
         if self.algorithm == "AES":
             return os.urandom(32)  # 256-bit key
         elif self.algorithm == "RSA":
-            from cryptography.hazmat.primitives import serialization
-            from cryptography.hazmat.primitives.asymmetric import rsa
             private_key = rsa.generate_private_key(
                 public_exponent=65537,
                 key_size=2048,
@@ -142,8 +158,6 @@ class Encryptor:
         Returns:
             Digital signature
         """
-        from cryptography.hazmat.primitives import serialization, hashes
-        from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
 
         private_key_obj = serialization.load_pem_private_key(private_key, password=None, backend=default_backend())
         signature = private_key_obj.sign(
@@ -167,8 +181,6 @@ class Encryptor:
         Returns:
             True if signature is valid
         """
-        from cryptography.hazmat.primitives import serialization, hashes
-        from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
 
         try:
             public_key_obj = serialization.load_pem_public_key(public_key, backend=default_backend())
@@ -224,8 +236,6 @@ class Encryptor:
 
     def _encrypt_rsa(self, data: bytes, key: bytes) -> bytes:
         """Encrypt using RSA."""
-        from cryptography.hazmat.primitives import serialization
-        from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
 
         public_key = serialization.load_pem_public_key(key, backend=default_backend())
         return public_key.encrypt(
@@ -239,8 +249,6 @@ class Encryptor:
 
     def _decrypt_rsa(self, data: bytes, key: bytes) -> bytes:
         """Decrypt using RSA."""
-        from cryptography.hazmat.primitives import serialization
-        from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
 
         private_key = serialization.load_pem_private_key(key, password=None, backend=default_backend())
         return private_key.decrypt(

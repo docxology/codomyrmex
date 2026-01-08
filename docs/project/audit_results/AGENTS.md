@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/project/audit_results
 
 ## Signposting
-- **Parent**: [Audit Results](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [remediation_check](remediation_check/AGENTS.md)
@@ -15,6 +15,8 @@
 Documentation files and guides for audit_results.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `comprehensive_filepath_audit.html` – Project file
 - `comprehensive_filepath_audit.json` – Project file
 - `remediation_check/` – Directory containing remediation_check components

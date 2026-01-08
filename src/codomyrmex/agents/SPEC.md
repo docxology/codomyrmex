@@ -10,14 +10,20 @@ The `agents` module provides integration with various agentic frameworks includi
 
 ### Modularity
 - **Framework Separation**: Each agentic framework is implemented as a separate submodule
-  - **CLI-based**: Jules, Gemini, OpenCode, Mistral Vibe, Every Code
-  - **API-based**: Claude, Codex
+  - **CLI-based**: Jules, Gemini, OpenCode, Mistral Vibe, Every Code (extend `CLIAgentBase`)
+  - **API-based**: Claude, Codex (extend `APIAgentBase`)
 - **Clear Interfaces**: All agents implement the `AgentInterface` abstract base class
-- **Extensibility**: New agentic frameworks can be added by implementing `AgentInterface`
+- **Base Classes**: 
+  - `BaseAgent`: Common functionality for all agents
+  - `CLIAgentBase`: Specialized base for CLI-based agents with subprocess handling
+  - `APIAgentBase`: Specialized base for API-based agents with standardized error handling and token extraction
+- **Extensibility**: New agentic frameworks can be added by extending appropriate base class
 
 ### Internal Coherence
 - **Unified Interface**: All agents follow the same request/response pattern
-- **Consistent Configuration**: Configuration management follows standard patterns
+- **Consistent Configuration**: Configuration management follows standard patterns with `get_config_value()` helper method
+- **Standardized Error Handling**: API agents use `_handle_api_error()` for consistent error conversion
+- **Token Extraction**: API agents use `_extract_tokens_from_response()` for standardized token counting
 - **Standardized Integration**: Integration adapters provide consistent interfaces to Codomyrmex modules
 
 ### Parsimony
@@ -46,6 +52,8 @@ graph TD
 
     subgraph "Generic Layer"
         BaseAgent[BaseAgent]
+        CLIAgentBase[CLIAgentBase]
+        APIAgentBase[APIAgentBase]
         AgentOrchestrator[AgentOrchestrator]
         MessageBus[MessageBus]
         TaskPlanner[TaskPlanner]
@@ -79,13 +87,15 @@ graph TD
 
     PublicAPI --> AgentInterface
     AgentInterface --> BaseAgent
-    BaseAgent --> JulesClient
-    BaseAgent --> GeminiClient
-    BaseAgent --> OpenCodeClient
-    BaseAgent --> MistralVibeClient
-    BaseAgent --> EveryCodeClient
-    BaseAgent --> ClaudeClient
-    BaseAgent --> CodexClient
+    BaseAgent --> CLIAgentBase
+    BaseAgent --> APIAgentBase
+    CLIAgentBase --> JulesClient
+    CLIAgentBase --> GeminiClient
+    CLIAgentBase --> OpenCodeClient
+    CLIAgentBase --> MistralVibeClient
+    CLIAgentBase --> EveryCodeClient
+    APIAgentBase --> ClaudeClient
+    APIAgentBase --> CodexClient
 
     AgentOrchestrator --> BaseAgent
     MessageBus --> BaseAgent
@@ -129,7 +139,9 @@ graph TD
 - `AgentRequest`, `AgentResponse`: Request/response data structures
 - `AgentCapabilities`: Enum of agent capabilities
 - `AgentConfig`: Configuration management
-- `BaseAgent`: Base implementation class
+- `BaseAgent`: Base implementation class with common functionality
+- `CLIAgentBase`: Base class for CLI-based agents with subprocess handling
+- `APIAgentBase`: Base class for API-based agents with error handling and token extraction
 - `AgentOrchestrator`: Multi-agent coordination
 - Framework-specific clients:
   - CLI-based: `JulesClient`, `GeminiClient`, `OpenCodeClient`, `MistralVibeClient`, `EveryCodeClient`

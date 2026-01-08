@@ -1,7 +1,7 @@
 # plugin_system
 
 ## Signposting
-- **Parent**: [plugin_system](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,6 +15,8 @@
 Test files and validation suites for plugin_system.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_plugin_system.py` – File
 
 ## Navigation
@@ -22,17 +24,3 @@ Test files and validation suites for plugin_system.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.plugin_system import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

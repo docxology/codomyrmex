@@ -15,6 +15,8 @@
 Test files and validation suites for documentation.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_documentation_accuracy.py` – Project file
 
 ## Operating Contracts

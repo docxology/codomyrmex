@@ -1,7 +1,7 @@
 # Codomyrmex Agents — scripts/documentation/examples/examples
 
 ## Signposting
-- **Parent**: [Examples Root](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -26,5 +26,5 @@ Documentation files and guides for examples.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [documentation](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation

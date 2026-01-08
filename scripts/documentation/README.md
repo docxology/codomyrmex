@@ -3,7 +3,10 @@
 ## Signposting
 - **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [basic](basic/README.md)
+    - [configs](configs/README.md)
+    - [examples](examples/README.md)
+    - [integration](integration/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -19,17 +22,25 @@ Documentation files and guides for documentation.
 - `SPEC.md` – File
 - `add_missing_navigation_links.py` – File
 - `add_missing_version_status.py` – File
+- `advanced_orchestrators_guide.md` – File
 - `analyze_content_quality.py` – File
+- `api_documentation_AGENTS.md` – File
+- `api_documentation_README.md` – File
+- `api_documentation_SPEC.md` – File
+- `audit_agents_filepaths.py` – File
 - `audit_documentation_inventory.py` – File
 - `audit_module_docs.py` – File
 - `audit_structure.py` – File
 - `auto_generate_docs.py` – File
+- `basic/` – Subdirectory
 - `boost_quality_score.py` – File
 - `bootstrap_agents_readmes.py` – File
 - `check_completeness.py` – File
 - `check_doc_links.py` – File
 - `check_docs_status.py` – File
 - `check_documentation_completeness.py` – File
+- `check_example_coverage.py` – File
+- `check_example_links.py` – File
 - `check_links.py` – File
 - `clean_agents_files.py` – File
 - `cleanup_operating_contracts.py` – File
@@ -40,14 +51,25 @@ Documentation files and guides for documentation.
 - `comprehensive_fix.py` – File
 - `comprehensive_placeholder_check.py` – File
 - `comprehensive_triple_check.py` – File
+- `configs/` – Subdirectory
 - `create_example_tutorials.py` – File
 - `create_missing_doc_files.py` – File
 - `doc_auditor.py` – File
 - `doc_scaffolder.py` – File
+- `docs_AGENTS.md` – File
+- `docs_README.md` – File
+- `docs_SPEC.md` – File
+- `documentation_module_AGENTS.md` – File
+- `documentation_module_README.md` – File
+- `documentation_module_SPEC.md` – File
 - `documentation_scan_report.py` – File
 - `documentation_status_summary.py` – File
 - `enforce_quality_gate.py` – File
 - `enhance_stubs.py` – File
+- `examples/` – Subdirectory
+- `examples_AGENTS.md` – File
+- `examples_README.md` – File
+- `examples_SPEC.md` – File
 - `fix_agents_completeness.py` – File
 - `fix_agents_files.py` – File
 - `fix_agents_structure.py` – File
@@ -67,6 +89,7 @@ Documentation files and guides for documentation.
 - `fix_missing_api_links.py` – File
 - `fix_navigation_links.py` – File
 - `fix_orchestrator_commands.py` – File
+- `fix_parent_references.py` – File
 - `fix_placeholders.py` – File
 - `fix_remaining_links.py` – File
 - `fix_script_specs.py` – File
@@ -85,16 +108,20 @@ Documentation files and guides for documentation.
 - `generate_spec_files.py` – File
 - `global_doc_auditor.py` – File
 - `identify_docs_needing_work.py` – File
+- `integration/` – Subdirectory
 - `module_audit_data.json` – File
 - `module_docs_auditor.py` – File
 - `monitor_health.py` – File
+- `orchestrate.py` – File
 - `refine_generic_descriptions.py` – File
 - `remove_missing_file_links.py` – File
 - `remove_nonexistent_spec_links.py` – File
 - `remove_placeholders.py` – File
 - `smart_template_engine.py` – File
 - `validate_agents_structure.py` – File
+- `validate_child_references.py` – File
 - `validate_code_examples.py` – File
+- `validate_configs.py` – File
 - `validate_documentation_links.py` – File
 - `validate_links.py` – File
 - `validate_links_comprehensive.py` – File
@@ -102,10 +129,8 @@ Documentation files and guides for documentation.
 - `verify_api_specs.py` – File
 - `verify_module_docs.py` – File
 
-- `scripts/` – Subdirectory containing example implementations
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [scripts](../README.md)
 - **Project Root**: [README](../../README.md)
-

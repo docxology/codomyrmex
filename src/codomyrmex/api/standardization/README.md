@@ -1,7 +1,7 @@
 # standardization
 
 ## Signposting
-- **Parent**: [standardization](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-API standardization including REST API, GraphQL API, and API versioning. Provides tools for standardizing API interfaces, validation, and compliance checking across different API types.
+Module components and implementation for standardization..
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -29,35 +29,3 @@ API standardization including REST API, GraphQL API, and API versioning. Provide
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [api](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.api.standardization import (
-    RESTAPI,
-    create_api,
-    APIVersionManager,
-    GraphQLAPI,
-    create_schema,
-)
-
-# Create a REST API
-api = create_api("v1")
-router = api.create_router()
-
-@router.get("/users")
-def get_users():
-    return {"users": []}
-
-# API versioning
-version_manager = APIVersionManager()
-version_manager.register_version("v1", api)
-
-# Create GraphQL schema
-schema = create_schema()
-query = schema.create_query()
-query.field("users", lambda: [])
-```
-

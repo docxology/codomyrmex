@@ -1,7 +1,7 @@
 # scripts
 
 ## Signposting
-- **Parent**: [scripts](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -26,17 +26,3 @@ Automation and utility scripts.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [environment_setup](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.environment_setup.scripts import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

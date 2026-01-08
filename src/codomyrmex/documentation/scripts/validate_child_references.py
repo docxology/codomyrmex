@@ -1,13 +1,17 @@
+from pathlib import Path
+from typing import Dict, List
+import json
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Validate all child references in AGENTS.md files.
 Check that children point to existing directories with AGENTS.md files.
 """
 
-import re
-from pathlib import Path
-from typing import Dict, List
-import json
 
 def extract_children_references(content: str) -> List[Dict]:
     """Extract all child references from AGENTS.md content."""

@@ -1,7 +1,7 @@
-# task_queue
+# task
 
 ## Signposting
-- **Parent**: [task_queue](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,27 +12,15 @@
 
 ## Overview
 
-Test files and validation suites for task_queue.
+Test files and validation suites for task.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_queue.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.task_queue import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [logistics](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

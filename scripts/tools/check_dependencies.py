@@ -12,7 +12,19 @@ from pathlib import Path
 repo_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(repo_root / "tools"))
 
-from dependency_analyzer import DependencyAnalyzer
+# Add current directory to path to find sibling modules
+sys.path.insert(0, str(Path(__file__).parent))
+
+try:
+    from dependency_analyzer import DependencyAnalyzer
+except ImportError:
+    # Try importing from src if available (fallback)
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "codomyrmex" / "tools"))
+    try:
+        from dependency_analyzer import DependencyAnalyzer
+    except ImportError:
+        print("Error: Could not import DependencyAnalyzer")
+        sys.exit(1)
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging

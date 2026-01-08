@@ -73,3 +73,4 @@ class NetworkStructureError(BayesianInferenceError):
     pass
 
 
+

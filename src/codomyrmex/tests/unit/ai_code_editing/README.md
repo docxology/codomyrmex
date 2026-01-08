@@ -1,7 +1,7 @@
 # ai_code_editing
 
 ## Signposting
-- **Parent**: [ai_code_editing](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,6 +15,8 @@
 Test files and validation suites for ai_code_editing.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_ai_code_editing.py` – File
 
 ## Navigation
@@ -22,17 +24,3 @@ Test files and validation suites for ai_code_editing.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.ai_code_editing import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

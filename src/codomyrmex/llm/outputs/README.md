@@ -1,7 +1,7 @@
 # outputs
 
 ## Signposting
-- **Parent**: [outputs](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [integration](integration/README.md)
     - [llm_outputs](llm_outputs/README.md)
@@ -16,7 +16,7 @@
 
 ## Overview
 
-Persistence layer for LLM interactions. Stores traces, generation logs, and performance metrics. Provides structured way to debug and analyze LLM interactions with timestamped or ID-based filenames to prevent collisions. Outputs are categorized by type (raw llm_outputs, structured reports, performance metrics).
+Module components and implementation for outputs..
 
 ## Directory Contents
 - `README.md` – File

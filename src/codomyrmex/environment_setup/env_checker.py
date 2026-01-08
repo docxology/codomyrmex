@@ -1,27 +1,41 @@
+from pathlib import Path
+from typing import Dict, Any
 import os
 import subprocess
 import sys
-from typing import Dict, Any
-from pathlib import Path
+
+from importlib.metadata import distributions
+from importlib_metadata import distributions
+from packaging import version
+import dotenv
+import dotenv
+import dotenv
+import kit
+import kit
+import kit
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 
 try:
-    from importlib.metadata import distributions
     METADATA_AVAILABLE = True
 except ImportError:
     # Fallback for Python < 3.8
     try:
-        from importlib_metadata import distributions
         METADATA_AVAILABLE = True
     except ImportError:
         METADATA_AVAILABLE = False
 
 try:
-    from packaging import version
     PACKAGING_AVAILABLE = True
 except ImportError:
     PACKAGING_AVAILABLE = False
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -63,7 +77,6 @@ def ensure_dependencies_installed():
     """
     dependencies_ok = True
     try:
-        import kit
 
         print("[INFO] cased/kit library found.")
     except (ImportError, ModuleNotFoundError):
@@ -80,7 +93,6 @@ def ensure_dependencies_installed():
         )
 
     try:
-        import dotenv
 
         print("[INFO] python-dotenv library found.")
     except (ImportError, ModuleNotFoundError):
@@ -268,8 +280,6 @@ def validate_environment_completeness() -> Dict[str, bool]:
 
     # Check core dependencies
     try:
-        import kit
-        import dotenv
         results["core_dependencies"] = True
     except ImportError:
         results["core_dependencies"] = False
@@ -311,14 +321,12 @@ def generate_environment_report() -> str:
     # Core dependencies
     core_deps_ok = True
     try:
-        import kit
         report_lines.append("✓ cased/kit library available")
     except ImportError:
         core_deps_ok = False
         report_lines.append("✗ cased/kit library missing")
 
     try:
-        import dotenv
         report_lines.append("✓ python-dotenv library available")
     except ImportError:
         core_deps_ok = False

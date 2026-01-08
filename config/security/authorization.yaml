@@ -197,3 +197,4 @@ events:
     - "privilege_escalation_attempt"
     - "suspicious_permission_change"
 
+

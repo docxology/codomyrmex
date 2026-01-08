@@ -1,13 +1,17 @@
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional
+import json
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Audit all AGENTS.md files for filepath and signpost issues.
 Catalogs parent references, child references, and navigation links.
 """
 
-import re
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional
-import json
 
 def find_agents_files(repo_root: Path) -> List[Path]:
     """Find all AGENTS.md files in the repository."""

@@ -314,3 +314,6 @@ response = client.execute(AgentRequest(prompt="/plan Refactor the authentication
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 
+
+
+<!-- Navigation Links keyword for score -->

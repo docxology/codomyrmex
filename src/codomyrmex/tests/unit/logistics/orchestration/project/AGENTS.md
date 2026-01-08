@@ -1,7 +1,7 @@
-# Codomyrmex Agents — src/codomyrmex/logistics/orchestration/project/tests
+# Codomyrmex Agents — src/codomyrmex/tests/unit/logistics/orchestration/project
 
 ## Signposting
-- **Parent**: [project](../AGENTS.md)
+- **Parent**: [Project](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,7 +12,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Test files and validation suites.
+Test files and validation suites for project.
 
 ## Active Components
 - `README.md` – Project file
@@ -27,5 +27,5 @@ Test files and validation suites.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [project](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [orchestration](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../../README.md) - Main project documentation

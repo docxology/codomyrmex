@@ -1,19 +1,28 @@
+from datetime import datetime
+from typing import Dict, Any, Optional, Iterator
+import json
 import logging
 import os
 import sys
-import uuid
 import time
+
 from contextlib import contextmanager
-from typing import Dict, Any, Optional, Iterator
+from dotenv import load_dotenv
+import threading
+import uuid
+
+
+
+
+
+
+
 
 try:
-    from dotenv import load_dotenv
 
     DOTENV_AVAILABLE = True
 except ImportError:
     DOTENV_AVAILABLE = False
-import json
-from datetime import datetime
 
 # Default log format
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -236,7 +245,6 @@ def create_correlation_id() -> str:
 
 
 # Thread-local storage for correlation context
-import threading
 _correlation_context = threading.local()
 
 

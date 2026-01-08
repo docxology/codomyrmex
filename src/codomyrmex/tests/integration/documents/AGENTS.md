@@ -15,6 +15,8 @@
 Test files and validation suites for documents.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_documents_integration.py` – Project file
 
 ## Operating Contracts

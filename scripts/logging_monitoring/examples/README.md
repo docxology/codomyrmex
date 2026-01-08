@@ -1,34 +1,31 @@
-# Logging Monitoring Examples
+# examples
+
+## Signposting
+- **Parent**: [Parent](../README.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Agent Guide](AGENTS.md)
+    - [Functional Spec](SPEC.md)
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This directory contains example implementations demonstrating the Logging Monitoring module functionality.
+Example implementations and demonstrations.
 
-## Contents
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `config.json` – File
+- `config.yaml` – File
+- `example_basic.py` – File
+- `tutorial_README.md` – File
+- `tutorial_config.yaml` – File
+- `tutorial_step_by_step.py` – File
 
-- `config.json` - Configuration file for the example
-- `config.yaml` - Configuration file for the example
-- `example_basic.py` - Main example script demonstrating module usage
-- `tutorial_README.md` - tutorial_README.md
-- `tutorial_config.yaml` - Configuration file for the example
-- `tutorial_step_by_step.py` - tutorial_step_by_step.py
-
-## Usage
-
-Run the example:
-
-```bash
-python example_basic.py
-```
-
-Or use the configuration files with the module's orchestration script:
-
-```bash
-python ../orchestrate.py --config config.yaml
-```
-
-## See Also
-
-- [Module Documentation](../README.md)
-- [Module Specification](../SPEC.md)
-- [Module Agents Guide](../AGENTS.md)
+## Navigation
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **Parent Directory**: [logging_monitoring](../README.md)
+- **Project Root**: [README](../../../README.md)

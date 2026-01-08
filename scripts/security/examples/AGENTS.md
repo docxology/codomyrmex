@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/code_execution_sandbox
+# Codomyrmex Agents — scripts/security/examples
 
 ## Signposting
-- **Parent**: [Code Execution Sandbox](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -15,7 +15,12 @@
 Example implementations and demonstrations.
 
 ## Active Components
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `config.json` – Project file
+- `config.yaml` – Project file
 - `example_basic.py` – Project file
+- `examples_README.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -25,5 +30,5 @@ Example implementations and demonstrations.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../README.md) - Main project documentation
+- **📁 Parent Directory**: [security](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

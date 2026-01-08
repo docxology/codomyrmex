@@ -1,16 +1,20 @@
-"""Every Code CLI client wrapper."""
-
 from pathlib import Path
 from typing import Any, Iterator, Optional
+import subprocess
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
+from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, EveryCodeError
+from codomyrmex.agents.generic import CLIAgentBase
+
+
+"""Every Code CLI client wrapper."""
+
+
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, EveryCodeError
-from codomyrmex.agents.generic import CLIAgentBase
 
 
 class EveryCodeClient(CLIAgentBase):
@@ -23,53 +27,9 @@ class EveryCodeClient(CLIAgentBase):
         Args:
             config: Optional configuration override
         """
-        agent_config = get_config()
-        code_command = (
-            config.get("every_code_command")
-            if config
-            else agent_config.every_code_command
-        )
-        alt_command = (
-            config.get("every_code_alt_command")
-            if config
-            else agent_config.every_code_alt_command
-        )
-        timeout = (
-            config.get("every_code_timeout")
-            if config
-            else agent_config.every_code_timeout
-        )
-        working_dir = (
-            Path(config.get("every_code_working_dir"))
-            if config and config.get("every_code_working_dir")
-            else Path(agent_config.every_code_working_dir)
-            if agent_config.every_code_working_dir
-            else None
-        )
-
-        # Try to find available command (code or coder)
-        available_command = self._find_available_command(code_command, alt_command)
-
-        # Set up environment variables
-        env_vars = {}
-        api_key = (
-            config.get("every_code_api_key")
-            if config
-            else agent_config.every_code_api_key
-        )
-        config_path = (
-            config.get("every_code_config_path")
-            if config
-            else agent_config.every_code_config_path
-        )
-        if api_key:
-            env_vars["OPENAI_API_KEY"] = api_key
-        if config_path:
-            env_vars["CODE_HOME"] = config_path
-
         super().__init__(
             name="every_code",
-            command=available_command,
+            command="code",
             capabilities=[
                 AgentCapabilities.CODE_GENERATION,
                 AgentCapabilities.CODE_EDITING,
@@ -79,11 +39,29 @@ class EveryCodeClient(CLIAgentBase):
                 AgentCapabilities.MULTI_TURN,
             ],
             config=config or {},
-            timeout=timeout,
-            working_dir=working_dir,
-            env_vars=env_vars,
+            timeout=120,
+            working_dir=None,
+            env_vars={},
         )
+        
+        code_command = self.get_config_value("every_code_command", config=config)
+        alt_command = self.get_config_value("every_code_alt_command", config=config)
+        timeout = self.get_config_value("every_code_timeout", config=config)
+        working_dir_str = self.get_config_value("every_code_working_dir", config=config)
+        working_dir = Path(working_dir_str) if working_dir_str else None
 
+        available_command = self._find_available_command(code_command, alt_command)
+
+        api_key = self.get_config_value("every_code_api_key", config=config)
+        config_path = self.get_config_value("every_code_config_path", config=config)
+        if api_key:
+            self.env_vars["OPENAI_API_KEY"] = api_key
+        if config_path:
+            self.env_vars["CODE_HOME"] = config_path
+
+        self.command = available_command
+        self.timeout = timeout
+        self.working_dir = working_dir
         self.api_key = api_key
         self.config_path = config_path
 
@@ -106,7 +84,6 @@ class EveryCodeClient(CLIAgentBase):
         Returns:
             Available command name
         """
-        import subprocess
 
         # Try primary command first
         try:

@@ -1,11 +1,16 @@
+from pathlib import Path
+from typing import Dict, List
+import argparse
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix navigation links in AGENTS.md files that point to non-existent files.
 """
 
-import re
-from pathlib import Path
-from typing import Dict, List
 
 
 class NavigationLinkFixer:
@@ -137,7 +142,6 @@ class NavigationLinkFixer:
 
 def main():
     """Main entry point."""
-    import argparse
 
     parser = argparse.ArgumentParser(description='Fix navigation links in AGENTS.md files')
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

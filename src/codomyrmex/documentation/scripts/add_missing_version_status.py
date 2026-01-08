@@ -1,8 +1,14 @@
+from pathlib import Path
+import os
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Add missing version/status information to documentation files."""
 
-import re
-from pathlib import Path
 
 def has_version_status(content: str) -> bool:
     """Check if file has version/status information."""
@@ -78,6 +84,5 @@ def main():
     print(f"\nCompleted: Fixed {fixed_count} files with version/status")
 
 if __name__ == "__main__":
-    import os
     main()
 

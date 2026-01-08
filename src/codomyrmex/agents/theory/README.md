@@ -1,7 +1,7 @@
 # theory
 
 ## Signposting
-- **Parent**: [agents](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Theoretical foundations for agentic systems including agent architectures, reasoning models, and theoretical frameworks. Provides theoretical basis for understanding and designing agentic systems.
+Module components and implementation for theory..
 
 ## Directory Contents
 - `README.md` – File
@@ -26,25 +26,3 @@ Theoretical foundations for agentic systems including agent architectures, reaso
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-This module provides theoretical foundations for understanding agentic systems:
-
-```python
-from codomyrmex.agents.theory import (
-    AgentArchitecture,
-    ReasoningModel,
-)
-
-# Explore agent architectures
-architectures = AgentArchitecture.list_architectures()
-for arch in architectures:
-    print(f"Architecture: {arch.name} - {arch.description}")
-
-# Understand reasoning models
-reasoning_models = ReasoningModel.list_models()
-for model in reasoning_models:
-    print(f"Model: {model.name} - {model.approach}")
-```
-

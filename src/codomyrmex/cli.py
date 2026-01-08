@@ -1,17 +1,171 @@
+from pathlib import Path
+from typing import Optional
+import argparse
+import json
+import json
+import json
+import json
+import logging
+import subprocess
+import sys
+import traceback
+import traceback
+import traceback
+import traceback
+import traceback
+import traceback
+import traceback
+import traceback
+
+import codomyrmex.performance
+import numpy as np
+import yaml
+
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import refactor_code_snippet
+from codomyrmex.build_synthesis import orchestrate_build_pipeline
+from codomyrmex.coding import execute_code
+from codomyrmex.data_visualization import create_bar_chart, create_line_plot
+from codomyrmex.data_visualization.git_visualizer import (
+from codomyrmex.fpf import FPFClient
+from codomyrmex.fpf import FPFClient
+from codomyrmex.fpf import FPFClient
+from codomyrmex.fpf import FPFClient
+from codomyrmex.fpf import FPFClient
+from codomyrmex.fpf import FPFClient
+from codomyrmex.fpf import FPFClient
+from codomyrmex.fpf import FPFClient, FPFVisualizer
+from codomyrmex.fpf import FPFFetcher
+from codomyrmex.fpf.analyzer import FPFAnalyzer
+from codomyrmex.fpf.report_generator import ReportGenerator
+from codomyrmex.fpf.section_exporter import SectionExporter
+from codomyrmex.fpf.section_manager import SectionManager
+from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
+from codomyrmex.git_operations import get_current_branch, get_status
+from codomyrmex.logging_monitoring.logger_config import (
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logistics.orchestration.project import WorkflowStep, get_workflow_manager
+from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+from codomyrmex.logistics.orchestration.project import get_project_manager
+from codomyrmex.logistics.orchestration.project import get_project_manager
+from codomyrmex.logistics.orchestration.project import get_workflow_manager
+from codomyrmex.performance.performance_monitor import (
+from codomyrmex.skills import get_skills_manager
+from codomyrmex.skills import get_skills_manager
+from codomyrmex.skills import get_skills_manager
+from codomyrmex.skills import get_skills_manager
+from codomyrmex.static_analysis import analyze_project
+from codomyrmex.system_discovery import StatusReporter
+from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
+from codomyrmex.terminal_interface.terminal_utils import (
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Codomyrmex CLI - Command Line Interface for Codomyrmex
 
-A modular, extensible coding workspace that integrates various tools
-for building, documenting, analyzing, executing, and visualizing code.
-Now with comprehensive orchestration and project management capabilities.
+A comprehensive command-line interface for the Codomyrmex modular coding workspace.
+Provides access to all package functionality through intuitive commands for building,
+documenting, analyzing, executing, and visualizing code.
+
+Available Commands:
+    Environment Commands:
+        check       - Check environment setup and dependencies
+        info        - Show project information and capabilities
+        modules     - List all available modules with descriptions
+        status      - Show comprehensive system status dashboard
+        shell       - Launch interactive Codomyrmex shell
+
+    Workflow Management:
+        workflow list           - List available workflows
+        workflow create <name>  - Create a new workflow
+        workflow run <name>     - Execute a workflow
+
+    Project Management:
+        project list            - List available projects
+        project create <name>   - Create a new project with template
+
+    Orchestration:
+        orchestration status    - Show orchestration system status
+        orchestration health    - Check system health
+
+    AI Operations:
+        ai generate <prompt>   - Generate code with AI
+        ai refactor <file>     - Refactor code with AI
+
+    Analysis Operations:
+        analyze code <path>    - Analyze code quality
+        analyze git [--repo]   - Analyze git repository
+
+    Build Operations:
+        build project          - Build the project
+
+    FPF Operations:
+        fpf fetch              - Fetch latest FPF spec from GitHub
+        fpf parse <file>       - Parse FPF specification
+        fpf export <file>      - Export FPF to JSON
+        fpf search <query>     - Search FPF patterns
+        fpf visualize <file>   - Generate visualizations
+        fpf context <file>     - Build context for prompt engineering
+        fpf analyze <file>     - Analyze FPF specification
+        fpf report <file>      - Generate comprehensive report
+
+    Skills Management:
+        skills sync            - Sync with upstream skills repository
+        skills list [category] - List available skills
+        skills get <cat> <name> - Get a specific skill
+        skills search <query>  - Search skills
+
+Command Examples:
+    # Check environment
+    codomyrmex check
+
+    # Show system status
+    codomyrmex status
+
+    # List modules
+    codomyrmex modules
+
+    # Run workflow
+    codomyrmex workflow run code-analysis
+
+    # Generate code with AI
+    codomyrmex ai generate "create a REST API endpoint"
+
+    # Analyze code
+    codomyrmex analyze code src/
+
+    # Build project
+    codomyrmex build project
+
+Module Integration:
+    The CLI integrates with multiple Codomyrmex modules:
+    - logging_monitoring: All commands use structured logging
+    - terminal_interface: Interactive shell and formatting
+    - performance: Optional performance monitoring
+    - logistics: Workflow orchestration
+    - agents: AI-powered operations
+    - static_analysis: Code analysis
+    - build_synthesis: Build operations
+    - fpf: First Principles Framework operations
+    - skills: Skills management
+
+Documentation:
+    - README.md: Package overview and usage
+    - AGENTS.md: Technical documentation
+    - SPEC.md: Functional specification
+    - Individual module README files for module-specific commands
+
+For detailed help on any command, use: codomyrmex <command> --help
 """
 
-import argparse
-import json
-import sys
-from pathlib import Path
-from typing import Optional
 
 # Add the src directory to Python path for development
 src_dir = Path(__file__).parent.parent
@@ -21,13 +175,11 @@ if str(src_dir) not in sys.path:
 
 # Import core logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
     logger = get_logger(__name__)
 except ImportError:
     try:
         # Try importing from installed package
-        from codomyrmex.logging_monitoring.logger_config import (
             get_logger,
             setup_logging,
         )
@@ -35,14 +187,11 @@ except ImportError:
     except ImportError:
         # Fallback logging - should not happen in normal operation
         # This is a fallback for edge cases, but we should always use get_logger
-        import logging
         logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
 
 # Import terminal interface for better UX
 try:
-    from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
-    from codomyrmex.terminal_interface.terminal_utils import (
         CommandRunner,
         TerminalFormatter,
     )
@@ -54,7 +203,6 @@ except ImportError:
 
 # Import performance monitoring
 try:
-    from codomyrmex.performance.performance_monitor import (
         PerformanceMonitor,
         monitor_performance,
     )
@@ -260,7 +408,6 @@ def run_interactive_shell():
 def list_workflows():
     """List available workflows and orchestration templates."""
     try:
-        from codomyrmex.logistics.orchestration.project import get_workflow_manager
 
         manager = get_workflow_manager()
         workflows = manager.list_workflows()
@@ -303,7 +450,6 @@ def list_workflows():
 def run_workflow(workflow_name: str, **kwargs):
     """Run a specific workflow."""
     try:
-        from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
         engine = get_orchestration_engine()
 
@@ -367,7 +513,6 @@ def show_system_status():
 
     # System discovery
     try:
-        from codomyrmex.system_discovery import StatusReporter
 
         reporter = StatusReporter()
 
@@ -651,7 +796,6 @@ Examples:
         logger.info("Performance monitoring enabled")
 
         # Enable performance monitoring globally
-        import codomyrmex.performance
 
         codomyrmex.performance._performance_monitor = monitor
 
@@ -798,7 +942,6 @@ Examples:
 def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
     """Handle AI code generation command."""
     try:
-        from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
         result = generate_code_snippet(
             prompt=prompt, language=language, provider=provider
@@ -825,7 +968,6 @@ def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
 def handle_ai_refactor(file_path: str, instruction: str) -> bool:
     """Handle AI code refactoring command."""
     try:
-        from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
         # Read the file
         with open(file_path) as f:
@@ -868,7 +1010,6 @@ def handle_ai_refactor(file_path: str, instruction: str) -> bool:
 def handle_code_analysis(path: str, output_dir: Optional[str]) -> bool:
     """Handle code analysis command."""
     try:
-        from codomyrmex.static_analysis import analyze_project
 
         result = analyze_project(path)
         print(f"Code quality analysis for: {path}")
@@ -894,7 +1035,6 @@ def handle_code_analysis(path: str, output_dir: Optional[str]) -> bool:
 def handle_git_analysis(repo_path: str) -> bool:
     """Handle git repository analysis command."""
     try:
-        from codomyrmex.data_visualization.git_visualizer import (
             visualize_git_repository,
         )
 
@@ -918,7 +1058,6 @@ def handle_git_analysis(repo_path: str) -> bool:
 def handle_project_build(config_file: Optional[str]) -> bool:
     """Handle project build command."""
     try:
-        from codomyrmex.build_synthesis import orchestrate_build_pipeline
 
         build_config = {}
         if config_file and Path(config_file).exists():
@@ -945,7 +1084,6 @@ def handle_project_build(config_file: Optional[str]) -> bool:
 def handle_module_test(module_name: str) -> bool:
     """Handle module testing command."""
     try:
-        import subprocess
 
         result = subprocess.run(
             [
@@ -991,9 +1129,7 @@ def handle_module_demo(module_name: str) -> bool:
 def demo_data_visualization() -> bool:
     """Demo data visualization capabilities."""
     try:
-        import numpy as np
 
-        from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
         # Generate sample data
         x = list(range(10))
@@ -1021,7 +1157,6 @@ def demo_data_visualization() -> bool:
 def demo_ai_code_editing() -> bool:
     """Demo AI code editing capabilities."""
     try:
-        from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
         result = generate_code_snippet(
             prompt="Create a simple function to calculate factorial", language="python"
@@ -1049,7 +1184,6 @@ def demo_ai_code_editing() -> bool:
 def demo_code_execution() -> bool:
     """Demo code execution sandbox."""
     try:
-        from codomyrmex.coding import execute_code
 
         code = """
 def fibonacci(n):
@@ -1085,7 +1219,6 @@ for i in range(8):
 def demo_git_operations() -> bool:
     """Demo git operations."""
     try:
-        from codomyrmex.git_operations import get_current_branch, get_status
 
         status = get_status()
         branch = get_current_branch()
@@ -1109,7 +1242,6 @@ def demo_git_operations() -> bool:
 def handle_workflow_create(name: str, template: Optional[str] = None) -> bool:
     """Handle workflow creation command."""
     try:
-        from codomyrmex.logistics.orchestration.project import WorkflowStep, get_workflow_manager
 
         manager = get_workflow_manager()
 
@@ -1187,7 +1319,6 @@ def handle_workflow_create(name: str, template: Optional[str] = None) -> bool:
 def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) -> bool:
     """Handle project creation command."""
     try:
-        from codomyrmex.logistics.orchestration.project import get_project_manager
 
         manager = get_project_manager()
 
@@ -1211,7 +1342,6 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
 def handle_project_list() -> bool:
     """Handle project listing command."""
     try:
-        from codomyrmex.logistics.orchestration.project import get_project_manager
 
         manager = get_project_manager()
         projects = manager.list_projects()
@@ -1261,7 +1391,6 @@ def handle_project_list() -> bool:
 def handle_orchestration_status() -> bool:
     """Handle orchestration status command."""
     try:
-        from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
         engine = get_orchestration_engine()
         status = engine.get_system_status()
@@ -1311,7 +1440,6 @@ def handle_orchestration_status() -> bool:
 def handle_orchestration_health() -> bool:
     """Handle orchestration health check command."""
     try:
-        from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
         engine = get_orchestration_engine()
         health = engine.health_check()
@@ -1373,7 +1501,6 @@ def handle_orchestration_health() -> bool:
 def handle_fpf_fetch(repo: str, branch: str, output: Optional[str]) -> bool:
     """Handle FPF fetch command."""
     try:
-        from codomyrmex.fpf import FPFFetcher
 
         fetcher = FPFFetcher()
         content = fetcher.fetch_latest(repo, branch)
@@ -1393,7 +1520,6 @@ def handle_fpf_fetch(repo: str, branch: str, output: Optional[str]) -> bool:
 def handle_fpf_parse(file: str, output: Optional[str]) -> bool:
     """Handle FPF parse command."""
     try:
-        from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
         spec = client.load_from_file(file)
@@ -1413,7 +1539,6 @@ def handle_fpf_parse(file: str, output: Optional[str]) -> bool:
 def handle_fpf_export(file: str, output: str, format: str) -> bool:
     """Handle FPF export command."""
     try:
-        from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
         client.load_from_file(file)
@@ -1429,7 +1554,6 @@ def handle_fpf_export(file: str, output: str, format: str) -> bool:
 def handle_fpf_search(query: str, file: Optional[str], filters: dict) -> bool:
     """Handle FPF search command."""
     try:
-        from codomyrmex.fpf import FPFClient
 
         if not file:
             # Try default location
@@ -1457,8 +1581,6 @@ def handle_fpf_search(query: str, file: Optional[str], filters: dict) -> bool:
 def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, layout: str, chart_type: str) -> bool:
     """Handle FPF visualize command."""
     try:
-        from codomyrmex.fpf import FPFClient, FPFVisualizer
-        from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
 
         client = FPFClient()
         client.load_from_file(file)
@@ -1497,7 +1619,6 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
         return True
     except Exception as e:
         print(f"❌ Error generating visualization: {str(e)}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -1505,7 +1626,6 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
 def handle_fpf_context(file: str, pattern: Optional[str], output: Optional[str], depth: int) -> bool:
     """Handle FPF context command."""
     try:
-        from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
         client.load_from_file(file)
@@ -1530,9 +1650,6 @@ def handle_fpf_context(file: str, pattern: Optional[str], output: Optional[str],
 def handle_fpf_export_section(file: str, part: Optional[str], pattern: Optional[str], output: str, include_dependencies: bool) -> bool:
     """Handle FPF export-section command."""
     try:
-        from codomyrmex.fpf import FPFClient
-        from codomyrmex.fpf.section_manager import SectionManager
-        from codomyrmex.fpf.section_exporter import SectionExporter
 
         client = FPFClient()
         client.load_from_file(file)
@@ -1553,7 +1670,6 @@ def handle_fpf_export_section(file: str, part: Optional[str], pattern: Optional[
         return True
     except Exception as e:
         print(f"❌ Error exporting section: {str(e)}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -1561,9 +1677,6 @@ def handle_fpf_export_section(file: str, part: Optional[str], pattern: Optional[
 def handle_fpf_analyze(file: str, output: Optional[str]) -> bool:
     """Handle FPF analyze command."""
     try:
-        import json
-        from codomyrmex.fpf import FPFClient
-        from codomyrmex.fpf.analyzer import FPFAnalyzer
 
         client = FPFClient()
         client.load_from_file(file)
@@ -1581,7 +1694,6 @@ def handle_fpf_analyze(file: str, output: Optional[str]) -> bool:
         return True
     except Exception as e:
         print(f"❌ Error analyzing FPF: {str(e)}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -1589,8 +1701,6 @@ def handle_fpf_analyze(file: str, output: Optional[str]) -> bool:
 def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
     """Handle FPF report command."""
     try:
-        from codomyrmex.fpf import FPFClient
-        from codomyrmex.fpf.report_generator import ReportGenerator
 
         client = FPFClient()
         client.load_from_file(file)
@@ -1602,7 +1712,6 @@ def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
         return True
     except Exception as e:
         print(f"❌ Error generating report: {str(e)}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -1610,7 +1719,6 @@ def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
 def handle_skills_sync(force: bool) -> bool:
     """Handle skills sync command."""
     try:
-        from codomyrmex.skills import get_skills_manager
 
         manager = get_skills_manager()
         success = manager.sync_upstream(force=force)
@@ -1622,7 +1730,6 @@ def handle_skills_sync(force: bool) -> bool:
         return success
     except Exception as e:
         print(f"❌ Error syncing skills: {str(e)}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -1630,8 +1737,6 @@ def handle_skills_sync(force: bool) -> bool:
 def handle_skills_list(category: Optional[str]) -> bool:
     """Handle skills list command."""
     try:
-        import json
-        from codomyrmex.skills import get_skills_manager
 
         manager = get_skills_manager()
         manager.initialize()
@@ -1652,7 +1757,6 @@ def handle_skills_list(category: Optional[str]) -> bool:
         return True
     except Exception as e:
         print(f"❌ Error listing skills: {str(e)}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -1660,9 +1764,6 @@ def handle_skills_list(category: Optional[str]) -> bool:
 def handle_skills_get(category: str, name: str, output: Optional[str]) -> bool:
     """Handle skills get command."""
     try:
-        import json
-        import yaml
-        from codomyrmex.skills import get_skills_manager
 
         manager = get_skills_manager()
         manager.initialize()
@@ -1688,7 +1789,6 @@ def handle_skills_get(category: str, name: str, output: Optional[str]) -> bool:
         return True
     except Exception as e:
         print(f"❌ Error getting skill: {str(e)}")
-        import traceback
         traceback.print_exc()
         return False
 
@@ -1696,7 +1796,6 @@ def handle_skills_get(category: str, name: str, output: Optional[str]) -> bool:
 def handle_skills_search(query: str) -> bool:
     """Handle skills search command."""
     try:
-        from codomyrmex.skills import get_skills_manager
 
         manager = get_skills_manager()
         manager.initialize()
@@ -1717,7 +1816,6 @@ def handle_skills_search(query: str) -> bool:
         return True
     except Exception as e:
         print(f"❌ Error searching skills: {str(e)}")
-        import traceback
         traceback.print_exc()
         return False
 

@@ -1,9 +1,34 @@
 import os
 import re
 
+from fix_src_doubling import FunctionName, ClassName
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides fix_src_doubling functionality including:
+- 1 functions: fix_src_doubling
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 def fix_src_doubling(directory):
     # Matches [label](.../src/README.md)
     # We want to change it to [label](.../README.md)
+    """Brief description of fix_src_doubling.
+
+Args:
+    directory : Description of directory
+
+    Returns: Description of return value
+"""
     pattern = re.compile(r'\[([^\]]+)\]\(((\.\./)+)src/README\.md\)')
     
     for root, dirs, files in os.walk(directory):

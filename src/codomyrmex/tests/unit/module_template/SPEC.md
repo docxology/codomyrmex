@@ -1,5 +1,6 @@
 # module_template Functional Specification
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 ## Core Concept
 [DESCRIBE THE CORE ARCHITECTURAL OR FUNCTIONAL CONCEPT OF module_template]
 

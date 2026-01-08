@@ -1,3 +1,17 @@
+from pathlib import Path
+import os
+import re
+import sys
+
+import hashlib
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Documentation Quality Validation Script
@@ -6,15 +20,9 @@ This script performs comprehensive validation of documentation quality
 to prevent errors from accumulating across versions.
 """
 
-import hashlib
-import os
-import re
-import sys
-from pathlib import Path
 
 # Add project root to path for imports
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))  # Removed sys.path manipulation
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 setup_logging()
 logger = get_logger(__name__)

@@ -92,3 +92,4 @@ resource_attributes:
   deployment.environment: "${ENVIRONMENT:development}"
   deployment.region: "${DEPLOYMENT_REGION:us-east-1}"
 
+

@@ -1,18 +1,28 @@
+from datetime import datetime, timezone
+from typing import Any, Optional
+import logging
+import os
+import sys
+
+from dataclasses import dataclass
+import OpenSSL
+import socket
+import ssl
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Certificate Validator for Codomyrmex Security Audit Module.
 
 Provides SSL/TLS certificate validation, monitoring, and security assessment.
 """
 
-import os
-import socket
-import ssl
-import sys
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from typing import Any, Optional
 
-import OpenSSL
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,11 +32,9 @@ if PROJECT_ROOT not in sys.path:
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 

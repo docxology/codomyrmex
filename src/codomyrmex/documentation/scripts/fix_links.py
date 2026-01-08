@@ -1,8 +1,33 @@
+from pathlib import Path
 import os
 import re
-from pathlib import Path
 
+from fix_links import FunctionName, ClassName
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides fix_links functionality including:
+- 1 functions: fix_documentation
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 def fix_documentation(root_dir):
+    """Brief description of fix_documentation.
+
+Args:
+    root_dir : Description of root_dir
+
+    Returns: Description of return value
+"""
     root_path = Path(root_dir).absolute()
     
     # regexes

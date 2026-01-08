@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/coding/tests/monitoring
+# Codomyrmex Agents — src/codomyrmex/tests/unit/coding/monitoring
 
 ## Signposting
 - **Parent**: [Monitoring](../AGENTS.md)
@@ -15,7 +15,8 @@
 Test files and validation suites for monitoring.
 
 ## Active Components
-- No active components documented
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -25,5 +26,5 @@ Test files and validation suites for monitoring.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **📁 Parent Directory**: [coding](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../../../../README.md) - Main project documentation

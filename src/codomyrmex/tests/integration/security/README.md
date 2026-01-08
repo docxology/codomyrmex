@@ -1,7 +1,7 @@
 # security
 
 ## Signposting
-- **Parent**: [security](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,6 +15,8 @@
 Test files and validation suites for security.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_analysis_security_cicd.py` – File
 - `test_security_integration.py` – File
 
@@ -23,17 +25,3 @@ Test files and validation suites for security.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [integration](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.integration.security import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

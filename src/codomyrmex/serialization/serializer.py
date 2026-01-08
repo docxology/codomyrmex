@@ -1,12 +1,28 @@
+from typing import Any, Optional, Union
+import json
+
+import msgpack
+import msgpack
+import tomli
+import tomli
+import tomli_w
+import yaml
+import yaml
+import yaml
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Base serializer interface and implementations.
 """
 
-import json
-from typing import Any, Optional, Union
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -122,7 +138,6 @@ class Serializer:
         # Try YAML (check for YAML-like structure)
         if data_str.strip().startswith("---") or ":" in data_str and "\n" in data_str:
             try:
-                import yaml
                 yaml.safe_load(data_str)
                 return "yaml"
             except (ImportError, yaml.YAMLError):
@@ -131,7 +146,6 @@ class Serializer:
         # Try TOML (check for TOML-like structure)
         if "=" in data_str and "[" in data_str:
             try:
-                import tomli
                 tomli.loads(data_str)
                 return "toml"
             except (ImportError, tomli.TOMLDecodeError):
@@ -152,7 +166,6 @@ class Serializer:
     def _serialize_yaml(self, obj: Any) -> str:
         """Serialize to YAML."""
         try:
-            import yaml
             return yaml.dump(obj, default_flow_style=False)
         except ImportError:
             raise SerializationError("yaml package not available. Install with: pip install pyyaml")
@@ -160,7 +173,6 @@ class Serializer:
     def _deserialize_yaml(self, data: Union[str, bytes]) -> Any:
         """Deserialize from YAML."""
         try:
-            import yaml
             if isinstance(data, bytes):
                 data = data.decode("utf-8")
             return yaml.safe_load(data)
@@ -170,7 +182,6 @@ class Serializer:
     def _serialize_toml(self, obj: Any) -> str:
         """Serialize to TOML."""
         try:
-            import tomli_w
             return tomli_w.dumps(obj)
         except ImportError:
             raise SerializationError("tomli-w package not available. Install with: pip install tomli-w")
@@ -178,7 +189,6 @@ class Serializer:
     def _deserialize_toml(self, data: Union[str, bytes]) -> Any:
         """Deserialize from TOML."""
         try:
-            import tomli
             if isinstance(data, bytes):
                 data = data.decode("utf-8")
             return tomli.loads(data)
@@ -188,7 +198,6 @@ class Serializer:
     def _serialize_msgpack(self, obj: Any) -> bytes:
         """Serialize to MessagePack."""
         try:
-            import msgpack
             return msgpack.packb(obj, default=str)
         except ImportError:
             raise SerializationError("msgpack package not available. Install with: pip install msgpack")
@@ -196,7 +205,6 @@ class Serializer:
     def _deserialize_msgpack(self, data: Union[str, bytes]) -> Any:
         """Deserialize from MessagePack."""
         try:
-            import msgpack
             if isinstance(data, str):
                 data = data.encode("utf-8")
             return msgpack.unpackb(data, raw=False)
@@ -220,4 +228,5 @@ class Serializer:
         if deserializer:
             # Store deserializer separately - would need additional structure
             pass
+
 

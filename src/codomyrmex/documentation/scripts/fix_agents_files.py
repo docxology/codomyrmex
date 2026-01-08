@@ -1,3 +1,12 @@
+from pathlib import Path
+from typing import List, Dict, Set
+import argparse
+import json
+import os
+
+
+
+
 #!/usr/bin/env python3
 """
 Batch fix AGENTS.md files throughout the repository.
@@ -8,10 +17,6 @@ This script identifies and fixes common issues with AGENTS.md files:
 - Ensures proper section structure
 """
 
-import os
-import json
-from pathlib import Path
-from typing import List, Dict, Set
 
 
 class AgentsFileFixer:
@@ -206,7 +211,6 @@ class AgentsFileFixer:
 
 def main():
     """Main entry point."""
-    import argparse
 
     parser = argparse.ArgumentParser(description='Fix AGENTS.md files throughout repository')
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

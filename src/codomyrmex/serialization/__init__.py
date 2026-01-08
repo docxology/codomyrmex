@@ -46,3 +46,4 @@ def detect_format(data: Union[str, bytes]) -> Optional[str]:
     serializer = Serializer()
     return serializer.detect_format(data)
 
+

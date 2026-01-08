@@ -1,11 +1,15 @@
+from pathlib import Path
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Fix template/module_template path references to point to correct location.
 """
 
-import re
-from pathlib import Path
-import sys
 
 
 def fix_template_paths():

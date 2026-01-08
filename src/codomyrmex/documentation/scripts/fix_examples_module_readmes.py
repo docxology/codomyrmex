@@ -1,9 +1,13 @@
+from pathlib import Path
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix relative paths in all examples/{module}/README.md files."""
 
-import os
-import re
-from pathlib import Path
 
 def fix_examples_module_readme(file_path: Path) -> bool:
     """Fix relative paths in an examples module README."""

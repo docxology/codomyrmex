@@ -1,7 +1,7 @@
 # Codomyrmex Agents — docs/integration
 
 ## Signposting
-- **Parent**: [Integration](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

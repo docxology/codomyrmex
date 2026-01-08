@@ -1,8 +1,12 @@
+from pathlib import Path
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix or remove links to non-existent API_SPECIFICATION.md and USAGE_EXAMPLES.md files."""
 
-import re
-from pathlib import Path
 
 def fix_missing_api_links(file_path: Path) -> bool:
     """Fix links to missing API/Usage files."""

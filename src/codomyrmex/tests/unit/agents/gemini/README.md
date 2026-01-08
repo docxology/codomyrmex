@@ -1,7 +1,7 @@
-# tests
+# gemini
 
 ## Signposting
-- **Parent**: [tests](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,29 +12,18 @@
 
 ## Overview
 
-Test files and validation suites.
+Test files and validation suites for gemini.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `__init__.py` – File
+- `test_gemini_api.py` – File
 - `test_gemini_client.py` – File
 - `test_gemini_integration.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [gemini](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.agents.gemini.tests import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

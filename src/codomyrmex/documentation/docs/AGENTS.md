@@ -15,7 +15,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Documentation files and guides for docs.
+Documentation files and guides.
 
 ## Active Components
 - `README.md` – Project file

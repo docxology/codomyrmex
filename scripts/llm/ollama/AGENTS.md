@@ -1,10 +1,10 @@
 # Codomyrmex Agents — scripts/llm/ollama
 
 ## Signposting
-- **Parent**: [Ollama](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - None
+    - [examples](examples/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -19,6 +19,7 @@ Automation and utility scripts.
 - `SPEC.md` – Project file
 - `analyze_model_tracking.py` – Project file
 - `basic_usage.py` – Project file
+- `examples/` – Directory containing examples components
 - `integration_demo.py` – Project file
 - `model_management.py` – Project file
 - `orchestrate.py` – Project file
@@ -30,6 +31,7 @@ Automation and utility scripts.
 - `verify_integration.py` – Project file
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

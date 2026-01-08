@@ -45,3 +45,4 @@ def get_compressor(format: str = "gzip") -> Compressor:
     """Get a compressor instance."""
     return Compressor(format=format)
 
+

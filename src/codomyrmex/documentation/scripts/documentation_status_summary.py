@@ -1,9 +1,13 @@
+from datetime import datetime
+
+
+
+
 #!/usr/bin/env python3
 """
 Generate a comprehensive summary of the documentation status after improvements.
 """
 
-from datetime import datetime
 
 def generate_summary():
     """Generate a summary of the documentation improvements."""

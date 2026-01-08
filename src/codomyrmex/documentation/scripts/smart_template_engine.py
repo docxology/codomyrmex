@@ -1,3 +1,22 @@
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Callable
+import argparse
+import ast
+import inspect
+import json
+import logging
+import sys
+
+from dataclasses import dataclass, asdict
+import importlib
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Smart Template Engine for Codomyrmex Documentation.
@@ -6,21 +25,11 @@ Analyzes Python modules to extract API information, generate code examples,
 infer relationships, and populate documentation templates with real content.
 """
 
-import ast
-import inspect
-import importlib
-import sys
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Callable
-from dataclasses import dataclass, asdict
-import json
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -435,7 +444,6 @@ class SmartTemplateEngine:
 
 def main():
     """Main entry point."""
-    import argparse
     
     parser = argparse.ArgumentParser(description="Smart documentation template engine")
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

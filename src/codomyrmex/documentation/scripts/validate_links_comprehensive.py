@@ -1,3 +1,25 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Set, Tuple, Optional
+import argparse
+import json
+import logging
+import re
+import sys
+import time
+
+from dataclasses import dataclass, asdict
+from urllib.parse import urlparse, urljoin
+import networkx as nx
+import requests
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Comprehensive Link Validator for Codomyrmex Documentation.
@@ -6,35 +28,22 @@ Validates markdown links across the entire repository, checking internal referen
 external URLs, circular references, and orphaned documents.
 """
 
-import json
-import re
-import sys
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
-from dataclasses import dataclass, asdict
-from urllib.parse import urlparse, urljoin
-from collections import defaultdict
-import time
 
 try:
-    import networkx as nx
     HAS_NETWORKX = True
 except ImportError:
     HAS_NETWORKX = False
     print("Warning: networkx not available. Graph features disabled.")
 
 try:
-    import requests
     HAS_REQUESTS = False
 except ImportError:
     HAS_REQUESTS = False
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -458,7 +467,6 @@ class ComprehensiveLinkValidator:
 
 def main():
     """Main entry point."""
-    import argparse
     
     parser = argparse.ArgumentParser(description="Comprehensive link validation for documentation")
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

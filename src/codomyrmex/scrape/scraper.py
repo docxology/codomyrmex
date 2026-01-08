@@ -231,3 +231,4 @@ class Scraper(BaseScraper):
             logger.error(f"Unexpected error extracting from URLs: {e}")
             raise ScrapeError(f"Failed to extract data: {e}") from e
 
+

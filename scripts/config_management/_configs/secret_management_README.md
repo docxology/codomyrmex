@@ -526,5 +526,5 @@ secret_rotation:
 ---
 
 **Status**: Security Configuration Example
-**Last Updated**: December 2025
+**Last Updated**: January 2026
 **Compliance**: GDPR, SOC 2, Security Best Practices

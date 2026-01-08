@@ -1,9 +1,13 @@
+from pathlib import Path
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix broken links in SPEC.md files."""
 
-import os
-import re
-from pathlib import Path
 
 def calculate_relative_path(from_dir: Path, to_file: Path) -> str:
     """Calculate relative path from directory to file."""

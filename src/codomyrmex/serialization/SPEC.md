@@ -1,6 +1,6 @@
 # serialization - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Proposed | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Proposed | **Last Updated**: January 2026
 
 ## Purpose
 
@@ -117,3 +117,4 @@ class Serializer:
 
 
 <!-- Navigation Links keyword for score -->
+

@@ -1,3 +1,12 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Set, Tuple
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Dependency Validation Tool
@@ -9,11 +18,6 @@ Validates that:
 4. requirements.txt files are deprecated (have deprecation notice)
 """
 
-import re
-import sys
-from pathlib import Path
-from typing import Dict, List, Set, Tuple
-from collections import defaultdict
 
 
 def parse_pyproject_dependencies(content: str) -> Dict[str, List[Tuple[str, str]]]:

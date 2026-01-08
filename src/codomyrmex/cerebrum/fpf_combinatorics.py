@@ -1,3 +1,37 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import itertools
+import json
+import json
+
+from matplotlib.patches import Patch
+from matplotlib.patches import Patch
+import csv
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import networkx as nx
+import networkx as nx
+import networkx as nx
+import networkx as nx
+import numpy as np
+
+from codomyrmex.cerebrum import (
+from codomyrmex.cerebrum.visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
+from codomyrmex.cerebrum.visualization_base import BaseHeatmapVisualizer
+from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
+from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
+from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
+from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
+from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+
+
+
+
+
 """Comprehensive combinatorics analysis using CEREBRUM on FPF.
 
 This module generates all possible combinations and analyses of FPF patterns
@@ -9,23 +43,13 @@ using CEREBRUM methods, including:
 - Term network analysis
 """
 
-import csv
-import itertools
-import json
-from collections import defaultdict
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 
-from codomyrmex.cerebrum import (
     BayesianNetwork,
     Case,
     CaseBase,
     CerebrumEngine,
     InferenceEngine,
 )
-from codomyrmex.cerebrum.visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
-from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
-from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 logger = get_logger(__name__)
 
@@ -302,9 +326,6 @@ class FPFCombinatoricsAnalyzer:
     def _visualize_pair_similarity(self, pairs_data: Dict[str, Any], viz_dir: Path) -> None:
         """Visualize pattern pair similarities with enhanced styling."""
         try:
-            from codomyrmex.cerebrum.visualization_base import BaseHeatmapVisualizer
-            import matplotlib.pyplot as plt
-            import numpy as np
 
             pairs = pairs_data.get("all_pairs", [])[:30]  # Top 30 pairs
 
@@ -389,9 +410,6 @@ class FPFCombinatoricsAnalyzer:
     def _visualize_dependency_chains(self, chains_data: Dict[str, Any], viz_dir: Path) -> None:
         """Visualize dependency chains with enhanced styling."""
         try:
-            from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
-            import matplotlib.pyplot as plt
-            import networkx as nx
 
             chains = chains_data.get("longest_chains", [])[:10]
             all_chains = chains_data.get("chains", [])
@@ -490,9 +508,6 @@ class FPFCombinatoricsAnalyzer:
     def _visualize_concept_cooccurrence(self, cooccurrence_data: Dict[str, Any], viz_dir: Path) -> None:
         """Visualize concept co-occurrence network with enhanced styling."""
         try:
-            from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
-            import matplotlib.pyplot as plt
-            import networkx as nx
 
             strong_pairs = cooccurrence_data.get("strong_pairs", [])[:50]
 
@@ -589,7 +604,6 @@ class FPFCombinatoricsAnalyzer:
             ax.axis("off")
 
             # Add legend
-            from matplotlib.patches import Patch
             legend_elements = [
                 Patch(facecolor=network_viz.theme.colors.node_default, edgecolor="black", label="Concept", alpha=0.9),
                 plt.Line2D([0], [0], color=network_viz.theme.colors.edge_default, linewidth=2, label="Co-occurrence", alpha=0.5),
@@ -605,9 +619,6 @@ class FPFCombinatoricsAnalyzer:
     def _visualize_cross_part_relationships(self, cross_part_data: Dict[str, Any], viz_dir: Path) -> None:
         """Visualize cross-part relationships with enhanced styling."""
         try:
-            from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
-            import matplotlib.pyplot as plt
-            import networkx as nx
 
             part_pair_counts = cross_part_data.get("part_pair_counts", {})
 
@@ -692,7 +703,6 @@ class FPFCombinatoricsAnalyzer:
             ax.axis("off")
 
             # Add legend
-            from matplotlib.patches import Patch
             legend_elements = [
                 Patch(facecolor=network_viz.theme.colors.node_default, edgecolor="black", label="Part", alpha=0.9),
                 plt.Line2D([0], [0], color=network_viz.theme.colors.edge_default, linewidth=3, label="Relationship", alpha=0.7),
@@ -732,7 +742,6 @@ class FPFCombinatoricsAnalyzer:
     def _find_concept_clusters(self, cooccurrence: Dict[str, Dict[str, int]], min_weight: int = 3) -> List[List[str]]:
         """Find clusters of co-occurring concepts."""
         try:
-            import networkx as nx
 
             G = nx.Graph()
 
@@ -767,7 +776,6 @@ class FPFCombinatoricsAnalyzer:
         self.generate_all_visualizations(results)
 
         # Export results
-        import json
         json_path = self.output_dir / "combinatorics_analysis.json"
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, default=str)

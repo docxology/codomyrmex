@@ -103,3 +103,4 @@ class InMemoryCache(Cache):
             self.delete(key)
         return len(keys_to_delete)
 
+

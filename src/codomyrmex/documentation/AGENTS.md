@@ -1,14 +1,13 @@
 # Codomyrmex Agents — src/codomyrmex/documentation
 
 ## Signposting
-- **Parent**: [codomyrmex](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [docs](docs/AGENTS.md)
-    - [scripts](scripts/AGENTS.md)
+    - [scripts](../../../scripts/examples/AGENTS.md)
     - [src](src/AGENTS.md)
     - [static](static/AGENTS.md)
-    - [tests](tests/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -16,7 +15,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Documentation generation tools including API documentation, markdown rendering, documentation website generation, consistency checking, quality assessment, and coverage analysis. Provides comprehensive documentation automation and management.
+Documentation files and guides for documentation.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
@@ -39,12 +38,14 @@ Documentation generation tools including API documentation, markdown rendering, 
 - `requirements.txt` – Project file
 - `scripts/` – Directory containing scripts components
 - `sidebars.js` – Project file
-- `sidebars.js.backup` – Project file
 - `src/` – Directory containing src components
 - `static/` – Directory containing static components
-- `tests/` – Directory containing tests components
 
 ## Operating Contracts
+- `.cursor/` – Directory for .cursor components.
+- `.docusaurus/` – Directory for .docusaurus components.
+- `__pycache__/` – Directory for __pycache__ components.
+- `node_modules/` – Directory for node_modules components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

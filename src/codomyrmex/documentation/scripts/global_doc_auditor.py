@@ -1,7 +1,11 @@
-
-import os
 from pathlib import Path
 from typing import List, Tuple
+import os
+
+
+
+
+
 
 REQUIRED_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 IGNORE_DIRS = [

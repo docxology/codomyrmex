@@ -1,9 +1,13 @@
+from pathlib import Path
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix relative paths in scripts/*/README.md files."""
 
-import os
-import re
-from pathlib import Path
 
 def fix_scripts_subdir_readme(file_path: Path) -> bool:
     """Fix relative paths in a scripts subdirectory README."""

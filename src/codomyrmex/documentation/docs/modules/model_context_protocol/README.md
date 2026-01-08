@@ -1,7 +1,7 @@
 # model_context_protocol
 
 ## Signposting
-- **Parent**: [model_context_protocol](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [docs](docs/README.md)
 - **Key Artifacts**:
@@ -30,17 +30,3 @@ Documentation files and guides for model_context_protocol.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: [README](../../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documentation.docs.modules.model_context_protocol import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

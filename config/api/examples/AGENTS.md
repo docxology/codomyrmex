@@ -1,29 +1,30 @@
 # Codomyrmex Agents — config/api/examples
 
 ## Signposting
-- **Parent**: [api](../AGENTS.md)
-- **Self**: [examples Agents](AGENTS.md)
-- **Children**: None
-- **Key Artifacts**: [Human Readme](README.md)
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
+- **Children**:
+    - None
+- **Key Artifacts**:
+    - [Functional Spec](SPEC.md)
+    - [Human Readme](README.md)
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Example API configurations demonstrating best practices for API endpoints, rate limiting, and versioning.
+Example implementations and demonstrations.
 
 ## Active Components
-
-- `README.md` – Examples documentation
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
-
-- Maintain alignment between examples and actual configuration templates.
-- Ensure examples demonstrate best practices.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
-- **Parent**: [api](../AGENTS.md)
-- **Project Root**: [README](../../../README.md)
-
+- **Functional Specification**: [SPEC.md](SPEC.md)
+- **📁 Parent Directory**: [api](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

@@ -1,7 +1,7 @@
 # cognitive
 
 ## Signposting
-- **Parent**: [security](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Cognitive security including phishing analysis, social engineering detection, behavior analysis, cognitive threat assessment, and awareness training. Focuses on human-factor security threats and cognitive vulnerabilities.
+Module components and implementation for cognitive..
 
 ## Directory Contents
 - `README.md` – File
@@ -29,31 +29,3 @@ Cognitive security including phishing analysis, social engineering detection, be
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-from codomyrmex.security.cognitive import (
-    PhishingAnalyzer,
-    SocialEngineeringDetector,
-    BehaviorAnalyzer,
-)
-
-# Analyze phishing attempts
-phishing_analyzer = PhishingAnalyzer()
-result = phishing_analyzer.analyze_email(email_content="...")
-print(f"Phishing score: {result.risk_score}")
-
-# Detect social engineering
-detector = SocialEngineeringDetector()
-threats = detector.detect_patterns(interaction_data={...})
-print(f"Threats detected: {len(threats)}")
-
-# Analyze behavior
-behavior_analyzer = BehaviorAnalyzer()
-anomalies = behavior_analyzer.analyze_patterns(user_behavior={...})
-print(f"Anomalies: {len(anomalies)}")
-```
-

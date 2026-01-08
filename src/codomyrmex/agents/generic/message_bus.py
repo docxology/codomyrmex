@@ -1,10 +1,18 @@
-"""Inter-agent communication system."""
+from typing import Any, Callable, Optional
 
 from dataclasses import dataclass, field
-from typing import Any, Callable, Optional
 from uuid import uuid4
 
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+"""Inter-agent communication system."""
+
+
 
 logger = get_logger(__name__)
 
@@ -183,4 +191,5 @@ class MessageBus:
             messages = messages[-limit:]
 
         return messages
+
 

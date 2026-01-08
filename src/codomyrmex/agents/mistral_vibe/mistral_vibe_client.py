@@ -1,16 +1,20 @@
-"""Mistral Vibe CLI client wrapper."""
-
 from pathlib import Path
 from typing import Any, Iterator, Optional
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
+from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, MistralVibeError
+from codomyrmex.agents.generic import CLIAgentBase
+
+
+
+"""Mistral Vibe CLI client wrapper."""
+
+
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, MistralVibeError
-from codomyrmex.agents.generic import CLIAgentBase
 
 
 class MistralVibeClient(CLIAgentBase):
@@ -23,38 +27,9 @@ class MistralVibeClient(CLIAgentBase):
         Args:
             config: Optional configuration override
         """
-        agent_config = get_config()
-        vibe_command = (
-            config.get("mistral_vibe_command")
-            if config
-            else agent_config.mistral_vibe_command
-        )
-        timeout = (
-            config.get("mistral_vibe_timeout")
-            if config
-            else agent_config.mistral_vibe_timeout
-        )
-        working_dir = (
-            Path(config.get("mistral_vibe_working_dir"))
-            if config and config.get("mistral_vibe_working_dir")
-            else Path(agent_config.mistral_vibe_working_dir)
-            if agent_config.mistral_vibe_working_dir
-            else None
-        )
-
-        # Set up environment variables
-        env_vars = {}
-        api_key = (
-            config.get("mistral_vibe_api_key")
-            if config
-            else agent_config.mistral_vibe_api_key
-        )
-        if api_key:
-            env_vars["MISTRAL_API_KEY"] = api_key
-
         super().__init__(
             name="mistral_vibe",
-            command=vibe_command,
+            command="vibe",
             capabilities=[
                 AgentCapabilities.CODE_GENERATION,
                 AgentCapabilities.CODE_EDITING,
@@ -64,11 +39,23 @@ class MistralVibeClient(CLIAgentBase):
                 AgentCapabilities.MULTI_TURN,
             ],
             config=config or {},
-            timeout=timeout,
-            working_dir=working_dir,
-            env_vars=env_vars,
+            timeout=60,
+            working_dir=None,
+            env_vars={},
         )
+        
+        vibe_command = self.get_config_value("mistral_vibe_command", config=config)
+        timeout = self.get_config_value("mistral_vibe_timeout", config=config)
+        working_dir_str = self.get_config_value("mistral_vibe_working_dir", config=config)
+        working_dir = Path(working_dir_str) if working_dir_str else None
 
+        api_key = self.get_config_value("mistral_vibe_api_key", config=config)
+        if api_key:
+            self.env_vars["MISTRAL_API_KEY"] = api_key
+
+        self.command = vibe_command
+        self.timeout = timeout
+        self.working_dir = working_dir
         self.api_key = api_key
 
         # Verify vibe is available

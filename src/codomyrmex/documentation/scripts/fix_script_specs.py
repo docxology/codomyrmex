@@ -1,7 +1,25 @@
-
-import os
 from pathlib import Path
+import os
 
+from fix_script_specs import FunctionName, ClassName
+
+
+
+
+
+
+
+
+
+"""Core functionality module
+
+This module provides fix_script_specs functionality including:
+- 1 functions: fix_script_specs
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 WRAPPER_TEMPLATE = """# scripts/{module_name} - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
@@ -41,6 +59,13 @@ This module contains the **automation scripts** and **CLI entry points** for the
 """
 
 def fix_script_specs(root_dir):
+    """Brief description of fix_script_specs.
+
+Args:
+    root_dir : Description of root_dir
+
+    Returns: Description of return value
+"""
     root = Path(root_dir)
     count = 0
     

@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex/llm/prompt_templates
 
 ## Signposting
-- **Parent**: [llm](../AGENTS.md)
+- **Parent**: [Prompt Templates](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -12,25 +12,14 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Prompt templates for LLM interactions including system templates, context templates, and task templates. Provides standardized prompt structures for consistent LLM interactions across the Codomyrmex platform.
+Module components and implementation for prompt_templates..
 
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
-- `context_template.md` – Context template for LLM prompts
-- `system_template.md` – System template for LLM prompts
-- `task_template.md` – Task template for LLM prompts
-
-## Key Templates
-
-### System Template (`system_template.md`)
-- System-level prompt template defining LLM persona and behavior
-
-### Context Template (`context_template.md`)
-- Context template for providing background information to LLMs
-
-### Task Template (`task_template.md`)
-- Task template for structuring task-specific prompts
+- `context_template.md` – Project file
+- `system_template.md` – Project file
+- `task_template.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

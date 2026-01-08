@@ -1,7 +1,7 @@
-# Codomyrmex Agents — examples/api
+# Codomyrmex Agents — scripts/api/examples
 
 ## Signposting
-- **Parent**: [API](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None
@@ -20,6 +20,9 @@ Example implementations and demonstrations.
 - `config.json` – Project file
 - `config.yaml` – Project file
 - `example_basic.py` – Project file
+- `examples_AGENTS.md` – Project file
+- `examples_README.md` – Project file
+- `examples_SPEC.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -29,6 +32,5 @@ Example implementations and demonstrations.
 ## Navigation Links
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [examples](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../README.md) - Main project documentation
-
+- **📁 Parent Directory**: [api](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../../README.md) - Main project documentation

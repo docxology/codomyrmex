@@ -1,21 +1,34 @@
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+from typing import Any, Optional, Tuple, List
+import asyncio
+import concurrent.futures
+import concurrent.futures
+import fnmatch
+import json
+import os
+import subprocess
+import sys
+import time
+
+from dataclasses import dataclass, field
+from enum import Enum
+import yaml
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Pipeline Manager for Codomyrmex CI/CD Automation Module.
 
 Provides comprehensive pipeline orchestration, management, and execution capabilities.
 """
 
-import asyncio
-import json
-import os
-import subprocess
-import sys
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Optional, Tuple, List
 
-import yaml
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -24,7 +37,6 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -336,7 +348,6 @@ class PipelineManager:
             loop = asyncio.get_event_loop()
             if loop.is_running():
                 # If loop is running, we need to handle differently
-                import concurrent.futures
 
                 def run_async():
                     new_loop = asyncio.new_event_loop()
@@ -702,7 +713,6 @@ class PipelineManager:
         Returns:
             Dictionary with execution results
         """
-        import concurrent.futures
 
         # Build dependency graph
         stage_deps = {}
@@ -777,7 +787,6 @@ class PipelineManager:
         """
         try:
             # Simulate stage execution
-            import time
             time.sleep(0.1)  # Simulate work
 
             jobs = stage.get("jobs", [])
@@ -858,7 +867,6 @@ class PipelineManager:
 
     def _matches_pattern(self, value: str, pattern: str) -> bool:
         """Simple pattern matching for conditions."""
-        import fnmatch
         return fnmatch.fnmatch(value, pattern)
 
     def optimize_pipeline_schedule(self, pipeline: Pipeline) -> dict:

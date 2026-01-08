@@ -1,9 +1,10 @@
 # environment_setup
 
 ## Signposting
-- **Parent**: [environment_setup](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [integration](integration/README.md)
+    - [unit](unit/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -15,25 +16,15 @@
 Test files and validation suites for environment_setup.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `integration/` – Subdirectory
 - `test_environment_setup.py` – File
 - `test_environment_setup_comprehensive.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.environment_setup import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

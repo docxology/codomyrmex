@@ -1,3 +1,10 @@
+from pathlib import Path
+import re
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Comprehensively fix all broken references in tutorial and documentation files.
@@ -8,9 +15,6 @@ Fixes:
 - MCP_TOOL_SPECIFICATION.md references (check if exists)
 """
 
-import re
-from pathlib import Path
-import sys
 
 
 def fix_all_tutorial_references():

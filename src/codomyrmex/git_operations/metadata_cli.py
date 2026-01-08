@@ -1,3 +1,15 @@
+from datetime import datetime
+from pathlib import Path
+import argparse
+import json
+import traceback
+
+from codomyrmex.git_operations.repository_manager import RepositoryManager
+from codomyrmex.git_operations.repository_metadata import (
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
 #!/usr/bin/env python3
 """
 Repository Metadata CLI - Command Line Interface for Repository Metadata Management
@@ -6,12 +18,7 @@ This script provides a command-line interface for managing repository metadata,
 including status tracking, permissions, versions, and comprehensive reporting.
 """
 
-import argparse
-import json
-from datetime import datetime
-from pathlib import Path
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -21,8 +28,6 @@ current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"
 # sys.path.insert(0, str(src_dir))  # Removed sys.path manipulation
 
-from codomyrmex.git_operations.repository_manager import RepositoryManager
-from codomyrmex.git_operations.repository_metadata import (
     CloneStatus,
     RepositoryMetadataManager,
 )
@@ -437,7 +442,6 @@ Examples:
     except Exception as e:
         print(f"Error executing command: {e}")
         if args.verbose:
-            import traceback
 
             traceback.print_exc()
 

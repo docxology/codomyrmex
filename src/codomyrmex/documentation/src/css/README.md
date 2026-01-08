@@ -1,7 +1,7 @@
 # css
 
 ## Signposting
-- **Parent**: [css](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -24,17 +24,3 @@ Documentation files and guides for css.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [src](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documentation.src.css import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

@@ -1,3 +1,18 @@
+from typing import Dict, List, Any, Optional, Callable, Type, Union
+import inspect
+import json
+import logging
+
+from dataclasses import dataclass, field
+from enum import Enum
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 GraphQL API Implementation for Codomyrmex
 
@@ -5,18 +20,11 @@ This module provides a GraphQL API framework with schema generation,
 resolvers, mutations, and query optimization.
 """
 
-import json
-from typing import Dict, List, Any, Optional, Callable, Type, Union
-from dataclasses import dataclass, field
-from enum import Enum
-import inspect
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 

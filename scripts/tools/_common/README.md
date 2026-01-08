@@ -12,7 +12,7 @@
 
 ## Overview
 
-Example implementations and demonstrations.
+Automation and utility scripts.
 
 ## Directory Contents
 - `README.md` – File
@@ -25,6 +25,5 @@ Example implementations and demonstrations.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [examples](../README.md)
-- **Project Root**: [README](../../README.md)
-
+- **Parent Directory**: [tools](../README.md)
+- **Project Root**: [README](../../../README.md)

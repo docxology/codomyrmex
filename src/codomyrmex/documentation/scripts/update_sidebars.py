@@ -1,3 +1,9 @@
+from pathlib import Path
+import json
+
+
+
+
 #!/usr/bin/env python3
 """Generate sidebar entries for Docusaurus based on aggregated docs in docs/modules.
 
@@ -5,8 +11,6 @@ This script scans src/codomyrmex/documentation/docs/modules and emits a JSON-lik
 structure fragment that can be manually merged into sidebars.js or used to
 automate sidebar updates.
 """
-import json
-from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1] / "docs" / "modules"
 

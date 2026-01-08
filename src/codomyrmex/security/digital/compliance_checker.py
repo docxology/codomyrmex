@@ -1,3 +1,25 @@
+from datetime import datetime, timezone
+from pathlib import Path
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Set, Tuple
+import logging
+import os
+import os
+import os
+import os
+import os
+import os
+
+from dataclasses import dataclass
+from enum import Enum
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Compliance Checker for Codomyrmex Security Audit Module.
 
@@ -10,16 +32,10 @@ Provides compliance validation against security standards including:
 - HIPAA
 """
 
-from typing import List, Dict, Any, Optional, Set, Tuple
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from enum import Enum
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 
@@ -456,8 +472,6 @@ class ComplianceChecker:
         ]
 
         findings = []
-        import os
-        from pathlib import Path
 
         for root, dirs, files in os.walk(target_path):
             for file in files:
@@ -490,8 +504,6 @@ class ComplianceChecker:
         ]
 
         findings = []
-        import os
-        from pathlib import Path
 
         for root, dirs, files in os.walk(target_path):
             for file in files:
@@ -517,7 +529,6 @@ class ComplianceChecker:
     def _check_security_misconfiguration(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
         """Check for security misconfiguration (OWASP A05:2021)."""
         findings = []
-        import os
 
         # Check for common misconfigurations
         config_files_to_check = ['requirements.txt', 'pyproject.toml', 'setup.py', 'Dockerfile']
@@ -555,7 +566,6 @@ class ComplianceChecker:
     def _check_software_integrity(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
         """Check for software integrity failures (OWASP A08:2021)."""
         findings = []
-        import os
 
         # Check for integrity verification
         if not os.path.exists(os.path.join(target_path, 'requirements.txt')) and \
@@ -571,7 +581,6 @@ class ComplianceChecker:
     def _check_security_logging(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
         """Check for security logging failures (OWASP A09:2021)."""
         findings = []
-        import os
 
         # Check for logging configuration
         has_logging = False
@@ -607,7 +616,6 @@ class ComplianceChecker:
         ]
 
         findings = []
-        import os
 
         for root, dirs, files in os.walk(target_path):
             for file in files:

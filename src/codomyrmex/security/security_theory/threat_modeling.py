@@ -1,9 +1,17 @@
-"""Threat modeling methodologies."""
-
-from dataclasses import dataclass
 from typing import List
 
+from dataclasses import dataclass
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+"""Threat modeling methodologies."""
+
+
 
 logger = get_logger(__name__)
 
@@ -85,5 +93,6 @@ def analyze_threats(
         "high_count": sum(1 for t in threat_model.threats if t.severity == "high"),
         "threats": threat_model.threats,
     }
+
 
 

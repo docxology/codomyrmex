@@ -1,7 +1,7 @@
 # Codomyrmex Agents — projects/test_project/reports
 
 ## Signposting
-- **Parent**: [Reports](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - None

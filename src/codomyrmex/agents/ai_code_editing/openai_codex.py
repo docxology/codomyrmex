@@ -1,3 +1,16 @@
+from typing import Any, Optional
+import os
+import re
+import time
+
+from dataclasses import dataclass, field
+from openai import OpenAI
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
 """OpenAI Codex Integration Module.
 
 This module provides integration with OpenAI's API for advanced code
@@ -7,12 +20,7 @@ code-capable models.
 Reference: https://platform.openai.com/docs/guides/code-generation
 """
 
-import os
-import time
-from dataclasses import dataclass, field
-from typing import Any, Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -70,7 +78,6 @@ class OpenAICodex:
                 raise ValueError("OPENAI_API_KEY environment variable not set")
 
             try:
-                from openai import OpenAI
                 self._client = OpenAI(api_key=self.api_key)
             except ImportError:
                 raise ImportError(
@@ -361,7 +368,6 @@ class OpenAICodex:
 
     def _extract_code_block(self, text: str, language: str) -> str:
         """Extract code from markdown code blocks if present."""
-        import re
 
         # Try to match code block with language
         pattern = rf"```(?:{language}|{language.lower()})?\s*\n(.*?)```"

@@ -1,7 +1,7 @@
 # examples
 
 ## Signposting
-- **Parent**: [examples](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -25,17 +25,3 @@ Example implementations and demonstrations.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [physical_management](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.physical_management.examples import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

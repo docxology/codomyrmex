@@ -1,3 +1,19 @@
+from typing import Dict, List, Any, Optional, Callable
+import logging
+import time
+
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+import psutil
+import threading
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Resource Tracker for Codomyrmex Performance Monitoring
 
@@ -5,23 +21,15 @@ This module provides detailed resource tracking capabilities for monitoring
 memory usage, CPU consumption, and other system resources during operations.
 """
 
-import time
-import threading
-from contextlib import contextmanager
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Callable
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 # Import psutil for system monitoring
 try:
-    import psutil
     HAS_PSUTIL = True
 except ImportError:
     psutil = None

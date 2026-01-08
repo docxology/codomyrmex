@@ -1,7 +1,7 @@
 # containerization
 
 ## Signposting
-- **Parent**: [containerization](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,6 +15,8 @@
 Test files and validation suites for containerization.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_containerization.py` – File
 - `test_containerization_enhanced.py` – File
 
@@ -23,17 +25,3 @@ Test files and validation suites for containerization.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.containerization import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

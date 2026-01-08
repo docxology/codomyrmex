@@ -1,7 +1,7 @@
 # events
 
 ## Signposting
-- **Parent**: [events](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -15,6 +15,8 @@
 Test files and validation suites for events.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 - `test_events.py` – File
 
 ## Navigation
@@ -22,17 +24,3 @@ Test files and validation suites for events.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.events import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

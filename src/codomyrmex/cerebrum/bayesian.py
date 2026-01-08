@@ -1,13 +1,21 @@
-"""Bayesian inference engine for probabilistic reasoning."""
-
 from collections import defaultdict
-from dataclasses import dataclass, field
 from typing import Any, Optional
 
+from dataclasses import dataclass, field
 import numpy as np
 
 from codomyrmex.cerebrum.exceptions import InferenceError, NetworkStructureError
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+"""Bayesian inference engine for probabilistic reasoning."""
+
+
+
 
 logger = get_logger(__name__)
 
@@ -437,5 +445,6 @@ class PriorBuilder:
         probabilities = [c / total for c in counts]
 
         return Distribution(unique_values, probabilities)
+
 
 

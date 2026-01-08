@@ -1,16 +1,20 @@
-"""OpenCode CLI client wrapper."""
-
 from pathlib import Path
 from typing import Any, Iterator, Optional
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
+from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, OpenCodeError
+from codomyrmex.agents.generic import CLIAgentBase
+
+
+
+"""OpenCode CLI client wrapper."""
+
+
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError, OpenCodeError
-from codomyrmex.agents.generic import CLIAgentBase
 
 
 class OpenCodeClient(CLIAgentBase):
@@ -23,24 +27,9 @@ class OpenCodeClient(CLIAgentBase):
         Args:
             config: Optional configuration override
         """
-        agent_config = get_config()
-        opencode_command = (
-            config.get("opencode_command") if config else agent_config.opencode_command
-        )
-        timeout = (
-            config.get("opencode_timeout") if config else agent_config.opencode_timeout
-        )
-        working_dir = (
-            Path(config.get("opencode_working_dir"))
-            if config and config.get("opencode_working_dir")
-            else Path(agent_config.opencode_working_dir)
-            if agent_config.opencode_working_dir
-            else None
-        )
-
         super().__init__(
             name="opencode",
-            command=opencode_command,
+            command="opencode",
             capabilities=[
                 AgentCapabilities.CODE_GENERATION,
                 AgentCapabilities.CODE_EDITING,
@@ -50,13 +39,19 @@ class OpenCodeClient(CLIAgentBase):
                 AgentCapabilities.MULTI_TURN,
             ],
             config=config or {},
-            timeout=timeout,
-            working_dir=working_dir,
+            timeout=60,
+            working_dir=None,
         )
+        
+        opencode_command = self.get_config_value("opencode_command", config=config)
+        timeout = self.get_config_value("opencode_timeout", config=config)
+        working_dir_str = self.get_config_value("opencode_working_dir", config=config)
+        working_dir = Path(working_dir_str) if working_dir_str else None
 
-        self.api_key = (
-            config.get("opencode_api_key") if config else agent_config.opencode_api_key
-        )
+        self.command = opencode_command
+        self.timeout = timeout
+        self.working_dir = working_dir
+        self.api_key = self.get_config_value("opencode_api_key", config=config)
 
         # Verify opencode is available
         if not self._check_command_available(check_args=["--version"]):

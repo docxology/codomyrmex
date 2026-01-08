@@ -1,3 +1,21 @@
+from pathlib import Path
+from typing import Dict, List, Set, Tuple, Optional, Any
+import argparse
+import json
+import logging
+import os
+import re
+import sys
+
+from dataclasses import dataclass, field
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Architecture Diagram Generation Tool
@@ -6,13 +24,6 @@ This script generates Mermaid diagrams for Codomyrmex architecture visualization
 including module dependency graphs, workflow diagrams, and system architecture.
 """
 
-import os
-import re
-import sys
-import json
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional, Any
-from dataclasses import dataclass, field
 
 # Add project root to path
 SCRIPT_DIR = Path(__file__).parent.parent.parent
@@ -20,10 +31,8 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 
@@ -444,7 +453,6 @@ def add_diagrams_to_readme(readme_path: str, diagrams: Dict[str, str]) -> None:
 
 def main():
     """Main CLI entry point."""
-    import argparse
 
     parser = argparse.ArgumentParser(
         description="Generate architecture diagrams",

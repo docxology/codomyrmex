@@ -1,13 +1,21 @@
+from typing import Any, Dict, List, Optional
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+
+
+
+
+
 """Core scraping abstractions and data structures.
 
 This module defines the core abstractions for the scrape module,
 including result types, configuration options, and abstract base classes.
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
 
 class ScrapeFormat(str, Enum):
@@ -137,11 +145,16 @@ class MapResult:
 
     Attributes:
         links: List of discovered links with metadata
-        total: Total number of links found
+        total: Total number of links found (auto-calculated from links if not set)
     """
 
     links: List[Dict[str, Any]] = field(default_factory=list)
     total: int = 0
+
+    def __post_init__(self):
+        """Auto-calculate total from links if not explicitly set."""
+        if self.total == 0 and self.links:
+            self.total = len(self.links)
 
 
 @dataclass
@@ -257,4 +270,5 @@ class BaseScraper(ABC):
             ExtractResult containing extracted data
         """
         pass
+
 

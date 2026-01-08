@@ -98,23 +98,29 @@ graph TD
 | **`terminal_interface`** | Rich terminal interactions | Colored output, progress bars, interactive prompts |
 | **`config_management`** | Configuration management | Centralized config loading, deployment, monitoring, secret management |
 | **`database_management`** | Data persistence | Database operations, migrations, backups, performance monitoring |
-| **`language_models`** | LLM infrastructure | Language model integration, provider abstraction, model management |
+| **`llm`** | LLM infrastructure | Language model integration, provider abstraction, Ollama support |
 | **`performance`** | Performance monitoring | Metrics collection, benchmarking, optimization guidance |
+| **`metrics`** | Metrics collection | System metrics, custom metrics, aggregation, reporting |
 
 ### **⚙️ Core Functional Modules**
 *Primary capabilities that users directly interact with*
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
-| **`ai_code_editing`** | AI-powered code assistance | Code generation, refactoring, explanation, multi-LLM support |
+| **`coding`** | Code execution and review | Multi-language support, sandboxing, code review, security isolation |
 | **`static_analysis`** | Code quality analysis | Linting, security scanning, complexity metrics, quality gates |
-| **`code`** | Safe code execution | Multi-language support, resource limits, security isolation |
 | **`data_visualization`** | Charts and plots | Static/interactive plots, multiple formats, customizable styling |
 | **`pattern_matching`** | Code pattern analysis | Pattern recognition, dependency analysis, code understanding |
 | **`git_operations`** | Version control automation | Git workflows, branch management, commit automation |
-| **`code_review`** | Automated code review | AI-powered review, quality analysis, improvement suggestions |
-| **`security_audit`** | Security scanning | Vulnerability detection, compliance checking, security monitoring |
-| **`llm/ollama`** | Local LLM integration | Ollama model management, execution, configuration, benchmarking |
+| **`security`** | Security scanning and audit | Vulnerability detection, compliance checking, threat modeling |
+| **`scrape`** | Web scraping | Content extraction, crawling, data collection |
+| **`documents`** | Document processing | Document parsing, metadata extraction, search indexing |
+| **`cache`** | Caching infrastructure | In-memory caching, distributed cache, cache invalidation |
+| **`compression`** | Data compression | Multiple algorithms, streaming compression, file archiving |
+| **`encryption`** | Encryption utilities | Symmetric/asymmetric encryption, key management, secure storage |
+| **`networking`** | Network utilities | HTTP clients, WebSocket support, network diagnostics |
+| **`serialization`** | Data serialization | JSON, YAML, binary formats, schema validation |
+| **`validation`** | Data validation | Schema validation, input sanitization, constraint checking |
 
 ### **🔧 Service Modules**
 *Higher-level services that orchestrate core modules*
@@ -123,10 +129,12 @@ graph TD
 |--------|---------|-------------|
 | **`build_synthesis`** | Build automation | Multi-language builds, artifact generation, deployment pipelines |
 | **`documentation`** | Documentation generation | Website generation, API docs, tutorial creation |
-| **`api_documentation`** | API documentation generation | OpenAPI/Swagger specs, code analysis, structured documentation |
+| **`api`** | API infrastructure | OpenAPI/Swagger specs, REST API building, versioning |
 | **`ci_cd_automation`** | CI/CD pipeline management | Pipeline orchestration, deployment automation, monitoring |
 | **`containerization`** | Container management | Docker lifecycle, image building, Kubernetes orchestration |
-| **`database_management`** | Database operations | Schema management, migrations, backups, performance monitoring |
+| **`logistics`** | Orchestration and scheduling | Task orchestration, workflow scheduling, resource allocation |
+| **`cloud`** | Cloud integrations | Cloud provider APIs, resource management, deployment |
+| **`auth`** | Authentication | OAuth, API keys, token management, access control |
 
 ### **🎮 Application Modules**
 *User-facing applications and interfaces*
@@ -135,24 +143,47 @@ graph TD
 |--------|---------|-------------|
 | **`system_discovery`** | System exploration | Module scanning, capability discovery, health monitoring |
 | **`terminal_interface`** | Interactive exploration | Command shell, foraging interface, guided discovery |
-| **`project_orchestration`** | Workflow orchestration | Workflow management, task coordination, resource allocation |
 | **`cli`** | Command-line interface | CLI commands, scripting support, interactive shell |
+| **`website`** | Website generation | Static site generation, templating, local server |
 
 ### **🔗 Integration Modules**
-*Standards and protocols for system integration*
+*Standards, protocols, and IDE integrations*
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
 | **`model_context_protocol`** | AI communication standard | Standardized LLM interfaces, tool specifications |
 | **`module_template`** | Module creation template | Template for creating new modules with standard structure |
+| **`ide`** | IDE integrations | Antigravity, Cursor, VS Code automation and control |
+| **`events`** | Event system | Event bus, pub/sub, event handlers |
+| **`plugin_system`** | Plugin architecture | Plugin loading, registration, lifecycle management |
+
+### **🧠 Intelligence Modules**
+*AI reasoning and agent capabilities*
+
+| Module | Purpose | Key Features |
+|--------|---------|-------------|
+| **`agents`** | Agentic framework integrations | Jules, Claude, Codex integration, agent orchestration |
+| **`cerebrum`** | Case-based reasoning | Bayesian inference, active inference, reasoning engine |
+| **`fpf`** | Functional Programming Framework | Combinator engine, transformation pipelines, composition |
+| **`skills`** | Skills framework | Skill definitions, execution, chaining |
 
 ### **🚀 Advanced Modules**
 *Specialized capabilities for advanced use cases*
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
-| **`spatial`** | 3D modeling and visualization | 3D model creation, manipulation, rendering |
-| **`physical_management`** | Physical system simulation | Physical system modeling, simulation management |
+| **`spatial`** | 3D/4D modeling and visualization | 3D model creation, manipulation, rendering, world models |
+| **`physical_management`** | Physical system simulation | System monitoring, resource management, performance tracking |
+
+### **🛠️ Utility Modules**
+*Common utilities and development tools*
+
+| Module | Purpose | Key Features |
+|--------|---------|-------------|
+| **`utils`** | Common utilities | Helper functions, CLI helpers, shared utilities |
+| **`tools`** | Utility tools | Tool registry, tool execution, helper tools |
+| **`templating`** | Template engine | Jinja2-style templating, code generation, scaffolding |
+| **`tests`** | Test infrastructure | Unit tests, integration tests, test utilities |
 
 ## 🔄 Module Communication Patterns
 
@@ -371,4 +402,4 @@ This modular architecture enables Codomyrmex to be both powerful and flexible, a
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Repository Root](../../../README.md)

@@ -1,7 +1,7 @@
-# documents
+# examples
 
 ## Signposting
-- **Parent**: [documents](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -12,7 +12,7 @@
 
 ## Overview
 
-Example implementations and demonstrations.
+Documentation files and guides for examples.
 
 ## Directory Contents
 - `README.md` – File
@@ -24,5 +24,5 @@ Example implementations and demonstrations.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [scripts](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Parent Directory**: [documents](../README.md)
+- **Project Root**: [README](../../../README.md)

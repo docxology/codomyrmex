@@ -1,3 +1,11 @@
+from pathlib import Path
+from typing import Any, Optional, Union
+
+
+# Removed self-import causing circular dependency
+# Removed self-import causing circular dependency
+
+
 """Codomyrmex Exception Classes
 
 This module defines all the exception classes used throughout the Codomyrmex
@@ -5,12 +13,116 @@ package. It provides a hierarchical structure of exceptions to handle various
 error conditions that can occur during code generation, analysis, execution,
 and other operations.
 
+Exception Hierarchy:
+    All exceptions inherit from CodomyrmexError, which provides:
+    - Context dictionaries for additional error information
+    - Error codes for programmatic handling
+    - Serialization to dictionaries
+    - Exception chaining support
+
+    CodomyrmexError (base)
+    ├── ConfigurationError - Configuration-related errors
+    ├── EnvironmentError - Environment setup errors
+    ├── DependencyError - Missing or incompatible dependencies
+    ├── FileOperationError - File I/O errors
+    ├── AIProviderError - AI provider errors
+    ├── CodeGenerationError - Code generation failures
+    ├── CodeExecutionError - Code execution failures
+    ├── StaticAnalysisError - Static analysis errors
+    ├── GitOperationError - Git operation errors
+    ├── OrchestrationError - Workflow orchestration errors
+    ├── VisualizationError - Visualization errors
+    └── ... (30+ exception types)
+
+Exception Categories:
+    1. Configuration and Setup Errors:
+       - ConfigurationError: Configuration issues
+       - EnvironmentError: Environment not properly set up
+       - DependencyError: Missing or incompatible dependencies
+
+    2. File and I/O Errors:
+       - FileOperationError: File operations failed
+       - DirectoryError: Directory operations failed
+
+    3. AI and Code Generation Errors:
+       - AIProviderError: AI provider operations failed
+       - CodeGenerationError: Code generation failed
+       - CodeEditingError: Code editing operations failed
+       - ModelContextError: MCP operations failed
+
+    4. Analysis Errors:
+       - StaticAnalysisError: Static analysis operations failed
+       - PatternMatchingError: Pattern matching operations failed
+       - SecurityAuditError: Security audit operations failed
+
+    5. Execution Errors:
+       - CodeExecutionError: Code execution failed
+       - SandboxError: Sandbox operations failed
+       - ContainerError: Container operations failed
+
+    6. Build and Synthesis Errors:
+       - BuildError: Build operations failed
+       - SynthesisError: Code synthesis operations failed
+
+    7. Git and Version Control Errors:
+       - GitOperationError: Git operations failed
+       - RepositoryError: Repository operations failed
+
+    8. Visualization Errors:
+       - VisualizationError: Data visualization operations failed
+       - PlottingError: Plotting operations failed
+
+    9. Documentation Errors:
+       - DocumentationError: Documentation operations failed
+       - APIDocumentationError: API documentation generation failed
+
+    10. Orchestration Errors:
+        - OrchestrationError: Orchestration operations failed
+        - WorkflowError: Workflow execution failed
+        - ProjectManagementError: Project management operations failed
+        - TaskExecutionError: Task execution failed
+
+Usage Guidelines:
+    All modules should use exceptions from this module:
+
+    ```python
+
+    try:
+        # Code execution
+        result = execute_code(code)
+    except CodeExecutionError as e:
+        # Handle execution error
+        logger.error(f"Execution failed: {e}")
+        # Access context
+        exit_code = e.context.get("exit_code")
+    except CodomyrmexError as e:
+        # Handle any Codomyrmex error
+        logger.error(f"Error: {e}")
+    ```
+
+Error Context:
+    All exceptions support context dictionaries for additional information:
+
+    ```python
+
+    raise CodeExecutionError(
+        "Code execution failed",
+        context=create_error_context(
+            exit_code=1,
+            stdout="...",
+            stderr="Error message"
+        )
+    )
+    ```
+
+Exception Utilities:
+    - format_exception_chain(): Format exception chain for display
+    - create_error_context(): Create context dictionary for exceptions
+
 The exception hierarchy is designed to be specific enough for proper error
 handling while remaining consistent across all modules.
 """
 
-from pathlib import Path
-from typing import Any, Optional, Union
 
 
 class CodomyrmexError(Exception):

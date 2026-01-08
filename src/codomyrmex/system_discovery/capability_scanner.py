@@ -1,3 +1,23 @@
+from pathlib import Path
+from typing import Any, Optional, Union
+import ast
+import datetime
+import datetime
+import inspect
+import json
+import logging
+import sys
+
+from dataclasses import dataclass
+import importlib
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Capability Scanner for Codomyrmex System Discovery
@@ -7,21 +27,11 @@ detailed information about functions, classes, methods, and other exportable
 functionality.
 """
 
-import ast
-import importlib
-import inspect
-import json
-import sys
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Any, Optional, Union
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 
@@ -513,7 +523,6 @@ class CapabilityScanner:
                     latest_time = mtime
 
             if latest_time > 0:
-                import datetime
 
                 return datetime.datetime.fromtimestamp(latest_time).strftime(
                     "%Y-%m-%d %H:%M:%S"
@@ -585,7 +594,6 @@ class CapabilityScanner:
     ) -> str:
         """Export detailed capabilities report to JSON."""
         if filename is None:
-            import datetime
 
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"codomyrmex_capabilities_{timestamp}.json"

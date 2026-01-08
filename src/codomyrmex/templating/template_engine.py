@@ -1,12 +1,24 @@
+from pathlib import Path
+from typing import Any, Callable, Optional
+
+from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, Template as Jinja2Template
+from mako.template import Template as MakoTemplate
+from mako.template import Template as MakoTemplate
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Template engine implementations.
 """
 
-from pathlib import Path
-from typing import Any, Callable, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -131,7 +143,6 @@ class TemplateEngine:
     def _render_jinja2(self, template: str, context: dict) -> str:
         """Render using Jinja2."""
         try:
-            from jinja2 import Environment, Template as Jinja2Template
 
             env = Environment()
             # Register custom filters
@@ -146,7 +157,6 @@ class TemplateEngine:
     def _load_jinja2(self, path: str) -> Any:
         """Load template using Jinja2."""
         try:
-            from jinja2 import Environment, FileSystemLoader
 
             path_obj = Path(path)
             env = Environment(loader=FileSystemLoader(str(path_obj.parent)))
@@ -161,7 +171,6 @@ class TemplateEngine:
     def _render_mako(self, template: str, context: dict) -> str:
         """Render using Mako."""
         try:
-            from mako.template import Template as MakoTemplate
 
             template_obj = MakoTemplate(template)
             return template_obj.render(**context)
@@ -171,9 +180,9 @@ class TemplateEngine:
     def _load_mako(self, path: str) -> Any:
         """Load template using Mako."""
         try:
-            from mako.template import Template as MakoTemplate
 
             return MakoTemplate(filename=path)
         except ImportError:
             raise TemplatingError("mako package not available. Install with: pip install mako")
+
 

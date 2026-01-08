@@ -1,9 +1,13 @@
+from pathlib import Path
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Fix remaining broken links in documentation."""
 
-import os
-import re
-from pathlib import Path
 
 def fix_self_referential_links(content: str, file_path: Path) -> str:
     """Fix self-referential directory links."""

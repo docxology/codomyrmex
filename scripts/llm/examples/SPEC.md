@@ -1,6 +1,6 @@
 # ollama_integration - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
@@ -66,9 +66,9 @@ Implementation guidelines for working within ollama_integration including best p
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [examples](../README.md)
-- **Repository Root**: [../../README.md](../../README.md)
-- **Repository SPEC**: [../../SPEC.md](../../SPEC.md)
+- **Parent Directory**: [llm](../README.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
 

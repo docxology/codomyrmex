@@ -1,10 +1,19 @@
+import os
+import pickle
+
+import base64
+import hashlib
+
+
+
+
+
+
+
 """
 Python file with security issues for testing security analysis.
 """
 
-import base64
-import os
-import pickle
 
 
 def insecure_function(user_input):
@@ -32,7 +41,6 @@ def insecure_function(user_input):
 def weak_crypto_example(password):
     """Example of weak cryptographic practices."""
     # Weak hashing (MD5)
-    import hashlib
     hash_obj = hashlib.md5(password.encode())
     return hash_obj.hexdigest()
 

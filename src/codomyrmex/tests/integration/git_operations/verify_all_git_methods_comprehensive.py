@@ -1,3 +1,17 @@
+from datetime import datetime
+from pathlib import Path
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import traceback
+
+from codomyrmex.git_operations import (
+
+
+
 #!/usr/bin/env python3
 """
 Comprehensive Git Methods Verification Script
@@ -22,19 +36,10 @@ this covers all major Git operations categories:
 10. Advanced Operations
 """
 
-import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import json
-from datetime import datetime
-from pathlib import Path
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-from codomyrmex.git_operations import (
     # Configuration and Setup
     check_git_availability,
     
@@ -944,7 +949,6 @@ class ComprehensiveGitVerifier:
             
         except Exception as e:
             self.log(f"💥 Error during verification: {e}")
-            import traceback
             self.log(traceback.format_exc())
             return False
             

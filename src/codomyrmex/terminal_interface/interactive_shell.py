@@ -1,3 +1,24 @@
+from pathlib import Path
+import logging
+import math
+import os
+import random
+import subprocess
+
+import cmd
+import numpy as np
+
+from codomyrmex.coding import execute_code
+from codomyrmex.data_visualization import create_bar_chart, create_line_plot
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Interactive Shell for Codomyrmex
@@ -7,22 +28,15 @@ Codomyrmex ecosystem - like being an epistemic forager in a vast,
 structured nest.
 """
 
-import cmd
-import os
-import random
-from pathlib import Path
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 
 try:
-    from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
 except ImportError:
     logger.warning("Could not import SystemDiscovery - running in limited mode")
     SystemDiscovery = None
@@ -353,9 +367,7 @@ Type 'explore' to begin your foraging adventure!
     def _demo_data_visualization(self):
         """Demo the data visualization module."""
         try:
-            import numpy as np
 
-            from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
             print("   📊 Creating sample line plot...")
             x = np.linspace(0, 6.28, 100)
@@ -395,7 +407,6 @@ Type 'explore' to begin your foraging adventure!
     def _demo_logging(self):
         """Demo the logging system."""
         try:
-            from codomyrmex.logging_monitoring import get_logger
 
             demo_logger = get_logger("interactive_demo")
 
@@ -413,12 +424,10 @@ Type 'explore' to begin your foraging adventure!
     def _demo_code_execution(self):
         """Demo the code execution sandbox."""
         try:
-            from codomyrmex.coding import execute_code
 
             print("   🏃 Executing sample Python code in sandbox...")
 
             code = """
-import math
 print("Hello from the Codomyrmex sandbox! 🐜")
 print(f"The answer to everything: {6 * 7}")
 print(f"Pi to 3 decimal places: {math.pi:.3f}")
@@ -698,7 +707,6 @@ print("Sandbox execution complete! ✅")
             return
 
         try:
-            import subprocess
 
             result = subprocess.run(arg, shell=True, capture_output=True, text=True)
             if result.stdout:

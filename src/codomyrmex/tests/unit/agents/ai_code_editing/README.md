@@ -1,7 +1,7 @@
-# tests
+# ai_code_editing
 
 ## Signposting
-- **Parent**: [tests](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [integration](integration/README.md)
     - [unit](unit/README.md)
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Test files and validation suites.
+Test files and validation suites for ai_code_editing.
 
 ## Directory Contents
 - `README.md` – File
@@ -24,19 +24,5 @@ Test files and validation suites.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [ai_code_editing](../README.md)
-- **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.agents.ai_code_editing.tests import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: [README](../../../../../../README.md)

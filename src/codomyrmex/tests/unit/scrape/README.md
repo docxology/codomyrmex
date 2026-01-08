@@ -1,9 +1,10 @@
 # scrape
 
 ## Signposting
-- **Parent**: [scrape](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
-    - None
+    - [integration](integration/README.md)
+    - [unit](unit/README.md)
 - **Key Artifacts**:
     - [Agent Guide](AGENTS.md)
     - [Functional Spec](SPEC.md)
@@ -15,24 +16,15 @@
 Test files and validation suites for scrape.
 
 ## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `integration/` – Subdirectory
 - `test_scrape.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: [README](../../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.tests.unit.scrape import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

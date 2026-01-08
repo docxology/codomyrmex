@@ -1,8 +1,8 @@
 # Codomyrmex Agents — config/security
 
 ## Signposting
-- **Parent**: [config](../AGENTS.md)
-- **Self**: [security Agents](AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
+- **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [examples](examples/AGENTS.md)
 - **Key Artifacts**:
@@ -12,33 +12,25 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Security and authentication configuration templates for API keys, authentication providers, authorization policies, encryption settings, and security policies. Used across `auth/`, `security/`, `api/`, `config_management/`, and `project_orchestration/` modules.
+Configuration files and templates.
 
 ## Active Components
-
-- `README.md` – Security configuration documentation
-- `SPEC.md` – Functional specification
-- `api-keys.yaml` – API key templates and validation rules
-- `authentication.yaml` – Authentication provider configurations
-- `authorization.yaml` – Permission and role definitions
-- `encryption.yaml` – Encryption key management templates
-- `security-policies.yaml` – Security policy configurations
-- `examples/` – Example security configurations
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `api-keys.yaml` – Project file
+- `authentication.yaml` – Project file
+- `authorization.yaml` – Project file
+- `encryption.yaml` – Project file
+- `examples/` – Directory containing examples components
+- `security-policies.yaml` – Project file
 
 ## Operating Contracts
-
-- Maintain alignment between code, documentation, and security configurations.
+- Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
-- Never commit actual secrets or API keys to version control.
-- Use environment variable references for all sensitive values.
 
 ## Navigation Links
-
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Examples**: [examples/](examples/README.md)
-- **Parent**: [config](../AGENTS.md)
-- **Project Root**: [README](../../README.md)
-
+- **📁 Parent Directory**: [config](../README.md) - Parent directory documentation
+- **🏠 Project Root**: [README](../../README.md) - Main project documentation

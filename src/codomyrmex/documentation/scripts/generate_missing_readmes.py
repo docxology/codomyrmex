@@ -1,13 +1,18 @@
+from datetime import datetime
+from pathlib import Path
+import argparse
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """
 Script to generate README.md files for directories that have AGENTS.md but no README.md.
 Uses AGENTS.md content as a template and enhances with technical details.
 """
 
-import os
-import re
-from pathlib import Path
-from datetime import datetime
 
 def parse_agents_file(agents_path):
     """Parse AGENTS.md file to extract key information."""
@@ -133,7 +138,6 @@ def generate_navigation_links(dir_path, repo_root):
 
 def main():
     """Main function to generate README.md files for all eligible directories."""
-    import argparse
 
     parser = argparse.ArgumentParser(description="Generate README.md files for directories with AGENTS.md")
     parser.add_argument('--repo-root', type=Path, default=Path.cwd(),

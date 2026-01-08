@@ -1,5 +1,6 @@
 # Codomyrmex
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/codomyrmex/codomyrmex)
@@ -10,7 +11,7 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 30+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 46+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
@@ -52,7 +53,7 @@ uv sync
 ## Navigation
 
 **Quick Links:**
-- 📚 **[Source Code](src/README.md)** - Browse all 30+ modules and implementations
+- 📚 **[Source Code](src/README.md)** - Browse all 46+ modules and implementations
 - 📖 **[Documentation Hub](docs/README.md)** - Comprehensive user and developer guides
 - 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
 - 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
@@ -104,7 +105,7 @@ uv sync
 ## Navigation
 
 **Quick Links:**
-- 📚 **[Source Code](src/README.md)** - Browse all 30+ modules and implementations
+- 📚 **[Source Code](src/README.md)** - Browse all 46+ modules and implementations
 - 📖 **[Documentation Hub](docs/README.md)** - Comprehensive user and developer guides
 - 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
 - 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
@@ -885,7 +886,6 @@ codomyrmex/
 │   └── /cursorrules/file-specific/       # File-specific rules
 ├── /projects/                # Project workspace and templates
 │   └── /projects/test_project/        # Example project structure
-├── /src/template/            # Code generation templates
 └── /output/                 # Generated output and reports
 ```
 
@@ -964,7 +964,7 @@ Modules organized to prevent circular dependencies:
 - **Children**:
     - [Source Code](src/README.md) - All modules and implementations
     - [Documentation](docs/README.md) - User and developer guides
-    - [Scripts](scripts/README.md) - Automation and orchestration utilities
+    - [Scripts](scripts/examples/README.md) - Automation and orchestration utilities
 
 ## Documentation
 
@@ -1305,7 +1305,7 @@ graph TD
 ## Module Maturity Levels
 
 ```mermaid
-pie title Module Development Status (December 2025)
+pie title Module Development Status (January 2026)
     "Production Ready" : 12
     "Beta" : 8
     "Alpha" : 6

@@ -1,10 +1,10 @@
 # Codomyrmex Agents — src/codomyrmex/tests
 
 ## Signposting
-- **Parent**: [codomyrmex](../AGENTS.md)
+- **Parent**: [Repository Root](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
-    - [examples](scripts/examples/AGENTS.md)
+    - [examples](examples/AGENTS.md)
     - [fixtures](fixtures/AGENTS.md)
     - [integration](integration/AGENTS.md)
     - [output](output/AGENTS.md)
@@ -32,6 +32,8 @@ Test files and validation suites.
 - `unit/` – Directory containing unit components
 
 ## Operating Contracts
+- `__pycache__/` – Directory for __pycache__ components.
+- `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

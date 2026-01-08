@@ -138,3 +138,4 @@ integrations:
     entity_id: "${SAML_ENTITY_ID}"
     certificate: "${SAML_CERTIFICATE}"
 
+

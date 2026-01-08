@@ -1,3 +1,18 @@
+from pathlib import Path
+from typing import Dict, List, Any
+import argparse
+import json
+import os
+import sys
+
+import tomllib
+
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Comprehensive Project Analysis Tool
@@ -6,12 +21,6 @@ Analyzes the Codomyrmex project structure, dependencies, and code quality.
 Provides insights for maintenance and development.
 """
 
-import argparse
-import json
-import os
-import sys
-from pathlib import Path
-from typing import Dict, List, Any
 
 
 def analyze_project_structure() -> Dict[str, Any]:
@@ -71,7 +80,6 @@ def analyze_dependencies() -> Dict[str, Any]:
     pyproject_path = Path(__file__).parent.parent.parent.parent / "pyproject.toml"
     if pyproject_path.exists():
         try:
-            import tomllib
             with open(pyproject_path, "rb") as f:
                 data = tomllib.load(f)
 

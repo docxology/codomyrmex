@@ -1,7 +1,7 @@
 # core
 
 ## Signposting
-- **Parent**: [core](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - None
 - **Key Artifacts**:
@@ -28,17 +28,3 @@ Documentation files and guides for core.
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [documents](../README.md)
 - **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.documents.core import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-

@@ -1,3 +1,24 @@
+from pathlib import Path
+from typing import Dict, List, Any, Optional
+import json
+import os
+import subprocess
+import tempfile
+
+from missing_package import something
+from mypackage.core import core_function
+import nonexistent_module
+import pytest
+import sqlite3
+import yaml
+import yaml
+
+
+
+
+
+
+
 """Real data factory for generating test fixtures without mocks.
 
 This module provides utilities for creating real test data, files, and structures
@@ -5,14 +26,6 @@ that can be used in place of mocked objects. Following the repository's TDD prin
 of "no mock methods, always do real data analysis."
 """
 
-import json
-import os
-import sqlite3
-import subprocess
-import tempfile
-import yaml
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 
 
 class RealDataFactory:
@@ -51,7 +64,6 @@ class RealDataFactory:
             config_file.write_text(json.dumps(config_data, indent=2))
         elif format_type == "yaml":
             try:
-                import yaml
                 config_file.write_text(yaml.dump(config_data, default_flow_style=False))
             except ImportError:
                 # Fallback to JSON if yaml not available
@@ -128,8 +140,6 @@ def problematic_function():
     return result
 ''',
             "import_error": '''
-import nonexistent_module
-from missing_package import something
 
 def function_with_missing_imports():
     return nonexistent_module.do_something()
@@ -186,8 +196,6 @@ def helper_function():
 
         test_core = tests_dir / "test_core.py"
         test_core.write_text('''
-import pytest
-from mypackage.core import core_function
 
 def test_core_function():
     result = core_function()

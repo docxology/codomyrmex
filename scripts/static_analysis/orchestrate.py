@@ -228,7 +228,7 @@ Examples:
 
     if not args.command:
         parser.print_help()
-        return 1
+        return 0
 
     # Validate dry-run mode
     if not validate_dry_run(args):

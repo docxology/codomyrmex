@@ -1,3 +1,27 @@
+from datetime import datetime, timezone
+from typing import Any, Optional
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+from dataclasses import dataclass, field
+from enum import Enum
+import docker
+import kubernetes
+import requests
+import socket
+import yaml
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Deployment Orchestrator for Codomyrmex CI/CD Automation Module.
 
@@ -5,19 +29,7 @@ Provides comprehensive deployment orchestration, environment management,
 and release coordination capabilities.
 """
 
-import json
-import os
-import shutil
-import subprocess
-import sys
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Optional
 
-import docker
-import kubernetes
-import yaml
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +38,6 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -451,7 +462,6 @@ class DeploymentOrchestrator:
                 manifest = manifest.replace(f"${key}", value)
 
             # Apply manifest
-            import tempfile
 
             with tempfile.NamedTemporaryFile(
                 mode="w", suffix=".yaml", delete=False
@@ -560,7 +570,6 @@ class DeploymentOrchestrator:
     def _check_http_health(self, endpoint: str, timeout: int) -> bool:
         """Check HTTP endpoint health."""
         try:
-            import requests
 
             response = requests.get(endpoint, timeout=timeout)
             return response.status_code == 200
@@ -571,7 +580,6 @@ class DeploymentOrchestrator:
     def _check_tcp_health(self, endpoint: str, timeout: int) -> bool:
         """Check TCP endpoint health."""
         try:
-            import socket
 
             host, port = endpoint.split(":")
             sock = socket.create_connection((host, int(port)), timeout=timeout)

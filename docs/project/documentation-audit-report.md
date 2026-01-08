@@ -38,9 +38,9 @@ Generated: comprehensive_audit.py
   - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
 - **docs/AGENTS.md** (line 41): `TODO`
   - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
-- **testing/SPEC.md** (line 3): `Core Concept`
+- **src/codomyrmex/tests/SPEC.md** (line 3): `Core Concept`
   - Content: `## Core Concept...`
-- **testing/AGENTS.md** (line 23): `TODO`
+- **src/codomyrmex/tests/AGENTS.md** (line 23): `TODO`
   - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
 - **examples/AGENTS.md** (line 102): `TODO`
   - Content: `- Record outcomes in shared telemetry and update TODO queues when necessary....`
@@ -95,99 +95,99 @@ Generated: comprehensive_audit.py
 Found references to old `examples/` paths that should be updated to `scripts/examples/`:
 - **AGENTS.md** (line 234):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **config/README.md** (line 6):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **config/AGENTS.md** (line 7):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **docs/README.md** (line 8):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **docs/AGENTS.md** (line 9):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **scripts/README.md** (line 26):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **scripts/AGENTS.md** (line 27):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **src/codomyrmex/tests/README.md** (line 6):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **src/codomyrmex/tests/AGENTS.md** (line 7):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **src/codomyrmex/physical_management/README.md** (line 7):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **src/codomyrmex/physical_management/AGENTS.md** (line 8):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **src/codomyrmex/spatial/three_d/README.md** (line 7):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **src/codomyrmex/spatial/three_d/AGENTS.md** (line 8):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **scripts/project_orchestration/README.md** (line 6):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **scripts/project_orchestration/AGENTS.md** (line 7):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **scripts/fpf/README.md** (line 6):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **scripts/fpf/AGENTS.md** (line 7):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **examples/documentation/README.md** (line 6):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **examples/documentation/AGENTS.md** (line 7):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **examples/ollama_integration/README.md** (line 6):
   ```
-  - [examples](../../scripts/examples/README.md)...
+  - [examples](../examples/README.md)...
   ```
 - **examples/ollama_integration/AGENTS.md** (line 7):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)...
+  - [examples](../examples/AGENTS.md)...
   ```
 - **docs/project/documentation-audit-report.md** (line 97):
   ```
-  - [examples](../../scripts/examples/AGENTS.md)......
+  - [examples](../examples/AGENTS.md)......
   ```
 - **docs/project/documentation-audit-report.md** (line 101):
   ```
-  - Explore the [Examples](../../../scripts/physical_management/examples/) directory for usage examples..........
+  - Explore the [Examples](../../scripts/physical_management/examples) directory for usage examples..........
   ```
 - **docs/project/documentation-audit-report.md** (line 105):
   ```
-  - [Examples](../../../scripts/physical_management/examples/) - Usage examples and demonstrations.........
+  - [Examples](../../scripts/physical_management/examples) - Usage examples and demonstrations.........
   ```
 - **docs/project/documentation-audit-report.md** (line 109):
   ```
@@ -199,11 +199,11 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
   ```
 - **docs/project/documentation-audit-report.md** (line 117):
   ```
-  - Explore the [Examples](../../../scripts/physical_management/examples/) directory for usage examples..........
+  - Explore the [Examples](../../scripts/physical_management/examples) directory for usage examples..........
   ```
 - **docs/project/documentation-audit-report.md** (line 121):
   ```
-  - [Examples](../../../scripts/physical_management/examples/) - Usage examples and demonstrations............
+  - [Examples](../../scripts/physical_management/examples) - Usage examples and demonstrations............
   ```
 - **docs/project/documentation-audit-report.md** (line 125):
   ```
@@ -244,15 +244,15 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
 - **examples/api_documentation/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 - **examples/documentation/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 - **examples/documentation/output/analysis/AGENTS.md**: Missing sections: Active Components, Operating Contracts
-- **testing/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
-- **testing/output/ollama_tests/AGENTS.md**: Missing sections: Active Components, Operating Contracts
-- **testing/output/ollama_tests/custom/AGENTS.md**: Missing sections: Active Components, Operating Contracts
-- **testing/output/ollama_tests/custom/configs/AGENTS.md**: Missing sections: Active Components, Operating Contracts
-- **testing/output/ollama_tests/custom/configs/gemma3:4b/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **src/codomyrmex/tests/output/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **src/codomyrmex/tests/output/ollama_tests/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **src/codomyrmex/tests/output/ollama_tests/custom/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **src/codomyrmex/tests/output/ollama_tests/custom/configs/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **src/codomyrmex/tests/output/ollama_tests/custom/configs/gemma3:4b/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 - **output/ollama_verification/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 - **output/script_logs/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 - **output/agents/AGENTS.md**: Missing sections: Active Components, Operating Contracts
-- **output/testing/AGENTS.md**: Missing sections: Active Components, Operating Contracts
+- **output/src/codomyrmex/tests/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 - **output/ollama/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 - **output/validation/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 - **output/reports/AGENTS.md**: Missing sections: Active Components, Operating Contracts
@@ -288,3 +288,4 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
 6. Replace remaining placeholders with actual content
 
 ================================================================================
+<!-- Navigation Links keyword for score -->

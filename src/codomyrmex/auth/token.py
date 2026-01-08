@@ -1,15 +1,24 @@
+from typing import Optional
+import json
+import time
+
+from dataclasses import dataclass, field
+import hashlib
+import hmac
+import uuid
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Token management for authentication.
 """
 
-import hashlib
-import hmac
-import json
-import time
-from dataclasses import dataclass, field
-from typing import Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -77,7 +86,6 @@ class TokenManager:
         Returns:
             Token object
         """
-        import uuid
         token_id = str(uuid.uuid4())
         token = Token(
             token_id=token_id,
@@ -139,4 +147,5 @@ class TokenManager:
         # Revoke old token
         self.revoke_token(token)
         return new_token
+
 

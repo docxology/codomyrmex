@@ -1,32 +1,41 @@
+from datetime import datetime, timezone
+from typing import Any, Optional
+import os
+import sys
+
+from dataclasses import dataclass
+from enum import Enum
+import psycopg2
+import pymysql
+import sqlite3
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Database Manager for Codomyrmex Database Management Module.
 
 Provides comprehensive database connection management and administration.
 """
 
-import os
-import sqlite3
-import sys
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Optional
 
 # Optional database drivers - import conditionally
 try:
-    import psycopg2
     POSTGRESQL_AVAILABLE = True
 except ImportError:
     psycopg2 = None
     POSTGRESQL_AVAILABLE = False
 
 try:
-    import pymysql
     MYSQL_AVAILABLE = True
 except ImportError:
     pymysql = None
     MYSQL_AVAILABLE = False
-from codomyrmex.exceptions import CodomyrmexError
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -35,7 +44,6 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 

@@ -1,12 +1,16 @@
+from pathlib import Path
+import os
+import sys
+
+
+
+
 #!/usr/bin/env python3
 """
 Script to check documentation status across the entire repository.
 Checks for README.md and AGENTS.md files in all directories.
 """
 
-import os
-import sys
-from pathlib import Path
 
 def check_documentation_status():
     """Check which directories are missing README.md and/or AGENTS.md files."""

@@ -1,7 +1,7 @@
-# tests
+# website
 
 ## Signposting
-- **Parent**: [tests](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [integration](integration/README.md)
     - [unit](unit/README.md)
@@ -13,30 +13,18 @@
 
 ## Overview
 
-Test files and validation suites.
+Test files and validation suites for website.
 
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
 - `integration/` – Subdirectory
+- `test_website_data_provider.py` – File
+- `test_website_generator.py` – File
 - `unit/` – Subdirectory
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [module_template](../README.md)
-- **Project Root**: [README](../../../../README.md)
-
-## Getting Started
-
-To use this module in your project, import the necessary components:
-
-```python
-# Example usage
-from codomyrmex.codomyrmex.module_template.tests import main_component
-
-def example():
-    
-    print(f"Result: {result}")
-```
-
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: [README](../../../../../README.md)

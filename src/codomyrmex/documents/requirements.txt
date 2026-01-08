@@ -20,3 +20,4 @@ pypdf>=3.0.0  # PDF reading (preferred)
 # python-magic>=0.4.0  # MIME type detection
 
 
+

@@ -1,11 +1,15 @@
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Tuple
+import os
+import re
+
+
+
+
 #!/usr/bin/env python3
 """Comprehensive triple-check of all SPEC, AGENTS, and README files."""
 
-import os
-import re
-from pathlib import Path
-from collections import defaultdict
-from typing import Dict, List, Tuple
 
 # Placeholder patterns
 PLACEHOLDER_PATTERNS = [

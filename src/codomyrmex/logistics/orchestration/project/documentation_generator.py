@@ -1,3 +1,12 @@
+from pathlib import Path
+from typing import Any, Optional
+import logging
+import re
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
 """
 Documentation Generator for Codomyrmex Projects
 
@@ -5,16 +14,11 @@ This module generates README.md and AGENTS.md files for projects and their
 nested directories based on templates and project metadata.
 """
 
-import re
-from pathlib import Path
-from typing import Any, Optional
 
 try:
-    from codomyrmex.logging_monitoring import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
-    import logging
 
     logger = logging.getLogger(__name__)
 

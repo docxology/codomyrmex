@@ -1,3 +1,21 @@
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from codomyrmex.cerebrum.exceptions import VisualizationError
+from codomyrmex.cerebrum.visualization_base import BaseChartVisualizer, BaseHeatmapVisualizer
+from codomyrmex.cerebrum.visualization_theme import VisualizationTheme, get_default_theme
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
 """Concordance visualizations for cross-analysis comparisons.
 
 This module provides visualizations that compare results from different
@@ -5,24 +23,14 @@ CEREBRUM analyses (CBR, Bayesian, Active Inference) and FPF analyses,
 showing agreement, correlation, and concordance patterns.
 """
 
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 
 try:
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import pandas as pd
-    from matplotlib.figure import Figure
 
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
     Figure = Any
 
-from codomyrmex.cerebrum.exceptions import VisualizationError
-from codomyrmex.cerebrum.visualization_base import BaseChartVisualizer, BaseHeatmapVisualizer
-from codomyrmex.cerebrum.visualization_theme import VisualizationTheme, get_default_theme
-from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -329,5 +337,6 @@ class ConcordanceVisualizer:
 
         plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
         return fig
+
 
 

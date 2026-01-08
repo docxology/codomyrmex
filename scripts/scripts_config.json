@@ -1,0 +1,78 @@
+{
+    "default": {
+        "timeout": 60,
+        "allowed_exit_codes": [
+            0
+        ],
+        "skip": false,
+        "env": {}
+    },
+    "scripts": {
+        "tools/audit_methods.py": {
+            "allowed_exit_codes": [
+                0,
+                1
+            ],
+            "description": "Linter script, exit 1 means issues found which is valid behavior"
+        },
+        "tools/check_dependencies.py": {
+            "allowed_exit_codes": [
+                0,
+                1
+            ]
+        },
+        "tools/add_logging.py": {
+            "allowed_exit_codes": [
+                0,
+                1
+            ]
+        },
+        "tools/check_version_pinning.py": {
+            "allowed_exit_codes": [
+                0,
+                1
+            ]
+        },
+        "tools/audit_error_handling.py": {
+            "allowed_exit_codes": [
+                0,
+                1
+            ]
+        },
+        "fabric/fabric_orchestrator.py": {
+            "skip": true,
+            "skip_reason": "Interactive/Service script"
+        },
+        "tools/run_quality_checks.py": {
+            "allowed_exit_codes": [
+                0,
+                1,
+                2
+            ]
+        },
+        "tools/generate_coverage_report.py": {
+            "allowed_exit_codes": [
+                0,
+                1
+            ]
+        },
+        "fabric/verify_api_specs.py": {
+            "skip": true
+        },
+        "fabric/start_fabric.py": {
+            "skip": true
+        },
+        "fabric/verify_api_specs.py": {
+            "skip": true
+        },
+        "fabric/start_fabric.py": {
+            "skip": true
+        },
+        "ollama/serve_model.py": {
+            "skip": true
+        },
+        "ollama/chat_cli.py": {
+            "skip": true
+        }
+    }
+}

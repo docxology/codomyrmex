@@ -1,7 +1,7 @@
 # Codomyrmex Agents — src/codomyrmex
 
 ## Signposting
-- **Parent**: [src](../AGENTS.md)
+- **Parent**: [Parent](../AGENTS.md)
 - **Self**: [Agents](AGENTS.md)
 - **Children**:
     - [agents](agents/AGENTS.md)
@@ -11,6 +11,7 @@
     - [cache](cache/AGENTS.md)
     - [cerebrum](cerebrum/AGENTS.md)
     - [ci_cd_automation](ci_cd_automation/AGENTS.md)
+    - [cloud](cloud/AGENTS.md)
     - [coding](coding/AGENTS.md)
     - [compression](compression/AGENTS.md)
     - [config_management](config_management/AGENTS.md)
@@ -22,34 +23,36 @@
     - [encryption](encryption/AGENTS.md)
     - [environment_setup](environment_setup/AGENTS.md)
     - [events](events/AGENTS.md)
+    - [examples](examples/AGENTS.md)
     - [fpf](fpf/AGENTS.md)
     - [git_operations](git_operations/AGENTS.md)
+    - [ide](ide/AGENTS.md)
     - [llm](llm/AGENTS.md)
     - [logging_monitoring](logging_monitoring/AGENTS.md)
+    - [logistics](logistics/AGENTS.md)
     - [metrics](metrics/AGENTS.md)
     - [model_context_protocol](model_context_protocol/AGENTS.md)
     - [module_template](module_template/AGENTS.md)
     - [networking](networking/AGENTS.md)
+    - [output](output/AGENTS.md)
     - [pattern_matching](pattern_matching/AGENTS.md)
     - [performance](performance/AGENTS.md)
     - [physical_management](physical_management/AGENTS.md)
     - [plugin_system](plugin_system/AGENTS.md)
-    - [logistics](logistics/AGENTS.md)
-    - [website](website/AGENTS.md)
     - [scrape](scrape/AGENTS.md)
     - [security](security/AGENTS.md)
     - [serialization](serialization/AGENTS.md)
+    - [skills](skills/AGENTS.md)
     - [spatial](spatial/AGENTS.md)
     - [static_analysis](static_analysis/AGENTS.md)
     - [system_discovery](system_discovery/AGENTS.md)
-    - [template](template/AGENTS.md)
     - [templating](templating/AGENTS.md)
     - [terminal_interface](terminal_interface/AGENTS.md)
     - [tests](tests/AGENTS.md)
     - [tools](tools/AGENTS.md)
     - [utils](utils/AGENTS.md)
     - [validation](validation/AGENTS.md)
-    - [skills](skills/AGENTS.md)
+    - [website](website/AGENTS.md)
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -57,7 +60,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Core Codomyrmex package containing all functional modules. Provides modular coding workspace enabling AI development workflows with comprehensive capabilities including agents, code execution, security, LLM integration, spatial computing, and more. This is the root package that coordinates all submodules.
+Module components and implementation for codomyrmex..
 
 ## Active Components
 - `README.md` – Project file
@@ -71,10 +74,10 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 - `cerebrum/` – Directory containing cerebrum components
 - `ci_cd_automation/` – Directory containing ci_cd_automation components
 - `cli.py` – Project file
+- `cloud/` – Directory containing cloud components
 - `coding/` – Directory containing coding components
 - `compression/` – Directory containing compression components
 - `config_management/` – Directory containing config_management components
-- `conftest.py` – Project file
 - `containerization/` – Directory containing containerization components
 - `data_visualization/` – Directory containing data_visualization components
 - `database_management/` – Directory containing database_management components
@@ -83,11 +86,14 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 - `encryption/` – Directory containing encryption components
 - `environment_setup/` – Directory containing environment_setup components
 - `events/` – Directory containing events components
+- `examples/` – Directory containing examples components
 - `exceptions.py` – Project file
 - `fpf/` – Directory containing fpf components
 - `git_operations/` – Directory containing git_operations components
+- `ide/` – Directory containing ide components
 - `llm/` – Directory containing llm components
 - `logging_monitoring/` – Directory containing logging_monitoring components
+- `logistics/` – Directory containing logistics components
 - `metrics/` – Directory containing metrics components
 - `model_context_protocol/` – Directory containing model_context_protocol components
 - `module_template/` – Directory containing module_template components
@@ -96,14 +102,13 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 - `performance/` – Directory containing performance components
 - `physical_management/` – Directory containing physical_management components
 - `plugin_system/` – Directory containing plugin_system components
-- `logistics/` – Directory containing logistics components (orchestration, task, schedule)
 - `scrape/` – Directory containing scrape components
 - `security/` – Directory containing security components
 - `serialization/` – Directory containing serialization components
+- `skills/` – Directory containing skills components
 - `spatial/` – Directory containing spatial components
 - `static_analysis/` – Directory containing static_analysis components
 - `system_discovery/` – Directory containing system_discovery components
-- `template/` – Directory containing template components
 - `templating/` – Directory containing templating components
 - `terminal_interface/` – Directory containing terminal_interface components
 - `tests/` – Directory containing tests components
@@ -111,9 +116,12 @@ Core Codomyrmex package containing all functional modules. Provides modular codi
 - `utils/` – Directory containing utils components
 - `validation/` – Directory containing validation components
 - `website/` – Directory containing website components
-- `skills/` – Directory containing skills components
 
 ## Operating Contracts
+- `.DS_Store` – Project file
+- `@output/` – Directory for @output components.
+- `__pycache__/` – Directory for __pycache__ components.
+- `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

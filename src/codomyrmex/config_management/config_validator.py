@@ -1,3 +1,17 @@
+from typing import Dict, List, Any, Optional, Tuple, Union, Callable
+import logging
+import re
+
+from dataclasses import dataclass, field
+from enum import Enum
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 """
 Configuration Validator for Codomyrmex
 
@@ -5,17 +19,11 @@ This module provides comprehensive configuration validation with schema support,
 type checking, constraint validation, and detailed error reporting.
 """
 
-import re
-from typing import Dict, List, Any, Optional, Tuple, Union, Callable
-from dataclasses import dataclass, field
-from enum import Enum
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
 
 

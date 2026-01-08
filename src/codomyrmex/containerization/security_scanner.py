@@ -1,3 +1,26 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
+import json
+import os
+import re
+import shutil
+import subprocess
+import tempfile
+import time
+
+from dataclasses import dataclass, field
+import csv
+import docker
+
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
 #!/usr/bin/env python3
 """
 Container Security Scanner Module for Codomyrmex Containerization.
@@ -6,26 +29,12 @@ This module provides container security scanning, vulnerability assessment,
 and compliance checking capabilities using Trivy, Grype, or Docker Scout.
 """
 
-import json
-import os
-import re
-import shutil
-import subprocess
-import tempfile
-import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 # Try to import Docker SDK
 try:
-    import docker
     DOCKER_AVAILABLE = True
 except ImportError:
     docker = None
@@ -574,7 +583,6 @@ class ContainerSecurityScanner:
                 json.dump(data, f, indent=2)
 
         elif format == "csv":
-            import csv
             with open(output_path, 'w', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow(["CVE ID", "Severity", "Package", "Version", "Fixed Version", "CVSS Score"])

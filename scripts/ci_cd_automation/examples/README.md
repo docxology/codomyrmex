@@ -1,7 +1,7 @@
-# ci_cd_automation
+# examples
 
 ## Signposting
-- **Parent**: [ci_cd_automation](../README.md)
+- **Parent**: [Parent](../README.md)
 - **Children**:
     - [optimization_data](optimization_data/README.md)
     - [output](output/README.md)
@@ -30,6 +30,5 @@ Example implementations and demonstrations.
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [scripts](../README.md)
-- **Project Root**: [README](../../README.md)
-
+- **Parent Directory**: [ci_cd_automation](../README.md)
+- **Project Root**: [README](../../../README.md)
