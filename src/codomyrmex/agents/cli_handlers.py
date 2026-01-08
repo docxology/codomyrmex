@@ -7,7 +7,10 @@ from dataclasses import fields
 from codomyrmex.agents import get_config, AgentRequest
 from codomyrmex.agents.claude import ClaudeClient
 from codomyrmex.agents.codex import CodexClient
-from codomyrmex.agents.droid import DroidController, create_default_controller
+from codomyrmex.agents.gemini import GeminiClient
+from codomyrmex.agents.jules import JulesClient
+from codomyrmex.agents.opencode import OpenCodeClient
+
 from codomyrmex.agents.exceptions import (
     AgentError,
     ClaudeError,

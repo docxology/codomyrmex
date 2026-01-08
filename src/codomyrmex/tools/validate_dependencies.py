@@ -4,15 +4,7 @@ from typing import Dict, List, Set, Tuple
 import re
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
 
 
 
@@ -38,6 +30,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
+
 """Main entry point and utility functions
 
 This module provides validate_dependencies functionality including:
@@ -56,8 +49,6 @@ Validates that:
 3. No conflicting version requirements
 4. requirements.txt files are deprecated (have deprecation notice)
 """
-
-
 
 def parse_pyproject_dependencies(content: str) -> Dict[str, List[Tuple[str, str]]]:
     """

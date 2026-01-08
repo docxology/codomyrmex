@@ -13,75 +13,11 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides config_validator functionality including:
-- 18 functions: get_logging_config_schema, get_database_config_schema, get_ai_model_config_schema...
-- 5 classes: ValidationSeverity, ValidationIssue, ValidationResult...
-
-Usage:
-    # Example usage here
-"""
 Configuration Validator for Codomyrmex
 
 This module provides comprehensive configuration validation with schema support,
 type checking, constraint validation, and detailed error reporting.
 """
-
 
 # Import logging
 try:
@@ -89,13 +25,11 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
-
 class ValidationSeverity(Enum):
     """Severity levels for validation issues."""
     ERROR = "error"
     WARNING = "warning"
     INFO = "info"
-
 
 @dataclass
 class ValidationIssue:
@@ -117,7 +51,6 @@ class ValidationIssue:
             "actual_value": self.actual_value,
             "expected_value": self.expected_value
         }
-
 
 @dataclass
 class ValidationResult:
@@ -146,7 +79,6 @@ class ValidationResult:
             "issues": [issue.to_dict() for issue in self.issues]
         }
 
-
 @dataclass
 class ConfigSchema:
     """Schema definition for configuration validation."""
@@ -170,7 +102,6 @@ class ConfigSchema:
         if self.nested_schema:
             result["nested_schema"] = {k: v.to_dict() for k, v in self.nested_schema.items()}
         return result
-
 
 class ConfigValidator:
     """
@@ -471,7 +402,6 @@ class ConfigValidator:
 
         return False
 
-
 # Predefined schemas for common Codomyrmex configurations
 
 def get_logging_config_schema() -> Dict[str, ConfigSchema]:
@@ -502,7 +432,6 @@ def get_logging_config_schema() -> Dict[str, ConfigSchema]:
         )
     }
 
-
 def get_database_config_schema() -> Dict[str, ConfigSchema]:
     """Get schema for database configuration."""
     return {
@@ -528,7 +457,6 @@ def get_database_config_schema() -> Dict[str, ConfigSchema]:
         )
     }
 
-
 def get_ai_model_config_schema() -> Dict[str, ConfigSchema]:
     """Get schema for AI model configuration."""
     return {
@@ -552,7 +480,6 @@ def get_ai_model_config_schema() -> Dict[str, ConfigSchema]:
             }
         )
     }
-
 
 # Convenience functions
 

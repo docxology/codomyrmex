@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Report generator for FPF specifications.
 
+
 """Core functionality module
 
 This module provides report_generator functionality including:
@@ -8,6 +9,7 @@ This module provides report_generator functionality including:
 - 1 classes: ReportGenerator
 
 Usage:
+    from report_generator import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

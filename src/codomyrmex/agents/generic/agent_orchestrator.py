@@ -49,26 +49,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Multi-agent orchestration utilities."""
-
-
 
 """Core functionality module
 
@@ -77,6 +58,7 @@ This module provides agent_orchestrator functionality including:
 - 2 classes: OrchestrationStrategy, AgentOrchestrator
 
 Usage:
+    from agent_orchestrator import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

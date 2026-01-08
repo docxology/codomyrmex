@@ -1,18 +1,7 @@
 from pathlib import Path
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -35,20 +24,15 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides cleanup_operating_contracts functionality including:
-- 2 functions: cleanup_operating_contracts, main
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Clean up AGENTS.md files by removing incorrectly added items from Operating Contracts sections.
 """
 
 
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 def cleanup_operating_contracts(agents_path: Path) -> bool:
     """Remove incorrectly added directory items from Operating Contracts section."""
@@ -115,4 +99,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

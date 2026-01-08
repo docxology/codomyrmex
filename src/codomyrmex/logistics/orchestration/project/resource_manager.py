@@ -8,28 +8,12 @@ import time
 
 from dataclasses import asdict, dataclass, field
 from enum import Enum
+from resource_manager import FunctionName, ClassName
 import psutil
 import threading
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.performance import monitor_performance
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -195,21 +179,6 @@ class Resource:
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def __init__(
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    id : Description of id
-    name : Description of name
-    resource_type : Description of resource_type
-    type : Description of type
-    capacity : Description of capacity
-    unit : Description of unit
-    description : Description of description
-    status : Description of status
-    metadata : Description of metadata
-
-    Returns: Description of return value
 """
         self,
         id: str,
@@ -255,12 +224,13 @@ Args:
         self.updated_at = kwargs.get("updated_at", datetime.now(timezone.utc))
 
     def to_dict(self) -> dict[str, Any]:
-    """Brief description of to_dict.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: Any)
+        """Brief description of to_dict.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         data = {
             "id": self.id,
@@ -325,12 +295,13 @@ Args:
         return inst
 
     def is_available(self) -> bool:
-    """Brief description of is_available.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: bool)
+        """Brief description of is_available.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value (type: bool)
+        """
 """
         return self.status == ResourceStatus.AVAILABLE
 

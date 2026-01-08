@@ -13,26 +13,10 @@ import time
 
 from dataclasses import dataclass, field
 from enum import Enum
+from pipeline_manager import FunctionName, ClassName
 import yaml
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -90,8 +74,6 @@ Pipeline Manager for Codomyrmex CI/CD Automation Module.
 
 Provides comprehensive pipeline orchestration, management, and execution capabilities.
 """
-
-
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -220,12 +202,13 @@ class Pipeline:
     duration: float = 0.0
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)

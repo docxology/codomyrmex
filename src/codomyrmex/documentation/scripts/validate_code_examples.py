@@ -50,38 +50,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides validate_code_examples functionality including:
-- 7 functions: extract_code_blocks, validate_python_syntax, check_imports...
-- 1 classes: CodeExample
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Code Example Validation Script
 
 This script extracts code examples from documentation files,
@@ -89,6 +59,12 @@ validates their syntax, and checks if they match actual API signatures.
 """
 
 
+
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 @dataclass
 class CodeExample:
@@ -102,13 +78,6 @@ class CodeExample:
     api_mismatches: List[str] = None
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
         if self.import_errors is None:
             self.import_errors = []
         if self.api_mismatches is None:
@@ -266,4 +235,3 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
-

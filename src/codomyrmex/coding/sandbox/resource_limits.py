@@ -2,8 +2,10 @@
 from codomyrmex.logging_monitoring import get_logger
 
 
-"""
-"""Core functionality module
+
+
+
+
 
 This module provides resource_limits functionality including:
 - 0 functions: 
@@ -12,7 +14,15 @@ This module provides resource_limits functionality including:
 Usage:
     # Example usage here
 """
+This module provides resource_limits functionality including:
+- 0 functions: 
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 logger = get_logger(__name__)
+"""
 Resource Limits Configuration
 
 Defines default resource limits and Docker security arguments.

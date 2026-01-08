@@ -8,6 +8,7 @@ This module provides context_builder functionality including:
 - 1 classes: ContextBuilder
 
 Usage:
+    from context_builder import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -223,6 +224,4 @@ class ContextBuilder:
                 related_patterns.append(related_pattern)
 
         return related_patterns[:10]  # Limit to 10
-
-
 

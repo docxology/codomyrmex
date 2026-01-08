@@ -6,6 +6,7 @@ import shutil  # For checking if command exists
 import subprocess
 import sys
 
+from documentation_website import FunctionName, ClassName
 import webbrowser
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
@@ -52,29 +53,21 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Standard logging import kept for compatibility with basicConfig structure
 
 # --- Determine project structure and add appropriate path to sys.path for package import ---
+
 """Main entry point and utility functions
 
+"""Main entry point and utility functions
+
+This module provides documentation_website functionality including:
+- 12 functions: command_exists, check_doc_environment, run_command_stream_output...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
 This module provides documentation_website functionality including:
 - 12 functions: command_exists, check_doc_environment, run_command_stream_output...
 - 0 classes: 

@@ -5,15 +5,7 @@ import json
 import subprocess
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
 
 
 
@@ -39,6 +31,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
+
 """Main entry point and utility functions
 
 This module provides dependency_checker functionality including:
@@ -53,8 +46,6 @@ Dependency Checker Tool
 
 Validates project dependencies and checks for vulnerabilities.
 """
-
-
 
 def run_command(cmd: List[str]) -> tuple[bool, str, str]:
     """Run a shell command and return success status, stdout, and stderr."""

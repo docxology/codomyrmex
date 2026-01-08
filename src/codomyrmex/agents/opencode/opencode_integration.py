@@ -1,6 +1,5 @@
 from typing import Any
 
-
 from codomyrmex.agents.core import AgentIntegrationAdapter
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.core import AgentRequest
@@ -30,16 +29,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
 """OpenCode integration adapters for Codomyrmex modules."""
-
-
-
 
 """Core functionality module
 
@@ -48,6 +38,7 @@ This module provides opencode_integration functionality including:
 - 1 classes: OpenCodeIntegrationAdapter
 
 Usage:
+    from opencode_integration import FunctionName, ClassName
     # Example usage here
 """
 class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):

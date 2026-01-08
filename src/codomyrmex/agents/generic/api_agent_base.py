@@ -1,7 +1,6 @@
 from typing import Any, Callable, Iterator, Optional, Type
 import time
 
-
 from codomyrmex.agents.config import AgentConfig, get_config
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.exceptions import AgentError, AgentConfigurationError
@@ -31,15 +30,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
 """Base class for API-based agents with common API patterns."""
-
-
 
 """Core functionality module
 
@@ -48,6 +39,7 @@ This module provides api_agent_base functionality including:
 - 1 classes: APIAgentBase
 
 Usage:
+    from api_agent_base import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

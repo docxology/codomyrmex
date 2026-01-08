@@ -53,23 +53,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Professional academic visualization theme system for CEREBRUM.
 
 """Core functionality module
@@ -79,6 +62,7 @@ This module provides visualization_theme functionality including:
 - 6 classes: FontConfig, ColorPalette, FigureConfig...
 
 Usage:
+    from visualization_theme import FunctionName, ClassName
     # Example usage here
 """
 This module provides a centralized theme system for consistent, publication-quality
@@ -527,6 +511,4 @@ def set_default_theme(theme: VisualizationTheme) -> None:
     """
     global _default_theme
     _default_theme = theme
-
-
 

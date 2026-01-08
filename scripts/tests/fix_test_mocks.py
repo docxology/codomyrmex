@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 """Identify and report test files using mocks that need to be fixed."""
 
+import sys
+from pathlib import Path
+try:
+    import codomyrmex
+except ImportError:
+    # Add project root to sys.path
+    project_root = Path(__file__).resolve().parent.parent.parent
+    src_path = project_root / "src"
+    sys.path.insert(0, str(src_path))
 import re
 from pathlib import Path
 from collections import defaultdict
@@ -90,4 +99,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -6,15 +6,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from .data_provider import DataProvider
 from codomyrmex.logging_monitoring import get_logger
 
-"""Core functionality module
 
-This module provides generator functionality including:
-- 4 functions: __init__, generate, _render_page...
-- 1 classes: WebsiteGenerator
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 class WebsiteGenerator:
     """
@@ -22,14 +14,15 @@ class WebsiteGenerator:
     """
 
     def __init__(self, output_dir: str, root_dir: Optional[str] = None):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    output_dir : Description of output_dir
-    root_dir : Description of root_dir
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+            output_dir : Description of output_dir
+            root_dir : Description of root_dir
+        
+            Returns: Description of return value
+        """
 """
         self.output_dir = Path(output_dir)
         # Assuming we are running from project root, or passing it in.
@@ -82,14 +75,15 @@ Args:
         print("Website generation complete.")
 
     def _render_page(self, template_name: str, context: dict):
-    """Brief description of _render_page.
-
-Args:
-    self : Description of self
-    template_name : Description of template_name
-    context : Description of context
-
-    Returns: Description of return value
+        """Brief description of _render_page.
+        
+        Args:
+            self : Description of self
+            template_name : Description of template_name
+            context : Description of context
+        
+            Returns: Description of return value
+        """
 """
         template = self.env.get_template(template_name)
         output = template.render(**context)
@@ -98,12 +92,13 @@ Args:
         print(f"Rendered {template_name}")
 
     def _copy_assets(self):
-    """Brief description of _copy_assets.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of _copy_assets.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.assets_dir.exists():
             shutil.copytree(self.assets_dir, self.output_dir / "assets")

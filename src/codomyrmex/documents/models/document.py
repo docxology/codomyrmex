@@ -12,55 +12,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-"""Document model definitions."""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -71,19 +22,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Document model definitions."""
 
-
-
-
-"""Core functionality module
-
-This module provides document functionality including:
-- 3 functions: __post_init__, type, get_content_as_string
-- 3 classes: DocumentType, DocumentFormat, Document
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
+
 class DocumentType(Enum):
     """Types of documents."""
     TEXT = "text"
@@ -121,12 +61,13 @@ class Document:
     version: Optional[str] = None
     
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.metadata is None:
             self.metadata = {}
@@ -164,6 +105,3 @@ Args:
             return self.content.decode(encoding)
         else:
             return str(self.content)
-
-
-

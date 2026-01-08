@@ -1,6 +1,7 @@
 import os
 import re
 
+from fix_src_doubling import FunctionName, ClassName
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -10,63 +11,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Core functionality module
-
-"""Core functionality module
+#!/usr/bin/env python3
 
 This module provides fix_src_doubling functionality including:
 - 1 functions: fix_src_doubling
@@ -75,14 +20,9 @@ This module provides fix_src_doubling functionality including:
 Usage:
     # Example usage here
 """
+
 logger = get_logger(__name__)
-This module provides fix_src_doubling functionality including:
-- 1 functions: fix_src_doubling
-- 0 classes: 
 
-Usage:
-    # Example usage here
-"""
 def fix_src_doubling(directory):
     # Matches [label](.../src/README.md)
     # We want to change it to [label](.../README.md)

@@ -26,73 +26,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides encryptor functionality including:
-- 11 functions: __init__, encrypt, decrypt...
-- 2 classes: EncryptionError, Encryptor
-
-Usage:
-    # Example usage here
-"""
 Encryption utilities.
 """
-
-
 
 logger = get_logger(__name__)
 
@@ -101,12 +36,10 @@ try:
 except ImportError:
     CRYPTOGRAPHY_AVAILABLE = False
 
-
 class EncryptionError(CodomyrmexError):
     """Raised when encryption operations fail."""
 
     pass
-
 
 class Encryptor:
     """Encryptor for various algorithms."""

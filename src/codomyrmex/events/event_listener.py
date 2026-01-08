@@ -383,12 +383,13 @@ def event_handler(event_types: Union[EventType, List[EventType]],
         Decorated function
     """
     def decorator(func: Callable[[Event], Any]) -> Callable[[Event], Any]:
-    """Brief description of decorator.
-
-Args:
-    func : Description of func
-
-    Returns: Description of return value (type: Any)
+        """Brief description of decorator.
+        
+        Args:
+            func : Description of func
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         func._event_types = event_types if isinstance(event_types, list) else [event_types]
         func._event_filter = filter_func

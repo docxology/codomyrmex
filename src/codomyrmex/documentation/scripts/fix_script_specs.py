@@ -1,7 +1,6 @@
 from pathlib import Path
 import os
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -23,52 +22,12 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Core functionality module
-
-"""Core functionality module
-
+#!/usr/bin/env python3
+"""
+WRAPPER_TEMPLATE =
+"""
+#!/usr/bin/env python3
+"""
 This module provides fix_script_specs functionality including:
 - 1 functions: fix_script_specs
 - 0 classes: 
@@ -76,15 +35,11 @@ This module provides fix_script_specs functionality including:
 Usage:
     # Example usage here
 """
+
+
 logger = get_logger(__name__)
-This module provides fix_script_specs functionality including:
-- 1 functions: fix_script_specs
-- 0 classes: 
 
-Usage:
-    # Example usage here
-"""
-WRAPPER_TEMPLATE = """# scripts/{module_name} - Functional Specification
+# scripts/{module_name} - Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
@@ -123,13 +78,6 @@ This module contains the **automation scripts** and **CLI entry points** for the
 """
 
 def fix_script_specs(root_dir):
-    """Brief description of fix_script_specs.
-
-Args:
-    root_dir : Description of root_dir
-
-    Returns: Description of return value
-"""
     root = Path(root_dir)
     count = 0
     

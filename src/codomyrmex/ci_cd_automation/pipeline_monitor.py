@@ -16,80 +16,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides pipeline_monitor functionality including:
-- 11 functions: monitor_pipeline_health, generate_pipeline_reports, __init__...
-- 4 classes: ReportType, PipelineMetrics, PipelineReport...
-
-Usage:
-    # Example usage here
-"""
 Pipeline Monitoring Module for Codomyrmex CI/CD Automation.
 
 This module provides comprehensive pipeline monitoring, health checks,
 and reporting capabilities for CI/CD pipelines.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 class ReportType(Enum):
     """Types of pipeline reports."""
@@ -98,7 +33,6 @@ class ReportType(Enum):
     QUALITY = "quality"
     COMPLIANCE = "compliance"
     SUMMARY = "summary"
-
 
 @dataclass
 class PipelineMetrics:
@@ -112,7 +46,6 @@ class PipelineMetrics:
     end_time: Optional[datetime] = None
     error_count: int = 0
     warning_count: int = 0
-
 
 @dataclass
 class PipelineReport:
@@ -132,7 +65,6 @@ class PipelineReport:
     metrics: dict[str, Any]
     errors: list[str]
     warnings: list[str]
-
 
 class PipelineMonitor:
     """Pipeline monitoring and reporting system."""
@@ -356,7 +288,6 @@ class PipelineMonitor:
             }
         }
 
-
 def monitor_pipeline_health(pipeline_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
     """Monitor pipeline health and return status.
 
@@ -369,7 +300,6 @@ def monitor_pipeline_health(pipeline_name: str, workspace_dir: Optional[str] = N
     """
     monitor = PipelineMonitor(workspace_dir)
     return monitor.get_pipeline_health(pipeline_name)
-
 
 def generate_pipeline_reports(
     execution_id: str,

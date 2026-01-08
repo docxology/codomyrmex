@@ -17,76 +17,13 @@ from codomyrmex.terminal_interface.terminal_utils import TerminalFormatter
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides status_reporter functionality including:
-- 20 functions: __init__, format_message, check_python_environment...
-- 1 classes: StatusReporter
-
-Usage:
-    # Example usage here
-"""
 Status Reporter for Codomyrmex System Discovery
 
 Provides detailed status reporting capabilities for the Codomyrmex ecosystem,
 including health checks, dependency analysis, and system diagnostics.
 """
-
 
 try:
 
@@ -94,7 +31,6 @@ try:
 except ImportError:
 
     logger = logging.getLogger(__name__)
-
 
 class StatusReporter:
     """
@@ -591,7 +527,6 @@ class StatusReporter:
         except Exception as e:
             print(self.format_message(f"Failed to export report: {e}", "error"))
             return ""
-
 
 if __name__ == "__main__":
     # Demo the status reporter

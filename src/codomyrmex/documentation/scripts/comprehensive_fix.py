@@ -2,18 +2,7 @@ from pathlib import Path
 import re
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -36,16 +25,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides comprehensive_fix functionality including:
-- 3 functions: fix_example_tutorial_references, fix_docs_index_references, main
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Comprehensive fixer for all documentation issues.
 
 Fixes:
@@ -55,6 +34,11 @@ Fixes:
 """
 
 
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 def fix_example_tutorial_references():
     """Fix all references in example_tutorial.md files."""
@@ -215,4 +199,3 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
-

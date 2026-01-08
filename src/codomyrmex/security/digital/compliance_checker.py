@@ -21,69 +21,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides compliance_checker functionality including:
-- 24 functions: check_compliance, __post_init__, __init__...
-- 4 classes: ComplianceStandard, ComplianceRequirement, ComplianceCheckResult...
-
-Usage:
-    # Example usage here
-"""
 Compliance Checker for Codomyrmex Security Audit Module.
 
 Provides compliance validation against security standards including:
@@ -95,12 +32,10 @@ Provides compliance validation against security standards including:
 - HIPAA
 """
 
-
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 class ComplianceStandard(Enum):
     """Supported compliance standards."""
@@ -110,7 +45,6 @@ class ComplianceStandard(Enum):
     PCI_DSS = "PCI_DSS"
     GDPR = "GDPR"
     HIPAA = "HIPAA"
-
 
 @dataclass
 class ComplianceRequirement:
@@ -124,7 +58,6 @@ class ComplianceRequirement:
     automated_check: bool = True
     evidence_required: bool = False
 
-
 @dataclass
 class ComplianceCheckResult:
     """Result of a compliance check."""
@@ -136,16 +69,16 @@ class ComplianceCheckResult:
     timestamp: datetime = None
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.timestamp is None:
             self.timestamp = datetime.now(timezone.utc)
-
 
 class ComplianceChecker:
     """
@@ -756,96 +689,102 @@ class ComplianceChecker:
             return ("compliant", "No unencrypted external endpoints detected", [], None)
 
     def _check_operations_security(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-    """Brief description of _check_operations_security.
-
-Args:
-    self : Description of self
-    target_path : Description of target_path
-    requirement : Description of requirement
-
-    Returns: Description of return value (type: Any)
+        """Brief description of _check_operations_security.
+        
+        Args:
+            self : Description of self
+            target_path : Description of target_path
+            requirement : Description of requirement
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return ("manual_review_required", "Operations security requires comprehensive security audit",
                ["Manual review required"], None)
 
     def _check_communications_security(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-    """Brief description of _check_communications_security.
-
-Args:
-    self : Description of self
-    target_path : Description of target_path
-    requirement : Description of requirement
-
-    Returns: Description of return value (type: Any)
+        """Brief description of _check_communications_security.
+        
+        Args:
+            self : Description of self
+            target_path : Description of target_path
+            requirement : Description of requirement
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return ("manual_review_required", "Communications security requires network security audit",
                ["Manual review required"], None)
 
     def _check_configuration_standards(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-    """Brief description of _check_configuration_standards.
-
-Args:
-    self : Description of self
-    target_path : Description of target_path
-    requirement : Description of requirement
-
-    Returns: Description of return value (type: Any)
+        """Brief description of _check_configuration_standards.
+        
+        Args:
+            self : Description of self
+            target_path : Description of target_path
+            requirement : Description of requirement
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return ("manual_review_required", "Configuration standards require security policy review",
                ["Manual review required"], None)
 
     def _check_data_encryption(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-    """Brief description of _check_data_encryption.
-
-Args:
-    self : Description of self
-    target_path : Description of target_path
-    requirement : Description of requirement
-
-    Returns: Description of return value (type: Any)
+        """Brief description of _check_data_encryption.
+        
+        Args:
+            self : Description of self
+            target_path : Description of target_path
+            requirement : Description of requirement
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return ("manual_review_required", "Data encryption requires cryptography audit",
                ["Manual review required"], None)
 
     def _check_security_updates(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-    """Brief description of _check_security_updates.
-
-Args:
-    self : Description of self
-    target_path : Description of target_path
-    requirement : Description of requirement
-
-    Returns: Description of return value (type: Any)
+        """Brief description of _check_security_updates.
+        
+        Args:
+            self : Description of self
+            target_path : Description of target_path
+            requirement : Description of requirement
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return ("manual_review_required", "Security updates require patch management audit",
                ["Manual review required"], None)
 
     def _check_security_of_processing(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-    """Brief description of _check_security_of_processing.
-
-Args:
-    self : Description of self
-    target_path : Description of target_path
-    requirement : Description of requirement
-
-    Returns: Description of return value (type: Any)
+        """Brief description of _check_security_of_processing.
+        
+        Args:
+            self : Description of self
+            target_path : Description of target_path
+            requirement : Description of requirement
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return ("manual_review_required", "Security of processing requires GDPR compliance audit",
                ["Manual review required"], None)
 
     def _check_technical_safeguards(self, target_path: str, requirement: ComplianceRequirement) -> Tuple[str, str, List[str], Optional[str]]:
-    """Brief description of _check_technical_safeguards.
-
-Args:
-    self : Description of self
-    target_path : Description of target_path
-    requirement : Description of requirement
-
-    Returns: Description of return value (type: Any)
+        """Brief description of _check_technical_safeguards.
+        
+        Args:
+            self : Description of self
+            target_path : Description of target_path
+            requirement : Description of requirement
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return ("manual_review_required", "Technical safeguards require HIPAA compliance audit",
                ["Manual review required"], None)
-
 
 # Convenience functions
 def check_compliance(target_path: str, standards: Optional[List[str]] = None) -> List[ComplianceCheckResult]:

@@ -11,8 +11,8 @@ import networkx as nx
 import numpy as np
 
 from codomyrmex.cerebrum import (
-from codomyrmex.cerebrum import (
 from codomyrmex.cerebrum.visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
+from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -20,10 +20,51 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
     ActiveInferenceAgent,
     BayesianNetwork,
+    Case,
+    CaseBase,
     CaseRetriever,
     CerebrumConfig,
+    CerebrumEngine,
     InferenceEngine,
     Model,
 )
@@ -45,14 +86,6 @@ except ImportError:
     plt = None
     nx = None
 
-
-    BayesianNetwork,
-    Case,
-    CaseBase,
-    CerebrumEngine,
-    InferenceEngine,
-)
-
 logger = get_logger(__name__)
 
 
@@ -66,7 +99,6 @@ class FPFCombinatoricsAnalyzer:
             fpf_spec_path: Path to FPF-Spec.md
             output_dir: Output directory (default: output/cerebrum/combinatorics)
         """
-        setup_logging()
         self.logger = get_logger(__name__)
 
         # Load FPF

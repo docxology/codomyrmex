@@ -6,6 +6,15 @@ This script reviews error handling patterns across all modules to identify
 inconsistencies and ensure standardization.
 """
 
+import sys
+from pathlib import Path
+try:
+    import codomyrmex
+except ImportError:
+    # Add project root to sys.path
+    project_root = Path(__file__).resolve().parent.parent.parent
+    src_path = project_root / "src"
+    sys.path.insert(0, str(src_path))
 if __name__ == "__main__":
     import ast
     import re
@@ -236,4 +245,3 @@ if __name__ == "__main__":
 
     if __name__ == '__main__':
         sys.exit(main())
-

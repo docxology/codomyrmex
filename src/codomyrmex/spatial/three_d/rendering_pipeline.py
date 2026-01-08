@@ -7,18 +7,17 @@ from .engine_3d import Camera3D, Light3D, Object3D, Scene3D
 
 logger = get_logger(__name__)
 
-
-
 class ShaderManager:
     """Manages 3D shaders."""
 
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.shaders: dict[str, str] = {}
 
@@ -31,12 +30,13 @@ class TextureManager:
     """Manages 3D textures."""
 
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.textures: dict[str, Any] = {}
 
@@ -50,12 +50,13 @@ class RenderPipeline:
     """Main rendering pipeline."""
 
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.shader_manager = ShaderManager()
         self.texture_manager = TextureManager()

@@ -3,14 +3,7 @@ from typing import Any, Dict, List, Optional
 import logging
 import re
 
-
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 
 
@@ -37,6 +30,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """Skill Registry Module
 
+
 """Core functionality module
 
 This module provides skill_registry functionality including:
@@ -44,6 +38,7 @@ This module provides skill_registry functionality including:
 - 1 classes: SkillRegistry
 
 Usage:
+    from skill_registry import FunctionName, ClassName
     # Example usage here
 """
 Handles indexing, categorizing, and searching skills.

@@ -4,6 +4,7 @@ import os
 import sys
 
 from dataclasses import dataclass
+from db_manager import FunctionName, ClassName
 from enum import Enum
 import psycopg2
 import pymysql
@@ -11,6 +12,50 @@ import sqlite3
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -146,12 +191,13 @@ class DatabaseConnection:
     connection_count: int = 0
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.created_at = datetime.now(timezone.utc)
 

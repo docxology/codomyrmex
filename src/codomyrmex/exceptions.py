@@ -1,39 +1,7 @@
 from pathlib import Path
 from typing import Any, Optional, Union
 
-
-
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Removed self-import causing circular dependency
-# Removed self-import causing circular dependency
+# from codomyrmex.logging_monitoring import get_logger
 
 
 """Codomyrmex Exception Classes

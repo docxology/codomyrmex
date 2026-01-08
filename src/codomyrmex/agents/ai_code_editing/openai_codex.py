@@ -50,24 +50,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """OpenAI Codex Integration Module.
+
 
 """Core functionality module
 
@@ -76,6 +60,7 @@ This module provides openai_codex functionality including:
 - 3 classes: CodexRequest, CodexResponse, OpenAICodex
 
 Usage:
+    from openai_codex import FunctionName, ClassName
     # Example usage here
 """
 This module provides integration with OpenAI's API for advanced code
@@ -84,8 +69,6 @@ code-capable models.
 
 Reference: https://platform.openai.com/docs/guides/code-generation
 """
-
-
 
 logger = get_logger(__name__)
 

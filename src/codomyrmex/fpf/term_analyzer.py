@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Term analyzer for extracting shared terms and variables across FPF sections.
 
+
 """Core functionality module
 
 This module provides term_analyzer functionality including:
@@ -8,6 +9,7 @@ This module provides term_analyzer functionality including:
 - 1 classes: TermAnalyzer
 
 Usage:
+    from term_analyzer import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -231,6 +233,4 @@ class TermAnalyzer:
         cross_section.sort(key=lambda x: x[1], reverse=True)
 
         return cross_section
-
-
 

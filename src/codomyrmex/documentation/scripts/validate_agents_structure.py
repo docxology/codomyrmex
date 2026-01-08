@@ -8,27 +8,8 @@ import sys
 
 from dataclasses import dataclass, asdict
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -71,15 +52,20 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides validate_agents_structure functionality including:
-- 20 functions: extract_orchestrator_commands, fix_script_orchestrator_agents, main...
-- 4 classes: ValidationIssue, AgentsFileValidation, StructureValidationReport...
 
-Usage:
-    # Example usage here
-"""
+@dataclass
+class ValidationIssue:
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
 AGENTS.md Structure Validator for Codomyrmex Documentation.
 
 Validates that all AGENTS.md files follow the standardized structure.
@@ -88,15 +74,11 @@ Validates that all AGENTS.md files follow the standardized structure.
 
 try:
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-@dataclass
-class ValidationIssue:
-    """Represents a validation issue."""
+logger = get_logger(__name__)
+
+Represents a validation issue."""
     file_path: str
     issue_type: str
     description: str
@@ -1134,4 +1116,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

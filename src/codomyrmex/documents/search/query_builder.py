@@ -1,13 +1,6 @@
 from typing import List, Optional
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
 
 
 
@@ -34,28 +27,18 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Query builder for document search."""
 
-
-
-"""Core functionality module
-
-This module provides query_builder functionality including:
-- 6 functions: build_query, __init__, add_term...
-- 1 classes: QueryBuilder
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 class QueryBuilder:
     """Builder for constructing search queries."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.terms: List[str] = []
         self.filters: dict = {}
@@ -103,6 +86,4 @@ def build_query(terms: List[str], filters: dict = None, sort_by: str = None) -> 
     if sort_by:
         builder.set_sort(sort_by)
     return builder.build()
-
-
 

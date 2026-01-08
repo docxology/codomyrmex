@@ -47,26 +47,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Inter-agent communication system."""
-
-
 
 """Core functionality module
 
@@ -75,6 +56,7 @@ This module provides message_bus functionality including:
 - 2 classes: Message, MessageBus
 
 Usage:
+    from message_bus import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

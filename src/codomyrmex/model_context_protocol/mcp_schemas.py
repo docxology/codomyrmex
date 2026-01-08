@@ -46,26 +46,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Core functionality module
 
 This module provides mcp_schemas functionality including:
@@ -73,11 +53,10 @@ This module provides mcp_schemas functionality including:
 - 3 classes: MCPErrorDetail, MCPToolCall, MCPToolResult
 
 Usage:
+    from mcp_schemas import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
-
-
 
 class MCPErrorDetail(BaseModel):
     """Standard structure for detailed error information in MCP responses."""

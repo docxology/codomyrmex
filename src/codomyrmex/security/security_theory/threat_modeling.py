@@ -46,36 +46,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Threat modeling methodologies."""
 
-
-
-"""Core functionality module
-
-This module provides threat_modeling functionality including:
-- 5 functions: create_threat_model, analyze_threats, __init__...
-- 3 classes: Threat, ThreatModel, ThreatModelBuilder
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -105,12 +77,13 @@ class ThreatModelBuilder:
     """Builds threat models."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         logger.info("ThreatModelBuilder initialized")
     
@@ -163,6 +136,4 @@ def analyze_threats(
         "high_count": sum(1 for t in threat_model.threats if t.severity == "high"),
         "threats": threat_model.threats,
     }
-
-
 

@@ -19,82 +19,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides serializer functionality including:
-- 14 functions: __init__, serialize, deserialize...
-- 2 classes: SerializationError, Serializer
-
-Usage:
-    # Example usage here
-"""
 Base serializer interface and implementations.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 class SerializationError(CodomyrmexError):
     """Raised when serialization operations fail."""
 
     pass
-
 
 class Serializer:
     """Base serializer class."""
@@ -291,5 +224,4 @@ class Serializer:
         if deserializer:
             # Store deserializer separately - would need additional structure
             pass
-
 

@@ -51,25 +51,9 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """
+
 """Main entry point and utility functions
 
 This module provides analyze_project functionality including:
@@ -85,8 +69,6 @@ Comprehensive Project Analysis Tool
 Analyzes the Codomyrmex project structure, dependencies, and code quality.
 Provides insights for maintenance and development.
 """
-
-
 
 def analyze_project_structure() -> Dict[str, Any]:
     """Analyze the overall project structure."""

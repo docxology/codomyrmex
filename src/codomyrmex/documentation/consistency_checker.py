@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from consistency_checker import FunctionName, ClassName
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -28,11 +29,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
 """Documentation Consistency Checker Module.
+
 
 """Testing utilities and test helpers
 
@@ -47,22 +45,19 @@ This module ensures documentation consistency across the Codomyrmex platform,
 checking for naming conventions, formatting standards, and content alignment.
 """
 
-
-
 logger = get_logger(__name__)
-
-
 
 class DocumentationConsistencyChecker:
     """Checks documentation consistency across files."""
 
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.naming_conventions = {
             "files": ["README.md", "CHANGELOG.md", "CONTRIBUTING.md"],
@@ -251,9 +246,6 @@ Args:
             report_lines.append("⚠️ Multiple consistency issues need attention.")
 
         return "\n".join(report_lines)
-
-
-
 
 def generate_quality_tests() -> str:
     """Generate tests for the quality assessment modules."""

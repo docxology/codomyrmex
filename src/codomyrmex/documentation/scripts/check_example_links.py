@@ -51,37 +51,22 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    # Fallback logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides check_example_links functionality including:
-- 15 functions: main, __init__, check_all_links...
-- 1 classes: LinkChecker
 
-Usage:
-    # Example usage here
-"""
+class LinkChecker:
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
 Link Checker for Codomyrmex Examples Documentation
 
 This script validates all links in README.md files and other documentation
@@ -113,15 +98,10 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    logger = get_logger(__name__)
-except ImportError:
-    # Fallback logging
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
+logger = get_logger(__name__)
 
-class LinkChecker:
-    """Checks links in Codomyrmex examples documentation."""
+Checks links in Codomyrmex examples documentation."""
 
     def __init__(self, project_root: Path):
         """Initialize the link checker."""

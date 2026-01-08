@@ -47,26 +47,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Reasoning model theories and implementations."""
-
-
 
 """Core functionality module
 
@@ -75,6 +56,7 @@ This module provides reasoning_models functionality including:
 - 5 classes: ReasoningType, ReasoningModel, SymbolicReasoningModel...
 
 Usage:
+    from reasoning_models import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

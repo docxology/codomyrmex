@@ -46,36 +46,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Risk assessment methodologies."""
 
-
-
-"""Core functionality module
-
-This module provides risk_assessment functionality including:
-- 7 functions: assess_risk, calculate_risk_score, __init__...
-- 3 classes: Risk, RiskAssessment, RiskAssessor
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -104,12 +76,13 @@ class RiskAssessor:
     """Performs risk assessments."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         logger.info("RiskAssessor initialized")
     
@@ -172,6 +145,4 @@ def calculate_risk_score(likelihood: str, impact: str) -> float:
     impact_scores = {"low": 0.25, "medium": 0.5, "high": 0.75, "critical": 1.0}
     
     return likelihood_scores.get(likelihood, 0.5) * impact_scores.get(impact, 0.5)
-
-
 

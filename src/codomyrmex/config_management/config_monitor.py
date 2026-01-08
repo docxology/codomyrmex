@@ -17,80 +17,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides config_monitor functionality including:
-- 14 functions: monitor_config_changes, __init__, _ensure_directories...
-- 4 classes: ConfigChange, ConfigAudit, ConfigSnapshot...
-
-Usage:
-    # Example usage here
-"""
 Configuration Monitoring Module for Codomyrmex Configuration Management.
 
 This module provides configuration monitoring, change tracking, drift detection,
 and compliance auditing for configuration management.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 @dataclass
 class ConfigChange:
@@ -104,7 +39,6 @@ class ConfigChange:
     changes: dict[str, Any] = field(default_factory=dict)
     source: str = "unknown"  # Who made the change
 
-
 @dataclass
 class ConfigAudit:
     """Configuration audit record."""
@@ -116,7 +50,6 @@ class ConfigAudit:
     recommendations: list[str]
     audit_scope: dict[str, Any]
 
-
 @dataclass
 class ConfigSnapshot:
     """Configuration snapshot for drift detection."""
@@ -125,7 +58,6 @@ class ConfigSnapshot:
     environment: str
     config_hashes: dict[str, str]
     total_files: int
-
 
 class ConfigurationMonitor:
     """Configuration monitoring and auditing system."""
@@ -501,7 +433,6 @@ class ConfigurationMonitor:
             "last_audit": self._audits[-1].timestamp.isoformat() if self._audits else None,
             "monitoring_status": "active"
         }
-
 
 def monitor_config_changes(
     config_paths: list[str],

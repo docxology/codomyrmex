@@ -12,15 +12,7 @@ from urllib.parse import urlparse, parse_qs
 from .data_provider import DataProvider
 from codomyrmex.logging_monitoring import get_logger
 
-"""Core functionality module
 
-This module provides server functionality including:
-- 12 functions: __init__, do_POST, do_GET...
-- 1 classes: WebsiteServer
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     """
@@ -80,12 +72,13 @@ Args:
             super().do_GET()
 
     def handle_config_list(self):
-    """Brief description of handle_config_list.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of handle_config_list.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.data_provider:
              data = self.data_provider.get_config_files()
@@ -94,13 +87,14 @@ Args:
              self.send_error(500)
 
     def handle_config_get(self, path: str):
-    """Brief description of handle_config_get.
-
-Args:
-    self : Description of self
-    path : Description of path
-
-    Returns: Description of return value
+        """Brief description of handle_config_get.
+        
+        Args:
+            self : Description of self
+            path : Description of path
+        
+            Returns: Description of return value
+        """
 """
          filename = path.replace("/api/config/", "")
          if self.data_provider:
@@ -111,12 +105,13 @@ Args:
                  self.send_error(404, str(e))
 
     def handle_config_save(self):
-    """Brief description of handle_config_save.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of handle_config_save.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
          parsed_path = urlparse(self.path)
          filename = parsed_path.path.replace("/api/config/", "")
@@ -133,12 +128,13 @@ Args:
                  self.send_json_response({"error": str(e)}, status=500)
 
     def handle_docs_list(self):
-    """Brief description of handle_docs_list.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of handle_docs_list.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.data_provider:
              data = self.data_provider.get_doc_tree()
@@ -147,12 +143,13 @@ Args:
              self.send_error(500)
 
     def handle_pipelines_list(self):
-    """Brief description of handle_pipelines_list.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of handle_pipelines_list.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.data_provider:
              data = self.data_provider.get_pipeline_status()
@@ -284,14 +281,15 @@ Args:
              self.send_error(500, "Data provider not initialized")
 
     def send_json_response(self, data, status=200):
-    """Brief description of send_json_response.
-
-Args:
-    self : Description of self
-    data : Description of data
-    status : Description of status
-
-    Returns: Description of return value
+        """Brief description of send_json_response.
+        
+        Args:
+            self : Description of self
+            data : Description of data
+            status : Description of status
+        
+            Returns: Description of return value
+        """
 """
         self.send_response(status)
         self.send_header('Content-type', 'application/json')

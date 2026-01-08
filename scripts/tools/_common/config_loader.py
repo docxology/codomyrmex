@@ -5,6 +5,15 @@ Supports loading from YAML and JSON files with environment variable substitution
 and validation.
 """
 
+import sys
+from pathlib import Path
+try:
+    import codomyrmex
+except ImportError:
+    # Add project root to sys.path
+    project_root = Path(__file__).resolve().parent.parent.parent
+    src_path = project_root / "src"
+    sys.path.insert(0, str(src_path))
 import json
 import os
 import re
@@ -144,4 +153,3 @@ def validate_config(config: Dict[str, Any], required_keys: list) -> None:
     
     if missing_keys:
         raise ValueError(f"Missing required configuration keys: {', '.join(missing_keys)}")
-

@@ -10,27 +10,8 @@ import time
 
 from dataclasses import dataclass, asdict
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -73,15 +54,20 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides comprehensive_filepath_audit functionality including:
-- 18 functions: main, to_dict, __init__...
-- 7 classes: BrokenLink, SignpostingIssue, StructureIssue...
 
-Usage:
-    # Example usage here
-"""
+@dataclass
+class BrokenLink:
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
 Comprehensive Filepath and Signpost Audit for Codomyrmex Repository.
 
 This script performs a complete repository-wide audit of:
@@ -98,15 +84,11 @@ Generates comprehensive reports for all audit areas.
 
 try:
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-@dataclass
-class BrokenLink:
-    """Represents a broken link."""
+logger = get_logger(__name__)
+
+Represents a broken link."""
     file_path: str
     line_number: int
     link_text: str
@@ -1080,4 +1062,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

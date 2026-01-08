@@ -16,69 +16,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides security_analyzer functionality including:
-- 19 functions: analyze_file_security, analyze_directory_security, __init__...
-- 4 classes: SecurityIssue, SecurityFinding, SecurityAnalyzer...
-
-Usage:
-    # Example usage here
-"""
 Security Analyzer for Codomyrmex Security Audit Module.
 
 Provides advanced security analysis capabilities including:
@@ -89,12 +26,10 @@ Provides advanced security analysis capabilities including:
 - Security best practices validation
 """
 
-
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 class SecurityIssue(Enum):
     """Types of security issues that can be detected."""
@@ -109,7 +44,6 @@ class SecurityIssue(Enum):
     LOGGING_SENSITIVE_DATA = "logging_sensitive_data"
     MISSING_INPUT_VALIDATION = "missing_input_validation"
 
-
 @dataclass
 class SecurityFinding:
     """Represents a security finding."""
@@ -123,7 +57,6 @@ class SecurityFinding:
     recommendation: str
     cwe_id: Optional[str] = None
     context: Optional[Dict[str, Any]] = None
-
 
 class SecurityAnalyzer:
     """
@@ -378,18 +311,18 @@ class SecurityAnalyzer:
 
         return all_findings
 
-
 class ASTSecurityAnalyzer(ast.NodeVisitor):
     """AST visitor for security analysis of Python code."""
 
     def __init__(self, filepath: str):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    filepath : Description of filepath
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+            filepath : Description of filepath
+        
+            Returns: Description of return value
+        """
 """
         self.filepath = filepath
         self.findings: List[SecurityFinding] = []
@@ -481,7 +414,6 @@ Args:
             return node.id == "os"
         return False
 
-
 # Convenience functions
 def analyze_file_security(filepath: str) -> List[SecurityFinding]:
     """
@@ -495,7 +427,6 @@ def analyze_file_security(filepath: str) -> List[SecurityFinding]:
     """
     analyzer = SecurityAnalyzer()
     return analyzer.analyze_file(filepath)
-
 
 def analyze_directory_security(directory: str, recursive: bool = True) -> List[SecurityFinding]:
     """

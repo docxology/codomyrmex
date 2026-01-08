@@ -47,36 +47,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Physical surveillance monitoring."""
 
-
-
-"""Core functionality module
-
-This module provides surveillance functionality including:
-- 5 functions: monitor_physical_access, log_physical_event, __init__...
-- 2 classes: PhysicalEvent, SurveillanceMonitor
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -96,12 +68,13 @@ class SurveillanceMonitor:
     """Monitors physical security events."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.events: list[PhysicalEvent] = []
         logger.info("SurveillanceMonitor initialized")
@@ -158,6 +131,4 @@ def log_physical_event(
     if monitor is None:
         monitor = SurveillanceMonitor()
     return monitor.log_event(event_type, location, description, severity)
-
-
 

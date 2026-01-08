@@ -14,82 +14,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides event_schema functionality including:
-- 17 functions: create_system_startup_event, create_module_load_event, create_analysis_start_event...
-- 4 classes: EventPriority, EventType, Event...
-
-Usage:
-    # Example usage here
-"""
 Event Schema for Codomyrmex Event System
 
 This module defines event types, schemas, and validation for the Codomyrmex
 event-driven architecture.
 """
 
-
 # Import logging
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 class EventPriority(Enum):
     """Event priority levels for logging and processing."""
@@ -100,7 +35,6 @@ class EventPriority(Enum):
     WARNING = "warning"
     ERROR = "error"
     CRITICAL = "critical"
-
 
 class EventType(Enum):
     """Standard event types in Codomyrmex."""
@@ -168,7 +102,6 @@ class EventType(Enum):
     # Custom events (for extensions)
     CUSTOM = "custom"
 
-
 @dataclass
 class Event:
     """Represents an event in the system."""
@@ -218,7 +151,6 @@ class Event:
         """Create event from JSON string."""
         data = json.loads(json_str)
         return cls.from_dict(data)
-
 
 class EventSchema:
     """
@@ -432,7 +364,6 @@ class EventSchema:
 
         logger.info(f"Loaded {len(self.schemas)} standard event schemas")
 
-
 # Convenience functions for creating common events
 
 def create_system_startup_event(version: str, components: List[str]) -> Event:
@@ -447,7 +378,6 @@ def create_system_startup_event(version: str, components: List[str]) -> Event:
         }
     )
 
-
 def create_module_load_event(module_name: str, version: str, load_time: float) -> Event:
     """Create a module load event."""
     return Event(
@@ -460,7 +390,6 @@ def create_module_load_event(module_name: str, version: str, load_time: float) -
         }
     )
 
-
 def create_analysis_start_event(analysis_type: str, target: str, parameters: Optional[Dict[str, Any]] = None) -> Event:
     """Create an analysis start event."""
     return Event(
@@ -472,7 +401,6 @@ def create_analysis_start_event(analysis_type: str, target: str, parameters: Opt
             "parameters": parameters or {}
         }
     )
-
 
 def create_analysis_complete_event(analysis_type: str, target: str, results: Dict[str, Any], duration: float, success: bool) -> Event:
     """Create an analysis complete event."""
@@ -488,7 +416,6 @@ def create_analysis_complete_event(analysis_type: str, target: str, results: Dic
         }
     )
 
-
 def create_error_event(event_type: EventType, source: str, error_message: str, error_type: str = "unknown", context: Optional[Dict[str, Any]] = None) -> Event:
     """Create an error event."""
     return Event(
@@ -501,7 +428,6 @@ def create_error_event(event_type: EventType, source: str, error_message: str, e
         },
         priority=2  # High priority for errors
     )
-
 
 def create_metric_event(metric_name: str, value: Union[int, float, str, bool], metric_type: str = "gauge", labels: Optional[Dict[str, str]] = None) -> Event:
     """Create a metric update event."""
@@ -516,7 +442,6 @@ def create_metric_event(metric_name: str, value: Union[int, float, str, bool], m
             "timestamp": __import__('time').time()
         }
     )
-
 
 def create_alert_event(alert_name: str, level: str, message: str, threshold: Any = None, current_value: Any = None) -> Event:
     """Create an alert event."""

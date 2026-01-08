@@ -17,75 +17,10 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides certificate_validator functionality including:
-- 12 functions: validate_ssl_certificates, __post_init__, __init__...
-- 2 classes: SSLValidationResult, CertificateValidator
-
-Usage:
-    # Example usage here
-"""
 Certificate Validator for Codomyrmex Security Audit Module.
 
 Provides SSL/TLS certificate validation, monitoring, and security assessment.
 """
-
-
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -100,7 +35,6 @@ try:
 except ImportError:
 
     logger = logging.getLogger(__name__)
-
 
 @dataclass
 class SSLValidationResult:
@@ -120,18 +54,18 @@ class SSLValidationResult:
     validation_timestamp: datetime = None
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.validation_errors is None:
             self.validation_errors = []
         if self.validation_timestamp is None:
             self.validation_timestamp = datetime.now(timezone.utc)
-
 
 class CertificateValidator:
     """
@@ -566,7 +500,6 @@ class CertificateValidator:
             return "D"
         else:
             return "F"
-
 
 # Convenience functions
 def validate_ssl_certificates(

@@ -2,54 +2,19 @@ from pathlib import Path
 import re
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides fix_template_paths functionality including:
-- 3 functions: fix_template_paths, calculate_correct_path, calculate_correct_path_text
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Fix template/module_template path references to point to correct location.
 """
 
+#!/usr/bin/env python3
 
+logger = get_logger(__name__)
 
 def fix_template_paths():
     """Fix all template/module_template path references."""
@@ -103,7 +68,6 @@ def fix_template_paths():
     print(f"\n✅ Fixed {fixed_count} files")
     return 0
 
-
 def calculate_correct_path(from_file: Path, repo_root: Path) -> str:
     """Calculate correct relative path to module_template/MCP_TOOL_SPECIFICATION.md."""
     target = repo_root / 'src' / 'codomyrmex' / 'module_template' / 'MCP_TOOL_SPECIFICATION.md'
@@ -119,12 +83,9 @@ def calculate_correct_path(from_file: Path, repo_root: Path) -> str:
         up_path = '../' * depth
         return f'{up_path}src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md'
 
-
 def calculate_correct_path_text(from_file: Path, repo_root: Path) -> str:
     """Calculate correct path for text (not markdown link)."""
     return calculate_correct_path(from_file, repo_root)
 
-
 if __name__ == '__main__':
     sys.exit(fix_template_paths())
-

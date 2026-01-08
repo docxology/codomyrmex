@@ -8,27 +8,8 @@ import sys
 
 from dataclasses import dataclass
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -71,15 +52,20 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides complete_placeholders functionality including:
-- 9 functions: main, __init__, find_markdown_files...
-- 3 classes: Placeholder, Replacement, PlaceholderCompleter
 
-Usage:
-    # Example usage here
-"""
+@dataclass
+class Placeholder:
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
 Placeholder Content Completer for Codomyrmex Documentation.
 
 Systematically identifies and completes placeholder content in documentation.
@@ -88,15 +74,11 @@ Systematically identifies and completes placeholder content in documentation.
 
 try:
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-@dataclass
-class Placeholder:
-    """Represents a placeholder in documentation."""
+logger = get_logger(__name__)
+
+Represents a placeholder in documentation."""
     file_path: str
     line_number: int
     pattern: str
@@ -401,5 +383,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

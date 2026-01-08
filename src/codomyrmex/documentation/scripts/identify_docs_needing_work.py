@@ -3,7 +3,6 @@ from typing import List, Dict
 import os
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -25,32 +24,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""Identify documentation files needing improvement."""
-
-
-"""Main entry point and utility functions
-
-This module provides identify_docs_needing_work functionality including:
-- 4 functions: check_placeholder_content, check_broken_links, analyze_directory...
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
 def check_placeholder_content(content: str) -> bool:
-    """Check if content has placeholder text."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """Identify documentation files needing improvement."""
+
+logger = get_logger(__name__)
+
+Check if content has placeholder text."""
     placeholders = [
         "[Architecture description if applicable]",
         "[Functional requirements for",
@@ -160,4 +146,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

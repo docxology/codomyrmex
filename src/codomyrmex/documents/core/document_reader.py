@@ -20,12 +20,13 @@ class DocumentReader:
     """Unified document reader supporting multiple formats."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.config = get_config()
     
@@ -149,6 +150,4 @@ def read_document(
     """
     reader = DocumentReader()
     return reader.read(file_path, format=format, encoding=encoding)
-
-
 

@@ -13,75 +13,11 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides workflow_dag functionality including:
-- 16 functions: to_dict, __init__, add_task...
-- 5 classes: DAGValidationError, CycleDetectedError, TaskStatus...
-
-Usage:
-    # Example usage here
-"""
 Workflow DAG (Directed Acyclic Graph) Implementation for Codomyrmex
 
 This module provides comprehensive DAG functionality for complex workflow management,
 including dependency resolution, cycle detection, topological sorting, and visualization.
 """
-
 
 # Import logging
 try:
@@ -89,16 +25,13 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
-
 class DAGValidationError(Exception):
     """Exception raised when DAG validation fails."""
     pass
 
-
 class CycleDetectedError(DAGValidationError):
     """Exception raised when a cycle is detected in the DAG."""
     pass
-
 
 class TaskStatus(Enum):
     """Status of a task in the workflow."""
@@ -107,7 +40,6 @@ class TaskStatus(Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     SKIPPED = "skipped"
-
 
 @dataclass
 class DAGTask:
@@ -135,7 +67,6 @@ class DAGTask:
             "result": self.result,
             "error": self.error
         }
-
 
 class WorkflowDAG:
     """

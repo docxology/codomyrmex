@@ -20,76 +20,11 @@ from codomyrmex.performance import monitor_performance, performance_context
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides advanced_plotter functionality including:
-- 35 functions: create_advanced_line_plot, create_advanced_scatter_plot, create_advanced_bar_chart...
-- 8 classes: PlotType, ChartStyle, ColorPalette...
-
-Usage:
-    # Example usage here
-"""
 Advanced data visualization functionality for Codomyrmex.
 
 This module provides comprehensive plotting capabilities including statistical plots,
 interactive visualizations, dashboard generation, and data analysis charts.
 """
-
-
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -112,12 +47,12 @@ except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
-    """Brief description of monitor_performance.
-
-Args:
-
-
-    Returns: Description of return value
+        """Brief description of monitor_performance.
+        
+        Args:
+        
+            Returns: Description of return value
+        """
 """
         def decorator(func):
     """Brief description of decorator.
@@ -132,15 +67,16 @@ Args:
         return decorator
 
     class performance_context:
-    """Brief description of performance_context.
-
-This class provides functionality for...
-
-Attributes:
-    # Add attribute descriptions here
-
-Methods:
-    # Method descriptions will be added automatically
+        """Brief description of performance_context.
+        
+        This class provides functionality for...
+        
+        Attributes:
+            # Add attribute descriptions here
+        
+        Methods:
+            # Method descriptions will be added automatically
+        """
 """
         def __init__(self, *args, **kwargs):
     """Brief description of __init__.
@@ -172,12 +108,10 @@ Args:
 """
             pass
 
-
 # Set up matplotlib and seaborn
 plt.style.use("default")
 sns.set_palette("husl")
 warnings.filterwarnings("ignore", category=UserWarning)
-
 
 # Enums for plot types and styles
 class PlotType(Enum):
@@ -197,7 +131,6 @@ class PlotType(Enum):
     DASHBOARD = "dashboard"
     INTERACTIVE = "interactive"
 
-
 class ChartStyle(Enum):
     """Chart styling options."""
 
@@ -208,7 +141,6 @@ class ChartStyle(Enum):
     TICKS = "ticks"
     DARKGRID = "darkgrid"
     WHITEGRID = "whitegrid"
-
 
 class ColorPalette(Enum):
     """Color palette options."""
@@ -223,7 +155,6 @@ class ColorPalette(Enum):
     PASTEL = "pastel"
     DARK = "dark"
     BRIGHT = "bright"
-
 
 @dataclass
 class PlotConfig:
@@ -245,7 +176,6 @@ class PlotConfig:
     transparent: bool = False
     bbox_inches: str = "tight"
 
-
 @dataclass
 class DataPoint:
     """Individual data point for plotting."""
@@ -256,7 +186,6 @@ class DataPoint:
     color: Optional[str] = None
     size: Optional[float] = None
     alpha: float = 1.0
-
 
 @dataclass
 class Dataset:
@@ -270,7 +199,6 @@ class Dataset:
     alpha: float = 1.0
     linewidth: float = 2.0
     markersize: float = 6.0
-
 
 class AdvancedPlotter:
     """Advanced plotting class with comprehensive visualization capabilities."""
@@ -1057,7 +985,6 @@ class AdvancedPlotter:
         self.current_figure = None
         self.current_axes = None
 
-
 # Convenience functions
 def create_advanced_line_plot(
     x_data: list[Union[float, int, str, datetime]],
@@ -1073,7 +1000,6 @@ def create_advanced_line_plot(
     plotter.plot_line(x_data, y_data, **kwargs)
     return plotter.finalize_plot(title, xlabel, ylabel)
 
-
 def create_advanced_scatter_plot(
     x_data: list[Union[float, int, str, datetime]],
     y_data: list[Union[float, int, str, datetime]],
@@ -1087,7 +1013,6 @@ def create_advanced_scatter_plot(
     plotter = AdvancedPlotter(config)
     plotter.plot_scatter(x_data, y_data, **kwargs)
     return plotter.finalize_plot(title, xlabel, ylabel)
-
 
 def create_advanced_bar_chart(
     x_data: list[Union[str, int, float]],
@@ -1103,7 +1028,6 @@ def create_advanced_bar_chart(
     plotter.plot_bar(x_data, y_data, **kwargs)
     return plotter.finalize_plot(title, xlabel, ylabel)
 
-
 def create_advanced_histogram(
     data: list[Union[float, int]],
     title: str = "",
@@ -1116,7 +1040,6 @@ def create_advanced_histogram(
     plotter = AdvancedPlotter(config)
     plotter.plot_histogram(data, **kwargs)
     return plotter.finalize_plot(title, xlabel, ylabel)
-
 
 def create_advanced_heatmap(
     data: Union[list[list[float]], np.ndarray, pd.DataFrame],
@@ -1131,7 +1054,6 @@ def create_advanced_heatmap(
     plotter.plot_heatmap(data, **kwargs)
     return plotter.finalize_plot(title, xlabel, ylabel)
 
-
 def create_advanced_dashboard(
     datasets: list[Dataset],
     title: str = "Dashboard",
@@ -1143,16 +1065,13 @@ def create_advanced_dashboard(
     plotter = AdvancedPlotter(config)
     return plotter.create_dashboard(datasets, layout, title, **kwargs)
 
-
 def get_available_styles() -> list[ChartStyle]:
     """Get list of available chart styles."""
     return list(ChartStyle)
 
-
 def get_available_palettes() -> list[ColorPalette]:
     """Get list of available color palettes."""
     return list(ColorPalette)
-
 
 def get_available_plot_types() -> list[PlotType]:
     """Get list of available plot types."""

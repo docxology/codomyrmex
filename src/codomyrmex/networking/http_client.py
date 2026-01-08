@@ -16,87 +16,20 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides http_client functionality including:
-- 7 functions: json, __init__, get...
-- 3 classes: NetworkingError, Response, HTTPClient
-
-Usage:
-    # Example usage here
-"""
 HTTP client implementation.
 """
-
 
 try:
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False
 
-
 logger = get_logger(__name__)
-
 
 class NetworkingError(CodomyrmexError):
     """Raised when networking operations fail."""
 
     pass
-
 
 @dataclass
 class Response:
@@ -113,7 +46,6 @@ class Response:
         if self.json_data is None:
             self.json_data = json.loads(self.text)
         return self.json_data
-
 
 class HTTPClient:
     """HTTP client with retry and timeout support."""

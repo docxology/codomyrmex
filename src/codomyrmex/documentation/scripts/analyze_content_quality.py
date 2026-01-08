@@ -9,27 +9,8 @@ import sys
 
 from dataclasses import dataclass, asdict
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -72,15 +53,20 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides analyze_content_quality functionality including:
-- 17 functions: main, to_dict, to_dict...
-- 4 classes: CodeExample, ContentQualityMetrics, QualityReport...
 
-Usage:
-    # Example usage here
-"""
+@dataclass
+class CodeExample:
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
 Content Quality Analyzer for Codomyrmex Documentation.
 
 Analyzes documentation content for completeness, quality metrics, and placeholder content.
@@ -89,15 +75,11 @@ Analyzes documentation content for completeness, quality metrics, and placeholde
 
 try:
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-@dataclass
-class CodeExample:
-    """Represents a code example in documentation."""
+logger = get_logger(__name__)
+
+Represents a code example in documentation."""
     language: str
     content: str
     line_number: int
@@ -609,5 +591,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

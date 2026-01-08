@@ -46,36 +46,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Cognitive threat assessment."""
 
-
-
-"""Core functionality module
-
-This module provides cognitive_threat_assessment functionality including:
-- 6 functions: assess_cognitive_threats, evaluate_human_factors, __init__...
-- 2 classes: CognitiveThreat, CognitiveThreatAssessor
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -95,12 +67,13 @@ class CognitiveThreatAssessor:
     """Assesses cognitive security threats."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         logger.info("CognitiveThreatAssessor initialized")
     

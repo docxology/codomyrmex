@@ -18,17 +18,52 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ActiveInferenceAgent,
-    BayesianNetwork,
-    CaseRetriever,
-    CerebrumConfig,
-    InferenceEngine,
-    Model,
     Case,
     CaseBase,
+    CaseRetriever,
+    CerebrumConfig,
     CerebrumEngine,
+    InferenceEngine,
+    Model,
     ReasoningResult,
+    BayesianNetwork,
 )
+    CaseVisualizer,
+    InferenceVisualizer,
+    ModelVisualizer,
+)
+
 """CEREBRUM orchestration for FPF analysis.
 
 This script demonstrates comprehensive application of CEREBRUM methods
@@ -42,12 +77,6 @@ try:
 except ImportError:
     HAS_MATPLOTLIB = False
     plt = None
-
-
-    CaseVisualizer,
-    InferenceVisualizer,
-    ModelVisualizer,
-)
 
 logger = get_logger(__name__)
 

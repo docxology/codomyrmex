@@ -23,76 +23,11 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides deployment_orchestrator functionality including:
-- 28 functions: manage_deployments, to_dict, __post_init__...
-- 5 classes: DeploymentStatus, EnvironmentType, Environment...
-
-Usage:
-    # Example usage here
-"""
 Deployment Orchestrator for Codomyrmex CI/CD Automation Module.
 
 Provides comprehensive deployment orchestration, environment management,
 and release coordination capabilities.
 """
-
-
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -101,9 +36,7 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-
 logger = get_logger(__name__)
-
 
 class DeploymentStatus(Enum):
     """Deployment execution status."""
@@ -115,7 +48,6 @@ class DeploymentStatus(Enum):
     ROLLED_BACK = "rolled_back"
     CANCELLED = "cancelled"
 
-
 class EnvironmentType(Enum):
     """Types of deployment environments."""
 
@@ -123,7 +55,6 @@ class EnvironmentType(Enum):
     STAGING = "staging"
     PRODUCTION = "production"
     TESTING = "testing"
-
 
 @dataclass
 class Environment:
@@ -159,7 +90,6 @@ class Environment:
             "health_checks": self.health_checks,
         }
 
-
 @dataclass
 class Deployment:
     """Deployment configuration and status."""
@@ -180,12 +110,13 @@ class Deployment:
     metrics: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
@@ -208,7 +139,6 @@ Args:
             "logs": self.logs,
             "metrics": self.metrics,
         }
-
 
 class DeploymentOrchestrator:
     """
@@ -720,7 +650,6 @@ class DeploymentOrchestrator:
             return True
 
         return False
-
 
 # Convenience functions
 def manage_deployments(config_path: Optional[str] = None) -> DeploymentOrchestrator:

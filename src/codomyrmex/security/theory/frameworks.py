@@ -47,26 +47,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Security frameworks (OWASP, NIST, ISO 27001, etc.)."""
-
-
 
 """Core functionality module
 
@@ -75,6 +56,7 @@ This module provides frameworks functionality including:
 - 3 classes: FrameworkCategory, FrameworkStandard, SecurityFramework
 
 Usage:
+    from frameworks import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

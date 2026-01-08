@@ -44,41 +44,17 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#!/usr/bin/env python3
+"""
+Exit code 1 if any module docs changed but aggregation was not updated.
+"""
 
 
 
 #!/usr/bin/env python3
 """Check for stale aggregation: ensure aggregated docs mirror module docs.
 
-"""Main entry point and utility functions
-
-This module provides check_stale_aggregation functionality including:
-- 1 functions: main
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
-Exit code 1 if any module docs changed but aggregation was not updated.
-"""
 
 project_root = Path(__file__).resolve().parents[2]
 source_root = project_root / "code"

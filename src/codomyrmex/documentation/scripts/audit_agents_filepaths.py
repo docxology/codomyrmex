@@ -3,18 +3,7 @@ from typing import Dict, List, Tuple, Optional
 import json
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -37,20 +26,16 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides audit_agents_filepaths functionality including:
-- 8 functions: find_agents_files, extract_parent_reference, extract_children_references...
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Audit all AGENTS.md files for filepath and signpost issues.
 Catalogs parent references, child references, and navigation links.
 """
 
+
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 def find_agents_files(repo_root: Path) -> List[Path]:
     """Find all AGENTS.md files in the repository."""
@@ -351,4 +336,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

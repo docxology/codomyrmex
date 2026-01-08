@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Graph generator for FPF visualizations using NetworkX and Matplotlib.
 
+
 """Core functionality module
 
 This module provides graph_generator functionality including:
@@ -8,6 +9,7 @@ This module provides graph_generator functionality including:
 - 1 classes: GraphGenerator
 
 Usage:
+    from graph_generator import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -279,6 +281,4 @@ class GraphGenerator:
         ]
 
         return sizes
-
-
 

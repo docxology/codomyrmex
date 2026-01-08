@@ -22,77 +22,13 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides security_scanner functionality including:
-- 12 functions: scan_container_security, __init__, _detect_scanner...
-- 3 classes: Vulnerability, SecurityScanResult, ContainerSecurityScanner
-
-Usage:
-    # Example usage here
-"""
 Container Security Scanner Module for Codomyrmex Containerization.
 
 This module provides container security scanning, vulnerability assessment,
 and compliance checking capabilities using Trivy, Grype, or Docker Scout.
 """
-
-
 
 logger = get_logger(__name__)
 
@@ -102,7 +38,6 @@ try:
 except ImportError:
     docker = None
     DOCKER_AVAILABLE = False
-
 
 @dataclass
 class Vulnerability:
@@ -117,7 +52,6 @@ class Vulnerability:
     references: list[str] = field(default_factory=list)
     layer: Optional[str] = None
 
-
 @dataclass
 class SecurityScanResult:
     """Container security scan results."""
@@ -131,7 +65,6 @@ class SecurityScanResult:
     scanner_version: str = "1.0.0"
     scanner_name: str = "unknown"
     os_info: Optional[dict[str, str]] = None
-
 
 class ContainerSecurityScanner:
     """Container security scanning and vulnerability assessment system.
@@ -684,7 +617,6 @@ class ContainerSecurityScanner:
 
         logger.info(f"Exported scan results to {output_path}")
         return str(output_path)
-
 
 def scan_container_security(
     image_name: str,

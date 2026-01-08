@@ -18,82 +18,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides plugin_validator functionality including:
-- 15 functions: validate_plugin, check_plugin_security, validate_plugin_metadata...
-- 2 classes: ValidationResult, PluginValidator
-
-Usage:
-    # Example usage here
-"""
 Plugin Validator for Codomyrmex Plugin System
 
 This module provides validation and security scanning
 for plugins before they are loaded into the system.
 """
 
-
 # Import logging
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 @dataclass
 class ValidationResult:
@@ -138,7 +73,6 @@ class ValidationResult:
             "warnings": self.warnings,
             "recommendations": self.recommendations
         }
-
 
 class PluginValidator:
     """
@@ -472,7 +406,6 @@ class PluginValidator:
 
         result.recommendations = recommendations
 
-
 # Convenience functions
 
 def validate_plugin(plugin_path: str) -> ValidationResult:
@@ -488,7 +421,6 @@ def validate_plugin(plugin_path: str) -> ValidationResult:
     validator = PluginValidator()
     return validator.validate_plugin(plugin_path)
 
-
 def check_plugin_security(plugin_path: str) -> List[str]:
     """
     Convenience function to check plugin security.
@@ -501,7 +433,6 @@ def check_plugin_security(plugin_path: str) -> List[str]:
     """
     validator = PluginValidator()
     return validator.check_plugin_security(plugin_path)
-
 
 def validate_plugin_metadata(metadata: Dict[str, Any]) -> List[str]:
     """

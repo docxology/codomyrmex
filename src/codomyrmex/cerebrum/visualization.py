@@ -5,6 +5,8 @@ from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 import networkx as nx
 import networkx as nx
+import networkx as nx
+import networkx as nx
 import numpy as np
 
 from codomyrmex.cerebrum.bayesian import BayesianNetwork
@@ -19,6 +21,36 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     BaseChartVisualizer,
     BaseNetworkVisualizer,
     BaseVisualizer,
@@ -27,21 +59,18 @@ from codomyrmex.logging_monitoring import get_logger
     get_default_theme,
 )
 
-"""Visualization tools for CEREBRUM models and inference results.
-
-Enhanced with professional academic styling, modular architecture, and comprehensive
-legends and axes formatting.
-"""
-
 
 try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
     Figure = Any
+    Patch = Any
+    plt = None
 
 try:
 except ImportError:
+    nx = None
     nx = None
 
 logger = get_logger(__name__)

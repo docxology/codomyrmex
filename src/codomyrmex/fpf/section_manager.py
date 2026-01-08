@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Section manager for extracting and managing FPF sections.
 
+
 """Core business logic and data management
 
 This module provides section_manager functionality including:
@@ -8,6 +9,7 @@ This module provides section_manager functionality including:
 - 1 classes: SectionManager
 
 Usage:
+    from section_manager import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

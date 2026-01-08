@@ -1,12 +1,49 @@
+from pathlib import Path
+from typing import Dict, Any
+import json
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
+
+"""Core functionality module
+
+This module provides config functionality including:
+- 2 functions: load_config, get_script_config
+- 0 classes: 
+
+Usage:
+    from config import FunctionName, ClassName
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Orchestrator Configuration
 
 Handles loading and parsing of script configurations.
 """
 
-import json
-from pathlib import Path
-from typing import Dict, Any
 
 def load_config(scripts_dir: Path) -> Dict[str, Any]:
     """Load script configuration."""

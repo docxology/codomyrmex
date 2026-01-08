@@ -9,27 +9,8 @@ import sys
 
 from dataclasses import dataclass, field
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -72,15 +53,19 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logger = logging.getLogger(__name__)
 
-This module provides generate_architecture_diagrams functionality including:
-- 17 functions: generate_module_diagram, generate_dependency_graph, generate_workflow_diagram...
-- 3 classes: ModuleInfo, WorkflowStep, ArchitectureDiagramGenerator
 
-Usage:
-    # Example usage here
-"""
+@dataclass
+class ModuleInfo:
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
 Architecture Diagram Generation Tool
 
 This script generates Mermaid diagrams for Codomyrmex architecture visualization,
@@ -94,14 +79,11 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 try:
-    logger = get_logger(__name__)
-except ImportError:
-    logger = logging.getLogger(__name__)
 
 
-@dataclass
-class ModuleInfo:
-    """Information about a module."""
+logger = get_logger(__name__)
+
+Information about a module."""
     name: str
     path: str
     dependencies: List[str] = field(default_factory=list)

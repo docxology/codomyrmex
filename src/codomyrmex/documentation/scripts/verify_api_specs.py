@@ -5,18 +5,8 @@ import logging
 import re
 import sys
 
-
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -39,15 +29,19 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
 
-This module provides verify_api_specs functionality including:
-- 11 functions: main, __init__, extract_function_signature_from_docs...
-- 1 classes: APIVerifier
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-Usage:
-    # Example usage here
-"""
+
+class APIVerifier:
+    """
+
+
+    #!/usr/bin/env python3
+    """
+
 API Specification Verification Tool.
 
 This script verifies that API_SPECIFICATION.md files match actual code signatures.
@@ -57,15 +51,11 @@ This script verifies that API_SPECIFICATION.md files match actual code signature
 try:
 
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-class APIVerifier:
-    """Verifies API specifications against actual code."""
+logger = get_logger(__name__)
+
+Verifies API specifications against actual code."""
 
     def __init__(self, repo_root: Path):
         """Initialize verifier."""
@@ -368,4 +358,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

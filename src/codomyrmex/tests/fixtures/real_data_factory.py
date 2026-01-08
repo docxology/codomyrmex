@@ -7,6 +7,7 @@ import tempfile
 
 from missing_package import something
 from mypackage.core import core_function
+from real_data_factory import FunctionName, ClassName
 import nonexistent_module
 import pytest
 import sqlite3
@@ -55,25 +56,8 @@ import yaml
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Real data factory for generating test fixtures without mocks.
+
 
 """Testing utilities and test helpers
 
@@ -88,8 +72,6 @@ This module provides utilities for creating real test data, files, and structure
 that can be used in place of mocked objects. Following the repository's TDD principle
 of "no mock methods, always do real data analysis."
 """
-
-
 
 class RealDataFactory:
     """Factory for creating real test data fixtures."""

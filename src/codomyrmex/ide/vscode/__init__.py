@@ -2,14 +2,7 @@ from pathlib import Path
 from typing import Any, Optional, Dict, List
 import json
 
-
 from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutionError
-
-
-
-
-
-
 
 
 
@@ -36,6 +29,7 @@ from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutio
 
 """VS Code IDE Integration
 
+
 """Core functionality module
 
 This module provides __init__ functionality including:
@@ -43,6 +37,7 @@ This module provides __init__ functionality including:
 - 1 classes: VSCodeClient
 
 Usage:
+    from __init__ import FunctionName, ClassName
     # Example usage here
 """
 Integration with Visual Studio Code. Provides programmatic access to
@@ -54,9 +49,6 @@ Example:
     >>> client.connect()
     >>> extensions = client.list_extensions()
 """
-
-
-
 
 class VSCodeClient(IDEClient):
     """Client for interacting with Visual Studio Code.

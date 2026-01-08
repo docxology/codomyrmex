@@ -42,7 +42,7 @@ Args:
 
     Returns: Description of return value
 """
-        def __enter__(self): pass
+        def __enter__(self): return self
     """Brief description of __enter__.
 
 Args:
@@ -51,7 +51,6 @@ Args:
     Returns: Description of return value
 """
         def __exit__(self, *args): pass
-
     """Brief description of __exit__.
 
 Args:

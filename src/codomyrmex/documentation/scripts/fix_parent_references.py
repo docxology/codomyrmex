@@ -2,18 +2,7 @@ from pathlib import Path
 from typing import Dict, Optional
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -36,19 +25,15 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides fix_parent_references functionality including:
-- 3 functions: determine_parent_label, fix_parent_reference, main
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Fix all generic [Parent] references in AGENTS.md files with descriptive labels.
 """
 
+
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 def determine_parent_label(file_path: Path, repo_root: Path) -> str:
     """Determine the appropriate parent label based on file location."""
@@ -146,4 +131,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

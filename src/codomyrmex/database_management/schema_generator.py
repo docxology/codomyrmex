@@ -17,80 +17,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides schema_generator functionality including:
-- 22 functions: generate_schema, generate_schema_from_models, to_sql...
-- 6 classes: Column, Index, SchemaTable...
-
-Usage:
-    # Example usage here
-"""
 Schema Generator Module for Codomyrmex Database Management.
 
 This module provides database schema generation, migration creation,
 and schema comparison capabilities supporting SQLite, PostgreSQL, and MySQL.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 # SQL type mappings for different databases
 TYPE_MAPPINGS = {
@@ -131,7 +66,6 @@ TYPE_MAPPINGS = {
         "uuid": "CHAR(36)",
     }
 }
-
 
 @dataclass
 class Column:
@@ -185,7 +119,6 @@ class Column:
 
         return " ".join(parts)
 
-
 @dataclass
 class Index:
     """Database index definition."""
@@ -205,7 +138,6 @@ class Index:
             sql += f" WHERE {self.condition}"
 
         return sql
-
 
 @dataclass
 class SchemaTable:
@@ -260,7 +192,6 @@ class SchemaTable:
             "description": self.description
         }
 
-
 @dataclass
 class SchemaMigration:
     """Database schema migration."""
@@ -274,16 +205,16 @@ class SchemaMigration:
     checksum: str = ""
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if not self.checksum:
             self.checksum = hashlib.sha256(self.up_sql.encode()).hexdigest()[:16]
-
 
 @dataclass
 class SchemaDefinition:
@@ -314,7 +245,6 @@ class SchemaDefinition:
             "tables": [t.to_dict() for t in self.tables],
             "created_at": self.created_at.isoformat()
         }
-
 
 class SchemaGenerator:
     """Database schema generation and management system."""
@@ -748,7 +678,6 @@ class SchemaGenerator:
             for m in self._migrations.values()
         ]
 
-
 def generate_schema(models: list[Any], output_dir: str) -> dict[str, Any]:
     """Generate database schema from models.
 
@@ -760,7 +689,6 @@ def generate_schema(models: list[Any], output_dir: str) -> dict[str, Any]:
         Generated schema information
     """
     return generate_schema_from_models(models, output_dir)
-
 
 def generate_schema_from_models(models: list[Any], output_dir: str) -> dict[str, Any]:
     """Generate database schema from model definitions.

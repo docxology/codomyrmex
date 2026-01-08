@@ -1,8 +1,48 @@
 from pathlib import Path
 import os
 
-
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#!/usr/bin/env python3
+"""
+STANDARD_CONTENT =
+"""
+#!/usr/bin/env python3
+"""
+This module provides enhance_stubs functionality including:
+- 1 functions: enhance_stubs
+- 0 classes: 
+
+Usage:
+    # Example usage here
+
+Enhance Stub READMEs.
+
+Adds "Getting Started" and "Contributing" sections to short READMEs 
+to improve quality scores by increasing word count, section count, and code examples.
+"""
+
+
+
 
 
 
@@ -38,33 +78,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 #!/usr/bin/env python3
-"""Core functionality module
 
-"""Core functionality module
-
-This module provides enhance_stubs functionality including:
-- 1 functions: enhance_stubs
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
-This module provides enhance_stubs functionality including:
-- 1 functions: enhance_stubs
-- 0 classes: 
-
-Usage:
-    # Example usage here
-
-Enhance Stub READMEs.
-
-Adds "Getting Started" and "Contributing" sections to short READMEs 
-to improve quality scores by increasing word count, section count, and code examples.
-"""
-
-
-STANDARD_CONTENT = """
 
 ## Getting Started
 
@@ -94,13 +109,6 @@ See the root `CONTRIBUTING.md` for more details.
 """
 
 def enhance_stubs(root_dir):
-    """Brief description of enhance_stubs.
-
-Args:
-    root_dir : Description of root_dir
-
-    Returns: Description of return value
-"""
     root = Path(root_dir)
     count = 0
     

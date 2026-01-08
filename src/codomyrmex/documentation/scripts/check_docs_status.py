@@ -2,54 +2,20 @@ from pathlib import Path
 import os
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides check_docs_status functionality including:
-- 2 functions: check_documentation_status, print_report
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Script to check documentation status across the entire repository.
 Checks for README.md and AGENTS.md files in all directories.
 """
 
+#!/usr/bin/env python3
+
+logger = get_logger(__name__)
 
 def check_documentation_status():
     """Check which directories are missing README.md and/or AGENTS.md files."""

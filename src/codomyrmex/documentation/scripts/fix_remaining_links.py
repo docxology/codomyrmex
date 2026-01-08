@@ -2,7 +2,6 @@ from pathlib import Path
 import os
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -24,32 +23,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""Fix remaining broken links in documentation."""
-
-
-"""Main entry point and utility functions
-
-This module provides fix_remaining_links functionality including:
-- 5 functions: fix_self_referential_links, fix_relative_path_links, process_file...
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
 def fix_self_referential_links(content: str, file_path: Path) -> str:
-    """Fix self-referential directory links."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """Fix remaining broken links in documentation."""
+
+logger = get_logger(__name__)
+
+Fix self-referential directory links."""
     base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
     rel_path = file_path.parent.relative_to(base_path)
     current_dir_name = file_path.parent.name
@@ -81,13 +67,6 @@ def fix_relative_path_links(content: str, file_path: Path) -> str:
     pattern = r'\[([^\]]+)\]\(([^\)]+)\)'
     
     def fix_link(match):
-    """Brief description of fix_link.
-
-Args:
-    match : Description of match
-
-    Returns: Description of return value
-"""
         link_text, link_path = match.groups()
         
         # Skip external links and anchors
@@ -156,4 +135,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

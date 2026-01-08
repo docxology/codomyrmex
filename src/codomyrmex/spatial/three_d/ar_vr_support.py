@@ -8,18 +8,17 @@ from .engine_3d import Quaternion, Vector3D
 
 logger = get_logger(__name__)
 
-
-
 class ARSession:
     """Augmented Reality session manager."""
 
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.is_active = False
         self.tracking_quality = "unknown"
@@ -61,12 +60,13 @@ class XRInterface:
     """Extended Reality interface combining AR and VR."""
 
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.ar_session = ARSession()
         self.vr_renderer = VRRenderer()

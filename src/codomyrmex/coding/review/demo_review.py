@@ -1,7 +1,6 @@
 import os
 import sys
 
-
 from codomyrmex.coding.review import CodeReviewer
 from codomyrmex.logging_monitoring import get_logger
 
@@ -27,15 +26,9 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """
+
 """Main entry point and utility functions
 
 This module provides demo_review functionality including:
@@ -56,8 +49,6 @@ and automated refactoring suggestions.
 
 # Add the src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-
-
 
 def main():
     """Run the enhanced code review demonstration."""

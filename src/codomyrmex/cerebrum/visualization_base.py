@@ -8,6 +8,7 @@ import matplotlib.colors
 import matplotlib.pyplot as plt
 import networkx as nx
 import networkx as nx
+import networkx as nx
 import numpy as np
 
 from codomyrmex.cerebrum.exceptions import VisualizationError
@@ -19,15 +20,39 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     VisualizationTheme,
     get_default_theme,
 )
-"""Base visualization classes for modular, reusable visualization components.
-
-This module provides base classes for network, chart, and heatmap visualizations
-with shared utilities for legends, axes, titles, color mapping, and node sizing.
-"""
-
 
 try:
     HAS_MATPLOTLIB = True
@@ -35,12 +60,11 @@ except ImportError:
     HAS_MATPLOTLIB = False
     Figure = Any
     Axes = Any
+    plt = None
 
 try:
 except ImportError:
     nx = None
-
-
 
 if TYPE_CHECKING:
     pass

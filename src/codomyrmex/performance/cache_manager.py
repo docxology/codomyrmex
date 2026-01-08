@@ -6,6 +6,7 @@ import pickle
 import tempfile
 import time
 
+from cache_manager import FunctionName, ClassName
 import hashlib
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -52,24 +53,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
+
 """Core business logic and data management
 
 This module provides cache_manager functionality including:
@@ -85,11 +70,7 @@ This module provides caching capabilities to improve performance
 by storing expensive computation results and avoiding redundant work.
 """
 
-
-
 logger = get_logger(__name__)
-
-
 
 class CacheManager:
     """

@@ -6,6 +6,15 @@ This script analyzes pytest test results, extracts metrics, categorizes failures
 analyzes warnings, and generates detailed assessment reports.
 """
 
+import sys
+from pathlib import Path
+try:
+    import codomyrmex
+except ImportError:
+    # Add project root to sys.path
+    project_root = Path(__file__).resolve().parent.parent.parent
+    src_path = project_root / "src"
+    sys.path.insert(0, str(src_path))
 import re
 import json
 import sys
@@ -677,4 +686,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

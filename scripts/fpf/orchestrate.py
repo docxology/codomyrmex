@@ -21,26 +21,14 @@ sys.path.insert(0, str(project_root))
 from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
 
 # Import shared utilities
-try:
-    from _orchestrator_utils import (
-        format_output,
-        print_error,
-        print_info,
-        print_section,
-        print_success,
-        save_json_file,
-    )
-except ImportError:
-    # Fallback if running from different directory
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    from _orchestrator_utils import (
-        format_output,
-        print_error,
-        print_info,
-        print_section,
-        print_success,
-        save_json_file,
-    )
+from codomyrmex.utils.cli_helpers import (
+    format_output,
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    save_json_file,
+)
 
 # Import FPF modules
 from codomyrmex.fpf import (

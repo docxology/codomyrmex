@@ -46,26 +46,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Configuration management for CEREBRUM module."""
-
-
 
 """Core functionality module
 
@@ -74,6 +55,7 @@ This module provides config functionality including:
 - 1 classes: CerebrumConfig
 
 Usage:
+    from config import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -146,6 +128,4 @@ class CerebrumConfig:
     def from_dict(cls, config_dict: dict[str, Any]) -> "CerebrumConfig":
         """Create config from dictionary."""
         return cls(**config_dict)
-
-
 

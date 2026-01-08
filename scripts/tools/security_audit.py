@@ -8,6 +8,15 @@ This script runs security checks on dependencies and code:
 - Summarizes findings and provides recommendations
 """
 
+import sys
+from pathlib import Path
+try:
+    import codomyrmex
+except ImportError:
+    # Add project root to sys.path
+    project_root = Path(__file__).resolve().parent.parent.parent
+    src_path = project_root / "src"
+    sys.path.insert(0, str(src_path))
 import subprocess
 import sys
 import json
@@ -226,4 +235,3 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
-

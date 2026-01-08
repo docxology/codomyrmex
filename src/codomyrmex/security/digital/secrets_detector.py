@@ -14,69 +14,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides secrets_detector functionality including:
-- 16 functions: audit_secrets_exposure, scan_file_for_secrets, scan_directory_for_secrets...
-- 1 classes: SecretsDetector
-
-Usage:
-    # Example usage here
-"""
 Secrets Detector for Codomyrmex Security Audit Module.
 
 Provides comprehensive detection of potential secrets exposure including:
@@ -87,12 +24,10 @@ Provides comprehensive detection of potential secrets exposure including:
 - Cloud service credentials
 """
 
-
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 class SecretsDetector:
     """
@@ -471,7 +406,6 @@ class SecretsDetector:
 
         return False
 
-
 # Convenience functions
 def audit_secrets_exposure(content: str, filepath: Optional[str] = None) -> List[Dict[str, Any]]:
     """
@@ -487,7 +421,6 @@ def audit_secrets_exposure(content: str, filepath: Optional[str] = None) -> List
     detector = SecretsDetector()
     return detector.audit_secrets_exposure(content, filepath)
 
-
 def scan_file_for_secrets(filepath: str) -> List[Dict[str, Any]]:
     """
     Convenience function to scan a file for secrets.
@@ -500,7 +433,6 @@ def scan_file_for_secrets(filepath: str) -> List[Dict[str, Any]]:
     """
     detector = SecretsDetector()
     return detector.scan_file(filepath)
-
 
 def scan_directory_for_secrets(directory: str, recursive: bool = True) -> List[Dict[str, Any]]:
     """

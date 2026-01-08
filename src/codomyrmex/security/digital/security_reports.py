@@ -16,75 +16,10 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides security_reports functionality including:
-- 20 functions: generate_security_report, to_dict, __init__...
-- 2 classes: SecurityReport, SecurityReportGenerator
-
-Usage:
-    # Example usage here
-"""
 Security Reports for Codomyrmex Security Audit Module.
 
 Provides comprehensive security reporting and assessment generation capabilities.
 """
-
-
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -99,7 +34,6 @@ try:
 except ImportError:
 
     logger = logging.getLogger(__name__)
-
 
 @dataclass
 class SecurityReport:
@@ -132,7 +66,6 @@ class SecurityReport:
             "metrics": self.metrics,
             "appendices": self.appendices,
         }
-
 
 class SecurityReportGenerator:
     """
@@ -730,7 +663,6 @@ class SecurityReportGenerator:
         except Exception as e:
             logger.error(f"Failed to generate HTML report: {e}")
             return f"<html><body><h1>{report.title}</h1><p>Error generating report: {e}</p></body></html>"
-
 
 # Convenience functions
 def generate_security_report(

@@ -1,14 +1,7 @@
 from pathlib import Path
 import re
 
-
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 
 
@@ -35,35 +28,24 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """Documentation Quality Assessment Module.
 
-"""Core functionality module
 
-This module provides quality_assessment functionality including:
-- 9 functions: generate_quality_report, __init__, analyze_file...
-- 1 classes: DocumentationQualityAnalyzer
-
-Usage:
-    # Example usage here
-"""
 This module provides tools for assessing documentation quality,
 consistency, and technical accuracy across the Codomyrmex platform.
 """
 
-
-
 logger = get_logger(__name__)
-
-
 
 class DocumentationQualityAnalyzer:
     """Analyzes documentation quality metrics."""
 
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.quality_metrics = {
             "completeness": 0,

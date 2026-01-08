@@ -1,14 +1,5 @@
 from codomyrmex.logging_monitoring import get_logger
-"""
-"""Core functionality module
 
-This module provides line_plot functionality including:
-- 1 functions: create_line_plot
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
 Contains the create_line_plot function for generating line plots.
 
 - Uses logging_monitoring for logging.
@@ -27,7 +18,6 @@ from .plot_utils import (
 )
 
 logger = get_codomyrmex_logger(__name__)
-
 
 def create_line_plot(
     x_data: list,
@@ -92,7 +82,6 @@ def create_line_plot(
 
     logger.info(f"Line plot '{title}' generated successfully.")
     return fig  # Return the figure object for potential further manipulation
-
 
 if __name__ == "__main__":
     # This section is for direct testing of line_plot.py

@@ -2,44 +2,7 @@ from pathlib import Path
 import os
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -62,16 +25,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides boost_quality_score functionality including:
-- 2 functions: boost_file, main
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Boost Documentation Quality Score to 99%.
 
 This script standardizes markdown files to meet all criteria of the 
@@ -83,6 +36,12 @@ ContentQualityAnalyzer:
 - Code examples in READMEs
 """
 
+
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 # Paths to ignore (matches analyze_content_quality.py)
 IGNORED_DIRS = {
@@ -117,13 +76,6 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 """
 
 def boost_file(path: Path):
-    """Brief description of boost_file.
-
-Args:
-    path : Description of path
-
-    Returns: Description of return value
-"""
     try:
         content = path.read_text(encoding="utf-8", errors="ignore")
         original_content = content
@@ -166,13 +118,6 @@ Args:
         return False
 
 def main():
-    """Brief description of main.
-
-Args:
-
-
-    Returns: Description of return value
-"""
     repo_root = Path.cwd()
     md_files = []
     for pattern in ['**/*.md', '**/*.MD']:

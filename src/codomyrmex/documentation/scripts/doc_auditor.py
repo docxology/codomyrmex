@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 
+from doc_auditor import FunctionName, ClassName
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -10,63 +11,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Core functionality module
-
-"""Core functionality module
+#!/usr/bin/env python3
 
 This module provides doc_auditor functionality including:
 - 1 functions: audit_docs
@@ -75,14 +20,9 @@ This module provides doc_auditor functionality including:
 Usage:
     # Example usage here
 """
+
 logger = get_logger(__name__)
-This module provides doc_auditor functionality including:
-- 1 functions: audit_docs
-- 0 classes: 
 
-Usage:
-    # Example usage here
-"""
 def audit_docs(root_dir):
     """Brief description of audit_docs.
 

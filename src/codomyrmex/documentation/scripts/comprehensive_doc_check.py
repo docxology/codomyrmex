@@ -4,7 +4,6 @@ from typing import Dict, List, Tuple
 import os
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -26,32 +25,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""Comprehensive documentation verification script."""
-
-
-"""Main entry point and utility functions
-
-This module provides comprehensive_doc_check functionality including:
-- 6 functions: check_placeholder_content, check_navigation_links, check_version_status...
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
 def check_placeholder_content(content: str) -> List[str]:
-    """Check for placeholder content."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """Comprehensive documentation verification script."""
+
+logger = get_logger(__name__)
+
+Check for placeholder content."""
     issues = []
     placeholders = [
         "[Architecture description if applicable]",
@@ -240,4 +226,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

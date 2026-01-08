@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Exporter for FPF specification to JSON and other formats.
 
+
 """Core functionality module
 
 This module provides exporter functionality including:
@@ -8,6 +9,7 @@ This module provides exporter functionality including:
 - 1 classes: FPFExporter
 
 Usage:
+    from exporter import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -217,6 +219,4 @@ class FPFExporter:
             "description": relationship.description,
             "metadata": relationship.metadata,
         }
-
-
 

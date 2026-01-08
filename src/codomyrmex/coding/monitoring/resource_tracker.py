@@ -11,74 +11,10 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides resource_tracker functionality including:
-- 4 functions: __init__, start_monitoring, update_monitoring...
-- 2 classes: ResourceMonitor, _DummyPSUtil
-
-Usage:
-    # Example usage here
-"""
 Resource Tracking
 
 Monitors resource usage during code execution.
 """
-
 
 try:
     PSUTIL_AVAILABLE = True
@@ -86,24 +22,23 @@ except ImportError:
     PSUTIL_AVAILABLE = False
     # Create a dummy psutil module for type hints
     class _DummyPSUtil:
-    """Brief description of _DummyPSUtil.
-
-This class provides functionality for...
-
-Attributes:
-    # Add attribute descriptions here
-
-Methods:
-    # Method descriptions will be added automatically
+        """Brief description of _DummyPSUtil.
+        
+        This class provides functionality for...
+        
+        Attributes:
+            # Add attribute descriptions here
+        
+        Methods:
+            # Method descriptions will be added automatically
+        """
 """
         Process = None
         cpu_percent = lambda *args, **kwargs: 0.0
         virtual_memory = lambda: type('obj', (object,), {'used': 0, 'total': 0})()
     psutil = _DummyPSUtil()
 
-
 logger = get_logger(__name__)
-
 
 class ResourceMonitor:
     """Monitor resource usage during code execution."""

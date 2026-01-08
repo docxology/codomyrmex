@@ -20,74 +20,10 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides security_monitor functionality including:
-- 26 functions: monitor_security_events, audit_access_logs, to_dict...
-- 5 classes: SecurityEventType, AlertLevel, SecurityEvent...
-
-Usage:
-    # Example usage here
-"""
 Security Monitor for Codomyrmex Security Audit Module.
 
 Provides real-time security monitoring, alerting, and audit logging capabilities.
 """
-
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -102,7 +38,6 @@ try:
 except ImportError:
 
     logger = logging.getLogger(__name__)
-
 
 class SecurityEventType(Enum):
     """Types of security events."""
@@ -119,7 +54,6 @@ class SecurityEventType(Enum):
     SQL_INJECTION_ATTEMPT = "sql_injection_attempt"
     XSS_ATTEMPT = "xss_attempt"
 
-
 class AlertLevel(Enum):
     """Alert severity levels."""
 
@@ -127,7 +61,6 @@ class AlertLevel(Enum):
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
     CRITICAL = "CRITICAL"
-
 
 @dataclass
 class SecurityEvent:
@@ -159,7 +92,6 @@ class SecurityEvent:
             "raw_log": self.raw_log,
         }
 
-
 @dataclass
 class AlertRule:
     """Represents an alert rule for security monitoring."""
@@ -173,7 +105,6 @@ class AlertRule:
     enabled: bool = True
     cooldown_period: int = 300  # seconds
     last_triggered: Optional[datetime] = None
-
 
 class SecurityMonitor:
     """
@@ -602,7 +533,6 @@ class SecurityMonitor:
         random_part = os.urandom(4).hex()
         return f"evt_{timestamp}_{random_part}"
 
-
 # Convenience functions
 def monitor_security_events(config_path: Optional[str] = None) -> SecurityMonitor:
     """
@@ -617,7 +547,6 @@ def monitor_security_events(config_path: Optional[str] = None) -> SecurityMonito
     monitor = SecurityMonitor(config_path)
     monitor.start_monitoring()
     return monitor
-
 
 def audit_access_logs(log_files: Optional[list[str]] = None) -> list[SecurityEvent]:
     """

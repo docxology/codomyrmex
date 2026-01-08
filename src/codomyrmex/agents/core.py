@@ -65,11 +65,23 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
 """Core agent interfaces and base classes."""
 
 
 
 
+"""Core functionality module
+
+This module provides core functionality including:
+- 19 functions: __post_init__, __post_init__, is_success...
+- 6 classes: AgentCapabilities, AgentRequest, AgentResponse...
+
+Usage:
+    from core import FunctionName, ClassName
+    # Example usage here
+"""
 logger = get_logger(__name__)
 
 
@@ -159,6 +171,16 @@ class BaseAgent(AgentInterface):
     """Base implementation for agents with standard capability handling."""
 
     def __init__(
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    name : Description of name
+    capabilities : Description of capabilities
+    config : Description of config
+
+    Returns: Description of return value
+"""
         self,
         name: str,
         capabilities: list[AgentCapabilities],
@@ -169,6 +191,13 @@ class BaseAgent(AgentInterface):
         self.capabilities = capabilities or []
 
     def get_capabilities(self) -> list[AgentCapabilities]:
+    """Brief description of get_capabilities.
+
+Args:
+    self : Description of self
+
+    Returns: Description of return value (type: Any)
+"""
         return self.capabilities
     
     def get_config_value(self, key: str, default: Any = None, config: Optional[dict[str, Any]] = None) -> Any:
@@ -208,6 +237,14 @@ class BaseAgent(AgentInterface):
         pass
 
     def validate_request(self, request: AgentRequest) -> list[str]:
+    """Brief description of validate_request.
+
+Args:
+    self : Description of self
+    request : Description of request
+
+    Returns: Description of return value (type: Any)
+"""
         errors = []
         if not request.prompt or not request.prompt.strip():
             errors.append("Prompt cannot be empty")
@@ -224,6 +261,14 @@ class AgentIntegrationAdapter(ABC):
     """Base class for integrating agents with Codomyrmex modules."""
 
     def __init__(self, agent: AgentInterface):
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    agent : Description of agent
+
+    Returns: Description of return value
+"""
         self.agent = agent
         self.logger = get_logger(self.__class__.__name__)
 

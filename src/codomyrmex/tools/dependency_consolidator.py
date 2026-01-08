@@ -3,15 +3,7 @@ from pathlib import Path
 from typing import Dict, List, Set, Tuple
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
 
 
 
@@ -37,6 +29,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
+
 """Main entry point and utility functions
 
 This module provides dependency_consolidator functionality including:
@@ -52,8 +45,6 @@ Dependency Consolidator - Migration tool for consolidating requirements.txt to p
 This script analyzes all module-specific requirements.txt files and consolidates them
 into pyproject.toml with exact version pinning.
 """
-
-
 
 def parse_requirements_file(file_path: Path) -> List[Tuple[str, str, str]]:
     """

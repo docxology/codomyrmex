@@ -17,82 +17,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides rest_api functionality including:
-- 31 functions: create_api, create_router, json_body...
-- 7 classes: HTTPMethod, HTTPStatus, APIRequest...
-
-Usage:
-    # Example usage here
-"""
 REST API Implementation for Codomyrmex
 
 This module provides a standardized REST API framework with automatic routing,
 middleware support, and comprehensive error handling.
 """
 
-
 # Import logging
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 class HTTPMethod(Enum):
     """HTTP methods supported by the REST API."""
@@ -103,7 +38,6 @@ class HTTPMethod(Enum):
     PATCH = "PATCH"
     OPTIONS = "OPTIONS"
     HEAD = "HEAD"
-
 
 class HTTPStatus(Enum):
     """Common HTTP status codes."""
@@ -120,7 +54,6 @@ class HTTPStatus(Enum):
     NOT_IMPLEMENTED = 501
     BAD_GATEWAY = 502
     SERVICE_UNAVAILABLE = 503
-
 
 @dataclass
 class APIRequest:
@@ -142,7 +75,6 @@ class APIRequest:
             except (json.JSONDecodeError, UnicodeDecodeError):
                 return None
         return None
-
 
 @dataclass
 class APIResponse:
@@ -185,7 +117,6 @@ class APIResponse:
         """Create a bad request response."""
         return cls.error(message, HTTPStatus.BAD_REQUEST)
 
-
 @dataclass
 class APIEndpoint:
     """Represents an API endpoint configuration."""
@@ -199,7 +130,6 @@ class APIEndpoint:
     request_body: Optional[Dict[str, Any]] = None
     responses: Dict[int, Dict[str, Any]] = field(default_factory=dict)
     middleware: List[Callable[[APIRequest], Optional[APIResponse]]] = field(default_factory=list)
-
 
 class APIRouter:
     """Router for managing API endpoints."""
@@ -362,7 +292,6 @@ Args:
             endpoints.extend(router.get_all_endpoints())
 
         return endpoints
-
 
 class RESTAPI:
     """
@@ -541,7 +470,6 @@ class RESTAPI:
         """
         return self.router.get_all_endpoints()
 
-
 # Convenience functions
 def create_api(title: str = "Codomyrmex API", version: str = "1.0.0") -> RESTAPI:
     """
@@ -555,7 +483,6 @@ def create_api(title: str = "Codomyrmex API", version: str = "1.0.0") -> RESTAPI
         RESTAPI instance
     """
     return RESTAPI(title=title, version=version)
-
 
 def create_router(prefix: str = "") -> APIRouter:
     """

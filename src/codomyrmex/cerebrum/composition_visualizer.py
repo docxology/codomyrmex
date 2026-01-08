@@ -54,24 +54,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Composition visualizations: graphical abstracts and multi-panel compositions.
+
 
 """Core functionality module
 
@@ -80,6 +64,7 @@ This module provides composition_visualizer functionality including:
 - 1 classes: CompositionVisualizer
 
 Usage:
+    from composition_visualizer import FunctionName, ClassName
     # Example usage here
 """
 This module provides composite visualizations that combine multiple analyses
@@ -417,6 +402,4 @@ class CompositionVisualizer:
         else:
             plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
             return fig
-
-
 

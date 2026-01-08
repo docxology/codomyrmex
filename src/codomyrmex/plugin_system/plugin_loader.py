@@ -34,12 +34,13 @@ class LoadResult:
     warnings: List[str] = None
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if self.warnings is None:
             self.warnings = []

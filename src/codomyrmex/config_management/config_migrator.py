@@ -13,82 +13,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides config_migrator functionality including:
-- 23 functions: create_logging_migration_rules, create_database_migration_rules, migrate_config...
-- 4 classes: MigrationAction, MigrationRule, MigrationResult...
-
-Usage:
-    # Example usage here
-"""
 Configuration Migrator for Codomyrmex
 
 This module provides configuration migration capabilities to handle version upgrades,
 deprecated field handling, and automatic configuration updates.
 """
 
-
 # Import logging
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 class MigrationAction(Enum):
     """Types of migration actions."""
@@ -100,7 +35,6 @@ class MigrationAction(Enum):
     SPLIT_FIELD = "split_field"
     MERGE_FIELDS = "merge_fields"
     CUSTOM_TRANSFORM = "custom_transform"
-
 
 @dataclass
 class MigrationRule:
@@ -140,7 +74,6 @@ class MigrationRule:
 
         return result
 
-
 @dataclass
 class MigrationResult:
     """Result of a configuration migration."""
@@ -164,7 +97,6 @@ class MigrationResult:
             "errors": self.errors,
             "has_backup": self.backup_config is not None
         }
-
 
 class ConfigMigrator:
     """
@@ -504,7 +436,6 @@ class ConfigMigrator:
         if isinstance(current, dict) and keys[-1] in current:
             del current[keys[-1]]
 
-
 # Predefined migration rules for common Codomyrmex configurations
 
 def create_logging_migration_rules() -> List[MigrationRule]:
@@ -536,7 +467,6 @@ def create_logging_migration_rules() -> List[MigrationRule]:
         )
     ]
 
-
 def create_database_migration_rules() -> List[MigrationRule]:
     """Create migration rules for database configuration."""
     return [
@@ -565,7 +495,6 @@ def create_database_migration_rules() -> List[MigrationRule]:
             new_value="require"
         )
     ]
-
 
 # Convenience functions
 

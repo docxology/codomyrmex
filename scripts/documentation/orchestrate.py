@@ -21,29 +21,15 @@ from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logge
 from codomyrmex.exceptions import DocumentationError, CodomyrmexError
 
 # Import shared utilities
-try:
-    from _orchestrator_utils import (
-        ensure_output_directory,
-        format_output,
-        print_error,
-        print_info,
-        print_section,
-        print_success,
-        validate_file_path,
-    )
-except ImportError:
-    import sys
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    from _orchestrator_utils import (
-        ensure_output_directory,
-        format_output,
-        print_error,
-        print_info,
-        print_section,
-        print_success,
-        validate_file_path,
-    )
+from codomyrmex.utils.cli_helpers import (
+    ensure_output_directory,
+    format_output,
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    validate_file_path,
+)
 
 # Import module functions
 from codomyrmex.documentation import (
@@ -55,8 +41,9 @@ from codomyrmex.documentation import (
     validate_doc_versions,
 )
 
-logger = get_logger(__name__)
+from codomyrmex.logging_monitoring import get_logger
 
+logger = get_logger(__name__)
 
 def handle_check_environment(args):
     """Handle check doc environment command."""
@@ -321,4 +308,3 @@ Examples:
 
 if __name__ == "__main__":
     sys.exit(main())
-

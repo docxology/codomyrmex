@@ -21,77 +21,13 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides container_registry functionality including:
-- 15 functions: manage_container_registry, get_auth_header, __init__...
-- 3 classes: ContainerImage, RegistryCredentials, ContainerRegistry
-
-Usage:
-    # Example usage here
-"""
 Container Registry Module for Codomyrmex Containerization.
 
 This module provides container registry management, image storage,
 and distribution capabilities using Docker SDK and registry APIs.
 """
-
-
 
 logger = get_logger(__name__)
 
@@ -113,7 +49,6 @@ except ImportError:
     requests = None
     REQUESTS_AVAILABLE = False
 
-
 @dataclass
 class ContainerImage:
     """Container image information."""
@@ -126,7 +61,6 @@ class ContainerImage:
     layers: list[str] = field(default_factory=list)
     labels: dict[str, str] = field(default_factory=dict)
     vulnerabilities: list[dict[str, Any]] = field(default_factory=list)
-
 
 @dataclass
 class RegistryCredentials:
@@ -143,7 +77,6 @@ class RegistryCredentials:
         auth_string = f"{self.username}:{self.password}"
         encoded = base64.b64encode(auth_string.encode()).decode()
         return f"Basic {encoded}"
-
 
 class ContainerRegistry:
     """Container registry management system.
@@ -690,7 +623,6 @@ class ContainerRegistry:
         except Exception as e:
             logger.error(f"Failed to inspect manifest: {e}")
             return None
-
 
 def manage_container_registry(
     operation: str,

@@ -3,18 +3,7 @@ from typing import Dict, List
 import argparse
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -37,33 +26,20 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides fix_navigation_links functionality including:
-- 6 functions: main, __init__, get_repo_structure...
-- 1 classes: NavigationLinkFixer
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Fix navigation links in AGENTS.md files that point to non-existent files.
 """
 
 
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 class NavigationLinkFixer:
     """Fix navigation links in AGENTS.md files."""
 
     def __init__(self, repo_root: Path):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    repo_root : Description of repo_root
-
-    Returns: Description of return value
-"""
         self.repo_root = repo_root
         self.fixed_count = 0
 
@@ -234,4 +210,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

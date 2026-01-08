@@ -5,7 +5,6 @@ import json
 import sys
 import time
 
-
 from contextlib import contextmanager
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, LogContext
@@ -69,14 +68,26 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, LogContext
 
 
 
-"""Core functionality module
 
-This module provides cli_helpers functionality including:
-- 28 functions: format_table, print_progress_bar, validate_dry_run...
-- 1 classes: ProgressReporter
+
+
+
+
+
+
+"""CLI Helper Utilities
+
+Core functionality module for CLI operations.
+
+This module provides utility functions for CLI interfaces including:
+- formatting tables and output
+- progress reporting
+- argument validation
+- color output
 
 Usage:
-    # Example usage here
+    from codomyrmex.utils.cli_helpers import format_table, print_success
+    print_success("Operation completed")
 """
 
 
@@ -571,7 +582,21 @@ def handle_common_exceptions(
         Decorator function
     """
     def decorator(func):
+    """Brief description of decorator.
+
+Args:
+    func : Description of func
+
+    Returns: Description of return value
+"""
         def wrapper(*args, **kwargs):
+    """Brief description of wrapper.
+
+Args:
+
+
+    Returns: Description of return value
+"""
             try:
                 return func(*args, **kwargs)
             except FileNotFoundError as e:

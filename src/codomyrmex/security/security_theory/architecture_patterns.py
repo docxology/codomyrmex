@@ -46,26 +46,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Security architecture patterns."""
-
-
 
 """Core functionality module
 
@@ -74,6 +55,7 @@ This module provides architecture_patterns functionality including:
 - 1 classes: SecurityPattern
 
 Usage:
+    from architecture_patterns import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -134,6 +116,4 @@ def apply_pattern(pattern_name: str, context: dict) -> dict:
         "pattern": pattern_name,
         "context": context,
     }
-
-
 

@@ -16,27 +16,29 @@ class ValidationResult:
     """Result of document validation."""
     
     def __init__(self, is_valid: bool, errors: list[str] = None, warnings: list[str] = None):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    is_valid : Description of is_valid
-    errors : Description of errors
-    warnings : Description of warnings
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+            is_valid : Description of is_valid
+            errors : Description of errors
+            warnings : Description of warnings
+        
+            Returns: Description of return value
+        """
 """
         self.is_valid = is_valid
         self.errors = errors or []
         self.warnings = warnings or []
     
     def __bool__(self) -> bool:
-    """Brief description of __bool__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: bool)
+        """Brief description of __bool__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value (type: bool)
+        """
 """
         return self.is_valid
 
@@ -165,6 +167,4 @@ def validate_document(
     """
     validator = DocumentValidator()
     return validator.validate(document, schema)
-
-
 

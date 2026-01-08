@@ -24,27 +24,14 @@ from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logge
 from codomyrmex.exceptions import GitOperationError, RepositoryError, CodomyrmexError
 
 # Import shared utilities
-try:
-    from _orchestrator_utils import (
-        format_output,
-        print_error,
-        print_info,
-        print_section,
-        print_success,
-        validate_file_path,
-    )
-except ImportError:
-    import sys
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    from _orchestrator_utils import (
-        format_output,
-        print_error,
-        print_info,
-        print_section,
-        print_success,
-        validate_file_path,
-    )
+from codomyrmex.utils.cli_helpers import (
+    format_output,
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    validate_file_path,
+)
 
 # Import module functions
 from codomyrmex.git_operations import (

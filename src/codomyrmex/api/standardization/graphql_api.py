@@ -14,82 +14,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides graphql_api functionality including:
-- 26 functions: resolver, mutation, create_schema...
-- 8 classes: GraphQLType, GraphQLField, GraphQLObjectType...
-
-Usage:
-    # Example usage here
-"""
 GraphQL API Implementation for Codomyrmex
 
 This module provides a GraphQL API framework with schema generation,
 resolvers, mutations, and query optimization.
 """
 
-
 # Import logging
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 class GraphQLType(Enum):
     """GraphQL type definitions."""
@@ -98,7 +33,6 @@ class GraphQLType(Enum):
     FLOAT = "Float"
     BOOLEAN = "Boolean"
     ID = "ID"
-
 
 @dataclass
 class GraphQLField:
@@ -109,7 +43,6 @@ class GraphQLField:
     args: Dict[str, Union[str, 'GraphQLObjectType']] = field(default_factory=dict)
     resolver: Optional[Callable] = None
     required: bool = False
-
 
 @dataclass
 class GraphQLObjectType:
@@ -126,7 +59,6 @@ class GraphQLObjectType:
     def get_field(self, name: str) -> Optional[GraphQLField]:
         """Get a field by name."""
         return self.fields.get(name)
-
 
 @dataclass
 class GraphQLSchema:
@@ -206,7 +138,6 @@ class GraphQLSchema:
 
         return "\n".join(lines)
 
-
 @dataclass
 class GraphQLResolver:
     """GraphQL resolver for handling field resolution."""
@@ -231,7 +162,6 @@ class GraphQLResolver:
         except Exception as e:
             logger.error(f"Resolver error for field {self.field_name}: {e}")
             raise
-
 
 @dataclass
 class GraphQLMutation:
@@ -259,7 +189,6 @@ class GraphQLMutation:
             logger.error(f"Mutation error for {self.name}: {e}")
             raise
 
-
 @dataclass
 class GraphQLQuery:
     """GraphQL query representation."""
@@ -267,7 +196,6 @@ class GraphQLQuery:
     selection_set: Dict[str, Any]
     variables: Dict[str, Any] = field(default_factory=dict)
     operation_name: Optional[str] = None
-
 
 class GraphQLAPI:
     """
@@ -498,7 +426,6 @@ class GraphQLAPI:
 
         return errors
 
-
 # Decorator for GraphQL resolvers
 def resolver(field_name: str, complexity: int = 1):
     """
@@ -512,12 +439,13 @@ def resolver(field_name: str, complexity: int = 1):
         Decorated function
     """
     def decorator(func: Callable) -> GraphQLResolver:
-    """Brief description of decorator.
-
-Args:
-    func : Description of func
-
-    Returns: Description of return value (type: GraphQLResolver)
+        """Brief description of decorator.
+        
+        Args:
+            func : Description of func
+        
+            Returns: Description of return value (type: GraphQLResolver)
+        """
 """
         return GraphQLResolver(
             field_name=field_name,
@@ -525,7 +453,6 @@ Args:
             complexity=complexity
         )
     return decorator
-
 
 # Decorator for GraphQL mutations
 def mutation(name: str, input_type: GraphQLObjectType,
@@ -543,12 +470,13 @@ def mutation(name: str, input_type: GraphQLObjectType,
         Decorated function
     """
     def decorator(func: Callable) -> GraphQLMutation:
-    """Brief description of decorator.
-
-Args:
-    func : Description of func
-
-    Returns: Description of return value (type: GraphQLMutation)
+        """Brief description of decorator.
+        
+        Args:
+            func : Description of func
+        
+            Returns: Description of return value (type: GraphQLMutation)
+        """
 """
         return GraphQLMutation(
             name=name,
@@ -559,7 +487,6 @@ Args:
         )
     return decorator
 
-
 # Convenience functions
 def create_schema() -> GraphQLSchema:
     """
@@ -569,7 +496,6 @@ def create_schema() -> GraphQLSchema:
         GraphQLSchema instance
     """
     return GraphQLSchema()
-
 
 def create_object_type(name: str, description: Optional[str] = None) -> GraphQLObjectType:
     """
@@ -583,7 +509,6 @@ def create_object_type(name: str, description: Optional[str] = None) -> GraphQLO
         GraphQLObjectType instance
     """
     return GraphQLObjectType(name=name, description=description)
-
 
 def create_field(name: str, type: Union[str, GraphQLObjectType],
                 description: Optional[str] = None, required: bool = False) -> GraphQLField:

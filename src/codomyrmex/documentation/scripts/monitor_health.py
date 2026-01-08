@@ -6,18 +6,8 @@ import json
 import logging
 import sys
 
-
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -40,15 +30,18 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides monitor_health functionality including:
-- 8 functions: main, __init__, load_history...
-- 1 classes: DocumentationHealthMonitor
 
-Usage:
-    # Example usage here
-"""
+class DocumentationHealthMonitor:
+    """
+
+
+    #!/usr/bin/env python3
+    """
+
 Documentation Health Monitoring for Codomyrmex.
 
 Continuous monitoring of documentation quality with alerting and reporting.
@@ -57,14 +50,11 @@ Continuous monitoring of documentation quality with alerting and reporting.
 
 try:
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-class DocumentationHealthMonitor:
-    """Monitors documentation health over time."""
+logger = get_logger(__name__)
+
+Monitors documentation health over time."""
     
     def __init__(self, repo_root: Path):
         """Initialize monitor."""
@@ -245,5 +235,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

@@ -1,20 +1,65 @@
 from typing import Any, Iterator, Optional
 import time
 
-try:
-    import anthropic
-except ImportError:
-    anthropic = None
+import anthropic
 
 from codomyrmex.agents.config import get_config
 from codomyrmex.agents.core import (
+from codomyrmex.agents.exceptions import ClaudeError
+from codomyrmex.agents.generic.api_agent_base import APIAgentBase
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    anthropic = None
+
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.exceptions import ClaudeError
-from codomyrmex.agents.generic.api_agent_base import APIAgentBase
-from codomyrmex.logging_monitoring import get_logger
+try:
+except ImportError:
 
 
 class ClaudeClient(APIAgentBase):

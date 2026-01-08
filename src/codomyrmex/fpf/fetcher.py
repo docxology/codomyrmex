@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Fetcher for FPF specification from GitHub.
 
+
 """Testing utilities and test helpers
 
 This module provides fetcher functionality including:
@@ -8,6 +9,7 @@ This module provides fetcher functionality including:
 - 1 classes: FPFFetcher
 
 Usage:
+    from fetcher import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -139,6 +141,4 @@ class FPFFetcher:
         cache_path.write_text(content, encoding="utf-8")
 
         return cache_path
-
-
 

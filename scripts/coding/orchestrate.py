@@ -39,30 +39,15 @@ from codomyrmex.exceptions import (
 )
 
 # Import shared utilities
-try:
-    from _orchestrator_utils import (
-        determine_language_from_file,
-        format_output,
-        print_error,
-        print_info,
-        print_section,
-        print_success,
-        validate_file_path,
-    )
-except ImportError:
-    # Fallback if running from different directory
-    import sys
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    from _orchestrator_utils import (
-        determine_language_from_file,
-        format_output,
-        print_error,
-        print_info,
-        print_section,
-        print_success,
-        validate_file_path,
-    )
+from codomyrmex.utils.cli_helpers import (
+    determine_language_from_file,
+    format_output,
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    validate_file_path,
+)
 
 # Import module functions
 from codomyrmex.agents.ai_code_editing import (

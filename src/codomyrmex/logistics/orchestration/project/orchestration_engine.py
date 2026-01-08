@@ -105,12 +105,13 @@ class OrchestrationSession:
     status: SessionStatus = SessionStatus.PENDING
 
     def to_dict(self) -> dict[str, Any]:
-    """Brief description of to_dict.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: Any)
+        """Brief description of to_dict.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         data = {
             "session_id": self.session_id,

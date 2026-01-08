@@ -1,1 +1,4 @@
-"""Core functionality module for Codomyrmex utilities."""
+"""Utilities package.
+
+Common utility functions and helpers.
+"""

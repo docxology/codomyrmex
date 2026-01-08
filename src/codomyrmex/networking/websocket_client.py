@@ -11,73 +11,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides websocket_client functionality including:
-- 5 functions: __init__, connect, send...
-- 2 classes: NetworkingError, WebSocketClient
-
-Usage:
-    # Example usage here
-"""
 WebSocket client implementation.
 """
-
-
 
 logger = get_logger(__name__)
 
@@ -86,12 +21,10 @@ try:
 except ImportError:
     WEBSOCKET_AVAILABLE = False
 
-
 class NetworkingError(CodomyrmexError):
     """Raised when networking operations fail."""
 
     pass
-
 
 class WebSocketClient:
     """WebSocket client for real-time communication."""
@@ -174,5 +107,4 @@ class WebSocketClient:
             finally:
                 self.ws = None
                 self.connected = False
-
 

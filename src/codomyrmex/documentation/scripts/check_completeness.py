@@ -4,18 +4,8 @@ import logging
 import re
 import sys
 
-
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -38,15 +28,19 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
 
-This module provides check_completeness functionality including:
-- 7 functions: main, __init__, check_file_for_placeholders...
-- 1 classes: DocumentationChecker
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-Usage:
-    # Example usage here
-"""
+
+class DocumentationChecker:
+    """
+
+
+    #!/usr/bin/env python3
+    """
+
 Documentation Completeness Checker.
 
 This script checks for placeholder content and generates an implementation status tracker.
@@ -56,15 +50,11 @@ This script checks for placeholder content and generates an implementation statu
 try:
 
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-class DocumentationChecker:
-    """Checks documentation for completeness and placeholder content."""
+logger = get_logger(__name__)
+
+Checks documentation for completeness and placeholder content."""
 
     def __init__(self, repo_root: Path):
         """Initialize checker."""
@@ -399,4 +389,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

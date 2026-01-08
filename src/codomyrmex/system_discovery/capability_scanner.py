@@ -19,70 +19,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides capability_scanner functionality including:
-- 16 functions: __init__, scan_all_modules, scan_module...
-- 4 classes: FunctionCapability, ClassCapability, ModuleCapability...
-
-Usage:
-    # Example usage here
-"""
 Capability Scanner for Codomyrmex System Discovery
 
 Scans and analyzes capabilities across the Codomyrmex ecosystem, providing
@@ -90,14 +28,12 @@ detailed information about functions, classes, methods, and other exportable
 functionality.
 """
 
-
 try:
 
     logger = get_logger(__name__)
 except ImportError:
 
     logger = logging.getLogger(__name__)
-
 
 @dataclass
 class FunctionCapability:
@@ -115,7 +51,6 @@ class FunctionCapability:
     decorators: list[str]
     complexity_score: int
 
-
 @dataclass
 class ClassCapability:
     """Detailed information about a class capability."""
@@ -130,7 +65,6 @@ class ClassCapability:
     line_number: int
     is_abstract: bool
     decorators: list[str]
-
 
 @dataclass
 class ModuleCapability:
@@ -147,7 +81,6 @@ class ModuleCapability:
     file_count: int
     line_count: int
     last_modified: str
-
 
 class CapabilityScanner:
     """
@@ -728,7 +661,6 @@ class CapabilityScanner:
         except Exception as e:
             logger.error(f"Failed to export capabilities report: {e}")
             return ""
-
 
 if __name__ == "__main__":
     # Demo the capability scanner

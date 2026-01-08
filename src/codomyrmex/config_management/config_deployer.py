@@ -15,80 +15,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides config_deployer functionality including:
-- 14 functions: deploy_configuration, __init__, _ensure_directories...
-- 5 classes: DeploymentStatus, EnvironmentType, Environment...
-
-Usage:
-    # Example usage here
-"""
 Configuration Deployment Module for Codomyrmex Configuration Management.
 
 This module provides configuration deployment, environment management,
 and configuration synchronization across multiple environments.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 class DeploymentStatus(Enum):
     """Configuration deployment status."""
@@ -98,14 +33,12 @@ class DeploymentStatus(Enum):
     FAILED = "failed"
     ROLLED_BACK = "rolled_back"
 
-
 class EnvironmentType(Enum):
     """Types of deployment environments."""
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
     TESTING = "testing"
-
 
 @dataclass
 class Environment:
@@ -116,7 +49,6 @@ class Environment:
     variables: dict[str, str] = field(default_factory=dict)
     secrets: dict[str, str] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
-
 
 @dataclass
 class ConfigDeployment:
@@ -130,7 +62,6 @@ class ConfigDeployment:
     config_files: list[str]
     changes: dict[str, Any]
     rollback_info: Optional[dict[str, Any]] = None
-
 
 class ConfigurationDeployer:
     """Configuration deployment and environment management system."""
@@ -408,7 +339,6 @@ class ConfigurationDeployer:
             List of environments
         """
         return list(self._environments.values())
-
 
 def deploy_configuration(
     environment_name: str,

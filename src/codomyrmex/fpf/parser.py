@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Parser for FPF specification markdown.
 
+
 """Core functionality module
 
 This module provides parser functionality including:
@@ -8,6 +9,7 @@ This module provides parser functionality including:
 - 1 classes: FPFParser
 
 Usage:
+    from parser import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -380,6 +382,4 @@ class FPFParser:
             sections[current_section] = "\n".join(current_lines).strip()
 
         return sections
-
-
 

@@ -2,57 +2,22 @@ from pathlib import Path
 import re
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides fix_tutorial_references functionality including:
-- 1 functions: fix_tutorial_references
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Fix broken references in example_tutorial.md files.
 
 Updates references to API_SPECIFICATION.md and USAGE_EXAMPLES.md
 to point to existing files or remove references if files don't exist.
 """
 
+#!/usr/bin/env python3
 
+logger = get_logger(__name__)
 
 def fix_tutorial_references():
     """Fix broken references in tutorial files."""
@@ -131,7 +96,5 @@ def fix_tutorial_references():
     print(f"\n✅ Fixed {fixed_count} tutorial files")
     return 0
 
-
 if __name__ == '__main__':
     sys.exit(fix_tutorial_references())
-

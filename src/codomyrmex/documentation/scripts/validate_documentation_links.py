@@ -3,7 +3,6 @@ from typing import List, Tuple
 import os
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -25,32 +24,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""Validate links in documentation files."""
-
-
-"""Main entry point and utility functions
-
-This module provides validate_documentation_links functionality including:
-- 4 functions: find_markdown_links, validate_link, validate_file_links...
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
 def find_markdown_links(content: str) -> List[Tuple[str, str]]:
-    """Find all markdown links in content."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """Validate links in documentation files."""
+
+logger = get_logger(__name__)
+
+Find all markdown links in content."""
     # Pattern for markdown links: [text](path)
     pattern = r'\[([^\]]+)\]\(([^\)]+)\)'
     matches = re.findall(pattern, content)
@@ -126,4 +112,3 @@ def main():
 if __name__ == "__main__":
     success = main()
     exit(0 if success else 1)
-

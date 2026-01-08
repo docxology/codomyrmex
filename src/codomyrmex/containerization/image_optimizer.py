@@ -16,75 +16,11 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides image_optimizer functionality including:
-- 19 functions: to_dict, to_dict, __init__...
-- 3 classes: ImageAnalysis, OptimizationSuggestion, ImageOptimizer
-
-Usage:
-    # Example usage here
-"""
 Image Optimizer for Codomyrmex Containerization
 
 This module provides comprehensive Docker image optimization capabilities,
 including size reduction, layer optimization, and multi-stage build generation.
 """
-
 
 # Import logging
 try:
@@ -98,7 +34,6 @@ try:
 except ImportError:
     docker = None
     HAS_DOCKER = False
-
 
 @dataclass
 class ImageAnalysis:
@@ -129,7 +64,6 @@ class ImageAnalysis:
             "optimization_score": self.optimization_score
         }
 
-
 @dataclass
 class OptimizationSuggestion:
     """A specific optimization suggestion."""
@@ -150,7 +84,6 @@ class OptimizationSuggestion:
             "dockerfile_changes": self.dockerfile_changes,
             "size_reduction_mb": self.size_reduction_mb
         }
-
 
 class ImageOptimizer:
     """

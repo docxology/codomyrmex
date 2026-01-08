@@ -10,74 +10,8 @@ import hashlib
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides security_issues functionality including:
-- 5 functions: insecure_function, weak_crypto_example, hardcoded_credentials...
-- 1 classes: InsecureClass
-
-Usage:
-    # Example usage here
-"""
 Python file with security issues for testing security analysis.
 """
-
-
 
 def insecure_function(user_input):
     """Function with multiple security issues."""
@@ -100,13 +34,11 @@ def insecure_function(user_input):
 
     return content
 
-
 def weak_crypto_example(password):
     """Example of weak cryptographic practices."""
     # Weak hashing (MD5)
     hash_obj = hashlib.md5(password.encode())
     return hash_obj.hexdigest()
-
 
 def hardcoded_credentials():
     """Example with hardcoded credentials."""
@@ -118,17 +50,17 @@ def hardcoded_credentials():
 
     return False
 
-
 class InsecureClass:
     """Class with insecure defaults."""
 
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.api_key = "sk-1234567890abcdef"  # Hardcoded API key
         self.debug_mode = True  # Debug mode enabled by default

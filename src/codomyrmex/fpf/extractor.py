@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Extractor for FPF patterns, concepts, and relationships.
 
+
 """Core functionality module
 
 This module provides extractor functionality including:
@@ -8,6 +9,7 @@ This module provides extractor functionality including:
 - 1 classes: FPFExtractor
 
 Usage:
+    from extractor import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -309,6 +311,4 @@ class FPFExtractor:
                 if pattern.id not in references:
                     references.append(pattern.id)
         return references
-
-
 

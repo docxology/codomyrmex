@@ -1,11 +1,48 @@
+from pathlib import Path
+from typing import List, Optional
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
+
+"""Core functionality module
+
+This module provides discovery functionality including:
+- 1 functions: discover_scripts
+- 0 classes: 
+
+Usage:
+    from discovery import FunctionName, ClassName
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Script Discovery
 
 Handles finding scripts to run based on criteria.
 """
 
-from pathlib import Path
-from typing import List, Optional
 
 # Constants
 SKIP_DIRS = {

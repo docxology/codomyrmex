@@ -48,24 +48,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Core scraping abstractions and data structures.
+
 
 """Core functionality module
 
@@ -74,14 +58,13 @@ This module provides core functionality including:
 - 8 classes: ScrapeFormat, ScrapeResult, ScrapeOptions...
 
 Usage:
+    from core import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
 This module defines the core abstractions for the scrape module,
 including result types, configuration options, and abstract base classes.
 """
-
-
 
 class ScrapeFormat(str, Enum):
     """Supported output formats for scraping operations."""

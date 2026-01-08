@@ -46,9 +46,6 @@ Args:
 
 from .documentation_generator import DocumentationGenerator
 
-
-
-
 class ProjectStatus(Enum):
     """Project lifecycle status."""
 

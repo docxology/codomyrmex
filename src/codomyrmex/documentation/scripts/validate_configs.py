@@ -50,37 +50,22 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    # Fallback logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides validate_configs functionality including:
-- 18 functions: main, __init__, validate_all_configs...
-- 1 classes: ConfigValidator
 
-Usage:
-    # Example usage here
-"""
+class ConfigValidator:
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
 Configuration Validator for Codomyrmex Examples
 
 This script validates all YAML and JSON configuration files in the examples directory.
@@ -111,15 +96,10 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    logger = get_logger(__name__)
-except ImportError:
-    # Fallback logging
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
+logger = get_logger(__name__)
 
-class ConfigValidator:
-    """Validates configuration files for Codomyrmex examples."""
+Validates configuration files for Codomyrmex examples."""
 
     def __init__(self, project_root: Path):
         """Initialize the config validator."""
@@ -326,14 +306,6 @@ class ConfigValidator:
     def _validate_env_vars(self, config: Dict[str, Any], result: Dict[str, Any]):
         """Validate environment variable references."""
         def check_env_vars(obj, path=""):
-    """Brief description of check_env_vars.
-
-Args:
-    obj : Description of obj
-    path : Description of path
-
-    Returns: Description of return value
-"""
             if isinstance(obj, dict):
                 for key, value in obj.items():
                     current_path = f"{path}.{key}" if path else key
@@ -359,14 +331,6 @@ Args:
     def _validate_file_paths(self, config: Dict[str, Any], result: Dict[str, Any]):
         """Validate file paths in configuration."""
         def check_file_paths(obj, path=""):
-    """Brief description of check_file_paths.
-
-Args:
-    obj : Description of obj
-    path : Description of path
-
-    Returns: Description of return value
-"""
             if isinstance(obj, dict):
                 for key, value in obj.items():
                     current_path = f"{path}.{key}" if path else key
@@ -388,14 +352,6 @@ Args:
     def _validate_numeric_ranges(self, config: Dict[str, Any], result: Dict[str, Any]):
         """Validate numeric values are in reasonable ranges."""
         def check_numeric_ranges(obj, path=""):
-    """Brief description of check_numeric_ranges.
-
-Args:
-    obj : Description of obj
-    path : Description of path
-
-    Returns: Description of return value
-"""
             if isinstance(obj, dict):
                 for key, value in obj.items():
                     current_path = f"{path}.{key}" if path else key

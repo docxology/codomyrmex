@@ -16,6 +16,15 @@ class AgentTimeoutError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    timeout : Description of timeout
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Agent operation timed out",
         timeout: float | None = None,
@@ -31,6 +40,15 @@ class AgentConfigurationError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    config_key : Description of config_key
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Agent configuration error",
         config_key: str | None = None,
@@ -46,6 +64,16 @@ class JulesError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    command : Description of command
+    exit_code : Description of exit_code
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Jules operation failed",
         command: str | None = None,
@@ -64,6 +92,16 @@ class ClaudeError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    api_error : Description of api_error
+    status_code : Description of status_code
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Claude operation failed",
         api_error: str | None = None,
@@ -82,6 +120,16 @@ class CodexError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    api_error : Description of api_error
+    status_code : Description of status_code
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Codex operation failed",
         api_error: str | None = None,
@@ -100,6 +148,16 @@ class OpenCodeError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    command : Description of command
+    exit_code : Description of exit_code
+
+    Returns: Description of return value
+"""
         self,
         message: str = "OpenCode operation failed",
         command: str | None = None,
@@ -118,6 +176,16 @@ class GeminiError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    command : Description of command
+    exit_code : Description of exit_code
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Gemini operation failed",
         command: str | None = None,
@@ -136,6 +204,16 @@ class MistralVibeError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    command : Description of command
+    exit_code : Description of exit_code
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Mistral Vibe operation failed",
         command: str | None = None,
@@ -154,6 +232,16 @@ class EveryCodeError(AgentError):
 
     def __init__(
 
+    """Brief description of __init__.
+
+Args:
+    self : Description of self
+    message : Description of message
+    command : Description of command
+    exit_code : Description of exit_code
+
+    Returns: Description of return value
+"""
         self,
         message: str = "Every Code operation failed",
         command: str | None = None,

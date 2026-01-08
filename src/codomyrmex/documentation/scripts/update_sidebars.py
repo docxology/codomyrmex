@@ -1,7 +1,6 @@
 from pathlib import Path
 import json
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -23,33 +22,18 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
+#!/usr/bin/env python3
+"""
+This script scans src/codomyrmex/documentation/docs/modules and emits a JSON-like
+structure fragment that can be manually merged into sidebars.js or used to
+automate sidebar updates.
+"""
 
 
 #!/usr/bin/env python3
 """Generate sidebar entries for Docusaurus based on aggregated docs in docs/modules.
 
-"""Main entry point and utility functions
-
-This module provides update_sidebars functionality including:
-- 2 functions: scan_modules, main
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
-This script scans src/codomyrmex/documentation/docs/modules and emits a JSON-like
-structure fragment that can be manually merged into sidebars.js or used to
-automate sidebar updates.
-"""
 
 ROOT = Path(__file__).resolve().parents[1] / "docs" / "modules"
 
@@ -72,13 +56,6 @@ def scan_modules(root: Path):
 
 
 def main():
-    """Brief description of main.
-
-Args:
-
-
-    Returns: Description of return value
-"""
     modules = scan_modules(ROOT)
     print(json.dumps(modules, indent=2))
 

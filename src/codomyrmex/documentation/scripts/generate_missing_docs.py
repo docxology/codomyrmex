@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import Optional
 import os
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -24,32 +23,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""Generate missing README.md and AGENTS.md files."""
-
-
-"""Main entry point and utility functions
-
-This module provides generate_missing_docs functionality including:
-- 4 functions: get_directory_info, create_readme, create_agents...
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
 def get_directory_info(dir_path: Path) -> dict:
-    """Get directory information from existing files."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """Generate missing README.md and AGENTS.md files."""
+
+logger = get_logger(__name__)
+
+Get directory information from existing files."""
     info = {
         'purpose': '',
         'description': '',
@@ -186,4 +172,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -15,80 +15,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides performance_monitor functionality including:
-- 14 functions: monitor_database, optimize_database, __init__...
-- 4 classes: QueryMetrics, DatabaseMetrics, PerformanceAlert...
-
-Usage:
-    # Example usage here
-"""
 Performance Monitoring Module for Codomyrmex Database Management.
 
 This module provides database performance monitoring, query optimization,
 and performance analytics capabilities.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 @dataclass
 class QueryMetrics:
@@ -100,7 +35,6 @@ class QueryMetrics:
     timestamp: datetime
     query_text: str = ""
     database_name: str = ""
-
 
 @dataclass
 class DatabaseMetrics:
@@ -114,7 +48,6 @@ class DatabaseMetrics:
     cache_hit_ratio: float
     disk_io_mb: float
 
-
 @dataclass
 class PerformanceAlert:
     """Performance alert or warning."""
@@ -126,7 +59,6 @@ class PerformanceAlert:
     description: str
     timestamp: datetime
     resolution_suggestions: list[str] = field(default_factory=list)
-
 
 class DatabasePerformanceMonitor:
     """Database performance monitoring and optimization system."""
@@ -532,10 +464,8 @@ class DatabasePerformanceMonitor:
 
         return history
 
-
 # Alias for backward compatibility
 DatabaseMonitor = DatabasePerformanceMonitor
-
 
 def monitor_database(database_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
     """Monitor database performance.
@@ -549,7 +479,6 @@ def monitor_database(database_name: str, workspace_dir: Optional[str] = None) ->
     """
     monitor = DatabasePerformanceMonitor(workspace_dir)
     return monitor.analyze_database_performance(database_name)
-
 
 def optimize_database(database_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
     """Optimize database performance.

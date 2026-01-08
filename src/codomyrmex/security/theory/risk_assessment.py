@@ -49,26 +49,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Risk assessment methodologies."""
-
-
 
 """Core functionality module
 
@@ -77,6 +58,7 @@ This module provides risk_assessment functionality including:
 - 6 classes: RiskLevel, LikelihoodLevel, ImpactLevel...
 
 Usage:
+    from risk_assessment import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

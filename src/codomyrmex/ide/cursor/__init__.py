@@ -2,14 +2,7 @@ from pathlib import Path
 from typing import Any, Optional, Dict, List
 import json
 
-
 from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutionError
-
-
-
-
-
-
 
 
 
@@ -36,6 +29,7 @@ from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutio
 
 """Cursor IDE Integration
 
+
 """Core functionality module
 
 This module provides __init__ functionality including:
@@ -43,6 +37,7 @@ This module provides __init__ functionality including:
 - 1 classes: CursorClient
 
 Usage:
+    from __init__ import FunctionName, ClassName
     # Example usage here
 """
 Integration with Cursor IDE - the AI-first code editor. Provides programmatic
@@ -54,9 +49,6 @@ Example:
     >>> client.connect()
     >>> rules = client.get_rules()
 """
-
-
-
 
 class CursorClient(IDEClient):
     """Client for interacting with Cursor IDE.

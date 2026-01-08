@@ -70,15 +70,50 @@ from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logge
 
 
 
-"""
-"""Testing utilities and test helpers
 
-This module provides conftest functionality including:
-- 10 functions: setup_performance_logging, temp_performance_dir, sample_code_files...
-- 1 classes: MockPerformanceLogger
 
-Usage:
-    # Example usage here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 Shared fixtures and configuration for performance tests.
 """
@@ -278,38 +313,10 @@ def performance_baseline_data() -> Dict[str, Any]:
 def mock_performance_logger():
     """Mock performance logger for testing."""
     class MockPerformanceLogger:
-    """Brief description of MockPerformanceLogger.
-
-This class provides functionality for...
-
-Attributes:
-    # Add attribute descriptions here
-
-Methods:
-    # Method descriptions will be added automatically
-"""
-        def __init__(self, name="mock"):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    name : Description of name
-
-    Returns: Description of return value
-"""
             self.name = name
             self.operations = []
 
         def start_timer(self, operation, context=None):
-    """Brief description of start_timer.
-
-Args:
-    self : Description of self
-    operation : Description of operation
-    context : Description of context
-
-    Returns: Description of return value
-"""
             self.operations.append({
                 "operation": operation,
                 "type": "start",
@@ -318,15 +325,6 @@ Args:
             })
 
         def end_timer(self, operation, context=None):
-    """Brief description of end_timer.
-
-Args:
-    self : Description of self
-    operation : Description of operation
-    context : Description of context
-
-    Returns: Description of return value
-"""
             self.operations.append({
                 "operation": operation,
                 "type": "end",
@@ -335,17 +333,6 @@ Args:
             })
 
         def log_metric(self, name, value, unit=None, context=None):
-    """Brief description of log_metric.
-
-Args:
-    self : Description of self
-    name : Description of name
-    value : Description of value
-    unit : Description of unit
-    context : Description of context
-
-    Returns: Description of return value
-"""
             self.operations.append({
                 "type": "metric",
                 "name": name,

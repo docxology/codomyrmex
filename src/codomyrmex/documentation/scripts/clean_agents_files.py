@@ -2,46 +2,7 @@ from pathlib import Path
 import argparse
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-# Script removes conceptual items from Active Components sections, while preserving the actual file listings.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -64,35 +25,24 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides clean_agents_files functionality including:
-- 5 functions: main, __init__, get_actual_files...
-- 1 classes: AgentsCleaner
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Clean AGENTS.md files by removing conceptual items from Active Components.
 
 This script identifies and removes items that are not actual files/directories
 """
 
 
+# Script removes conceptual items from Active Components sections, while preserving the actual file listings.
+
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 class AgentsCleaner:
     """Clean AGENTS.md files by removing conceptual items."""
 
     def __init__(self, repo_root: Path):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    repo_root : Description of repo_root
-
-    Returns: Description of return value
-"""
         self.repo_root = repo_root
         self.fixed_count = 0
 
@@ -262,4 +212,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

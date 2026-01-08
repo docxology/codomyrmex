@@ -5,12 +5,20 @@ import numpy as np
 
 from codomyrmex.cerebrum.exceptions import CaseNotFoundError, InvalidCaseError
 from codomyrmex.cerebrum.utils import (
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
     compute_cosine_similarity,
     compute_euclidean_distance,
     normalize_features,
 )
-from codomyrmex.logging_monitoring import get_logger
-
 
 """Case management for case-based reasoning."""
 
@@ -253,6 +261,3 @@ class CaseRetriever:
             return weighted
         else:
             return similar_cases
-
-
-

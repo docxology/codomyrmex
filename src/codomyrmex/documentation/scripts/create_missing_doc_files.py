@@ -2,60 +2,26 @@ from pathlib import Path
 import json
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
 
 
-# Template variables (used in string templates below):
-# from codomyrmex.{module_name} import function_name
-# from codomyrmex.{module_name} import register_tools
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides create_missing_doc_files functionality including:
-- 1 functions: create_missing_doc_files
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Create missing documentation files that are referenced but don't exist.
 
 Creates placeholder API_SPECIFICATION.md and MCP_TOOL_SPECIFICATION.md files
 for modules that reference them but don't have them.
 """
 
+# Template variables (used in string templates below):
+# from codomyrmex.{module_name} import function_name
+# from codomyrmex.{module_name} import register_tools
 
+#!/usr/bin/env python3
+
+logger = get_logger(__name__)
 
 API_SPEC_TEMPLATE = """# {module_name} - API Specification
 
@@ -115,7 +81,6 @@ result = function_name(param1="value")
 
 **Note**: This is a placeholder file. Please update it with the actual API specification for this module.
 """
-
 
 MCP_TOOL_SPEC_TEMPLATE = """# {module_name} - MCP Tool Specification
 
@@ -179,7 +144,6 @@ register_tools()
 **Note**: This is a placeholder file. Please update it with the actual MCP tool specifications for this module.
 """
 
-
 def create_missing_doc_files():
     """Create missing documentation files."""
     script_dir = Path(__file__).parent
@@ -231,7 +195,5 @@ def create_missing_doc_files():
     print(f"\n✅ Created {created_count} missing documentation files")
     return 0
 
-
 if __name__ == '__main__':
     sys.exit(create_missing_doc_files())
-

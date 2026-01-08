@@ -8,6 +8,15 @@ Calls actual module functions from codomyrmex.security.
 See also: src/codomyrmex/cli.py for main CLI integration
 """
 
+import sys
+from pathlib import Path
+try:
+    import codomyrmex
+except ImportError:
+    # Add project root to sys.path
+    project_root = Path(__file__).resolve().parent.parent.parent
+    src_path = project_root / "src"
+    sys.path.insert(0, str(src_path))
 import argparse
 import sys
 from pathlib import Path
@@ -19,27 +28,14 @@ from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logge
 from codomyrmex.exceptions import CodomyrmexError
 
 # Import shared utilities
-try:
-    from _orchestrator_utils import (
-        format_output,
-        print_error,
-        print_section,
-        print_success,
-        save_json_file,
-        validate_file_path,
-    )
-except ImportError:
-    import sys
-    from pathlib import Path
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    from _orchestrator_utils import (
-        format_output,
-        print_error,
-        print_section,
-        print_success,
-        save_json_file,
-        validate_file_path,
-    )
+from codomyrmex.utils.cli_helpers import (
+    format_output,
+    print_error,
+    print_section,
+    print_success,
+    save_json_file,
+    validate_file_path,
+)
 
 # Import module functions
 from codomyrmex.security import (
@@ -290,4 +286,3 @@ Examples:
 
 if __name__ == "__main__":
     sys.exit(main())
-

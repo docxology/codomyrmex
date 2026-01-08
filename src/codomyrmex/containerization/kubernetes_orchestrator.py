@@ -18,78 +18,14 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides kubernetes_orchestrator functionality including:
-- 15 functions: orchestrate_kubernetes, __init__, _initialize_client...
-- 3 classes: KubernetesDeployment, KubernetesService, KubernetesOrchestrator
-
-Usage:
-    # Example usage here
-"""
 Kubernetes Orchestration Module for Codomyrmex Containerization.
 
 This module provides Kubernetes orchestration, deployment management,
 and container orchestration capabilities using the official Kubernetes
 Python client.
 """
-
-
 
 logger = get_logger(__name__)
 
@@ -104,7 +40,6 @@ except ImportError:
     logger.warning(
         "Kubernetes client not available. Install with: pip install kubernetes"
     )
-
 
 @dataclass
 class KubernetesDeployment:
@@ -125,7 +60,6 @@ class KubernetesDeployment:
     resources: dict[str, dict[str, str]] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
 
-
 @dataclass
 class KubernetesService:
     """Kubernetes service configuration."""
@@ -137,7 +71,6 @@ class KubernetesService:
     node_port: Optional[int] = None
     selector: dict[str, str] = field(default_factory=dict)
     labels: dict[str, str] = field(default_factory=dict)
-
 
 class KubernetesOrchestrator:
     """Kubernetes orchestration and deployment management system."""
@@ -681,7 +614,6 @@ class KubernetesOrchestrator:
                 results.append(result)
 
         return results
-
 
 def orchestrate_kubernetes(
     deployment_config: dict[str, Any],

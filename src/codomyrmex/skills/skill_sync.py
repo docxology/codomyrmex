@@ -9,11 +9,33 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-try:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         clone_repository,
         is_git_repository,
         pull_changes,
     )
+try:
 except ImportError:
     # Fallback functions defined below
     def clone_repository(url: str, destination: str, branch: Optional[str] = None) -> bool:

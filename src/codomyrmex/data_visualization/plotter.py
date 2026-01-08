@@ -59,12 +59,13 @@ except ImportError:
 
     # Create no-op decorators
     def monitor_performance(*args, **kwargs):
-    """Brief description of monitor_performance.
-
-Args:
-
-
-    Returns: Description of return value
+        """Brief description of monitor_performance.
+        
+        Args:
+        
+        
+            Returns: Description of return value
+        """
 """
         def decorator(func):
     """Brief description of decorator.
@@ -79,15 +80,16 @@ Args:
         return decorator
 
     class performance_context:
-    """Brief description of performance_context.
-
-This class provides functionality for...
-
-Attributes:
-    # Add attribute descriptions here
-
-Methods:
-    # Method descriptions will be added automatically
+        """Brief description of performance_context.
+        
+        This class provides functionality for...
+        
+        Attributes:
+            # Add attribute descriptions here
+        
+        Methods:
+            # Method descriptions will be added automatically
+        """
 """
         def __init__(self, *args, **kwargs):
     """Brief description of __init__.

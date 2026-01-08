@@ -104,24 +104,9 @@ from codomyrmex.terminal_interface.terminal_utils import CommandRunner, Terminal
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """
+
 """Main entry point and utility functions
 
 This module provides cli functionality including:

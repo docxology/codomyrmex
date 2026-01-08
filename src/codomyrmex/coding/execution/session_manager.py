@@ -1,6 +1,6 @@
 
 from codomyrmex.logging_monitoring import get_logger
-"""
+
 """Core functionality module
 
 This module provides session_manager functionality including:
@@ -8,9 +8,11 @@ This module provides session_manager functionality including:
 - 0 classes: 
 
 Usage:
+    from session_manager import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
+"""
 Session Management
 
 Handles execution session management for persistent environments.

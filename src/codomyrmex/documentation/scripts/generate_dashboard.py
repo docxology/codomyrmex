@@ -6,18 +6,8 @@ import json
 import logging
 import sys
 
-
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -40,15 +30,18 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides generate_dashboard functionality including:
-- 10 functions: main, __init__, load_validation_results...
-- 1 classes: DocumentationDashboard
 
-Usage:
-    # Example usage here
-"""
+class DocumentationDashboard:
+    """
+
+
+    #!/usr/bin/env python3
+    """
+
 Documentation Dashboard Generator for Codomyrmex.
 
 Generates an interactive HTML dashboard showing documentation quality metrics,
@@ -58,14 +51,11 @@ validation results, and progress tracking.
 
 try:
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-class DocumentationDashboard:
-    """Generates interactive documentation quality dashboard."""
+logger = get_logger(__name__)
+
+Generates interactive documentation quality dashboard."""
     
     def __init__(self, repo_root: Path):
         """Initialize dashboard generator."""
@@ -540,5 +530,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

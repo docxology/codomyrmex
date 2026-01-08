@@ -1,55 +1,16 @@
 import logging
 import os
 
-
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides plot_utils functionality including:
-- 3 functions: get_codomyrmex_logger, save_plot, apply_common_aesthetics
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
 Utility functions for the Data Visualization module.
 
 - All logging is handled via logging_monitoring (get_codomyrmex_logger).
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
-
-
 
 def get_codomyrmex_logger(name: str) -> logging.Logger:
     """
@@ -72,13 +33,11 @@ def get_codomyrmex_logger(name: str) -> logging.Logger:
         )
     return logger_instance
 
-
 # Get a logger for this utility module itself
 logger = get_codomyrmex_logger(__name__)
 
 # Recommend: At application startup, call environment_setup.env_checker.ensure_dependencies_installed()
 # to check for required dependencies and environment variables.
-
 
 def save_plot(fig, output_path: str, dpi: int = 300):
     """
@@ -99,13 +58,11 @@ def save_plot(fig, output_path: str, dpi: int = 300):
     except Exception as e:
         logger.error(f"Error saving plot to {output_path}: {e}", exc_info=True)
 
-
 # Common aesthetic settings (optional, can be expanded)
 DEFAULT_FIGURE_SIZE = (10, 6)  # Standard figure size
 DEFAULT_GRID_STYLE = {"visible": True, "linestyle": "--", "alpha": 0.7}
 DEFAULT_TITLE_FONTSIZE = 16
 DEFAULT_LABEL_FONTSIZE = 12
-
 
 def apply_common_aesthetics(
     ax, title: str = None, x_label: str = None, y_label: str = None
@@ -120,7 +77,6 @@ def apply_common_aesthetics(
     if y_label:
         ax.set_ylabel(y_label, fontsize=DEFAULT_LABEL_FONTSIZE)
     ax.grid(**DEFAULT_GRID_STYLE)
-
 
 # Configure this once, perhaps based on an environment variable or a config file
 CODOMYRMEX_LOGGING_NAMESPACE_PREFIX = "codomyrmex"

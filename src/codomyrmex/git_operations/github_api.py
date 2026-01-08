@@ -14,77 +14,13 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides github_api functionality including:
-- 8 functions: _get_github_headers, _validate_github_token, create_github_repository...
-- 1 classes: GitHubAPIError
-
-Usage:
-    # Example usage here
-"""
 GitHub API Operations for Codomyrmex Git Operations Module.
 
 This module provides GitHub API integration for repository creation,
 pull request management, and other GitHub-specific operations.
 """
-
-
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -93,15 +29,12 @@ if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
-
 logger = get_logger(__name__)
-
 
 class GitHubAPIError(Exception):
     """Custom exception for GitHub API errors."""
 
     pass
-
 
 def _get_github_headers(token: str) -> dict[str, str]:
     """Get GitHub API headers with authentication."""
@@ -110,7 +43,6 @@ def _get_github_headers(token: str) -> dict[str, str]:
         "Accept": "application/vnd.github.v3+json",
         "Content-Type": "application/json",
     }
-
 
 def _validate_github_token(token: Optional[str]) -> str:
     """Validate and return GitHub token, raising error if invalid."""
@@ -123,7 +55,6 @@ def _validate_github_token(token: Optional[str]) -> str:
         )
 
     return token
-
 
 def create_github_repository(
     name: str,
@@ -211,7 +142,6 @@ def create_github_repository(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg)
 
-
 def delete_github_repository(
     owner: str, repo_name: str, github_token: Optional[str] = None
 ) -> bool:
@@ -258,7 +188,6 @@ def delete_github_repository(
         error_msg = f"Network error deleting repository: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg)
-
 
 def create_pull_request(
     repo_owner: str,
@@ -347,7 +276,6 @@ def create_pull_request(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg)
 
-
 def get_pull_requests(
     repo_owner: str,
     repo_name: str,
@@ -418,7 +346,6 @@ def get_pull_requests(
         error_msg = f"Network error fetching PRs: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg)
-
 
 def get_pull_request(
     repo_owner: str, repo_name: str, pr_number: int, github_token: Optional[str] = None
@@ -491,7 +418,6 @@ def get_pull_request(
         logger.error(error_msg)
         raise GitHubAPIError(error_msg)
 
-
 def get_repository_info(
     repo_owner: str, repo_name: str, github_token: Optional[str] = None
 ) -> dict:
@@ -558,7 +484,6 @@ def get_repository_info(
         error_msg = f"Network error fetching repository info: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg)
-
 
 if __name__ == "__main__":
     """Example usage and testing."""

@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Visualizer for FPF specification.
 
+
 """Core functionality module
 
 This module provides visualizer functionality including:
@@ -8,6 +9,7 @@ This module provides visualizer functionality including:
 - 1 classes: FPFVisualizer
 
 Usage:
+    from visualizer import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -199,6 +201,4 @@ class FPFVisualizer:
             card_lines.append("")
 
         return "\n".join(card_lines)
-
-
 

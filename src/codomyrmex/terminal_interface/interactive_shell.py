@@ -20,70 +20,8 @@ from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides interactive_shell functionality including:
-- 27 functions: __init__, emptyline, default...
-- 1 classes: InteractiveShell
-
-Usage:
-    # Example usage here
-"""
 Interactive Shell for Codomyrmex
 
 Provides an engaging, interactive terminal interface for exploring the
@@ -91,16 +29,12 @@ Codomyrmex ecosystem - like being an epistemic forager in a vast,
 structured nest.
 """
 
-
 try:
 
     logger = get_logger(__name__)
 except ImportError:
 
     logger = logging.getLogger(__name__)
-
-
-
 
 class InteractiveShell(cmd.Cmd):
     """
@@ -427,7 +361,6 @@ Type 'explore' to begin your foraging adventure!
     def _demo_data_visualization(self):
         """Demo the data visualization module."""
         try:
-
 
             print("   📊 Creating sample line plot...")
             x = np.linspace(0, 6.28, 100)
@@ -862,7 +795,6 @@ print("Sandbox execution complete! ✅")
             logger.error(f"Error in interactive shell: {e}")
             print(f"\n❌ An error occurred: {e}")
             print("🐜 Thanks for exploring the Codomyrmex nest!")
-
 
 if __name__ == "__main__":
     # Allow running this module directly for testing

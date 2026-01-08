@@ -51,24 +51,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Claude Task Master Integration Module.
+
 
 """Core functionality module
 
@@ -77,6 +61,7 @@ This module provides claude_task_master functionality including:
 - 5 classes: TaskPriority, TaskStatus, Task...
 
 Usage:
+    from claude_task_master import FunctionName, ClassName
     # Example usage here
 """
 This module provides integration with Anthropic's Claude API for
@@ -85,8 +70,6 @@ task decomposition capabilities.
 
 Reference: https://docs.anthropic.com/claude/docs
 """
-
-
 
 logger = get_logger(__name__)
 

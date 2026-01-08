@@ -3,57 +3,22 @@ import json
 import re
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides fix_contributing_refs functionality including:
-- 2 functions: calculate_relative_path, fix_contributing_refs
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Fix CONTRIBUTING.md references in module documentation.
 
 Updates all references to CONTRIBUTING.md in modules to point to
 the correct location at docs/project/contributing.md
 """
 
+#!/usr/bin/env python3
 
+logger = get_logger(__name__)
 
 def calculate_relative_path(from_file: Path, to_file: Path, repo_root: Path) -> str:
     """Calculate relative path from one file to another."""
@@ -76,7 +41,6 @@ def calculate_relative_path(from_file: Path, to_file: Path, repo_root: Path) -> 
         
         # Build path
         return '../' * up_levels + str(to_rel).replace('\\', '/')
-
 
 def fix_contributing_refs():
     """Fix all CONTRIBUTING.md references."""
@@ -146,7 +110,5 @@ def fix_contributing_refs():
     print(f"\n✅ Fixed {fixed_count} of {len(contributing_refs)} references")
     return 0
 
-
 if __name__ == '__main__':
     sys.exit(fix_contributing_refs())
-

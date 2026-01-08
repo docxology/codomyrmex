@@ -9,17 +9,52 @@ from dataclasses import dataclass, field
 
 from codomyrmex.ide import (
 from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Antigravity IDE Integration
 
-"""Core functionality module
-
-This module provides __init__ (1) functionality including:
-- 26 functions: to_dict, to_dict, __init__...
-- 3 classes: Artifact, ConversationContext, AntigravityClient
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 Integration with Google DeepMind's Antigravity IDE - the agentic AI coding
 assistant. Provides programmatic access to Antigravity's capabilities for
@@ -57,13 +92,6 @@ class Artifact:
     modified: float = 0.0
     
     def to_dict(self) -> Dict[str, Any]:
-    """Brief description of to_dict.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: Any)
-"""
         return {
             "name": self.name,
             "path": self.path,
@@ -83,13 +111,6 @@ class ConversationContext:
     artifacts: List[Artifact] = field(default_factory=list)
     
     def to_dict(self) -> Dict[str, Any]:
-    """Brief description of to_dict.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: Any)
-"""
         return {
             "conversation_id": self.conversation_id,
             "task_name": self.task_name,

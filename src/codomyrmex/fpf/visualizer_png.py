@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """PNG visualization engine for FPF specifications.
 
+
 """Core functionality module
 
 This module provides visualizer_png functionality including:
@@ -8,6 +9,7 @@ This module provides visualizer_png functionality including:
 - 1 classes: FPFVisualizerPNG
 
 Usage:
+    from visualizer_png import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

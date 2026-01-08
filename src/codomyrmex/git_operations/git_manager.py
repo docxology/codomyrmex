@@ -4,56 +4,19 @@ import subprocess
 import sys
 import time
 
-
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 from codomyrmex.performance import monitor_performance, performance_context
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides git_manager functionality including:
-- 36 functions: check_git_availability, is_git_repository, initialize_git_repository...
-- 1 classes: performance_context
-
-Usage:
-    # Example usage here
-"""
 Git Operations Manager for Codomyrmex.
 
 This module provides a standardized interface and a set of tools for performing
 common Git actions programmatically within the Codomyrmex ecosystem.
 """
-
 
 # Add project root for sibling module imports if run directly
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -61,7 +24,6 @@ PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 if PROJECT_ROOT not in sys.path:
     pass
 #     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
-
 
 logger = get_logger(__name__)
 
@@ -123,7 +85,6 @@ Args:
             duration = time.time() - self.start_time
             logger.debug(f"Exiting performance context: {self.context_name} (Duration: {duration:.4f}s)")
 
-
 def check_git_availability() -> bool:
     """Check if Git is available on the system."""
     try:
@@ -136,7 +97,6 @@ def check_git_availability() -> bool:
     except (subprocess.CalledProcessError, FileNotFoundError):
         logger.error("Git is not available on this system")
         return False
-
 
 def is_git_repository(path: str = None) -> bool:
     """Check if the given path is a Git repository."""
@@ -154,7 +114,6 @@ def is_git_repository(path: str = None) -> bool:
         return result.returncode == 0
     except Exception:
         return False
-
 
 @monitor_performance("git_initialize_repository")
 def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
@@ -215,7 +174,6 @@ def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
         logger.error(f"Unexpected error initializing repository: {e}")
         return False
 
-
 @monitor_performance("git_clone_repository")
 def clone_repository(url: str, destination: str, branch: str = None) -> bool:
     """Clone a Git repository to the specified destination."""
@@ -240,7 +198,6 @@ def clone_repository(url: str, destination: str, branch: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error cloning repository: {e}")
         return False
-
 
 def create_branch(branch_name: str, repository_path: str = None) -> bool:
     """Create and switch to a new Git branch."""
@@ -271,7 +228,6 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error creating branch: {e}")
         return False
 
-
 def switch_branch(branch_name: str, repository_path: str = None) -> bool:
     """Switch to an existing Git branch."""
     if repository_path is None:
@@ -300,7 +256,6 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error switching branch: {e}")
         return False
 
-
 def get_current_branch(repository_path: str = None) -> Optional[str]:
     """Get the name of the current Git branch."""
     if repository_path is None:
@@ -326,7 +281,6 @@ def get_current_branch(repository_path: str = None) -> Optional[str]:
         logger.error(f"Unexpected error getting current branch: {e}")
         return None
 
-
 def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     """Add files to the Git staging area."""
     if repository_path is None:
@@ -351,7 +305,6 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error adding files: {e}")
         return False
-
 
 def commit_changes(
     message: str,
@@ -464,7 +417,6 @@ def commit_changes(
         logger.error(f"Unexpected error committing changes: {e}")
         return None
 
-
 def push_changes(
     remote: str = "origin", branch: str = None, repository_path: str = None
 ) -> bool:
@@ -501,7 +453,6 @@ def push_changes(
         logger.error(f"Unexpected error pushing changes: {e}")
         return False
 
-
 def pull_changes(
     remote: str = "origin", branch: str = None, repository_path: str = None
 ) -> bool:
@@ -537,7 +488,6 @@ def pull_changes(
     except Exception as e:
         logger.error(f"Unexpected error pulling changes: {e}")
         return False
-
 
 def get_status(repository_path: str = None) -> dict[str, any]:
     """Get the current Git repository status."""
@@ -613,7 +563,6 @@ def get_status(repository_path: str = None) -> dict[str, any]:
         logger.error(f"Unexpected error getting status: {e}")
         return {"error": str(e)}
 
-
 def get_commit_history(
     limit: int = 10, repository_path: str = None
 ) -> list[dict[str, str]]:
@@ -664,7 +613,6 @@ def get_commit_history(
         logger.error(f"Unexpected error getting commit history: {e}")
         return []
 
-
 def merge_branch(
     source_branch: str,
     target_branch: str = None,
@@ -713,7 +661,6 @@ def merge_branch(
         logger.error(f"Unexpected error merging branch: {e}")
         return False
 
-
 def rebase_branch(
     target_branch: str, repository_path: str = None, interactive: bool = False
 ) -> bool:
@@ -748,7 +695,6 @@ def rebase_branch(
         logger.error(f"Unexpected error rebasing branch: {e}")
         return False
 
-
 def create_tag(tag_name: str, message: str = None, repository_path: str = None) -> bool:
     """Create a Git tag."""
     if repository_path is None:
@@ -779,7 +725,6 @@ def create_tag(tag_name: str, message: str = None, repository_path: str = None) 
         logger.error(f"Unexpected error creating tag: {e}")
         return False
 
-
 def list_tags(repository_path: str = None) -> list[str]:
     """List all Git tags."""
     if repository_path is None:
@@ -806,7 +751,6 @@ def list_tags(repository_path: str = None) -> list[str]:
     except Exception as e:
         logger.error(f"Unexpected error listing tags: {e}")
         return []
-
 
 def stash_changes(message: str = None, repository_path: str = None) -> bool:
     """Stash current changes."""
@@ -836,7 +780,6 @@ def stash_changes(message: str = None, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error stashing changes: {e}")
         return False
 
-
 def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
     """Apply stashed changes."""
     if repository_path is None:
@@ -864,7 +807,6 @@ def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error applying stash: {e}")
         return False
-
 
 def list_stashes(repository_path: str = None) -> list[dict[str, str]]:
     """List all stashes."""
@@ -906,7 +848,6 @@ def list_stashes(repository_path: str = None) -> list[dict[str, str]]:
         logger.error(f"Unexpected error listing stashes: {e}")
         return []
 
-
 def get_diff(
     file_path: str = None, staged: bool = False, repository_path: str = None
 ) -> str:
@@ -936,7 +877,6 @@ def get_diff(
     except Exception as e:
         logger.error(f"Unexpected error getting diff: {e}")
         return ""
-
 
 def reset_changes(
     mode: str = "mixed", target: str = "HEAD", repository_path: str = None
@@ -972,7 +912,6 @@ def reset_changes(
         logger.error(f"Unexpected error resetting repository: {e}")
         return False
 
-
 def add_remote(
     remote_name: str, url: str, repository_path: str = None
 ) -> bool:
@@ -1003,7 +942,6 @@ def add_remote(
         logger.error(f"Unexpected error adding remote: {e}")
         return False
 
-
 def remove_remote(remote_name: str, repository_path: str = None) -> bool:
     """Remove a remote repository."""
     if repository_path is None:
@@ -1031,7 +969,6 @@ def remove_remote(remote_name: str, repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error removing remote: {e}")
         return False
-
 
 def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
     """List all remote repositories."""
@@ -1083,7 +1020,6 @@ def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
         logger.error(f"Unexpected error listing remotes: {e}")
         return []
 
-
 def get_config(key: str, repository_path: str = None, global_config: bool = False) -> Optional[str]:
     """Get a Git configuration value."""
     if repository_path is None:
@@ -1115,7 +1051,6 @@ def get_config(key: str, repository_path: str = None, global_config: bool = Fals
     except Exception as e:
         logger.error(f"Unexpected error getting config: {e}")
         return None
-
 
 def set_config(
     key: str, value: str, repository_path: str = None, global_config: bool = False
@@ -1152,7 +1087,6 @@ def set_config(
         logger.error(f"Unexpected error setting config: {e}")
         return False
 
-
 def cherry_pick(
     commit_sha: str, repository_path: str = None, no_commit: bool = False
 ) -> bool:
@@ -1187,7 +1121,6 @@ def cherry_pick(
     except Exception as e:
         logger.error(f"Unexpected error cherry-picking commit: {e}")
         return False
-
 
 def amend_commit(
     message: str = None,
@@ -1272,7 +1205,6 @@ def amend_commit(
         logger.error(f"Unexpected error amending commit: {e}")
         return None
 
-
 def fetch_changes(
     remote: str = "origin",
     branch: str = None,
@@ -1312,7 +1244,6 @@ def fetch_changes(
     except Exception as e:
         logger.error(f"Unexpected error fetching changes: {e}")
         return False
-
 
 def get_commit_history_filtered(
     limit: int = 10,
@@ -1398,7 +1329,6 @@ def get_commit_history_filtered(
     except Exception as e:
         logger.error(f"Unexpected error getting filtered commit history: {e}")
         return []
-
 
 if __name__ == "__main__":
     # Ensure logging is set up when script is run directly

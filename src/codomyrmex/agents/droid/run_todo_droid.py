@@ -9,8 +9,19 @@ from typing import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
+
 """Main entry point and utility functions
 
+"""Main entry point and utility functions
+
+This module provides run_todo_droid functionality including:
+- 10 functions: resolve_handler, get_todo_count_interactive, run_todos...
+- 0 classes: 
+
+Usage:
+    from run_todo_droid import FunctionName, ClassName
+    # Example usage here
+"""
 This module provides run_todo_droid functionality including:
 - 10 functions: resolve_handler, get_todo_count_interactive, run_todos...
 - 0 classes: 

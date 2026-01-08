@@ -14,97 +14,31 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides validator functionality including:
-- 10 functions: __init__, __bool__, __init__...
-- 4 classes: ValidationError, ValidationWarning, ValidationResult...
-
-Usage:
-    # Example usage here
-"""
 Base validator interface and implementations.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 class ValidationError(CodomyrmexError):
     """Raised when validation fails."""
 
     def __init__(self, message: str, field: Optional[str] = None, code: Optional[str] = None, path: Optional[list[str]] = None):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    message : Description of message
-    field : Description of field
-    code : Description of code
-    path : Description of path
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+            message : Description of message
+            field : Description of field
+            code : Description of code
+            path : Description of path
+        
+            Returns: Description of return value
+        """
 """
         super().__init__(message)
         self.field = field
         self.code = code
         self.path = path or []
-
 
 @dataclass
 class ValidationWarning:
@@ -115,7 +49,6 @@ class ValidationWarning:
     code: Optional[str] = None
     path: list[str] = field(default_factory=list)
 
-
 @dataclass
 class ValidationResult:
     """Result of a validation operation."""
@@ -125,15 +58,15 @@ class ValidationResult:
     warnings: list[ValidationWarning] = field(default_factory=list)
 
     def __bool__(self) -> bool:
-    """Brief description of __bool__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: bool)
+        """Brief description of __bool__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value (type: bool)
+        """
 """
         return self.is_valid
-
 
 class Validator:
     """Base validator interface."""
@@ -264,5 +197,4 @@ class Validator:
         """Get validation errors for data."""
         result = self.validate(data, schema)
         return result.errors
-
 

@@ -4,57 +4,22 @@ import json
 import os
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides audit_documentation_inventory functionality including:
-- 4 functions: check_file_content, find_doc_files, audit_all_files...
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Audit all README.md and AGENTS.md files in the repository.
 Creates a comprehensive inventory with current state assessment.
 """
 
+#!/usr/bin/env python3
+
+logger = get_logger(__name__)
 
 REPO_ROOT = Path(__file__).parent.parent.parent
-
 
 def check_file_content(filepath: Path) -> Dict:
     """Check a documentation file for completeness indicators."""
@@ -83,7 +48,6 @@ def check_file_content(filepath: Path) -> Dict:
     
     return checks
 
-
 def find_doc_files(root: Path) -> List[Tuple[Path, str]]:
     """Find all README.md and AGENTS.md files."""
     files = []
@@ -94,7 +58,6 @@ def find_doc_files(root: Path) -> List[Tuple[Path, str]]:
         if ".venv" not in str(path) and "node_modules" not in str(path):
             files.append((path, "AGENTS.md"))
     return sorted(files)
-
 
 def audit_all_files() -> Dict:
     """Audit all documentation files."""
@@ -116,7 +79,6 @@ def audit_all_files() -> Dict:
         }
     
     return inventory
-
 
 def generate_summary(inventory: Dict) -> str:
     """Generate a summary report."""
@@ -144,7 +106,6 @@ def generate_summary(inventory: Dict) -> str:
     
     return "\n".join(summary)
 
-
 if __name__ == "__main__":
     print("Auditing documentation files...")
     inventory = audit_all_files()
@@ -158,4 +119,3 @@ if __name__ == "__main__":
     # Print summary
     print(generate_summary(inventory))
     print(f"\nFull inventory saved to: {output_file}")
-

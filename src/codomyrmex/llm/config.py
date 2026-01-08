@@ -4,14 +4,7 @@ import json
 import json
 import os
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
 
 
 
@@ -38,8 +31,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Configuration management for Language Models module."""
 
-
-
 """Core functionality module
 
 This module provides config functionality including:
@@ -47,6 +38,7 @@ This module provides config functionality including:
 - 2 classes: LLMConfig, LLMConfigPresets
 
 Usage:
+    from config import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

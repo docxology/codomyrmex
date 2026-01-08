@@ -9,74 +9,47 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Error analyzer for autonomous debugging."""
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Core functionality module
-
-This module provides error_analyzer functionality including:
-- 2 functions: __init__, analyze
-- 2 classes: ErrorDiagnosis, ErrorAnalyzer
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 @dataclass
 class ErrorDiagnosis:

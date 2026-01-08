@@ -49,37 +49,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Bayesian inference engine for probabilistic reasoning."""
-
-
-
-
-"""Core functionality module
-
-This module provides bayesian functionality including:
-- 21 functions: __post_init__, sample, expectation...
-- 4 classes: Distribution, BayesianNetwork, InferenceEngine...
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -220,6 +189,7 @@ class BayesianNetwork:
         order = []
 
         def visit(node: str):
+
     """Brief description of visit.
 
 Args:
@@ -515,6 +485,4 @@ class PriorBuilder:
         probabilities = [c / total for c in counts]
 
         return Distribution(unique_values, probabilities)
-
-
 

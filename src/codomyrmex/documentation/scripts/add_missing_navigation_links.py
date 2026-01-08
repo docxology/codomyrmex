@@ -3,7 +3,6 @@ import os
 import os
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -25,32 +24,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""Add missing navigation links to documentation files."""
-
-
-"""Main entry point and utility functions
-
-This module provides add_missing_navigation_links functionality including:
-- 3 functions: calculate_paths, add_navigation_links, main
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
 def calculate_paths(file_path: Path, base_path: Path) -> dict:
-    """Calculate all necessary relative paths."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """Add missing navigation links to documentation files."""
+
+logger = get_logger(__name__)
+
+Calculate all necessary relative paths."""
     rel_path = file_path.parent.relative_to(base_path)
     depth = len(rel_path.parts)
     
@@ -166,4 +152,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

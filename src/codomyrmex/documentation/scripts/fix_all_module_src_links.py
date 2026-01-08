@@ -1,7 +1,6 @@
 from pathlib import Path
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -23,32 +22,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""Fix all src/README.md links in module subdirectories."""
-
-
-"""Main entry point and utility functions
-
-This module provides fix_all_module_src_links functionality including:
-- 3 functions: calculate_correct_path, fix_src_links, main
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
 def calculate_correct_path(from_file: Path, base_path: Path) -> str:
-    """Calculate correct relative path to src/README.md."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """Fix all src/README.md links in module subdirectories."""
+
+logger = get_logger(__name__)
+
+Calculate correct relative path to src/README.md."""
     rel_path = from_file.parent.relative_to(base_path)
     depth = len(rel_path.parts)
     return "../" * depth + "src/README.md"
@@ -96,4 +82,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

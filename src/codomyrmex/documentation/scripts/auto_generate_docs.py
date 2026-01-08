@@ -7,27 +7,8 @@ import sys
 
 from smart_template_engine import SmartTemplateEngine
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -70,24 +51,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides auto_generate_docs functionality including:
-- 6 functions: main, __init__, find_modules...
-- 1 classes: AutoDocumentationGenerator
-
-Usage:
-    # Example usage here
-"""
-Automatic Documentation Generator for Codomyrmex.
-
-Uses smart template engine to automatically regenerate documentation for modules.
-"""
-
-
-try:
-    setup_logging()
-    logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -97,7 +60,26 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 
 class AutoDocumentationGenerator:
-    """Automatically generates documentation using smart templates."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
+Automatic Documentation Generator for Codomyrmex.
+
+Uses smart template engine to automatically regenerate documentation for modules.
+"""
+
+
+try:
+    setup_logging()
+
+
+logger = get_logger(__name__)
+
+Automatically generates documentation using smart templates."""
     
     def __init__(self, repo_root: Path, dry_run: bool = False):
         """Initialize generator."""
@@ -329,5 +311,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

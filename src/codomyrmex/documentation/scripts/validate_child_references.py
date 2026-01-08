@@ -3,18 +3,7 @@ from typing import Dict, List
 import json
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -37,20 +26,16 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides validate_child_references functionality including:
-- 4 functions: extract_children_references, resolve_path, validate_agents_file...
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Validate all child references in AGENTS.md files.
 Check that children point to existing directories with AGENTS.md files.
 """
 
+
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 def extract_children_references(content: str) -> List[Dict]:
     """Extract all child references from AGENTS.md content."""
@@ -216,4 +201,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

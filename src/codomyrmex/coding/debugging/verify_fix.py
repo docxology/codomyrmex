@@ -48,27 +48,9 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # In a real scenario, this would import the Execution module
 # from codomyrmex.coding.execution import execute_code 
+
 
 """Core functionality module
 
@@ -77,6 +59,7 @@ This module provides verify_fix functionality including:
 - 2 classes: VerificationResult, FixVerifier
 
 Usage:
+    from verify_fix import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

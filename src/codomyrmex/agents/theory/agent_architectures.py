@@ -47,26 +47,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Agent architecture patterns and implementations."""
-
-
 
 """Core functionality module
 
@@ -75,6 +56,7 @@ This module provides agent_architectures functionality including:
 - 5 classes: ArchitectureType, AgentArchitecture, ReactiveArchitecture...
 
 Usage:
+    from agent_architectures import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)

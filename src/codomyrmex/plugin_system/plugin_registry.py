@@ -14,82 +14,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides plugin_registry functionality including:
-- 35 functions: create_plugin_info, get_registry, to_dict...
-- 6 classes: PluginState, PluginType, PluginInfo...
-
-Usage:
-    # Example usage here
-"""
 Plugin Registry for Codomyrmex Plugin System
 
 This module defines the core plugin interfaces and registry for managing
 plugin discovery, loading, and lifecycle management.
 """
 
-
 # Import logging
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 class PluginState(Enum):
     """Plugin lifecycle states."""
@@ -101,7 +36,6 @@ class PluginState(Enum):
     ERROR = "error"
     DISABLED = "disabled"
 
-
 class PluginType(Enum):
     """Plugin type classifications."""
     ANALYSIS = "analysis"
@@ -110,7 +44,6 @@ class PluginType(Enum):
     TRANSFORMATION = "transformation"
     UTILITY = "utility"
     EXTENSION = "extension"
-
 
 @dataclass
 class PluginInfo:
@@ -142,7 +75,6 @@ class PluginInfo:
             "license": self.license,
             "tags": self.tags
         }
-
 
 class PluginHook:
     """Represents a plugin hook point."""
@@ -222,7 +154,6 @@ class PluginHook:
 
         except Exception:
             return False
-
 
 class Plugin(ABC):
     """
@@ -317,7 +248,6 @@ class Plugin(ABC):
         if hook_name in self.hooks:
             return self.hooks[hook_name].emit(*args, **kwargs)
         return []
-
 
 class PluginRegistry:
     """
@@ -600,7 +530,6 @@ Args:
             return self.hooks[hook_name].emit(*args, **kwargs)
         return []
 
-
 # Convenience functions
 
 def create_plugin_info(**kwargs) -> PluginInfo:
@@ -614,7 +543,6 @@ def create_plugin_info(**kwargs) -> PluginInfo:
         PluginInfo instance
     """
     return PluginInfo(**kwargs)
-
 
 def get_registry() -> PluginRegistry:
     """

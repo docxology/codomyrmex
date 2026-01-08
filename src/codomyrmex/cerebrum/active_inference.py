@@ -50,27 +50,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Active inference implementation based on the free energy principle."""
-
-
-
 
 """Core functionality module
 
@@ -79,6 +59,7 @@ This module provides active_inference functionality including:
 - 4 classes: BeliefState, VariationalFreeEnergy, PolicySelector...
 
 Usage:
+    from active_inference import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -473,6 +454,4 @@ class ActiveInferenceAgent:
         self.beliefs.states = {state: uniform_prob for state in self.states}
         self.beliefs.observations = {}
         self.logger.debug("Reset agent")
-
-
 

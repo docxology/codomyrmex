@@ -10,76 +10,10 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides metrics functionality including:
-- 18 functions: inc, get, set...
-- 5 classes: Counter, Gauge, Histogram...
-
-Usage:
-    # Example usage here
-"""
 Metrics collection and aggregation.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 @dataclass
 class Counter:
@@ -96,7 +30,6 @@ class Counter:
     def get(self) -> float:
         """Get counter value."""
         return self.value
-
 
 @dataclass
 class Gauge:
@@ -121,7 +54,6 @@ class Gauge:
     def get(self) -> float:
         """Get gauge value."""
         return self.value
-
 
 @dataclass
 class Histogram:
@@ -148,7 +80,6 @@ class Histogram:
             "avg": sum(self.values) / len(self.values),
         }
 
-
 @dataclass
 class Summary:
     """Summary metric."""
@@ -170,7 +101,6 @@ class Summary:
             "sum": self.sum,
             "avg": self.sum / self.count if self.count > 0 else 0.0,
         }
-
 
 class Metrics:
     """Metrics collection and aggregation."""
@@ -300,5 +230,4 @@ class Metrics:
                 lines.append(f"{histogram.name}_sum {stats['sum']}")
 
         return "\n".join(lines)
-
 

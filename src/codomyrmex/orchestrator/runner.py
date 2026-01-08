@@ -1,16 +1,53 @@
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, Any, Optional
+import os
+import subprocess
+import sys
+import time
+
+from codomyrmex.logging_monitoring import get_logger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
+
+"""Core functionality module
+
+This module provides runner functionality including:
+- 1 functions: run_script
+- 0 classes: 
+
+Usage:
+    from runner import FunctionName, ClassName
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Script Runner
 
 Handles the actual execution of Python scripts.
 """
 
-import os
-import subprocess
-import sys
-import time
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, Any, Optional
 
 def run_script(
     script_path: Path,
@@ -77,6 +114,7 @@ def run_script(
     # get args from config
     script_args = script_config.get("args", [])
     cmd = [sys.executable, str(script_path)] + script_args
+    print(f"DEBUG: src_path={src_path}, PYTHONPATH={run_env.get("PYTHONPATH")}")
 
     try:
         process = subprocess.run(

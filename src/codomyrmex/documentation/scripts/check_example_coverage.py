@@ -5,18 +5,7 @@ import logging
 import os
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -39,15 +28,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    # Fallback logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides check_example_coverage functionality including:
-- 11 functions: main, __init__, get_all_modules...
-- 1 classes: ExampleCoverageChecker
 
-Usage:
-    # Example usage here
-"""
+class ExampleCoverageChecker:
+    """
+
+
+    #!/usr/bin/env python3
+    """
+
 Example Coverage Checker
 
 This script verifies that all Codomyrmex modules have corresponding examples.
@@ -69,15 +62,10 @@ project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 try:
-    logger = get_logger(__name__)
-except ImportError:
-    # Fallback logging
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
+logger = get_logger(__name__)
 
-class ExampleCoverageChecker:
-    """Checks coverage of examples for Codomyrmex modules."""
+Checks coverage of examples for Codomyrmex modules."""
 
     def __init__(self, project_root: Path):
         """Initialize the coverage checker."""

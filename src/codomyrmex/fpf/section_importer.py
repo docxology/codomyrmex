@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Section importer for merging FPF sections.
 
+
 """Core functionality module
 
 This module provides section_importer functionality including:
@@ -8,6 +9,7 @@ This module provides section_importer functionality including:
 - 1 classes: SectionImporter
 
 Usage:
+    from section_importer import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -204,6 +206,4 @@ class SectionImporter:
             description=data.get("description"),
             metadata=data.get("metadata", {}),
         )
-
-
 

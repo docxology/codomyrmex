@@ -9,27 +9,8 @@ import sys
 
 from dataclasses import dataclass, field
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -72,15 +53,19 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logger = logging.getLogger(__name__)
 
-This module provides check_documentation_completeness functionality including:
-- 12 functions: check_documentation_coverage, find_missing_docs, validate_doc_structure...
-- 3 classes: DocumentationRequirements, CompletenessReport, DocumentationCompletenessChecker
 
-Usage:
-    # Example usage here
-"""
+@dataclass
+class DocumentationRequirements:
+    """
+
+
+
+    #!/usr/bin/env python3
+    """
+
 Documentation Completeness Checking Tool
 
 This script checks the completeness of documentation across the Codomyrmex project,
@@ -94,14 +79,11 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 try:
-    logger = get_logger(__name__)
-except ImportError:
-    logger = logging.getLogger(__name__)
 
 
-@dataclass
-class DocumentationRequirements:
-    """Requirements for module documentation."""
+logger = get_logger(__name__)
+
+Requirements for module documentation."""
 
     required_files: List[str] = field(default_factory=lambda: [
         "README.md",

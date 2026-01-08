@@ -4,7 +4,6 @@ from typing import Dict, List, Tuple
 import os
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -26,31 +25,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""Comprehensive triple-check of all SPEC, AGENTS, and README files."""
-
-
-# Placeholder patterns
-"""Main entry point and utility functions
-
-This module provides comprehensive_triple_check functionality including:
-- 5 functions: find_placeholders, verify_relative_path, check_file_completeness...
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
 PLACEHOLDER_PATTERNS = [
     (r'\[Architecture description[^\]]*\]', 'Architecture description placeholder'),
     (r'\[Functional requirements[^\]]*\]', 'Functional requirements placeholder'),
@@ -75,7 +51,20 @@ PLACEHOLDER_PATTERNS = [
 ]
 
 def find_placeholders(content: str, file_path: Path) -> List[Dict]:
-    """Find placeholder content in file."""
+    """
+
+
+
+    #!/usr/bin/env python3
+    """Comprehensive triple-check of all SPEC, AGENTS, and README files."""
+
+
+# Placeholder patterns
+
+
+logger = get_logger(__name__)
+
+Find placeholder content in file."""
     issues = []
     for pattern, description in PLACEHOLDER_PATTERNS:
         matches = re.finditer(pattern, content, re.IGNORECASE)
@@ -335,4 +324,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

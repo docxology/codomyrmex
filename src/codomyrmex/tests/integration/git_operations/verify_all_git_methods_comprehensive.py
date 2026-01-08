@@ -12,7 +12,38 @@ from codomyrmex.git_operations import (
 
 
 
-try:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""Main entry point and utility functions
+
+This module provides verify_all_git_methods_comprehensive functionality including:
+- 51 functions: main, __init__, log...
+- 1 classes: ComprehensiveGitVerifier
+
+Usage:
+    # Example usage here
+"""
         check_git_availability,
         is_git_repository,
         initialize_git_repository,
@@ -39,6 +70,7 @@ try:
         get_repository_info,
         GitHubAPIError
     )
+try:
     GIT_OPERATIONS_AVAILABLE = True
 except ImportError:
     GIT_OPERATIONS_AVAILABLE = False

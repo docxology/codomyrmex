@@ -15,80 +15,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides performance_optimizer functionality including:
-- 11 functions: optimize_containers, __init__, _ensure_directories...
-- 3 classes: ContainerMetrics, OptimizationSuggestion, ContainerOptimizer
-
-Usage:
-    # Example usage here
-"""
 Container Performance Optimization Module for Codomyrmex Containerization.
 
 This module provides container performance optimization, resource monitoring,
 and efficiency improvements.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 @dataclass
 class ContainerMetrics:
@@ -102,7 +37,6 @@ class ContainerMetrics:
     container_name: str = ""
     image_name: str = ""
 
-
 @dataclass
 class OptimizationSuggestion:
     """Container optimization suggestion."""
@@ -113,7 +47,6 @@ class OptimizationSuggestion:
     implementation_effort: str  # "low", "medium", "high"
     steps: list[str]
     expected_savings: dict[str, Any]
-
 
 class ContainerOptimizer:
     """Container performance optimization system."""
@@ -427,7 +360,6 @@ class ContainerOptimizer:
         history.sort(key=lambda x: x.get("created_at", ""), reverse=True)
 
         return history
-
 
 def optimize_containers(
     container_config: dict[str, Any],

@@ -1,6 +1,5 @@
 from typing import Any
 
-
 from codomyrmex.agents.core import AgentIntegrationAdapter, AgentInterface
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.core import AgentRequest
@@ -30,16 +29,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
 """Jules integration adapters for Codomyrmex modules."""
-
-
-
 
 """Core functionality module
 
@@ -48,6 +38,7 @@ This module provides jules_integration functionality including:
 - 1 classes: JulesIntegrationAdapter
 
 Usage:
+    from jules_integration import FunctionName, ClassName
     # Example usage here
 """
 class JulesIntegrationAdapter(AgentIntegrationAdapter):

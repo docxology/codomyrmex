@@ -46,36 +46,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """User behavior analysis for security."""
 
-
-
-"""Core functionality module
-
-This module provides behavior_analysis functionality including:
-- 5 functions: analyze_user_behavior, detect_anomalous_behavior, __init__...
-- 3 classes: BehaviorPattern, Anomaly, BehaviorAnalyzer
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -103,12 +75,13 @@ class BehaviorAnalyzer:
     """Analyzes user behavior for security purposes."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.behavior_history: dict[str, List[dict]] = {}
         logger.info("BehaviorAnalyzer initialized")
@@ -159,6 +132,4 @@ def detect_anomalous_behavior(
     if analyzer is None:
         analyzer = BehaviorAnalyzer()
     return analyzer.detect_anomalies(user_id, current_behavior)
-
-
 

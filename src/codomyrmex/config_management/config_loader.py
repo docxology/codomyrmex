@@ -129,12 +129,13 @@ class Configuration:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-    """Brief description of __post_init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __post_init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         if not hasattr(self, 'loaded_at') or self.loaded_at is None:
             self.loaded_at = datetime.now(timezone.utc)

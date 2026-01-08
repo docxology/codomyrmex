@@ -7,7 +7,28 @@ from codomyrmex.physical_management import (
 
 
 
-try:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         EventType,
         ForceField,
         MaterialType,
@@ -21,6 +42,7 @@ try:
         StreamingAnalytics,
         Vector3D,
     )
+try:
 except ImportError:
     EventType = None
     ForceField = None

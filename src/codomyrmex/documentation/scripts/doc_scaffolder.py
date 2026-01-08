@@ -1,7 +1,6 @@
 import os
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -28,55 +27,10 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-
-"""Main entry point and utility functions
-
-"""Main entry point and utility functions
-
-This module provides doc_scaffolder functionality including:
-- 4 functions: get_children_links, update_file_with_signposting, process_directory...
-- 0 classes: 
-
-Usage:
-    # Example usage here
 """
-logger = get_logger(__name__)
+"""Main entry point and utility functions
+
 This module provides doc_scaffolder functionality including:
 - 4 functions: get_children_links, update_file_with_signposting, process_directory...
 - 0 classes: 
@@ -94,7 +48,26 @@ EXCLUDE_FILES = {
     '__init__.py', '.DS_Store'
 }
 
-TEMPLATE_README = """# {name}
+TEMPLATE_README =
+"""
+#!/usr/bin/env python3
+"""
+This module provides doc_scaffolder functionality including:
+- 4 functions: get_children_links, update_file_with_signposting, process_directory...
+- 0 classes: 
+
+Usage:
+    # Example usage here
+"""
+
+
+#!/usr/bin/env python3
+
+"""Main entry point and utility functions
+
+logger = get_logger(__name__)
+
+# {name}
 
 ## Signposting
 - **Parent**: [Parent](../README.md)
@@ -142,15 +115,6 @@ TEMPLATE_SPEC = """# {name} Functional Specification
 """
 
 def get_children_links(root, dirs, filename="README.md"):
-    """Brief description of get_children_links.
-
-Args:
-    root : Description of root
-    dirs : Description of dirs
-    filename : Description of filename
-
-    Returns: Description of return value
-"""
     links = []
     for d in sorted(dirs):
         if d in EXCLUDE_DIRS or d.startswith('.'):
@@ -163,16 +127,6 @@ Args:
     return "\n".join(links)
 
 def update_file_with_signposting(path, name, children_links, file_type="README.md"):
-    """Brief description of update_file_with_signposting.
-
-Args:
-    path : Description of path
-    name : Description of name
-    children_links : Description of children_links
-    file_type : Description of file_type
-
-    Returns: Description of return value
-"""
     with open(path, "r") as f:
         content = f.read()
     
@@ -216,14 +170,6 @@ Args:
         f.write("\n".join(new_lines))
 
 def process_directory(root, dirs):
-    """Brief description of process_directory.
-
-Args:
-    root : Description of root
-    dirs : Description of dirs
-
-    Returns: Description of return value
-"""
     name = os.path.basename(root)
     if not name:
         name = "Root"
@@ -260,13 +206,6 @@ Args:
 
 
 def main():
-    """Brief description of main.
-
-Args:
-
-
-    Returns: Description of return value
-"""
     start_dir = sys.argv[1] if len(sys.argv) > 1 else "."
     start_dir = os.path.abspath(start_dir)
 

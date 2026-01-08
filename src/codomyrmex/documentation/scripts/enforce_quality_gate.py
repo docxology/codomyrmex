@@ -5,18 +5,8 @@ import json
 import logging
 import sys
 
-
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -39,15 +29,18 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides enforce_quality_gate functionality including:
-- 8 functions: main, __init__, load_results...
-- 1 classes: QualityGateEnforcer
 
-Usage:
-    # Example usage here
-"""
+class QualityGateEnforcer:
+    """
+
+
+    #!/usr/bin/env python3
+    """
+
 Quality Gate Enforcement for Codomyrmex Documentation.
 
 Enforces minimum quality standards for documentation in CI/CD pipelines.
@@ -56,14 +49,11 @@ Enforces minimum quality standards for documentation in CI/CD pipelines.
 
 try:
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-class QualityGateEnforcer:
-    """Enforces documentation quality gates."""
+logger = get_logger(__name__)
+
+Enforces documentation quality gates."""
     
     def __init__(self, repo_root: Path, output_dir: Path):
         """Initialize enforcer."""
@@ -243,5 +233,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

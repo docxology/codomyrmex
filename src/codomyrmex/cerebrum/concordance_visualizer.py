@@ -53,34 +53,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Concordance visualizations for cross-analysis comparisons.
 
-"""Core functionality module
-
-This module provides concordance_visualizer functionality including:
-- 5 functions: __init__, plot_analysis_concordance_matrix, plot_pattern_importance_concordance...
-- 1 classes: ConcordanceVisualizer
-
-Usage:
-    # Example usage here
-"""
 This module provides visualizations that compare results from different
 CEREBRUM analyses (CBR, Bayesian, Active Inference) and FPF analyses,
 showing agreement, correlation, and concordance patterns.
@@ -407,6 +381,4 @@ Args:
 
         plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
         return fig
-
-
 

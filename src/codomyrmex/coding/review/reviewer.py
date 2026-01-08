@@ -69,15 +69,16 @@ Args:
         return decorator
 
     class performance_context:
-    """Brief description of performance_context.
-
-This class provides functionality for...
-
-Attributes:
-    # Add attribute descriptions here
-
-Methods:
-    # Method descriptions will be added automatically
+        """Brief description of performance_context.
+        
+        This class provides functionality for...
+        
+        Attributes:
+            # Add attribute descriptions here
+        
+        Methods:
+            # Method descriptions will be added automatically
+        """
 """
         def __init__(self, context_name: str = "unknown_context", *args, **kwargs):
             """Initialize performance context (fallback)."""

@@ -2,57 +2,23 @@ from pathlib import Path
 import json
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
 
 
-# Template variable: from codomyrmex.{module_name} import main_function
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides create_example_tutorials functionality including:
-- 1 functions: create_example_tutorials
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Create placeholder example_tutorial.md files for modules that reference them.
 
 Creates a standard template that modules can customize with their own examples.
 """
 
+# Template variable: from codomyrmex.{module_name} import main_function
 
+#!/usr/bin/env python3
+
+logger = get_logger(__name__)
 
 EXAMPLE_TUTORIAL_TEMPLATE = """# Example Tutorial
 
@@ -112,7 +78,6 @@ print(result)
 **Note**: This is a template file. Please customize it with module-specific examples and use cases.
 """
 
-
 def create_example_tutorials():
     """Create placeholder example_tutorial.md files."""
     script_dir = Path(__file__).parent
@@ -157,7 +122,5 @@ def create_example_tutorials():
     print(f"\n✅ Created {created_count} files, skipped {skipped_count} existing files")
     return 0
 
-
 if __name__ == '__main__':
     sys.exit(create_example_tutorials())
-

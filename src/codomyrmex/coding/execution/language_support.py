@@ -1,6 +1,6 @@
 
 from codomyrmex.logging_monitoring import get_logger
-"""
+
 """Core functionality module
 
 This module provides language_support functionality including:
@@ -8,9 +8,11 @@ This module provides language_support functionality including:
 - 0 classes: 
 
 Usage:
+    from language_support import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
+"""
 Language Support Configuration
 
 Defines supported programming languages and their execution configurations.

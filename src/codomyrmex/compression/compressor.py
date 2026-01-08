@@ -15,82 +15,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides compressor functionality including:
-- 6 functions: __init__, compress, decompress...
-- 2 classes: CompressionError, Compressor
-
-Usage:
-    # Example usage here
-"""
 Compression utilities.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 class CompressionError(CodomyrmexError):
     """Raised when compression operations fail."""
 
     pass
-
 
 class Compressor:
     """Compressor for various formats."""
@@ -198,5 +131,4 @@ class Compressor:
         elif len(data) > 2 and data[:2] in [b"\x78\x01", b"\x78\x9c", b"\x78\xda"]:
             return "zlib"
         return None
-
 

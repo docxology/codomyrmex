@@ -1,6 +1,7 @@
 from codomyrmex.logging_monitoring import get_logger
 """Section exporter for FPF sections.
 
+
 """Core functionality module
 
 This module provides section_exporter functionality including:
@@ -8,6 +9,7 @@ This module provides section_exporter functionality including:
 - 1 classes: SectionExporter
 
 Usage:
+    from section_exporter import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -215,6 +217,4 @@ class SectionExporter:
             "description": relationship.description,
             "metadata": relationship.metadata,
         }
-
-
 

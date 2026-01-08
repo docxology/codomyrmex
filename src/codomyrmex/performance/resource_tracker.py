@@ -15,75 +15,11 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides resource_tracker functionality including:
-- 15 functions: track_memory_usage, create_resource_report, benchmark_resource_usage...
-- 3 classes: ResourceSnapshot, ResourceTrackingResult, ResourceTracker
-
-Usage:
-    # Example usage here
-"""
 Resource Tracker for Codomyrmex Performance Monitoring
 
 This module provides detailed resource tracking capabilities for monitoring
 memory usage, CPU consumption, and other system resources during operations.
 """
-
 
 # Import logging
 try:
@@ -97,7 +33,6 @@ try:
 except ImportError:
     psutil = None
     HAS_PSUTIL = False
-
 
 @dataclass
 class ResourceSnapshot:
@@ -126,7 +61,6 @@ class ResourceSnapshot:
             "num_fds": self.num_fds,
             "context": self.context
         }
-
 
 @dataclass
 class ResourceTrackingResult:
@@ -159,7 +93,6 @@ class ResourceTrackingResult:
             "snapshot_count": len(self.snapshots),
             "summary": self.summary
         }
-
 
 class ResourceTracker:
     """
@@ -362,7 +295,6 @@ class ResourceTracker:
         """Check if tracking is currently active."""
         return self._tracking
 
-
 @contextmanager
 def track_memory_usage(func: Callable):
     """
@@ -377,12 +309,12 @@ def track_memory_usage(func: Callable):
     tracker = ResourceTracker()
 
     def wrapper(*args, **kwargs):
-    """Brief description of wrapper.
-
-Args:
-
-
-    Returns: Description of return value
+        """Brief description of wrapper.
+        
+        Args:
+        
+            Returns: Description of return value
+        """
 """
         tracker.start_tracking(func.__name__, {"args_count": len(args), "kwargs_count": len(kwargs)})
 
@@ -400,7 +332,6 @@ Args:
             )
 
     yield wrapper
-
 
 def create_resource_report(results: List[ResourceTrackingResult]) -> Dict[str, Any]:
     """
@@ -451,7 +382,6 @@ def create_resource_report(results: List[ResourceTrackingResult]) -> Dict[str, A
         "detailed_results": [r.to_dict() for r in results],
         "generated_at": time.time()
     }
-
 
 def benchmark_resource_usage(func: Callable, iterations: int = 10, *args, **kwargs) -> Dict[str, Any]:
     """

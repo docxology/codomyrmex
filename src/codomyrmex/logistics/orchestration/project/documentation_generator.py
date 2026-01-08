@@ -3,54 +3,16 @@ from typing import Any, Optional
 import logging
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides documentation_generator functionality including:
-- 14 functions: __init__, _load_template, _substitute_variables...
-- 1 classes: DocumentationGenerator
-
-Usage:
-    # Example usage here
-"""
 Documentation Generator for Codomyrmex Projects
 
 This module generates README.md and AGENTS.md files for projects and their
 nested directories based on templates and project metadata.
 """
-
 
 try:
 
@@ -58,7 +20,6 @@ try:
 except ImportError:
 
     logger = logging.getLogger(__name__)
-
 
 class DocumentationGenerator:
     """Generates documentation files for projects and nested directories."""

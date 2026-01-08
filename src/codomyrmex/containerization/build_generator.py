@@ -15,82 +15,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides build_generator functionality including:
-- 14 functions: to_dockerfile, to_dockerfile, to_shell_script...
-- 4 classes: BuildStage, MultiStageBuild, BuildScript...
-
-Usage:
-    # Example usage here
-"""
 Build Generator for Codomyrmex Containerization
 
 This module provides advanced Dockerfile generation and build optimization,
 including multi-stage builds, security hardening, and performance optimization.
 """
 
-
 # Import logging
 try:
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
-
 
 @dataclass
 class BuildStage:
@@ -128,7 +63,6 @@ class BuildStage:
 
         return "\n".join(lines)
 
-
 @dataclass
 class MultiStageBuild:
     """Represents a complete multi-stage Docker build."""
@@ -156,7 +90,6 @@ class MultiStageBuild:
             lines.append(f"\nFROM {self.final_stage}")
 
         return "\n".join(lines)
-
 
 @dataclass
 class BuildScript:
@@ -189,7 +122,6 @@ class BuildScript:
                 lines.append(f"docker push {target}")
 
         return "\n".join(lines)
-
 
 class BuildGenerator:
     """

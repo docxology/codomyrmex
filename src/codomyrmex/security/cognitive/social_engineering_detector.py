@@ -46,36 +46,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Social engineering detection."""
 
-
-
-"""Core functionality module
-
-This module provides social_engineering_detector functionality including:
-- 6 functions: detect_social_engineering, analyze_communication, __init__...
-- 2 classes: SocialEngineeringIndicator, SocialEngineeringDetector
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -93,12 +65,13 @@ class SocialEngineeringDetector:
     """Detects social engineering attempts."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         logger.info("SocialEngineeringDetector initialized")
     
@@ -159,6 +132,4 @@ def analyze_communication(
     if detector is None:
         detector = SocialEngineeringDetector()
     return detector.analyze_communication(communication)
-
-
 

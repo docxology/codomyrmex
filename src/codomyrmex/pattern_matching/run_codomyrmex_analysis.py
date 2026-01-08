@@ -24,29 +24,73 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 
 
-try:
-except ImportError:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     load_dotenv = None
 
-try:
-except ImportError:
     DocstringIndexer = None
     OpenAIConfig = None
     Repository = None
 
-try:
-except ImportError:
     SentenceTransformer = None
 
-try:
-except ImportError:
-    def tqdm(iterable, **kwargs):
         return iterable
 
-try:
         check_and_setup_env_vars,
         ensure_dependencies_installed as ensure_core_deps_installed,
     )
+try:
+except ImportError:
+try:
+except ImportError:
+try:
+except ImportError:
+try:
+except ImportError:
+    def tqdm(iterable, **kwargs):
+try:
 except ImportError:
     def check_and_setup_env_vars(): pass
     def ensure_core_deps_installed(): pass
@@ -958,11 +1002,13 @@ def _perform_chunking_examples(
 
 # --- Main Analysis Orchestration Function ---
 def analyze_repository_path(
-    path_to_analyze: str,
-    relative_output_dir_name: str,
-    config: dict,
-    module_pbar_desc: str,
-):
+    """
+        path_to_analyze: str,
+        relative_output_dir_name: str,
+        config: dict,
+        module_pbar_desc: str,
+    ):
+        """
     """
     Runs a suite of kit analyses on the given repository path and saves results.
     Returns a list of error messages encountered.

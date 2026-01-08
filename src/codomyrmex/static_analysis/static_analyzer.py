@@ -76,15 +76,50 @@ from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
 
 
-"""
-"""Core functionality module
 
-This module provides static_analyzer functionality including:
-- 38 functions: analyze_file, analyze_project, get_available_tools...
-- 8 classes: AnalysisType, SeverityLevel, Language...
 
-Usage:
-    # Example usage here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 Comprehensive static analysis functionality for Codomyrmex.
 
@@ -114,64 +149,18 @@ except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
-    """Brief description of monitor_performance.
-
-Args:
-
-
-    Returns: Description of return value
-"""
         def decorator(func):
-    """Brief description of decorator.
-
-Args:
-    func : Description of func
-
-    Returns: Description of return value
-"""
             return func
 
         return decorator
 
     class performance_context:
-    """Brief description of performance_context.
-
-This class provides functionality for...
-
-Attributes:
-    # Add attribute descriptions here
-
-Methods:
-    # Method descriptions will be added automatically
-"""
-        def __init__(self, *args, **kwargs):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
             pass
 
         def __enter__(self):
-    """Brief description of __enter__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
             return self
 
         def __exit__(self, *args):
-    """Brief description of __exit__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
             pass
 
 

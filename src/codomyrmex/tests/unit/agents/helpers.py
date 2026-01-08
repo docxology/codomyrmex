@@ -23,16 +23,8 @@ import subprocess
 
 
 
-
-
-
-
-
-
-
-
-
 """Helper functions for agent tests.
+
 
 """Core functionality module
 
@@ -41,14 +33,13 @@ This module provides helpers functionality including:
 - 0 classes: 
 
 Usage:
+    from helpers import FunctionName, ClassName
     # Example usage here
 """
 Tests use real implementations only. When CLI tools are not available,
 tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
-
-
 
 def check_tool_available(command: str, help_flag: str = "--help") -> bool:
     """

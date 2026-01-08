@@ -15,82 +15,15 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core functionality module
-
-This module provides template_engine functionality including:
-- 11 functions: __init__, render, __init__...
-- 3 classes: TemplatingError, Template, TemplateEngine
-
-Usage:
-    # Example usage here
-"""
 Template engine implementations.
 """
 
-
-
 logger = get_logger(__name__)
-
 
 class TemplatingError(CodomyrmexError):
     """Raised when templating operations fail."""
 
     pass
-
 
 class Template:
     """Template object."""
@@ -113,7 +46,6 @@ class Template:
             return self.template_obj.render(**context)
         else:
             raise TemplatingError(f"Unknown engine: {self.engine}")
-
 
 class TemplateEngine:
     """Template engine interface."""
@@ -247,5 +179,4 @@ class TemplateEngine:
             return MakoTemplate(filename=path)
         except ImportError:
             raise TemplatingError("mako package not available. Install with: pip install mako")
-
 

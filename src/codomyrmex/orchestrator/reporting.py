@@ -1,4 +1,17 @@
+from codomyrmex.logging_monitoring import get_logger
 """
+
+"""Core functionality module
+
+This module provides reporting functionality including:
+- 3 functions: save_log, generate_report, generate_script_documentation
+- 0 classes: 
+
+Usage:
+    from reporting import FunctionName, ClassName
+    # Example usage here
+"""
+logger = get_logger(__name__)
 Orchestrator Reporting
 
 Handles logging, summary generation, and documentation.

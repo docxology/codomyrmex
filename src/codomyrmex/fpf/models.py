@@ -11,19 +11,62 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """Data models for FPF specification parsing and analysis.
 
+
+"""Core functionality module
+
+This module provides models functionality including:
+- 8 functions: parse_last_updated, get_pattern_by_id, get_concepts_by_pattern...
+- 11 classes: PatternStatus, RelationshipType, ConceptType...
+
+Usage:
+    from models import FunctionName, ClassName
+    # Example usage here
+"""
 This module defines Pydantic models for representing the First Principles
 Framework specification structure, including patterns, concepts, relationships,
 and the overall specification.
 """
 
 logger = get_logger(__name__)
-
-try:
-except ImportError:
-    parser = None
-
 
 class PatternStatus(str, Enum):
     """Status values for FPF patterns."""

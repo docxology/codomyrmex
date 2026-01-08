@@ -47,26 +47,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Utility functions for CEREBRUM module."""
-
-
 
 """Core functionality module
 
@@ -75,6 +56,7 @@ This module provides utils functionality including:
 - 0 classes: 
 
 Usage:
+    from utils import FunctionName, ClassName
     # Example usage here
 """
 logger = get_logger(__name__)
@@ -174,6 +156,4 @@ def softmax(values: list[float], temperature: float = 1.0) -> list[float]:
         return [1.0 / len(values)] * len(values)
 
     return [v / sum_exp for v in exp_values]
-
-
 

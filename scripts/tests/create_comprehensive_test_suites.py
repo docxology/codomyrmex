@@ -5,6 +5,15 @@ Create comprehensive test suites for modules with low coverage.
 This script generates test file templates for modules that need more tests.
 """
 
+import sys
+from pathlib import Path
+try:
+    import codomyrmex
+except ImportError:
+    # Add project root to sys.path
+    project_root = Path(__file__).resolve().parent.parent.parent
+    src_path = project_root / "src"
+    sys.path.insert(0, str(src_path))
 import os
 from pathlib import Path
 from typing import Dict, List
@@ -111,4 +120,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -47,36 +47,8 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Physical asset inventory management."""
 
-
-
-"""Core functionality module
-
-This module provides asset_inventory functionality including:
-- 7 functions: register_asset, track_asset, get_asset_status...
-- 2 classes: PhysicalAsset, AssetInventory
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -97,12 +69,13 @@ class AssetInventory:
     """Manages physical asset inventory."""
     
     def __init__(self):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
+        """Brief description of __init__.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value
+        """
 """
         self.assets: dict[str, PhysicalAsset] = {}
         logger.info("AssetInventory initialized")
@@ -178,6 +151,4 @@ def get_asset_status(
     if inventory is None:
         inventory = AssetInventory()
     return inventory.get_asset_status(asset_id)
-
-
 

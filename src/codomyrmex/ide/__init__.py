@@ -48,35 +48,8 @@ from enum import Enum
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """IDE Integration Module
 
-"""Core functionality module
-
-This module provides __init__ functionality including:
-- 22 functions: to_dict, to_dict, to_dict...
-- 10 classes: IDEStatus, IDECommand, IDECommandResult...
-
-Usage:
-    # Example usage here
-"""
 Provides programmatic integration and automation capabilities for various
 Integrated Development Environments including Antigravity, Cursor, and VS Code.
 
@@ -94,8 +67,6 @@ Example:
     >>> capabilities = client.get_capabilities()
 """
 
-
-
 class IDEStatus(Enum):
     """Status of an IDE session."""
     DISCONNECTED = "disconnected"
@@ -112,12 +83,13 @@ class IDECommand:
     timeout: float = 30.0
     
     def to_dict(self) -> Dict[str, Any]:
-    """Brief description of to_dict.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: Any)
+        """Brief description of to_dict.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return {"name": self.name, "args": self.args, "timeout": self.timeout}
 
@@ -132,12 +104,13 @@ class IDECommandResult:
     execution_time: float = 0.0
     
     def to_dict(self) -> Dict[str, Any]:
-    """Brief description of to_dict.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: Any)
+        """Brief description of to_dict.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return {
             "success": self.success,
@@ -158,12 +131,13 @@ class FileInfo:
     line_count: Optional[int] = None
     
     def to_dict(self) -> Dict[str, Any]:
-    """Brief description of to_dict.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: Any)
+        """Brief description of to_dict.
+        
+        Args:
+            self : Description of self
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         return {
             "path": self.path,

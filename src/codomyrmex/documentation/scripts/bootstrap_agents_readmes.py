@@ -5,18 +5,8 @@ import argparse
 import logging
 import sys
 
-
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -39,15 +29,18 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-This module provides bootstrap_agents_readmes functionality including:
-- 10 functions: main, __init__, should_process_directory...
-- 1 classes: DocumentationBootstrapper
 
-Usage:
-    # Example usage here
-"""
+class DocumentationBootstrapper:
+    """
+
+
+    #!/usr/bin/env python3
+    """
+
 Bootstrap script to create AGENTS.md and README.md files for every directory
 under the allowed surfaces in the Codomyrmex repository.
 
@@ -58,14 +51,11 @@ and proper navigation signposting.
 
 try:
     setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 
-class DocumentationBootstrapper:
-    """Handles bootstrapping of AGENTS.md and README.md files across the repository."""
+logger = get_logger(__name__)
+
+Handles bootstrapping of AGENTS.md and README.md files across the repository."""
 
     # Surface roots to cover
     SURFACE_ROOTS = {

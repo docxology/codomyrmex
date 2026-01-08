@@ -1,7 +1,6 @@
 from pathlib import Path
 import os
 
-
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -23,52 +22,12 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Core functionality module
-
-"""Core functionality module
-
+#!/usr/bin/env python3
+"""
+TEST_SPEC_TEMPLATE =
+"""
+#!/usr/bin/env python3
+"""
 This module provides fix_placeholders functionality including:
 - 1 functions: fix_placeholders
 - 0 classes: 
@@ -76,15 +35,11 @@ This module provides fix_placeholders functionality including:
 Usage:
     # Example usage here
 """
+
+
 logger = get_logger(__name__)
-This module provides fix_placeholders functionality including:
-- 1 functions: fix_placeholders
-- 0 classes: 
 
-Usage:
-    # Example usage here
-"""
-TEST_SPEC_TEMPLATE = """# {module_name} - Test Specification
+# {module_name} - Test Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
@@ -127,13 +82,6 @@ This directory contains **{doc_type}** documentation. It serves to educate users
 """
 
 def fix_placeholders(root_dir):
-    """Brief description of fix_placeholders.
-
-Args:
-    root_dir : Description of root_dir
-
-    Returns: Description of return value
-"""
     root = Path(root_dir)
     count = 0
     

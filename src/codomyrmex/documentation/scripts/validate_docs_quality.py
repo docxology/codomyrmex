@@ -5,27 +5,8 @@ import sys
 
 import hashlib
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -68,15 +49,14 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+class DocumentationValidator:
+    """
 
-This module provides validate_docs_quality functionality including:
-- 9 functions: main, __init__, validate_module_structure...
-- 1 classes: DocumentationValidator
 
-Usage:
-    # Example usage here
-"""
+
+    #!/usr/bin/env python3
+    """
+
 Documentation Quality Validation Script
 
 This script performs comprehensive validation of documentation quality
@@ -88,21 +68,13 @@ to prevent errors from accumulating across versions.
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))  # Removed sys.path manipulation
 
 setup_logging()
+
+
 logger = get_logger(__name__)
 
-
-class DocumentationValidator:
-    """Comprehensive documentation quality validator."""
+Comprehensive documentation quality validator."""
 
     def __init__(self, project_root: str):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    project_root : Description of project_root
-
-    Returns: Description of return value
-"""
         self.project_root = Path(project_root)
         self.src_dir = self.project_root / "src" / "codomyrmex"
         self.docs_dir = self.src_dir / "documentation"

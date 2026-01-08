@@ -2,18 +2,7 @@ from pathlib import Path
 from typing import List, Tuple
 import re
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -36,22 +25,17 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides fix_broken_links functionality including:
-- 3 functions: fix_links_in_file, main, replace_link
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Fix broken links in documentation files.
 
 This script fixes common broken link patterns found during documentation scanning.
 """
 
 
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 def fix_links_in_file(file_path: Path, repo_root: Path) -> List[str]:
     """Fix broken links in a single file."""
@@ -66,13 +50,6 @@ def fix_links_in_file(file_path: Path, repo_root: Path) -> List[str]:
         link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
         
         def replace_link(match):
-    """Brief description of replace_link.
-
-Args:
-    match : Description of match
-
-    Returns: Description of return value
-"""
             link_text = match.group(1)
             link_url = match.group(2)
             
@@ -172,4 +149,3 @@ def main():
 
 if __name__ == '__main__':
     exit(main())
-

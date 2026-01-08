@@ -14,12 +14,56 @@ from codomyrmex.ide import (
 
 
 
-try:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         IDEClient, 
         IDEStatus,
         IDECommand,
         IDECommandResult,
     )
+try:
 except ImportError:
     # Fallback if ide module not available
     IDEClient = object

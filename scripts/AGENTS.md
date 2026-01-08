@@ -10,7 +10,24 @@ Maintenance and automation utilities for project management.
 - `README.md` – Project file
 - `SCRIPTS_REFERENCE.md` – Project file
 - `SPEC.md` – Project file
-- `_orchestrator_utils.py` – Project file
+- `agents_core_tail.py` – Project file
+- `debug_syntax.py` – Project file
+- `ensure_sys_path.py` – Project file
+- `exceptions_tail.py` – Project file
+- `find_init_corruption.py` – Project file
+- `fix_broken_imports.py` – Project file
+- `fix_docstring_infection.py` – Project file
+- `fix_docstring_infection_v3.py` – Project file
+- `fix_docstrings.py` – Project file
+- `fix_garbage.py` – Project file
+- `fix_imports_infection.py` – Project file
+- `fix_missing_opening_quote.py` – Project file
+- `fix_orchestrators_imports.py` – Project file
+- `fix_syntax_errors.py` – Project file
+- `fix_syntax_errors_v2.py` – Project file
+- `fix_tangled_imports.py` – Project file
+- `global_repair.py` – Project file
+- `remove_docstring_header.py` – Project file
 - `run_all_scripts.py` – Project file
 - `scripts_config.json` – Project file
 - `agents/` – Directory containing agents components

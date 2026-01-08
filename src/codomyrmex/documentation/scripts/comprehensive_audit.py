@@ -5,18 +5,7 @@ import os
 import re
 import sys
 
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -39,16 +28,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 #!/usr/bin/env python3
 """
-"""Main entry point and utility functions
-
-This module provides comprehensive_audit functionality including:
-- 18 functions: main, __init__, scan_structure...
-- 1 classes: DocumentationAudit
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 Comprehensive Documentation and Signposting Audit Script
 
 This script performs a complete audit of documentation across the Codomyrmex repository,
@@ -62,27 +41,13 @@ checking for:
 """
 
 
+#!/usr/bin/env python3
+"""
+
+
+logger = get_logger(__name__)
 
 class DocumentationAudit:
-    """Brief description of DocumentationAudit.
-
-This class provides functionality for...
-
-Attributes:
-    # Add attribute descriptions here
-
-Methods:
-    # Method descriptions will be added automatically
-"""
-    def __init__(self, repo_root: Path):
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-    repo_root : Description of repo_root
-
-    Returns: Description of return value
-"""
         self.repo_root = repo_root.resolve()
         self.issues = {
             'missing_readme': [],
@@ -701,4 +666,3 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
-

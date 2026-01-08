@@ -465,47 +465,14 @@ def _analyze_directory_structure(path: str, max_depth: int = 3) -> dict[str, Any
     path_obj = Path(path)
 
     def scan_directory(current_path: Path, current_depth: int = 0) -> dict[str, Any]:
-    """Brief description of scan_directory.
-
-Args:
-    current_path : Description of current_path
-    current_depth : Description of current_depth
-
-    Returns: Description of return value (type: Any)
-"""
-        if current_depth >= max_depth:
-            return {}
-
-        items = {}
-        try:
-            for item in current_path.iterdir():
-                # Skip hidden files and git directory
-                if item.name.startswith("."):
-                    continue
-
-                if item.is_dir():
-                    items[item.name] = scan_directory(item, current_depth + 1)
-                else:
-                    items[item.name] = "file"
-        except PermissionError:
-            pass
-
-        return items
-
-    return scan_directory(path_obj)
-
-
-def _get_structure_stats(structure: dict[str, Any]) -> dict[str, int]:
-    """Get statistics from directory structure."""
-    stats = {"directories": 0, "files": 0}
-
-    def count_items(items: dict[str, Any]):
-    """Brief description of count_items.
-
-Args:
-    items : Description of items
-
-    Returns: Description of return value
+        """Brief description of scan_directory.
+        
+        Args:
+            current_path : Description of current_path
+            current_depth : Description of current_depth
+        
+            Returns: Description of return value (type: Any)
+        """
 """
         for _name, content in items.items():
             if isinstance(content, dict):

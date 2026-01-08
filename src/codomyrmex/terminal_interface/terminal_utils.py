@@ -5,60 +5,20 @@ import shutil
 import subprocess
 import sys
 
-
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
-"""
-"""Core functionality module
 
-This module provides terminal_utils functionality including:
-- 18 functions: create_ascii_art, __init__, _supports_color...
-- 2 classes: TerminalFormatter, CommandRunner
-
-Usage:
-    # Example usage here
-"""
 Terminal Utilities for Codomyrmex
 
 Provides utilities for creating engaging terminal interfaces, formatting
 output, and running commands with beautiful presentation.
 """
 
-
-
 logger = get_logger(__name__)
-
-
 
 class TerminalFormatter:
     """
@@ -275,7 +235,6 @@ class TerminalFormatter:
 
         return "\n".join(result)
 
-
 class CommandRunner:
     """
     Utility class for running commands with beautiful output formatting.
@@ -458,7 +417,6 @@ class CommandRunner:
 
         print(self.formatter.table(headers, rows))
 
-
 def create_ascii_art(text: str, style: str = "simple") -> str:
     """
     Create simple ASCII art for text.
@@ -496,7 +454,6 @@ def create_ascii_art(text: str, style: str = "simple") -> str:
         return "\n".join(result)
 
     return text
-
 
 if __name__ == "__main__":
     # Demo the terminal utilities
