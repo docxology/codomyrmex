@@ -17,7 +17,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 #!/usr/bin/env python3
 
-Performance Monitoring Module for Codomyrmex Database Management.
+# Performance Monitoring Module for Codomyrmex Database Management.
 
 This module provides database performance monitoring, query optimization,
 and performance analytics capabilities.

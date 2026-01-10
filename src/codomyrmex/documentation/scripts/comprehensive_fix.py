@@ -23,7 +23,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Comprehensive fixer for all documentation issues.
 
@@ -34,8 +33,6 @@ Fixes:
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

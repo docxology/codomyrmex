@@ -51,7 +51,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 except ImportError:
     logger = logging.getLogger(__name__)
@@ -133,7 +132,6 @@ class ArchitectureDiagramGenerator:
         """
         Initialize the diagram generator.
 
-        Args:
             project_root: Root path of the project
         """
         self.project_root = Path(project_root or SCRIPT_DIR)
@@ -155,7 +153,6 @@ class ArchitectureDiagramGenerator:
         """
         Generate a diagram for a specific module's internal structure.
 
-        Args:
             module_name: Name of the module
 
         Returns:
@@ -241,7 +238,6 @@ class ArchitectureDiagramGenerator:
         """
         Generate a diagram for a workflow.
 
-        Args:
             workflow: Workflow definition dictionary
 
         Returns:
@@ -323,7 +319,6 @@ class ArchitectureDiagramGenerator:
         """
         Add generated diagrams to a README file.
 
-        Args:
             readme_path: Path to the README file
             diagrams: Dictionary mapping diagram names to diagram content
         """
@@ -438,7 +433,6 @@ def generate_module_diagram(module_name: str) -> str:
     """
     Convenience function to generate a module diagram.
 
-    Args:
         module_name: Name of the module
 
     Returns:
@@ -463,7 +457,6 @@ def generate_workflow_diagram(workflow: Dict[str, Any]) -> str:
     """
     Convenience function to generate a workflow diagram.
 
-    Args:
         workflow: Workflow definition
 
     Returns:
@@ -488,7 +481,6 @@ def add_diagrams_to_readme(readme_path: str, diagrams: Dict[str, str]) -> None:
     """
     Convenience function to add diagrams to README.
 
-    Args:
         readme_path: Path to README file
         diagrams: Dictionary of diagram names to content
     """

@@ -1,20 +1,16 @@
-from codomyrmex.logging_monitoring import get_logger
 """Orchestrator Core.
 
-Main entry point and utility functions.
+Main entry point and execution loop for running and reporting on scripts.
 
-This module provides core functionality including:
-- 1 functions: main
-- 0 classes: 
-
-Usage:
-    from core import FunctionName, ClassName
-    # Example usage here
-
-Main entry point and execution loop.
+This module provides:
+- main(): Entry point for script orchestration
+- Discovery, execution, and reporting of Python scripts
 """
 
+from codomyrmex.logging_monitoring import get_logger
+
 logger = get_logger(__name__)
+
 
 import argparse
 import sys

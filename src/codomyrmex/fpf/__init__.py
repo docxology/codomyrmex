@@ -2,7 +2,7 @@
 
 This module provides functionality to fetch, parse, analyze, and export
 the First Principles Framework specification for use in prompt/context engineering.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from pathlib import Path
 
@@ -66,14 +66,14 @@ class FPFClient:
     """High-level client for working with FPF specifications.
 
     This class provides a convenient interface for common FPF operations.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     def __init__(self, spec_path: str = None):
         """Initialize the FPF client.
 
         Args:
             spec_path: Optional path to local FPF-Spec.md file
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.parser = FPFParser()
         self.extractor = FPFExtractor()
         self.indexer = FPFIndexer()
@@ -91,7 +91,7 @@ class FPFClient:
 
         Returns:
             Parsed FPFSpec object
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         content = Path(file_path).read_text(encoding="utf-8")
         self.spec = self.parser.parse_spec(content, source_path=file_path)
 
@@ -113,7 +113,7 @@ class FPFClient:
 
         Returns:
             Parsed FPFSpec object
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         content = self.fetcher.fetch_latest(repo, branch)
         self.spec = self.parser.parse_spec(content, source_path=f"{repo}/{branch}")
 
@@ -135,7 +135,7 @@ class FPFClient:
 
         Returns:
             List of matching Pattern objects
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self.spec:
             raise ValueError("No specification loaded. Call load_from_file() or fetch_and_load() first.")
 
@@ -149,7 +149,7 @@ class FPFClient:
 
         Returns:
             Pattern object
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self.spec:
             raise ValueError("No specification loaded. Call load_from_file() or fetch_and_load() first.")
 
@@ -164,7 +164,7 @@ class FPFClient:
 
         Args:
             output_path: Path to output JSON file
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self.spec:
             raise ValueError("No specification loaded. Call load_from_file() or fetch_and_load() first.")
 
@@ -179,7 +179,7 @@ class FPFClient:
 
         Returns:
             Context string
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self.spec:
             raise ValueError("No specification loaded. Call load_from_file() or fetch_and_load() first.")
 

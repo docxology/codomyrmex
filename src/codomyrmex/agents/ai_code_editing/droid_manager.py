@@ -2,7 +2,7 @@
 
 This module provides comprehensive management capabilities for the Codomyrmex droid system,
 including TODO list management, task execution, statistics tracking, and system monitoring.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from __future__ import annotations
 

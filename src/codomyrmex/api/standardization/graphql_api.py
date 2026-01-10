@@ -14,7 +14,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-GraphQL API Implementation for Codomyrmex
+"""GraphQL API Implementation for Codomyrmex
 
 This module provides a GraphQL API framework with schema generation,
 resolvers, mutations, and query optimization.
@@ -439,14 +439,7 @@ def resolver(field_name: str, complexity: int = 1):
         Decorated function
     """
     def decorator(func: Callable) -> GraphQLResolver:
-        """Brief description of decorator.
-        
-        Args:
-            func : Description of func
-        
-            Returns: Description of return value (type: GraphQLResolver)
-        """
-"""
+
         return GraphQLResolver(
             field_name=field_name,
             resolver_func=func,
@@ -470,14 +463,7 @@ def mutation(name: str, input_type: GraphQLObjectType,
         Decorated function
     """
     def decorator(func: Callable) -> GraphQLMutation:
-        """Brief description of decorator.
-        
-        Args:
-            func : Description of func
-        
-            Returns: Description of return value (type: GraphQLMutation)
-        """
-"""
+
         return GraphQLMutation(
             name=name,
             input_type=input_type,

@@ -31,16 +31,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """OpenCode integration adapters for Codomyrmex modules."""
 
-"""Core functionality module
-
-This module provides opencode_integration functionality including:
-- 3 functions: adapt_for_ai_code_editing, adapt_for_llm, adapt_for_code_execution
-- 1 classes: OpenCodeIntegrationAdapter
-
-Usage:
-    from opencode_integration import FunctionName, ClassName
-    # Example usage here
-"""
 class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for OpenCode with Codomyrmex modules."""
 

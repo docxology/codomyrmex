@@ -51,20 +51,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Core scraping abstractions and data structures.
 
 
-"""Core functionality module
-
-This module provides core functionality including:
-- 9 functions: get_format, has_format, to_dict...
-- 8 classes: ScrapeFormat, ScrapeResult, ScrapeOptions...
-
-Usage:
-    from core import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module defines the core abstractions for the scrape module,
 including result types, configuration options, and abstract base classes.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 class ScrapeFormat(str, Enum):
     """Supported output formats for scraping operations."""
@@ -89,7 +79,7 @@ class ScrapeResult:
         status_code: HTTP status code if available
         success: Whether the scrape operation was successful
         error: Error message if the operation failed
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     url: str
     content: str = ""
@@ -126,7 +116,7 @@ class ScrapeOptions:
         limit: Maximum number of pages to scrape (for crawl operations)
         follow_links: Whether to follow links when crawling
         respect_robots_txt: Whether to respect robots.txt
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     formats: List[ScrapeFormat | str] = field(default_factory=lambda: [ScrapeFormat.MARKDOWN])
     timeout: Optional[float] = None
@@ -176,7 +166,7 @@ class CrawlResult:
         results: List of ScrapeResult objects for each page
         credits_used: Number of API credits used
         expires_at: When the crawl result expires
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     job_id: str
     status: str
@@ -194,7 +184,7 @@ class MapResult:
     Attributes:
         links: List of discovered links with metadata
         total: Total number of links found (auto-calculated from links if not set)
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     links: List[Dict[str, Any]] = field(default_factory=list)
     total: int = 0
@@ -213,7 +203,7 @@ class SearchResult:
         query: The search query
         results: List of search results with content
         total: Total number of results
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     query: str
     results: List[ScrapeResult] = field(default_factory=list)
@@ -229,7 +219,7 @@ class ExtractResult:
         status: Current status of the extraction
         data: Extracted structured data
         urls: URLs that were processed
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     job_id: Optional[str] = None
     status: str = "completed"
@@ -242,7 +232,7 @@ class BaseScraper(ABC):
 
     All scraper implementations should inherit from this class
     and implement the required methods.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     @abstractmethod
     def scrape(self, url: str, options: Optional[ScrapeOptions] = None) -> ScrapeResult:
@@ -254,7 +244,7 @@ class BaseScraper(ABC):
 
         Returns:
             ScrapeResult containing the scraped content
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
 
     @abstractmethod
@@ -269,7 +259,7 @@ class BaseScraper(ABC):
 
         Returns:
             CrawlResult containing the crawl job information
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
 
     @abstractmethod
@@ -282,7 +272,7 @@ class BaseScraper(ABC):
 
         Returns:
             MapResult containing discovered links
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
 
     @abstractmethod
@@ -297,7 +287,7 @@ class BaseScraper(ABC):
 
         Returns:
             SearchResult containing search results
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
 
     @abstractmethod
@@ -316,7 +306,7 @@ class BaseScraper(ABC):
 
         Returns:
             ExtractResult containing extracted data
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
 
 

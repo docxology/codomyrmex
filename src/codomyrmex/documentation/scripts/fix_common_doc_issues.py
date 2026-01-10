@@ -24,7 +24,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 def calculate_correct_path(from_file: Path, to_file: Path) -> str:
     """

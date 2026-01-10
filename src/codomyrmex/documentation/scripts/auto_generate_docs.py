@@ -49,11 +49,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 
 
-#!/usr/bin/env python3
-"""
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
 # Import smart template engine
 sys.path.insert(0, str(Path(__file__).parent))
@@ -61,25 +56,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 class AutoDocumentationGenerator:
     """
-
-
-
-    #!/usr/bin/env python3
+    Automatic Documentation Generator for Codomyrmex.
+    
+    Uses smart template engine to automatically regenerate documentation for modules.
     """
-
-Automatic Documentation Generator for Codomyrmex.
-
-Uses smart template engine to automatically regenerate documentation for modules.
-"""
-
-
-try:
-    setup_logging()
-
-
-logger = get_logger(__name__)
-
-Automatically generates documentation using smart templates."""
     
     def __init__(self, repo_root: Path, dry_run: bool = False):
         """Initialize generator."""

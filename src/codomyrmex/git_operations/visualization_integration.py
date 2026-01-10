@@ -465,15 +465,7 @@ def _analyze_directory_structure(path: str, max_depth: int = 3) -> dict[str, Any
     path_obj = Path(path)
 
     def scan_directory(current_path: Path, current_depth: int = 0) -> dict[str, Any]:
-        """Brief description of scan_directory.
-        
-        Args:
-            current_path : Description of current_path
-            current_depth : Description of current_depth
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         for _name, content in items.items():
             if isinstance(content, dict):
                 stats["directories"] += 1

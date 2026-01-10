@@ -7,13 +7,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Script to check documentation status across the entire repository.
 Checks for README.md and AGENTS.md files in all directories.
 """
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

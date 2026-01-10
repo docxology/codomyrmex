@@ -471,15 +471,7 @@ class PredictiveAnalytics:
     """Simple predictive analytics using statistical methods."""
 
     def __init__(self, min_data_points: int = 10):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-            min_data_points : Description of min_data_points
-        
-            Returns: Description of return value
-        """
-"""
+
         self.min_data_points = min_data_points
 
     def predict_linear_trend(

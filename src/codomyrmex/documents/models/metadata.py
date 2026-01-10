@@ -73,14 +73,7 @@ class DocumentMetadata:
     custom_fields: dict[str, Any] = None
     
     def __post_init__(self):
-        """Brief description of __post_init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         if self.tags is None:
             self.tags = []
         if self.custom_fields is None:

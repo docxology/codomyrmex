@@ -1,17 +1,13 @@
-from typing import Any, Optional
+"""Metrics collection and aggregation.
 
+This module provides classes for collecting and aggregating metrics (Counter, Gauge, Histogram, Summary)
+and exporting them to various backends (e.g., Prometheus).
+"""
+
+from typing import Any, Optional
 from dataclasses import dataclass, field
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-Metrics collection and aggregation.
-"""
 
 logger = get_logger(__name__)
 
@@ -230,4 +226,3 @@ class Metrics:
                 lines.append(f"{histogram.name}_sum {stats['sum']}")
 
         return "\n".join(lines)
-

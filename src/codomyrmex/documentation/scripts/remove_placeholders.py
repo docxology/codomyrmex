@@ -22,14 +22,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Remove placeholder content from README.md files.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

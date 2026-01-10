@@ -1,20 +1,10 @@
 from codomyrmex.logging_monitoring import get_logger
 """Context builder for prompt engineering.
 
-"""Core functionality module
-
-This module provides context_builder functionality including:
-- 6 functions: __init__, build_context_for_pattern, build_context_for_concept...
-- 1 classes: ContextBuilder
-
-Usage:
-    from context_builder import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to build context strings
 from FPF specifications for use in prompt engineering.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from typing import Dict, List, Optional
 
@@ -29,7 +19,7 @@ class ContextBuilder:
 
         Args:
             spec: The FPFSpec object to build contexts from
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.spec = spec
 
     def build_context_for_pattern(
@@ -44,7 +34,7 @@ class ContextBuilder:
 
         Returns:
             Context string for prompt engineering
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pattern = self.spec.get_pattern_by_id(pattern_id)
         if not pattern:
             return f"Pattern {pattern_id} not found."
@@ -96,7 +86,7 @@ class ContextBuilder:
 
         Returns:
             Context string for prompt engineering
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Find concept
         matching_concepts = [c for c in self.spec.concepts if concept.lower() in c.name.lower()]
 
@@ -132,7 +122,7 @@ class ContextBuilder:
 
         Returns:
             Minimal context string
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         patterns = self.spec.patterns
 
         # Apply filters
@@ -165,7 +155,7 @@ class ContextBuilder:
 
         Returns:
             Full context string
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         context_lines = [
             "# FPF Full Specification Context",
             f"Version: {self.spec.version or 'Unknown'}",
@@ -205,7 +195,7 @@ class ContextBuilder:
 
         Returns:
             List of related Pattern objects
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pattern = self.spec.get_pattern_by_id(pattern_id)
         if not pattern:
             return []

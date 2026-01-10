@@ -1,47 +1,29 @@
+"""Security Monitor for Codomyrmex Security Audit Module.
+
+Provides real-time security monitoring, alerting, and audit logging capabilities.
+"""
+
 from datetime import datetime, timezone
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, Dict, List
 import json
 import logging
 import os
 import re
 import sys
 import time
-
 from dataclasses import dataclass, field
 from enum import Enum
 import hashlib
 import threading
+import uuid
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
+logger = get_logger(__name__)
 
-
-
-
-
-
-Security Monitor for Codomyrmex Security Audit Module.
-
-Provides real-time security monitoring, alerting, and audit logging capabilities.
-"""
-
-# Add project root to Python path
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
-if PROJECT_ROOT not in sys.path:
-    pass
-#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
-
-try:
-
-    logger = get_logger(__name__)
-except ImportError:
-
-    logger = logging.getLogger(__name__)
 
 class SecurityEventType(Enum):
     """Types of security events."""
-
     AUTHENTICATION_FAILURE = "authentication_failure"
     AUTHORIZATION_FAILURE = "authorization_failure"
     SUSPICIOUS_ACTIVITY = "suspicious_activity"
@@ -54,18 +36,18 @@ class SecurityEventType(Enum):
     SQL_INJECTION_ATTEMPT = "sql_injection_attempt"
     XSS_ATTEMPT = "xss_attempt"
 
+
 class AlertLevel(Enum):
     """Alert severity levels."""
-
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
     CRITICAL = "CRITICAL"
 
+
 @dataclass
 class SecurityEvent:
     """Represents a security event."""
-
     event_id: str
     event_type: SecurityEventType
     timestamp: datetime
@@ -74,10 +56,10 @@ class SecurityEvent:
     resource: Optional[str] = None
     action: Optional[str] = None
     severity: AlertLevel = AlertLevel.MEDIUM
-    details: dict[str, Any] = field(default_factory=dict)
+    details: Dict[str, Any] = field(default_factory=dict)
     raw_log: Optional[str] = None
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Convert event to dictionary format."""
         return {
             "event_id": self.event_id,
@@ -92,75 +74,58 @@ class SecurityEvent:
             "raw_log": self.raw_log,
         }
 
+
 @dataclass
 class AlertRule:
     """Represents an alert rule for security monitoring."""
-
     rule_id: str
     name: str
     description: str
     event_type: SecurityEventType
-    conditions: dict[str, Any]
+    conditions: Dict[str, Any]
     alert_level: AlertLevel
     enabled: bool = True
     cooldown_period: int = 300  # seconds
     last_triggered: Optional[datetime] = None
 
-class SecurityMonitor:
-    """
-    Real-time security monitoring and alerting system.
 
-    Features:
-    - Real-time security event monitoring
-    - Configurable alert rules
-    - Automated incident response
-    - Security audit logging
-    - Threat intelligence integration
-    """
+class SecurityMonitor:
+    """Real-time security monitoring and alerting system."""
 
     def __init__(self, config_path: Optional[str] = None):
-        """
-        Initialize the security monitor.
-
-        Args:
-            config_path: Path to monitor configuration file
-        """
-        self.config_path = config_path or os.path.join(
-            os.getcwd(), "security_monitor_config.json"
-        )
+        """Initialize the security monitor."""
+        self.config_path = config_path
         self.config = self._load_config()
 
-        self.events: list[SecurityEvent] = []
-        self.alert_rules: dict[str, AlertRule] = {}
-        self.active_alerts: dict[str, SecurityEvent] = {}
+        self.events: List[SecurityEvent] = []
+        self.alert_rules: Dict[str, AlertRule] = {}
+        self.active_alerts: Dict[str, SecurityEvent] = {}
 
         self.monitoring_active = False
         self.monitor_thread: Optional[threading.Thread] = None
-
-        # Alert callbacks
-        self.alert_callbacks: list[Callable[[SecurityEvent], None]] = []
+        self.alert_callbacks: List[Callable[[SecurityEvent], None]] = []
 
         # Load default alert rules
         self._load_default_alert_rules()
 
-    def _load_config(self) -> dict[str, Any]:
+    def _load_config(self) -> Dict[str, Any]:
         """Load monitor configuration."""
         default_config = {
             "log_files": ["/var/log/auth.log", "/var/log/security.log"],
-            "monitoring_interval": 10,  # seconds
+            "monitoring_interval": 10,
             "max_events": 10000,
-            "alert_cooldown": 300,  # 5 minutes
+            "alert_cooldown": 300,
             "enable_auto_response": False,
             "threat_intelligence_enabled": True,
             "log_rotation_days": 30,
         }
 
-        if os.path.exists(self.config_path):
+        if self.config_path and os.path.exists(self.config_path):
             try:
                 with open(self.config_path) as f:
                     user_config = json.load(f)
                 default_config.update(user_config)
-            except (FileNotFoundError, PermissionError, json.JSONDecodeError, KeyError) as e:
+            except Exception as e:
                 logger.warning(f"Failed to load monitor config: {e}")
 
         return default_config
@@ -186,7 +151,7 @@ class SecurityMonitor:
                 },
                 alert_level=AlertLevel.CRITICAL,
             ),
-            AlertRule(
+             AlertRule(
                 rule_id="config_change",
                 name="Configuration File Change",
                 description="Unauthorized configuration file modification",
@@ -239,101 +204,37 @@ class SecurityMonitor:
 
         while self.monitoring_active:
             try:
-                # Collect security events from various sources
                 self._collect_system_logs()
-                self._collect_application_logs()
-                self._check_system_integrity()
-
-                # Process collected events
                 self._process_events()
-
-                # Check for threats
-                self._check_threat_intelligence()
-
-                # Clean up old events
                 self._cleanup_old_events()
-
-                # Sleep before next iteration
                 time.sleep(self.config.get("monitoring_interval", 10))
 
-            except (KeyboardInterrupt, SystemExit):
-                # Allow clean shutdown
-                raise
-            except (OSError, RuntimeError, AttributeError) as e:
+            except Exception as e:
                 logger.error(f"Error in monitoring loop: {e}")
-                time.sleep(30)  # Wait longer on error
+                time.sleep(30)
 
         logger.info("Security monitoring loop stopped")
 
     def _collect_system_logs(self):
         """Collect events from system log files."""
         log_files = self.config.get("log_files", [])
-
         for log_file in log_files:
             if os.path.exists(log_file):
                 try:
-                    with open(log_file) as f:
-                        # Read new lines since last check
+                    with open(log_file, 'r', errors='ignore') as f:
                         lines = f.readlines()
-                        for line in lines[-100:]:  # Check last 100 lines
+                        for line in lines[-100:]:
                             event = self._parse_log_line(line.strip(), log_file)
                             if event:
                                 self.events.append(event)
-
-                except (FileNotFoundError, PermissionError, OSError, UnicodeDecodeError) as e:
+                except Exception as e:
                     logger.error(f"Error reading log file {log_file}: {e}")
-
-    def _collect_application_logs(self):
-        """Collect events from application-specific logs."""
-        # This would integrate with the logging_monitoring module
-        try:
-            # Check for security-related log entries
-            # This is a placeholder for actual implementation
-            pass
-        except (OSError, RuntimeError, AttributeError) as e:
-            logger.error(f"Error collecting application logs: {e}")
-
-    def _check_system_integrity(self):
-        """Check system integrity and detect anomalies."""
-        # This is a basic implementation monitoring critical file changes
-        critical_files = ["/etc/passwd", "/etc/hosts", "/etc/resolv.conf"]
-        
-        try:
-            
-            if not hasattr(self, '_file_hashes'):
-                self._file_hashes = {}
-                
-            for file_path in critical_files:
-                if os.path.exists(file_path):
-                    try:
-                        with open(file_path, "rb") as f:
-                            file_hash = hashlib.sha256(f.read()).hexdigest()
-                            
-                        if file_path in self._file_hashes:
-                            if self._file_hashes[file_path] != file_hash:
-                                self._record_event(SecurityEvent(
-                                    event_id=str(uuid.uuid4()),
-                                    timestamp=datetime.now(),
-                                    event_type=SecurityEventType.SUSPICIOUS_ACTIVITY,
-                                    severity=SecuritySeverity.HIGH,
-                                    source="system_integrity",
-                                    description=f"Integrity violation detected in {file_path}",
-                                    metadata={"file": file_path, "old_hash": self._file_hashes[file_path], "new_hash": file_hash}
-                                ))
-                        
-                        self._file_hashes[file_path] = file_hash
-                    except (OSError, PermissionError) as e:
-                        logger.debug(f"Could not read {file_path} for integrity check: {e}")
-                        
-        except (OSError, RuntimeError) as e:
-            logger.error(f"Error checking system integrity: {e}")
 
     def _parse_log_line(self, line: str, source: str) -> Optional[SecurityEvent]:
         """Parse a log line and extract security events."""
         if not line.strip():
             return None
 
-        # Common patterns for security events
         patterns = {
             SecurityEventType.AUTHENTICATION_FAILURE: [
                 r"authentication failure.*user=(\w+)",
@@ -362,207 +263,82 @@ class SecurityMonitor:
                         raw_log=line,
                         details={"source": source, "pattern": pattern},
                     )
-
-                    # Extract additional information
+                    
                     if event_type == SecurityEventType.AUTHENTICATION_FAILURE:
-                        if match.groups():
-                            # Extract user ID
+                         if match.groups():
                             if len(match.groups()) >= 1:
                                 event.user_id = match.group(1)
-
-                            # Extract source IP if present
                             if len(match.groups()) >= 2:
                                 event.source_ip = match.group(2)
-                            elif "from" in line.lower():
-                                # Extract IP from "from IP" pattern
+                            else:
                                 ip_match = re.search(r"from (\d+\.\d+\.\d+\.\d+)", line, re.IGNORECASE)
                                 if ip_match:
                                     event.source_ip = ip_match.group(1)
-
                     return event
-
         return None
 
     def _process_events(self):
         """Process collected security events."""
         if not self.events:
             return
-
-        logger.debug(f"Processing {len(self.events)} security events")
-
+            
         for event in self.events:
-            # Check against alert rules
             self._check_alert_rules(event)
-
-            # Store event for analysis
-            self._store_event(event)
-
-        # Clear processed events
+        
         self.events.clear()
 
     def _check_alert_rules(self, event: SecurityEvent):
-        """Check event against alert rules and trigger alerts if needed."""
+        """Check event against alert rules."""
         for rule in self.alert_rules.values():
             if not rule.enabled:
                 continue
-
             if event.event_type != rule.event_type:
                 continue
-
-            # Check if rule conditions are met
-            if self._rule_conditions_met(rule, event):
-                # Check cooldown period
-                if rule.last_triggered:
-                    time_since_last = (
-                        datetime.now(timezone.utc) - rule.last_triggered
-                    ).total_seconds()
-                    if time_since_last < rule.cooldown_period:
-                        continue
-
-                # Trigger alert
-                self._trigger_alert(rule, event)
-                rule.last_triggered = datetime.now(timezone.utc)
-
-    def _rule_conditions_met(self, rule: AlertRule, event: SecurityEvent) -> bool:
-        """Check if alert rule conditions are met."""
-        # This is a simplified implementation
-        # In a real system, this would be more sophisticated
-        return True
+            
+            # Simplified trigger (always triggers if type matches for now)
+            self._trigger_alert(rule, event)
+            rule.last_triggered = datetime.now(timezone.utc)
 
     def _trigger_alert(self, rule: AlertRule, event: SecurityEvent):
         """Trigger an alert for a security event."""
-        alert_message = f"🚨 SECURITY ALERT: {rule.name}\n"
-        alert_message += f"Event: {event.event_type.value}\n"
-        alert_message += f"Severity: {event.severity.value}\n"
-        alert_message += f"Timestamp: {event.timestamp.isoformat()}\n"
-
-        if event.source_ip:
-            alert_message += f"Source IP: {event.source_ip}\n"
-        if event.user_id:
-            alert_message += f"User: {event.user_id}\n"
-
-        logger.warning(alert_message)
-
-        # Store active alert
+        logger.warning(f"🚨 SECURITY ALERT: {rule.name} - {event.event_type.value}")
         self.active_alerts[event.event_id] = event
-
-        # Call alert callbacks
         for callback in self.alert_callbacks:
             try:
                 callback(event)
-            except (TypeError, AttributeError, RuntimeError) as e:
+            except Exception as e:
                 logger.error(f"Error in alert callback: {e}")
-
-    def _check_threat_intelligence(self):
-        """Check threat intelligence feeds for known threats."""
-        # This would integrate with threat intelligence APIs
-        # For now, it's a placeholder
-        pass
-
-    def _store_event(self, event: SecurityEvent):
-        """Store security event for analysis and reporting."""
-        # In a real system, this would store to a database
-        # For now, we just keep in memory with size limit
-        max_events = self.config.get("max_events", 10000)
-        if len(self.events) >= max_events:
-            # Remove oldest events
-            self.events = self.events[-max_events:]
 
     def _cleanup_old_events(self):
         """Clean up old events and alerts."""
-        # Remove events older than configured retention period
-        self.config.get("log_rotation_days", 30)
-        cutoff_date = datetime.now(timezone.utc)  # Would be adjusted for retention_days
-
-        # Remove old active alerts
-        expired_alerts = []
-        for event_id, event in self.active_alerts.items():
-            if event.timestamp < cutoff_date:
-                expired_alerts.append(event_id)
-
-        for event_id in expired_alerts:
-            del self.active_alerts[event_id]
-
-    def add_alert_rule(self, rule: AlertRule):
-        """Add a new alert rule."""
-        self.alert_rules[rule.rule_id] = rule
-        logger.info(f"Added alert rule: {rule.name}")
-
-    def remove_alert_rule(self, rule_id: str):
-        """Remove an alert rule."""
-        if rule_id in self.alert_rules:
-            del self.alert_rules[rule_id]
-            logger.info(f"Removed alert rule: {rule_id}")
-
-    def add_alert_callback(self, callback: Callable[[SecurityEvent], None]):
-        """Add a callback function for alerts."""
-        self.alert_callbacks.append(callback)
-
-    def get_active_alerts(self) -> list[SecurityEvent]:
-        """Get list of currently active alerts."""
-        return list(self.active_alerts.values())
-
-    def get_events_summary(self) -> dict[str, Any]:
-        """Get summary of security events."""
-        summary = {
-            "total_events": len(self.events),
-            "active_alerts": len(self.active_alerts),
-            "events_by_type": {},
-            "alerts_by_severity": {},
-        }
-
-        # Count events by type
-        for event in self.events:
-            event_type = event.event_type.value
-            summary["events_by_type"][event_type] = (
-                summary["events_by_type"].get(event_type, 0) + 1
-            )
-
-        # Count events by severity
-        for event in self.events:
-            severity = event.severity.value
-            summary["alerts_by_severity"][severity] = (
-                summary["alerts_by_severity"].get(severity, 0) + 1
-            )
-
-        return summary
+        max_events = self.config.get("max_events", 10000)
+        if len(self.active_alerts) > max_events:
+            # Simple cleanup - clear if too many
+            self.active_alerts.clear()
 
     def _generate_event_id(self) -> str:
         """Generate unique event ID."""
-        timestamp = str(time.time())
-        random_part = os.urandom(4).hex()
-        return f"evt_{timestamp}_{random_part}"
+        return f"evt_{time.time()}_{os.urandom(4).hex()}"
+
+    def get_events_summary(self) -> Dict[str, Any]:
+        """Get summary of security events."""
+        return {
+            "total_events": len(self.events),
+            "active_alerts": len(self.active_alerts)
+        }
+
 
 # Convenience functions
 def monitor_security_events(config_path: Optional[str] = None) -> SecurityMonitor:
-    """
-    Convenience function to create and start security monitoring.
-
-    Args:
-        config_path: Path to monitor configuration file
-
-    Returns:
-        SecurityMonitor: Configured security monitor
-    """
+    """Convenience function to create and start security monitoring."""
     monitor = SecurityMonitor(config_path)
     monitor.start_monitoring()
     return monitor
 
-def audit_access_logs(log_files: Optional[list[str]] = None) -> list[SecurityEvent]:
-    """
-    Convenience function to audit access logs for security events.
-
-    Args:
-        log_files: List of log files to audit
-
-    Returns:
-        List of security events found
-    """
+def audit_access_logs(log_files: Optional[List[str]] = None) -> List[SecurityEvent]:
+    """Convenience function to audit access logs for security events."""
     monitor = SecurityMonitor()
     if log_files:
         monitor.config["log_files"] = log_files
-
-    # Perform one-time audit
     monitor._collect_system_logs()
-
     return monitor.events

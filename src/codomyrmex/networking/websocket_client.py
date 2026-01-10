@@ -1,110 +1,127 @@
-from typing import Optional, Union
+"""WebSocket client implementation.
 
-import websocket
+This module provides a robust WebSocket client wrapper with reconnection logic,
+message handling, and error recovery.
+"""
+
+import asyncio
+import json
+import logging
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, Optional, Union
+
+try:
+    import websockets
+    WEBSOCKETS_AVAILABLE = True
+except ImportError:
+    WEBSOCKETS_AVAILABLE = False
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-
-
-
-
-
-
-WebSocket client implementation.
-"""
-
 logger = get_logger(__name__)
 
-try:
-    WEBSOCKET_AVAILABLE = True
-except ImportError:
-    WEBSOCKET_AVAILABLE = False
 
-class NetworkingError(CodomyrmexError):
-    """Raised when networking operations fail."""
-
+class WebSocketError(CodomyrmexError):
+    """Raised when WebSocket operations fail."""
     pass
 
-class WebSocketClient:
-    """WebSocket client for real-time communication."""
 
-    def __init__(self, url: str):
+class WebSocketClient:
+    """WebSocket client with automatic reconnection."""
+
+    def __init__(
+        self,
+        url: str,
+        headers: Optional[Dict[str, str]] = None,
+        reconnect_interval: float = 1.0,
+        max_reconnect_delay: float = 30.0,
+    ):
         """Initialize WebSocket client.
 
         Args:
             url: WebSocket URL
+            headers: Headers for handshake
+            reconnect_interval: Initial reconnection delay
+            max_reconnect_delay: Maximum reconnection delay
         """
-        if not WEBSOCKET_AVAILABLE:
-            raise ImportError("websocket-client package not available. Install with: pip install websocket-client")
+        if not WEBSOCKETS_AVAILABLE:
+            raise ImportError("websockets package not available. Install with: pip install websockets")
 
         self.url = url
-        self.ws: Optional[websocket.WebSocket] = None
-        self.connected = False
+        self.headers = headers or {}
+        self.reconnect_interval = reconnect_interval
+        self.max_reconnect_delay = max_reconnect_delay
+        self.connection = None
+        self._running = False
+        self._handlers = []
 
-    def connect(self) -> bool:
-        """Connect to WebSocket server.
+    async def connect(self):
+        """Connect to WebSocket server with retry loop."""
+        self._running = True
+        delay = self.reconnect_interval
 
-        Returns:
-            True if connection successful
-        """
-        try:
-            self.ws = websocket.create_connection(self.url)
-            self.connected = True
-            logger.info(f"Connected to WebSocket: {self.url}")
-            return True
-        except Exception as e:
-            logger.error(f"WebSocket connection failed: {e}")
-            self.connected = False
-            return False
-
-    def send(self, message: Union[str, bytes]) -> bool:
-        """Send a message over WebSocket.
-
-        Args:
-            message: Message to send
-
-        Returns:
-            True if send successful
-        """
-        if not self.connected or self.ws is None:
-            raise NetworkingError("WebSocket not connected")
-
-        try:
-            if isinstance(message, str):
-                self.ws.send(message)
-            else:
-                self.ws.send_binary(message)
-            return True
-        except Exception as e:
-            logger.error(f"WebSocket send failed: {e}")
-            raise NetworkingError(f"Failed to send message: {str(e)}") from e
-
-    def receive(self) -> Optional[Union[str, bytes]]:
-        """Receive a message from WebSocket.
-
-        Returns:
-            Received message, None if connection closed
-        """
-        if not self.connected or self.ws is None:
-            raise NetworkingError("WebSocket not connected")
-
-        try:
-            message = self.ws.recv()
-            return message
-        except Exception as e:
-            logger.error(f"WebSocket receive failed: {e}")
-            self.connected = False
-            return None
-
-    def close(self) -> None:
-        """Close WebSocket connection."""
-        if self.ws is not None:
+        while self._running:
             try:
-                self.ws.close()
+                logger.info(f"Connecting to {self.url}...")
+                async with websockets.connect(self.url, extra_headers=self.headers) as websocket:
+                    self.connection = websocket
+                    logger.info("WebSocket connected")
+                    delay = self.reconnect_interval  # Reset delay on success
+                    
+                    # Process messages
+                    async for message in websocket:
+                        await self._handle_message(message)
+                        
+            except (OSError, websockets.exceptions.WebSocketException) as e:
+                logger.warning(f"WebSocket connection failed: {e}")
             except Exception as e:
-                logger.error(f"Error closing WebSocket: {e}")
+                logger.error(f"Unexpected WebSocket error: {e}")
             finally:
-                self.ws = None
-                self.connected = False
+                self.connection = None
+                
+            if self._running:
+                logger.info(f"Reconnecting in {delay}s...")
+                await asyncio.sleep(delay)
+                delay = min(delay * 1.5, self.max_reconnect_delay)
 
+    async def send(self, message: Union[str, bytes, Dict]):
+        """Send a message."""
+        if not self.connection or self.connection.closed:
+            raise WebSocketError("Not connected")
+            
+        try:
+            if isinstance(message, dict):
+                message = json.dumps(message)
+            await self.connection.send(message)
+        except Exception as e:
+            raise WebSocketError(f"Failed to send message: {e}") from e
+
+    async def close(self):
+        """Close connection."""
+        self._running = False
+        if self.connection:
+            await self.connection.close()
+
+    def add_handler(self, handler: Callable[[Any], Any]):
+        """Add a message handler."""
+        self._handlers.append(handler)
+
+    async def _handle_message(self, message: Union[str, bytes]):
+        """Dispatch message to handlers."""
+        # Try to parse JSON
+        data = message
+        if isinstance(message, str):
+            try:
+                data = json.loads(message)
+            except json.JSONDecodeError:
+                pass
+                
+        for handler in self._handlers:
+            try:
+                if asyncio.iscoroutinefunction(handler):
+                    await handler(data)
+                else:
+                    handler(data)
+            except Exception as e:
+                logger.error(f"Error in message handler: {e}")

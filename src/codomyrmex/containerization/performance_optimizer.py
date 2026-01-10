@@ -15,13 +15,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-#!/usr/bin/env python3
-
-Container Performance Optimization Module for Codomyrmex Containerization.
-
-This module provides container performance optimization, resource monitoring,
-and efficiency improvements.
-"""
+"""Container Performance Optimization Module for Codomyrmex Containerization."""
 
 logger = get_logger(__name__)
 

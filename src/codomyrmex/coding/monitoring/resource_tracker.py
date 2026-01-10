@@ -1,42 +1,25 @@
-from typing import Any, Dict
-import time
-
-import psutil
-
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
+"""
 Resource Tracking
 
 Monitors resource usage during code execution.
 """
 
+from typing import Any, Dict
+import time
+
 try:
+    import psutil
     PSUTIL_AVAILABLE = True
 except ImportError:
     PSUTIL_AVAILABLE = False
     # Create a dummy psutil module for type hints
     class _DummyPSUtil:
-        """Brief description of _DummyPSUtil.
-        
-        This class provides functionality for...
-        
-        Attributes:
-            # Add attribute descriptions here
-        
-        Methods:
-            # Method descriptions will be added automatically
-        """
-"""
         Process = None
         cpu_percent = lambda *args, **kwargs: 0.0
         virtual_memory = lambda: type('obj', (object,), {'used': 0, 'total': 0})()
     psutil = _DummyPSUtil()
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -92,4 +75,3 @@ class ResourceMonitor:
             "cpu_average_percent": round(sum(self.cpu_usage) / len(self.cpu_usage), 2) if self.cpu_usage else 0,
             "cpu_peak_percent": round(max(self.cpu_usage), 2) if self.cpu_usage else 0,
         }
-

@@ -15,8 +15,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-Compression utilities.
-"""
+"""Compression utilities."""
 
 logger = get_logger(__name__)
 

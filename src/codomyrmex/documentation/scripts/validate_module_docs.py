@@ -24,7 +24,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Module Documentation Validator
 
@@ -33,7 +32,6 @@ Can be run as part of CI/CD to ensure documentation standards are maintained.
 """
 
 
-#!/usr/bin/env python3
 """
 
 

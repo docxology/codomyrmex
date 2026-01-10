@@ -9,13 +9,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Audit all README.md and AGENTS.md files in the repository.
 Creates a comprehensive inventory with current state assessment.
 """
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

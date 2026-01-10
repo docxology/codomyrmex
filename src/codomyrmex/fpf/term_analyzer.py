@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Term analyzer for extracting shared terms and variables across FPF sections.
 
 
-"""Core functionality module
-
-This module provides term_analyzer functionality including:
-- 8 functions: __init__, extract_terms_from_pattern, build_term_cooccurrence_matrix...
-- 1 classes: TermAnalyzer
-
-Usage:
-    from term_analyzer import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to analyze terms, variables, and concepts
 that appear across different patterns and sections of the FPF specification.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import re
 from collections import Counter, defaultdict
@@ -43,7 +33,7 @@ class TermAnalyzer:
 
         Returns:
             Set of unique terms
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         terms = set()
         content = pattern.content + " " + pattern.title
 
@@ -76,7 +66,7 @@ class TermAnalyzer:
 
         Returns:
             Dictionary mapping term pairs to co-occurrence counts
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         term_patterns: Dict[str, Set[str]] = defaultdict(set)
         
         # Collect terms for each pattern
@@ -111,7 +101,7 @@ class TermAnalyzer:
 
         Returns:
             List of tuples (term, occurrence_count, pattern_ids)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         term_patterns: Dict[str, Set[str]] = defaultdict(set)
 
         for pattern in spec.patterns:
@@ -138,7 +128,7 @@ class TermAnalyzer:
 
         Returns:
             Dictionary mapping terms to their frequency counts
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         term_counter = Counter()
 
         for pattern in spec.patterns:
@@ -158,7 +148,7 @@ class TermAnalyzer:
 
         Returns:
             List of tuples (term, frequency, importance_score)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         term_frequency = self.get_term_frequency(spec)
         term_patterns: Dict[str, Set[str]] = defaultdict(set)
 
@@ -191,7 +181,7 @@ class TermAnalyzer:
 
         Returns:
             Dictionary mapping section/part to list of unique terms
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         section_terms: Dict[str, Set[str]] = defaultdict(set)
 
         for pattern in spec.patterns:
@@ -215,7 +205,7 @@ class TermAnalyzer:
 
         Returns:
             List of tuples (term, section_count, section_names)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         term_sections: Dict[str, Set[str]] = defaultdict(set)
 
         for pattern in spec.patterns:

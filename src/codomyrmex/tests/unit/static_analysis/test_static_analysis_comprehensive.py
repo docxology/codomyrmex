@@ -64,7 +64,7 @@ class TestStaticAnalysisComprehensive:
         output = """/path/to/file1.py:10:5: error: Type mismatch
 /path/to/file2.py:25:15: warning: Unused variable
 Some non-matching line
-/path/to/file3.py:100:20: error: Import error"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: /path/to/file3.py:100:20: error: Import error"""
 
         project_root = "/path/to"
         result = parse_pyrefly_output(output, project_root)
@@ -96,7 +96,7 @@ Some non-matching line
         output = """This is not an error line
 incomplete:123
 /path/to/file.py:abc:def: error: Invalid line number
-/path/to/file.py:123:45: error: Real error"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: /path/to/file.py:123:45: error: Real error"""
 
         project_root = "/path/to"
         result = parse_pyrefly_output(output, project_root)
@@ -421,7 +421,7 @@ incomplete:123
 /path/to/file.py:10:5: error: First error
 
 /path/to/file.py:20:15: error: Second error
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
         project_root = "/path/to"
         result = parse_pyrefly_output(output, project_root)

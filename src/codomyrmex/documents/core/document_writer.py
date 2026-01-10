@@ -18,14 +18,7 @@ class DocumentWriter:
     """Unified document writer supporting multiple formats."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         self.config = get_config()
     
     def write(

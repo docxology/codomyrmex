@@ -27,8 +27,11 @@ Data structures:
 """
 
 from .pyrefly_runner import (
-    parse_pyrefly_output,
-    run_pyrefly_analysis,
+    PyreflyRunner,
+    PyreflyResult,
+    PyreflyIssue,
+    run_pyrefly,
+    check_pyrefly_available,
 )
 from .static_analyzer import (
     AnalysisResult,
@@ -51,8 +54,11 @@ def analyze_codebase(*args, **kwargs):
 
 
 __all__ = [
-    "parse_pyrefly_output",
-    "run_pyrefly_analysis",
+    "PyreflyRunner",
+    "PyreflyResult",
+    "PyreflyIssue",
+    "run_pyrefly",
+    "check_pyrefly_available",
     "StaticAnalyzer",
     "analyze_file",
     "analyze_project",
@@ -65,3 +71,4 @@ __all__ = [
     "SeverityLevel",
     "Language",
 ]
+

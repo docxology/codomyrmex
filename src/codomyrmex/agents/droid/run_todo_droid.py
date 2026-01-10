@@ -12,7 +12,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """Main entry point and utility functions
 
-"""Main entry point and utility functions
+# """Main entry point and utility functions
 
 This module provides run_todo_droid functionality including:
 - 10 functions: resolve_handler, get_todo_count_interactive, run_todos...
@@ -115,45 +115,7 @@ CODOMYRMEX_ENHANCED_PROMPT = (
 
 
 def resolve_handler(handler_path: str) -> Callable:
-    """Brief description of resolve_handler.
-
-Args:
-    handler_path : Description of handler_path
-
-    Returns: Description of return value (type: Callable)
-"""
-    if ":" not in handler_path:
-        raise ValueError(
-            f"Handler path must include module and attribute: {handler_path}"
-        )
-    module_name, attribute = handler_path.split(":", 1)
-
-    try:
-        if module_name.startswith("."):
-            # Handle relative imports
-            current_package = "codomyrmex.agents.droid"
-            if module_name.startswith(".."):
-                # Go up one level
-                current_package = "codomyrmex.agents"
-            module = importlib.import_module(module_name, current_package)
-        elif module_name in ("droid", "tasks", "ai_code_editing"):
-            # Handle local handlers - both 'droid' and 'tasks' refer to the tasks module
-            current_package = "codomyrmex.agents.droid"
-            module = importlib.import_module(".tasks", current_package)
-        else:
-            # Handle absolute imports
-            module = importlib.import_module(module_name)
-    except ImportError as e:
-        raise ImportError(f"Failed to import handler module '{module_name}': {e}") from e
-
-    handler = getattr(module, attribute, None)
-    if handler is None or not callable(handler):
-        raise AttributeError(f"Handler {handler_path} is not callable")
-    return handler
-
-
-def get_todo_count_interactive() -> int:
-    """Interactively prompt user for number of TODOs to process."""
+Interactively prompt user for number of TODOs to process."""
     import os
 
     todo_file = os.path.join(os.path.dirname(__file__), "todo_list.txt")
@@ -357,23 +319,7 @@ def run_todos(
 
 
 def build_controller(config_path: str | None) -> DroidController:
-    """Brief description of build_controller.
-
-Args:
-    config_path : Description of config_path
-
-    Returns: Description of return value (type: DroidController)
-"""
-    if config_path:
-        config = load_config_from_file(config_path)
-        controller = DroidController(config)
-        controller.start()
-        return controller
-    return create_default_controller()
-
-
-def _list_todos(todo_items: list, completed_items: list) -> None:
-    """Display TODO list and exit."""
+Display TODO list and exit."""
     print("📋 TODO List:")
     print("============")
     if not todo_items:

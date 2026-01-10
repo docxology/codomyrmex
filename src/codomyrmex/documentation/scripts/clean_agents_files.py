@@ -23,7 +23,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Clean AGENTS.md files by removing conceptual items from Active Components.
 
@@ -33,8 +32,6 @@ This script identifies and removes items that are not actual files/directories
 
 # Script removes conceptual items from Active Components sections, while preserving the actual file listings.
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

@@ -4,7 +4,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 This module provides intelligent analysis capabilities including
 importance scoring, centrality analysis, and relationship strength calculation.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from collections import defaultdict
 from typing import Dict, List, Tuple
@@ -22,7 +22,7 @@ class FPFAnalyzer:
 
         Args:
             spec: The FPFSpec object to analyze
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.spec = spec
         self._dependency_graph = None
         self._concept_graph = None
@@ -35,7 +35,7 @@ class FPFAnalyzer:
 
         Returns:
             Dictionary mapping pattern IDs to importance scores
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._dependency_graph:
             self._build_dependency_graph()
 
@@ -66,7 +66,7 @@ class FPFAnalyzer:
 
         Returns:
             Dictionary mapping concept names to centrality scores
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._concept_graph:
             self._build_concept_graph()
 
@@ -83,7 +83,7 @@ class FPFAnalyzer:
 
         Returns:
             Dictionary mapping (source, target, type) tuples to strength scores
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         strengths = {}
 
         for relationship in self.spec.relationships:
@@ -114,7 +114,7 @@ class FPFAnalyzer:
 
         Returns:
             Dictionary mapping pattern IDs to their maximum dependency depth
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._dependency_graph:
             self._build_dependency_graph()
 
@@ -127,14 +127,7 @@ class FPFAnalyzer:
 
         def calculate_depth(node: str, visited: set) -> int:
 
-    """Brief description of calculate_depth.
 
-Args:
-    node : Description of node
-    visited : Description of visited
-
-    Returns: Description of return value (type: int)
-"""
             if node in visited:
                 return 0
             visited.add(node)
@@ -161,7 +154,7 @@ Args:
 
         Returns:
             List of tuples (pattern_id, importance_score)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         importance = self.calculate_pattern_importance()
         sorted_patterns = sorted(
             importance.items(), key=lambda x: x[1], reverse=True
@@ -173,7 +166,7 @@ Args:
 
         Returns:
             List of isolated pattern IDs
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._dependency_graph:
             self._build_dependency_graph()
 
@@ -195,7 +188,7 @@ Args:
 
         Returns:
             Dictionary mapping part IDs to cohesion scores
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         part_patterns: Dict[str, List[str]] = defaultdict(list)
         for pattern in self.spec.patterns:
             part = pattern.part or "Other"
@@ -227,7 +220,7 @@ Args:
 
         Returns:
             Dictionary with analysis results
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         importance = self.calculate_pattern_importance()
         centrality = self.calculate_concept_centrality()
         depths = self.analyze_dependency_depth()

@@ -1,129 +1,14 @@
+"""Timezone management for Codomyrmex scheduling.
+
+This module provides timezone functionality including conversion, localization,
+and current time retrieval across different timezones.
+"""
+
 from datetime import datetime
 from typing import Optional
-
-from timezone import FunctionName, ClassName
 import pytz
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core business logic and data management
-
-This module provides timezone functionality including:
-- 4 functions: __init__, now, to_timezone...
-- 1 classes: TimezoneManager
-
-Usage:
-    # Example usage here
-"""
-Timezone-aware scheduling.
-"""
-
-
-
 
 logger = get_logger(__name__)
 
@@ -185,5 +70,3 @@ class TimezoneManager:
         if dt.tzinfo is None:
             return self.timezone.localize(dt)
         return dt.astimezone(self.timezone)
-
-

@@ -67,14 +67,7 @@ class AccessControlSystem:
     """Manages physical access control."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         self.permissions: dict[str, list[AccessPermission]] = {}
         logger.info("AccessControlSystem initialized")
     

@@ -1,56 +1,15 @@
-from typing import Optional, List
-import re
-
 from __future__ import annotations
-from dataclasses import dataclass
-
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Error analyzer for autonomous debugging."""
 
+from typing import Optional, List
+import re
+from dataclasses import dataclass
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
 logger = get_logger(__name__)
+
 @dataclass
 class ErrorDiagnosis:
     """Represents a diagnosed error from execution output."""
@@ -67,13 +26,7 @@ class ErrorAnalyzer:
     
     def __init__(self):
         # Patterns for common Python errors
-    """Brief description of __init__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
+    
         self.python_traceback_pattern = re.compile(
             r'File "(?P<file>[^"]+)", line (?P<line>\d+), in .*?\n(?P<line_content>.*?)\n(?P<error_type>\w+): (?P<message>.*)',
             re.DOTALL

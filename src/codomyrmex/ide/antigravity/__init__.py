@@ -64,6 +64,8 @@ from codomyrmex.ide import (
         IDECommandResult,
     )
 try:
+    pass
+    pass
 except ImportError:
     # Fallback if ide module not available
     IDEClient = object
@@ -109,7 +111,7 @@ Example:
     >>> client = AntigravityClient()
     >>> client.connect()
     >>> capabilities = client.get_capabilities()
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 @dataclass
 class Artifact:
@@ -157,7 +159,7 @@ class AntigravityClient(IDEClient):
     Attributes:
         artifact_dir: Path to the Antigravity artifacts directory.
         conversation_id: Current conversation ID if connected.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     
     # Available Antigravity tools
     TOOLS = [
@@ -195,7 +197,7 @@ class AntigravityClient(IDEClient):
         Args:
             artifact_dir: Optional path to artifacts directory.
                          Defaults to ~/.gemini/antigravity/brain/
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         super().__init__()
         self._connected = False
         self._conversation_id: Optional[str] = None
@@ -217,7 +219,7 @@ class AntigravityClient(IDEClient):
             
         Raises:
             ConnectionError: If no active session found.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self._status = IDEStatus.CONNECTING
         
         if self.artifact_dir.exists():
@@ -253,7 +255,7 @@ class AntigravityClient(IDEClient):
         
         Returns:
             bool: True if connected.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return self._connected
     
     def get_capabilities(self) -> Dict[str, Any]:
@@ -261,7 +263,7 @@ class AntigravityClient(IDEClient):
         
         Returns:
             Dict containing available tools and features.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return {
             "name": "Antigravity",
             "version": "1.0.0",
@@ -298,7 +300,7 @@ class AntigravityClient(IDEClient):
             
         Raises:
             CommandExecutionError: If command execution fails.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._connected:
             raise CommandExecutionError("Not connected to Antigravity session")
         
@@ -319,7 +321,7 @@ class AntigravityClient(IDEClient):
         
         Returns:
             File path or None if no file is active.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # In a real integration, this would query the IDE state
         return None
     
@@ -331,7 +333,7 @@ class AntigravityClient(IDEClient):
             
         Returns:
             bool: True if successful.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # In a real integration, this would invoke view_file tool
         return Path(path).exists()
     
@@ -340,7 +342,7 @@ class AntigravityClient(IDEClient):
         
         Returns:
             List of file paths.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return []
     
     # Antigravity-specific methods
@@ -350,7 +352,7 @@ class AntigravityClient(IDEClient):
         
         Returns:
             Conversation ID or None if not connected.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return self._conversation_id
     
     def get_context(self) -> Optional[ConversationContext]:
@@ -358,7 +360,7 @@ class AntigravityClient(IDEClient):
         
         Returns:
             ConversationContext or None if not connected.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return self._context
     
     def _load_context(self) -> Optional[ConversationContext]:
@@ -421,7 +423,7 @@ class AntigravityClient(IDEClient):
         
         Returns:
             List of artifact metadata dictionaries.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._connected or not self._conversation_id:
             return []
         
@@ -436,7 +438,7 @@ class AntigravityClient(IDEClient):
             
         Returns:
             Dict with artifact data including content.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._connected or not self._conversation_id:
             return None
         
@@ -476,7 +478,7 @@ class AntigravityClient(IDEClient):
             
         Raises:
             ArtifactError: If artifact creation fails.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._connected or not self._conversation_id:
             raise ArtifactError("Not connected to Antigravity session")
         
@@ -514,7 +516,7 @@ class AntigravityClient(IDEClient):
             
         Raises:
             ArtifactError: If artifact doesn't exist or update fails.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._connected or not self._conversation_id:
             raise ArtifactError("Not connected to Antigravity session")
         
@@ -549,7 +551,7 @@ class AntigravityClient(IDEClient):
             
         Raises:
             ArtifactError: If artifact doesn't exist.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._connected or not self._conversation_id:
             raise ArtifactError("Not connected to Antigravity session")
         
@@ -576,7 +578,7 @@ class AntigravityClient(IDEClient):
             
         Returns:
             List of conversation metadata.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self.artifact_dir.exists():
             return []
         
@@ -607,7 +609,7 @@ class AntigravityClient(IDEClient):
             
         Returns:
             bool: True if switch successful.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         conversation_dir = self.artifact_dir / conversation_id
         if not conversation_dir.exists():
             return False
@@ -627,7 +629,7 @@ class AntigravityClient(IDEClient):
             
         Returns:
             Dict with tool information or None if not found.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         tool_info = {
             "task_boundary": {
                 "name": "task_boundary",
@@ -684,7 +686,7 @@ class AntigravityClient(IDEClient):
             
         Returns:
             IDECommandResult with execution details.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if tool_name not in self.TOOLS:
             return IDECommandResult(
                 success=False,
@@ -699,7 +701,7 @@ class AntigravityClient(IDEClient):
         
         Returns:
             Dict with session statistics.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return {
             "connected": self._connected,
             "conversation_id": self._conversation_id,

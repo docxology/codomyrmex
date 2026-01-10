@@ -7,7 +7,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Create missing documentation files that are referenced but don't exist.
 
@@ -19,7 +18,6 @@ for modules that reference them but don't have them.
 # from codomyrmex.{module_name} import function_name
 # from codomyrmex.{module_name} import register_tools
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

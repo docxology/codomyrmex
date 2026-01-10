@@ -51,7 +51,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 except ImportError:
     logger = logging.getLogger(__name__)
@@ -145,7 +144,6 @@ class DocumentationCompletenessChecker:
         """
         Initialize the completeness checker.
 
-        Args:
             project_root: Root path of the project
         """
         self.project_root = Path(project_root or SCRIPT_DIR)
@@ -201,7 +199,6 @@ class DocumentationCompletenessChecker:
         """
         Validate the structure of documentation in a module.
 
-        Args:
             module_path: Path to the module
 
         Returns:
@@ -418,7 +415,6 @@ def validate_doc_structure(module_path: str) -> Dict[str, Any]:
     """
     Convenience function to validate documentation structure.
 
-    Args:
         module_path: Path to the module
 
     Returns:

@@ -16,11 +16,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-Image Optimizer for Codomyrmex Containerization
-
-This module provides comprehensive Docker image optimization capabilities,
-including size reduction, layer optimization, and multi-stage build generation.
-"""
+"""Image Optimizer for Codomyrmex Containerization."""
 
 # Import logging
 try:

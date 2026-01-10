@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Visualizer for FPF specification.
 
 
-"""Core functionality module
-
-This module provides visualizer functionality including:
-- 5 functions: __init__, visualize_pattern_hierarchy, visualize_dependencies...
-- 1 classes: FPFVisualizer
-
-Usage:
-    from visualizer import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to generate visualizations
 and reports from FPF specifications.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from pathlib import Path
 from typing import List, Optional
@@ -39,7 +29,7 @@ class FPFVisualizer:
 
         Returns:
             Mermaid diagram string
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Group patterns by part
         parts: dict[str, List[Pattern]] = {}
         for pattern in patterns:
@@ -77,7 +67,7 @@ class FPFVisualizer:
 
         Returns:
             Mermaid diagram string
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         mermaid_lines = ["graph LR"]
         node_ids = {}
 
@@ -110,7 +100,7 @@ class FPFVisualizer:
         Args:
             spec: The FPFSpec object
             output_path: Path to output report file
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         report_lines = [
@@ -173,7 +163,7 @@ class FPFVisualizer:
 
         Returns:
             Markdown string representing the pattern card
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         card_lines = [
             f"## {pattern.id} - {pattern.title}",
             "",

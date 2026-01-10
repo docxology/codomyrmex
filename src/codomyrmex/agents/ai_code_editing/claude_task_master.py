@@ -58,7 +58,7 @@ advanced AI-powered task orchestration, code generation, and
 task decomposition capabilities.
 
 Reference: https://docs.anthropic.com/claude/docs
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 
 logger = get_logger(__name__)
@@ -123,7 +123,7 @@ class ClaudeTaskMaster:
 
         Raises:
             ValueError: If no API key is available
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.api_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
         self.model = model or DEFAULT_MODEL
         self._client = None
@@ -168,7 +168,7 @@ class ClaudeTaskMaster:
 
         Raises:
             RuntimeError: If task execution fails
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         start_time = time.time()
         self._task_counter += 1
         task_id = f"task_{self._task_counter}_{int(time.time())}"
@@ -249,7 +249,7 @@ class ClaudeTaskMaster:
 
         Returns:
             Dictionary containing subtasks and metadata
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         start_time = time.time()
 
         try:
@@ -319,7 +319,7 @@ class ClaudeTaskMaster:
 
         Returns:
             Dictionary containing task analysis
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         start_time = time.time()
 
         try:
@@ -388,7 +388,7 @@ class ClaudeTaskMaster:
 
         Returns:
             Dictionary containing workflow plan
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         start_time = time.time()
 
         try:

@@ -8,29 +8,12 @@ from codomyrmex.cerebrum.exceptions import CerebrumError, ModelError
 from codomyrmex.cerebrum.models import Model, ReasoningResult
 from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-    TransformationPipeline,
-    Transformer,
-)
-
-
-
-
-
-
-
-
-
-
+from codomyrmex.cerebrum.transformations import (
     AdaptationTransformer,
     LearningTransformer,
     TransformationManager,
+
+
 )
 
 """Main CEREBRUM engine that orchestrates case-based reasoning and Bayesian inference."""
@@ -338,4 +321,3 @@ class CerebrumEngine:
             "models": {name: model.to_dict() for name, model in self.model_manager.models.items()},
             "bayesian_network": self.bayesian_network.to_dict() if self.bayesian_network else None,
         }
-

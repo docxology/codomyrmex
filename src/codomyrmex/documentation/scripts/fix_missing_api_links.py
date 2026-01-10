@@ -22,7 +22,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 def fix_missing_api_links(file_path: Path) -> bool:
     """

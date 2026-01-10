@@ -49,16 +49,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Utility functions for CEREBRUM module."""
 
-"""Core functionality module
-
-This module provides utils functionality including:
-- 5 functions: compute_hash, normalize_features, compute_euclidean_distance...
-- 0 classes: 
-
-Usage:
-    from utils import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 def compute_hash(data: Any) -> str:
     """Compute a hash for the given data.
@@ -68,7 +58,7 @@ def compute_hash(data: Any) -> str:
 
     Returns:
         Hexadecimal hash string
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     data_str = json.dumps(data, sort_keys=True)
     return hashlib.sha256(data_str.encode()).hexdigest()
 
@@ -81,7 +71,7 @@ def normalize_features(features: dict[str, Any]) -> dict[str, float]:
 
     Returns:
         Dictionary with normalized feature values
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     normalized = {}
     for key, value in features.items():
         if isinstance(value, (int, float)):
@@ -102,7 +92,7 @@ def compute_euclidean_distance(vec1: dict[str, float], vec2: dict[str, float]) -
 
     Returns:
         Euclidean distance
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     all_keys = set(vec1.keys()) | set(vec2.keys())
     squared_diff = sum((vec1.get(k, 0.0) - vec2.get(k, 0.0)) ** 2 for k in all_keys)
     return (squared_diff ** 0.5) if squared_diff > 0 else 0.0
@@ -117,7 +107,7 @@ def compute_cosine_similarity(vec1: dict[str, float], vec2: dict[str, float]) ->
 
     Returns:
         Cosine similarity in [0, 1]
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     all_keys = set(vec1.keys()) | set(vec2.keys())
     dot_product = sum(vec1.get(k, 0.0) * vec2.get(k, 0.0) for k in all_keys)
     magnitude1 = sum(v ** 2 for v in vec1.values()) ** 0.5
@@ -139,7 +129,7 @@ def softmax(values: list[float], temperature: float = 1.0) -> list[float]:
 
     Returns:
         List of probabilities
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     if not values:
         return []
 

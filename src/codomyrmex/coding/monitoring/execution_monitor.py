@@ -7,16 +7,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 """
-"""Core functionality module
-
-This module provides execution_monitor functionality including:
-- 4 functions: __init__, start_execution, end_execution...
-- 1 classes: ExecutionMonitor
-
-Usage:
-    from execution_monitor import FunctionName, ClassName
-    # Example usage here
-"""
 Execution Monitoring
 
 Monitors code execution status and provides execution tracking capabilities.

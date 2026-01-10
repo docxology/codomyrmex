@@ -109,16 +109,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-"""Core functionality module
-
-This module provides models functionality including:
-- 0 functions: 
-- 15 classes: AnalysisType, SeverityLevel, Language...
-
-Usage:
-    from models import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 """
 Review Models

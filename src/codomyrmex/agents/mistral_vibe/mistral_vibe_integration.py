@@ -31,16 +31,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Mistral Vibe integration adapters for Codomyrmex modules."""
 
-"""Core functionality module
-
-This module provides mistral_vibe_integration functionality including:
-- 3 functions: adapt_for_ai_code_editing, adapt_for_llm, adapt_for_code_execution
-- 1 classes: MistralVibeIntegrationAdapter
-
-Usage:
-    from mistral_vibe_integration import FunctionName, ClassName
-    # Example usage here
-"""
 class MistralVibeIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Mistral Vibe with Codomyrmex modules."""
 

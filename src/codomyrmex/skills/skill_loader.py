@@ -55,16 +55,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 """Skill Loader Module
 
 
-"""Core functionality module
 
-This module provides skill_loader functionality including:
-- 7 functions: __init__, load_skill_file, get_skill_paths...
-- 1 classes: SkillLoader
-
-Usage:
-    from skill_loader import FunctionName, ClassName
-    # Example usage here
-"""
 Handles loading and parsing YAML skill files with merge logic.
 """
 

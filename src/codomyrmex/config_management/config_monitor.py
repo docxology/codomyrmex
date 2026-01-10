@@ -17,13 +17,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-#!/usr/bin/env python3
-
-Configuration Monitoring Module for Codomyrmex Configuration Management.
-
-This module provides configuration monitoring, change tracking, drift detection,
-and compliance auditing for configuration management.
-"""
+"""Configuration Monitoring Module for Codomyrmex Configuration Management."""
 
 logger = get_logger(__name__)
 

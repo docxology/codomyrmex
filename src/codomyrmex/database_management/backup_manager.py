@@ -1,142 +1,24 @@
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional
-import os
-import re
-import shutil
-import subprocess
-import time
-
-from backup_manager import FunctionName, ClassName
-from dataclasses import dataclass, field
-import gzip
-import hashlib
-import sqlite3
-
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#!/usr/bin/env python3
-"""
-"""Core business logic and data management
-
-This module provides backup_manager functionality including:
-- 18 functions: backup_database, __init__, _ensure_directories...
-- 3 classes: Backup, BackupResult, BackupManager
-
-Usage:
-    # Example usage here
-"""
-Backup Management Module for Codomyrmex Database Management.
+"""Backup Management Module for Codomyrmex Database Management.
 
 This module provides database backup, restore, and recovery capabilities
 with support for SQLite, PostgreSQL, and MySQL databases.
 """
 
+import gzip
+import hashlib
+import os
+import re
+import shutil
+import sqlite3
+import subprocess
+import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -146,15 +28,15 @@ class Backup:
     """Database backup information."""
     backup_id: str
     database_name: str
-    database_type: str  # "sqlite", "postgresql", "mysql"
-    backup_type: str  # "full", "incremental", "differential"
+    database_type: str
+    backup_type: str
     file_path: str
     size_mb: float
     created_at: datetime
     compression: str = "none"
     encryption: bool = False
     checksum: Optional[str] = None
-    metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -165,42 +47,30 @@ class BackupResult:
     duration: float
     file_size_mb: float
     error_message: Optional[str] = None
-    warnings: list[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
     checksum: Optional[str] = None
 
 
 class BackupManager:
-    """Database backup and restore management system.
-
-    Supports:
-    - SQLite: Direct file copy with optional compression
-    - PostgreSQL: pg_dump/pg_restore
-    - MySQL: mysqldump/mysql
-    """
+    """Database backup and restore management system."""
 
     def __init__(
         self,
         workspace_dir: Optional[str] = None,
         database_url: Optional[str] = None
     ):
-        """Initialize backup manager.
-
-        Args:
-            workspace_dir: Directory for storing backup data
-            database_url: Database connection URL (optional)
-        """
+        """Initialize backup manager."""
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
         self.backups_dir = self.workspace_dir / "database_backups"
         self._ensure_directories()
-
-        self._backups: dict[str, Backup] = {}
+        self._backups: Dict[str, Backup] = {}
         self._database_url = database_url
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
         self.backups_dir.mkdir(parents=True, exist_ok=True)
 
-    def _parse_database_url(self, url: str) -> dict[str, Any]:
+    def _parse_database_url(self, url: str) -> Dict[str, Any]:
         """Parse database URL into components."""
         if url.startswith("sqlite"):
             match = re.match(r'sqlite:///(.+)', url)
@@ -239,19 +109,7 @@ class BackupManager:
         include_schema: bool = True,
         include_data: bool = True
     ) -> BackupResult:
-        """Create a database backup.
-
-        Args:
-            database_name: Friendly name for the backup
-            database_url: Database connection URL (uses default if not provided)
-            backup_type: Type of backup ("full", "schema", "data")
-            compression: Compression method ("none", "gzip")
-            include_schema: Include schema in backup
-            include_data: Include data in backup
-
-        Returns:
-            Backup operation result
-        """
+        """Create a database backup."""
         url = database_url or self._database_url
         if not url:
             raise CodomyrmexError("No database URL provided")
@@ -296,13 +154,12 @@ class BackupManager:
                 metadata={
                     "include_schema": include_schema,
                     "include_data": include_data,
-                    "database_url_masked": self._mask_password(url)
                 }
             )
 
             self._backups[backup_id] = backup
 
-            result = BackupResult(
+            return BackupResult(
                 backup_id=backup_id,
                 success=True,
                 duration=duration,
@@ -311,13 +168,10 @@ class BackupManager:
                 checksum=checksum
             )
 
-            logger.info(f"Created backup {backup_id}: {file_size:.2f} MB in {duration:.2f}s")
-            return result
-
         except Exception as e:
             duration = time.time() - start_time
-
-            result = BackupResult(
+            logger.error(f"Failed to create backup {backup_id}: {e}")
+            return BackupResult(
                 backup_id=backup_id,
                 success=False,
                 duration=duration,
@@ -325,17 +179,12 @@ class BackupManager:
                 error_message=str(e)
             )
 
-            logger.error(f"Failed to create backup {backup_id}: {e}")
-            return result
-
     def _backup_sqlite(self, db_path: str, backup_path: str, compression: str):
         """Backup SQLite database."""
         if not os.path.exists(db_path):
             raise CodomyrmexError(f"SQLite database not found: {db_path}")
 
-        # Connect and dump
         conn = sqlite3.connect(db_path)
-
         try:
             if compression == "gzip":
                 with gzip.open(backup_path, 'wt', encoding='utf-8') as f:
@@ -350,7 +199,7 @@ class BackupManager:
 
     def _backup_postgresql(
         self,
-        params: dict[str, Any],
+        params: Dict[str, Any],
         backup_path: str,
         compression: str,
         include_schema: bool,
@@ -377,37 +226,20 @@ class BackupManager:
         env = os.environ.copy()
         env["PGPASSWORD"] = params.get("password", "")
 
-        try:
-            if compression == "gzip":
-                result = subprocess.run(
-                    cmd,
-                    capture_output=True,
-                    env=env,
-                    timeout=3600
-                )
-                if result.returncode != 0:
-                    raise CodomyrmexError(f"pg_dump failed: {result.stderr.decode()}")
+        result = subprocess.run(cmd, capture_output=True, env=env, timeout=3600)
+        if result.returncode != 0:
+            raise CodomyrmexError(f"pg_dump failed: {result.stderr.decode()}")
 
-                with gzip.open(backup_path, 'wb') as f:
-                    f.write(result.stdout)
-            else:
-                with open(backup_path, 'wb') as f:
-                    result = subprocess.run(
-                        cmd,
-                        stdout=f,
-                        stderr=subprocess.PIPE,
-                        env=env,
-                        timeout=3600
-                    )
-                    if result.returncode != 0:
-                        raise CodomyrmexError(f"pg_dump failed: {result.stderr.decode()}")
-
-        except subprocess.TimeoutExpired:
-            raise CodomyrmexError("pg_dump timed out after 1 hour")
+        if compression == "gzip":
+            with gzip.open(backup_path, 'wb') as f:
+                f.write(result.stdout)
+        else:
+            with open(backup_path, 'wb') as f:
+                f.write(result.stdout)
 
     def _backup_mysql(
         self,
-        params: dict[str, Any],
+        params: Dict[str, Any],
         backup_path: str,
         compression: str,
         include_schema: bool,
@@ -431,383 +263,52 @@ class BackupManager:
         if not include_schema:
             cmd.append("--no-create-info")
 
-        try:
-            if compression == "gzip":
-                result = subprocess.run(
-                    cmd,
-                    capture_output=True,
-                    timeout=3600
-                )
-                if result.returncode != 0:
-                    raise CodomyrmexError(f"mysqldump failed: {result.stderr.decode()}")
+        result = subprocess.run(cmd, capture_output=True, timeout=3600)
+        if result.returncode != 0:
+            raise CodomyrmexError(f"mysqldump failed: {result.stderr.decode()}")
 
-                with gzip.open(backup_path, 'wb') as f:
-                    f.write(result.stdout)
-            else:
-                with open(backup_path, 'wb') as f:
-                    result = subprocess.run(
-                        cmd,
-                        stdout=f,
-                        stderr=subprocess.PIPE,
-                        timeout=3600
-                    )
-                    if result.returncode != 0:
-                        raise CodomyrmexError(f"mysqldump failed: {result.stderr.decode()}")
-
-        except subprocess.TimeoutExpired:
-            raise CodomyrmexError("mysqldump timed out after 1 hour")
-
-    def restore_backup(
-        self,
-        backup_id: str,
-        target_database_url: Optional[str] = None,
-        drop_existing: bool = False
-    ) -> BackupResult:
-        """Restore a database from backup.
-
-        Args:
-            backup_id: ID of the backup to restore
-            target_database_url: Target database URL (uses original if not provided)
-            drop_existing: Drop existing database before restore
-
-        Returns:
-            Restore operation result
-        """
-        if backup_id not in self._backups:
-            # Try to find backup file by ID pattern
-            found = False
-            for path in self.backups_dir.iterdir():
-                if path.name.startswith(backup_id):
-                    found = True
-                    break
-            if not found:
-                raise CodomyrmexError(f"Backup not found: {backup_id}")
-
-        backup = self._backups.get(backup_id)
-        if backup:
-            backup_path = backup.file_path
-            db_type = backup.database_type
+        if compression == "gzip":
+            with gzip.open(backup_path, 'wb') as f:
+                f.write(result.stdout)
         else:
-            raise CodomyrmexError(f"Backup metadata not found: {backup_id}")
+            with open(backup_path, 'wb') as f:
+                f.write(result.stdout)
 
-        target_url = target_database_url or self._database_url
-        if not target_url:
-            raise CodomyrmexError("No target database URL provided")
-
-        target_params = self._parse_database_url(target_url)
-        start_time = time.time()
-
-        try:
-            # Verify checksum if available
-            if backup.checksum:
-                current_checksum = self._calculate_checksum(backup_path)
-                if current_checksum != backup.checksum:
-                    raise CodomyrmexError("Backup checksum mismatch - file may be corrupted")
-
-            if db_type == "sqlite":
-                self._restore_sqlite(backup_path, target_params["database"], backup.compression)
-            elif db_type == "postgresql":
-                self._restore_postgresql(backup_path, target_params, backup.compression, drop_existing)
-            elif db_type == "mysql":
-                self._restore_mysql(backup_path, target_params, backup.compression, drop_existing)
-            else:
-                raise CodomyrmexError(f"Unsupported database type: {db_type}")
-
-            duration = time.time() - start_time
-
-            result = BackupResult(
-                backup_id=f"restore_{backup_id}",
-                success=True,
-                duration=duration,
-                file_size_mb=backup.size_mb
-            )
-
-            logger.info(f"Restored backup {backup_id} in {duration:.2f}s")
-            return result
-
-        except Exception as e:
-            duration = time.time() - start_time
-
-            result = BackupResult(
-                backup_id=f"restore_{backup_id}",
-                success=False,
-                duration=duration,
-                file_size_mb=0.0,
-                error_message=str(e)
-            )
-
-            logger.error(f"Failed to restore backup {backup_id}: {e}")
-            return result
-
-    def _restore_sqlite(self, backup_path: str, db_path: str, compression: str):
-        """Restore SQLite database."""
-        # Remove existing database
-        if os.path.exists(db_path):
-            os.remove(db_path)
-
-        conn = sqlite3.connect(db_path)
-
-        try:
-            if compression == "gzip":
-                with gzip.open(backup_path, 'rt', encoding='utf-8') as f:
-                    sql = f.read()
-            else:
-                with open(backup_path, 'r', encoding='utf-8') as f:
-                    sql = f.read()
-
-            conn.executescript(sql)
-            conn.commit()
-        finally:
-            conn.close()
-
-    def _restore_postgresql(
-        self,
-        backup_path: str,
-        params: dict[str, Any],
-        compression: str,
-        drop_existing: bool
-    ):
-        """Restore PostgreSQL database using psql."""
-        if not shutil.which("psql"):
-            raise CodomyrmexError("psql not found. Install PostgreSQL client tools.")
-
-        env = os.environ.copy()
-        env["PGPASSWORD"] = params.get("password", "")
-
-        if drop_existing:
-            # Drop and recreate database
-            drop_cmd = [
-                "psql",
-                "-h", params["host"],
-                "-p", str(params["port"]),
-                "-U", params["user"],
-                "-d", "postgres",
-                "-c", f"DROP DATABASE IF EXISTS {params['database']}"
-            ]
-            subprocess.run(drop_cmd, env=env, capture_output=True)
-
-            create_cmd = [
-                "psql",
-                "-h", params["host"],
-                "-p", str(params["port"]),
-                "-U", params["user"],
-                "-d", "postgres",
-                "-c", f"CREATE DATABASE {params['database']}"
-            ]
-            subprocess.run(create_cmd, env=env, capture_output=True)
-
-        cmd = [
-            "psql",
-            "-h", params["host"],
-            "-p", str(params["port"]),
-            "-U", params["user"],
-            "-d", params["database"],
-            "--no-password"
-        ]
-
-        try:
-            if compression == "gzip":
-                with gzip.open(backup_path, 'rb') as f:
-                    sql_data = f.read()
-                result = subprocess.run(
-                    cmd,
-                    input=sql_data,
-                    capture_output=True,
-                    env=env,
-                    timeout=3600
-                )
-            else:
-                with open(backup_path, 'rb') as f:
-                    result = subprocess.run(
-                        cmd,
-                        stdin=f,
-                        capture_output=True,
-                        env=env,
-                        timeout=3600
-                    )
-
-            if result.returncode != 0:
-                raise CodomyrmexError(f"psql restore failed: {result.stderr.decode()}")
-
-        except subprocess.TimeoutExpired:
-            raise CodomyrmexError("psql restore timed out after 1 hour")
-
-    def _restore_mysql(
-        self,
-        backup_path: str,
-        params: dict[str, Any],
-        compression: str,
-        drop_existing: bool
-    ):
-        """Restore MySQL database."""
-        if not shutil.which("mysql"):
-            raise CodomyrmexError("mysql client not found. Install MySQL client tools.")
-
-        if drop_existing:
-            drop_cmd = [
-                "mysql",
-                "-h", params["host"],
-                "-P", str(params["port"]),
-                "-u", params["user"],
-                f"-p{params.get('password', '')}",
-                "-e", f"DROP DATABASE IF EXISTS {params['database']}; CREATE DATABASE {params['database']}"
-            ]
-            subprocess.run(drop_cmd, capture_output=True)
-
-        cmd = [
-            "mysql",
-            "-h", params["host"],
-            "-P", str(params["port"]),
-            "-u", params["user"],
-            f"-p{params.get('password', '')}",
-            params["database"]
-        ]
-
-        try:
-            if compression == "gzip":
-                with gzip.open(backup_path, 'rb') as f:
-                    sql_data = f.read()
-                result = subprocess.run(
-                    cmd,
-                    input=sql_data,
-                    capture_output=True,
-                    timeout=3600
-                )
-            else:
-                with open(backup_path, 'rb') as f:
-                    result = subprocess.run(
-                        cmd,
-                        stdin=f,
-                        capture_output=True,
-                        timeout=3600
-                    )
-
-            if result.returncode != 0:
-                raise CodomyrmexError(f"mysql restore failed: {result.stderr.decode()}")
-
-        except subprocess.TimeoutExpired:
-            raise CodomyrmexError("mysql restore timed out after 1 hour")
-
-    def _mask_password(self, url: str) -> str:
-        """Mask password in database URL."""
-        return re.sub(r'(://[^:]+:)[^@]+(@)', r'\1***\2', url)
-
-    def list_backups(self, database_name: Optional[str] = None) -> list[dict[str, Any]]:
+    def list_backups(self, database_name: Optional[str] = None) -> List[Dict[str, Any]]:
         """List available backups."""
         backups = []
-
         for backup in self._backups.values():
             if database_name and backup.database_name != database_name:
                 continue
-
             backups.append({
                 "backup_id": backup.backup_id,
                 "database_name": backup.database_name,
-                "database_type": backup.database_type,
-                "backup_type": backup.backup_type,
-                "file_path": backup.file_path,
                 "size_mb": backup.size_mb,
                 "created_at": backup.created_at.isoformat(),
-                "compression": backup.compression,
-                "encryption": backup.encryption,
-                "checksum": backup.checksum
             })
-
-        backups.sort(key=lambda b: b["created_at"], reverse=True)
-        return backups
+        return sorted(backups, key=lambda b: b["created_at"], reverse=True)
 
     def delete_backup(self, backup_id: str) -> bool:
         """Delete a backup."""
         if backup_id not in self._backups:
             return False
-
         backup = self._backups[backup_id]
-
         try:
-            backup_file = Path(backup.file_path)
-            if backup_file.exists():
-                backup_file.unlink()
-
+            Path(backup.file_path).unlink(missing_ok=True)
             del self._backups[backup_id]
-
-            logger.info(f"Deleted backup: {backup_id}")
             return True
-
         except Exception as e:
-            logger.error(f"Failed to delete backup {backup_id}: {e}")
+            logger.error(f"Failed to delete backup: {e}")
             return False
 
-    def get_backup_info(self, backup_id: str) -> Optional[dict[str, Any]]:
-        """Get detailed information about a backup."""
-        if backup_id not in self._backups:
-            return None
 
-        backup = self._backups[backup_id]
-
-        return {
-            "backup_id": backup.backup_id,
-            "database_name": backup.database_name,
-            "database_type": backup.database_type,
-            "backup_type": backup.backup_type,
-            "file_path": backup.file_path,
-            "size_mb": backup.size_mb,
-            "created_at": backup.created_at.isoformat(),
-            "compression": backup.compression,
-            "encryption": backup.encryption,
-            "checksum": backup.checksum,
-            "metadata": backup.metadata
-        }
-
-    def verify_backup(self, backup_id: str) -> dict[str, Any]:
-        """Verify backup integrity."""
-        if backup_id not in self._backups:
-            raise CodomyrmexError(f"Backup not found: {backup_id}")
-
-        backup = self._backups[backup_id]
-        issues = []
-
-        # Check file exists
-        if not os.path.exists(backup.file_path):
-            issues.append("Backup file not found")
-            return {"valid": False, "issues": issues}
-
-        # Verify checksum
-        if backup.checksum:
-            current_checksum = self._calculate_checksum(backup.file_path)
-            if current_checksum != backup.checksum:
-                issues.append("Checksum mismatch - file may be corrupted")
-
-        # Check file size
-        current_size = os.path.getsize(backup.file_path) / (1024 * 1024)
-        size_diff = abs(current_size - backup.size_mb)
-        if size_diff > 0.1:  # More than 100KB difference
-            issues.append(f"File size changed: expected {backup.size_mb:.2f} MB, got {current_size:.2f} MB")
-
-        return {
-            "valid": len(issues) == 0,
-            "backup_id": backup_id,
-            "file_exists": os.path.exists(backup.file_path),
-            "checksum_valid": backup.checksum and not any("Checksum" in i for i in issues),
-            "issues": issues
-        }
-
-
+# Convenience functions
 def backup_database(
     database_name: str,
     database_url: Optional[str] = None,
     backup_type: str = "full",
     compression: str = "gzip"
 ) -> BackupResult:
-    """Create a database backup.
-
-    Args:
-        database_name: Name for the backup
-        database_url: Database connection URL
-        backup_type: Type of backup
-        compression: Compression method
-
-    Returns:
-        Backup operation result
-    """
+    """Convenience function to backup a database."""
     manager = BackupManager()
     return manager.create_backup(database_name, database_url, backup_type, compression)

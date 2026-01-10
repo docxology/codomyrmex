@@ -2,7 +2,7 @@
 
 This module provides FirecrawlAdapter, which implements BaseScraper
 using the Firecrawl service via FirecrawlClient.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from typing import Any, Dict, List, Optional
 
@@ -43,7 +43,7 @@ class FirecrawlAdapter(BaseScraper):
         options = ScrapeOptions(formats=[ScrapeFormat.MARKDOWN])
         result = adapter.scrape("https://example.com", options)
         ```
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     def __init__(self, config: Optional[ScrapeConfig] = None):
         """Initialize the Firecrawl adapter.
@@ -53,7 +53,7 @@ class FirecrawlAdapter(BaseScraper):
 
         Raises:
             FirecrawlError: If Firecrawl client cannot be initialized
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         from ..config import get_config
 
         self.config = config or get_config()
@@ -78,7 +78,7 @@ class FirecrawlAdapter(BaseScraper):
             print(result.content)  # Markdown content
             print(result.formats.get("html"))  # HTML content
             ```
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         options = options or ScrapeOptions()
         formats = [f.value if isinstance(f, ScrapeFormat) else f for f in options.formats]
 
@@ -118,7 +118,7 @@ class FirecrawlAdapter(BaseScraper):
             for page in result.results:
                 print(f"Scraped: {page.url}")
             ```
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         options = options or ScrapeOptions()
         scrape_options: Dict[str, Any] = {}
 
@@ -161,7 +161,7 @@ class FirecrawlAdapter(BaseScraper):
             for link in result.links:
                 print(f"{link.get('title')}: {link.get('url')}")
             ```
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         try:
             firecrawl_result = self.client.map_url(url, search=search)
 
@@ -195,7 +195,7 @@ class FirecrawlAdapter(BaseScraper):
             for item in result.results:
                 print(f"{item.url}: {item.content[:100]}")
             ```
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         options = options or ScrapeOptions()
         scrape_options: Dict[str, Any] = {}
 
@@ -250,7 +250,7 @@ class FirecrawlAdapter(BaseScraper):
             )
             print(result.data)
             ```
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         try:
             firecrawl_result = self.client.extract_data(urls, schema=schema, prompt=prompt)
 
@@ -272,7 +272,7 @@ class FirecrawlAdapter(BaseScraper):
 
         Returns:
             ScrapeResult instance
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Firecrawl returns data in different formats depending on SDK version
         # Handle both Document objects and dict responses
         if hasattr(firecrawl_data, "markdown"):
@@ -330,7 +330,7 @@ class FirecrawlAdapter(BaseScraper):
 
         Returns:
             CrawlResult instance
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Firecrawl crawl returns job info or completed results
         if isinstance(firecrawl_data, dict):
             job_id = firecrawl_data.get("id", firecrawl_data.get("jobId", ""))
@@ -376,7 +376,7 @@ class FirecrawlAdapter(BaseScraper):
 
         Returns:
             MapResult instance
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if isinstance(firecrawl_data, dict):
             links = firecrawl_data.get("links", [])
             return MapResult(links=links, total=len(links))
@@ -392,7 +392,7 @@ class FirecrawlAdapter(BaseScraper):
 
         Returns:
             SearchResult instance
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if isinstance(firecrawl_data, dict):
             data_list = firecrawl_data.get("data", [])
             results = []
@@ -417,7 +417,7 @@ class FirecrawlAdapter(BaseScraper):
 
         Returns:
             ExtractResult instance
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if isinstance(firecrawl_data, dict):
             job_id = firecrawl_data.get("id", firecrawl_data.get("jobId"))
             status = firecrawl_data.get("status", "completed")

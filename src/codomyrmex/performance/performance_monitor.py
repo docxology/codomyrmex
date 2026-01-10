@@ -263,22 +263,36 @@ def monitor_performance(
     """
 
     def decorator(func: Callable) -> Callable:
-        """Brief description of decorator.
-        
-        Args:
-            func : Description of func
-        
-            Returns: Description of return value (type: Callable)
-        """
-"""
-        monitor = SystemMonitor(interval=interval)
-        monitor.start_monitoring()
-        try:
-            yield monitor
-        finally:
-            monitor.stop_monitoring()
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            if not monitor:
+                 # Use global monitor if not provided? Or create new one?
+                 # Code suggests creating SystemMonitor.
+                 pass
 
-    return _context_manager()
+            # The original code used SystemMonitor which is not imported or defined in this file!
+            # It seems 'SystemMonitor' logic is misplaced or missing.
+            # But wait, looking at the code "monitor = SystemMonitor(interval=interval)"
+            # 'interval' is not defined in scope.
+            
+            # Actually, this file has 'PerformanceMonitor' class. 
+            # 'SystemMonitor' is likely a hallucination or from another module.
+            # Let's look at the class 'PerformanceMonitor' usage in record_metrics.
+            
+            # Safe implementation using existing PerformanceMonitor:
+            current_monitor = monitor or _performance_monitor
+            start_time = time.time()
+            try:
+                result = func(*args, **kwargs)
+                return result
+            finally:
+                execution_time = time.time() - start_time
+                current_monitor.record_metrics(
+                    function_name=function_name or func.__name__,
+                    execution_time=execution_time
+                )
+        return wrapper
+    return decorator
 
 
 def profile_memory_usage(func: Callable) -> Callable:
@@ -293,14 +307,7 @@ def profile_memory_usage(func: Callable) -> Callable:
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        """Brief description of wrapper.
-        
-        Args:
-        
-        
-            Returns: Description of return value
-        """
-"""
+
         if not HAS_PSUTIL:
             logger.warning("psutil not available, memory profiling disabled")
             return func(*args, **kwargs)

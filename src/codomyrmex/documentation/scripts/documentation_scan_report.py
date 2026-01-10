@@ -28,7 +28,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Comprehensive Documentation Scan and Improvement Tool
 
@@ -37,8 +36,6 @@ all documentation across the Codomyrmex repository.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

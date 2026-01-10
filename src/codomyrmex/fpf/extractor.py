@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Extractor for FPF patterns, concepts, and relationships.
 
 
-"""Core functionality module
-
-This module provides extractor functionality including:
-- 10 functions: __init__, extract_patterns, extract_concepts...
-- 1 classes: FPFExtractor
-
-Usage:
-    from extractor import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to extract structured information
 from parsed FPF specifications.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import re
 from typing import Dict, List, Optional
@@ -42,7 +32,7 @@ class FPFExtractor:
 
         Returns:
             List of Pattern objects (same as input, but with enhanced metadata)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Patterns are already extracted by the parser
         # This method can be used for post-processing
         return spec.patterns
@@ -55,7 +45,7 @@ class FPFExtractor:
 
         Returns:
             List of Concept objects
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         concepts = []
         concept_names = set()
 
@@ -104,7 +94,7 @@ class FPFExtractor:
 
         Returns:
             List of Relationship objects
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         relationships = []
 
         for pattern in spec.patterns:
@@ -195,7 +185,7 @@ class FPFExtractor:
 
         Returns:
             Dictionary mapping pattern IDs to keyword lists
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         keywords = {}
         for pattern in spec.patterns:
             keywords[pattern.id] = pattern.keywords
@@ -209,7 +199,7 @@ class FPFExtractor:
 
         Returns:
             Dictionary mapping pattern IDs to dependency dictionaries
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         dependencies = {}
         for pattern in spec.patterns:
             dependencies[pattern.id] = pattern.dependencies
@@ -223,7 +213,7 @@ class FPFExtractor:
 
         Returns:
             List of U.Type names (without the U. prefix)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         u_types = set()
         content = pattern.content + " " + pattern.title
 
@@ -241,7 +231,7 @@ class FPFExtractor:
 
         Returns:
             List of tuples (concept_name, concept_type)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         concepts = []
         content = pattern.content.lower()
 
@@ -277,7 +267,7 @@ class FPFExtractor:
 
         Returns:
             Definition string (or empty if not found)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Look in solution section first
         if "solution" in pattern.sections:
             solution = pattern.sections["solution"]
@@ -304,7 +294,7 @@ class FPFExtractor:
 
         Returns:
             List of pattern IDs that reference the concept
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         references = []
         for pattern in spec.patterns:
             if concept_name in pattern.content or concept_name in pattern.title:

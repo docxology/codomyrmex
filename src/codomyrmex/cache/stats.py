@@ -53,16 +53,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-"""Core functionality module
-
-This module provides stats functionality including:
-- 3 functions: hit_rate, miss_rate, usage_percent
-- 1 classes: CacheStats
-
-Usage:
-    from stats import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 """
 Cache statistics data structures.

@@ -15,11 +15,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-Build Generator for Codomyrmex Containerization
-
-This module provides advanced Dockerfile generation and build optimization,
-including multi-stage builds, security hardening, and performance optimization.
-"""
+"""Build Generator for Codomyrmex Containerization."""
 
 # Import logging
 try:

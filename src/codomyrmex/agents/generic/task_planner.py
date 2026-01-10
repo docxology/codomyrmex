@@ -49,16 +49,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Task planning and decomposition utilities."""
 
-"""Core functionality module
-
-This module provides task_planner functionality including:
-- 8 functions: __init__, create_task, decompose_task...
-- 3 classes: TaskStatus, Task, TaskPlanner
-
-Usage:
-    from task_planner import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 

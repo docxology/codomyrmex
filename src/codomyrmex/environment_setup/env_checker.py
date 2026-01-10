@@ -17,16 +17,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-"""Core functionality module
-
-This module provides env_checker functionality including:
-- 4 functions: ensure_dependencies_installed, check_and_setup_env_vars, is_uv_available...
-- 0 classes: 
-
-Usage:
-    from env_checker import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 # Store the original script directory to correctly locate files relative to REPO_ROOT_PATH

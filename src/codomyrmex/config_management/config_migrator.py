@@ -13,11 +13,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-Configuration Migrator for Codomyrmex
-
-This module provides configuration migration capabilities to handle version upgrades,
-deprecated field handling, and automatic configuration updates.
-"""
+"""Configuration Migrator for Codomyrmex."""
 
 # Import logging
 try:

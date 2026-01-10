@@ -24,7 +24,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 PLACEHOLDER_PATTERNS = [
     (r'\[Architecture description if applicable\]', 'Architecture description placeholder'),

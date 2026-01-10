@@ -582,20 +582,9 @@ def handle_common_exceptions(
         Decorator function
     """
     def decorator(func):
-        """Brief description of decorator.
 
-        Args:
-            func : Description of func
-
-        Returns: Description of return value
-        """
         def wrapper(*args, **kwargs):
-            """Brief description of wrapper.
 
-            Args:
-                
-            Returns: Description of return value
-            """
             try:
                 return func(*args, **kwargs)
             except FileNotFoundError as e:

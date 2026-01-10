@@ -46,16 +46,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-"""Core functionality module
-
-This module provides mcp_schemas functionality including:
-- 2 functions: check_error_if_failed, check_data_if_success
-- 3 classes: MCPErrorDetail, MCPToolCall, MCPToolResult
-
-Usage:
-    from mcp_schemas import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 class MCPErrorDetail(BaseModel):
@@ -115,7 +105,7 @@ class MCPToolResult(BaseModel):
 
             Returns:
                 The validated value
-            """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:             """
         if hasattr(info, 'data') and info.data.get("status"):
             status = info.data.get("status")
         else:
@@ -143,7 +133,7 @@ class MCPToolResult(BaseModel):
 
             Returns:
                 The validated value
-            """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:             """
         if hasattr(info, 'data') and info.data.get("status"):
             status = info.data.get("status")
         else:

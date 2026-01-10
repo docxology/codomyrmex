@@ -50,7 +50,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 except ImportError:
     # Fallback logging
@@ -71,7 +70,6 @@ Configuration Validator for Codomyrmex Examples
 This script validates all YAML and JSON configuration files in the examples directory.
 It checks syntax, required fields, and schema compliance.
 
-Usage:
     python scripts/examples/validate_configs.py
 
 Options:

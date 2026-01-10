@@ -7,52 +7,15 @@ import matplotlib
 import matplotlib.colors
 import matplotlib.pyplot as plt
 import networkx as nx
-import networkx as nx
-import networkx as nx
 import numpy as np
 
 from codomyrmex.cerebrum.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization_theme import (
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     VisualizationTheme,
     get_default_theme,
 )
+from codomyrmex.logging_monitoring import get_logger
+
 
 try:
     HAS_MATPLOTLIB = True
@@ -63,6 +26,7 @@ except ImportError:
     plt = None
 
 try:
+    import networkx as nx
 except ImportError:
     nx = None
 
@@ -547,4 +511,3 @@ class BaseHeatmapVisualizer(BaseVisualizer):
         cbar.ax.tick_params(labelsize=self.theme.font.tick_size)
 
         return fig, ax
-

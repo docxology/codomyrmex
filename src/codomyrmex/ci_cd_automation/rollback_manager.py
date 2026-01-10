@@ -1,3 +1,9 @@
+"""Rollback Management Module for Codomyrmex CI/CD Automation.
+
+This module provides comprehensive rollback capabilities for failed deployments,
+including rollback strategies, execution tracking, and recovery mechanisms.
+"""
+
 from datetime import datetime
 from pathlib import Path
 from typing import Callable, Optional
@@ -7,123 +13,9 @@ import time
 
 from dataclasses import dataclass, field
 from enum import Enum
-from rollback_manager import FunctionName, ClassName
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#!/usr/bin/env python3
-"""Rollback Management Module for Codomyrmex CI/CD Automation.
-
-This module provides comprehensive rollback capabilities for failed deployments,
-including rollback strategies, execution tracking, and recovery mechanisms.
-"""
-
-
-
 
 logger = get_logger(__name__)
 
@@ -357,6 +249,8 @@ class RollbackManager:
                     logger.info(f"Executing rollback step {i+1}/{len(plan.steps)}: {step.name}")
 
                     # Execute step with timeout
+                    # In a real implementation we would actually await self._execute_step_async(step)
+                    # Here we simulate it
                     await asyncio.wait_for(
                         self._execute_step_async(step),
                         timeout=step.timeout

@@ -49,16 +49,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Model base classes and implementations for CEREBRUM."""
 
-"""Core functionality module
-
-This module provides models functionality including:
-- 7 functions: to_dict, from_dict, to_dict...
-- 3 classes: Model, ReasoningResult, ModelBase
-
-Usage:
-    from models import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -68,7 +58,7 @@ class Model:
 
     A model represents a cognitive structure that can reason about cases
     and perform probabilistic inference.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     name: str
     model_type: str
@@ -127,7 +117,7 @@ class ModelBase(ABC):
         Args:
             name: Model name
             config: Configuration dictionary
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.name = name
         self.config = config or {}
         self.logger = get_logger(f"{__name__}.{self.__class__.__name__}")
@@ -141,7 +131,7 @@ class ModelBase(ABC):
 
         Returns:
             Prediction results
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
 
     @abstractmethod
@@ -151,7 +141,7 @@ class ModelBase(ABC):
         Args:
             data: Input data
             outcome: Observed outcome
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
 
     def to_dict(self) -> dict[str, Any]:

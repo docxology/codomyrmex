@@ -1,409 +1,145 @@
+"""Pyrefly Runner for Codomyrmex Static Analysis module.
+
+Provides integration with Pyrefly static analysis tool.
+"""
+
 import json
-import logging
-import os
-import re
 import subprocess
-import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-# Imports moved to try/except block below
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Add project root for sibling module imports if run directly
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(
-    os.path.join(SCRIPT_DIR, "..", "..")
-)  # static_analysis -> codomyrmex
-if PROJECT_ROOT not in sys.path:
-    pass
-#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
-
-try:
-    from codomyrmex.logging_monitoring import get_logger
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-except ImportError:
-    # Fallback for environments where logging_monitoring might not be discoverable
-    # This is less ideal but provides a basic operational mode.
-    import logging
-
-    print(
-        "Warning: Could not import Codomyrmex logging. Using standard Python logging.",
-        file=sys.stderr,
-    )
-
-    def setup_logging():  # Dummy setup_logging
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        )
-
-    def get_logger(name):
-        _logger = logging.getLogger(name)
-        if (
-            not _logger.handlers
-        ):  # Avoid adding handlers multiple times if already configured
-            _handler = logging.StreamHandler(sys.stdout)
-            _formatter = logging.Formatter(
-                "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-            )
-            _handler.setFormatter(_formatter)
-            _logger.addHandler(_handler)
-            _logger.setLevel(logging.INFO)
-        return _logger
-
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
-# Import performance monitoring
-try:
-    PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
-    logger.warning("Performance monitoring not available - decorators will be no-op")
-    PERFORMANCE_MONITORING_AVAILABLE = False
 
-    # Create no-op decorators
-    def monitor_performance(*args, **kwargs):
-        def decorator(func):
-            return func
-
-        return decorator
-
-    class performance_context:
-        def __init__(self, *args, **kwargs):
-            pass
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *args):
-            pass
+@dataclass
+class PyreflyIssue:
+    """Represents a Pyrefly issue."""
+    file_path: str
+    line: int
+    column: int
+    severity: str
+    message: str
+    rule_id: Optional[str] = None
 
 
-# Regex patterns to parse Pyrefly errors in various formats
-# Format 1: path:line:col: error: message [error_code]
-# Format 2: path:line:col: message
-# Format 3: path:line:col: error_code: message
-PYREFLY_ERROR_PATTERN = re.compile(
-    r"([^:]+):(\d+):(\d+):\s*(?:error|warning|info|note)?:?\s*(.+?)(?:\s*\[([^\]]+)\])?$"
-)
-# Alternative pattern for format without error prefix
-PYREFLY_ERROR_PATTERN_ALT = re.compile(
-    r"([^:]+):(\d+):(\d+):\s*(.+)$"
-)
+@dataclass
+class PyreflyResult:
+    """Result of Pyrefly analysis."""
+    success: bool
+    issues: List[PyreflyIssue] = field(default_factory=list)
+    error_message: Optional[str] = None
+    files_analyzed: int = 0
 
 
-@monitor_performance("static_analysis_parse_output")
-def parse_pyrefly_output(output: str, project_root: str) -> list:
-    """
-    Parses the raw output from Pyrefly to extract structured error information.
-    This is a basic parser and might need significant improvement based on actual Pyrefly output.
-    """
-    issues = []
-    logger.debug(f"Attempting to parse Pyrefly output. Project root: {project_root}")
-    logger.debug(f"Raw output for parsing:\\n{output}")
+class PyreflyRunner:
+    """Runs Pyrefly static analysis."""
 
-    for line in output.splitlines():
-        line = line.strip()
-        if not line:
-            continue
+    def __init__(self, config_path: Optional[str] = None):
+        """Initialize runner."""
+        self.config_path = config_path
+        self.pyrefly_available = self._check_pyrefly()
 
-        # Try primary pattern first (with error prefix)
-        match = PYREFLY_ERROR_PATTERN.match(line)
-        if not match:
-            # Try alternative pattern
-            match = PYREFLY_ERROR_PATTERN_ALT.match(line)
+    def _check_pyrefly(self) -> bool:
+        """Check if Pyrefly is available."""
+        try:
+            subprocess.run(["pyrefly", "--version"], capture_output=True, timeout=5)
+            return True
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            return False
 
-        if match:
-            groups = match.groups()
-            raw_file_path = groups[0]
-            line_num = groups[1]
-            col_num = groups[2]
+    def analyze_file(self, file_path: str) -> PyreflyResult:
+        """Analyze a single file."""
+        if not self.pyrefly_available:
+            return PyreflyResult(
+                success=False,
+                error_message="Pyrefly is not installed"
+            )
 
-            # Extract message and error code
-            if len(groups) >= 4:
-                message = groups[3] if groups[3] else ""
-                error_code = groups[4] if len(groups) > 4 and groups[4] else None
-            else:
-                message = ""
-                error_code = None
+        try:
+            result = subprocess.run(
+                ["pyrefly", "check", file_path, "--output-format", "json"],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
 
-            # Determine severity from message or use default
-            severity = "error"
-            if "warning" in line.lower():
-                severity = "warning"
-            elif "info" in line.lower() or "note" in line.lower():
-                severity = "info"
+            issues = self._parse_output(result.stdout)
+            return PyreflyResult(
+                success=True,
+                issues=issues,
+                files_analyzed=1
+            )
 
-            # Attempt to make file path relative to project_root
-            try:
-                # If raw_file_path is already absolute and within project_root, relpath is fine.
-                # If raw_file_path is relative (to where pyrefly ran, i.e., project_root), os.path.join might be redundant
-                # but os.path.relpath should correctly simplify it.
-                abs_raw_path = os.path.join(project_root, raw_file_path.strip())
-                if not os.path.exists(abs_raw_path) and os.path.exists(
-                    raw_file_path.strip()
-                ):
-                    # If joining with project_root doesn't make sense (e.g. path is already absolute)
-                    # and original path exists, use original path.
-                    # This can happen if Pyrefly outputs absolute paths.
-                    file_path = (
-                        os.path.relpath(raw_file_path.strip(), project_root)
-                        if os.path.isabs(raw_file_path.strip())
-                        and raw_file_path.strip().startswith(project_root)
-                        else raw_file_path.strip()
-                    )
-                else:
-                    file_path = os.path.relpath(abs_raw_path, project_root)
+        except subprocess.TimeoutExpired:
+            return PyreflyResult(success=False, error_message="Pyrefly timed out")
+        except Exception as e:
+            return PyreflyResult(success=False, error_message=str(e))
 
-            except (ValueError, OSError) as e:
-                logger.warning(
-                    f"Could not create relative path for {raw_file_path.strip()} against {project_root}: {e}. Using original path."
-                )
-                file_path = raw_file_path.strip()  # Keep original if relpath fails
+    def analyze_directory(self, directory: str) -> PyreflyResult:
+        """Analyze all Python files in a directory."""
+        if not self.pyrefly_available:
+            return PyreflyResult(
+                success=False,
+                error_message="Pyrefly is not installed"
+            )
 
-            issue = {
-                "file_path": file_path,
-                "line_number": int(line_num),
-                "column_number": int(col_num),
-                "code": error_code or "PYREFLY_ERROR",  # Use extracted error code or generic
-                "message": message.strip(),
-                "severity": severity,
-            }
-            issues.append(issue)
-            logger.debug(f"Parsed issue: {issue}")
-        elif line and not line.startswith("---"):  # Log lines that don't match, ignore separator lines
-            logger.debug(f"Non-matching line in Pyrefly output: '{line}'")
-    logger.info(f"Parsed {len(issues)} issues from Pyrefly output.")
-    return issues
+        try:
+            result = subprocess.run(
+                ["pyrefly", "check", directory, "--output-format", "json"],
+                capture_output=True,
+                text=True,
+                timeout=300
+            )
 
+            issues = self._parse_output(result.stdout)
+            files_count = len(list(Path(directory).rglob("*.py")))
+            
+            return PyreflyResult(
+                success=True,
+                issues=issues,
+                files_analyzed=files_count
+            )
 
-@monitor_performance("static_analysis_run_pyrefly")
-def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict:
-    """
-    Runs Pyrefly static type checker on the given paths and returns the analysis results.
+        except subprocess.TimeoutExpired:
+            return PyreflyResult(success=False, error_message="Pyrefly timed out")
+        except Exception as e:
+            return PyreflyResult(success=False, error_message=str(e))
 
-    Args:
-        target_paths: A list of file or directory paths to analyze.
-        project_root: The root directory of the project, used for resolving paths
-                      and for Pyrefly to find its configuration.
+    def _parse_output(self, output: str) -> List[PyreflyIssue]:
+        """Parse Pyrefly JSON output."""
+        issues = []
+        if not output.strip():
+            return issues
 
-    Returns:
-        A dictionary containing the analysis results from Pyrefly, conforming to
-        the MCP_TOOL_SPECIFICATION for 'tool_results'.
-    """
-    tool_name = "pyrefly"
-    results = {
-        "tool_name": tool_name,
-        "issue_count": 0,
-        "issues": [],
-        "raw_output": "",
-        "error": None,
-        "report_path": None,  # Pyrefly might not generate separate report files by default
-    }
-    logger.info(
-        f"Starting Pyrefly analysis for targets: {target_paths} in project root: {project_root}"
-    )
+        try:
+            data = json.loads(output)
+            for item in data.get("issues", []):
+                issues.append(PyreflyIssue(
+                    file_path=item.get("file", ""),
+                    line=item.get("line", 0),
+                    column=item.get("column", 0),
+                    severity=item.get("severity", "warning"),
+                    message=item.get("message", ""),
+                    rule_id=item.get("rule_id")
+                ))
+        except json.JSONDecodeError:
+            logger.warning("Failed to parse Pyrefly output as JSON")
 
-    if not target_paths:
-        results["error"] = "No target paths provided for Pyrefly analysis."
-        logger.error(results["error"])
-        return results
-
-    try:
-        # Pyrefly typically operates on the current working directory to find its config
-        # and interpret paths.
-        command = ["pyrefly", "check"] + target_paths
-        logger.info(f"Executing Pyrefly command: {' '.join(command)} in {project_root}")
-
-        process = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            cwd=project_root,  # Run Pyrefly from the project root
-            check=False,  # Do not raise exception for non-zero exit codes, handle it manually
-        )
-
-        stdout_output = process.stdout.strip()
-        stderr_output = process.stderr.strip()
-        combined_output_parts = []
-        if stdout_output:
-            combined_output_parts.append("--- Pyrefly STDOUT ---")
-            combined_output_parts.append(stdout_output)
-        if stderr_output:
-            combined_output_parts.append("--- Pyrefly STDERR ---")
-            combined_output_parts.append(stderr_output)
-
-        results["raw_output"] = "\n".join(combined_output_parts)
-        logger.debug(f"Pyrefly raw stdout:\\n{stdout_output}")
-        logger.debug(f"Pyrefly raw stderr:\\n{stderr_output}")
-
-        # Pyrefly documentation suggests errors might go to stdout or stderr.
-        # Let's prioritize parsing stdout as it's more common for findings,
-        # but include stderr content for parsing as well if stdout is empty or has no issues.
-        # Some tools output to stderr for errors AND findings.
-        output_to_parse = stdout_output
-        if not output_to_parse and stderr_output:  # If stdout is empty, try stderr
-            output_to_parse = stderr_output
-        elif (
-            stdout_output and stderr_output
-        ):  # If both have content, combine them for parsing
-            # This might be noisy but ensures we don't miss errors if they are split.
-            # Or, Pyrefly might clearly delineate. For now, let's assume errors could be in either/both.
-            output_to_parse = stdout_output + "\n" + stderr_output
-
-        parsed_issues = parse_pyrefly_output(output_to_parse, project_root)
-        results["issues"] = parsed_issues
-        results["issue_count"] = len(parsed_issues)
-
-        if process.returncode != 0:
-            logger.warning(f"Pyrefly exited with code {process.returncode}.")
-            if (
-                not parsed_issues
-            ):  # If exit code is non-zero AND we found no specific issues
-                error_summary = f"Pyrefly exited with code {process.returncode}."
-                # Prefer stderr for general error messages if no issues parsed
-                if stderr_output:
-                    error_summary += f" Stderr: {stderr_output}"
-                elif stdout_output:
-                    error_summary += f" Stdout: {stdout_output}"
-                results["error"] = error_summary
-                logger.error(error_summary)
-                if not results[
-                    "raw_output"
-                ]:  # Ensure raw_output is populated if it wasn't
-                    results["raw_output"] = error_summary
-        else:
-            logger.info("Pyrefly completed successfully (exit code 0).")
-
-    except FileNotFoundError:
-        results["error"] = (
-            "Pyrefly command not found. Please ensure it is installed and in PATH."
-        )
-        logger.error(results["error"], exc_info=True)
-    except Exception as e:
-        results["error"] = (
-            f"An unexpected error occurred while running Pyrefly: {str(e)}"
-        )
-        logger.error(results["error"], exc_info=True)
-        if not results["raw_output"]:  # Ensure raw_output is populated
-            results["raw_output"] = str(e)
-
-    logger.info(
-        f"Pyrefly analysis finished. Issues found: {results['issue_count']}. Error: {results['error']}"
-    )
-    return results
+        return issues
 
 
-if __name__ == "__main__":
-    # Ensure logging is set up when script is run directly
-    # This will use environment variables or defaults defined in logger_config.py
-    setup_logging()
-    logger.info("Executing pyrefly_runner.py directly for testing example.")
+# Convenience functions
+def run_pyrefly(path: str) -> PyreflyResult:
+    """Run Pyrefly analysis on a path."""
+    runner = PyreflyRunner()
+    if Path(path).is_file():
+        return runner.analyze_file(path)
+    return runner.analyze_directory(path)
 
-    # Define a hypothetical project root and target file for the example.
-    # For a real test, these paths would need to exist, Pyrefly be installed,
-    # and a pyrefly.toml (or pyproject.toml section) be present in the project root.
-    example_project_root = "./temp_pyrefly_test_project"  # Example path
-    analysis_targets = ["test_module.py"]  # Example target
-
-    logger.info(
-        f"Simulating Pyrefly run for: {analysis_targets} in project root {example_project_root}"
-    )
-    logger.info("To perform a real test run:")
-    logger.info(
-        f"1. Create a directory named '{example_project_root}' (relative to where you run this script, or use an absolute path)."
-    )
-    logger.info(
-        f"2. Inside '{example_project_root}', create a 'pyrefly.toml' with content like:"
-    )
-    logger.info('   python_version = "3.10"\n   project_includes = ["*.py"]')
-    logger.info(
-        f"3. Inside '{example_project_root}', create a Python file named '{analysis_targets[0]}' with some type errors."
-    )
-    logger.info("   Example test_module.py content:")
-    logger.info(
-        '   def add(a: int, b: str) -> int: return a + b\n   my_var: int = "text"'
-    )
-    logger.info("4. Ensure Pyrefly is installed (`pip install pyrefly`).")
-    logger.info("5. Uncomment and run the analysis lines below.")
-
-    # --- To perform an actual run, set up files as described above and uncomment: ---
-    logger.info(
-        f"Attempting to create directory {example_project_root} if it doesn't exist for the test."
-    )
-    os.makedirs(example_project_root, exist_ok=True)
-    pyrefly_toml_path = os.path.join(example_project_root, "pyrefly.toml")
-    with open(pyrefly_toml_path, "w") as f:
-        f.write('python_version = "3.10"\nproject_includes = ["*.py"]\n')
-    test_file_path_abs = os.path.join(example_project_root, analysis_targets[0])
-    with open(test_file_path_abs, "w") as f:
-        f.write('def add(a: int, b: str) -> int: return a + b\nmy_var: int = "text"\n')
-    logger.info(
-        f"Created dummy pyrefly.toml and {analysis_targets[0]} in {example_project_root}"
-    )
-
-    analysis_result = run_pyrefly_analysis(
-        target_paths=analysis_targets, project_root=example_project_root
-    )
-    logger.info("--- Pyrefly Analysis Result (JSON) ---")
-    print(json.dumps(analysis_result, indent=2))
-    logger.info(
-        f"Test run finished. To clean up, you can remove the directory: {example_project_root}"
-    )
-    # --- End of actual run block ---
-
-    # Showing a mock result structure for demonstration if not running live
-    # if True: # This block will always run to show mock output structure
-    #     logger.info("Displaying a MOCK result structure as the actual run is commented out by default.")
-    #     mock_result = {
-    #         "tool_name": "pyrefly",
-    #         "issue_count": 2,
-    #         "issues": [
-    #             {
-    #                 "file_path": "test_module.py",
-    #                 "line_number": 1,
-    #                 "column_number": 32,
-    #                 "code": "PYREFLY_ERROR",
-    #                 "message": "Unsupported operand types for + (\"int\" and \"str\")",
-    #                 "severity": "error"
-    #             },
-    #             {
-    #                 "file_path": "test_module.py",
-    #                 "line_number": 2,
-    #                 "column_number": 16,
-    #                 "code": "PYREFLY_ERROR",
-    #                 "message": "Expression \"text\" is incompatible with declared type \"int\"",
-    #                 "severity": "error"
-    #             }
-    #         ],
-    #         "raw_output": "test_module.py:1:32 Unsupported operand types for + (...)\ntest_module.py:2:16 Expression \"text\" is incompatible with declared type \"int\"",
-    #         "error": None,
-    #         "report_path": None
-    #     }
-    #     logger.info("--- Mock Pyrefly Analysis Result (JSON) ---")
-    #     print(json.dumps(mock_result, indent=2))
+def check_pyrefly_available() -> bool:
+    """Check if Pyrefly is available."""
+    runner = PyreflyRunner()
+    return runner.pyrefly_available

@@ -15,7 +15,7 @@ from codomyrmex.git_operations import initialize_git_repository
 
 
 """Pytest configuration and shared fixtures for git_operations tests.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 @pytest.fixture
 def temp_dir() -> Generator[str, None, None]:

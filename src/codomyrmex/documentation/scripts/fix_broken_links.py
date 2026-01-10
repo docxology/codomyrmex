@@ -23,7 +23,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Fix broken links in documentation files.
 
@@ -31,8 +30,6 @@ This script fixes common broken link patterns found during documentation scannin
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

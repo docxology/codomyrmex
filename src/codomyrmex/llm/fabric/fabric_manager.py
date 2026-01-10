@@ -59,7 +59,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-Fabric Manager - Main integration class for Codomyrmex
+# Fabric Manager - Main integration class for Codomyrmex
 
 """
 Provides comprehensive Fabric pattern management, execution, and integration

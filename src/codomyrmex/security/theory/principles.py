@@ -49,16 +49,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """Security principles and fundamentals."""
 
-"""Core functionality module
-
-This module provides principles functionality including:
-- 6 functions: get_security_principles, get_principle, get_principles_by_category...
-- 2 classes: PrincipleCategory, SecurityPrinciple
-
-Usage:
-    from principles import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 

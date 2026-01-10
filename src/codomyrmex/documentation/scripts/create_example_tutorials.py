@@ -7,7 +7,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Create placeholder example_tutorial.md files for modules that reference them.
 
@@ -16,7 +15,6 @@ Creates a standard template that modules can customize with their own examples.
 
 # Template variable: from codomyrmex.{module_name} import main_function
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

@@ -31,16 +31,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Configuration management for Language Models module."""
 
-"""Core functionality module
-
-This module provides config functionality including:
-- 18 functions: get_config, set_config, reset_config...
-- 2 classes: LLMConfig, LLMConfigPresets
-
-Usage:
-    from config import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 class LLMConfig:
     """

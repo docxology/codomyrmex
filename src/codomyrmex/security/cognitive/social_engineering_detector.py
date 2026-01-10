@@ -65,14 +65,7 @@ class SocialEngineeringDetector:
     """Detects social engineering attempts."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         logger.info("SocialEngineeringDetector initialized")
     
     def detect(self, communication: str) -> List[SocialEngineeringIndicator]:

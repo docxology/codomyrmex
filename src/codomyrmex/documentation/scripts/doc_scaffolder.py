@@ -27,16 +27,10 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
-"""Main entry point and utility functions
+# """Main entry point and utility functions
 
-This module provides doc_scaffolder functionality including:
-- 4 functions: get_children_links, update_file_with_signposting, process_directory...
-- 0 classes: 
 
-Usage:
-    # Example usage here
 """
 EXCLUDE_DIRS = {
     '__pycache__', '.git', '.github', '.idea', '.vscode', 'venv', 'env', 'node_modules', 
@@ -50,18 +44,11 @@ EXCLUDE_FILES = {
 
 TEMPLATE_README =
 """
-#!/usr/bin/env python3
 """
-This module provides doc_scaffolder functionality including:
-- 4 functions: get_children_links, update_file_with_signposting, process_directory...
-- 0 classes: 
 
-Usage:
-    # Example usage here
 """
 
 
-#!/usr/bin/env python3
 
 """Main entry point and utility functions
 

@@ -8,47 +8,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 from codomyrmex.cerebrum import (
-from codomyrmex.cerebrum.bayesian import Distribution
-from codomyrmex.cerebrum.visualization import (
-from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
-from codomyrmex.logging_monitoring import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     ActiveInferenceAgent,
+    BayesianNetwork,
     Case,
     CaseBase,
     CaseRetriever,
@@ -57,12 +18,15 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
     InferenceEngine,
     Model,
     ReasoningResult,
-    BayesianNetwork,
 )
+from codomyrmex.cerebrum.bayesian import Distribution
+from codomyrmex.cerebrum.visualization import (
     CaseVisualizer,
     InferenceVisualizer,
     ModelVisualizer,
 )
+from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 """CEREBRUM orchestration for FPF analysis.
 

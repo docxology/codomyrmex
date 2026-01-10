@@ -2,7 +2,7 @@
 
 This module defines exception classes specific to the CEREBRUM module for
 case-based reasoning and Bayesian inference operations.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring import get_logger

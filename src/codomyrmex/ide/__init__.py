@@ -65,7 +65,7 @@ Example:
     >>> from codomyrmex.ide import antigravity
     >>> client = antigravity.AntigravityClient()
     >>> capabilities = client.get_capabilities()
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 class IDEStatus(Enum):
     """Status of an IDE session."""
@@ -83,13 +83,7 @@ class IDECommand:
     timeout: float = 30.0
     
     def to_dict(self) -> Dict[str, Any]:
-        """Brief description of to_dict.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 
         return {"name": self.name, "args": self.args, "timeout": self.timeout}
 
@@ -104,13 +98,7 @@ class IDECommandResult:
     execution_time: float = 0.0
     
     def to_dict(self) -> Dict[str, Any]:
-        """Brief description of to_dict.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 
         return {
             "success": self.success,
@@ -131,13 +119,7 @@ class FileInfo:
     line_count: Optional[int] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        """Brief description of to_dict.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 
         return {
             "path": self.path,
@@ -156,7 +138,7 @@ class IDEClient(ABC):
     
     Provides both abstract methods that must be implemented and concrete 
     helper methods that work across all IDE implementations.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     
     def __init__(self):
         """Initialize the IDE client."""
@@ -181,7 +163,7 @@ class IDEClient(ABC):
         
         Returns:
             bool: True if connection successful, False otherwise.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
     
     @abstractmethod
@@ -195,7 +177,7 @@ class IDEClient(ABC):
         
         Returns:
             bool: True if connected, False otherwise.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
     
     @abstractmethod
@@ -204,7 +186,7 @@ class IDEClient(ABC):
         
         Returns:
             Dict containing capability information.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
     
     @abstractmethod
@@ -217,7 +199,7 @@ class IDEClient(ABC):
             
         Returns:
             The result of the command execution.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
     
     @abstractmethod
@@ -226,7 +208,7 @@ class IDEClient(ABC):
         
         Returns:
             The file path or None if no file is active.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
     
     @abstractmethod
@@ -238,7 +220,7 @@ class IDEClient(ABC):
             
         Returns:
             bool: True if file opened successfully.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
     
     @abstractmethod
@@ -247,7 +229,7 @@ class IDEClient(ABC):
         
         Returns:
             List of file paths.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pass
     
     # Concrete helper methods available to all implementations
@@ -266,7 +248,7 @@ class IDEClient(ABC):
             
         Returns:
             IDECommandResult with success status and output.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         start_time = time.time()
         try:
             result = self.execute_command(command, args)
@@ -302,7 +284,7 @@ class IDEClient(ABC):
             
         Returns:
             List of IDECommandResult objects.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         results = []
         for cmd in commands:
             result = self.execute_command_safe(cmd.name, cmd.args, cmd.timeout)
@@ -319,7 +301,7 @@ class IDEClient(ABC):
             
         Returns:
             FileInfo object or None if file not found.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         file_path = Path(path)
         if not file_path.exists():
             return None
@@ -360,7 +342,7 @@ class IDEClient(ABC):
         Args:
             event: Event name to listen for.
             handler: Callable to invoke when event occurs.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if event not in self._event_handlers:
             self._event_handlers[event] = []
         self._event_handlers[event].append(handler)
@@ -371,7 +353,7 @@ class IDEClient(ABC):
         Args:
             event: Event name.
             data: Event data to pass to handlers.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if event in self._event_handlers:
             for handler in self._event_handlers[event]:
                 try:
@@ -388,7 +370,7 @@ class IDEClient(ABC):
         
         Returns:
             The last IDECommandResult or None if no commands executed.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if self._command_history:
             return self._command_history[-1]
         return None
@@ -398,7 +380,7 @@ class IDEClient(ABC):
         
         Returns:
             Success rate as a float between 0.0 and 1.0.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._command_history:
             return 1.0
         successes = sum(1 for cmd in self._command_history if cmd.success)

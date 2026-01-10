@@ -13,11 +13,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-Configuration Validator for Codomyrmex
-
-This module provides comprehensive configuration validation with schema support,
-type checking, constraint validation, and detailed error reporting.
-"""
+"""Configuration Validator for Codomyrmex."""
 
 # Import logging
 try:

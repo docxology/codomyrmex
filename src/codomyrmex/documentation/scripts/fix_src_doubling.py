@@ -11,14 +11,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
-This module provides fix_src_doubling functionality including:
-- 1 functions: fix_src_doubling
-- 0 classes: 
 
-Usage:
-    # Example usage here
 """
 
 logger = get_logger(__name__)
@@ -26,13 +20,7 @@ logger = get_logger(__name__)
 def fix_src_doubling(directory):
     # Matches [label](.../src/README.md)
     # We want to change it to [label](.../README.md)
-    """Brief description of fix_src_doubling.
-
-Args:
-    directory : Description of directory
-
-    Returns: Description of return value
-"""
+    
     pattern = re.compile(r'\[([^\]]+)\]\(((\.\./)+)src/README\.md\)')
     
     for root, dirs, files in os.walk(directory):

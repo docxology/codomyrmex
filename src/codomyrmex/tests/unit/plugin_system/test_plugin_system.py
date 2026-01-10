@@ -285,7 +285,7 @@ COPY . .
 RUN apt-get update && apt-get install -y python3
 USER appuser
 CMD ["python", "app.py"]
-"""
+# AGGRESSIVE_REMOVAL: """
 
         is_valid, issues = validator.validate_dockerfile(valid_dockerfile)
         assert is_valid or len(issues) == 0  # May have warnings but no errors
@@ -294,7 +294,7 @@ CMD ["python", "app.py"]
         invalid_dockerfile = """FROM ubuntu:latest
 RUN chmod 777 /app
 USER root
-"""
+# AGGRESSIVE_REMOVAL: """
 
         is_valid, issues = validator.validate_dockerfile(invalid_dockerfile)
         assert not is_valid or len(issues) > 0

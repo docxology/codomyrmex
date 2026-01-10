@@ -1,52 +1,23 @@
 from pathlib import Path
 import os
 import re
-
-from check_links import FunctionName, ClassName
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-#!/usr/bin/env python3
-
-This module provides check_links functionality including:
-- 2 functions: find_markdown_files, check_links
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 
 def find_markdown_files(root_dir):
-    """Brief description of find_markdown_files.
-
-Args:
-    root_dir : Description of root_dir
-
-    Returns: Description of return value
-"""
-    for root, dirs, files in os.walk(root_dir):
-        for file in files:
-            if file.endswith(".md"):
-                yield Path(root) / file
+    """Recursively find all markdown files in a directory."""
+    return list(Path(root_dir).rglob("*.md"))
 
 def check_links(root_dir):
-    """Brief description of check_links.
+    """
+    Check for broken links in markdown files.
 
-Args:
-    root_dir : Description of root_dir
+        root_dir: Directory to scan
 
-    Returns: Description of return value
-"""
+    Returns:
+        List of dictionaries containing broken link details
+    """
     root_path = Path(root_dir).absolute()
     link_pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
     broken_links = []

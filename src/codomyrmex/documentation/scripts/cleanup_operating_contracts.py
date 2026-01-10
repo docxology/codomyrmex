@@ -22,14 +22,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Clean up AGENTS.md files by removing incorrectly added items from Operating Contracts sections.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

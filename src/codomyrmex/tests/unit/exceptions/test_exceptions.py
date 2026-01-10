@@ -2,7 +2,7 @@
 
 This module tests all exception classes and utility functions defined in
 the exceptions module to ensure proper error handling throughout the package.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import pytest
 from pathlib import Path

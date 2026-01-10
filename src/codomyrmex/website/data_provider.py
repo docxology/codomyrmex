@@ -33,14 +33,7 @@ class DataProvider:
     """
     
     def __init__(self, root_dir: Path):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-            root_dir : Description of root_dir
-        
-            Returns: Description of return value
-        """
+
 
         self.root_dir = root_dir
 
@@ -147,13 +140,7 @@ class DataProvider:
         return self.get_modules()
 
     def _count_agents(self) -> int:
-        """Brief description of _count_agents.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: int)
-        """
+
 
         return len(self.get_actual_agents())
 
@@ -352,14 +339,7 @@ class DataProvider:
         return tree
 
     def _scan_directory_for_docs(self, path: Path) -> Dict[str, Any]:
-        """Brief description of _scan_directory_for_docs.
-        
-        Args:
-            self : Description of self
-            path : Description of path
-        
-            Returns: Description of return value (type: Any)
-        """
+
 
         node = {"name": path.name, "children": []}
         

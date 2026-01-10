@@ -14,15 +14,7 @@ class WebsiteGenerator:
     """
 
     def __init__(self, output_dir: str, root_dir: Optional[str] = None):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-            output_dir : Description of output_dir
-            root_dir : Description of root_dir
-        
-            Returns: Description of return value
-        """
+
 
         self.output_dir = Path(output_dir)
         # Assuming we are running from project root, or passing it in.
@@ -75,15 +67,7 @@ class WebsiteGenerator:
         print("Website generation complete.")
 
     def _render_page(self, template_name: str, context: dict):
-        """Brief description of _render_page.
-        
-        Args:
-            self : Description of self
-            template_name : Description of template_name
-            context : Description of context
-        
-            Returns: Description of return value
-        """
+
 
         template = self.env.get_template(template_name)
         output = template.render(**context)

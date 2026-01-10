@@ -407,14 +407,7 @@ class EventOperationContext:
         self.start_time: Optional[float] = None
 
     def __enter__(self):
-        """Brief description of __enter__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         import time
         self.start_time = time.time()
         self.correlation_id = self.emitter.start_operation(self.operation_name, self.operation_data)

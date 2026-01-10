@@ -7,7 +7,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Comprehensively fix all broken references in tutorial and documentation files.
 
@@ -17,7 +16,6 @@ Fixes:
 - MCP_TOOL_SPECIFICATION.md references (check if exists)
 """
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

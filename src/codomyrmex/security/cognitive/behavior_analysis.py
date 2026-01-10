@@ -75,14 +75,7 @@ class BehaviorAnalyzer:
     """Analyzes user behavior for security purposes."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         self.behavior_history: dict[str, List[dict]] = {}
         logger.info("BehaviorAnalyzer initialized")
     

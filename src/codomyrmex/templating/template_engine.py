@@ -16,7 +16,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 """Template engine implementations.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 logger = get_logger(__name__)
 
@@ -34,7 +34,7 @@ class Template:
         Args:
             template_obj: Template object from engine
             engine: Engine name
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.template_obj = template_obj
         self.engine = engine
 
@@ -55,7 +55,7 @@ class TemplateEngine:
 
         Args:
             engine: Template engine (jinja2, mako)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.engine = engine
         self._filters: dict[str, Callable] = {}
         self._cache: dict[str, Template] = {}
@@ -72,7 +72,7 @@ class TemplateEngine:
 
         Raises:
             TemplatingError: If rendering fails
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         try:
             if self.engine == "jinja2":
                 return self._render_jinja2(template, context)
@@ -95,7 +95,7 @@ class TemplateEngine:
 
         Raises:
             TemplatingError: If template loading fails
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         path_str = str(path)
         if path_str in self._cache:
             return self._cache[path_str]
@@ -121,7 +121,7 @@ class TemplateEngine:
         Args:
             name: Filter name
             func: Filter function
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self._filters[name] = func
 
     def get_filter(self, name: str) -> Optional[Callable]:
@@ -132,7 +132,7 @@ class TemplateEngine:
 
         Returns:
             Filter function if found
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return self._filters.get(name)
 
     def _render_jinja2(self, template: str, context: dict) -> str:

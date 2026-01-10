@@ -1,51 +1,54 @@
-from typing import Any, Optional
-import json
-import time
+"""HTTP client implementation.
 
+This module provides a robust HTTP client wrapper with retry logic,
+timeouts, and error handling for network operations.
+"""
+
+import json
+import logging
 from dataclasses import dataclass
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
-import requests
+from typing import Any, Optional, Dict
+
+try:
+    import requests
+    from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
+    # Mocking for type checking or fallback
+    class HTTPAdapter:
+        def __init__(self, **kwargs): pass
+    class Retry:
+        def __init__(self, **kwargs): pass
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-
-
-
-
-
-
-HTTP client implementation.
-"""
-
-try:
-    REQUESTS_AVAILABLE = True
-except ImportError:
-    REQUESTS_AVAILABLE = False
-
 logger = get_logger(__name__)
+
 
 class NetworkingError(CodomyrmexError):
     """Raised when networking operations fail."""
-
     pass
+
 
 @dataclass
 class Response:
     """HTTP response object."""
 
     status_code: int
-    headers: dict
+    headers: Dict[str, Any]
     content: bytes
     text: str
-    json_data: Optional[dict] = None
+    json_data: Optional[Dict[str, Any]] = None
 
-    def json(self) -> dict:
+    def json(self) -> Dict[str, Any]:
         """Get JSON data from response."""
         if self.json_data is None:
             self.json_data = json.loads(self.text)
         return self.json_data
+
 
 class HTTPClient:
     """HTTP client with retry and timeout support."""
@@ -55,7 +58,7 @@ class HTTPClient:
         timeout: int = 30,
         max_retries: int = 3,
         retry_backoff: float = 1.0,
-        headers: Optional[dict] = None,
+        headers: Optional[Dict[str, str]] = None,
     ):
         """Initialize HTTP client.
 
@@ -83,55 +86,25 @@ class HTTPClient:
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
+        
+        # Update session headers
+        if self.default_headers:
+            self.session.headers.update(self.default_headers)
 
     def get(self, url: str, **kwargs) -> Response:
-        """Send a GET request.
-
-        Args:
-            url: Request URL
-            **kwargs: Additional request options
-
-        Returns:
-            Response object
-        """
+        """Send a GET request."""
         return self.request("GET", url, **kwargs)
 
     def post(self, url: str, data: Any = None, **kwargs) -> Response:
-        """Send a POST request.
-
-        Args:
-            url: Request URL
-            data: Request data
-            **kwargs: Additional request options
-
-        Returns:
-            Response object
-        """
+        """Send a POST request."""
         return self.request("POST", url, data=data, **kwargs)
 
     def put(self, url: str, data: Any = None, **kwargs) -> Response:
-        """Send a PUT request.
-
-        Args:
-            url: Request URL
-            data: Request data
-            **kwargs: Additional request options
-
-        Returns:
-            Response object
-        """
+        """Send a PUT request."""
         return self.request("PUT", url, data=data, **kwargs)
 
     def delete(self, url: str, **kwargs) -> Response:
-        """Send a DELETE request.
-
-        Args:
-            url: Request URL
-            **kwargs: Additional request options
-
-        Returns:
-            Response object
-        """
+        """Send a DELETE request."""
         return self.request("DELETE", url, **kwargs)
 
     def request(self, method: str, url: str, **kwargs) -> Response:
@@ -149,13 +122,18 @@ class HTTPClient:
             NetworkingError: If request fails
         """
         try:
-            headers = {**self.default_headers, **kwargs.pop("headers", {})}
+            # Merge headers
+            request_headers = {}
+            if "headers" in kwargs:
+                request_headers = kwargs.pop("headers")
+            
+            # Use session options but allow overrides
             timeout = kwargs.pop("timeout", self.timeout)
 
             response = self.session.request(
                 method=method,
                 url=url,
-                headers=headers,
+                headers=request_headers,
                 timeout=timeout,
                 **kwargs
             )
@@ -163,7 +141,8 @@ class HTTPClient:
             # Parse JSON if possible
             json_data = None
             try:
-                json_data = response.json()
+                if response.content:
+                    json_data = response.json()
             except Exception:
                 pass
 
@@ -177,4 +156,3 @@ class HTTPClient:
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP request failed: {e}")
             raise NetworkingError(f"HTTP request failed: {str(e)}") from e
-

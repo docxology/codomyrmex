@@ -23,14 +23,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Validate all internal links in README.md and AGENTS.md files.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

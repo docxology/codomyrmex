@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Section importer for merging FPF sections.
 
 
-"""Core functionality module
-
-This module provides section_importer functionality including:
-- 9 functions: __init__, import_part, import_pattern_group...
-- 1 classes: SectionImporter
-
-Usage:
-    from section_importer import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to import and merge sections
 from separate JSON files into a unified FPF specification.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import json
 from pathlib import Path
@@ -32,7 +22,7 @@ class SectionImporter:
 
         Args:
             base_spec: Optional base specification to merge into
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.base_spec = base_spec or FPFSpec()
 
     def import_part(self, json_path: Path) -> FPFSpec:
@@ -43,7 +33,7 @@ class SectionImporter:
 
         Returns:
             Updated FPFSpec with imported part
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
@@ -69,7 +59,7 @@ class SectionImporter:
 
         Returns:
             Updated FPFSpec
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
@@ -89,7 +79,7 @@ class SectionImporter:
 
         Returns:
             Updated FPFSpec
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return self.import_pattern_group(json_path)
 
     def merge_specs(self, *specs: FPFSpec) -> FPFSpec:
@@ -100,7 +90,7 @@ class SectionImporter:
 
         Returns:
             Merged FPFSpec
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         merged = FPFSpec()
 
         for spec in specs:
@@ -142,7 +132,7 @@ class SectionImporter:
 
         Returns:
             Updated FPFSpec
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Create new spec from base
         merged = FPFSpec(
             version=self.base_spec.version,

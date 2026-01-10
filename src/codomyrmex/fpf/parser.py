@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Parser for FPF specification markdown.
 
 
-"""Core functionality module
-
-This module provides parser functionality including:
-- 9 functions: __init__, parse_spec, extract_table_of_contents...
-- 1 classes: FPFParser
-
-Usage:
-    from parser import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to parse the FPF specification markdown
 file into structured data models.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import re
 from pathlib import Path
@@ -45,7 +35,7 @@ class FPFParser:
 
         Returns:
             FPFSpec object containing all parsed patterns and metadata
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         lines = markdown_content.split("\n")
         table_of_contents = self.extract_table_of_contents(markdown_content)
         patterns = self.extract_patterns(markdown_content)
@@ -80,7 +70,7 @@ class FPFParser:
 
         Returns:
             Dictionary containing the table of contents structure
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         toc = {
             "preface": [],
             "parts": {},
@@ -126,7 +116,7 @@ class FPFParser:
 
         Returns:
             List of Pattern objects
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         patterns = []
         lines = content.split("\n")
 
@@ -222,7 +212,7 @@ class FPFParser:
 
         Returns:
             PatternStatus enum value
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Check table of contents or pattern metadata
         # Look backwards and forwards for status indicators
         for i in range(max(0, pattern_line - 10), min(len(lines), pattern_line + 50)):
@@ -247,7 +237,7 @@ class FPFParser:
 
         Returns:
             Normalized section name
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         section_name = section_name.strip()
         # Remove numbering and colons
         section_name = re.sub(r"^\d+\)\s*", "", section_name)
@@ -283,7 +273,7 @@ class FPFParser:
 
         Args:
             pattern: Pattern object to populate with metadata
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         content = pattern.content
 
         # Extract keywords
@@ -343,7 +333,7 @@ class FPFParser:
 
         Returns:
             List of pattern IDs
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Extract pattern IDs like A.1, A.2.1, B.3, etc.
         pattern_ids = re.findall(r"([A-Z]\.\d+(?:\.\d+)?(?:\.[A-Z])?)", dep_string)
         return pattern_ids
@@ -356,7 +346,7 @@ class FPFParser:
 
         Returns:
             Dictionary mapping section names to their content
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         sections = {}
         lines = pattern_content.split("\n")
         current_section = None

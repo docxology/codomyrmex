@@ -25,7 +25,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Batch fix AGENTS.md files throughout the repository.
 
@@ -36,8 +35,6 @@ This script identifies and fixes common issues with AGENTS.md files:
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

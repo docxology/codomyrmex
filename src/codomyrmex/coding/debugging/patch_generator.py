@@ -1,124 +1,16 @@
+from __future__ import annotations
+
+"""Patch generator for autonomous debugging."""
+
 from typing import Optional, List
 import logging
-
-from __future__ import annotations
 from dataclasses import dataclass
 
 from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Patch generator for autonomous debugging."""
-
-
-try:
-except ImportError:
-    ErrorDiagnosis = None
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # We define a minimal interface for the LLM to avoid circular hard dependencies 
 # or complex setup if the user hasn't configured 'codomyrmex.llm' yet.
 # In a real scenario, this would import from codomyrmex.llm.
-
 
 logger = logging.getLogger(__name__)
 
@@ -135,7 +27,7 @@ class PatchGenerator:
     
     def __init__(self, llm_client=None):
         self.llm_client = llm_client 
-
+    
     def generate(self, source_code: str, diagnosis: ErrorDiagnosis) -> List[Patch]:
         """
         Generate candidate patches for the given error.

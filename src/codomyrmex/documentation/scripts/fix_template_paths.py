@@ -7,12 +7,10 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Fix template/module_template path references to point to correct location.
 """
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

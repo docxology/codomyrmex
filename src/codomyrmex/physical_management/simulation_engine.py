@@ -59,39 +59,12 @@ class Vector3D:
     z: float = 0.0
 
     def __add__(self, other: "Vector3D") -> "Vector3D":
-        """Brief description of __add__.
-        
-        Args:
-            self : Description of self
-            other : Description of other
-        
-            Returns: Description of return value (type: str)
-        """
-"""
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: "Vector3D") -> "Vector3D":
-        """Brief description of __sub__.
-        
-        Args:
-            self : Description of self
-            other : Description of other
-        
-            Returns: Description of return value (type: str)
-        """
-"""
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar: float) -> "Vector3D":
-        """Brief description of __mul__.
-        
-        Args:
-            self : Description of self
-            scalar : Description of scalar
-        
-            Returns: Description of return value (type: str)
-        """
-"""
         return Vector3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
     def magnitude(self) -> float:
@@ -144,7 +117,7 @@ class PhysicsSimulator:
 
     def __init__(self):
         """  Init  .
-            """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:             """
         self.gravity = Vector3D(0, -9.81, 0)
         self.force_fields: list[ForceField] = []
         self.constraints: list[Constraint] = []

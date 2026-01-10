@@ -22,7 +22,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 This script scans src/codomyrmex/documentation/docs/modules and emits a JSON-like
 structure fragment that can be manually merged into sidebars.js or used to
@@ -30,7 +29,6 @@ automate sidebar updates.
 """
 
 
-#!/usr/bin/env python3
 """Generate sidebar entries for Docusaurus based on aggregated docs in docs/modules.
 
 logger = get_logger(__name__)

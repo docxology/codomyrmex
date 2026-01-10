@@ -2,7 +2,7 @@
 
 Tests use real implementations only. FailingAgent is a test adapter
 that implements BaseAgent interface for testing error scenarios, not a mock.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import pytest
 import subprocess
@@ -24,7 +24,7 @@ class FailingAgent(BaseAgent):
     """Test agent that fails in various ways for error testing.
     
     This is a test adapter implementing BaseAgent interface, not a mock.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     def __init__(self, name: str, failure_type: str = "error_response"):
         super().__init__(

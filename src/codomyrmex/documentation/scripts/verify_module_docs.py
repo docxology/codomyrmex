@@ -23,7 +23,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 def verify_modules(base_path: Path) -> dict:
     """

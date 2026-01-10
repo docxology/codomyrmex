@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Exporter for FPF specification to JSON and other formats.
 
 
-"""Core functionality module
-
-This module provides exporter functionality including:
-- 8 functions: __init__, export_json, export_patterns_json...
-- 1 classes: FPFExporter
-
-Usage:
-    from exporter import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to export FPF specifications
 to structured formats for use in context engineering.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import json
 from pathlib import Path
@@ -37,7 +27,7 @@ class FPFExporter:
         Args:
             spec: The FPFSpec object to export
             output_path: Path to output JSON file
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         export_data = {
@@ -61,7 +51,7 @@ class FPFExporter:
         Args:
             patterns: List of Pattern objects
             output_path: Path to output JSON file
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         export_data = {
@@ -79,7 +69,7 @@ class FPFExporter:
         Args:
             concepts: List of Concept objects
             output_path: Path to output JSON file
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         export_data = {
@@ -98,7 +88,7 @@ class FPFExporter:
 
         Returns:
             Dictionary optimized for prompt context
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         patterns = spec.patterns
         concepts = spec.concepts
         relationships = spec.relationships
@@ -168,7 +158,7 @@ class FPFExporter:
 
         Returns:
             Dictionary representation
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return {
             "id": pattern.id,
             "title": pattern.title,
@@ -191,7 +181,7 @@ class FPFExporter:
 
         Returns:
             Dictionary representation
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return {
             "name": concept.name,
             "definition": concept.definition,
@@ -210,7 +200,7 @@ class FPFExporter:
 
         Returns:
             Dictionary representation
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return {
             "source": relationship.source,
             "target": relationship.target,

@@ -4,60 +4,21 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 import networkx as nx
-import networkx as nx
-import networkx as nx
-import networkx as nx
 import numpy as np
 
 from codomyrmex.cerebrum.bayesian import BayesianNetwork
 from codomyrmex.cerebrum.cases import Case
 from codomyrmex.cerebrum.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization_base import (
-from codomyrmex.cerebrum.visualization_theme import (
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     BaseChartVisualizer,
     BaseNetworkVisualizer,
     BaseVisualizer,
 )
+from codomyrmex.cerebrum.visualization_theme import (
     VisualizationTheme,
     get_default_theme,
 )
+from codomyrmex.logging_monitoring import get_logger
 
 
 try:
@@ -69,8 +30,8 @@ except ImportError:
     plt = None
 
 try:
+    import networkx as nx
 except ImportError:
-    nx = None
     nx = None
 
 logger = get_logger(__name__)

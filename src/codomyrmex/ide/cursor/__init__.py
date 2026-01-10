@@ -30,16 +30,6 @@ from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutio
 """Cursor IDE Integration
 
 
-"""Core functionality module
-
-This module provides __init__ functionality including:
-- 13 functions: __init__, connect, disconnect...
-- 1 classes: CursorClient
-
-Usage:
-    from __init__ import FunctionName, ClassName
-    # Example usage here
-"""
 Integration with Cursor IDE - the AI-first code editor. Provides programmatic
 access to Cursor's AI-assisted development capabilities.
 
@@ -48,14 +38,14 @@ Example:
     >>> client = CursorClient()
     >>> client.connect()
     >>> rules = client.get_rules()
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 class CursorClient(IDEClient):
     """Client for interacting with Cursor IDE.
     
     Provides programmatic access to Cursor's AI-assisted development capabilities
     including Composer automation, rules management, and model configuration.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     
     def __init__(self, workspace_path: Optional[str] = None):
         """Initialize the Cursor client.
@@ -63,7 +53,7 @@ class CursorClient(IDEClient):
         Args:
             workspace_path: Optional path to the workspace root.
                            Defaults to current directory.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self._connected = False
         self.workspace_path = Path(workspace_path) if workspace_path else Path.cwd()
         self._cursorrules_path = self.workspace_path / ".cursorrules"
@@ -76,7 +66,7 @@ class CursorClient(IDEClient):
         
         Returns:
             bool: True if connection successful.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Check for Cursor workspace indicators
         cursor_dir = self.workspace_path / ".cursor"
         if cursor_dir.exists() or self._cursorrules_path.exists():
@@ -100,7 +90,7 @@ class CursorClient(IDEClient):
         
         Returns:
             bool: True if connected.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return self._connected
     
     def get_capabilities(self) -> Dict[str, Any]:
@@ -108,7 +98,7 @@ class CursorClient(IDEClient):
         
         Returns:
             Dict containing available features.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return {
             "name": "Cursor",
             "version": "latest",
@@ -141,7 +131,7 @@ class CursorClient(IDEClient):
             
         Returns:
             Command result.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._connected:
             raise CommandExecutionError("Not connected to Cursor")
         
@@ -156,7 +146,7 @@ class CursorClient(IDEClient):
         
         Returns:
             File path or None.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return None
     
     def open_file(self, path: str) -> bool:
@@ -167,7 +157,7 @@ class CursorClient(IDEClient):
             
         Returns:
             bool: True if successful.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return Path(path).exists()
     
     def get_open_files(self) -> List[str]:
@@ -175,7 +165,7 @@ class CursorClient(IDEClient):
         
         Returns:
             List of file paths.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return []
     
     def get_rules(self) -> Dict[str, Any]:
@@ -183,7 +173,7 @@ class CursorClient(IDEClient):
         
         Returns:
             Dict containing rules configuration.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if self._cursorrules_path.exists():
             try:
                 content = self._cursorrules_path.read_text()
@@ -200,7 +190,7 @@ class CursorClient(IDEClient):
             
         Returns:
             bool: True if update successful.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self._connected:
             raise IDEError("Not connected to Cursor")
         
@@ -218,7 +208,7 @@ class CursorClient(IDEClient):
         
         Returns:
             List of model names.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return self.get_capabilities()["models"]
     
     def set_model(self, model: str) -> bool:
@@ -229,7 +219,7 @@ class CursorClient(IDEClient):
             
         Returns:
             bool: True if successful.
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         available = self.get_models()
         return model in available
 

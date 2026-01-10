@@ -31,16 +31,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Every Code integration adapters for Codomyrmex modules."""
 
-"""Core functionality module
-
-This module provides every_code_integration functionality including:
-- 3 functions: adapt_for_ai_code_editing, adapt_for_llm, adapt_for_code_execution
-- 1 classes: EveryCodeIntegrationAdapter
-
-Usage:
-    from every_code_integration import FunctionName, ClassName
-    # Example usage here
-"""
 class EveryCodeIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Every Code with Codomyrmex modules."""
 

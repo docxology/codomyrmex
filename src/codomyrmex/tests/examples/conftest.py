@@ -115,7 +115,7 @@ import pytest
 """Pytest configuration and fixtures for example testing.
 
 Provides shared fixtures and configuration for testing Codomyrmex examples.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 
 

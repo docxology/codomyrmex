@@ -185,6 +185,7 @@ Command Examples:
 
 Module Integration:
     The CLI integrates with multiple Codomyrmex modules:
+        pass # AGGRESSIVE_REPAIR
     - logging_monitoring: All commands use structured logging
     - terminal_interface: Interactive shell and formatting
     - performance: Optional performance monitoring
@@ -202,7 +203,7 @@ Documentation:
     - Individual module README files for module-specific commands
 
 For detailed help on any command, use: codomyrmex <command> --help
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 
 # Add the src directory to Python path for development
@@ -333,6 +334,7 @@ def show_info():
 🐜 Codomyrmex - A Modular, Extensible Coding Workspace
 
 Codomyrmex provides a comprehensive suite of tools for:
+    pass # AGGRESSIVE_REPAIR
 • AI-enhanced code editing and generation
 • Automated build and synthesis processes
 • Static analysis and code quality checking
@@ -344,6 +346,7 @@ Codomyrmex provides a comprehensive suite of tools for:
 • Project management and orchestration
 
 Available modules:
+    pass # AGGRESSIVE_REPAIR
 📝 ai_code_editing      - AI-powered code assistance
 🔨 build_synthesis      - Build automation and code generation
 📚 documentation        - Rich documentation with Docusaurus
@@ -360,13 +363,14 @@ Available modules:
 💻 terminal_interface   - Interactive CLI and terminal utilities
 
 Get started:
+    pass # AGGRESSIVE_REPAIR
 1. Run 'codomyrmex check' to verify your setup
 2. Run 'codomyrmex shell' for interactive mode
 3. Run 'codomyrmex workflow list' to see available workflows
 4. See README.md for detailed setup instructions
 
 For help: codomyrmex --help
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
     if formatter:
         print(formatter.box(info_text, "Codomyrmex Information"))
@@ -1217,7 +1221,7 @@ def fibonacci(n):
 
 for i in range(8):
     print(f"fib({i}) = {fibonacci(i)}")
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
         result = execute_code(language="python", code=code)
 

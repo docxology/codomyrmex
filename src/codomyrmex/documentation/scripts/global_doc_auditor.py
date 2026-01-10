@@ -23,8 +23,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
-"""
 REQUIRED_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 IGNORE_DIRS = [
     ".git", ".github", ".venv", "__pycache__", ".pytest_cache", 
@@ -38,9 +36,7 @@ def is_relevant_dir(path: Path) -> bool:
 
     logger = get_logger(__name__)
 
-    Brief description of is_relevant_dir.
 
-    Args:
         path : Description of path
 
         Returns: Description of return value (type: bool)

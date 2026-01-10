@@ -83,19 +83,9 @@ class DroidStatus(Enum):
 
 
 def _to_bool(value: str) -> bool:
-    """Brief description of _to_bool.
-
-Args:
-    value : Description of value
-
-    Returns: Description of return value (type: bool)
-"""
-    return value.lower() in {"1", "true", "yes", "on"}
-
-
-@dataclass(frozen=True)
-class DroidConfig:
-    """Immutable configuration for the droid controller."""
+    pass
+    pass
+Immutable configuration for the droid controller."""
 
     identifier: str = "droid"
     mode: DroidMode = DroidMode.DEVELOPMENT
@@ -125,13 +115,7 @@ class DroidConfig:
 
     @property
     def allowed(self) -> frozenset[str] | None:
-        """Brief description of allowed.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         return (
             frozenset(self.allowed_operations)
@@ -141,13 +125,7 @@ class DroidConfig:
 
     @property
     def blocked(self) -> frozenset[str] | None:
-        """Brief description of blocked.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         return (
             frozenset(self.blocked_operations)
@@ -173,27 +151,13 @@ class DroidConfig:
 
     @classmethod
     def from_json(cls, raw: str) -> DroidConfig:
-        """Brief description of from_json.
-        
-        Args:
-            cls : Description of cls
-            raw : Description of raw
-        
-            Returns: Description of return value (type: DroidConfig)
-        """
+
 """
         return cls.from_dict(json.loads(raw))
 
     @classmethod
     def from_file(cls, path: str | os.PathLike[str]) -> DroidConfig:
-        """Brief description of from_file.
-        
-        Args:
-            cls : Description of cls
-            path : Description of path
-        
-            Returns: Description of return value (type: DroidConfig)
-        """
+
 """
         with open(path, encoding="utf-8") as handle:
             return cls.from_json(handle.read())
@@ -209,68 +173,7 @@ class DroidConfig:
         mapping: dict[str, Any] = {}
 
         def set_if_present(name: str, transform: Callable[[str], Any]) -> None:
-    """Brief description of set_if_present.
-
-Args:
-    name : Description of name
-    transform : Description of transform
-
-    Returns: Description of return value (type: Any)
-"""
-            value = os.getenv(f"{prefix}{name}")
-            if value is not None:
-                mapping[name.lower()] = transform(value)
-
-        set_if_present("IDENTIFIER", str)
-        set_if_present("MODE", lambda v: DroidMode(v.lower()))
-        set_if_present("LLM_PROVIDER", str)
-        set_if_present("LLM_MODEL", str)
-        set_if_present("SAFE_MODE", _to_bool)
-        set_if_present("TELEMETRY_OPT_IN", _to_bool)
-        set_if_present("MAX_PARALLEL_TASKS", int)
-        set_if_present("MAX_RETRY_ATTEMPTS", int)
-        set_if_present("RETRY_BACKOFF_SECONDS", float)
-        set_if_present("HEARTBEAT_INTERVAL_SECONDS", float)
-        set_if_present("LOG_LEVEL", str)
-        set_if_present(
-            "ALLOWED_OPERATIONS",
-            lambda v: [i.strip() for i in v.split(",") if i.strip()],
-        )
-        set_if_present(
-            "BLOCKED_OPERATIONS",
-            lambda v: [i.strip() for i in v.split(",") if i.strip()],
-        )
-
-        config = cls(**mapping)
-        config.validate()
-        return config
-
-    def with_overrides(self, **overrides: Any) -> DroidConfig:
-        """With Overrides.
-
-            Returns:        The result of the operation.
-            """
-        candidate = replace(self, **overrides)
-        candidate.validate()
-        return candidate
-
-    def to_dict(self) -> dict[str, Any]:
-        """To Dict.
-
-            Returns:        The result of the operation.
-            """
-        data = asdict(self)
-        data["mode"] = self.mode.value
-        if self.allowed is not None:
-            data["allowed_operations"] = sorted(self.allowed)
-        if self.blocked is not None:
-            data["blocked_operations"] = sorted(self.blocked)
-        return data
-
-
-@dataclass
-class DroidMetrics:
-    """Runtime metrics tracked for droid sessions."""
+Runtime metrics tracked for droid sessions."""
 
     sessions_started: int = 0
     sessions_completed: int = 0
@@ -281,13 +184,7 @@ class DroidMetrics:
     last_heartbeat_epoch: float | None = None
 
     def snapshot(self) -> dict[str, Any]:
-        """Brief description of snapshot.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         return asdict(self)
 
@@ -321,60 +218,30 @@ class DroidController:
 
     @property
     def config(self) -> DroidConfig:
-        """Brief description of config.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: DroidConfig)
-        """
+
 """
         return self._config
 
     @property
     def status(self) -> DroidStatus:
-        """Brief description of status.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: DroidStatus)
-        """
+
 """
         return self._status
 
     @property
     def metrics(self) -> dict[str, Any]:
-        """Brief description of metrics.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         return self._metrics.snapshot()
 
     @property
     def last_status_change(self) -> float:
-        """Brief description of last_status_change.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: float)
-        """
+
 """
         return self._last_status_change
 
     def update_config(self, **overrides: Any) -> DroidConfig:
-        """Brief description of update_config.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: DroidConfig)
-        """
+
 """
         with self._lock:
             new_config = self._config.with_overrides(**overrides)
@@ -383,13 +250,7 @@ class DroidController:
             return new_config
 
     def reset_metrics(self) -> None:
-        """Brief description of reset_metrics.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         with self._lock:
             self._metrics.reset()
@@ -397,13 +258,7 @@ class DroidController:
 
     @monitor_performance("droid_start")
     def start(self) -> None:
-        """Brief description of start.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         with self._lock:
             if self._status == DroidStatus.RUNNING:
@@ -416,13 +271,7 @@ class DroidController:
 
     @monitor_performance("droid_stop")
     def stop(self) -> None:
-        """Brief description of stop.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         with self._lock:
             if self._status == DroidStatus.STOPPED:
@@ -435,13 +284,7 @@ class DroidController:
             logger.info("droid stopped")
 
     def record_heartbeat(self) -> None:
-        """Brief description of record_heartbeat.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         with self._lock:
             self._metrics.last_heartbeat_epoch = time.time()
@@ -451,14 +294,7 @@ class DroidController:
             )
 
     def _check_operation_permissions(self, operation_id: str) -> None:
-        """Brief description of _check_operation_permissions.
-        
-        Args:
-            self : Description of self
-            operation_id : Description of operation_id
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         if (
             self._config.allowed is not None
@@ -469,13 +305,7 @@ class DroidController:
             raise PermissionError(f"operation '{operation_id}' is blocked")
 
     def _enter_execution(self) -> None:
-        """Brief description of _enter_execution.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         if self._active_tasks >= self._config.max_parallel_tasks:
             raise RuntimeError("maximum number of parallel tasks reached")
@@ -484,13 +314,7 @@ class DroidController:
         self._last_status_change = time.time()
 
     def _exit_execution(self) -> None:
-        """Brief description of _exit_execution.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         self._active_tasks = max(0, self._active_tasks - 1)
         if self._status == DroidStatus.ERROR:
@@ -501,13 +325,7 @@ class DroidController:
         self._last_status_change = time.time()
 
     def _transition_to_error(self) -> None:
-        """Brief description of _transition_to_error.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
+
 """
         self._status = DroidStatus.ERROR
         self._last_status_change = time.time()
@@ -570,13 +388,7 @@ def save_config_to_file(config: DroidConfig, path: str | os.PathLike[str]) -> No
 
 
 def load_config_from_file(path: str | os.PathLike[str]) -> DroidConfig:
-    """Brief description of load_config_from_file.
-
-Args:
-    path : Description of path
-
-    Returns: Description of return value (type: DroidConfig)
-"""
+    
     return DroidConfig.from_file(path)
 
 

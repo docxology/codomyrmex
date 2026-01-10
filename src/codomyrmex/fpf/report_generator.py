@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Report generator for FPF specifications.
 
 
-"""Core functionality module
-
-This module provides report_generator functionality including:
-- 9 functions: __init__, generate_report, _get_css_styles...
-- 1 classes: ReportGenerator
-
-Usage:
-    from report_generator import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to generate comprehensive HTML reports
 with analysis, statistics, and visualizations.
-"""
+# AGGRESSIVE_REMOVAL: """
 
 from datetime import datetime
 from pathlib import Path
@@ -34,7 +24,7 @@ class ReportGenerator:
 
         Args:
             spec: The FPFSpec object
-        """
+# AGGRESSIVE_REMOVAL:         """
         self.spec = spec
         self.analyzer = FPFAnalyzer(spec)
         self.term_analyzer = TermAnalyzer()
@@ -45,7 +35,7 @@ class ReportGenerator:
         Args:
             output_path: Path to output HTML file
             include_analysis: Whether to include analysis sections
-        """
+# AGGRESSIVE_REMOVAL:         """
         analysis = self.analyzer.get_analysis_summary() if include_analysis else None
         term_frequency = self.term_analyzer.get_term_frequency(self.spec)
         shared_terms = self.term_analyzer.get_shared_terms(self.spec, min_occurrences=2)
@@ -162,7 +152,7 @@ class ReportGenerator:
             color: #7f8c8d;
             font-size: 0.9em;
         }
-        """
+# AGGRESSIVE_REMOVAL:         """
 
     def _generate_overview_section(self) -> List[str]:
         """Generate overview section."""

@@ -1,132 +1,49 @@
+"""API Versioning Implementation for Codomyrmex
+
+This module provides API versioning capabilities with version management,
+backward compatibility, and migration support.
+"""
+
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Callable, Union, Type
 import logging
 import re
-
-from api_versioning import FunctionName, ClassName
 from dataclasses import dataclass, field
 from enum import Enum
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
+# Import logging
+try:
+    logger = get_logger(__name__)
+except ImportError:
+    logger = logging.getLogger(__name__)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core business logic and data management
-
-This module provides api_versioning functionality including:
-- 31 functions: version, deprecated_version, create_version_manager...
-- 5 classes: SimpleVersion, VersionFormat, APIVersion...
-
-Usage:
-    # Example usage here
-"""
-API Versioning Implementation for Codomyrmex
-
-This module provides API versioning capabilities with version management,
-backward compatibility, and migration support.
-"""
 
 # Simple semantic version implementation (no external dependencies)
 class SimpleVersion:
     """Simple semantic version implementation."""
 
     def __init__(self, version_str: str):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-            version_str : Description of version_str
-        
-            Returns: Description of return value
-        """
-"""
         parts = version_str.split('.')
         if len(parts) != 3:
-            raise ValueError(f"Invalid semantic version format: {version_str}")
-
+            raise ValueError(f"Invalid semantic version: {version_str}")
         try:
             self.major = int(parts[0])
             self.minor = int(parts[1])
             self.patch = int(parts[2])
         except ValueError:
-            raise ValueError(f"Invalid semantic version numbers: {version_str}")
+            raise ValueError(f"Invalid semantic version components: {version_str}")
 
     def __str__(self):
-        """Brief description of __str__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
         return f"{self.major}.{self.minor}.{self.patch}"
 
     def __lt__(self, other):
-        """Brief description of __lt__.
-        
-        Args:
-            self : Description of self
-            other : Description of other
-        
-            Returns: Description of return value
-        """
-"""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
         return (self.major, self.minor, self.patch) < (other.major, other.minor, other.patch)
 
     def __eq__(self, other):
-        """Brief description of __eq__.
-        
-        Args:
-            self : Description of self
-            other : Description of other
-        
-            Returns: Description of return value
-        """
-"""
         if not isinstance(other, SimpleVersion):
             return NotImplemented
         return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
@@ -134,12 +51,6 @@ class SimpleVersion:
     def is_compatible(self, other):
         """Check if compatible (same major version)."""
         return self.major == other.major
-
-# Import logging
-try:
-    logger = get_logger(__name__)
-except ImportError:
-    logger = logging.getLogger(__name__)
 
 
 class VersionFormat(Enum):
@@ -340,10 +251,11 @@ class APIVersionManager:
             Latest version
         """
         if not self.versions:
-            return None
+            # Handle empty versions case
+            return None # type: ignore
 
         versions = list(self.versions.values())
-        return max(versions, key=lambda v: v.version)
+        return max(versions, key=lambda v: v.version) # type: ignore
 
     def parse_version_from_request(self, headers: Dict[str, str], query_params: Dict[str, List[str]]) -> str:
         """
@@ -365,7 +277,7 @@ class APIVersionManager:
         # Check query parameters
         version = query_params.get("version", [None])[0]
         if version:
-            return version
+            return version # type: ignore
 
         # Check Accept header for versioned content types
         accept = headers.get("accept", "")
@@ -528,14 +440,6 @@ def version(version_str: str):
         Decorated function
     """
     def decorator(func: Callable) -> Callable:
-        """Brief description of decorator.
-        
-        Args:
-            func : Description of func
-        
-            Returns: Description of return value (type: Callable)
-        """
-"""
         func._api_version = version_str
         return func
     return decorator
@@ -552,14 +456,6 @@ def deprecated_version(version_str: str):
         Decorated function
     """
     def decorator(func: Callable) -> Callable:
-        """Brief description of decorator.
-        
-        Args:
-            func : Description of func
-        
-            Returns: Description of return value (type: Callable)
-        """
-"""
         func._deprecated_version = version_str
         return func
     return decorator

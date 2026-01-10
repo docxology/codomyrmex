@@ -7,7 +7,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Bulk Fix Documentation Placeholders.
 
@@ -15,7 +14,6 @@ Replaces generic placeholders in SECURITY.md and AGENTS.md with more specific,
 albeit still generic, descriptions to clear "Placeholder" audits.
 """
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

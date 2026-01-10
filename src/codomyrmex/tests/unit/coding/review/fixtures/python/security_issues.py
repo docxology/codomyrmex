@@ -11,7 +11,7 @@ import hashlib
 
 
 """Python file with security issues for testing security analysis.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 def insecure_function(user_input):
     """Function with multiple security issues."""
@@ -54,13 +54,7 @@ class InsecureClass:
     """Class with insecure defaults."""
 
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
+
 
         self.api_key = "sk-1234567890abcdef"  # Hardcoded API key
         self.debug_mode = True  # Debug mode enabled by default

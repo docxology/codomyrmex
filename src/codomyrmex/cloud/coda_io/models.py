@@ -126,15 +126,7 @@ class Icon:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["Icon"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -154,15 +146,7 @@ class Image:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["Image"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -184,15 +168,7 @@ class WorkspaceReference:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["WorkspaceReference"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -214,15 +190,7 @@ class FolderReference:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["FolderReference"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -243,15 +211,7 @@ class DocSize:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["DocSize"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -273,15 +233,7 @@ class PageReference:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["PageReference"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -305,15 +257,7 @@ class TableReference:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["TableReference"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -335,15 +279,7 @@ class ColumnReference:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["ColumnReference"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -380,15 +316,7 @@ class Doc:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Doc":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "doc"),
@@ -420,15 +348,7 @@ class DocList:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "DocList":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             items=[Doc.from_dict(item) for item in data.get("items", [])],
             href=data.get("href"),
@@ -445,15 +365,7 @@ class PersonValue:
     
     @classmethod
     def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["PersonValue"]:
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         if not data:
             return None
         return cls(
@@ -486,15 +398,7 @@ class Page:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Page":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         children_data = data.get("children", [])
         children = [PageReference.from_dict(c) for c in children_data if c]
         
@@ -533,15 +437,7 @@ class PageList:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "PageList":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             items=[Page.from_dict(item) for item in data.get("items", [])],
             href=data.get("href"),
@@ -559,15 +455,7 @@ class PageContentItem:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "PageContentItem":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             id=data.get("id", ""),
             type=data.get("type", ""),
@@ -583,15 +471,7 @@ class Sort:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Sort":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             column=ColumnReference.from_dict(data.get("column")) or ColumnReference(id=""),
             direction=data.get("direction", "ascending"),
@@ -619,15 +499,7 @@ class Table:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Table":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         sorts_data = data.get("sorts", [])
         sorts = [Sort.from_dict(s) for s in sorts_data] if sorts_data else None
         
@@ -660,15 +532,7 @@ class TableList:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "TableList":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             items=[Table.from_dict(item) for item in data.get("items", [])],
             href=data.get("href"),
@@ -693,15 +557,7 @@ class Column:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Column":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "column"),
@@ -726,15 +582,7 @@ class ColumnList:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ColumnList":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             items=[Column.from_dict(item) for item in data.get("items", [])],
             href=data.get("href"),
@@ -759,15 +607,7 @@ class Row:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Row":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "row"),
@@ -793,15 +633,7 @@ class RowList:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "RowList":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             items=[Row.from_dict(item) for item in data.get("items", [])],
             href=data.get("href"),
@@ -818,22 +650,10 @@ class CellEdit:
     value: Any
     
     def to_dict(self) -> Dict[str, Any]:
-        """Brief description of to_dict.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
-    """Brief description of to_dict.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value (type: Any)
-"""
-        return {"column": self.column, "value": self.value}
+        return {
+            "column": self.column,
+            "value": self.value,
+        }
 
 
 @dataclass
@@ -857,23 +677,6 @@ class Formula:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Formula":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
-    """Brief description of from_dict.
-
-Args:
-    cls : Description of cls
-    data : Description of data
-
-    Returns: Description of return value (type: str)
-"""
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "formula"),
@@ -894,15 +697,7 @@ class FormulaList:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "FormulaList":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             items=[Formula.from_dict(item) for item in data.get("items", [])],
             href=data.get("href"),
@@ -924,15 +719,7 @@ class Control:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Control":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "control"),
@@ -954,15 +741,7 @@ class ControlList:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ControlList":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             items=[Control.from_dict(item) for item in data.get("items", [])],
             href=data.get("href"),
@@ -983,29 +762,14 @@ class Principal:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Principal":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             type=data.get("type", ""),
             email=data.get("email"),
         )
     
     def to_dict(self) -> Dict[str, Any]:
-        """Brief description of to_dict.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+
         result = {"type": self.type}
         if self.email:
             result["email"] = self.email
@@ -1021,15 +785,7 @@ class Permission:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Permission":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             id=data.get("id", ""),
             principal=Principal.from_dict(data.get("principal", {})),
@@ -1047,15 +803,7 @@ class PermissionList:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "PermissionList":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             items=[Permission.from_dict(item) for item in data.get("items", [])],
             href=data.get("href", ""),
@@ -1074,15 +822,7 @@ class SharingMetadata:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "SharingMetadata":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             can_share=data.get("canShare", False),
             can_share_with_workspace=data.get("canShareWithWorkspace", False),
@@ -1100,15 +840,7 @@ class ACLSettings:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ACLSettings":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             allow_editors_to_change_permissions=data.get("allowEditorsToChangePermissions", False),
             allow_copying=data.get("allowCopying", False),
@@ -1134,15 +866,7 @@ class User:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "User":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             name=data.get("name", ""),
             login_id=data.get("loginId", ""),
@@ -1167,15 +891,7 @@ class MutationStatus:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "MutationStatus":
-        """Brief description of from_dict.
-        
-        Args:
-            cls : Description of cls
-            data : Description of data
-        
-            Returns: Description of return value (type: str)
-        """
-"""
+
         return cls(
             completed=data.get("completed", False),
             warning=data.get("warning"),

@@ -8,7 +8,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Fix CONTRIBUTING.md references in module documentation.
 
@@ -16,7 +15,6 @@ Updates all references to CONTRIBUTING.md in modules to point to
 the correct location at docs/project/contributing.md
 """
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

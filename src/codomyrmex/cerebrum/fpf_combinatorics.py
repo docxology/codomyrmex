@@ -11,53 +11,6 @@ import networkx as nx
 import numpy as np
 
 from codomyrmex.cerebrum import (
-from codomyrmex.cerebrum.visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
-from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
     ActiveInferenceAgent,
     BayesianNetwork,
     Case,
@@ -68,6 +21,10 @@ from codomyrmex.logging_monitoring import get_logger
     InferenceEngine,
     Model,
 )
+from codomyrmex.cerebrum.visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
+from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
+from codomyrmex.logging_monitoring import get_logger
+
 """Comprehensive combinatorics analysis using CEREBRUM on FPF.
 
 This module generates all possible combinations and analyses of FPF patterns
@@ -798,22 +755,27 @@ class FPFCombinatoricsAnalyzer:
             Complete combinatorics analysis results
         """
         self.logger.info("Running comprehensive combinatorics analysis")
-
+        
+        # Run analyses
+        pair_analysis = self.analyze_pattern_pairs()
+        chain_analysis = self.analyze_dependency_chains()
+        cooccurrence_analysis = self.analyze_concept_cooccurrence()
+        cross_part_analysis = self.analyze_cross_part_relationships()
+        
         results = {
-            "pattern_pairs": self.analyze_pattern_pairs(),
-            "dependency_chains": self.analyze_dependency_chains(),
-            "concept_cooccurrence": self.analyze_concept_cooccurrence(),
-            "cross_part_relationships": self.analyze_cross_part_relationships(),
+            "pattern_pairs": pair_analysis,
+            "dependency_chains": chain_analysis,
+            "concept_cooccurrence": cooccurrence_analysis,
+            "cross_part_relationships": cross_part_analysis,
         }
-
+        
+        # Export results
+        output_path = self.output_dir / "combinatorics_analysis.json"
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(results, f, indent=2, default=str)
+        self.logger.info(f"Exported analysis to {output_path}")
+        
         # Generate visualizations
         self.generate_all_visualizations(results)
-
-        # Export results
-        json_path = self.output_dir / "combinatorics_analysis.json"
-        with open(json_path, "w", encoding="utf-8") as f:
-            json.dump(results, f, indent=2, default=str)
-
-        self.logger.info(f"Combinatorics analysis complete. Results saved to {self.output_dir}")
+        
         return results
-

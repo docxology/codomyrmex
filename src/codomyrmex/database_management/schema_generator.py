@@ -19,7 +19,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 #!/usr/bin/env python3
 
-Schema Generator Module for Codomyrmex Database Management.
+# Schema Generator Module for Codomyrmex Database Management.
 
 This module provides database schema generation, migration creation,
 and schema comparison capabilities supporting SQLite, PostgreSQL, and MySQL.
@@ -205,13 +205,7 @@ class SchemaMigration:
     checksum: str = ""
 
     def __post_init__(self):
-        """Brief description of __post_init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
+
 """
         if not self.checksum:
             self.checksum = hashlib.sha256(self.up_sql.encode()).hexdigest()[:16]

@@ -1,227 +1,119 @@
-from typing import Any, Optional, Union
-import json
+"""Serializer for Codomyrmex Serialization module.
 
-import msgpack
-import msgpack
-import tomli
-import tomli
-import tomli_w
-import yaml
-import yaml
-import yaml
-
-from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-Base serializer interface and implementations.
+Provides serialization and deserialization of objects to various formats.
 """
+
+import json
+import pickle
+from dataclasses import asdict, is_dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
-class SerializationError(CodomyrmexError):
-    """Raised when serialization operations fail."""
+T = TypeVar('T')
 
+
+class SerializationFormat(Enum):
+    """Supported serialization formats."""
+    JSON = "json"
+    PICKLE = "pickle"
+    YAML = "yaml"
+
+
+class SerializationError(Exception):
+    """Raised when serialization fails."""
     pass
 
+
 class Serializer:
-    """Base serializer class."""
+    """Generic serializer supporting multiple formats."""
 
-    def __init__(self, format: str = "json"):
-        """Initialize serializer.
+    def __init__(self, default_format: SerializationFormat = SerializationFormat.JSON):
+        """Initialize serializer."""
+        self.default_format = default_format
 
-        Args:
-            format: Serialization format (json, yaml, toml, msgpack)
-        """
-        self.format = format
-        self._serializers: dict[str, callable] = {}
+    def serialize(self, obj: Any, format: Optional[SerializationFormat] = None) -> bytes:
+        """Serialize an object to bytes."""
+        fmt = format or self.default_format
 
-    def serialize(self, obj: Any) -> Union[str, bytes]:
-        """Serialize an object to string or bytes.
-
-        Args:
-            obj: Object to serialize
-
-        Returns:
-            Serialized data as string or bytes
-
-        Raises:
-            SerializationError: If serialization fails
-        """
         try:
-            if self.format == "json":
+            if fmt == SerializationFormat.JSON:
                 return self._serialize_json(obj)
-            elif self.format == "yaml":
-                return self._serialize_yaml(obj)
-            elif self.format == "toml":
-                return self._serialize_toml(obj)
-            elif self.format == "msgpack":
-                return self._serialize_msgpack(obj)
-            elif self.format in self._serializers:
-                return self._serializers[self.format](obj)
+            elif fmt == SerializationFormat.PICKLE:
+                return pickle.dumps(obj)
             else:
-                raise ValueError(f"Unknown format: {self.format}")
+                raise SerializationError(f"Unsupported format: {fmt}")
         except Exception as e:
-            logger.error(f"Serialization error: {e}")
-            raise SerializationError(f"Failed to serialize: {str(e)}") from e
+            raise SerializationError(f"Serialization failed: {e}") from e
 
-    def deserialize(self, data: Union[str, bytes], format: Optional[str] = None) -> Any:
-        """Deserialize data to an object.
+    def deserialize(self, data: bytes, format: Optional[SerializationFormat] = None, 
+                    target_type: Optional[Type[T]] = None) -> Any:
+        """Deserialize bytes to an object."""
+        fmt = format or self.default_format
 
-        Args:
-            data: Serialized data
-            format: Format to use (if None, auto-detect)
-
-        Returns:
-            Deserialized object
-
-        Raises:
-            SerializationError: If deserialization fails
-        """
         try:
-            format = format or self.format or self.detect_format(data)
-            if format is None:
-                raise SerializationError("Could not detect format")
-
-            if format == "json":
-                return self._deserialize_json(data)
-            elif format == "yaml":
-                return self._deserialize_yaml(data)
-            elif format == "toml":
-                return self._deserialize_toml(data)
-            elif format == "msgpack":
-                return self._deserialize_msgpack(data)
-            elif format in self._serializers:
-                return self._deserialize_custom(data, format)
+            if fmt == SerializationFormat.JSON:
+                return self._deserialize_json(data, target_type)
+            elif fmt == SerializationFormat.PICKLE:
+                return pickle.loads(data)
             else:
-                raise ValueError(f"Unknown format: {format}")
+                raise SerializationError(f"Unsupported format: {fmt}")
         except Exception as e:
-            logger.error(f"Deserialization error: {e}")
-            raise SerializationError(f"Failed to deserialize: {str(e)}") from e
+            raise SerializationError(f"Deserialization failed: {e}") from e
 
-    def detect_format(self, data: Union[str, bytes]) -> Optional[str]:
-        """Detect serialization format from data.
+    def _serialize_json(self, obj: Any) -> bytes:
+        """Serialize to JSON bytes."""
+        return json.dumps(self._to_jsonable(obj), indent=2).encode('utf-8')
 
-        Args:
-            data: Serialized data
+    def _deserialize_json(self, data: bytes, target_type: Optional[Type[T]]) -> Any:
+        """Deserialize from JSON bytes."""
+        parsed = json.loads(data.decode('utf-8'))
+        if target_type and is_dataclass(target_type):
+            return target_type(**parsed)
+        return parsed
 
-        Returns:
-            Format name if detected, None otherwise
-        """
-        if isinstance(data, bytes):
-            # Try to detect from magic bytes
-            if data.startswith(b"\x82\xa5"):
-                return "msgpack"
-            try:
-                data_str = data.decode("utf-8")
-            except UnicodeDecodeError:
-                return None
+    def _to_jsonable(self, obj: Any) -> Any:
+        """Convert object to JSON-serializable form."""
+        if obj is None or isinstance(obj, (bool, int, float, str)):
+            return obj
+        elif isinstance(obj, datetime):
+            return obj.isoformat()
+        elif isinstance(obj, Enum):
+            return obj.value
+        elif is_dataclass(obj):
+            return asdict(obj)
+        elif isinstance(obj, dict):
+            return {k: self._to_jsonable(v) for k, v in obj.items()}
+        elif isinstance(obj, (list, tuple)):
+            return [self._to_jsonable(item) for item in obj]
         else:
-            data_str = data
+            return str(obj)
 
-        # Try JSON
-        try:
-            json.loads(data_str)
-            return "json"
-        except (json.JSONDecodeError, TypeError):
-            pass
+    def to_file(self, obj: Any, file_path: str, format: Optional[SerializationFormat] = None):
+        """Serialize object to file."""
+        data = self.serialize(obj, format)
+        with open(file_path, 'wb') as f:
+            f.write(data)
 
-        # Try YAML (check for YAML-like structure)
-        if data_str.strip().startswith("---") or ":" in data_str and "\n" in data_str:
-            try:
-                yaml.safe_load(data_str)
-                return "yaml"
-            except (ImportError, yaml.YAMLError):
-                pass
+    def from_file(self, file_path: str, format: Optional[SerializationFormat] = None,
+                  target_type: Optional[Type[T]] = None) -> Any:
+        """Deserialize object from file."""
+        with open(file_path, 'rb') as f:
+            data = f.read()
+        return self.deserialize(data, format, target_type)
 
-        # Try TOML (check for TOML-like structure)
-        if "=" in data_str and "[" in data_str:
-            try:
-                tomli.loads(data_str)
-                return "toml"
-            except (ImportError, tomli.TOMLDecodeError):
-                pass
 
-        return None
+# Convenience functions
+def serialize(obj: Any, format: SerializationFormat = SerializationFormat.JSON) -> bytes:
+    """Serialize an object."""
+    serializer = Serializer(format)
+    return serializer.serialize(obj)
 
-    def _serialize_json(self, obj: Any) -> str:
-        """Serialize to JSON."""
-        return json.dumps(obj, default=str, indent=2)
-
-    def _deserialize_json(self, data: Union[str, bytes]) -> Any:
-        """Deserialize from JSON."""
-        if isinstance(data, bytes):
-            data = data.decode("utf-8")
-        return json.loads(data)
-
-    def _serialize_yaml(self, obj: Any) -> str:
-        """Serialize to YAML."""
-        try:
-            return yaml.dump(obj, default_flow_style=False)
-        except ImportError:
-            raise SerializationError("yaml package not available. Install with: pip install pyyaml")
-
-    def _deserialize_yaml(self, data: Union[str, bytes]) -> Any:
-        """Deserialize from YAML."""
-        try:
-            if isinstance(data, bytes):
-                data = data.decode("utf-8")
-            return yaml.safe_load(data)
-        except ImportError:
-            raise SerializationError("yaml package not available. Install with: pip install pyyaml")
-
-    def _serialize_toml(self, obj: Any) -> str:
-        """Serialize to TOML."""
-        try:
-            return tomli_w.dumps(obj)
-        except ImportError:
-            raise SerializationError("tomli-w package not available. Install with: pip install tomli-w")
-
-    def _deserialize_toml(self, data: Union[str, bytes]) -> Any:
-        """Deserialize from TOML."""
-        try:
-            if isinstance(data, bytes):
-                data = data.decode("utf-8")
-            return tomli.loads(data)
-        except ImportError:
-            raise SerializationError("tomli package not available. Install with: pip install tomli")
-
-    def _serialize_msgpack(self, obj: Any) -> bytes:
-        """Serialize to MessagePack."""
-        try:
-            return msgpack.packb(obj, default=str)
-        except ImportError:
-            raise SerializationError("msgpack package not available. Install with: pip install msgpack")
-
-    def _deserialize_msgpack(self, data: Union[str, bytes]) -> Any:
-        """Deserialize from MessagePack."""
-        try:
-            if isinstance(data, str):
-                data = data.encode("utf-8")
-            return msgpack.unpackb(data, raw=False)
-        except ImportError:
-            raise SerializationError("msgpack package not available. Install with: pip install msgpack")
-
-    def _deserialize_custom(self, data: Union[str, bytes], format: str) -> Any:
-        """Deserialize using custom serializer."""
-        # This would need to be implemented based on custom serializer requirements
-        raise SerializationError(f"Custom deserialization not implemented for format: {format}")
-
-    def register_serializer(self, format_name: str, serializer: callable, deserializer: Optional[callable] = None) -> None:
-        """Register a custom serializer.
-
-        Args:
-            format_name: Format name
-            serializer: Serializer function
-            deserializer: Deserializer function (optional)
-        """
-        self._serializers[format_name] = serializer
-        if deserializer:
-            # Store deserializer separately - would need additional structure
-            pass
-
+def deserialize(data: bytes, format: SerializationFormat = SerializationFormat.JSON) -> Any:
+    """Deserialize bytes to object."""
+    serializer = Serializer(format)
+    return serializer.deserialize(data)

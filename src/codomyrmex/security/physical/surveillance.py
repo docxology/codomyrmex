@@ -68,14 +68,7 @@ class SurveillanceMonitor:
     """Monitors physical security events."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         self.events: list[PhysicalEvent] = []
         logger.info("SurveillanceMonitor initialized")
     

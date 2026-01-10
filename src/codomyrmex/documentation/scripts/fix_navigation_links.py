@@ -24,14 +24,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Fix navigation links in AGENTS.md files that point to non-existent files.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

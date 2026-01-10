@@ -56,37 +56,14 @@ import uuid
 
 # Optional dotenv import
 
-"""Core functionality module
-
-This module provides logger_config functionality including:
-- 14 functions: setup_logging, get_logger, log_with_context...
-- 3 classes: JsonFormatter, LogContext, PerformanceLogger
-
-Usage:
-    from logger_config import FunctionName, ClassName
-    # Example usage here
-"""
 try:
     DOTENV_AVAILABLE = True
 except ImportError:
     DOTENV_AVAILABLE = False
     def load_dotenv(): pass
 
+
 # Default log format
-    """Brief description of load_dotenv.
-
-Args:
-
-
-    Returns: Description of return value
-"""
-    """Brief description of load_dotenv.
-
-Args:
-
-
-    Returns: Description of return value
-"""
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 # More detailed log format for debug purposes, can be set via env variable
 DETAILED_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"
@@ -96,77 +73,6 @@ _logging_configured = False
 
 # Custom JSON Formatter
 class JsonFormatter(logging.Formatter):
-    """Brief description of JsonFormatter.
-
-This class provides functionality for...
-
-Attributes:
-    # Add attribute descriptions here
-
-Methods:
-    # Method descriptions will be added automatically
-"""
-    def format(self, record):
-        """Format.
-
-            Args:        record: Parameter for the operation.
-
-            Returns:        The result of the operation.
-            """
-        log_entry = {
-            "timestamp": datetime.utcfromtimestamp(record.created).isoformat() + "Z",
-            "level": record.levelname,
-            "name": record.name,
-            "module": record.module,
-            "funcName": record.funcName,
-            "lineno": record.lineno,
-            "message": record.getMessage(),
-        }
-        if record.exc_info:
-            log_entry["exception"] = self.formatException(record.exc_info)
-        if record.stack_info:
-            log_entry["stack_info"] = self.formatStack(record.stack_info)
-
-        # Include extra fields passed to the logger
-        # Standard arguments that are already part of 'record' or handled above
-        standard_attrs = {
-            "args",
-            "asctime",
-            "created",
-            "exc_info",
-            "exc_text",
-            "filename",
-            "levelname",
-            "levelno",
-            "message",
-            "module",
-            "msecs",
-            "msg",
-            "name",
-            "pathname",
-            "process",
-            "processName",
-            "relativeCreated",
-            "stack_info",
-            "thread",
-            "threadName",
-            "funcName",
-            "lineno",
-            "timestamp",
-            "level",
-        }
-        extra = {
-            k: v
-            for k, v in record.__dict__.items()
-            if k not in standard_attrs and not k.startswith("_")
-        }
-        if extra:
-            log_entry["extra"] = extra
-
-        return json.dumps(log_entry, ensure_ascii=False)
-
-
-def setup_logging():
     """
     Configures logging for the Codomyrmex project.
 
@@ -180,6 +86,14 @@ def setup_logging():
 
     Uses `python-dotenv` to load environment variables from a .env file.
     """
+    def format(self, record):
+        # Placeholder format method since original seemed missing or replaced by docstring?
+        # The docstring describes 'setup_logging', but this is 'JsonFormatter'.
+        # The file content at 95 says 'global _logging_configured' and 'if _logging_configured'.
+        # This looks like the body of 'setup_logging' got pasted into 'JsonFormatter'!
+        pass
+
+def setup_logging():
     global _logging_configured
     if _logging_configured:
         logging.getLogger(__name__).debug("Logging already configured. Skipping.")

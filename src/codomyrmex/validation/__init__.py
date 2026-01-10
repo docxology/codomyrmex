@@ -30,16 +30,7 @@ class ValidationError(CodomyrmexError):
     """Raised when validation fails."""
 
     def __init__(self, message: str, field: Optional[str] = None, code: Optional[str] = None):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-            message : Description of message
-            field : Description of field
-            code : Description of code
-        
-            Returns: Description of return value
-        """
+
 
         super().__init__(message)
         self.field = field

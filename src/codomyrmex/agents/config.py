@@ -50,16 +50,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Configuration management for agents module."""
 
-"""Core functionality module
-
-This module provides config functionality including:
-- 6 functions: get_config, set_config, reset_config...
-- 1 classes: AgentConfig
-
-Usage:
-    from config import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 @dataclass
 class AgentConfig:

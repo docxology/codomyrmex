@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from archive_manager import FunctionName, ClassName
+
 import tarfile
 import zipfile
 
@@ -111,18 +111,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-"""
-"""Core business logic and data management
-
-This module provides archive_manager functionality including:
-- 2 functions: create_archive, extract_archive
-- 2 classes: CompressionError, ArchiveManager
-
-Usage:
-    # Example usage here
-"""
-Archive management for creating and extracting archives.
-"""
+"""Archive management for creating and extracting archives."""
 
 
 

@@ -44,14 +44,12 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Exit code 1 if any module docs changed but aggregation was not updated.
 """
 
 
 
-#!/usr/bin/env python3
 """Check for stale aggregation: ensure aggregated docs mirror module docs.
 
 logger = get_logger(__name__)

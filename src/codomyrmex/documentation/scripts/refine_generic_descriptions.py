@@ -11,25 +11,17 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Refine Generic Descriptions in AGENTS.md.
 
 Replaces "Documentation files and guides." with context-aware descriptions.
 """
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 
 def refine_descriptions(root_dir):
-    """Brief description of refine_descriptions.
-
-Args:
-    root_dir : Description of root_dir
-
-    Returns: Description of return value
-"""
+    
     root = Path(root_dir)
     count = 0
     target_phrase = "Documentation files and guides."

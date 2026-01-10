@@ -51,7 +51,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 except ImportError:
     # Fallback logging
@@ -73,7 +72,6 @@ This script validates all links in README.md files and other documentation
 within the examples directory. It checks both internal file references and
 external URLs.
 
-Usage:
     python scripts/examples/check_example_links.py
 
 Options:

@@ -51,20 +51,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Data models for FPF specification parsing and analysis.
 
 
-"""Core functionality module
-
-This module provides models functionality including:
-- 8 functions: parse_last_updated, get_pattern_by_id, get_concepts_by_pattern...
-- 11 classes: PatternStatus, RelationshipType, ConceptType...
-
-Usage:
-    from models import FunctionName, ClassName
-    # Example usage here
-"""
 This module defines Pydantic models for representing the First Principles
 Framework specification structure, including patterns, concepts, relationships,
 and the overall specification.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 logger = get_logger(__name__)
 
@@ -109,7 +99,7 @@ class Pattern(BaseModel):
 
     Patterns are the core building blocks of FPF, each with a unique ID,
     title, status, and structured content sections.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     id: str = Field(..., description="Pattern identifier (e.g., 'A.1', 'A.2.1')")
     title: str = Field(..., description="Pattern title")
@@ -144,7 +134,7 @@ class Concept(BaseModel):
 
     Concepts are terms, types, mechanisms, or other defined entities
     that appear throughout the FPF specification.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     name: str = Field(..., description="Concept name")
     definition: str = Field(..., description="Concept definition or description")
@@ -171,7 +161,7 @@ class Relationship(BaseModel):
 
     Relationships capture how different parts of FPF relate to each other,
     such as dependencies, constraints, or coordination.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     source: str = Field(..., description="Source pattern/concept ID")
     target: str = Field(..., description="Target pattern/concept ID")
@@ -197,7 +187,7 @@ class FPFSpec(BaseModel):
 
     This is the root model containing all patterns, concepts, relationships,
     and metadata for the entire FPF specification.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     version: Optional[str] = Field(None, description="FPF specification version")
     last_updated: Optional[Union[datetime, str]] = Field(
@@ -256,7 +246,7 @@ class FPFIndex(BaseModel):
     """Search index for FPF patterns and concepts.
 
     Provides fast lookup and search capabilities over the FPF specification.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     pattern_index: Dict[str, Pattern] = Field(
         default_factory=dict, description="Pattern ID to Pattern mapping"

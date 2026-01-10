@@ -22,19 +22,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 WRAPPER_TEMPLATE =
 """
-#!/usr/bin/env python3
 """
-This module provides fix_script_specs functionality including:
-- 1 functions: fix_script_specs
-- 0 classes: 
 
-Usage:
-    # Example usage here
-"""
 
 
 logger = get_logger(__name__)

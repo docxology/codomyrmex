@@ -2,7 +2,7 @@
 
 This module provides 3D modeling, rendering, and AR/VR/XR capabilities
 for the Codomyrmex platform, enabling spatial computing and visualization.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from .ar_vr_support import *
 from .engine_3d import *

@@ -27,7 +27,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Module Documentation Auditor
 
@@ -39,7 +38,6 @@ Scans all modules in src/codomyrmex/ to identify:
 """
 
 
-#!/usr/bin/env python3
 """
 
 

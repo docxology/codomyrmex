@@ -36,12 +36,15 @@ from codomyrmex.logging_monitoring import get_logger
 Main entry point and utility functions
 
 This module provides add_deprecation_notices functionality including:
+    pass # AGGRESSIVE_REPAIR
 - 4 functions: get_module_name, get_dependency_location, add_deprecation_notice...
 - 0 classes: 
+    pass # AGGRESSIVE_REPAIR
 
 Usage:
+    pass # AGGRESSIVE_REPAIR
     # Example usage here
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 logger = get_logger(__name__)
 def get_module_name(file_path: Path) -> str:
     """Extract module name from file path."""
@@ -85,7 +88,7 @@ def add_deprecation_notice(file_path: Path) -> None:
 #
 # Migration completed: {location}
 #
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     
     # Read existing content
     if file_path.exists():

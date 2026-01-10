@@ -77,14 +77,7 @@ class ThreatModelBuilder:
     """Builds threat models."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         logger.info("ThreatModelBuilder initialized")
     
     def create_model(

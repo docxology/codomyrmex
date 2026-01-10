@@ -1,4 +1,4 @@
-from typing import Optional
+"""Encryption utilities."""
 import os
 
 from cryptography.hazmat.backends import default_backend
@@ -26,8 +26,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-Encryption utilities.
-"""
+
 
 logger = get_logger(__name__)
 

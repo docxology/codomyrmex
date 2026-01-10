@@ -1,8 +1,13 @@
+"""
+Pipeline Manager for Codomyrmex CI/CD Automation Module.
+
+Provides comprehensive pipeline orchestration, management, and execution capabilities.
+"""
+
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from typing import Any, Optional, Tuple, List
 import asyncio
-import concurrent.futures
 import concurrent.futures
 import fnmatch
 import json
@@ -10,78 +15,15 @@ import os
 import subprocess
 import sys
 import time
-
 from dataclasses import dataclass, field
 from enum import Enum
-from pipeline_manager import FunctionName, ClassName
 import yaml
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core business logic and data management
-
-This module provides pipeline_manager functionality including:
-- 30 functions: create_pipeline, run_pipeline, to_dict...
-- 7 classes: PipelineStatus, StageStatus, JobStatus...
-
-Usage:
-    # Example usage here
-"""
-Pipeline Manager for Codomyrmex CI/CD Automation Module.
-
-Provides comprehensive pipeline orchestration, management, and execution capabilities.
-"""
-
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
-if PROJECT_ROOT not in sys.path:
-    pass
-#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
-
 
 logger = get_logger(__name__)
 
@@ -202,14 +144,6 @@ class Pipeline:
     duration: float = 0.0
 
     def __post_init__(self):
-        """Brief description of __post_init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
 
@@ -358,9 +292,10 @@ class PipelineManager:
 
             # Calculate final status
             pipeline.finished_at = datetime.now(timezone.utc)
-            pipeline.duration = (
-                pipeline.finished_at - pipeline.started_at
-            ).total_seconds()
+            if pipeline.started_at:
+                pipeline.duration = (
+                    pipeline.finished_at - pipeline.started_at
+                ).total_seconds()
 
             if any(stage.status == StageStatus.FAILURE for stage in pipeline.stages):
                 pipeline.status = PipelineStatus.FAILURE
@@ -532,7 +467,6 @@ class PipelineManager:
         """Run a command asynchronously."""
 
         def run_cmd():
-
             try:
                 env = os.environ.copy()
                 env.update(env_vars)

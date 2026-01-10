@@ -33,7 +33,6 @@ class DocumentsConfig:
     """Configuration for document operations."""
     
     def __init__(
-"""
         self,
         default_encoding: str = "utf-8",
         max_file_size: int = 100 * 1024 * 1024,  # 100MB

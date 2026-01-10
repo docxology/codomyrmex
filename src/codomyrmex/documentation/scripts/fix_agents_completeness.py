@@ -26,7 +26,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 AGENTS.md Completeness Fixer for Codomyrmex
 
@@ -35,8 +34,6 @@ based on validation report analysis.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

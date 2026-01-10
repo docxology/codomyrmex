@@ -67,7 +67,7 @@ def generate_3d_init_content() -> str:
 
 This module provides comprehensive 3D modeling, rendering, and AR/VR/XR capabilities
 for the Codomyrmex platform, enabling advanced spatial computing and visualization.
-"""
+# AGGRESSIVE_REMOVAL: """
 
 from .engine_3d import *
 from .ar_vr_support import *
@@ -87,7 +87,7 @@ __all__ = [
     # Utilities
     "MeshLoader", "AnimationController", "PhysicsEngine"
 ]
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_3d_engine_content() -> str:
@@ -233,7 +233,7 @@ class PhysicsEngine:
         for obj in objects:
             # Apply gravity
             obj.position.y += self.gravity.y * delta_time * delta_time * 0.5
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_ar_vr_content() -> str:
@@ -296,7 +296,7 @@ class XRInterface:
             "virtual_objects": [],
             "real_world_geometry": []
         }
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_rendering_content() -> str:
@@ -386,7 +386,7 @@ class RenderPipeline:
     def _apply_post_effects(self) -> None:
         """Apply post-processing effects."""
         pass
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_3d_readme_content() -> str:
@@ -456,7 +456,7 @@ vr_renderer.render_stereo(scene)
 ## Requirements
 
 See [requirements.txt](requirements.txt) for dependencies.
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_3d_api_spec() -> str:
@@ -525,7 +525,7 @@ def generate_3d_api_spec() -> str:
 - **Purpose**: Manages texture resources
 - **Methods**:
   - `load_texture(name: str, file_path: str) -> bool`
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_3d_examples() -> str:
@@ -611,7 +611,7 @@ if __name__ == "__main__":
     ar_example()
 
     print("Examples completed!")
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_3d_tests() -> str:
@@ -744,7 +744,7 @@ class TestRenderPipeline:
 
 if __name__ == "__main__":
     pytest.main([__file__])
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_3d_requirements() -> str:
@@ -779,7 +779,7 @@ pytest-cov>=2.10.0
 black>=21.0.0
 isort>=5.9.0
 mypy>=0.910
-"""
+# AGGRESSIVE_REMOVAL: """
 
 
 def generate_3d_docs_content() -> str:
@@ -877,7 +877,7 @@ Input Data → Scene Setup → Transform Objects → Lighting → Rendering → 
 - Procedural content generation
 - Real-time global illumination
 - Advanced material systems (PBR, subsurface scattering)
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def assess_documentation_coverage(*, prompt: str, description: str) -> str:
@@ -1042,7 +1042,7 @@ class TestDocumentationConsistencyChecker:
 
 if __name__ == "__main__":
     pytest.main([__file__])
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
@@ -1231,7 +1231,7 @@ def generate_documentation_quality_module() -> str:
 
 This module provides tools for assessing documentation quality,
 consistency, and technical accuracy across the Codomyrmex platform.
-"""
+# AGGRESSIVE_REMOVAL: """
 
 from typing import Dict, List, Optional, Tuple
 from pathlib import Path
@@ -1456,7 +1456,7 @@ def generate_quality_report(project_path: Path) -> str:
 
 
 __all__ = ["DocumentationQualityAnalyzer", "generate_quality_report"]
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_consistency_checker_module() -> str:
@@ -1465,7 +1465,7 @@ def generate_consistency_checker_module() -> str:
 
 This module ensures documentation consistency across the Codomyrmex platform,
 checking for naming conventions, formatting standards, and content alignment.
-"""
+# AGGRESSIVE_REMOVAL: """
 
 from typing import Dict, List, Set, Tuple
 from pathlib import Path
@@ -1878,7 +1878,7 @@ def prompt_engineering(*, prompt: str, description: str) -> str:
 
     Real implementation: create/update prompt templates and composition utilities
     within `codomyrmex/agents/ai_code_editing` and write a short README.
-    """
+# AGGRESSIVE_REMOVAL:     """
     from pathlib import Path
 
     project_root = Path(__file__).resolve().parents[4]
@@ -1960,7 +1960,7 @@ def generate_physical_init_content() -> str:
 This module provides comprehensive physical object management, simulation,
 and sensor integration capabilities for the Codomyrmex platform, enabling
 advanced physical computing and IoT device management.
-"""
+# AGGRESSIVE_REMOVAL: """
 
 from .object_manager import *
 from .simulation_engine import *
@@ -1980,7 +1980,7 @@ __all__ = [
     # Utilities
     "PhysicalConstants", "UnitConverter", "CoordinateSystem"
 ]
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_physical_manager_content() -> str:
@@ -2162,6 +2162,7 @@ class PhysicalObjectManager:
 
     def create_object(self, object_id: str, name: str, object_type: ObjectType,
                      x: float, y: float, z: float, **properties) -> PhysicalObject:
+                         pass # AGGRESSIVE_REPAIR
         """Create a new physical object."""
         obj = PhysicalObject(
             id=object_id,
@@ -2225,7 +2226,7 @@ class PhysicalObjectManager:
 __all__ = [
     "ObjectType", "ObjectStatus", "PhysicalObject", "ObjectRegistry", "PhysicalObjectManager"
 ]
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_physical_simulation_content() -> str:
@@ -2316,6 +2317,7 @@ class PhysicsSimulator:
 
     def register_object(self, object_id: str, mass: float, position: Vector3D,
                        velocity: Vector3D = None) -> None:
+                           pass # AGGRESSIVE_REPAIR
         """Register an object for physics simulation."""
         if velocity is None:
             velocity = Vector3D(0, 0, 0)
@@ -2414,7 +2416,7 @@ class PhysicsSimulator:
 
 
 __all__ = ["Vector3D", "ForceField", "Constraint", "PhysicsSimulator"]
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_sensor_integration_content() -> str:
@@ -2528,6 +2530,7 @@ class SensorManager:
     def get_readings_by_type(self, sensor_type: SensorType,
                            start_time: Optional[float] = None,
                            end_time: Optional[float] = None) -> List[SensorReading]:
+                               pass # AGGRESSIVE_REPAIR
         """Get readings for a sensor type within time range."""
         filtered_readings = []
 
@@ -2657,7 +2660,7 @@ __all__ = [
     "SensorType", "DeviceStatus", "SensorReading", "DeviceInterface",
     "SensorManager", "PhysicalConstants", "UnitConverter", "CoordinateSystem"
 ]
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_physical_readme_content() -> str:
@@ -2803,7 +2806,7 @@ See [requirements.txt](requirements.txt) for dependencies.
 2. Add comprehensive tests for new features
 3. Update documentation for API changes
 4. Ensure compatibility with existing modules
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_physical_api_spec() -> str:
@@ -2923,7 +2926,7 @@ def generate_physical_api_spec() -> str:
 
 ### CoordinateSystem
 - Static methods for coordinate transformations
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_physical_examples() -> str:
@@ -3057,7 +3060,7 @@ def comprehensive_demo():
 
 if __name__ == "__main__":
     comprehensive_demo()
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_physical_tests() -> str:
@@ -3287,7 +3290,7 @@ class TestIntegration:
 
 if __name__ == "__main__":
     pytest.main([__file__])
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 def generate_physical_requirements() -> str:
@@ -3331,7 +3334,7 @@ flake8>=3.9.0
 # Documentation
 mkdocs>=1.2.0
 mkdocs-material>=7.3.0
-"""
+# AGGRESSIVE_REMOVAL: """
 
 
 def generate_physical_docs_content() -> str:
@@ -3504,7 +3507,7 @@ External Devices → Sensor Manager → Data Processing → Object Manager → P
 - **Distributed Simulation**: Multi-node physics processing
 - **Real-time Optimization**: Adaptive algorithms for performance
 - **Memory Pooling**: Efficient memory management for large object counts
-'''
+# AGGRESSIVE_REMOVAL: '''
 
 
 __all__ = [

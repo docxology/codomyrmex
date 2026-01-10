@@ -12,7 +12,7 @@ Example:
     result = scraper.scrape("https://example.com", options)
     print(result.content)
     ```
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from .config import ScrapeConfig, get_config, reset_config, set_config
 from .core import (

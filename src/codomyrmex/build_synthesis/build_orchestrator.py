@@ -1,3 +1,9 @@
+"""Build Orchestrator for Codomyrmex Build Synthesis.
+
+This module provides build orchestration and synthesis capabilities for
+automating build processes and artifact generation.
+"""
+
 from pathlib import Path
 import os
 import shutil
@@ -6,25 +12,8 @@ import sys
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
-
-
-
-#!/usr/bin/env python3
-
-Build Orchestrator for Codomyrmex Build Synthesis.
-
-This module provides build orchestration and synthesis capabilities for
-automating build processes and artifact generation.
-"""
-
-# Add project root for sibling module imports if run directly
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
-if PROJECT_ROOT not in sys.path:
-    pass
-#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
-
 logger = get_logger(__name__)
+
 
 def check_build_environment():
     """Check if the build environment is properly configured."""
@@ -69,9 +58,9 @@ def check_build_environment():
         )
         return result
 
+
 def run_build_command(command: list[str], cwd: str = None) -> tuple[bool, str, str]:
-    """
-    Run a build command and return the result.
+    """Run a build command and return the result.
 
     Args:
         command: List of command arguments
@@ -110,11 +99,11 @@ def run_build_command(command: list[str], cwd: str = None) -> tuple[bool, str, s
         logger.error(error_msg)
         return False, "", error_msg
 
+
 def synthesize_build_artifact(
     source_path: str, output_path: str, artifact_type: str = "executable"
 ) -> bool:
-    """
-    Synthesize a build artifact from source code.
+    """Synthesize a build artifact from source code.
 
     Args:
         source_path: Path to source file or directory
@@ -153,14 +142,24 @@ def synthesize_build_artifact(
 
     return success
 
+
 def _create_python_executable(source_path: Path, output_path: Path) -> bool:
     """Create a Python executable wrapper."""
     try:
         # Create a simple wrapper script
         wrapper_content = f"""#!/usr/bin/env python3
-# sys.path.insert(0, os.path.dirname(__file__))  # Removed sys.path manipulation
+import os
+import sys
+
+# Add directory containing the script to path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Import the actual module
+# This is a placeholder - full implementation would need to handle imports correctly
+# For now just executing the file
 if __name__ == "__main__":
-    main()
+    with open("{source_path.absolute()}", "r") as f:
+        exec(f.read())
 """
         with open(output_path, "w") as f:
             f.write(wrapper_content)
@@ -174,18 +173,17 @@ if __name__ == "__main__":
         logger.error(f"Failed to create Python executable: {e}")
         return False
 
+
 def _create_python_package(source_path: Path, output_path: Path) -> bool:
     """Create a Python package distributable."""
     try:
         # This would typically use setuptools or similar
         # For now, just copy the source
         if source_path.is_dir():
-
             if output_path.exists():
                 shutil.rmtree(output_path)
             shutil.copytree(source_path, output_path)
         else:
-
             shutil.copy2(source_path, output_path)
 
         return True
@@ -193,9 +191,9 @@ def _create_python_package(source_path: Path, output_path: Path) -> bool:
         logger.error(f"Failed to create Python package: {e}")
         return False
 
+
 def validate_build_output(output_path: str) -> dict[str, any]:
-    """
-    Validate that build output meets expectations.
+    """Validate that build output meets expectations.
 
     Args:
         output_path: Path to the build output
@@ -246,9 +244,9 @@ def validate_build_output(output_path: str) -> dict[str, any]:
     logger.info(f"Validation completed. Errors: {len(validation_results['errors'])}")
     return validation_results
 
+
 def orchestrate_build_pipeline(build_config: dict[str, any]) -> dict[str, any]:
-    """
-    Orchestrate a complete build pipeline.
+    """Orchestrate a complete build pipeline.
 
     Args:
         build_config: Dictionary containing build configuration
@@ -366,6 +364,7 @@ def orchestrate_build_pipeline(build_config: dict[str, any]) -> dict[str, any]:
 
     return results
 
+
 def _install_build_dependencies(dependencies: list[str]) -> bool:
     """Install build dependencies."""
     logger.info(f"Installing {len(dependencies)} build dependencies")
@@ -384,6 +383,7 @@ def _install_build_dependencies(dependencies: list[str]) -> bool:
     except Exception as e:
         logger.error(f"Dependency installation failed: {e}")
         return False
+
 
 if __name__ == "__main__":
     # Ensure logging is set up when script is run directly

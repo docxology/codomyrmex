@@ -14,17 +14,7 @@ class ValidationError(CodomyrmexError):
     """Raised when validation fails."""
 
     def __init__(self, message: str, field: Optional[str] = None, code: Optional[str] = None, path: Optional[list[str]] = None):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-            message : Description of message
-            field : Description of field
-            code : Description of code
-            path : Description of path
-        
-            Returns: Description of return value
-        """
+
         super().__init__(message)
         self.field = field
         self.code = code
@@ -48,13 +38,7 @@ class ValidationResult:
     warnings: list[ValidationWarning] = field(default_factory=list)
 
     def __bool__(self) -> bool:
-        """Brief description of __bool__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value (type: bool)
-        """
+
         return self.is_valid
 
 class Validator:
@@ -65,7 +49,7 @@ class Validator:
 
         Args:
             validator_type: Type of validator (json_schema, pydantic, custom)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.validator_type = validator_type
         self._validators: dict[str, Callable] = {}
 
@@ -78,7 +62,7 @@ class Validator:
 
         Returns:
             ValidationResult with validation status and errors
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         try:
             if self.validator_type == "json_schema":
                 return self._validate_json_schema(data, schema)

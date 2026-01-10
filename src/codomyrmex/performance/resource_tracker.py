@@ -15,7 +15,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-Resource Tracker for Codomyrmex Performance Monitoring
+# Resource Tracker for Codomyrmex Performance Monitoring
 
 This module provides detailed resource tracking capabilities for monitoring
 memory usage, CPU consumption, and other system resources during operations.
@@ -309,12 +309,7 @@ def track_memory_usage(func: Callable):
     tracker = ResourceTracker()
 
     def wrapper(*args, **kwargs):
-        """Brief description of wrapper.
-        
-        Args:
-        
-            Returns: Description of return value
-        """
+
 """
         tracker.start_tracking(func.__name__, {"args_count": len(args), "kwargs_count": len(kwargs)})
 

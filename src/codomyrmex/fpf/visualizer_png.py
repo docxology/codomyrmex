@@ -2,21 +2,11 @@ from codomyrmex.logging_monitoring import get_logger
 """PNG visualization engine for FPF specifications.
 
 
-"""Core functionality module
-
-This module provides visualizer_png functionality including:
-- 6 functions: __init__, visualize_shared_terms_network, visualize_pattern_dependencies...
-- 1 classes: FPFVisualizerPNG
-
-Usage:
-    from visualizer_png import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to generate high-quality PNG visualizations
 of FPF patterns, concepts, relationships, and shared terms with professional
 academic styling.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from collections import defaultdict
 from pathlib import Path
@@ -43,7 +33,7 @@ class FPFVisualizerPNG:
         Args:
             figsize: Figure size (width, height) in inches
             dpi: Dots per inch for output
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.figsize = figsize
         self.dpi = dpi
         self.theme = get_default_theme()
@@ -65,7 +55,7 @@ class FPFVisualizerPNG:
             output_path: Path to save PNG file
             min_weight: Minimum co-occurrence weight to show
             top_n: Number of top terms to include
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Get co-occurrence matrix
         cooccurrence = self.term_analyzer.build_term_cooccurrence_matrix(spec)
 
@@ -163,7 +153,7 @@ class FPFVisualizerPNG:
             output_path: Path to save PNG file
             layout: Layout type ("hierarchical", "spring", "circular")
             color_by: Attribute to color by ("status", "part")
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Create graph
         G = self.graph_generator.create_pattern_dependency_graph(spec, layout=layout)
 
@@ -226,7 +216,7 @@ class FPFVisualizerPNG:
             spec: The FPFSpec object
             output_path: Path to save PNG file
             layout: Layout type ("circular", "spring", "hierarchical")
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Create graph
         G = self.graph_generator.create_concept_relationship_graph(spec)
 
@@ -277,7 +267,7 @@ class FPFVisualizerPNG:
         Args:
             spec: The FPFSpec object
             output_path: Path to save PNG file
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Create graph with parts as nodes
         G = nx.DiGraph()
 
@@ -348,7 +338,7 @@ class FPFVisualizerPNG:
             spec: The FPFSpec object
             output_path: Path to save PNG file
             chart_type: Chart type ("bar", "pie")
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Count patterns by status
         status_counts = {}
         for pattern in spec.patterns:

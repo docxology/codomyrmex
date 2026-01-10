@@ -122,14 +122,9 @@ class TodoManager:
     """
 
     def __init__(self, todo_file: str | Path):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-            todo_file : Description of todo_file
-        
-            Returns: Description of return value
-        """
+
+        pass
+    pass
 """
         self.todo_path = Path(todo_file)
 

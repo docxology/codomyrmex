@@ -52,16 +52,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Active inference implementation based on the free energy principle."""
 
-"""Core functionality module
-
-This module provides active_inference functionality including:
-- 19 functions: normalize, entropy, to_dict...
-- 4 classes: BeliefState, VariationalFreeEnergy, PolicySelector...
-
-Usage:
-    from active_inference import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -101,7 +91,7 @@ class VariationalFreeEnergy:
 
         Args:
             precision: Precision parameter (inverse variance)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.precision = precision
         self.logger = get_logger(__name__)
 
@@ -120,7 +110,7 @@ class VariationalFreeEnergy:
 
         Returns:
             Variational free energy value
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # F = -log P(o|s) + KL[q(s) || p(s)]
         # Simplified version: complexity + accuracy
 
@@ -158,7 +148,7 @@ class VariationalFreeEnergy:
 
         Returns:
             Expected free energy
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # EFE = E[log q(s) - log p(s|o)] - E[log p(o)]
         # Simplified: expected complexity + expected ambiguity
 
@@ -199,7 +189,7 @@ class PolicySelector:
 
         Args:
             exploration_weight: Weight for exploration vs exploitation
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.exploration_weight = exploration_weight
         self.logger = get_logger(__name__)
 
@@ -218,7 +208,7 @@ class PolicySelector:
 
         Returns:
             Selected policy
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not policies:
             raise ActiveInferenceError("No policies available")
 
@@ -244,7 +234,7 @@ class PolicySelector:
 
         Returns:
             Policy with lowest EFE
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not policies:
             raise ActiveInferenceError("No policies available")
 
@@ -273,7 +263,7 @@ class ActiveInferenceAgent:
             precision: Precision parameter for free energy
             policy_horizon: Planning horizon
             exploration_weight: Exploration vs exploitation weight
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.states = states
         self.observations = observations
         self.actions = actions
@@ -302,7 +292,7 @@ class ActiveInferenceAgent:
 
         Args:
             model: Transition probabilities P(s'|s, a)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.transition_model = model
         self.logger.debug("Set transition model")
 
@@ -313,7 +303,7 @@ class ActiveInferenceAgent:
 
         Args:
             model: Observation probabilities P(o|s)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.observation_model = model
         self.likelihood = model  # Alias for compatibility
         self.logger.debug("Set observation model")
@@ -326,7 +316,7 @@ class ActiveInferenceAgent:
 
         Returns:
             Predicted state distribution
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if observation is None:
             # Return current beliefs
             return self.beliefs.states.copy()
@@ -359,7 +349,7 @@ class ActiveInferenceAgent:
 
         Returns:
             Selected action
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Evaluate each action as a policy
         policies = self.actions
         expected_free_energies = []
@@ -384,7 +374,7 @@ class ActiveInferenceAgent:
 
         Returns:
             Expected free energy
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Simplified: use transition and observation models
         if not self.transition_model or not self.observation_model:
             return 0.0  # No model, return neutral value
@@ -419,7 +409,7 @@ class ActiveInferenceAgent:
 
         Args:
             observation: New observation
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         updated = self.predict(observation)
         self.beliefs.states = updated
         self.beliefs.observations.update(observation)
@@ -437,7 +427,7 @@ class ActiveInferenceAgent:
 
         Returns:
             Free energy value
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         beliefs = beliefs or self.beliefs
         observations = observations or self.beliefs.observations
 

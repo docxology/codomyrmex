@@ -1,32 +1,12 @@
-
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-This module provides resource_limits functionality including:
-- 0 functions: 
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-This module provides resource_limits functionality including:
-- 0 functions: 
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-logger = get_logger(__name__)
 """
 Resource Limits Configuration
 
 Defines default resource limits and Docker security arguments.
 """
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
 
 # Default Docker run arguments for security
 DEFAULT_DOCKER_ARGS = [
@@ -39,4 +19,3 @@ DEFAULT_DOCKER_ARGS = [
     "--cpus=0.5",  # CPU limit
     "--pids-limit=50",  # Process limit
 ]
-

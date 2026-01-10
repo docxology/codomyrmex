@@ -4,38 +4,14 @@ import logging
 import shutil
 import subprocess
 
-from codomyrmex.git_operations.git_manager import (
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+try:
+    from codomyrmex.git_operations.git_manager import (
         clone_repository,
         is_git_repository,
         pull_changes,
     )
-try:
 except ImportError:
     # Fallback functions defined below
     def clone_repository(url: str, destination: str, branch: Optional[str] = None) -> bool:
@@ -256,5 +232,3 @@ class SkillSync:
         except Exception as e:
             logger.warning(f"Error getting upstream version: {e}")
             return None
-
-

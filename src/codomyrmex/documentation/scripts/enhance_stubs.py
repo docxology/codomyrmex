@@ -22,24 +22,16 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 STANDARD_CONTENT =
 """
-#!/usr/bin/env python3
 """
-This module provides enhance_stubs functionality including:
-- 1 functions: enhance_stubs
-- 0 classes: 
 
-Usage:
-    # Example usage here
 
 Enhance Stub READMEs.
 
 Adds "Getting Started" and "Contributing" sections to short READMEs 
 to improve quality scores by increasing word count, section count, and code examples.
-"""
 
 
 
@@ -77,7 +69,6 @@ to improve quality scores by increasing word count, section count, and code exam
 
 
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

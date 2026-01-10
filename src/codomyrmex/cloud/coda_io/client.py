@@ -1,14 +1,4 @@
 from codomyrmex.logging_monitoring import get_logger
-"""Core functionality module
-
-This module provides client functionality including:
-- 53 functions: __init__, _request, _get...
-- 1 classes: CodaClient
-
-Usage:
-    from client import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 """
 Coda.io REST API v1 Client.

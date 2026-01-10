@@ -1,13 +1,18 @@
+"""Script Discovery.
+
+Handles finding scripts to run based on directory traversal and filtering criteria.
+
+This module provides:
+- discover_scripts(): Find Python scripts in a directory tree
+- SKIP_DIRS, SKIP_PATTERNS: Default exclusion lists
+"""
+
 from pathlib import Path
 from typing import List, Optional
 
 from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
+logger = get_logger(__name__)
 
 
 

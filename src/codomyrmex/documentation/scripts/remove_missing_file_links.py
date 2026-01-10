@@ -23,7 +23,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 def check_and_fix_missing_links(file_path: Path, base_path: Path) -> bool:
     """

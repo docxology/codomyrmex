@@ -16,7 +16,7 @@ from enum import Enum
 import csv
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly
 
 
 
@@ -680,40 +680,35 @@ class StaticAnalyzer:
         results = []
 
         try:
-            # Import pyrefly_runner here to avoid circular imports
-
             # Run Pyrefly analysis on the file
-            pyrefly_result = run_pyrefly_analysis(
-                target_paths=[file_path],
-                project_root=self.project_root
-            )
+            pyrefly_result = run_pyrefly(file_path)
 
             # Convert Pyrefly results to AnalysisResult format
-            if pyrefly_result.get("issues"):
+            if pyrefly_result.success and pyrefly_result.issues:
                 severity_map = {
                     "error": SeverityLevel.ERROR,
                     "warning": SeverityLevel.WARNING,
                     "info": SeverityLevel.INFO,
                 }
 
-                for issue in pyrefly_result["issues"]:
+                for issue in pyrefly_result.issues:
                     results.append(
                         AnalysisResult(
-                            file_path=issue.get("file_path", file_path),
-                            line_number=issue.get("line_number", 0),
-                            column_number=issue.get("column_number", 0),
+                            file_path=issue.file_path or file_path,
+                            line_number=issue.line,
+                            column_number=issue.column,
                             severity=severity_map.get(
-                                issue.get("severity", "error"), SeverityLevel.ERROR
+                                issue.severity, SeverityLevel.ERROR
                             ),
-                            message=issue.get("message", ""),
-                            rule_id=issue.get("code", "PYREFLY_ERROR"),
+                            message=issue.message,
+                            rule_id=issue.rule_id or "PYREFLY_ERROR",
                             category="type_checking",
                         )
                     )
 
             # Log any errors from Pyrefly execution
-            if pyrefly_result.get("error"):
-                logger.warning(f"Pyrefly reported error for {file_path}: {pyrefly_result['error']}")
+            if pyrefly_result.error_message:
+                logger.warning(f"Pyrefly reported error for {file_path}: {pyrefly_result.error_message}")
 
         except (ImportError, subprocess.SubprocessError, FileNotFoundError, Exception) as e:
             logger.error(f"Error running Pyrefly on {file_path}: {e}")

@@ -22,7 +22,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Fix AGENTS.md Structure
 
@@ -32,10 +31,8 @@ This script iterates through all AGENTS.md files and ensures they have the requi
 - Operating Contracts
 
 If sections are missing, it adds them with intelligent default content.
-"""
 
 
-#!/usr/bin/env python3
 """
 
 

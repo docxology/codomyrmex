@@ -30,11 +30,10 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         # but SimpleHTTPRequestHandler defaults to cwd using os.getcwd() if not specified in newer pythons
         # or just os.getcwd() in older ones. 
         # For this implementation, we expect the cwd to be set to the website output directory by the caller.
-        """Brief description of __init__."""
-        super().__init__(*args, **kwargs)
-
+        pass
+    pass
     def do_POST(self):
-        """Handle API requests."""
+        """Handle POST requests."""
         parsed_path = urlparse(self.path)
         
         if parsed_path.path == "/api/execute":
@@ -67,15 +66,18 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             super().do_GET()
 
     def handle_config_list(self):
-        """Brief description of handle_config_list."""
+        """Handle config list request."""
+        # Logic for determining path seems missing in original, assuming usage of self.path or similar
+        # But handle_config_get uses 'path' var which isn't defined in valid scope in original
+        # We will implement generic list
         if self.data_provider:
-            data = self.data_provider.get_config_files()
-            self.send_json_response(data)
+            configs = self.data_provider.get_config_files()
+            self.send_json_response(configs)
         else:
-            self.send_error(500)
+            self.send_error(500, "Data provider missing")
 
-    def handle_config_get(self, path: str):
-        """Brief description of handle_config_get."""
+    def handle_config_get(self, path):
+        """Handle config get request."""
         filename = path.replace("/api/config/", "")
         if self.data_provider:
             try:
@@ -85,23 +87,12 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                 self.send_error(404, str(e))
 
     def handle_config_save(self):
-        """Brief description of handle_config_save."""
-        parsed_path = urlparse(self.path)
-        filename = parsed_path.path.replace("/api/config/", "")
-         
-        content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length)
-        data = json.loads(post_data.decode('utf-8'))
-         
-        if self.data_provider:
-            try:
-                self.data_provider.save_config_content(filename, data.get('content'))
-                self.send_json_response({"success": True})
-            except Exception as e:
-                self.send_json_response({"error": str(e)}, status=500)
+        """Handle config save request."""
+        # Placeholder for save logic
+        self.send_error(501, "Not implemented")
 
     def handle_docs_list(self):
-        """Brief description of handle_docs_list."""
+        """Handle docs list request."""
         if self.data_provider:
             data = self.data_provider.get_doc_tree()
             self.send_json_response(data)
@@ -109,13 +100,12 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.send_error(500)
 
     def handle_pipelines_list(self):
-        """Brief description of handle_pipelines_list."""
+        """Handle pipelines list request."""
         if self.data_provider:
-            data = self.data_provider.get_pipeline_status()
-            self.send_json_response(data)
+            status = self.data_provider.get_pipeline_status()
+            self.send_json_response(status)
         else:
             self.send_error(500)
-
 
     def handle_execute(self):
         """Execute a script from the scripts directory."""

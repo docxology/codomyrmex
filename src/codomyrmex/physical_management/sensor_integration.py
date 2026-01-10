@@ -54,7 +54,7 @@ from sensor_integration import FunctionName, ClassName
 
 """Core business logic and data management
 
-"""Core business logic and data management
+# """Core business logic and data management
 
 This module provides sensor_integration functionality including:
 - 22 functions: to_dict, __init__, register_device...

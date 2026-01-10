@@ -2,7 +2,7 @@
 
 This module provides the main Scraper class that serves as the primary
 interface for scraping operations, delegating to provider-specific adapters.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from typing import List, Optional
 
@@ -38,7 +38,7 @@ class Scraper(BaseScraper):
         result = scraper.scrape("https://example.com", options)
         print(result.content)
         ```
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     def __init__(self, config: Optional[ScrapeConfig] = None, adapter: Optional[BaseScraper] = None):
         """Initialize the scraper.
@@ -50,7 +50,7 @@ class Scraper(BaseScraper):
 
         Raises:
             ScrapeValidationError: If configuration is invalid or no adapter is available
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.config = config or get_config()
         self.adapter = adapter
 
@@ -88,7 +88,7 @@ class Scraper(BaseScraper):
             ScrapeValidationError: If URL is invalid
             ScrapeConnectionError: If connection fails
             ScrapeTimeoutError: If operation times out
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not url or not isinstance(url, str):
             raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
 
@@ -116,7 +116,7 @@ class Scraper(BaseScraper):
         Raises:
             ScrapeValidationError: If URL is invalid
             ScrapeConnectionError: If connection fails
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not url or not isinstance(url, str):
             raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
 
@@ -144,7 +144,7 @@ class Scraper(BaseScraper):
         Raises:
             ScrapeValidationError: If URL is invalid
             ScrapeConnectionError: If connection fails
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not url or not isinstance(url, str):
             raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
 
@@ -174,7 +174,7 @@ class Scraper(BaseScraper):
         Raises:
             ScrapeValidationError: If query is invalid
             ScrapeConnectionError: If connection fails
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not query or not isinstance(query, str):
             raise ScrapeValidationError("Query must be a non-empty string", field="query", value=str(query))
 
@@ -208,7 +208,7 @@ class Scraper(BaseScraper):
         Raises:
             ScrapeValidationError: If URLs are invalid
             ScrapeConnectionError: If connection fails
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not urls or not isinstance(urls, list):
             raise ScrapeValidationError("URLs must be a non-empty list", field="urls", value=str(urls))
 

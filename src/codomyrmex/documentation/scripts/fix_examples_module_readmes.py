@@ -23,7 +23,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 def fix_examples_module_readme(file_path: Path) -> bool:
     """

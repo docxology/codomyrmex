@@ -31,16 +31,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Codex integration adapters for Codomyrmex modules."""
 
-"""Core functionality module
-
-This module provides codex_integration functionality including:
-- 3 functions: adapt_for_ai_code_editing, adapt_for_llm, adapt_for_code_execution
-- 1 classes: CodexIntegrationAdapter
-
-Usage:
-    from codex_integration import FunctionName, ClassName
-    # Example usage here
-"""
 class CodexIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Codex with Codomyrmex modules."""
 

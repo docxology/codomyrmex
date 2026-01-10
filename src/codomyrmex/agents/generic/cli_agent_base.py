@@ -34,16 +34,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Base class for CLI-based agents with common subprocess patterns."""
 
-"""Core functionality module
-
-This module provides cli_agent_base functionality including:
-- 6 functions: __init__, _check_command_available, _build_env...
-- 1 classes: CLIAgentBase
-
-Usage:
-    from cli_agent_base import FunctionName, ClassName
-    # Example usage here
-"""
 class CLIAgentBase(BaseAgent):
     """Base class for CLI-based agents with common subprocess execution patterns."""
 

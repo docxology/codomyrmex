@@ -8,7 +8,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 This module defines exception classes specific to the scrape module.
 All exceptions inherit from CodomyrmexError for consistent error handling.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 class ScrapeError(CodomyrmexError):
     """Base exception class for all scrape-related errors."""
@@ -20,7 +20,7 @@ class ScrapeConnectionError(ScrapeError):
     """Raised when there's a network or connection issue during scraping."""
 
     def __init__(
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
         self,
         message: str,
         url: str | None = None,
@@ -38,7 +38,7 @@ class ScrapeTimeoutError(ScrapeError):
     """Raised when a scraping operation times out."""
 
     def __init__(
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
         self,
         message: str,
         url: str | None = None,
@@ -56,7 +56,7 @@ class ScrapeValidationError(ScrapeError):
     """Raised when input validation fails for scraping operations."""
 
     def __init__(
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
         self,
         message: str,
         field: str | None = None,
@@ -74,7 +74,7 @@ class FirecrawlError(ScrapeError):
     """Raised when Firecrawl-specific errors occur."""
 
     def __init__(
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
         self,
         message: str,
         firecrawl_error: Exception | None = None,

@@ -25,14 +25,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Script to generate README.md files for directories that have AGENTS.md but no README.md.
 Uses AGENTS.md content as a template and enhances with technical details.
-"""
 
 
-#!/usr/bin/env python3
 """
 
 

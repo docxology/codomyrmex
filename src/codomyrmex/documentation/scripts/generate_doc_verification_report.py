@@ -25,7 +25,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 def analyze_all_docs(base_path: Path) -> dict:
     """

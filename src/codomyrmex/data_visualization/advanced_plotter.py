@@ -20,7 +20,7 @@ from codomyrmex.performance import monitor_performance, performance_context
 
 
 
-Advanced data visualization functionality for Codomyrmex.
+"""Advanced data visualization functionality for Codomyrmex.
 
 This module provides comprehensive plotting capabilities including statistical plots,
 interactive visualizations, dashboard generation, and data analysis charts.
@@ -47,65 +47,23 @@ except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
-        """Brief description of monitor_performance.
-        
-        Args:
-        
-            Returns: Description of return value
-        """
-"""
+        """No-op decorator."""
         def decorator(func):
-    """Brief description of decorator.
-
-Args:
-    func : Description of func
-
-    Returns: Description of return value
-"""
             return func
-
         return decorator
 
     class performance_context:
-        """Brief description of performance_context.
-        
-        This class provides functionality for...
-        
-        Attributes:
-            # Add attribute descriptions here
-        
-        Methods:
-            # Method descriptions will be added automatically
-        """
-"""
+
         def __init__(self, *args, **kwargs):
-    """Brief description of __init__.
 
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
             pass
 
         def __enter__(self):
-    """Brief description of __enter__.
 
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
             return self
 
         def __exit__(self, *args):
-    """Brief description of __exit__.
 
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
             pass
 
 # Set up matplotlib and seaborn

@@ -24,7 +24,7 @@ def test_extract_table_of_contents():
 | § | ID & Title | Status |
 | :--- | :--- | :--- |
 | A.1 | **Test Pattern** | Stable |
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     toc = parser.extract_table_of_contents(content)
     assert "parts" in toc
     assert "A" in toc["parts"]
@@ -41,7 +41,7 @@ This is a test problem.
 
 ### Solution
 This is a test solution.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     patterns = parser.extract_patterns(content)
     assert len(patterns) > 0
     assert patterns[0].id == "A.1"
@@ -59,7 +59,7 @@ This is the problem section.
 
 ### Solution
 This is the solution section.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     sections = parser.extract_sections(content)
     assert "problem" in sections or "header" in sections
 
@@ -77,7 +77,7 @@ Test problem.
 
 ### Solution
 Test solution.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     spec = parser.parse_spec(content)
     assert spec is not None
     assert len(spec.patterns) > 0
@@ -100,7 +100,7 @@ Content 1
 
 ## A.2 - Second Pattern
 Content 2
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     spec = parser.parse_spec(content)
     assert len(spec.patterns) == 2
     assert spec.patterns[0].id == "A.1"
@@ -113,7 +113,7 @@ def test_extract_patterns_with_dependencies():
     content = """
 ## A.1 - Test Pattern
 **Builds on:** A.0, B.1. **Prerequisite for:** A.2.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     patterns = parser.extract_patterns(content)
     assert len(patterns) > 0
     pattern = patterns[0]
@@ -126,7 +126,7 @@ def test_extract_patterns_with_keywords():
     content = """
 ## A.1 - Test Pattern
 *Keywords:* holon, system, entity. *Queries:* "What is a holon?"
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     patterns = parser.extract_patterns(content)
     assert len(patterns) > 0
     # Keywords should be extracted during metadata extraction
@@ -157,7 +157,7 @@ def test_extract_table_of_contents_multiple_parts():
 
 **Part B - Reasoning**
 | B.1 | Pattern | Stable |
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
     toc = parser.extract_table_of_contents(content)
     assert "A" in toc.get("parts", {})
     assert "B" in toc.get("parts", {})

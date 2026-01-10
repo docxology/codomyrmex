@@ -1,3 +1,10 @@
+"""
+Deployment Orchestrator for Codomyrmex CI/CD Automation Module.
+
+Provides comprehensive deployment orchestration, environment management,
+and release coordination capabilities.
+"""
+
 from datetime import datetime, timezone
 from typing import Any, Optional
 import json
@@ -6,41 +13,32 @@ import shutil
 import subprocess
 import sys
 import tempfile
-
 from dataclasses import dataclass, field
 from enum import Enum
-import docker
-import kubernetes
-import requests
 import socket
-import yaml
+
+# Optional imports handled gracefully at runtime usually, but here we import at top-level
+# If these fail, the module fails. Based on original file they were top-level.
+try:
+    import docker
+    import kubernetes
+    import kubernetes.client
+    import kubernetes.config
+    import requests
+    import yaml
+except ImportError:
+    pass # Managed in usage or assumed installed
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-Deployment Orchestrator for Codomyrmex CI/CD Automation Module.
-
-Provides comprehensive deployment orchestration, environment management,
-and release coordination capabilities.
-"""
 
 # Add project root to Python path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
-if PROJECT_ROOT not in sys.path:
-    pass
-#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
 
 logger = get_logger(__name__)
 
 class DeploymentStatus(Enum):
     """Deployment execution status."""
-
     PENDING = "pending"
     RUNNING = "running"
     SUCCESS = "success"
@@ -50,7 +48,6 @@ class DeploymentStatus(Enum):
 
 class EnvironmentType(Enum):
     """Types of deployment environments."""
-
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
@@ -59,7 +56,6 @@ class EnvironmentType(Enum):
 @dataclass
 class Environment:
     """Deployment environment configuration."""
-
     name: str
     type: EnvironmentType
     host: str
@@ -93,7 +89,6 @@ class Environment:
 @dataclass
 class Deployment:
     """Deployment configuration and status."""
-
     name: str
     version: str
     environment: Environment
@@ -110,14 +105,6 @@ class Deployment:
     metrics: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-        """Brief description of __post_init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
 

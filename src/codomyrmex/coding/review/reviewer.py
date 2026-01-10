@@ -58,28 +58,12 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
-    """Brief description of decorator.
 
-Args:
-    func : Description of func
-
-    Returns: Description of return value
-"""
             return func
         return decorator
 
     class performance_context:
-        """Brief description of performance_context.
-        
-        This class provides functionality for...
-        
-        Attributes:
-            # Add attribute descriptions here
-        
-        Methods:
-            # Method descriptions will be added automatically
-        """
-"""
+
         def __init__(self, context_name: str = "unknown_context", *args, **kwargs):
             """Initialize performance context (fallback)."""
             self.context_name = context_name

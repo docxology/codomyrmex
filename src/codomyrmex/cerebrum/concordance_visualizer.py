@@ -58,7 +58,7 @@ from codomyrmex.logging_monitoring import get_logger
 This module provides visualizations that compare results from different
 CEREBRUM analyses (CBR, Bayesian, Active Inference) and FPF analyses,
 showing agreement, correlation, and concordance patterns.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 
 try:
@@ -87,7 +87,7 @@ class ConcordanceVisualizer:
             figure_size: Figure size (width, height)
             dpi: DPI for figures
             theme: Visualization theme
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not HAS_MATPLOTLIB:
             raise VisualizationError("matplotlib is required for visualization")
 
@@ -113,7 +113,7 @@ class ConcordanceVisualizer:
 
         Returns:
             Matplotlib figure
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Get common pattern IDs
         if pattern_ids is None:
             pattern_ids = sorted(set(cbr_results.keys()) & set(bayesian_results.keys()))
@@ -125,13 +125,7 @@ class ConcordanceVisualizer:
 
         # Normalize scores to [0, 1]
         def normalize(scores: Dict[str, float]) -> Dict[str, float]:
-    """Brief description of normalize.
-
-Args:
-    scores : Description of scores
-
-    Returns: Description of return value (type: Any)
-"""
+    
             if not scores:
                 return {}
             min_val = min(scores.values())
@@ -224,7 +218,7 @@ Args:
 
         Returns:
             Matplotlib figure
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not importance_metrics:
             raise ValueError("No importance metrics provided")
 
@@ -312,7 +306,7 @@ Args:
 
         Returns:
             Matplotlib figure
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Calculate agreement matrix
         n_patterns = len(pattern_ids)
         n_analyses = len(analysis_results)

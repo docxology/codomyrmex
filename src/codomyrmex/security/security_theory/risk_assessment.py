@@ -76,14 +76,7 @@ class RiskAssessor:
     """Performs risk assessments."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         logger.info("RiskAssessor initialized")
     
     def assess(self, context: dict) -> RiskAssessment:

@@ -24,15 +24,12 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Validate all child references in AGENTS.md files.
 Check that children point to existing directories with AGENTS.md files.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

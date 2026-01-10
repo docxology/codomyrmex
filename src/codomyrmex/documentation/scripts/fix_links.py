@@ -12,26 +12,14 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
-This module provides fix_links functionality including:
-- 1 functions: fix_documentation
-- 0 classes: 
 
-Usage:
-    # Example usage here
 """
 
 logger = get_logger(__name__)
 
 def fix_documentation(root_dir):
-    """Brief description of fix_documentation.
-
-Args:
-    root_dir : Description of root_dir
-
-    Returns: Description of return value
-"""
+    
     root_path = Path(root_dir).absolute()
     
     # regexes

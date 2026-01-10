@@ -55,19 +55,9 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Professional academic visualization theme system for CEREBRUM.
 
-"""Core functionality module
-
-This module provides visualization_theme functionality including:
-- 14 functions: get_default_theme, set_default_theme, __post_init__...
-- 6 classes: FontConfig, ColorPalette, FigureConfig...
-
-Usage:
-    from visualization_theme import FunctionName, ClassName
-    # Example usage here
-"""
 This module provides a centralized theme system for consistent, publication-quality
 visualizations with professional fonts, colorblind-safe palettes, and standardized styling.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 
 try:
@@ -204,7 +194,7 @@ class VisualizationTheme:
 
     Provides consistent styling for all CEREBRUM visualizations with
     publication-quality defaults.
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
 
     def __init__(
         self,
@@ -222,7 +212,7 @@ class VisualizationTheme:
             figure_config: Figure configuration
             axis_config: Axis configuration
             legend_config: Legend configuration
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.font = font_config or FontConfig()
         self.colors = color_palette or ColorPalette()
         self.figure = figure_config or FigureConfig()
@@ -289,7 +279,7 @@ class VisualizationTheme:
 
         Args:
             ax: Matplotlib axes object
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not HAS_MATPLOTLIB:
             return
 
@@ -327,7 +317,7 @@ class VisualizationTheme:
 
         Returns:
             Legend object
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not HAS_MATPLOTLIB:
             return None
 
@@ -360,7 +350,7 @@ class VisualizationTheme:
 
         Returns:
             Color hex code
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         status_map = {
             "Stable": self.colors.stable,
             "Draft": self.colors.draft,
@@ -377,7 +367,7 @@ class VisualizationTheme:
 
         Returns:
             Color hex code
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         level_map = {
             "high": self.colors.high,
             "medium": self.colors.medium,
@@ -394,7 +384,7 @@ class VisualizationTheme:
 
         Returns:
             List of color hex codes
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if palette == "primary":
             colors = self.colors.primary
         elif palette == "secondary":
@@ -418,7 +408,7 @@ class VisualizationTheme:
             ax: Matplotlib axes object
             axis: Axis to format ("x", "y", or "both")
             precision: Decimal precision
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not HAS_MATPLOTLIB:
             return
 
@@ -438,7 +428,7 @@ class VisualizationTheme:
         Args:
             ax: Matplotlib axes object
             axis: Axis to format ("x", "y", or "both")
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not HAS_MATPLOTLIB:
             return
 
@@ -454,7 +444,7 @@ class VisualizationTheme:
         Args:
             ax: Matplotlib axes object
             statuses: List of status values to include
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not HAS_MATPLOTLIB:
             return
 
@@ -473,7 +463,7 @@ class VisualizationTheme:
         Args:
             ax: Matplotlib axes object
             levels: List of importance levels to include
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not HAS_MATPLOTLIB:
             return
 
@@ -496,7 +486,7 @@ def get_default_theme() -> VisualizationTheme:
 
     Returns:
         Default VisualizationTheme instance
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     global _default_theme
     if _default_theme is None:
         _default_theme = VisualizationTheme()
@@ -508,7 +498,7 @@ def set_default_theme(theme: VisualizationTheme) -> None:
 
     Args:
         theme: VisualizationTheme instance
-    """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
     global _default_theme
     _default_theme = theme
 

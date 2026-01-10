@@ -6,7 +6,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-Utility functions for the Data Visualization module.
+"""Utility functions for the Data Visualization module.
 
 - All logging is handled via logging_monitoring (get_codomyrmex_logger).
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.

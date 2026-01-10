@@ -1,7 +1,7 @@
 from typing import Any, Optional
 
 from abc import ABC, abstractmethod
-from transformations import FunctionName, ClassName
+
 
 from codomyrmex.cerebrum.cases import Case
 from codomyrmex.cerebrum.exceptions import TransformationError
@@ -52,25 +52,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Model transformation and adaptation algorithms."""
 
-"""Core business logic and data management
 
-"""Core business logic and data management
-
-This module provides transformations functionality including:
-- 13 functions: __init__, transform, __init__...
-- 4 classes: ModelTransformer, AdaptationTransformer, LearningTransformer...
-
-Usage:
-    from transformations import FunctionName, ClassName
-    # Example usage here
-"""
-This module provides transformations functionality including:
-- 13 functions: __init__, transform, __init__...
-- 4 classes: ModelTransformer, AdaptationTransformer, LearningTransformer...
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 

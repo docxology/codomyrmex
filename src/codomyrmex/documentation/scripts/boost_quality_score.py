@@ -23,7 +23,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Boost Documentation Quality Score to 99%.
 
@@ -34,10 +33,8 @@ ContentQualityAnalyzer:
 - Navigation completeness = 1.0 (contains 'Navigation Links' and 3+ links)
 - No placeholders
 - Code examples in READMEs
-"""
 
 
-#!/usr/bin/env python3
 """
 
 

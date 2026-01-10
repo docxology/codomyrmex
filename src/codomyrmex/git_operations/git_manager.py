@@ -12,7 +12,7 @@ from codomyrmex.performance import monitor_performance, performance_context
 
 #!/usr/bin/env python3
 
-Git Operations Manager for Codomyrmex.
+"""Git Operations Manager for Codomyrmex.
 
 This module provides a standardized interface and a set of tools for performing
 common Git actions programmatically within the Codomyrmex ecosystem.
@@ -39,13 +39,7 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
-    """Brief description of decorator.
 
-Args:
-    func : Description of func
-
-    Returns: Description of return value
-"""
             return func
 
         return decorator
@@ -60,28 +54,12 @@ Args:
             self.start_time = 0
 
         def __enter__(self):
-    """Brief description of __enter__.
-
-Args:
-    self : Description of self
-
-    Returns: Description of return value
-"""
+            """Enter context."""
             self.start_time = time.time()
-            logger.debug(f"Entering performance context: {self.context_name}")
             return self
 
         def __exit__(self, exc_type, exc_val, exc_tb):
-    """Brief description of __exit__.
-
-Args:
-    self : Description of self
-    exc_type : Description of exc_type
-    exc_val : Description of exc_val
-    exc_tb : Description of exc_tb
-
-    Returns: Description of return value
-"""
+            """Exit context."""
             duration = time.time() - self.start_time
             logger.debug(f"Exiting performance context: {self.context_name} (Duration: {duration:.4f}s)")
 

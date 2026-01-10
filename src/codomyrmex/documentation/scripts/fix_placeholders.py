@@ -22,19 +22,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 TEST_SPEC_TEMPLATE =
 """
-#!/usr/bin/env python3
 """
-This module provides fix_placeholders functionality including:
-- 1 functions: fix_placeholders
-- 0 classes: 
 
-Usage:
-    # Example usage here
-"""
 
 
 logger = get_logger(__name__)

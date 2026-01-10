@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Indexer for FPF specification search and relationship traversal.
 
 
-"""Core functionality module
-
-This module provides indexer functionality including:
-- 5 functions: __init__, build_index, search_patterns...
-- 1 classes: FPFIndexer
-
-Usage:
-    from indexer import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides indexing and search capabilities for FPF patterns
 and concepts.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from typing import Any, Dict, List, Optional
 
@@ -37,7 +27,7 @@ class FPFIndexer:
 
         Returns:
             FPFIndex object containing all indexes
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pattern_index: Dict[str, Pattern] = {}
         concept_index: Dict[str, List] = {}  # concept_name -> List[Concept]
         keyword_index: Dict[str, List[str]] = {}  # keyword -> pattern_ids
@@ -108,7 +98,7 @@ class FPFIndexer:
 
         Returns:
             List of matching Pattern objects
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self.index:
             return []
 
@@ -122,7 +112,7 @@ class FPFIndexer:
 
         Returns:
             Pattern object or None if not found
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self.index:
             return None
 
@@ -137,7 +127,7 @@ class FPFIndexer:
 
         Returns:
             List of related Pattern objects
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not self.index:
             return []
 

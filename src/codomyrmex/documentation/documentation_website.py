@@ -59,21 +59,8 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 """Main entry point and utility functions
 
-"""Main entry point and utility functions
-
-This module provides documentation_website functionality including:
-- 12 functions: command_exists, check_doc_environment, run_command_stream_output...
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
-This module provides documentation_website functionality including:
-- 12 functions: command_exists, check_doc_environment, run_command_stream_output...
-- 0 classes: 
-
-Usage:
-    # Example usage here
+This module provides documentation_website functionality including checks for
+environment, verifying dependencies, and managing the documentation lifecycle.
 """
 _codomyrmex_dir_for_import_msg = "Unknown"
 _path_added_for_import_msg = "Unknown"
@@ -611,13 +598,7 @@ def assess_site():
 
 
 def main():
-    """Brief description of main.
-
-Args:
-
-
-    Returns: Description of return value
-"""
+    
     parser = argparse.ArgumentParser(
         description=(
             "Manage and assess the Codomyrmex documentation website. "

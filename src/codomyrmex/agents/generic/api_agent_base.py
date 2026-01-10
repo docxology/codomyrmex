@@ -32,16 +32,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """Base class for API-based agents with common API patterns."""
 
-"""Core functionality module
-
-This module provides api_agent_base functionality including:
-- 7 functions: __init__, _extract_config_value, _handle_api_error...
-- 1 classes: APIAgentBase
-
-Usage:
-    from api_agent_base import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 

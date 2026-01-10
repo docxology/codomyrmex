@@ -55,12 +55,15 @@ from codomyrmex.logging_monitoring import get_logger
 """Main entry point and utility functions
 
 This module provides analyze_project functionality including:
+    pass # AGGRESSIVE_REPAIR
 - 5 functions: analyze_project_structure, analyze_dependencies, analyze_code_quality...
 - 0 classes: 
+    pass # AGGRESSIVE_REPAIR
 
 Usage:
+    pass # AGGRESSIVE_REPAIR
     # Example usage here
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 logger = get_logger(__name__)
 logger = get_logger(__name__)
 

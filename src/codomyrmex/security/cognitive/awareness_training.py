@@ -79,14 +79,7 @@ class AwarenessTrainer:
     """Manages security awareness training."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         self.modules: dict[str, TrainingModule] = {}
         self.results: list[TrainingResult] = []
         logger.info("AwarenessTrainer initialized")

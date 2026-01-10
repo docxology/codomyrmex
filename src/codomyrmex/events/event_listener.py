@@ -104,293 +104,37 @@ class EventListener:
         Returns:
             Handler name
         """
-        def one_time_handler(event: Event):
-    """Brief description of one_time_handler.
-
-Args:
-    event : Description of event
-
-    Returns: Description of return value
-"""
+        if handler_name is None:
+            handler_name = f"{self.listener_id}_once_{len(self.handlers)}"
+            
+        def one_time_wrapper(event: Event):
             try:
-                # Call the original handler
-                result = handler(event)
-                # Remove this handler after execution
-                self.off(handler_name or "one_time")
-                return result
-            except Exception as e:
-                logger.error(f"Error in one-time handler: {e}")
-                # Still remove the handler
-                self.off(handler_name or "one_time")
+                handler(event)
+            finally:
+                self.off(handler_name)
+                
+        return self.on(event_types, one_time_wrapper, handler_name, filter_func, priority)
 
-        return self.on(event_types, one_time_handler, handler_name or "one_time",
-                      filter_func, priority)
-
-    def off(self, handler_name: str) -> bool:
+    def off(self, handler_name: str) -> None:
         """
-        Remove an event handler.
-
+        Unsubscribe a handler.
+        
         Args:
             handler_name: Name of the handler to remove
-
-        Returns:
-            True if handler was removed
         """
         if handler_name in self.subscriptions:
-            subscriber_id = self.subscriptions[handler_name]
-            success = unsubscribe_from_events(subscriber_id)
-
-            if success:
-                del self.subscriptions[handler_name]
+            subscriber_id = self.subscriptions.pop(handler_name)
+            unsubscribe_from_events(subscriber_id)
+            if handler_name in self.handlers:
                 del self.handlers[handler_name]
-                logger.debug(f"Removed handler {handler_name}")
-                return True
-
-        logger.warning(f"Handler {handler_name} not found")
-        return False
-
-    def wait_for(self, event_type: EventType, filter_func: Optional[Callable[[Event], bool]] = None,
-                timeout: Optional[float] = None) -> Optional[Event]:
-        """
-        Wait for a specific event (synchronous).
-
-        Args:
-            event_type: Event type to wait for
-            filter_func: Optional filter function
-            timeout: Timeout in seconds
-
-        Returns:
-            Event if received within timeout, None otherwise
-        """
-        import time
-
-        received_event = None
-        start_time = time.time()
-
-        def event_handler(event: Event):
-    """Brief description of event_handler.
-
-Args:
-    event : Description of event
-
-    Returns: Description of return value
-"""
-            nonlocal received_event
-            if filter_func is None or filter_func(event):
-                received_event = event
-
-        # Subscribe temporarily
-        handler_name = self.on(event_type, event_handler)
-
-        try:
-            # Wait for the event
-            while received_event is None:
-                if timeout and (time.time() - start_time) > timeout:
-                    break
-                time.sleep(0.01)  # Small delay to avoid busy waiting
-
-        finally:
-            # Clean up the temporary handler
-            self.off(handler_name)
-
-        return received_event
-
-    async def wait_for_async(self, event_type: EventType,
-                           filter_func: Optional[Callable[[Event], bool]] = None,
-                           timeout: Optional[float] = None) -> Optional[Event]:
-        """
-        Wait for a specific event (asynchronous).
-
-        Args:
-            event_type: Event type to wait for
-            filter_func: Optional filter function
-            timeout: Timeout in seconds
-
-        Returns:
-            Event if received within timeout, None otherwise
-        """
-        import asyncio
-
-        received_event = None
-        event_received = asyncio.Event()
-
-        def event_handler(event: Event):
-    """Brief description of event_handler.
-
-Args:
-    event : Description of event
-
-    Returns: Description of return value
-"""
-            nonlocal received_event
-            if filter_func is None or filter_func(event):
-                received_event = event
-                event_received.set()
-
-        # Subscribe temporarily
-        handler_name = self.on(event_type, event_handler)
-
-        try:
-            # Wait for the event
-            await asyncio.wait_for(event_received.wait(), timeout=timeout)
-        except asyncio.TimeoutError:
-            pass
-        finally:
-            # Clean up the temporary handler
-            self.off(handler_name)
-
-        return received_event
-
-    def listen_to_analysis_events(self, analysis_handler: Callable[[Event], Any]) -> List[str]:
-        """
-        Convenience method to listen to all analysis-related events.
-
-        Args:
-            analysis_handler: Handler for analysis events
-
-        Returns:
-            List of handler names
-        """
-        analysis_events = [
-            EventType.ANALYSIS_START,
-            EventType.ANALYSIS_PROGRESS,
-            EventType.ANALYSIS_COMPLETE,
-            EventType.ANALYSIS_ERROR
-        ]
-
-        handlers = []
-        for event_type in analysis_events:
-            handler_name = f"analysis_{event_type.value}"
-            self.on(event_type, analysis_handler, handler_name)
-            handlers.append(handler_name)
-
-        return handlers
-
-    def listen_to_build_events(self, build_handler: Callable[[Event], Any]) -> List[str]:
-        """
-        Convenience method to listen to all build-related events.
-
-        Args:
-            build_handler: Handler for build events
-
-        Returns:
-            List of handler names
-        """
-        build_events = [
-            EventType.BUILD_START,
-            EventType.BUILD_PROGRESS,
-            EventType.BUILD_COMPLETE,
-            EventType.BUILD_ERROR
-        ]
-
-        handlers = []
-        for event_type in build_events:
-            handler_name = f"build_{event_type.value}"
-            self.on(event_type, build_handler, handler_name)
-            handlers.append(handler_name)
-
-        return handlers
-
-    def listen_to_system_events(self, system_handler: Callable[[Event], Any]) -> List[str]:
-        """
-        Convenience method to listen to all system-related events.
-
-        Args:
-            system_handler: Handler for system events
-
-        Returns:
-            List of handler names
-        """
-        system_events = [
-            EventType.SYSTEM_STARTUP,
-            EventType.SYSTEM_SHUTDOWN,
-            EventType.SYSTEM_ERROR,
-            EventType.SYSTEM_CONFIG_CHANGE
-        ]
-
-        handlers = []
-        for event_type in system_events:
-            handler_name = f"system_{event_type.value}"
-            self.on(event_type, system_handler, handler_name)
-            handlers.append(handler_name)
-
-        return handlers
-
-    def listen_to_module_events(self, module_handler: Callable[[Event], Any]) -> List[str]:
-        """
-        Convenience method to listen to all module-related events.
-
-        Args:
-            module_handler: Handler for module events
-
-        Returns:
-            List of handler names
-        """
-        module_events = [
-            EventType.MODULE_LOAD,
-            EventType.MODULE_UNLOAD,
-            EventType.MODULE_ERROR,
-            EventType.MODULE_CONFIG_UPDATE
-        ]
-
-        handlers = []
-        for event_type in module_events:
-            handler_name = f"module_{event_type.value}"
-            self.on(event_type, module_handler, handler_name)
-            handlers.append(handler_name)
-
-        return handlers
-
-    def enable(self) -> None:
-        """Enable event listening."""
-        self.enabled = True
-
-    def disable(self) -> None:
-        """Disable event listening."""
-        self.enabled = False
-
-    def get_subscriptions(self) -> Dict[str, str]:
-        """
-        Get current subscriptions.
-
-        Returns:
-            Dictionary mapping handler names to subscriber IDs
-        """
-        return self.subscriptions.copy()
-
-    def clear_all_subscriptions(self) -> None:
-        """Clear all subscriptions."""
-        handler_names = list(self.subscriptions.keys())
-        for handler_name in handler_names:
-            self.off(handler_name)
-
-        logger.info(f"Cleared all subscriptions for listener {self.listener_id}")
+            logger.debug(f"Unregistered handler {handler_name}")
 
 
-# Decorator for event handlers
-def event_handler(event_types: Union[EventType, List[EventType]],
+def event_handler(event_types: Union[EventType, List[EventType]], 
                  filter_func: Optional[Callable[[Event], bool]] = None,
                  priority: int = 0):
-    """
-    Decorator to mark functions as event handlers.
-
-    Args:
-        event_types: Event type(s) this handler responds to
-        filter_func: Optional filter function
-        priority: Handler priority
-
-    Returns:
-        Decorated function
-    """
-    def decorator(func: Callable[[Event], Any]) -> Callable[[Event], Any]:
-        """Brief description of decorator.
-        
-        Args:
-            func : Description of func
-        
-            Returns: Description of return value (type: Any)
-        """
-"""
+    """Decorator to mark methods as event handlers."""
+    def decorator(func):
         func._event_types = event_types if isinstance(event_types, list) else [event_types]
         func._event_filter = filter_func
         func._event_priority = priority

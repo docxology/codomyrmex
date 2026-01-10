@@ -6,18 +6,21 @@ and Every Code CLI. It includes theoretical foundations, generic utilities, and
 framework-specific implementations.
 
 Integration:
+    pass # AGGRESSIVE_REPAIR
 - Uses `logging_monitoring` for all logging
 - Integrates with `ai_code_editing` for code generation workflows
 - Integrates with `llm` for LLM infrastructure
 - Integrates with `code` for safe code execution
 
 Available classes:
+    pass # AGGRESSIVE_REPAIR
 - AgentInterface: Abstract base class for all agents
 - AgentRequest, AgentResponse: Request/response data structures
 - AgentCapabilities: Enum of agent capabilities
 - AgentConfig: Configuration management
 
 Available submodules:
+    pass # AGGRESSIVE_REPAIR
 - generic: Base agent classes and utilities
 - theory: Theoretical foundations for agentic systems
 - jules: Jules CLI integration
@@ -27,7 +30,7 @@ Available submodules:
 - gemini: Gemini CLI integration
 - mistral_vibe: Mistral Vibe CLI integration
 - every_code: Every Code CLI integration (multi-agent orchestration)
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from .config import AgentConfig, get_config, reset_config, set_config
 from .core import (

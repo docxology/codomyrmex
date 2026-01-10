@@ -7,7 +7,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 
 Fix broken references in example_tutorial.md files.
 
@@ -15,7 +14,6 @@ Updates references to API_SPECIFICATION.md and USAGE_EXAMPLES.md
 to point to existing files or remove references if files don't exist.
 """
 
-#!/usr/bin/env python3
 
 logger = get_logger(__name__)
 

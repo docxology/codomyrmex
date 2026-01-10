@@ -24,7 +24,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 def find_markdown_links(content: str) -> List[Tuple[str, str]]:
     """

@@ -1,6 +1,6 @@
 from codomyrmex.logging_monitoring import get_logger
 
-Contains the create_line_plot function for generating line plots.
+"""Contains the create_line_plot function for generating line plots.
 
 - Uses logging_monitoring for logging.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.

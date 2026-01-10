@@ -169,13 +169,7 @@ def lazy_function(
     @wraps(lambda: None)  # Placeholder for the actual function
     def lazy_wrapper(*args, **kwargs):
 
-    """Brief description of lazy_wrapper.
-
-Args:
-
-
-    Returns: Description of return value
-"""
+    
         func = getattr(loader, function_name)
         return func(*args, **kwargs)
 

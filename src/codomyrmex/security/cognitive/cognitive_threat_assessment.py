@@ -67,14 +67,7 @@ class CognitiveThreatAssessor:
     """Assesses cognitive security threats."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         logger.info("CognitiveThreatAssessor initialized")
     
     def assess_threats(self, context: dict) -> List[CognitiveThreat]:

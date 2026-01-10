@@ -25,7 +25,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Documentation Link Validation Script
 
@@ -34,8 +33,6 @@ identifying broken links, missing files, and incorrect references.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

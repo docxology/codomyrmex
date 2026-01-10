@@ -1,128 +1,14 @@
+"""API key management.
+
+This module provides APIKeyManager functionality including:
+- API key generation
+- API key validation
+- API key revocation
+"""
+
 from typing import Optional
-
-from api_key_manager import FunctionName, ClassName
-import hashlib
 import secrets
-
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core business logic and data management
-
-This module provides api_key_manager functionality including:
-- 4 functions: __init__, generate_api_key, validate_api_key...
-- 1 classes: APIKeyManager
-
-Usage:
-    # Example usage here
-"""
-API key management.
-"""
-
-
 
 logger = get_logger(__name__)
 
@@ -178,5 +64,3 @@ class APIKeyManager:
             logger.info(f"Revoked API key: {api_key[:20]}...")
             return True
         return False
-
-

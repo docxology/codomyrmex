@@ -26,7 +26,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 except ImportError:
     # Fallback logging
@@ -46,7 +45,6 @@ Example Coverage Checker
 This script verifies that all Codomyrmex modules have corresponding examples.
 It scans the src/codomyrmex directory for modules and checks if examples exist.
 
-Usage:
     python scripts/examples/check_example_coverage.py
 
 Output:

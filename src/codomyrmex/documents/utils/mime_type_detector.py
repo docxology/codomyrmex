@@ -49,16 +49,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 """MIME type and format detection utilities."""
 
-"""Core functionality module
-
-This module provides mime_type_detector functionality including:
-- 2 functions: detect_format_from_path, detect_mime_type
-- 0 classes: 
-
-Usage:
-    from mime_type_detector import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 def detect_format_from_path(file_path: Path) -> str:
     """

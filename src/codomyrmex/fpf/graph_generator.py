@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Graph generator for FPF visualizations using NetworkX and Matplotlib.
 
 
-"""Core functionality module
-
-This module provides graph_generator functionality including:
-- 10 functions: __init__, create_pattern_dependency_graph, create_term_cooccurrence_graph...
-- 1 classes: GraphGenerator
-
-Usage:
-    from graph_generator import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides graph generation utilities for creating various
 types of network visualizations from FPF specifications.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 from typing import Dict, List, Optional, Tuple
 
@@ -35,7 +25,7 @@ class GraphGenerator:
         Args:
             figsize: Figure size (width, height) in inches
             dpi: Dots per inch for output
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.figsize = figsize
         self.dpi = dpi
 
@@ -50,7 +40,7 @@ class GraphGenerator:
 
         Returns:
             NetworkX directed graph
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         G = nx.DiGraph()
 
         # Add nodes (patterns)
@@ -84,7 +74,7 @@ class GraphGenerator:
 
         Returns:
             NetworkX undirected graph
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         G = nx.Graph()
 
         for term1, neighbors in cooccurrence.items():
@@ -107,7 +97,7 @@ class GraphGenerator:
 
         Returns:
             NetworkX graph
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         G = nx.Graph()
 
         # Add concept nodes
@@ -143,7 +133,7 @@ class GraphGenerator:
 
         Returns:
             Dictionary mapping node IDs to (x, y) positions
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         try:
             pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
         except Exception:
@@ -164,7 +154,7 @@ class GraphGenerator:
 
         Returns:
             Dictionary mapping node IDs to (x, y) positions
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if k is None:
             k = 1 / np.sqrt(len(G.nodes()))
 
@@ -179,7 +169,7 @@ class GraphGenerator:
 
         Returns:
             Dictionary mapping node IDs to (x, y) positions
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return nx.circular_layout(G)
 
     def apply_tree_layout(self, G: nx.Graph, root: Optional[str] = None) -> Dict[str, Tuple[float, float]]:
@@ -191,7 +181,7 @@ class GraphGenerator:
 
         Returns:
             Dictionary mapping node IDs to (x, y) positions
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         try:
             if root and root in G:
                 pos = nx.nx_agraph.graphviz_layout(G, prog="dot", root=root)
@@ -215,7 +205,7 @@ class GraphGenerator:
 
         Returns:
             List of color values for each node
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if color_map is None:
             # Default color maps
             if attribute == "status":
@@ -255,7 +245,7 @@ class GraphGenerator:
 
         Returns:
             List of sizes for each node
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if importance_metric == "degree":
             importances = dict(G.degree())
         elif importance_metric == "betweenness":

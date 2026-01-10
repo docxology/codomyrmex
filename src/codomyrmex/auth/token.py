@@ -1,132 +1,17 @@
-from typing import Optional
-import json
-import time
+"""Token management for authentication.
 
+This module provides token functionality including:
+- Token data class
+- Token generation and verification
+- Token revocation and refreshing
+"""
+
+from typing import Optional
+import time
 from dataclasses import dataclass, field
-from token import FunctionName, ClassName
-import hashlib
-import hmac
 import uuid
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-"""Core business logic and data management
-
-This module provides token functionality including:
-- 8 functions: is_expired, to_dict, from_dict...
-- 2 classes: Token, TokenManager
-
-Usage:
-    # Example usage here
-"""
-Token management for authentication.
-"""
-
-
 
 logger = get_logger(__name__)
 
@@ -255,5 +140,3 @@ class TokenManager:
         # Revoke old token
         self.revoke_token(token)
         return new_token
-
-

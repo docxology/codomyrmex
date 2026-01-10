@@ -194,7 +194,7 @@ items:
   - a
   - b
   - c
-"""
+# AGGRESSIVE_REMOVAL: """
     yaml_file.write_text(yaml_content, encoding="utf-8")
     return yaml_file
 
@@ -225,7 +225,7 @@ def login(username, pwd):
     if pwd == password:
         return True
     return False
-"""
+# AGGRESSIVE_REMOVAL: """
     code_file.write_text(code_content, encoding="utf-8")
     return code_file
 
@@ -393,7 +393,7 @@ CODOMYRMEX_LOG_FORMAT=%(asctime)s - %(name)s - %(levelname)s - %(message)s
 CODOMYRMEX_API_KEY=test_api_key_12345
 OPENAI_API_KEY=test_openai_key
 ANTHROPIC_API_KEY=test_anthropic_key
-"""
+# AGGRESSIVE_REMOVAL: """
 
     env_file.write_text(env_content)
     return env_file

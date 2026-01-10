@@ -1,46 +1,23 @@
 from pathlib import Path
 import os
-
-from audit_structure import FunctionName, ClassName
-
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-#!/usr/bin/env python3
-
-This module provides audit_structure functionality including:
-- 2 functions: is_python_module, check_structure
-- 0 classes: 
-
-Usage:
-    # Example usage here
-"""
 
 logger = get_logger(__name__)
 
 def is_python_module(path):
-    """Brief description of is_python_module.
-
-Args:
-    path : Description of path
-
-    Returns: Description of return value
-"""
+    """Check if a directory is a Python module."""
+    if not isinstance(path, Path):
+        path = Path(path)
     return (path / "__init__.py").exists()
 
 def check_structure(root_path):
-    """Brief description of check_structure.
+    """
+    Check the documentation structure.
 
-Args:
-    root_path : Description of root_path
+        root_path : Root path to check
 
-    Returns: Description of return value
-"""
+    Returns: modules list, errors list
+    """
     root = Path(root_path)
     modules = []
     errors = []

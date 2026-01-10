@@ -24,7 +24,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 def calculate_paths(file_path: Path, base_path: Path) -> dict:
     """

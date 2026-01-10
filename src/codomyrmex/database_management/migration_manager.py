@@ -121,7 +121,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 #!/usr/bin/env python3
 """
-"""Core business logic and data management
+# """Core business logic and data management
 
 This module provides migration_manager functionality including:
 - 29 functions: run_migrations, __post_init__, __init__...

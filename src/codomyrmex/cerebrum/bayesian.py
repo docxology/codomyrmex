@@ -73,7 +73,7 @@ class Distribution:
 
         Returns:
             List of samples
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         return np.random.choice(self.values, size=n, p=self.probabilities).tolist()
 
     def expectation(self) -> float:
@@ -96,7 +96,7 @@ class BayesianNetwork:
 
         Args:
             name: Network name
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.name = name
         self.nodes: dict[str, dict[str, Any]] = {}
         self.edges: dict[str, list[str]] = defaultdict(list)
@@ -111,7 +111,7 @@ class BayesianNetwork:
             node: Node name
             values: Possible values for the node
             prior: Prior probabilities (uniform if None)
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if node in self.nodes:
             raise NetworkStructureError(f"Node {node} already exists")
 
@@ -136,7 +136,7 @@ class BayesianNetwork:
         Args:
             parent: Parent node name
             child: Child node name
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if parent not in self.nodes:
             raise NetworkStructureError(f"Parent node {parent} does not exist")
         if child not in self.nodes:
@@ -157,7 +157,7 @@ class BayesianNetwork:
         Args:
             node: Node name
             cpt: Conditional probability table mapping parent value tuples to value probabilities
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if node not in self.nodes:
             raise NetworkStructureError(f"Node {node} does not exist")
 
@@ -184,19 +184,13 @@ class BayesianNetwork:
 
         Returns:
             List of node names in topological order
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         visited = set()
         order = []
 
         def visit(node: str):
 
-    """Brief description of visit.
 
-Args:
-    node : Description of node
-
-    Returns: Description of return value
-"""
             if node in visited:
                 return
             visited.add(node)
@@ -229,7 +223,7 @@ class InferenceEngine:
         Args:
             network: Bayesian network
             method: Inference method ("variable_elimination", "mcmc", "belief_propagation")
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.network = network
         self.method = method
         self.logger = get_logger(__name__)
@@ -245,7 +239,7 @@ class InferenceEngine:
 
         Returns:
             Dictionary of variable -> posterior distribution
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         evidence = evidence or {}
 
         if self.method == "variable_elimination":
@@ -266,7 +260,7 @@ class InferenceEngine:
 
         Returns:
             Posterior distributions
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # For small networks, use brute force enumeration
         # In practice, this would use proper variable elimination algorithm
         results = {}
@@ -303,7 +297,7 @@ class InferenceEngine:
 
         Returns:
             Joint probability
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         prob = 1.0
         topo_order = self.network.get_topological_order()
 
@@ -353,7 +347,7 @@ class InferenceEngine:
 
         Returns:
             Posterior distributions
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Simplified MCMC - in practice would use proper Gibbs sampling or Metropolis-Hastings
         results = {}
 
@@ -390,7 +384,7 @@ class InferenceEngine:
 
         Returns:
             Sample assignment
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         assignment = evidence.copy()
 
         # Initialize unobserved variables
@@ -427,7 +421,7 @@ class InferenceEngine:
 
         Returns:
             Marginal distribution
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         results = self.infer({variable: None}, evidence)
         return results[variable]
 
@@ -439,7 +433,7 @@ class InferenceEngine:
 
         Returns:
             Updated beliefs for all variables
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         # Query all variables
         query = {var: None for var in self.network.nodes if var not in evidence}
         return self.infer(query, evidence)
@@ -464,7 +458,7 @@ class PriorBuilder:
 
         Returns:
             Prior distribution
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         values = []
         for case in cases:
             value = feature_extractor(case)

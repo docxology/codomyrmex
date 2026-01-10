@@ -6,7 +6,7 @@ import pickle
 import tempfile
 import time
 
-from cache_manager import FunctionName, ClassName
+
 import hashlib
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -53,18 +53,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-"""
-
-"""Core business logic and data management
-
-This module provides cache_manager functionality including:
-- 13 functions: cached_function, clear_cache, get_cache_stats...
-- 1 classes: CacheManager
-
-Usage:
-    # Example usage here
-"""
-Caching utilities for Codomyrmex modules.
+"""Caching utilities for Codomyrmex modules.
 
 This module provides caching capabilities to improve performance
 by storing expensive computation results and avoiding redundant work.

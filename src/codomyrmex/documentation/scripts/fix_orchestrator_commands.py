@@ -25,7 +25,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Add orchestrator commands to AGENTS.md Active Components sections.
 
@@ -34,8 +33,6 @@ to the corresponding AGENTS.md files.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

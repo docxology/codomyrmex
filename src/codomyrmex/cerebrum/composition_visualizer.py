@@ -57,20 +57,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Composition visualizations: graphical abstracts and multi-panel compositions.
 
 
-"""Core functionality module
-
-This module provides composition_visualizer functionality including:
-- 4 functions: __init__, create_analysis_overview_dashboard, create_pattern_landscape_map...
-- 1 classes: CompositionVisualizer
-
-Usage:
-    from composition_visualizer import FunctionName, ClassName
-    # Example usage here
-"""
 This module provides composite visualizations that combine multiple analyses
 into summary dashboards, overview panels, and graphical abstracts suitable
 for presentations and reports.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 
 try:
@@ -99,7 +89,7 @@ class CompositionVisualizer:
             figure_size: Figure size (width, height)
             dpi: DPI for figures
             theme: Visualization theme
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not HAS_MATPLOTLIB:
             raise VisualizationError("matplotlib is required for visualization")
 
@@ -121,7 +111,7 @@ class CompositionVisualizer:
 
         Returns:
             Matplotlib figure
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         fig = plt.figure(figsize=self.figure_size, dpi=self.dpi)
         gs = GridSpec(3, 3, figure=fig, hspace=0.3, wspace=0.3)
 
@@ -258,7 +248,7 @@ class CompositionVisualizer:
 
         Returns:
             Matplotlib figure
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         if not pattern_embeddings:
             raise ValueError("No pattern embeddings provided")
 
@@ -346,7 +336,7 @@ class CompositionVisualizer:
 
         Returns:
             Matplotlib figure
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         n_analyses = len(analysis_results)
         if n_analyses == 0:
             raise ValueError("No analysis results provided")

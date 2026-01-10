@@ -24,15 +24,12 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 
-#!/usr/bin/env python3
 """
 Audit all AGENTS.md files for filepath and signpost issues.
 Catalogs parent references, child references, and navigation links.
 """
 
 
-#!/usr/bin/env python3
-"""
 
 
 logger = get_logger(__name__)

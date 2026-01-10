@@ -32,14 +32,7 @@ class QueryBuilder:
     """Builder for constructing search queries."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         self.terms: List[str] = []
         self.filters: dict = {}
         self.sort_by: Optional[str] = None

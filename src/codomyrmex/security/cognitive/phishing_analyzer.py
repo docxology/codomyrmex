@@ -66,14 +66,7 @@ class PhishingAnalyzer:
     """Analyzes emails and communications for phishing attempts."""
     
     def __init__(self):
-        """Brief description of __init__.
-        
-        Args:
-            self : Description of self
-        
-            Returns: Description of return value
-        """
-"""
+
         logger.info("PhishingAnalyzer initialized")
     
     def analyze(self, email_content: str, sender: Optional[str] = None) -> PhishingAnalysis:

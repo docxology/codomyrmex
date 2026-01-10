@@ -43,6 +43,8 @@ from codomyrmex.physical_management import (
         Vector3D,
     )
 try:
+    pass
+    pass
 except ImportError:
     EventType = None
     ForceField = None

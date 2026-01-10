@@ -2,20 +2,10 @@ from codomyrmex.logging_monitoring import get_logger
 """Section exporter for FPF sections.
 
 
-"""Core functionality module
-
-This module provides section_exporter functionality including:
-- 9 functions: __init__, export_part, export_pattern_group...
-- 1 classes: SectionExporter
-
-Usage:
-    from section_exporter import FunctionName, ClassName
-    # Example usage here
-"""
 logger = get_logger(__name__)
 This module provides functionality to export individual parts, pattern groups,
 and concept clusters to separate JSON files.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import json
 from pathlib import Path
@@ -33,7 +23,7 @@ class SectionExporter:
 
         Args:
             section_manager: SectionManager instance
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         self.section_manager = section_manager
 
     def export_part(
@@ -45,7 +35,7 @@ class SectionExporter:
             part_id: Part identifier
             output_path: Path to output JSON file
             include_metadata: Whether to include metadata
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         part_data = self.section_manager.extract_part(part_id)
 
         export_data = {
@@ -78,7 +68,7 @@ class SectionExporter:
             output_path: Path to output JSON file
             include_dependencies: Whether to include dependent patterns
             include_metadata: Whether to include metadata
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         group_data = self.section_manager.extract_pattern_group(
             pattern_ids, include_dependencies=include_dependencies
         )
@@ -108,7 +98,7 @@ class SectionExporter:
             pattern_id: Pattern identifier
             output_path: Path to output JSON file
             include_related: Whether to include related patterns
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         pattern_ids = [pattern_id]
         if include_related:
             # Get related patterns
@@ -138,7 +128,7 @@ class SectionExporter:
             output_path: Path to output JSON file
             include_related_patterns: Whether to include related patterns
             include_metadata: Whether to include metadata
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         cluster_data = self.section_manager.extract_concept_cluster(
             concept_names, include_related_patterns=include_related_patterns
         )
@@ -168,7 +158,7 @@ class SectionExporter:
 
         Returns:
             List of exported file paths
-        """
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
         output_dir.mkdir(parents=True, exist_ok=True)
         exported_paths = []
 

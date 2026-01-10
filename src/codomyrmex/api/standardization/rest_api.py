@@ -17,7 +17,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-REST API Implementation for Codomyrmex
+"""REST API Implementation for Codomyrmex
 
 This module provides a standardized REST API framework with automatic routing,
 middleware support, and comprehensive error handling.
@@ -199,13 +199,7 @@ class APIRouter:
                          tags: Optional[List[str]] = None, **kwargs) -> Callable:
         """Create a decorator for the specified HTTP method."""
         def decorator(func: Callable[[APIRequest], APIResponse]) -> Callable[[APIRequest], APIResponse]:
-    """Brief description of decorator.
 
-Args:
-    func : Description of func
-
-    Returns: Description of return value (type: Any)
-"""
             endpoint = APIEndpoint(
                 path=self._normalize_path(path),
                 method=method,

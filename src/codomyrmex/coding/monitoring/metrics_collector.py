@@ -1,14 +1,12 @@
-from typing import Any, Dict, List
-
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
+"""
 Metrics Collection
 
 Collects and aggregates execution metrics for analysis and reporting.
 """
+
+from typing import Any, Dict, List
+
+from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -87,4 +85,3 @@ class MetricsCollector:
     def clear(self) -> None:
         """Clear all collected metrics."""
         self.metrics.clear()
-

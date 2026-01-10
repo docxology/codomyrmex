@@ -2,7 +2,7 @@
 
 Tests use real implementations only. Environment variable tests use
 real environment manipulation or skip when not applicable.
-"""
+# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
 
 import os
 import pytest
