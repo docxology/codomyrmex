@@ -49,7 +49,7 @@ class Validator:
 
         Args:
             validator_type: Type of validator (json_schema, pydantic, custom)
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         self.validator_type = validator_type
         self._validators: dict[str, Callable] = {}
 
@@ -62,7 +62,7 @@ class Validator:
 
         Returns:
             ValidationResult with validation status and errors
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         try:
             if self.validator_type == "json_schema":
                 return self._validate_json_schema(data, schema)

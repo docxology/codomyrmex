@@ -62,3 +62,51 @@ class JobScheduler:
 
             time.sleep(self.check_interval)
 
+    def get_all_job_statuses(self) -> dict[str, str]:
+        """
+        Get status of all jobs in the queue.
+        
+        Returns:
+            Dict mapping job_id to status string
+        """
+        statuses = {}
+        # Access backend's job storage
+        backend = self.queue._queue
+        if hasattr(backend, '_jobs'):
+            for job_id, job in backend._jobs.items():
+                statuses[job_id] = job.status.value
+        return statuses
+        
+    def cancel_job(self, job_id: str) -> bool:
+        """
+        Cancel a pending or running job.
+        
+        Args:
+            job_id: ID of the job to cancel
+            
+        Returns:
+            True if job was found and cancelled, False otherwise
+        """
+        # Use Queue's cancel method
+        result = self.queue.cancel(job_id)
+        if result:
+            logger.info(f"Cancelled job: {job_id}")
+        else:
+            logger.warning(f"Failed to cancel job: {job_id}")
+        return result
+        
+    def get_job(self, job_id: str) -> Optional["Job"]:
+        """
+        Get a job by its ID.
+        
+        Args:
+            job_id: ID of the job
+            
+        Returns:
+            Job instance or None if not found
+        """
+        backend = self.queue._queue
+        if hasattr(backend, '_jobs'):
+            return backend._jobs.get(job_id)
+        return None
+

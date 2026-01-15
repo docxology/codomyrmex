@@ -24,6 +24,16 @@ class PluginType(Enum):
     HOOK = "hook"
 
 
+class PluginState(Enum):
+    """Lifecycle state of a plugin."""
+    UNKNOWN = "unknown"
+    REGISTERED = "registered"
+    LOADED = "loaded"
+    ACTIVE = "active"
+    DISABLED = "disabled"
+    ERROR = "error"
+
+
 @dataclass
 class PluginInfo:
     """Plugin metadata."""

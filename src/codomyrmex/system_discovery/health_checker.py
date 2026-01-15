@@ -16,7 +16,7 @@ import matplotlib
 
 from codomyrmex.coding.execution.executor import execute_code
 from codomyrmex.environment_setup.env_checker import validate_environment_completeness
-from codomyrmex.git_operations.git_manager import check_git_availability
+from codomyrmex.git_operations.core.git import check_git_availability
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 from codomyrmex.logging_monitoring.logger_config import log_with_context
@@ -218,18 +218,8 @@ class HealthChecker:
             "security": self._check_security_digital,
             "llm": self._check_ollama_integration,
             "performance": self._check_performance,
-            "build_synthesis": self._check_build_synthesis,
-            "documentation": self._check_documentation,
-            "api": self._check_api,
-            "ci_cd_automation": self._check_ci_cd_automation,
-            "containerization": self._check_containerization,
-            "config_management": self._check_config_management,
-            "database_management": self._check_database_management,
             "project_orchestration": self._check_project_orchestration,
-            "physical_management": self._check_physical_management,
-            "system_discovery": self._check_system_discovery,
-            "module_template": self._check_module_template,
-            "spatial": self._check_spatial,
+            "containerization": self._check_containerization,
         }
 
     def perform_health_check(self, module_name: str) -> HealthCheckResult:

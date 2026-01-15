@@ -212,4 +212,4 @@ All workflows follow modern best practices, use consistent tooling, and provide 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../AGENTS.md)
 - **Documentation**: [Reference Guides](../docs/README.md)
-- **Home**: [Repository Root](../../README.md)
+- **Home**: [Repository Root](../README.md)

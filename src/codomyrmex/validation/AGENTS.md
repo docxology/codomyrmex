@@ -3,7 +3,8 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for validation..
+
+Data validation framework with schema checking, examples validation, and validation management utilities for ensuring data integrity across modules.
 
 ## Active Components
 - `README.md` – Project file
@@ -14,7 +15,6 @@ Module components and implementation for validation..
 - `validator.py` – Project file
 
 ## Operating Contracts
-- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

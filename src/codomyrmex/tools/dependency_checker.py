@@ -28,14 +28,14 @@ from codomyrmex.logging_monitoring import get_logger
 """Main entry point and utility functions
 
 This module provides dependency_checker functionality including:
-    pass # AGGRESSIVE_REPAIR
+    pass 
 - 4 functions: check_dependencies, verify_versions, analyze_conflicts...
 - 1 classes: DependencyChecker
 
 Usage:
-    pass # AGGRESSIVE_REPAIR
+    pass 
     # Example usage here
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 logger = get_logger(__name__)
 
 

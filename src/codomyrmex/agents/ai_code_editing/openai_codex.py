@@ -57,7 +57,7 @@ generation, completion, and editing capabilities using GPT-4 and other
 code-capable models.
 
 Reference: https://platform.openai.com/docs/guides/code-generation
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 
 logger = get_logger(__name__)
@@ -101,7 +101,7 @@ class OpenAICodex:
 
         Raises:
             ValueError: If no API key is available
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         self.api_key = api_key or os.environ.get("OPENAI_API_KEY")
         self.model = model or DEFAULT_MODEL
         self._client = None
@@ -147,7 +147,7 @@ class OpenAICodex:
 
         Raises:
             RuntimeError: If code generation fails
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         start_time = time.time()
 
         try:
@@ -223,7 +223,7 @@ class OpenAICodex:
 
         Returns:
             Dictionary containing completed code and metadata
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         prompt = f"Complete the following {language} code:\n\n{code_prefix}"
         return self.generate_code(
             prompt=prompt,
@@ -254,7 +254,7 @@ class OpenAICodex:
 
         Returns:
             Dictionary containing edited code and metadata
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         start_time = time.time()
 
         try:
@@ -323,7 +323,7 @@ class OpenAICodex:
 
         Returns:
             Dictionary containing explanation and metadata
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         start_time = time.time()
 
         try:
@@ -444,7 +444,7 @@ def generate_code(
 
     Returns:
         Generated code and metadata
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
     codex = OpenAICodex()
     return codex.generate_code(prompt, language, **kwargs)
 

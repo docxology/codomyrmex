@@ -218,3 +218,18 @@ def execute_query(database_url: str, query: str, params: Optional[Tuple] = None)
         return manager.execute(query, params)
     finally:
         manager.disconnect()
+
+
+def manage_databases(database_url: Optional[str] = None) -> DatabaseManager:
+    """Create and return a DatabaseManager instance for database administration.
+    
+    Args:
+        database_url: Optional database URL. If provided, connects automatically.
+        
+    Returns:
+        DatabaseManager instance ready for use.
+    """
+    manager = DatabaseManager(database_url)
+    if database_url:
+        manager.connect()
+    return manager

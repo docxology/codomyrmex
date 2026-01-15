@@ -3,42 +3,41 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Documentation files and guides for modules.
+
+Documentation files and guides for all 50 Codomyrmex modules.
 
 ## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `agents_ai_code_editing/` – Directory containing agents_ai_code_editing components
-- `build_synthesis/` – Directory containing build_synthesis components
-- `cerebrum/` – Directory containing cerebrum components
-- `coding/` – Directory containing coding components
-- `data_visualization/` – Directory containing data_visualization components
-- `dependency-graph.md` – Project file
-- `documents/` – Directory containing documents components
-- `environment_setup/` – Directory containing environment_setup components
-- `git_operations/` – Directory containing git_operations components
-- `logging_monitoring/` – Directory containing logging_monitoring components
-- `model_context_protocol/` – Directory containing model_context_protocol components
-- `module_template/` – Directory containing module_template components
-- `ollama_integration.md` – Project file
-- `overview.md` – Project file
-- `pattern_matching/` – Directory containing pattern_matching components
-- `physical_management/` – Directory containing physical_management components
-- `relationships.md` – Project file
-- `scrape/` – Directory containing scrape components
-- `security/` – Directory containing security components
-- `skills/` – Directory containing skills components
-- `spatial_three_d/` – Directory containing spatial_three_d components
-- `static_analysis/` – Directory containing static_analysis components
-- `website/` – Directory containing website components
+
+### Reference Files
+- `README.md` – Module index
+- `SPEC.md` – Functional specification
+- `overview.md` – Comprehensive module overview
+- `relationships.md` – Module interdependencies
+- `dependency-graph.md` – Dependency visualization
+- `ollama_integration.md` – LLM integration guide
+
+### Module Directories (50 total)
+- `agents/`, `api/`, `auth/`, `build_synthesis/`, `cache/`, `cerebrum/`
+- `ci_cd_automation/`, `cli/`, `cloud/`, `coding/`, `compression/`
+- `config_management/`, `containerization/`, `data_visualization/`
+- `database_management/`, `documentation/`, `documents/`, `encryption/`
+- `environment_setup/`, `events/`, `examples/`, `fpf/`, `git_operations/`
+- `ide/`, `llm/`, `logging_monitoring/`, `logistics/`, `metrics/`
+- `model_context_protocol/`, `module_template/`, `networking/`, `orchestrator/`
+- `pattern_matching/`, `performance/`, `physical_management/`, `plugin_system/`
+- `scrape/`, `security/`, `serialization/`, `skills/`, `spatial/`
+- `static_analysis/`, `system_discovery/`, `templating/`, `terminal_interface/`
+- `tests/`, `tools/`, `utils/`, `validation/`, `website/`
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+- Maintain alignment between docs/modules and src/codomyrmex module structure.
+- Each module directory contains README.md, AGENTS.md, SPEC.md.
+- Reference files (overview.md, relationships.md) provide cross-module context.
 
 ## Navigation Links
+
 - **Human Documentation**: [README.md](README.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../README.md) - Main project documentation
+- **📁 Parent Directory**: [docs](../README.md)
+- **🏠 Project Root**: [README](../../README.md)

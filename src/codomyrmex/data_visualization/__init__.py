@@ -85,12 +85,7 @@ from .mermaid_generator import (
     create_repository_structure_diagram,
 )
 from .plotter import (
-    create_bar_chart,
-    create_heatmap,
-    create_histogram,
-    create_line_plot,
     create_pie_chart,
-    create_scatter_plot,
 )
 
 __all__ = [

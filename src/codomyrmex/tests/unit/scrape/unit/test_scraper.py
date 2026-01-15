@@ -3,7 +3,7 @@
 Tests use real implementations only. TestAdapter is a test adapter that implements
 the BaseScraper interface for testing, not a mock. All data structures and
 processing logic use real implementations.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 import pytest
 

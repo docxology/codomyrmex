@@ -2,7 +2,7 @@
 
 Comprehensive tests for IDEClient base class, AntigravityClient, 
 CursorClient, and VSCodeClient implementations.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 import pytest
 from pathlib import Path

@@ -1,54 +1,4 @@
-from pathlib import Path
-from typing import Any, Optional, Dict, List, Callable
-import time
-
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""IDE Integration Module
+"""IDE Integration Module.
 
 Provides programmatic integration and automation capabilities for various
 Integrated Development Environments including Antigravity, Cursor, and VS Code.
@@ -62,10 +12,18 @@ Submodules:
     vscode: Integration with Visual Studio Code
 
 Example:
-    >>> from codomyrmex.ide import antigravity
-    >>> client = antigravity.AntigravityClient()
-    >>> capabilities = client.get_capabilities()
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+    >>> from codomyrmex.ide import IDEClient
+    >>> # Subclass IDEClient for specific IDE implementations
+"""
+
+from pathlib import Path
+from typing import Any, Optional, Dict, List, Callable
+import time
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+
 
 class IDEStatus(Enum):
     """Status of an IDE session."""
@@ -83,8 +41,6 @@ class IDECommand:
     timeout: float = 30.0
     
     def to_dict(self) -> Dict[str, Any]:
-
-
         return {"name": self.name, "args": self.args, "timeout": self.timeout}
 
 
@@ -98,8 +54,6 @@ class IDECommandResult:
     execution_time: float = 0.0
     
     def to_dict(self) -> Dict[str, Any]:
-
-
         return {
             "success": self.success,
             "command": self.command,
@@ -119,8 +73,6 @@ class FileInfo:
     line_count: Optional[int] = None
     
     def to_dict(self) -> Dict[str, Any]:
-
-
         return {
             "path": self.path,
             "name": self.name,
@@ -135,10 +87,7 @@ class IDEClient(ABC):
     
     All IDE-specific clients should inherit from this class and implement
     the required abstract methods to ensure a consistent API across integrations.
-    
-    Provides both abstract methods that must be implemented and concrete 
-    helper methods that work across all IDE implementations.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
     
     def __init__(self):
         """Initialize the IDE client."""
@@ -156,14 +105,9 @@ class IDEClient(ABC):
         """Get the history of executed commands."""
         return self._command_history.copy()
     
-    # Abstract methods that must be implemented
     @abstractmethod
     def connect(self) -> bool:
-        """Establish connection to the IDE.
-        
-        Returns:
-            bool: True if connection successful, False otherwise.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Establish connection to the IDE."""
         pass
     
     @abstractmethod
@@ -173,82 +117,41 @@ class IDEClient(ABC):
     
     @abstractmethod
     def is_connected(self) -> bool:
-        """Check if currently connected to the IDE.
-        
-        Returns:
-            bool: True if connected, False otherwise.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Check if currently connected to the IDE."""
         pass
     
     @abstractmethod
     def get_capabilities(self) -> Dict[str, Any]:
-        """Get the capabilities of this IDE integration.
-        
-        Returns:
-            Dict containing capability information.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get the capabilities of this IDE integration."""
         pass
     
     @abstractmethod
     def execute_command(self, command: str, args: Optional[Dict] = None) -> Any:
-        """Execute an IDE command.
-        
-        Args:
-            command: The command to execute.
-            args: Optional arguments for the command.
-            
-        Returns:
-            The result of the command execution.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Execute an IDE command."""
         pass
     
     @abstractmethod
     def get_active_file(self) -> Optional[str]:
-        """Get the path of the currently active file.
-        
-        Returns:
-            The file path or None if no file is active.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get the path of the currently active file."""
         pass
     
     @abstractmethod
     def open_file(self, path: str) -> bool:
-        """Open a file in the IDE.
-        
-        Args:
-            path: Path to the file to open.
-            
-        Returns:
-            bool: True if file opened successfully.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Open a file in the IDE."""
         pass
     
     @abstractmethod
     def get_open_files(self) -> List[str]:
-        """Get list of currently open files.
-        
-        Returns:
-            List of file paths.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get list of currently open files."""
         pass
     
-    # Concrete helper methods available to all implementations
     def execute_command_safe(
         self, 
         command: str, 
         args: Optional[Dict] = None,
         timeout: float = 30.0
     ) -> IDECommandResult:
-        """Execute a command with error handling and timing.
-        
-        Args:
-            command: The command to execute.
-            args: Optional arguments for the command.
-            timeout: Maximum execution time in seconds.
-            
-        Returns:
-            IDECommandResult with success status and output.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Execute a command with error handling and timing."""
         start_time = time.time()
         try:
             result = self.execute_command(command, args)
@@ -276,15 +179,7 @@ class IDEClient(ABC):
         commands: List[IDECommand],
         stop_on_error: bool = True
     ) -> List[IDECommandResult]:
-        """Execute multiple commands in sequence.
-        
-        Args:
-            commands: List of IDECommand objects to execute.
-            stop_on_error: If True, stop execution on first error.
-            
-        Returns:
-            List of IDECommandResult objects.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Execute multiple commands in sequence."""
         results = []
         for cmd in commands:
             result = self.execute_command_safe(cmd.name, cmd.args, cmd.timeout)
@@ -294,32 +189,16 @@ class IDEClient(ABC):
         return results
     
     def get_file_info(self, path: str) -> Optional[FileInfo]:
-        """Get information about a file.
-        
-        Args:
-            path: Path to the file.
-            
-        Returns:
-            FileInfo object or None if file not found.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get information about a file."""
         file_path = Path(path)
         if not file_path.exists():
             return None
         
-        # Detect language from extension
         ext_to_lang = {
-            ".py": "python",
-            ".js": "javascript", 
-            ".ts": "typescript",
-            ".java": "java",
-            ".go": "go",
-            ".rs": "rust",
-            ".c": "c",
-            ".cpp": "cpp",
-            ".md": "markdown",
-            ".json": "json",
-            ".yaml": "yaml",
-            ".yml": "yaml",
+            ".py": "python", ".js": "javascript", ".ts": "typescript",
+            ".java": "java", ".go": "go", ".rs": "rust",
+            ".c": "c", ".cpp": "cpp", ".md": "markdown",
+            ".json": "json", ".yaml": "yaml", ".yml": "yaml",
         }
         
         language = ext_to_lang.get(file_path.suffix.lower())
@@ -337,50 +216,32 @@ class IDEClient(ABC):
         )
     
     def register_event_handler(self, event: str, handler: Callable) -> None:
-        """Register a handler for an IDE event.
-        
-        Args:
-            event: Event name to listen for.
-            handler: Callable to invoke when event occurs.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Register a handler for an IDE event."""
         if event not in self._event_handlers:
             self._event_handlers[event] = []
         self._event_handlers[event].append(handler)
     
     def emit_event(self, event: str, data: Any = None) -> None:
-        """Emit an event to all registered handlers.
-        
-        Args:
-            event: Event name.
-            data: Event data to pass to handlers.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Emit an event to all registered handlers."""
         if event in self._event_handlers:
             for handler in self._event_handlers[event]:
                 try:
                     handler(data)
                 except Exception:
-                    pass  # Don't let handler errors break emission
+                    pass
     
     def clear_command_history(self) -> None:
         """Clear the command execution history."""
         self._command_history.clear()
     
     def get_last_command(self) -> Optional[IDECommandResult]:
-        """Get the most recent command result.
-        
-        Returns:
-            The last IDECommandResult or None if no commands executed.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get the most recent command result."""
         if self._command_history:
             return self._command_history[-1]
         return None
     
     def get_success_rate(self) -> float:
-        """Calculate the command success rate.
-        
-        Returns:
-            Success rate as a float between 0.0 and 1.0.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Calculate the command success rate."""
         if not self._command_history:
             return 1.0
         successes = sum(1 for cmd in self._command_history if cmd.success)
@@ -412,17 +273,21 @@ class ArtifactError(IDEError):
     pass
 
 
+# Import submodule clients
+from codomyrmex.ide.cursor import CursorClient
+
+
 __all__ = [
-    # Base classes
     "IDEClient",
     "IDEStatus",
     "IDECommand",
     "IDECommandResult",
     "FileInfo",
-    # Exceptions
     "IDEError",
     "ConnectionError",
     "CommandExecutionError",
     "SessionError",
     "ArtifactError",
+    # Submodule clients
+    "CursorClient",
 ]

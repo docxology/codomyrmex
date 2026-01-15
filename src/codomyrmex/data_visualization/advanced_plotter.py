@@ -951,12 +951,13 @@ def create_advanced_line_plot(
     xlabel: str = "",
     ylabel: str = "",
     config: PlotConfig = None,
+    save_path: str = None,
     **kwargs,
 ) -> plt.Figure:
     """Create an advanced line plot."""
     plotter = AdvancedPlotter(config)
     plotter.plot_line(x_data, y_data, **kwargs)
-    return plotter.finalize_plot(title, xlabel, ylabel)
+    return plotter.finalize_plot(title, xlabel, ylabel, save_path=save_path)
 
 def create_advanced_scatter_plot(
     x_data: list[Union[float, int, str, datetime]],
@@ -979,12 +980,13 @@ def create_advanced_bar_chart(
     xlabel: str = "",
     ylabel: str = "",
     config: PlotConfig = None,
+    save_path: str = None,
     **kwargs,
 ) -> plt.Figure:
     """Create an advanced bar chart."""
     plotter = AdvancedPlotter(config)
     plotter.plot_bar(x_data, y_data, **kwargs)
-    return plotter.finalize_plot(title, xlabel, ylabel)
+    return plotter.finalize_plot(title, xlabel, ylabel, save_path=save_path)
 
 def create_advanced_histogram(
     data: list[Union[float, int]],

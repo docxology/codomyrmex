@@ -4,20 +4,40 @@ import os
 import subprocess
 import time
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse
-from codomyrmex.agents.exceptions import AgentError, AgentTimeoutError
-from codomyrmex.agents.generic.base_agent import BaseAgent
+from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
+from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
 from codomyrmex.logging_monitoring import get_logger
 
 
+def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
+    """
+    Decorator for retrying failed operations with exponential backoff.
+    
+    Args:
+        max_retries: Maximum number of retry attempts
+        backoff_factor: Base delay multiplier (delay = factor * 2^attempt)
+    """
+    import functools
+    import time as time_module
+    
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            last_exception = None
+            for attempt in range(max_retries + 1):
+                try:
+                    return func(*args, **kwargs)
+                except (AgentError, AgentTimeoutError) as e:
+                    last_exception = e
+                    if attempt < max_retries:
+                        delay = backoff_factor * (2 ** attempt)
+                        time_module.sleep(delay)
+            raise last_exception
+        return wrapper
 
 
-
-
-
-
-
-
+class CLIAgentBase(BaseAgent):
+    """Base class for CLI-based agents with common subprocess execution patterns."""
 
 
 
@@ -67,6 +87,70 @@ class CLIAgentBase(BaseAgent):
         )
         self.env_vars = env_vars or {}
         self._command_available = None
+
+    def setup(self) -> None:
+        """
+        Setup CLI Agent configuration.
+
+        Prompts user for command path if check fails.
+        """
+        if not self._check_command_available():
+            print(f"Configuring {self.name}...")
+            print(f"Command '{self.command}' not found in PATH.")
+            path = input(f"Enter absolute path to '{self.command}' executable (or leave empty to skip): ")
+            if path:
+                self.config[f"{self.name}_command"] = path.strip()
+                self.command = path.strip()
+                self.logger.info(f"User provided command path: {path}")
+            else:
+                self.logger.warning("No command path provided during setup")
+
+    def test_connection(self) -> bool:
+        """
+        Test CLI command availability.
+        """
+        available = self._check_command_available()
+        if available:
+             self.logger.info(f"Connection test passed for {self.name} (Command available)")
+        else:
+             self.logger.warning(f"Connection test failed for {self.name}: Command not found")
+        return available
+
+    def health_check(self) -> dict[str, Any]:
+        """
+        Perform comprehensive health check.
+        
+        Returns:
+            Dict with status, available, version, and response_time
+        """
+        start_time = time.time()
+        available = self._check_command_available()
+        response_time = time.time() - start_time
+        
+        version = None
+        if available:
+            try:
+                result = subprocess.run(
+                    [self.command, "--version"],
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                version = result.stdout.strip() or result.stderr.strip()
+            except Exception:
+                pass
+        
+        status = "healthy" if available else "unavailable"
+        
+        return {
+            "status": status,
+            "available": available,
+            "command": self.command,
+            "version": version,
+            "response_time_ms": round(response_time * 1000, 2),
+            "agent": self.name,
+        }
+
 
     def _check_command_available(
         self, command: Optional[str] = None, check_args: Optional[list[str]] = None

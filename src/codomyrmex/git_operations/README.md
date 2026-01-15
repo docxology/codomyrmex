@@ -7,32 +7,16 @@
 Module components and implementation for git_operations..
 
 ## Directory Contents
-- `API_SPECIFICATION.md` – File
-- `CHANGELOG.md` – File
-- `COMPLETE_API_DOCUMENTATION.md` – File
-- `COMPREHENSIVE_USAGE_EXAMPLES.md` – File
-- `MCP_TOOL_SPECIFICATION.md` – File
-- `METADATA_SYSTEM_GUIDE.md` – File
-- `README.md` – File
-- `REPOSITORY_MANAGEMENT_GUIDE.md` – File
-- `SECURITY.md` – File
-- `SPEC.md` – File
-- `USAGE_EXAMPLES.md` – File
-- `__init__.py` – File
-- `auto_generated_library.txt` – File
-- `demo.py` – File
-- `docxology_repository_library.txt` – File
-- `git_manager.py` – File
-- `github_api.py` – File
-- `github_library_generator.py` – File
-- `metadata_cli.py` – File
-- `repo_cli.py` – File
-- `repository_library.txt` – File
-- `repository_manager.py` – File
-- `repository_metadata.json` – File
-- `repository_metadata.py` – File
-- `requirements.txt` – File
-- `visualization_integration.py` – File
+- `core/`: Core implementation
+- `api/`: API integrations
+- `cli/`: CLI entrypoints
+- `tools/`: Utility tools
+- `data/`: Data and templates
+- `docs/`: Module-specific documentation
+- `__init__.py`: Module export
+- `AGENTS.md`: Agent documentation
+- `SPEC.md`: Module specification
+- `requirements.txt`: Module dependencies
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)

@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set, Tuple, Union
 import ast
 import logging
 import sys
@@ -33,14 +33,14 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 """Main entry point and utility functions
 
 This module provides dependency_analyzer functionality including:
-    pass # AGGRESSIVE_REPAIR
+    pass 
 - 11 functions: main, __init__, extract_imports...
 - 1 classes: DependencyAnalyzer
 
 Usage:
-    pass # AGGRESSIVE_REPAIR
+    pass 
     # Example usage here
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 
 
@@ -57,10 +57,16 @@ except ImportError:
 class DependencyAnalyzer:
     """Analyzes module dependencies for circular imports and hierarchy violations."""
 
-    def __init__(self, repo_root: Path):
-        """Initialize analyzer with repository root."""
-        self.repo_root = repo_root.resolve()
-        self.src_path = self.repo_root / "src" / "codomyrmex"
+    def __init__(self, project_root: Union[str, Path]):
+        """
+        Initialize the analyzer.
+
+        Args:
+            project_root: Root directory of the project
+        """
+        self.project_root = Path(project_root).resolve()
+        self.logger = get_logger(self.__class__.__name__)
+        self.src_path = self.project_root / "src" / "codomyrmex"
         self.imports: Dict[str, Set[str]] = defaultdict(set)
         self.modules: Set[str] = set()
         self.circular_deps: List[Tuple[str, str]] = []

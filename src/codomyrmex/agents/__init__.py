@@ -6,21 +6,21 @@ and Every Code CLI. It includes theoretical foundations, generic utilities, and
 framework-specific implementations.
 
 Integration:
-    pass # AGGRESSIVE_REPAIR
+    pass 
 - Uses `logging_monitoring` for all logging
 - Integrates with `ai_code_editing` for code generation workflows
 - Integrates with `llm` for LLM infrastructure
 - Integrates with `code` for safe code execution
 
 Available classes:
-    pass # AGGRESSIVE_REPAIR
+    pass 
 - AgentInterface: Abstract base class for all agents
 - AgentRequest, AgentResponse: Request/response data structures
 - AgentCapabilities: Enum of agent capabilities
 - AgentConfig: Configuration management
 
 Available submodules:
-    pass # AGGRESSIVE_REPAIR
+    pass 
 - generic: Base agent classes and utilities
 - theory: Theoretical foundations for agentic systems
 - jules: Jules CLI integration
@@ -30,30 +30,88 @@ Available submodules:
 - gemini: Gemini CLI integration
 - mistral_vibe: Mistral Vibe CLI integration
 - every_code: Every Code CLI integration (multi-agent orchestration)
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
-from .config import AgentConfig, get_config, reset_config, set_config
+from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
+from codomyrmex.agents.claude import ClaudeClient
+from codomyrmex.agents.codex import CodexClient
+from codomyrmex.agents.droid import DroidController
+from codomyrmex.agents.every_code import EveryCodeClient
+from codomyrmex.agents.gemini import GeminiClient
+from codomyrmex.agents.jules import JulesClient
+from codomyrmex.agents.mistral_vibe import MistralVibeClient
+from codomyrmex.agents.opencode import OpenCodeClient
+from codomyrmex.agents.theory.agent_architectures import (
+    ReactiveArchitecture,
+    DeliberativeArchitecture,
+    HybridArchitecture,
+    KnowledgeBase,
+)
+
 from .core import (
+    AgentConfig,
+    get_config,
+    reset_config,
+    set_config,
+    BaseAgent,
     AgentCapabilities,
     AgentInterface,
     AgentIntegrationAdapter,
     AgentRequest,
     AgentResponse,
+    AgentSession,
+    SessionManager,
+    Message,
+    parse_json_response,
+    parse_code_blocks,
+    parse_first_code_block,
+    parse_structured_output,
+    CodeBlock,
+    ParseResult,
+    clean_response,
 )
+from .git_agent import GitAgent
+from .generic import APIAgentBase, CLIAgentBase
 
 __all__ = [
-    # Core interfaces
     "AgentInterface",
     "AgentIntegrationAdapter",
+    "BaseAgent",
+    "GitAgent",
+    "APIAgentBase",
+    "CLIAgentBase",
     "AgentCapabilities",
     "AgentRequest",
     "AgentResponse",
-    # Configuration
     "AgentConfig",
     "get_config",
     "set_config",
     "reset_config",
+    "CodeEditor",
+    "ClaudeClient",
+    "CodexClient",
+    "DroidController",
+    "EveryCodeClient",
+    "GeminiClient",
+    "JulesClient",
+    "MistralVibeClient",
+    "OpenCodeClient",
+    "ReactiveArchitecture",
+    "DeliberativeArchitecture",
+    "HybridArchitecture",
+    "KnowledgeBase",
+    # Session management
+    "AgentSession",
+    "SessionManager",
+    "Message",
+    # Parsers
+    "parse_json_response",
+    "parse_code_blocks",
+    "parse_first_code_block",
+    "parse_structured_output",
+    "CodeBlock",
+    "ParseResult",
+    "clean_response",
 ]
 
 __version__ = "0.1.0"
-

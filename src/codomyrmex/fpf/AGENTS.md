@@ -12,26 +12,13 @@ Module components and implementation for fpf..
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
-- `analyzer.py` – Project file
-- `context_builder.py` – Project file
-- `exporter.py` – Project file
-- `extractor.py` – Project file
-- `fetcher.py` – Project file
-- `graph_generator.py` – Project file
-- `indexer.py` – Project file
-- `models.py` – Project file
-- `parser.py` – Project file
-- `report_generator.py` – Project file
+- `analysis/` – Directory containing analysis components
+- `core/` – Directory containing core components
+- `io/` – Directory containing I/O components
 - `requirements.txt` – Project file
-- `section_exporter.py` – Project file
-- `section_importer.py` – Project file
-- `section_manager.py` – Project file
-- `term_analyzer.py` – Project file
-- `visualizer.py` – Project file
-- `visualizer_png.py` – Project file
+- `visualization/` – Directory containing visualization components
 
 ## Operating Contracts
-- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

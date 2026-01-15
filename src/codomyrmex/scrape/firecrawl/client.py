@@ -2,7 +2,7 @@
 
 This module wraps the firecrawl-py SDK, providing typed interfaces
 and error translation to module exceptions.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 from typing import Any, Dict, List, Optional
 
@@ -29,7 +29,7 @@ class FirecrawlClient:
         client = FirecrawlClient(config)
         result = client.scrape_url("https://example.com", formats=["markdown"])
         ```
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
 
     def __init__(self, config: ScrapeConfig):
         """Initialize the Firecrawl client.
@@ -39,7 +39,7 @@ class FirecrawlClient:
 
         Raises:
             FirecrawlError: If firecrawl-py is not installed or initialization fails
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         try:
             from firecrawl import Firecrawl
         except ImportError as e:
@@ -86,7 +86,7 @@ class FirecrawlClient:
             )
             print(result["markdown"])
             ```
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         formats = formats or ["markdown"]
         logger.debug(f"Scraping URL with Firecrawl: {url}, formats: {formats}")
 
@@ -122,7 +122,7 @@ class FirecrawlClient:
 
         Returns:
             Dictionary containing crawl job information with keys:
-                pass # AGGRESSIVE_REPAIR
+                pass 
             - id: Job identifier
             - status: Current job status
             - total: Total pages found
@@ -142,7 +142,7 @@ class FirecrawlClient:
             )
             print(f"Job ID: {result['id']}")
             ```
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         logger.debug(f"Starting crawl with Firecrawl: {url}, limit: {limit}")
 
         try:
@@ -169,7 +169,7 @@ class FirecrawlClient:
 
         Returns:
             Dictionary containing discovered links with structure:
-                pass # AGGRESSIVE_REPAIR
+                pass 
             - links: List of link dictionaries with url, title, description
 
         Raises:
@@ -183,7 +183,7 @@ class FirecrawlClient:
             for link in result["links"]:
                 print(f"{link['title']}: {link['url']}")
             ```
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         logger.debug(f"Mapping URL with Firecrawl: {url}" + (f" (search: {search})" if search else ""))
 
         try:
@@ -214,7 +214,7 @@ class FirecrawlClient:
 
         Returns:
             Dictionary containing search results with structure:
-                pass # AGGRESSIVE_REPAIR
+                pass 
             - data: List of result dictionaries with url, title, content
 
         Raises:
@@ -232,7 +232,7 @@ class FirecrawlClient:
             for item in result["data"]:
                 print(f"{item['url']}: {item.get('markdown', '')[:100]}")
             ```
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         logger.debug(f"Searching web with Firecrawl: {query}, limit: {limit}")
 
         try:
@@ -262,7 +262,7 @@ class FirecrawlClient:
 
         Returns:
             Dictionary containing extracted data with structure:
-                pass # AGGRESSIVE_REPAIR
+                pass 
             - id: Job identifier (if async)
             - status: Extraction status
             - data: Extracted structured data
@@ -285,7 +285,7 @@ class FirecrawlClient:
             )
             print(result["data"])
             ```
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         logger.debug(f"Extracting data with Firecrawl from {len(urls)} URL(s)")
 
         try:

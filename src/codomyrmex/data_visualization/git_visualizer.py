@@ -21,7 +21,10 @@ from typing import Any
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
-from .mermaid_generator import MermaidDiagramGenerator
+from .mermaid_generator import (
+    MermaidDiagramGenerator,
+    create_git_workflow_diagram,
+)
 
 # Import from data_visualization module
 from .plot_utils import (
@@ -32,7 +35,7 @@ from .plot_utils import (
 
 # Import git_operations if available
 try:
-    from codomyrmex.git_operations.git_manager import (
+    from codomyrmex.git_operations.core.git import (
         check_git_availability,
         get_commit_history,
         get_current_branch,
@@ -798,10 +801,30 @@ class GitVisualizer:
                     structure[item.name] = substructure
                 else:
                     structure[item.name] = "file"
+
         except Exception as e:
-            logger.error(f"Error reading repository structure: {e}")
+            logger.error(f"Error getting repository structure: {e}")
 
         return structure
+
+
+def visualize_git_repository(repository_path: str, output_dir: str) -> dict[str, bool]:
+    """
+    Visualize a git repository by creating a comprehensive report.
+
+    Args:
+        repository_path: Path to Git repository
+        output_dir: Directory to save all outputs
+
+    Returns:
+        Dictionary with success status for each visualization type
+    """
+    visualizer = GitVisualizer()
+    return visualizer.create_comprehensive_git_report(
+        repository_path=repository_path, output_dir=output_dir
+    )
+
+
 
     def _create_report_summary(
         self,

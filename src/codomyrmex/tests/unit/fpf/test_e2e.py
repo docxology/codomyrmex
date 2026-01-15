@@ -39,7 +39,7 @@ Test problem.
 
 ### Solution
 Test solution.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         

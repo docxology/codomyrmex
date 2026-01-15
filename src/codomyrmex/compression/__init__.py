@@ -1,7 +1,13 @@
 """
 Compression module for Codomyrmex.
 
-This module provides data compression utilities and archive handling.
+This module provides data compression utilities and archive handling:
+- gzip, zlib, and ZIP format support
+- Configurable compression levels
+- Stream-based compression
+- Automatic format detection
+- File compression utilities
+- Archive creation and extraction
 """
 
 from pathlib import Path
@@ -10,15 +16,30 @@ from typing import Optional
 from codomyrmex.exceptions import CodomyrmexError
 
 from .archive_manager import ArchiveManager
-from .compressor import Compressor
+from .compressor import (
+    Compressor,
+    CompressionError,
+    compress_data,
+    decompress_data,
+    auto_decompress,
+)
 
 __all__ = [
+    # Classes
     "Compressor",
     "ArchiveManager",
+    "CompressionError",
+    # Functions
     "compress",
     "decompress",
     "get_compressor",
+    "compress_data",
+    "decompress_data",
+    "auto_decompress",
+    "compress_file",
+    "decompress_file",
 ]
+
 
 __version__ = "0.1.0"
 

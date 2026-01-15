@@ -2,49 +2,15 @@ from pathlib import Path
 from typing import Any, Iterator, Optional
 import json
 
-from codomyrmex.agents.config import get_config
+from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-
-
-
-
-
-
-
-
-
-"""Jules CLI client wrapper."""
+from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError, JulesError
+from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.logging_monitoring import get_logger
 
 
 class JulesClient(CLIAgentBase):
@@ -89,115 +55,78 @@ class JulesClient(CLIAgentBase):
             )
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
-        """
-        Execute Jules command.
-
-        Args:
-            request: Agent request
-
-        Returns:
-            Agent response
-        """
+        """Execute Jules command."""
         prompt = request.prompt
         context = request.context or {}
-
-        # Build jules command arguments
         jules_args = self._build_jules_args(prompt, context)
-
-        try:
-            # Execute jules command using base class method
-            result = self._execute_command(args=jules_args)
-
-            # Build response using base class helper
-            return self._build_response_from_result(
-                result,
-                request,
-                additional_metadata={
-                    "jules_success": result.get("success", False),
-                    "command_full": " ".join([self.command] + jules_args),
-                },
-            )
-
-        except AgentTimeoutError as e:
-            # Convert timeout to JulesError
-            raise JulesError(
-                f"Jules command timed out: {str(e)}",
-                command=self.command,
-            ) from e
-        except AgentError as e:
-            # Convert base agent error to JulesError
-            raise JulesError(
-                f"Jules command failed: {str(e)}",
-                command=self.command,
-            ) from e
-        except Exception as e:
-            # Convert any other exception to JulesError
-            self.logger.error(
-                f"Jules execution failed: {e}",
-                exc_info=True,
-                extra={"command": self.command, "args": jules_args, "error": str(e)},
-            )
-            raise JulesError(f"Jules command failed: {str(e)}", command=self.command) from e
+        
+        retries = 3
+        last_error = None
+        
+        for attempt in range(retries):
+            try:
+                result = self._execute_command(args=jules_args)
+                
+                # Check for auth errors in output
+                stdout = result.get("stdout", "")
+                stderr = result.get("stderr", "")
+                if "unauthorized" in stdout.lower() or "unauthorized" in stderr.lower():
+                    raise JulesError("Jules authentication failed. Please run 'jules auth login'.", command=self.command)
+                
+                return self._build_response_from_result(
+                    result,
+                    request,
+                    additional_metadata={
+                        "jules_success": result.get("success", False),
+                        "command_full": " ".join([self.command] + jules_args),
+                        "attempt": attempt + 1,
+                    },
+                )
+            except AgentTimeoutError as e:
+                # Timeouts might be transient
+                last_error = e
+                if attempt < retries - 1:
+                    continue
+                raise JulesError(f"Jules command timed out after {retries} attempts: {str(e)}", command=self.command) from e
+            except AgentError as e:
+                # Other agent errors
+                raise JulesError(f"Jules command failed: {str(e)}", command=self.command) from e
+            except Exception as e:
+                self.logger.error(f"Jules execution failed: {e}", exc_info=True)
+                raise JulesError(f"Jules command failed: {str(e)}", command=self.command) from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
-        """
-        Stream Jules command output.
-
-        Note: Jules CLI is primarily TUI-based. For streaming, we execute
-        the command and stream its output. For interactive TUI mode,
-        users should use Jules CLI directly.
-
-        Args:
-            request: Agent request
-
-        Yields:
-            Chunks of output
-        """
+        """Stream Jules command output."""
         prompt = request.prompt
         context = request.context or {}
-
         jules_args = self._build_jules_args(prompt, context)
-
-        # Use base class streaming method
         yield from self._stream_command(args=jules_args)
 
     def _build_jules_args(self, prompt: str, context: dict[str, Any]) -> list[str]:
-        """
-        Build jules command arguments from prompt and context.
+        """Build jules command arguments from prompt and context."""
+        
+        # Check for direct commands
+        if context.get("command"):
+            cmd = context["command"]
+            if cmd in ["auth", "config", "login", "logout"]:
+                 args = [cmd]
+                 if context.get("args"):
+                     args.extend(context["args"])
+                 return args
 
-        Jules CLI uses task-based commands. For code generation/editing tasks,
-        we use 'jules new' to create a session with the task description.
-
-        Args:
-            prompt: User prompt (task description)
-            context: Additional context (may include repo, parallel, etc.)
-
-        Returns:
-            List of command arguments
-        """
         args = ["new"]
 
-        # Add repository if specified in context
         if "repo" in context:
             args.extend(["--repo", str(context["repo"])])
 
-        # Add parallel sessions if specified
         if "parallel" in context:
             args.extend(["--parallel", str(context["parallel"])])
 
-        # Add prompt as task description
         args.append(prompt)
-
         return args
 
-
     def get_jules_help(self) -> dict[str, Any]:
-        """
-        Get jules help information.
-
-        Returns:
-            Help information dictionary
-        """
+        """Get jules help information."""
         try:
             result = self._execute_command(args=["help"], timeout=5)
             return {
@@ -206,32 +135,24 @@ class JulesClient(CLIAgentBase):
                 "available": result.get("success", False),
             }
         except Exception as e:
-            self.logger.warning(
-                f"Failed to get Jules help: {e}",
-                extra={"command": self.command, "error": str(e)},
-            )
-            return {
-                "help_text": "",
-                "exit_code": -1,
-                "available": False,
-                "error": str(e),
-            }
+            self.logger.warning(f"Failed to get Jules help: {e}")
+            return {"help_text": "", "exit_code": -1, "available": False, "error": str(e)}
 
-    def execute_jules_command(
-        self, command: str, args: Optional[list[str]] = None
-    ) -> dict[str, Any]:
+    def execute_jules_command(self, command: str, args: Optional[list[str]] = None, config_path: Optional[Path] = None) -> dict[str, Any]:
         """
         Execute a jules command.
-
+        
         Args:
-            command: Jules command name
-            args: Optional command arguments
-
-        Returns:
-            Command result dictionary
+            command: The jules subcommand (e.g., 'auth', 'config').
+            args: Additional arguments.
+            config_path: Path to a custom config file to use with --config.
         """
         jules_args = [command]
+        
+        if config_path:
+            jules_args.extend(["--config", str(config_path)])
+            
         if args:
             jules_args.extend(args)
-
+            
         return self._execute_command(args=jules_args)

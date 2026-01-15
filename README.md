@@ -1,6 +1,6 @@
 # Codomyrmex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/codomyrmex/codomyrmex)
@@ -853,7 +853,7 @@ Advanced capabilities for specific domains:
 - **Infrastructure Management**: [Database operations](src/codomyrmex/database_management/) → [Configuration management](src/codomyrmex/config_management/) → [Physical monitoring](src/codomyrmex/physical_management/)
 - **Quality Assurance**: [Security scanning](src/codomyrmex/security/) → [Performance benchmarking](src/codomyrmex/performance/) → [Automated testing](src/codomyrmex/tests/)
 
-See **[executable examples](scripts/examples/)** for working demonstrations of these workflows.
+See **[executable examples](src/codomyrmex/examples/)** for working demonstrations of these workflows.
 
 ## Project Structure
 
@@ -964,7 +964,7 @@ Modules organized to prevent circular dependencies:
 - **Children**:
     - [Source Code](src/README.md) - All modules and implementations
     - [Documentation](docs/README.md) - User and developer guides
-    - [Scripts](scripts/examples/README.md) - Automation and orchestration utilities
+    - [Scripts](scripts/README.md) - Automation and orchestration utilities
 
 ## Documentation
 

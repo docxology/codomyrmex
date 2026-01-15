@@ -2,7 +2,7 @@
 
 Tests use real implementations only. TestAgent is a test adapter
 that implements BaseAgent interface for testing, not a mock.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 import pytest
 import time
@@ -16,7 +16,7 @@ class TestAgent(BaseAgent):
     """Test agent for advanced orchestration testing.
     
     This is a test adapter implementing BaseAgent interface, not a mock.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
 
     def __init__(
         self,

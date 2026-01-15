@@ -1,10 +1,9 @@
 from typing import Any, Callable, Iterator, Optional, Type
 import time
 
-from codomyrmex.agents.config import AgentConfig, get_config
-from codomyrmex.agents.core import AgentRequest, AgentResponse
-from codomyrmex.agents.exceptions import AgentError, AgentConfigurationError
-from codomyrmex.agents.generic.base_agent import BaseAgent
+from codomyrmex.agents.core.config import AgentConfig, get_config
+from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
+from codomyrmex.agents.core.exceptions import AgentError, AgentConfigurationError
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -158,6 +157,42 @@ class APIAgentBase(BaseAgent):
                 return value
 
         return default
+
+    def setup(self) -> None:
+        """
+        Setup Agent configuration.
+
+        Prompts user for API key if not configured.
+        """
+        if not self.config.get(self.api_key_config_key):
+            import getpass
+            print(f"Configuring {self.name}...")
+            api_key = getpass.getpass(f"Enter {self.api_key_config_key} (or env var name): ")
+            if api_key:
+                # In a real app we might save this to a config file
+                # For now we just check if it looks like an ENV var or a key
+                if api_key.isupper() and "_" in api_key:
+                     self.logger.info(f"User provided env var name: {api_key}")
+                else:
+                     self.logger.info("User provided raw API key")
+            else:
+                self.logger.warning("No API key provided during setup")
+
+    def test_connection(self) -> bool:
+        """
+        Test API connection.
+
+        Checks if API key is present and (optionally) makes a dummy call.
+        """
+        api_key = self.api_key
+        if not api_key:
+            self.logger.warning(f"Connection test failed for {self.name}: No API key found")
+            return False
+        
+        # We could try a simple generation here if we want to be thorough
+        # For now, presence of key is a basic check
+        self.logger.info(f"Connection test passed for {self.name} (Key present)")
+        return True
 
     def _handle_api_error(
         self,

@@ -276,7 +276,7 @@ Found references to old `examples/` paths that should be updated to `scripts/exa
 - **output/script_logs/20260107_045635/cerebrum/AGENTS.md**: Missing sections: Active Components, Operating Contracts
 
 ## Navigation Issues
-- **docs/README.md**: Broken link `../../../README.md`
+- **docs/README.md**: Broken link `../../README.md`
   - Resolved to: `/Users/mini/Documents/README.md`
 
 ## Recommendations

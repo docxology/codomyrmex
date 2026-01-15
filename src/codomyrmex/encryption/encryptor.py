@@ -1,18 +1,20 @@
-"""Encryption utilities."""
+"""Encryption utilities.
+
+This module provides cryptographic operations including:
+- AES-256 symmetric encryption with CBC mode
+- RSA asymmetric encryption with OAEP padding
+- Key generation and password-based key derivation (PBKDF2)
+- Digital signatures with PSS padding
+- File encryption utilities
+- Secure hashing functions
+"""
+import base64
 import os
+from typing import Optional, Tuple
 
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes, padding
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
-from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
-from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
-from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
-from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import hashes, padding, serialization
+from cryptography.hazmat.primitives.asymmetric import padding as asym_padding, rsa
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import hashlib
@@ -21,7 +23,18 @@ from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
+logger = get_logger(__name__)
 
+try:
+    CRYPTOGRAPHY_AVAILABLE = True
+except ImportError:
+    CRYPTOGRAPHY_AVAILABLE = False
+
+
+class EncryptionError(CodomyrmexError):
+    """Raised when encryption operations fail."""
+
+    pass
 
 
 
@@ -255,3 +268,190 @@ class Encryptor:
             )
         )
 
+    # --- Utility Methods ---
+
+    def encrypt_string(self, plaintext: str, key: bytes, encoding: str = "utf-8") -> str:
+        """Encrypt a string and return base64-encoded ciphertext.
+
+        Args:
+            plaintext: String to encrypt
+            key: Encryption key
+            encoding: String encoding (default: utf-8)
+
+        Returns:
+            Base64-encoded encrypted string
+        """
+        encrypted = self.encrypt(plaintext.encode(encoding), key)
+        return base64.b64encode(encrypted).decode("ascii")
+
+    def decrypt_string(self, ciphertext: str, key: bytes, encoding: str = "utf-8") -> str:
+        """Decrypt a base64-encoded ciphertext to string.
+
+        Args:
+            ciphertext: Base64-encoded encrypted string
+            key: Decryption key
+            encoding: String encoding (default: utf-8)
+
+        Returns:
+            Decrypted string
+        """
+        encrypted = base64.b64decode(ciphertext.encode("ascii"))
+        return self.decrypt(encrypted, key).decode(encoding)
+
+    def encrypt_file(self, input_path: str, output_path: str, key: bytes) -> bool:
+        """Encrypt a file.
+
+        Args:
+            input_path: Path to input file
+            output_path: Path to output encrypted file
+            key: Encryption key
+
+        Returns:
+            True if successful
+
+        Raises:
+            EncryptionError: If encryption fails
+        """
+        try:
+            with open(input_path, "rb") as f:
+                plaintext = f.read()
+
+            ciphertext = self.encrypt(plaintext, key)
+
+            with open(output_path, "wb") as f:
+                f.write(ciphertext)
+
+            logger.info(f"Encrypted file: {input_path} -> {output_path}")
+            return True
+        except Exception as e:
+            logger.error(f"File encryption error: {e}")
+            raise EncryptionError(f"Failed to encrypt file: {str(e)}") from e
+
+    def decrypt_file(self, input_path: str, output_path: str, key: bytes) -> bool:
+        """Decrypt a file.
+
+        Args:
+            input_path: Path to encrypted file
+            output_path: Path to output decrypted file
+            key: Decryption key
+
+        Returns:
+            True if successful
+
+        Raises:
+            EncryptionError: If decryption fails
+        """
+        try:
+            with open(input_path, "rb") as f:
+                ciphertext = f.read()
+
+            plaintext = self.decrypt(ciphertext, key)
+
+            with open(output_path, "wb") as f:
+                f.write(plaintext)
+
+            logger.info(f"Decrypted file: {input_path} -> {output_path}")
+            return True
+        except Exception as e:
+            logger.error(f"File decryption error: {e}")
+            raise EncryptionError(f"Failed to decrypt file: {str(e)}") from e
+
+    @staticmethod
+    def hash_data(data: bytes, algorithm: str = "sha256") -> str:
+        """Compute hash of data.
+
+        Args:
+            data: Data to hash
+            algorithm: Hash algorithm (sha256, sha512, sha384, md5)
+
+        Returns:
+            Hexadecimal hash string
+        """
+        if algorithm == "sha256":
+            return hashlib.sha256(data).hexdigest()
+        elif algorithm == "sha512":
+            return hashlib.sha512(data).hexdigest()
+        elif algorithm == "sha384":
+            return hashlib.sha384(data).hexdigest()
+        elif algorithm == "md5":
+            return hashlib.md5(data).hexdigest()
+        else:
+            raise ValueError(f"Unknown hash algorithm: {algorithm}")
+
+    @staticmethod
+    def generate_salt(length: int = 16) -> bytes:
+        """Generate cryptographically secure random salt.
+
+        Args:
+            length: Salt length in bytes (default: 16)
+
+        Returns:
+            Random salt bytes
+        """
+        return os.urandom(length)
+
+    def generate_key_pair(self, key_size: int = 2048) -> Tuple[bytes, bytes]:
+        """Generate RSA key pair.
+
+        Args:
+            key_size: RSA key size in bits (default: 2048)
+
+        Returns:
+            Tuple of (private_key_pem, public_key_pem)
+        """
+        private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=key_size,
+            backend=default_backend()
+        )
+
+        private_pem = private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+
+        public_pem = private_key.public_key().public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+
+        return private_pem, public_pem
+
+
+# Convenience functions for module-level access
+def encrypt_data(data: bytes, key: bytes, algorithm: str = "AES") -> bytes:
+    """Encrypt data using specified algorithm.
+
+    Args:
+        data: Data to encrypt
+        key: Encryption key
+        algorithm: Algorithm (AES or RSA)
+
+    Returns:
+        Encrypted data
+    """
+    return Encryptor(algorithm).encrypt(data, key)
+
+
+def decrypt_data(data: bytes, key: bytes, algorithm: str = "AES") -> bytes:
+    """Decrypt data using specified algorithm.
+
+    Args:
+        data: Encrypted data
+        key: Decryption key
+        algorithm: Algorithm (AES or RSA)
+
+    Returns:
+        Decrypted data
+    """
+    return Encryptor(algorithm).decrypt(data, key)
+
+
+def generate_aes_key() -> bytes:
+    """Generate a random AES-256 key.
+
+    Returns:
+        32-byte AES key
+    """
+    return os.urandom(32)

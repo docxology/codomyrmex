@@ -1,13 +1,13 @@
 from typing import Any, Iterator, Optional
 import time
 
-from codomyrmex.agents.config import get_config
+from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.exceptions import ClaudeError
+from codomyrmex.agents.core.exceptions import ClaudeError
 from codomyrmex.agents.generic.api_agent_base import APIAgentBase
 from codomyrmex.logging_monitoring import get_logger
 

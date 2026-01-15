@@ -27,7 +27,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 This module provides tools for assessing documentation quality,
 consistency, and technical accuracy across the Codomyrmex platform.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 logger = get_logger(__name__)
 

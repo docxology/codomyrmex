@@ -3,7 +3,7 @@
 Tests use real implementations only. When Mistral Vibe CLI is not available,
 tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 import pytest
 from typing import Any

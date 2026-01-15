@@ -6,13 +6,9 @@ import shutil  # For checking if command exists
 import subprocess
 import sys
 
-from documentation_website import FunctionName, ClassName
 import webbrowser
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
-
-
-
 
 
 

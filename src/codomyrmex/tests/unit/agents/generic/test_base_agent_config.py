@@ -4,7 +4,7 @@ import pytest
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
 from codomyrmex.agents.generic import BaseAgent
-from codomyrmex.agents.config import AgentConfig, get_config, set_config, reset_config
+from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
 
 
 class TestAgent(BaseAgent):

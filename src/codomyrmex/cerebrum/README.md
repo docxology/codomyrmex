@@ -4,34 +4,22 @@
 
 ## Overview
 
-Module components and implementation for cerebrum..
+## Overview
+
+Case-based reasoning engine with Bayesian inference and Active Inference capabilities. Refactored into domain-driven submodules.
 
 ## Directory Contents
+- `core/` – Basic engines, data structures, and configuration
+- `inference/` – Bayesian and Active Inference logic
+- `fpf/` – First Principles Framework orchestration
+- `visualization/` – Rendering and visualization tools
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
-- `FPF_INTEGRATION_SUMMARY.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `README.md` – File
 - `SECURITY.md` – File
 - `SPEC.md` – File
 - `USAGE_EXAMPLES.md` – File
-- `__init__.py` – File
-- `active_inference.py` – File
-- `bayesian.py` – File
-- `cases.py` – File
-- `composition_visualizer.py` – File
-- `concordance_visualizer.py` – File
-- `config.py` – File
-- `core.py` – File
-- `exceptions.py` – File
-- `fpf_combinatorics.py` – File
-- `fpf_orchestration.py` – File
-- `models.py` – File
-- `transformations.py` – File
-- `utils.py` – File
-- `visualization.py` – File
-- `visualization_base.py` – File
-- `visualization_theme.py` – File
 
 ## Navigation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)

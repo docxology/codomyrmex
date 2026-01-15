@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+"""Performance Monitoring Module for Codomyrmex Database Management.
+
+This module provides database performance monitoring, query optimization,
+and performance analytics capabilities.
+"""
+
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Optional
@@ -9,23 +16,11 @@ import statistics
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-
-
-
-
-
-
-#!/usr/bin/env python3
-
-# Performance Monitoring Module for Codomyrmex Database Management.
-
-This module provides database performance monitoring, query optimization,
-and performance analytics capabilities.
-"""
-
 logger = get_logger(__name__)
 
+
 @dataclass
+
 class QueryMetrics:
     """Query performance metrics."""
     query_hash: str

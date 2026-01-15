@@ -19,12 +19,16 @@ from codomyrmex.exceptions import CodomyrmexError
 
 from .mcp_schemas import (
     MCPErrorDetail,
+    MCPMessage,
     MCPToolCall,
+    MCPToolRegistry,
     MCPToolResult,
 )
 
 __all__ = [
     "MCPErrorDetail",
+    "MCPMessage",
     "MCPToolCall",
+    "MCPToolRegistry",
     "MCPToolResult",
 ]

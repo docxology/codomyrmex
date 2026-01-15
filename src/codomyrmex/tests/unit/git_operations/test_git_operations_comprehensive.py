@@ -28,7 +28,7 @@ from typing import Dict, List, Optional
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from codomyrmex.git_operations.git_manager import (
+from codomyrmex.git_operations.core.git import (
     check_git_availability,
     is_git_repository,
     initialize_git_repository,

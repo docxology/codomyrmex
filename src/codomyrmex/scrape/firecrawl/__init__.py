@@ -2,7 +2,7 @@
 
 This submodule provides integration with the Firecrawl Python SDK,
 wrapping it in a typed interface that matches the core scraping abstractions.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 from .adapter import FirecrawlAdapter
 from .client import FirecrawlClient

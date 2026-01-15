@@ -105,7 +105,7 @@ class MCPToolResult(BaseModel):
 
             Returns:
                 The validated value
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:             """
+            """
         if hasattr(info, 'data') and info.data.get("status"):
             status = info.data.get("status")
         else:
@@ -133,7 +133,7 @@ class MCPToolResult(BaseModel):
 
             Returns:
                 The validated value
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:             """
+            """
         if hasattr(info, 'data') and info.data.get("status"):
             status = info.data.get("status")
         else:
@@ -150,6 +150,144 @@ class MCPToolResult(BaseModel):
         return v
 
     model_config = ConfigDict(extra="allow")  # Allow additional fields in data, specific validation is per-tool
+
+
+class MCPMessage(BaseModel):
+    """Represents a message in an MCP conversation."""
+    
+    role: str = Field(..., description="Role of the message sender (e.g., 'user', 'assistant', 'system', 'tool').")
+    content: Optional[str] = Field(None, description="Text content of the message.")
+    tool_calls: Optional[list[MCPToolCall]] = Field(None, description="Tool calls made in this message.")
+    tool_results: Optional[list[MCPToolResult]] = Field(None, description="Results from tool executions.")
+    metadata: Optional[dict[str, Any]] = Field(None, description="Additional metadata for the message.")
+    
+    model_config = ConfigDict(extra="allow")
+
+
+class MCPToolRegistry:
+    """Registry for managing available MCP tools."""
+    
+    def __init__(self):
+        """Initialize the tool registry."""
+        self._tools: dict[str, dict[str, Any]] = {}
+        logger.info("MCPToolRegistry initialized")
+        
+    def register(self, tool_name: str, schema: dict[str, Any], handler: Optional[callable] = None) -> None:
+        """
+        Register a tool with the registry.
+        
+        Args:
+            tool_name: Unique name for the tool
+            schema: JSON Schema describing the tool's arguments
+            handler: Optional callable to handle tool invocations
+        """
+        self._tools[tool_name] = {
+            "name": tool_name,
+            "schema": schema,
+            "handler": handler,
+        }
+        logger.debug(f"Registered tool: {tool_name}")
+        
+    def unregister(self, tool_name: str) -> bool:
+        """
+        Remove a tool from the registry.
+        
+        Args:
+            tool_name: Name of the tool to remove
+            
+        Returns:
+            True if removed, False if not found
+        """
+        if tool_name in self._tools:
+            del self._tools[tool_name]
+            logger.debug(f"Unregistered tool: {tool_name}")
+            return True
+        return False
+        
+    def get(self, tool_name: str) -> Optional[dict[str, Any]]:
+        """
+        Get a tool's metadata by name.
+        
+        Args:
+            tool_name: Name of the tool
+            
+        Returns:
+            Tool metadata dict or None
+        """
+        return self._tools.get(tool_name)
+        
+    def list_tools(self) -> list[str]:
+        """
+        List all registered tool names.
+        
+        Returns:
+            List of tool names
+        """
+        return list(self._tools.keys())
+        
+    def validate_call(self, tool_call: MCPToolCall) -> tuple[bool, Optional[str]]:
+        """
+        Validate a tool call against the registry.
+        
+        Args:
+            tool_call: The tool call to validate
+            
+        Returns:
+            Tuple of (is_valid, error_message)
+        """
+        tool = self._tools.get(tool_call.tool_name)
+        if not tool:
+            return False, f"Unknown tool: {tool_call.tool_name}"
+            
+        # Basic schema validation could be added here
+        # For now, just check tool exists
+        return True, None
+        
+    def execute(self, tool_call: MCPToolCall) -> MCPToolResult:
+        """
+        Execute a tool call using its registered handler.
+        
+        Args:
+            tool_call: The tool call to execute
+            
+        Returns:
+            MCPToolResult with execution outcome
+        """
+        tool = self._tools.get(tool_call.tool_name)
+        if not tool:
+            return MCPToolResult(
+                status="failure",
+                error=MCPErrorDetail(
+                    error_type="ToolNotFound",
+                    error_message=f"Tool '{tool_call.tool_name}' not registered"
+                )
+            )
+            
+        handler = tool.get("handler")
+        if not handler:
+            return MCPToolResult(
+                status="failure", 
+                error=MCPErrorDetail(
+                    error_type="NoHandler",
+                    error_message=f"No handler registered for tool '{tool_call.tool_name}'"
+                )
+            )
+            
+        try:
+            result = handler(**tool_call.arguments)
+            return MCPToolResult(
+                status="success",
+                data={"result": result}
+            )
+        except Exception as e:
+            logger.error(f"Tool execution failed: {e}")
+            return MCPToolResult(
+                status="failure",
+                error=MCPErrorDetail(
+                    error_type=type(e).__name__,
+                    error_message=str(e)
+                )
+            )
 
 
 # Example Usage (for testing or demonstration)

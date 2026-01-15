@@ -53,14 +53,14 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 """Core business logic and data management
 
 This module provides perimeter_management functionality including:
-    pass # AGGRESSIVE_REPAIR
+    pass 
 - 6 functions: check_perimeter_security, manage_access_points, __init__...
 - 2 classes: AccessPoint, PerimeterManager
 
 Usage:
-    pass # AGGRESSIVE_REPAIR
+    pass 
     # Example usage here
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 logger = get_logger(__name__)
 
 

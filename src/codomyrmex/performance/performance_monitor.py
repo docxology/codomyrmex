@@ -1,3 +1,4 @@
+
 from pathlib import Path
 from typing import Any, Callable, Optional, Union
 import functools
@@ -6,58 +7,15 @@ import time
 
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-import psutil
 import threading
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 logger = get_logger(__name__)
 
 
 try:
-
+    import psutil
     HAS_PSUTIL = True
 except ImportError:
     psutil = None
@@ -75,6 +33,49 @@ class PerformanceMetrics:
     timestamp: float = field(default_factory=time.time)
     metadata: dict[str, Any] = field(default_factory=dict)
 
+@dataclass
+class SystemMetrics:
+    cpu_percent: float
+    memory_percent: float
+    memory_used_mb: float
+    memory_total_mb: float
+    disk_usage_percent: float
+    disk_free_gb: float
+    network_bytes_sent: int
+    network_bytes_recv: int
+    timestamp: float = field(default_factory=time.time)
+
+class SystemMonitor:
+    def __init__(self, interval: float = 1.0):
+        self.interval = interval
+        self._process = psutil.Process() if HAS_PSUTIL else None
+
+    def start_monitoring(self):
+        # Implementation placeholder
+        pass
+    
+    def stop_monitoring(self):
+        # Implementation placeholder
+        pass
+
+    def get_current_metrics(self) -> SystemMetrics:
+        if not HAS_PSUTIL:
+            return SystemMetrics(0,0,0,0,0,0,0,0)
+            
+        mem = psutil.virtual_memory()
+        disk = psutil.disk_usage('/')
+        net = psutil.net_io_counters()
+        
+        return SystemMetrics(
+            cpu_percent=psutil.cpu_percent(),
+            memory_percent=mem.percent,
+            memory_used_mb=mem.used / 1024 / 1024,
+            memory_total_mb=mem.total / 1024 / 1024,
+            disk_usage_percent=disk.percent,
+            disk_free_gb=disk.free / 1024 / 1024 / 1024,
+            network_bytes_sent=net.bytes_sent,
+            network_bytes_recv=net.bytes_recv
+        )
 
 class PerformanceMonitor:
     """
@@ -254,32 +255,11 @@ def monitor_performance(
 
     Returns:
         Decorated function with performance monitoring enabled
-
-    Example:
-        >>> @monitor_performance()
-        ... def expensive_function():
-        ...     # Some expensive operation
-        ...     return result
     """
 
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            if not monitor:
-                 # Use global monitor if not provided? Or create new one?
-                 # Code suggests creating SystemMonitor.
-                 pass
-
-            # The original code used SystemMonitor which is not imported or defined in this file!
-            # It seems 'SystemMonitor' logic is misplaced or missing.
-            # But wait, looking at the code "monitor = SystemMonitor(interval=interval)"
-            # 'interval' is not defined in scope.
-            
-            # Actually, this file has 'PerformanceMonitor' class. 
-            # 'SystemMonitor' is likely a hallucination or from another module.
-            # Let's look at the class 'PerformanceMonitor' usage in record_metrics.
-            
-            # Safe implementation using existing PerformanceMonitor:
             current_monitor = monitor or _performance_monitor
             start_time = time.time()
             try:
@@ -293,6 +273,8 @@ def monitor_performance(
                 )
         return wrapper
     return decorator
+
+profile_function = monitor_performance
 
 
 def profile_memory_usage(func: Callable) -> Callable:
@@ -382,8 +364,9 @@ def track_resource_usage(operation: str):
     finally:
         end_time = time.time()
         end_metrics = monitor.get_current_metrics()
-
-        monitor.stop_monitoring()
+        
+        # Stop not strictly needed if start didn't spawn thread, but good for completeness
+        monitor.stop_monitoring() 
 
         duration = end_time - start_time
         cpu_used = end_metrics.cpu_percent - start_metrics.cpu_percent

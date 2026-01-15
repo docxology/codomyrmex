@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+"""Schema Generator Module for Codomyrmex Database Management.
+
+This module provides database schema generation, migration creation,
+and schema comparison capabilities supporting SQLite, PostgreSQL, and MySQL.
+"""
+
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
@@ -10,20 +17,6 @@ import hashlib
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-#!/usr/bin/env python3
-
-# Schema Generator Module for Codomyrmex Database Management.
-
-This module provides database schema generation, migration creation,
-and schema comparison capabilities supporting SQLite, PostgreSQL, and MySQL.
-"""
 
 logger = get_logger(__name__)
 
@@ -205,8 +198,7 @@ class SchemaMigration:
     checksum: str = ""
 
     def __post_init__(self):
-
-"""
+        """Calculate checksum after initialization."""
         if not self.checksum:
             self.checksum = hashlib.sha256(self.up_sql.encode()).hexdigest()[:16]
 

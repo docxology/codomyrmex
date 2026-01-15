@@ -7,77 +7,12 @@ Git actions programmatically within the Codomyrmex ecosystem.
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
 - Relies on `environment_setup` for environment and dependency checks.
-
-Available functions:
-Core Operations:
-- check_git_availability
-- is_git_repository
-- initialize_git_repository
-- clone_repository
-
-Branch Operations:
-- create_branch
-- switch_branch
-- get_current_branch
-- merge_branch
-- rebase_branch
-
-File Operations:
-- add_files
-- commit_changes
-- amend_commit
-- get_status
-- get_diff
-- reset_changes
-
-Remote Operations:
-- push_changes
-- pull_changes
-- fetch_changes
-- add_remote
-- remove_remote
-- list_remotes
-
-History & Information:
-- get_commit_history
-- get_commit_history_filtered
-
-Config Operations:
-- get_config
-- set_config
-
-Advanced Operations:
-- cherry_pick
-
-Tag Operations:
-- create_tag
-- list_tags
-
-Stash Operations:
-- stash_changes
-- apply_stash
-- list_stashes
-
-GitHub API Operations:
-- create_github_repository
-- delete_github_repository
-- create_pull_request
-- get_pull_requests
-- get_pull_request
-- get_repository_info
-
-Visualization Integration:
-- create_git_analysis_report
-- visualize_git_branches
-- visualize_commit_activity
-- create_git_workflow_diagram
-- analyze_repository_structure
-- get_repository_metadata
 """
 
 from codomyrmex.exceptions import CodomyrmexError
 
-from .git_manager import (
+# Core Git Operations
+from .core.git import (
     # File operations
     add_files,
     amend_commit,
@@ -92,7 +27,6 @@ from .git_manager import (
     create_tag,
     # History & information
     get_commit_history,
-    get_commit_history_filtered,
     get_current_branch,
     get_diff,
     get_status,
@@ -119,7 +53,23 @@ from .git_manager import (
     # Advanced operations
     cherry_pick,
 )
-from .github_api import (
+
+# Repository Management
+from .core.repository import (
+    RepositoryManager,
+    RepositoryType,
+    Repository,
+)
+
+# Metadata Management
+from .core.metadata import (
+    RepositoryMetadataManager,
+    RepositoryMetadata,
+    CloneStatus,
+)
+
+# GitHub API Operations
+from .api.github import (
     GitHubAPIError,
     # GitHub API operations
     create_github_repository,
@@ -130,8 +80,9 @@ from .github_api import (
     get_repository_info,
 )
 
+# Visualization Integration
 try:
-    from .visualization_integration import (
+    from .api.visualization import (
         analyze_repository_structure,
         # Visualization integration
         create_git_analysis_report,
@@ -173,7 +124,6 @@ __all__ = [
     "list_remotes",
     # History & information
     "get_commit_history",
-    "get_commit_history_filtered",
     # Config operations
     "get_config",
     "set_config",
@@ -186,6 +136,14 @@ __all__ = [
     "stash_changes",
     "apply_stash",
     "list_stashes",
+    # Repository Management
+    "RepositoryManager",
+    "RepositoryType",
+    "Repository",
+    # Metadata Management
+    "RepositoryMetadataManager",
+    "RepositoryMetadata",
+    "CloneStatus",
     # GitHub API operations
     "create_github_repository",
     "delete_github_repository",

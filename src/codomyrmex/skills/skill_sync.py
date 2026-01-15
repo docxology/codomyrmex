@@ -7,7 +7,7 @@ import subprocess
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 try:
-    from codomyrmex.git_operations.git_manager import (
+    from codomyrmex.git_operations.core.git import (
         clone_repository,
         is_git_repository,
         pull_changes,

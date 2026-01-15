@@ -174,4 +174,4 @@ Refer to `SECURITY.md` and the security considerations in `MCP_TOOL_SPECIFICATIO
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Root README](../../README.md)

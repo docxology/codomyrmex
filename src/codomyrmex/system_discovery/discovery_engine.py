@@ -1,3 +1,9 @@
+"""System Discovery Engine for Codomyrmex
+
+This module provides comprehensive system discovery capabilities, scanning all
+modules, methods, classes, and functions to create a complete map of the
+Codomyrmex ecosystem capabilities.
+"""
 from pathlib import Path
 from typing import Any, Optional
 import ast
@@ -9,7 +15,6 @@ import subprocess
 import sys
 
 from dataclasses import asdict, dataclass
-from discovery_engine import FunctionName, ClassName
 import importlib
 import numpy as np
 
@@ -121,13 +126,7 @@ from codomyrmex.logging_monitoring.logger_config import get_logger, setup_loggin
 
 
 
-#!/usr/bin/env python3
-"""System Discovery Engine for Codomyrmex
- 
- This module provides comprehensive system discovery capabilities, scanning all
- modules, methods, classes, and functions to create a complete map of the
- Codomyrmex ecosystem capabilities.
- """
+
 
 
 try:
@@ -204,14 +203,71 @@ class SystemDiscovery:
         print(f"📦 Source Path: {self.src_path}")
         print(f"🧪 Testing Path: {self.testing_path}")
 
-        # Discover all modules
-        self._discover_modules()
+        # Scan system
+        self.scan_system()
 
         # Show discovery results
         self._display_discovery_results()
 
         # Show capability summary
         self._display_capability_summary()
+
+    def scan_system(self) -> dict[str, Any]:
+        """
+        Programmatically scan the system and return the inventory.
+        
+        Returns:
+            Dictionary containing system status and module inventory.
+        """
+        # Discover all modules
+        self._discover_modules()
+        
+        system_inventory = {
+            "project_root": str(self.project_root),
+            "status": {
+                "python_version": sys.version.split()[0],
+                "src_exists": self.src_path.exists(),
+                "tests_exist": self.testing_path.exists(),
+            },
+            "modules": {
+                name: asdict(info) for name, info in self.modules.items()
+            },
+            "stats": {
+                "total_modules": len(self.modules),
+                "importable": sum(1 for m in self.modules.values() if m.is_importable),
+                "documented": sum(1 for m in self.modules.values() if m.has_docs),
+                "tested": sum(1 for m in self.modules.values() if m.has_tests),
+            }
+        }
+        return system_inventory
+
+    def export_inventory(self, output_path: Path) -> bool:
+        """
+        Export system inventory to a JSON file.
+        
+        Args:
+            output_path: Path to save the JSON file.
+            
+        Returns:
+            True if successful, False otherwise.
+        """
+        try:
+            inventory = self.scan_system()
+            
+            # Simple recursive helper to handle non-serializable objects if any slip through
+            def default_serializer(obj):
+                if isinstance(obj, (Path, set)):
+                    return str(list(obj) if isinstance(obj, set) else obj)
+                return str(obj)
+
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(inventory, f, indent=2, default=default_serializer)
+                
+            logger.info(f"System inventory exported to {output_path}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to export inventory: {e}")
+            return False
 
     def _discover_modules(self) -> None:
         """Discover all modules in the codomyrmex package."""

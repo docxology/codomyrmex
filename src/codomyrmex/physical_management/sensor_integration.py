@@ -1,4 +1,9 @@
-from typing import Any, Callable, Optional
+"""Sensor integration and device management.
+
+This module provides sensor integration functionality, including device registration,
+data collection, and calibration.
+"""
+
 import json
 import logging
 import math
@@ -6,71 +11,9 @@ import time
 
 from dataclasses import dataclass, field
 from enum import Enum
-from sensor_integration import FunctionName, ClassName
+from typing import Any, Callable, Optional
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Sensor integration and device management."""
-
-"""Core business logic and data management
-
-# """Core business logic and data management
-
-This module provides sensor_integration functionality including:
-- 22 functions: to_dict, __init__, register_device...
-- 8 classes: SensorType, DeviceStatus, SensorReading...
-
-Usage:
-    from sensor_integration import FunctionName, ClassName
-    # Example usage here
-"""
-This module provides sensor_integration functionality including:
-- 22 functions: to_dict, __init__, register_device...
-- 8 classes: SensorType, DeviceStatus, SensorReading...
-
-Usage:
-    # Example usage here
-"""
 logger = logging.getLogger(__name__)
 
 

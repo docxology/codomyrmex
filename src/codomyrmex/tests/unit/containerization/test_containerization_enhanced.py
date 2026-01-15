@@ -166,7 +166,7 @@ RUN apt-get update
 RUN apt-get install -y python3
 RUN pip install flask
 RUN apt-get clean
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
         dockerfile_path = tmp_path / "test.dockerfile"
         dockerfile_path.write_text(dockerfile_content)
@@ -193,7 +193,7 @@ COPY . .
 RUN apt-get update && apt-get install -y python3
 USER appuser
 CMD ["python", "app.py"]
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
         is_valid, issues = generator.validate_dockerfile(valid_dockerfile)
         assert isinstance(is_valid, bool)
@@ -203,7 +203,7 @@ CMD ["python", "app.py"]
         invalid_dockerfile = """FROM ubuntu:latest
 RUN chmod 777 /app
 ENV PASSWORD=secret123
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
         is_valid, issues = generator.validate_dockerfile(invalid_dockerfile)
         assert isinstance(is_valid, bool)

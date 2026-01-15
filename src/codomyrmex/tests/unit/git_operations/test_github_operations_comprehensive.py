@@ -24,7 +24,7 @@ from typing import Dict, List, Optional
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from codomyrmex.git_operations.github_api import (
+from codomyrmex.git_operations.api.github import (
     create_github_repository,
     delete_github_repository,
     create_pull_request,
@@ -35,7 +35,7 @@ from codomyrmex.git_operations.github_api import (
     _validate_github_token
 )
 
-from codomyrmex.git_operations.git_manager import (
+from codomyrmex.git_operations.core.git import (
     check_git_availability,
     initialize_git_repository,
     clone_repository,

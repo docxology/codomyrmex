@@ -5,7 +5,7 @@ import os
 from unittest.mock import patch
 from pathlib import Path
 
-from codomyrmex.agents.config import AgentConfig, get_config, set_config, reset_config
+from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
 
 
 class TestSimpleConfigurationConfirmations:

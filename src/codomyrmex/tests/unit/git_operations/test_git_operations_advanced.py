@@ -26,7 +26,7 @@ from pathlib import Path
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from codomyrmex.git_operations.git_manager import (
+from codomyrmex.git_operations.core.git import (
     # Core operations
     check_git_availability,
     is_git_repository,
@@ -326,7 +326,7 @@ class TestAdvancedGitOperations(unittest.TestCase):
         
         # Stage the changes and test staged diff
         self.assertTrue(add_files(["diff_test.txt"], self.repo_dir))
-        diff = get_diff(staged=True, repository_path=self.repo_dir)
+        diff = get_diff(cached=True, repository_path=self.repo_dir)
         self.assertIsInstance(diff, str)
 
     def test_diff_operations_error_scenarios(self):

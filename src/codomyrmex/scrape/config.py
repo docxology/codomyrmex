@@ -2,7 +2,7 @@
 
 This module handles configuration loading, validation, and management
 for scraping operations, including API key management and default settings.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 import os
 from dataclasses import dataclass, field
@@ -27,7 +27,7 @@ class ScrapeConfig:
         rate_limit: Rate limit (requests per second)
         user_agent: User agent string to use for requests
         respect_robots_txt: Whether to respect robots.txt by default
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
 
     api_key: Optional[str] = None
     base_url: str = "https://api.firecrawl.dev"
@@ -55,7 +55,7 @@ class ScrapeConfig:
 
         Returns:
             ScrapeConfig instance configured from environment
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         api_key = os.getenv("FIRECRAWL_API_KEY") or os.getenv("FC_API_KEY")
         base_url = os.getenv("SCRAPE_BASE_URL", "https://api.firecrawl.dev")
         timeout = float(os.getenv("SCRAPE_TIMEOUT", "30.0"))
@@ -81,7 +81,7 @@ class ScrapeConfig:
 
         Raises:
             ScrapeValidationError: If the configuration is invalid
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         from .exceptions import ScrapeValidationError
 
         if not self.api_key:
@@ -132,7 +132,7 @@ def get_config() -> ScrapeConfig:
 
     Returns:
         ScrapeConfig instance
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
     global _config
     if _config is None:
         _config = ScrapeConfig.from_env()
@@ -144,7 +144,7 @@ def set_config(config: ScrapeConfig) -> None:
 
     Args:
         config: ScrapeConfig instance to use globally
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
     global _config
     _config = config
     logger.info("Scrape configuration updated")

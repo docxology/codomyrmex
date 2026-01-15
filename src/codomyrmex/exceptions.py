@@ -9,12 +9,12 @@ from typing import Any, Optional, Union
 Core functionality module
 
 This module provides exceptions functionality including:
-    pass # AGGRESSIVE_REPAIR
+    pass 
 - 9 functions: format_exception_chain, create_error_context, __init__...
 - 48 classes: CodomyrmexError, ConfigurationError, EnvironmentError...
 
 Usage:
-    pass # AGGRESSIVE_REPAIR
+    pass 
     # Example usage here
 
 This module defines all the exception classes used throughout the Codomyrmex
@@ -24,7 +24,7 @@ and other operations.
 
 Exception Hierarchy:
     All exceptions inherit from CodomyrmexError, which provides:
-        pass # AGGRESSIVE_REPAIR
+        pass 
     - Context dictionaries for additional error information
     - Error codes for programmatic handling
     - Serialization to dictionaries
@@ -94,7 +94,7 @@ Exception Categories:
 
 Usage Guidelines:
     All modules should use exceptions from this module:
-        pass # AGGRESSIVE_REPAIR
+        pass 
 
     ```python
 
@@ -113,7 +113,7 @@ Usage Guidelines:
 
 Error Context:
     All exceptions support context dictionaries for additional information:
-        pass # AGGRESSIVE_REPAIR
+        pass 
 
     ```python
 
@@ -133,7 +133,7 @@ Exception Utilities:
 
 The exception hierarchy is designed to be specific enough for proper error
 handling while remaining consistent across all modules.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 
 
@@ -148,7 +148,7 @@ class CodomyrmexError(Exception):
         message (str): The error message
         context (Dict[str, Any]): Additional context information about the error
         error_code (str): A unique error code for this exception type
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
 
     def __init__(
         self,
@@ -515,6 +515,30 @@ class MemoryError(CodomyrmexError):
     pass
 
 
+# Spatial Errors
+class SpatialError(CodomyrmexError):
+    """Raised when spatial operations fail."""
+    pass
+
+
+# Cerebrum Errors
+class CerebrumError(CodomyrmexError):
+    """Raised when cognitive processing fails."""
+    pass
+
+
+# Event Errors
+class EventError(CodomyrmexError):
+    """Raised when event processing fails."""
+    pass
+
+
+# Skill Errors
+class SkillError(CodomyrmexError):
+    """Raised when skill execution fails."""
+    pass
+
+
 # Template Errors
 class TemplateError(CodomyrmexError):
     """Raised when template operations fail."""
@@ -531,7 +555,7 @@ def format_exception_chain(exception: Exception) -> str:
 
     Returns:
         A formatted string representation of the exception chain
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
     lines = []
     current: Optional[BaseException] = exception
 
@@ -553,5 +577,5 @@ def create_error_context(**kwargs: Any) -> dict[str, Any]:
 
     Returns:
         A dictionary suitable for use as exception context
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
     return {k: v for k, v in kwargs.items() if v is not None}

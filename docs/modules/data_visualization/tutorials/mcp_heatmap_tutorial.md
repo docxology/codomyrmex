@@ -123,5 +123,5 @@ For a complete list of parameters and details for the `create_heatmap` MCP tool 
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../README.md)
-- **Home**: [Root README](../../../README.md)
+- **Documentation**: [Reference Guides](../../README.md)
+- **Home**: [Root README](../../README.md)

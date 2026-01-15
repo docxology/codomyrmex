@@ -3,37 +3,29 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for cerebrum..
+
+Case-based reasoning engine with Bayesian inference and Active Inference capabilities. Provides FPF integration, concordance visualization, and composition analysis for intelligent decision-making.
 
 ## Active Components
+## Active Components
+- `__init__.py` – Top-level package export
+- `core/` – Foundational components and engines
+  - `core.py`, `cases.py`, `models.py`, `utils.py`, `config.py`, `exceptions.py`
+- `inference/` – Reasoning logic
+  - `active_inference.py`, `bayesian.py`
+- `fpf/` – First Principles Framework
+  - `orchestration.py`, `combinatorics.py`
+- `visualization/` – Rendering and UI
+  - `core.py`, `composition.py`, `concordance.py`, `base.py`, `theme.py`
 - `API_SPECIFICATION.md` – Project file
 - `CHANGELOG.md` – Project file
-- `FPF_INTEGRATION_SUMMARY.md` – Project file
 - `MCP_TOOL_SPECIFICATION.md` – Project file
 - `README.md` – Project file
 - `SECURITY.md` – Project file
 - `SPEC.md` – Project file
 - `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `active_inference.py` – Project file
-- `bayesian.py` – Project file
-- `cases.py` – Project file
-- `composition_visualizer.py` – Project file
-- `concordance_visualizer.py` – Project file
-- `config.py` – Project file
-- `core.py` – Project file
-- `exceptions.py` – Project file
-- `fpf_combinatorics.py` – Project file
-- `fpf_orchestration.py` – Project file
-- `models.py` – Project file
-- `transformations.py` – Project file
-- `utils.py` – Project file
-- `visualization.py` – Project file
-- `visualization_base.py` – Project file
-- `visualization_theme.py` – Project file
 
 ## Operating Contracts
-- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

@@ -1251,4 +1251,4 @@ This tutorial showed you the complete process of creating a professional-grade C
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
-- **Home**: [Repository Root](../../../README.md)
+- **Home**: [Repository Root](../../README.md)

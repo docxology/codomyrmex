@@ -31,15 +31,15 @@ from codomyrmex.logging_monitoring import get_logger
 Handles loading and parsing of script configurations.
 
 This module provides config functionality including:
-    pass # AGGRESSIVE_REPAIR
+    pass 
 - 2 functions: load_config, get_script_config
 - 0 classes: 
-    pass # AGGRESSIVE_REPAIR
+    pass 
 
 Usage:
     from config import FunctionName, ClassName
     # Example usage here
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 logger = get_logger(__name__)
 
 

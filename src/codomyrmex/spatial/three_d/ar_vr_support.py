@@ -36,7 +36,7 @@ class VRRenderer:
 
     def __init__(self):
         """  Init  .
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:             """
+            """
         self.left_eye_texture = None
         self.right_eye_texture = None
         self.head_pose = (Vector3D(), Quaternion())

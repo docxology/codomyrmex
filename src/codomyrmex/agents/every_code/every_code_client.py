@@ -2,62 +2,15 @@ from pathlib import Path
 from typing import Any, Iterator, Optional
 import subprocess
 
-from codomyrmex.agents.config import get_config
+from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError, EveryCodeError
+from codomyrmex.agents.generic import CLIAgentBase
+from codomyrmex.logging_monitoring import get_logger
 
 
 class EveryCodeClient(CLIAgentBase):
@@ -226,6 +179,24 @@ class EveryCodeClient(CLIAgentBase):
         # Use base class streaming method
         yield from self._stream_command(input_text=code_input)
 
+    def _sanitize_path(self, path_str: str) -> Optional[str]:
+        """Sanitize and validate file path."""
+        try:
+            # Prevent directory traversal / shell injection attempts
+            if ".." in path_str or ";" in path_str or "|" in path_str:
+                self.logger.warning(f"Suspicious path detected and ignored: {path_str}")
+                return None
+                
+            path = Path(path_str).resolve()
+            # Ensure path exists
+            if not path.exists():
+                return None
+                
+            return str(path)
+        except Exception as e:
+            self.logger.warning(f"Error sanitizing path {path_str}: {e}")
+            return None
+
     def _build_code_input(self, prompt: str, context: dict[str, Any]) -> str:
         """
         Build code command input from prompt and context.
@@ -251,13 +222,15 @@ class EveryCodeClient(CLIAgentBase):
         # Handle context parameters
         if "files" in context:
             for file_path in context["files"]:
-                if Path(file_path).exists():
-                    input_parts.insert(0, f"@{file_path}\n")
+                sanitized = self._sanitize_path(file_path)
+                if sanitized:
+                    input_parts.insert(0, f"@{sanitized}\n")
 
         if "directories" in context:
             for dir_path in context["directories"]:
-                if Path(dir_path).is_dir():
-                    input_parts.insert(0, f"@directory {dir_path}\n")
+                sanitized = self._sanitize_path(dir_path)
+                if sanitized:
+                    input_parts.insert(0, f"@directory {sanitized}\n")
 
         # Join all parts
         return "\n".join(input_parts)
@@ -337,4 +310,3 @@ class EveryCodeClient(CLIAgentBase):
                 "available": False,
                 "error": str(e),
             }
-

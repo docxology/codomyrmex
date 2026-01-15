@@ -16,4 +16,4 @@ This directory contains **Documentation** documentation. It serves to educate us
 
 ## Navigation
 - **Parent**: [../README.md](../README.md)
-- **Root**: [../../../README.md](../../../README.md)
+- **Root**: [../../README.md](../../README.md)

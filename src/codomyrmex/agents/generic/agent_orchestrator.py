@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from codomyrmex.agents.core import AgentCapabilities
 from codomyrmex.agents.core import AgentInterface, AgentRequest, AgentResponse
-from codomyrmex.agents.exceptions import AgentError
+from codomyrmex.agents.core.exceptions import AgentError
 from codomyrmex.logging_monitoring import get_logger
 
 

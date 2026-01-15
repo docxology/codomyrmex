@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 # Import git operations functions
 try:
-    from codomyrmex.git_operations.git_manager import (
+    from codomyrmex.git_operations.core.git import (
         check_git_availability,
         is_git_repository,
         get_current_branch,
@@ -58,7 +58,7 @@ try:
 except ImportError:
     # Fallback to basic imports if full module not available
     try:
-        from codomyrmex.git_operations.git_manager import (
+        from codomyrmex.git_operations.core.git import (
             check_git_availability,
             is_git_repository,
             get_current_branch,
@@ -123,7 +123,7 @@ class TestGitOperations(unittest.TestCase):
 
     def test_get_commit_history(self):
         """Test getting commit history."""
-        from codomyrmex.git_operations.git_manager import get_commit_history
+        from codomyrmex.git_operations.core.git import get_commit_history
 
         # Test in non-repository directory
         history = get_commit_history(repository_path=self.test_dir)
@@ -142,7 +142,7 @@ class TestGitOperations(unittest.TestCase):
 
     def test_add_files(self):
         """Test adding files to staging area."""
-        from codomyrmex.git_operations.git_manager import add_files
+        from codomyrmex.git_operations.core.git import add_files
 
         # Create a test file
         test_file = os.path.join(self.test_dir, "test.txt")
@@ -155,7 +155,7 @@ class TestGitOperations(unittest.TestCase):
 
     def test_commit_changes(self):
         """Test committing changes."""
-        from codomyrmex.git_operations.git_manager import commit_changes
+        from codomyrmex.git_operations.core.git import commit_changes
 
         # Test in non-repository directory (should fail)
         result = commit_changes("Test commit", repository_path=self.test_dir)
@@ -164,7 +164,7 @@ class TestGitOperations(unittest.TestCase):
     @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
     def test_create_and_switch_branches(self):
         """Test creating and switching branches."""
-        from codomyrmex.git_operations.git_manager import create_branch, switch_branch, get_branches
+        from codomyrmex.git_operations.core.git import create_branch, switch_branch, get_branches
 
         # Test in non-repository directory (should fail)
         result = create_branch("test-branch", repository_path=self.test_dir)
@@ -179,7 +179,7 @@ class TestGitOperations(unittest.TestCase):
     @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
     def test_branch_operations_edge_cases(self):
         """Test branch operations with edge cases."""
-        from codomyrmex.git_operations.git_manager import create_branch, switch_branch
+        from codomyrmex.git_operations.core.git import create_branch, switch_branch
 
         # Test with invalid branch names
         invalid_names = ["", " ", ".lock", "HEAD", "refs/heads/main"]
@@ -192,7 +192,7 @@ class TestGitOperations(unittest.TestCase):
     @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
     def test_merge_operations(self):
         """Test merge operations."""
-        from codomyrmex.git_operations.git_manager import merge_branch, check_merge_conflicts
+        from codomyrmex.git_operations.core.git import merge_branch, check_merge_conflicts
 
         # Test in non-repository directory
         result = merge_branch("feature-branch", repository_path=self.test_dir)
@@ -204,7 +204,7 @@ class TestGitOperations(unittest.TestCase):
     @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
     def test_remote_operations(self):
         """Test remote repository operations."""
-        from codomyrmex.git_operations.git_manager import pull_changes, push_changes, get_remote_info
+        from codomyrmex.git_operations.core.git import pull_changes, push_changes, get_remote_info
 
         # Test in non-repository directory
         result = pull_changes(repository_path=self.test_dir)
@@ -219,7 +219,7 @@ class TestGitOperations(unittest.TestCase):
     @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
     def test_stash_operations(self):
         """Test git stash operations."""
-        from codomyrmex.git_operations.git_manager import stash_changes, unstash_changes, get_stash_list
+        from codomyrmex.git_operations.core.git import stash_changes, unstash_changes, get_stash_list
 
         # Test in non-repository directory
         result = stash_changes("Test stash", repository_path=self.test_dir)
@@ -234,7 +234,7 @@ class TestGitOperations(unittest.TestCase):
     @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
     def test_reset_and_clean_operations(self):
         """Test reset and clean operations."""
-        from codomyrmex.git_operations.git_manager import reset_changes, clean_repository
+        from codomyrmex.git_operations.core.git import reset_changes, clean_repository
 
         # Test in non-repository directory
         result = reset_changes("--hard", repository_path=self.test_dir)
@@ -264,7 +264,7 @@ class TestGitOperations(unittest.TestCase):
         if not FULL_GIT_AVAILABLE:
             self.skipTest("Full git operations not available")
 
-        from codomyrmex.git_operations.git_manager import validate_git_config
+        from codomyrmex.git_operations.core.git import validate_git_config
 
         # Test in non-repository directory
         result = validate_git_config(repository_path=self.test_dir)
@@ -279,7 +279,7 @@ class TestGitOperations(unittest.TestCase):
         if not FULL_GIT_AVAILABLE:
             self.skipTest("Full git operations not available")
 
-        from codomyrmex.git_operations.git_manager import get_hook_status
+        from codomyrmex.git_operations.core.git import get_hook_status
 
         # Test in non-repository directory
         hooks = get_hook_status(repository_path=self.test_dir)
@@ -290,7 +290,7 @@ class TestGitOperations(unittest.TestCase):
         if not FULL_GIT_AVAILABLE:
             self.skipTest("Full git operations not available")
 
-        from codomyrmex.git_operations.git_manager import update_submodules
+        from codomyrmex.git_operations.core.git import update_submodules
 
         # Test in non-repository directory
         result = update_submodules(repository_path=self.test_dir)
@@ -301,7 +301,7 @@ class TestGitOperations(unittest.TestCase):
         if not FULL_GIT_AVAILABLE:
             self.skipTest("Full git operations not available")
 
-        from codomyrmex.git_operations.git_manager import add_files, get_file_history, get_diff
+        from codomyrmex.git_operations.core.git import add_files, get_file_history, get_diff
 
         # Test with non-existent files
         result = add_files(["nonexistent.txt"], repository_path=self.test_dir)
@@ -325,7 +325,7 @@ class TestGitOperations(unittest.TestCase):
         if not FULL_GIT_AVAILABLE:
             self.skipTest("Full git operations not available")
 
-        from codomyrmex.git_operations.git_manager import commit_changes
+        from codomyrmex.git_operations.core.git import commit_changes
 
         # Test with various commit messages
         test_messages = [
@@ -345,7 +345,7 @@ class TestGitOperations(unittest.TestCase):
         if not FULL_GIT_AVAILABLE:
             self.skipTest("Full git operations not available")
 
-        from codomyrmex.git_operations.git_manager import get_status
+        from codomyrmex.git_operations.core.git import get_status
 
         results = []
 
@@ -393,7 +393,7 @@ class TestGitOperations(unittest.TestCase):
                 self.assertIsInstance(result, bool)
 
                 if FULL_GIT_AVAILABLE:
-                    from codomyrmex.git_operations.git_manager import get_status
+                    from codomyrmex.git_operations.core.git import get_status
                     status = get_status(path)
                     self.assertIsInstance(status, dict)
                     self.assertIn("error", status)
@@ -404,7 +404,7 @@ class TestGitOperations(unittest.TestCase):
             self.skipTest("Full git operations not available")
 
         # Test operations that might timeout
-        from codomyrmex.git_operations.git_manager import get_commit_history
+        from codomyrmex.git_operations.core.git import get_commit_history
 
         # Request large history which might be slow
         history = get_commit_history(limit=1000, repository_path=self.test_dir)
@@ -415,7 +415,7 @@ class TestGitOperations(unittest.TestCase):
         if not FULL_GIT_AVAILABLE:
             self.skipTest("Full git operations not available")
 
-        from codomyrmex.git_operations.git_manager import get_repository_info
+        from codomyrmex.git_operations.core.git import get_repository_info
 
         # Test in non-repository directory
         info = get_repository_info(repository_path=self.test_dir)
@@ -435,7 +435,7 @@ class TestGitOperations(unittest.TestCase):
         self.assertFalse(result)
 
         if FULL_GIT_AVAILABLE:
-            from codomyrmex.git_operations.git_manager import get_status
+            from codomyrmex.git_operations.core.git import get_status
             status = get_status(repository_path=self.test_dir)
             # Should handle error gracefully
             assert isinstance(status, dict)
@@ -448,7 +448,7 @@ class TestGitOperations(unittest.TestCase):
             self.skipTest("Full git operations not available")
 
         # Test operations that might return large outputs
-        from codomyrmex.git_operations.git_manager import get_commit_history, get_diff
+        from codomyrmex.git_operations.core.git import get_commit_history, get_diff
 
         # These should handle large outputs gracefully
         history = get_commit_history(limit=100, repository_path=self.test_dir)
@@ -463,7 +463,7 @@ class TestGitOperations(unittest.TestCase):
         unicode_message = "Test commit with unicode: 🚀 αβγδε"
 
         if FULL_GIT_AVAILABLE:
-            from codomyrmex.git_operations.git_manager import commit_changes
+            from codomyrmex.git_operations.core.git import commit_changes
             result = commit_changes(unicode_message, repository_path=self.test_dir)
             self.assertFalse(result)  # Should fail gracefully in non-repo
 
@@ -496,7 +496,7 @@ class TestGitOperations(unittest.TestCase):
                 self.assertIsInstance(result, bool)
 
                 if FULL_GIT_AVAILABLE:
-                    from codomyrmex.git_operations.git_manager import get_status
+                    from codomyrmex.git_operations.core.git import get_status
                     status = get_status(path)
                     self.assertIsInstance(status, dict)
 
@@ -510,7 +510,7 @@ class TestGitOperations(unittest.TestCase):
         self.assertEqual(result1.get("error"), result2.get("error"))
 
         if FULL_GIT_AVAILABLE:
-            from codomyrmex.git_operations.git_manager import get_branches
+            from codomyrmex.git_operations.core.git import get_branches
             branches1 = get_branches(repository_path=self.test_dir)
             branches2 = get_branches(repository_path=self.test_dir)
             self.assertEqual(branches1, branches2)

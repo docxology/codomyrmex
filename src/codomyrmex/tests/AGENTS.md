@@ -18,7 +18,6 @@ Test files and validation suites.
 - `unit/` – Directory containing unit components
 
 ## Operating Contracts
-- `__pycache__/` – Directory for __pycache__ components.
 - `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.

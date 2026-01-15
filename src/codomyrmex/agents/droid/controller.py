@@ -1,15 +1,20 @@
+"""Droid controller and configuration utilities.
+
+This module provides thread-safe droid controller with configuration management,
+metrics tracking, and task execution capabilities.
+"""
+from __future__ import annotations
+
 from collections.abc import Iterable
+from dataclasses import asdict, dataclass, replace
+from enum import Enum
 from pathlib import Path
+from threading import RLock
 from typing import Any, Callable
 import json
 import logging
 import os
 import time
-
-from __future__ import annotations
-from dataclasses import asdict, dataclass, replace
-from enum import Enum
-from threading import RLock
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.performance import monitor_performance, performance_context
@@ -83,9 +88,13 @@ class DroidStatus(Enum):
 
 
 def _to_bool(value: str) -> bool:
-    pass
-    pass
-Immutable configuration for the droid controller."""
+    """Convert string to boolean."""
+    return value.lower() in ("1", "true", "yes", "on")
+
+
+@dataclass(frozen=True)
+class DroidConfig:
+    """Immutable configuration for the droid controller."""
 
     identifier: str = "droid"
     mode: DroidMode = DroidMode.DEVELOPMENT
@@ -115,8 +124,7 @@ Immutable configuration for the droid controller."""
 
     @property
     def allowed(self) -> frozenset[str] | None:
-
-"""
+        """Get allowed operations as a frozen set."""
         return (
             frozenset(self.allowed_operations)
             if self.allowed_operations is not None
@@ -125,8 +133,7 @@ Immutable configuration for the droid controller."""
 
     @property
     def blocked(self) -> frozenset[str] | None:
-
-"""
+        """Get blocked operations as a frozen set."""
         return (
             frozenset(self.blocked_operations)
             if self.blocked_operations is not None
@@ -151,14 +158,12 @@ Immutable configuration for the droid controller."""
 
     @classmethod
     def from_json(cls, raw: str) -> DroidConfig:
-
-"""
+        """Create config from JSON string."""
         return cls.from_dict(json.loads(raw))
 
     @classmethod
     def from_file(cls, path: str | os.PathLike[str]) -> DroidConfig:
-
-"""
+        """Create config from JSON file."""
         with open(path, encoding="utf-8") as handle:
             return cls.from_json(handle.read())
 
@@ -173,7 +178,41 @@ Immutable configuration for the droid controller."""
         mapping: dict[str, Any] = {}
 
         def set_if_present(name: str, transform: Callable[[str], Any]) -> None:
-Runtime metrics tracked for droid sessions."""
+            """Set mapping value if environment variable is present."""
+            env_val = os.environ.get(f"{prefix}{name.upper()}")
+            if env_val is not None:
+                mapping[name] = transform(env_val)
+
+        set_if_present("identifier", str)
+        set_if_present("mode", lambda v: DroidMode(v.lower()))
+        set_if_present("llm_provider", str)
+        set_if_present("llm_model", str)
+        set_if_present("safe_mode", _to_bool)
+        set_if_present("telemetry_opt_in", _to_bool)
+        set_if_present("max_parallel_tasks", int)
+        set_if_present("max_retry_attempts", int)
+        set_if_present("retry_backoff_seconds", float)
+        set_if_present("heartbeat_interval_seconds", float)
+        set_if_present("log_level", str)
+
+        return cls.from_dict(mapping) if mapping else cls()
+
+    def with_overrides(self, **kwargs: Any) -> DroidConfig:
+        """Return new config with overrides applied."""
+        new_config = replace(self, **kwargs)
+        new_config.validate()
+        return new_config
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert config to dictionary."""
+        data = asdict(self)
+        data["mode"] = self.mode.value
+        return data
+
+
+@dataclass
+class DroidMetrics:
+    """Runtime metrics tracked for droid sessions."""
 
     sessions_started: int = 0
     sessions_completed: int = 0
@@ -184,8 +223,7 @@ Runtime metrics tracked for droid sessions."""
     last_heartbeat_epoch: float | None = None
 
     def snapshot(self) -> dict[str, Any]:
-
-"""
+        """Return snapshot of current metrics."""
         return asdict(self)
 
     def reset(self) -> None:
@@ -218,31 +256,26 @@ class DroidController:
 
     @property
     def config(self) -> DroidConfig:
-
-"""
+        """Get current configuration."""
         return self._config
 
     @property
     def status(self) -> DroidStatus:
-
-"""
+        """Get current status."""
         return self._status
 
     @property
     def metrics(self) -> dict[str, Any]:
-
-"""
+        """Get current metrics snapshot."""
         return self._metrics.snapshot()
 
     @property
     def last_status_change(self) -> float:
-
-"""
+        """Get timestamp of last status change."""
         return self._last_status_change
 
     def update_config(self, **overrides: Any) -> DroidConfig:
-
-"""
+        """Update configuration with overrides."""
         with self._lock:
             new_config = self._config.with_overrides(**overrides)
             self._config = new_config
@@ -250,16 +283,14 @@ class DroidController:
             return new_config
 
     def reset_metrics(self) -> None:
-
-"""
+        """Reset all metrics to zero."""
         with self._lock:
             self._metrics.reset()
             logger.info("droid metrics reset")
 
     @monitor_performance("droid_start")
     def start(self) -> None:
-
-"""
+        """Start the droid controller."""
         with self._lock:
             if self._status == DroidStatus.RUNNING:
                 logger.debug("droid already running")
@@ -271,8 +302,7 @@ class DroidController:
 
     @monitor_performance("droid_stop")
     def stop(self) -> None:
-
-"""
+        """Stop the droid controller."""
         with self._lock:
             if self._status == DroidStatus.STOPPED:
                 logger.debug("droid already stopped")
@@ -284,8 +314,7 @@ class DroidController:
             logger.info("droid stopped")
 
     def record_heartbeat(self) -> None:
-
-"""
+        """Record a heartbeat timestamp."""
         with self._lock:
             self._metrics.last_heartbeat_epoch = time.time()
             logger.debug(
@@ -294,8 +323,7 @@ class DroidController:
             )
 
     def _check_operation_permissions(self, operation_id: str) -> None:
-
-"""
+        """Check if operation is permitted."""
         if (
             self._config.allowed is not None
             and operation_id not in self._config.allowed
@@ -305,8 +333,7 @@ class DroidController:
             raise PermissionError(f"operation '{operation_id}' is blocked")
 
     def _enter_execution(self) -> None:
-
-"""
+        """Enter task execution state."""
         if self._active_tasks >= self._config.max_parallel_tasks:
             raise RuntimeError("maximum number of parallel tasks reached")
         self._active_tasks += 1
@@ -314,8 +341,7 @@ class DroidController:
         self._last_status_change = time.time()
 
     def _exit_execution(self) -> None:
-
-"""
+        """Exit task execution state."""
         self._active_tasks = max(0, self._active_tasks - 1)
         if self._status == DroidStatus.ERROR:
             return
@@ -325,16 +351,15 @@ class DroidController:
         self._last_status_change = time.time()
 
     def _transition_to_error(self) -> None:
-
-"""
+        """Transition to error state."""
         self._status = DroidStatus.ERROR
         self._last_status_change = time.time()
 
     @monitor_performance("droid_execute_task")
     def execute_task(
-"""
         self, operation_id: str, handler: Callable[..., Any], *args: Any, **kwargs: Any
     ) -> Any:
+        """Execute a task through the droid controller."""
         with self._lock:
             if self._status == DroidStatus.STOPPED:
                 raise RuntimeError("droid is stopped")

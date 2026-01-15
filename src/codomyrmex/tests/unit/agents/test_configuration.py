@@ -2,14 +2,14 @@
 
 Tests use real implementations only. Environment variable tests use
 real environment manipulation or skip when not applicable.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 import os
 import pytest
 from pathlib import Path
 import tempfile
 
-from codomyrmex.agents.config import (
+from codomyrmex.agents.core.config import (
     AgentConfig,
     get_config,
     set_config,

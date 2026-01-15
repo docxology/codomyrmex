@@ -87,7 +87,8 @@ graph TB
         CICD[ci_cd_automation<br/>CI/CD pipelines]
         Container[containerization<br/>Docker management]
         DB[database_management<br/>Database ops]
-        Logistics[logistics<br/>Orchestration]
+        Logistics[logistics<br/>Logistics]
+        Orchestrator[orchestrator<br/>DAG Workflows]
         Auth[auth<br/>Authentication]
         Cloud[cloud<br/>Cloud services]
     end
@@ -181,6 +182,7 @@ graph TB
 - `containerization`: Docker and container orchestration
 - `database_management`: Database operations and migrations
 - `logistics`: Workflow orchestration and task scheduling
+- `orchestrator`: DAG-based workflow execution engine
 - `auth`: Authentication and authorization
 - `cloud`: Cloud service integrations
 
@@ -197,7 +199,7 @@ graph TB
 - `spatial`: 3D/4D spatial modeling and visualization
 - `cerebrum`: Case-based reasoning and Bayesian inference
 - `fpf`: First Principles Framework integration
-- `agents`: AI agent integrations (Claude, Codex, Jules, etc.)
+- `agents`: AI agent integrations (CodeEditor, Claude, Codex, Jules, etc.)
 - `events`: Event system and pub/sub
 - `plugin_system`: Plugin architecture
 - `system_discovery`: System introspection and capability mapping

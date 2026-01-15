@@ -2,7 +2,7 @@
 
 Tests use real implementations only. TestAgent is a test adapter
 that implements BaseAgent interface for testing, not a mock.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 import pytest
 
@@ -16,7 +16,7 @@ class TestAgent(BaseAgent):
     """Test agent for testing modularity.
     
     This is a test adapter implementing BaseAgent interface, not a mock.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
 
     def __init__(self, name: str, capabilities: list[AgentCapabilities], should_succeed: bool = True):
         super().__init__(name=name, capabilities=capabilities, config={})

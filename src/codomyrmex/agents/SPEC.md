@@ -136,6 +136,11 @@ graph TD
 
 ### Public API
 - `AgentInterface`: Abstract base class for all agents
+  - `execute(request: AgentRequest) -> AgentResponse`
+  - `stream(request: AgentRequest) -> Iterator[str]`
+  - `setup() -> None`
+  - `test_connection() -> bool`
+- `CodeEditor`: Specialized agent for code manipulation (generation, refactoring)
 - `AgentRequest`, `AgentResponse`: Request/response data structures
 - `AgentCapabilities`: Enum of agent capabilities
 - `AgentConfig`: Configuration management

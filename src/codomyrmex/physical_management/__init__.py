@@ -3,7 +3,7 @@
 This module provides physical object management, simulation,
 and sensor integration capabilities for the Codomyrmex platform, enabling
 physical computing and IoT device management.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 from .analytics import *
 from .object_manager import *

@@ -88,6 +88,20 @@ class CodaAPIError(Exception):
         return f"{self.message} (Status: {self.status_code})"
 
 
+class CodaAuthenticationError(CodaAPIError):
+    """Raised when the API token is invalid or missing.
+    
+    HTTP Status Code: 401
+    """
+    
+    def __init__(
+        self,
+        message: str = "The API token is invalid or missing",
+        response_body: Optional[Dict[str, Any]] = None,
+    ):
+        super().__init__(message, status_code=401, response_body=response_body)
+
+
 class CodaForbiddenError(CodaAPIError):
     """Raised when the API token does not grant access to a resource.
     

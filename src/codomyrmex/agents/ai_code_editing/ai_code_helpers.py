@@ -1,19 +1,17 @@
+"""AI Code Editing Helpers.
+
+This module provides AI-powered code generation, refactoring, analysis,
+and documentation utilities using multiple LLM providers (OpenAI, Anthropic, Google).
+"""
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Optional
+from dataclasses import dataclass
+from enum import Enum
 import logging
 import os
 import sys
 import time
 
-from anthropic import Anthropic
-from dataclasses import dataclass
-from enum import Enum
-from environment_setup.env_checker import check_and_setup_env_vars
-from openai import OpenAI
-import google.generativeai as genai
-
-from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.performance import monitor_performance
 
 
 
@@ -66,24 +64,29 @@ from codomyrmex.performance import monitor_performance
 
 # Optional LLM client imports
 try:
+    from anthropic import Anthropic
 except ImportError:
     Anthropic = None
 
 try:
+    from openai import OpenAI
 except ImportError:
     OpenAI = None
 
 try:
+    import google.generativeai as genai
 except ImportError:
     genai = None
 
 # Optional environment setup
 try:
+    from environment_setup.env_checker import check_and_setup_env_vars
 except ImportError:
     check_and_setup_env_vars = None
 
 # Optional performance monitoring
 try:
+    from codomyrmex.performance import monitor_performance
 except ImportError:
     def monitor_performance(*args, **kwargs):
         def decorator(func):
@@ -91,9 +94,10 @@ except ImportError:
         return decorator
 
 try:
+    from codomyrmex.logging_monitoring.logger_config import get_logger
 except ImportError:
     def get_logger(name):
-"""
+        """Fallback logger if codomyrmex logging not available."""
         return logging.getLogger(name)
 
 

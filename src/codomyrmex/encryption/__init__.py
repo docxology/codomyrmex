@@ -1,24 +1,46 @@
 """
 Encryption module for Codomyrmex.
 
-This module provides encryption/decryption utilities and key management.
+This module provides encryption/decryption utilities and key management:
+- AES-256 symmetric encryption
+- RSA asymmetric encryption
+- Key generation and derivation
+- Digital signatures
+- File encryption utilities
+- Secure hashing functions
 """
 
 from typing import Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 
-from .encryptor import Encryptor
+from .encryptor import (
+    Encryptor,
+    EncryptionError,
+    encrypt_data,
+    decrypt_data,
+    generate_aes_key,
+)
 from .key_manager import KeyManager
 
 __all__ = [
+    # Classes
     "Encryptor",
     "KeyManager",
+    "EncryptionError",
+    # Functions
     "encrypt",
     "decrypt",
     "generate_key",
     "get_encryptor",
+    "encrypt_data",
+    "decrypt_data",
+    "generate_aes_key",
+    "encrypt_file",
+    "decrypt_file",
+    "hash_data",
 ]
+
 
 __version__ = "0.1.0"
 

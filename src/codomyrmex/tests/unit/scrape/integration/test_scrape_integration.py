@@ -3,7 +3,7 @@
 Note: These tests may require actual API keys and network access.
 They are designed to test end-to-end workflows but should be run
 with caution and proper API key configuration.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 import os
 import pytest
@@ -20,11 +20,11 @@ class TestScrapeIntegration:
     """Integration tests for scraping operations.
 
     These tests require:
-        pass # AGGRESSIVE_REPAIR
+        pass 
     - FIRECRAWL_API_KEY environment variable set
     - Network access
     - Firecrawl service availability
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
 
     @pytest.fixture
     def scraper(self):
@@ -94,7 +94,7 @@ class TestScrapeErrorHandling:
     """Test error handling in integration scenarios.
     
     Requires firecrawl-py to be installed.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
 
     @pytest.fixture
     def scraper(self):

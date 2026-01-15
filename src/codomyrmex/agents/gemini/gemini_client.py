@@ -6,75 +6,15 @@ from PIL import Image
 from google import genai
 from google.genai import types
 
-from codomyrmex.agents.config import get_config
+from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
-from codomyrmex.agents.exceptions import AgentError, GeminiError
-from codomyrmex.agents.generic import BaseAgent
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
+    BaseAgent,
 )
-
-try:
-    # This import is likely for type hinting or direct use if PIL is available
-    # If Image is not imported here, the try/except block below for Image will be redundant
-    # Assuming Image is used later, and this block is for handling its absence.
-    pass
-except ImportError:
-    Image = None
-
-try:
-    # These imports are already at the top, this block is for handling their absence
-    pass
-except ImportError:
-    pass
-except ImportError:
-    genai = None
-    types = None
+from codomyrmex.agents.core.exceptions import AgentError, GeminiError
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -121,24 +61,18 @@ class GeminiClient(BaseAgent):
         context = request.context or {}
         model = context.get("model", self.default_model)
         
-        # Build Config
         config_params = {}
         
-        # 1. Structured Output / JSON Mode
         if "response_schema" in context:
              config_params["response_mime_type"] = "application/json"
              config_params["response_schema"] = context["response_schema"]
         
-        # 2. System Instructions
         if "system_instruction" in context:
              config_params["system_instruction"] = context["system_instruction"]
 
-        # 3. Safety Settings
         if "safety_settings" in context:
              config_params["safety_settings"] = context["safety_settings"]
 
-        # 4. Tools (Function Calling, Code Execution, Google Search)
-        # Expecting context['tools'] to be a list of tool definitions or predefined strings
         if "tools" in context:
              tools_config = []
              for tool in context["tools"]:
@@ -146,18 +80,14 @@ class GeminiClient(BaseAgent):
                      if tool == "code_execution":
                          tools_config.append(types.Tool(code_execution=types.CodeExecution()))
                      elif tool == "google_search":
-                         # Check SDK specific syntax for Grounding/Search tool
                          tools_config.append(types.Tool(google_search=types.GoogleSearch()))
                  else:
-                     # Assume it's a Tool object or dict conformant to SDK
                      tools_config.append(tool)
              config_params["tools"] = tools_config
 
-        # 5. Tool Config (Mode)
         if "tool_config" in context:
              config_params["tool_config"] = context["tool_config"]
 
-        # 6. Cached Content
         if "cached_content" in context:
              config_params["cached_content"] = context["cached_content"]
 
@@ -182,10 +112,9 @@ class GeminiClient(BaseAgent):
         model = context.get("model", self.default_model)
         contents = self._build_contents(prompt, context)
         
-        # Similar config logic for streaming
         config_params = {}
-        if "system_instruction" in context: config_params["system_instruction"] = context["system_instruction"]
-        # ... (rest of config logic ideally shared)
+        if "system_instruction" in context:
+            config_params["system_instruction"] = context["system_instruction"]
 
         try:
             response_stream = self.client.models.generate_content_stream(
@@ -198,10 +127,11 @@ class GeminiClient(BaseAgent):
                     yield chunk.text
         except Exception as e:
             logger.error(f"Gemini streaming failed: {e}")
-            yield f"\\n[Error: {e}]"
+            yield f"\n[Error: {e}]"
 
     def _build_contents(self, prompt: str, context: Dict[str, Any]) -> List[Any]:
-        if "contents" in context: return context["contents"]
+        if "contents" in context:
+            return context["contents"]
         
         parts = [prompt]
         if "images" in context:
@@ -215,23 +145,21 @@ class GeminiClient(BaseAgent):
 
     def _build_response_from_api_result(self, response: Any, request: AgentRequest) -> AgentResponse:
         if not response.candidates:
-             # Check if it was a prompt feedback block
              return AgentResponse(content="", error="No candidates returned", metadata={"raw": str(response)})
         
         cand = response.candidates[0]
         content = ""
         
-        # Handle Parts (Text vs Function Call)
         if cand.content and cand.content.parts:
              for part in cand.content.parts:
                  if part.text:
                      content += part.text
                  if part.function_call:
-                     content += f"\\n[Function Call]: {part.function_call.name}({part.function_call.args})"
+                     content += f"\n[Function Call]: {part.function_call.name}({part.function_call.args})"
                  if part.executable_code:
-                     content += f"\\n[Executable Code]:\\n{part.executable_code.code}"
+                     content += f"\n[Executable Code]:\n{part.executable_code.code}"
                  if part.code_execution_result:
-                     content += f"\\n[Code Execution Result]: {part.code_execution_result.output}"
+                     content += f"\n[Code Execution Result]: {part.code_execution_result.output}"
 
         return AgentResponse(
             request_id=request.id,
@@ -243,9 +171,9 @@ class GeminiClient(BaseAgent):
             }
         )
 
-    # --- Core API Methods ---
     def list_models(self) -> List[Dict[str, Any]]:
-        if not self.client: return []
+        if not self.client:
+            return []
         try:
              return [m.model_dump() for m in self.client.models.list()]
         except Exception as e:
@@ -253,106 +181,136 @@ class GeminiClient(BaseAgent):
             return []
 
     def get_model(self, model_name: str) -> Optional[Dict[str, Any]]:
-        if not self.client: return None
+        if not self.client:
+            return None
         try:
              return self.client.models.get(model=model_name).model_dump()
-        except Exception as e: return None
+        except Exception:
+            return None
 
     def count_tokens(self, content: Union[str, List[Any]], model: Optional[str] = None) -> int:
-        if not self.client: return 0
+        if not self.client:
+            return 0
         try:
             return self.client.models.count_tokens(model=model or self.default_model, contents=content).total_tokens
-        except Exception as e: return 0
+        except Exception:
+            return 0
 
     def embed_content(self, content: Union[str, List[str]], model: str = "text-embedding-004") -> List[List[float]]:
-        if not self.client: return []
+        if not self.client:
+            return []
         try:
             resp = self.client.models.embed_content(model=model, contents=content)
-            if hasattr(resp, 'embedding'): return [resp.embedding.values]
-            if hasattr(resp, 'embeddings'): return [e.values for e in resp.embeddings]
+            if hasattr(resp, 'embedding'):
+                return [resp.embedding.values]
+            if hasattr(resp, 'embeddings'):
+                return [e.values for e in resp.embeddings]
             return []
-        except Exception as e: return []
+        except Exception:
+            return []
 
-    # --- Files API ---
     def upload_file(self, file_path: str, mime_type: Optional[str] = None) -> Optional[Dict[str, Any]]:
-        if not self.client: return None
+        if not self.client:
+            return None
         try:
-            # Corrected signature: file=path
-            file_ref = self.client.files.upload(file=file_path, config=types.UploadFileConfig(mime_type=mime_type) if mime_type else None)
+            file_ref = self.client.files.upload(
+                file=file_path,
+                config=types.UploadFileConfig(mime_type=mime_type) if mime_type else None
+            )
             return file_ref.model_dump()
         except Exception as e:
             logger.error(f"Failed to upload file: {e}")
             return None
 
     def list_files(self) -> List[Dict[str, Any]]:
-        if not self.client: return []
+        if not self.client:
+            return []
         try:
             return [f.model_dump() for f in self.client.files.list()]
-        except Exception as e: return []
+        except Exception:
+            return []
 
     def delete_file(self, file_name: str) -> bool:
-        if not self.client: return False
+        if not self.client:
+            return False
         try:
             self.client.files.delete(name=file_name)
             return True
-        except Exception: return False
+        except Exception:
+            return False
 
-    # --- Caching API ---
     def create_cached_content(self, model: str, contents: Any, ttl: Optional[str] = None, display_name: Optional[str] = None) -> Optional[Dict[str, Any]]:
-        if not self.client: return None
+        if not self.client:
+            return None
         try:
              config = types.CreateCachedContentConfig(model=model, contents=contents, ttl=ttl, display_name=display_name)
              return self.client.caches.create(config=config).model_dump()
-        except Exception as e: return None
+        except Exception:
+            return None
 
     def list_cached_contents(self) -> List[Dict[str, Any]]:
-        if not self.client: return []
+        if not self.client:
+            return []
         try:
              return [c.model_dump() for c in self.client.caches.list()]
-        except Exception: return []
+        except Exception:
+            return []
 
     def get_cached_content(self, name: str) -> Optional[Dict[str, Any]]:
-        if not self.client: return None
+        if not self.client:
+            return None
         try:
              return self.client.caches.get(name=name).model_dump()
-        except Exception: return None
+        except Exception:
+            return None
 
     def delete_cached_content(self, name: str) -> bool:
-        if not self.client: return False
+        if not self.client:
+            return False
         try:
              self.client.caches.delete(name=name)
              return True
-        except Exception: return False
+        except Exception:
+            return False
 
     def update_cached_content(self, name: str, ttl: Optional[str] = None) -> Optional[Dict[str, Any]]:
-        if not self.client: return None
+        if not self.client:
+            return None
         try:
              return self.client.caches.update(name=name, config=types.UpdateCachedContentConfig(ttl=ttl)).model_dump()
-        except Exception: return None
+        except Exception:
+            return None
 
-    # --- Tuning API ---
     def create_tuned_model(self, source_model: str, training_data: Any, display_name: Optional[str] = None, epochs: Optional[int] = None) -> Optional[Dict[str, Any]]:
-        if not self.client: return None
+        if not self.client:
+            return None
         try:
              job = self.client.tunings.tune(base_model=source_model, training_data=training_data, config=types.CreateTunedModelConfig(display_name=display_name, epoch_count=epochs))
              return job.model_dump()
-        except Exception: return None
+        except Exception:
+            return None
 
     def list_tuned_models(self) -> List[Dict[str, Any]]:
-        if not self.client: return []
+        if not self.client:
+            return []
         try:
              return [m.model_dump() for m in self.client.tunings.list()]
-        except Exception: return []
+        except Exception:
+            return []
 
     def get_tuned_model(self, name: str) -> Optional[Dict[str, Any]]:
-        if not self.client: return None
+        if not self.client:
+            return None
         try:
              return self.client.tunings.get(name=name).model_dump()
-        except Exception: return None
+        except Exception:
+            return None
 
     def delete_tuned_model(self, name: str) -> bool:
-        if not self.client: return False
+        if not self.client:
+            return False
         try:
              self.client.tunings.delete(name=name)
              return True
-        except Exception: return False
+        except Exception:
+            return False

@@ -6,7 +6,7 @@ from unittest.mock import Mock, MagicMock, patch
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
 from codomyrmex.agents.exceptions import AgentError, AgentConfigurationError
 from codomyrmex.agents.generic import APIAgentBase
-from codomyrmex.agents.config import AgentConfig, get_config, set_config, reset_config
+from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
 
 
 class TestAPIAgentBase(APIAgentBase):

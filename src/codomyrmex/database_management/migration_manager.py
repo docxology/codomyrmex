@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""Migration Management Module for Codomyrmex Database Management.
+
+This module provides database migration management, schema versioning,
+and migration execution capabilities with support for SQLite, PostgreSQL,
+and MySQL databases.
+"""
+
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional, Union
@@ -7,152 +15,29 @@ import re
 import time
 
 from dataclasses import dataclass, field
-from migration_manager import FunctionName, ClassName
 import hashlib
-import psycopg2
-import pymysql
 import sqlite3
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#!/usr/bin/env python3
-"""
-# """Core business logic and data management
-
-This module provides migration_manager functionality including:
-- 29 functions: run_migrations, __post_init__, __init__...
-- 4 classes: Migration, MigrationResult, DatabaseConnector...
-
-Usage:
-    # Example usage here
-"""
-Migration Management Module for Codomyrmex Database Management.
-
-This module provides database migration management, schema versioning,
-and migration execution capabilities with support for SQLite, PostgreSQL,
-and MySQL databases.
-"""
-
-
-
 logger = get_logger(__name__)
 
 # Optional database drivers
 try:
+    import psycopg2
     POSTGRESQL_AVAILABLE = True
 except ImportError:
     psycopg2 = None
     POSTGRESQL_AVAILABLE = False
 
 try:
+    import pymysql
     MYSQL_AVAILABLE = True
 except ImportError:
     pymysql = None
     MYSQL_AVAILABLE = False
+
 
 
 @dataclass

@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Tuple
 
 from dataclasses import dataclass, field
 
@@ -111,3 +111,34 @@ class PhysicsEngine:
             # Apply gravity
             # Simplistic Euler integration for demo
             obj.position.y += self.gravity.y * delta_time * delta_time * 0.5
+
+
+@dataclass
+class Light3D:
+    """3D Light representation."""
+    position: Vector3D = field(default_factory=Vector3D)
+    color: Tuple[float, float, float] = (1.0, 1.0, 1.0)
+    intensity: float = 1.0
+
+
+@dataclass
+class Camera3D:
+    """3D Camera representation."""
+    position: Vector3D = field(default_factory=Vector3D)
+    rotation: Quaternion = field(default_factory=Quaternion)
+    field_of_view: float = 60.0
+    near_plane: float = 0.1
+    far_plane: float = 1000.0
+
+    def look_at(self, target: Vector3D) -> None:
+        """Point camera at target."""
+        # Implementation placeholder
+        pass
+
+
+@dataclass
+class Scene3D:
+    """3D Scene representation."""
+    objects: list[Object3D] = field(default_factory=list)
+    lights: list[Light3D] = field(default_factory=list)
+    camera: Camera3D = field(default_factory=Camera3D)

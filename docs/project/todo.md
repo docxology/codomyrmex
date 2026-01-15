@@ -274,7 +274,6 @@ This document outlines the tasks required to complete the Codomyrmex project. It
     - [ ] Ensure all development follows module-specific rules.
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Repository Root](../../../README.md)
+- **Parent**: [docs](../README.md)
+- **Module Index**: [AGENTS.md](../../AGENTS.md)
+- **Home**: [Repository Root](../../README.md)

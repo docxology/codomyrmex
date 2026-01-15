@@ -1,8 +1,17 @@
-from typing import IO, Optional
+"""Compression utilities.
 
+This module provides data compression and decompression utilities supporting:
+- gzip compression with configurable levels
+- zlib compression for raw deflate
+- ZIP archive creation and extraction
+- Stream-based compression
+- Automatic format detection via magic bytes
+"""
 from io import BytesIO
+from pathlib import Path
+from typing import IO, List, Optional, Union
 import gzip
-import zipfile
+import os
 import zipfile
 import zlib
 
@@ -10,29 +19,34 @@ from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
-
-
-
-
-
-"""Compression utilities."""
-
 logger = get_logger(__name__)
+
 
 class CompressionError(CodomyrmexError):
     """Raised when compression operations fail."""
 
     pass
 
+
 class Compressor:
-    """Compressor for various formats."""
+    """Compressor for various formats.
+
+    Supports gzip, zlib, and ZIP formats with configurable compression levels.
+    """
+
+    SUPPORTED_FORMATS = {"gzip", "zlib", "zip"}
 
     def __init__(self, format: str = "gzip"):
         """Initialize compressor.
 
         Args:
             format: Compression format (gzip, zlib, zip)
+
+        Raises:
+            ValueError: If format is not supported
         """
+        if format not in self.SUPPORTED_FORMATS:
+            raise ValueError(f"Unsupported format: {format}. Use one of: {self.SUPPORTED_FORMATS}")
         self.format = format
 
     def compress(self, data: bytes, level: int = 6) -> bytes:
@@ -131,3 +145,174 @@ class Compressor:
             return "zlib"
         return None
 
+    # --- File Utilities ---
+
+    def compress_file(self, input_path: str, output_path: Optional[str] = None, level: int = 6) -> str:
+        """Compress a file.
+
+        Args:
+            input_path: Path to input file
+            output_path: Path to output file (defaults to input_path + extension)
+            level: Compression level
+
+        Returns:
+            Path to compressed file
+
+        Raises:
+            CompressionError: If compression fails
+        """
+        try:
+            ext_map = {"gzip": ".gz", "zlib": ".zlib", "zip": ".zip"}
+            if output_path is None:
+                output_path = input_path + ext_map.get(self.format, ".compressed")
+
+            with open(input_path, "rb") as f:
+                data = f.read()
+
+            compressed = self.compress(data, level)
+
+            with open(output_path, "wb") as f:
+                f.write(compressed)
+
+            original_size = os.path.getsize(input_path)
+            compressed_size = len(compressed)
+            ratio = (1 - compressed_size / original_size) * 100 if original_size > 0 else 0
+
+            logger.info(f"Compressed {input_path} -> {output_path} ({ratio:.1f}% reduction)")
+            return output_path
+        except Exception as e:
+            logger.error(f"File compression error: {e}")
+            raise CompressionError(f"Failed to compress file: {str(e)}") from e
+
+    def decompress_file(self, input_path: str, output_path: Optional[str] = None) -> str:
+        """Decompress a file.
+
+        Args:
+            input_path: Path to compressed file
+            output_path: Path to output file (defaults to removing extension)
+
+        Returns:
+            Path to decompressed file
+
+        Raises:
+            CompressionError: If decompression fails
+        """
+        try:
+            if output_path is None:
+                # Remove common compression extensions
+                for ext in [".gz", ".gzip", ".zlib", ".zip", ".compressed"]:
+                    if input_path.endswith(ext):
+                        output_path = input_path[:-len(ext)]
+                        break
+                else:
+                    output_path = input_path + ".decompressed"
+
+            with open(input_path, "rb") as f:
+                data = f.read()
+
+            decompressed = self.decompress(data)
+
+            with open(output_path, "wb") as f:
+                f.write(decompressed)
+
+            logger.info(f"Decompressed {input_path} -> {output_path}")
+            return output_path
+        except Exception as e:
+            logger.error(f"File decompression error: {e}")
+            raise CompressionError(f"Failed to decompress file: {str(e)}") from e
+
+    @staticmethod
+    def get_compression_ratio(original: bytes, compressed: bytes) -> float:
+        """Calculate compression ratio.
+
+        Args:
+            original: Original data
+            compressed: Compressed data
+
+        Returns:
+            Compression ratio as percentage reduction (0-100)
+        """
+        if len(original) == 0:
+            return 0.0
+        return (1 - len(compressed) / len(original)) * 100
+
+
+# Convenience functions
+def compress_data(data: bytes, format: str = "gzip", level: int = 6) -> bytes:
+    """Compress data using specified format.
+
+    Args:
+        data: Data to compress
+        format: Compression format (gzip, zlib, zip)
+        level: Compression level (0-9)
+
+    Returns:
+        Compressed data
+    """
+    return Compressor(format).compress(data, level)
+
+
+def decompress_data(data: bytes, format: str = "gzip") -> bytes:
+    """Decompress data using specified format.
+
+    Args:
+        data: Compressed data
+        format: Compression format (gzip, zlib, zip)
+
+    Returns:
+        Decompressed data
+    """
+    return Compressor(format).decompress(data)
+
+
+def auto_decompress(data: bytes) -> bytes:
+    """Automatically detect format and decompress.
+
+    Args:
+        data: Compressed data
+
+    Returns:
+        Decompressed data
+
+    Raises:
+        CompressionError: If format cannot be detected
+    """
+    compressor = Compressor()
+    detected = compressor.detect_format(data)
+    if detected is None:
+        raise CompressionError("Unable to detect compression format")
+    return Compressor(detected).decompress(data)
+
+
+def compare_formats(data: bytes, level: int = 6) -> dict[str, dict[str, float]]:
+    """
+    Compare compression across all supported formats.
+    
+    Args:
+        data: Data to compress
+        level: Compression level
+        
+    Returns:
+        Dict with format -> {compressed_size, ratio, time_ms}
+    """
+    import time
+    
+    results = {}
+    original_size = len(data)
+    
+    for fmt in Compressor.SUPPORTED_FORMATS:
+        compressor = Compressor(fmt)
+        start = time.time()
+        try:
+            compressed = compressor.compress(data, level)
+            elapsed = (time.time() - start) * 1000
+            ratio = (1 - len(compressed) / original_size) * 100 if original_size > 0 else 0
+            results[fmt] = {
+                "compressed_size": len(compressed),
+                "ratio": round(ratio, 2),
+                "time_ms": round(elapsed, 2),
+            }
+        except Exception as e:
+            results[fmt] = {"error": str(e)}
+            
+    return results

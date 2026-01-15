@@ -5,6 +5,12 @@ Provides serialization and deserialization of objects to various formats.
 
 import json
 import pickle
+from pathlib import Path
+try:
+    import yaml
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
 from dataclasses import asdict, is_dataclass
 from datetime import datetime
 from enum import Enum
@@ -45,6 +51,8 @@ class Serializer:
                 return self._serialize_json(obj)
             elif fmt == SerializationFormat.PICKLE:
                 return pickle.dumps(obj)
+            elif fmt == SerializationFormat.YAML:
+                return self._serialize_yaml(obj)
             else:
                 raise SerializationError(f"Unsupported format: {fmt}")
         except Exception as e:
@@ -60,6 +68,8 @@ class Serializer:
                 return self._deserialize_json(data, target_type)
             elif fmt == SerializationFormat.PICKLE:
                 return pickle.loads(data)
+            elif fmt == SerializationFormat.YAML:
+                return self._deserialize_yaml(data, target_type)
             else:
                 raise SerializationError(f"Unsupported format: {fmt}")
         except Exception as e:
@@ -72,6 +82,21 @@ class Serializer:
     def _deserialize_json(self, data: bytes, target_type: Optional[Type[T]]) -> Any:
         """Deserialize from JSON bytes."""
         parsed = json.loads(data.decode('utf-8'))
+        if target_type and is_dataclass(target_type):
+            return target_type(**parsed)
+        return parsed
+
+    def _serialize_yaml(self, obj: Any) -> bytes:
+        """Serialize to YAML bytes."""
+        if not YAML_AVAILABLE:
+            raise SerializationError("PyYAML not installed")
+        return yaml.dump(self._to_jsonable(obj), default_flow_style=False).encode('utf-8')
+
+    def _deserialize_yaml(self, data: bytes, target_type: Optional[Type[T]]) -> Any:
+        """Deserialize from YAML bytes."""
+        if not YAML_AVAILABLE:
+            raise SerializationError("PyYAML not installed")
+        parsed = yaml.safe_load(data.decode('utf-8'))
         if target_type and is_dataclass(target_type):
             return target_type(**parsed)
         return parsed
@@ -90,6 +115,8 @@ class Serializer:
             return {k: self._to_jsonable(v) for k, v in obj.items()}
         elif isinstance(obj, (list, tuple)):
             return [self._to_jsonable(item) for item in obj]
+        elif isinstance(obj, Path):
+            return str(obj)
         else:
             return str(obj)
 

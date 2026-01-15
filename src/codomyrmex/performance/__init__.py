@@ -33,6 +33,13 @@ except ImportError:
         def __enter__(self): return self
 
         def __exit__(self, *args): pass
+        
+    def profile_function(*args, **kwargs):
+        """No-op."""
+        return monitor_performance(*args, **kwargs)
+        
+    def get_system_metrics(*args, **kwargs):
+        return {}
 
 __all__ = [
     "LazyLoader",
@@ -45,8 +52,12 @@ if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("PerformanceMonitor")
     __all__.append("monitor_performance")
     __all__.append("performance_context")
+    __all__.append("profile_function")
+    __all__.append("get_system_metrics")
 else:
     __all__.append("monitor_performance") # Export the no-op version
     __all__.append("performance_context") # Export the no-op version
+    __all__.append("profile_function")
+    __all__.append("get_system_metrics")
 
 __version__ = "0.1.0"

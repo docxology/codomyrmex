@@ -1,6 +1,6 @@
 # Gemini Agent Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 ## 1. Overview
 The Gemini Agent provides a standardized interface to Google's Gemini models, supporting text generation, multimodal inputs, and advanced platform features via the `google-genai` SDK.
 

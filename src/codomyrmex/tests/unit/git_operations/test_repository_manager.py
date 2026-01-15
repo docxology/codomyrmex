@@ -10,12 +10,13 @@ import tempfile
 import os
 import shutil
 import subprocess
+from unittest.mock import patch, MagicMock
 from pathlib import Path
 
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from codomyrmex.git_operations.repository_manager import (
+from codomyrmex.git_operations.core.repository import (
     RepositoryManager, Repository, RepositoryType
 )
 
@@ -46,6 +47,13 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
 """
         with open(self.library_file, 'w') as f:
             f.write(library_content)
+        
+        # Initialize manager
+        self.manager = RepositoryManager(
+            library_file=self.library_file,
+            base_path=self.base_path
+        )
+        self.test_repo = self.manager.get_repository("testuser/testrepo")
     
     def tearDown(self):
         """Clean up test environment."""
@@ -406,6 +414,35 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
         self.assertTrue(fork_repo.is_development_repo)
         self.assertFalse(fork_repo.is_readonly_repo)
 
+
+    @patch('codomyrmex.git_operations.core.repository.push_changes')
+    def test_sync_repository(self, mock_push):
+        """Test syncing a repository."""
+        self.manager.update_repository = MagicMock(return_value=True)
+        self.manager.get_repository = MagicMock(return_value=self.test_repo)
+        self.manager.get_local_path = MagicMock(return_value=Path("/tmp/test"))
+        
+        mock_push.return_value = True
+        
+        result = self.manager.sync_repository("test_owner/test_repo")
+        
+        self.assertTrue(result)
+        self.manager.update_repository.assert_called_with("test_owner/test_repo", None)
+        mock_push.assert_called_once()
+
+    @patch('codomyrmex.git_operations.core.repository.prune_remote')
+    @patch('codomyrmex.git_operations.core.repository.is_git_repository')
+    def test_prune_repository(self, mock_is_git, mock_prune):
+        """Test pruning a repository."""
+        self.manager.get_repository = MagicMock(return_value=self.test_repo)
+        self.manager.get_local_path = MagicMock(return_value=Path("/tmp/test"))
+        mock_is_git.return_value = True
+        mock_prune.return_value = True
+        
+        result = self.manager.prune_repository("test_owner/test_repo")
+        
+        self.assertTrue(result)
+        mock_prune.assert_called_with("origin", "/tmp/test")
 
 if __name__ == '__main__':
     unittest.main()

@@ -29,7 +29,7 @@ This documentation provides in-depth information beyond the main `README.md` for
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Root README](../../README.md)
 
 ## Detailed Architecture and Implementation
 

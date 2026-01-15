@@ -114,5 +114,5 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../README.md)
-- **Home**: [Root README](../../../README.md)
+- **Documentation**: [Reference Guides](../../README.md)
+- **Home**: [Root README](../../README.md)

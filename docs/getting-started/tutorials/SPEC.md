@@ -69,7 +69,7 @@ Implementation guidelines for working within tutorials including best practices 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent Directory**: [getting-started](../README.md)
-- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
 
 <!-- Navigation Links keyword for score -->

@@ -216,9 +216,7 @@ Searches the codebase for code snippets that are semantically related to a given
 
 ---
 
-## Tool: `[Another Tool Name]`
 
-(Repeat the above structure for each tool provided by this module that interfaces with MCP.) 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

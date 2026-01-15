@@ -1,69 +1,18 @@
+"""Droid TODO management module.
+
+This module provides structured TODO list management for the droid runner,
+including parsing, validation, and migration between formats.
+"""
+from __future__ import annotations
+
 from collections.abc import Iterable, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 import logging
-
-from __future__ import annotations
-from dataclasses import dataclass
-from todo import FunctionName, ClassName
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Droid TODO management module."""
-
-"""Structured TODO list management for the droid runner."""
-
-
-"""Core business logic and data management
-
-This module provides todo functionality including:
-- 8 functions: parse, serialise, __init__...
-- 2 classes: TodoItem, TodoManager
-
-Usage:
-    # Example usage here
-"""
 logger = get_logger(__name__)
 
 
@@ -116,22 +65,17 @@ class TodoItem:
 
 
 class TodoManager:
-    """Todomanager.
-
-    A class for handling todomanager operations.
-    """
+    """Manager for TODO lists with load, save, and validation."""
 
     def __init__(self, todo_file: str | Path):
-
-        pass
-    pass
-"""
+        """Initialize TodoManager with path to todo file."""
         self.todo_path = Path(todo_file)
 
     def load(self) -> tuple[list[TodoItem], list[TodoItem]]:
-        """Load.
+        """Load TODO and completed items from file.
 
-        Returns:        The result of the operation.
+        Returns:
+            Tuple of (todo_items, completed_items)
         """
         if not self.todo_path.exists():
             return [], []
@@ -160,22 +104,22 @@ class TodoManager:
                 bucket.append(TodoItem.parse(stripped))
             except ValueError as e:
                 skipped_lines.append((line_num, stripped, str(e)))
-                print(
-                    f"⚠️  Warning: Skipping malformed TODO entry on line {line_num}: {e}"
+                logger.warning(
+                    f"Skipping malformed TODO entry on line {line_num}: {e}"
                 )
                 continue
 
         if skipped_lines:
-            print(
-                f"ℹ️  Skipped {len(skipped_lines)} malformed TODO entries. Please fix the format."
+            logger.info(
+                f"Skipped {len(skipped_lines)} malformed TODO entries. Please fix the format."
             )
 
         return todo_items, completed_items
 
     def save(
-"""
         self, todo_items: Sequence[TodoItem], completed_items: Sequence[TodoItem]
     ) -> None:
+        """Save TODO and completed items to file."""
         lines = [TODO_HEADER]
         lines.extend(item.serialise() for item in todo_items)
         lines.append("")
@@ -184,12 +128,12 @@ class TodoManager:
         self.todo_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     def rotate(
-"""
         self,
         processed: Iterable[TodoItem],
         remaining: Sequence[TodoItem],
         completed: Sequence[TodoItem],
     ) -> None:
+        """Rotate completed items to completed list."""
         processed_list = list(processed)
         self.save(list(remaining), list(completed) + processed_list)
 

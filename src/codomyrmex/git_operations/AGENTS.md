@@ -6,35 +6,29 @@
 Module components and implementation for git_operations..
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `COMPLETE_API_DOCUMENTATION.md` – Project file
-- `COMPREHENSIVE_USAGE_EXAMPLES.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `METADATA_SYSTEM_GUIDE.md` – Project file
-- `README.md` – Project file
-- `REPOSITORY_MANAGEMENT_GUIDE.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `auto_generated_library.txt` – Project file
-- `demo.py` – Project file
-- `docxology_repository_library.txt` – Project file
-- `git_manager.py` – Project file
-- `github_api.py` – Project file
-- `github_library_generator.py` – Project file
-- `metadata_cli.py` – Project file
-- `repo_cli.py` – Project file
-- `repository_library.txt` – Project file
-- `repository_manager.py` – Project file
-- `repository_metadata.json` – Project file
-- `repository_metadata.py` – Project file
-- `requirements.txt` – Project file
-- `visualization_integration.py` – Project file
+- `__init__.py` – Package initialization
+- `core/` – Core logic and managers
+    - `git.py` – Git operations manager
+    - `repository.py` – Repository management
+    - `metadata.py` – Metadata handling
+- `api/` – API integrations
+    - `github.py` – GitHub API interaction
+    - `visualization.py` – Visualization tools
+- `cli/` – Command line interfaces
+    - `repo.py` – Repository CLI
+    - `metadata.py` – Metadata CLI
+    - `demo.py` – Demonstration CLI
+- `tools/` – Helper tools
+    - `library_generator.py` – Library generation
+- `data/` – Data files
+    - `repository_metadata.json` – Metadata storage
+    - `*.txt` – Library files
+- `docs/` – Module documentation
+    - `API_SPECIFICATION.md`
+    - `COMPREHENSIVE_USAGE_EXAMPLES.md`
+    - `...`
 
 ## Operating Contracts
-- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

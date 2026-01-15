@@ -72,7 +72,7 @@ class TestStaticAnalysis:
         pyrefly_output = """/path/to/file1.py:10:5: error: Type mismatch
 /path/to/file2.py:25:15: warning: Unused variable
 Some non-matching line
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: /path/to/file3.py:100:20: error: Import error"""
+/path/to/file3.py:100:20: error: Import error"""
 
         project_root = "/path/to"
         result = parse_pyrefly_output(pyrefly_output, project_root)

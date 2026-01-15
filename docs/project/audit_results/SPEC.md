@@ -1,6 +1,6 @@
 # audit_results Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: December 2025
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 ## Core Concept
 [DESCRIBE THE CORE ARCHITECTURAL OR FUNCTIONAL CONCEPT OF audit_results]
 
@@ -22,7 +22,7 @@
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [project](../README.md)
-- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
 
 <!-- Navigation Links keyword for score -->

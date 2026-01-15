@@ -38,14 +38,14 @@ Example:
     >>> client = VSCodeClient()
     >>> client.connect()
     >>> extensions = client.list_extensions()
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 class VSCodeClient(IDEClient):
     """Client for interacting with Visual Studio Code.
     
     Provides programmatic access to VS Code's Extension API,
     workspace management, and debugging capabilities.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
     
     def __init__(self, workspace_path: Optional[str] = None):
         """Initialize the VS Code client.
@@ -53,7 +53,7 @@ class VSCodeClient(IDEClient):
         Args:
             workspace_path: Optional path to the workspace root.
                            Defaults to current directory.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         self._connected = False
         self.workspace_path = Path(workspace_path) if workspace_path else Path.cwd()
         self._vscode_dir = self.workspace_path / ".vscode"
@@ -66,7 +66,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             bool: True if connection successful.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         # Check for VS Code workspace indicators
         if self._vscode_dir.exists():
             self._connected = True
@@ -95,7 +95,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             bool: True if connected.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         return self._connected
     
     def get_capabilities(self) -> Dict[str, Any]:
@@ -103,7 +103,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             Dict containing available features.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         return {
             "name": "Visual Studio Code",
             "version": "latest",
@@ -137,7 +137,7 @@ class VSCodeClient(IDEClient):
             
         Returns:
             Command result.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         if not self._connected:
             raise CommandExecutionError("Not connected to VS Code")
         
@@ -152,7 +152,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             File path or None.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         return None
     
     def open_file(self, path: str) -> bool:
@@ -163,7 +163,7 @@ class VSCodeClient(IDEClient):
             
         Returns:
             bool: True if successful.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         return Path(path).exists()
     
     def get_open_files(self) -> List[str]:
@@ -171,7 +171,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             List of file paths.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         return []
     
     def list_extensions(self) -> List[Dict[str, Any]]:
@@ -179,7 +179,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             List of extension metadata.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         # Common extensions that might be installed
         return [
             {"name": "python", "publisher": "ms-python", "version": "2024.0.0", "enabled": True},
@@ -192,7 +192,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             List of command IDs.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         return self.get_capabilities()["commands"]
     
     def get_settings(self) -> Dict[str, Any]:
@@ -200,7 +200,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             Dict containing settings.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         settings_path = self._vscode_dir / "settings.json"
         if settings_path.exists():
             try:
@@ -217,7 +217,7 @@ class VSCodeClient(IDEClient):
             
         Returns:
             bool: True if successful.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         if not self._connected:
             raise IDEError("Not connected to VS Code")
         
@@ -242,7 +242,7 @@ class VSCodeClient(IDEClient):
             
         Returns:
             bool: True if debug session started.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         if not self._connected:
             raise IDEError("Not connected to VS Code")
         return True
@@ -252,7 +252,7 @@ class VSCodeClient(IDEClient):
         
         Returns:
             bool: True if debug session stopped.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
         if not self._connected:
             raise IDEError("Not connected to VS Code")
         return True

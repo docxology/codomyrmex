@@ -6,7 +6,6 @@ import subprocess
 import sys
 
 import dotenv
-import dotenv
 import kit
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -57,13 +56,43 @@ def check_and_setup_env_vars(repo_root: str) -> bool:
     except ImportError:
         return False
 
+def validate_python_version() -> bool:
+    """Validate python version."""
+    return sys.version_info >= (3, 10)
+
 def is_uv_available() -> bool:
     """Check if 'uv' is available in the path."""
     return shutil.which("uv") is not None
 
+def is_uv_environment() -> bool:
+    """Check if running within a uv environment."""
+    # Check for VIRTUAL_ENV environment variable which uv sets
+    # Or specifically check if the python executable path is inside .venv created by uv
+    return os.environ.get("VIRTUAL_ENV") is not None or is_uv_available()
+
 def generate_environment_report() -> str:
     """Generate detailed environment status report."""
     return "Environment report generation placeholder."
+
+def validate_environment_completeness(repo_root: Optional[str] = None) -> bool:
+    """
+    Validate overall environment completeness.
+    
+    Args:
+        repo_root: Optional root path
+        
+    Returns:
+        True if all checks pass
+    """
+    if repo_root is None:
+        repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    deps = ensure_dependencies_installed()
+    env_vars = check_and_setup_env_vars(repo_root)
+    py_ver = validate_python_version()
+    uv_env = is_uv_environment()
+    
+    return deps and env_vars and py_ver
 
 if __name__ == "__main__":
     print("Running env_checker.py standalone for basic checks...")

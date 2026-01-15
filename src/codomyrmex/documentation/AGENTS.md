@@ -32,7 +32,6 @@ Documentation files and guides for documentation.
 ## Operating Contracts
 - `.cursor/` – Directory for .cursor components.
 - `.docusaurus/` – Directory for .docusaurus components.
-- `__pycache__/` – Directory for __pycache__ components.
 - `node_modules/` – Directory for node_modules components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.

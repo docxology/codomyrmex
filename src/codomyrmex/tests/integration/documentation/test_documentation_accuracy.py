@@ -130,7 +130,7 @@ class TestDocumentationAccuracy:
 
     def test_git_operations_api_exists(self):
         """Test that documented git operations functions exist."""
-        from codomyrmex.git_operations.git_manager import (
+        from codomyrmex.git_operations.core.git import (
             check_git_availability,
             is_git_repository,
             create_branch,
@@ -265,8 +265,8 @@ class TestDocumentationAccuracy:
 
     def test_repository_management_classes_exist(self):
         """Test that documented repository management classes exist."""
-        from codomyrmex.git_operations.repository_manager import Repository, RepositoryManager
-        from codomyrmex.git_operations.repository_manager import RepositoryType
+        from codomyrmex.git_operations.core.repository import Repository, RepositoryManager
+        from codomyrmex.git_operations.core.repository import RepositoryType
 
         # Test Repository class
         repo = Repository(
@@ -338,7 +338,7 @@ class TestDocumentationAccuracy:
             'codomyrmex.data_visualization.line_plot',
             'codomyrmex.static_analysis.pyrefly_runner',
             'codomyrmex.coding.execution.executor',
-            'codomyrmex.git_operations.git_manager',
+            'codomyrmex.git_operations.core.git',
             'codomyrmex.environment_setup.env_checker',
             'codomyrmex.build_synthesis.build_orchestrator',
             'codomyrmex.logging_monitoring.logger_config',

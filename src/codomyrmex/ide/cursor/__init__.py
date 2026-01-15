@@ -1,34 +1,4 @@
-from pathlib import Path
-from typing import Any, Optional, Dict, List
-import json
-
-from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutionError
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Cursor IDE Integration
-
+"""Cursor IDE Integration.
 
 Integration with Cursor IDE - the AI-first code editor. Provides programmatic
 access to Cursor's AI-assisted development capabilities.
@@ -38,42 +8,40 @@ Example:
     >>> client = CursorClient()
     >>> client.connect()
     >>> rules = client.get_rules()
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
+
+from pathlib import Path
+from typing import Any, Optional, Dict, List
+import json
+
+from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutionError
+
 
 class CursorClient(IDEClient):
     """Client for interacting with Cursor IDE.
     
     Provides programmatic access to Cursor's AI-assisted development capabilities
     including Composer automation, rules management, and model configuration.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:     """
+    """
     
     def __init__(self, workspace_path: Optional[str] = None):
         """Initialize the Cursor client.
         
         Args:
             workspace_path: Optional path to the workspace root.
-                           Defaults to current directory.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """
+        super().__init__()
         self._connected = False
         self.workspace_path = Path(workspace_path) if workspace_path else Path.cwd()
         self._cursorrules_path = self.workspace_path / ".cursorrules"
     
     def connect(self) -> bool:
-        """Establish connection to Cursor.
-        
-        Attempts to detect an active Cursor workspace by checking
-        for configuration files.
-        
-        Returns:
-            bool: True if connection successful.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
-        # Check for Cursor workspace indicators
+        """Establish connection to Cursor workspace."""
         cursor_dir = self.workspace_path / ".cursor"
         if cursor_dir.exists() or self._cursorrules_path.exists():
             self._connected = True
             return True
         
-        # If no cursor-specific files, still connect if workspace exists
         if self.workspace_path.exists():
             self._connected = True
             return True
@@ -86,94 +54,48 @@ class CursorClient(IDEClient):
         self._connected = False
     
     def is_connected(self) -> bool:
-        """Check if currently connected.
-        
-        Returns:
-            bool: True if connected.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Check if currently connected."""
         return self._connected
     
     def get_capabilities(self) -> Dict[str, Any]:
-        """Get Cursor capabilities.
-        
-        Returns:
-            Dict containing available features.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get Cursor capabilities."""
         return {
             "name": "Cursor",
             "version": "latest",
             "features": [
-                "composer",
-                "chat",
-                "inline_edit",
-                "code_generation",
-                "code_explanation",
-                "rules_management",
-                "model_selection",
+                "composer", "chat", "inline_edit",
+                "code_generation", "code_explanation",
+                "rules_management", "model_selection",
             ],
             "models": [
-                "gpt-4",
-                "gpt-4-turbo",
-                "gpt-3.5-turbo",
-                "claude-3-opus",
-                "claude-3-sonnet",
+                "gpt-4", "gpt-4-turbo", "gpt-3.5-turbo",
+                "claude-3-opus", "claude-3-sonnet",
             ],
             "connected": self._connected,
             "workspace": str(self.workspace_path),
         }
     
     def execute_command(self, command: str, args: Optional[Dict] = None) -> Any:
-        """Execute a Cursor command.
-        
-        Args:
-            command: Command name to execute.
-            args: Optional command arguments.
-            
-        Returns:
-            Command result.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Execute a Cursor command."""
         if not self._connected:
             raise CommandExecutionError("Not connected to Cursor")
         
-        return {
-            "status": "success",
-            "command": command,
-            "args": args or {},
-        }
+        return {"status": "success", "command": command, "args": args or {}}
     
     def get_active_file(self) -> Optional[str]:
-        """Get the currently active file.
-        
-        Returns:
-            File path or None.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get the currently active file."""
         return None
     
     def open_file(self, path: str) -> bool:
-        """Open a file in Cursor.
-        
-        Args:
-            path: Path to the file.
-            
-        Returns:
-            bool: True if successful.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Open a file in Cursor."""
         return Path(path).exists()
     
     def get_open_files(self) -> List[str]:
-        """Get list of open files.
-        
-        Returns:
-            List of file paths.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get list of open files."""
         return []
     
     def get_rules(self) -> Dict[str, Any]:
-        """Get current .cursorrules configuration.
-        
-        Returns:
-            Dict containing rules configuration.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get current .cursorrules configuration."""
         if self._cursorrules_path.exists():
             try:
                 content = self._cursorrules_path.read_text()
@@ -183,14 +105,7 @@ class CursorClient(IDEClient):
         return {"content": "", "path": str(self._cursorrules_path), "exists": False}
     
     def update_rules(self, rules: Dict[str, Any]) -> bool:
-        """Update .cursorrules configuration.
-        
-        Args:
-            rules: Dictionary containing rule configuration.
-            
-        Returns:
-            bool: True if update successful.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Update .cursorrules configuration."""
         if not self._connected:
             raise IDEError("Not connected to Cursor")
         
@@ -204,24 +119,12 @@ class CursorClient(IDEClient):
             return False
     
     def get_models(self) -> List[str]:
-        """Get available AI models.
-        
-        Returns:
-            List of model names.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
+        """Get available AI models."""
         return self.get_capabilities()["models"]
     
     def set_model(self, model: str) -> bool:
-        """Set the active AI model.
-        
-        Args:
-            model: Model name to activate.
-            
-        Returns:
-            bool: True if successful.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:         """
-        available = self.get_models()
-        return model in available
+        """Set the active AI model."""
+        return model in self.get_models()
 
 
 __all__ = ["CursorClient"]

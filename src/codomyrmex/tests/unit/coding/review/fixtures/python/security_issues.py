@@ -11,7 +11,7 @@ import hashlib
 
 
 """Python file with security issues for testing security analysis.
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL: """
+"""
 
 def insecure_function(user_input):
     """Function with multiple security issues."""

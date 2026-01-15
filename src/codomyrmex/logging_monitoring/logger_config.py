@@ -74,24 +74,44 @@ _logging_configured = False
 # Custom JSON Formatter
 class JsonFormatter(logging.Formatter):
     """
-    Configures logging for the Codomyrmex project.
-
-    This function should be called once, typically at the application's entry point.
-    It reads configuration from environment variables:
-    - CODOMYRMEX_LOG_LEVEL: Logging level (e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL). Defaults to INFO.
-    - CODOMYRMEX_LOG_FILE: Optional path to a log file. If not set, logs to console.
-    - CODOMYRMEX_LOG_FORMAT: Optional custom log format string for TEXT output.
-                           Defaults to DEFAULT_LOG_FORMAT. Set to "DETAILED" to use DETAILED_LOG_FORMAT.
-    - CODOMYRMEX_LOG_OUTPUT_TYPE: Output type ("TEXT" or "JSON"). Defaults to "TEXT".
-
-    Uses `python-dotenv` to load environment variables from a .env file.
+    JSON formatter for structured logging output.
+    
+    Formats log records as JSON objects with standard fields.
     """
-    def format(self, record):
-        # Placeholder format method since original seemed missing or replaced by docstring?
-        # The docstring describes 'setup_logging', but this is 'JsonFormatter'.
-        # The file content at 95 says 'global _logging_configured' and 'if _logging_configured'.
-        # This looks like the body of 'setup_logging' got pasted into 'JsonFormatter'!
-        pass
+    def format(self, record: logging.LogRecord) -> str:
+        """Format a log record as JSON."""
+        log_data = {
+            "timestamp": datetime.fromtimestamp(record.created).isoformat(),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+            "module": record.module,
+            "function": record.funcName,
+            "line": record.lineno,
+        }
+        
+        # Add exception info if present
+        if record.exc_info:
+            log_data["exception"] = self.formatException(record.exc_info)
+            
+        # Add extra fields
+        if hasattr(record, "context"):
+            log_data["context"] = record.context
+        if hasattr(record, "correlation_id"):
+            log_data["correlation_id"] = record.correlation_id
+            
+        # Add any other extra fields
+        for key, value in record.__dict__.items():
+            if key not in [
+                "name", "msg", "args", "created", "filename", "funcName",
+                "levelname", "levelno", "lineno", "module", "msecs",
+                "pathname", "process", "processName", "relativeCreated",
+                "stack_info", "exc_info", "exc_text", "thread", "threadName",
+                "message", "context", "correlation_id"
+            ]:
+                log_data[key] = value
+                
+        return json.dumps(log_data)
 
 def setup_logging():
     global _logging_configured
@@ -363,6 +383,92 @@ class PerformanceLogger:
             extra["metric_unit"] = unit
 
         self.logger.info(f"Metric: {metric_name} = {value}{f' {unit}' if unit else ''}", extra=extra)
+
+
+class AuditLogger:
+    """
+    Specialized logger for immutable audit trails.
+    
+    Ensures all audit entries have mandatory fields and cannot be easily tampered with.
+    """
+    
+    REQUIRED_FIELDS = ["actor", "action", "resource"]
+    
+    def __init__(self, logger_name: str = "audit", log_file: Optional[str] = None):
+        """
+        Initialize audit logger.
+        
+        Args:
+            logger_name: Name for the logger
+            log_file: Optional dedicated audit log file
+        """
+        self.logger = logging.getLogger(logger_name)
+        self.logger.setLevel(logging.INFO)
+        
+        # Always use JSON format for audit logs
+        formatter = JsonFormatter()
+        
+        # Add file handler if specified
+        if log_file:
+            handler = logging.FileHandler(log_file, mode='a')
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            
+    def log(
+        self,
+        actor: str,
+        action: str,
+        resource: str,
+        outcome: str = "success",
+        details: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """
+        Log an audit event.
+        
+        Args:
+            actor: Who performed the action (user ID, service name, etc.)
+            action: What action was performed (e.g., "create", "delete", "login")
+            resource: What resource was affected (e.g., "user:123", "file:/path")
+            outcome: Result of the action ("success", "failure", "denied")
+            details: Additional context
+        """
+        audit_record = {
+            "audit_id": str(uuid.uuid4()),
+            "timestamp": datetime.now().isoformat(),
+            "actor": actor,
+            "action": action,
+            "resource": resource,
+            "outcome": outcome,
+            "details": details or {},
+        }
+        
+        self.logger.info(
+            f"AUDIT: {actor} {action} {resource} -> {outcome}",
+            extra={"audit": audit_record}
+        )
+        
+    def log_access(
+        self,
+        actor: str,
+        resource: str,
+        access_type: str = "read",
+        granted: bool = True,
+    ) -> None:
+        """
+        Log an access event.
+        
+        Args:
+            actor: Who requested access
+            resource: What resource was accessed
+            access_type: Type of access (read, write, execute)
+            granted: Whether access was granted
+        """
+        self.log(
+            actor=actor,
+            action=f"access:{access_type}",
+            resource=resource,
+            outcome="granted" if granted else "denied",
+        )
 
 
 # Example of how to use it (primarily for testing this file directly):

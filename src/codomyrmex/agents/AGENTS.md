@@ -3,7 +3,8 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for agents..
+
+Agent integration framework providing unified interfaces for CLI-based (Jules, Gemini, OpenCode, Mistral Vibe, Every Code) and API-based (Claude, Codex) AI agents. Includes base classes, orchestration, and Codomyrmex module adapters.
 
 ## Active Components
 - `AGENT_COMPARISON.md` – Project file
@@ -12,13 +13,11 @@ Module components and implementation for agents..
 - `__init__.py` – Project file
 - `ai_code_editing/` – Directory containing ai_code_editing components
 - `claude/` – Directory containing claude components
-- `cli_handlers.py` – Project file
+- `cli/` – Directory containing CLI handlers and utilities
 - `codex/` – Directory containing codex components
-- `config.py` – Project file
-- `core.py` – Project file
+- `core/` – Directory containing core agent logic (formerly core.py, config.py)
 - `droid/` – Directory containing droid components
 - `every_code/` – Directory containing every_code components
-- `exceptions.py` – Project file
 - `gemini/` – Directory containing gemini components
 - `generic/` – Directory containing generic components
 - `jules/` – Directory containing jules components
@@ -27,7 +26,6 @@ Module components and implementation for agents..
 - `theory/` – Directory containing theory components
 
 ## Operating Contracts
-- `__pycache__/` – Directory for __pycache__ components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

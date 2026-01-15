@@ -5,48 +5,6 @@ from enum import Enum
 
 from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Agent architecture patterns and implementations."""
 
 logger = get_logger(__name__)
@@ -173,6 +131,49 @@ class ReactiveArchitecture(AgentArchitecture):
         return {"result": "no_action"}
 
 
+class KnowledgeBase:
+    """Simple Knowledge Base for deliberative agents."""
+    
+    def __init__(self):
+        self.facts: dict[str, Any] = {}
+        self.rules: list[callable] = []
+
+    def add_fact(self, key: str, value: Any) -> None:
+        """Add or update a fact in the knowledge base."""
+        self.facts[key] = value
+
+    def get_fact(self, key: str) -> Optional[Any]:
+        """Get a fact by key."""
+        return self.facts.get(key)
+
+    def remove_fact(self, key: str) -> bool:
+        """Remove a fact from the knowledge base.
+        
+        Returns:
+            True if fact was removed, False if not found
+        """
+        if key in self.facts:
+            del self.facts[key]
+            return True
+        return False
+
+    def clear(self) -> None:
+        """Clear all facts from the knowledge base."""
+        self.facts.clear()
+
+    def has_fact(self, key: str) -> bool:
+        """Check if a fact exists."""
+        return key in self.facts
+
+    def list_facts(self) -> list[str]:
+        """List all fact keys."""
+        return list(self.facts.keys())
+
+    def query(self, query_func: callable) -> Any:
+        """Query facts using a custom function."""
+        return query_func(self.facts)
+
+
 class DeliberativeArchitecture(AgentArchitecture):
     """Deliberative agent architecture (planning-based)."""
 
@@ -181,6 +182,7 @@ class DeliberativeArchitecture(AgentArchitecture):
         super().__init__(name, ArchitectureType.DELIBERATIVE)
         self.goals: list[dict[str, Any]] = []
         self.plans: list[dict[str, Any]] = []
+        self.kb = KnowledgeBase()
 
     def set_goal(self, goal: dict[str, Any]) -> None:
         """
@@ -194,7 +196,7 @@ class DeliberativeArchitecture(AgentArchitecture):
 
     def plan(self, goal: dict[str, Any], current_state: dict[str, Any]) -> list[dict[str, Any]]:
         """
-        Create a plan to achieve a goal.
+        Create a plan to achieve a goal using knowledge base.
 
         Args:
             goal: Goal to achieve
@@ -203,8 +205,19 @@ class DeliberativeArchitecture(AgentArchitecture):
         Returns:
             List of actions (plan)
         """
-        # Simple planning: return goal as single action
-        plan = [{"action": "achieve_goal", "goal": goal, "state": current_state}]
+        # Store current state in KB
+        for k, v in current_state.items():
+            self.kb.add_fact(f"state_{k}", v)
+
+        # Simple planning logic (enhanced from placeholder)
+        # If goal is "reach_location", and we are at "A", plan is "move_to_B", "move_to_Goal"
+        plan = []
+        if goal.get("type") == "complex":
+             plan.append({"action": "decompose_goal", "goal": goal})
+             plan.append({"action": "execute_subgoals"})
+        else:
+             plan.append({"action": "achieve_goal", "goal": goal, "context": self.kb.facts})
+        
         self.plans.append(plan)
         self.logger.debug(f"Created plan for goal: {goal}")
         return plan
@@ -219,6 +232,10 @@ class DeliberativeArchitecture(AgentArchitecture):
         Returns:
             Interpreted perception
         """
+        # Update KB with new perceptions
+        for k, v in environment.items():
+            self.kb.add_fact(k, v)
+            
         return {
             "raw": environment,
             "interpreted": self._interpret(environment),
@@ -242,8 +259,13 @@ class DeliberativeArchitecture(AgentArchitecture):
             return {"action": None, "plan": []}
 
         goal = self.goals[0]
+        # Plan based on interpreted state
         plan = self.plan(goal, perception.get("interpreted", {}))
-        return {"action": plan[0] if plan else None, "plan": plan}
+        
+        if plan:
+            next_action = plan[0]
+            return {"action": next_action, "plan": plan}
+        return {"action": None, "plan": []}
 
     def act(self, decision: dict[str, Any]) -> dict[str, Any]:
         """
@@ -257,6 +279,7 @@ class DeliberativeArchitecture(AgentArchitecture):
         """
         action = decision.get("action")
         if action:
+            self.logger.info(f"Executing deliberative action: {action}")
             return {"result": "executed", "action": action}
         return {"result": "no_action"}
 

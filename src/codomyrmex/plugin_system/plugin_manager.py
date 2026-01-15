@@ -254,8 +254,13 @@ class PluginManager:
                 )
                 return result
 
-        # Load plugins concurrently
-        tasks = [load_single_plugin(name) for name in plugin_names]
+        # Sort by dependencies
+        sorted_names = self.resolve_load_order(plugin_names)
+        
+        # Load one by one for correctness (async/await ensures yield, but logic mostly synchronous)
+        # For true parallel loading of independent branches, a more complex graph executor is needed.
+        # Here we just ensuring strict order.
+        tasks = [load_single_plugin(name) for name in sorted_names]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         # Process results
@@ -271,6 +276,51 @@ class PluginManager:
                 result_dict[name] = result
 
         return result_dict
+
+    def resolve_load_order(self, plugin_names: List[str]) -> List[str]:
+        """
+        Resolve correct plugin load order based on dependencies.
+        
+        Uses topological sort to ensure dependencies are loaded first.
+        
+        Args:
+            plugin_names: List of plugins to sort
+            
+        Returns:
+            Sorted list of plugin names
+        """
+        # Build dependency graph
+        graph = {name: set() for name in plugin_names}
+        for name in plugin_names:
+            info = self.registry.get_plugin_info(name)
+            if info and info.dependencies:
+                # Only include dependencies that are in our target list
+                # External deps are assumed satisfied or checked elsewhere
+                deps = set(info.dependencies) & set(plugin_names)
+                graph[name] = deps
+                
+        # Topological sort
+        result = []
+        visited = set()
+        temp_mark = set()
+        
+        def visit(n):
+            if n in temp_mark:
+                logger.warning(f"Circular dependency detected involving {n}")
+                return
+            if n not in visited:
+                temp_mark.add(n)
+                for m in graph.get(n, []):
+                    visit(m)
+                temp_mark.remove(n)
+                visited.add(n)
+                result.append(n)
+                
+        for name in plugin_names:
+            if name not in visited:
+                visit(name)
+                
+        return result
 
     def get_plugin_status(self, plugin_name: str) -> Dict[str, Any]:
         """
@@ -309,6 +359,42 @@ class PluginManager:
             status["state"] = plugin_instance.get_state().value
 
         return status
+
+    def get_plugin_health(self, plugin_name: str) -> Dict[str, Any]:
+        """
+        Get aggregated health status of a plugin.
+        
+        Args:
+            plugin_name: Name of the plugin
+            
+        Returns:
+            Dict with 'healthy' (bool) and 'issues' (list)
+        """
+        status = self.get_plugin_status(plugin_name)
+        issues = []
+        
+        # Check validation
+        plg_info = self.registry.get_plugin_info(plugin_name)
+        if plg_info:
+            validation = self.validate_plugin(plg_info.entry_point)
+            if not validation.is_valid:
+                issues.append("Validation failed")
+                issues.extend([i['message'] for i in validation.issues])
+                
+        # Check dependencies
+        if status.get("missing_dependencies"):
+            issues.append(f"Missing dependencies: {status['missing_dependencies']}")
+            
+        # Check runtime state
+        if status['loaded'] and status['state'] == 'error':
+             issues.append("Plugin in error state")
+             
+        return {
+            "plugin": plugin_name,
+            "healthy": len(issues) == 0,
+            "issues": issues,
+            "status": status
+        }
 
     def get_system_status(self) -> Dict[str, Any]:
         """

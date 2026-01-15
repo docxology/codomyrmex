@@ -117,7 +117,7 @@ class PhysicsSimulator:
 
     def __init__(self):
         """  Init  .
-# AGGRESSIVE_REMOVAL_GARBAGE_DOC: # AGGRESSIVE_REMOVAL:             """
+            """
         self.gravity = Vector3D(0, -9.81, 0)
         self.force_fields: list[ForceField] = []
         self.constraints: list[Constraint] = []

@@ -228,4 +228,4 @@ pip install -r requirements.txt
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Repository Root](../../../README.md)
+- **Home**: [Repository Root](../../README.md)

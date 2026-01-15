@@ -90,4 +90,4 @@ N/A for this type of utility module. The checks performed by `env_checker.py` (i
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Root README](../../README.md)

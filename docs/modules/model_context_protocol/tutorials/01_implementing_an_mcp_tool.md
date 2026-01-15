@@ -350,5 +350,5 @@ This approach ensures your tools are well-defined, robust, and can be easily int
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../README.md)
-- **Home**: [Root README](../../../README.md)
+- **Documentation**: [Reference Guides](../../README.md)
+- **Home**: [Root README](../../README.md)

@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock, Mock
 from io import StringIO
 
-from codomyrmex.agents.config import AgentConfig, get_config, set_config, reset_config
+from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
 
@@ -475,7 +475,7 @@ class TestConfigCommands:
 
     def test_config_set_structure(self):
         """Test config set command structure."""
-        from codomyrmex.agents.config import AgentConfig, set_config, reset_config
+        from codomyrmex.agents.core.config import AgentConfig, set_config, reset_config
         
         reset_config()
         original_config = get_config()
@@ -490,7 +490,7 @@ class TestConfigCommands:
 
     def test_config_reset(self):
         """Test config reset command."""
-        from codomyrmex.agents.config import reset_config, set_config, AgentConfig
+        from codomyrmex.agents.core.config import reset_config, set_config, AgentConfig
         
         custom_config = AgentConfig(default_timeout=999)
         set_config(custom_config)

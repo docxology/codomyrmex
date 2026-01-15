@@ -28,14 +28,14 @@ class TestCheckGitAvailability:
         assert isinstance(result, bool)
         # Should be True if Git is installed (which it should be in test environment)
 
-    @patch("codomyrmex.git_operations.git_manager.subprocess.run")
+    @patch("codomyrmex.git_operations.core.git.subprocess.run")
     def test_git_not_available(self, mock_run):
         """Test when Git is not available."""
         mock_run.side_effect = FileNotFoundError()
         result = check_git_availability()
         assert result is False
 
-    @patch("codomyrmex.git_operations.git_manager.subprocess.run")
+    @patch("codomyrmex.git_operations.core.git.subprocess.run")
     def test_git_command_fails(self, mock_run):
         """Test when Git command fails."""
         mock_run.side_effect = subprocess.CalledProcessError(1, "git")

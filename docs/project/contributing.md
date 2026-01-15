@@ -113,4 +113,4 @@ If you have questions about contributing, project structure, or anything else, f
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Repository Root](../../../README.md)
+- **Home**: [Repository Root](../../README.md)
