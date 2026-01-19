@@ -8,6 +8,7 @@ Automation and utility scripts.
 
 ## Directory Contents
 - `README.md` – File
+- `examples/` – Subdirectory
 - `orchestrate.py` – File
 
 ## Navigation

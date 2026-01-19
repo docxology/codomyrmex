@@ -7,6 +7,7 @@ Automation and utility scripts.
 
 ## Active Components
 - `README.md` – Project file
+- `examples/` – Directory containing examples components
 - `orchestrate.py` – Project file
 
 ## Operating Contracts

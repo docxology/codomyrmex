@@ -5,10 +5,11 @@ Logging and Monitoring - Real Usage Examples
 Demonstrates actual logging and monitoring capabilities:
 - Structured logging setup
 - Logger configuration
-- Performance monitoring
+- Performance monitoring integration
 """
 
 import sys
+import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -19,62 +20,41 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
-
+from codomyrmex.logging_monitoring import get_logger, setup_logging as setup_structured_logging
 
 def main():
     setup_logging()
     print_info("Running Logging and Monitoring Examples...")
 
+    # 1. Logger Retrieval
+    print_info("Testing get_logger...")
     try:
-        from codomyrmex.logging_monitoring import (
-            get_logger,
-            setup_logging as setup_structured_logging,
-        )
-        print_info("Successfully imported logging_monitoring module")
-    except ImportError as e:
-        print_error(f"Could not import logging_monitoring: {e}")
-        return 1
-
-    # Example 1: Get a logger instance
-    print_info("Getting logger instances:")
-    logger = get_logger(__name__)
-    print(f"  Logger name: {logger.name}")
-    print(f"  Logger type: {type(logger).__name__}")
-
-    # Example 2: Log levels
-    print_info("Available log levels:")
-    print("  - DEBUG: Detailed diagnostic information")
-    print("  - INFO: General operational messages")
-    print("  - WARNING: Potential issues or concerns")
-    print("  - ERROR: Error conditions")
-    print("  - CRITICAL: Severe errors")
-
-    # Example 3: Structured logging features
-    print_info("Structured logging features:")
-    print("  - JSON output format")
-    print("  - Contextual fields (request_id, user_id)")
-    print("  - Automatic timestamp formatting")
-    print("  - Log rotation and retention")
-
-    # Example 4: Demonstrate logging
-    print_info("Sample log output:")
-    try:
-        logger.info("This is an info message")
-        logger.debug("This is a debug message")
-        print("  Logged info and debug messages")
+        logger = get_logger("test_logger")
+        if logger:
+            print_success(f"  Logger '{logger.name}' retrieved.")
     except Exception as e:
-        print_info(f"  Logging demo: {e}")
+        print_error(f"  get_logger failed: {e}")
 
-    # Example 5: Monitoring integration
-    print_info("Monitoring integration:")
-    print("  - metrics → logging_monitoring: Metric logging")
-    print("  - performance → logging_monitoring: Performance logs")
-    print("  - api → logging_monitoring: Request logging")
-    print("  - database_management → logging_monitoring: Query logs")
+    # 2. Logging Operation
+    print_info("Testing logging operations...")
+    try:
+        logger.info("Test info message")
+        logger.error("Test error message", extra={"context": "example"})
+        print_success("  Log messages dispatched.")
+    except Exception as e:
+        # Some loggers might not be initialized yet
+        print_info(f"  Logging note: {e}")
 
-    print_success("Logging and Monitoring examples completed successfully")
+    # 3. Structured Logging Setup
+    print_info("Testing structured logging setup stub...")
+    try:
+        if setup_structured_logging:
+            print_success("  setup_logging (structured) handler available.")
+    except Exception as e:
+        print_error(f"  Structured setup failed: {e}")
+
+    print_success("Logging and monitoring examples completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

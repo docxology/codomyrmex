@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-LLM Module - Real Usage Examples
+LLM Integration - Real Usage Examples
 
-Demonstrates actual LLM integration capabilities:
-- Ollama manager and model configuration
-- Fabric integration for prompt patterns
-- LLM configuration presets
+Demonstrates actual LLM capabilities:
+- LLM configuration management
+- Ollama and Fabric manager interfaces
+- Model runners and output handlers
 """
 
 import sys
+import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -19,68 +20,47 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
-
+from codomyrmex.llm import (
+    LLMConfig,
+    get_config,
+    OllamaManager,
+    ModelRunner,
+    OutputManager,
+    FabricManager,
+    FabricOrchestrator
+)
 
 def main():
     setup_logging()
-    print_info("Running LLM Module Examples...")
+    print_info("Running LLM Integration Examples...")
 
-    try:
-        from codomyrmex.llm import (
-            OllamaManager,
-            LLMConfig,
-            LLMConfigPresets,
-            get_config,
-        )
-        print_info("Successfully imported llm module")
-    except ImportError as e:
-        print_error(f"Could not import llm: {e}")
-        return 1
+    # 1. Configuration Check
+    print_info("Checking LLM configuration...")
+    config = get_config()
+    if isinstance(config, LLMConfig):
+        print_success(f"  Current model: {config.model}")
 
-    # Example 1: Show LLM configuration presets
-    print_info("Available LLM configuration presets:")
+    # 2. Ollama Components
+    print_info("Testing Ollama components...")
     try:
-        presets = LLMConfigPresets
-        preset_names = [p.name for p in presets][:5]
-        for preset in preset_names:
-            print(f"  - {preset}")
+        ollama = OllamaManager(auto_start_server=False)
+        runner = ModelRunner(config=config)
+        output = OutputManager()
+        print_success("  Ollama components (Manager, Runner, Output) initialized.")
     except Exception as e:
-        print_info(f"  Presets enumeration: {e}")
+        print_info(f"  Ollama check note: {e}")
 
-    # Example 2: Get current LLM configuration
-    print_info("Current LLM configuration:")
+    # 3. Fabric Components
+    print_info("Testing Fabric components...")
     try:
-        config = get_config()
-        print(f"  Config type: {type(config).__name__}")
+        fabric = FabricManager()
+        orch = FabricOrchestrator()
+        print_success("  Fabric components (Manager, Orchestrator) initialized.")
     except Exception as e:
-        print_info(f"  Config access: {e}")
+        print_info(f"  Fabric check note: {e}")
 
-    # Example 3: Demonstrate OllamaManager capabilities
-    print_info("OllamaManager capabilities:")
-    print("  - list_models(): List available local models")
-    print("  - pull_model(name): Download a model")
-    print("  - run_model(name, prompt): Execute inference")
-    print("  - get_model_info(name): Get model metadata")
-
-    # Example 4: LLM use cases in Codomyrmex
-    print_info("LLM integration use cases:")
-    print("  1. Code review and analysis")
-    print("  2. Documentation generation")
-    print("  3. Commit message generation")
-    print("  4. Code explanation and summarization")
-    print("  5. Test case generation")
-
-    # Example 5: Fabric patterns (if available)
-    print_info("Fabric prompt pattern categories:")
-    print("  - analyze: Code and data analysis")
-    print("  - create: Content generation")
-    print("  - explain: Explanation and teaching")
-    print("  - extract: Information extraction")
-    print("  - summarize: Text summarization")
-
-    print_success("LLM module examples completed successfully")
+    print_success("LLM integration examples completed successfully")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

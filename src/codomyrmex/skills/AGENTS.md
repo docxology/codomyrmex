@@ -15,6 +15,7 @@ Contains components for the src system.
 - `skill_registry.py` – Project file
 - `skill_sync.py` – Project file
 - `skill_validator.py` – Project file
+- `skills/` – Directory containing skills components
 - `skills_manager.py` – Project file
 
 ## Operating Contracts

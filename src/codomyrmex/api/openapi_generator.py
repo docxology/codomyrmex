@@ -34,9 +34,9 @@ if TYPE_CHECKING:
 else:
     # Runtime imports - try to import, but handle gracefully if circular import occurs
     try:
-        from .standardization.rest_api import RESTAPI, APIEndpoint as StandardizationAPIEndpoint, HTTPMethod
-        from .standardization.graphql_api import GraphQLAPI, GraphQLSchema, GraphQLObjectType, GraphQLField
-        from .standardization.api_versioning import APIVersionManager, APIVersion
+        from codomyrmex.api.standardization.rest_api import RESTAPI, APIEndpoint as StandardizationAPIEndpoint, HTTPMethod
+        from codomyrmex.api.standardization.graphql_api import GraphQLAPI, GraphQLSchema, GraphQLObjectType, GraphQLField
+        from codomyrmex.api.standardization.api_versioning import APIVersionManager, APIVersion
     except (ImportError, AttributeError):
         # Handle case where standardization module isn't available or circular import
         RESTAPI = None
@@ -468,7 +468,7 @@ class StandardizationOpenAPIGenerator:
         _restapi_class = RESTAPI
         if _restapi_class is None:
             try:
-                from .standardization.rest_api import RESTAPI as _RESTAPI
+                from codomyrmex.api.standardization.rest_api import RESTAPI as _RESTAPI
                 _restapi_class = _RESTAPI
             except ImportError:
                 raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
@@ -934,8 +934,13 @@ def create_openapi_from_rest_api(api: RESTAPI) -> OpenAPISpecification:
     Returns:
         OpenAPI specification
     """
+    global RESTAPI
     if RESTAPI is None:
-        raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
+        try:
+            from codomyrmex.api.standardization.rest_api import RESTAPI as _RESTAPI
+            RESTAPI = _RESTAPI
+        except ImportError:
+            raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
 
     generator = StandardizationOpenAPIGenerator(
         title=api.title,

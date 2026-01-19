@@ -36,6 +36,7 @@ class EventPriority(Enum):
     WARNING = "warning"
     ERROR = "error"
     CRITICAL = "critical"
+    MONITORING = "monitoring"
 
 class EventType(Enum):
     """Standard event types in Codomyrmex."""

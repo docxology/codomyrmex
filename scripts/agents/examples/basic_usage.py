@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-Basic agents Usage
+Agents - Real Usage Examples
 
-Demonstrates basic usage patterns.
+Demonstrates actual agent capabilities:
+- Agent client interfaces
+- Orchestrator stubs
 """
 
 import sys
+import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -15,22 +18,51 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+
+from codomyrmex.agents import AgentOrchestrator, AgentRequest, AgentResponse, BaseAgent, AgentCapabilities
+
+# 1. Define a Mock Agent for demonstration (to avoid requiring real API keys in example)
+class DemoAgent(BaseAgent):
+    def __init__(self, name="demo_agent"):
+        super().__init__(name=name, capabilities=[AgentCapabilities.TEXT_COMPLETION])
+    
+    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+        self.logger.info(f"Agent {self.name} processing prompt: {request.prompt[:20]}...")
+        return AgentResponse(
+            content=f"Response from {self.name} for: {request.prompt}",
+            metadata={"agent": self.name}
+        )
 
 def main():
     setup_logging()
-    print_info(f"Running Basic agents Usage...")
+    print_info("Running Agents Examples...")
 
-    # Import validation
-    try:
-        import codomyrmex.agents
-        print_info("Successfully imported codomyrmex.agents")
-    except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.agents: {e}")
-        # We don't exit here because we want the script to be 'resilient' for testing purposes
+    # 1. Orchestrator and Client Usage
+    print_info("Initializing real AgentOrchestrator with demo agents...")
+    agent_a = DemoAgent(name="Agent_A")
+    agent_b = DemoAgent(name="Agent_B")
+    
+    orchestrator = AgentOrchestrator(agents=[agent_a, agent_b])
+    
+    request = AgentRequest(prompt="What is the capital of France?")
+    
+    # 2. Parallel Execution
+    print_info("Executing request in parallel across orchestrated agents...")
+    responses = orchestrator.execute_parallel(request)
+    
+    for resp in responses:
+        if resp.is_success():
+            print_success(f"  {resp.metadata.get('agent', 'Unknown agent')}: {resp.content}")
+        else:
+            print_error(f"  Agent failed: {resp.error}")
 
-    # Basic logic here
-    print_success(f"Basic agents Usage completed successfully")
+    # 3. Fallback Execution
+    print_info("Executing with fallback strategy...")
+    fallback_response = orchestrator.execute_with_fallback(request)
+    print_success(f"  Fallback Result: {fallback_response.content}")
+
+    print_success("Agents examples completed successfully")
     return 0
 
 if __name__ == "__main__":

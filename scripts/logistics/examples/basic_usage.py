@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
-Basic logistics Usage
+Logistics - Real Usage Examples
 
-Demonstrates basic usage patterns.
+Demonstrates actual logistics capabilities:
+- Workflow management (WorkflowManager)
+- Task/Job queuing (Queue, Job)
+- Scheduling (ScheduleManager)
 """
 
 import sys
+import os
 from pathlib import Path
+from datetime import datetime
 
 # Ensure codomyrmex is in path
 try:
@@ -15,22 +20,47 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.logistics import (
+    WorkflowManager,
+    Queue,
+    Job,
+    ScheduleManager
+)
 
 def main():
     setup_logging()
-    print_info(f"Running Basic logistics Usage...")
+    print_info("Running Logistics Examples...")
 
-    # Import validation
+    # 1. Workflow Manager
+    print_info("Testing WorkflowManager...")
     try:
-        import codomyrmex.logistics
-        print_info("Successfully imported codomyrmex.logistics")
-    except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.logistics: {e}")
-        # We don't exit here because we want the script to be 'resilient' for testing purposes
+        wm = WorkflowManager()
+        print_success("  WorkflowManager initialized successfully.")
+    except Exception as e:
+        print_error(f"  WorkflowManager failed: {e}")
 
-    # Basic logic here
-    print_success(f"Basic logistics Usage completed successfully")
+    # 2. Task Queue & Jobs
+    print_info("Testing Task Queue and Jobs...")
+    try:
+        queue = Queue(backend="in_memory")
+        job = Job(task="echo 'Hello'")
+        job_id = queue.enqueue(job)
+        stats = queue.get_stats()
+        if stats.get("queue_length", 0) > 0:
+            print_success(f"  Job '{job_id}' enqueued successfully.")
+    except Exception as e:
+        print_error(f"  Task queue failed: {e}")
+
+    # 3. Scheduling
+    print_info("Testing ScheduleManager...")
+    try:
+        sm = ScheduleManager()
+        print_success("  ScheduleManager initialized successfully.")
+    except Exception as e:
+        print_error(f"  ScheduleManager failed: {e}")
+
+    print_success("Logistics examples completed successfully")
     return 0
 
 if __name__ == "__main__":

@@ -16,6 +16,7 @@ Contains components for the src system.
 - `skill_registry.py` – File
 - `skill_sync.py` – File
 - `skill_validator.py` – File
+- `skills/` – Subdirectory
 - `skills_manager.py` – File
 
 ## Navigation

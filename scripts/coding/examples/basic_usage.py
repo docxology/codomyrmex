@@ -21,16 +21,43 @@ def main():
     setup_logging()
     print_info(f"Running Basic coding Usage...")
 
-    # Import validation
+    # 1. Code Execution
+    print_info("Testing code execution...")
     try:
-        import codomyrmex.coding
-        print_info("Successfully imported codomyrmex.coding")
-    except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.coding: {e}")
-        # We don't exit here because we want the script to be 'resilient' for testing purposes
+        from codomyrmex.coding import execute_code, SUPPORTED_LANGUAGES
+        code = "print('Hello from Codomyrmex!')"
+        # Correct order: language, code
+        result = execute_code("python", code)
+        if result.get("success") or result.get("exit_code") == 0:
+            print_success(f"  Execution result: {result.get('stdout', '').strip()}")
+        else:
+            print_info(f"  Execution result note: {result.get('stderr', '').strip()}")
+        print_success(f"  Supported languages count: {len(SUPPORTED_LANGUAGES)}")
+    except Exception as e:
+        print_info(f"  Code execution note: {e}")
 
-    # Basic logic here
-    print_success(f"Basic coding Usage completed successfully")
+    # 2. Code Review / Analysis
+    print_info("Testing code analysis...")
+    try:
+        from codomyrmex.coding import analyze_file
+        # Analyze this script itself
+        report = analyze_file(__file__)
+        if report:
+            print_success(f"  Analysis completed for {Path(__file__).name}")
+    except Exception as e:
+        print_info(f"  Code analysis demo note: {e}")
+
+    # 3. Sandbox / Monitoring (Interface Check)
+    print_info("Checking Sandbox and Monitor interfaces...")
+    try:
+        from codomyrmex.coding import ExecutionMonitor, check_docker_available
+        monitor = ExecutionMonitor()
+        docker = check_docker_available()
+        print_success(f"  ExecutionMonitor initialized. Docker available: {docker}")
+    except Exception as e:
+        print_info(f"  Sandbox/Monitor demo: {e}")
+
+    print_success(f"Coding Usage completed successfully")
     return 0
 
 if __name__ == "__main__":

@@ -67,3 +67,15 @@ def get_compressor(format: str = "gzip") -> Compressor:
     return Compressor(format=format)
 
 
+def compress_file(input_path: str, output_path: Optional[str] = None, format: str = "gzip", level: int = 6) -> str:
+    """Compress a file."""
+    compressor = Compressor(format=format)
+    return compressor.compress_file(input_path, output_path, level)
+
+
+def decompress_file(input_path: str, output_path: Optional[str] = None, format: str = "gzip") -> str:
+    """Decompress a file."""
+    compressor = Compressor(format=format)
+    return compressor.decompress_file(input_path, output_path)
+
+

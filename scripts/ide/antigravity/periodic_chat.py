@@ -5,6 +5,7 @@ Simulates a "Real IDE UX" by sending status updates or messages on a timer.
 """
 
 import sys
+import os
 import time
 import argparse
 import logging
@@ -82,8 +83,13 @@ if __name__ == "__main__":
     parser.add_argument("--interval", type=int, default=60, help="Interval in seconds (default: 60)")
     parser.add_argument("--limit", type=int, default=-1, help="Number of messages to send (default: infinite)")
     parser.add_argument("--gui", action="store_true", help="Use GUI automation instead of CLI")
+    parser.add_argument("--test-mode", action="store_true", help="Run once with 0 delay for testing")
     
     args = parser.parse_args()
+    
+    if args.test_mode or os.getenv("CODOMYRMEX_TEST_MODE") == "1":
+        args.limit = 1
+        args.interval = 0
     
     if run_periodic_chat(args.interval, args.limit, use_gui=args.gui):
         sys.exit(0)

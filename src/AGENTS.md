@@ -10,6 +10,7 @@ Hosts core source code and agent-enabled services for the Codomyrmex platform.
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
 - `codomyrmex/` – Directory containing codomyrmex components
+- `codomyrmex.llm/` – Directory containing codomyrmex.llm components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

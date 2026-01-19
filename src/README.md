@@ -11,6 +11,7 @@ Hosts core source code and agent-enabled services for the Codomyrmex platform.
 - `SPEC.md` – File
 - `__init__.py` – File
 - `codomyrmex/` – Subdirectory
+- `codomyrmex.llm/` – Subdirectory
 
 ## Navigation
 - **Project Root**: ../README.md

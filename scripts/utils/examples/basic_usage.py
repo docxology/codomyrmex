@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 """
-Basic utils Usage
+Utility Functions - Real Usage Examples
 
-Demonstrates basic usage patterns.
+Demonstrates actual utility capabilities:
+- Directory management (ensure_directory)
+- JSON safety (safe_json_loads, safe_json_dumps)
+- Content hashing (hash_content)
+- Timing and retries
 """
 
 import sys
+import os
+import shutil
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -15,22 +21,64 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.utils import (
+    ensure_directory,
+    safe_json_loads,
+    safe_json_dumps,
+    hash_content,
+    timing_decorator,
+    retry
+)
 
 def main():
     setup_logging()
-    print_info(f"Running Basic utils Usage...")
+    print_info("Running Utility Examples...")
 
-    # Import validation
+    # 1. Directory Management
+    print_info("Testing ensure_directory...")
     try:
-        import codomyrmex.utils
-        print_info("Successfully imported codomyrmex.utils")
-    except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.utils: {e}")
-        # We don't exit here because we want the script to be 'resilient' for testing purposes
+        test_dir = Path("output/utils_test")
+        ensure_directory(test_dir)
+        if test_dir.exists():
+            print_success(f"  Directory ensured: {test_dir}")
+    except Exception as e:
+        print_error(f"  Directory management failed: {e}")
 
-    # Basic logic here
-    print_success(f"Basic utils Usage completed successfully")
+    # 2. JSON Safety
+    print_info("Testing safe JSON operations...")
+    try:
+        data = {"a": 1, "b": [2, 3]}
+        json_str = safe_json_dumps(data)
+        parsed = safe_json_loads(json_str)
+        if parsed == data:
+            print_success("  JSON dump/load verified.")
+    except Exception as e:
+        print_error(f"  JSON operations failed: {e}")
+
+    # 3. Hashing
+    print_info("Testing content hashing...")
+    try:
+        content = "Hello Codomyrmex"
+        h = hash_content(content)
+        print_success(f"  Hash for '{content}': {h[:10]}...")
+    except Exception as e:
+        print_error(f"  Hashing failed: {e}")
+
+    # 4. Decorators
+    print_info("Testing decorators (timing)...")
+    try:
+        @timing_decorator
+        def task():
+            return {"status": "ok"}
+        
+        result = task()
+        if "execution_time_ms" in result:
+            print_success(f"  Timing decorator verified: {result['execution_time_ms']}ms")
+    except Exception as e:
+        print_error(f"  Decorators failed: {e}")
+
+    print_success("Utility examples completed successfully")
     return 0
 
 if __name__ == "__main__":

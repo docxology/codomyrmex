@@ -74,3 +74,18 @@ def get_encryptor(algorithm: str = "AES") -> Encryptor:
     return Encryptor(algorithm=algorithm)
 
 
+def encrypt_file(input_path: str, output_path: str, key: bytes, algorithm: str = "AES") -> bool:
+    """Encrypt a file."""
+    return Encryptor(algorithm=algorithm).encrypt_file(input_path, output_path, key)
+
+
+def decrypt_file(input_path: str, output_path: str, key: bytes, algorithm: str = "AES") -> bool:
+    """Decrypt a file."""
+    return Encryptor(algorithm=algorithm).decrypt_file(input_path, output_path, key)
+
+
+def hash_data(data: bytes, algorithm: str = "sha256") -> str:
+    """Compute hash of data."""
+    return Encryptor.hash_data(data, algorithm)
+
+

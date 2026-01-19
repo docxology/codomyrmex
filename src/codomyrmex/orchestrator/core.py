@@ -252,6 +252,9 @@ Examples:
                 config=script_config
             )
             
+            # Use improved subdirectory for logging to avoid collisions (e.g. module/examples/)
+            result["subdirectory"] = str(script.relative_to(scripts_dir).parent)
+            
             # Save individual log
             log_file = save_log(result, args.output_dir, run_id)
             result["log_file"] = str(log_file)

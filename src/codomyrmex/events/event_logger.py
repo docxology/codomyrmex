@@ -117,11 +117,70 @@ class EventLogger:
 
         # Subscribe with high priority to capture everything
         self.subscriber_id = self.event_bus.subscribe(
-            EventType.ALL, 
+            list(EventType), 
             log_event_handler, 
             f"event_logger_{id(self)}", 
             priority=EventPriority.MONITORING
         )
+
+    def log_event(self, event: Event, handler_count: int = 0,
+                  processing_time: Optional[float] = None) -> None:
+        """Log an event."""
+        with self.lock:
+            entry = EventLogEntry(event, handler_count, processing_time)
+            self.entries.append(entry)
+            
+            # Update stats
+            self.event_counts[event.event_type.value] += 1
+            if event.event_type in [EventType.SYSTEM_ERROR, EventType.MODULE_ERROR, EventType.PLUGIN_ERROR]:
+                self.error_counts[event.event_type.value] += 1
+            
+            if processing_time is not None:
+                self.processing_times[event.event_type.value].append(processing_time)
+                # Keep only last 100 processing times per type
+                if len(self.processing_times[event.event_type.value]) > 100:
+                    self.processing_times[event.event_type.value].pop(0)
+
+    def get_event_statistics(self) -> Dict[str, Any]:
+        """Get event statistics."""
+        with self.lock:
+            return {
+                "total_events": sum(self.event_counts.values()),
+                "event_counts": dict(self.event_counts),
+                "error_counts": dict(self.error_counts),
+                "uptime": "N/A"  # Could track start time
+            }
+
+    def get_recent_events(self, limit: int = 50) -> List[EventLogEntry]:
+        """Get recent events."""
+        with self.lock:
+            return list(self.entries)[-limit:]
+
+    def export_logs(self, filepath: str, format: str = 'json') -> None:
+        """Export logs to file."""
+        with self.lock:
+            data = [entry.to_dict() for entry in self.entries]
+            
+        with open(filepath, 'w') as f:
+            if format == 'json':
+                json.dump(data, f, indent=2)
+            else:
+                # Basic CSV or other format
+                f.write(str(data))
+
+    def get_performance_report(self) -> Dict[str, Any]:
+        """Get performance report."""
+        with self.lock:
+            report = {}
+            for event_type, times in self.processing_times.items():
+                if times:
+                    report[event_type] = {
+                        "avg": sum(times) / len(times),
+                        "max": max(times),
+                        "min": min(times),
+                        "count": len(times)
+                    }
+            return report
 
 
 # Global event logger instance

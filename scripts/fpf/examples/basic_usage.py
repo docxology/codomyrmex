@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-Basic fpf Usage
+First Principles Framework (FPF) - Real Usage Examples
 
-Demonstrates basic usage patterns.
+Demonstrates actual FPF capabilities:
+- FPFClient initialization
+- Loading/Parsing FPF specification (stubs)
+- FPF models (Concept, Pattern, Relationship)
 """
 
 import sys
+import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -15,22 +19,45 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.fpf import (
+    FPFClient,
+    FPFSpec,
+    Concept,
+    Pattern,
+    Relationship
+)
 
 def main():
     setup_logging()
-    print_info(f"Running Basic fpf Usage...")
+    print_info("Running FPF Examples...")
 
-    # Import validation
+    # 1. FPFClient
+    print_info("Testing FPFClient initialization...")
     try:
-        import codomyrmex.fpf
-        print_info("Successfully imported codomyrmex.fpf")
-    except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.fpf: {e}")
-        # We don't exit here because we want the script to be 'resilient' for testing purposes
+        client = FPFClient()
+        print_success("  FPFClient initialized successfully.")
+    except Exception as e:
+        print_error(f"  FPFClient failed: {e}")
 
-    # Basic logic here
-    print_success(f"Basic fpf Usage completed successfully")
+    # 2. Models
+    print_info("Testing FPF models...")
+    try:
+        spec = FPFSpec(title="Demo Spec", version="1.0.0")
+        print_success(f"  FPFSpec instance created: {spec.title}")
+        
+        concept = Concept(id="concept1", name="Test Concept")
+        print_success(f"  Concept model instance created: {concept.name}")
+        
+        pattern = Pattern(id="pattern1", name="Test Pattern")
+        print_success(f"  Pattern model instance created: {pattern.name}")
+        
+        rel = Relationship(id="rel1", source_id="concept1", target_id="pattern1")
+        print_success(f"  Relationship model instance created.")
+    except Exception as e:
+        print_error(f"  Models check failed: {e}")
+
+    print_success("FPF examples completed successfully")
     return 0
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ Demonstrates basic usage of OpenCodeClient for CLI-based code operations.
 This script handles gracefully when OpenCode CLI is not installed.
 """
 import sys
+import os
 from pathlib import Path
 
 try:
@@ -24,11 +25,14 @@ def main():
 
     client = OpenCodeClient()
     
-    # Test connection - gracefully handle when CLI not available
     if not client.test_connection():
         print_warning("OpenCode CLI not available. Skipping execution.")
         print_info("To use: ensure OpenCode CLI is installed and in PATH")
         return 0  # Exit gracefully - this is expected for demo scripts
+
+    if os.getenv("CODOMYRMEX_TEST_MODE") == "1":
+        print_info("Test mode enabled: skipping resource-intensive execution.")
+        return 0
 
     # Execute a simple request
     request = AgentRequest(

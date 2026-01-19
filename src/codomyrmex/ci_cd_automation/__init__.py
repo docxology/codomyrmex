@@ -42,6 +42,7 @@ from .performance_optimizer import (
 )
 from .pipeline_manager import (
     Pipeline,
+    PipelineJob,
     PipelineManager,
     PipelineStage,
     create_pipeline,
@@ -65,6 +66,7 @@ __all__ = [
     "create_pipeline",
     "run_pipeline",
     "Pipeline",
+    "PipelineJob",
     "PipelineStage",
     # Deployment orchestration
     "DeploymentOrchestrator",

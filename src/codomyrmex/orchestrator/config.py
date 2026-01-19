@@ -45,25 +45,32 @@ logger = get_logger(__name__)
 
 
 def load_config(scripts_dir: Path) -> Dict[str, Any]:
-    """Load script configuration."""
-    # Try YAML first
-    for name in ["config.yaml", "config.yml"]:
-        config_path = scripts_dir / name
-        if config_path.exists():
+    """Load script configuration, searching upwards for config.yaml."""
+    current = scripts_dir
+    # Search up to 3 levels for config.yaml or config.yml
+    for _ in range(4):
+        for name in ["config.yaml", "config.yml"]:
+            config_path = current / name
+            if config_path.exists():
+                try:
+                    with open(config_path, "r") as f:
+                        return yaml.safe_load(f) or {}
+                except Exception as e:
+                    logger.warning(f"Failed to load YAML config {config_path}: {e}")
+        
+        # Also check for scripts_config.json
+        json_path = current / "scripts_config.json"
+        if json_path.exists():
             try:
-                with open(config_path, "r") as f:
-                    return yaml.safe_load(f) or {}
+                with open(json_path, "r") as f:
+                    return json.load(f)
             except Exception as e:
-                logger.warning(f"Failed to load YAML config {config_path}: {e}")
-    
-    # Fallback to JSON
-    config_path = scripts_dir / "scripts_config.json"
-    if config_path.exists():
-        try:
-            with open(config_path, "r") as f:
-                return json.load(f)
-        except Exception as e:
-            logger.warning(f"Failed to load JSON config {config_path}: {e}")
+                logger.warning(f"Failed to load JSON config {json_path}: {e}")
+        
+        # Stop if we hit project root or system root
+        if (current / "src").exists() or current.parent == current:
+            break
+        current = current.parent
             
     return {"skip": [], "timeout_override": {}, "scripts": {}}
 

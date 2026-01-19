@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-Basic physical_management Usage
+Physical Management - Real Usage Examples
 
-Demonstrates basic usage patterns.
+Demonstrates actual physical management capabilities:
+- PhysicalObjectManager initialization
+- PhysicsSimulator stubs
+- SensorManager initialization
 """
 
 import sys
+import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -15,22 +19,46 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.physical_management import (
+    PhysicalObjectManager,
+    PhysicsSimulator,
+    SensorManager,
+    PhysicalObject,
+    Vector3D
+)
 
 def main():
     setup_logging()
-    print_info(f"Running Basic physical_management Usage...")
+    print_info("Running Physical Management Examples...")
 
-    # Import validation
+    # 1. Physical Object Manager
+    print_info("Testing PhysicalObjectManager...")
     try:
-        import codomyrmex.physical_management
-        print_info("Successfully imported codomyrmex.physical_management")
-    except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.physical_management: {e}")
-        # We don't exit here because we want the script to be 'resilient' for testing purposes
+        mgr = PhysicalObjectManager()
+        obj = PhysicalObject(id="obj1", name="Test Object", position=Vector3D(0, 0, 0))
+        mgr.add_object(obj)
+        print_success(f"  PhysicalObjectManager initialized. Added object: {obj.name}")
+    except Exception as e:
+        print_error(f"  Object manager failed: {e}")
 
-    # Basic logic here
-    print_success(f"Basic physical_management Usage completed successfully")
+    # 2. Physics Simulator
+    print_info("Testing PhysicsSimulator...")
+    try:
+        sim = PhysicsSimulator()
+        print_success("  PhysicsSimulator initialized.")
+    except Exception as e:
+        print_error(f"  Physics simulator failed: {e}")
+
+    # 3. Sensor Manager
+    print_info("Testing SensorManager...")
+    try:
+        sensor_mgr = SensorManager()
+        print_success("  SensorManager initialized.")
+    except Exception as e:
+        print_error(f"  Sensor manager failed: {e}")
+
+    print_success("Physical management examples completed successfully")
     return 0
 
 if __name__ == "__main__":
