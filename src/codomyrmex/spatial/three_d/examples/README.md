@@ -12,7 +12,5 @@ Example implementations and demonstrations.
 - `basic_usage.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [three_d](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: ../../../../../README.md

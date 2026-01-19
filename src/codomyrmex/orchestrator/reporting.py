@@ -121,6 +121,19 @@ def generate_report(
         ]
         json.dump(summary_clean, f, indent=2)
     
+    # Log RUN_SUMMARY event
+    logger.info("Run summary generated", extra={
+        "event": "RUN_SUMMARY",
+        "run_id": run_id,
+        "total_scripts": summary["total_scripts"],
+        "passed": summary["passed"],
+        "failed": summary["failed"],
+        "timeout": summary["timeout"],
+        "error": summary["error"],
+        "skipped": summary["skipped"],
+        "total_execution_time": summary["total_execution_time"],
+    })
+    
     return summary
 
 

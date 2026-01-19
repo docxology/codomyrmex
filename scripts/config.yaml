@@ -1,0 +1,12 @@
+# Script Orchestrator Configuration
+# This file configures script execution for run_all_scripts.py
+
+# Scripts to skip during orchestrator runs
+# These are scripts that require specific conditions not available in automated testing
+skip:
+  - ide/antigravity/periodic_chat.py   # Long-running/interactive script
+  - agents/test_gemini_dispatch.py      # Requires API credits (rate-limited)
+
+# Scripts that need extended timeouts
+timeout_override:
+  agents/examples/opencode_example.py: 180   # Extended for external API calls

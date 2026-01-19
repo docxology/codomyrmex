@@ -41,6 +41,7 @@ from codomyrmex.agents.gemini import GeminiClient
 from codomyrmex.agents.jules import JulesClient
 from codomyrmex.agents.mistral_vibe import MistralVibeClient
 from codomyrmex.agents.opencode import OpenCodeClient
+from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
 from codomyrmex.agents.theory.agent_architectures import (
     ReactiveArchitecture,
     DeliberativeArchitecture,
@@ -100,6 +101,7 @@ __all__ = [
     "DeliberativeArchitecture",
     "HybridArchitecture",
     "KnowledgeBase",
+    "AgentOrchestrator",
     # Session management
     "AgentSession",
     "SessionManager",

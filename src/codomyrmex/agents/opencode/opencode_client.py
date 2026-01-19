@@ -106,7 +106,7 @@ class OpenCodeClient(CLIAgentBase):
                 return args
 
         if prompt:
-            args.append(prompt)
+            args.extend(["run", prompt])
 
         return args
 

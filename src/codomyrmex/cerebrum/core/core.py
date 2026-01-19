@@ -142,7 +142,16 @@ class ReasoningEngine:
             # Weight outcomes by similarity
             total_weight = sum(sim for _, sim in outcomes)
             if total_weight > 0:
-                weighted_outcome = sum(outcome * sim for outcome, sim in outcomes) / total_weight
+                # Check if outcomes are numeric
+                if all(isinstance(o, (int, float)) for o, _ in outcomes):
+                    weighted_outcome = sum(outcome * sim for outcome, sim in outcomes) / total_weight
+                else:
+                    # Categorical voting
+                    scores = {}
+                    for outcome, sim in outcomes:
+                        scores[outcome] = scores.get(outcome, 0) + sim
+                    weighted_outcome = max(scores.items(), key=lambda x: x[1])[0]
+
                 confidence = min(1.0, total_weight / len(outcomes))
             else:
                 weighted_outcome = outcomes[0][0] if outcomes else None

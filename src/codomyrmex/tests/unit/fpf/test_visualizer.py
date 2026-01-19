@@ -4,8 +4,7 @@ import pytest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from codomyrmex.fpf.visualizer import FPFVisualizer
-from codomyrmex.fpf.models import FPFSpec, Pattern, PatternStatus
+from codomyrmex.fpf import FPFVisualizer, FPFSpec, Pattern, PatternStatus
 
 
 def test_visualizer_initialization():

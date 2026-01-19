@@ -4,20 +4,12 @@
 
 ## Overview
 
-User-facing documentation for the `terminal_interface` module. For technical details, see the source module documentation.
+Documentation files and guides.
 
-## Source Module
-
-📁 **Source Code**: [src/codomyrmex/terminal_interface/](../../../src/codomyrmex/terminal_interface/)
-
-See the source module for:
-- [README.md](../../../src/codomyrmex/terminal_interface/README.md) - Module overview
-- [AGENTS.md](../../../src/codomyrmex/terminal_interface/AGENTS.md) - Technical specifications
-- [SPEC.md](../../../src/codomyrmex/terminal_interface/SPEC.md) - Functional specification
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

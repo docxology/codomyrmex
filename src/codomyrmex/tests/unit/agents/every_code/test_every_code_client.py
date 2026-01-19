@@ -11,7 +11,7 @@ from typing import Any
 
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities
 from codomyrmex.agents.every_code import EveryCodeClient
-from codomyrmex.agents.exceptions import EveryCodeError
+from codomyrmex.agents.core.exceptions import EveryCodeError
 from codomyrmex.tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
 
 
@@ -149,7 +149,7 @@ class TestEveryCodeClient:
         
         client = EveryCodeClient(config=config)
         
-        assert client.code_command == "custom-code"
+        assert client.command == "custom-code"
         assert client.timeout == 180
 
     def test_every_code_client_request_validation(self):
@@ -158,9 +158,9 @@ class TestEveryCodeClient:
         
         # Test empty prompt validation
         empty_request = AgentRequest(prompt="")
-        errors = client.validate_request(empty_request)
-        assert len(errors) > 0
-        assert any("empty" in error.lower() for error in errors)
+        response = client.execute(empty_request)
+        assert not response.is_success()
+        assert "Prompt is required" in response.error
 
     def test_every_code_client_special_commands(self):
         """Test special command handling."""

@@ -5,8 +5,7 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from codomyrmex.fpf.exporter import FPFExporter
-from codomyrmex.fpf.models import FPFSpec, Pattern, PatternStatus, Concept, ConceptType
+from codomyrmex.fpf import FPFExporter, FPFSpec, Pattern, Relationship, PatternStatus, Concept, ConceptType
 
 
 def test_exporter_initialization():

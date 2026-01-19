@@ -15,7 +15,5 @@ Test files and validation suites.
 - `src/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [projects](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../README.md

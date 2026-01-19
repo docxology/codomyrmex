@@ -4,14 +4,12 @@
 
 ## Overview
 
-Documentation files and guides for tutorials.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [environment_setup](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Project Root**: ../../../../README.md

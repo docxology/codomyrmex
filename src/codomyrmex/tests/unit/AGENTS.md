@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Test files and validation suites for unit.
+Test files and validation suites.
 
 ## Active Components
 - `README.md` – Project file
@@ -41,6 +41,7 @@ Test files and validation suites for unit.
 - `module_template/` – Directory containing module_template components
 - `networking/` – Directory containing networking components
 - `ollama_test_helpers.py` – Project file
+- `orchestrator/` – Directory containing orchestrator components
 - `pattern_matching/` – Directory containing pattern_matching components
 - `performance/` – Directory containing performance components
 - `physical_management/` – Directory containing physical_management components
@@ -66,7 +67,5 @@ Test files and validation suites for unit.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [tests](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

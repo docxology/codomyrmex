@@ -15,7 +15,5 @@ Example implementations and demonstrations.
 - `sample_analysis_workflow.json` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [workflows](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

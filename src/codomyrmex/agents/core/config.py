@@ -85,6 +85,7 @@ class AgentConfig:
     gemini_timeout: int = 60
     gemini_working_dir: Optional[str] = None
     gemini_api_key: Optional[str] = None
+    gemini_model: str = "gemini-2.0-flash"
     gemini_auth_method: str = "oauth"  # "oauth" or "api_key"
     gemini_settings_path: Optional[str] = None
 
@@ -156,6 +157,7 @@ class AgentConfig:
             "GEMINI_WORKING_DIR", self.gemini_working_dir
         )
         self.gemini_api_key = os.getenv("GEMINI_API_KEY", self.gemini_api_key)
+        self.gemini_model = os.getenv("GEMINI_MODEL", self.gemini_model)
         self.gemini_auth_method = os.getenv(
             "GEMINI_AUTH_METHOD", self.gemini_auth_method
         )
@@ -228,6 +230,7 @@ class AgentConfig:
             "gemini_timeout": self.gemini_timeout,
             "gemini_working_dir": self.gemini_working_dir,
             "gemini_api_key": "***" if self.gemini_api_key else None,
+            "gemini_model": self.gemini_model,
             "gemini_auth_method": self.gemini_auth_method,
             "gemini_settings_path": self.gemini_settings_path,
             "mistral_vibe_command": self.mistral_vibe_command,

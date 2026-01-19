@@ -3,27 +3,17 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Documentation stub for the `terminal_interface` module. Primary documentation resides in the source module.
+Documentation files and guides.
 
 ## Active Components
-
-- `README.md` – Module documentation overview
-- `SPEC.md` – Pointer to source specification
-
-## Source Reference
-
-For complete technical documentation, see:
-- [src/codomyrmex/terminal_interface/AGENTS.md](../../../src/codomyrmex/terminal_interface/AGENTS.md)
+- `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
-
-- Maintain alignment between this docs stub and the source module documentation.
-- Direct users to source module for authoritative technical details.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [modules](../README.md)
-- **🏠 Project Root**: [README](../../../README.md)
+- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

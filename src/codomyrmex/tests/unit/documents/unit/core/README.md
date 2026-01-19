@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites for core.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
@@ -15,7 +15,5 @@ Test files and validation suites for core.
 - `test_document_writer.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
-- **Project Root**: [README](../../../../../../../README.md)
+- **Project Root**: ../../../../../../../README.md

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites for security.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
@@ -13,7 +13,5 @@ Test files and validation suites for security.
 - `test_security_integration.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [integration](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: ../../../../../README.md

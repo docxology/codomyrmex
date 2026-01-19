@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for documentation.
+Documentation files and guides.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -31,7 +31,5 @@ Documentation files and guides for documentation.
 - `static/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

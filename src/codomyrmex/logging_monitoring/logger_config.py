@@ -182,9 +182,12 @@ def setup_logging():
     logging.getLogger("httpcore").setLevel(logging.WARNING)
     # logging.getLogger("some_verbose_library").setLevel(logging.WARNING)
 
-    logging.getLogger(__name__).info(
-        f"Logging configured: Level={log_level_str}, OutputType={log_output_type}, File='{log_file if log_file else 'Console'}', Format='{actual_log_format_for_display}'"
-    )
+    # Support quiet mode for subprocess environments to reduce log noise
+    quiet_reconfig = os.getenv("CODOMYRMEX_LOG_QUIET_RECONFIG", "0") == "1"
+    if not quiet_reconfig:
+        logging.getLogger(__name__).info(
+            f"Logging configured: Level={log_level_str}, OutputType={log_output_type}, File='{log_file if log_file else 'Console'}', Format='{actual_log_format_for_display}'"
+        )
     _logging_configured = True
 
 

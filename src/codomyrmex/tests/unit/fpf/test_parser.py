@@ -3,8 +3,7 @@
 import pytest
 from pathlib import Path
 
-from codomyrmex.fpf.parser import FPFParser
-from codomyrmex.fpf.models import PatternStatus
+from codomyrmex.fpf import FPFParser, FPFSpec, Pattern
 
 
 def test_parser_initialization():

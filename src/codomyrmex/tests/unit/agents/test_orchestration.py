@@ -3,7 +3,8 @@
 import pytest
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.generic import AgentOrchestrator, BaseAgent
+from codomyrmex.agents.core import BaseAgent
+from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
 
 
 class MockAgent(BaseAgent):

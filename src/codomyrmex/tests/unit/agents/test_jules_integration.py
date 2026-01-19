@@ -10,8 +10,9 @@ from typing import Any
 
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities, AgentResponse
 from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
-from codomyrmex.agents.generic import AgentOrchestrator, BaseAgent
-from codomyrmex.agents.exceptions import JulesError
+from codomyrmex.agents.core import BaseAgent
+from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+from codomyrmex.agents.core.exceptions import JulesError
 from codomyrmex.tests.unit.agents.helpers import JULES_AVAILABLE
 
 

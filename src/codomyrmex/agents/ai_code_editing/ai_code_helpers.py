@@ -74,9 +74,11 @@ except ImportError:
     OpenAI = None
 
 try:
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
 except ImportError:
     genai = None
+    types = None
 
 # Optional environment setup
 try:
@@ -304,11 +306,11 @@ class CodeGenerationResult:
 
 
 # Default LLM configurations
-DEFAULT_LLM_PROVIDER = "openai"
+DEFAULT_LLM_PROVIDER = "google"
 DEFAULT_LLM_MODEL = {
     "openai": "gpt-3.5-turbo",
     "anthropic": "claude-instant-1",
-    "google": "gemini-pro",
+    "google": "gemini-flash-latest",
 }
 
 # Retry configuration for API calls
@@ -371,20 +373,17 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any
 
     elif provider == "google":
         try:
-
-            # Check for API key
-            api_key = os.environ.get("GOOGLE_API_KEY")
+            # Check for API key (support both variations)
+            api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
             if not api_key:
-                raise ValueError("GOOGLE_API_KEY environment variable not set")
+                raise ValueError("Neither GEMINI_API_KEY nor GOOGLE_API_KEY environment variable is set")
 
-            genai.configure(api_key=api_key)
+            client = genai.Client(api_key=api_key)
             model = model_name or DEFAULT_LLM_MODEL["google"]
-            return genai, model
+            return client, model
 
-        except ImportError as e:
-            raise ImportError(
-                "Google Generative AI package not installed. Install with: pip install google-generativeai"
-            ) from e
+        except Exception as e:
+            raise RuntimeError(f"Failed to initialize Google Gemini client: {e}")
 
     else:
         raise ValueError(
@@ -481,16 +480,16 @@ def generate_code_snippet(
             )
 
         elif provider == "google":
-            model_instance = client.GenerativeModel(model)
-            response = model_instance.generate_content(
-                full_prompt,
-                generation_config={
-                    "max_output_tokens": max_length or 1000,
-                    "temperature": temperature,
-                },
+            response = client.models.generate_content(
+                model=model,
+                contents=full_prompt,
+                config=types.GenerateContentConfig(
+                    max_output_tokens=max_length or 2000,
+                    temperature=temperature,
+                ) if types else None
             )
             generated_code = response.text
-            tokens_used = None  # Google doesn't provide token count in basic response
+            tokens_used = response.usage_metadata.total_token_count if hasattr(response, "usage_metadata") else None
 
         else:
             raise ValueError(f"Unsupported provider: {provider}")
@@ -607,10 +606,12 @@ def refactor_code_snippet(
             )
 
         elif provider == "google":
-            model_instance = client.GenerativeModel(model)
-            response = model_instance.generate_content(prompt)
+            response = client.models.generate_content(
+                model=model,
+                contents=prompt
+            )
             refactored_code = response.text
-            tokens_used = None
+            tokens_used = response.usage_metadata.total_token_count if hasattr(response, "usage_metadata") else None
 
         else:
             raise ValueError(f"Unsupported provider: {provider}")

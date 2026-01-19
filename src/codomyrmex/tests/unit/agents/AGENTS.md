@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Test files and validation suites for agents.
+Test files and validation suites.
 
 ## Active Components
 - `README.md` – Project file
@@ -20,12 +20,14 @@ Test files and validation suites for agents.
 - `test_cli_orchestration.py` – Project file
 - `test_configuration.py` – Project file
 - `test_error_handling.py` – Project file
+- `test_git_agent.py` – Project file
 - `test_integrations.py` – Project file
 - `test_jules_integration.py` – Project file
 - `test_modularity.py` – Project file
 - `test_opencode_integration.py` – Project file
 - `test_orchestration.py` – Project file
 - `test_orchestration_advanced.py` – Project file
+- `test_react_agent.py` – Project file
 - `test_real_world_scenarios.py` – Project file
 
 ## Operating Contracts
@@ -34,7 +36,5 @@ Test files and validation suites for agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

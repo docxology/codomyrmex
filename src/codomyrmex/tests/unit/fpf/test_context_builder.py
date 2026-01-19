@@ -2,8 +2,8 @@
 
 import pytest
 
-from codomyrmex.fpf.context_builder import ContextBuilder
-from codomyrmex.fpf.models import FPFSpec, Pattern, PatternStatus, Concept, ConceptType
+from codomyrmex.fpf import ContextBuilder
+from codomyrmex.fpf import FPFSpec, Pattern, PatternStatus, Concept, ConceptType
 
 
 def test_context_builder_initialization():

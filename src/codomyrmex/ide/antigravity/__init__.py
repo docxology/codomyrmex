@@ -4,68 +4,24 @@ from typing import Any, Optional, Dict, List, Callable
 import json
 import os
 import time
+import subprocess
+import shutil
 
 from dataclasses import dataclass, field
 
-from codomyrmex.ide import (
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+try:
+    from codomyrmex.ide import (
         IDEClient, 
         IDEStatus,
         IDECommand,
         IDECommandResult,
+        IDEError,
+        ConnectionError,
+        CommandExecutionError,
+        SessionError,
+        ArtifactError,
     )
-try:
-    pass
-    pass
+    from codomyrmex.ide import FileInfo
 except ImportError:
     # Fallback if ide module not available
     IDEClient = object
@@ -78,27 +34,6 @@ except ImportError:
     CommandExecutionError = Exception
     SessionError = Exception
     ArtifactError = Exception
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Antigravity IDE Integration
 
@@ -282,7 +217,7 @@ class AntigravityClient(IDEClient):
             ],
             "connected": self._connected,
             "conversation_id": self._conversation_id,
-            "status": self._status.value,
+            "status": self._status.value if self._status else "unknown",
         }
     
     def execute_command(self, command: str, args: Optional[Dict] = None) -> Any:
@@ -375,6 +310,7 @@ class AntigravityClient(IDEClient):
         task_artifact = self._get_artifact_by_name("task")
         if task_artifact:
             context.task_name = "Current Task"
+            context.task_status = "Active"
         
         return context
     
@@ -427,8 +363,12 @@ class AntigravityClient(IDEClient):
         if not self._connected or not self._conversation_id:
             return []
         
-        artifacts = self._scan_artifacts()
-        return [a.to_dict() for a in artifacts]
+        # Always refresh artifacts on list
+        self._context = self._load_context()
+        if not self._context:
+            return []
+            
+        return [a.to_dict() for a in self._context.artifacts]
     
     def get_artifact(self, name: str) -> Optional[Dict[str, Any]]:
         """Get a specific artifact by name.
@@ -486,23 +426,26 @@ class AntigravityClient(IDEClient):
             raise ArtifactError(f"Invalid artifact type: {artifact_type}")
         
         conversation_dir = self.artifact_dir / self._conversation_id
-        conversation_dir.mkdir(parents=True, exist_ok=True)
-        
-        artifact_path = conversation_dir / f"{name}.md"
-        artifact_path.write_text(content)
-        
-        # Refresh context
-        self._context = self._load_context()
-        
-        self.emit_event("artifact_created", {"name": name, "type": artifact_type})
-        
-        return {
-            "name": name,
-            "path": str(artifact_path),
-            "type": artifact_type,
-            "size": len(content),
-            "created": True,
-        }
+        try:
+            conversation_dir.mkdir(parents=True, exist_ok=True)
+            
+            artifact_path = conversation_dir / f"{name}.md"
+            artifact_path.write_text(content)
+            
+            # Refresh context
+            self._context = self._load_context()
+            
+            self.emit_event("artifact_created", {"name": name, "type": artifact_type})
+            
+            return {
+                "name": name,
+                "path": str(artifact_path),
+                "type": artifact_type,
+                "size": len(content),
+                "created": True,
+            }
+        except Exception as e:
+            raise ArtifactError(f"Failed to create artifact: {e}")
     
     def update_artifact(self, name: str, content: str) -> Dict[str, Any]:
         """Update an existing artifact.
@@ -526,19 +469,22 @@ class AntigravityClient(IDEClient):
         if not artifact_path.exists():
             raise ArtifactError(f"Artifact not found: {name}")
         
-        artifact_path.write_text(content)
-        
-        # Refresh context
-        self._context = self._load_context()
-        
-        self.emit_event("artifact_updated", {"name": name})
-        
-        return {
-            "name": name,
-            "path": str(artifact_path),
-            "size": len(content),
-            "updated": True,
-        }
+        try:
+            artifact_path.write_text(content)
+            
+            # Refresh context
+            self._context = self._load_context()
+            
+            self.emit_event("artifact_updated", {"name": name})
+            
+            return {
+                "name": name,
+                "path": str(artifact_path),
+                "size": len(content),
+                "updated": True,
+            }
+        except Exception as e:
+            raise ArtifactError(f"Failed to update artifact: {e}")
     
     def delete_artifact(self, name: str) -> bool:
         """Delete an artifact.
@@ -561,14 +507,17 @@ class AntigravityClient(IDEClient):
         if not artifact_path.exists():
             raise ArtifactError(f"Artifact not found: {name}")
         
-        artifact_path.unlink()
-        
-        # Refresh context
-        self._context = self._load_context()
-        
-        self.emit_event("artifact_deleted", {"name": name})
-        
-        return True
+        try:
+            artifact_path.unlink()
+            
+            # Refresh context
+            self._context = self._load_context()
+            
+            self.emit_event("artifact_deleted", {"name": name})
+            
+            return True
+        except Exception as e:
+            raise ArtifactError(f"Failed to delete artifact: {e}")
     
     def list_conversations(self, limit: int = 10) -> List[Dict[str, Any]]:
         """List recent conversations.
@@ -651,6 +600,16 @@ class AntigravityClient(IDEClient):
                 "description": "View file contents",
                 "parameters": ["AbsolutePath", "StartLine", "EndLine"],
             },
+            "view_file_outline": {
+                "name": "view_file_outline",
+                "description": "View the outline of a file",
+                "parameters": ["AbsolutePath", "ItemOffset"],
+            },
+             "view_code_item": {
+                "name": "view_code_item",
+                "description": "View specific code items",
+                "parameters": ["File", "NodePaths"],
+            },
             "run_command": {
                 "name": "run_command",
                 "description": "Execute a terminal command",
@@ -671,10 +630,71 @@ class AntigravityClient(IDEClient):
                 "description": "List directory contents",
                 "parameters": ["DirectoryPath"],
             },
+            "replace_file_content": {
+                "name": "replace_file_content",
+                "description": "Replace content in a file",
+                "parameters": ["TargetFile", "StartLine", "EndLine", "TargetContent", "ReplacementContent"],
+            },
+             "multi_replace_file_content": {
+                "name": "multi_replace_file_content",
+                "description": "Make multiple replacements in a file",
+                "parameters": ["TargetFile", "ReplacementChunks"],
+            },
         }
         
         return tool_info.get(tool_name)
     
+    
+    def send_chat_gui(self, message: str, app_name: str = "Antigravity") -> IDECommandResult:
+        """Send a message using GUI automation (AppleScript).
+        
+        This method bypasses the CLI and sends keystrokes directly to the 
+        active window of the specified application. Useful for targeting 
+        specific UI panes that the CLI cannot reach.
+        
+        Args:
+            message: The message to type.
+            app_name: The application name to target (default: "Antigravity").
+            
+        Returns:
+            IDECommandResult indicating success/failure of the AppleScript execution.
+        """
+        # Escape double quotes for AppleScript
+        safe_message = message.replace('"', '\\"')
+        
+        apple_script = f'''
+        tell application "{app_name}"
+            activate
+        end tell
+        
+        delay 0.5
+        
+        tell application "System Events"
+            tell process "{app_name}"
+                keystroke "{safe_message}"
+                delay 0.1
+                key code 36
+            end tell
+        end tell
+        '''
+        
+        try:
+            subprocess.run(["osascript", "-e", apple_script], check=True, capture_output=True)
+            return IDECommandResult(
+                success=True,
+                command="osascript",
+                output={"message": message, "method": "gui", "app": app_name}
+            )
+        except subprocess.CalledProcessError as e:
+            error_msg = e.stderr.decode() if e.stderr else str(e)
+            return IDECommandResult(
+                success=False,
+                command="osascript",
+                error=f"GUI automation failed: {error_msg}"
+            )
+        except Exception as e:
+            return IDECommandResult(success=False, command="osascript", error=str(e))
+
     def invoke_tool(self, tool_name: str, parameters: Dict[str, Any]) -> IDECommandResult:
         """Invoke an Antigravity tool.
         
@@ -696,6 +716,65 @@ class AntigravityClient(IDEClient):
         
         return self.execute_command_safe(tool_name, parameters)
     
+    def send_chat_message(self, message: str, **kwargs) -> IDECommandResult:
+        """Send a message to the Antigravity chat.
+        
+        Uses the 'antigravity' or 'agy' CLI if available to send a real message
+        to the IDE chat interface. Falls back to simulated tool invocation.
+        
+        Args:
+            message: The message content to send.
+            **kwargs: Additional arguments for notify_user.
+            
+        Returns:
+            IDECommandResult with the execution result.
+        """
+        # Try real CLI first
+        cli = shutil.which("antigravity") or shutil.which("agy")
+        
+        if cli:
+            try:
+                # Build command args
+                cmd = [cli, "chat", "--reuse-window"]
+                
+                # Add mode if specified
+                mode = kwargs.get("mode")
+                if mode:
+                    cmd.extend(["--mode", mode])
+                    
+                cmd.append(message)
+
+                # Run the CLI command
+                subprocess.run(cmd, check=True, capture_output=True)
+                
+                return IDECommandResult(
+                    success=True,
+                    command=f"{Path(cli).name} chat",
+                    output={"message": message, "method": "cli", "cli_path": cli, "mode": mode or "default"}
+                )
+            except subprocess.CalledProcessError as e:
+                # If CLI fails, we continue to fallback but log error
+                cli_error = e.stderr.decode() if e.stderr else str(e)
+            except Exception as e:
+                cli_error = str(e)
+        
+        # Fallback implementation
+        if not self._connected:
+            return IDECommandResult(
+                success=False,
+                command="notify_user",
+                error="Not connected to Antigravity session"
+            )
+
+        params = {
+            "Message": message,
+            "BlockedOnUser": kwargs.get("BlockedOnUser", False),
+            "PathsToReview": kwargs.get("PathsToReview", []),
+            "ShouldAutoProceed": kwargs.get("ShouldAutoProceed", False)
+        }
+        
+        return self.invoke_tool("notify_user", params)
+
     def get_session_stats(self) -> Dict[str, Any]:
         """Get statistics about the current session.
         

@@ -11,7 +11,7 @@ from typing import Any
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities
 from codomyrmex.agents.every_code import EveryCodeClient, EveryCodeIntegrationAdapter
 from codomyrmex.agents.generic import AgentOrchestrator
-from codomyrmex.agents.exceptions import EveryCodeError
+from codomyrmex.agents.core.exceptions import EveryCodeError
 from codomyrmex.tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
 
 

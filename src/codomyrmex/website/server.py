@@ -25,13 +25,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     data_provider: Optional[DataProvider] = None
     
     def __init__(self, *args, **kwargs):
-        # Ensure we serve files from the output directory
-        # The 'directory' argument is set by the socketserver/HTTPServer logic usually,
-        # but SimpleHTTPRequestHandler defaults to cwd using os.getcwd() if not specified in newer pythons
-        # or just os.getcwd() in older ones. 
-        # For this implementation, we expect the cwd to be set to the website output directory by the caller.
-        pass
-    pass
+        super().__init__(*args, **kwargs)
     def do_POST(self):
         """Handle POST requests."""
         parsed_path = urlparse(self.path)

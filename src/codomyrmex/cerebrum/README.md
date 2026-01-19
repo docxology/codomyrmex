@@ -4,15 +4,9 @@
 
 ## Overview
 
-## Overview
-
-Case-based reasoning engine with Bayesian inference and Active Inference capabilities. Refactored into domain-driven submodules.
+Contains components for the src system.
 
 ## Directory Contents
-- `core/` – Basic engines, data structures, and configuration
-- `inference/` – Bayesian and Active Inference logic
-- `fpf/` – First Principles Framework orchestration
-- `visualization/` – Rendering and visualization tools
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -20,9 +14,14 @@ Case-based reasoning engine with Bayesian inference and Active Inference capabil
 - `SECURITY.md` – File
 - `SPEC.md` – File
 - `USAGE_EXAMPLES.md` – File
+- `__init__.py` – File
+- `core/` – Subdirectory
+- `fpf/` – Subdirectory
+- `inference/` – Subdirectory
+- `visualization/` – Subdirectory
+- `visualization_base.py` – File
+- `visualization_theme.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

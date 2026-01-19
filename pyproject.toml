@@ -98,6 +98,10 @@ dependencies = [
     "pytz>=2024.1",
     "beautifulsoup4>=4.14.3",
     "markdownify>=1.2.2",
+    # For encryption module
+    "cryptography>=41.0.0",
+    # For templating module
+    "mako>=1.2.0",
 ]
 
 [project.optional-dependencies]
@@ -179,8 +183,8 @@ Documentation = "https://codomyrmex.readthedocs.io/"
 [tool.hatch.build.targets.wheel]
 packages = ["src/codomyrmex"]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest>=8.0.0",
     "pytest-mock>=3.10.0",
     "pytest-cov>=4.0.0",

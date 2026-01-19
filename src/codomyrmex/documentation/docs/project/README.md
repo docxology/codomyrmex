@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for project.
+Documentation files and guides.
 
 ## Directory Contents
 - `CONTRIBUTING_TO_DOCUMENTATION.md` – File
@@ -18,7 +18,5 @@ Documentation files and guides for project.
 - `license.md` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: ../../../../../README.md

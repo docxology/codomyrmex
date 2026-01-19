@@ -4,7 +4,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from codomyrmex.fpf.fetcher import FPFFetcher
+from codomyrmex.fpf import FPFFetcher, FPFSpec
 
 
 def test_fetcher_initialization():
@@ -14,7 +14,7 @@ def test_fetcher_initialization():
     assert fetcher.cache_dir.exists()
 
 
-@patch("codomyrmex.fpf.fetcher.requests.get")
+@patch("codomyrmex.fpf.io.fetcher.requests.get")
 def test_fetch_latest(mock_get):
     """Test fetching latest from GitHub."""
     mock_response = Mock()
@@ -48,7 +48,7 @@ def test_cache_spec():
     assert cache_path.read_text() == content
 
 
-@patch("codomyrmex.fpf.fetcher.requests.get")
+@patch("codomyrmex.fpf.io.fetcher.requests.get")
 def test_fetch_latest_error_handling(mock_get):
     """Test error handling in fetch_latest."""
     mock_get.side_effect = Exception("Network error")
@@ -64,7 +64,7 @@ def test_check_for_updates_nonexistent_file():
     assert result is True  # Should return True if file doesn't exist
 
 
-@patch("codomyrmex.fpf.fetcher.requests.get")
+@patch("codomyrmex.fpf.io.fetcher.requests.get")
 def test_check_for_updates_no_changes(mock_get):
     """Test checking updates when no changes."""
     fetcher = FPFFetcher()
@@ -83,7 +83,7 @@ def test_check_for_updates_no_changes(mock_get):
     local_path.unlink()
 
 
-@patch("codomyrmex.fpf.fetcher.requests.get")
+@patch("codomyrmex.fpf.io.fetcher.requests.get")
 def test_get_version_info_error_handling(mock_get):
     """Test error handling in get_version_info."""
     mock_get.side_effect = Exception("API error")

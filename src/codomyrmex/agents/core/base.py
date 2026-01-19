@@ -186,6 +186,11 @@ class AgentInterface(ABC):
         """
         pass
 
+    @abstractmethod
+    def supports_capability(self, capability: AgentCapabilities) -> bool:
+        """Check if agent supports a specific capability."""
+        pass
+
 
 class BaseAgent(AgentInterface):
     """Base implementation of AgentInterface with common functionality."""
@@ -323,6 +328,18 @@ class BaseAgent(AgentInterface):
             List of agent capabilities
         """
         return self.capabilities
+
+    def supports_capability(self, capability: AgentCapabilities) -> bool:
+        """
+        Check if agent supports a specific capability.
+
+        Args:
+            capability: Capability to check
+
+        Returns:
+            True if supported, False otherwise
+        """
+        return capability in self.get_capabilities()
 
     def get_config_value(
         self, key: str, default: Any = None, config: Optional[dict[str, Any]] = None

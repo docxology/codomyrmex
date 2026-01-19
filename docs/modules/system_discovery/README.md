@@ -4,20 +4,12 @@
 
 ## Overview
 
-User-facing documentation for the `system_discovery` module. For technical details, see the source module documentation.
+Documentation files and guides.
 
-## Source Module
-
-📁 **Source Code**: [src/codomyrmex/system_discovery/](../../../src/codomyrmex/system_discovery/)
-
-See the source module for:
-- [README.md](../../../src/codomyrmex/system_discovery/README.md) - Module overview
-- [AGENTS.md](../../../src/codomyrmex/system_discovery/AGENTS.md) - Technical specifications
-- [SPEC.md](../../../src/codomyrmex/system_discovery/SPEC.md) - Functional specification
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

@@ -20,6 +20,4 @@ Documentation components and guides for the Codomyrmex platform.
 - `reference/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../README.md)
+- **Project Root**: ../README.md

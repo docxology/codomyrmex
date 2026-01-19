@@ -70,7 +70,7 @@ class JulesClient(CLIAgentBase):
                 # Check for auth errors in output
                 stdout = result.get("stdout", "")
                 stderr = result.get("stderr", "")
-                if "unauthorized" in stdout.lower() or "unauthorized" in stderr.lower():
+                if any(x in stdout.lower() or x in stderr.lower() for x in ["unauthorized", "unauthenticated", "401"]):
                     raise JulesError("Jules authentication failed. Please run 'jules auth login'.", command=self.command)
                 
                 return self._build_response_from_result(

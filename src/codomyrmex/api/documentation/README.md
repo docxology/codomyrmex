@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for documentation.
+Documentation files and guides.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -16,7 +16,5 @@ Documentation files and guides for documentation.
 - `doc_generator.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [api](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Project Root**: ../../../../README.md

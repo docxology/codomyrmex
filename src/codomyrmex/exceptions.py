@@ -155,11 +155,13 @@ class CodomyrmexError(Exception):
         message: str,
         context: Optional[dict[str, Any]] = None,
         error_code: Optional[str] = None,
+        **kwargs: Any,
     ):
 
         super().__init__(message)
         self.message = message
         self.context = context or {}
+        self.context.update(kwargs)
         self.error_code = error_code or self.__class__.__name__
 
     def __str__(self) -> str:

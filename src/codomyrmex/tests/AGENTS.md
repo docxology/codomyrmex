@@ -6,6 +6,7 @@
 Test files and validation suites.
 
 ## Active Components
+- `API_SPECIFICATION.md` – Project file
 - `README.md` – Project file
 - `RUNNING_TESTS.md` – Project file
 - `SPEC.md` – Project file
@@ -18,13 +19,10 @@ Test files and validation suites.
 - `unit/` – Directory containing unit components
 
 ## Operating Contracts
-- `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

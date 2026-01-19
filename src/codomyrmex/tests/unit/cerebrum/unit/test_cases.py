@@ -2,8 +2,8 @@
 
 import pytest
 
-from codomyrmex.cerebrum.cases import Case, CaseBase, CaseRetriever
-from codomyrmex.cerebrum.exceptions import CaseNotFoundError, InvalidCaseError
+from codomyrmex.cerebrum import Case, CaseBase, CaseRetriever
+from codomyrmex.cerebrum import CaseNotFoundError, InvalidCaseError
 
 
 class TestCase:

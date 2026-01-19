@@ -3,30 +3,20 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for git_operations..
+Contains components for the src system.
 
 ## Active Components
-- `__init__.py` – Package initialization
-- `core/` – Core logic and managers
-    - `git.py` – Git operations manager
-    - `repository.py` – Repository management
-    - `metadata.py` – Metadata handling
-- `api/` – API integrations
-    - `github.py` – GitHub API interaction
-    - `visualization.py` – Visualization tools
-- `cli/` – Command line interfaces
-    - `repo.py` – Repository CLI
-    - `metadata.py` – Metadata CLI
-    - `demo.py` – Demonstration CLI
-- `tools/` – Helper tools
-    - `library_generator.py` – Library generation
-- `data/` – Data files
-    - `repository_metadata.json` – Metadata storage
-    - `*.txt` – Library files
-- `docs/` – Module documentation
-    - `API_SPECIFICATION.md`
-    - `COMPREHENSIVE_USAGE_EXAMPLES.md`
-    - `...`
+- `API_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `api/` – Directory containing api components
+- `cli/` – Directory containing cli components
+- `core/` – Directory containing core components
+- `data/` – Directory containing data components
+- `docs/` – Directory containing docs components
+- `requirements.txt` – Project file
+- `tools/` – Directory containing tools components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -34,7 +24,5 @@ Module components and implementation for git_operations..
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

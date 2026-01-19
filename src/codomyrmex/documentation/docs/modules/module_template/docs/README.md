@@ -14,7 +14,5 @@ Documentation files and guides.
 - `tutorials/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [module_template](../README.md)
-- **Project Root**: [README](../../../../../../../README.md)
+- **Project Root**: ../../../../../../../README.md

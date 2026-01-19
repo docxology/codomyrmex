@@ -3,9 +3,10 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for coding..
+Contains components for the src system.
 
 ## Active Components
+- `API_SPECIFICATION.md` – Project file
 - `MIGRATION_COMPLETE.md` – Project file
 - `README.md` – Project file
 - `SECURITY.md` – Project file
@@ -23,7 +24,5 @@ Module components and implementation for coding..
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

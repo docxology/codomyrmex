@@ -15,7 +15,7 @@ Codomyrmex is a modular coding workspace enabling AI development workflows. This
 The repository is organized into distinct surfaces, each with specific responsibilities:
 
 | Surface | Purpose | Documentation |
-|---------|---------|---------------|
+| :--- | :--- | :--- |
 | **src/** | Core source modules implementing functionality | [src/README.md](src/README.md) |
 | **scripts/** | Maintenance and automation utilities | [scripts/README.md](scripts/README.md) |
 | **docs/** | Project documentation (about Codomyrmex) | [docs/README.md](docs/README.md) |
@@ -24,7 +24,6 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **cursorrules/** | Coding standards and automation rules | [cursorrules/README.md](cursorrules/README.md) |
 | **projects/** | Project workspace and templates | [projects/README.md](projects/README.md) |
 | **examples/** | Executable examples and demos | [examples/README.md](examples/README.md) |
-
 
 ### Repository Root Files
 
@@ -66,6 +65,7 @@ All agents operating within this repository must:
 ### Surface-Specific Guidelines
 
 #### src/ - Source Code
+
 - Follow Python best practices (PEP 8)
 - Maintain test coverage (≥80%)
 - Update `API_SPECIFICATION.md` when changing interfaces
@@ -73,18 +73,21 @@ All agents operating within this repository must:
 - Version changes in `CHANGELOG.md`
 
 #### scripts/ - Automation
+
 - Scripts should be idempotent where possible
 - Include usage documentation in script headers
 - Log all significant operations
 - Handle errors gracefully with informative messages
 
 #### docs/ - Documentation
+
 - Documentation is about Codomyrmex (not tools Codomyrmex provides)
 - Use clear, understated language ("show not tell")
 - Maintain navigation links between related documents
 - Keep examples current with codebase
 
 #### src/codomyrmex/tests/ - Tests
+
 - Follow test-driven development (TDD) practices
 - Use real data analysis (no mock methods)
 - Organize by test type (unit, integration)
@@ -97,6 +100,7 @@ All agents operating within this repository must:
 Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 
 **Foundation Layer**:
+
 - `logging_monitoring/` - Centralized logging system
   - Key Classes: `Logger`, `LogAggregator`, `StructuredLogger`
   - Key Functions: `get_logger(name: str) -> Logger`, `setup_logging(config: dict) -> None`
@@ -111,6 +115,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Functions: `display_table(data: list, headers: list) -> None`, `confirm_action(message: str) -> bool`
 
 **Core Layer**:
+
 - `static_analysis/` - Code quality analysis
   - Key Classes: `CodeAnalyzer`, `LintRunner`, `ComplexityCalculator`
   - Key Functions: `analyze_file(filepath: str) -> dict`, `calculate_complexity(code: str) -> float`
@@ -140,6 +145,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Functions: `profile_function(func: callable, *args, **kwargs) -> ProfileResult`, `run_benchmark(test_func: callable) -> dict`
 
 **Service Layer**:
+
 - `build_synthesis/` - Build automation
   - Key Classes: `BuildOrchestrator`, `ArtifactBuilder`, `DependencyResolver`
   - Key Functions: `build_project(config: dict) -> BuildResult`, `resolve_dependencies(requirements: list) -> dict`
@@ -159,7 +165,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `database_management/` - Database operations
   - Key Classes: `DatabaseClient`, `SchemaManager`, `MigrationRunner`
   - Key Functions: `execute_query(query: str, params: dict = None) -> list`, `run_migration(migration_file: str) -> bool`
-- `project_orchestration/` - Workflow orchestration
+- `orchestrator/` - Workflow orchestration
   - Key Classes: `WorkflowEngine`, `TaskScheduler`, `DependencyGraph`
   - Key Functions: `execute_workflow(workflow_id: str, context: dict) -> WorkflowResult`
 - `config_management/` - Configuration management
@@ -167,6 +173,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Functions: `load_config(path: str) -> dict`, `get_secret(key: str) -> str`
 
 **Specialized Layer**:
+
 - `spatial/` - Spatial modeling (3D/4D)
   - Key Submodules: `three_d/`, `four_d/`, `world_models/`
   - Key Classes: `SceneBuilder`, `MeshGenerator`, `Renderer`
@@ -199,8 +206,29 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `tools/` - Utility tools and helpers
   - Key Classes: `ToolRegistry`, `ToolExecutor`
   - Key Functions: `register_tool(name: str, tool: callable) -> None`, `execute_tool(name: str, args: dict) -> Any`
+- `utils/` - General utilities
+  - Key Functions: `ensure_directory`, `safe_write`
+- `validation/` - input validation
+  - Key Classes: `Validator`, `Schema`
+- `templating/` - Template management
+  - Key Classes: `TemplateEngine`
+- `ide/` - IDE Integration
+  - Key Classes: `EditorInterface`
+- `cloud/` - Cloud provider integration
+  - Key Classes: `AWSClient`, `GCPClient`
+- `networking/` - Network utilities
+  - Key Classes: `NetworkClient`
+- `serialization/` - Data serialization
+  - Key Classes: `Serializer`
+- `compression/` - Data compression
+  - Key Classes: `Compressor`
+- `encryption/` - Data encryption
+  - Key Classes: `Encrypter`
+- `scrape/` - Web scraping
+  - Key Classes: `Scraper`
 
 **Development Layer**:
+
 - `module_template/` - Module creation templates and scaffolding
   - Key Classes: `ModuleGenerator`, `TemplateRenderer`, `ScaffoldBuilder`
   - Key Functions: `create_module(name: str, template: str) -> bool`, `generate_scaffold(config: dict) -> dict`
@@ -210,40 +238,44 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 ## Navigation
 
 ### For Users
+
 - **Start Here**: [README.md](README.md) - Project overview and quick start
 - **Getting Started**: [docs/getting-started/quickstart.md](docs/getting-started/quickstart.md)
 - **Architecture**: [docs/project/architecture.md](docs/project/architecture.md)
 - **Contributing**: [docs/project/contributing.md](docs/project/contributing.md)
 
 ### For Agents
+
 - **Coding Standards**: [cursorrules/general.cursorrules](cursorrules/general.cursorrules)
 - **Module System**: [docs/modules/overview.md](docs/modules/overview.md)
 - **Module Relationships**: [docs/modules/relationships.md](docs/modules/relationships.md)
 - **API Reference**: [docs/reference/api.md](docs/reference/api.md)
 
 ## Signposting
+
 - **Parent**: [Repository Root](README.md)
 - **Self**: [Codomyrmex Root](AGENTS.md)
 - **Children**:
-    - [src](src/AGENTS.md)
-    - [docs](docs/AGENTS.md)
-    - [scripts](scripts/AGENTS.md)
-    - [examples](examples/AGENTS.md)
-    - [config](config/AGENTS.md)
-    - [cursorrules](cursorrules/AGENTS.md)
-    - [projects](projects/AGENTS.md)
+  - [src](src/AGENTS.md)
+  - [docs](docs/AGENTS.md)
+  - [scripts](scripts/AGENTS.md)
+  - [examples](examples/AGENTS.md)
+  - [config](config/AGENTS.md)
+  - [cursorrules](cursorrules/AGENTS.md)
+  - [projects](projects/AGENTS.md)
 
 - **Key Artifacts**:
-    - [Agent Guide](AGENTS.md)
-    - [Functional Spec](SPEC.md)
-
+  - [Agent Guide](AGENTS.md)
+  - [Functional Spec](SPEC.md)
 
 ### For Contributors
+
 - **Development Setup**: [docs/development/environment-setup.md](docs/development/environment-setup.md)
 - **Testing Strategy**: [docs/development/testing-strategy.md](docs/development/testing-strategy.md)
 - **Documentation Guide**: [docs/development/documentation.md](docs/development/documentation.md)
 
 ## Active Components
+
 - `package.json` – Node.js package configuration
 - `projects/` – Project workspace and templates
 - `pyproject.toml` – Python package configuration
@@ -257,8 +289,8 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - `workflow.db` – Workflow database file
 - `output/` – Generated reports and documentation artifacts
 
-
 ## Navigation Links
+
 - `LICENSE` – Project license file
 - `Makefile` – Build automation file
 - `README.md` – Documentation file

@@ -2,7 +2,7 @@
 
 import pytest
 
-from codomyrmex.cerebrum.bayesian import (
+from codomyrmex.cerebrum import (
     BayesianNetwork,
     Distribution,
     InferenceEngine,
@@ -102,7 +102,8 @@ class TestInferenceEngine:
         inference = InferenceEngine(network)
         result = inference.compute_marginal("A")
         
-        assert "A" in result.values
+        assert 0 in result.values
+        assert 1 in result.values
         assert abs(sum(result.probabilities) - 1.0) < 1e-6
 
     def test_inference_with_evidence(self):
@@ -120,7 +121,8 @@ class TestInferenceEngine:
         evidence = {"B": 1}
         result = inference.compute_marginal("A", evidence)
         
-        assert "A" in result.values
+        assert 0 in result.values
+        assert 1 in result.values
         assert abs(sum(result.probabilities) - 1.0) < 1e-6
 
     def test_inference_invalid_variable(self):

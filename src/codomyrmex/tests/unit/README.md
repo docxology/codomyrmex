@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites for unit.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
@@ -42,6 +42,7 @@ Test files and validation suites for unit.
 - `module_template/` – Subdirectory
 - `networking/` – Subdirectory
 - `ollama_test_helpers.py` – File
+- `orchestrator/` – Subdirectory
 - `pattern_matching/` – Subdirectory
 - `performance/` – Subdirectory
 - `physical_management/` – Subdirectory
@@ -62,7 +63,5 @@ Test files and validation suites for unit.
 - `website/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [tests](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Project Root**: ../../../../README.md

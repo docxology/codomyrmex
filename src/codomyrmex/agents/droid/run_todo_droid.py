@@ -7,27 +7,19 @@ import time
 from collections.abc import Iterable
 from typing import Callable
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+setup_logging()
+logger = get_logger(__name__)
 
 
 """Main entry point and utility functions
 
-# """Main entry point and utility functions
-
 This module provides run_todo_droid functionality including:
-- 10 functions: resolve_handler, get_todo_count_interactive, run_todos...
-- 0 classes: 
+- resolve_handler, get_todo_count_interactive, run_todos...
 
 Usage:
-    from run_todo_droid import FunctionName, ClassName
-    # Example usage here
-"""
-This module provides run_todo_droid functionality including:
-- 10 functions: resolve_handler, get_todo_count_interactive, run_todos...
-- 0 classes: 
-
-Usage:
-    # Example usage here
+    from codomyrmex.agents.droid.run_todo_droid import run_todos
 """
 logger = get_logger(__name__)
 
@@ -61,6 +53,7 @@ try:
     # When run as module
     from .controller import (
         DroidController,
+        create_default_controller,
         load_config_from_file,
     )
     from .todo import TodoItem, TodoManager
@@ -115,7 +108,31 @@ CODOMYRMEX_ENHANCED_PROMPT = (
 
 
 def resolve_handler(handler_path: str) -> Callable:
-Interactively prompt user for number of TODOs to process."""
+    """Resolve a handler string to a callable function."""
+    import importlib
+    
+    if ":" not in handler_path:
+        # Default to droid.tasks if no module specified
+        module_name = "codomyrmex.agents.droid.tasks"
+        function_name = handler_path
+    else:
+        module_name, function_name = handler_path.split(":", 1)
+        # Expansion logic for short names
+        if module_name == "droid":
+            module_name = "codomyrmex.agents.droid.tasks"
+        elif module_name == "ai_code":
+            module_name = "codomyrmex.agents.ai_code_editing.tasks"
+
+    try:
+        module = importlib.import_module(module_name)
+        return getattr(module, function_name)
+    except (ImportError, AttributeError) as e:
+        logger.error(f"Failed to resolve handler {handler_path}: {e}")
+        raise
+
+
+def get_todo_count_interactive() -> int:
+    """Interactively prompt user for number of TODOs to process."""
     import os
 
     todo_file = os.path.join(os.path.dirname(__file__), "todo_list.txt")
@@ -319,7 +336,20 @@ def run_todos(
 
 
 def build_controller(config_path: str | None) -> DroidController:
-Display TODO list and exit."""
+    """Build and initialize a DroidController."""
+    if config_path:
+        config = load_config_from_file(config_path)
+        return DroidController(config=config)
+    else:
+        # Check for create_default_controller helper
+        try:
+            return create_default_controller()
+        except NameError:
+            return DroidController()
+
+
+def _list_todos(todo_items: list[TodoItem], completed_items: list[TodoItem]) -> None:
+    """Display TODO list and exit."""
     print("📋 TODO List:")
     print("============")
     if not todo_items:

@@ -2,8 +2,7 @@
 
 import pytest
 
-from codomyrmex.fpf.indexer import FPFIndexer
-from codomyrmex.fpf.models import FPFSpec, Pattern, PatternStatus
+from codomyrmex.fpf import FPFIndexer, FPFSpec, Pattern, PatternStatus
 
 
 def test_indexer_initialization():

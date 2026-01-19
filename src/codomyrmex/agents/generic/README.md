@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module components and implementation for generic..
+Contains components for the src system.
 
 ## Directory Contents
 - `README.md` – File
@@ -12,13 +12,10 @@ Module components and implementation for generic..
 - `__init__.py` – File
 - `agent_orchestrator.py` – File
 - `api_agent_base.py` – File
-- `base_agent.py` – File
 - `cli_agent_base.py` – File
 - `message_bus.py` – File
 - `task_planner.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [agents](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Project Root**: ../../../../README.md

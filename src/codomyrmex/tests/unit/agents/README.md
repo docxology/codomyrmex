@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites for agents.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
@@ -21,16 +21,16 @@ Test files and validation suites for agents.
 - `test_cli_orchestration.py` – File
 - `test_configuration.py` – File
 - `test_error_handling.py` – File
+- `test_git_agent.py` – File
 - `test_integrations.py` – File
 - `test_jules_integration.py` – File
 - `test_modularity.py` – File
 - `test_opencode_integration.py` – File
 - `test_orchestration.py` – File
 - `test_orchestration_advanced.py` – File
+- `test_react_agent.py` – File
 - `test_real_world_scenarios.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [unit](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: ../../../../../README.md

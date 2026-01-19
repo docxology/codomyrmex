@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for pattern_matching.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
@@ -24,7 +24,5 @@ Documentation files and guides for pattern_matching.
 - `usage_examples.md` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../../../../README.md)
+- **Project Root**: ../../../../../../README.md

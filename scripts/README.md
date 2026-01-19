@@ -1,82 +1,65 @@
-# Codomyrmex Scripts
+# scripts
 
-This directory contains orchestration, maintenance, and utility scripts for the Codomyrmex ecosystem.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-## Quick Start
+## Overview
 
-```bash
-# Run all scripts (141 total)
-python run_all_scripts.py
+Maintenance and automation utilities for project management.
 
-# Run with verbose output
-python run_all_scripts.py --verbose
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
+- `agents/` – Subdirectory
+- `api/` – Subdirectory
+- `auth/` – Subdirectory
+- `build_synthesis/` – Subdirectory
+- `cache/` – Subdirectory
+- `cerebrum/` – Subdirectory
+- `ci_cd_automation/` – Subdirectory
+- `cli/` – Subdirectory
+- `cloud/` – Subdirectory
+- `coding/` – Subdirectory
+- `codomyrmex.log` – File
+- `compression/` – Subdirectory
+- `config_management/` – Subdirectory
+- `containerization/` – Subdirectory
+- `data_visualization/` – Subdirectory
+- `database_management/` – Subdirectory
+- `documentation/` – Subdirectory
+- `documents/` – Subdirectory
+- `encryption/` – Subdirectory
+- `environment_setup/` – Subdirectory
+- `events/` – Subdirectory
+- `examples/` – Subdirectory
+- `fpf/` – Subdirectory
+- `git_operations/` – Subdirectory
+- `ide/` – Subdirectory
+- `llm/` – Subdirectory
+- `logging_monitoring/` – Subdirectory
+- `logistics/` – Subdirectory
+- `metrics/` – Subdirectory
+- `model_context_protocol/` – Subdirectory
+- `module_template/` – Subdirectory
+- `networking/` – Subdirectory
+- `orchestrator/` – Subdirectory
+- `pattern_matching/` – Subdirectory
+- `performance/` – Subdirectory
+- `physical_management/` – Subdirectory
+- `plugin_system/` – Subdirectory
+- `run_all_scripts.py` – File
+- `scrape/` – Subdirectory
+- `security/` – Subdirectory
+- `serialization/` – Subdirectory
+- `skills/` – Subdirectory
+- `spatial/` – Subdirectory
+- `static_analysis/` – Subdirectory
+- `system_discovery/` – Subdirectory
+- `templating/` – Subdirectory
+- `terminal_interface/` – Subdirectory
+- `tools/` – Subdirectory
+- `utils/` – Subdirectory
+- `validation/` – Subdirectory
+- `website/` – Subdirectory
 
-# Run specific modules only
-python run_all_scripts.py --subdirs agents llm api
-
-# Dry run - show what would execute
-python run_all_scripts.py --dry-run
-
-# Generate documentation
-python run_all_scripts.py --generate-docs docs/scripts.md
-```
-
-## Module Index
-
-| Module | Description |
-|--------|-------------|
-| `agents/` | Agent orchestration and LLM interactions |
-| `api/` | API endpoint management |
-| `auth/` | Authentication and authorization |
-| `build_synthesis/` | Build artifact generation |
-| `cache/` | Caching subsystem |
-| `cerebrum/` | Reasoning engine and FPF integration |
-| `ci_cd_automation/` | CI/CD pipeline automation |
-| `cloud/` | Cloud provider integrations |
-| `coding/` | Code generation and transformation |
-| `compression/` | Data compression utilities |
-| `config_management/` | Configuration management |
-| `containerization/` | Docker and container operations |
-| `data_visualization/` | Chart and visualization generation |
-| `database_management/` | Database operations |
-| `documentation/` | Documentation generation |
-| `documents/` | Document processing |
-| `encryption/` | Encryption operations |
-| `environment_setup/` | Environment configuration |
-| `events/` | Event-driven architecture |
-| `fpf/` | First Principles Framework |
-| `git_operations/` | Git workflow automation |
-| `ide/` | IDE integrations |
-| `llm/` | LLM provider clients |
-| `logging_monitoring/` | Structured logging |
-| `logistics/` | Workflow logistics |
-| `metrics/` | Metrics collection |
-| `model_context_protocol/` | MCP integrations |
-| `module_template/` | Module scaffolding |
-| `networking/` | Network operations |
-| `orchestrator/` | Script orchestration core |
-| `pattern_matching/` | Pattern matching utilities |
-| `performance/` | Performance monitoring |
-| `physical_management/` | Physical systems |
-| `plugin_system/` | Plugin architecture |
-| `scrape/` | Web scraping |
-| `security/` | Security operations |
-| `serialization/` | Data serialization |
-| `skills/` | Skill definitions |
-| `spatial/` | Spatial/3D operations |
-| `static_analysis/` | Static code analysis |
-| `system_discovery/` | System introspection |
-| `templating/` | Template rendering |
-| `terminal_interface/` | Terminal UI |
-| `tools/` | Development tools |
-| `utils/` | Shared utilities |
-| `validation/` | Data validation |
-| `website/` | Website generation |
-
-## Structure
-
-Each module directory contains:
-- `orchestrate.py` - Thin wrapper that delegates to `codomyrmex.orchestrator.core`
-- `examples/` - Usage examples (`basic_usage.py`, `advanced_workflow.py`)
-
-See [SPEC.md](SPEC.md) for detailed architecture and [AGENTS.md](AGENTS.md) for AI agent guidance.
+## Navigation
+- **Project Root**: ../README.md

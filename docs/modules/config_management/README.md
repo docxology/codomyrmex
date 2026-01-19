@@ -4,20 +4,12 @@
 
 ## Overview
 
-User-facing documentation for the `config_management` module. For technical details, see the source module documentation.
+Documentation files and guides.
 
-## Source Module
-
-📁 **Source Code**: [src/codomyrmex/config_management/](../../../src/codomyrmex/config_management/)
-
-See the source module for:
-- [README.md](../../../src/codomyrmex/config_management/README.md) - Module overview
-- [AGENTS.md](../../../src/codomyrmex/config_management/AGENTS.md) - Technical specifications
-- [SPEC.md](../../../src/codomyrmex/config_management/SPEC.md) - Functional specification
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

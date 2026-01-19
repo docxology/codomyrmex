@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites for fixtures.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
@@ -12,7 +12,5 @@ Test files and validation suites for fixtures.
 - `python/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [review](../README.md)
-- **Project Root**: [README](../../../../../../../README.md)
+- **Project Root**: ../../../../../../../README.md

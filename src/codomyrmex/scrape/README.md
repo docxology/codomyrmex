@@ -4,9 +4,10 @@
 
 ## Overview
 
-Module components and implementation for scrape..
+Contains components for the src system.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `README.md` – File
 - `SECURITY.md` – File
@@ -21,7 +22,5 @@ Module components and implementation for scrape..
 - `scraper.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

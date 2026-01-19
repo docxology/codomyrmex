@@ -4,9 +4,10 @@
 
 ## Overview
 
-Module components and implementation for security..
+Contains components for the src system.
 
 ## Directory Contents
+- `API_SPECIFICATION.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
@@ -17,7 +18,5 @@ Module components and implementation for security..
 - `theory/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

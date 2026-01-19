@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for transformation.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
@@ -16,7 +16,5 @@ Documentation files and guides for transformation.
 - `splitter.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [documents](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,45 +1,5 @@
-from datetime import datetime
-from pathlib import Path
-from typing import Set, List
-import argparse
-import logging
-import sys
-
-from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#!/usr/bin/env python3
 """
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
-
-class DocumentationBootstrapper:
-    """
-
-
-    #!/usr/bin/env python3
-    """
-
 Bootstrap script to create AGENTS.md and README.md files for every directory
 under the allowed surfaces in the Codomyrmex repository.
 
@@ -47,14 +7,25 @@ This script ensures complete documentation coverage with explicit inventories
 and proper navigation signposting.
 """
 
+import argparse
+import logging
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import List, Set
+
+from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
 try:
     setup_logging()
-
+except Exception:
+    logging.basicConfig(level=logging.INFO)
 
 logger = get_logger(__name__)
 
-Handles bootstrapping of AGENTS.md and README.md files across the repository."""
+
+class DocumentationBootstrapper:
+    """Handles bootstrapping of AGENTS.md and README.md files across the repository."""
 
     # Surface roots to cover
     SURFACE_ROOTS = {
@@ -149,10 +120,6 @@ Handles bootstrapping of AGENTS.md and README.md files across the repository."""
             if parent_readme.exists():
                 nav_links['parent'] = "../README.md"
 
-        # Surface hub (if surface README exists)
-        # Note: Surface READMEs may not exist for all surface roots,
-        # so we don't generate these links to avoid broken references
-
         return nav_links
 
     def generate_agents_md(self, dir_path: Path) -> str:
@@ -194,10 +161,7 @@ Handles bootstrapping of AGENTS.md and README.md files across the repository."""
 
         if 'parent' in nav_links:
             content += f"- **📁 Parent Directory**: [{rel_path.parent.name}](../README.md) - Parent directory documentation\n"
-        content += f"- **🏠 Project Root**: [README](../../../README.md) - Main project documentation\n"
-        if 'surface' in nav_links:
-            surface_name = rel_path.parts[0]
-            content += f"- **📦 {surface_name.title()}**: [{surface_name}](../../../{surface_name}/README.md) - {surface_name} documentation hub\n"
+        content += f"- **🏠 Project Root**: {'../' * (len(rel_path.parts))}README.md - Main project documentation\n"
 
         return content
 
@@ -236,7 +200,7 @@ Handles bootstrapping of AGENTS.md and README.md files across the repository."""
 
         if 'parent' in nav_links:
             content += f"- **Parent Directory**: [{rel_path.parent.name}](../README.md)\n"
-        content += "- **Project Root**: [README](../../../README.md)\n"
+        content += f"- **Project Root**: {'../' * (len(rel_path.parts))}README.md\n"
 
         return content
 
@@ -279,26 +243,18 @@ Handles bootstrapping of AGENTS.md and README.md files across the repository."""
         """Process a single directory, creating/updating documentation files."""
         agents_path = dir_path / 'AGENTS.md'
         readme_path = dir_path / 'README.md'
-
         rel_path = dir_path.relative_to(self.repo_root)
 
         # Create or update AGENTS.md
         content = self.generate_agents_md(dir_path)
         agents_path.write_text(content, encoding='utf-8')
-        if agents_path.exists():
-            logger.info(f"Updated AGENTS.md for {rel_path}")
-        else:
-            logger.info(f"Created AGENTS.md for {rel_path}")
         self.generated_count += 1
 
         # Create or update README.md
         content = self.generate_readme_md(dir_path)
         readme_path.write_text(content, encoding='utf-8')
-        if readme_path.exists():
-            logger.info(f"Updated README.md for {rel_path}")
-        else:
-            logger.info(f"Created README.md for {rel_path}")
         self.generated_count += 1
+        logger.info(f"Processed documentation for {rel_path}")
 
     def bootstrap_repository(self) -> None:
         """Bootstrap documentation for the entire repository."""
@@ -322,12 +278,11 @@ Handles bootstrapping of AGENTS.md and README.md files across the repository."""
                 if dir_path.is_dir() and self.should_process_directory(dir_path):
                     self.process_directory(dir_path)
 
-        logger.info(f"Bootstrap complete: generated {self.generated_count} files")
+        logger.info(f"Bootstrap complete: processed {self.generated_count} files")
 
 
 def main():
     """Main entry point."""
-
     parser = argparse.ArgumentParser(
         description="Bootstrap AGENTS.md and README.md files across the repository"
     )
@@ -341,23 +296,16 @@ def main():
     )
 
     args = parser.parse_args()
-
     bootstrapper = DocumentationBootstrapper(args.repo_root)
 
     if args.dry_run:
         print("DRY RUN MODE - No files will be created")
-        print("This would process the following surfaces:")
         for surface in bootstrapper.SURFACE_ROOTS:
             print(f"  - {surface}/")
-        print("\nExcluding:")
-        for excluded in bootstrapper.EXCLUDED_DIRS:
-            print(f"  - {excluded}/")
         return
 
     bootstrapper.bootstrap_repository()
-
-    print("\n📊 Bootstrap Summary:")
-    print(f"   Generated files: {bootstrapper.generated_count}")
+    print(f"\n📊 Bootstrap Summary: Processed {bootstrapper.generated_count} files")
 
 
 if __name__ == '__main__':

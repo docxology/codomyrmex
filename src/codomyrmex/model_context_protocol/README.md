@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module components and implementation for model_context_protocol..
+Contains components for the src system.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -19,7 +19,5 @@ Module components and implementation for model_context_protocol..
 - `requirements.txt` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

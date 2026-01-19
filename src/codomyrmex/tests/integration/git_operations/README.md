@@ -4,18 +4,17 @@
 
 ## Overview
 
-Test files and validation suites for git_operations.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
 - `SPEC.md` – File
+- `test_git_integration.py` – File
 - `test_github_functionality_demo.py` – File
 - `test_github_operations_demo.py` – File
 - `test_real_github_repos.py` – File
 - `verify_all_git_methods_comprehensive.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [integration](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: ../../../../../README.md

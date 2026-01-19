@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites for unit.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
@@ -16,7 +16,5 @@ Test files and validation suites for unit.
 - `test_scraper.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [scrape](../README.md)
-- **Project Root**: [README](../../../../../../README.md)
+- **Project Root**: ../../../../../../README.md

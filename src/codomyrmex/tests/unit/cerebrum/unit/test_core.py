@@ -3,9 +3,9 @@
 import pytest
 
 from codomyrmex.cerebrum.core import CerebrumEngine, ModelManager, ReasoningEngine
-from codomyrmex.cerebrum.cases import Case, CaseBase
-from codomyrmex.cerebrum.models import Model
-from codomyrmex.cerebrum.exceptions import ModelError
+from codomyrmex.cerebrum import Case, CaseBase
+from codomyrmex.cerebrum import Model
+from codomyrmex.cerebrum import ModelError
 
 
 class TestModelManager:

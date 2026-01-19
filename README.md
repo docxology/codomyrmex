@@ -53,6 +53,7 @@ uv sync
 ## Navigation
 
 **Quick Links:**
+
 - 📚 **[Source Code](src/README.md)** - Browse all 46+ modules and implementations
 - 📖 **[Documentation Hub](docs/README.md)** - Comprehensive user and developer guides
 - 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
@@ -101,17 +102,6 @@ uv sync
 - [Links](#links)
 
 </details>
-
-## Navigation
-
-**Quick Links:**
-- 📚 **[Source Code](src/README.md)** - Browse all 46+ modules and implementations
-- 📖 **[Documentation Hub](docs/README.md)** - Comprehensive user and developer guides
-- 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
-- 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
-- 🎯 **[Architecture Guide](docs/project/architecture.md)** - System design and principles
-- 💻 **[Examples](scripts/documentation/examples/)** - Working code examples and demonstrations
-- 🤝 **[Contributing](docs/project/contributing.md)** - How to contribute to Codomyrmex
 
 ## System Architecture
 
@@ -164,12 +154,17 @@ graph TB
         PhysMgmt["Physical Management"]
         Events["Event System"]
         PluginSys["Plugin System"]
+        Cloud["Cloud Integration"]
+        Networking["Networking"]
     end
 
     subgraph extensions ["Module Layer - Extensions"]
         ModTemplate["Module Template"]
         Tools["Utility Tools"]
         SysDiscovery["System Discovery"]
+        Cerebrum["Cerebrum (Reasoning)"]
+        FPF["FPF (Functional)"]
+        IDE["IDE Integration"]
     end
 
     subgraph foundation ["Foundation Layer"]
@@ -512,6 +507,7 @@ graph TD
 ### Installation Options
 
 **Option 1: Using uv (Recommended)**
+
 ```bash
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
@@ -519,6 +515,7 @@ uv sync
 ```
 
 **Option 2: Using pip**
+
 ```bash
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
@@ -598,12 +595,14 @@ flowchart TD
 Codomyrmex follows a **layered architecture** that ensures clean separation of concerns and prevents circular dependencies. Each layer builds upon the layers below it, creating a stable foundation for complex workflows.
 
 **Key Architectural Decisions**:
+
 - **Upward Dependencies Only**: Higher layers depend on lower layers, never the reverse
 - **Foundation Services**: Core infrastructure used by all modules
 - **Clear Layer Boundaries**: Each layer has distinct responsibilities
 - **Modular Composition**: Modules can be used independently or combined
 
 **Layer Responsibilities**:
+
 - **Foundation Layer**: Provides essential services (logging, environment, terminal, MCP)
 - **Core Layer**: Implements primary development capabilities (analysis, execution, AI, visualization)
 - **Service Layer**: Orchestrates complex workflows and integrations (build, docs, CI/CD, orchestration)
@@ -628,7 +627,7 @@ graph TD
         Documentation["Documentation Generation"]
         BuildSynthesis["Build Synthesis"]
         StaticAnalysis["Static Analysis & Quality"]
-        ProjectOrchestration["Project Orchestration"]
+        Orchestrator["Orchestrator"]
         CICDAutomation["CI/CD Automation"]
         APIDocumentation["API Documentation"]
         Containerization["Container Management"]
@@ -683,9 +682,9 @@ graph TD
     StaticAnalysis -.-> PatternMatching
     StaticAnalysis -.-> CodeReview
 
-    ProjectOrchestration -.-> LoggingMonitoring
-    ProjectOrchestration -.-> BuildSynthesis
-    ProjectOrchestration -.-> Documentation
+    Orchestrator -.-> LoggingMonitoring
+    Orchestrator -.-> BuildSynthesis
+    Orchestrator -.-> Documentation
 
     CICDAutomation -.-> BuildSynthesis
     CICDAutomation -.-> SecurityAudit
@@ -721,20 +720,22 @@ graph TD
 ```
 
 ### Foundation Layer
+
 Essential infrastructure used by all other modules:
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| :--- | :--- | :--- |
 | [**logging_monitoring**](src/codomyrmex/logging_monitoring/) | Centralized logging system | Structured logging, multiple formats, aggregation |
 | [**environment_setup**](src/codomyrmex/environment_setup/) | Environment validation | Dependency checking, API key management, setup automation |
 | [**model_context_protocol**](src/codomyrmex/model_context_protocol/) | AI communication standard | Standardized LLM interfaces, tool specifications |
 | [**terminal_interface**](src/codomyrmex/terminal_interface/) | Rich terminal interactions | Colored output, progress bars, interactive prompts |
 
 ### Core Functional Modules
+
 Primary capabilities for development workflows:
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| :--- | :--- | :--- |
 | [**agents**](src/codomyrmex/agents/) | Agentic framework integrations | AI code editing, task management, various providers |
 | [**static_analysis**](src/codomyrmex/static_analysis/) | Code quality analysis | Linting, security scanning, complexity metrics |
 | [**coding**](src/codomyrmex/coding/) | Code execution & review | Safe sandbox execution, automated code review |
@@ -746,10 +747,11 @@ Primary capabilities for development workflows:
 | [**performance**](src/codomyrmex/performance/) | Performance monitoring | Profiling, optimization, benchmarking |
 
 ### Service Modules
+
 Higher-level services that orchestrate core modules:
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| :--- | :--- | :--- |
 | [**build_synthesis**](src/codomyrmex/build_synthesis/) | Build automation | Multi-language builds, artifact generation, pipelines |
 | [**documentation**](src/codomyrmex/documentation/) | Documentation generation | Website generation, API docs, tutorial creation |
 | [**api**](src/codomyrmex/api/) | API infrastructure | OpenAPI/Swagger specs, standardization, documentation |
@@ -760,10 +762,11 @@ Higher-level services that orchestrate core modules:
 | [**logistics**](src/codomyrmex/logistics/) | Logistics and orchestration | Workflow orchestration, task management, scheduling |
 
 ### Specialized Modules
+
 Advanced capabilities for specific domains:
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| :--- | :--- | :--- |
 | [**spatial**](src/codomyrmex/spatial/) | Spatial modeling (3D/4D) | Scene creation, rendering, geometric operations, world models |
 | [**physical_management**](src/codomyrmex/physical_management/) | Physical system simulation | Hardware monitoring, resource management |
 | [**system_discovery**](src/codomyrmex/system_discovery/) | System exploration | Module discovery, capability detection, health monitoring |
@@ -779,6 +782,7 @@ Codomyrmex includes **30+ modules** organized in a layered architecture. Each mo
 Browse all available modules organized by layer and category:
 
 ### Foundation Layer
+
 Essential infrastructure used by all other modules:
 
 - **[logging_monitoring](src/codomyrmex/logging_monitoring/)** - Centralized logging system with structured logging, multiple formats, and aggregation
@@ -787,6 +791,7 @@ Essential infrastructure used by all other modules:
 - **[terminal_interface](src/codomyrmex/terminal_interface/)** - Rich terminal interactions with colored output, progress bars, and interactive prompts
 
 ### Core Layer
+
 Primary capabilities for development workflows:
 
 - **[agents](src/codomyrmex/agents/)** - Agentic framework integrations with AI code editing, task management, and various providers
@@ -800,6 +805,7 @@ Primary capabilities for development workflows:
 - **[performance](src/codomyrmex/performance/)** - Performance monitoring with profiling, optimization, and benchmarking
 
 ### Service Layer
+
 Higher-level services that orchestrate core modules:
 
 - **[build_synthesis](src/codomyrmex/build_synthesis/)** - Build automation with multi-language builds, artifact generation, and pipelines
@@ -812,6 +818,7 @@ Higher-level services that orchestrate core modules:
 - **[logistics](src/codomyrmex/logistics/)** - Logistics module with orchestration, task management, and scheduling
 
 ### Specialized Layer
+
 Advanced capabilities for specific domains:
 
 - **[spatial](src/codomyrmex/spatial/)** - Spatial modeling (3D/4D) with scene creation, rendering, geometric operations, and world models
@@ -821,13 +828,21 @@ Advanced capabilities for specific domains:
 - **[events](src/codomyrmex/events/)** - Event system with message passing, pub/sub patterns, and event logging
 - **[plugin_system](src/codomyrmex/plugin_system/)** - Plugin architecture with extension loading, plugin management, and interfaces
 - **[tools](src/codomyrmex/tools/)** - Utility tools with development helpers and analysis utilities
+- **[cerebrum](src/codomyrmex/cerebrum/)** - Advanced reasoning and inference engine
+- **[fpf](src/codomyrmex/fpf/)** - Functional Programming Framework
+- **[ide](src/codomyrmex/ide/)** - IDE integration and protocol support
+- **[cloud](src/codomyrmex/cloud/)** - Cloud provider integrations (AWS, GCP)
+- **[networking](src/codomyrmex/networking/)** - Networking utilities
+- **[scrape](src/codomyrmex/scrape/)** - Web scraping capabilities
+- **[encryption](src/codomyrmex/encryption/)** - Data encryption utilities
+- **[compression](src/codomyrmex/compression/)** - Data compression utilities
 
 **See [Source Code Index](src/README.md) for complete module listing and [Module System Overview](docs/modules/overview.md) for detailed architecture.**
 
 ## Module Quick Reference
 
 | Category | Modules |
-|----------|---------|
+| :--- | :--- |
 | **Foundation** | [logging_monitoring](src/codomyrmex/logging_monitoring/) • [environment_setup](src/codomyrmex/environment_setup/) • [model_context_protocol](src/codomyrmex/model_context_protocol/) • [terminal_interface](src/codomyrmex/terminal_interface/) |
 | **AI & Intelligence** | [agents](src/codomyrmex/agents/) • [llm](src/codomyrmex/llm/) |
 | **Analysis & Quality** | [static_analysis](src/codomyrmex/static_analysis/) • [coding](src/codomyrmex/coding/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) |
@@ -841,15 +856,18 @@ Advanced capabilities for specific domains:
 ## Common Use Cases
 
 ### Development Workflows
+
 - **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/coding/review/) → [Security scan](src/codomyrmex/security/)
 - **AI-Assisted Development**: [AI code editing](src/codomyrmex/agents/ai_code_editing/) with [pattern matching](src/codomyrmex/pattern_matching/) for code refactoring
 - **Build & Deploy**: [Build synthesis](src/codomyrmex/build_synthesis/) → [CI/CD automation](src/codomyrmex/ci_cd_automation/) → [Container management](src/codomyrmex/containerization/)
 
 ### Research & Analysis
+
 - **Data Science Workflow**: [Coding](src/codomyrmex/coding/sandbox/) → [Data visualization](src/codomyrmex/data_visualization/) → [Performance monitoring](src/codomyrmex/performance/)
 - **System Exploration**: [System discovery](src/codomyrmex/system_discovery/) → [Pattern analysis](src/codomyrmex/pattern_matching/) → [Documentation generation](src/codomyrmex/documentation/)
 
 ### Production Operations
+
 - **Infrastructure Management**: [Database operations](src/codomyrmex/database_management/) → [Configuration management](src/codomyrmex/config_management/) → [Physical monitoring](src/codomyrmex/physical_management/)
 - **Quality Assurance**: [Security scanning](src/codomyrmex/security/) → [Performance benchmarking](src/codomyrmex/performance/) → [Automated testing](src/codomyrmex/tests/)
 
@@ -857,7 +875,7 @@ See **[executable examples](src/codomyrmex/examples/)** for working demonstratio
 
 ## Project Structure
 
-```
+```text
 codomyrmex/
 ├── /src/codomyrmex/          # Core source modules
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
@@ -927,7 +945,9 @@ graph TD
 ## Key Concepts
 
 ### Modular Architecture
+
 Each module is self-contained with:
+
 - Own dependencies (`requirements.txt`)
 - Tests (`tests/`)
 - API documentation (`API_SPECIFICATION.md`)
@@ -937,7 +957,9 @@ Each module is self-contained with:
 See **[module system overview](docs/modules/overview.md)** for detailed module architecture and relationships.
 
 ### Model Context Protocol (MCP)
+
 Standardized interface for AI integration:
+
 - Tool specifications for LLM interactions
 - Consistent parameter schemas
 - Provider-agnostic design
@@ -946,7 +968,9 @@ Standardized interface for AI integration:
 See **[MCP documentation](src/codomyrmex/model_context_protocol/)** for technical specifications and implementation details.
 
 ### Layered Dependencies
+
 Modules organized to prevent circular dependencies:
+
 - **Foundation Layer**: Base services (logging, environment, terminal)
 - **Core Layer**: Functional capabilities (analysis, execution, visualization)
 - **Service Layer**: Orchestration and integration
@@ -957,32 +981,36 @@ Modules organized to prevent circular dependencies:
 ## Signposting
 
 **Navigation Links:**
+
 - **Self**: [Codomyrmex Root](README.md)
 - **Key Artifacts**:
-    - [Agent Guide](AGENTS.md) - Technical documentation for AI agents
-    - [Functional Spec](SPEC.md) - Functional specification
+  - [Agent Guide](AGENTS.md) - Technical documentation for AI agents
+  - [Functional Spec](SPEC.md) - Functional specification
 - **Children**:
-    - [Source Code](src/README.md) - All modules and implementations
-    - [Documentation](docs/README.md) - User and developer guides
-    - [Scripts](scripts/README.md) - Automation and orchestration utilities
+  - [Source Code](src/README.md) - All modules and implementations
+  - [Documentation](docs/README.md) - User and developer guides
+  - [Scripts](scripts/README.md) - Automation and orchestration utilities
 
 ## Documentation
 
 Comprehensive documentation for users, developers, and contributors. All documentation is organized in the [docs/](docs/README.md) directory.
 
 ### Getting Started
+
 - **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
 - **[Installation Guide](docs/getting-started/installation.md)** - Detailed installation instructions
 - **[Setup Guide](docs/getting-started/setup.md)** - Environment configuration and setup
 - **[Tutorials](docs/getting-started/tutorials/)** - Step-by-step tutorials including [Creating a Module](docs/getting-started/tutorials/creating-a-module.md)
 
 ### Architecture & Design
+
 - **[Architecture Overview](docs/project/architecture.md)** - System design and principles
 - **[Module System](docs/modules/overview.md)** - Module architecture and relationships
 - **[Module Dependencies](docs/modules/dependency-graph.md)** - Dependency graph and relationships
 - **[Module Relationships](docs/modules/relationships.md)** - How modules interact
 
-### Development
+### Development Resources
+
 - **[Contributing Guide](docs/project/contributing.md)** - Development guidelines and workflow
 - **[Development Environment](docs/development/environment-setup.md)** - Setting up your development environment
 - **[Testing Strategy](docs/development/testing-strategy.md)** - Testing approaches and best practices
@@ -990,11 +1018,13 @@ Comprehensive documentation for users, developers, and contributors. All documen
 - **[UV Usage Guide](docs/development/uv-usage-guide.md)** - Using uv for package management
 
 ### Integration
+
 - **[Integration Guide](docs/integration/)** - Integrating Codomyrmex with other systems
 - **[External Systems](docs/integration/external-systems.md)** - Integration with external services
 - **[Fabric AI Integration](docs/integration/fabric-ai-integration.md)** - AI integration patterns
 
 ### Reference
+
 - **[API Reference](docs/reference/api.md)** - Complete API documentation
 - **[CLI Reference](docs/reference/cli.md)** - Command-line interface documentation
 - **[Troubleshooting](docs/reference/troubleshooting.md)** - Common issues and solutions
@@ -1003,16 +1033,19 @@ Comprehensive documentation for users, developers, and contributors. All documen
 - **[Security Guide](docs/reference/security.md)** - Security best practices
 
 ### Deployment
+
 - **[Deployment Guide](docs/deployment/)** - Production deployment instructions
 - **[Production Setup](docs/deployment/production.md)** - Production environment configuration
 
-### Project Orchestration
+### Workflow Orchestration
+
 - **[Project Lifecycle](docs/project_orchestration/project-lifecycle-guide.md)** - Managing project workflows
 - **[Workflow Configuration](docs/project_orchestration/workflow-configuration-schema.md)** - Workflow schemas
 - **[Task Orchestration](docs/project_orchestration/task-orchestration-guide.md)** - Task management
 - **[Logistics Module](src/codomyrmex/logistics/)** - Orchestration, task management, and scheduling
 
 ### Examples
+
 - **[Example Scripts](docs/examples/)** - Working examples and demonstrations
 - **[Basic Examples](docs/examples/basic-examples.md)** - Simple usage examples
 - **[Integration Examples](docs/examples/integration-examples.md)** - Integration patterns
@@ -1056,6 +1089,7 @@ See **[Creating a Module Tutorial](docs/getting-started/tutorials/creating-a-mod
 ## Contributing
 
 We welcome contributions! Please see our **[Contributing Guide](docs/project/contributing.md)** for:
+
 - Code standards and best practices
 - Development workflow
 - Pull request process
@@ -1065,6 +1099,7 @@ We welcome contributions! Please see our **[Contributing Guide](docs/project/con
 ## Security
 
 Security is a priority. See **[SECURITY.md](SECURITY.md)** for:
+
 - Vulnerability reporting
 - Security best practices
 - Module-specific security considerations
@@ -1140,7 +1175,7 @@ graph TD
 
     subgraph orchestrationLayer ["Orchestration Layer"]
         SystemDiscovery["System Discovery: Module Loading"]
-        ProjectOrchestrator["Project Orchestrator: Workflow Planning"]
+        Orchestrator["Orchestrator: Workflow Planning"]
         TaskScheduler["Task Scheduler: Parallel Execution"]
     end
 
@@ -1312,6 +1347,8 @@ pie title Module Development Status (January 2026)
     "Planning" : 4
 ```
 
+| Level | Description | Example Modules |
+| :--- | :--- | :--- |
 | **Production Ready** | Fully tested, documented, stable APIs | logging_monitoring, environment_setup, terminal_interface |
 | **Beta** | Core functionality complete, API stabilization | agents, static_analysis, code |
 | **Alpha** | Basic functionality, APIs may change | spatial, physical_management, system_discovery |

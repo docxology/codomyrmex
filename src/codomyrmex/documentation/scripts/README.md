@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for scripts.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
@@ -104,7 +104,5 @@ Documentation files and guides for scripts.
 - `verify_module_docs.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [documentation](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Project Root**: ../../../../README.md

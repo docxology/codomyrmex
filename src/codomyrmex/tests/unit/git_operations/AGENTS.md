@@ -3,18 +3,22 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Test files and validation suites for git_operations.
+Test files and validation suites.
 
 ## Active Components
 - `README.md` – Project file
 - `SPEC.md` – Project file
+- `api/` – Directory containing api components
 - `conftest.py` – Project file
+- `core/` – Directory containing core components
 - `integration/` – Directory containing integration components
 - `test_git_operations.py` – Project file
 - `test_git_operations_advanced.py` – Project file
 - `test_git_operations_comprehensive.py` – Project file
 - `test_github_operations_comprehensive.py` – Project file
+- `test_repo_cli.py` – Project file
 - `test_repository_manager.py` – Project file
+- `test_repository_performance.py` – Project file
 - `unit/` – Directory containing unit components
 
 ## Operating Contracts
@@ -23,7 +27,5 @@ Test files and validation suites for git_operations.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

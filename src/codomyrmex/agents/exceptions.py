@@ -1,0 +1,30 @@
+"""Agent exceptions shim for backward compatibility."""
+from codomyrmex.agents.core.exceptions import (
+    AgentError,
+    AgentTimeoutError,
+    AgentConfigurationError,
+    JulesError,
+    ClaudeError,
+    CodexError,
+    OpenCodeError,
+    GeminiError,
+    MistralVibeError,
+    EveryCodeError,
+    ConfigError,
+    SessionError,
+)
+
+__all__ = [
+    "AgentError",
+    "AgentTimeoutError",
+    "AgentConfigurationError",
+    "JulesError",
+    "ClaudeError",
+    "CodexError",
+    "OpenCodeError",
+    "GeminiError",
+    "MistralVibeError",
+    "EveryCodeError",
+    "ConfigError",
+    "SessionError",
+]

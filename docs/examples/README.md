@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for examples.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
@@ -14,7 +14,5 @@ Documentation files and guides for examples.
 - `orchestration-examples.md` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../README.md

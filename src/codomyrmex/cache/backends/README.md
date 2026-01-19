@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module components and implementation for backends..
+Contains components for the src system.
 
 ## Directory Contents
 - `README.md` – File
@@ -15,7 +15,5 @@ Module components and implementation for backends..
 - `redis_backend.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cache](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Project Root**: ../../../../README.md

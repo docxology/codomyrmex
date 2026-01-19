@@ -6,8 +6,10 @@
 Example implementations and demonstrations.
 
 ## Active Components
+- `API_SPECIFICATION.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
+- `__init__.py` – Project file
 - `config_validation_report.json` – Project file
 - `link_check_report.json` – Project file
 
@@ -17,7 +19,5 @@ Example implementations and demonstrations.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

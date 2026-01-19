@@ -12,7 +12,7 @@ from typing import Any
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities, AgentResponse
 from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
 from codomyrmex.agents.generic import AgentOrchestrator
-from codomyrmex.agents.exceptions import OpenCodeError
+from codomyrmex.agents.core.exceptions import OpenCodeError
 from codomyrmex.tests.unit.agents.helpers import OPENCODE_AVAILABLE
 
 

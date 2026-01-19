@@ -11,7 +11,7 @@ from typing import Any
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities
 from codomyrmex.agents.gemini import GeminiClient, GeminiIntegrationAdapter
 from codomyrmex.agents.generic import AgentOrchestrator
-from codomyrmex.agents.exceptions import GeminiError
+from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
 
 

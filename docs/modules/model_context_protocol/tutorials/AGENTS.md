@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Documentation files and guides for tutorials.
+Documentation files and guides.
 
 ## Active Components
 - `01_implementing_an_mcp_tool.md` – Project file
@@ -16,7 +16,5 @@ Documentation files and guides for tutorials.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [model_context_protocol](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

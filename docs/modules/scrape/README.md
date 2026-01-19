@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for scrape.
+Documentation files and guides.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -13,7 +13,5 @@ Documentation files and guides for scrape.
 - `USAGE_EXAMPLES.md` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../../README.md

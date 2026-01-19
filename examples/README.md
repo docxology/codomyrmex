@@ -12,6 +12,4 @@ Example implementations and demonstrations.
 - `coverage_report.json` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../README.md)
+- **Project Root**: ../README.md

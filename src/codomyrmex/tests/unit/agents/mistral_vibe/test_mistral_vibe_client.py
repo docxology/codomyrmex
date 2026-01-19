@@ -8,10 +8,11 @@ conversion logic is tested with real data structures.
 import pytest
 from pathlib import Path
 from typing import Any
+import os
 
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities
 from codomyrmex.agents.mistral_vibe import MistralVibeClient
-from codomyrmex.agents.exceptions import MistralVibeError
+from codomyrmex.agents.core.exceptions import MistralVibeError
 from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
 
 
@@ -42,7 +43,7 @@ class TestMistralVibeClient:
         assert AgentCapabilities.STREAMING in capabilities
         assert AgentCapabilities.MULTI_TURN in capabilities
 
-    @pytest.mark.skipif(not VIBE_AVAILABLE, reason="vibe CLI not installed")
+    @pytest.mark.skipif(not VIBE_AVAILABLE or not os.getenv("MISTRAL_API_KEY"), reason="vibe CLI not installed or not configured")
     def test_mistral_vibe_client_execute_success(self):
         """Test successful execution of Mistral Vibe command with real CLI."""
         client = MistralVibeClient()
@@ -54,6 +55,7 @@ class TestMistralVibeClient:
         # Note: Actual success depends on authentication and CLI state
         # We test that the response structure is correct
 
+    @pytest.mark.skipif(not VIBE_AVAILABLE, reason="vibe CLI not installed")
     def test_mistral_vibe_client_execute_failure_invalid_command(self):
         """Test handling when command is not found."""
         # Use invalid command to trigger real FileNotFoundError
@@ -139,7 +141,7 @@ class TestMistralVibeClient:
         
         client = MistralVibeClient(config=config)
         
-        assert client.vibe_command == "custom-vibe"
+        assert client.command == "custom-vibe"
         assert client.timeout == 120
 
     def test_mistral_vibe_client_request_validation(self):
@@ -148,7 +150,7 @@ class TestMistralVibeClient:
         
         # Test empty prompt validation
         empty_request = AgentRequest(prompt="")
-        errors = client.validate_request(empty_request)
-        assert len(errors) > 0
-        assert any("empty" in error.lower() for error in errors)
-
+        response = client.execute(empty_request)
+        assert not response.is_success()
+        assert "Prompt is required" in response.error
+        assert "empty" in response.error.lower()

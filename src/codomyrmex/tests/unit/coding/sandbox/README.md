@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites for sandbox.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
@@ -13,7 +13,5 @@ Test files and validation suites for sandbox.
 - `unit/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [coding](../README.md)
-- **Project Root**: [README](../../../../../../README.md)
+- **Project Root**: ../../../../../../README.md

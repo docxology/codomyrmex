@@ -2,8 +2,7 @@
 
 import pytest
 
-from codomyrmex.fpf.extractor import FPFExtractor
-from codomyrmex.fpf.models import FPFSpec, Pattern, PatternStatus
+from codomyrmex.fpf import FPFExtractor, FPFSpec, Pattern, PatternStatus
 
 
 def test_extractor_initialization():

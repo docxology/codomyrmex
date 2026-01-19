@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for module_template.
+Documentation files and guides.
 
 ## Directory Contents
 - `AGENTS_ROOT_TEMPLATE.md` – File
@@ -16,7 +16,5 @@ Documentation files and guides for module_template.
 - `tutorials/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../../README.md

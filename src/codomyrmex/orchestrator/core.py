@@ -8,6 +8,7 @@ This module provides:
 """
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring.logger_config import LogContext, PerformanceLogger
 
 logger = get_logger(__name__)
 
@@ -144,6 +145,7 @@ Examples:
         return 0 if success else 1
     
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+    perf_logger = PerformanceLogger("orchestrator.performance")
     
     print_section("SCRIPT ORCHESTRATOR")
     print_info(f"Scripts directory: {scripts_dir}")
@@ -196,115 +198,138 @@ Examples:
         print(f"ℹ️  Skipped by config: {skipped_count}")
         return 0
     
-    # Execute scripts
-    print_section("Executing Scripts", separator="-")
-    print_info(f"Timeout per script: {args.timeout}s")
-    print()
-    
-    results = []
-    progress = ProgressReporter(total=len(scripts), prefix="Progress")
-    
-    for i, script in enumerate(scripts, 1):
-        relative_path = script.relative_to(scripts_dir)
-        progress.update(message=f"Running {relative_path}")
+    # Execute scripts with LogContext for correlation ID
+    with LogContext(correlation_id=run_id) as ctx:
+        logger.info("Orchestrator run started", extra={
+            "event": "RUN_STARTED",
+            "run_id": run_id,
+            "scripts_dir": str(scripts_dir),
+            "scripts_count": len(scripts),
+            "timeout": args.timeout,
+        })
+        perf_logger.start_timer("full_run", {"scripts_count": len(scripts)})
         
-        if args.verbose:
-            timestamp = datetime.now().strftime("%H:%M:%S")
-            print(f"\n[{timestamp}] [{i}/{len(scripts)}] Running: {relative_path}")
+        print_section("Executing Scripts", separator="-")
+        print_info(f"Timeout per script: {args.timeout}s")
+        print()
+        
+        results = []
+        progress = ProgressReporter(total=len(scripts), prefix="Progress")
+    
+        for i, script in enumerate(scripts, 1):
+            relative_path = script.relative_to(scripts_dir)
+            progress.update(message=f"Running {relative_path}")
             
-        # Get script config
-        script_config = get_script_config(script, scripts_dir, config)
-        
-        # Check if skipped
-        if script_config.get("skip"):
-            # Add skipped result
-            results.append({
-                "script": str(script),
-                "name": script.name,
-                "subdirectory": script.parent.name,
-                "status": "skipped",
-                "execution_time": 0.0,
-                "start_time": datetime.now().isoformat(),
-                "end_time": datetime.now().isoformat(),
-                "error": script_config.get('skip_reason', 'Configured to skip'),
-                "stdout": "",
-                "stderr": "", 
-                "exit_code": None
-            })
-            continue
-        
-        result = run_script(
-            script,
-            timeout=args.timeout,
-            cwd=scripts_dir.parent,  # Run from project root
-            config=script_config
-        )
-        
-        # Save individual log
-        log_file = save_log(result, args.output_dir, run_id)
-        result["log_file"] = str(log_file)
-        
-        results.append(result)
-        
-        # Show status
-        timestamp = datetime.now().strftime("%H:%M:%S")
-        if result["status"] == "passed":
             if args.verbose:
-                print_success(f"  [{timestamp}] {result['name']} ({result['execution_time']:.1f}s)")
-        elif result["status"] == "failed":
-            print_error(f"  [{timestamp}] {result['name']} (exit code {result['exit_code']})")
-        elif result["status"] == "timeout":
-            print_warning(f"  [{timestamp}] {result['name']} (timeout after {args.timeout}s)")
-        else:
-            print_error(f"  [{timestamp}] {result['name']} ({result['error']})")
-    
-    progress.complete("Done")
-    
-    # Generate summary report
-    print_section("Summary Report", separator="=")
-    summary = generate_report(results, args.output_dir, run_id)
-    
-    print(f"\nTotal Scripts: {summary['total_scripts']}")
-    print_with_color(f"  Passed:  {summary['passed']}", "green")
-    print_with_color(f"  Failed:  {summary['failed']}", "red" if summary['failed'] > 0 else "default")
-    print_with_color(f"  Timeout: {summary['timeout']}", "yellow" if summary['timeout'] > 0 else "default")
-    print_with_color(f"  Error:   {summary['error']}", "red" if summary['error'] > 0 else "default")
-    print(f"\nTotal Execution Time: {summary['total_execution_time']:.1f}s")
-    
-    # By subdirectory breakdown
-    print("\nBy Subdirectory:")
-    for subdir, stats in sorted(summary["by_subdirectory"].items()):
-        status = "✅" if stats["failed"] == 0 else "❌"
-        print(f"  {status} {subdir}: {stats['passed']}/{stats['total']} passed")
+                timestamp = datetime.now().strftime("%H:%M:%S")
+                print(f"\n[{timestamp}] [{i}/{len(scripts)}] Running: {relative_path}")
+                
+            # Get script config
+            script_config = get_script_config(script, scripts_dir, config)
+            
+            # Check if skipped
+            if script_config.get("skip"):
+                # Add skipped result
+                results.append({
+                    "script": str(script),
+                    "name": script.name,
+                    "subdirectory": script.parent.name,
+                    "status": "skipped",
+                    "execution_time": 0.0,
+                    "start_time": datetime.now().isoformat(),
+                    "end_time": datetime.now().isoformat(),
+                    "error": script_config.get('skip_reason', 'Configured to skip'),
+                    "stdout": "",
+                    "stderr": "", 
+                    "exit_code": None
+                })
+                continue
+            
+            result = run_script(
+                script,
+                timeout=args.timeout,
+                cwd=scripts_dir.parent,  # Run from project root
+                config=script_config
+            )
+            
+            # Save individual log
+            log_file = save_log(result, args.output_dir, run_id)
+            result["log_file"] = str(log_file)
+            
+            results.append(result)
+            
+            # Show status
+            timestamp = datetime.now().strftime("%H:%M:%S")
+            if result["status"] == "passed":
+                if args.verbose:
+                    print_success(f"  [{timestamp}] {result['name']} ({result['execution_time']:.1f}s)")
+            elif result["status"] == "failed":
+                print_error(f"  [{timestamp}] {result['name']} (exit code {result['exit_code']})")
+            elif result["status"] == "timeout":
+                print_warning(f"  [{timestamp}] {result['name']} (timeout after {args.timeout}s)")
+            else:
+                print_error(f"  [{timestamp}] {result['name']} ({result['error']})")
+        
+        progress.complete("Done")
+        
+        # Generate summary report
+        print_section("Summary Report", separator="=")
+        summary = generate_report(results, args.output_dir, run_id)
+        
+        # Log RUN_COMPLETED event
+        run_duration = perf_logger.end_timer("full_run")
+        logger.info("Orchestrator run completed", extra={
+            "event": "RUN_COMPLETED",
+            "run_id": run_id,
+            "total_scripts": summary["total_scripts"],
+            "passed": summary["passed"],
+            "failed": summary["failed"],
+            "timeout": summary["timeout"],
+            "error": summary["error"],
+            "total_execution_time": summary["total_execution_time"],
+        })
+        
+        print(f"\nTotal Scripts: {summary['total_scripts']}")
+        print_with_color(f"  Passed:  {summary['passed']}", "green")
+        print_with_color(f"  Failed:  {summary['failed']}", "red" if summary['failed'] > 0 else "default")
+        print_with_color(f"  Timeout: {summary['timeout']}", "yellow" if summary['timeout'] > 0 else "default")
+        print_with_color(f"  Error:   {summary['error']}", "red" if summary['error'] > 0 else "default")
+        print(f"\nTotal Execution Time: {summary['total_execution_time']:.1f}s")
+        
+        # By subdirectory breakdown
+        print("\nBy Subdirectory:")
+        for subdir, stats in sorted(summary["by_subdirectory"].items()):
+            status = "✅" if stats["failed"] == 0 else "❌"
+            print(f"  {status} {subdir}: {stats['passed']}/{stats['total']} passed")
 
-    # Top Slowest Scripts
-    print_section("Top 5 Slowest Scripts", separator="-")
-    slowest = sorted(results, key=lambda x: x["execution_time"], reverse=True)[:5]
-    for r in slowest:
-         print(f"  {r['execution_time']:.2f}s: {r['subdirectory']}/{r['name']}")
-    
-    print(f"\nLogs saved to: {args.output_dir / run_id}")
-    print(f"Summary report: {args.output_dir / run_id / 'summary.json'}")
-    
-    # Show failed scripts
-    failed = [r for r in results if r["status"] not in ("passed", "skipped")]
-    if failed:
-        print_section("Failed Scripts", separator="-")
-        for r in failed:
-            print(f"  ❌ {r['subdirectory']}/{r['name']}")
-            if r["error"]:
-                print(f"     Error: {r['error']}")
-            elif r["stderr"]:
-                # Show last line of stderr for better context (usually the Exception)
-                lines = r["stderr"].strip().split("\n")
-                last_line = lines[-1] if lines else ""
-                print(f"     {last_line}")
-                # Also show the line before if it helps (e.g. "SyntaxError: ...")
-                if len(lines) > 1 and "Traceback" not in lines[-1]:
-                     print(f"     {lines[-2]}")
-    
-    # Return non-zero if any failed
-    return 1 if summary["failed"] + summary["error"] + summary["timeout"] > 0 else 0
+        # Top Slowest Scripts
+        print_section("Top 5 Slowest Scripts", separator="-")
+        slowest = sorted(results, key=lambda x: x["execution_time"], reverse=True)[:5]
+        for r in slowest:
+             print(f"  {r['execution_time']:.2f}s: {r['subdirectory']}/{r['name']}")
+        
+        print(f"\nLogs saved to: {args.output_dir / run_id}")
+        print(f"Summary report: {args.output_dir / run_id / 'summary.json'}")
+        
+        # Show failed scripts
+        failed = [r for r in results if r["status"] not in ("passed", "skipped")]
+        if failed:
+            print_section("Failed Scripts", separator="-")
+            for r in failed:
+                print(f"  ❌ {r['subdirectory']}/{r['name']}")
+                if r["error"]:
+                    print(f"     Error: {r['error']}")
+                elif r["stderr"]:
+                    # Show last line of stderr for better context (usually the Exception)
+                    lines = r["stderr"].strip().split("\n")
+                    last_line = lines[-1] if lines else ""
+                    print(f"     {last_line}")
+                    # Also show the line before if it helps (e.g. "SyntaxError: ...")
+                    if len(lines) > 1 and "Traceback" not in lines[-1]:
+                         print(f"     {lines[-2]}")
+        
+        # Return non-zero if any failed
+        return 1 if summary["failed"] + summary["error"] + summary["timeout"] > 0 else 0
 
 
 if __name__ == "__main__":

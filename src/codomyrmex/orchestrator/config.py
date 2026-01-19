@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Dict, Any
 import json
+import yaml
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -45,14 +46,26 @@ logger = get_logger(__name__)
 
 def load_config(scripts_dir: Path) -> Dict[str, Any]:
     """Load script configuration."""
+    # Try YAML first
+    for name in ["config.yaml", "config.yml"]:
+        config_path = scripts_dir / name
+        if config_path.exists():
+            try:
+                with open(config_path, "r") as f:
+                    return yaml.safe_load(f) or {}
+            except Exception as e:
+                logger.warning(f"Failed to load YAML config {config_path}: {e}")
+    
+    # Fallback to JSON
     config_path = scripts_dir / "scripts_config.json"
     if config_path.exists():
         try:
             with open(config_path, "r") as f:
                 return json.load(f)
         except Exception as e:
-            pass
-    return {"default": {}, "scripts": {}}
+            logger.warning(f"Failed to load JSON config {config_path}: {e}")
+            
+    return {"skip": [], "timeout_override": {}, "scripts": {}}
 
 def get_script_config(script_path: Path, scripts_dir: Path, global_config: Dict[str, Any]) -> Dict[str, Any]:
     """Get configuration for a specific script."""
@@ -60,15 +73,26 @@ def get_script_config(script_path: Path, scripts_dir: Path, global_config: Dict[
     
     config = global_config.get("default", {}).copy()
     
-    # Direct match
-    if rel_path in global_config.get("scripts", {}):
-        config.update(global_config["scripts"][rel_path])
-        return config
-        
-    # Check if any key in config ends with the script name or relative path
-    for key, val in global_config.get("scripts", {}).items():
-        if rel_path.endswith(key):
-            config.update(val)
-            return config
+    # Check skips
+    skip_list = global_config.get("skip", [])
+    if rel_path in skip_list:
+        config["skip"] = True
+        config["skip_reason"] = "Listed in skip configuration"
+    
+    # Check timeout overrides
+    timeout_overrides = global_config.get("timeout_override", {})
+    if rel_path in timeout_overrides:
+        config["timeout"] = timeout_overrides[rel_path]
+    
+    # Traditional scripts section (backwards compatibility)
+    scripts_config = global_config.get("scripts", {})
+    if rel_path in scripts_config:
+        config.update(scripts_config[rel_path])
+    else:
+        # Check partial matches
+        for key, val in scripts_config.items():
+            if rel_path.endswith(key):
+                config.update(val)
+                break
             
     return config

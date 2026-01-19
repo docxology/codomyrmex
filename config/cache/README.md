@@ -14,7 +14,5 @@ Configuration files and templates.
 - `policies.yaml` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [config](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../README.md

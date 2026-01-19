@@ -11,12 +11,9 @@ Example implementations and demonstrations.
 - `coverage_report.json` – Project file
 
 ## Operating Contracts
-- `output/` – Directory for output components.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **🏠 Project Root**: [README](../README.md) - Main project documentation
+- **🏠 Project Root**: ../README.md - Main project documentation

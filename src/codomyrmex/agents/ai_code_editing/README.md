@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module components and implementation for ai_code_editing..
+Contains components for the src system.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -18,13 +18,12 @@ Module components and implementation for ai_code_editing..
 - `__init__.py` – File
 - `ai_code_helpers.py` – File
 - `claude_task_master.py` – File
+- `code_editor.py` – File
 - `droid_manager.py` – File
 - `openai_codex.py` – File
 - `prompt_composition.py` – File
 - `requirements.txt` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [agents](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Project Root**: ../../../../README.md

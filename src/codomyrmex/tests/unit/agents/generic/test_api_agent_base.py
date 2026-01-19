@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import Mock, MagicMock, patch
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.exceptions import AgentError, AgentConfigurationError
+from codomyrmex.agents.core.exceptions import AgentError, AgentConfigurationError
 from codomyrmex.agents.generic import APIAgentBase
 from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
 
@@ -16,13 +16,13 @@ class TestAPIAgentBase(APIAgentBase):
         self,
         config=None,
         agent_config=None,
-        client_class=None,
+        client_class="SENTINEL",
         client_init_func=None,
         error_class=None,
     ):
         """Initialize test agent."""
-        # Mock client class if not provided
-        if client_class is None:
+        # Use sentinel to allow passing None
+        if client_class == "SENTINEL":
             client_class = Mock
         if client_init_func is None:
             client_init_func = lambda api_key: Mock()

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for css.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
@@ -12,7 +12,5 @@ Documentation files and guides for css.
 - `custom.css` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [src](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: ../../../../../README.md

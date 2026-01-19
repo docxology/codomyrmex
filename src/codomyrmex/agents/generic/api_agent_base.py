@@ -228,17 +228,30 @@ class APIAgentBase(BaseAgent):
 
         # Check if it's an API error class
         if api_error_class and isinstance(error, api_error_class):
-            raise self._error_class(
-                f"{self.name} API error: {api_error_str}",
-                api_error=api_error_str,
-                status_code=status_code,
-            ) from error
+            if isinstance(error, BaseException):
+                raise self._error_class(
+                    f"{self.name} API error: {api_error_str}",
+                    api_error=api_error_str,
+                    status_code=status_code,
+                ) from error
+            else:
+                raise self._error_class(
+                    f"{self.name} API error: {api_error_str}",
+                    api_error=api_error_str,
+                    status_code=status_code,
+                )
 
         # Generic error
-        raise self._error_class(
-            f"Unexpected error: {api_error_str}",
-            api_error=api_error_str,
-        ) from error
+        if isinstance(error, BaseException):
+            raise self._error_class(
+                f"Unexpected error: {api_error_str}",
+                api_error=api_error_str,
+            ) from error
+        else:
+            raise self._error_class(
+                f"Unexpected error: {api_error_str}",
+                api_error=api_error_str,
+            )
 
     def _extract_tokens_from_response(
         self, response: Any, provider: str

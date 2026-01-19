@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module components and implementation for module_template..
+Contains components for the src system.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -16,9 +16,8 @@ Module components and implementation for module_template..
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
 - `requirements.template.txt` – File
+- `scaffold.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

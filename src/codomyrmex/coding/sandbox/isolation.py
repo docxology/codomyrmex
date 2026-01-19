@@ -62,13 +62,25 @@ def resource_limits_context(limits: ExecutionLimits):
         # Set CPU time limit (soft limit)
         soft, hard = resource.getrlimit(resource.RLIMIT_CPU)
         old_limits[resource.RLIMIT_CPU] = (soft, hard)
-        resource.setrlimit(resource.RLIMIT_CPU, (limits.time_limit, hard))
+        if hard != resource.RLIM_INFINITY:
+             limited_time = min(limits.time_limit, hard)
+        else:
+             limited_time = limits.time_limit
+        try:
+            resource.setrlimit(resource.RLIMIT_CPU, (limited_time, hard))
+        except (ValueError, OSError) as e:
+            logger.warning(f"Failed to set CPU limit: {e}")
 
         # Set memory limit (address space)
         soft, hard = resource.getrlimit(resource.RLIMIT_AS)
         old_limits[resource.RLIMIT_AS] = (soft, hard)
         memory_bytes = limits.memory_limit * 1024 * 1024  # Convert MB to bytes
-        resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+        if hard != resource.RLIM_INFINITY:
+            memory_bytes = min(memory_bytes, hard)
+        try:
+            resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+        except (ValueError, OSError) as e:
+            logger.warning(f"Failed to set memory limit: {e}")
 
         yield
 

@@ -4,7 +4,7 @@ import shutil
 import sys
 import tempfile
 
-from conftest import FunctionName, ClassName
+# from conftest import FunctionName, ClassName
 import pytest
 
 

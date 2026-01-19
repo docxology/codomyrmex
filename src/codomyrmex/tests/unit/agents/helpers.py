@@ -66,8 +66,16 @@ def check_tool_available(command: str, help_flag: str = "--help") -> bool:
         return False
 
 
-# Check availability of CLI tools at module level
-GEMINI_AVAILABLE = check_tool_available("gemini")
+# Check availability of CLI tools and SDKs at module level
+try:
+    import google.genai as genai
+    SDK_AVAILABLE = True
+except ImportError:
+    SDK_AVAILABLE = False
+
+import os
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_AVAILABLE = (SDK_AVAILABLE and GEMINI_API_KEY is not None) or check_tool_available("gemini")
 JULES_AVAILABLE = check_tool_available("jules")
 OPENCODE_AVAILABLE = check_tool_available("opencode")
 VIBE_AVAILABLE = check_tool_available("vibe")

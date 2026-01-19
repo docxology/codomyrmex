@@ -14,7 +14,5 @@ Example implementations and demonstrations.
 - `sqlite-example.yaml` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [database](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

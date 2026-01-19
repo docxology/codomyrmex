@@ -104,6 +104,13 @@ def run_script(
         "error": None,
     }
     
+    # Log SCRIPT_START event
+    logger.info(f"Script execution started: {script_path.name}", extra={
+        "event": "SCRIPT_START",
+        "script": str(script_path),
+        "subdirectory": script_path.parent.name,
+    })
+    
     start_time = time.time()
     
     # Prepare environment
@@ -194,7 +201,15 @@ def run_script(
     result["execution_time"] = time.time() - start_time
     result["end_time"] = datetime.now().isoformat()
     
-    result["end_time"] = datetime.now().isoformat()
+    # Log SCRIPT_END event
+    logger.info(f"Script execution completed: {script_path.name}", extra={
+        "event": "SCRIPT_END",
+        "script": str(script_path),
+        "subdirectory": script_path.parent.name,
+        "status": result["status"],
+        "exit_code": result["exit_code"],
+        "execution_time": result["execution_time"],
+    })
     
     return result
 

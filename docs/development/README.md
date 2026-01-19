@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for development.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
@@ -15,7 +15,5 @@ Documentation files and guides for development.
 - `uv-usage-guide.md` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../README.md

@@ -9,6 +9,14 @@ from pathlib import Path
 import tempfile
 import os
 import time
+import sys
+import subprocess
+import unittest
+from unittest.mock import patch, MagicMock
+import sys
+import subprocess
+import unittest
+from unittest.mock import patch, MagicMock
 
 from codomyrmex.ide import (
     IDEClient, 
@@ -259,7 +267,134 @@ class TestAntigravityClient:
         client = AntigravityClient()
         with pytest.raises(ArtifactError):
             client.delete_artifact("test")
-    
+
+    def test_create_artifact_success(self):
+        """create_artifact should successfully create file on disk."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Setup
+            client = AntigravityClient(artifact_dir=tmpdir)
+            
+            # Create a dummy conversation dir to allow connection
+            conv_id = "test_conv_id"
+            (Path(tmpdir) / conv_id).mkdir()
+            
+            client.connect()
+            
+            # Test creation
+            result = client.create_artifact(
+                name="test_artifact", 
+                content="# Test Content", 
+                artifact_type="task"
+            )
+            
+            # Verification
+            assert result["created"] is True
+            assert result["name"] == "test_artifact"
+            
+            artifact_path = Path(tmpdir) / conv_id / "test_artifact.md"
+            assert artifact_path.exists()
+            assert artifact_path.read_text() == "# Test Content"
+            
+            # Verify context update
+            assert client.get_artifact("test_artifact") is not None
+
+    def test_update_artifact_success(self):
+        """update_artifact should successfully update file on disk."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Setup
+            client = AntigravityClient(artifact_dir=tmpdir)
+            conv_id = "test_conv_id"
+            conv_dir = Path(tmpdir) / conv_id
+            conv_dir.mkdir()
+            
+            # Create initial artifact
+            (conv_dir / "test_artifact.md").write_text("Initial")
+            
+            client.connect()
+            
+            # Test update
+            result = client.update_artifact("test_artifact", "Updated Content")
+            
+            # Verification
+            assert result["updated"] is True
+            assert (conv_dir / "test_artifact.md").read_text() == "Updated Content"
+
+    def test_delete_artifact_success(self):
+        """delete_artifact should successfully remove file from disk."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Setup
+            client = AntigravityClient(artifact_dir=tmpdir)
+            conv_id = "test_conv_id"
+            conv_dir = Path(tmpdir) / conv_id
+            conv_dir.mkdir()
+            
+            # Create artifact
+            (conv_dir / "to_delete.md").write_text("Bye")
+            
+            client.connect()
+            
+            # Test deletion
+            result = client.delete_artifact("to_delete")
+            
+            # Verification
+            assert result is True
+            assert not (conv_dir / "to_delete.md").exists()
+            
+            # Verify context update
+            assert client.get_artifact("to_delete") is None
+
+    @patch("codomyrmex.ide.antigravity.shutil.which")
+    @patch("codomyrmex.ide.antigravity.subprocess.run")
+    def test_send_chat_message_cli_success(self, mock_run, mock_which):
+        """send_chat_message should use CLI when available."""
+        mock_which.return_value = "/usr/bin/agy"
+        
+        client = AntigravityClient()
+        # Connect strictly speaking not needed for CLI path, but good practice
+        # However, the code checks CLI *before* connection status for that path?
+        # Let's check code: Yes, CLI check is first.
+        
+        result = client.send_chat_message("Hello CLI")
+        
+        assert result.success is True
+        assert "chat" in result.command
+        assert result.output["method"] == "cli"
+        mock_run.assert_called_once()
+        args = mock_run.call_args[0][0]
+        assert args == ["/usr/bin/agy", "chat", "--reuse-window", "Hello CLI"]
+
+    @patch("codomyrmex.ide.antigravity.shutil.which")
+    def test_send_chat_message_no_cli_fallback(self, mock_which):
+        """send_chat_message should fallback to notify_user if CLI missing."""
+        mock_which.return_value = None
+        
+        with tempfile.TemporaryDirectory() as tmpdir:
+            client = AntigravityClient(artifact_dir=tmpdir)
+            (Path(tmpdir) / "conv_id").mkdir()
+            client.connect()
+            
+            result = client.send_chat_message("Hello Fallback")
+            
+            assert result.success is True
+            assert result.command == "notify_user"
+            assert result.output["args"]["Message"] == "Hello Fallback"
+
+    @patch("codomyrmex.ide.antigravity.shutil.which")
+    @patch("codomyrmex.ide.antigravity.subprocess.run")
+    def test_send_chat_message_cli_failure_fallback(self, mock_run, mock_which):
+        """send_chat_message should fallback if CLI fails."""
+        mock_which.return_value = "/usr/bin/agy"
+        mock_run.side_effect = subprocess.CalledProcessError(1, ["agy"], stderr=b"Error")
+        
+        with tempfile.TemporaryDirectory() as tmpdir:
+            client = AntigravityClient(artifact_dir=tmpdir)
+            (Path(tmpdir) / "conv_id").mkdir()
+            client.connect()
+            
+            result = client.send_chat_message("Hello Error")
+            
+            assert result.success is True
+            assert result.command == "notify_user"
     def test_get_tool_info_known_tool(self):
         """get_tool_info should return info for known tools."""
         client = AntigravityClient()

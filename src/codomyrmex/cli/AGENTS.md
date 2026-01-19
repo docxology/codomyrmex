@@ -1,34 +1,25 @@
-# Codomyrmex Agents — cli
+# Codomyrmex Agents — src/codomyrmex/cli
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Command-line interface for the Codomyrmex platform, providing access to all modules and workflows.
+Contains components for the src system.
 
 ## Active Components
-
-- `__init__.py` – Module exports
-- `__main__.py` – Module entry point
-- `core.py` – Main CLI implementation with argparse
-- `utils.py` – CLI utilities and terminal formatters
-- `handlers/` – Command handler implementations
-  - `ai.py` – AI command handlers
-  - `analysis.py` – Analysis command handlers
-  - `build.py` – Build command handlers
-  - `environment.py` – Environment command handlers
-  - `fpf.py` – FPF command handlers
-  - `skills.py` – Skills command handlers
+- `API_SPECIFICATION.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `__main__.py` – Project file
+- `core.py` – Project file
+- `handlers/` – Directory containing handlers components
+- `utils.py` – Project file
 
 ## Operating Contracts
-
 - Maintain alignment between code, documentation, and configured workflows.
-- Ensure all command handlers use the centralized logging from `logging_monitoring`.
-- Commands should fail gracefully with helpful error messages.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **📁 Parent Directory**: [codomyrmex](../README.md)
-- **🏠 Project Root**: [README](../../../README.md)
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module components and implementation for backends..
+Contains components for the src system.
 
 ## Directory Contents
 - `README.md` – File
@@ -13,7 +13,5 @@ Module components and implementation for backends..
 - `in_memory_queue.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [task](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: ../../../../../README.md

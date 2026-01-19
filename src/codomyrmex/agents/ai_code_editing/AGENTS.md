@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Module components and implementation for ai_code_editing..
+Contains components for the src system.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
@@ -17,6 +17,7 @@ Module components and implementation for ai_code_editing..
 - `__init__.py` – Project file
 - `ai_code_helpers.py` – Project file
 - `claude_task_master.py` – Project file
+- `code_editor.py` – Project file
 - `droid_manager.py` – Project file
 - `openai_codex.py` – Project file
 - `prompt_composition.py` – Project file
@@ -28,7 +29,5 @@ Module components and implementation for ai_code_editing..
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **📁 Parent Directory**: [agents](../README.md) - Parent directory documentation
-- **🏠 Project Root**: [README](../../../../README.md) - Main project documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

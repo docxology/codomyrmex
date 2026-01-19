@@ -4,7 +4,7 @@
 
 ## Overview
 
-Test files and validation suites for gemini.
+Test files and validation suites.
 
 ## Directory Contents
 - `README.md` – File
@@ -15,7 +15,5 @@ Test files and validation suites for gemini.
 - `test_gemini_integration.py` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [agents](../README.md)
-- **Project Root**: [README](../../../../../../README.md)
+- **Project Root**: ../../../../../../README.md

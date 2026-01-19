@@ -40,15 +40,19 @@ class CodeEditor(BaseAgent):
         For now, this is a simplified wrapper that assumes the prompt is a generation request.
         """
         try:
+            # Extract language from context, metadata or default to python
+            language = request.context.get("language") or request.metadata.get("language", "python")
+            
             # Simple dispatch based on prompt content keywords (naive routing)
-            # In a real system, we'd use intent classification
             if "refactor" in request.prompt.lower():
                 # Naively assume the context has 'code'
                 code = request.context.get("code", "") if request.context else ""
-                result = ai_code_helpers.refactor_code_snippet(code, request.prompt)
+                result_dict = ai_code_helpers.refactor_code_snippet(code, request.prompt, language=language)
+                result = result_dict.get("refactored_code", str(result_dict))
             else:
                 context_str = str(request.context) if request.context else None
-                result = ai_code_helpers.generate_code_snippet(request.prompt, context=context_str)
+                result_dict = ai_code_helpers.generate_code_snippet(request.prompt, language=language, context=context_str)
+                result = result_dict.get("generated_code", str(result_dict))
             
             return AgentResponse(content=result, request_id=request.id)
         except Exception as e:

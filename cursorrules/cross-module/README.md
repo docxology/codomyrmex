@@ -19,7 +19,5 @@ Contains components for the cursorrules system.
 - `template_module.cursorrules` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [cursorrules](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../README.md

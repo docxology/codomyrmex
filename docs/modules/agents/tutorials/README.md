@@ -4,7 +4,7 @@
 
 ## Overview
 
-Documentation files and guides for tutorials.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
@@ -13,7 +13,5 @@ Documentation files and guides for tutorials.
 - `refactor_code_snippet_tutorial.md` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [agents_ai_code_editing](../README.md)
-- **Project Root**: [README](../../../../README.md)
+- **Parent Directory**: [agents](../README.md)
+- **Project Root**: ../../../../README.md

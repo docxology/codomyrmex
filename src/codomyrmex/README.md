@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module components and implementation for codomyrmex..
+Contains components for the src system.
 
 ## Directory Contents
 - `README.md` – File
@@ -17,7 +17,7 @@ Module components and implementation for codomyrmex..
 - `cache/` – Subdirectory
 - `cerebrum/` – Subdirectory
 - `ci_cd_automation/` – Subdirectory
-- `cli.py` – File
+- `cli/` – Subdirectory
 - `cloud/` – Subdirectory
 - `coding/` – Subdirectory
 - `compression/` – Subdirectory
@@ -42,6 +42,7 @@ Module components and implementation for codomyrmex..
 - `model_context_protocol/` – Subdirectory
 - `module_template/` – Subdirectory
 - `networking/` – Subdirectory
+- `orchestrator/` – Subdirectory
 - `pattern_matching/` – Subdirectory
 - `performance/` – Subdirectory
 - `physical_management/` – Subdirectory
@@ -62,7 +63,5 @@ Module components and implementation for codomyrmex..
 - `website/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [src](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../README.md

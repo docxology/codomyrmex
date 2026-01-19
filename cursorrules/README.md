@@ -15,6 +15,4 @@ Coding standards and automation rules.
 - `modules/` – Subdirectory
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Project Root**: [README](../README.md)
+- **Project Root**: ../README.md

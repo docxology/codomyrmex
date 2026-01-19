@@ -4,20 +4,12 @@
 
 ## Overview
 
-User-facing documentation for the `tests` module. For technical details, see the source module documentation.
+Test files and validation suites.
 
-## Source Module
-
-📁 **Source Code**: [src/codomyrmex/tests/](../../../src/codomyrmex/tests/)
-
-See the source module for:
-- [README.md](../../../src/codomyrmex/tests/README.md) - Module overview
-- [AGENTS.md](../../../src/codomyrmex/tests/AGENTS.md) - Technical specifications
-- [SPEC.md](../../../src/codomyrmex/tests/SPEC.md) - Functional specification
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

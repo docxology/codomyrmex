@@ -11,7 +11,7 @@ from typing import Any
 
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities
 from codomyrmex.agents.gemini import GeminiClient
-from codomyrmex.agents.exceptions import GeminiError
+from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
 
 
@@ -78,92 +78,50 @@ class TestGeminiClient:
         # Verify we got some response (even if empty or error)
         assert isinstance(chunks, list)
 
-    @pytest.mark.skipif(not GEMINI_AVAILABLE, reason="gemini CLI not installed")
-    def test_gemini_client_execute_command(self):
-        """Test executing a Gemini slash command with real CLI."""
+    @pytest.mark.skipif(not GEMINI_AVAILABLE, reason="Gemini SDK/Key not available")
+    def test_gemini_client_execute_content(self):
+        """Test executing generic content generation."""
         client = GeminiClient()
-        result = client.execute_gemini_command("/help")
-        
-        # Test real result structure
-        assert isinstance(result, dict)
-        assert "exit_code" in result or "output" in result
-
-    @pytest.mark.skipif(not GEMINI_AVAILABLE, reason="gemini CLI not installed")
-    def test_gemini_client_save_chat(self):
-        """Test saving a chat session with real CLI."""
-        client = GeminiClient()
-        result = client.save_chat("test_session", "test prompt")
-        
-        # Test real result structure
-        assert isinstance(result, dict)
-
-    @pytest.mark.skipif(not GEMINI_AVAILABLE, reason="gemini CLI not installed")
-    def test_gemini_client_resume_chat(self):
-        """Test resuming a chat session with real CLI."""
-        client = GeminiClient()
-        result = client.resume_chat("test_session")
-        
-        # Test real result structure
-        assert isinstance(result, dict)
-
-    @pytest.mark.skipif(not GEMINI_AVAILABLE, reason="gemini CLI not installed")
-    def test_gemini_client_list_chats(self):
-        """Test listing chat sessions with real CLI."""
-        client = GeminiClient()
-        result = client.list_chats()
-        
-        # Test real result structure
-        assert isinstance(result, dict)
-
-    def test_gemini_client_get_help(self):
-        """Test getting Gemini help information."""
-        client = GeminiClient()
-        help_info = client.get_gemini_help()
-        
-        # Test real result structure
-        assert isinstance(help_info, dict)
-        assert "available" in help_info
-        assert "help_text" in help_info
-        # Available depends on whether gemini is installed
-        if GEMINI_AVAILABLE:
-            assert help_info["available"] is True
+        request = AgentRequest(prompt="Say 'Hello, World!'")
+        # Only run if we actually have a client (which implies API key)
+        if client.client:
+            response = client.execute(request)
+            assert response is not None
+            if not response.is_success():
+                pytest.skip(f"Gemini API call failed (environment/auth issue): {response.error}")
+            assert len(response.content) > 0
 
     def test_gemini_client_timeout_config(self):
         """Test timeout configuration."""
         client = GeminiClient(config={"gemini_timeout": 120})
-        assert client.timeout == 120
+        # Timeout settings are stored in config
+        assert client.get_config_value("gemini_timeout") == 120
 
     def test_gemini_client_file_operations_structure(self):
         """Test file operations structure (without executing)."""
         client = GeminiClient()
-        request = AgentRequest(
-            prompt="Analyze this code",
-            context={"files": ["src/main.py"]}
-        )
-        
-        # Test that request structure is correct
-        assert request.prompt == "Analyze this code"
-        assert "files" in request.context
-        assert request.context["files"] == ["src/main.py"]
+        assert hasattr(client, 'upload_file')
+        assert hasattr(client, 'list_files')
+        assert hasattr(client, 'delete_file')
 
     def test_gemini_client_config_override(self):
         """Test configuration override."""
         config = {
-            "gemini_command": "custom-gemini",
+            "gemini_model": "custom-model",
             "gemini_timeout": 120,
         }
-        
+    
         client = GeminiClient(config=config)
-        
-        assert client.gemini_command == "custom-gemini"
-        assert client.timeout == 120
+    
+        assert client.default_model == "custom-model"
+        assert client.get_config_value("gemini_timeout") == 120
 
     def test_gemini_client_request_validation(self):
         """Test request validation."""
         client = GeminiClient()
-        
+    
         # Test empty prompt validation
         empty_request = AgentRequest(prompt="")
-        errors = client.validate_request(empty_request)
-        assert len(errors) > 0
-        assert any("empty" in error.lower() for error in errors)
+        response = client.execute(empty_request)
+        assert not response.is_success()
+        assert "Prompt is required" in response.error

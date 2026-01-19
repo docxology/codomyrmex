@@ -1,10 +1,10 @@
-# spatial_three_d
+# spatial
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Documentation files and guides for spatial_three_d.
+Documentation files and guides.
 
 ## Directory Contents
 - `README.md` – File
@@ -13,7 +13,5 @@ Documentation files and guides for spatial_three_d.
 - `index.md` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../README.md)
+- **Project Root**: ../../../README.md

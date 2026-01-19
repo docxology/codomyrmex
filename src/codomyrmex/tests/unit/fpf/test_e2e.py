@@ -27,7 +27,7 @@ def test_e2e_load_from_file_workflow():
 
 def test_e2e_fetch_and_load_workflow():
     """Test end-to-end workflow: fetch and load."""
-    with patch("codomyrmex.fpf.fetcher.requests.get") as mock_get:
+    with patch("codomyrmex.fpf.io.fetcher.requests.get") as mock_get:
         mock_response = Mock()
         mock_response.text = """
 # First Principles Framework (FPF)

@@ -8,8 +8,9 @@ import pytest
 import time
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.generic import BaseAgent, AgentOrchestrator
-from codomyrmex.agents.exceptions import AgentError
+from codomyrmex.agents.core import BaseAgent
+from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+from codomyrmex.agents.core.exceptions import AgentError
 
 
 class TestAgent(BaseAgent):

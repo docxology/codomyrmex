@@ -269,6 +269,14 @@ class SystemDiscovery:
             logger.error(f"Failed to export inventory: {e}")
             return False
 
+    def export_full_inventory(self) -> bool:
+        """Export full inventory to default location (compatibility method)."""
+        return self.export_inventory(self.project_root / "codomyrmex_inventory.json")
+
+    def check_git_repositories(self) -> None:
+        """Check status of git repositories."""
+        self._check_git_status()
+
     def _discover_modules(self) -> None:
         """Discover all modules in the codomyrmex package."""
         print(f"\n🔎 Scanning modules in {self.codomyrmex_path}...")

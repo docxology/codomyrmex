@@ -44,10 +44,31 @@ def verify_real_methods(*, prompt: str, description: str) -> str:
     return "methods verified"
 
 
+def verify_readiness(*, prompt: str, description: str) -> str:
+    """Check the ecosystem for autonomous readiness."""
+    import os
+    from pathlib import Path
+    
+    project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+    required_dirs = ["src/codomyrmex", "scripts", "src/codomyrmex/tests"]
+    
+    missing = []
+    for d in required_dirs:
+        if not (project_root / d).exists():
+            missing.append(d)
+            
+    if missing:
+        raise RuntimeError(f"Missing required directories: {', '.join(missing)}")
+        
+    logger.info("Autonomous readiness verified", extra={"description": description})
+    return "Autonomous readiness verified"
+
+
 __all__ = [
     "ensure_documentation_exists",
     "confirm_logging_integrations",
     "verify_real_methods",
+    "verify_readiness",
 ]
 
 

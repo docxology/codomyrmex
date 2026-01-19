@@ -4,20 +4,12 @@
 
 ## Overview
 
-User-facing documentation for the `events` module. For technical details, see the source module documentation.
+Documentation files and guides.
 
-## Source Module
-
-📁 **Source Code**: [src/codomyrmex/events/](../../../src/codomyrmex/events/)
-
-See the source module for:
-- [README.md](../../../src/codomyrmex/events/README.md) - Module overview
-- [AGENTS.md](../../../src/codomyrmex/events/AGENTS.md) - Technical specifications
-- [SPEC.md](../../../src/codomyrmex/events/SPEC.md) - Functional specification
+## Directory Contents
+- `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
-
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+- **Project Root**: ../../../README.md

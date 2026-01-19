@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module components and implementation for performance..
+Contains components for the src system.
 
 ## Directory Contents
 - `README.md` – File
@@ -17,7 +17,5 @@ Module components and implementation for performance..
 - `token_generation_speed.json` – File
 
 ## Navigation
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [outputs](../README.md)
-- **Project Root**: [README](../../../../../README.md)
+- **Project Root**: ../../../../../README.md

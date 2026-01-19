@@ -8,7 +8,7 @@ import unittest
 
 import threading
 
-from codomyrmex.monitoring.performance import PerformanceMonitor
+from codomyrmex.performance.performance_monitor import PerformanceMonitor
 from codomyrmex.logistics.orchestration.project import (
 
 

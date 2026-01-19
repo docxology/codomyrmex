@@ -11,7 +11,7 @@ from typing import Any
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities
 from codomyrmex.agents.mistral_vibe import MistralVibeClient, MistralVibeIntegrationAdapter
 from codomyrmex.agents.generic import AgentOrchestrator
-from codomyrmex.agents.exceptions import MistralVibeError
+from codomyrmex.agents.core.exceptions import MistralVibeError
 from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
 
 

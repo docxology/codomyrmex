@@ -40,8 +40,15 @@ class TestGeminiClient:
         """Test generate_content execution."""
         # Setup mock response
         mock_response = MagicMock()
-        mock_response.text = "Generated text"
-        mock_response.candidates = [MagicMock(finish_reason="STOP")]
+        mock_cand = MagicMock()
+        mock_part = MagicMock()
+        mock_part.text = "Generated text"
+        mock_part.function_call = None
+        mock_part.executable_code = None
+        mock_part.code_execution_result = None
+        mock_cand.content.parts = [mock_part]
+        mock_cand.finish_reason = "STOP"
+        mock_response.candidates = [mock_cand]
         mock_response.usage_metadata.model_dump.return_value = {"total_tokens": 10}
         
         mock_genai_client.models.generate_content.return_value = mock_response

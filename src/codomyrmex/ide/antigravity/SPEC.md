@@ -9,16 +9,19 @@ Integration with Google DeepMind's Antigravity IDE, providing programmatic acces
 ## Design Principles
 
 ### Modularity
+
 - Session management separated from tool invocation
 - Artifact handling as independent component
 - Clear separation of concerns
 
 ### Internal Coherence
+
 - Consistent API surface with other IDE integrations
 - Unified error handling patterns
 - Standardized logging
 
 ### Functionality
+
 - Real working integration with Antigravity
 - Full coverage of available capabilities
 - Production-ready implementation
@@ -52,31 +55,42 @@ graph TD
 ## Functional Requirements
 
 ### Session Management
+
 1. Connect to active Antigravity session
 2. Detect session state and health
 3. Handle reconnection on failure
 4. Clean session termination
 
 ### Tool Invocation
+
 1. List available tools
 2. Invoke tools with parameters
 3. Handle tool responses
 4. Track tool execution history
 
 ### Artifact Management
+
 1. List conversation artifacts
 2. Create new artifacts
 3. Update existing artifacts
 4. Delete artifacts
 
 ### Context Access
+
 1. Read conversation context
 2. Access knowledge items
 3. Query conversation history
 
+### Chat Integration
+
+1. Send real messages to IDE chat
+2. Support CLI-based messaging (background)
+3. Support GUI-based messaging (active pane targeting)
+
 ## Interface Contracts
 
 ### AntigravityClient
+
 ```python
 class AntigravityClient(IDEClient):
     def connect(self) -> bool: ...
@@ -101,6 +115,8 @@ class AntigravityClient(IDEClient):
     def get_tool_info(self, tool_name: str) -> Optional[Dict[str, Any]]: ...
     def invoke_tool(self, tool_name: str, parameters: Dict[str, Any]) -> IDECommandResult: ...
     def get_session_stats(self) -> Dict[str, Any]: ...
+    def send_chat_message(self, message: str, **kwargs) -> IDECommandResult: ...
+    def send_chat_gui(self, message: str, app_name: str = "Antigravity") -> IDECommandResult: ...
 ```
 
 ## Navigation
