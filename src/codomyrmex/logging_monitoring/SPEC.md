@@ -9,36 +9,42 @@ Foundation module providing centralized logging infrastructure for the Codomyrme
 ## Design Principles
 
 ### Modularity
+
 - Self-contained logging system
 - Clear interface boundaries
 - Minimal external dependencies
 - Composable logging components
 
 ### Internal Coherence
+
 - Consistent log formatting
 - Unified configuration interface
 - Standardized log levels
 - Logical component organization
 
 ### Parsimony
+
 - Essential logging features only
 - Minimal configuration surface
 - Direct implementations
 - Focus on core functionality
 
 ### Functionality
+
 - Working logging system
 - Practical configuration options
 - Current best practices
 - Reliable log delivery
 
 ### Testing
+
 - Comprehensive test coverage
 - Configuration validation tests
 - Output format verification
 - Integration testing
 
 ### Documentation
+
 - Clear API documentation
 - Configuration examples
 - Usage patterns
@@ -62,7 +68,7 @@ graph TD
     subgraph "Output Layer"
         Console[Console Handler]
         File[File Handler]
-        JSON[JSON Formatter]
+        JSON[JSONFormatter]
         Text[Text Formatter]
     end
 
@@ -81,6 +87,7 @@ graph TD
 ## Functional Requirements
 
 ### Core Capabilities
+
 1. **Logging Setup**: Initialize and configure logging system
 2. **Logger Factory**: Provide logger instances for modules
 3. **Structured Logging**: JSON format for machine-readable logs
@@ -88,6 +95,7 @@ graph TD
 5. **Context Management**: Correlation IDs and context injection
 
 ### Configuration
+
 - Environment variable configuration
 - Optional configuration file support
 - Log level management
@@ -96,18 +104,21 @@ graph TD
 ## Quality Standards
 
 ### Code Quality
+
 - Type hints for all functions
 - Clear error handling
 - PEP 8 compliance
 - Comprehensive docstrings
 
 ### Testing Standards
+
 - ≥80% test coverage
 - Configuration validation tests
 - Output format verification
 - Integration tests
 
 ### Documentation Standards
+
 - Complete API documentation
 - Configuration examples
 - Usage patterns
@@ -116,12 +127,15 @@ graph TD
 ## Interface Contracts
 
 ### Public API
-- `setup_logging()` - Initialize logging system
-- `get_logger(name)` - Get logger instance
-- `log_with_context()` - Log with structured context
-- `LogContext` - Context manager for correlation IDs
+
+- `setup_logging()` - Initialize logging system with support for "TEXT" and "JSON" outputs.
+- `get_logger(name)` - Get logger instance.
+- `JSONFormatter` - Standardized JSON log formatter (legacy `JsonFormatter` alias removed).
+- `log_with_context()` - Log with structured context.
+- `LogContext` - Context manager for correlation IDs.
 
 ### Configuration Interface
+
 - Environment variables: `CODOMYRMEX_LOG_*`
 - Optional configuration file
 - Standard Python logging integration
@@ -129,12 +143,14 @@ graph TD
 ## Implementation Guidelines
 
 ### Usage Patterns
+
 1. Call `setup_logging()` at application start
 2. Use `get_logger(__name__)` in modules
 3. Use `LogContext` for request tracing
 4. Configure via environment variables
 
 ### Integration
+
 - All modules depend on this module
 - Foundation layer service
 - Minimal dependencies

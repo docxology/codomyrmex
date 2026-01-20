@@ -103,8 +103,8 @@ class WebSocketClient:
         if self.connection:
             await self.connection.close()
 
-    def add_handler(self, handler: Callable[[Any], Any]):
-        """Add a message handler."""
+    def on(self, handler: Callable[[Any], Any]):
+        """Add a message handler. Alias for event system consistency."""
         self._handlers.append(handler)
 
     async def _handle_message(self, message: Union[str, bytes]):

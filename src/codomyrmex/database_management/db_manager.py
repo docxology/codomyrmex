@@ -38,6 +38,11 @@ class QueryResult:
     execution_time: float
     error_message: Optional[str] = None
 
+    @property
+    def valid(self) -> bool:
+        """Alias for success to match Unified Streamline pattern."""
+        return self.success
+
 
 @dataclass
 class DatabaseConnection:

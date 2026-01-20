@@ -67,10 +67,10 @@ class TestLoggingMonitoring:
 
     def test_json_logging_format(self):
         """Test JSON logging format capabilities."""
-        from codomyrmex.logging_monitoring.logger_config import JsonFormatter
+        from codomyrmex.logging_monitoring.logger_config import JSONFormatter
 
-        # Test that JsonFormatter exists and can be instantiated
-        formatter = JsonFormatter()
+        # Test that JSONFormatter exists and can be instantiated
+        formatter = JSONFormatter()
         assert formatter is not None
         assert hasattr(formatter, 'format')
 

@@ -3,9 +3,15 @@ Cloud Services Module for Codomyrmex.
 
 This module provides integrations with various cloud service APIs including:
 - Coda.io: Document and database API for Coda docs
+- AWS: Amazon Web Services (S3)
+- GCP: Google Cloud Platform (GCS)
+- Azure: Microsoft Azure (Blob Storage)
 
 The module is organized into submodules for each cloud service:
 - coda_io: Coda.io REST API v1 client
+- aws: AWS S3 client
+- gcp: GCP Storage client
+- azure: Azure Blob client
 
 Usage:
     from codomyrmex.cloud import CodaClient
@@ -56,6 +62,11 @@ from .coda_io import (
     CodaGoneError,
 )
 
+# Import from other submodules
+from .aws import S3Client
+from .gcp import GCSClient
+from .azure import AzureBlobClient
+
 __all__ = [
     # Client
     "CodaClient",
@@ -95,4 +106,8 @@ __all__ = [
     "CodaRateLimitError",
     "CodaValidationError",
     "CodaGoneError",
+    # Other Clients
+    "S3Client",
+    "GCSClient",
+    "AzureBlobClient",
 ]

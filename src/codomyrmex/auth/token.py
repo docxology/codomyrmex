@@ -55,16 +55,19 @@ class Token:
         )
 
 
+from .validator import TokenValidator
+
 class TokenManager:
     """Manager for token operations."""
-
+    
     def __init__(self, secret: Optional[str] = None):
         """Initialize token manager.
-
+        
         Args:
             secret: Secret key for token signing
         """
         self.secret = secret or "default_secret_change_in_production"
+        self.validator = TokenValidator(self.secret)
         self._tokens: dict[str, Token] = {}
         self._revoked_tokens: set[str] = set()
 

@@ -90,7 +90,8 @@ class InMemoryCache(Cache):
 
         return True
 
-    def get_stats(self) -> CacheStats:
+    @property
+    def stats(self) -> CacheStats:
         """Get cache statistics."""
         self._stats.size = len(self._cache)
         return self._stats

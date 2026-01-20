@@ -114,7 +114,7 @@ class Configuration:
     """Configuration object with validation and metadata."""
 
     data: dict[str, Any]
-    source: str
+    source: str = "unknown"
     loaded_at: datetime = field(init=False)
     schema: Optional[ConfigSchema] = None
     environment: str = "default"

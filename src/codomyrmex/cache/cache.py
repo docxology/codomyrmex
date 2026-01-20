@@ -74,8 +74,9 @@ class Cache(ABC):
         """
         pass
 
+    @property
     @abstractmethod
-    def get_stats(self) -> CacheStats:
+    def stats(self) -> CacheStats:
         """Get cache statistics.
 
         Returns:

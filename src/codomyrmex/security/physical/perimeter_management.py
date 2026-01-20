@@ -1,7 +1,6 @@
 from typing import List, Optional
 
 from dataclasses import dataclass
-from perimeter_management import FunctionName, ClassName
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -49,19 +48,18 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """Physical perimeter security management."""
 
-
-"""Core business logic and data management
-
-This module provides perimeter_management functionality including:
-    pass 
-- 6 functions: check_perimeter_security, manage_access_points, __init__...
-- 2 classes: AccessPoint, PerimeterManager
-
-Usage:
-    pass 
-    # Example usage here
-"""
 logger = get_logger(__name__)
+
+# Global singleton instance for functional wrappers
+_GLOBAL_PERIMETER = None
+
+
+def get_perimeter_manager() -> "PerimeterManager":
+    """Get or create the global PerimeterManager instance."""
+    global _GLOBAL_PERIMETER
+    if _GLOBAL_PERIMETER is None:
+        _GLOBAL_PERIMETER = PerimeterManager()
+    return _GLOBAL_PERIMETER
 
 
 @dataclass
@@ -127,7 +125,7 @@ def check_perimeter_security(
 ) -> dict:
     """Check perimeter security."""
     if manager is None:
-        manager = PerimeterManager()
+        manager = get_perimeter_manager()
     return manager.check_perimeter_security()
 
 
@@ -136,7 +134,7 @@ def manage_access_points(
 ) -> List[AccessPoint]:
     """Manage access points."""
     if manager is None:
-        manager = PerimeterManager()
+        manager = get_perimeter_manager()
     return manager.manage_access_points()
 
 

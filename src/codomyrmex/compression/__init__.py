@@ -23,12 +23,16 @@ from .compressor import (
     decompress_data,
     auto_decompress,
 )
+from .zstd_compressor import ZstdCompressor
+from .parallel import ParallelCompressor
 
 __all__ = [
     # Classes
     "Compressor",
     "ArchiveManager",
     "CompressionError",
+    "ZstdCompressor",
+    "ParallelCompressor",
     # Functions
     "compress",
     "decompress",

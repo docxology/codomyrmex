@@ -9,16 +9,19 @@ Cloud services integration module providing standardized Python clients for inte
 ## Design Principles
 
 ### Modularity
+
 - Each cloud service has its own submodule
 - Shared utilities extracted to common components
 - Clear separation of concerns between services
 
 ### Consistency
+
 - Uniform interface patterns across all cloud clients
 - Standardized error handling and exceptions
 - Common data model patterns using dataclasses
 
 ### Reliability
+
 - Proper error handling with typed exceptions
 - Rate limit awareness and handling
 - Pagination support for list endpoints
@@ -29,6 +32,9 @@ Cloud services integration module providing standardized Python clients for inte
 graph TD
     subgraph "Cloud Module"
         Init[__init__.py]
+        AWS[aws/S3Client]
+        GCP[gcp/GCSClient]
+        Azure[azure/AzureBlobClient]
         
         subgraph "coda_io Submodule"
             CodaClient[CodaClient]
@@ -37,6 +43,9 @@ graph TD
         end
     end
     
+    Init --> AWS
+    Init --> GCP
+    Init --> Azure
     Init --> CodaClient
     CodaClient --> Models
     CodaClient --> Exceptions
@@ -45,13 +54,30 @@ graph TD
 
 ## Functional Requirements
 
+### Object Storage (AWS, GCP, Azure)
+
+#### Core Operations
+
+- `upload_file(local_path: str, bucket: str, object_name: str) -> bool`
+- `download_file(bucket: str, object_name: str, local_path: str) -> bool`
+- `get_metadata(bucket: str, object_name: str) -> dict`
+- `ensure_bucket(bucket: str) -> bool` / `ensure_container(container: str) -> bool`
+
+#### Authentication
+
+- **AWS**: Uses `boto3` default credential chain.
+- **GCP**: Uses `google-cloud-storage` default credentials or service account JSON.
+- **Azure**: Uses `DefaultAzureCredential` from `azure-identity`.
+
 ### Coda.io Integration
 
 #### Authentication
+
 - Bearer token authentication via API token
 - Token passed in Authorization header
 
 #### API Coverage
+
 The client must support all major Coda API v1 endpoints:
 
 | Category | Endpoints |
@@ -70,26 +96,32 @@ The client must support all major Coda API v1 endpoints:
 | Miscellaneous | whoami, resolve browser link, mutation status |
 
 #### Error Handling
+
 - Map HTTP status codes to typed exceptions
 - Preserve error messages from API responses
 - Support for rate limit detection (429)
 
 #### Pagination
+
 - Support `pageToken` and `limit` parameters
 - Provide iterator helpers for automatic pagination
 
 ## Technical Constraints
 
 ### Dependencies
+
 - `requests` library for HTTP
 - Python 3.10+ for modern type hints
 
 ### API Versioning
+
 - Target Coda API v1 (base URL: `https://coda.io/apis/v1`)
 - API version included in base URL
 
 ### Rate Limits
+
 Per Coda documentation:
+
 - Reading: 100 requests / 6 seconds
 - Writing: 10 requests / 6 seconds
 - Listing docs: 4 requests / 6 seconds

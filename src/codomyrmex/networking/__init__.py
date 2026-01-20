@@ -8,10 +8,17 @@ from codomyrmex.exceptions import CodomyrmexError
 
 from .http_client import HTTPClient, Response
 from .websocket_client import WebSocketClient
+from .ssh_sftp import SSHClient
+from .raw_sockets import TCPClient, TCPServer, UDPClient, PortScanner
 
 __all__ = [
     "HTTPClient",
     "WebSocketClient",
+    "SSHClient",
+    "TCPClient",
+    "TCPServer",
+    "UDPClient",
+    "PortScanner",
     "Response",
     "get_http_client",
 ]

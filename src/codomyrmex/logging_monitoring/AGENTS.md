@@ -3,25 +3,24 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Contains components for the src system.
+
+Centralized logging and monitoring infrastructure. Standardizes output (JSON/Text) and session-based correlation.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `logger_config.py` – Project file
-- `requirements.txt` – Project file
+
+- `SPEC.md` – Functional specification (v0.1.0 Unified Streamline)
+- `logger_config.py` – Primary configuration logic
+- `json_formatter.py` – Standardized `JSONFormatter` (formerly `JsonFormatter`)
+- `audit.py` – Domain-specific auditing
+- `rotation.py` – Log file management
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../README.md - Main project documentation

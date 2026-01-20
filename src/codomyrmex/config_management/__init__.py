@@ -45,6 +45,7 @@ from .config_monitor import (
     ConfigurationMonitor,
     monitor_config_changes,
 )
+from .watcher import ConfigWatcher
 
 # Import secret management conditionally (requires cryptography)
 try:
@@ -77,6 +78,7 @@ __all__ = [
     "ConfigurationMonitor",
     "monitor_config_changes",
     "ConfigAudit",
+    "ConfigWatcher",
 ]
 
 # Add secret management if available

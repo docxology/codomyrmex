@@ -51,6 +51,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+# Global singleton instance for functional wrappers
+_GLOBAL_ACS = None
+
+
+def get_access_control_system() -> "AccessControlSystem":
+    """Get or create the global AccessControlSystem instance."""
+    global _GLOBAL_ACS
+    if _GLOBAL_ACS is None:
+        _GLOBAL_ACS = AccessControlSystem()
+    return _GLOBAL_ACS
+
 
 @dataclass
 class AccessPermission:
@@ -127,7 +138,7 @@ def check_access_permission(
 ) -> bool:
     """Check access permission."""
     if access_control is None:
-        access_control = AccessControlSystem()
+        access_control = get_access_control_system()
     return access_control.check_access(user_id, resource, permission_type)
 
 
@@ -140,7 +151,7 @@ def grant_access(
 ) -> AccessPermission:
     """Grant access permission."""
     if access_control is None:
-        access_control = AccessControlSystem()
+        access_control = get_access_control_system()
     return access_control.grant_access(user_id, resource, permission_type, expires_at)
 
 
@@ -151,6 +162,6 @@ def revoke_access(
 ) -> bool:
     """Revoke access permission."""
     if access_control is None:
-        access_control = AccessControlSystem()
+        access_control = get_access_control_system()
     return access_control.revoke_access(user_id, resource)
 

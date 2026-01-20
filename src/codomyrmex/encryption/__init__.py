@@ -22,11 +22,15 @@ from .encryptor import (
     generate_aes_key,
 )
 from .key_manager import KeyManager
+from .aes_gcm import AESGCMEncryptor
+from .container import SecureDataContainer
 
 __all__ = [
     # Classes
     "Encryptor",
     "KeyManager",
+    "AESGCMEncryptor",
+    "SecureDataContainer",
     "EncryptionError",
     # Functions
     "encrypt",

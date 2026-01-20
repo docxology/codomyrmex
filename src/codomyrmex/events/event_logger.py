@@ -1,5 +1,4 @@
-"""
-Event Logger for Codomyrmex Event System
+"""Event Logger for Codomyrmex Event System
 
 This module provides logging capabilities for events, including structured logging,
 event history, and monitoring dashboards.
@@ -7,8 +6,8 @@ event history, and monitoring dashboards.
 
 import json
 import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Callable
+from datetime import datetime
+from typing import Dict, List, Any, Optional, Union
 from collections import defaultdict, deque
 import threading
 
@@ -21,25 +20,12 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
-from .event_bus import subscribe_to_events, EventBus, get_event_bus
+from .event_bus import get_event_bus, subscribe_to_events, EventBus
 from .event_schema import Event, EventType, EventPriority
 
 
 class EventLogEntry:
-    """
-    Represents a logged event entry with metadata.
-    """
-
-    def __init__(self, event: Event, handler_count: int = 0,
-                 processing_time: Optional[float] = None):
-        """
-        Initialize an event log entry.
-
-        Args:
-            event: The event that was logged
-            handler_count: Number of handlers that processed the event
-            processing_time: Time taken to process the event (seconds)
-        """
+    def __init__(self, event: Event, handler_count: int = 0, processing_time: Optional[float] = None):
         self.event = event
         self.timestamp = datetime.now()
         self.handler_count = handler_count
@@ -47,17 +33,12 @@ class EventLogEntry:
         self.event_id = event.event_id
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the log entry to a dictionary.
-
-        Returns:
-            Dictionary representation
-        """
-        priority_val = self.event.priority.value if hasattr(self.event.priority, 'value') else self.event.priority
+        etype = self.event.event_type.value if hasattr(self.event.event_type, 'value') else str(self.event.event_type)
+        priority = self.event.priority.value if hasattr(self.event.priority, 'value') else str(self.event.priority)
         return {
             'event_id': self.event_id,
-            'event_type': self.event.event_type.value,
-            'priority': priority_val,
+            'event_type': etype,
+            'priority': priority,
             'timestamp': self.timestamp.isoformat(),
             'handler_count': self.handler_count,
             'processing_time': self.processing_time,
@@ -66,203 +47,96 @@ class EventLogEntry:
             'metadata': self.event.metadata
         }
 
-    def to_json(self) -> str:
-        """
-        Convert the log entry to JSON.
-
-        Returns:
-            JSON string
-        """
-        return json.dumps(self.to_dict(), indent=2, default=str)
-
 
 class EventLogger:
-    """
-    Event logger that captures and stores event information for monitoring and debugging.
-    """
-
     def __init__(self, max_entries: int = 10000, event_bus: Optional[EventBus] = None):
-        """
-        Initialize the event logger.
-
-        Args:
-            max_entries: Maximum number of entries to keep in memory
-            event_bus: Event bus to subscribe to (uses global if None)
-        """
         self.max_entries = max_entries
         self.event_bus = event_bus or get_event_bus()
         self.entries: deque[EventLogEntry] = deque(maxlen=max_entries)
         self.event_counts: Dict[str, int] = defaultdict(int)
         self.error_counts: Dict[str, int] = defaultdict(int)
         self.processing_times: Dict[str, List[float]] = defaultdict(list)
-        self.subscriber_id: Optional[str] = None
         self.lock = threading.Lock()
+        self.event_bus.subscribe(["*"], self.log_event)
 
-        # Auto-subscribe to all events
-        self._subscribe_to_events()
-
-        logger.info(f"EventLogger initialized with max_entries={max_entries}")
-
-    def _subscribe_to_events(self) -> None:
-        """Subscribe to all events for logging."""
-        def log_event_handler(event: Event) -> None:
-            """Internal handler for logging events."""
-            start_time = time.time()
-            try:
-                # Basic logging
-                self.log_event(event, processing_time=0.0)
-            except Exception as e:
-                # Avoid infinite recursion if logging fails
-                pass
-
-        # Subscribe with high priority to capture everything
-        self.subscriber_id = self.event_bus.subscribe(
-            list(EventType), 
-            log_event_handler, 
-            f"event_logger_{id(self)}", 
-            priority=EventPriority.MONITORING
-        )
-
-    def log_event(self, event: Event, handler_count: int = 0,
-                  processing_time: Optional[float] = None) -> None:
-        """Log an event."""
+    def log_event(self, event: Event, handler_count: int = 0, processing_time: Optional[float] = 0.0) -> None:
         with self.lock:
             entry = EventLogEntry(event, handler_count, processing_time)
             self.entries.append(entry)
-            
-            # Update stats
-            self.event_counts[event.event_type.value] += 1
-            if event.event_type in [EventType.SYSTEM_ERROR, EventType.MODULE_ERROR, EventType.PLUGIN_ERROR]:
-                self.error_counts[event.event_type.value] += 1
-            
-            if processing_time is not None:
-                self.processing_times[event.event_type.value].append(processing_time)
-                # Keep only last 100 processing times per type
-                if len(self.processing_times[event.event_type.value]) > 100:
-                    self.processing_times[event.event_type.value].pop(0)
+            etype = event.event_type.value if hasattr(event.event_type, 'value') else str(event.event_type)
+            self.event_counts[etype] += 1
+            if "error" in etype.lower():
+                self.error_counts[etype] += 1
+            self.processing_times[etype].append(processing_time or 0.0)
 
     def get_event_statistics(self) -> Dict[str, Any]:
-        """Get event statistics."""
         with self.lock:
             return {
                 "total_events": sum(self.event_counts.values()),
                 "event_counts": dict(self.event_counts),
-                "error_counts": dict(self.error_counts),
-                "uptime": "N/A"  # Could track start time
+                "error_counts": dict(self.error_counts)
             }
 
-    def get_recent_events(self, limit: int = 50) -> List[EventLogEntry]:
-        """Get recent events."""
+    def get_events(self, event_type: Optional[str] = None, start_time=None, end_time=None) -> List[EventLogEntry]:
         with self.lock:
-            return list(self.entries)[-limit:]
+            res = list(self.entries)
+            if event_type:
+                res = [e for e in res if (e.event.event_type.value if hasattr(e.event.event_type, 'value') else str(e.event.event_type)) == event_type]
+            if start_time: res = [e for e in res if e.timestamp >= start_time]
+            if end_time: res = [e for e in res if e.timestamp <= end_time]
+            return res
 
-    def export_logs(self, filepath: str, format: str = 'json') -> None:
-        """Export logs to file."""
+    def get_events_by_type(self, event_type: Union[EventType, str]) -> List[EventLogEntry]:
+        t = event_type.value if hasattr(event_type, 'value') else str(event_type)
+        return self.get_events(event_type=t)
+
+    def get_error_events(self) -> List[EventLogEntry]:
         with self.lock:
-            data = [entry.to_dict() for entry in self.entries]
-            
-        with open(filepath, 'w') as f:
-            if format == 'json':
-                json.dump(data, f, indent=2)
-            else:
-                # Basic CSV or other format
-                f.write(str(data))
+            return [e for e in self.entries if "error" in (e.event.event_type.value if hasattr(e.event.event_type, 'value') else str(e.event.event_type)).lower()]
+
+    def get_events_in_time_range(self, start, end) -> List[EventLogEntry]:
+        return self.get_events(start_time=start, end_time=end)
+
+    def get_recent_events(self, limit: int = 50) -> List[EventLogEntry]:
+        with self.lock: return list(self.entries)[-limit:]
+
+    def clear(self) -> None:
+        with self.lock:
+            self.entries.clear()
+            self.event_counts.clear()
+            self.error_counts.clear()
+            self.processing_times.clear()
+
 
     def get_performance_report(self) -> Dict[str, Any]:
-        """Get performance report."""
         with self.lock:
-            report = {}
-            for event_type, times in self.processing_times.items():
-                if times:
-                    report[event_type] = {
-                        "avg": sum(times) / len(times),
-                        "max": max(times),
-                        "min": min(times),
-                        "count": len(times)
-                    }
+            total_time = sum(sum(t) for t in self.processing_times.values())
+            total_count = sum(len(t) for t in self.processing_times.values())
+            report = {
+                "event_statistics": dict(self.event_counts),
+                "total_processing_time": total_time,
+                "average_processing_time_per_event": total_time / total_count if total_count > 0 else 0
+            }
             return report
 
-
-# Global event logger instance
-_event_logger: Optional[EventLogger] = None
-_event_logger_lock = threading.Lock()
-
-
-def get_event_logger() -> EventLogger:
-    """
-    Get the global event logger instance.
-
-    Returns:
-        EventLogger instance
-    """
-    global _event_logger
-
-    if _event_logger is None:
-        with _event_logger_lock:
-            if _event_logger is None:
-                _event_logger = EventLogger()
-
-    return _event_logger
+    def export_logs(self, path: str, format: str = 'json') -> None:
+        with self.lock:
+            data = [e.to_dict() for e in self.entries]
+            if format == 'json':
+                with open(path, 'w') as f: json.dump(data, f)
+            else:
+                with open(path, 'w') as f: f.write("id,type\n" + "\n".join([f"{e['event_id']},{e['event_type']}" for e in data]))
 
 
-def log_event_to_monitoring(event: Event, handler_count: int = 0,
-                           processing_time: Optional[float] = None) -> None:
-    """
-    Log an event to the monitoring system.
+_logger = None
+def get_event_logger():
+    global _logger
+    if _logger is None: _logger = EventLogger()
+    return _logger
 
-    Args:
-        event: Event to log
-        handler_count: Number of handlers that processed the event
-        processing_time: Time taken to process the event
-    """
-    logger = get_event_logger()
-    logger.log_event(event, handler_count, processing_time)
-
-
-# Convenience functions for monitoring
-def get_event_stats() -> Dict[str, Any]:
-    """
-    Get current event statistics.
-
-    Returns:
-        Event statistics dictionary
-    """
-    logger = get_event_logger()
-    return logger.get_event_statistics()
-
-
-def get_recent_events(limit: int = 50) -> List[EventLogEntry]:
-    """
-    Get recent events.
-
-    Args:
-        limit: Maximum number of events to return
-
-    Returns:
-        List of recent event log entries
-    """
-    logger = get_event_logger()
-    return logger.get_recent_events(limit)
-
-
-def export_event_logs(filepath: str, format: str = 'json') -> None:
-    """
-    Export event logs to a file.
-
-    Args:
-        filepath: Path to export file
-        format: Export format ('json' or 'csv')
-    """
-    logger = get_event_logger()
-    logger.export_logs(filepath, format)
-
-
-def generate_performance_report() -> Dict[str, Any]:
-    """
-    Generate a performance report.
-
-    Returns:
-        Performance report dictionary
-    """
-    logger = get_event_logger()
-    return logger.get_performance_report()
+def get_event_stats(): return get_event_logger().get_event_statistics()
+def get_recent_events(limit=50): return get_event_logger().get_recent_events(limit)
+def get_events(**kwargs): return get_event_logger().get_events(**kwargs)
+def generate_performance_report(): return get_event_logger().get_performance_report()
+def log_event_to_monitoring(e, c=0, t=0): get_event_logger().log_event(e, c, t)
+def export_event_logs(p, f='json'): get_event_logger().export_logs(p, f)

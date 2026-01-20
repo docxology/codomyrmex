@@ -51,6 +51,17 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
+# Global singleton instance for functional wrappers
+_GLOBAL_INVENTORY = None
+
+
+def get_asset_inventory() -> "AssetInventory":
+    """Get or create the global AssetInventory instance."""
+    global _GLOBAL_INVENTORY
+    if _GLOBAL_INVENTORY is None:
+        _GLOBAL_INVENTORY = AssetInventory()
+    return _GLOBAL_INVENTORY
+
 
 @dataclass
 class PhysicalAsset:
@@ -121,7 +132,7 @@ def register_asset(
 ) -> PhysicalAsset:
     """Register a new asset."""
     if inventory is None:
-        inventory = AssetInventory()
+        inventory = get_asset_inventory()
     return inventory.register_asset(asset_id, name, asset_type, location)
 
 
@@ -132,7 +143,7 @@ def track_asset(
 ) -> bool:
     """Track an asset."""
     if inventory is None:
-        inventory = AssetInventory()
+        inventory = get_asset_inventory()
     return inventory.track_asset(asset_id, location)
 
 
@@ -142,6 +153,6 @@ def get_asset_status(
 ) -> Optional[PhysicalAsset]:
     """Get asset status."""
     if inventory is None:
-        inventory = AssetInventory()
+        inventory = get_asset_inventory()
     return inventory.get_asset_status(asset_id)
 

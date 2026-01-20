@@ -11,6 +11,7 @@ from codomyrmex.exceptions import CodomyrmexError
 
 from .serializer import Serializer, SerializationFormat, SerializationError
 from .serialization_manager import SerializationManager
+from .binary_formats import MsgpackSerializer, AvroSerializer, ParquetSerializer
 
 __all__ = [
     "Serializer",
@@ -19,6 +20,9 @@ __all__ = [
     "SerializationError",
     "serialize",
     "deserialize",
+    "MsgpackSerializer",
+    "AvroSerializer",
+    "ParquetSerializer",
 ]
 
 __version__ = "0.1.0"

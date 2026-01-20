@@ -21,7 +21,7 @@ class TestPluginRegistry:
 
         registry = PluginRegistry()
         assert registry is not None
-        assert registry.plugins == {}
+        assert registry._plugins == {}
         assert registry.categories == {}
 
     def test_plugin_info_creation(self):
@@ -61,9 +61,9 @@ class TestPluginRegistry:
             entry_point="test.py"
         ))
 
-        registry.register_plugin(plugin)
+        registry.register(plugin)
 
-        assert "test_plugin" in registry.plugins
+        assert "test_plugin" in registry._plugins
         assert PluginType.UTILITY.value in registry.categories
         assert "test_plugin" in registry.categories[PluginType.UTILITY.value]
 
@@ -76,24 +76,23 @@ class TestPluginRegistry:
 
         registry = PluginRegistry()
 
-        # Register multiple plugins
         plugins = [
-            Plugin(PluginInfo("analysis_plugin", "1.0.0", "Analysis", "Author", PluginType.ANALYSIS, "a.py")),
+            Plugin(PluginInfo("analyzer_plugin", "1.0.0", "Analysis", "Author", PluginType.ANALYZER, "a.py")),
             Plugin(PluginInfo("utility_plugin", "1.0.0", "Utility", "Author", PluginType.UTILITY, "u.py")),
             Plugin(PluginInfo("another_utility", "1.0.0", "Utility 2", "Author", PluginType.UTILITY, "u2.py"))
         ]
 
         for plugin in plugins:
-            registry.register_plugin(plugin)
+            registry.register(plugin)
 
         # Test listing all
         all_plugins = registry.list_plugins()
         assert len(all_plugins) == 3
 
         # Test filtering by type
-        analysis_plugins = registry.list_plugins(PluginType.ANALYSIS)
+        analysis_plugins = registry.list_plugins(PluginType.ANALYZER)
         assert len(analysis_plugins) == 1
-        assert analysis_plugins[0].name == "analysis_plugin"
+        assert analysis_plugins[0].name == "analyzer_plugin"
 
         utility_plugins = registry.list_plugins(PluginType.UTILITY)
         assert len(utility_plugins) == 2
@@ -117,7 +116,7 @@ class TestPluginRegistry:
             entry_point="dep.py",
             dependencies=["base_plugin"]
         ))
-        registry.register_plugin(plugin)
+        registry.register(plugin)
 
         # Check dependencies (base_plugin not registered)
         missing = registry.check_dependencies("dependent_plugin")
@@ -132,7 +131,7 @@ class TestPluginRegistry:
             plugin_type=PluginType.UTILITY,
             entry_point="base.py"
         ))
-        registry.register_plugin(base_plugin)
+        registry.register(base_plugin)
 
         # Check dependencies again
         missing = registry.check_dependencies("dependent_plugin")
@@ -200,8 +199,8 @@ class TestPluginValidator:
             "entry_point": "test_plugin.py"
         }
 
-        errors = validator.validate_plugin_metadata(valid_metadata)
-        assert len(errors) == 0
+        result = validator.validate_plugin_metadata(valid_metadata)
+        assert result.valid
 
         # Invalid metadata
         invalid_metadata = {
@@ -211,8 +210,9 @@ class TestPluginValidator:
             # Missing other required fields
         }
 
-        errors = validator.validate_plugin_metadata(invalid_metadata)
-        assert len(errors) > 0
+        result = validator.validate_plugin_metadata(invalid_metadata)
+        assert not result.valid
+        assert len(result.issues) > 0
 
     def test_security_scanning(self):
         """Test plugin security scanning."""
@@ -239,7 +239,7 @@ def dangerous_function():
         try:
             result = validator.validate_plugin(test_file)
 
-            assert not result.is_valid
+            assert not result.valid
             assert result.security_score < 100
 
             # Should detect multiple issues
@@ -261,13 +261,14 @@ def dangerous_function():
 
         # Test safe dependencies
         safe_deps = ["requests", "click", "pyyaml"]
-        issues = validator.check_plugin_dependencies(safe_deps)
-        assert len(issues) == 0
+        result = validator.check_plugin_dependencies(safe_deps)
+        assert result.valid
+        assert len(result.issues) == 0
 
         # Test risky dependencies
         risky_deps = ["cryptography", "paramiko", "docker"]
-        issues = validator.check_plugin_dependencies(risky_deps)
-        assert len(issues) > 0  # Should flag at least some as risky
+        result = validator.check_plugin_dependencies(risky_deps)
+        assert len(result.warnings) > 0  # Should flag at least some as risky
 
     def test_dockerfile_validation(self):
         """Test Dockerfile validation."""
@@ -287,8 +288,8 @@ USER appuser
 CMD ["python", "app.py"]
 """
 
-        is_valid, issues = validator.validate_dockerfile(valid_dockerfile)
-        assert is_valid or len(issues) == 0  # May have warnings but no errors
+        result = validator.validate_dockerfile(valid_dockerfile)
+        assert result.valid or len(result.issues) == 0  # May have warnings but no errors
 
         # Invalid Dockerfile
         invalid_dockerfile = """FROM ubuntu:latest
@@ -296,8 +297,8 @@ RUN chmod 777 /app
 USER root
 """
 
-        is_valid, issues = validator.validate_dockerfile(invalid_dockerfile)
-        assert not is_valid or len(issues) > 0
+        result = validator.validate_dockerfile(invalid_dockerfile)
+        assert not result.valid or len(result.issues) > 0
 
 
 # Test Plugin Loader
@@ -483,7 +484,7 @@ class TestPlugin:
         plugin = Plugin(PluginInfo(
             "test_plugin", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py"
         ))
-        manager.registry.register_plugin(plugin)
+        manager.registry.register(plugin)
 
         plugins = manager.list_plugins()
         assert len(plugins) == 1
@@ -527,7 +528,7 @@ class TestPlugin:
             "test_plugin", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py",
             dependencies=["missing_dep"]
         ))
-        manager.registry.register_plugin(plugin)
+        manager.registry.register(plugin)
 
         status = manager.get_plugin_status("test_plugin")
 
@@ -549,18 +550,18 @@ class TestPlugin:
         # Add some plugins
         from codomyrmex.plugin_system.plugin_registry import Plugin
         plugins = [
-            Plugin(PluginInfo("analysis1", "1.0.0", "Analysis 1", "Author", PluginType.ANALYSIS, "a1.py")),
+            Plugin(PluginInfo("analysis1", "1.0.0", "Analysis 1", "Author", PluginType.ANALYZER, "a1.py")),
             Plugin(PluginInfo("utility1", "1.0.0", "Utility 1", "Author", PluginType.UTILITY, "u1.py")),
         ]
 
         for plugin in plugins:
-            manager.registry.register_plugin(plugin)
+            manager.registry.register(plugin)
 
         status = manager.get_system_status()
 
         assert status["status_counts"]["total_registered"] == 2
         assert status["status_counts"]["total_loaded"] == 0
-        assert status["status_counts"]["by_type"]["analysis"] == 1
+        assert status["status_counts"]["by_type"]["analyzer"] == 1
         assert status["status_counts"]["by_type"]["utility"] == 1
 
     def test_load_plugin_with_validation(self, tmp_path):
@@ -600,7 +601,7 @@ class TestPlugin:
         plugin = Plugin(PluginInfo(
             "test_plugin", "1.0.0", "Test", "Author", PluginType.UTILITY, str(plugin_file)
         ))
-        manager.registry.register_plugin(plugin)
+        manager.registry.register(plugin)
 
         # Try to load the plugin
         result = manager.load_plugin("test_plugin")

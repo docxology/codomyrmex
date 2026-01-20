@@ -12,12 +12,16 @@ from codomyrmex.exceptions import CodomyrmexError
 from .api_key_manager import APIKeyManager
 from .authenticator import Authenticator
 from .token import Token, TokenManager
+from .permissions import PermissionRegistry
+from .validator import TokenValidator
 
 __all__ = [
     "Authenticator",
     "Token",
     "TokenManager",
     "APIKeyManager",
+    "PermissionRegistry",
+    "TokenValidator",
     "authenticate",
     "authorize",
     "get_authenticator",

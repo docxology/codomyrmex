@@ -452,7 +452,7 @@ class TestEventLogger:
         assert len(self.logger.get_recent_events()) == 1
 
         # Clear logs
-        self.logger.clear_logs()
+        self.logger.clear()
 
         assert len(self.logger.get_recent_events()) == 0
 

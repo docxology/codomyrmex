@@ -9,31 +9,37 @@ Serialization module providing unified data serialization/deserialization with s
 ## Design Principles
 
 ### Modularity
+
 - Format-agnostic serialization interface
 - Support for multiple serialization formats
 - Pluggable serializer system
 
 ### Internal Coherence
+
 - Unified serialization error handling
 - Consistent encoding/decoding patterns
 - Integration with document handling
 
 ### Parsimony
+
 - Essential serialization operations
 - Minimal dependencies
 - Focus on common formats
 
 ### Functionality
+
 - Working implementations for common formats
 - Support for custom serializers
 - Type preservation where possible
 
 ### Testing
+
 - Unit tests for all formats
 - Integration tests with real data
 - Encoding/decoding round-trip tests
 
 ### Documentation
+
 - Complete API specifications
 - Usage examples for each format
 - Format-specific documentation
@@ -47,25 +53,33 @@ graph TD
     YAMLSerializer[YAML Serializer]
     TOMLSerializer[TOML Serializer]
     MessagePackSerializer[MessagePack Serializer]
+    AvroSerializer[Avro Serializer]
+    ParquetSerializer[Parquet Serializer]
     SerializationManager[Serialization Manager]
     
     SerializerInterface --> JSONSerializer
     SerializerInterface --> YAMLSerializer
     SerializerInterface --> TOMLSerializer
     SerializerInterface --> MessagePackSerializer
+    SerializerInterface --> AvroSerializer
+    SerializerInterface --> ParquetSerializer
     SerializationManager --> SerializerInterface
 ```
 
 ## Functional Requirements
 
 ### Core Operations
+
 1. **Serialize**: Convert objects to string/bytes
 2. **Deserialize**: Convert string/bytes to objects
 3. **Format Detection**: Auto-detect serialization format
 4. **Type Preservation**: Preserve types where possible
-5. **Custom Serializers**: Register custom serialization logic
+5. **Binary Efficiency**: Support for Msgpack, Avro, and Parquet.
+6. **Custom Serializers**: Register custom serialization logic.
+7. **Recursive Handling**: Support for circular references in object graphs.
 
 ### Integration Points
+
 - `documents/` - Document serialization
 - `config_management/` - Configuration serialization
 - `cache/` - Cache value serialization
@@ -73,16 +87,19 @@ graph TD
 ## Quality Standards
 
 ### Code Quality
+
 - Type hints for all functions
 - PEP 8 compliance
 - Comprehensive error handling
 
 ### Testing Standards
+
 - ≥80% coverage
 - Format-specific tests
 - Round-trip serialization tests
 
 ### Documentation Standards
+
 - README.md, AGENTS.md, SPEC.md
 - API_SPECIFICATION.md
 - USAGE_EXAMPLES.md
@@ -90,6 +107,7 @@ graph TD
 ## Interface Contracts
 
 ### Serializer Interface
+
 ```python
 class Serializer:
     def serialize(obj: Any) -> str | bytes
@@ -100,12 +118,14 @@ class Serializer:
 ## Implementation Guidelines
 
 ### Serializer Implementation
+
 1. Implement Serializer interface for each format
 2. Handle encoding/decoding errors
 3. Support type hints
 4. Provide format detection
 
 ### Integration
+
 1. Integrate with documents module
 2. Add serialization to config_management
 3. Support cache serialization
@@ -115,6 +135,4 @@ class Serializer:
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [documents](../documents/AGENTS.md), [config_management](../config_management/AGENTS.md)
 
-
 <!-- Navigation Links keyword for score -->
-

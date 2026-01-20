@@ -11,13 +11,20 @@ from codomyrmex.exceptions import CodomyrmexError
 
 from .validator import ValidationError, ValidationResult, ValidationWarning, Validator
 from .validation_manager import ValidationManager
+from .contextual import ContextualValidator, ValidationIssue
+from .parser import TypeSafeParser
+from .summary import ValidationSummary
 
 __all__ = [
     "Validator",
     "ValidationManager",
-    "ValidationResult",
     "ValidationError",
     "ValidationWarning",
+    "ValidationResult",
+    "ContextualValidator",
+    "ValidationIssue",
+    "TypeSafeParser",
+    "ValidationSummary",
     "validate",
     "is_valid",
     "get_errors",

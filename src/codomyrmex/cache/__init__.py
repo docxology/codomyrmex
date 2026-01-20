@@ -12,11 +12,15 @@ from codomyrmex.exceptions import CodomyrmexError
 from .cache import Cache
 from .cache_manager import CacheManager
 from .stats import CacheStats
+from .namespaced import NamespacedCache
+from .ttl_manager import TTLManager
 
 __all__ = [
     "Cache",
     "CacheManager",
     "CacheStats",
+    "NamespacedCache",
+    "TTLManager",
     "get_cache",
 ]
 

@@ -96,7 +96,8 @@ class TestVulnerabilityScanner:
         try:
             result = scan_vulnerabilities(str(tmp_path))
             assert result is not None
-            assert isinstance(result, dict)
+            assert isinstance(result, VulnerabilityReport)
+            assert hasattr(result, "valid")
         except Exception as e:
             # May fail if dependencies not available, that's okay
             pytest.skip(f"Vulnerability scanning failed: {e}")
@@ -110,6 +111,7 @@ class TestVulnerabilityScanner:
         try:
             results = audit_code_security(str(tmp_path))
             assert isinstance(results, list)
+            # Convenience function returns vulnerabilities list, which is correct
         except Exception as e:
             pytest.skip(f"Code security audit failed: {e}")
 

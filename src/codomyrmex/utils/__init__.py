@@ -12,7 +12,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Optional, TypeVar, Union
 
+from .refined import RefinedUtilities
+
 T = TypeVar("T")
+
+__all__ = ["RefinedUtilities"]
 
 
 def ensure_directory(path: Union[str, Path]) -> Path:
