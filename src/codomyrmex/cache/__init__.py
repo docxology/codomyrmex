@@ -22,6 +22,12 @@ from .exceptions import (
     CacheInvalidationError,
 )
 
+# New submodule exports
+from . import policies
+from . import invalidation
+from . import distributed
+from . import serializers
+
 __all__ = [
     # Core classes
     "Cache",
@@ -39,6 +45,11 @@ __all__ = [
     "CacheKeyError",
     "CacheSerializationError",
     "CacheInvalidationError",
+    # Submodules
+    "policies",
+    "invalidation",
+    "distributed",
+    "serializers",
 ]
 
 __version__ = "0.1.0"
@@ -56,5 +67,3 @@ def get_cache(name: str = "default", backend: str = "in_memory") -> Cache:
     """
     manager = CacheManager()
     return manager.get_cache(name, backend)
-
-

@@ -23,6 +23,12 @@ from .config import (
     set_config,
 )
 
+# New submodule exports
+from . import providers
+from . import chains
+from . import memory
+from . import tools
+
 __all__ = [
     'OllamaManager',
     'ModelRunner',
@@ -38,4 +44,11 @@ __all__ = [
     'get_config',
     'set_config',
     'reset_config',
+    
+    # Submodules
+    'providers',
+    'chains',
+    'memory',
+    'tools',
 ]
+

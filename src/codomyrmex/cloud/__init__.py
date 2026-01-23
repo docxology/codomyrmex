@@ -12,6 +12,7 @@ The module is organized into submodules for each cloud service:
 - aws: AWS S3 client
 - gcp: GCP Storage client
 - azure: Azure Blob client
+- common: Shared cloud utilities
 
 Usage:
     from codomyrmex.cloud import CodaClient
@@ -78,6 +79,9 @@ try:
 except ImportError:
     AzureBlobClient = None  # azure-storage-blob not installed
 
+# New submodule exports
+from . import common
+
 __all__ = [
     # Client
     "CodaClient",
@@ -121,4 +125,7 @@ __all__ = [
     "S3Client",
     "GCSClient",
     "AzureBlobClient",
+    # Submodules
+    "common",
 ]
+

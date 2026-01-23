@@ -12,11 +12,22 @@ from .skill_loader import SkillLoader
 from .skill_sync import SkillSync
 from .skill_registry import SkillRegistry
 
+# New submodule exports
+from . import discovery
+from . import execution
+from . import composition
+from . import testing
+
 __all__ = [
     "SkillsManager",
     "SkillLoader",
     "SkillSync",
     "SkillRegistry",
+    # Submodules
+    "discovery",
+    "execution",
+    "composition",
+    "testing",
 ]
 
 # Default configuration
@@ -56,5 +67,3 @@ def get_skills_manager(
         upstream_branch=upstream_branch,
         auto_sync=auto_sync,
     )
-
-

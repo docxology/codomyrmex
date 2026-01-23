@@ -28,27 +28,28 @@ Data structures:
 - SecurityScanResult: Container security scan results
 """
 
-from .container_registry import (
+# Import from new submodule structure
+from .registry.container_registry import (
     ContainerRegistry,
     manage_container_registry,
 )
-from .docker_manager import (
+from .docker.docker_manager import (
     ContainerConfig,
     DockerManager,
     build_containers,
     manage_containers,
 )
-from .kubernetes_orchestrator import (
+from .kubernetes.kubernetes_orchestrator import (
     KubernetesDeployment,
     KubernetesOrchestrator,
     orchestrate_kubernetes,
 )
-from .performance_optimizer import (
+from .security.performance_optimizer import (
     ContainerMetrics,
     ContainerOptimizer,
     optimize_containers,
 )
-from .security_scanner import (
+from .security.security_scanner import (
     ContainerSecurityScanner,
     SecurityScanResult,
     scan_container_security,
@@ -61,6 +62,12 @@ from .exceptions import (
     RegistryError,
     KubernetesError,
 )
+
+# Submodule exports
+from . import docker
+from . import kubernetes
+from . import registry
+from . import security
 
 __all__ = [
     # Docker management

@@ -1,8 +1,15 @@
 """Deployment module for Codomyrmex."""
 
-from .manager import DeploymentManager
-from .strategies import DeploymentStrategy, CanaryStrategy, BlueGreenStrategy
-from .gitops import GitOpsSynchronizer
+from .manager.manager import DeploymentManager
+from .strategies.strategies import DeploymentStrategy, CanaryStrategy, BlueGreenStrategy
+from .gitops.gitops import GitOpsSynchronizer
+
+# Submodule exports
+from . import manager
+from . import strategies
+from . import gitops
+from . import rollback
+from . import health_checks
 
 __all__ = [
     "DeploymentManager",
@@ -10,6 +17,12 @@ __all__ = [
     "CanaryStrategy",
     "BlueGreenStrategy",
     "GitOpsSynchronizer",
+    "manager",
+    "strategies",
+    "gitops",
+    "rollback",
+    "health_checks",
 ]
 
 __version__ = "0.1.0"
+

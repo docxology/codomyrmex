@@ -6,9 +6,26 @@ exploring and interacting with the Codomyrmex ecosystem in engaging,
 accessible ways.
 """
 
-from .interactive_shell import InteractiveShell
-from .terminal_utils import CommandRunner, TerminalFormatter
+from .shells.interactive_shell import InteractiveShell
+from .utils.terminal_utils import CommandRunner, TerminalFormatter
 
-__all__ = ["InteractiveShell", "TerminalFormatter", "CommandRunner"]
+# Submodule exports
+from . import shells
+from . import utils
+from . import commands
+from . import rendering
+from . import completions
+
+__all__ = [
+    "InteractiveShell",
+    "TerminalFormatter",
+    "CommandRunner",
+    "shells",
+    "utils",
+    "commands",
+    "rendering",
+    "completions",
+]
 
 __version__ = "0.1.0"
+

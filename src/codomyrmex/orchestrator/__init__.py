@@ -70,6 +70,12 @@ from .integration import (
     run_agent_task,
 )
 
+# New submodule exports
+from . import engines
+from . import schedulers
+from . import workflows
+from . import monitors
+
 __all__ = [
     # Core orchestration
     "run_orchestrator",
@@ -127,4 +133,10 @@ __all__ = [
     "create_pipeline_workflow",
     "run_ci_stage",
     "run_agent_task",
+    # Submodules
+    "engines",
+    "schedulers",
+    "workflows",
+    "monitors",
 ]
+

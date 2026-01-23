@@ -35,7 +35,8 @@ Data structures:
 - ColorPalette: Color palette options
 """
 
-from .advanced_plotter import (
+# Import from new submodule structure
+from .engines.advanced_plotter import (
     AdvancedPlotter,
     ChartStyle,
     ColorPalette,
@@ -71,22 +72,30 @@ def get_available_palettes():
 def get_available_plot_types():
     """Get available plot types."""
     return [t.value for t in PlotType]
-from .git_visualizer import (
+
+from .git.git_visualizer import (
     GitVisualizer,
     create_git_tree_mermaid,
     create_git_tree_png,
     visualize_git_repository,
 )
-from .mermaid_generator import (
+from .mermaid.mermaid_generator import (
     MermaidDiagramGenerator,
     create_commit_timeline_diagram,
     create_git_branch_diagram,
     create_git_workflow_diagram,
     create_repository_structure_diagram,
 )
-from .plotter import (
+from .engines.plotter import (
     create_pie_chart,
 )
+
+# Submodule exports
+from . import charts
+from . import engines
+from . import themes
+from . import mermaid
+from . import git
 
 __all__ = [
     # Core plotting functions

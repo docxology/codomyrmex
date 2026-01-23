@@ -3,20 +3,26 @@
 This module provides OpenTelemetry-compatible tracing and observability tools.
 """
 
-from .trace_context import (
+from .context.trace_context import (
     TraceContext,
     start_span,
     get_current_span,
     traced,
     link_span,
 )
-from .span_processor import (
+from .spans.span_processor import (
     SimpleSpanProcessor,
     BatchSpanProcessor,
 )
-from .otlp_exporter import (
+from .exporters.otlp_exporter import (
     OTLPExporter,
 )
+
+# Submodule exports
+from . import exporters
+from . import spans
+from . import context
+from . import metrics
 
 __all__ = [
     "TraceContext",
@@ -27,4 +33,9 @@ __all__ = [
     "SimpleSpanProcessor",
     "BatchSpanProcessor",
     "OTLPExporter",
+    "exporters",
+    "spans",
+    "context",
+    "metrics",
 ]
+

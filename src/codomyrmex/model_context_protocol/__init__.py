@@ -17,7 +17,7 @@ Available classes:
 
 from codomyrmex.exceptions import CodomyrmexError
 
-from .mcp_schemas import (
+from .schemas.mcp_schemas import (
     MCPErrorDetail,
     MCPMessage,
     MCPToolCall,
@@ -25,10 +25,21 @@ from .mcp_schemas import (
     MCPToolResult,
 )
 
+# Submodule exports
+from . import schemas
+from . import adapters
+from . import validators
+from . import discovery
+
 __all__ = [
     "MCPErrorDetail",
     "MCPMessage",
     "MCPToolCall",
     "MCPToolRegistry",
     "MCPToolResult",
+    "schemas",
+    "adapters",
+    "validators",
+    "discovery",
 ]
+

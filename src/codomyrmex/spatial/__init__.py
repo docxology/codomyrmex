@@ -7,4 +7,17 @@ from . import three_d
 from . import four_d
 from . import world_models
 
-__all__ = ["three_d", "four_d", "world_models"]
+# New submodules
+from . import coordinates
+from . import rendering
+from . import physics
+
+__all__ = [
+    "three_d",
+    "four_d",
+    "world_models",
+    "coordinates",
+    "rendering",
+    "physics",
+]
+

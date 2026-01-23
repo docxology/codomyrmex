@@ -8,6 +8,10 @@ Submodules:
 - orchestration: Workflow and project orchestration
 - task: Task queue management and job execution
 - schedule: Advanced scheduling with cron, recurring, and timezone support
+- routing: Task routing algorithms
+- optimization: Schedule optimization
+- resources: Resource allocation
+- tracking: Progress and status tracking
 """
 
 from .orchestration import (
@@ -27,6 +31,12 @@ from .schedule import (
     TimezoneManager,
 )
 from .task import Job, JobScheduler, Queue
+
+# New submodule exports
+from . import routing
+from . import optimization
+from . import resources
+from . import tracking
 
 __version__ = "0.1.0"
 
@@ -49,5 +59,9 @@ __all__ = [
     "RecurringScheduler",
     "RecurringSchedule",
     "TimezoneManager",
+    # Submodules
+    "routing",
+    "optimization",
+    "resources",
+    "tracking",
 ]
-
