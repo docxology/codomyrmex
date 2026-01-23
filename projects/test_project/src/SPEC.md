@@ -1,88 +1,51 @@
-# src - Functional Specification
+# src/ - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
-Source code implementation for the test project demonstrating modular application architecture, API development, business logic implementation, and comprehensive error handling. This source directory serves as a complete example of Codomyrmex application development best practices.
+Core implementation of test_project analysis capabilities. Provides a complete, working example of codomyrmex module integration.
 
-The src directory showcases professional software development patterns, clean architecture principles, and integration with the Codomyrmex platform.
+## Module Specifications
 
-## Overview
+### main.py
 
-Test files and validation suites for src.
+- **Function**: `run_analysis(target_path, config_path)` → `Dict[str, Any]`
+- **Function**: `run_pipeline(target_path, config_path)` → `PipelineResult`
+- **Function**: `main()` → `int` (CLI entry point)
 
-## Design Principles
+### analyzer.py
 
-### Modularity
-- Self-contained components
-- Clear boundaries
-- Minimal dependencies
+- **Class**: `AnalysisResult` (dataclass)
+  - `file_path: Path`, `metrics: Dict`, `issues: List`, `patterns: List`
+- **Class**: `ProjectAnalyzer`
+  - `analyze(target_path: Path)` → `Dict[str, Any]`
 
-### Internal Coherence
-- Logical organization
-- Consistent patterns
-- Unified design
+### visualizer.py
 
-### Parsimony
-- Essential elements only
-- No unnecessary complexity
-- Minimal surface area
+- **Class**: `ChartConfig` (dataclass)
+- **Class**: `DataVisualizer`
+  - `create_dashboard(results)` → `Path`
+  - `visualize_metrics(metrics, config)` → `Path`
 
-### Functionality
-- Focus on working solutions
-- Forward-looking design
-- Current needs focus
+### reporter.py
 
-### Testing
-- Comprehensive coverage
-- TDD practices
-- Real data analysis
+- **Class**: `ReportConfig` (dataclass)
+- **Class**: `ReportGenerator`
+  - `generate(results, config)` → `Path`
+  - `generate_all_formats(results)` → `Dict[str, Path]`
 
-### Documentation
-- Self-documenting code
-- Clear APIs
-- Complete specifications
+### pipeline.py
 
-## Architecture
-
-Architecture description with component relationships and data flow patterns.
-
-## Functional Requirements
-
-Functional requirements for src including core capabilities and standards.
-
-## Quality Standards
-
-Testing requirements, documentation standards, performance expectations, and security considerations.
-
-## Interface Contracts
-
-API interfaces, data structure definitions, and communication patterns.
-
-## Implementation Guidelines
-
-Implementation guidelines for working within src including best practices and patterns.
+- **Enum**: `PipelineStatus` (PENDING, RUNNING, COMPLETED, FAILED, CANCELLED)
+- **Class**: `PipelineStep` (dataclass)
+- **Class**: `PipelineResult` (dataclass)
+- **Class**: `AnalysisPipeline`
+  - `add_step(name, handler, dependencies)` → `None`
+  - `execute(target_path)` → `PipelineResult`
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [test_project](../README.md)
-- **Repository Root**: [../../../README.md](../../../README.md)
-- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **Agent Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../README.md](../README.md)

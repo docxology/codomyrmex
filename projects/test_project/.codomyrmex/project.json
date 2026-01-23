@@ -1,9 +1,9 @@
 {
   "name": "test_project",
-  "description": "",
-  "type": "ai_analysis",
-  "path": "/Users/4d/Documents/GitHub/codomyrmex/projects/test_project",
-  "status": "planning",
+  "description": "Comprehensive reference implementation demonstrating all codomyrmex functionalities",
+  "type": "reference_implementation",
+  "path": "/Users/mini/Documents/GitHub/codomyrmex/projects/test_project",
+  "status": "active",
   "version": "1.0.0",
   "template": "ai_analysis",
   "config": {
@@ -21,31 +21,59 @@
     },
     "ai": {
       "provider": "openai",
-      "model": "gpt-3.5-turbo"
+      "model": "gpt-4"
     },
     "output": {
       "formats": [
         "json",
         "html",
-        "pdf"
+        "pdf",
+        "markdown"
       ],
       "include_visualizations": true
+    },
+    "logging": {
+      "level": "INFO",
+      "format": "json",
+      "output": "both"
     }
   },
   "workflows": [
-    "ai-analysis",
-    "build-and-test"
+    "analysis",
+    "visualization",
+    "reporting",
+    "full-pipeline"
   ],
-  "active_workflows": [],
+  "active_workflows": [
+    "analysis"
+  ],
   "required_modules": [
-    "ai_code_editing",
+    "logging_monitoring",
+    "config_management",
     "static_analysis",
-    "data_visualization"
+    "data_visualization",
+    "documentation",
+    "orchestrator",
+    "serialization",
+    "validation",
+    "events",
+    "pattern_matching",
+    "terminal_interface"
   ],
-  "author": "",
-  "tags": [],
+  "author": "Codomyrmex Team",
+  "tags": [
+    "reference",
+    "template",
+    "demonstration",
+    "ai-analysis"
+  ],
   "created_at": "2025-10-21T18:41:18.209323+00:00",
-  "updated_at": "2025-10-21T18:41:18.209325+00:00",
-  "milestones": {},
-  "metrics": {}
+  "updated_at": "2026-01-23T22:52:00.000000+00:00",
+  "milestones": {
+    "v1.0.0": "Initial comprehensive implementation"
+  },
+  "metrics": {
+    "modules_integrated": 11,
+    "documentation_coverage": 100
+  }
 }

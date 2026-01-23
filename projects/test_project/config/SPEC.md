@@ -1,88 +1,109 @@
-# config - Functional Specification
+# config/ - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
-Configuration management for the test project demonstrating environment-specific settings, module activation, and validation procedures. This configuration directory serves as a comprehensive example of Codomyrmex project configuration patterns and best practices.
-
-The config directory showcases configuration management approaches for different environments, validation strategies, and integration with the broader Codomyrmex platform.
-
-## Overview
-
-Test files and validation suites for config.
+Configuration management layer for test_project. Provides YAML-based configuration files that control project behavior, module enablement, and workflow orchestration.
 
 ## Design Principles
 
 ### Modularity
-- Self-contained components
-- Clear boundaries
-- Minimal dependencies
+
+- Separate configuration files by concern
+- Independent module configurations
+- Composable settings
 
 ### Internal Coherence
-- Logical organization
-- Consistent patterns
-- Unified design
+
+- Consistent YAML structure
+- Unified naming conventions
+- Predictable key hierarchies
 
 ### Parsimony
-- Essential elements only
-- No unnecessary complexity
-- Minimal surface area
 
-### Functionality
-- Focus on working solutions
-- Forward-looking design
-- Current needs focus
-
-### Testing
-- Comprehensive coverage
-- TDD practices
-- Real data analysis
-
-### Documentation
-- Self-documenting code
-- Clear APIs
-- Complete specifications
+- Only essential configuration
+- Clear default values
+- No redundant settings
 
 ## Architecture
 
-Architecture description with component relationships and data flow patterns.
+```mermaid
+graph LR
+    Settings[settings.yaml] --> ConfigMgr[config_management]
+    Modules[modules.yaml] --> ConfigMgr
+    Workflows[workflows.yaml] --> Orchestrator[orchestrator]
+    
+    ConfigMgr --> App[Application]
+    Orchestrator --> Pipeline[Pipeline]
+```
 
 ## Functional Requirements
 
-Functional requirements for config including core capabilities and standards.
+### FR-1: Settings Configuration
 
-## Quality Standards
+**File**: `settings.yaml`
 
-Testing requirements, documentation standards, performance expectations, and security considerations.
+**Sections**:
+
+- `project`: Name, version, environment
+- `logging`: Level, format, output
+- `analysis`: Patterns, limits
+- `visualization`: Theme, formats
+- `reporting`: Formats, styling
+- `data`: Paths
+- `pipeline`: Defaults
+
+### FR-2: Module Configuration
+
+**File**: `modules.yaml`
+
+**Sections**:
+
+- `enabled_modules`: By layer
+- `module_overrides`: Per-module settings
+- `dependencies`: Module graph
+
+### FR-3: Workflow Configuration
+
+**File**: `workflows.yaml`
+
+**Sections**:
+
+- `workflows`: Named workflow definitions
+- `execution`: Runtime settings
+- `hooks`: Event hooks
 
 ## Interface Contracts
 
-API interfaces, data structure definitions, and communication patterns.
+### Settings Schema
 
-## Implementation Guidelines
+```yaml
+project:
+  name: str           # Required
+  version: str        # Semver format
+  environment: enum   # development | staging | production
 
-Implementation guidelines for working within config including best practices and patterns.
+logging:
+  level: enum         # DEBUG | INFO | WARNING | ERROR
+  format: enum        # text | json
+  output: enum        # console | file | both
+```
+
+### Workflow Step Schema
+
+```yaml
+steps:
+  - name: str           # Unique step identifier
+    module: str         # Codomyrmex module name
+    description: str    # Human readable
+    depends_on: [str]   # Previous step names
+    config: dict        # Step-specific config
+    timeout: int        # Seconds
+```
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [test_project](../README.md)
-- **Repository Root**: [../../../README.md](../../../README.md)
-- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **Agent Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [../README.md](../README.md)

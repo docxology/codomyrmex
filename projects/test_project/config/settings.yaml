@@ -1,0 +1,89 @@
+# Test Project Configuration
+
+project:
+  name: test_project
+  version: 1.0.0
+  description: Comprehensive reference implementation demonstrating codomyrmex capabilities
+  environment: development
+  author: Codomyrmex Team
+
+# Logging configuration (uses logging_monitoring module)
+logging:
+  level: INFO
+  format: json
+  output: both  # console and file
+  file_path: logs/test_project.log
+  include_timestamps: true
+  include_caller: true
+
+# Analysis configuration (uses static_analysis module)
+analysis:
+  include_patterns:
+    - "*.py"
+    - "*.js"
+    - "*.ts"
+    - "*.jsx"
+    - "*.tsx"
+  exclude_patterns:
+    - "**/node_modules/**"
+    - "**/__pycache__/**"
+    - "**/venv/**"
+    - "**/.git/**"
+    - "**/test_*"
+  max_file_size: 1MB
+  max_complexity: 10
+  enable_pattern_detection: true
+  patterns_to_detect:
+    - async_functions
+    - dataclasses
+    - type_hints
+    - decorators
+
+# Visualization configuration (uses data_visualization module)
+visualization:
+  theme: dark
+  output_formats:
+    - png
+    - svg
+    - html
+  default_width: 800
+  default_height: 600
+  interactive: true
+  color_palette:
+    - "#667eea"
+    - "#764ba2"
+    - "#e94560"
+    - "#0f3460"
+    - "#16213e"
+
+# Reporting configuration (uses documentation module)
+reporting:
+  formats:
+    - html
+    - json
+    - markdown
+  include_visualizations: true
+  include_metrics: true
+  include_file_details: true
+  max_files_in_report: 50
+  template_dir: reports/templates
+  output_dir: reports/output
+  styling:
+    font_family: "Segoe UI, sans-serif"
+    primary_color: "#667eea"
+    secondary_color: "#764ba2"
+
+# Data paths configuration
+data:
+  input_dir: data/input
+  processed_dir: data/processed
+  sample_data: data/input/sample_data.json
+
+# Pipeline configuration (uses orchestrator module)
+pipeline:
+  default_workflow: full_pipeline
+  timeout_seconds: 300
+  retry_on_failure: true
+  max_retries: 3
+  emit_events: true
+  save_intermediate_results: true

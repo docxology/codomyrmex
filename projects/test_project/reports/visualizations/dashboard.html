@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analysis Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            background: #16213e;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .section h2 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+        }
+        
+        .metric-card {
+            background: #1a1a2e;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+        
+        .metric-icon {
+            font-size: 1.8em;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+        
+        .metric-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .bar-chart {
+            padding: 10px 0;
+        }
+        
+        .bar-row {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+        }
+        
+        .bar-label {
+            width: 140px;
+            font-size: 0.95em;
+        }
+        
+        .bar-container {
+            flex: 1;
+            background: #1a1a2e;
+            border-radius: 6px;
+            margin: 0 12px;
+            height: 24px;
+            overflow: hidden;
+        }
+        
+        .bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        
+        .bar-value {
+            width: 50px;
+            text-align: right;
+            color: #e94560;
+            font-weight: bold;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        tr:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .file-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .number-cell {
+            text-align: center;
+            font-family: monospace;
+        }
+        
+        .patterns-cell {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+        }
+        
+        .issue-count-warning {
+            color: #e94560;
+            font-weight: bold;
+        }
+        
+        .issue-count-ok {
+            color: #4ade80;
+        }
+        
+        .issues-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .issue-item {
+            background: #1a1a2e;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .issue-severity {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .issue-file {
+            font-family: monospace;
+            color: #888;
+            min-width: 150px;
+        }
+        
+        .issue-message {
+            flex: 1;
+        }
+        
+        .muted {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    
+        <div class="header">
+            <h1>🔬 Code Analysis Dashboard</h1>
+            <p class="subtitle">
+                <strong>Target:</strong> /private/var/folders/l5/5t5z6z8d0tn3pth_0f7970q40000gn/T/pytest-of-mini/pytest-176/test_result_to_dict0 | 
+                <strong>Generated:</strong> 2026-01-23 15:09:13
+            </p>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Summary Metrics</h2>
+            <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-icon">📁</span>
+                <span class="metric-value">3</span>
+                <span class="metric-label">Files Analyzed</span>
+            </div>
+            
+            <div class="metric-card">
+                <span class="metric-icon">📝</span>
+                <span class="metric-value">18</span>
+                <span class="metric-label">Lines of Code</span>
+            </div>
+            
+            <div class="metric-card">
+                <span class="metric-icon">⚡</span>
+                <span class="metric-value">2</span>
+                <span class="metric-label">Functions</span>
+            </div>
+            
+            <div class="metric-card">
+                <span class="metric-icon">🏗️</span>
+                <span class="metric-value">1</span>
+                <span class="metric-label">Classes</span>
+            </div>
+            
+            <div class="metric-card">
+                <span class="metric-icon">⚠️</span>
+                <span class="metric-value">0</span>
+                <span class="metric-label">Issues</span>
+            </div>
+            
+            <div class="metric-card">
+                <span class="metric-icon">📊</span>
+                <span class="metric-value">6.0</span>
+                <span class="metric-label">Avg Lines/File</span>
+            </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Patterns Detected</h2>
+            <div class="bar-chart">
+            <div class="bar-row">
+                <span class="bar-label">Docstrings</span>
+                <div class="bar-container">
+                    <div class="bar" style="width: 100.0%"></div>
+                </div>
+                <span class="bar-value">3</span>
+            </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📄 File Analysis</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Lines</th>
+                            <th>Functions</th>
+                            <th>Classes</th>
+                            <th>Patterns</th>
+                            <th>Issues</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            <tr>
+                <td class="file-cell" title="/private/var/folders/l5/5t5z6z8d0tn3pth_0f7970q40000gn/T/pytest-of-mini/pytest-176/test_result_to_dict0/utils.py">utils.py</td>
+                <td class="number-cell">5</td>
+                <td class="number-cell">1</td>
+                <td class="number-cell">0</td>
+                <td class="patterns-cell"><span class="badge">docstrings</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/private/var/folders/l5/5t5z6z8d0tn3pth_0f7970q40000gn/T/pytest-of-mini/pytest-176/test_result_to_dict0/main.py">main.py</td>
+                <td class="number-cell">8</td>
+                <td class="number-cell">1</td>
+                <td class="number-cell">0</td>
+                <td class="patterns-cell"><span class="badge">docstrings</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            
+            <tr>
+                <td class="file-cell" title="/private/var/folders/l5/5t5z6z8d0tn3pth_0f7970q40000gn/T/pytest-of-mini/pytest-176/test_result_to_dict0/subdir/module.py">module.py</td>
+                <td class="number-cell">5</td>
+                <td class="number-cell">0</td>
+                <td class="number-cell">1</td>
+                <td class="patterns-cell"><span class="badge">docstrings</span></td>
+                <td class="number-cell issue-count-ok">0</td>
+            </tr>
+            </tbody>
+                </table>
+            </div>
+            
+        </div>
+        
+</body>
+</html>

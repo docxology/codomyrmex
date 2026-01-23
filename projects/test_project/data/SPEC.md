@@ -1,88 +1,52 @@
-# data - Functional Specification
+# data/ - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
-Data management and processing for the test project demonstrating input validation, data transformation, quality assurance, and output formatting. This data directory serves as a comprehensive example of data handling best practices within Codomyrmex applications.
-
-The data directory showcases the complete data lifecycle from ingestion through processing to output, demonstrating robust data management patterns.
-
-## Overview
-
-Test files and validation suites for data.
-
-## Design Principles
-
-### Modularity
-- Self-contained components
-- Clear boundaries
-- Minimal dependencies
-
-### Internal Coherence
-- Logical organization
-- Consistent patterns
-- Unified design
-
-### Parsimony
-- Essential elements only
-- No unnecessary complexity
-- Minimal surface area
-
-### Functionality
-- Focus on working solutions
-- Forward-looking design
-- Current needs focus
-
-### Testing
-- Comprehensive coverage
-- TDD practices
-- Real data analysis
-
-### Documentation
-- Self-documenting code
-- Clear APIs
-- Complete specifications
-
-## Architecture
-
-Architecture description with component relationships and data flow patterns.
+Data storage layer with input and processed output directories.
 
 ## Functional Requirements
 
-Functional requirements for data including core capabilities and standards.
+### FR-1: Input Data Storage
 
-## Quality Standards
+- Store source data files for analysis
+- Support JSON structured data
+- Maintain sample data for testing
 
-Testing requirements, documentation standards, performance expectations, and security considerations.
+### FR-2: Processed Output Storage
 
-## Interface Contracts
+- Store intermediate pipeline results
+- Cache computed analysis data
+- Support pipeline re-runs with fresh state
 
-API interfaces, data structure definitions, and communication patterns.
+## Data Formats
 
-## Implementation Guidelines
+### sample_data.json Schema
 
-Implementation guidelines for working within data including best practices and patterns.
+```json
+{
+  "project": "string",
+  "version": "string",
+  "files": [
+    {
+      "path": "string",
+      "type": "string",
+      "lines": "number",
+      "functions": "number",
+      "classes": "number",
+      "patterns": ["string"]
+    }
+  ],
+  "metrics": {
+    "total_lines": "number",
+    "total_files": "number"
+  }
+}
+```
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [test_project](../README.md)
-- **Repository Root**: [../../../README.md](../../../README.md)
-- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **Agent Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../README.md](../README.md)

@@ -1,0 +1,98 @@
+# Module Enablement Configuration
+# Specifies which codomyrmex modules are enabled and their settings
+
+enabled_modules:
+  # Foundation Layer - Core infrastructure
+  foundation:
+    - logging_monitoring
+    - config_management
+    - terminal_interface
+    - environment_setup
+    - metrics
+
+  # Core Layer - Primary development capabilities
+  core:
+    - static_analysis
+    - data_visualization
+    - pattern_matching
+    - validation
+
+  # Service Layer - Higher-level services
+  service:
+    - documentation
+    - orchestrator
+
+  # Utility Layer - Supporting utilities
+  utility:
+    - serialization
+    - events
+    - utils
+
+# Module-specific configuration overrides
+module_overrides:
+  logging_monitoring:
+    log_file: logs/test_project.log
+    log_level: INFO
+    json_format: true
+    include_performance_metrics: true
+
+  static_analysis:
+    max_complexity: 10
+    enable_linting: true
+    lint_rules:
+      - no-unused-imports
+      - consistent-naming
+      - docstring-required
+
+  data_visualization:
+    default_theme: dark
+    enable_interactivity: true
+    export_formats:
+      - html
+      - png
+
+  documentation:
+    output_formats:
+      - html
+      - markdown
+    include_source_links: true
+    syntax_highlighting: true
+
+  orchestrator:
+    max_parallel_steps: 4
+    step_timeout_seconds: 60
+    enable_caching: true
+
+  pattern_matching:
+    patterns:
+      - name: async_pattern
+        regex: "async def \\w+"
+      - name: dataclass_pattern
+        regex: "@dataclass"
+      - name: type_hint_pattern
+        regex: "def \\w+\\([^)]*:[^)]*\\)"
+
+  serialization:
+    default_format: json
+    pretty_print: true
+    include_metadata: true
+
+  events:
+    enable_logging: true
+    async_dispatch: false
+    max_listeners_per_event: 100
+
+# Module dependency graph (for validation)
+dependencies:
+  static_analysis:
+    - logging_monitoring
+    - config_management
+  data_visualization:
+    - logging_monitoring
+  documentation:
+    - logging_monitoring
+    - static_analysis
+  orchestrator:
+    - logging_monitoring
+    - config_management
+    - events

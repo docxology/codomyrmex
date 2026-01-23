@@ -1,0 +1,173 @@
+# Workflow Definitions
+# Demonstrates orchestrator module integration with DAG-based workflows
+
+workflows:
+  # Simple analysis workflow
+  analysis:
+    description: Run static analysis on project files
+    enabled: true
+    steps:
+      - name: validate_config
+        module: config_management
+        description: Validate project configuration
+        timeout: 10
+
+      - name: analyze_code
+        module: static_analysis
+        description: Run code quality analysis
+        depends_on:
+          - validate_config
+        config:
+          include_patterns: ["*.py"]
+          calculate_metrics: true
+        timeout: 60
+
+      - name: generate_report
+        module: documentation
+        description: Generate analysis report
+        depends_on:
+          - analyze_code
+        config:
+          format: markdown
+        timeout: 30
+
+  # Visualization workflow
+  visualization:
+    description: Generate visualizations from analysis data
+    enabled: true
+    steps:
+      - name: load_data
+        module: serialization
+        description: Load analysis results
+        timeout: 10
+
+      - name: create_charts
+        module: data_visualization
+        description: Generate metric charts
+        depends_on:
+          - load_data
+        config:
+          chart_types: [bar, pie]
+        timeout: 30
+
+      - name: create_dashboard
+        module: data_visualization
+        description: Create interactive dashboard
+        depends_on:
+          - load_data
+        config:
+          interactive: true
+          theme: dark
+        timeout: 30
+
+  # Reporting workflow
+  reporting:
+    description: Generate formatted reports
+    enabled: true
+    steps:
+      - name: validate_results
+        module: validation
+        description: Validate input data
+        timeout: 10
+
+      - name: generate_html
+        module: documentation
+        description: Generate HTML report
+        depends_on:
+          - validate_results
+        config:
+          format: html
+          include_styling: true
+        timeout: 30
+
+      - name: generate_json
+        module: documentation
+        description: Generate JSON export
+        depends_on:
+          - validate_results
+        config:
+          format: json
+        timeout: 10
+
+  # Full pipeline - combines all workflows
+  full_pipeline:
+    description: Complete analysis, visualization, and reporting pipeline
+    enabled: true
+    steps:
+      - name: load_config
+        module: config_management
+        description: Load project configuration
+        timeout: 10
+
+      - name: validate_inputs
+        module: validation
+        description: Validate input files and configuration
+        depends_on:
+          - load_config
+        timeout: 10
+
+      - name: run_analysis
+        module: static_analysis
+        description: Perform code analysis
+        depends_on:
+          - validate_inputs
+        config:
+          full_analysis: true
+          detect_patterns: true
+        timeout: 120
+
+      - name: generate_visualizations
+        module: data_visualization
+        description: Create charts and dashboard
+        depends_on:
+          - run_analysis
+        config:
+          create_dashboard: true
+          chart_types: [bar, pie, line]
+        timeout: 60
+
+      - name: generate_reports
+        module: documentation
+        description: Generate final reports
+        depends_on:
+          - run_analysis
+          - generate_visualizations
+        config:
+          formats: [html, json, markdown]
+          include_visualizations: true
+        timeout: 60
+
+      - name: emit_completion
+        module: events
+        description: Emit pipeline completion event
+        depends_on:
+          - generate_reports
+        config:
+          event_type: pipeline_complete
+        timeout: 5
+
+# Workflow execution settings
+execution:
+  default_workflow: full_pipeline
+  parallel_execution: true
+  max_parallel_steps: 4
+  retry_failed_steps: true
+  max_retries: 3
+  timeout_seconds: 300
+  save_intermediate: true
+  intermediate_dir: data/processed
+
+# Event hooks
+hooks:
+  on_start:
+    - log_start
+    - validate_environment
+  on_step_complete:
+    - log_step_completion
+    - save_step_result
+  on_error:
+    - log_error
+    - send_notification
+  on_complete:
+    - log_completion
+    - cleanup_temp_files

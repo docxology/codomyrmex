@@ -1,88 +1,48 @@
-# reports - Functional Specification
+# reports/ - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
 
-Report generation and output management for the test project demonstrating result formatting, visualization, analytics, and export capabilities. This reports directory serves as a comprehensive example of output generation and presentation within Codomyrmex applications.
-
-The reports directory showcases the complete output lifecycle from data processing results through formatting, visualization, and delivery.
-
-## Overview
-
-Test files and validation suites for reports.
-
-## Design Principles
-
-### Modularity
-- Self-contained components
-- Clear boundaries
-- Minimal dependencies
-
-### Internal Coherence
-- Logical organization
-- Consistent patterns
-- Unified design
-
-### Parsimony
-- Essential elements only
-- No unnecessary complexity
-- Minimal surface area
-
-### Functionality
-- Focus on working solutions
-- Forward-looking design
-- Current needs focus
-
-### Testing
-- Comprehensive coverage
-- TDD practices
-- Real data analysis
-
-### Documentation
-- Self-documenting code
-- Clear APIs
-- Complete specifications
-
-## Architecture
-
-Architecture description with component relationships and data flow patterns.
+Reports layer with templates and output directories for analysis documentation.
 
 ## Functional Requirements
 
-Functional requirements for reports including core capabilities and standards.
+### FR-1: Report Generation
 
-## Quality Standards
+- Support multiple output formats (HTML, JSON, Markdown)
+- Include summary metrics and file details
+- Professional styling for HTML reports
 
-Testing requirements, documentation standards, performance expectations, and security considerations.
+### FR-2: Dashboard Generation
 
-## Interface Contracts
+- Interactive HTML dashboards
+- Metric cards and charts
+- File analysis tables
 
-API interfaces, data structure definitions, and communication patterns.
+## Output Formats
 
-## Implementation Guidelines
+### HTML Report Structure
 
-Implementation guidelines for working within reports including best practices and patterns.
+- Header with title and metadata
+- Summary metrics grid
+- Pattern distribution chart
+- File analysis table
+- Issues summary
+
+### JSON Report Structure
+
+```json
+{
+  "metadata": { "title", "author", "generated_at" },
+  "target": "string",
+  "summary": { ... },
+  "files": [ ... ]
+}
+```
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [test_project](../README.md)
-- **Repository Root**: [../../../README.md](../../../README.md)
-- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **Agent Coordination**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../README.md](../README.md)
