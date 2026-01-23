@@ -71,9 +71,41 @@ Maintenance and automation utilities for project management.
 - `website/` – Directory containing website components
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
-- **🏠 Project Root**: ../README.md - Main project documentation
+1. **Script Organization**: Scripts organized by module, mirroring src/codomyrmex structure
+2. **Examples**: Each script directory contains an examples/ subdirectory
+3. **Logging**: Scripts use logging_monitoring for consistent output
+4. **Documentation**: Scripts are self-documenting with usage examples
+
+## Signposting
+
+### Document Hierarchy
+
+- **Self**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../AGENTS.md](../AGENTS.md) - Project root agent coordination
+- **Project Root**: [../README.md](../README.md)
+
+### Sibling Directories
+
+| Directory | AGENTS.md | Purpose |
+| :--- | :--- | :--- |
+| src/ | [../src/AGENTS.md](../src/AGENTS.md) | Source code |
+| docs/ | [../docs/AGENTS.md](../docs/AGENTS.md) | Documentation |
+| config/ | [../config/AGENTS.md](../config/AGENTS.md) | Configuration |
+
+### Key Script Categories
+
+| Category | Purpose |
+| :--- | :--- |
+| agents/ | AI agent automation |
+| build_synthesis/ | Build automation |
+| ci_cd_automation/ | CI/CD scripts |
+| git_operations/ | Git automation |
+| llm/ | LLM interaction scripts |
+| orchestrator/ | Workflow orchestration |
+
+### Related Documentation
+
+- [README.md](README.md) - Scripts overview
+- [SPEC.md](SPEC.md) - Functional specification
+- [run_all_scripts.py](run_all_scripts.py) - Script runner

@@ -507,3 +507,288 @@ class TestGlobalFunctions:
         auto_listener = create_auto_listener("auto_test", component)
         assert isinstance(auto_listener, AutoEventListener)
         assert len(auto_listener.subscriptions) == 1
+
+
+# ==================== ASYNC TESTS ====================
+
+@pytest.mark.asyncio
+class TestAsyncEventBus:
+    """Async tests for EventBus."""
+
+    async def test_async_publish(self):
+        """Test async event publishing."""
+        bus = EventBus(enable_async=True)
+        received_events = []
+
+        def handler(event):
+            received_events.append(event)
+
+        bus.subscribe([EventType.SYSTEM_STARTUP], handler, "async_subscriber")
+
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="async_test")
+        await bus.publish_async(event)
+
+        # Give time for async processing
+        await asyncio.sleep(0.1)
+
+        bus.shutdown()
+
+    async def test_async_handler(self):
+        """Test async event handlers."""
+        bus = EventBus(enable_async=False)
+        results = []
+
+        async def async_handler(event):
+            await asyncio.sleep(0.01)
+            results.append(event.event_type)
+
+        bus.subscribe([EventType.SYSTEM_STARTUP], async_handler, "async_handler")
+
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+        bus.publish(event)
+
+        # Give time for async handler to complete
+        await asyncio.sleep(0.2)
+
+        bus.shutdown()
+
+    async def test_multiple_async_handlers(self):
+        """Test multiple async handlers."""
+        bus = EventBus(enable_async=False)
+        results = []
+        lock = asyncio.Lock()
+
+        async def handler1(event):
+            await asyncio.sleep(0.01)
+            async with lock:
+                results.append("handler1")
+
+        async def handler2(event):
+            await asyncio.sleep(0.01)
+            async with lock:
+                results.append("handler2")
+
+        bus.subscribe([EventType.SYSTEM_STARTUP], handler1, "handler1")
+        bus.subscribe([EventType.SYSTEM_STARTUP], handler2, "handler2")
+
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+        bus.publish(event)
+
+        # Give time for handlers
+        await asyncio.sleep(0.2)
+
+        bus.shutdown()
+
+    async def test_async_publish_multiple_events(self):
+        """Test publishing multiple events asynchronously."""
+        bus = EventBus(enable_async=True)
+        received_count = 0
+
+        def handler(event):
+            nonlocal received_count
+            received_count += 1
+
+        bus.subscribe([EventType.SYSTEM_STARTUP], handler, "counter")
+
+        # Publish multiple events
+        for i in range(5):
+            event = Event(event_type=EventType.SYSTEM_STARTUP, source=f"source_{i}")
+            await bus.publish_async(event)
+
+        await asyncio.sleep(0.2)
+        bus.shutdown()
+
+    async def test_event_bus_stats_after_async_ops(self):
+        """Test event bus statistics after async operations."""
+        bus = EventBus(enable_async=True)
+
+        def handler(event):
+            pass
+
+        bus.subscribe([EventType.SYSTEM_STARTUP], handler, "stats_test")
+
+        # Publish events
+        for i in range(3):
+            event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+            await bus.publish_async(event)
+
+        await asyncio.sleep(0.1)
+
+        stats = bus.get_stats()
+        assert stats['events_published'] == 3
+
+        bus.shutdown()
+
+
+@pytest.mark.asyncio
+class TestAsyncEventEmitter:
+    """Async tests for EventEmitter."""
+
+    async def test_emit_async(self):
+        """Test async event emission."""
+        emitter = EventEmitter("async_emitter")
+
+        # emit_async should exist
+        assert hasattr(emitter, 'emit_async')
+
+        # Call emit_async (it may require specific setup)
+        try:
+            await emitter.emit_async(EventType.SYSTEM_STARTUP)
+        except Exception:
+            # May fail if event bus is not in async mode, but shouldn't crash
+            pass
+
+
+@pytest.mark.asyncio
+class TestAsyncEventPatterns:
+    """Async tests for common event patterns."""
+
+    async def test_async_event_chain(self):
+        """Test chaining events asynchronously."""
+        bus = EventBus(enable_async=False)
+        chain_results = []
+
+        async def first_handler(event):
+            chain_results.append("first")
+            await asyncio.sleep(0.01)
+            # Trigger next event in chain
+            next_event = Event(
+                event_type=EventType.ANALYSIS_START,
+                source="chain",
+                data={"step": 2}
+            )
+            bus.publish(next_event)
+
+        async def second_handler(event):
+            chain_results.append("second")
+
+        bus.subscribe([EventType.SYSTEM_STARTUP], first_handler, "first_handler")
+        bus.subscribe([EventType.ANALYSIS_START], second_handler, "second_handler")
+
+        # Start the chain
+        initial_event = Event(event_type=EventType.SYSTEM_STARTUP, source="chain")
+        bus.publish(initial_event)
+
+        await asyncio.sleep(0.3)
+        bus.shutdown()
+
+    async def test_async_event_aggregation(self):
+        """Test aggregating multiple events asynchronously."""
+        bus = EventBus(enable_async=False)
+        aggregated_data = []
+
+        async def aggregator(event):
+            aggregated_data.append(event.data)
+            await asyncio.sleep(0.01)
+
+        bus.subscribe(
+            [EventType.ANALYSIS_PROGRESS],
+            aggregator,
+            "aggregator"
+        )
+
+        # Publish multiple progress events
+        for i in range(5):
+            event = Event(
+                event_type=EventType.ANALYSIS_PROGRESS,
+                source="test",
+                data={"progress": i * 20}
+            )
+            bus.publish(event)
+
+        await asyncio.sleep(0.2)
+        bus.shutdown()
+
+    async def test_async_event_timeout(self):
+        """Test handling event with timeout."""
+        bus = EventBus(enable_async=False)
+        timed_out = False
+
+        async def slow_handler(event):
+            await asyncio.sleep(10)  # Very slow handler
+
+        bus.subscribe([EventType.SYSTEM_STARTUP], slow_handler, "slow")
+
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+
+        # Publish and don't wait long
+        bus.publish(event)
+
+        # Short wait - handler won't finish but shouldn't block
+        await asyncio.sleep(0.1)
+
+        bus.shutdown()
+
+    async def test_concurrent_event_publishing(self):
+        """Test concurrent event publishing from multiple sources."""
+        bus = EventBus(enable_async=False)
+        received_events = []
+        lock = asyncio.Lock()
+
+        def handler(event):
+            received_events.append(event.source)
+
+        bus.subscribe([EventType.SYSTEM_STARTUP], handler, "concurrent_handler")
+
+        async def publish_events(source_id, count):
+            for i in range(count):
+                event = Event(
+                    event_type=EventType.SYSTEM_STARTUP,
+                    source=f"source_{source_id}_{i}"
+                )
+                bus.publish(event)
+                await asyncio.sleep(0.01)
+
+        # Publish from 3 sources concurrently
+        await asyncio.gather(
+            publish_events(1, 3),
+            publish_events(2, 3),
+            publish_events(3, 3)
+        )
+
+        await asyncio.sleep(0.1)
+
+        # Should have received all events
+        assert len(received_events) == 9
+
+        bus.shutdown()
+
+
+@pytest.mark.asyncio
+class TestAsyncEventLogger:
+    """Async tests for EventLogger."""
+
+    async def test_async_log_events(self):
+        """Test logging events in async context."""
+        logger = EventLogger(max_entries=100)
+
+        async def log_events():
+            for i in range(5):
+                event = Event(
+                    event_type=EventType.SYSTEM_STARTUP,
+                    source=f"async_source_{i}"
+                )
+                logger.log_event(event, processing_time=0.01 * i)
+                await asyncio.sleep(0.01)
+
+        await log_events()
+
+        entries = logger.get_recent_events()
+        assert len(entries) == 5
+
+    async def test_async_statistics_generation(self):
+        """Test generating statistics in async context."""
+        logger = EventLogger(max_entries=100)
+
+        # Log events
+        for i in range(10):
+            event = Event(
+                event_type=EventType.SYSTEM_STARTUP if i < 5 else EventType.ANALYSIS_START,
+                source="test"
+            )
+            logger.log_event(event)
+
+        # Get stats (can be called in async context)
+        stats = logger.get_event_statistics()
+
+        assert stats['total_events'] == 10

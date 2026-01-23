@@ -13,9 +13,36 @@ Hosts core source code and agent-enabled services for the Codomyrmex platform.
 - `codomyrmex.llm/` – Directory containing codomyrmex.llm components
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
-- **🏠 Project Root**: ../README.md - Main project documentation
+1. **Code Quality**: Maintain alignment between code, documentation, and tests
+2. **MCP Interfaces**: Ensure Model Context Protocol interfaces remain available
+3. **Telemetry**: Record outcomes in shared telemetry
+4. **Layered Architecture**: Respect Foundation → Core → Service → Specialized layer dependencies
+
+## Signposting
+
+### Document Hierarchy
+
+- **Self**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../AGENTS.md](../AGENTS.md) - Project root agent coordination
+- **Project Root**: [../README.md](../README.md)
+
+### Sibling Directories
+
+| Directory | AGENTS.md | Purpose |
+| :--- | :--- | :--- |
+| docs/ | [../docs/AGENTS.md](../docs/AGENTS.md) | Documentation |
+| scripts/ | [../scripts/AGENTS.md](../scripts/AGENTS.md) | Automation scripts |
+| config/ | [../config/AGENTS.md](../config/AGENTS.md) | Configuration |
+
+### Child Directories
+
+| Directory | AGENTS.md | Purpose |
+| :--- | :--- | :--- |
+| codomyrmex/ | [codomyrmex/AGENTS.md](codomyrmex/AGENTS.md) | Main module hub |
+
+### Related Documentation
+
+- [README.md](README.md) - Source overview
+- [SPEC.md](SPEC.md) - Functional specification
+- [codomyrmex/PAI.md](codomyrmex/PAI.md) - PAI documentation

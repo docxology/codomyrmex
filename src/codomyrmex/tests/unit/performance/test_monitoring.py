@@ -4,6 +4,7 @@ import pytest
 import time
 import importlib
 import os
+import asyncio
 
 # Test SystemMonitor
 class TestSystemMonitor:
@@ -480,6 +481,213 @@ class TestHealthReporter:
             export_health_report(report, report_path)
             assert os.path.exists(report_path)
             os.unlink(report_path)
+
+
+# ==================== ASYNC TESTS ====================
+
+
+@pytest.mark.asyncio
+class TestAsyncProfiler:
+    """Async tests for AsyncProfiler functionality."""
+
+    async def test_async_profiler_basic(self):
+        """Test basic async profiler functionality."""
+        try:
+            from codomyrmex.performance.async_profiler import AsyncProfiler
+        except ImportError:
+            pytest.skip("AsyncProfiler not available")
+
+        @AsyncProfiler.profile
+        async def sample_async_function():
+            await asyncio.sleep(0.01)
+            return "completed"
+
+        result = await sample_async_function()
+
+        assert result == "completed"
+
+    async def test_async_profiler_preserves_return_value(self):
+        """Test that profiler preserves the return value."""
+        try:
+            from codomyrmex.performance.async_profiler import AsyncProfiler
+        except ImportError:
+            pytest.skip("AsyncProfiler not available")
+
+        @AsyncProfiler.profile
+        async def return_dict():
+            await asyncio.sleep(0.001)
+            return {"key": "value", "count": 42}
+
+        result = await return_dict()
+
+        assert result == {"key": "value", "count": 42}
+
+    async def test_async_profiler_preserves_function_name(self):
+        """Test that profiler preserves function metadata."""
+        try:
+            from codomyrmex.performance.async_profiler import AsyncProfiler
+        except ImportError:
+            pytest.skip("AsyncProfiler not available")
+
+        @AsyncProfiler.profile
+        async def named_function():
+            return True
+
+        # functools.wraps should preserve the name
+        assert named_function.__name__ == "named_function"
+
+    async def test_async_profiler_with_args(self):
+        """Test async profiler with function arguments."""
+        try:
+            from codomyrmex.performance.async_profiler import AsyncProfiler
+        except ImportError:
+            pytest.skip("AsyncProfiler not available")
+
+        @AsyncProfiler.profile
+        async def add_numbers(a: int, b: int) -> int:
+            await asyncio.sleep(0.001)
+            return a + b
+
+        result = await add_numbers(5, 3)
+
+        assert result == 8
+
+    async def test_async_profiler_with_kwargs(self):
+        """Test async profiler with keyword arguments."""
+        try:
+            from codomyrmex.performance.async_profiler import AsyncProfiler
+        except ImportError:
+            pytest.skip("AsyncProfiler not available")
+
+        @AsyncProfiler.profile
+        async def greet(name: str, greeting: str = "Hello") -> str:
+            await asyncio.sleep(0.001)
+            return f"{greeting}, {name}!"
+
+        result = await greet("World", greeting="Hi")
+
+        assert result == "Hi, World!"
+
+    async def test_async_profiler_exception_handling(self):
+        """Test that profiler handles exceptions properly."""
+        try:
+            from codomyrmex.performance.async_profiler import AsyncProfiler
+        except ImportError:
+            pytest.skip("AsyncProfiler not available")
+
+        @AsyncProfiler.profile
+        async def failing_function():
+            await asyncio.sleep(0.001)
+            raise ValueError("Test error")
+
+        with pytest.raises(ValueError, match="Test error"):
+            await failing_function()
+
+    async def test_async_profiler_concurrent_execution(self):
+        """Test profiler with concurrent async executions."""
+        try:
+            from codomyrmex.performance.async_profiler import AsyncProfiler
+        except ImportError:
+            pytest.skip("AsyncProfiler not available")
+
+        results = []
+
+        @AsyncProfiler.profile
+        async def concurrent_task(task_id: int):
+            await asyncio.sleep(0.01)
+            results.append(task_id)
+            return task_id
+
+        # Run multiple tasks concurrently
+        await asyncio.gather(
+            concurrent_task(1),
+            concurrent_task(2),
+            concurrent_task(3),
+        )
+
+        assert len(results) == 3
+        assert set(results) == {1, 2, 3}
+
+    async def test_async_profiler_nested_calls(self):
+        """Test profiler with nested async function calls."""
+        try:
+            from codomyrmex.performance.async_profiler import AsyncProfiler
+        except ImportError:
+            pytest.skip("AsyncProfiler not available")
+
+        @AsyncProfiler.profile
+        async def inner_function(x: int) -> int:
+            await asyncio.sleep(0.001)
+            return x * 2
+
+        @AsyncProfiler.profile
+        async def outer_function(x: int) -> int:
+            result = await inner_function(x)
+            return result + 1
+
+        result = await outer_function(5)
+
+        assert result == 11  # (5 * 2) + 1
+
+
+@pytest.mark.asyncio
+class TestAsyncPerformancePatterns:
+    """Async tests for common performance patterns."""
+
+    async def test_async_rate_limiting(self):
+        """Test async rate limiting pattern."""
+        start_time = time.time()
+        call_times = []
+
+        async def rate_limited_call():
+            call_times.append(time.time() - start_time)
+            await asyncio.sleep(0.01)
+
+        # Simulate rate limiting with a semaphore
+        semaphore = asyncio.Semaphore(2)
+
+        async def limited_call():
+            async with semaphore:
+                await rate_limited_call()
+
+        # Run 4 calls with limit of 2 concurrent
+        await asyncio.gather(*[limited_call() for _ in range(4)])
+
+        assert len(call_times) == 4
+
+    async def test_async_timeout_pattern(self):
+        """Test async timeout pattern."""
+        async def slow_operation():
+            await asyncio.sleep(10)  # Would take 10 seconds
+            return "done"
+
+        # Should timeout quickly
+        with pytest.raises(asyncio.TimeoutError):
+            await asyncio.wait_for(slow_operation(), timeout=0.01)
+
+    async def test_async_retry_pattern(self):
+        """Test async retry pattern."""
+        attempts = 0
+
+        async def flaky_operation():
+            nonlocal attempts
+            attempts += 1
+            if attempts < 3:
+                raise ValueError("Temporary failure")
+            return "success"
+
+        # Simple retry logic
+        result = None
+        for _ in range(5):
+            try:
+                result = await flaky_operation()
+                break
+            except ValueError:
+                await asyncio.sleep(0.001)
+                continue
+
+        assert result == "success"
+        assert attempts == 3
 
 
 if __name__ == "__main__":

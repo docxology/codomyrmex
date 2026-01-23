@@ -985,11 +985,14 @@ Modules organized to prevent circular dependencies:
 - **Self**: [Codomyrmex Root](README.md)
 - **Key Artifacts**:
   - [Agent Guide](AGENTS.md) - Technical documentation for AI agents
+  - [Personal AI Infrastructure](PAI.md) - PAI documentation and capabilities
   - [Functional Spec](SPEC.md) - Functional specification
+  - [Security](SECURITY.md) - Security policies
 - **Children**:
   - [Source Code](src/README.md) - All modules and implementations
   - [Documentation](docs/README.md) - User and developer guides
   - [Scripts](scripts/README.md) - Automation and orchestration utilities
+  - [Configuration](config/README.md) - Configuration templates
 
 ## Documentation
 

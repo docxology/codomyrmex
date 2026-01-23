@@ -19,9 +19,42 @@ Documentation components and guides for the Codomyrmex platform.
 - `reference/` – Directory containing reference components
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
-- **🏠 Project Root**: ../README.md - Main project documentation
+1. **Documentation Structure**: Organized by getting-started, modules, reference, etc.
+2. **Module Docs**: Each src module has corresponding docs in modules/
+3. **Consistency**: Documentation follows common templates and conventions
+4. **Updates**: Documentation kept in sync with code changes
+
+## Signposting
+
+### Document Hierarchy
+
+- **Self**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../AGENTS.md](../AGENTS.md) - Project root agent coordination
+- **Project Root**: [../README.md](../README.md)
+
+### Sibling Directories
+
+| Directory | AGENTS.md | Purpose |
+| :--- | :--- | :--- |
+| src/ | [../src/AGENTS.md](../src/AGENTS.md) | Source code |
+| scripts/ | [../scripts/AGENTS.md](../scripts/AGENTS.md) | Automation scripts |
+| config/ | [../config/AGENTS.md](../config/AGENTS.md) | Configuration |
+
+### Child Directories
+
+| Directory | Purpose |
+| :--- | :--- |
+| getting-started/ | Installation and quick start |
+| modules/ | Module-specific documentation |
+| reference/ | API and CLI reference |
+| project/ | Architecture and design |
+| deployment/ | Deployment guides |
+| development/ | Developer guides |
+| integration/ | Integration guides |
+
+### Related Documentation
+
+- [README.md](README.md) - Documentation index
+- [PAI.md](PAI.md) - PAI documentation guide
+- [SPEC.md](SPEC.md) - Functional specification

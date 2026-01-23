@@ -1,31 +1,62 @@
-# Codomyrmex Agents — src/codomyrmex/website
+# Codomyrmex Agents - src/codomyrmex/website
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Contains components for the src system.
+
+The Website module provides a dynamic web dashboard and control interface for the Codomyrmex ecosystem. It serves as a central hub for human interaction with the system's data and operations, featuring a dashboard, script execution, Ollama chat integration, configuration editing, documentation browsing, and pipeline visualization.
 
 ## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `assets/` – Directory containing assets components
-- `data_provider.py` – Project file
-- `generator.py` – Project file
-- `requirements.template.txt` – Project file
-- `server.py` – Project file
-- `templates/` – Directory containing templates components
+
+- `__init__.py` - Module entry point exposing WebsiteGenerator, DataProvider, and WebsiteServer
+- `generator.py` - Static website generation using Jinja2 templates
+- `data_provider.py` - Data aggregation from system modules (modules, agents, scripts, configs, docs, pipelines)
+- `server.py` - HTTP server with API endpoints for dynamic functionality
+- `templates/` - Jinja2 HTML templates for all pages
+- `assets/` - Static CSS, JavaScript, and other assets
+- `API_SPECIFICATION.md` - API endpoint documentation
+- `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool specs
+- `USAGE_EXAMPLES.md` - Usage examples and quick start guide
+- `SECURITY.md` - Security considerations
+- `CHANGELOG.md` - Version history
+- `SPEC.md` - Technical specification
+
+## Key Classes
+
+- **WebsiteGenerator** - Generates static website from Jinja2 templates
+  - `generate()` - Execute full generation process (prepare output, collect data, render pages, copy assets)
+  - Renders pages: index.html, modules.html, scripts.html, chat.html, agents.html, config.html, docs.html, pipelines.html
+
+- **DataProvider** - Aggregates data from various system modules
+  - `get_system_summary()` - System status, version, environment, counts
+  - `get_modules()` - Scan src/codomyrmex for all packages with descriptions
+  - `get_actual_agents()` - List agent integrations from src/codomyrmex/agents
+  - `get_available_scripts()` - Scan scripts directory for executable Python scripts
+  - `get_config_files()` - Find configuration files (toml, yaml, json)
+  - `get_doc_tree()` - Build documentation file tree
+  - `get_pipeline_status()` - Retrieve CI/CD pipeline status
+
+- **WebsiteServer** - HTTP server extending SimpleHTTPRequestHandler
+  - POST `/api/execute` - Execute scripts from scripts directory
+  - POST `/api/chat` - Proxy chat requests to Ollama
+  - POST `/api/refresh` - Refresh system data
+  - GET `/api/config` - List configuration files
+  - GET `/api/config/<file>` - Get configuration file content
+  - GET `/api/docs` - Get documentation tree
+  - GET `/api/pipelines` - Get pipeline status
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Script execution is sandboxed to the `scripts/` directory with path validation
+- Configuration file access prevents directory traversal attacks
+- Ollama chat proxying defaults to port 11434 with 60-second timeout
+- Static generation clears and recreates output directory on each run
+- Asset files are copied from `assets/` to output directory
+
+## Signposting
+
+- **Parent Directory**: [codomyrmex](../README.md) - Main package documentation
+- **Submodules**:
+  - [templates/](./templates/README.md) - Jinja2 HTML templates
+  - [assets/](./assets/README.md) - Static CSS and JavaScript assets
+- **Project Root**: [../../../README.md](../../../README.md) - Main project documentation

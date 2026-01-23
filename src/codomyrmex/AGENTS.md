@@ -3,69 +3,132 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Contains components for the src system.
+
+This is the module coordination hub for all Codomyrmex source modules. It contains 50+ modules organized in a layered architecture (Foundation → Core → Service → Specialized) with no circular dependencies.
 
 ## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `agents/` – Directory containing agents components
-- `api/` – Directory containing api components
-- `auth/` – Directory containing auth components
-- `build_synthesis/` – Directory containing build_synthesis components
-- `cache/` – Directory containing cache components
-- `cerebrum/` – Directory containing cerebrum components
-- `ci_cd_automation/` – Directory containing ci_cd_automation components
-- `cli/` – Directory containing cli components
-- `cloud/` – Directory containing cloud components
-- `coding/` – Directory containing coding components
-- `compression/` – Directory containing compression components
-- `config_management/` – Directory containing config_management components
-- `containerization/` – Directory containing containerization components
-- `data_visualization/` – Directory containing data_visualization components
-- `database_management/` – Directory containing database_management components
-- `documentation/` – Directory containing documentation components
-- `documents/` – Directory containing documents components
-- `encryption/` – Directory containing encryption components
-- `environment_setup/` – Directory containing environment_setup components
-- `events/` – Directory containing events components
-- `examples/` – Directory containing examples components
-- `exceptions.py` – Project file
-- `fpf/` – Directory containing fpf components
-- `git_operations/` – Directory containing git_operations components
-- `ide/` – Directory containing ide components
-- `llm/` – Directory containing llm components
-- `logging_monitoring/` – Directory containing logging_monitoring components
-- `logistics/` – Directory containing logistics components
-- `metrics/` – Directory containing metrics components
-- `model_context_protocol/` – Directory containing model_context_protocol components
-- `module_template/` – Directory containing module_template components
-- `networking/` – Directory containing networking components
-- `orchestrator/` – Directory containing orchestrator components
-- `pattern_matching/` – Directory containing pattern_matching components
-- `performance/` – Directory containing performance components
-- `physical_management/` – Directory containing physical_management components
-- `plugin_system/` – Directory containing plugin_system components
-- `scrape/` – Directory containing scrape components
-- `security/` – Directory containing security components
-- `serialization/` – Directory containing serialization components
-- `skills/` – Directory containing skills components
-- `spatial/` – Directory containing spatial components
-- `static_analysis/` – Directory containing static_analysis components
-- `system_discovery/` – Directory containing system_discovery components
-- `templating/` – Directory containing templating components
-- `terminal_interface/` – Directory containing terminal_interface components
-- `tests/` – Directory containing tests components
-- `tools/` – Directory containing tools components
-- `utils/` – Directory containing utils components
-- `validation/` – Directory containing validation components
-- `website/` – Directory containing website components
+
+### Foundation Layer (No Dependencies)
+
+| Module | Purpose | Key Classes/Functions |
+| :--- | :--- | :--- |
+| `logging_monitoring/` | Centralized logging | `setup_logging()`, `get_logger()`, `JSONFormatter` |
+| `environment_setup/` | Environment validation | `EnvironmentValidator`, `DependencyChecker` |
+| `model_context_protocol/` | MCP standards | `MCPClient`, `ToolSpecification` |
+| `terminal_interface/` | Terminal UI | `TerminalUI`, `ProgressBar`, `confirm_action()` |
+| `config_management/` | Configuration | `ConfigManager`, `SecretHandler` |
+| `metrics/` | Metrics collection | `MetricsCollector` |
+
+### Core Layer (Depends on Foundation)
+
+| Module | Purpose | Key Classes/Functions |
+| :--- | :--- | :--- |
+| `agents/` | AI agent integrations | `AgentOrchestrator`, `ClaudeClient`, `CodeEditor` |
+| `static_analysis/` | Code analysis | `CodeAnalyzer`, `LintRunner` |
+| `coding/` | Code execution | `SandboxExecutor`, `CodeReviewer` |
+| `data_visualization/` | Visualization | `PlotGenerator`, `ChartBuilder` |
+| `pattern_matching/` | Pattern recognition | `PatternMatcher`, `ASTAnalyzer` |
+| `git_operations/` | Git automation | `GitManager`, `CommitBuilder` |
+| `security/` | Security scanning | `SecurityScanner`, `VulnerabilityDetector` |
+| `llm/` | LLM infrastructure | `OllamaManager`, `ModelRunner`, `FabricManager` |
+| `performance/` | Performance profiling | `PerformanceProfiler`, `BenchmarkRunner` |
+
+### Service Layer (Depends on Foundation + Core)
+
+| Module | Purpose | Key Classes/Functions |
+| :--- | :--- | :--- |
+| `build_synthesis/` | Build automation | `BuildOrchestrator`, `ArtifactBuilder` |
+| `documentation/` | Doc generation | `DocGenerator`, `APIDocumenter` |
+| `api/` | API infrastructure | `OpenAPISpecGenerator`, `RESTAPIBuilder` |
+| `ci_cd_automation/` | CI/CD pipelines | `PipelineBuilder`, `DeploymentManager` |
+| `containerization/` | Containers | `DockerManager`, `ImageBuilder` |
+| `database_management/` | Database ops | `DatabaseClient`, `MigrationRunner` |
+| `orchestrator/` | Workflow orchestration | `WorkflowEngine`, `TaskScheduler` |
+| `logistics/` | Task management | `LogisticsManager` |
+| `auth/` | Authentication | `AuthManager` |
+| `cloud/` | Cloud integrations | `AWSClient`, `GCPClient` |
+
+### Specialized Layer (Full Stack)
+
+| Module | Purpose | Key Classes/Functions |
+| :--- | :--- | :--- |
+| `cerebrum/` | Reasoning engine | `CerebrumEngine`, `BayesianNetwork`, `ActiveInferenceAgent` |
+| `fpf/` | Functional programming | `FPFOrchestrator`, `CombinatorEngine` |
+| `spatial/` | 3D/4D modeling | `SceneBuilder`, `MeshGenerator` |
+| `events/` | Event system | `EventBus`, `EventEmitter` |
+| `plugin_system/` | Plugin architecture | `PluginManager`, `PluginLoader` |
+| `skills/` | Skills management | `SkillsManager` |
+| `ide/` | IDE integration | `EditorInterface` |
+| `documents/` | Document processing | `DocumentProcessor`, `SearchEngine` |
+| `system_discovery/` | System exploration | `ModuleScanner`, `CapabilityDetector` |
+| `module_template/` | Module scaffolding | `ModuleGenerator`, `TemplateRenderer` |
+
+### Utility Modules
+
+| Module | Purpose |
+| :--- | :--- |
+| `utils/` | Common utilities |
+| `validation/` | Input validation |
+| `serialization/` | Data serialization |
+| `compression/` | Data compression |
+| `encryption/` | Cryptographic ops |
+| `networking/` | Network utilities |
+| `scrape/` | Web scraping |
+| `templating/` | Template engine |
+| `cache/` | Caching backends |
+| `website/` | Website generation |
+| `cli/` | CLI utilities |
+| `tests/` | Test suites |
+| `examples/` | Example code |
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
-- **📁 Parent Directory**: [src](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+1. **Layer Dependencies**: Higher layers may only depend on lower layers
+2. **Logging**: All modules use `logging_monitoring` for structured logging
+3. **Configuration**: Modules use `config_management` for settings
+4. **MCP Tools**: Modules expose MCP-compatible tool specifications
+5. **Documentation**: Each module maintains README.md, AGENTS.md, and SPEC.md
+6. **Testing**: Modules maintain ≥80% test coverage
+
+## Signposting
+
+### Document Hierarchy
+
+- **Self**: [AGENTS.md](AGENTS.md)
+- **Parent**: [src/AGENTS.md](../AGENTS.md)
+- **Project Root**: [../../AGENTS.md](../../AGENTS.md)
+
+### Child Module AGENTS.md Files
+
+#### Foundation Layer
+- [logging_monitoring/AGENTS.md](logging_monitoring/AGENTS.md)
+- [environment_setup/AGENTS.md](environment_setup/AGENTS.md)
+- [model_context_protocol/AGENTS.md](model_context_protocol/AGENTS.md)
+- [terminal_interface/AGENTS.md](terminal_interface/AGENTS.md)
+
+#### Core Layer
+- [agents/AGENTS.md](agents/AGENTS.md)
+- [static_analysis/AGENTS.md](static_analysis/AGENTS.md)
+- [coding/AGENTS.md](coding/AGENTS.md)
+- [llm/AGENTS.md](llm/AGENTS.md)
+- [git_operations/AGENTS.md](git_operations/AGENTS.md)
+
+#### Service Layer
+- [build_synthesis/AGENTS.md](build_synthesis/AGENTS.md)
+- [documentation/AGENTS.md](documentation/AGENTS.md)
+- [api/AGENTS.md](api/AGENTS.md)
+- [orchestrator/AGENTS.md](orchestrator/AGENTS.md)
+
+#### Specialized Layer
+- [cerebrum/AGENTS.md](cerebrum/AGENTS.md)
+- [fpf/AGENTS.md](fpf/AGENTS.md)
+- [spatial/AGENTS.md](spatial/AGENTS.md)
+- [events/AGENTS.md](events/AGENTS.md)
+
+### Related Documentation
+
+- [README.md](README.md) - Module overview
+- [SPEC.md](SPEC.md) - Functional specification
+- [PAI.md](PAI.md) - Personal AI Infrastructure (local)
+- [Root PAI.md](../../PAI.md) - Project PAI documentation
+- [Module System Docs](../../docs/modules/overview.md) - Module system documentation

@@ -253,20 +253,45 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 
 ## Signposting
 
-- **Parent**: [Repository Root](README.md)
-- **Self**: [Codomyrmex Root](AGENTS.md)
-- **Children**:
-  - [src](src/AGENTS.md)
-  - [docs](docs/AGENTS.md)
-  - [scripts](scripts/AGENTS.md)
-  - [examples](examples/AGENTS.md)
-  - [config](config/AGENTS.md)
-  - [cursorrules](cursorrules/AGENTS.md)
-  - [projects](projects/AGENTS.md)
+### Document Hierarchy
 
-- **Key Artifacts**:
-  - [Agent Guide](AGENTS.md)
-  - [Functional Spec](SPEC.md)
+- **Self**: [AGENTS.md](AGENTS.md) - This document (root agent coordination)
+- **Parent**: [README.md](README.md) - Project overview and entry point
+
+### Sibling Documents (Root Level)
+
+- [README.md](README.md) - Project overview and quick start
+- [SPEC.md](SPEC.md) - Functional specification
+- [PAI.md](PAI.md) - Personal AI Infrastructure documentation
+- [SECURITY.md](SECURITY.md) - Security policies
+
+### Child AGENTS.md Files
+
+| Directory | AGENTS.md | Purpose |
+| :--- | :--- | :--- |
+| **src/** | [src/AGENTS.md](src/AGENTS.md) | Source code coordination |
+| **src/codomyrmex/** | [src/codomyrmex/AGENTS.md](src/codomyrmex/AGENTS.md) | Module coordination hub |
+| **docs/** | [docs/AGENTS.md](docs/AGENTS.md) | Documentation coordination |
+| **scripts/** | [scripts/AGENTS.md](scripts/AGENTS.md) | Automation scripts coordination |
+| **config/** | [config/AGENTS.md](config/AGENTS.md) | Configuration coordination |
+| **cursorrules/** | [cursorrules/AGENTS.md](cursorrules/AGENTS.md) | Coding standards coordination |
+| **projects/** | [projects/AGENTS.md](projects/AGENTS.md) | Project workspace coordination |
+| **examples/** | [examples/AGENTS.md](examples/AGENTS.md) | Examples coordination |
+
+### Key Module AGENTS.md Files
+
+| Module | AGENTS.md | Layer |
+| :--- | :--- | :--- |
+| **logging_monitoring** | [src/codomyrmex/logging_monitoring/AGENTS.md](src/codomyrmex/logging_monitoring/AGENTS.md) | Foundation |
+| **environment_setup** | [src/codomyrmex/environment_setup/AGENTS.md](src/codomyrmex/environment_setup/AGENTS.md) | Foundation |
+| **model_context_protocol** | [src/codomyrmex/model_context_protocol/AGENTS.md](src/codomyrmex/model_context_protocol/AGENTS.md) | Foundation |
+| **terminal_interface** | [src/codomyrmex/terminal_interface/AGENTS.md](src/codomyrmex/terminal_interface/AGENTS.md) | Foundation |
+| **agents** | [src/codomyrmex/agents/AGENTS.md](src/codomyrmex/agents/AGENTS.md) | Core |
+| **static_analysis** | [src/codomyrmex/static_analysis/AGENTS.md](src/codomyrmex/static_analysis/AGENTS.md) | Core |
+| **coding** | [src/codomyrmex/coding/AGENTS.md](src/codomyrmex/coding/AGENTS.md) | Core |
+| **llm** | [src/codomyrmex/llm/AGENTS.md](src/codomyrmex/llm/AGENTS.md) | Core |
+| **cerebrum** | [src/codomyrmex/cerebrum/AGENTS.md](src/codomyrmex/cerebrum/AGENTS.md) | Specialized |
+| **orchestrator** | [src/codomyrmex/orchestrator/AGENTS.md](src/codomyrmex/orchestrator/AGENTS.md) | Service |
 
 ### For Contributors
 
