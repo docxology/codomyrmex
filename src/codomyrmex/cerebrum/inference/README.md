@@ -1,17 +1,37 @@
-# inference
+# Inference
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `inference` module provides core functionality for Inference.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `__init__.py` – File
-- `active_inference.py` – File
-- `bayesian.py` – File
+```mermaid
+graph TD
+    inference --> Utils[codomyrmex.utils]
+    inference --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph inference
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.inference import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [cerebrum](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

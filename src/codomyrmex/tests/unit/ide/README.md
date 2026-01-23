@@ -1,16 +1,37 @@
-# ide
+# Ide
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `ide` module provides core functionality for Ide.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `test_ide.py` – File
+```mermaid
+graph TD
+    ide --> Utils[codomyrmex.utils]
+    ide --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph ide
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.ide import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

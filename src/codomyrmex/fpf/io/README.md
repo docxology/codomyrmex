@@ -1,19 +1,37 @@
-# io
+# Io
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `io` module provides core functionality for Io.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `exporter.py` – File
-- `fetcher.py` – File
-- `section_exporter.py` – File
-- `section_importer.py` – File
-- `section_manager.py` – File
+```mermaid
+graph TD
+    io --> Utils[codomyrmex.utils]
+    io --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph io
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.io import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [fpf](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

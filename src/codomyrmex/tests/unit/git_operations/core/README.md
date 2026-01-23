@@ -1,15 +1,37 @@
-# core
+# Core
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `core` module provides core functionality for Core.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `test_git_advanced.py` – File
+```mermaid
+graph TD
+    core --> Utils[codomyrmex.utils]
+    core --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph core
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.core import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [git_operations](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

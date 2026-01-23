@@ -1,16 +1,37 @@
-# orchestrator
+# Orchestrator
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `orchestrator` module provides core functionality for Orchestrator.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `test_orchestrator_logging.py` – File
-- `test_workflow.py` – File
+```mermaid
+graph TD
+    orchestrator --> Utils[codomyrmex.utils]
+    orchestrator --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph orchestrator
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.orchestrator import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

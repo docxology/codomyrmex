@@ -1,3 +1,22 @@
+"""Review Models for Code Analysis.
+
+Data classes and enums used throughout the code review system. Provides
+structured representations for analysis results, metrics, quality gates,
+and error types.
+
+Example:
+    >>> from codomyrmex.coding.review.models import AnalysisResult, SeverityLevel
+    >>> result = AnalysisResult(
+    ...     file_path="app.py",
+    ...     line_number=42,
+    ...     column_number=10,
+    ...     severity=SeverityLevel.WARNING,
+    ...     message="Unused variable 'x'",
+    ...     rule_id="W0612",
+    ...     category="quality"
+    ... )
+"""
+
 from typing import Any, Optional
 
 from dataclasses import dataclass, field
@@ -110,17 +129,25 @@ from codomyrmex.logging_monitoring import get_logger
 
 
 logger = get_logger(__name__)
-"""
-Review Models
-
-Data classes and enums for code review operations.
-"""
-
-
 
 
 class AnalysisType(Enum):
-    """Types of static analysis."""
+    """Types of static analysis that can be performed on code.
+
+    Defines the categories of analysis available for code review,
+    from quality checks to security scanning.
+
+    Attributes:
+        QUALITY: General code quality checks.
+        SECURITY: Security vulnerability scanning.
+        PERFORMANCE: Performance analysis and optimization hints.
+        MAINTAINABILITY: Code maintainability assessment.
+        COMPLEXITY: Cyclomatic and cognitive complexity analysis.
+        STYLE: Code style and formatting checks.
+        DOCUMENTATION: Documentation coverage analysis.
+        TESTING: Test coverage and quality analysis.
+        PYSCN: Advanced pyscn-based analysis.
+    """
 
     QUALITY = "quality"
     SECURITY = "security"
@@ -130,11 +157,21 @@ class AnalysisType(Enum):
     STYLE = "style"
     DOCUMENTATION = "documentation"
     TESTING = "testing"
-    PYSCN = "pyscn"  # Advanced pyscn analysis
+    PYSCN = "pyscn"
 
 
 class SeverityLevel(Enum):
-    """Severity levels for analysis results."""
+    """Severity levels for analysis results.
+
+    Indicates the importance and urgency of addressing an issue,
+    from informational to critical.
+
+    Attributes:
+        INFO: Informational finding, no action required.
+        WARNING: Potential issue that should be reviewed.
+        ERROR: Definite issue that should be fixed.
+        CRITICAL: Severe issue requiring immediate attention.
+    """
 
     INFO = "info"
     WARNING = "warning"
@@ -143,7 +180,23 @@ class SeverityLevel(Enum):
 
 
 class Language(Enum):
-    """Supported programming languages."""
+    """Supported programming languages for analysis.
+
+    Defines the programming languages that can be analyzed
+    by the code review system.
+
+    Attributes:
+        PYTHON: Python language (.py files).
+        JAVASCRIPT: JavaScript language (.js files).
+        TYPESCRIPT: TypeScript language (.ts, .tsx files).
+        JAVA: Java language (.java files).
+        CPP: C++ language (.cpp, .cc, .cxx files).
+        CSHARP: C# language (.cs files).
+        GO: Go language (.go files).
+        RUST: Rust language (.rs files).
+        PHP: PHP language (.php files).
+        RUBY: Ruby language (.rb files).
+    """
 
     PYTHON = "python"
     JAVASCRIPT = "javascript"
@@ -159,7 +212,24 @@ class Language(Enum):
 
 @dataclass
 class AnalysisResult:
-    """Result of a static analysis operation."""
+    """Result of a static analysis operation.
+
+    Represents a single finding from code analysis, including its
+    location, severity, and optional suggestions for fixing.
+
+    Attributes:
+        file_path: Path to the file containing the issue.
+        line_number: Line number where the issue was found.
+        column_number: Column number for precise location.
+        severity: The severity level of the issue.
+        message: Human-readable description of the issue.
+        rule_id: Identifier for the rule that triggered this finding.
+        category: Category of the analysis (e.g., "quality", "security").
+        suggestion: Optional suggestion for fixing the issue.
+        context: Optional code context around the issue.
+        fix_available: Whether an automatic fix is available.
+        confidence: Confidence score (0.0-1.0) for the finding.
+    """
 
     file_path: str
     line_number: int
@@ -176,7 +246,21 @@ class AnalysisResult:
 
 @dataclass
 class AnalysisSummary:
-    """Summary of analysis results for a file or project."""
+    """Summary of analysis results for a file or project.
+
+    Aggregates analysis findings with breakdowns by severity,
+    category, and rule for easy reporting and tracking.
+
+    Attributes:
+        total_issues: Total number of issues found.
+        by_severity: Issue counts grouped by severity level.
+        by_category: Issue counts grouped by category.
+        by_rule: Issue counts grouped by rule ID.
+        files_analyzed: Number of files that were analyzed.
+        analysis_time: Total time taken for analysis in seconds.
+        language: Primary language of the analyzed code.
+        pyscn_metrics: Optional metrics from pyscn analysis.
+    """
 
     total_issues: int
     by_severity: dict[SeverityLevel, int] = field(default_factory=dict)
@@ -190,7 +274,20 @@ class AnalysisSummary:
 
 @dataclass
 class CodeMetrics:
-    """Code quality metrics."""
+    """Code quality metrics for a codebase.
+
+    Contains quantitative measurements of code quality including
+    complexity, maintainability, and coverage metrics.
+
+    Attributes:
+        lines_of_code: Total lines of code (excluding blanks/comments).
+        cyclomatic_complexity: McCabe cyclomatic complexity score.
+        maintainability_index: Maintainability index (0-100 scale).
+        technical_debt: Estimated technical debt in hours.
+        code_duplication: Percentage of duplicated code.
+        test_coverage: Optional test coverage percentage.
+        documentation_coverage: Optional documentation coverage percentage.
+    """
 
     lines_of_code: int
     cyclomatic_complexity: int
@@ -203,7 +300,20 @@ class CodeMetrics:
 
 @dataclass
 class ComplexityReductionSuggestion:
-    """Suggestion for reducing function complexity."""
+    """Suggestion for reducing function complexity.
+
+    Provides actionable recommendations for refactoring complex
+    functions to improve maintainability.
+
+    Attributes:
+        function_name: Name of the complex function.
+        file_path: Path to the file containing the function.
+        current_complexity: Current cyclomatic complexity score.
+        suggested_refactoring: Description of suggested refactoring.
+        estimated_effort: Effort estimate ("low", "medium", "high").
+        benefits: List of benefits from the refactoring.
+        code_example: Optional example of the refactored code.
+    """
 
     function_name: str
     file_path: str
@@ -216,7 +326,21 @@ class ComplexityReductionSuggestion:
 
 @dataclass
 class DeadCodeFinding:
-    """Enhanced dead code finding with suggestions."""
+    """Enhanced dead code finding with suggestions.
+
+    Represents detected dead or unreachable code with context
+    and recommendations for removal.
+
+    Attributes:
+        file_path: Path to the file containing dead code.
+        line_number: Starting line number of the dead code.
+        code_snippet: The dead code snippet.
+        reason: Why this code is considered dead.
+        severity: Severity level of the finding.
+        suggestion: Recommendation for handling the dead code.
+        fix_available: Whether automatic removal is available.
+        estimated_savings: Estimated benefit from removal.
+    """
 
     file_path: str
     line_number: int
@@ -230,7 +354,19 @@ class DeadCodeFinding:
 
 @dataclass
 class ArchitectureViolation:
-    """Architecture compliance violation."""
+    """Architecture compliance violation.
+
+    Represents a deviation from defined architecture rules or
+    best practices in module organization.
+
+    Attributes:
+        file_path: Path to the violating file.
+        violation_type: Type of architecture violation.
+        description: Detailed description of the violation.
+        severity: Severity level of the violation.
+        suggestion: Recommendation for fixing the violation.
+        affected_modules: List of modules affected by this violation.
+    """
 
     file_path: str
     violation_type: str
@@ -242,7 +378,38 @@ class ArchitectureViolation:
 
 @dataclass
 class QualityDashboard:
-    """Comprehensive code quality dashboard."""
+    """Comprehensive code quality dashboard.
+
+    Aggregates all quality metrics, scores, and recommendations
+    into a single dashboard view for project health assessment.
+
+    Attributes:
+        overall_score: Overall quality score (0-100).
+        grade: Letter grade (A, B, C, D, F).
+        analysis_timestamp: ISO timestamp of the analysis.
+        total_files: Number of files in the project.
+        total_functions: Number of functions analyzed.
+        total_lines: Total lines of code.
+        complexity_score: Complexity category score.
+        maintainability_score: Maintainability category score.
+        testability_score: Testability category score.
+        reliability_score: Reliability category score.
+        security_score: Security category score.
+        performance_score: Performance category score.
+        complexity_metrics: Detailed complexity metrics.
+        dead_code_metrics: Detailed dead code metrics.
+        duplication_metrics: Detailed duplication metrics.
+        coupling_metrics: Detailed coupling metrics.
+        architecture_metrics: Detailed architecture metrics.
+        top_complexity_issues: Top complexity issues to address.
+        top_dead_code_issues: Top dead code issues to address.
+        top_duplication_issues: Top duplication issues to address.
+        priority_actions: High-priority recommended actions.
+        quick_wins: Low-effort improvements with high impact.
+        long_term_improvements: Strategic long-term improvements.
+        trend_direction: Optional trend direction ("improving", "declining").
+        trend_percentage: Optional trend change percentage.
+    """
 
     overall_score: float
     grade: str
@@ -283,7 +450,18 @@ class QualityDashboard:
 
 @dataclass
 class QualityGateResult:
-    """Result of quality gate check."""
+    """Result of quality gate check.
+
+    Indicates whether code passes defined quality thresholds
+    with details on passed and failed checks.
+
+    Attributes:
+        passed: Whether all quality gates passed.
+        total_checks: Total number of quality checks performed.
+        passed_checks: Number of checks that passed.
+        failed_checks: Number of checks that failed.
+        failures: List of failure details with check names and values.
+    """
 
     passed: bool
     total_checks: int
@@ -293,21 +471,34 @@ class QualityGateResult:
 
 
 class CodeReviewError(CodomyrmexError):
-    """Base exception for code review operations."""
+    """Base exception for code review operations.
+
+    Parent class for all code review-related exceptions.
+    """
     pass
 
 
 class PyscnError(CodeReviewError):
-    """Error in pyscn analysis."""
+    """Error in pyscn analysis.
+
+    Raised when pyscn analysis fails or produces invalid results.
+    """
     pass
 
 
 class ToolNotFoundError(CodeReviewError):
-    """Required analysis tool not found."""
+    """Required analysis tool not found.
+
+    Raised when a required external tool (e.g., pylint, pyscn)
+    is not installed or not available in PATH.
+    """
     pass
 
 
 class ConfigurationError(CodeReviewError):
-    """Invalid configuration provided."""
+    """Invalid configuration provided.
+
+    Raised when analysis configuration is invalid or incomplete.
+    """
     pass
 

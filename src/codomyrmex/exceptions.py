@@ -186,7 +186,18 @@ class CodomyrmexError(Exception):
 class ConfigurationError(CodomyrmexError):
     """Raised when there's an issue with configuration settings."""
 
-    pass
+    def __init__(
+        self,
+        message: str,
+        config_key: Optional[str] = None,
+        config_file: Optional[Union[str, Path]] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if config_key:
+            self.context["config_key"] = config_key
+        if config_file:
+            self.context["config_file"] = str(config_file)
 
 
 class EnvironmentError(CodomyrmexError):
@@ -469,7 +480,18 @@ class DeploymentError(CodomyrmexError):
 class ValidationError(CodomyrmexError):
     """Raised when data validation fails."""
 
-    pass
+    def __init__(
+        self,
+        message: str,
+        field_name: Optional[str] = None,
+        validation_rule: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if field_name:
+            self.context["field_name"] = field_name
+        if validation_rule:
+            self.context["validation_rule"] = validation_rule
 
 
 class SchemaError(CodomyrmexError):
@@ -482,7 +504,18 @@ class SchemaError(CodomyrmexError):
 class NetworkError(CodomyrmexError):
     """Raised when network operations fail."""
 
-    pass
+    def __init__(
+        self,
+        message: str,
+        url: Optional[str] = None,
+        status_code: Optional[int] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if url:
+            self.context["url"] = url
+        if status_code is not None:
+            self.context["status_code"] = status_code
 
 
 class APIError(CodomyrmexError):
@@ -546,6 +579,60 @@ class TemplateError(CodomyrmexError):
     """Raised when template operations fail."""
 
     pass
+
+
+# Plugin Errors
+class PluginError(CodomyrmexError):
+    """Raised when plugin operations fail."""
+
+    def __init__(
+        self,
+        message: str,
+        plugin_name: Optional[str] = None,
+        plugin_version: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if plugin_name:
+            self.context["plugin_name"] = plugin_name
+        if plugin_version:
+            self.context["plugin_version"] = plugin_version
+
+
+# Cache Errors
+class CacheError(CodomyrmexError):
+    """Raised when cache operations fail."""
+
+    def __init__(
+        self,
+        message: str,
+        cache_key: Optional[str] = None,
+        backend: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if cache_key:
+            self.context["cache_key"] = cache_key
+        if backend:
+            self.context["backend"] = backend
+
+
+# Serialization Errors
+class SerializationError(CodomyrmexError):
+    """Raised when serialization/deserialization operations fail."""
+
+    def __init__(
+        self,
+        message: str,
+        format_type: Optional[str] = None,
+        data_type: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if format_type:
+            self.context["format_type"] = format_type
+        if data_type:
+            self.context["data_type"] = data_type
 
 
 # Utility functions for exception handling

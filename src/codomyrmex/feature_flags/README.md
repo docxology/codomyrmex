@@ -1,34 +1,104 @@
-# feature_flags
+# Feature Flags Module
 
-Dynamic feature management and toggle module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This module provides a robust framework for managing feature flags (toggles) within Codomyrmex applications. It enables safe feature rollouts, A/B testing, and operational toggles without code redeployment.
+The Feature Flags module provides feature toggle management for the Codomyrmex platform, enabling controlled rollout and A/B testing of features.
 
-## Key Features
+## Architecture
 
-- **Decoupled Configuration**: Feature states are managed independently of the application logic.
-- **Contextual Evaluation**: Flags can be evaluated based on user context or environment.
-- **Persistence Layer**: Built-in `load_from_file` and `save_to_file` for flag configuration.
-- **Rollout Strategies**: Support for percentage-based rollouts and target groups.
-- **Audit Logging**: Traceability of flag state changes and evaluation results.
+```mermaid
+graph TB
+    subgraph feature_flags["feature_flags/"]
+        Manager["FeatureManager"]
+    end
+    
+    Manager --> Config["Configuration"]
+    Manager --> Users["User Targeting"]
+```
 
-## Usage
+## Key Classes
+
+| Class | Purpose |
+|-------|---------|
+| `FeatureManager` | Manage feature flags |
+
+## Quick Start
+
+### Basic Usage
 
 ```python
 from codomyrmex.feature_flags import FeatureManager
 
-manager = FeatureManager()
+flags = FeatureManager()
 
-# Evaluate a flag for a specific user
-if manager.is_enabled("new-ui-v2", user_id="user_123"):
-    render_new_ui()
+# Check if feature is enabled
+if flags.is_enabled("new-dashboard"):
+    show_new_dashboard()
 else:
-    render_old_ui()
+    show_old_dashboard()
 ```
 
-## Navigation Links
+### Define Features
 
-- [Functional Specification](SPEC.md)
-- [Technical Documentation](AGENTS.md)
+```python
+from codomyrmex.feature_flags import FeatureManager
+
+flags = FeatureManager()
+
+# Define features
+flags.define("dark-mode", default=False)
+flags.define("new-editor", default=True)
+flags.define("beta-features", default=False)
+
+# Enable for specific users
+flags.enable_for_user("beta-features", user_id="user-123")
+```
+
+### Percentage Rollout
+
+```python
+from codomyrmex.feature_flags import FeatureManager
+
+flags = FeatureManager()
+
+# Gradual rollout
+flags.set_percentage("new-feature", 25)  # 25% of users
+
+# Check for specific user
+if flags.is_enabled_for("new-feature", user_id=current_user.id):
+    use_new_feature()
+```
+
+### Feature Configuration
+
+```python
+from codomyrmex.feature_flags import FeatureManager
+
+flags = FeatureManager(config_file="features.yaml")
+
+# YAML config:
+# features:
+#   new-dashboard:
+#     enabled: true
+#     percentage: 100
+#   beta-editor:
+#     enabled: true
+#     percentage: 10
+#     allowlist:
+#       - admin
+#       - beta-tester
+```
+
+## Integration Points
+
+- **config_management**: Feature configuration
+- **logging_monitoring**: Feature usage logging
+- **auth**: User-based targeting
+
+## Navigation
+
+- **Parent**: [../README.md](../README.md)
+- **Siblings**: [config_management](../config_management/), [auth](../auth/)
+- **Spec**: [SPEC.md](SPEC.md)

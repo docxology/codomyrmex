@@ -1,16 +1,37 @@
-# examples
+# Examples
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `examples` module provides core functionality for Examples.
 
-Example implementations and demonstrations.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `advanced_workflow.py` – File
-- `basic_usage.py` – File
+```mermaid
+graph TD
+    examples --> Utils[codomyrmex.utils]
+    examples --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph examples
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.examples import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [compression](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

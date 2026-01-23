@@ -46,6 +46,11 @@ from .handlers import (
     handle_skills_list,
     handle_skills_get,
     handle_skills_search,
+    handle_quick_run,
+    handle_quick_pipe,
+    handle_quick_batch,
+    handle_quick_chain,
+    handle_quick_workflow,
 )
 
 # Add the src directory to Python path for development (legacy support)
@@ -304,6 +309,31 @@ Examples:
     skills_search_parser = skills_subparsers.add_parser("search", help="Search skills")
     skills_search_parser.add_argument("query", help="Search query")
 
+    # Quick orchestration commands (thin orchestration)
+    run_parser = subparsers.add_parser("run", help="Quick run script, module, or directory")
+    run_parser.add_argument("target", help="Script path, module name, directory, or glob pattern")
+    run_parser.add_argument("args", nargs="*", help="Additional arguments")
+    run_parser.add_argument("--timeout", "-t", type=int, default=60, help="Timeout per script")
+    run_parser.add_argument("--parallel", "-p", action="store_true", help="Run in parallel")
+
+    pipe_parser = subparsers.add_parser("pipe", help="Pipe commands together sequentially")
+    pipe_parser.add_argument("commands", nargs="+", help="Commands to pipe")
+    pipe_parser.add_argument("--continue", dest="continue_on_error", action="store_true", help="Continue on error")
+
+    batch_parser = subparsers.add_parser("batch", help="Run multiple targets in parallel")
+    batch_parser.add_argument("targets", nargs="+", help="Targets to run")
+    batch_parser.add_argument("--workers", "-w", type=int, default=4, help="Number of parallel workers")
+    batch_parser.add_argument("--timeout", "-t", type=int, default=60, help="Timeout per target")
+
+    chain_parser = subparsers.add_parser("chain", help="Chain scripts sequentially with result passing")
+    chain_parser.add_argument("scripts", nargs="+", help="Scripts to chain")
+    chain_parser.add_argument("--timeout", "-t", type=int, default=60, help="Timeout per script")
+    chain_parser.add_argument("--continue", dest="continue_on_error", action="store_true", help="Continue on error")
+
+    exec_workflow_parser = subparsers.add_parser("exec", help="Execute workflow from definition file")
+    exec_workflow_parser.add_argument("definition", help="Workflow definition file (YAML/JSON)")
+    exec_workflow_parser.add_argument("--params", "-p", help="JSON parameters")
+
     # Parse arguments
     args = parser.parse_args()
 
@@ -438,6 +468,44 @@ Examples:
         else:
             skills_parser.print_help()
             success = False
+
+    # Quick orchestration commands
+    elif args.command == "run":
+        success = handle_quick_run(
+            args.target,
+            args=args.args,
+            timeout=args.timeout,
+            parallel=args.parallel,
+            verbose=args.verbose
+        )
+
+    elif args.command == "pipe":
+        success = handle_quick_pipe(
+            args.commands,
+            stop_on_error=not args.continue_on_error
+        )
+
+    elif args.command == "batch":
+        success = handle_quick_batch(
+            args.targets,
+            workers=args.workers,
+            timeout=args.timeout,
+            verbose=args.verbose
+        )
+
+    elif args.command == "chain":
+        success = handle_quick_chain(
+            args.scripts,
+            timeout=args.timeout,
+            continue_on_error=args.continue_on_error
+        )
+
+    elif args.command == "exec":
+        success = handle_quick_workflow(
+            args.definition,
+            params=args.params,
+            verbose=args.verbose
+        )
 
     else:
         if args.command is None:

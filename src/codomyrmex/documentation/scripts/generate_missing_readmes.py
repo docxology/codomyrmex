@@ -112,7 +112,8 @@ def generate_readme_content(module_info, dir_path, repo_root):
             readme_content += "\n".join(contents) + "\n"
         else:
             readme_content += "No additional files.\n"
-    except:
+    except OSError as e:
+        logger.debug(f"Failed to list directory contents: {e}")
         readme_content += "Directory contents.\n"
 
     # Add navigation

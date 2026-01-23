@@ -53,6 +53,14 @@ from .security_scanner import (
     SecurityScanResult,
     scan_container_security,
 )
+from .exceptions import (
+    ContainerError,
+    ImageBuildError,
+    NetworkError,
+    VolumeError,
+    RegistryError,
+    KubernetesError,
+)
 
 __all__ = [
     # Docker management
@@ -75,4 +83,11 @@ __all__ = [
     "ContainerOptimizer",
     "optimize_containers",
     "ContainerMetrics",
+    # Exceptions
+    "ContainerError",
+    "ImageBuildError",
+    "NetworkError",
+    "VolumeError",
+    "RegistryError",
+    "KubernetesError",
 ]

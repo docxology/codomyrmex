@@ -1,38 +1,133 @@
-# evolutionary_ai
+# Evolutionary AI Module
 
-Evolutionary computation and genetic algorithm module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This module provides a framework for evolutionary AI, including genetic algorithms, neuroevolution, and generative design. It enables the optimization of parameters, architectures, and behaviors through simulated evolution.
+The Evolutionary AI module provides genetic algorithm and evolutionary computation capabilities for the Codomyrmex platform, enabling optimization through evolution-inspired methods.
 
-## Key Features
+## Architecture
 
-- **Genetic Operators**: Optimized `crossover`, `mutate`, and `tournament_selection` implementations.
-- **Genome Management**: `Genome` objects with automated gene initialization and mutation.
-- **Population Control**: Robust `Population` class for managing generations and evolution cycles.
-- **Fitness Evaluation**: Abstract interfaces for defining and executes fitness functions.
-
-## Usage
-
-```python
-from codomyrmex.evolutionary_ai import Population, GeneticAlgorithm
-
-# Define a simple fitness function
-def fitness_fn(genome):
-    return sum(genome.genes)
-
-# Initialize population
-pop = Population(size=100, genome_length=10)
-
-# Run evolution
-ga = GeneticAlgorithm(population=pop, fitness_fn=fitness_fn)
-best_genome = ga.evolve(generations=50)
-
-print(f"Best fitness: {best_genome.fitness}")
+```mermaid
+graph TB
+    subgraph evolutionary_ai["evolutionary_ai/"]
+        Population["Population"]
+        Genome["Genome"]
+        
+        subgraph operators["Operators"]
+            Crossover["crossover()"]
+            Mutate["mutate()"]
+            Selection["tournament_selection()"]
+        end
+    end
+    
+    Population --> Genome
+    Population --> operators
 ```
 
-## Navigation Links
+## Key Classes
 
-- [Functional Specification](SPEC.md)
-- [Technical Documentation](AGENTS.md)
+| Class | Purpose |
+|-------|---------|
+| `Genome` | Individual genome representation |
+| `Population` | Population of genomes |
+
+## Operators
+
+| Function | Purpose |
+|----------|---------|
+| `crossover()` | Combine two genomes |
+| `mutate()` | Mutate a genome |
+| `tournament_selection()` | Select best individuals |
+
+## Quick Start
+
+### Create Population
+
+```python
+from codomyrmex.evolutionary_ai import Population, Genome
+
+# Define genome structure
+def create_genome():
+    return Genome(genes=[random.random() for _ in range(10)])
+
+# Create population
+population = Population(size=100, genome_factory=create_genome)
+```
+
+### Evolution Loop
+
+```python
+from codomyrmex.evolutionary_ai import (
+    Population,
+    crossover,
+    mutate,
+    tournament_selection
+)
+
+# Fitness function
+def fitness(genome):
+    return sum(genome.genes)
+
+# Evolution loop
+for generation in range(100):
+    # Evaluate fitness
+    population.evaluate(fitness)
+    
+    # Selection
+    parents = tournament_selection(population, k=2)
+    
+    # Crossover
+    offspring = crossover(parents[0], parents[1])
+    
+    # Mutation
+    offspring = mutate(offspring, rate=0.01)
+    
+    # Update population
+    population.replace_worst(offspring)
+    
+    print(f"Gen {generation}: Best = {population.best_fitness}")
+```
+
+### Custom Genome
+
+```python
+from codomyrmex.evolutionary_ai import Genome
+
+class NeuralGenome(Genome):
+    def __init__(self, layers):
+        self.layers = layers
+        self.weights = self._init_weights()
+    
+    def _init_weights(self):
+        # Initialize neural network weights
+        return [np.random.randn(l1, l2) 
+                for l1, l2 in zip(self.layers[:-1], self.layers[1:])]
+```
+
+### Operators
+
+```python
+from codomyrmex.evolutionary_ai import crossover, mutate
+
+# Single-point crossover
+child = crossover(parent1, parent2, method="single_point")
+
+# Uniform crossover
+child = crossover(parent1, parent2, method="uniform")
+
+# Gaussian mutation
+mutated = mutate(genome, rate=0.1, sigma=0.5)
+```
+
+## Integration Points
+
+- **cerebrum**: Neural architecture search
+- **agents**: Agent evolution
+- **coding**: Program synthesis
+
+## Navigation
+
+- **Parent**: [../README.md](../README.md)
+- **Siblings**: [cerebrum](../cerebrum/), [agents](../agents/)
+- **Spec**: [SPEC.md](SPEC.md)

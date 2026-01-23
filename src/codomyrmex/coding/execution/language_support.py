@@ -1,12 +1,23 @@
+"""Language Support Configuration.
+
+Defines supported programming languages and their execution configurations
+for the sandboxed code execution environment. Each language specifies its
+Docker image, file extension, execution command, and timeout factor.
+
+Attributes:
+    SUPPORTED_LANGUAGES: Dictionary mapping language names to their
+        execution configurations.
+
+Example:
+    >>> from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES, validate_language
+    >>> if validate_language("python"):
+    ...     config = SUPPORTED_LANGUAGES["python"]
+    ...     print(f"Using Docker image: {config['image']}")
+"""
 
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
-"""
-Language Support Configuration
-
-Defines supported programming languages and their execution configurations.
-"""
 
 # Supported languages and their corresponding Docker images and file extensions
 SUPPORTED_LANGUAGES = {
@@ -66,6 +77,25 @@ SUPPORTED_LANGUAGES = {
 
 
 def validate_language(language: str) -> bool:
-    """Validate that the requested language is supported."""
+    """Validate that the requested programming language is supported.
+
+    Checks if the given language string matches one of the supported
+    languages in the SUPPORTED_LANGUAGES configuration.
+
+    Args:
+        language: The programming language identifier to validate
+            (e.g., "python", "javascript", "java").
+
+    Returns:
+        True if the language is supported, False otherwise.
+
+    Example:
+        >>> validate_language("python")
+        True
+        >>> validate_language("cobol")
+        False
+        >>> validate_language("JavaScript")  # Case-sensitive
+        False
+    """
     return language in SUPPORTED_LANGUAGES
 

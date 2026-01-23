@@ -1,34 +1,99 @@
-# model_ops
+# Model Operations Module
 
-Machine Learning and LLM operations management module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This module provides tools for managing the lifecycle of machine learning models, specifically focusing on Large Language Models (LLMs). It covers fine-tuning orchestration, model evaluation, and dataset management.
+The Model Operations module provides ML model lifecycle management for the Codomyrmex platform, including dataset management, fine-tuning, and evaluation capabilities.
 
-## Key Features
+## Architecture
 
-- **Fine-tuning**: Standardized interface for triggering and monitoring fine-tuning jobs.
-- **Evaluation**: Unified `Evaluator` for running benchmarks with metrics like Exact Match (EM).
-- **Dataset Management**: `DatasetSanitizer` for stripping keys and filtering data by length.
-- **Model Registry**: A central hub for tracking models and their metadata.
+```mermaid
+graph TB
+    subgraph model_ops["model_ops/"]
+        Dataset["Dataset"]
+        Sanitizer["DatasetSanitizer"]
+        FineTuning["FineTuningJob"]
+        Evaluator["Evaluator"]
+    end
+    
+    Dataset --> Sanitizer
+    Dataset --> FineTuning
+    FineTuning --> Evaluator
+```
 
-## Usage
+## Key Classes
+
+| Class | Purpose |
+|-------|---------|
+| `Dataset` | Dataset management |
+| `DatasetSanitizer` | Clean and prepare data |
+| `FineTuningJob` | Model fine-tuning |
+| `Evaluator` | Model evaluation |
+
+## Quick Start
+
+### Dataset Management
+
+```python
+from codomyrmex.model_ops import Dataset, DatasetSanitizer
+
+# Create dataset
+dataset = Dataset.from_jsonl("training_data.jsonl")
+
+# Sanitize data
+sanitizer = DatasetSanitizer()
+clean_data = sanitizer.sanitize(dataset)
+clean_data.save("clean_data.jsonl")
+```
+
+### Fine-Tuning
 
 ```python
 from codomyrmex.model_ops import FineTuningJob, Dataset
 
-# Prepare dataset
-dataset = Dataset.from_file("training_data.jsonl")
-dataset.upload("my-bucket/datasets/")
+dataset = Dataset.from_jsonl("training.jsonl")
 
-# Start fine-tuning
-job = FineTuningJob(base_model="gpt-3.5-turbo", dataset=dataset)
-job.run()
-print(job.status)
+job = FineTuningJob(
+    model="gpt-4o-mini",
+    dataset=dataset,
+    epochs=3,
+    learning_rate=1e-5
+)
+
+# Start training
+job.start()
+
+# Monitor progress
+while job.status == "running":
+    print(f"Progress: {job.progress:.1%}")
 ```
 
-## Navigation Links
+### Evaluation
 
-- [Functional Specification](SPEC.md)
-- [Technical Documentation](AGENTS.md)
+```python
+from codomyrmex.model_ops import Evaluator, Dataset
+
+evaluator = Evaluator()
+
+# Evaluate model
+results = evaluator.evaluate(
+    model="fine-tuned-model",
+    dataset=Dataset.from_jsonl("test.jsonl"),
+    metrics=["accuracy", "f1", "perplexity"]
+)
+
+print(f"Accuracy: {results.accuracy:.2%}")
+```
+
+## Integration Points
+
+- **llm**: Model inference
+- **agents**: Agent fine-tuning
+- **cerebrum**: Neural operations
+
+## Navigation
+
+- **Parent**: [../README.md](../README.md)
+- **Siblings**: [llm](../llm/), [cerebrum](../cerebrum/)
+- **Spec**: [SPEC.md](SPEC.md)

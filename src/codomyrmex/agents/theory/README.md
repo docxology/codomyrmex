@@ -1,18 +1,37 @@
-# theory
+# Theory
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `theory` module provides core functionality for Theory.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `agent_architectures.py` – File
-- `reasoning_models.py` – File
+```mermaid
+graph TD
+    theory --> Utils[codomyrmex.utils]
+    theory --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph theory
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.theory import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [agents](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

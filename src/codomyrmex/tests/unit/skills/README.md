@@ -1,19 +1,37 @@
-# skills
+# Skills
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `skills` module provides core functionality for Skills.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `test_skill_loader.py` – File
-- `test_skill_sync.py` – File
-- `test_skills_manager.py` – File
+```mermaid
+graph TD
+    skills --> Utils[codomyrmex.utils]
+    skills --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph skills
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.skills import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

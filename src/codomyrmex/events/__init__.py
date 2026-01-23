@@ -8,16 +8,39 @@ asynchronous communication between different components of the Codomyrmex platfo
 from .event_schema import Event, EventType, EventPriority, EventSchema
 from .event_bus import EventBus, get_event_bus, publish_event, subscribe_to_events, unsubscribe_from_events
 from .emitter import AsyncEventEmitter
+from .exceptions import (
+    EventPublishError,
+    EventSubscriptionError,
+    EventHandlerError,
+    EventTimeoutError,
+    EventValidationError,
+    EventQueueError,
+    EventDeliveryError,
+)
+
+# Re-export base EventError from main exceptions module
+from codomyrmex.exceptions import EventError
 
 __all__ = [
+    # Core classes
     'Event',
     'EventType',
     'EventPriority',
     'EventSchema',
     'EventBus',
+    'AsyncEventEmitter',
+    # Functions
     'get_event_bus',
     'publish_event',
     'subscribe_to_events',
     'unsubscribe_from_events',
-    'AsyncEventEmitter',
+    # Exceptions
+    'EventError',
+    'EventPublishError',
+    'EventSubscriptionError',
+    'EventHandlerError',
+    'EventTimeoutError',
+    'EventValidationError',
+    'EventQueueError',
+    'EventDeliveryError',
 ]

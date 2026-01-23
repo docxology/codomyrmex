@@ -6,9 +6,12 @@ streaming support, and integration options.
 """
 
 import asyncio
+import json
 import time
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Any, AsyncIterator, Callable, Optional
+
+import aiohttp
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -431,3 +434,445 @@ class ModelRunner:
             'avg_tokens_per_second': sum(tokens_per_sec) / len(tokens_per_sec),
             'success_rate': len(successful_results) / len(results)
         }
+
+    # =========================================================================
+    # ASYNC VARIANTS FOR I/O-BOUND OPERATIONS
+    # =========================================================================
+
+    async def async_run_model(
+        self,
+        model_name: str,
+        prompt: str,
+        options: Optional[ExecutionOptions] = None,
+        timeout: int = 300
+    ) -> ModelExecutionResult:
+        """
+        Run a model asynchronously with custom execution options.
+
+        Uses aiohttp for non-blocking HTTP requests to the Ollama API.
+
+        Args:
+            model_name: Name of the model to run
+            prompt: Input prompt
+            options: Execution options
+            timeout: Request timeout in seconds (default 300)
+
+        Returns:
+            ModelExecutionResult with execution details
+        """
+        if options is None:
+            options = ExecutionOptions()
+
+        self.logger.info(f"[ASYNC] Running model {model_name} with prompt length: {len(prompt)}")
+
+        start_time = time.time()
+
+        # Build Ollama API payload
+        payload: dict[str, Any] = {
+            "model": model_name,
+            "prompt": prompt,
+            "stream": False,
+            "options": {
+                "temperature": options.temperature,
+                "top_p": options.top_p,
+                "top_k": options.top_k,
+                "repeat_penalty": options.repeat_penalty,
+            }
+        }
+
+        if options.max_tokens:
+            payload["options"]["num_predict"] = options.max_tokens
+
+        if options.format:
+            payload["format"] = options.format
+
+        if options.context_window:
+            payload["options"]["num_ctx"] = options.context_window
+
+        if options.system_prompt:
+            payload["system"] = options.system_prompt
+
+        try:
+            timeout_config = aiohttp.ClientTimeout(total=timeout)
+            async with aiohttp.ClientSession(timeout=timeout_config) as session:
+                async with session.post(
+                    f"{self.ollama_manager.base_url}/api/generate",
+                    json=payload
+                ) as response:
+                    execution_time = time.time() - start_time
+
+                    if response.status == 200:
+                        data = await response.json()
+                        response_text = data.get("response", "").strip()
+                        tokens_used = data.get("eval_count")
+
+                        self.logger.info(
+                            f"[ASYNC] Model {model_name} completed in {execution_time:.2f}s"
+                        )
+
+                        return ModelExecutionResult(
+                            model_name=model_name,
+                            prompt=prompt,
+                            response=response_text,
+                            execution_time=execution_time,
+                            tokens_used=tokens_used,
+                            success=True,
+                            error_message=None,
+                            metadata={"api_method": "async_http"}
+                        )
+                    else:
+                        error_text = await response.text()
+                        error_msg = f"HTTP {response.status}: {error_text}"
+                        self.logger.error(f"[ASYNC] Model {model_name} failed: {error_msg}")
+
+                        return ModelExecutionResult(
+                            model_name=model_name,
+                            prompt=prompt,
+                            response="",
+                            execution_time=execution_time,
+                            success=False,
+                            error_message=error_msg
+                        )
+
+        except asyncio.TimeoutError:
+            execution_time = time.time() - start_time
+            return ModelExecutionResult(
+                model_name=model_name,
+                prompt=prompt,
+                response="",
+                execution_time=execution_time,
+                success=False,
+                error_message="Model execution timed out"
+            )
+        except aiohttp.ClientError as e:
+            execution_time = time.time() - start_time
+            return ModelExecutionResult(
+                model_name=model_name,
+                prompt=prompt,
+                response="",
+                execution_time=execution_time,
+                success=False,
+                error_message=f"Network error: {str(e)}"
+            )
+        except Exception as e:
+            execution_time = time.time() - start_time
+            return ModelExecutionResult(
+                model_name=model_name,
+                prompt=prompt,
+                response="",
+                execution_time=execution_time,
+                success=False,
+                error_message=f"Execution error: {str(e)}"
+            )
+
+    async def async_generate(
+        self,
+        model_name: str,
+        prompt: str,
+        options: Optional[ExecutionOptions] = None,
+        timeout: int = 300
+    ) -> ModelExecutionResult:
+        """
+        Generate text asynchronously using the specified model.
+
+        This is an alias for async_run_model with a more intuitive name
+        for text generation tasks.
+
+        Args:
+            model_name: Name of the model to use
+            prompt: Input prompt for generation
+            options: Execution options (temperature, top_p, etc.)
+            timeout: Request timeout in seconds
+
+        Returns:
+            ModelExecutionResult with generated text
+        """
+        return await self.async_run_model(model_name, prompt, options, timeout)
+
+    async def async_chat(
+        self,
+        model_name: str,
+        messages: list[dict[str, str]],
+        options: Optional[ExecutionOptions] = None,
+        timeout: int = 300
+    ) -> ModelExecutionResult:
+        """
+        Run a chat conversation asynchronously.
+
+        Uses Ollama's chat API endpoint for multi-turn conversations.
+
+        Args:
+            model_name: Name of the model to use
+            messages: List of message dicts with 'role' and 'content' keys
+                     Roles can be: 'system', 'user', 'assistant'
+            options: Execution options
+            timeout: Request timeout in seconds
+
+        Returns:
+            ModelExecutionResult with assistant's response
+        """
+        if options is None:
+            options = ExecutionOptions()
+
+        self.logger.info(
+            f"[ASYNC] Running chat with {model_name}, {len(messages)} messages"
+        )
+
+        start_time = time.time()
+
+        # Build Ollama chat API payload
+        payload: dict[str, Any] = {
+            "model": model_name,
+            "messages": messages,
+            "stream": False,
+            "options": {
+                "temperature": options.temperature,
+                "top_p": options.top_p,
+                "top_k": options.top_k,
+                "repeat_penalty": options.repeat_penalty,
+            }
+        }
+
+        if options.max_tokens:
+            payload["options"]["num_predict"] = options.max_tokens
+
+        if options.format:
+            payload["format"] = options.format
+
+        if options.context_window:
+            payload["options"]["num_ctx"] = options.context_window
+
+        try:
+            timeout_config = aiohttp.ClientTimeout(total=timeout)
+            async with aiohttp.ClientSession(timeout=timeout_config) as session:
+                async with session.post(
+                    f"{self.ollama_manager.base_url}/api/chat",
+                    json=payload
+                ) as response:
+                    execution_time = time.time() - start_time
+
+                    if response.status == 200:
+                        data = await response.json()
+                        message = data.get("message", {})
+                        response_text = message.get("content", "").strip()
+                        tokens_used = data.get("eval_count")
+
+                        self.logger.info(
+                            f"[ASYNC] Chat with {model_name} completed in {execution_time:.2f}s"
+                        )
+
+                        # Format the prompt as the conversation for logging
+                        prompt_repr = json.dumps(messages, indent=2)
+
+                        return ModelExecutionResult(
+                            model_name=model_name,
+                            prompt=prompt_repr,
+                            response=response_text,
+                            execution_time=execution_time,
+                            tokens_used=tokens_used,
+                            success=True,
+                            error_message=None,
+                            metadata={
+                                "api_method": "async_chat",
+                                "message_count": len(messages),
+                                "role": message.get("role", "assistant")
+                            }
+                        )
+                    else:
+                        error_text = await response.text()
+                        error_msg = f"HTTP {response.status}: {error_text}"
+                        self.logger.error(f"[ASYNC] Chat with {model_name} failed: {error_msg}")
+
+                        return ModelExecutionResult(
+                            model_name=model_name,
+                            prompt=json.dumps(messages),
+                            response="",
+                            execution_time=execution_time,
+                            success=False,
+                            error_message=error_msg
+                        )
+
+        except asyncio.TimeoutError:
+            execution_time = time.time() - start_time
+            return ModelExecutionResult(
+                model_name=model_name,
+                prompt=json.dumps(messages),
+                response="",
+                execution_time=execution_time,
+                success=False,
+                error_message="Chat execution timed out"
+            )
+        except aiohttp.ClientError as e:
+            execution_time = time.time() - start_time
+            return ModelExecutionResult(
+                model_name=model_name,
+                prompt=json.dumps(messages),
+                response="",
+                execution_time=execution_time,
+                success=False,
+                error_message=f"Network error: {str(e)}"
+            )
+        except Exception as e:
+            execution_time = time.time() - start_time
+            return ModelExecutionResult(
+                model_name=model_name,
+                prompt=json.dumps(messages),
+                response="",
+                execution_time=execution_time,
+                success=False,
+                error_message=f"Execution error: {str(e)}"
+            )
+
+    async def async_generate_stream(
+        self,
+        model_name: str,
+        prompt: str,
+        options: Optional[ExecutionOptions] = None,
+        timeout: int = 300
+    ) -> AsyncIterator[StreamingChunk]:
+        """
+        Generate text asynchronously with streaming output.
+
+        Yields chunks as they are generated by the model.
+
+        Args:
+            model_name: Name of the model to use
+            prompt: Input prompt for generation
+            options: Execution options
+            timeout: Request timeout in seconds
+
+        Yields:
+            StreamingChunk objects with partial content
+        """
+        if options is None:
+            options = ExecutionOptions()
+
+        self.logger.info(f"[ASYNC] Starting streaming generation with {model_name}")
+
+        # Build Ollama API payload with streaming enabled
+        payload: dict[str, Any] = {
+            "model": model_name,
+            "prompt": prompt,
+            "stream": True,
+            "options": {
+                "temperature": options.temperature,
+                "top_p": options.top_p,
+                "top_k": options.top_k,
+                "repeat_penalty": options.repeat_penalty,
+            }
+        }
+
+        if options.max_tokens:
+            payload["options"]["num_predict"] = options.max_tokens
+
+        if options.format:
+            payload["format"] = options.format
+
+        if options.context_window:
+            payload["options"]["num_ctx"] = options.context_window
+
+        if options.system_prompt:
+            payload["system"] = options.system_prompt
+
+        try:
+            timeout_config = aiohttp.ClientTimeout(total=timeout)
+            async with aiohttp.ClientSession(timeout=timeout_config) as session:
+                async with session.post(
+                    f"{self.ollama_manager.base_url}/api/generate",
+                    json=payload
+                ) as response:
+                    if response.status != 200:
+                        error_text = await response.text()
+                        yield StreamingChunk(
+                            content="",
+                            done=True,
+                            token_count=0
+                        )
+                        self.logger.error(f"[ASYNC] Stream failed: HTTP {response.status}")
+                        return
+
+                    async for line in response.content:
+                        if line:
+                            try:
+                                data = json.loads(line.decode("utf-8"))
+                                chunk_content = data.get("response", "")
+                                is_done = data.get("done", False)
+                                eval_count = data.get("eval_count")
+
+                                yield StreamingChunk(
+                                    content=chunk_content,
+                                    done=is_done,
+                                    token_count=eval_count
+                                )
+
+                                if is_done:
+                                    self.logger.info(
+                                        f"[ASYNC] Streaming generation completed"
+                                    )
+                                    return
+
+                            except json.JSONDecodeError:
+                                continue
+
+        except asyncio.TimeoutError:
+            self.logger.error("[ASYNC] Streaming generation timed out")
+            yield StreamingChunk(content="", done=True, token_count=0)
+        except aiohttp.ClientError as e:
+            self.logger.error(f"[ASYNC] Streaming network error: {e}")
+            yield StreamingChunk(content="", done=True, token_count=0)
+        except Exception as e:
+            self.logger.error(f"[ASYNC] Streaming error: {e}")
+            yield StreamingChunk(content="", done=True, token_count=0)
+
+    async def async_run_batch(
+        self,
+        model_name: str,
+        prompts: list[str],
+        options: Optional[ExecutionOptions] = None,
+        max_concurrent: int = 3
+    ) -> list[ModelExecutionResult]:
+        """
+        Run multiple prompts in batch asynchronously with concurrency control.
+
+        Args:
+            model_name: Name of the model to run
+            prompts: List of prompts to execute
+            options: Execution options
+            max_concurrent: Maximum concurrent executions
+
+        Returns:
+            List of ModelExecutionResult objects
+        """
+        self.logger.info(
+            f"[ASYNC] Running batch of {len(prompts)} prompts with {model_name}"
+        )
+
+        semaphore = asyncio.Semaphore(max_concurrent)
+
+        async def run_single(prompt: str) -> ModelExecutionResult:
+            async with semaphore:
+                return await self.async_run_model(model_name, prompt, options)
+
+        tasks = [run_single(prompt) for prompt in prompts]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Handle any exceptions
+        final_results = []
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                final_results.append(ModelExecutionResult(
+                    model_name=model_name,
+                    prompt=prompts[i],
+                    response="",
+                    execution_time=0,
+                    success=False,
+                    error_message=str(result)
+                ))
+            else:
+                final_results.append(result)
+
+        self.logger.info(
+            f"[ASYNC] Batch completed: {sum(1 for r in final_results if r.success)}/{len(final_results)} successful"
+        )
+
+        return final_results

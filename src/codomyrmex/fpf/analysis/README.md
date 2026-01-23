@@ -1,18 +1,37 @@
-# analysis
+# Analysis
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `analysis` module provides core functionality for Analysis.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `analyzer.py` – File
-- `indexer.py` – File
-- `report_generator.py` – File
-- `term_analyzer.py` – File
+```mermaid
+graph TD
+    analysis --> Utils[codomyrmex.utils]
+    analysis --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph analysis
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.analysis import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [fpf](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

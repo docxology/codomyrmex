@@ -1,21 +1,37 @@
-# standardization
+# Standardization
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `standardization` module provides core functionality for Standardization.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `API_SPECIFICATION.md` – File
-- `CHANGELOG.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `api_versioning.py` – File
-- `graphql_api.py` – File
-- `rest_api.py` – File
+```mermaid
+graph TD
+    standardization --> Utils[codomyrmex.utils]
+    standardization --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph standardization
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.standardization import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [api](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

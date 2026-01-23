@@ -1,19 +1,37 @@
-# core
+# Core
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `core` module provides core functionality for Core.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `test_document_parser.py` – File
-- `test_document_reader.py` – File
-- `test_document_validator.py` – File
-- `test_document_writer.py` – File
+```mermaid
+graph TD
+    core --> Utils[codomyrmex.utils]
+    core --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph core
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.core import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: ../../../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

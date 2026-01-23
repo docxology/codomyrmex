@@ -195,7 +195,7 @@ class SmartTemplateEngine:
                     if arg.annotation:
                         try:
                             arg_type = ast.unparse(arg.annotation)
-                        except:
+                        except (AttributeError, ValueError) as e:
                             arg_type = "Any"
                     args.append(f"{arg_name}: {arg_type}" if arg_type else arg_name)
                 
@@ -209,7 +209,7 @@ class SmartTemplateEngine:
                 if node.returns:
                     try:
                         returns = ast.unparse(node.returns)
-                    except:
+                    except (AttributeError, ValueError) as e:
                         returns = "Any"
                 
                 # Generate example

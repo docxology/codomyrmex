@@ -1,20 +1,37 @@
-# unit
+# Unit
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `unit` module provides core functionality for Unit.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `test_config.py` – File
-- `test_core.py` – File
-- `test_firecrawl.py` – File
-- `test_scraper.py` – File
+```mermaid
+graph TD
+    unit --> Utils[codomyrmex.utils]
+    unit --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph unit
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.unit import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [scrape](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -59,6 +59,14 @@ from .rollback_manager import (
     RollbackStrategy,
     handle_rollback,
 )
+from .exceptions import (
+    PipelineError,
+    BuildError,
+    DeploymentError,
+    ArtifactError,
+    StageError,
+    RollbackError,
+)
 
 __all__ = [
     # Pipeline management
@@ -85,4 +93,11 @@ __all__ = [
     # Performance optimization
     "PipelineOptimizer",
     "optimize_pipeline_performance",
+    # Exceptions
+    "PipelineError",
+    "BuildError",
+    "DeploymentError",
+    "ArtifactError",
+    "StageError",
+    "RollbackError",
 ]

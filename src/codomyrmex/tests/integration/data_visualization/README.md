@@ -1,16 +1,37 @@
-# data_visualization
+# Data Visualization
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `data_visualization` module provides core functionality for Data Visualization.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `test_visualization_performance.py` – File
+```mermaid
+graph TD
+    data_visualization --> Utils[codomyrmex.utils]
+    data_visualization --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph data_visualization
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.data_visualization import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [integration](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

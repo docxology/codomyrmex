@@ -1,18 +1,37 @@
-# cloud
+# Cloud
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `cloud` module provides core functionality for Cloud.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `test_coda_io_client.py` – File
-- `test_coda_io_exceptions.py` – File
-- `test_coda_io_models.py` – File
+```mermaid
+graph TD
+    cloud --> Utils[codomyrmex.utils]
+    cloud --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph cloud
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.cloud import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -12,6 +12,9 @@ from codomyrmex.agents.core.exceptions import (
     EveryCodeError,
     ConfigError,
     SessionError,
+    ExecutionError,
+    ToolError,
+    ContextError,
 )
 
 __all__ = [
@@ -27,4 +30,7 @@ __all__ = [
     "EveryCodeError",
     "ConfigError",
     "SessionError",
+    "ExecutionError",
+    "ToolError",
+    "ContextError",
 ]

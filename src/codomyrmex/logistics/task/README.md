@@ -1,20 +1,37 @@
-# task
+# Task
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `task` module provides core functionality for Task.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `backends/` – Subdirectory
-- `job.py` – File
-- `queue.py` – File
-- `scheduler.py` – File
+```mermaid
+graph TD
+    task --> Utils[codomyrmex.utils]
+    task --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph task
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.task import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [logistics](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

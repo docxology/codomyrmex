@@ -1157,8 +1157,8 @@ def cherry_pick(commit_sha: str, repository_path: str = None) -> bool:
         # Or let user handle conflict? Simple wrapper implies return False.
         try:
              subprocess.run(["git", "cherry-pick", "--abort"], cwd=repository_path, capture_output=True)
-        except:
-            pass
+        except Exception as e:
+            logger.debug(f"Cherry-pick abort cleanup failed: {e}")
         return False
 
 def init_submodules(repository_path: str = None) -> bool:

@@ -1,20 +1,37 @@
-# sandbox
+# Sandbox
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `sandbox` module provides core functionality for Sandbox.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `container.py` – File
-- `isolation.py` – File
-- `resource_limits.py` – File
-- `security.py` – File
+```mermaid
+graph TD
+    sandbox --> Utils[codomyrmex.utils]
+    sandbox --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph sandbox
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.sandbox import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [coding](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

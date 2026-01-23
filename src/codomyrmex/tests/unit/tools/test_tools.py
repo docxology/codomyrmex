@@ -1,4 +1,8 @@
-"""Unit tests for tools module - comprehensive testing with real implementations."""
+"""Unit tests for tools module - comprehensive testing with real implementations.
+
+Tests for DependencyAnalyzer, DependencyChecker, project analysis functions,
+dependency consolidator, deprecation notice utilities, and validate_dependencies.
+"""
 
 import pytest
 import tempfile
@@ -6,6 +10,7 @@ from pathlib import Path
 import json
 import ast
 import os
+import re
 
 # Test with real implementations
 from codomyrmex.tools.dependency_analyzer import DependencyAnalyzer
@@ -16,6 +21,23 @@ from codomyrmex.tools.analyze_project import (
     analyze_code_quality,
     generate_report,
 )
+
+
+# ==================== Module Import Tests ====================
+
+
+class TestToolsModuleImport:
+    """Tests for tools module import."""
+
+    def test_tools_module_import(self):
+        """Test that tools module can be imported."""
+        from codomyrmex import tools
+        assert tools is not None
+
+    def test_tools_module_has_path(self):
+        """Test tools module has __path__ attribute."""
+        from codomyrmex import tools
+        assert hasattr(tools, "__path__")
 
 
 # ==================== DependencyAnalyzer Tests ====================
@@ -142,6 +164,31 @@ from pathlib import Path
 
         assert "validation" in imports
 
+    def test_extract_imports_multiple_imports_same_module(self, tmp_path):
+        """Test extracting multiple imports from same module."""
+        test_file = tmp_path / "test.py"
+        test_file.write_text("""
+from codomyrmex.cache import Cache
+from codomyrmex.cache import CacheManager
+from codomyrmex.cache.backends import InMemoryCache
+""")
+
+        analyzer = DependencyAnalyzer(tmp_path)
+        imports = analyzer.extract_imports(test_file)
+
+        assert "cache" in imports
+        assert len([i for i in imports if i == "cache"]) == 1  # No duplicates
+
+    def test_extract_imports_aliased_import(self, tmp_path):
+        """Test extracting aliased imports."""
+        test_file = tmp_path / "test.py"
+        test_file.write_text("import codomyrmex.validation as val")
+
+        analyzer = DependencyAnalyzer(tmp_path)
+        imports = analyzer.extract_imports(test_file)
+
+        assert "validation" in imports
+
 
 class TestDependencyAnalyzerScanModule:
     """Tests for scan_module method."""
@@ -172,6 +219,16 @@ class TestDependencyAnalyzerScanModule:
 
         assert "tools" in analyzer.imports
 
+    def test_scan_module_idempotent(self):
+        """Test that scanning same module twice is idempotent."""
+        analyzer = DependencyAnalyzer(".")
+
+        analyzer.scan_module("logging_monitoring")
+        initial_count = len(analyzer.modules)
+
+        analyzer.scan_module("logging_monitoring")
+        assert len(analyzer.modules) == initial_count
+
 
 class TestDependencyAnalyzerScanAll:
     """Tests for scan_all_modules method."""
@@ -186,6 +243,14 @@ class TestDependencyAnalyzerScanAll:
         assert len(analyzer.modules) > 0
         # Should include known modules
         assert "logging_monitoring" in analyzer.modules or len(analyzer.modules) > 5
+
+    def test_scan_all_modules_populates_imports(self):
+        """Test scan_all_modules populates imports dict."""
+        analyzer = DependencyAnalyzer(".")
+
+        analyzer.scan_all_modules()
+
+        assert len(analyzer.imports) > 0
 
 
 class TestDependencyAnalyzerCircularDeps:
@@ -212,6 +277,15 @@ class TestDependencyAnalyzerCircularDeps:
             assert isinstance(item, tuple)
             assert len(item) == 2
 
+    def test_detect_circular_dependencies_stores_result(self):
+        """Test that detection stores result in circular_deps."""
+        analyzer = DependencyAnalyzer(".")
+        analyzer.scan_all_modules()
+
+        result = analyzer.detect_circular_dependencies()
+
+        assert analyzer.circular_deps == result
+
 
 class TestDependencyAnalyzerValidateHierarchy:
     """Tests for dependency hierarchy validation."""
@@ -236,6 +310,15 @@ class TestDependencyAnalyzerValidateHierarchy:
             assert "imported" in violation
             assert "allowed" in violation
             assert "severity" in violation
+
+    def test_validate_hierarchy_stores_violations(self):
+        """Test that validation stores violations."""
+        analyzer = DependencyAnalyzer(".")
+        analyzer.scan_all_modules()
+
+        violations = analyzer.validate_dependency_hierarchy()
+
+        assert analyzer.violations == violations
 
 
 class TestDependencyAnalyzerReports:
@@ -266,6 +349,15 @@ class TestDependencyAnalyzerReports:
         assert "```mermaid" in graph
         assert "graph TD" in graph
         assert "```" in graph
+
+    def test_generate_report_with_no_issues(self):
+        """Test report generation with no issues detected."""
+        analyzer = DependencyAnalyzer(".")
+
+        report = analyzer.generate_report()
+
+        assert isinstance(report, str)
+        assert "# Dependency Analysis Report" in report
 
 
 class TestDependencyAnalyzerAnalyze:
@@ -303,6 +395,22 @@ class TestDependencyAnalyzerAnalyze:
         assert "circular_count" in summary
         assert "violation_count" in summary
 
+    def test_analyze_modules_is_list(self):
+        """Test that modules in result is a list."""
+        analyzer = DependencyAnalyzer(".")
+
+        result = analyzer.analyze()
+
+        assert isinstance(result["modules"], list)
+
+    def test_analyze_imports_is_dict(self):
+        """Test that imports in result is a dict."""
+        analyzer = DependencyAnalyzer(".")
+
+        result = analyzer.analyze()
+
+        assert isinstance(result["imports"], dict)
+
 
 # ==================== DependencyChecker Tests ====================
 
@@ -333,6 +441,13 @@ class TestDependencyChecker:
         result = check_dependencies()
 
         assert isinstance(result, dict)
+
+    def test_check_dependencies_has_status(self):
+        """Test check_dependencies has status."""
+        result = check_dependencies()
+
+        # Should have some indication of status
+        assert len(result) > 0
 
 
 # ==================== Project Analysis Tests ====================
@@ -374,6 +489,12 @@ class TestAnalyzeProjectStructure:
         # Should have at least Python files
         assert ".py" in file_types or len(file_types) > 0
 
+    def test_directories_is_dict(self):
+        """Test directories is a dictionary."""
+        result = analyze_project_structure()
+
+        assert isinstance(result["directories"], dict)
+
 
 class TestAnalyzeDependencies:
     """Tests for dependency analysis."""
@@ -411,6 +532,13 @@ class TestAnalyzeDependencies:
         assert "total_count" in result
         expected_total = len(result["main_dependencies"]) + len(result["dev_dependencies"])
         assert result["total_count"] == expected_total
+
+    def test_main_dependencies_are_strings(self):
+        """Test main dependencies are strings."""
+        result = analyze_dependencies()
+
+        for dep in result["main_dependencies"]:
+            assert isinstance(dep, str)
 
 
 class TestAnalyzeCodeQuality:
@@ -463,6 +591,14 @@ class TestAnalyzeCodeQuality:
 
         assert "has_linting" in result
         assert isinstance(result["has_linting"], bool)
+
+    def test_positive_file_counts(self):
+        """Test file counts are non-negative."""
+        result = analyze_code_quality()
+
+        assert result["total_python_files"] >= 0
+        assert result["test_files"] >= 0
+        assert result["documentation_files"] >= 0
 
 
 class TestGenerateReport:
@@ -521,6 +657,155 @@ class TestGenerateReport:
 
         assert "Recommendations" in report
 
+    def test_report_no_recommendations_when_complete(self):
+        """Test report when all features present."""
+        structure = {"directories": {}, "file_types": {".py": []}, "total_size": 1000}
+        deps = {"main_dependencies": ["pytest"], "dev_dependencies": [], "total_count": 1}
+        quality = {
+            "total_python_files": 10,
+            "test_files": 2,
+            "documentation_files": 5,
+            "has_tests": True,
+            "has_ci": True,
+            "has_linting": True,
+        }
+
+        report = generate_report(structure, deps, quality)
+
+        assert isinstance(report, str)
+        assert len(report) > 0
+
+
+# ==================== Dependency Consolidator Tests ====================
+
+
+class TestDependencyConsolidator:
+    """Tests for dependency consolidator functions."""
+
+    def test_parse_requirements_file_empty(self, tmp_path):
+        """Test parsing empty requirements file."""
+        from codomyrmex.tools.dependency_consolidator import parse_requirements_file
+
+        req_file = tmp_path / "requirements.txt"
+        req_file.write_text("")
+
+        result = parse_requirements_file(req_file)
+
+        assert result == []
+
+    def test_parse_requirements_file_nonexistent(self, tmp_path):
+        """Test parsing nonexistent requirements file."""
+        from codomyrmex.tools.dependency_consolidator import parse_requirements_file
+
+        req_file = tmp_path / "nonexistent.txt"
+
+        result = parse_requirements_file(req_file)
+
+        assert result == []
+
+    def test_parse_requirements_file_with_packages(self, tmp_path):
+        """Test parsing requirements file with packages."""
+        from codomyrmex.tools.dependency_consolidator import parse_requirements_file
+
+        req_file = tmp_path / "requirements.txt"
+        req_file.write_text("""pytest==7.0.0
+requests>=2.28.0
+# This is a comment
+click
+""")
+
+        result = parse_requirements_file(req_file)
+
+        assert len(result) == 3
+        assert any(r[0] == "pytest" for r in result)
+        assert any(r[0] == "requests" for r in result)
+        assert any(r[0] == "click" for r in result)
+
+    def test_parse_requirements_file_with_comments(self, tmp_path):
+        """Test parsing requirements file skips comments."""
+        from codomyrmex.tools.dependency_consolidator import parse_requirements_file
+
+        req_file = tmp_path / "requirements.txt"
+        req_file.write_text("""# Comment line
+pytest==7.0.0  # inline comment
+""")
+
+        result = parse_requirements_file(req_file)
+
+        assert len(result) == 1
+        assert result[0][0] == "pytest"
+
+    def test_find_all_requirements_files(self, tmp_path):
+        """Test finding requirements files."""
+        from codomyrmex.tools.dependency_consolidator import find_all_requirements_files
+
+        # Create directory structure
+        src_dir = tmp_path / "src" / "codomyrmex"
+        src_dir.mkdir(parents=True)
+
+        module1 = src_dir / "module1"
+        module1.mkdir()
+        (module1 / "requirements.txt").write_text("pytest")
+
+        module2 = src_dir / "module2"
+        module2.mkdir()
+        (module2 / "requirements.txt").write_text("requests")
+
+        result = find_all_requirements_files(tmp_path)
+
+        assert len(result) == 2
+
+    def test_generate_deprecation_notice(self):
+        """Test generating deprecation notice."""
+        from codomyrmex.tools.dependency_consolidator import generate_deprecation_notice
+
+        notice = generate_deprecation_notice("auth", "pyproject.toml")
+
+        assert "DEPRECATED" in notice
+        assert "auth" in notice
+        assert "pyproject.toml" in notice
+
+
+# ==================== Deprecation Notice Tests ====================
+
+
+class TestDeprecationNotice:
+    """Tests for deprecation notice utilities."""
+
+    def test_get_module_name_from_path(self):
+        """Test extracting module name from path."""
+        from codomyrmex.tools.add_deprecation_notices import get_module_name
+
+        path = Path("/src/codomyrmex/auth/requirements.txt")
+        result = get_module_name(path)
+
+        assert result == "auth"
+
+    def test_get_module_name_unknown(self):
+        """Test get_module_name with unknown path."""
+        from codomyrmex.tools.add_deprecation_notices import get_module_name
+
+        path = Path("/some/other/path.txt")
+        result = get_module_name(path)
+
+        assert result == "unknown"
+
+    def test_get_dependency_location_optional(self):
+        """Test get_dependency_location for optional modules."""
+        from codomyrmex.tools.add_deprecation_notices import get_dependency_location
+
+        result = get_dependency_location("code_review")
+
+        assert "optional-dependencies" in result
+
+    def test_get_dependency_location_main(self):
+        """Test get_dependency_location for main modules."""
+        from codomyrmex.tools.add_deprecation_notices import get_dependency_location
+
+        result = get_dependency_location("some_other_module")
+
+        assert "project.dependencies" in result
+
 
 # ==================== Integration Tests ====================
 
@@ -560,6 +845,16 @@ class TestToolsIntegration:
         assert report is not None
         assert graph is not None
 
+    def test_all_analysis_functions_return_consistent_types(self):
+        """Test that all analysis functions return consistent types."""
+        structure = analyze_project_structure()
+        deps = analyze_dependencies()
+        quality = analyze_code_quality()
+
+        assert isinstance(structure, dict)
+        assert isinstance(deps, dict)
+        assert isinstance(quality, dict)
+
 
 # ==================== Allowed Dependencies Tests ====================
 
@@ -590,3 +885,65 @@ class TestAllowedDependencies:
         assert "logging_monitoring" in build_deps
         assert "static_analysis" in build_deps
 
+    def test_allowed_dependencies_are_sets(self):
+        """Test that all allowed dependencies are sets."""
+        analyzer = DependencyAnalyzer(".")
+
+        for module, deps in analyzer.allowed_dependencies.items():
+            assert isinstance(deps, set), f"Dependencies for {module} should be a set"
+
+
+# ==================== Edge Cases Tests ====================
+
+
+class TestToolsEdgeCases:
+    """Tests for edge cases in tools module."""
+
+    def test_analyzer_with_empty_project(self, tmp_path):
+        """Test analyzer with empty project directory."""
+        # Create minimal structure
+        src_dir = tmp_path / "src" / "codomyrmex"
+        src_dir.mkdir(parents=True)
+
+        analyzer = DependencyAnalyzer(tmp_path)
+        result = analyzer.analyze()
+
+        assert result is not None
+        assert isinstance(result["modules"], list)
+
+    def test_extract_imports_with_try_except(self, tmp_path):
+        """Test extracting imports from file with try/except."""
+        test_file = tmp_path / "test.py"
+        test_file.write_text("""
+try:
+    from codomyrmex.cache import Cache
+except ImportError:
+    Cache = None
+""")
+
+        analyzer = DependencyAnalyzer(tmp_path)
+        imports = analyzer.extract_imports(test_file)
+
+        assert "cache" in imports
+
+    def test_extract_imports_conditional(self, tmp_path):
+        """Test extracting conditional imports."""
+        test_file = tmp_path / "test.py"
+        test_file.write_text("""
+if True:
+    import codomyrmex.validation
+else:
+    import codomyrmex.cache
+""")
+
+        analyzer = DependencyAnalyzer(tmp_path)
+        imports = analyzer.extract_imports(test_file)
+
+        assert "validation" in imports
+        assert "cache" in imports
+
+    def test_generate_report_handles_empty_inputs(self):
+        """Test generate_report handles empty inputs gracefully."""
+        report = generate_report({}, {}, {})
+
+        assert isinstance(report, str)

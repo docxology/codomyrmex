@@ -22,6 +22,13 @@ from .orchestration import (
     list_workflows,
     run_workflow,
 )
+from .quick import (
+    handle_quick_run,
+    handle_quick_pipe,
+    handle_quick_batch,
+    handle_quick_chain,
+    handle_quick_workflow,
+)
 from .skills import (
     handle_skills_sync,
     handle_skills_list,

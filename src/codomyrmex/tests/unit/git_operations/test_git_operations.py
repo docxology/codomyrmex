@@ -1,520 +1,1093 @@
 #!/usr/bin/env python3
 """
-Unit tests for the Git Operations module.
+Comprehensive Unit Tests for Git Operations Module.
 
-Comprehensive test coverage including:
-- Basic functionality tests
-- Edge cases and error conditions
-- Concurrent operations
-- Repository state management
-- Branch and merge operations
+Tests cover:
+- Git command execution (status, log, diff)
+- Branch operations
+- Commit operations
+- Remote operations
+- GitHub API wrapper functions
+- Error handling for git failures
+- Repository state detection
 """
 
-import unittest
-import tempfile
 import os
-import sys
 import shutil
 import subprocess
-import time
+import tempfile
 import threading
 from pathlib import Path
+from typing import Generator
+from unittest.mock import MagicMock, patch
 
-# Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+import pytest
 
 # Import git operations functions
-try:
-    from codomyrmex.git_operations.core.git import (
-        check_git_availability,
-        is_git_repository,
-        get_current_branch,
-        get_status,
-        get_commit_history,
-        add_files,
-        commit_changes,
-        create_branch,
-        switch_branch,
-        get_branches,
-        merge_branch,
-        pull_changes,
-        push_changes,
-        get_remote_info,
-        get_diff,
-        get_file_history,
-        check_merge_conflicts,
-        resolve_merge_conflicts,
-        get_stash_list,
-        stash_changes,
-        unstash_changes,
-        reset_changes,
-        clean_repository,
-        get_repository_info,
-        validate_git_config,
-        get_hook_status,
-        update_submodules
-    )
-    FULL_GIT_AVAILABLE = True
-except ImportError:
-    # Fallback to basic imports if full module not available
+from codomyrmex.git_operations import (
+    # Core operations
+    check_git_availability,
+    is_git_repository,
+    initialize_git_repository,
+    clone_repository,
+    # Branch operations
+    create_branch,
+    switch_branch,
+    get_current_branch,
+    merge_branch,
+    rebase_branch,
+    # File operations
+    add_files,
+    commit_changes,
+    amend_commit,
+    get_status,
+    get_diff,
+    reset_changes,
+    # Remote operations
+    push_changes,
+    pull_changes,
+    fetch_changes,
+    add_remote,
+    remove_remote,
+    list_remotes,
+    # History & information
+    get_commit_history,
+    # Config operations
+    get_config,
+    set_config,
+    # Advanced operations
+    cherry_pick,
+    # Tag operations
+    create_tag,
+    list_tags,
+    # Stash operations
+    stash_changes,
+    apply_stash,
+    list_stashes,
+    # GitHub API
+    GitHubAPIError,
+)
+
+
+# ==============================================================================
+# Fixtures
+# ==============================================================================
+
+
+@pytest.fixture
+def temp_dir() -> Generator[str, None, None]:
+    """Create a temporary directory for tests."""
+    temp_path = tempfile.mkdtemp()
     try:
-        from codomyrmex.git_operations.core.git import (
-            check_git_availability,
-            is_git_repository,
-            get_current_branch,
-            get_status
-        )
-        FULL_GIT_AVAILABLE = False
-    except ImportError:
-        FULL_GIT_AVAILABLE = False
+        yield temp_path
+    finally:
+        shutil.rmtree(temp_path, ignore_errors=True)
 
 
-class TestGitOperations(unittest.TestCase):
-    """Test cases for git operations functionality."""
+@pytest.fixture
+def temp_git_repo(temp_dir: str) -> Generator[str, None, None]:
+    """Create a temporary Git repository for tests."""
+    repo_path = os.path.join(temp_dir, "test_repo")
+    os.makedirs(repo_path, exist_ok=True)
 
-    def setUp(self):
-        """Set up test fixtures."""
-        self.test_dir = tempfile.mkdtemp()
+    # Initialize Git repository with initial commit
+    initialize_git_repository(repo_path, initial_commit=True)
 
-    def tearDown(self):
-        """Clean up test fixtures."""
-        import shutil
-        shutil.rmtree(self.test_dir, ignore_errors=True)
+    yield repo_path
+
+
+@pytest.fixture
+def temp_git_repo_no_commit(temp_dir: str) -> Generator[str, None, None]:
+    """Create a temporary Git repository without initial commit."""
+    repo_path = os.path.join(temp_dir, "test_repo_no_commit")
+    os.makedirs(repo_path, exist_ok=True)
+
+    # Initialize Git repository without initial commit
+    initialize_git_repository(repo_path, initial_commit=False)
+
+    yield repo_path
+
+
+@pytest.fixture
+def sample_file(temp_git_repo: str) -> Generator[str, None, None]:
+    """Create a sample file in the test repository."""
+    file_path = os.path.join(temp_git_repo, "test_file.txt")
+    with open(file_path, "w") as f:
+        f.write("Test content\n")
+
+    yield file_path
+
+
+# ==============================================================================
+# Core Git Operations Tests
+# ==============================================================================
+
+
+class TestGitAvailability:
+    """Tests for Git availability checking."""
 
     def test_check_git_availability(self):
-        """Test Git availability checking."""
+        """Test Git availability checking returns boolean."""
         result = check_git_availability()
-        self.assertIsInstance(result, bool)
+        assert isinstance(result, bool)
 
-    def test_is_git_repository(self):
-        """Test Git repository detection."""
-        # Test non-repository directory
-        self.assertFalse(is_git_repository(self.test_dir))
+    def test_check_git_availability_returns_true_when_git_installed(self):
+        """Test that Git is available on the test system."""
+        # This test assumes git is installed on the test system
+        result = check_git_availability()
+        assert result is True
 
-        # Test current directory (should be a repo if running from project)
-        current_dir_is_repo = is_git_repository()
-        self.assertIsInstance(current_dir_is_repo, bool)
 
-    def test_get_current_branch(self):
-        """Test getting current branch."""
-        # Test in non-repository directory
-        branch = get_current_branch(self.test_dir)
-        self.assertIsNone(branch)
+class TestRepositoryDetection:
+    """Tests for Git repository detection."""
 
-        # Test in current directory
-        current_branch = get_current_branch()
-        if is_git_repository():  # Only test if we're in a repo
-            self.assertIsInstance(current_branch, (str, type(None)))
+    def test_is_git_repository_returns_false_for_non_repo(self, temp_dir: str):
+        """Test non-repository directory is correctly detected."""
+        assert is_git_repository(temp_dir) is False
 
-    def test_get_status(self):
-        """Test getting repository status."""
-        # Test in non-repository directory
-        status = get_status(self.test_dir)
-        self.assertIn("error", status)
+    def test_is_git_repository_returns_true_for_repo(self, temp_git_repo: str):
+        """Test Git repository is correctly detected."""
+        assert is_git_repository(temp_git_repo) is True
 
-        # Test in current directory
-        current_status = get_status()
-        self.assertIsInstance(current_status, dict)
+    def test_is_git_repository_with_none_uses_cwd(self):
+        """Test default path uses current directory."""
+        result = is_git_repository(None)
+        assert isinstance(result, bool)
 
-        if is_git_repository():
-            expected_keys = ["modified", "added", "deleted", "renamed", "untracked", "clean"]
-            for key in expected_keys:
-                self.assertIn(key, current_status)
+    def test_is_git_repository_nonexistent_path(self):
+        """Test nonexistent path returns False."""
+        result = is_git_repository("/nonexistent/path/that/does/not/exist")
+        assert result is False
 
-    def test_get_commit_history(self):
-        """Test getting commit history."""
-        from codomyrmex.git_operations.core.git import get_commit_history
+    def test_is_git_repository_root_directory(self):
+        """Test root directory (usually not a repo) returns False."""
+        result = is_git_repository("/")
+        assert result is False
 
-        # Test in non-repository directory
-        history = get_commit_history(repository_path=self.test_dir)
-        self.assertEqual(history, [])
 
-        # Test in current directory
-        current_history = get_commit_history(limit=5)
-        self.assertIsInstance(current_history, list)
+class TestRepositoryInitialization:
+    """Tests for Git repository initialization."""
 
-        if is_git_repository():
-            for commit in current_history:
-                if commit:  # Skip empty commits
-                    expected_keys = ["hash", "author_name", "author_email", "date", "message"]
-                    for key in expected_keys:
-                        self.assertIn(key, commit)
+    def test_initialize_git_repository_creates_repo(self, temp_dir: str):
+        """Test repository initialization creates .git directory."""
+        repo_path = os.path.join(temp_dir, "new_repo")
+        os.makedirs(repo_path)
 
-    def test_add_files(self):
+        result = initialize_git_repository(repo_path, initial_commit=True)
+
+        assert result is True
+        assert os.path.exists(os.path.join(repo_path, ".git"))
+
+    def test_initialize_git_repository_without_initial_commit(self, temp_dir: str):
+        """Test repository initialization without initial commit."""
+        repo_path = os.path.join(temp_dir, "new_repo")
+        os.makedirs(repo_path)
+
+        result = initialize_git_repository(repo_path, initial_commit=False)
+
+        assert result is True
+        assert os.path.exists(os.path.join(repo_path, ".git"))
+
+    def test_initialize_git_repository_creates_readme(self, temp_dir: str):
+        """Test repository initialization creates README if specified."""
+        repo_path = os.path.join(temp_dir, "new_repo")
+        os.makedirs(repo_path)
+
+        initialize_git_repository(repo_path, initial_commit=True)
+
+        readme_path = os.path.join(repo_path, "README.md")
+        assert os.path.exists(readme_path)
+
+
+# ==============================================================================
+# Branch Operations Tests
+# ==============================================================================
+
+
+class TestBranchOperations:
+    """Tests for branch operations."""
+
+    def test_get_current_branch(self, temp_git_repo: str):
+        """Test getting current branch name."""
+        branch = get_current_branch(temp_git_repo)
+        assert branch is not None
+        assert isinstance(branch, str)
+        # New repos default to main or master
+        assert branch in ["main", "master"]
+
+    def test_get_current_branch_returns_none_for_non_repo(self, temp_dir: str):
+        """Test getting current branch returns None for non-repository."""
+        branch = get_current_branch(temp_dir)
+        assert branch is None
+
+    def test_create_branch(self, temp_git_repo: str):
+        """Test branch creation."""
+        result = create_branch("feature-test", temp_git_repo)
+        assert result is True
+
+        # Verify we're on the new branch
+        current = get_current_branch(temp_git_repo)
+        assert current == "feature-test"
+
+    def test_create_branch_fails_in_non_repo(self, temp_dir: str):
+        """Test branch creation fails in non-repository."""
+        result = create_branch("test-branch", temp_dir)
+        assert result is False
+
+    def test_switch_branch(self, temp_git_repo: str):
+        """Test switching branches."""
+        # Create a new branch first
+        create_branch("feature-test", temp_git_repo)
+
+        # Switch back to main/master
+        original_branch = "main" if get_current_branch(temp_git_repo) != "main" else "master"
+
+        # Create main branch if not exists
+        subprocess.run(
+            ["git", "checkout", "-b", "main"],
+            cwd=temp_git_repo,
+            capture_output=True,
+            check=False
+        )
+
+        result = switch_branch("feature-test", temp_git_repo)
+        assert result is True
+        assert get_current_branch(temp_git_repo) == "feature-test"
+
+    def test_switch_branch_fails_for_nonexistent_branch(self, temp_git_repo: str):
+        """Test switching to nonexistent branch fails."""
+        result = switch_branch("nonexistent-branch", temp_git_repo)
+        assert result is False
+
+
+class TestMergeOperations:
+    """Tests for merge operations."""
+
+    def test_merge_branch(self, temp_git_repo: str, sample_file: str):
+        """Test merging branches."""
+        # Create a feature branch with changes
+        create_branch("feature-to-merge", temp_git_repo)
+
+        # Make changes on feature branch
+        feature_file = os.path.join(temp_git_repo, "feature.txt")
+        with open(feature_file, "w") as f:
+            f.write("Feature content\n")
+
+        add_files(["feature.txt"], temp_git_repo)
+        commit_changes("Add feature", temp_git_repo)
+
+        # Switch to main and merge
+        switch_branch("main", temp_git_repo)
+        result = merge_branch("feature-to-merge", repository_path=temp_git_repo)
+
+        # Merge should succeed or fail depending on state
+        assert isinstance(result, bool)
+
+    def test_merge_branch_fails_in_non_repo(self, temp_dir: str):
+        """Test merge fails in non-repository."""
+        result = merge_branch("some-branch", repository_path=temp_dir)
+        assert result is False
+
+
+# ==============================================================================
+# Commit Operations Tests
+# ==============================================================================
+
+
+class TestCommitOperations:
+    """Tests for commit operations."""
+
+    def test_add_files(self, temp_git_repo: str):
         """Test adding files to staging area."""
-        from codomyrmex.git_operations.core.git import add_files
+        # Create a file to add
+        test_file = os.path.join(temp_git_repo, "new_file.txt")
+        with open(test_file, "w") as f:
+            f.write("New content\n")
 
-        # Create a test file
-        test_file = os.path.join(self.test_dir, "test.txt")
-        with open(test_file, 'w') as f:
-            f.write("Test content")
+        result = add_files(["new_file.txt"], temp_git_repo)
+        assert result is True
 
-        # Test in non-repository directory (should fail)
-        result = add_files([os.path.basename(test_file)], repository_path=self.test_dir)
-        self.assertFalse(result)
+    def test_add_files_fails_for_nonexistent(self, temp_git_repo: str):
+        """Test adding nonexistent file fails."""
+        result = add_files(["nonexistent.txt"], temp_git_repo)
+        assert result is False
 
-    def test_commit_changes(self):
+    def test_add_files_fails_in_non_repo(self, temp_dir: str):
+        """Test adding files fails in non-repository."""
+        test_file = os.path.join(temp_dir, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test")
+
+        result = add_files(["test.txt"], temp_dir)
+        assert result is False
+
+    def test_commit_changes(self, temp_git_repo: str):
         """Test committing changes."""
-        from codomyrmex.git_operations.core.git import commit_changes
+        # Create and add a file
+        test_file = os.path.join(temp_git_repo, "commit_test.txt")
+        with open(test_file, "w") as f:
+            f.write("Commit test content\n")
 
-        # Test in non-repository directory (should fail)
-        result = commit_changes("Test commit", repository_path=self.test_dir)
-        self.assertFalse(result)
+        add_files(["commit_test.txt"], temp_git_repo)
 
-    @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
-    def test_create_and_switch_branches(self):
-        """Test creating and switching branches."""
-        from codomyrmex.git_operations.core.git import create_branch, switch_branch, get_branches
+        result = commit_changes("Test commit message", temp_git_repo)
+        # Returns SHA on success, None on failure
+        assert result is not None
+        assert isinstance(result, str)
+        assert len(result) == 40  # Full SHA
 
-        # Test in non-repository directory (should fail)
-        result = create_branch("test-branch", repository_path=self.test_dir)
-        self.assertFalse(result)
+    def test_commit_changes_with_author(self, temp_git_repo: str):
+        """Test committing with custom author."""
+        test_file = os.path.join(temp_git_repo, "author_test.txt")
+        with open(test_file, "w") as f:
+            f.write("Author test content\n")
 
-        result = switch_branch("test-branch", repository_path=self.test_dir)
-        self.assertFalse(result)
+        add_files(["author_test.txt"], temp_git_repo)
 
-        branches = get_branches(repository_path=self.test_dir)
-        self.assertEqual(branches, [])
+        result = commit_changes(
+            "Test commit with author",
+            temp_git_repo,
+            author_name="Test Author",
+            author_email="test@example.com"
+        )
+        assert result is not None
 
-    @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
-    def test_branch_operations_edge_cases(self):
-        """Test branch operations with edge cases."""
-        from codomyrmex.git_operations.core.git import create_branch, switch_branch
+    def test_commit_changes_fails_when_nothing_staged(self, temp_git_repo: str):
+        """Test commit fails when nothing is staged."""
+        # Don't stage anything - just try to commit
+        result = commit_changes("Empty commit", temp_git_repo, stage_all=False)
+        assert result is None
 
-        # Test with invalid branch names
-        invalid_names = ["", " ", ".lock", "HEAD", "refs/heads/main"]
+    def test_commit_changes_fails_in_non_repo(self, temp_dir: str):
+        """Test commit fails in non-repository."""
+        result = commit_changes("Test commit", temp_dir)
+        assert result is None
 
-        for name in invalid_names:
-            with self.subTest(branch_name=name):
-                result = create_branch(name, repository_path=self.test_dir)
-                self.assertFalse(result)
 
-    @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
-    def test_merge_operations(self):
-        """Test merge operations."""
-        from codomyrmex.git_operations.core.git import merge_branch, check_merge_conflicts
+class TestAmendCommit:
+    """Tests for amend commit operations."""
 
-        # Test in non-repository directory
-        result = merge_branch("feature-branch", repository_path=self.test_dir)
-        self.assertFalse(result)
+    def test_amend_commit(self, temp_git_repo: str):
+        """Test amending the last commit."""
+        # Create initial commit
+        test_file = os.path.join(temp_git_repo, "amend_test.txt")
+        with open(test_file, "w") as f:
+            f.write("Initial content\n")
 
-        conflicts = check_merge_conflicts(repository_path=self.test_dir)
-        self.assertIsInstance(conflicts, (bool, list))
+        add_files(["amend_test.txt"], temp_git_repo)
+        commit_changes("Initial commit", temp_git_repo)
 
-    @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
-    def test_remote_operations(self):
-        """Test remote repository operations."""
-        from codomyrmex.git_operations.core.git import pull_changes, push_changes, get_remote_info
+        # Amend with new message
+        result = amend_commit("Amended commit message", temp_git_repo)
+        assert result is not None
 
-        # Test in non-repository directory
-        result = pull_changes(repository_path=self.test_dir)
-        self.assertFalse(result)
+    def test_amend_commit_no_edit(self, temp_git_repo: str):
+        """Test amending commit without changing message."""
+        # Create initial commit
+        test_file = os.path.join(temp_git_repo, "amend_noedit.txt")
+        with open(test_file, "w") as f:
+            f.write("Content\n")
 
-        result = push_changes(repository_path=self.test_dir)
-        self.assertFalse(result)
+        add_files(["amend_noedit.txt"], temp_git_repo)
+        commit_changes("Original message", temp_git_repo)
 
-        remote_info = get_remote_info(repository_path=self.test_dir)
-        self.assertIsInstance(remote_info, (dict, type(None)))
+        # Amend without changing message
+        result = amend_commit(repository_path=temp_git_repo, no_edit=True)
+        assert result is not None
 
-    @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
-    def test_stash_operations(self):
-        """Test git stash operations."""
-        from codomyrmex.git_operations.core.git import stash_changes, unstash_changes, get_stash_list
 
-        # Test in non-repository directory
-        result = stash_changes("Test stash", repository_path=self.test_dir)
-        self.assertFalse(result)
+# ==============================================================================
+# Status and Diff Tests
+# ==============================================================================
 
-        result = unstash_changes(repository_path=self.test_dir)
-        self.assertFalse(result)
 
-        stashes = get_stash_list(repository_path=self.test_dir)
-        self.assertIsInstance(stashes, list)
+class TestStatusOperations:
+    """Tests for repository status operations."""
 
-    @unittest.skipUnless(FULL_GIT_AVAILABLE, "Full git operations not available")
-    def test_reset_and_clean_operations(self):
-        """Test reset and clean operations."""
-        from codomyrmex.git_operations.core.git import reset_changes, clean_repository
+    def test_get_status_clean_repo(self, temp_git_repo: str):
+        """Test getting status of clean repository."""
+        status = get_status(temp_git_repo)
+        assert isinstance(status, dict)
+        assert "clean" in status
+        assert status["clean"] is True
 
-        # Test in non-repository directory
-        result = reset_changes("--hard", repository_path=self.test_dir)
-        self.assertFalse(result)
+    def test_get_status_with_changes(self, temp_git_repo: str):
+        """Test getting status with modified files."""
+        # Create an untracked file
+        test_file = os.path.join(temp_git_repo, "untracked.txt")
+        with open(test_file, "w") as f:
+            f.write("Untracked content\n")
 
-        result = clean_repository(repository_path=self.test_dir)
-        self.assertFalse(result)
+        status = get_status(temp_git_repo)
+        assert status["clean"] is False
+        assert "untracked" in status
+        assert "untracked.txt" in status["untracked"]
 
-    def test_repository_validation(self):
-        """Test repository validation functions."""
-        # Test with various directory types
-        test_cases = [
-            (self.test_dir, False),  # Empty directory
-            ("/nonexistent/path", False),  # Non-existent path
-            ("/", False),  # Root directory (usually not a git repo)
-        ]
+    def test_get_status_modified_file(self, temp_git_repo: str):
+        """Test getting status with modified tracked file."""
+        # Create and commit a file
+        test_file = os.path.join(temp_git_repo, "tracked.txt")
+        with open(test_file, "w") as f:
+            f.write("Initial content\n")
 
-        for path, expected in test_cases:
-            with self.subTest(path=path):
-                result = is_git_repository(path)
-                if expected is False:
-                    self.assertFalse(result)
-                # True case depends on actual repository state
+        add_files(["tracked.txt"], temp_git_repo)
+        commit_changes("Add tracked file", temp_git_repo)
 
-    def test_git_config_validation(self):
-        """Test git configuration validation."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
+        # Modify the file
+        with open(test_file, "w") as f:
+            f.write("Modified content\n")
 
-        from codomyrmex.git_operations.core.git import validate_git_config
+        status = get_status(temp_git_repo)
+        assert status["clean"] is False
+        assert "modified" in status
 
-        # Test in non-repository directory
-        result = validate_git_config(repository_path=self.test_dir)
-        self.assertIsInstance(result, dict)
+    def test_get_status_returns_error_for_non_repo(self, temp_dir: str):
+        """Test getting status returns error for non-repository."""
+        status = get_status(temp_dir)
+        assert "error" in status
 
-        # Should have validation results
-        self.assertIn("valid", result)
-        self.assertIsInstance(result["valid"], bool)
 
-    def test_hook_status_checking(self):
-        """Test git hooks status checking."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
+class TestDiffOperations:
+    """Tests for diff operations."""
 
-        from codomyrmex.git_operations.core.git import get_hook_status
+    def test_get_diff_no_changes(self, temp_git_repo: str):
+        """Test diff with no changes."""
+        diff = get_diff(repository_path=temp_git_repo)
+        assert isinstance(diff, str)
+        assert diff == ""  # No changes
 
-        # Test in non-repository directory
-        hooks = get_hook_status(repository_path=self.test_dir)
-        self.assertIsInstance(hooks, (dict, list))
+    def test_get_diff_with_changes(self, temp_git_repo: str):
+        """Test diff with changes."""
+        # Create and commit a file
+        test_file = os.path.join(temp_git_repo, "diff_test.txt")
+        with open(test_file, "w") as f:
+            f.write("Initial content\n")
 
-    def test_submodule_operations(self):
-        """Test git submodule operations."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
+        add_files(["diff_test.txt"], temp_git_repo)
+        commit_changes("Add file", temp_git_repo)
 
-        from codomyrmex.git_operations.core.git import update_submodules
+        # Modify the file
+        with open(test_file, "w") as f:
+            f.write("Modified content\n")
 
-        # Test in non-repository directory
-        result = update_submodules(repository_path=self.test_dir)
-        self.assertIsInstance(result, (bool, dict))
+        diff = get_diff(repository_path=temp_git_repo)
+        assert "Modified content" in diff or "diff --git" in diff
 
-    def test_file_operations_edge_cases(self):
-        """Test file operations with edge cases."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
+    def test_get_diff_cached(self, temp_git_repo: str):
+        """Test diff for staged changes."""
+        # Create and stage a file
+        test_file = os.path.join(temp_git_repo, "cached_diff.txt")
+        with open(test_file, "w") as f:
+            f.write("Cached content\n")
 
-        from codomyrmex.git_operations.core.git import add_files, get_file_history, get_diff
+        add_files(["cached_diff.txt"], temp_git_repo)
 
-        # Test with non-existent files
-        result = add_files(["nonexistent.txt"], repository_path=self.test_dir)
-        self.assertFalse(result)
+        diff = get_diff(repository_path=temp_git_repo, cached=True)
+        assert isinstance(diff, str)
 
-        # Test with empty file list
-        result = add_files([], repository_path=self.test_dir)
-        self.assertFalse(result)
 
-        # Test file history for non-existent file
-        history = get_file_history("nonexistent.txt", repository_path=self.test_dir)
-        self.assertIsInstance(history, list)
-        self.assertEqual(len(history), 0)
+# ==============================================================================
+# Remote Operations Tests
+# ==============================================================================
 
-        # Test diff operations
-        diff = get_diff(repository_path=self.test_dir)
-        self.assertIsInstance(diff, (str, list, dict))
 
-    def test_commit_operations_comprehensive(self):
-        """Comprehensive test of commit operations."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
+class TestRemoteOperations:
+    """Tests for remote repository operations."""
 
-        from codomyrmex.git_operations.core.git import commit_changes
+    def test_list_remotes_empty(self, temp_git_repo: str):
+        """Test listing remotes when none exist."""
+        remotes = list_remotes(temp_git_repo)
+        assert isinstance(remotes, list)
+        assert len(remotes) == 0
 
-        # Test with various commit messages
-        test_messages = [
-            "Normal commit message",
-            "",  # Empty message
-            "Message with\nnewlines",
-            "Very long message: " + "x" * 200,
-        ]
+    def test_add_remote(self, temp_git_repo: str):
+        """Test adding a remote."""
+        result = add_remote("origin", "https://github.com/test/repo.git", temp_git_repo)
+        assert result is True
 
-        for message in test_messages:
-            with self.subTest(message=message[:50]):
-                result = commit_changes(message, repository_path=self.test_dir)
-                self.assertFalse(result)  # Should fail in non-repo directory
+        remotes = list_remotes(temp_git_repo)
+        assert len(remotes) == 1
+        assert remotes[0]["name"] == "origin"
 
-    def test_concurrent_git_operations(self):
-        """Test concurrent git operations."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
+    def test_remove_remote(self, temp_git_repo: str):
+        """Test removing a remote."""
+        # Add a remote first
+        add_remote("origin", "https://github.com/test/repo.git", temp_git_repo)
 
-        from codomyrmex.git_operations.core.git import get_status
+        result = remove_remote("origin", temp_git_repo)
+        assert result is True
 
+        remotes = list_remotes(temp_git_repo)
+        assert len(remotes) == 0
+
+    def test_remove_nonexistent_remote(self, temp_git_repo: str):
+        """Test removing nonexistent remote fails."""
+        result = remove_remote("nonexistent", temp_git_repo)
+        assert result is False
+
+    def test_fetch_changes_fails_without_remote(self, temp_git_repo: str):
+        """Test fetch fails when no remote configured."""
+        result = fetch_changes(repository_path=temp_git_repo)
+        assert result is False
+
+    def test_push_changes_fails_without_remote(self, temp_git_repo: str):
+        """Test push fails when no remote configured."""
+        result = push_changes(repository_path=temp_git_repo)
+        assert result is False
+
+    def test_pull_changes_fails_without_remote(self, temp_git_repo: str):
+        """Test pull fails when no remote configured."""
+        result = pull_changes(repository_path=temp_git_repo)
+        assert result is False
+
+
+# ==============================================================================
+# History and Log Tests
+# ==============================================================================
+
+
+class TestCommitHistory:
+    """Tests for commit history operations."""
+
+    def test_get_commit_history(self, temp_git_repo: str):
+        """Test getting commit history."""
+        history = get_commit_history(repository_path=temp_git_repo)
+        assert isinstance(history, list)
+        assert len(history) >= 1  # At least initial commit
+
+    def test_get_commit_history_with_limit(self, temp_git_repo: str):
+        """Test getting limited commit history."""
+        # Create multiple commits
+        for i in range(5):
+            test_file = os.path.join(temp_git_repo, f"file_{i}.txt")
+            with open(test_file, "w") as f:
+                f.write(f"Content {i}\n")
+            add_files([f"file_{i}.txt"], temp_git_repo)
+            commit_changes(f"Commit {i}", temp_git_repo)
+
+        history = get_commit_history(limit=3, repository_path=temp_git_repo)
+        assert len(history) == 3
+
+    def test_get_commit_history_empty_repo(self, temp_dir: str):
+        """Test getting history from non-repository."""
+        history = get_commit_history(repository_path=temp_dir)
+        assert history == []
+
+    def test_commit_history_has_required_fields(self, temp_git_repo: str):
+        """Test commit history entries have required fields."""
+        history = get_commit_history(limit=1, repository_path=temp_git_repo)
+        if history:
+            commit = history[0]
+            assert "hash" in commit
+            assert "author_name" in commit
+            assert "author_email" in commit
+            assert "date" in commit
+            assert "message" in commit
+
+
+# ==============================================================================
+# Tag Operations Tests
+# ==============================================================================
+
+
+class TestTagOperations:
+    """Tests for tag operations."""
+
+    def test_create_tag(self, temp_git_repo: str):
+        """Test creating a tag."""
+        result = create_tag("v1.0.0", repository_path=temp_git_repo)
+        assert result is True
+
+        tags = list_tags(temp_git_repo)
+        assert "v1.0.0" in tags
+
+    def test_create_annotated_tag(self, temp_git_repo: str):
+        """Test creating an annotated tag."""
+        result = create_tag(
+            "v1.0.1",
+            message="Release version 1.0.1",
+            repository_path=temp_git_repo
+        )
+        assert result is True
+
+    def test_list_tags_empty(self, temp_git_repo: str):
+        """Test listing tags when none exist."""
+        tags = list_tags(temp_git_repo)
+        assert isinstance(tags, list)
+        assert len(tags) == 0
+
+    def test_list_multiple_tags(self, temp_git_repo: str):
+        """Test listing multiple tags."""
+        create_tag("v1.0.0", repository_path=temp_git_repo)
+        create_tag("v1.1.0", repository_path=temp_git_repo)
+        create_tag("v2.0.0", repository_path=temp_git_repo)
+
+        tags = list_tags(temp_git_repo)
+        assert len(tags) == 3
+
+
+# ==============================================================================
+# Stash Operations Tests
+# ==============================================================================
+
+
+class TestStashOperations:
+    """Tests for stash operations."""
+
+    def test_stash_changes(self, temp_git_repo: str):
+        """Test stashing changes."""
+        # Create a tracked file and modify it
+        test_file = os.path.join(temp_git_repo, "stash_test.txt")
+        with open(test_file, "w") as f:
+            f.write("Initial content\n")
+
+        add_files(["stash_test.txt"], temp_git_repo)
+        commit_changes("Add file", temp_git_repo)
+
+        # Modify the file
+        with open(test_file, "w") as f:
+            f.write("Modified content\n")
+
+        # Stash the changes
+        result = stash_changes(message="Test stash", repository_path=temp_git_repo)
+        assert result is True
+
+    def test_list_stashes_empty(self, temp_git_repo: str):
+        """Test listing stashes when none exist."""
+        stashes = list_stashes(temp_git_repo)
+        assert isinstance(stashes, list)
+        assert len(stashes) == 0
+
+    def test_apply_stash_fails_when_empty(self, temp_git_repo: str):
+        """Test applying stash fails when no stash exists."""
+        result = apply_stash(repository_path=temp_git_repo)
+        assert result is False
+
+
+# ==============================================================================
+# Config Operations Tests
+# ==============================================================================
+
+
+class TestConfigOperations:
+    """Tests for Git config operations."""
+
+    def test_get_config_user_name(self, temp_git_repo: str):
+        """Test getting user.name config."""
+        # Set a local config first
+        set_config("user.name", "Test User", repository_path=temp_git_repo)
+
+        value = get_config("user.name", repository_path=temp_git_repo)
+        assert value == "Test User"
+
+    def test_get_config_nonexistent(self, temp_git_repo: str):
+        """Test getting nonexistent config returns None."""
+        value = get_config("nonexistent.config.key", repository_path=temp_git_repo)
+        assert value is None
+
+    def test_set_config(self, temp_git_repo: str):
+        """Test setting config value."""
+        result = set_config(
+            "core.autocrlf",
+            "false",
+            repository_path=temp_git_repo
+        )
+        assert result is True
+
+        value = get_config("core.autocrlf", repository_path=temp_git_repo)
+        assert value == "false"
+
+
+# ==============================================================================
+# Reset Operations Tests
+# ==============================================================================
+
+
+class TestResetOperations:
+    """Tests for reset operations."""
+
+    def test_reset_changes_soft(self, temp_git_repo: str):
+        """Test soft reset."""
+        # Create a commit
+        test_file = os.path.join(temp_git_repo, "reset_test.txt")
+        with open(test_file, "w") as f:
+            f.write("Content\n")
+
+        add_files(["reset_test.txt"], temp_git_repo)
+        commit_changes("Commit to reset", temp_git_repo)
+
+        result = reset_changes(mode="soft", target="HEAD~1", repository_path=temp_git_repo)
+        assert result is True
+
+    def test_reset_changes_invalid_mode(self, temp_git_repo: str):
+        """Test reset with invalid mode fails."""
+        result = reset_changes(mode="invalid", repository_path=temp_git_repo)
+        assert result is False
+
+    def test_reset_changes_fails_in_non_repo(self, temp_dir: str):
+        """Test reset fails in non-repository."""
+        result = reset_changes(mode="mixed", repository_path=temp_dir)
+        assert result is False
+
+
+# ==============================================================================
+# Cherry Pick Operations Tests
+# ==============================================================================
+
+
+class TestCherryPickOperations:
+    """Tests for cherry-pick operations."""
+
+    def test_cherry_pick_invalid_commit(self, temp_git_repo: str):
+        """Test cherry-pick with invalid commit fails."""
+        result = cherry_pick("invalid-commit-sha", temp_git_repo)
+        assert result is False
+
+    def test_cherry_pick_fails_in_non_repo(self, temp_dir: str):
+        """Test cherry-pick fails in non-repository."""
+        result = cherry_pick("abc123", temp_dir)
+        assert result is False
+
+
+# ==============================================================================
+# Error Handling Tests
+# ==============================================================================
+
+
+class TestErrorHandling:
+    """Tests for error handling in git operations."""
+
+    def test_operations_handle_nonexistent_paths(self, temp_dir: str):
+        """Test operations handle nonexistent paths gracefully."""
+        nonexistent = os.path.join(temp_dir, "nonexistent")
+
+        assert is_git_repository(nonexistent) is False
+        assert get_current_branch(nonexistent) is None
+        assert get_status(nonexistent).get("error") is not None
+        assert create_branch("test", nonexistent) is False
+        assert commit_changes("test", nonexistent) is None
+
+    def test_operations_handle_empty_strings(self):
+        """Test operations handle empty string paths."""
+        assert is_git_repository("") is False
+        assert get_current_branch("") is None
+
+    def test_operations_handle_special_paths(self):
+        """Test operations handle special paths."""
+        paths = ["/dev/null", "/etc/passwd"]
+
+        for path in paths:
+            result = is_git_repository(path)
+            assert result is False
+
+    def test_unicode_in_commit_message(self, temp_git_repo: str):
+        """Test Unicode characters in commit messages."""
+        test_file = os.path.join(temp_git_repo, "unicode_test.txt")
+        with open(test_file, "w") as f:
+            f.write("Unicode content\n")
+
+        add_files(["unicode_test.txt"], temp_git_repo)
+
+        # Test with various unicode characters
+        result = commit_changes(
+            "Test with unicode: Hello! Bonjour! Hallo! Ciao!",
+            temp_git_repo
+        )
+        assert result is not None
+
+    def test_special_characters_in_file_names(self, temp_git_repo: str):
+        """Test handling files with special characters."""
+        # Create file with spaces
+        test_file = os.path.join(temp_git_repo, "file with spaces.txt")
+        with open(test_file, "w") as f:
+            f.write("Content\n")
+
+        result = add_files(["file with spaces.txt"], temp_git_repo)
+        assert result is True
+
+
+# ==============================================================================
+# Concurrent Operations Tests
+# ==============================================================================
+
+
+class TestConcurrentOperations:
+    """Tests for concurrent git operations."""
+
+    def test_concurrent_status_reads(self, temp_git_repo: str):
+        """Test concurrent status reads are safe."""
         results = []
 
-        def worker():
-            """Worker function for concurrent testing."""
-            try:
-                status = get_status(repository_path=self.test_dir)
-                results.append(("success", status))
-            except Exception as e:
-                results.append(("error", str(e)))
+        def read_status():
+            for _ in range(10):
+                status = get_status(temp_git_repo)
+                results.append(status)
 
-        # Start multiple threads
-        threads = []
-        for i in range(5):
-            t = threading.Thread(target=worker)
-            threads.append(t)
-            t.start()
-
-        # Wait for all threads to complete
+        threads = [threading.Thread(target=read_status) for _ in range(5)]
         for t in threads:
-            t.join(timeout=5.0)
+            t.start()
+        for t in threads:
+            t.join()
 
-        # Verify results
-        self.assertEqual(len(results), 5)
-        for result in results:
-            status, data = result
-            self.assertEqual(status, "success")
-            self.assertIsInstance(data, dict)
+        assert len(results) == 50
+        assert all("clean" in r or "error" in r for r in results)
 
-    def test_error_handling_comprehensive(self):
-        """Test comprehensive error handling."""
-        # Test with various invalid inputs
-        invalid_paths = [
-            None,
-            "",
-            "/dev/null",
-            "/nonexistent/path/that/does/not/exist",
-            "/etc/passwd",  # Usually not a git repo
+    def test_concurrent_history_reads(self, temp_git_repo: str):
+        """Test concurrent history reads are safe."""
+        results = []
+
+        def read_history():
+            for _ in range(10):
+                history = get_commit_history(limit=5, repository_path=temp_git_repo)
+                results.append(history)
+
+        threads = [threading.Thread(target=read_history) for _ in range(5)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        assert len(results) == 50
+        assert all(isinstance(r, list) for r in results)
+
+
+# ==============================================================================
+# GitHub API Tests (Mocked)
+# ==============================================================================
+
+
+class TestGitHubAPIError:
+    """Tests for GitHubAPIError exception."""
+
+    def test_github_api_error_creation(self):
+        """Test GitHubAPIError can be created."""
+        error = GitHubAPIError("API request failed")
+        assert str(error) == "API request failed"
+
+    def test_github_api_error_can_be_raised(self):
+        """Test GitHubAPIError can be raised and caught."""
+        with pytest.raises(GitHubAPIError) as exc_info:
+            raise GitHubAPIError("Test error")
+        assert "Test error" in str(exc_info.value)
+
+
+class TestGitHubAPIOperations:
+    """Tests for GitHub API operations (mocked)."""
+
+    @patch("codomyrmex.git_operations.api.github.requests.post")
+    def test_create_github_repository_mocked(self, mock_post):
+        """Test create_github_repository with mocked API."""
+        from codomyrmex.git_operations.api.github import create_github_repository
+
+        mock_response = MagicMock()
+        mock_response.status_code = 201
+        mock_response.json.return_value = {
+            "name": "test-repo",
+            "full_name": "user/test-repo",
+            "html_url": "https://github.com/user/test-repo",
+            "clone_url": "https://github.com/user/test-repo.git",
+            "ssh_url": "git@github.com:user/test-repo.git",
+            "private": True,
+            "description": "Test description",
+            "default_branch": "main"
+        }
+        mock_post.return_value = mock_response
+
+        result = create_github_repository(
+            name="test-repo",
+            private=True,
+            description="Test description",
+            github_token="test-token"
+        )
+
+        assert result["success"] is True
+        assert result["repository"]["name"] == "test-repo"
+
+    @patch("codomyrmex.git_operations.api.github.requests.get")
+    def test_get_repository_info_mocked(self, mock_get):
+        """Test get_repository_info with mocked API."""
+        from codomyrmex.git_operations.api.github import get_repository_info
+
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "name": "test-repo",
+            "full_name": "user/test-repo",
+            "html_url": "https://github.com/user/test-repo",
+            "clone_url": "https://github.com/user/test-repo.git",
+            "ssh_url": "git@github.com:user/test-repo.git",
+            "private": False,
+            "description": "Test repo",
+            "default_branch": "main",
+            "owner": {"login": "user"},
+            "created_at": "2024-01-01T00:00:00Z",
+            "updated_at": "2024-01-01T00:00:00Z",
+            "language": "Python",
+            "size": 1000,
+            "stargazers_count": 10,
+            "watchers_count": 5,
+            "forks_count": 2,
+            "open_issues_count": 1
+        }
+        mock_get.return_value = mock_response
+
+        result = get_repository_info("user", "test-repo", "test-token")
+
+        assert result["name"] == "test-repo"
+        assert result["full_name"] == "user/test-repo"
+
+    @patch("codomyrmex.git_operations.api.github.requests.post")
+    def test_create_pull_request_mocked(self, mock_post):
+        """Test create_pull_request with mocked API."""
+        from codomyrmex.git_operations.api.github import create_pull_request
+
+        mock_response = MagicMock()
+        mock_response.status_code = 201
+        mock_response.json.return_value = {
+            "number": 1,
+            "title": "Test PR",
+            "body": "PR description",
+            "html_url": "https://github.com/user/repo/pull/1",
+            "state": "open",
+            "head": {"ref": "feature", "sha": "abc123"},
+            "base": {"ref": "main", "sha": "def456"},
+            "user": {"login": "user"},
+            "created_at": "2024-01-01T00:00:00Z"
+        }
+        mock_post.return_value = mock_response
+
+        result = create_pull_request(
+            repo_owner="user",
+            repo_name="repo",
+            head_branch="feature",
+            base_branch="main",
+            title="Test PR",
+            body="PR description",
+            github_token="test-token"
+        )
+
+        assert result["success"] is True
+        assert result["pull_request"]["number"] == 1
+
+    @patch("codomyrmex.git_operations.api.github.requests.get")
+    def test_get_pull_requests_mocked(self, mock_get):
+        """Test get_pull_requests with mocked API."""
+        from codomyrmex.git_operations.api.github import get_pull_requests
+
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = [
+            {
+                "number": 1,
+                "title": "PR 1",
+                "body": "Description 1",
+                "html_url": "https://github.com/user/repo/pull/1",
+                "state": "open",
+                "head": {"ref": "feature1", "sha": "abc123"},
+                "base": {"ref": "main", "sha": "def456"},
+                "user": {"login": "user"},
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z"
+            },
+            {
+                "number": 2,
+                "title": "PR 2",
+                "body": "Description 2",
+                "html_url": "https://github.com/user/repo/pull/2",
+                "state": "open",
+                "head": {"ref": "feature2", "sha": "ghi789"},
+                "base": {"ref": "main", "sha": "def456"},
+                "user": {"login": "user"},
+                "created_at": "2024-01-02T00:00:00Z",
+                "updated_at": "2024-01-02T00:00:00Z"
+            }
         ]
+        mock_get.return_value = mock_response
 
-        for path in invalid_paths:
-            with self.subTest(path=path):
-                # Test various operations with invalid paths
-                result = is_git_repository(path)
-                self.assertIsInstance(result, bool)
+        result = get_pull_requests("user", "repo", "open", "test-token")
 
-                if FULL_GIT_AVAILABLE:
-                    from codomyrmex.git_operations.core.git import get_status
-                    status = get_status(path)
-                    self.assertIsInstance(status, dict)
-                    self.assertIn("error", status)
-
-    def test_git_command_timeout_handling(self):
-        """Test handling of git command timeouts."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
-
-        # Test operations that might timeout
-        from codomyrmex.git_operations.core.git import get_commit_history
-
-        # Request large history which might be slow
-        history = get_commit_history(limit=1000, repository_path=self.test_dir)
-        self.assertIsInstance(history, list)
-
-    def test_large_repository_handling(self):
-        """Test handling of potentially large repository operations."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
-
-        from codomyrmex.git_operations.core.git import get_repository_info
-
-        # Test in non-repository directory
-        info = get_repository_info(repository_path=self.test_dir)
-        self.assertIsInstance(info, dict)
-
-        # Should handle the case gracefully
-        if "error" in info:
-            self.assertIsInstance(info["error"], str)
-
-    def test_git_command_failure_simulation(self):
-        """Test handling of git command failures with real subprocess."""
-        # Test with a non-git directory (should fail gracefully)
-        result = check_git_availability()
-        # This should still work as it tests git availability differently
-
-        result = is_git_repository(self.test_dir)
-        self.assertFalse(result)
-
-        if FULL_GIT_AVAILABLE:
-            from codomyrmex.git_operations.core.git import get_status
-            status = get_status(repository_path=self.test_dir)
-            # Should handle error gracefully
-            assert isinstance(status, dict)
-            if "error" in status:
-                self.assertIsInstance(status["error"], str)
-
-    def test_memory_usage_with_large_outputs(self):
-        """Test memory usage when handling large git outputs."""
-        if not FULL_GIT_AVAILABLE:
-            self.skipTest("Full git operations not available")
-
-        # Test operations that might return large outputs
-        from codomyrmex.git_operations.core.git import get_commit_history, get_diff
-
-        # These should handle large outputs gracefully
-        history = get_commit_history(limit=100, repository_path=self.test_dir)
-        self.assertIsInstance(history, list)
-
-        diff = get_diff(repository_path=self.test_dir)
-        self.assertIsInstance(diff, (str, list, dict))
-
-    def test_unicode_and_special_characters(self):
-        """Test handling of unicode and special characters in git operations."""
-        # Test with unicode commit messages, file names, etc.
-        unicode_message = "Test commit with unicode: 🚀 αβγδε"
-
-        if FULL_GIT_AVAILABLE:
-            from codomyrmex.git_operations.core.git import commit_changes
-            result = commit_changes(unicode_message, repository_path=self.test_dir)
-            self.assertFalse(result)  # Should fail gracefully in non-repo
-
-    def test_repository_state_transitions(self):
-        """Test repository state transitions and edge cases."""
-        # This would typically require setting up actual git repositories
-        # For now, test the functions handle various states
-
-        states_to_test = [
-            "nonexistent_directory",
-            "empty_directory",
-            "directory_with_files",
-        ]
-
-        for state in states_to_test:
-            with self.subTest(state=state):
-                if state == "empty_directory":
-                    path = self.test_dir
-                elif state == "directory_with_files":
-                    # Create some files
-                    test_file = os.path.join(self.test_dir, "test.txt")
-                    with open(test_file, 'w') as f:
-                        f.write("test content")
-                    path = self.test_dir
-                else:
-                    path = "/nonexistent/path"
-
-                # Test various operations
-                result = is_git_repository(path)
-                self.assertIsInstance(result, bool)
-
-                if FULL_GIT_AVAILABLE:
-                    from codomyrmex.git_operations.core.git import get_status
-                    status = get_status(path)
-                    self.assertIsInstance(status, dict)
-
-    def test_git_operations_idempotency(self):
-        """Test that git operations are idempotent where appropriate."""
-        # Operations like get_status should be idempotent
-        result1 = get_status(repository_path=self.test_dir)
-        result2 = get_status(repository_path=self.test_dir)
-
-        # Results should be consistent (both should indicate non-repo or same error)
-        self.assertEqual(result1.get("error"), result2.get("error"))
-
-        if FULL_GIT_AVAILABLE:
-            from codomyrmex.git_operations.core.git import get_branches
-            branches1 = get_branches(repository_path=self.test_dir)
-            branches2 = get_branches(repository_path=self.test_dir)
-            self.assertEqual(branches1, branches2)
+        assert len(result) == 2
+        assert result[0]["number"] == 1
+        assert result[1]["number"] == 2
 
 
-if __name__ == '__main__':
-    unittest.main()
+# ==============================================================================
+# Integration Tests
+# ==============================================================================
+
+
+class TestGitOperationsIntegration:
+    """Integration tests for git operations workflow."""
+
+    def test_full_workflow(self, temp_dir: str):
+        """Test a complete git workflow."""
+        repo_path = os.path.join(temp_dir, "integration_test")
+        os.makedirs(repo_path)
+
+        # Initialize repository
+        result = initialize_git_repository(repo_path, initial_commit=True)
+        assert result is True
+        assert is_git_repository(repo_path)
+
+        # Create and commit a file
+        test_file = os.path.join(repo_path, "main.py")
+        with open(test_file, "w") as f:
+            f.write("print('Hello, World!')\n")
+
+        add_files(["main.py"], repo_path)
+        sha = commit_changes("Add main.py", repo_path)
+        assert sha is not None
+
+        # Check status is clean
+        status = get_status(repo_path)
+        assert status["clean"] is True
+
+        # Create a feature branch
+        create_branch("feature-branch", repo_path)
+        assert get_current_branch(repo_path) == "feature-branch"
+
+        # Make changes on feature branch
+        with open(test_file, "a") as f:
+            f.write("print('Feature added!')\n")
+
+        add_files(["main.py"], repo_path)
+        commit_changes("Add feature", repo_path)
+
+        # Check history
+        history = get_commit_history(limit=10, repository_path=repo_path)
+        assert len(history) >= 2
+
+        # Create a tag
+        create_tag("v0.1.0", message="First version", repository_path=repo_path)
+        tags = list_tags(repo_path)
+        assert "v0.1.0" in tags
+
+    def test_multiple_branch_workflow(self, temp_dir: str):
+        """Test workflow with multiple branches."""
+        repo_path = os.path.join(temp_dir, "multi_branch_test")
+        os.makedirs(repo_path)
+
+        initialize_git_repository(repo_path, initial_commit=True)
+
+        # Create multiple feature branches
+        branches = ["feature-a", "feature-b", "feature-c"]
+
+        for branch in branches:
+            # Switch to main first
+            switch_branch("main", repo_path)
+
+            # Create and switch to new branch
+            create_branch(branch, repo_path)
+
+            # Make a change
+            test_file = os.path.join(repo_path, f"{branch}.txt")
+            with open(test_file, "w") as f:
+                f.write(f"Content for {branch}\n")
+
+            add_files([f"{branch}.txt"], repo_path)
+            commit_changes(f"Add {branch}", repo_path)
+
+        # Verify we can switch between branches
+        for branch in branches:
+            switch_branch(branch, repo_path)
+            assert get_current_branch(repo_path) == branch

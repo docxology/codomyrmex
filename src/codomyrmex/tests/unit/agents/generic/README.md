@@ -1,17 +1,37 @@
-# generic
+# Generic
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `generic` module provides core functionality for Generic.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `test_api_agent_base.py` – File
-- `test_base_agent_config.py` – File
+```mermaid
+graph TD
+    generic --> Utils[codomyrmex.utils]
+    generic --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph generic
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.generic import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [agents](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

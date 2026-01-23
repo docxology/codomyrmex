@@ -1,20 +1,37 @@
-# antigravity
+# Antigravity
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `antigravity` module provides core functionality for Antigravity.
 
-Automation and utility scripts.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `artifact_inspector.py` – File
-- `basic_setup.py` – File
-- `chat_demo.py` – File
-- `gui_chat.py` – File
-- `periodic_chat.py` – File
-- `workflow_manager.py` – File
+```mermaid
+graph TD
+    antigravity --> Utils[codomyrmex.utils]
+    antigravity --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph antigravity
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.antigravity import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [ide](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

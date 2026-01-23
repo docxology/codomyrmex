@@ -1,6 +1,13 @@
 """Utilities Package.
 
 Common utility functions and helpers used across the codomyrmex codebase.
+
+This package provides:
+- Subprocess execution utilities (run_command, run_command_async, etc.)
+- JSON handling utilities (safe_json_loads, safe_json_dumps)
+- File/path utilities (ensure_directory, hash_file)
+- Retry decorators and timing utilities
+- Script execution base classes
 """
 
 import functools
@@ -14,9 +21,22 @@ from typing import Any, Callable, Optional, TypeVar, Union
 
 from .refined import RefinedUtilities
 
-T = TypeVar("T")
+# Import subprocess utilities
+from .subprocess import (
+    CommandError,
+    CommandErrorType,
+    SubprocessResult,
+    check_command_available,
+    get_command_version,
+    quote_command,
+    run_command,
+    run_command_async,
+    run_with_retry,
+    split_command,
+    stream_command,
+)
 
-__all__ = ["RefinedUtilities"]
+T = TypeVar("T")
 
 
 def ensure_directory(path: Union[str, Path]) -> Path:
@@ -242,7 +262,17 @@ def deep_merge(base: dict, override: dict) -> dict:
     return result
 
 
+# Script base utilities
+from .script_base import (
+    ScriptBase,
+    ScriptConfig,
+    ScriptResult,
+    ConfigurableScript,
+    run_script,
+)
+
 __all__ = [
+    # Core utilities
     "ensure_directory",
     "safe_json_loads",
     "safe_json_dumps",
@@ -255,4 +285,24 @@ __all__ = [
     "get_env",
     "flatten_dict",
     "deep_merge",
+    # Script base
+    "ScriptBase",
+    "ScriptConfig",
+    "ScriptResult",
+    "ConfigurableScript",
+    "run_script",
+    # Subprocess utilities
+    "run_command",
+    "run_command_async",
+    "stream_command",
+    "run_with_retry",
+    "SubprocessResult",
+    "CommandError",
+    "CommandErrorType",
+    "check_command_available",
+    "get_command_version",
+    "quote_command",
+    "split_command",
+    # Refined utilities
+    "RefinedUtilities",
 ]

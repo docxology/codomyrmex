@@ -1,20 +1,37 @@
-# examples
+# Examples
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `examples` module provides core functionality for Examples.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `conftest.py` – File
-- `test_config_validation.py` – File
-- `test_example_execution.py` – File
-- `test_output_validation.py` – File
+```mermaid
+graph TD
+    examples --> Utils[codomyrmex.utils]
+    examples --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph examples
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.examples import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [tests](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

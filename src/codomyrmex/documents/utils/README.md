@@ -1,19 +1,37 @@
-# utils
+# Utils
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `utils` module provides core functionality for Utils.
 
-Documentation files and guides.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `encoding_detector.py` – File
-- `file_validator.py` – File
-- `mime_type_detector.py` – File
+```mermaid
+graph TD
+    utils --> Utils[codomyrmex.utils]
+    utils --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph utils
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.utils import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [documents](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

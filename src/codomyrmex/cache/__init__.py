@@ -7,30 +7,41 @@ LLM responses, build artifacts, and other frequently accessed data.
 
 from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-
 from .cache import Cache
 from .cache_manager import CacheManager
 from .stats import CacheStats
 from .namespaced import NamespacedCache
 from .ttl_manager import TTLManager
+from .exceptions import (
+    CacheError,
+    CacheExpiredError,
+    CacheFullError,
+    CacheConnectionError,
+    CacheKeyError,
+    CacheSerializationError,
+    CacheInvalidationError,
+)
 
 __all__ = [
+    # Core classes
     "Cache",
     "CacheManager",
     "CacheStats",
     "NamespacedCache",
     "TTLManager",
+    # Functions
     "get_cache",
+    # Exceptions
+    "CacheError",
+    "CacheExpiredError",
+    "CacheFullError",
+    "CacheConnectionError",
+    "CacheKeyError",
+    "CacheSerializationError",
+    "CacheInvalidationError",
 ]
 
 __version__ = "0.1.0"
-
-
-class CacheError(CodomyrmexError):
-    """Raised when cache operations fail."""
-
-    pass
 
 
 def get_cache(name: str = "default", backend: str = "in_memory") -> Cache:

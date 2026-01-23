@@ -108,8 +108,105 @@ ConfigError = AgentConfigurationError
 
 class SessionError(AgentError):
     """Raised when agent session operations fail."""
-    
+
     def __init__(self, message: str = "Session operation failed", session_id: str | None = None, **kwargs):
         super().__init__(message, **kwargs)
         if session_id:
             self.context["session_id"] = session_id
+
+
+class ExecutionError(AgentError):
+    """Raised when agent execution fails.
+
+    This includes task execution failures, action processing errors,
+    and agent runtime failures.
+    """
+
+    def __init__(
+        self,
+        message: str = "Agent execution failed",
+        task_id: str | None = None,
+        action: str | None = None,
+        exit_code: int | None = None,
+        **kwargs
+    ):
+        """Initialize ExecutionError.
+
+        Args:
+            message: Error description
+            task_id: ID of the task being executed
+            action: Action that failed
+            exit_code: Exit code if applicable
+            **kwargs: Additional context passed to parent
+        """
+        super().__init__(message, **kwargs)
+        if task_id:
+            self.context["task_id"] = task_id
+        if action:
+            self.context["action"] = action
+        if exit_code is not None:
+            self.context["exit_code"] = exit_code
+
+
+class ToolError(AgentError):
+    """Raised when agent tool operations fail.
+
+    This includes tool invocation errors, tool not found,
+    and tool execution failures.
+    """
+
+    def __init__(
+        self,
+        message: str = "Tool operation failed",
+        tool_name: str | None = None,
+        tool_input: dict | None = None,
+        **kwargs
+    ):
+        """Initialize ToolError.
+
+        Args:
+            message: Error description
+            tool_name: Name of the tool that failed
+            tool_input: Input provided to the tool (truncated for safety)
+            **kwargs: Additional context passed to parent
+        """
+        super().__init__(message, **kwargs)
+        if tool_name:
+            self.context["tool_name"] = tool_name
+        if tool_input:
+            # Truncate tool input to avoid huge context
+            input_str = str(tool_input)
+            self.context["tool_input"] = input_str[:500] + "..." if len(input_str) > 500 else input_str
+
+
+class ContextError(AgentError):
+    """Raised when agent context operations fail.
+
+    This includes context window exceeded, context corruption,
+    and context serialization failures.
+    """
+
+    def __init__(
+        self,
+        message: str = "Context operation failed",
+        context_size: int | None = None,
+        max_context: int | None = None,
+        context_type: str | None = None,
+        **kwargs
+    ):
+        """Initialize ContextError.
+
+        Args:
+            message: Error description
+            context_size: Current context size (tokens or bytes)
+            max_context: Maximum allowed context size
+            context_type: Type of context (conversation, memory, etc.)
+            **kwargs: Additional context passed to parent
+        """
+        super().__init__(message, **kwargs)
+        if context_size is not None:
+            self.context["context_size"] = context_size
+        if max_context is not None:
+            self.context["max_context"] = max_context
+        if context_type:
+            self.context["context_type"] = context_type

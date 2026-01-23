@@ -61,15 +61,57 @@ class ReActAgent(BaseAgent):
         # For Phase 17, we establish the STRUCTURE.
         
         try:
-            # Mock reasoning step
+            # Get available tools for the system prompt
             tools = self.tool_registry.list_tools()
             tool_names = [t.name for t in tools]
-            
-            # TODO: Implement actual LLM call loop
-            # response = self.llm_client.chat(history)
-            # ... parse ... 
-            
-            # Fallback for now: Check if prompt asks to run a tool directly (e.g. "Run tool X")
+
+            # LLM client integration for the ReAct loop
+            if self.llm_client is not None:
+                # Use the LLM client to process the ReAct loop
+                while steps < self.max_steps:
+                    steps += 1
+                    try:
+                        # Call LLM with current history
+                        if hasattr(self.llm_client, 'chat'):
+                            response = self.llm_client.chat(history)
+                        elif hasattr(self.llm_client, 'complete'):
+                            # Alternative interface for completion-style clients
+                            prompt_text = "\n".join(
+                                f"{m['role']}: {m['content']}" for m in history
+                            )
+                            response = self.llm_client.complete(prompt_text)
+                        else:
+                            self.logger.warning("LLM client has no chat/complete method, falling back")
+                            break
+
+                        # Parse response for Thought/Action/Final Answer pattern
+                        response_text = response if isinstance(response, str) else str(response)
+
+                        # Check for final answer
+                        if "Final Answer:" in response_text:
+                            final_answer = response_text.split("Final Answer:")[-1].strip()
+                            break
+
+                        # Parse action if present
+                        if "Action:" in response_text:
+                            action_line = response_text.split("Action:")[-1].split("\n")[0].strip()
+                            # Execute tool and add observation
+                            try:
+                                result = self.tool_registry.execute(action_line.split()[0],
+                                    **self._parse_action_args(action_line))
+                                history.append({"role": "assistant", "content": response_text})
+                                history.append({"role": "user", "content": f"Observation: {result}"})
+                            except Exception as tool_error:
+                                history.append({"role": "user", "content": f"Observation: Error - {tool_error}"})
+                        else:
+                            # No action parsed, treat as thinking/reasoning step
+                            history.append({"role": "assistant", "content": response_text})
+
+                    except Exception as llm_error:
+                        self.logger.warning(f"LLM call failed: {llm_error}, falling back to direct execution")
+                        break
+
+            # Fallback behavior: Check if prompt asks to run a tool directly
             # This allows unit testing the harness without an LLM.
             
             if request.prompt.startswith("call:"):
@@ -115,6 +157,45 @@ Observation: ...
 ... (repeat)
 Final Answer: ...
 """
+
+    def _parse_action_args(self, action_line: str) -> Dict[str, Any]:
+        """Parse action arguments from an action line.
+
+        Supports formats like:
+        - tool_name {"key": "value"}
+        - tool_name key=value key2=value2
+
+        Args:
+            action_line: The action line to parse
+
+        Returns:
+            Dictionary of parsed arguments
+        """
+        parts = action_line.split(None, 1)
+        if len(parts) < 2:
+            return {}
+
+        args_str = parts[1].strip()
+
+        # Try JSON format first
+        if args_str.startswith("{"):
+            try:
+                return json.loads(args_str)
+            except json.JSONDecodeError:
+                pass
+
+        # Try key=value format
+        result = {}
+        for item in args_str.split():
+            if "=" in item:
+                key, value = item.split("=", 1)
+                # Try to parse value as JSON for complex types
+                try:
+                    result[key] = json.loads(value)
+                except json.JSONDecodeError:
+                    result[key] = value
+
+        return result
 
     def stream(self, request: AgentRequest) -> Iterator[str]:
         # Simple implementation

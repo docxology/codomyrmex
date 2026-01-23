@@ -1,16 +1,37 @@
-# module_template
+# Module Template
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `module_template` module provides core functionality for Module Template.
 
-Automation and utility scripts.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `examples/` – Subdirectory
-- `orchestrate.py` – File
+```mermaid
+graph TD
+    module_template --> Utils[codomyrmex.utils]
+    module_template --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph module_template
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.module_template import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [scripts](../README.md)
-- **Project Root**: ../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

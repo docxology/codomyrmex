@@ -2,7 +2,7 @@
 
 Tests for ensure_directory, safe_json_loads, safe_json_dumps, hash_content,
 hash_file, timing_decorator, retry, get_timestamp, truncate_string, get_env,
-flatten_dict, deep_merge, and RefinedUtilities.
+flatten_dict, deep_merge, RefinedUtilities, CLI helpers, and script base classes.
 """
 
 import json
@@ -11,7 +11,8 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
+import argparse
 
 import pytest
 
@@ -43,6 +44,25 @@ class TestRefinedUtilities(unittest.TestCase):
         result = failing_func()
         self.assertEqual(result, "success")
         self.assertEqual(self.count, 2)
+
+    def test_resolve_path_absolute(self):
+        """Test resolving an absolute path."""
+        abs_path = "/tmp/test/path"
+        result = RefinedUtilities.resolve_path(abs_path)
+        self.assertEqual(result, Path(abs_path))
+
+    def test_resolve_path_relative(self):
+        """Test resolving a relative path."""
+        rel_path = "relative/path"
+        result = RefinedUtilities.resolve_path(rel_path)
+        self.assertTrue(result.is_absolute())
+
+    def test_resolve_path_with_base_dir(self):
+        """Test resolving a relative path with base directory."""
+        rel_path = "subdir/file.txt"
+        base_dir = "/base/path"
+        result = RefinedUtilities.resolve_path(rel_path, base_dir)
+        self.assertEqual(result, Path("/base/path/subdir/file.txt").resolve())
 
 
 class TestEnsureDirectory:
@@ -88,6 +108,15 @@ class TestEnsureDirectory:
 
         assert result.exists()
 
+    def test_returns_path_object(self, tmp_path):
+        """Test that ensure_directory returns Path object."""
+        from codomyrmex.utils import ensure_directory
+
+        new_dir = tmp_path / "test_dir"
+        result = ensure_directory(new_dir)
+
+        assert isinstance(result, Path)
+
 
 class TestSafeJsonLoads:
     """Tests for safe_json_loads function."""
@@ -124,6 +153,30 @@ class TestSafeJsonLoads:
 
         assert result == {}
 
+    def test_empty_string(self):
+        """Test empty string returns default."""
+        from codomyrmex.utils import safe_json_loads
+
+        result = safe_json_loads("", default={"empty": True})
+
+        assert result == {"empty": True}
+
+    def test_valid_json_array(self):
+        """Test parsing valid JSON array."""
+        from codomyrmex.utils import safe_json_loads
+
+        result = safe_json_loads('[1, 2, 3]')
+
+        assert result == [1, 2, 3]
+
+    def test_valid_json_number(self):
+        """Test parsing valid JSON number."""
+        from codomyrmex.utils import safe_json_loads
+
+        result = safe_json_loads('42')
+
+        assert result == 42
+
 
 class TestSafeJsonDumps:
     """Tests for safe_json_dumps function."""
@@ -156,6 +209,26 @@ class TestSafeJsonDumps:
 
         # Should convert using str() function, not return the default
         assert result is not None
+
+    def test_serializes_list(self):
+        """Test serializing a list."""
+        from codomyrmex.utils import safe_json_dumps
+
+        result = safe_json_dumps([1, 2, 3])
+
+        assert "[" in result
+        assert "1" in result
+
+    def test_serializes_nested_object(self):
+        """Test serializing nested object."""
+        from codomyrmex.utils import safe_json_dumps
+
+        data = {"level1": {"level2": {"value": 42}}}
+        result = safe_json_dumps(data)
+
+        assert "level1" in result
+        assert "level2" in result
+        assert "42" in result
 
 
 class TestHashContent:
@@ -208,6 +281,14 @@ class TestHashContent:
 
         assert hash1 != hash2
 
+    def test_hash_empty_string(self):
+        """Test hashing empty string."""
+        from codomyrmex.utils import hash_content
+
+        result = hash_content("")
+
+        assert len(result) == 64  # SHA256 always produces 64 char hex
+
 
 class TestHashFile:
     """Tests for hash_file function."""
@@ -243,6 +324,33 @@ class TestHashFile:
 
         assert result is not None
 
+    def test_hash_file_different_algorithms(self, tmp_path):
+        """Test hashing file with different algorithms."""
+        from codomyrmex.utils import hash_file
+
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("content")
+
+        sha256 = hash_file(test_file, algorithm="sha256")
+        md5 = hash_file(test_file, algorithm="md5")
+
+        assert len(sha256) == 64
+        assert len(md5) == 32
+
+    def test_hash_file_same_content_same_hash(self, tmp_path):
+        """Test same file content produces same hash."""
+        from codomyrmex.utils import hash_file
+
+        file1 = tmp_path / "file1.txt"
+        file2 = tmp_path / "file2.txt"
+        file1.write_text("identical content")
+        file2.write_text("identical content")
+
+        hash1 = hash_file(file1)
+        hash2 = hash_file(file2)
+
+        assert hash1 == hash2
+
 
 class TestTimingDecorator:
     """Tests for timing_decorator."""
@@ -271,6 +379,29 @@ class TestTimingDecorator:
         result = func_returning_string()
 
         assert result == "result"
+
+    def test_timing_preserves_function_name(self):
+        """Test timing decorator preserves function name."""
+        from codomyrmex.utils import timing_decorator
+
+        @timing_decorator
+        def my_function():
+            return {}
+
+        assert my_function.__name__ == "my_function"
+
+    def test_timing_measures_actual_time(self):
+        """Test timing decorator measures actual execution time."""
+        from codomyrmex.utils import timing_decorator
+
+        @timing_decorator
+        def slow_function():
+            time.sleep(0.1)
+            return {}
+
+        result = slow_function()
+
+        assert result["execution_time_ms"] >= 100
 
 
 class TestRetryDecorator:
@@ -334,6 +465,28 @@ class TestRetryDecorator:
         with pytest.raises(TypeError):
             raises_type_error()
 
+    def test_retry_with_backoff(self):
+        """Test retry with exponential backoff."""
+        from codomyrmex.utils import retry
+
+        call_times = []
+
+        @retry(max_attempts=3, delay=0.05, backoff=2.0)
+        def track_calls():
+            call_times.append(time.time())
+            if len(call_times) < 3:
+                raise ValueError("Fail")
+            return "success"
+
+        result = track_calls()
+
+        assert result == "success"
+        # Check delays increase
+        if len(call_times) >= 3:
+            delay1 = call_times[1] - call_times[0]
+            delay2 = call_times[2] - call_times[1]
+            assert delay2 > delay1
+
 
 class TestGetTimestamp:
     """Tests for get_timestamp function."""
@@ -357,6 +510,16 @@ class TestGetTimestamp:
 
         assert len(result) == 8
         assert result.isdigit()
+
+    def test_timestamp_changes_over_time(self):
+        """Test that timestamp changes over time."""
+        from codomyrmex.utils import get_timestamp
+
+        ts1 = get_timestamp(fmt="%Y%m%d%H%M%S%f")
+        time.sleep(0.001)
+        ts2 = get_timestamp(fmt="%Y%m%d%H%M%S%f")
+
+        assert ts1 != ts2
 
 
 class TestTruncateString:
@@ -395,6 +558,23 @@ class TestTruncateString:
 
         assert result == "exact"
 
+    def test_empty_string(self):
+        """Test empty string."""
+        from codomyrmex.utils import truncate_string
+
+        result = truncate_string("", max_length=10)
+
+        assert result == ""
+
+    def test_empty_suffix(self):
+        """Test truncation with empty suffix."""
+        from codomyrmex.utils import truncate_string
+
+        result = truncate_string("long string", max_length=5, suffix="")
+
+        assert len(result) == 5
+        assert result == "long "
+
 
 class TestGetEnv:
     """Tests for get_env function."""
@@ -424,6 +604,28 @@ class TestGetEnv:
 
         with pytest.raises(ValueError):
             get_env("NONEXISTENT_VAR", required=True)
+
+    def test_existing_required_env_var(self):
+        """Test existing required env var succeeds."""
+        from codomyrmex.utils import get_env
+
+        os.environ["REQUIRED_VAR"] = "value"
+        try:
+            result = get_env("REQUIRED_VAR", required=True)
+            assert result == "value"
+        finally:
+            del os.environ["REQUIRED_VAR"]
+
+    def test_env_var_with_empty_value(self):
+        """Test env var with empty value."""
+        from codomyrmex.utils import get_env
+
+        os.environ["EMPTY_VAR"] = ""
+        try:
+            result = get_env("EMPTY_VAR", default="default")
+            assert result == ""  # Empty string is valid
+        finally:
+            del os.environ["EMPTY_VAR"]
 
 
 class TestFlattenDict:
@@ -460,6 +662,22 @@ class TestFlattenDict:
         result = flatten_dict({"a": 1, "b": {"c": 2, "d": {"e": 3}}})
 
         assert result == {"a": 1, "b.c": 2, "b.d.e": 3}
+
+    def test_empty_dict(self):
+        """Test flattening empty dictionary."""
+        from codomyrmex.utils import flatten_dict
+
+        result = flatten_dict({})
+
+        assert result == {}
+
+    def test_dict_with_list_values(self):
+        """Test flattening dict with list values."""
+        from codomyrmex.utils import flatten_dict
+
+        result = flatten_dict({"a": [1, 2, 3]})
+
+        assert result == {"a": [1, 2, 3]}
 
 
 class TestDeepMerge:
@@ -506,6 +724,376 @@ class TestDeepMerge:
 
         assert base == {"a": 1}
         assert override == {"b": 2}
+
+    def test_deep_merge_multiple_levels(self):
+        """Test deep merge with multiple nesting levels."""
+        from codomyrmex.utils import deep_merge
+
+        base = {"a": {"b": {"c": 1}}}
+        override = {"a": {"b": {"d": 2}, "e": 3}}
+
+        result = deep_merge(base, override)
+
+        assert result == {"a": {"b": {"c": 1, "d": 2}, "e": 3}}
+
+    def test_merge_with_non_dict_override(self):
+        """Test merge when override replaces dict with non-dict."""
+        from codomyrmex.utils import deep_merge
+
+        base = {"a": {"nested": "value"}}
+        override = {"a": "simple"}
+
+        result = deep_merge(base, override)
+
+        assert result == {"a": "simple"}
+
+
+class TestCliHelpers:
+    """Tests for CLI helper functions."""
+
+    def test_format_table_empty(self):
+        """Test format_table with empty data."""
+        from codomyrmex.utils.cli_helpers import format_table
+
+        result = format_table([], ["col1", "col2"])
+
+        assert "No data" in result
+
+    def test_format_table_with_data(self):
+        """Test format_table with data."""
+        from codomyrmex.utils.cli_helpers import format_table
+
+        data = [{"name": "Alice", "age": "30"}, {"name": "Bob", "age": "25"}]
+        headers = ["name", "age"]
+
+        result = format_table(data, headers)
+
+        assert "Alice" in result
+        assert "Bob" in result
+        assert "name" in result
+        assert "age" in result
+
+    def test_format_output_json(self):
+        """Test format_output with JSON format."""
+        from codomyrmex.utils.cli_helpers import format_output
+
+        data = {"key": "value"}
+        result = format_output(data, format_type="json")
+
+        assert '"key"' in result
+        assert '"value"' in result
+
+    def test_format_output_text(self):
+        """Test format_output with text format."""
+        from codomyrmex.utils.cli_helpers import format_output
+
+        data = {"key": "value"}
+        result = format_output(data, format_type="text")
+
+        assert result == str(data)
+
+    def test_validate_file_path_exists(self, tmp_path):
+        """Test validate_file_path with existing file."""
+        from codomyrmex.utils.cli_helpers import validate_file_path
+
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("content")
+
+        result = validate_file_path(test_file, must_exist=True, must_be_file=True)
+
+        assert result == test_file.resolve()
+
+    def test_validate_file_path_not_exists(self, tmp_path):
+        """Test validate_file_path with non-existent file."""
+        from codomyrmex.utils.cli_helpers import validate_file_path
+
+        missing_file = tmp_path / "missing.txt"
+
+        with pytest.raises(FileNotFoundError):
+            validate_file_path(missing_file, must_exist=True)
+
+    def test_validate_file_path_must_be_dir(self, tmp_path):
+        """Test validate_file_path with must_be_dir."""
+        from codomyrmex.utils.cli_helpers import validate_file_path
+
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("content")
+
+        with pytest.raises(ValueError):
+            validate_file_path(test_file, must_exist=True, must_be_dir=True)
+
+    def test_determine_language_python(self):
+        """Test determine_language_from_file for Python."""
+        from codomyrmex.utils.cli_helpers import determine_language_from_file
+
+        result = determine_language_from_file("test.py")
+
+        assert result == "python"
+
+    def test_determine_language_javascript(self):
+        """Test determine_language_from_file for JavaScript."""
+        from codomyrmex.utils.cli_helpers import determine_language_from_file
+
+        result = determine_language_from_file("test.js")
+
+        assert result == "javascript"
+
+    def test_determine_language_unknown(self):
+        """Test determine_language_from_file for unknown extension."""
+        from codomyrmex.utils.cli_helpers import determine_language_from_file
+
+        result = determine_language_from_file("test.unknown")
+
+        assert result == "python"  # Default
+
+    def test_ensure_output_directory(self, tmp_path):
+        """Test ensure_output_directory creates parent directories."""
+        from codomyrmex.utils.cli_helpers import ensure_output_directory
+
+        output_file = tmp_path / "nested" / "dir" / "output.txt"
+
+        result = ensure_output_directory(output_file)
+
+        assert result.parent.exists()
+
+
+class TestProgressReporter:
+    """Tests for ProgressReporter class."""
+
+    def test_progress_reporter_init(self):
+        """Test ProgressReporter initialization."""
+        from codomyrmex.utils.cli_helpers import ProgressReporter
+
+        reporter = ProgressReporter(total=100, prefix="Test")
+
+        assert reporter.total == 100
+        assert reporter.prefix == "Test"
+        assert reporter.current == 0
+
+    def test_progress_reporter_update(self):
+        """Test ProgressReporter update."""
+        from codomyrmex.utils.cli_helpers import ProgressReporter
+
+        reporter = ProgressReporter(total=100)
+        reporter.update(10)
+
+        assert reporter.current == 10
+
+    def test_progress_reporter_set_current(self):
+        """Test ProgressReporter set_current."""
+        from codomyrmex.utils.cli_helpers import ProgressReporter
+
+        reporter = ProgressReporter(total=100)
+        reporter.set_current(50)
+
+        assert reporter.current == 50
+
+    def test_progress_reporter_complete(self):
+        """Test ProgressReporter complete."""
+        from codomyrmex.utils.cli_helpers import ProgressReporter
+
+        reporter = ProgressReporter(total=100)
+        reporter.complete()
+
+        assert reporter.current == reporter.total
+
+    def test_progress_reporter_cap_at_total(self):
+        """Test ProgressReporter caps at total."""
+        from codomyrmex.utils.cli_helpers import ProgressReporter
+
+        reporter = ProgressReporter(total=100)
+        reporter.update(150)
+
+        assert reporter.current == 100
+
+
+class TestScriptBase:
+    """Tests for ScriptBase and related classes."""
+
+    def test_script_config_defaults(self):
+        """Test ScriptConfig default values."""
+        from codomyrmex.utils.script_base import ScriptConfig
+
+        config = ScriptConfig()
+
+        assert config.dry_run is False
+        assert config.verbose is False
+        assert config.quiet is False
+        assert config.output_format == "json"
+        assert config.save_output is True
+        assert config.log_level == "INFO"
+        assert config.timeout == 300
+
+    def test_script_config_from_dict(self):
+        """Test ScriptConfig.from_dict."""
+        from codomyrmex.utils.script_base import ScriptConfig
+
+        data = {"dry_run": True, "verbose": True, "custom_key": "value"}
+        config = ScriptConfig.from_dict(data)
+
+        assert config.dry_run is True
+        assert config.verbose is True
+        assert config.custom.get("custom_key") == "value"
+
+    def test_script_config_to_dict(self):
+        """Test ScriptConfig.to_dict."""
+        from codomyrmex.utils.script_base import ScriptConfig
+
+        config = ScriptConfig(dry_run=True, verbose=True)
+        result = config.to_dict()
+
+        assert result["dry_run"] is True
+        assert result["verbose"] is True
+
+    def test_script_result_to_dict(self):
+        """Test ScriptResult.to_dict."""
+        from codomyrmex.utils.script_base import ScriptResult
+
+        result = ScriptResult(
+            script_name="test",
+            status="success",
+            start_time="2024-01-01T00:00:00",
+            end_time="2024-01-01T00:00:01",
+            duration_seconds=1.0,
+            exit_code=0
+        )
+
+        d = result.to_dict()
+
+        assert d["script_name"] == "test"
+        assert d["status"] == "success"
+        assert d["exit_code"] == 0
+
+    def test_script_result_to_json(self):
+        """Test ScriptResult.to_json."""
+        from codomyrmex.utils.script_base import ScriptResult
+
+        result = ScriptResult(
+            script_name="test",
+            status="success",
+            start_time="2024-01-01T00:00:00",
+            end_time="2024-01-01T00:00:01",
+            duration_seconds=1.0,
+            exit_code=0
+        )
+
+        json_str = result.to_json()
+
+        assert '"script_name"' in json_str
+        assert '"test"' in json_str
+
+
+class TestAddCommonArguments:
+    """Tests for add_common_arguments function."""
+
+    def test_adds_dry_run(self):
+        """Test add_common_arguments adds dry-run."""
+        from codomyrmex.utils.cli_helpers import add_common_arguments
+
+        parser = argparse.ArgumentParser()
+        add_common_arguments(parser)
+
+        args = parser.parse_args(["--dry-run"])
+
+        assert args.dry_run is True
+
+    def test_adds_format(self):
+        """Test add_common_arguments adds format."""
+        from codomyrmex.utils.cli_helpers import add_common_arguments
+
+        parser = argparse.ArgumentParser()
+        add_common_arguments(parser)
+
+        args = parser.parse_args(["--format", "json"])
+
+        assert args.format == "json"
+
+    def test_adds_verbose(self):
+        """Test add_common_arguments adds verbose."""
+        from codomyrmex.utils.cli_helpers import add_common_arguments
+
+        parser = argparse.ArgumentParser()
+        add_common_arguments(parser)
+
+        args = parser.parse_args(["-v"])
+
+        assert args.verbose is True
+
+    def test_adds_quiet(self):
+        """Test add_common_arguments adds quiet."""
+        from codomyrmex.utils.cli_helpers import add_common_arguments
+
+        parser = argparse.ArgumentParser()
+        add_common_arguments(parser)
+
+        args = parser.parse_args(["-q"])
+
+        assert args.quiet is True
+
+
+class TestFormatResult:
+    """Tests for format_result function."""
+
+    def test_format_result_dict_success(self):
+        """Test format_result with dict containing success."""
+        from codomyrmex.utils.cli_helpers import format_result
+
+        result = {"success": True, "output": "test output"}
+        success, message = format_result(result, output_key="output")
+
+        assert success is True
+        assert message == "test output"
+
+    def test_format_result_dict_failure(self):
+        """Test format_result with dict containing failure."""
+        from codomyrmex.utils.cli_helpers import format_result
+
+        result = {"success": False}
+        success, message = format_result(result)
+
+        assert success is False
+        assert message is None
+
+    def test_format_result_bool(self):
+        """Test format_result with bool."""
+        from codomyrmex.utils.cli_helpers import format_result
+
+        success, message = format_result(True)
+
+        assert success is True
+        assert message is None
+
+    def test_format_result_other(self):
+        """Test format_result with other type."""
+        from codomyrmex.utils.cli_helpers import format_result
+
+        success, message = format_result("result string")
+
+        assert success is True
+        assert message == "result string"
+
+
+class TestPrintFunctions:
+    """Tests for print helper functions."""
+
+    def test_print_with_color_default(self, capsys):
+        """Test print_with_color with default color."""
+        from codomyrmex.utils.cli_helpers import print_with_color
+
+        print_with_color("test message")
+        captured = capsys.readouterr()
+
+        assert "test message" in captured.out
+
+    def test_print_section(self, capsys):
+        """Test print_section."""
+        from codomyrmex.utils.cli_helpers import print_section
+
+        print_section("Test Title", separator="=", width=20)
+        captured = capsys.readouterr()
+
+        assert "Test Title" in captured.out
+        assert "=" in captured.out
 
 
 if __name__ == "__main__":

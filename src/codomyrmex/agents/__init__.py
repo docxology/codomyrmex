@@ -73,6 +73,15 @@ from .core import (
 )
 from .git_agent import GitAgent
 from .generic import APIAgentBase, CLIAgentBase
+from .exceptions import (
+    AgentError,
+    AgentTimeoutError,
+    AgentConfigurationError,
+    ExecutionError,
+    ToolError,
+    ContextError,
+    SessionError,
+)
 
 __all__ = [
     "AgentInterface",
@@ -114,6 +123,14 @@ __all__ = [
     "CodeBlock",
     "ParseResult",
     "clean_response",
+    # Exceptions
+    "AgentError",
+    "AgentTimeoutError",
+    "AgentConfigurationError",
+    "ExecutionError",
+    "ToolError",
+    "ContextError",
+    "SessionError",
 ]
 
 __version__ = "0.1.0"

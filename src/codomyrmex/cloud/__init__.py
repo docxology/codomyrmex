@@ -62,10 +62,21 @@ from .coda_io import (
     CodaGoneError,
 )
 
-# Import from other submodules
-from .aws import S3Client
-from .gcp import GCSClient
-from .azure import AzureBlobClient
+# Import from other submodules with optional dependencies
+try:
+    from .aws import S3Client
+except ImportError:
+    S3Client = None  # boto3 not installed
+
+try:
+    from .gcp import GCSClient
+except ImportError:
+    GCSClient = None  # google-cloud-storage not installed
+
+try:
+    from .azure import AzureBlobClient
+except ImportError:
+    AzureBlobClient = None  # azure-storage-blob not installed
 
 __all__ = [
     # Client

@@ -1,21 +1,37 @@
-# generic
+# Generic
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `generic` module provides core functionality for Generic.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `agent_orchestrator.py` – File
-- `api_agent_base.py` – File
-- `cli_agent_base.py` – File
-- `message_bus.py` – File
-- `task_planner.py` – File
+```mermaid
+graph TD
+    generic --> Utils[codomyrmex.utils]
+    generic --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph generic
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.generic import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [agents](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

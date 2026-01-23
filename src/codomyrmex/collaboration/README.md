@@ -1,35 +1,124 @@
-# collaboration
+# Collaboration Module
 
-Multi-agent coordination and collaborative intelligence module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This module enables multiple Codomyrmex agents to work together effectively. It provides mechanisms for task decomposition, swarm coordination, consensus building, and shared knowledge management.
+The Collaboration module provides multi-agent collaboration capabilities for the Codomyrmex platform, enabling swarm intelligence, agent coordination, and task decomposition.
 
-## Key Features
+## Architecture
 
-- **Swarm Intelligence**: Algorithms for managing groups of agents working on a unified goal.
-- **Task Decomposition**: `TaskDecomposer` for breaking down missions into smaller, assignable subtasks.
-- **Consensus Building**: `consensus_vote` for simple majority-based decision making.
-- **Communication Protocols**: Standardized message formats for inter-agent dialogue.
-
-## Usage
-
-```python
-from codomyrmex.collaboration import SwarmManager, AgentProxy
-
-# Initialize swarm
-swarm = SwarmManager()
-agent1 = AgentProxy("builder")
-agent2 = AgentProxy("reviewer")
-
-swarm.add_agents([agent1, agent2])
-
-# Execute a collaborative task
-swarm.execute("Design and verify a new API endpoint")
+```mermaid
+graph TB
+    subgraph collaboration["collaboration/"]
+        SwarmMgr["SwarmManager"]
+        AgentProxy["AgentProxy"]
+        TaskDecomp["TaskDecomposer"]
+    end
+    
+    SwarmMgr --> AgentProxy
+    SwarmMgr --> TaskDecomp
+    AgentProxy --> Agent1["Agent 1"]
+    AgentProxy --> Agent2["Agent 2"]
+    AgentProxy --> AgentN["Agent N"]
 ```
 
-## Navigation Links
+## Key Classes
 
-- [Functional Specification](SPEC.md)
-- [Technical Documentation](AGENTS.md)
+| Class | Purpose |
+|-------|---------|
+| `SwarmManager` | Coordinate agent swarms |
+| `AgentProxy` | Proxy for remote agents |
+| `TaskDecomposer` | Decompose complex tasks |
+
+## Quick Start
+
+### Swarm Management
+
+```python
+from codomyrmex.collaboration import SwarmManager
+
+swarm = SwarmManager()
+
+# Add agents to swarm
+swarm.add_agent("coder", capabilities=["code", "review"])
+swarm.add_agent("tester", capabilities=["test", "validate"])
+swarm.add_agent("researcher", capabilities=["search", "summarize"])
+
+# Execute task with swarm
+result = swarm.execute(
+    task="Build a REST API",
+    strategy="parallel"
+)
+```
+
+### Agent Proxy
+
+```python
+from codomyrmex.collaboration import AgentProxy
+
+# Create proxy to remote agent
+agent = AgentProxy(
+    agent_id="claude-coder",
+    endpoint="http://localhost:8000"
+)
+
+# Send task to agent
+response = agent.execute(
+    task="Implement authentication"
+)
+
+print(response.result)
+```
+
+### Task Decomposition
+
+```python
+from codomyrmex.collaboration import TaskDecomposer
+
+decomposer = TaskDecomposer()
+
+# Decompose complex task
+subtasks = decomposer.decompose(
+    "Build a web application with user authentication"
+)
+
+for subtask in subtasks:
+    print(f"- {subtask.name}: {subtask.description}")
+    print(f"  Dependencies: {subtask.dependencies}")
+    print(f"  Estimated: {subtask.estimated_time}")
+```
+
+### Collaborative Workflow
+
+```python
+from codomyrmex.collaboration import SwarmManager, TaskDecomposer
+
+swarm = SwarmManager()
+decomposer = TaskDecomposer()
+
+# Decompose task
+subtasks = decomposer.decompose("Create data pipeline")
+
+# Assign to agents
+for subtask in subtasks:
+    best_agent = swarm.find_agent(
+        capabilities=subtask.required_capabilities
+    )
+    swarm.assign(subtask, best_agent)
+
+# Run all in parallel
+results = swarm.run_all()
+```
+
+## Integration Points
+
+- **agents**: Agent infrastructure
+- **orchestrator**: Workflow coordination
+- **events**: Agent communication
+
+## Navigation
+
+- **Parent**: [../README.md](../README.md)
+- **Siblings**: [agents](../agents/), [orchestrator](../orchestrator/)
+- **Spec**: [SPEC.md](SPEC.md)

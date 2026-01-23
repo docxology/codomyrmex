@@ -73,7 +73,7 @@ def fix_all_tutorial_references():
                 rel_to_module = md_file.relative_to(module_path)
                 depth = len(rel_to_module.parent.parts) - 1  # -1 because we're in module root
                 up_path = '../' * depth if depth > 0 else './'
-            except:
+            except ValueError:
                 up_path = '../'
             
             # Fix API_SPECIFICATION.md references

@@ -1,16 +1,37 @@
-# events
+# Events
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `events` module provides core functionality for Events.
 
-Automation and utility scripts.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `examples/` – Subdirectory
-- `orchestrate.py` – File
+```mermaid
+graph TD
+    events --> Utils[codomyrmex.utils]
+    events --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph events
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.events import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [scripts](../README.md)
-- **Project Root**: ../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

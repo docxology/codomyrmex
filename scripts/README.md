@@ -1,75 +1,106 @@
-# scripts
+# Scripts
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Maintenance and automation utilities for project management.
+The `scripts/` directory contains automation utilities, example scripts, and maintenance tools for the Codomyrmex platform. Each subdirectory mirrors a corresponding `src/codomyrmex/` module, providing runnable examples and orchestrator scripts.
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `agents/` – Subdirectory
-- `api/` – Subdirectory
-- `auth/` – Subdirectory
-- `build_synthesis/` – Subdirectory
-- `cache/` – Subdirectory
-- `cerebrum/` – Subdirectory
-- `ci_cd_automation/` – Subdirectory
-- `cli/` – Subdirectory
-- `cloud/` – Subdirectory
-- `coding/` – Subdirectory
-- `codomyrmex.log` – File
-- `compression/` – Subdirectory
-- `config/` – Subdirectory
-- `config.yaml` – File
-- `config_audits/` – Subdirectory
-- `config_management/` – Subdirectory
-- `config_monitoring/` – Subdirectory
-- `container_optimization/` – Subdirectory
-- `containerization/` – Subdirectory
-- `data_visualization/` – Subdirectory
-- `database_management/` – Subdirectory
-- `documentation/` – Subdirectory
-- `documents/` – Subdirectory
-- `encryption/` – Subdirectory
-- `environment_setup/` – Subdirectory
-- `events/` – Subdirectory
-- `examples/` – Subdirectory
-- `exceptions/` – Subdirectory
-- `fpf/` – Subdirectory
-- `git_operations/` – Subdirectory
-- `ide/` – Subdirectory
-- `llm/` – Subdirectory
-- `logging_monitoring/` – Subdirectory
-- `logistics/` – Subdirectory
-- `metrics/` – Subdirectory
-- `model_context_protocol/` – Subdirectory
-- `module_template/` – Subdirectory
-- `networking/` – Subdirectory
-- `orchestrator/` – Subdirectory
-- `pattern_matching/` – Subdirectory
-- `performance/` – Subdirectory
-- `physical_management/` – Subdirectory
-- `pipeline_metrics/` – Subdirectory
-- `pipeline_reports/` – Subdirectory
-- `plugin_system/` – Subdirectory
-- `plugins/` – Subdirectory
-- `run_all_scripts.py` – File
-- `scrape/` – Subdirectory
-- `security/` – Subdirectory
-- `serialization/` – Subdirectory
-- `skills/` – Subdirectory
-- `spatial/` – Subdirectory
-- `src/` – Subdirectory
-- `static_analysis/` – Subdirectory
-- `system_discovery/` – Subdirectory
-- `templating/` – Subdirectory
-- `terminal_interface/` – Subdirectory
-- `tools/` – Subdirectory
-- `utils/` – Subdirectory
-- `validation/` – Subdirectory
-- `website/` – Subdirectory
+## Architecture
+
+```mermaid
+graph TB
+    subgraph scripts["scripts/"]
+        RunAll["run_all_scripts.py"]
+        
+        subgraph modules["Module Scripts"]
+            Agents["agents/"]
+            LLM["llm/"]
+            Cerebrum["cerebrum/"]
+            Docs["documentation/"]
+        end
+        
+        subgraph tools["Automation Tools"]
+            DocAudit["documentation/audit_documentation.py"]
+            DocFix["documentation/fix_documentation.py"]
+        end
+    end
+    
+    RunAll --> modules
+    RunAll --> tools
+```
+
+## Key Tools
+
+### Script Runner
+
+```bash
+# Run all module orchestrators
+python scripts/run_all_scripts.py
+
+# Run specific module
+python scripts/agents/orchestrate.py
+```
+
+### Documentation Audit
+
+```bash
+# Check documentation coverage
+PYTHONPATH=src python3 scripts/documentation/audit_documentation.py --target src/codomyrmex
+```
+
+### Documentation Fix
+
+```bash
+# Auto-generate missing documentation
+PYTHONPATH=src python3 scripts/documentation/fix_documentation.py --target src/codomyrmex
+```
+
+## Directory Structure
+
+Each module subdirectory typically contains:
+
+```
+scripts/<module>/
+├── orchestrate.py      # Thin orchestrator (entry point)
+├── examples/           # Working examples
+│   ├── basic_usage.py
+│   └── advanced_usage.py
+├── AGENTS.md           # Agent instructions
+├── README.md           # Module script docs
+├── SPEC.md             # Script specifications
+└── PAI.md              # AI context
+```
+
+## Key Directories
+
+| Directory | Purpose |
+|-----------|---------|
+| `agents/` | AI agent framework examples |
+| `llm/` | LLM integration examples |
+| `documentation/` | Doc generation and audit tools |
+| `cerebrum/` | Reasoning engine examples |
+| `orchestrator/` | Workflow execution examples |
+
+## Usage Pattern
+
+All scripts inherit from `ScriptBase` for consistent behavior:
+
+```python
+from codomyrmex.utils import ScriptBase
+
+class MyScript(ScriptBase):
+    def run(self, args, config):
+        self.log_info("Running...")
+        return {"status": "success"}
+
+if __name__ == "__main__":
+    MyScript(name="my_script", description="Does something").execute()
+```
 
 ## Navigation
-- **Project Root**: ../README.md
+
+- **Parent**: [../README.md](../README.md)
+- **Source Modules**: [../src/codomyrmex/](../src/codomyrmex/)
+- **Agent Guide**: [AGENTS.md](AGENTS.md)
+- **Spec**: [SPEC.md](SPEC.md)

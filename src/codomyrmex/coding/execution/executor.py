@@ -1,7 +1,13 @@
-"""
-Code Execution Engine
+"""Code Execution Engine.
 
-Main execution logic for running code in sandboxed environments.
+Main execution logic for running code in sandboxed Docker environments.
+Provides secure code execution with timeout controls, session management,
+and multi-language support.
+
+Example:
+    >>> from codomyrmex.coding.execution import execute_code
+    >>> result = execute_code("python", "print('Hello, World!')")
+    >>> print(result["stdout"])  # "Hello, World!"
 """
 
 import os
@@ -24,7 +30,26 @@ MIN_TIMEOUT = 1
 
 
 def validate_timeout(timeout: Optional[int]) -> int:
-    """Validate and normalize timeout value."""
+    """Validate and normalize a timeout value to be within allowed bounds.
+
+    Ensures the timeout is within the MIN_TIMEOUT and MAX_TIMEOUT range.
+    Returns the default timeout if None is provided.
+
+    Args:
+        timeout: The requested timeout in seconds, or None for default.
+
+    Returns:
+        A valid timeout value clamped to [MIN_TIMEOUT, MAX_TIMEOUT],
+        or DEFAULT_TIMEOUT if timeout was None.
+
+    Example:
+        >>> validate_timeout(None)  # Returns DEFAULT_TIMEOUT (30)
+        30
+        >>> validate_timeout(500)   # Clamped to MAX_TIMEOUT (300)
+        300
+        >>> validate_timeout(0)     # Clamped to MIN_TIMEOUT (1)
+        1
+    """
     if timeout is None:
         return DEFAULT_TIMEOUT
 
@@ -40,18 +65,42 @@ def execute_code(
     timeout: Optional[int] = None,
     session_id: Optional[str] = None,
 ) -> dict[str, Any]:
-    """
-    Execute a code snippet in a sandboxed environment.
+    """Execute a code snippet in a sandboxed Docker environment.
+
+    Runs the provided source code in an isolated Docker container with
+    resource limits and timeout controls. Supports multiple programming
+    languages and optional session persistence.
 
     Args:
-        language: Programming language of the code
-        code: Source code to execute
-        stdin: Standard input to provide to the program
-        timeout: Maximum execution time in seconds (default: 30)
-        session_id: Optional session identifier for persistent environments
+        language: Programming language of the code. Must be one of the
+            supported languages (python, javascript, java, cpp, c, go,
+            rust, bash).
+        code: Source code to execute as a string.
+        stdin: Optional standard input to provide to the program.
+        timeout: Maximum execution time in seconds. Defaults to 30,
+            with a maximum of 300 seconds.
+        session_id: Optional session identifier for persistent environments.
+            Allows maintaining state between executions.
 
     Returns:
-        Dictionary with execution results: stdout, stderr, exit_code, execution_time, status
+        A dictionary containing execution results with keys:
+        - stdout (str): Standard output from the program
+        - stderr (str): Standard error output
+        - exit_code (int): Process exit code (0 for success)
+        - execution_time (float): Actual execution time in seconds
+        - status (str): Execution status ("success", "timeout", "error", "setup_error")
+        - error_message (str): Detailed error message if status is not "success"
+
+    Raises:
+        No exceptions are raised; errors are returned in the result dictionary.
+
+    Example:
+        >>> result = execute_code("python", "print(sum(range(10)))")
+        >>> print(result["stdout"])  # "45"
+        >>> print(result["exit_code"])  # 0
+        >>>
+        >>> result = execute_code("python", "x = input(); print(f'Got: {x}')", stdin="hello")
+        >>> print(result["stdout"])  # "Got: hello"
     """
     logger.info(f"Executing {language} code (session_id: {session_id or 'none'})")
 

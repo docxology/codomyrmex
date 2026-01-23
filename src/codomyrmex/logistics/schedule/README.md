@@ -1,20 +1,37 @@
-# schedule
+# Schedule
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `schedule` module provides core functionality for Schedule.
 
-Contains components for the src system.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `cron.py` – File
-- `recurring.py` – File
-- `scheduler.py` – File
-- `timezone.py` – File
+```mermaid
+graph TD
+    schedule --> Utils[codomyrmex.utils]
+    schedule --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph schedule
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.schedule import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [logistics](../README.md)
-- **Project Root**: ../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

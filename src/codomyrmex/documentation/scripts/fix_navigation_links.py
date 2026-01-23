@@ -71,7 +71,7 @@ class NavigationLinkFixer:
             else:
                 # Absolute path
                 return False
-        except:
+        except (OSError, ValueError) as e:
             return False
 
     def fix_navigation_links(self, agents_file: Path, dry_run: bool = True) -> bool:

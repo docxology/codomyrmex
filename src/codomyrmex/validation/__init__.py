@@ -7,41 +7,50 @@ JSON Schema, Pydantic models, and custom validators.
 
 from typing import Any, Optional
 
-from codomyrmex.exceptions import CodomyrmexError
-
-from .validator import ValidationError, ValidationResult, ValidationWarning, Validator
+from .validator import ValidationResult, ValidationWarning, Validator
 from .validation_manager import ValidationManager
 from .contextual import ContextualValidator, ValidationIssue
 from .parser import TypeSafeParser
 from .summary import ValidationSummary
+from .exceptions import (
+    ValidationError,
+    SchemaError,
+    ConstraintViolationError,
+    TypeValidationError,
+    RequiredFieldError,
+    RangeValidationError,
+    FormatValidationError,
+    LengthValidationError,
+    CustomValidationError,
+)
 
 __all__ = [
+    # Core classes
     "Validator",
     "ValidationManager",
-    "ValidationError",
-    "ValidationWarning",
     "ValidationResult",
+    "ValidationWarning",
     "ContextualValidator",
     "ValidationIssue",
     "TypeSafeParser",
     "ValidationSummary",
+    # Functions
     "validate",
     "is_valid",
     "get_errors",
+    # Exceptions
+    "ValidationError",
+    "SchemaError",
+    "ConstraintViolationError",
+    "TypeValidationError",
+    "RequiredFieldError",
+    "RangeValidationError",
+    "FormatValidationError",
+    "LengthValidationError",
+    "CustomValidationError",
 ]
 
 __version__ = "0.1.0"
-
-
-class ValidationError(CodomyrmexError):
-    """Raised when validation fails."""
-
-    def __init__(self, message: str, field: Optional[str] = None, code: Optional[str] = None):
-
-
-        super().__init__(message)
-        self.field = field
-        self.code = code
 
 
 def validate(data: Any, schema: Any, validator_type: str = "json_schema") -> "ValidationResult":

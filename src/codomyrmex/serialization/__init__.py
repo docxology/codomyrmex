@@ -7,22 +7,40 @@ for JSON, YAML, TOML, MessagePack, and other formats.
 
 from typing import Any, Optional, Union
 
-from codomyrmex.exceptions import CodomyrmexError
-
-from .serializer import Serializer, SerializationFormat, SerializationError
+from .serializer import Serializer, SerializationFormat
 from .serialization_manager import SerializationManager
 from .binary_formats import MsgpackSerializer, AvroSerializer, ParquetSerializer
+from .exceptions import (
+    SerializationError,
+    DeserializationError,
+    SchemaValidationError,
+    EncodingError,
+    FormatNotSupportedError,
+    CircularReferenceError,
+    TypeConversionError,
+    BinaryFormatError,
+)
 
 __all__ = [
+    # Core classes
     "Serializer",
     "SerializationManager",
     "SerializationFormat",
-    "SerializationError",
-    "serialize",
-    "deserialize",
     "MsgpackSerializer",
     "AvroSerializer",
     "ParquetSerializer",
+    # Functions
+    "serialize",
+    "deserialize",
+    # Exceptions
+    "SerializationError",
+    "DeserializationError",
+    "SchemaValidationError",
+    "EncodingError",
+    "FormatNotSupportedError",
+    "CircularReferenceError",
+    "TypeConversionError",
+    "BinaryFormatError",
 ]
 
 __version__ = "0.1.0"

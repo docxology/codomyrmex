@@ -66,7 +66,8 @@ Monitors documentation health over time."""
         if self.history_file.exists():
             try:
                 return json.loads(self.history_file.read_text())
-            except:
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning(f"Failed to load history file: {e}")
                 return []
         return []
     
@@ -92,16 +93,16 @@ Monitors documentation health over time."""
                 data = json.loads(quality_file.read_text())
                 metrics['quality_score'] = data.get('average_score', 0)
                 metrics['placeholders'] = data.get('total_placeholders', 0)
-            except:
-                pass
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning(f"Failed to load quality report: {e}")
         
         link_file = self.output_dir / 'link_validation_results.json'
         if link_file.exists():
             try:
                 data = json.loads(link_file.read_text())
                 metrics['broken_links'] = len(data.get('broken_links', []))
-            except:
-                pass
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning(f"Failed to load link validation results: {e}")
         
         agents_file = self.output_dir / 'agents_structure_validation.json'
         if agents_file.exists():
@@ -110,8 +111,8 @@ Monitors documentation health over time."""
                 total = data.get('total_files', 1)
                 valid = data.get('valid_files', 0)
                 metrics['agents_valid_rate'] = (valid / total * 100) if total > 0 else 0
-            except:
-                pass
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning(f"Failed to load agents validation results: {e}")
         
         return metrics
     

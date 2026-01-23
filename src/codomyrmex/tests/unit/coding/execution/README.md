@@ -1,19 +1,37 @@
-# execution
+# Execution
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `execution` module provides core functionality for Execution.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `integration/` – Subdirectory
-- `test_code_execution_sandbox.py` – File
-- `test_code_execution_sandbox_comprehensive.py` – File
-- `unit/` – Subdirectory
+```mermaid
+graph TD
+    execution --> Utils[codomyrmex.utils]
+    execution --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph execution
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.execution import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [coding](../README.md)
-- **Project Root**: ../../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

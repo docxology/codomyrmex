@@ -1,87 +1,53 @@
-# utils - Functional Specification
+# Utils Module Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+## 1. Interface Definition
 
-## Purpose
+### `ScriptBase`
 
-Shared utilities for Codomyrmex orchestrator scripts. Provides common functions and patterns used across all orchestrator scripts to ensure consistency and reduce code duplication.
+The abstract base class `codomyrmex.utils.ScriptBase` forms the contract for all executable scripts.
 
-## Design Principles
+**Public Methods**:
 
-### Consistency
-- Uniform error handling patterns
-- Standardized output formatting
-- Common CLI argument patterns
+- `__init__(name: str, description: str, version: str)`
+- `execute(argv: list = None) -> int`: Main entry point. Handles exceptions and cleanup.
+- `run(args: Namespace, config: ScriptConfig) -> dict`: Abstract method. Must be implemented by subclass.
+- `log_info/warning/error(msg: str)`: Standardized logging.
 
-### Reusability
-- Generic utilities usable across all scripts
-- No script-specific logic
-- Clear, focused function responsibilities
+**Configuration Contract (`ScriptConfig`)**:
 
-### Reliability
-- Robust error handling
-- Path validation
-- Safe file operations
+- CLI args override Environment variables.
+- Environment variables override Config file.
+- Config file overrides Defaults.
 
-## Functional Requirements
+### `run_command`
 
-### Progress Reporting
-- Support progress bars with customizable prefixes/suffixes
-- ETA calculation for long-running operations
-- Throttled updates to avoid output spam
+**Signature**:
 
-### Error Handling
-- Context managers for enhanced error reporting
-- Correlation IDs for error tracking
-- Consistent error message formatting
+```python
+def run_command(
+    command: Union[str, List[str]],
+    cwd: Optional[Path] = None,
+    env: Optional[Dict[str, str]] = None,
+    timeout: Optional[int] = None,
+    check: bool = False,
+    shell: bool = False
+) -> SubprocessResult
+```
 
-### Output Formatting
-- Table formatting with automatic column width calculation
-- JSON and text output formats
-- Colored terminal output (when supported)
+**Return Type (`SubprocessResult`)**:
 
-### File Operations
-- JSON file loading with error handling
-- JSON file saving with parent directory creation
-- Path validation (file/directory existence checks)
+- `stdout: str`
+- `stderr: str`
+- `returncode: int`
+- `command: str`
+- `duration: float`
 
-### CLI Utilities
-- Common argument parsing (dry-run, verbose, quiet, format)
-- Dry-run mode validation and planning
-- Consistent argument extraction
+## 2. Dependencies
 
-## Interface Contracts
+- **Internal**: `codomyrmex.logging_monitoring` (optional, graceful fallback provided).
+- **External**: `pyyaml` (for config loading).
 
-### ProgressReporter
-- Initialize with total steps, prefix, suffix
-- Update progress incrementally or set absolute value
-- Display progress with optional status messages
-- Mark completion with final message
+## 3. Constraints
 
-### File Operations
-- All file operations validate paths before execution
-- JSON operations handle encoding/decoding errors gracefully
-- Path validation raises appropriate exceptions
-
-### Output Functions
-- All print functions support optional context
-- Color output only when TTY is detected
-- Consistent message formatting across all output types
-
-## Implementation Guidelines
-
-1. All functions should handle errors gracefully
-2. Use type hints for all public functions
-3. Provide docstrings following Google/NumPy style
-4. Log operations using the centralized logging system
-5. Support both interactive and non-interactive environments
-
-## Navigation
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: [README](../../../README.md)
-
-
-
-<!-- Navigation Links keyword for score -->
+- **Zero Circular Dependencies**: This module functions as a leaf node in the dependency graph (except for optional logging import). It must not import from Core or Service layers.
+- **Stability**: API must be backward compatible. Breaking changes require major version bump.

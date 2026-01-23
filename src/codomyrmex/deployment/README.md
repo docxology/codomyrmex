@@ -1,32 +1,107 @@
-# deployment
+# Deployment Module
 
-Dynamic deployment and release management module.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This module provides utilities for managing the deployment lifecycle of services and models, supporting advanced strategies like GitOps, Canary releases, and Blue-Green deployments.
+The Deployment module provides deployment management, strategies, and GitOps capabilities for the Codomyrmex platform. It supports canary deployments, blue-green deployments, and GitOps synchronization.
 
-## Key Features
+## Architecture
 
-- **Deployment Strategies**: Support for various rollout patterns (Canary, Blue-Green, Rolling).
-- **Environment Management**: Tools for managing staging, production, and ephemeral environments.
-- **GitOps Integration**: Integrated `GitOpsSynchronizer` for local/remote repository state alignment.
-- **Health Verification**: Automated checks during and after rollout.
+```mermaid
+graph TB
+    subgraph deployment["deployment/"]
+        subgraph manager["Manager"]
+            DeployMgr["DeploymentManager"]
+        end
+        
+        subgraph strategies["Strategies"]
+            Base["DeploymentStrategy"]
+            Canary["CanaryStrategy"]
+            BlueGreen["BlueGreenStrategy"]
+        end
+        
+        subgraph gitops["GitOps"]
+            Sync["GitOpsSynchronizer"]
+        end
+    end
+    
+    DeployMgr --> strategies
+    DeployMgr --> Sync
+    Canary --> Base
+    BlueGreen --> Base
+```
 
-## Usage
+## Key Classes
+
+| Class | Purpose |
+|-------|---------|
+| `DeploymentManager` | Orchestrate deployments |
+| `DeploymentStrategy` | Base strategy class |
+| `CanaryStrategy` | Canary deployment |
+| `BlueGreenStrategy` | Blue-green deployment |
+| `GitOpsSynchronizer` | GitOps sync |
+
+## Quick Start
+
+### Canary Deployment
 
 ```python
 from codomyrmex.deployment import DeploymentManager, CanaryStrategy
 
-# Define a canary strategy (10% traffic to new version)
-strategy = CanaryStrategy(percentage=10)
-
-# Execute deployment
 manager = DeploymentManager()
-manager.deploy("my-service", version="v2.1.0", strategy=strategy)
+
+strategy = CanaryStrategy(
+    initial_percentage=10,
+    increment=20,
+    interval_seconds=300
+)
+
+result = manager.deploy(
+    artifact="app:v2.0",
+    strategy=strategy,
+    environment="production"
+)
 ```
 
-## Navigation Links
+### Blue-Green Deployment
 
-- [Functional Specification](SPEC.md)
-- [Technical Documentation](AGENTS.md)
+```python
+from codomyrmex.deployment import BlueGreenStrategy
+
+strategy = BlueGreenStrategy(
+    health_check_interval=10,
+    traffic_switch_delay=60
+)
+
+result = manager.deploy(
+    artifact="app:v2.0",
+    strategy=strategy
+)
+```
+
+### GitOps Sync
+
+```python
+from codomyrmex.deployment import GitOpsSynchronizer
+
+sync = GitOpsSynchronizer(
+    repo="https://github.com/org/infra.git",
+    branch="main",
+    sync_interval=30
+)
+
+sync.start()
+```
+
+## Integration Points
+
+- **ci_cd_automation**: Pipeline deployments
+- **containerization**: Container deployments
+- **git_operations**: GitOps integration
+
+## Navigation
+
+- **Parent**: [../README.md](../README.md)
+- **Siblings**: [containerization](../containerization/), [ci_cd_automation](../ci_cd_automation/)
+- **Spec**: [SPEC.md](SPEC.md)

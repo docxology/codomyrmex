@@ -4,6 +4,7 @@ import json
 import os
 import sys
 
+import aiohttp
 import requests
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -636,6 +637,541 @@ def add_comment(
         error_msg = f"Network error adding comment: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg)
+
+# =============================================================================
+# ASYNC VARIANTS FOR I/O-BOUND OPERATIONS
+# =============================================================================
+
+
+async def _async_request(
+    method: str,
+    url: str,
+    headers: dict[str, str],
+    json_data: Optional[dict] = None,
+    params: Optional[dict] = None,
+    timeout: int = 30,
+) -> tuple[int, dict | list | str]:
+    """
+    Make an async HTTP request using aiohttp.
+
+    Args:
+        method: HTTP method (GET, POST, PATCH, DELETE)
+        url: Request URL
+        headers: Request headers
+        json_data: JSON payload for POST/PATCH requests
+        params: Query parameters
+        timeout: Request timeout in seconds
+
+    Returns:
+        Tuple of (status_code, response_data)
+
+    Raises:
+        GitHubAPIError: If network error occurs
+    """
+    try:
+        timeout_config = aiohttp.ClientTimeout(total=timeout)
+        async with aiohttp.ClientSession(timeout=timeout_config) as session:
+            kwargs = {"headers": headers}
+            if json_data is not None:
+                kwargs["json"] = json_data
+            if params is not None:
+                kwargs["params"] = params
+
+            async with session.request(method, url, **kwargs) as response:
+                status = response.status
+                try:
+                    data = await response.json()
+                except (json.JSONDecodeError, aiohttp.ContentTypeError):
+                    data = await response.text()
+                return status, data
+    except aiohttp.ClientError as e:
+        raise GitHubAPIError(f"Network error: {e}")
+
+
+async def async_get_repo_info(
+    repo_owner: str, repo_name: str, github_token: Optional[str] = None
+) -> dict:
+    """
+    Get detailed repository information asynchronously.
+
+    Args:
+        repo_owner: Repository owner
+        repo_name: Repository name
+        github_token: GitHub personal access token
+
+    Returns:
+        Dictionary containing repository information
+
+    Raises:
+        GitHubAPIError: If fetching fails
+    """
+    token = _validate_github_token(github_token)
+    headers = _get_github_headers(token)
+
+    logger.info(f"[ASYNC] Fetching repository info for {repo_owner}/{repo_name}")
+
+    status, data = await _async_request(
+        "GET",
+        f"https://api.github.com/repos/{repo_owner}/{repo_name}",
+        headers,
+    )
+
+    if status == 200:
+        repo = data
+        logger.info(f"[ASYNC] Found repository: {repo['full_name']}")
+
+        return {
+            "name": repo["name"],
+            "full_name": repo["full_name"],
+            "html_url": repo["html_url"],
+            "clone_url": repo["clone_url"],
+            "ssh_url": repo["ssh_url"],
+            "private": repo["private"],
+            "description": repo["description"],
+            "default_branch": repo["default_branch"],
+            "owner": repo["owner"]["login"],
+            "created_at": repo["created_at"],
+            "updated_at": repo["updated_at"],
+            "language": repo["language"],
+            "size": repo["size"],
+            "stargazers_count": repo["stargazers_count"],
+            "watchers_count": repo["watchers_count"],
+            "forks_count": repo["forks_count"],
+            "open_issues_count": repo["open_issues_count"],
+        }
+    else:
+        error_msg = f"Failed to fetch repository info: {status}"
+        if isinstance(data, dict):
+            error_msg += f" - {data.get('message', str(data))}"
+        elif data:
+            error_msg += f" - {data}"
+
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg)
+
+
+async def async_list_pull_requests(
+    repo_owner: str,
+    repo_name: str,
+    state: str = "open",
+    github_token: Optional[str] = None,
+) -> list[dict]:
+    """
+    Get pull requests for a repository asynchronously.
+
+    Args:
+        repo_owner: Repository owner
+        repo_name: Repository name
+        state: PR state ("open", "closed", "all")
+        github_token: GitHub personal access token
+
+    Returns:
+        List of PR dictionaries
+
+    Raises:
+        GitHubAPIError: If fetching fails
+    """
+    token = _validate_github_token(github_token)
+    headers = _get_github_headers(token)
+
+    params = {"state": state}
+
+    logger.info(f"[ASYNC] Fetching {state} PRs from {repo_owner}/{repo_name}")
+
+    status, data = await _async_request(
+        "GET",
+        f"https://api.github.com/repos/{repo_owner}/{repo_name}/pulls",
+        headers,
+        params=params,
+    )
+
+    if status == 200:
+        prs = data
+        logger.info(f"[ASYNC] Found {len(prs)} {state} PRs")
+
+        return [
+            {
+                "number": pr["number"],
+                "title": pr["title"],
+                "body": pr["body"],
+                "html_url": pr["html_url"],
+                "state": pr["state"],
+                "head": {"ref": pr["head"]["ref"], "sha": pr["head"]["sha"]},
+                "base": {"ref": pr["base"]["ref"], "sha": pr["base"]["sha"]},
+                "user": pr["user"]["login"],
+                "created_at": pr["created_at"],
+                "updated_at": pr["updated_at"],
+            }
+            for pr in prs
+        ]
+    else:
+        error_msg = f"Failed to fetch PRs: {status}"
+        if isinstance(data, dict):
+            error_msg += f" - {data.get('message', str(data))}"
+        elif data:
+            error_msg += f" - {data}"
+
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg)
+
+
+async def async_create_issue(
+    owner: str,
+    repo_name: str,
+    title: str,
+    body: str = "",
+    labels: Optional[list[str]] = None,
+    assignees: Optional[list[str]] = None,
+    github_token: Optional[str] = None,
+) -> dict:
+    """
+    Create a new issue asynchronously.
+
+    Args:
+        owner: Repository owner
+        repo_name: Repository name
+        title: Issue title
+        body: Issue body/description
+        labels: List of label names
+        assignees: List of assignee usernames
+        github_token: GitHub personal access token
+
+    Returns:
+        Dictionary containing created issue information
+
+    Raises:
+        GitHubAPIError: If issue creation fails
+    """
+    token = _validate_github_token(github_token)
+    headers = _get_github_headers(token)
+
+    issue_data: dict = {"title": title, "body": body}
+    if labels:
+        issue_data["labels"] = labels
+    if assignees:
+        issue_data["assignees"] = assignees
+
+    logger.info(f"[ASYNC] Creating issue in {owner}/{repo_name}: {title}")
+
+    status, data = await _async_request(
+        "POST",
+        f"https://api.github.com/repos/{owner}/{repo_name}/issues",
+        headers,
+        json_data=issue_data,
+    )
+
+    if status == 201:
+        issue = data
+        logger.info(f"[ASYNC] Successfully created issue #{issue['number']}")
+        return issue
+    else:
+        error_msg = f"Failed to create issue: {status}"
+        if isinstance(data, dict):
+            error_msg += f" - {data.get('message', str(data))}"
+        elif data:
+            error_msg += f" - {data}"
+
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg)
+
+
+async def async_create_pull_request(
+    repo_owner: str,
+    repo_name: str,
+    head_branch: str,
+    base_branch: str,
+    title: str,
+    body: str = "",
+    github_token: Optional[str] = None,
+) -> dict:
+    """
+    Create a pull request asynchronously.
+
+    Args:
+        repo_owner: Repository owner
+        repo_name: Repository name
+        head_branch: Source branch for the PR
+        base_branch: Target branch for the PR
+        title: PR title
+        body: PR body/description
+        github_token: GitHub personal access token
+
+    Returns:
+        Dictionary containing PR information
+
+    Raises:
+        GitHubAPIError: If PR creation fails
+    """
+    token = _validate_github_token(github_token)
+    headers = _get_github_headers(token)
+
+    pr_data = {"title": title, "head": head_branch, "base": base_branch, "body": body}
+
+    logger.info(
+        f"[ASYNC] Creating PR in {repo_owner}/{repo_name}: {head_branch} -> {base_branch}"
+    )
+
+    status, data = await _async_request(
+        "POST",
+        f"https://api.github.com/repos/{repo_owner}/{repo_name}/pulls",
+        headers,
+        json_data=pr_data,
+    )
+
+    if status == 201:
+        pr_info = data
+        logger.info(
+            f"[ASYNC] Successfully created PR #{pr_info['number']}: {pr_info['title']}"
+        )
+
+        return {
+            "success": True,
+            "pull_request": {
+                "number": pr_info["number"],
+                "title": pr_info["title"],
+                "body": pr_info["body"],
+                "html_url": pr_info["html_url"],
+                "state": pr_info["state"],
+                "head": {
+                    "ref": pr_info["head"]["ref"],
+                    "sha": pr_info["head"]["sha"],
+                },
+                "base": {
+                    "ref": pr_info["base"]["ref"],
+                    "sha": pr_info["base"]["sha"],
+                },
+                "user": pr_info["user"]["login"],
+                "created_at": pr_info["created_at"],
+            },
+            "created_at": datetime.now().isoformat(),
+        }
+    else:
+        error_msg = f"Failed to create PR: {status}"
+        if isinstance(data, dict):
+            error_msg += f" - {data.get('message', str(data))}"
+        elif data:
+            error_msg += f" - {data}"
+
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg)
+
+
+async def async_get_pull_request(
+    repo_owner: str, repo_name: str, pr_number: int, github_token: Optional[str] = None
+) -> dict:
+    """
+    Get a specific pull request asynchronously.
+
+    Args:
+        repo_owner: Repository owner
+        repo_name: Repository name
+        pr_number: PR number
+        github_token: GitHub personal access token
+
+    Returns:
+        Dictionary containing detailed PR information
+
+    Raises:
+        GitHubAPIError: If fetching fails
+    """
+    token = _validate_github_token(github_token)
+    headers = _get_github_headers(token)
+
+    logger.info(f"[ASYNC] Fetching PR #{pr_number} from {repo_owner}/{repo_name}")
+
+    status, data = await _async_request(
+        "GET",
+        f"https://api.github.com/repos/{repo_owner}/{repo_name}/pulls/{pr_number}",
+        headers,
+    )
+
+    if status == 200:
+        pr = data
+        logger.info(f"[ASYNC] Found PR #{pr['number']}: {pr['title']}")
+
+        return {
+            "number": pr["number"],
+            "title": pr["title"],
+            "body": pr["body"],
+            "html_url": pr["html_url"],
+            "state": pr["state"],
+            "merged": pr["merged"],
+            "mergeable": pr["mergeable"],
+            "head": {"ref": pr["head"]["ref"], "sha": pr["head"]["sha"]},
+            "base": {"ref": pr["base"]["ref"], "sha": pr["base"]["sha"]},
+            "user": pr["user"]["login"],
+            "created_at": pr["created_at"],
+            "updated_at": pr["updated_at"],
+            "merged_at": pr["merged_at"],
+            "comments": pr["comments"],
+            "review_comments": pr["review_comments"],
+            "commits": pr["commits"],
+            "additions": pr["additions"],
+            "deletions": pr["deletions"],
+            "changed_files": pr["changed_files"],
+        }
+    else:
+        error_msg = f"Failed to fetch PR #{pr_number}: {status}"
+        if isinstance(data, dict):
+            error_msg += f" - {data.get('message', str(data))}"
+        elif data:
+            error_msg += f" - {data}"
+
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg)
+
+
+async def async_list_issues(
+    owner: str,
+    repo_name: str,
+    state: str = "open",
+    labels: Optional[list[str]] = None,
+    github_token: Optional[str] = None,
+) -> list[dict]:
+    """
+    List issues in a repository asynchronously.
+
+    Args:
+        owner: Repository owner
+        repo_name: Repository name
+        state: Issue state ("open", "closed", "all")
+        labels: Filter by label names
+        github_token: GitHub personal access token
+
+    Returns:
+        List of issue dictionaries
+
+    Raises:
+        GitHubAPIError: If fetching fails
+    """
+    token = _validate_github_token(github_token)
+    headers = _get_github_headers(token)
+
+    params: dict = {"state": state}
+    if labels:
+        params["labels"] = ",".join(labels)
+
+    logger.info(f"[ASYNC] Listing {state} issues in {owner}/{repo_name}")
+
+    status, data = await _async_request(
+        "GET",
+        f"https://api.github.com/repos/{owner}/{repo_name}/issues",
+        headers,
+        params=params,
+    )
+
+    if status == 200:
+        all_items = data
+        # Filter out pull requests (GitHub API includes PRs in issues endpoint)
+        issues = [item for item in all_items if "pull_request" not in item]
+        logger.info(f"[ASYNC] Found {len(issues)} issues")
+        return issues
+    else:
+        error_msg = f"Failed to list issues: {status}"
+        if isinstance(data, dict):
+            error_msg += f" - {data.get('message', str(data))}"
+        elif data:
+            error_msg += f" - {data}"
+
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg)
+
+
+async def async_close_issue(
+    owner: str,
+    repo_name: str,
+    issue_number: int,
+    github_token: Optional[str] = None,
+) -> dict:
+    """
+    Close an issue asynchronously.
+
+    Args:
+        owner: Repository owner
+        repo_name: Repository name
+        issue_number: Issue number to close
+        github_token: GitHub personal access token
+
+    Returns:
+        Dictionary containing updated issue information
+
+    Raises:
+        GitHubAPIError: If closing fails
+    """
+    token = _validate_github_token(github_token)
+    headers = _get_github_headers(token)
+
+    logger.info(f"[ASYNC] Closing issue #{issue_number} in {owner}/{repo_name}")
+
+    status, data = await _async_request(
+        "PATCH",
+        f"https://api.github.com/repos/{owner}/{repo_name}/issues/{issue_number}",
+        headers,
+        json_data={"state": "closed"},
+    )
+
+    if status == 200:
+        logger.info(f"[ASYNC] Successfully closed issue #{issue_number}")
+        return data
+    else:
+        error_msg = f"Failed to close issue: {status}"
+        if isinstance(data, dict):
+            error_msg += f" - {data.get('message', str(data))}"
+        elif data:
+            error_msg += f" - {data}"
+
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg)
+
+
+async def async_add_comment(
+    owner: str,
+    repo_name: str,
+    issue_number: int,
+    body: str,
+    github_token: Optional[str] = None,
+) -> dict:
+    """
+    Add a comment to an issue (or PR) asynchronously.
+
+    Args:
+        owner: Repository owner
+        repo_name: Repository name
+        issue_number: Issue or PR number
+        body: Comment body
+        github_token: GitHub personal access token
+
+    Returns:
+        Dictionary containing created comment information
+
+    Raises:
+        GitHubAPIError: If adding comment fails
+    """
+    token = _validate_github_token(github_token)
+    headers = _get_github_headers(token)
+
+    logger.info(f"[ASYNC] Adding comment to #{issue_number} in {owner}/{repo_name}")
+
+    status, data = await _async_request(
+        "POST",
+        f"https://api.github.com/repos/{owner}/{repo_name}/issues/{issue_number}/comments",
+        headers,
+        json_data={"body": body},
+    )
+
+    if status == 201:
+        logger.info(f"[ASYNC] Successfully added comment to #{issue_number}")
+        return data
+    else:
+        error_msg = f"Failed to add comment: {status}"
+        if isinstance(data, dict):
+            error_msg += f" - {data.get('message', str(data))}"
+        elif data:
+            error_msg += f" - {data}"
+
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg)
+
 
 if __name__ == "__main__":
     """Example usage and testing."""

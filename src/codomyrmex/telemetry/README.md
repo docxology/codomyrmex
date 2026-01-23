@@ -1,32 +1,143 @@
-# telemetry
+# Telemetry Module
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-The `telemetry` module provides enterprise-grade observability for the Codomyrmex ecosystem. It is designed to be compatible with OpenTelemetry (OTLP) and provides structured tracing, span management, and context propagation across distributed components.
+The Telemetry module provides OpenTelemetry-compatible tracing and observability tools for the Codomyrmex platform. It enables distributed tracing, span management, and OTLP export.
 
-## Key Features
+## Architecture
 
-- **OpenTelemetry Compatibility**: Standardized tracing using OTLP.
-- **Context Propagation**: Maintains trace continuity across asynchronous and distributed boundaries.
-- **Custom Span Processors**: Extensible logic for span enrichment and filtering.
-- **Distributed Observability**: Enables complex workflow analysis through parent-child span relationships.
-- **Decorator Support**: Easy tracing of functions via `@traced`.
+```mermaid
+graph TB
+    subgraph telemetry["telemetry/"]
+        subgraph tracing["Tracing"]
+            TraceContext["TraceContext"]
+            StartSpan["start_span()"]
+            GetSpan["get_current_span()"]
+            Traced["traced()"]
+        end
+        
+        subgraph processing["Processing"]
+            SimpleProc["SimpleSpanProcessor"]
+            BatchProc["BatchSpanProcessor"]
+        end
+        
+        subgraph export["Export"]
+            OTLPExporter["OTLPExporter"]
+        end
+    end
+    
+    TraceContext --> StartSpan
+    StartSpan --> SimpleProc
+    StartSpan --> BatchProc
+    BatchProc --> OTLPExporter
+```
 
-## Module Structure
+## Key Classes
 
-- `trace_context.py` – Core logic for span management and context propagation.
-- `otlp_exporter.py` – Exporting traces to OTLP collectors.
-- `span_processor.py` – Custom processing and filtering of telemetry data.
+| Class | Purpose |
+|-------|---------|
+| `TraceContext` | Trace context management |
+| `SimpleSpanProcessor` | Synchronous span processing |
+| `BatchSpanProcessor` | Batched span processing |
+| `OTLPExporter` | Export to OTLP endpoint |
 
-## Implementation Standards
+## Functions
 
-- **Zero Mocks**: Uses real OTLP-compatible structures.
-- **Logging Integration**: Seamlessly attaches trace IDs to system logs.
-- **Performance Focused**: Minimal overhead during span lifecycle.
+| Function | Purpose |
+|----------|---------|
+| `start_span()` | Start a new span |
+| `get_current_span()` | Get active span |
+| `traced()` | Decorator for tracing |
+| `link_span()` | Link spans together |
+
+## Quick Start
+
+### Basic Tracing
+
+```python
+from codomyrmex.telemetry import start_span, get_current_span
+
+with start_span("my_operation") as span:
+    span.set_attribute("user_id", "123")
+    
+    # Nested span
+    with start_span("sub_operation") as child:
+        child.set_attribute("step", 1)
+        do_work()
+```
+
+### Decorator-Based Tracing
+
+```python
+from codomyrmex.telemetry import traced
+
+@traced("process_request")
+def process_request(request):
+    # Automatically traced
+    return handle(request)
+
+@traced("database_query", attributes={"db": "postgres"})
+def query_database(sql):
+    return execute(sql)
+```
+
+### Span Linking
+
+```python
+from codomyrmex.telemetry import start_span, link_span
+
+# Create related spans
+with start_span("producer") as producer_span:
+    message_id = produce_message()
+
+# Link consumer to producer
+with start_span("consumer") as consumer_span:
+    link_span(consumer_span, producer_span)
+    consume_message(message_id)
+```
+
+### OTLP Export
+
+```python
+from codomyrmex.telemetry import (
+    OTLPExporter,
+    BatchSpanProcessor,
+    TraceContext
+)
+
+# Configure export
+exporter = OTLPExporter(endpoint="http://localhost:4317")
+processor = BatchSpanProcessor(exporter)
+
+context = TraceContext()
+context.add_processor(processor)
+```
+
+### Trace Context
+
+```python
+from codomyrmex.telemetry import TraceContext
+
+ctx = TraceContext()
+
+# Propagate across services
+headers = ctx.extract_headers()
+# ... send headers in HTTP request ...
+
+# On receiving service
+ctx.inject_headers(incoming_headers)
+```
+
+## Integration Points
+
+- **logging_monitoring**: Correlate logs with traces
+- **metrics**: Trace-to-metrics correlation
+- **networking**: HTTP trace propagation
 
 ## Navigation
 
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent**: [../README.md](../README.md)
+- **Siblings**: [logging_monitoring](../logging_monitoring/), [metrics](../metrics/)
+- **Spec**: [SPEC.md](SPEC.md)

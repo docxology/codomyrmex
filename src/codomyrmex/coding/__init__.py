@@ -1,7 +1,29 @@
-"""
-Code Module
+"""Coding Module.
 
-Unified module for code execution, sandboxing, review, and monitoring.
+Unified module for code execution, sandboxing, review, monitoring, and
+debugging. Provides a comprehensive toolkit for running, analyzing, and
+fixing code programmatically.
+
+Submodules:
+    execution: Sandboxed code execution with multi-language support.
+    sandbox: Container isolation and resource limits.
+    review: Static analysis and code quality assessment.
+    monitoring: Execution metrics and resource tracking.
+    debugging: Automated error analysis and fix generation.
+
+Example:
+    >>> from codomyrmex.coding import execute_code, CodeReviewer, Debugger
+    >>>
+    >>> # Execute code
+    >>> result = execute_code("python", "print('Hello!')")
+    >>>
+    >>> # Review code quality
+    >>> reviewer = CodeReviewer("./src")
+    >>> issues = reviewer.analyze_file("module.py")
+    >>>
+    >>> # Debug failures
+    >>> debugger = Debugger()
+    >>> fixed = debugger.debug(code, stdout, stderr, exit_code)
 """
 
 # Execution submodule

@@ -1,18 +1,37 @@
-# model_context_protocol
+# Model Context Protocol
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `model_context_protocol` module provides core functionality for Model Context Protocol.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `integration/` – Subdirectory
-- `test_model_context_protocol.py` – File
-- `unit/` – Subdirectory
+```mermaid
+graph TD
+    model_context_protocol --> Utils[codomyrmex.utils]
+    model_context_protocol --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph model_context_protocol
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.model_context_protocol import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

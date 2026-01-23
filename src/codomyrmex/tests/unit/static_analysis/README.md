@@ -1,19 +1,37 @@
-# static_analysis
+# Static Analysis
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `static_analysis` module provides core functionality for Static Analysis.
 
-Test files and validation suites.
+## Architecture
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `integration/` – Subdirectory
-- `test_static_analysis.py` – File
-- `test_static_analysis_comprehensive.py` – File
-- `unit/` – Subdirectory
+```mermaid
+graph TD
+    static_analysis --> Utils[codomyrmex.utils]
+    static_analysis --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph static_analysis
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
+
+## Usage
+
+```python
+from codomyrmex.static_analysis import ...
+
+# Example usage
+# result = process(...)
+```
 
 ## Navigation
-- **Parent Directory**: [unit](../README.md)
-- **Project Root**: ../../../../../README.md
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)
