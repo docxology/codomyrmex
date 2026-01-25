@@ -3,98 +3,101 @@ Containerization Module for Codomyrmex.
 
 The Containerization module provides container management,
 orchestration, and deployment capabilities for the Codomyrmex ecosystem.
-
-Integration:
-- Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
-- Integrates with `ci_cd_automation` for automated container builds and deployments.
-- Works with `security` for container security scanning.
-- Supports `environment_setup` for container environment configuration.
-
-Available functions:
-- build_containers: Build Docker containers from source
-- manage_containers: Container lifecycle management
-- orchestrate_kubernetes: Kubernetes orchestration and management
-- scan_container_security: Container security scanning and vulnerability assessment
-- deploy_containers: Automated container deployment
-- monitor_containers: Container health monitoring and logging
-- manage_container_registry: Container registry operations
-- optimize_containers: Container performance optimization
-
-Data structures:
-- ContainerConfig: Container configuration and build settings
-- KubernetesDeployment: Kubernetes deployment configuration
-- ContainerRegistry: Container registry connection and management
-- ContainerMetrics: Container performance and resource metrics
-- SecurityScanResult: Container security scan results
 """
 
-# Import from new submodule structure
-from .registry.container_registry import (
-    ContainerRegistry,
-    manage_container_registry,
-)
-from .docker.docker_manager import (
-    ContainerConfig,
-    DockerManager,
-    build_containers,
-    manage_containers,
-)
-from .kubernetes.kubernetes_orchestrator import (
-    KubernetesDeployment,
-    KubernetesOrchestrator,
-    orchestrate_kubernetes,
-)
-from .security.performance_optimizer import (
-    ContainerMetrics,
-    ContainerOptimizer,
-    optimize_containers,
-)
-from .security.security_scanner import (
-    ContainerSecurityScanner,
-    SecurityScanResult,
-    scan_container_security,
-)
-from .exceptions import (
-    ContainerError,
-    ImageBuildError,
-    NetworkError,
-    VolumeError,
-    RegistryError,
-    KubernetesError,
-)
-
-# Submodule exports
+# Submodule exports - import first
 from . import docker
 from . import kubernetes
 from . import registry
 from . import security
 
+# Try to import from existing modules, but don't fail if they don't exist
+try:
+    from .registry.container_registry import (
+        ContainerRegistry,
+        manage_container_registry,
+    )
+    HAS_REGISTRY = True
+except ImportError:
+    HAS_REGISTRY = False
+    ContainerRegistry = None
+
+try:
+    from .docker.docker_manager import (
+        ContainerConfig,
+        DockerManager,
+        build_containers,
+        manage_containers,
+    )
+    HAS_DOCKER_MANAGER = True
+except ImportError:
+    HAS_DOCKER_MANAGER = False
+    DockerManager = None
+    ContainerConfig = None
+
+try:
+    from .kubernetes.kubernetes_orchestrator import (
+        KubernetesDeployment,
+        KubernetesOrchestrator,
+        orchestrate_kubernetes,
+    )
+    HAS_K8S = True
+except ImportError:
+    HAS_K8S = False
+    KubernetesOrchestrator = None
+
+try:
+    from .security.performance_optimizer import (
+        ContainerMetrics,
+        ContainerOptimizer,
+        optimize_containers,
+    )
+    HAS_OPTIMIZER = True
+except ImportError:
+    HAS_OPTIMIZER = False
+
+try:
+    from .security.security_scanner import (
+        ContainerSecurityScanner,
+        SecurityScanResult,
+        scan_container_security,
+    )
+    HAS_SCANNER = True
+except ImportError:
+    HAS_SCANNER = False
+    SecurityScanResult = None
+
+try:
+    from .exceptions import (
+        ContainerError,
+        ImageBuildError,
+        NetworkError,
+        VolumeError,
+        RegistryError,
+        KubernetesError,
+    )
+    HAS_EXCEPTIONS = True
+except ImportError:
+    HAS_EXCEPTIONS = False
+
 __all__ = [
-    # Docker management
-    "DockerManager",
-    "build_containers",
-    "manage_containers",
-    "ContainerConfig",
-    # Kubernetes orchestration
-    "KubernetesOrchestrator",
-    "orchestrate_kubernetes",
-    "KubernetesDeployment",
-    # Container registry
-    "ContainerRegistry",
-    "manage_container_registry",
-    # Security scanning
-    "ContainerSecurityScanner",
-    "scan_container_security",
-    "SecurityScanResult",
-    # Performance optimization
-    "ContainerOptimizer",
-    "optimize_containers",
-    "ContainerMetrics",
-    # Exceptions
-    "ContainerError",
-    "ImageBuildError",
-    "NetworkError",
-    "VolumeError",
-    "RegistryError",
-    "KubernetesError",
+    "docker",
+    "kubernetes",
+    "registry",
+    "security",
 ]
+
+if HAS_DOCKER_MANAGER:
+    __all__.extend(["DockerManager", "ContainerConfig", "build_containers", "manage_containers"])
+if HAS_REGISTRY:
+    __all__.extend(["ContainerRegistry", "manage_container_registry"])
+if HAS_K8S:
+    __all__.extend(["KubernetesOrchestrator", "KubernetesDeployment", "orchestrate_kubernetes"])
+if HAS_SCANNER:
+    __all__.extend(["ContainerSecurityScanner", "SecurityScanResult", "scan_container_security"])
+if HAS_OPTIMIZER:
+    __all__.extend(["ContainerOptimizer", "ContainerMetrics", "optimize_containers"])
+if HAS_EXCEPTIONS:
+    __all__.extend(["ContainerError", "ImageBuildError", "NetworkError", "VolumeError", "RegistryError", "KubernetesError"])
+
+__version__ = "0.1.0"

@@ -1,28 +1,41 @@
 """Deployment module for Codomyrmex."""
 
-from .manager.manager import DeploymentManager
-from .strategies.strategies import DeploymentStrategy, CanaryStrategy, BlueGreenStrategy
-from .gitops.gitops import GitOpsSynchronizer
+# Try to import from existing modules, but don't fail if they don't exist
+try:
+    from .manager.manager import DeploymentManager
+except ImportError:
+    DeploymentManager = None
 
-# Submodule exports
-from . import manager
-from . import strategies
-from . import gitops
-from . import rollback
+try:
+    from .gitops.gitops import GitOpsSynchronizer
+except ImportError:
+    GitOpsSynchronizer = None
+
+# Submodule exports  
 from . import health_checks
+from . import strategies
+from . import rollback
+
+# Try optional submodules
+try:
+    from . import manager
+except ImportError:
+    pass
+
+try:
+    from . import gitops
+except ImportError:
+    pass
 
 __all__ = [
-    "DeploymentManager",
-    "DeploymentStrategy",
-    "CanaryStrategy",
-    "BlueGreenStrategy",
-    "GitOpsSynchronizer",
-    "manager",
-    "strategies",
-    "gitops",
-    "rollback",
     "health_checks",
+    "strategies",
+    "rollback",
 ]
 
-__version__ = "0.1.0"
+if DeploymentManager:
+    __all__.append("DeploymentManager")
+if GitOpsSynchronizer:
+    __all__.append("GitOpsSynchronizer")
 
+__version__ = "0.1.0"

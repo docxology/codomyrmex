@@ -90,6 +90,11 @@ class TestAgentCapabilities:
             "MULTI_TURN",
             "CODE_EXECUTION",
             "VISION",
+            "TOOL_USE",
+            "EXTENDED_THINKING",
+            "FILE_OPERATIONS",
+            "CACHING",
+            "BATCH",
         ]
 
         for cap_name in expected:
@@ -106,7 +111,7 @@ class TestAgentCapabilities:
         """Test that capabilities can be iterated."""
         AgentCapabilities = agent_modules['AgentCapabilities']
         caps = list(AgentCapabilities)
-        assert len(caps) >= 8
+        assert len(caps) >= 13
 
 
 class TestAgentRequest:

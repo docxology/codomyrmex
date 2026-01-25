@@ -87,6 +87,11 @@ class AgentCapabilities(Enum):
     MULTI_TURN = "multi_turn"
     CODE_EXECUTION = "code_execution"
     VISION = "vision"
+    TOOL_USE = "tool_use"
+    EXTENDED_THINKING = "extended_thinking"
+    FILE_OPERATIONS = "file_operations"
+    CACHING = "caching"
+    BATCH = "batch"
 
 
 @dataclass

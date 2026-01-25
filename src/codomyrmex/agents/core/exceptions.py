@@ -41,12 +41,53 @@ class JulesError(AgentError):
 
 
 class ClaudeError(AgentError):
-    """Raised when Claude API operations fail."""
+    """Raised when Claude API operations fail.
 
-    def __init__(self, message: str = "Claude operation failed", model: str | None = None, **kwargs):
+    This includes API errors, rate limits, authentication failures,
+    and other Claude-specific operation failures.
+    """
+
+    def __init__(
+        self,
+        message: str = "Claude operation failed",
+        model: str | None = None,
+        api_error: str | None = None,
+        status_code: int | None = None,
+        retry_after: float | None = None,
+        request_id: str | None = None,
+        **kwargs
+    ):
+        """Initialize ClaudeError.
+
+        Args:
+            message: Error description
+            model: Claude model being used
+            api_error: Original API error message
+            status_code: HTTP status code from API response
+            retry_after: Seconds to wait before retry (for rate limits)
+            request_id: Request ID for debugging/support
+            **kwargs: Additional context passed to parent
+        """
         super().__init__(message, **kwargs)
         if model:
             self.context["model"] = model
+        if api_error:
+            self.context["api_error"] = api_error
+        if status_code is not None:
+            self.context["status_code"] = status_code
+        if retry_after is not None:
+            self.context["retry_after"] = retry_after
+        if request_id:
+            self.context["request_id"] = request_id
+
+    @property
+    def is_retryable(self) -> bool:
+        """Check if the error is retryable based on status code."""
+        status = self.context.get("status_code")
+        if status is None:
+            return False
+        # Retryable: rate limits (429), server errors (500, 502, 503, 529)
+        return status in (429, 500, 502, 503, 529)
 
 
 class CodexError(AgentError):

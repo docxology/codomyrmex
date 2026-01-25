@@ -1,25 +1,47 @@
 """Model Operations module for Codomyrmex."""
 
-from .datasets.datasets import Dataset, DatasetSanitizer
-from .fine_tuning.fine_tuning import FineTuningJob
-from .evaluation.evaluators import Evaluator
+# Try to import from existing modules, but don't fail if they don't exist
+try:
+    from .datasets.datasets import Dataset, DatasetSanitizer
+except ImportError:
+    Dataset = None
+    DatasetSanitizer = None
+
+try:
+    from .fine_tuning.fine_tuning import FineTuningJob
+except ImportError:
+    FineTuningJob = None
+
+try:
+    from .evaluation.evaluators import Evaluator
+except ImportError:
+    Evaluator = None
 
 # Submodule exports
-from . import datasets
 from . import evaluation
-from . import fine_tuning
 from . import training
 
+# Try optional submodules
+try:
+    from . import datasets
+except ImportError:
+    pass
+
+try:
+    from . import fine_tuning
+except ImportError:
+    pass
+
 __all__ = [
-    "Dataset",
-    "DatasetSanitizer",
-    "FineTuningJob",
-    "Evaluator",
-    "datasets",
     "evaluation",
-    "fine_tuning",
     "training",
 ]
 
-__version__ = "0.1.0"
+if Dataset:
+    __all__.extend(["Dataset", "DatasetSanitizer"])
+if FineTuningJob:
+    __all__.append("FineTuningJob")
+if Evaluator:
+    __all__.append("Evaluator")
 
+__version__ = "0.1.0"
