@@ -7,6 +7,7 @@
 Project workspace and templates.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `test_project/` – Subdirectory

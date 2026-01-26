@@ -7,6 +7,7 @@ Configuration files and templates.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SECURITY.md` – Project file
 - `SPEC.md` – Project file
@@ -17,6 +18,7 @@ Configuration files and templates.
 - `config_monitor.py` – Project file
 - `config_validator.py` – Project file
 - `secret_manager.py` – Project file
+- `watcher.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

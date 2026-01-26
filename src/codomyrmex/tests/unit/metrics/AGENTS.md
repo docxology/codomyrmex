@@ -6,9 +6,11 @@
 Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `test_metrics.py` – Project file
+- `test_metrics_expansion.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

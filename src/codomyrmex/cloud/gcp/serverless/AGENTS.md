@@ -1,10 +1,21 @@
-# Gcp Serverless - Agent Instructions
+# Codomyrmex Agents — src/codomyrmex/cloud/gcp/serverless
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Cloud Run and Functions
+Contains components for the src system.
 
-## Key Files
-See module implementation files.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
 
-## Agent Guidelines
-- Import from `codomyrmex.cloud.gcp.serverless`
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+## Navigation Links
+- **📁 Parent Directory**: [gcp](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

@@ -1,37 +1,18 @@
-# Feature Flags
+# feature_flags
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `feature_flags` module provides core functionality for Feature Flags.
 
-## Architecture
+Automation and utility scripts.
 
-```mermaid
-graph TD
-    feature_flags --> Utils[codomyrmex.utils]
-    feature_flags --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph feature_flags
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.feature_flags import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `examples/` – Subdirectory
+- `orchestrate.py` – File
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

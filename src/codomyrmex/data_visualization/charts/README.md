@@ -1,29 +1,23 @@
-# Charts Submodule
+# charts
 
-Chart type implementations for data visualization.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-This submodule contains specific chart type implementations including bar charts, line plots, pie charts, histograms, and scatter plots.
+Contains components for the src system.
 
-## Components
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `bar_chart.py` – File
+- `histogram.py` – File
+- `line_plot.py` – File
+- `pie_chart.py` – File
+- `plot_utils.py` – File
+- `scatter_plot.py` – File
 
-- `bar_chart.py` - Bar chart implementation
-- `line_plot.py` - Line plot implementation  
-- `pie_chart.py` - Pie chart implementation
-- `histogram.py` - Histogram implementation
-- `scatter_plot.py` - Scatter plot implementation
-
-## Usage
-
-```python
-from codomyrmex.data_visualization.charts import BarChart, create_bar_chart
-
-chart = create_bar_chart(data, labels)
-chart.render()
-```
-
-## Dependencies
-
-- matplotlib
-- numpy
+## Navigation
+- **Parent Directory**: [data_visualization](../README.md)
+- **Project Root**: ../../../../README.md

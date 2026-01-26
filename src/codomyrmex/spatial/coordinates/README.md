@@ -1,13 +1,37 @@
-# Coordinate Systems
+# Coordinates
 
-Coordinate transforms
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `coordinates` module provides core functionality for Coordinates.
 
-This submodule provides coordinate systems functionality.
+## Architecture
+
+```mermaid
+graph TD
+    coordinates --> Utils[codomyrmex.utils]
+    coordinates --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph coordinates
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.spatial.coordinates import ...
+from codomyrmex.coordinates import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

@@ -1,26 +1,27 @@
-# Charts Submodule - Agent Instructions
+# Codomyrmex Agents — src/codomyrmex/data_visualization/charts
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
+Contains components for the src system.
 
-Provides chart type implementations for data visualization.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `bar_chart.py` – Project file
+- `histogram.py` – Project file
+- `line_plot.py` – Project file
+- `pie_chart.py` – Project file
+- `plot_utils.py` – Project file
+- `scatter_plot.py` – Project file
 
-## Key Files
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `bar_chart.py` - Bar chart with customization options
-- `line_plot.py` - Line plots with trend support
-- `pie_chart.py` - Pie charts with percentage labels
-- `histogram.py` - Histograms with bin configuration
-- `scatter_plot.py` - Scatter plots with regression lines
-
-## Agent Guidelines
-
-- Use appropriate chart type for data being visualized
-- Configure color themes via parent themes/ submodule
-- All charts support matplotlib backend
-- Export functions prefer PNG format by default
-
-## Integration Points
-
-- Import from `codomyrmex.data_visualization.charts`
-- Uses engines/ for rendering utilities
-- Themes applied from themes/ submodule
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,37 +1,19 @@
-# Ide
+# ide
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `ide` module provides core functionality for Ide.
 
-## Architecture
+Automation and utility scripts.
 
-```mermaid
-graph TD
-    ide --> Utils[codomyrmex.utils]
-    ide --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph ide
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.ide import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `antigravity/` – Subdirectory
+- `examples/` – Subdirectory
+- `orchestrate.py` – File
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

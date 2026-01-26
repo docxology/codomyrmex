@@ -1,16 +1,37 @@
-# Security Submodule
+# Security
 
-Container security scanning and performance optimization.
+**Version**: v0.1.0 | **Status**: Active
+
+## Overview
+The `security` module provides core functionality for Security.
+
+## Architecture
+
+```mermaid
+graph TD
+    security --> Utils[codomyrmex.utils]
+    security --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph security
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
 
 ## Components
-
-- `security_scanner.py` - Vulnerability scanning
-- `performance_optimizer.py` - Runtime optimization
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.containerization.security import SecurityScanner
-scanner = SecurityScanner()
-vulnerabilities = scanner.scan_image("myapp:latest")
+from codomyrmex.security import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

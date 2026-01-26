@@ -1,37 +1,18 @@
-# Cli
+# cli
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `cli` module provides core functionality for Cli.
 
-## Architecture
+Automation and utility scripts.
 
-```mermaid
-graph TD
-    cli --> Utils[codomyrmex.utils]
-    cli --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph cli
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.cli import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `examples/` – Subdirectory
+- `orchestrate.py` – File
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

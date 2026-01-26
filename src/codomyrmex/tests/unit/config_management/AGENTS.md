@@ -6,8 +6,10 @@
 Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
+- `config/` – Directory containing config components
 - `test_config_management.py` – Project file
 - `test_config_management_enhanced.py` – Project file
 

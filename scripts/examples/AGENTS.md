@@ -6,7 +6,9 @@
 Example implementations and demonstrations.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `orchestrate.py` – Project file
 
 ## Operating Contracts

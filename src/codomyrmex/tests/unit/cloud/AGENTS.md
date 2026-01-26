@@ -6,8 +6,10 @@
 Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
+- `test_cloud_expansion.py` – Project file
 - `test_coda_io_client.py` – Project file
 - `test_coda_io_exceptions.py` – Project file
 - `test_coda_io_models.py` – Project file

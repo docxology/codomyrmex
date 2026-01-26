@@ -1,17 +1,37 @@
-# Docker Submodule
+# Docker
 
-Docker container and image management for containerization.
+**Version**: v0.1.0 | **Status**: Active
+
+## Overview
+The `docker` module provides core functionality for Docker.
+
+## Architecture
+
+```mermaid
+graph TD
+    docker --> Utils[codomyrmex.utils]
+    docker --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph docker
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
 
 ## Components
-
-- `docker_manager.py` - Docker daemon interaction
-- `build_generator.py` - Dockerfile generation
-- `image_optimizer.py` - Image size optimization
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.containerization.docker import DockerManager
-manager = DockerManager()
-manager.build_image("./", "myapp:latest")
+from codomyrmex.docker import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

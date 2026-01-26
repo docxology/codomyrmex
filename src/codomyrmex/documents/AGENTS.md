@@ -7,7 +7,9 @@ Documentation files and guides.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SECURITY.md` – Project file
 - `SPEC.md` – Project file
 - `USAGE_EXAMPLES.md` – Project file
 - `__init__.py` – Project file

@@ -7,6 +7,7 @@
 Test files and validation suites.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `ai_code_editing/` – Subdirectory

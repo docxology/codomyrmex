@@ -1,37 +1,21 @@
-# Orchestrator
+# orchestrator
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `orchestrator` module provides core functionality for Orchestrator.
 
-## Architecture
+Automation and utility scripts.
 
-```mermaid
-graph TD
-    orchestrator --> Utils[codomyrmex.utils]
-    orchestrator --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph orchestrator
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.orchestrator import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `__init__.py` – File
+- `examples/` – Subdirectory
+- `orchestrate.py` – File
+- `run_workflow.py` – File
+- `workflows/` – Subdirectory
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

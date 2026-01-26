@@ -1,37 +1,18 @@
-# Security
+# security
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `security` module provides core functionality for Security.
 
-## Architecture
+Automation and utility scripts.
 
-```mermaid
-graph TD
-    security --> Utils[codomyrmex.utils]
-    security --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph security
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.security import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `examples/` – Subdirectory
+- `orchestrate.py` – File
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

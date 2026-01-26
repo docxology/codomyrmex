@@ -20,9 +20,9 @@ except ImportError:
 
 # Try to import from existing modules, but don't fail if they don't exist
 try:
-    from .shells.interactive_shell import InteractiveShell as LegacyInteractiveShell
+    from .shells.interactive_shell import InteractiveShell
 except ImportError:
-    LegacyInteractiveShell = None
+    InteractiveShell = None
 
 try:
     from .utils.terminal_utils import CommandRunner, TerminalFormatter
@@ -37,9 +37,10 @@ __all__ = [
     "completions",
 ]
 
-if LegacyInteractiveShell:
+if InteractiveShell:
     __all__.append("InteractiveShell")
 if CommandRunner:
     __all__.extend(["CommandRunner", "TerminalFormatter"])
 
 __version__ = "0.1.0"
+

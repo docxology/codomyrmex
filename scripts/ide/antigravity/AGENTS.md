@@ -6,7 +6,9 @@
 Automation and utility scripts.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `artifact_inspector.py` – Project file
 - `basic_setup.py` – Project file
 - `chat_demo.py` – Project file

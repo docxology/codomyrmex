@@ -7,7 +7,9 @@
 Automation and utility scripts.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
+- `SPEC.md` – File
 
 ## Navigation
 - **Parent Directory**: [scripts](../README.md)

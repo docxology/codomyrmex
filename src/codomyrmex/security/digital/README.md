@@ -9,6 +9,7 @@ Contains components for the src system.
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
+- `PAI.md` – File
 - `README.md` – File
 - `SECURITY.md` – File
 - `SPEC.md` – File

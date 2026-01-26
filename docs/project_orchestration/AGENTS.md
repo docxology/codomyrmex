@@ -6,6 +6,7 @@
 Documentation files and guides.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `config-driven-operations.md` – Project file

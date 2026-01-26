@@ -10,215 +10,428 @@ This API specification documents the programmatic interfaces for the Ollama Inte
 
 Primary interface for Ollama integration with comprehensive model management:
 
+#### Constructor
+
+```python
+OllamaManager(
+    ollama_binary: str = "ollama",
+    auto_start_server: bool = True,
+    base_url: str = "http://localhost:11434",
+    use_http_api: bool = True
+)
+```
+
+- **Parameters**:
+  - `ollama_binary`: Path to the ollama binary executable
+  - `auto_start_server`: Automatically start Ollama server if not running
+  - `base_url`: Base URL for Ollama HTTP API
+  - `use_http_api`: Use HTTP API (True) or CLI subprocess calls (False)
+
 #### Methods
 
-**`__init__(host: str = "localhost", port: int = 11434, **kwargs)`**
-- Initialize Ollama manager with connection parameters
-- **Parameters**: `host`, `port`, connection options
-- **Errors**: `OllamaConnectionError` for connection failures
+**`list_models(force_refresh: bool = False) -> List[OllamaModel]`**
 
-**`list_models() -> List[Dict]`**
 - Retrieve available Ollama models
-- **Return Value**: List of model information dictionaries
-- **Errors**: `OllamaError` for API failures
+- **Parameters**: `force_refresh` - Force cache refresh
+- **Return Value**: List of OllamaModel dataclass instances
 
-**`pull_model(model_name: str, **kwargs) -> Dict`**
-- Download and install Ollama model
-- **Parameters**: `model_name`, download options
-- **Return Value**: Model installation status and metadata
-- **Errors**: `OllamaModelError` for model installation failures
+**`download_model(model_name: str) -> bool`**
 
-**`run_model(model_name: str, prompt: str, **kwargs) -> Dict`**
+- Download and install Ollama model (equivalent to `ollama pull`)
+- **Parameters**: `model_name` - Name of model to download
+- **Return Value**: True if successful
+
+**`is_model_available(model_name: str) -> bool`**
+
+- Check if a specific model is available
+- **Parameters**: `model_name` - Name of model to check
+- **Return Value**: True if model is available
+
+**`get_model_by_name(model_name: str) -> Optional[OllamaModel]`**
+
+- Get model information by name
+- **Parameters**: `model_name` - Name of model
+- **Return Value**: OllamaModel instance or None if not found
+
+**`run_model(model_name: str, prompt: str, options: Optional[dict] = None, save_output: bool = True, output_dir: Optional[str] = None) -> ModelExecutionResult`**
+
 - Execute model inference with prompt
-- **Parameters**: `model_name`, `prompt`, generation parameters
-- **Return Value**: Model response with metadata
-- **Errors**: `OllamaModelError` for inference failures
+- **Parameters**: `model_name`, `prompt`, optional `options` dict, `save_output` flag, optional `output_dir`
+- **Return Value**: ModelExecutionResult with response, execution time, token count
 
-**`get_model_info(model_name: str) -> Dict`**
-- Retrieve detailed model information
-- **Parameters**: `model_name`
-- **Return Value**: Model metadata and capabilities
-- **Errors**: `OllamaModelError` for model not found
+**`run_model_async(model_name: str, prompt: str, options: Optional[dict] = None) -> Future[ModelExecutionResult]`**
+
+- Execute model inference asynchronously
+- **Parameters**: `model_name`, `prompt`, optional `options`
+- **Return Value**: Future that resolves to ModelExecutionResult
+
+**`get_model_stats() -> dict[str, Any]`**
+
+- Get statistics about available models
+- **Return Value**: Dict with total_models, total_size, models list
+
+**`cleanup() -> None`**
+
+- Cleanup resources (stop server if started by manager)
 
 ### ModelRunner
 
-Specialized model execution with performance optimization:
+Advanced model execution engine with streaming and batch processing:
+
+#### Constructor
+
+```python
+ModelRunner(ollama_manager: OllamaManager)
+```
 
 #### Methods
 
-**`execute(prompt: str, model: str, **kwargs) -> Dict`**
-- Execute model inference with optimized performance
-- **Parameters**: `prompt`, `model`, execution options
-- **Return Value**: Execution results with performance metrics
-- **Errors**: `ModelExecutionError` for execution failures
+**`run_with_options(model_name: str, prompt: str, options: Optional[ExecutionOptions] = None, save_output: bool = True, output_dir: Optional[str] = None) -> ModelExecutionResult`**
 
-**`stream_execute(prompt: str, model: str, **kwargs) -> Iterator[Dict]`**
-- Stream model inference results for real-time processing
-- **Parameters**: `prompt`, `model`, streaming options
-- **Return Value**: Iterator of response chunks
-- **Errors**: `ModelExecutionError` for streaming failures
+- Run a model with custom execution options
+- **Parameters**: `model_name`, `prompt`, optional `ExecutionOptions`, `save_output`, `output_dir`
+- **Return Value**: ModelExecutionResult
 
-**`benchmark_model(model: str, test_prompts: List[str], **kwargs) -> Dict`**
+**`run_streaming(model_name: str, prompt: str, options: Optional[ExecutionOptions] = None, chunk_callback: Optional[Callable[[StreamingChunk], None]] = None) -> ModelExecutionResult`**
+
+- Run a model with streaming output
+- **Parameters**: `model_name`, `prompt`, optional `options`, optional `chunk_callback`
+- **Return Value**: ModelExecutionResult with accumulated response
+
+**`run_batch(model_name: str, prompts: list[str], options: Optional[ExecutionOptions] = None, max_concurrent: int = 3) -> list[ModelExecutionResult]`**
+
+- Run multiple prompts in batch with concurrency control
+- **Parameters**: `model_name`, `prompts` list, optional `options`, `max_concurrent` limit
+- **Return Value**: List of ModelExecutionResult objects
+
+**`run_conversation(model_name: str, messages: list[dict[str, str]], options: Optional[ExecutionOptions] = None) -> ModelExecutionResult`**
+
+- Run conversational model execution with message history
+- **Parameters**: `model_name`, `messages` list with role/content dicts, optional `options`
+- **Return Value**: ModelExecutionResult
+
+**`run_with_context(model_name: str, prompt: str, context_docs: list[str], options: Optional[ExecutionOptions] = None) -> ModelExecutionResult`**
+
+- Run a model with additional context documents
+- **Parameters**: `model_name`, `prompt`, `context_docs` list, optional `options`
+- **Return Value**: ModelExecutionResult
+
+**`benchmark_model(model_name: str, test_prompts: list[str], options: Optional[ExecutionOptions] = None) -> dict[str, Any]`**
+
 - Benchmark model performance across multiple prompts
-- **Parameters**: `model`, `test_prompts`, benchmark options
-- **Return Value**: Performance metrics and statistics
-- **Errors**: `BenchmarkError` for benchmarking failures
+- **Parameters**: `model_name`, `test_prompts`, optional `options`
+- **Return Value**: Dict with avg_execution_time, avg_tokens_per_second, individual_results
+
+**`create_model_comparison(model_names: list[str], test_prompt: str, options: Optional[ExecutionOptions] = None) -> dict[str, Any]`**
+
+- Compare multiple models on the same prompt
+- **Parameters**: `model_names` list, `test_prompt`, optional `options`
+- **Return Value**: Dict with results per model and summary statistics
+
+#### Async Methods
+
+**`async_generate(model_name: str, prompt: str, options: Optional[ExecutionOptions] = None) -> ModelExecutionResult`**
+
+- Async text generation
+
+**`async_chat(model_name: str, messages: list[dict], options: Optional[ExecutionOptions] = None) -> ModelExecutionResult`**
+
+- Async chat-style conversation
+
+**`async_generate_stream(model_name: str, prompt: str, options: Optional[ExecutionOptions] = None) -> AsyncIterator[StreamingChunk]`**
+
+- Async streaming text generation
+
+**`async_run_batch(model_name: str, prompts: list[str], options: Optional[ExecutionOptions] = None) -> list[ModelExecutionResult]`**
+
+- Async batch processing
+
+**`async_run_model(model_name: str, prompt: str, options: Optional[ExecutionOptions] = None, timeout: int = 300) -> ModelExecutionResult`**
+
+- Async model execution with timeout
 
 ### OutputManager
 
-Model output processing and formatting utilities:
+Model output processing and persistence utilities:
+
+#### Constructor
+
+```python
+OutputManager(base_output_dir: Optional[str] = None)
+```
 
 #### Methods
 
-**`process_output(raw_output: Dict, format_type: str = "text", **kwargs) -> Dict`**
-- Process and format model output
-- **Parameters**: `raw_output`, `format_type`, formatting options
-- **Return Value**: Processed output in specified format
-- **Errors**: `OutputProcessingError` for processing failures
+**`save_model_output(model_name: str, prompt: str, response: str, execution_time: float, output_dir: Optional[str] = None, metadata: Optional[dict] = None) -> Path`**
 
-**`validate_output(output: Dict, schema: Optional[Dict] = None, **kwargs) -> Dict`**
-- Validate model output against schema
-- **Parameters**: `output`, `schema`, validation options
-- **Return Value**: Validation results and compliance status
-- **Errors**: `ValidationError` for validation failures
+- Save model execution output to files
+- **Return Value**: Path to saved output file
 
-**`export_output(output: Dict, format: str, destination: str, **kwargs) -> Dict`**
-- Export processed output to various formats
-- **Parameters**: `output`, `format`, `destination`, export options
-- **Return Value**: Export status and metadata
-- **Errors**: `ExportError` for export failures
+**`save_execution_result(result: ModelExecutionResult, output_dir: Optional[str] = None) -> Path`**
+
+- Save complete execution result as JSON
+- **Return Value**: Path to saved result file
+
+**`save_model_config(model_name: str, config: dict[str, Any], config_name: Optional[str] = None) -> Path`**
+
+- Save model configuration
+- **Return Value**: Path to saved config file
+
+**`load_model_config(model_name: str, config_name: Optional[str] = None) -> Optional[dict[str, Any]]`**
+
+- Load model configuration
+- **Return Value**: Configuration dict or None if not found
+
+**`save_batch_results(results: list[ModelExecutionResult], batch_name: str, output_dir: Optional[str] = None) -> Path`**
+
+- Save batch execution results
+- **Return Value**: Path to saved batch results file
+
+**`save_benchmark_report(benchmark_results: dict[str, Any], model_name: str, output_dir: Optional[str] = None) -> Path`**
+
+- Save benchmark results as comprehensive report
+- **Return Value**: Path to saved report
+
+**`save_model_comparison(comparison_results: dict[str, Any], output_dir: Optional[str] = None) -> Path`**
+
+- Save model comparison results
+- **Return Value**: Path to saved comparison report
+
+**`list_saved_outputs(model_name: Optional[str] = None, output_type: str = "outputs") -> list[dict[str, Any]]`**
+
+- List saved outputs of a specific type
+- **Parameters**: Optional `model_name` filter, `output_type` ("outputs", "configs", "results", "reports")
+- **Return Value**: List of output information dicts
+
+**`get_output_stats() -> dict[str, Any]`**
+
+- Get statistics about saved outputs
+- **Return Value**: Dict with counts, sizes, paths
+
+**`cleanup_old_outputs(days_old: int = 30) -> int`**
+
+- Clean up outputs older than specified days
+- **Return Value**: Number of files removed
 
 ### ConfigManager
 
 Configuration management for Ollama integration:
 
+#### Constructor
+
+```python
+ConfigManager(config_file: Optional[str] = None)
+```
+
 #### Methods
 
-**`load_config(config_path: Optional[str] = None) -> Dict`**
-- Load Ollama configuration from file or defaults
-- **Parameters**: `config_path`, optional configuration file path
-- **Return Value**: Loaded configuration dictionary
-- **Errors**: `ConfigError` for configuration loading failures
+**`load_config() -> bool`**
 
-**`validate_config(config: Dict) -> Dict`**
-- Validate Ollama configuration parameters
-- **Parameters**: `config`, configuration dictionary
-- **Return Value**: Validation results and corrected configuration
-- **Errors**: `ConfigError` for invalid configurations
+- Load configuration from file
+- **Return Value**: True if loaded successfully
 
-**`save_config(config: Dict, config_path: str) -> None`**
-- Save configuration to file
-- **Parameters**: `config`, `config_path`
-- **Errors**: `ConfigError` for configuration saving failures
+**`save_config() -> bool`**
 
-## Error Handling
+- Save current configuration to file
+- **Return Value**: True if saved successfully
 
-All classes follow consistent error handling patterns:
+**`create_default_config() -> OllamaConfig`**
 
-- **Connection Errors**: `OllamaConnectionError` for network and connectivity issues
-- **Model Errors**: `OllamaModelError` for model loading, availability, or compatibility issues
-- **Execution Errors**: `ModelExecutionError` for inference and execution failures
-- **Processing Errors**: `OutputProcessingError` for output handling failures
-- **Validation Errors**: `ValidationError` for output and configuration validation failures
-- **Export Errors**: `ExportError` for output export failures
-- **Configuration Errors**: `ConfigError` for configuration management issues
-- **Benchmark Errors**: `BenchmarkError` for performance benchmarking issues
+- Create a default configuration
+- **Return Value**: OllamaConfig instance
+
+**`update_config(**kwargs) -> bool`**
+
+- Update configuration with new values
+- **Parameters**: Keyword arguments for config fields
+- **Return Value**: True if updated successfully
+
+**`get_model_config(model_name: str) -> Optional[dict[str, Any]]`**
+
+- Get configuration for a specific model
+- **Return Value**: Configuration dict or None
+
+**`save_model_config(model_name: str, config: dict[str, Any]) -> bool`**
+
+- Save configuration for a specific model
+- **Return Value**: True if saved successfully
+
+**`get_execution_presets() -> dict[str, ExecutionOptions]`**
+
+- Get predefined execution option presets
+- **Return Value**: Dict mapping preset names to ExecutionOptions (fast, creative, balanced, precise, long_form)
+
+**`export_config(export_path: str) -> bool`**
+
+- Export complete configuration to a file
+- **Return Value**: True if export successful
+
+**`import_config(import_path: str) -> bool`**
+
+- Import configuration from a file
+- **Return Value**: True if import successful
+
+**`reset_to_defaults() -> bool`**
+
+- Reset configuration to default values
+- **Return Value**: True if reset successful
+
+**`validate_config() -> dict[str, Any]`**
+
+- Validate current configuration
+- **Return Value**: Dict with valid flag, warnings, errors
+
+## Data Classes
+
+### ExecutionOptions
+
+```python
+@dataclass
+class ExecutionOptions:
+    temperature: float = 0.7
+    top_p: float = 0.9
+    top_k: int = 40
+    repeat_penalty: float = 1.1
+    max_tokens: int = 2048
+    timeout: int = 300
+    stream: bool = False
+    format: Optional[str] = None
+    system_prompt: Optional[str] = None
+    context_window: Optional[int] = None
+```
+
+### OllamaModel
+
+```python
+@dataclass
+class OllamaModel:
+    name: str
+    id: str
+    size: int
+    modified: str
+    parameters: Optional[str] = None
+    family: Optional[str] = None
+    format: Optional[str] = None
+    status: str = "available"
+```
+
+### ModelExecutionResult
+
+```python
+@dataclass
+class ModelExecutionResult:
+    model_name: str
+    prompt: str
+    response: str
+    execution_time: float
+    tokens_used: Optional[int] = None
+    success: bool = True
+    error_message: Optional[str] = None
+    metadata: Optional[dict[str, Any]] = None
+```
 
 ## Integration Patterns
 
 ### Basic Model Execution
+
 ```python
 from codomyrmex.llm.ollama import OllamaManager
 
 # Initialize manager
-manager = OllamaManager(host="localhost", port=11434)
+manager = OllamaManager()
 
 # Execute model
 result = manager.run_model(
-    model_name="llama2",
+    model_name="llama3.1:latest",
     prompt="Explain the concept of recursion in programming"
 )
 
-print(result['response'])
+print(result.response)
+print(f"Execution time: {result.execution_time:.2f}s")
+```
+
+### Advanced Execution with Options
+
+```python
+from codomyrmex.llm.ollama import OllamaManager, ModelRunner
+from codomyrmex.llm.ollama.model_runner import ExecutionOptions
+
+manager = OllamaManager()
+runner = ModelRunner(manager)
+
+options = ExecutionOptions(
+    temperature=0.8,
+    max_tokens=1024,
+    system_prompt="You are a helpful coding assistant."
+)
+
+result = runner.run_with_options(
+    "codellama:latest",
+    "Write a Python function to calculate fibonacci numbers.",
+    options
+)
 ```
 
 ### Streaming Response Processing
+
 ```python
-from codomyrmex.llm.ollama import ModelRunner
+from codomyrmex.llm.ollama import ModelRunner, OllamaManager
 
-# Initialize runner
-runner = ModelRunner()
-
-# Stream execution
-for chunk in runner.stream_execute(
-    prompt="Write a Python function to calculate fibonacci numbers",
-    model="codellama"
-):
-    if 'response' in chunk:
-        print(chunk['response'], end='', flush=True)
-    elif chunk.get('done', False):
-        print(f"\
-\
-Tokens used: {chunk.get('total_tokens', 0)}")
-```
-
-### Output Processing Pipeline
-```python
-from codomyrmex.llm.ollama import OutputManager, OllamaManager
-
-# Generate output
 manager = OllamaManager()
-raw_result = manager.run_model("llama2", "Generate JSON data about programming languages")
+runner = ModelRunner(manager)
 
-# Process output
-processor = OutputManager()
-processed = processor.process_output(raw_result, format_type="json")
+def on_chunk(chunk):
+    print(chunk.content, end='', flush=True)
 
-# Validate output
-validation = processor.validate_output(processed, schema=my_json_schema)
-
-if validation['valid']:
-    # Export to file
-    processor.export_output(processed, format="json", destination="output.json")
+result = runner.run_streaming(
+    "llama3.1:latest",
+    "Write a haiku about programming",
+    chunk_callback=on_chunk
+)
 ```
 
 ### Configuration Management
+
 ```python
 from codomyrmex.llm.ollama import ConfigManager
 
-# Load configuration
 config_mgr = ConfigManager()
-config = config_mgr.load_config("ollama_config.yaml")
+config_mgr.load_config()
 
-# Validate and apply
-validated = config_mgr.validate_config(config)
+# Update settings
+config_mgr.update_config(
+    default_model="llama3.1:latest",
+    auto_start_server=False
+)
 
-# Save updated configuration
-config_mgr.save_config(validated, "ollama_config.yaml")
+# Get execution presets
+presets = config_mgr.get_execution_presets()
+creative_options = presets["creative"]  # Temperature 0.9, max_tokens 1024
+
+config_mgr.save_config()
 ```
 
 ## Security Considerations
 
 - **Local Execution**: All processing occurs locally, ensuring data privacy
-- **Network Security**: Secure communication with Ollama server
+- **Network Security**: Communication with Ollama server on localhost only by default
 - **Input Validation**: All inputs are validated before processing
-- **Output Sanitization**: Generated content is sanitized for safe consumption
+- **Output Sanitization**: Generated content is handled as untrusted data
 - **Access Control**: Model access is controlled through configuration
-- **Audit Logging**: All operations are logged for compliance
+- **Audit Logging**: All operations are logged through Codomyrmex logging system
 
 ## Performance Characteristics
 
 - **Local Processing**: No external API calls, low latency
-- **Resource Management**: Configurable resource limits and monitoring
-- **Model Caching**: Efficient model loading and caching
-- **Streaming Support**: Real-time response streaming
-- **Concurrent Execution**: Support for multiple simultaneous model runs
-- **Memory Optimization**: Intelligent model unloading and memory management
-
+- **Resource Management**: Configurable timeouts and memory management
+- **Model Caching**: Ollama provides efficient model loading and caching
+- **Streaming Support**: Real-time response streaming via `run_streaming`
+- **Concurrent Execution**: Support for batch processing with `run_batch`
+- **Async Support**: Full async API for non-blocking operations
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
+- **Parent**: [llm README](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- **Home**: [Root README](../../../../README.md)

@@ -1,30 +1,27 @@
-# deployment - Technical Documentation
+# Codomyrmex Agents — src/codomyrmex/deployment
 
-## Operating Contract
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-- Encapsulate deployment logic in strategy-specific classes.
-- Provide a unified `DeploymentManager` for orchestration.
-- Use structured events/logging for all deployment stages.
-- Ensure all actions are reversible (rollback support).
+## Purpose
+Contains components for the src system.
 
-## Directory Structure
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `gitops/` – Directory containing gitops components
+- `health_checks/` – Directory containing health_checks components
+- `manager/` – Directory containing manager components
+- `rollback/` – Directory containing rollback components
+- `strategies/` – Directory containing strategies components
 
-- `__init__.py`: Module entry point and exports.
-- `manager.py`: Core `DeploymentManager` implementation.
-- `strategies.py`: Implementation of Canary, Blue-Green, and Rolling strategies.
-- `gitops.py`: Git-based state synchronization logic.
-- `verifiers.py`: Deployment health check utilities.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Deployment Workflow
-
-1. **Plan**: Define target version and strategy.
-2. **Pre-flight**: Run verification checks on the new version.
-3. **Execute**: Perform the rollout according to the strategy.
-4. **Post-flight**: Monitor health and adjust traffic (e.g., in Canary).
-5. **Finalize**: Shift 100% traffic or rollback if unhealthy.
-
-## Testing Strategy
-
-- Unit tests for strategy logic (percentage calculations, slot swapping).
-- Mocked environment state for end-to-end flow verification.
-- Simulation of failure scenarios to test rollback triggers.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

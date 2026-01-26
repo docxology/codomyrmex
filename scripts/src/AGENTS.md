@@ -6,7 +6,9 @@
 Automation and utility scripts.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `codomyrmex.llm/` – Directory containing codomyrmex.llm components
 
 ## Operating Contracts

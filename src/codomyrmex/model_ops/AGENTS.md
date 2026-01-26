@@ -1,29 +1,27 @@
-# model_ops - Technical Documentation
+# Codomyrmex Agents — src/codomyrmex/model_ops
 
-## Operating Contract
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-- Use provider-agnostic interfaces for model operations where possible.
-- Mantain strict versioning for both datasets and models.
-- Track all experiments and evaluations with detailed metrics.
-- Ensure data privacy by validating datasets before upload.
+## Purpose
+Contains components for the src system.
 
-## Directory Structure
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `datasets/` – Directory containing datasets components
+- `evaluation/` – Directory containing evaluation components
+- `fine_tuning/` – Directory containing fine_tuning components
+- `training/` – Directory containing training components
 
-- `__init__.py`: Module entry point and exports.
-- `fine_tuning.py`: Logic for fine-tuning jobs (OpenAI, Anthropic, etc.).
-- `evaluation.py`: Framework for model benchmarking and evaluation.
-- `datasets.py`: Datasets utility for preparation and versioning.
-- `registry.py`: Simple model metadata registry.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Workflow
-
-1. **Prepare**: Clean and format raw data into `Dataset` objects.
-2. **Tune**: Execute a `FineTuningJob` and wait for completion.
-3. **Evaluate**: Run `Evaluation` suites against the resulting model.
-4. **Register**: Add the model to the `Registry` with its eval scores.
-
-## Testing Strategy
-
-- Unit tests for dataset validation logic.
-- Mocked API calls for fine-tuning orchestration.
-- Verification of evaluation metric calculations.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

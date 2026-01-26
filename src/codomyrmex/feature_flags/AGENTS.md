@@ -1,28 +1,28 @@
-# feature_flags - Technical Documentation
+# Codomyrmex Agents — src/codomyrmex/feature_flags
 
-## Operating Contract
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-- Always provide a safe default value if a flag evaluation fails.
-- Minimize latency in flag evaluations by using local caching.
-- Ensure all flags are documented with their purpose and owner.
-- Periodically audit and remove deprecated flags to prevent 'toggle debt'.
+## Purpose
+Contains components for the src system.
 
-## Directory Structure
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `core/` – Directory containing core components
+- `evaluation/` – Directory containing evaluation components
+- `rollout/` – Directory containing rollout components
+- `storage/` – Directory containing storage components
+- `strategies/` – Directory containing strategies components
 
-- `__init__.py`: Module entry point and exports.
-- `manager.py`: Core `FeatureManager` implementation.
-- `strategies.py`: Flag evaluation strategies (Static, Percentage, Targeting).
-- `providers.py`: Connectors for external flag management services.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Flag Evaluation Flow
-
-1. **Request**: `manager.is_enabled(flag_key, context)`.
-2. **Lookup**: Retrieve flag definition from the configured provider/cache.
-3. **Evaluate**: Pass context and definition to the sequence of `Strategy` objects.
-4. **Resolution**: Return the first definitive True/False, or the default value.
-
-## Testing Strategy
-
-- Unit tests for each evaluation strategy.
-- Mocking of external flag providers.
-- Verification of default value behavior when flags are missing.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

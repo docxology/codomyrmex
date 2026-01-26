@@ -6,7 +6,9 @@
 Automation and utility scripts.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

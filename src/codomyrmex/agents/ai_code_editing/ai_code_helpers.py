@@ -80,6 +80,17 @@ except ImportError:
     genai = None
     types = None
 
+# Optional Ollama integration
+try:
+    from codomyrmex.llm.ollama import OllamaManager, ModelRunner
+    from codomyrmex.llm.ollama.model_runner import ExecutionOptions
+    OLLAMA_AVAILABLE = True
+except ImportError:
+    OllamaManager = None
+    ModelRunner = None
+    ExecutionOptions = None
+    OLLAMA_AVAILABLE = False
+
 # Optional environment setup
 try:
     from environment_setup.env_checker import check_and_setup_env_vars
@@ -311,6 +322,7 @@ DEFAULT_LLM_MODEL = {
     "openai": "gpt-3.5-turbo",
     "anthropic": "claude-instant-1",
     "google": "gemini-flash-latest",
+    "ollama": "llama3.1:latest",
 }
 
 # Retry configuration for API calls
@@ -385,9 +397,21 @@ def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any
         except Exception as e:
             raise RuntimeError(f"Failed to initialize Google Gemini client: {e}")
 
+    elif provider == "ollama":
+        if not OLLAMA_AVAILABLE:
+            raise ImportError(
+                "Ollama integration not available. Install with: pip install codomyrmex[ollama]"
+            )
+        try:
+            manager = OllamaManager(auto_start_server=True)
+            model = model_name or DEFAULT_LLM_MODEL["ollama"]
+            return manager, model
+        except Exception as e:
+            raise RuntimeError(f"Failed to initialize Ollama client: {e}")
+
     else:
         raise ValueError(
-            f"Unsupported LLM provider: {provider}. Supported providers: openai, anthropic, google"
+            f"Unsupported LLM provider: {provider}. Supported providers: openai, anthropic, google, ollama"
         )
 
 
@@ -490,6 +514,23 @@ def generate_code_snippet(
             )
             generated_code = response.text
             tokens_used = response.usage_metadata.total_token_count if hasattr(response, "usage_metadata") else None
+
+        elif provider == "ollama":
+            # Use Ollama integration
+            options = {
+                "temperature": temperature,
+            }
+            if max_length:
+                options["max_tokens"] = max_length
+            
+            result = client.run_model(
+                model_name=model,
+                prompt=full_prompt,
+                options=options,
+                save_output=False
+            )
+            generated_code = result.response
+            tokens_used = result.tokens_used
 
         else:
             raise ValueError(f"Unsupported provider: {provider}")
@@ -613,6 +654,16 @@ def refactor_code_snippet(
             refactored_code = response.text
             tokens_used = response.usage_metadata.total_token_count if hasattr(response, "usage_metadata") else None
 
+        elif provider == "ollama":
+            # Use Ollama integration
+            result = client.run_model(
+                model_name=model,
+                prompt=prompt,
+                save_output=False
+            )
+            refactored_code = result.response
+            tokens_used = result.tokens_used
+
         else:
             raise ValueError(f"Unsupported provider: {provider}")
 
@@ -727,6 +778,16 @@ def analyze_code_quality(
             response = model_instance.generate_content(prompt)
             analysis = response.text
             tokens_used = None
+
+        elif provider == "ollama":
+            # Use Ollama integration
+            result = client.run_model(
+                model_name=model,
+                prompt=prompt,
+                save_output=False
+            )
+            analysis = result.response
+            tokens_used = result.tokens_used
 
         else:
             raise ValueError(f"Unsupported provider: {provider}")
@@ -950,6 +1011,16 @@ Please analyze:
             comparison = response.text
             tokens_used = None
 
+        elif provider == "ollama":
+            # Use Ollama integration
+            result = client.run_model(
+                model_name=model,
+                prompt=prompt,
+                save_output=False
+            )
+            comparison = result.response
+            tokens_used = result.tokens_used
+
         else:
             raise ValueError(f"Unsupported provider: {provider}")
 
@@ -1062,6 +1133,16 @@ def generate_code_documentation(
             documentation = response.text
             tokens_used = None
 
+        elif provider == "ollama":
+            # Use Ollama integration
+            result = client.run_model(
+                model_name=model,
+                prompt=prompt,
+                save_output=False
+            )
+            documentation = result.response
+            tokens_used = result.tokens_used
+
         else:
             raise ValueError(f"Unsupported provider: {provider}")
 
@@ -1103,7 +1184,10 @@ def get_supported_languages() -> list[CodeLanguage]:
 
 def get_supported_providers() -> list[str]:
     """Get list of supported LLM providers."""
-    return ["openai", "anthropic", "google"]
+    providers = ["openai", "anthropic", "google"]
+    if OLLAMA_AVAILABLE:
+        providers.append("ollama")
+    return providers
 
 
 def get_available_models(provider: str) -> list[str]:
@@ -1112,6 +1196,7 @@ def get_available_models(provider: str) -> list[str]:
         "openai": ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo"],
         "anthropic": ["claude-instant-1", "claude-2", "claude-3-sonnet"],
         "google": ["gemini-pro", "gemini-pro-vision"],
+        "ollama": ["llama3.1:latest", "llama3.1:8b", "codellama:latest", "gemma2:2b", "mistral:latest"],
     }
     return models.get(provider.lower(), [])
 

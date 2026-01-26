@@ -1,37 +1,18 @@
-# Telemetry
+# telemetry
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `telemetry` module provides core functionality for Telemetry.
 
-## Architecture
+Automation and utility scripts.
 
-```mermaid
-graph TD
-    telemetry --> Utils[codomyrmex.utils]
-    telemetry --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph telemetry
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.telemetry import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `examples/` – Subdirectory
+- `orchestrate.py` – File
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

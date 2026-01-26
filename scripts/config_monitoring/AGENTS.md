@@ -6,7 +6,9 @@
 Automation and utility scripts.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `snapshots/` – Directory containing snapshots components
 
 ## Operating Contracts

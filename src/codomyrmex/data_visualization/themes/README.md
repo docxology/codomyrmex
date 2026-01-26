@@ -1,37 +1,37 @@
-# Themes Submodule
+# Themes
 
-Color themes and styling for data visualizations.
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `themes` module provides core functionality for Themes.
 
-Provides consistent theming across all chart types with pre-defined and customizable color schemes.
+## Architecture
 
-## Available Themes
+```mermaid
+graph TD
+    themes --> Utils[codomyrmex.utils]
+    themes --> Logs[codomyrmex.logging_monitoring]
 
-- `default` - Standard professional theme
-- `dark` - Dark mode with vibrant accents
-- `light` - Light theme with subdued colors
+    subgraph themes
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.data_visualization.themes import apply_theme, get_color_palette
+from codomyrmex.themes import ...
 
-theme = apply_theme("dark")
-palette = get_color_palette("dark")
+# Example usage
+# result = process(...)
 ```
 
-## Custom Themes
-
-Themes follow the structure:
-
-```python
-{
-    "background": "#color",
-    "foreground": "#color",
-    "primary": "#color",
-    "secondary": "#color",
-    "accent": "#color",
-    "palette": ["#c1", "#c2", ...]
-}
-```
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

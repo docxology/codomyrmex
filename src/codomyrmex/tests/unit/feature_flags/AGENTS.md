@@ -1,12 +1,21 @@
-# Codomyrmex Agents - Feature Flags
+# Codomyrmex Agents — src/codomyrmex/tests/unit/feature_flags
 
-**Scope**: `feature_flags` directory.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-## Operating Rules
-1.  **Modularity**: Do not import from sibling modules unless necessary.
-2.  **Testing**: Create unit tests in `src/codomyrmex/tests/unit/feature_flags/`.
-3.  **Documentation**: Keep `README.md` updated with new features.
+## Purpose
+Test files and validation suites.
 
-## Task Queue
-- [ ] Review implementation for edge cases.
-- [ ] Add type hints to all public methods.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `test_feature_flags.py` – Project file
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+## Navigation Links
+- **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../../README.md - Main project documentation

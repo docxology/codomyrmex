@@ -1,33 +1,26 @@
-# Codomyrmex Agents — telemetry
+# Codomyrmex Agents — src/codomyrmex/telemetry
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-The `telemetry` module enables agents to observe the execution flow of complex tasks. It provides the infrastructure to record spans, propagate context, and export performance data for analysis.
+Contains components for the src system.
 
 ## Active Components
-
-- `trace_context.py` – Manages the active span and trace ID lifecycle.
-- `otlp_exporter.py` – Handles the transmission of telemetry data to external collectors.
-- `span_processor.py` – Allows for real-time transformation of span data.
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `context/` – Directory containing context components
+- `exporters/` – Directory containing exporters components
+- `metrics/` – Directory containing metrics components
+- `spans/` – Directory containing spans components
 
 ## Operating Contracts
-
-1. **Trace Consistency**: Ensure Trace IDs are preserved across module boundaries.
-2. **Context Integrity**: Never silence or drop spans unless explicitly configured for performance.
-3. **Provider Agnostic**: Use OTLP standard interfaces to remain compatible with various backends (Jaeger, Honeycomb, Datadog).
-
-## Core Interfaces
-
-- `TraceContext`: Global or local management of trace state.
-- `traced`: Decorator for automatic function instrumentation.
-- `link_span`: Tool for manual context bridging.
-- `Span`: Represents a single unit of work with attributes and timing.
-- `OTLPExporter`: Interface for OTLP-compliant data export.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
-- **🏠 Project Root**: ../../../README.md
-- **📦 Module README**: ./README.md
-- **📜 Functional Spec**: ./SPEC.md
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

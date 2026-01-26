@@ -7,7 +7,9 @@
 Example implementations and demonstrations.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
+- `SPEC.md` – File
 - `advanced_workflow.py` – File
 - `agent_diagnostics.py` – File
 - `basic_usage.py` – File

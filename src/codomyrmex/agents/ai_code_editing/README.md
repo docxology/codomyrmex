@@ -10,6 +10,7 @@ Contains components for the src system.
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
 - `PROMPT_ENGINEERING.md` – File
 - `README.md` – File
 - `SECURITY.md` – File

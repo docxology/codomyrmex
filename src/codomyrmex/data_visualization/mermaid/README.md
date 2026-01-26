@@ -1,15 +1,37 @@
-# Mermaid Submodule
+# Mermaid
 
-Mermaid diagram generation for documentation and visualization.
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `mermaid` module provides core functionality for Mermaid.
 
-Generates Mermaid-compatible diagram markup for flowcharts, sequence diagrams, and more.
+## Architecture
+
+```mermaid
+graph TD
+    mermaid --> Utils[codomyrmex.utils]
+    mermaid --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph mermaid
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.data_visualization.mermaid import MermaidGenerator
-gen = MermaidGenerator()
-diagram = gen.create_flowchart(nodes, edges)
+from codomyrmex.mermaid import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

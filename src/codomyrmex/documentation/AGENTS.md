@@ -9,6 +9,7 @@ Documentation files and guides.
 - `API_SPECIFICATION.md` – Project file
 - `CHANGELOG.md` – Project file
 - `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SECURITY.md` – Project file
 - `SPEC.md` – Project file

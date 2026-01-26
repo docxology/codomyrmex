@@ -1,13 +1,37 @@
-# Trace Context
+# Context
 
-Trace context propagation
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `context` module provides core functionality for Context.
 
-This submodule provides trace context functionality.
+## Architecture
+
+```mermaid
+graph TD
+    context --> Utils[codomyrmex.utils]
+    context --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph context
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.telemetry.context import ...
+from codomyrmex.context import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

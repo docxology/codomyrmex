@@ -6,7 +6,9 @@
 Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `test_git_advanced.py` – Project file
 
 ## Operating Contracts

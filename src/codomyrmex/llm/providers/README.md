@@ -1,13 +1,37 @@
-# Llm Providers
+# Providers
 
-Provider abstractions for OpenAI, Anthropic, Google
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `providers` module provides core functionality for Providers.
 
-This submodule provides llm providers functionality.
+## Architecture
+
+```mermaid
+graph TD
+    providers --> Utils[codomyrmex.utils]
+    providers --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph providers
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.llm.providers import ...
+from codomyrmex.providers import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

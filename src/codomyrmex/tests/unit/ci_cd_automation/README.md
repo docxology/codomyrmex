@@ -1,37 +1,22 @@
-# Ci Cd Automation
+# ci_cd_automation
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `ci_cd_automation` module provides core functionality for Ci Cd Automation.
 
-## Architecture
+Test files and validation suites.
 
-```mermaid
-graph TD
-    ci_cd_automation --> Utils[codomyrmex.utils]
-    ci_cd_automation --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph ci_cd_automation
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.ci_cd_automation import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `optimization_data/` – Subdirectory
+- `pipeline_metrics/` – Subdirectory
+- `pipeline_reports/` – Subdirectory
+- `rollback_history/` – Subdirectory
+- `rollback_plans/` – Subdirectory
+- `test_ci_cd_automation.py` – File
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [unit](../README.md)
+- **Project Root**: ../../../../../README.md

@@ -6,6 +6,7 @@
 Coding standards and automation rules.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `cross-module/` – Directory containing cross-module components

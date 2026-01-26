@@ -1,12 +1,23 @@
-# Security - Agent Instructions
+# Codomyrmex Agents — src/codomyrmex/containerization/security
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
+Contains components for the src system.
 
-Container security and optimization.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `performance_optimizer.py` – Project file
+- `security_scanner.py` – Project file
 
-## Capabilities
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Vulnerability scanning
-- CVE detection
-- Resource optimization
-- Security policy enforcement
+## Navigation Links
+- **📁 Parent Directory**: [containerization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

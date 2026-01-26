@@ -6,6 +6,7 @@
 Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
@@ -19,11 +20,13 @@ Test files and validation suites.
 - `test_cli_configurations.py` – Project file
 - `test_cli_orchestration.py` – Project file
 - `test_configuration.py` – Project file
+- `test_core_agents.py` – Project file
 - `test_error_handling.py` – Project file
 - `test_git_agent.py` – Project file
 - `test_integrations.py` – Project file
 - `test_jules_integration.py` – Project file
 - `test_modularity.py` – Project file
+- `test_ollama_agents_integration.py` – Project file
 - `test_opencode_integration.py` – Project file
 - `test_orchestration.py` – Project file
 - `test_orchestration_advanced.py` – Project file

@@ -6,6 +6,7 @@
 Configuration templates and examples.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `api/` – Directory containing api components
@@ -19,44 +20,9 @@ Configuration templates and examples.
 - `workflows/` – Directory containing workflows components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Template Structure**: Configurations organized by domain (llm, database, cache, etc.)
-2. **Environment Variables**: Sensitive values use environment variable substitution
-3. **Examples**: Working examples in examples/ subdirectory
-4. **Validation**: Configurations validate against schemas
-
-## Signposting
-
-### Document Hierarchy
-
-- **Self**: [AGENTS.md](AGENTS.md)
-- **Parent**: [../AGENTS.md](../AGENTS.md) - Project root agent coordination
-- **Project Root**: [../README.md](../README.md)
-
-### Sibling Directories
-
-| Directory | AGENTS.md | Purpose |
-| :--- | :--- | :--- |
-| src/ | [../src/AGENTS.md](../src/AGENTS.md) | Source code |
-| docs/ | [../docs/AGENTS.md](../docs/AGENTS.md) | Documentation |
-| scripts/ | [../scripts/AGENTS.md](../scripts/AGENTS.md) | Automation scripts |
-
-### Child Directories
-
-| Directory | Purpose |
-| :--- | :--- |
-| llm/ | LLM provider configuration |
-| database/ | Database connections and pools |
-| cache/ | Cache backend configuration |
-| security/ | Authentication and API keys |
-| api/ | API configuration |
-| monitoring/ | Monitoring settings |
-| workflows/ | CI/CD workflow configs |
-| templates/ | Configuration templates |
-| examples/ | Working configuration examples |
-
-### Related Documentation
-
-- [README.md](README.md) - Configuration overview
-- [SPEC.md](SPEC.md) - Functional specification
-- [examples/](examples/) - Example configurations
+## Navigation Links
+- **🏠 Project Root**: ../README.md - Main project documentation

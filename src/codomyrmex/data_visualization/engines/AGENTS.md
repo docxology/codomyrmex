@@ -1,18 +1,24 @@
-# Engines Submodule - Agent Instructions
+# Codomyrmex Agents — src/codomyrmex/data_visualization/engines
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
+Contains components for the src system.
 
-Core plotting engines providing the foundation for all visualizations.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `advanced_plotter.py` – Project file
+- `plot_utils.py` – Project file
+- `plotter.py` – Project file
 
-## Key Files
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- `plotter.py` - Base Plotter class with core functionality
-- `advanced_plotter.py` - Multi-axis and complex layouts
-- `plot_utils.py` - Utilities for configuration and export
-
-## Agent Guidelines
-
-- Use Plotter for simple single-axis plots
-- Use AdvancedPlotter for multi-panel or complex layouts
-- Always call configure_plot() before rendering
-- Use save_figure() for consistent export behavior
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

@@ -1,34 +1,26 @@
-# tree_sitter - Technical Documentation
+# Codomyrmex Agents — src/codomyrmex/tree_sitter
 
-## Operating Contract
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-- Use `tree-sitter` for all parsing operations.
-- Maintain a registry of supported languages and their compiled libraries.
-- Ensure thread-safety for parser instances where possible.
-- Provide clear error messages for grammar loading failures.
+## Purpose
+Contains components for the src system.
 
-## Directory Structure
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `languages/` – Directory containing languages components
+- `parsers/` – Directory containing parsers components
+- `queries/` – Directory containing queries components
+- `transformers/` – Directory containing transformers components
 
-- `__init__.py`: Module entry point and exports.
-- `parser.py`: Core `TreeSitterParser` implementation.
-- `languages.py`: Language grammar management and loading logic.
-- `utils.py`: AST traversal and utility functions.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Implementation Details
-
-### Parser Lifecycle
-
-1. Request a language grammar from `LanguageManager`.
-2. Initialize `tree_sitter.Parser`.
-3. Set the parser's language.
-4. Execute `parser.parse(source_code)`.
-
-### Grammar Compilation
-
-If a pre-compiled library is not found, the module should provide instructions or a helper to clone the grammar repository and build it using `Language.build_library`.
-
-## Testing Strategy
-
-- Unit tests for parser initialization.
-- Mocked grammar loading to verify parser calls.
-- Integration tests with real grammars (if available in the environment).
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

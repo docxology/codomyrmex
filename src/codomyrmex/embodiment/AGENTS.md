@@ -1,29 +1,26 @@
-# embodiment - Technical Documentation
+# Codomyrmex Agents — src/codomyrmex/embodiment
 
-## Operating Contract
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-- Use asynchronous messaging for all robot communications.
-- Validate all motion commands against safety constraints before execution.
-- Maintain a history of sensor data for temporal reasoning.
-- Provide a clean abstraction over specific ROS2 message types.
+## Purpose
+Contains components for the src system.
 
-## Directory Structure
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `actuators/` – Directory containing actuators components
+- `ros/` – Directory containing ros components
+- `sensors/` – Directory containing sensors components
+- `transformation/` – Directory containing transformation components
 
-- `__init__.py`: Module entry point and exports.
-- `ros_bridge.py`: Core ROS2 communication logic.
-- `sensors.py`: Sensor data wrappers (Camera, Lidar, etc.).
-- `actuators.py`: Motion control and action dispatching.
-- `safety.py`: Safety monitoring and collision avoidance logic.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Communication Pattern
-
-1. **Discovery**: Identify available ROS2 topics and services.
-2. **Subscription**: Attach callbacks to relevant sensor streams.
-3. **Processing**: Transform raw sensor data into high-level features.
-4. **Command**: Dispatch control messages back to the robot.
-
-## Testing Strategy
-
-- Unit tests for data transformation logic (e.g., coordinate system shifts).
-- Mocked ROS2 environment to verify publish/subscribe cycles.
-- Simulation-based integration tests for safety constraint enforcement.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

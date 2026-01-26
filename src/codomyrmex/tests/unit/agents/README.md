@@ -7,6 +7,7 @@
 Test files and validation suites.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
@@ -20,11 +21,13 @@ Test files and validation suites.
 - `test_cli_configurations.py` – File
 - `test_cli_orchestration.py` – File
 - `test_configuration.py` – File
+- `test_core_agents.py` – File
 - `test_error_handling.py` – File
 - `test_git_agent.py` – File
 - `test_integrations.py` – File
 - `test_jules_integration.py` – File
 - `test_modularity.py` – File
+- `test_ollama_agents_integration.py` – File
 - `test_opencode_integration.py` – File
 - `test_orchestration.py` – File
 - `test_orchestration_advanced.py` – File

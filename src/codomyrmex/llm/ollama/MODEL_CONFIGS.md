@@ -10,7 +10,7 @@ This document provides model-specific configuration examples and recommendations
 ### Basic Configuration
 
 ```python
-from codomyrmex.llm.ollama import ExecutionOptions
+from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
 options = ExecutionOptions(
     temperature=0.7,
@@ -25,30 +25,35 @@ options = ExecutionOptions(
 ### Presets
 
 #### Fast Mode
+
 - Temperature: 0.1
 - Top P: 0.5
 - Max Tokens: 512
 - Use for: Quick responses, simple tasks
 
 #### Creative Mode
+
 - Temperature: 0.9
 - Top P: 0.95
 - Max Tokens: 2048
 - Use for: Creative writing, brainstorming
 
 #### Balanced Mode (Default)
+
 - Temperature: 0.7
 - Top P: 0.9
 - Max Tokens: 1024
 - Use for: General purpose tasks
 
 #### Precise Mode
+
 - Temperature: 0.3
 - Top P: 0.7
 - Max Tokens: 2048
 - Use for: Code generation, technical tasks
 
 #### Long Form Mode
+
 - Temperature: 0.7
 - Top P: 0.9
 - Max Tokens: 4096
@@ -57,6 +62,7 @@ options = ExecutionOptions(
 ### Use Case Configurations
 
 #### Code Generation
+
 ```python
 options = ExecutionOptions(
     temperature=0.2,
@@ -67,6 +73,7 @@ options = ExecutionOptions(
 ```
 
 #### Creative Writing
+
 ```python
 options = ExecutionOptions(
     temperature=0.9,
@@ -77,6 +84,7 @@ options = ExecutionOptions(
 ```
 
 #### Analysis (JSON Output)
+
 ```python
 options = ExecutionOptions(
     temperature=0.5,
@@ -87,6 +95,7 @@ options = ExecutionOptions(
 ```
 
 #### Conversation
+
 ```python
 options = ExecutionOptions(
     temperature=0.7,
@@ -129,11 +138,9 @@ config_manager.save_model_config("rnj-1:8b", config)
 
 All configurations are tested with real Ollama API calls (no mocks). See `scripts/llm/ollama/test_all_parameters_rnj.py` for comprehensive parameter testing.
 
-
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
-

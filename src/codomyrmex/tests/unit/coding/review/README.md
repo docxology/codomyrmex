@@ -1,37 +1,22 @@
-# Review
+# review
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `review` module provides core functionality for Review.
 
-## Architecture
+Test files and validation suites.
 
-```mermaid
-graph TD
-    review --> Utils[codomyrmex.utils]
-    review --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph review
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.review import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `e2e/` – Subdirectory
+- `fixtures/` – Subdirectory
+- `integration/` – Subdirectory
+- `performance/` – Subdirectory
+- `test_code_review.py` – File
+- `unit/` – Subdirectory
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [coding](../README.md)
+- **Project Root**: ../../../../../../README.md

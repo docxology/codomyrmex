@@ -12,6 +12,7 @@ Contains components for the src system.
 - `COMPREHENSIVE_API_DOCUMENTATION.md` – File
 - `DEVELOPER_GUIDE.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
+- `PAI.md` – File
 - `README.md` – File
 - `SECURITY.md` – File
 - `SPEC.md` – File

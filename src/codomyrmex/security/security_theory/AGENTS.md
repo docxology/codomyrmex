@@ -6,6 +6,7 @@
 Contains components for the src system.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file

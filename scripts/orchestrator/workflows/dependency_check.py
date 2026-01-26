@@ -137,8 +137,11 @@ async def verify_requirements_files(_task_results: dict = None) -> Dict[str, Any
     return results
 
 
-async def generate_dependency_report(task_results: dict) -> Dict[str, Any]:
+async def generate_dependency_report(task_results: dict = None, _task_results: dict = None) -> Dict[str, Any]:
     """Generate comprehensive dependency report."""
+    # Handle both parameter naming conventions
+    results = task_results or _task_results or {}
+    
     report = {
         "timestamp": __import__("datetime").datetime.now().isoformat(),
         "summary": {},
@@ -146,10 +149,10 @@ async def generate_dependency_report(task_results: dict) -> Dict[str, Any]:
     }
 
     # Aggregate results
-    outdated = task_results.get("list_outdated", {})
-    security = task_results.get("check_security", {})
-    tree = task_results.get("check_tree", {})
-    reqs = task_results.get("verify_requirements", {})
+    outdated = results.get("list_outdated", {})
+    security = results.get("check_security", {})
+    tree = results.get("check_tree", {})
+    reqs = results.get("verify_requirements", {})
 
     # Build summary
     report["summary"]["outdated_packages"] = outdated.get("outdated_count", 0)

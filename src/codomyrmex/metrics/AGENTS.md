@@ -1,32 +1,27 @@
-# Codomyrmex Agents — metrics
+# Codomyrmex Agents — src/codomyrmex/metrics
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-The `metrics` module provides the instrumentation layer for agents to monitor system performance and health. It allows for recording high-fidelity metrics with minimal overhead.
+Contains components for the src system.
 
 ## Active Components
-
-- `metrics.py` – Core instrumentation primitives (Counter, Gauge, Histogram, Summary).
-- `aggregator.py` – Local multi-metric aggregation and snapshotting.
-- `prometheus_exporter.py` – Interface for external time-series database scraping.
-- `statsd_client.py` – High-frequency metrics transmission via UDP.
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `aggregator.py` – Project file
+- `metrics.py` – Project file
+- `prometheus_exporter.py` – Project file
+- `statsd_client.py` – Project file
 
 ## Operating Contracts
-
-1. **Performance First**: Metric collection must not block the main execution flow.
-2. **Standardization**: Use consistent label naming conventions across all modules.
-3. **Observability**: Metrics should be easily correlated with telemetry traces.
-
-## Core Interfaces
-
-- `Metrics`: Primary manager for creating and exporting metrics.
-- `MetricAggregator`: Utility for localized metric buffering.
-- `Counter / Gauge / Histogram`: Individual metric types for recording data.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
-- **🏠 Project Root**: ../../../README.md
-- **📦 Module README**: ./README.md
-- **📜 Functional Spec**: ./SPEC.md
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

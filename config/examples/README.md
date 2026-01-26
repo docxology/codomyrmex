@@ -7,6 +7,7 @@
 Example implementations and demonstrations.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `docker-compose.yml` – File

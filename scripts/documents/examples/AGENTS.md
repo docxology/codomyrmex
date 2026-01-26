@@ -6,7 +6,9 @@
 Documentation files and guides.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
 - `advanced_workflow.py` – Project file
 - `basic_usage.py` – Project file
 

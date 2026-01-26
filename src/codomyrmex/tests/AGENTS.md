@@ -7,6 +7,7 @@ Test files and validation suites.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `RUNNING_TESTS.md` – Project file
 - `SPEC.md` – Project file

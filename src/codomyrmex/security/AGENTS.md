@@ -3,23 +3,25 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-The `security` module provides the foundational infrastructure for protecting agents, data, and physical assets. It orchestrates vulnerability scanning, encryption, compliance checking, and physical access control across the Codomyrmex ecosystem.
+Contains components for the src system.
 
 ## Active Components
-
-- `digital/` – Core digital defense: vulnerability scanning, encryption, and secrets detection.
-- `physical/` – Real-world security: access control systems, asset tracking, and surveillance.
-- `cognitive/` – Human-centric security: social engineering detection and phishing analysis.
-- `theory/` – Security architecture patterns, threat modeling, and risk assessment frameworks.
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `cognitive/` – Directory containing cognitive components
+- `digital/` – Directory containing digital components
+- `physical/` – Directory containing physical components
+- `security_theory/` – Directory containing security_theory components
+- `theory/` – Directory containing theory components
 
 ## Operating Contracts
-
-1. **Uniform Validity**: All security results (`SecurityScanResult`, `VulnerabilityReport`) must provide a `.valid` property for simplified agent checking.
-2. **Context Persistence**: Use global singletons (e.g., `_GLOBAL_ACS`) via functional wrappers to maintain security state across agent interactions.
-3. **Defense in Depth**: Leverage multiple submodules to provide layered security (e.g., combining digital audit with risk assessment).
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../README.md - Main project documentation

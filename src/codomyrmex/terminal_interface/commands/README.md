@@ -1,13 +1,37 @@
-# Command Registry
+# Commands
 
-Command definitions
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `commands` module provides core functionality for Commands.
 
-This submodule provides command registry functionality.
+## Architecture
+
+```mermaid
+graph TD
+    commands --> Utils[codomyrmex.utils]
+    commands --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph commands
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.terminal_interface.commands import ...
+from codomyrmex.commands import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

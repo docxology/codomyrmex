@@ -7,6 +7,7 @@
 Configuration templates and examples.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `api/` – Subdirectory

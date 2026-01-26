@@ -1,23 +1,37 @@
-# Engines Submodule
+# Engines
 
-Core plotting engines and utilities for data visualization.
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `engines` module provides core functionality for Engines.
 
-This submodule provides the foundational plotting engines that power all chart types.
+## Architecture
+
+```mermaid
+graph TD
+    engines --> Utils[codomyrmex.utils]
+    engines --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph engines
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
 
 ## Components
-
-- `plotter.py` - Base plotter class
-- `advanced_plotter.py` - Advanced plotting with multi-axis support
-- `plot_utils.py` - Utility functions for plot configuration
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.data_visualization.engines import Plotter, configure_plot
+from codomyrmex.engines import ...
 
-plotter = Plotter()
-plotter.create_figure(figsize=(10, 6))
-configure_plot(title="My Chart", xlabel="X", ylabel="Y")
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

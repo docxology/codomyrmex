@@ -1,12 +1,29 @@
-# Codomyrmex Agents - Workflows
+# Codomyrmex Agents — scripts/orchestrator/workflows
 
-**Scope**: `workflows` directory.
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-## Operating Rules
-1.  **Modularity**: Do not import from sibling modules unless necessary.
-2.  **Testing**: Create unit tests in `src/codomyrmex/tests/unit/workflows/`.
-3.  **Documentation**: Keep `README.md` updated with new features.
+## Purpose
+Automation and utility scripts.
 
-## Task Queue
-- [ ] Review implementation for edge cases.
-- [ ] Add type hints to all public methods.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `analyze_and_report.py` – Project file
+- `build_and_validate.py` – Project file
+- `code_quality.py` – Project file
+- `dependency_check.py` – Project file
+- `deploy_preview.py` – Project file
+- `module_health.py` – Project file
+- `parallel_tests.py` – Project file
+- `quick_test.py` – Project file
+
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+## Navigation Links
+- **📁 Parent Directory**: [orchestrator](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

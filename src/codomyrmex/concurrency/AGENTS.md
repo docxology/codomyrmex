@@ -1,33 +1,26 @@
-# Codomyrmex Agents — concurrency
+# Codomyrmex Agents — src/codomyrmex/concurrency
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-The `concurrency` module enables agents to safely coordinate access to shared state and resources. It provides the mechanism for mutual exclusion and resource limiting in complex, concurrent workflows.
+Contains components for the src system.
 
 ## Active Components
-
-- `distributed_lock.py` – Provides atomic mutual exclusion.
-- `semaphore.py` – Manages shared resource quotas.
-- `redis_lock.py` – Orchestrates locking across distributed agent nodes.
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `distributed_lock.py` – Project file
+- `lock_manager.py` – Project file
+- `redis_lock.py` – Project file
+- `semaphore.py` – Project file
 
 ## Operating Contracts
-
-1. **Deadlock Prevention**: Always use timeouts when acquiring locks.
-2. **Deterministic Cleanup**: Ensure locks are released in a `finally` block or context manager.
-3. **Hierarchy Aware**: Supports hierarchical locking for nested resource trees.
-
-## Core Interfaces
-
-- `Lockable`: Abstract interface for any resource that can be locked.
-- `DistributedLock`: Interface for cross-process synchronization.
-- `LockManager`: Multi-lock orchestration interface.
-- `ReadWriteLock`: Shared/exclusive access interface.
-- `Semaphore`: Interface for counting semaphores.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
-- **🏠 Project Root**: ../../../README.md
-- **📦 Module README**: ./README.md
-- **📜 Functional Spec**: ./SPEC.md
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

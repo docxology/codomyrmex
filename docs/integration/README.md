@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `external-systems.md` – File

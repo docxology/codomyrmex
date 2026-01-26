@@ -1,30 +1,27 @@
-# evolutionary_ai - Technical Documentation
+# Codomyrmex Agents — src/codomyrmex/evolutionary_ai
 
-## Operating Contract
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
-- Encapsulate genetic state in `Genome` objects.
-- Use stateless `Operator` classes for genetic transformations.
-- Ensure diversity in populations to prevent premature convergence.
-- Support parallel fitness evaluation for large populations.
+## Purpose
+Contains components for the src system.
 
-## Directory Structure
+## Active Components
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `fitness/` – Directory containing fitness components
+- `genome/` – Directory containing genome components
+- `operators/` – Directory containing operators components
+- `population/` – Directory containing population components
+- `selection/` – Directory containing selection components
 
-- `__init__.py`: Module entry point and exports.
-- `genome.py`: `Genome` and `Gene` definitions.
-- `operators.py`: Implementation of mutation, crossover, and selection.
-- `population.py`: `Population` management and generation tracking.
-- `algorithms.py`: Higher-level evolutionary algorithm orchestrators.
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Evolutionary Loop
-
-1. **Initialize**: Create a random initial population of genomes.
-2. **Evaluate**: Calculate fitness for each genome in the population.
-3. **Select**: Choose parents based on fitness (e.g., Tournament, Roulette).
-4. **Reproduce**: Apply crossover and mutation to create offspring.
-5. **Replace**: Form the next generation and repeat.
-
-## Testing Strategy
-
-- Unit tests for genetic operators (verify mutation rates, crossover logic).
-- Convergence tests on simple optimization problems.
-- Verification of population diversity metrics.
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

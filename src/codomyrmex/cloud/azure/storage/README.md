@@ -1,13 +1,37 @@
-# Azure Storage
+# Storage
 
-Blob storage
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `storage` module provides core functionality for Storage.
 
-This submodule provides azure storage functionality.
+## Architecture
+
+```mermaid
+graph TD
+    storage --> Utils[codomyrmex.utils]
+    storage --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph storage
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.cloud.azure.storage import ...
+from codomyrmex.storage import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

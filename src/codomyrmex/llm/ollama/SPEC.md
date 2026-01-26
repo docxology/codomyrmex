@@ -1,51 +1,72 @@
 # llm/ollama - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Provides integration with local LLMs via Ollama. It enables privacy-first, offline-capable AI features.
+
+Provides integration with local LLMs via Ollama. Enables privacy-first, offline-capable AI features within the Codomyrmex ecosystem.
 
 ## Design Principles
-- **Local First**: Prioritize local execution.
-- **Fallbacks**: Graceful error handling if Ollama service is down.
+
+- **Local First**: Prioritize local execution for privacy and performance
+- **Fallbacks**: Graceful error handling if Ollama service is unavailable
+- **Modularity**: All components are independently configurable
+- **Real Methods Only**: No mocks - all API calls use real Ollama interactions
 
 ## Functional Requirements
-1.  **Inference**: Generate text using local models (e.g., Llama 3).
-2.  **Management**: Check model availability (`ollama run`).
+
+1. **Model Management**
+   - List available local models via `OllamaManager.list_models()`
+   - Download models via `OllamaManager.download_model()`
+   - Check model availability via `OllamaManager.is_model_available()`
+
+2. **Model Execution**
+   - Execute prompts via `OllamaManager.run_model()` or `ModelRunner.run_with_options()`
+   - Streaming output via `ModelRunner.run_streaming()`
+   - Batch processing via `ModelRunner.run_batch()`
+   - Multi-turn conversations via `ModelRunner.run_conversation()`
+   - Context-aware execution via `ModelRunner.run_with_context()`
+
+3. **Configuration Management**
+   - Global settings via `ConfigManager`
+   - Model-specific configurations
+   - Execution presets (fast, creative, balanced, precise, long_form)
+
+4. **Output Management**
+   - Automatic output persistence via `OutputManager`
+   - Benchmarking reports
+   - Model comparison reports
 
 ## Interface Contracts
-- `ModelRunner`: Abstraction for executing prompts.
-- `OllamaManager`: Service lifecycle management.
+
+### Primary Classes
+
+| Class | Responsibility |
+|-------|---------------|
+| `OllamaManager` | Core Ollama API interaction, server management |
+| `ModelRunner` | Advanced execution with options, streaming, batching |
+| `ConfigManager` | Configuration persistence and validation |
+| `OutputManager` | Output saving, loading, and cleanup |
+
+### Key Data Classes
+
+| Class | Purpose |
+|-------|---------|
+| `ExecutionOptions` | Modular execution parameters |
+| `OllamaModel` | Model metadata representation |
+| `ModelExecutionResult` | Execution result container |
+| `OllamaConfig` | Complete configuration settings |
+
+## Dependencies
+
+- **External**: Ollama binary installed and accessible
+- **Python**: `requests` for HTTP API, `aiohttp` for async operations
+- **Internal**: `codomyrmex.logging_monitoring` for logging
 
 ## Navigation
+
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent**: [../../SPEC.md](../../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Detailed Architecture and Implementation
-
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Parameters**: [PARAMETERS.md](PARAMETERS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)

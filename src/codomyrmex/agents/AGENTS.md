@@ -3,112 +3,37 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-The Agents module provides integration with various agentic AI frameworks for AI-powered code editing, task automation, and multi-agent orchestration. It supports Claude, Jules, Codex, Gemini, Mistral Vibe, OpenCode, and Every Code providers.
+Contains components for the src system.
 
 ## Active Components
-
-### Core Infrastructure
-
-- `core/` - Base classes, interfaces, and configuration
-  - Key Classes: `AgentInterface`, `BaseAgent`, `AgentConfig`, `AgentSession`, `SessionManager`
-  - Key Functions: `get_config()`, `set_config()`, `reset_config()`
-- `generic/` - Generic agent base classes and utilities
-  - Key Classes: `APIAgentBase`, `CLIAgentBase`, `AgentOrchestrator`
-
-### Provider Integrations
-
-- `claude/` - Claude API integration
-  - Key Classes: `ClaudeClient`
-  - Key Functions: `generate()`, `stream()`, `chat()`
-- `codex/` - OpenAI Codex integration
-  - Key Classes: `CodexClient`
-- `gemini/` - Google Gemini CLI integration
-  - Key Classes: `GeminiClient`
-- `jules/` - Jules CLI integration
-  - Key Classes: `JulesClient`
-- `mistral_vibe/` - Mistral Vibe CLI integration
-  - Key Classes: `MistralVibeClient`
-- `opencode/` - OpenCode CLI integration
-  - Key Classes: `OpenCodeClient`
-- `every_code/` - Multi-agent orchestration
-  - Key Classes: `EveryCodeClient`
-
-### Specialized Agents
-
-- `ai_code_editing/` - AI-powered code generation and editing
-  - Key Classes: `CodeEditor`
-  - Key Functions: `refactor()`, `generate()`, `review()`
-- `droid/` - Task management and agent coordination
-  - Key Classes: `DroidController`
-- `git_agent/` - Git operations agent
-  - Key Classes: `GitAgent`
-
-### Theory
-
-- `theory/` - Agent architecture theory and foundations
-  - Key Classes: `ReactiveArchitecture`, `DeliberativeArchitecture`, `HybridArchitecture`, `KnowledgeBase`
-
-## Key Classes and Functions
-
-| Class/Function | Module | Purpose |
-| :--- | :--- | :--- |
-| `AgentInterface` | core | Abstract base class for all agents |
-| `BaseAgent` | core | Concrete base with common functionality |
-| `AgentOrchestrator` | generic | Multi-agent workflow coordination |
-| `CodeEditor` | ai_code_editing | AI-powered code refactoring and generation |
-| `ClaudeClient` | claude | Anthropic Claude API client |
-| `AgentConfig` | core | Configuration management |
-| `AgentSession` | core | Session state management |
-| `SessionManager` | core | Multi-session handling |
-| `parse_json_response()` | core | Parse JSON from agent responses |
-| `parse_code_blocks()` | core | Extract code blocks from responses |
+- `AGENT_COMPARISON.md` – Project file
+- `API_SPECIFICATION.md` – Project file
+- `MCP_TOOL_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `ai_code_editing/` – Directory containing ai_code_editing components
+- `claude/` – Directory containing claude components
+- `cli/` – Directory containing cli components
+- `codex/` – Directory containing codex components
+- `core/` – Directory containing core components
+- `droid/` – Directory containing droid components
+- `every_code/` – Directory containing every_code components
+- `exceptions.py` – Project file
+- `gemini/` – Directory containing gemini components
+- `generic/` – Directory containing generic components
+- `git_agent/` – Directory containing git_agent components
+- `jules/` – Directory containing jules components
+- `mistral_vibe/` – Directory containing mistral_vibe components
+- `opencode/` – Directory containing opencode components
+- `theory/` – Directory containing theory components
 
 ## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-1. **Logging**: All agents use `logging_monitoring` for structured logging
-2. **Configuration**: Configuration managed via `AgentConfig` and environment variables
-3. **Session Management**: Long-running tasks use `AgentSession` for state preservation
-4. **Error Handling**: All agents raise `AgentError` subclasses for consistent error handling
-5. **MCP Compatibility**: Agents expose MCP-compatible tool specifications
-
-## Integration Points
-
-- **logging_monitoring** - All agents log via centralized logger
-- **llm** - LLM infrastructure for model management
-- **coding** - Safe code execution and sandboxing
-- **pattern_matching** - Pattern-based code analysis
-- **model_context_protocol** - MCP tool specifications
-
-## Signposting
-
-### Document Hierarchy
-
-- **Self**: [AGENTS.md](AGENTS.md)
-- **Parent**: [src/codomyrmex/AGENTS.md](../AGENTS.md)
-- **Project Root**: [../../../AGENTS.md](../../../AGENTS.md)
-
-### Sibling Modules
-
-| Module | AGENTS.md | Purpose |
-| :--- | :--- | :--- |
-| llm | [../llm/AGENTS.md](../llm/AGENTS.md) | LLM infrastructure |
-| coding | [../coding/AGENTS.md](../coding/AGENTS.md) | Code execution |
-| cerebrum | [../cerebrum/AGENTS.md](../cerebrum/AGENTS.md) | Reasoning engine |
-
-### Child Directories
-
-| Directory | Purpose |
-| :--- | :--- |
-| core/ | Base classes and configuration |
-| ai_code_editing/ | AI code generation |
-| claude/ | Claude API integration |
-| codex/ | OpenAI Codex integration |
-| droid/ | Task management |
-
-### Related Documentation
-
-- [README.md](README.md) - User documentation
-- [API_SPECIFICATION.md](API_SPECIFICATION.md) - API documentation
-- [AGENT_COMPARISON.md](AGENT_COMPARISON.md) - Provider comparison
-- [SPEC.md](SPEC.md) - Functional specification
+## Navigation Links
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

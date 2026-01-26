@@ -1,37 +1,21 @@
-# Utils
+# utils
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
-The `utils` module provides core functionality for Utils.
 
-## Architecture
+Automation and utility scripts.
 
-```mermaid
-graph TD
-    utils --> Utils[codomyrmex.utils]
-    utils --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph utils
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.utils import ...
-
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+- `PAI.md` – File
+- `README.md` – File
+- `SPEC.md` – File
+- `check_module_health.py` – File
+- `examples/` – Subdirectory
+- `integration_example.py` – File
+- `orchestrate.py` – File
+- `verify_structure_parity.py` – File
 
 ## Navigation
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [scripts](../README.md)
+- **Project Root**: ../../README.md

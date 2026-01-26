@@ -1,17 +1,21 @@
-# Themes - Agent Instructions
+# Codomyrmex Agents — src/codomyrmex/data_visualization/themes
+
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
+Contains components for the src system.
 
-Visual theming system for consistent chart styling.
+## Active Components
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
 
-## Usage
+## Operating Contracts
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
-- Apply themes before rendering charts
-- Use get_color_palette() for multi-series data
-- Default theme is professional/neutral
-
-## Available Themes
-
-- `default` - Business/professional
-- `dark` - Dark mode presentations
-- `light` - Light backgrounds
+## Navigation Links
+- **📁 Parent Directory**: [data_visualization](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../../README.md - Main project documentation

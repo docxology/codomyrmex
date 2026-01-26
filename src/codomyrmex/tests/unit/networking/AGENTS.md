@@ -6,9 +6,12 @@
 Test files and validation suites.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `test_networking.py` – Project file
+- `test_networking_expansion.py` – Project file
+- `test_websocket_client.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

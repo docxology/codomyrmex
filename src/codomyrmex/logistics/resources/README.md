@@ -1,13 +1,37 @@
-# Resource Allocation
+# Resources
 
-Resource management
+**Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+The `resources` module provides core functionality for Resources.
 
-This submodule provides resource allocation functionality.
+## Architecture
+
+```mermaid
+graph TD
+    resources --> Utils[codomyrmex.utils]
+    resources --> Logs[codomyrmex.logging_monitoring]
+
+    subgraph resources
+        Core[Core Logic]
+        API[Public Interface]
+    end
+```
+
+## Components
+- **Core**: Implementation logic.
+- **API**: Exposed functions and classes.
 
 ## Usage
 
 ```python
-from codomyrmex.logistics.resources import ...
+from codomyrmex.resources import ...
+
+# Example usage
+# result = process(...)
 ```
+
+## Navigation
+- **Parent**: [codomyrmex](../README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **Agents**: [AGENTS.md](AGENTS.md)

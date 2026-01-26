@@ -6,9 +6,14 @@
 Automation and utility scripts.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
 - `examples/` – Directory containing examples components
 - `orchestrate.py` – Project file
+- `run_workflow.py` – Project file
+- `workflows/` – Directory containing workflows components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

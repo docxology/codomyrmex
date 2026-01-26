@@ -11,12 +11,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 46+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 60+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 30+ independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 60+ independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -54,7 +54,7 @@ uv sync
 
 **Quick Links:**
 
-- 📚 **[Source Code](src/README.md)** - Browse all 46+ modules and implementations
+- 📚 **[Source Code](src/README.md)** - Browse all 60+ modules and implementations
 - 📖 **[Documentation Hub](docs/README.md)** - Comprehensive user and developer guides
 - 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
 - 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
@@ -777,7 +777,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **30+ modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **60+ modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 

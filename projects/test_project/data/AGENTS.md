@@ -1,40 +1,22 @@
 # Codomyrmex Agents — projects/test_project/data
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: January 2026
-
-## Signposting
-
-- **Parent**: [test_project/AGENTS.md](../AGENTS.md)
-- **Self**: [data/AGENTS.md](AGENTS.md)
-- **Key Artifacts**: `input/sample_data.json`
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-Data storage layer providing input files and processed output directories for the test_project pipeline.
+Test files and validation suites.
 
 ## Active Components
-
-| Directory/File | Purpose |
-| :--- | :--- |
-| `input/` | Source data files for analysis |
-| `input/sample_data.json` | Sample analysis data |
-| `processed/` | Intermediate and cached results |
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `input/` – Directory containing input components
+- `processed/` – Directory containing processed components
 
 ## Operating Contracts
-
-### Data Handling
-
-- Input files are read-only during analysis
-- Processed outputs may be overwritten on re-runs
-- JSON format for structured data
-- UTF-8 encoding for all text files
-
-### Cleanup
-
-- Processed directory can be cleared for fresh runs
-- Input data should remain stable
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
-- **📁 Parent**: [../AGENTS.md](../AGENTS.md)
-- **🏠 Project Root**: [../../README.md](../../README.md)
+- **📁 Parent Directory**: [test_project](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

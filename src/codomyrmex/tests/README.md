@@ -8,6 +8,7 @@ Test files and validation suites.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
+- `PAI.md` – File
 - `README.md` – File
 - `RUNNING_TESTS.md` – File
 - `SPEC.md` – File

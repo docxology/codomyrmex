@@ -6,6 +6,7 @@
 Project workspace and templates.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `test_project/` – Directory containing test_project components

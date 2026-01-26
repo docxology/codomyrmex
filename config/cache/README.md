@@ -7,6 +7,7 @@
 Configuration files and templates.
 
 ## Directory Contents
+- `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `backends.yaml` – File

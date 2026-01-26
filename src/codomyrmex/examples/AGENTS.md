@@ -7,6 +7,7 @@ Example implementations and demonstrations.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file

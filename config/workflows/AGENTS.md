@@ -6,6 +6,7 @@
 Configuration files and templates.
 
 ## Active Components
+- `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `examples/` – Directory containing examples components

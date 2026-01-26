@@ -95,11 +95,20 @@ async def run_pre_deployment_checks(_task_results: dict = None) -> Dict[str, Any
     }
 
 
-async def deploy_to_preview(task_results: dict = None, env: str = "preview", dry_run: bool = False) -> Dict[str, Any]:
+async def deploy_to_preview(task_results: dict = None, _task_results: dict = None, env: str = "preview", dry_run: bool = False) -> Dict[str, Any]:
     """Deploy to preview environment."""
-    # Get build artifacts
-    build_result = task_results.get("build", {}) if task_results else {}
-    artifacts = build_result.get("artifacts", [])
+    # Handle both naming conventions and TaskResult objects
+    results = task_results or _task_results or {}
+    
+    # Get build artifacts - handle TaskResult objects
+    build_result_obj = results.get("build")
+    if build_result_obj is not None:
+        # If it's a TaskResult, extract .value; if it's a dict, use directly
+        build_result = getattr(build_result_obj, "value", build_result_obj) or {}
+    else:
+        build_result = {}
+    
+    artifacts = build_result.get("artifacts", []) if isinstance(build_result, dict) else []
 
     if not artifacts:
         return {
@@ -138,7 +147,7 @@ async def deploy_to_preview(task_results: dict = None, env: str = "preview", dry
     }
 
 
-async def run_smoke_tests(task_results: dict = None, skip: bool = False) -> Dict[str, Any]:
+async def run_smoke_tests(task_results: dict = None, _task_results: dict = None, skip: bool = False) -> Dict[str, Any]:
     """Run smoke tests against deployed preview."""
     if skip:
         return {
@@ -147,7 +156,12 @@ async def run_smoke_tests(task_results: dict = None, skip: bool = False) -> Dict
             "message": "Smoke tests skipped"
         }
 
-    deployment = task_results.get("deploy", {}) if task_results else {}
+    # Handle both naming conventions and TaskResult objects
+    results = task_results or _task_results or {}
+    deploy_obj = results.get("deploy")
+    deployment = getattr(deploy_obj, "value", deploy_obj) if deploy_obj else {}
+    deployment = deployment or {}
+    
     if deployment.get("dry_run"):
         return {
             "success": True,
@@ -176,8 +190,19 @@ async def run_smoke_tests(task_results: dict = None, skip: bool = False) -> Dict
     }
 
 
-async def generate_deployment_report(task_results: dict) -> Dict[str, Any]:
+def _extract_result(obj) -> dict:
+    """Extract value from TaskResult or return dict directly."""
+    if obj is None:
+        return {}
+    value = getattr(obj, "value", obj)
+    return value if isinstance(value, dict) else {}
+
+
+async def generate_deployment_report(task_results: dict = None, _task_results: dict = None) -> Dict[str, Any]:
     """Generate deployment report."""
+    # Handle both naming conventions
+    results = task_results or _task_results or {}
+    
     report = {
         "timestamp": datetime.now().isoformat(),
         "status": "success",
@@ -185,7 +210,8 @@ async def generate_deployment_report(task_results: dict) -> Dict[str, Any]:
     }
 
     # Aggregate all stage results
-    for stage_name, result in task_results.items():
+    for stage_name, result_obj in results.items():
+        result = _extract_result(result_obj)
         if isinstance(result, dict):
             report["stages"][stage_name] = {
                 "success": result.get("success", False),
@@ -196,14 +222,13 @@ async def generate_deployment_report(task_results: dict) -> Dict[str, Any]:
 
     # Check for overall success
     all_success = all(
-        r.get("success", False)
-        for r in task_results.values()
-        if isinstance(r, dict)
+        _extract_result(r).get("success", False)
+        for r in results.values()
     )
     report["status"] = "success" if all_success else "failure"
 
     # Add deployment details
-    deploy_result = task_results.get("deploy", {})
+    deploy_result = _extract_result(results.get("deploy"))
     report["deployment"] = {
         "id": deploy_result.get("deployment_id", "N/A"),
         "environment": deploy_result.get("environment", "unknown"),

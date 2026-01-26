@@ -1,30 +1,27 @@
-# Codomyrmex Agents — serialization
+# Codomyrmex Agents — src/codomyrmex/serialization
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-
-The `serialization` module enables agents to persist and transmit complex data structures. It provides the mechanism for state snapshots, inter-agent message encoding, and high-performance data storage.
+Contains components for the src system.
 
 ## Active Components
-
-- `serializer.py` – Core contract for all serialization formats.
-- `binary_formats.py` – Efficient binary encoding (Msgpack, Avro, Parquet).
-- `serialization_manager.py` – Global registry for format-agnostic data handling.
+- `API_SPECIFICATION.md` – Project file
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SECURITY.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
+- `binary_formats.py` – Project file
+- `exceptions.py` – Project file
+- `serialization_manager.py` – Project file
+- `serializer.py` – Project file
 
 ## Operating Contracts
-
-1. **Format Parsimony**: Select the most efficient format for the medium (e.g., Msgpack for RPC, Parquet for large datasets, JSON for human-readable config).
-2. **Schema Resilience**: Ensure serializers handle missing or unknown fields gracefully during deserialization.
-3. **Deep Encoding**: Use `SerializationManager` to handle object graphs with circular references.
-
-## Core Interfaces
-
-- `Serializer.serialize(...)` / `Serializer.deserialize(...)`: Standard interface.
-- `SerializationManager.encode(...)` / `SerializationManager.decode(...)`: format-aware orchestration.
+- Maintain alignment between code, documentation, and configured workflows.
+- Ensure Model Context Protocol interfaces remain available for sibling agents.
+- Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-
-- **🏠 Project Root**: ../../../README.md
-- **📦 Module README**: ./README.md
-- **📜 Functional Spec**: ./SPEC.md
+- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
+- **🏠 Project Root**: ../../../README.md - Main project documentation

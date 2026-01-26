@@ -6,7 +6,7 @@
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with 60+ specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -226,6 +226,34 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `Encrypter`
 - `scrape/` - Web scraping
   - Key Classes: `Scraper`
+- `auth/` - Authentication and authorization
+  - Key Classes: `AuthManager`, `TokenHandler`
+- `cache/` - Caching infrastructure
+  - Key Classes: `CacheManager`, `CacheStrategy`
+- `collaboration/` - Team collaboration tools
+  - Key Classes: `CollaborationSession`, `SyncManager`
+- `concurrency/` - Concurrency utilities
+  - Key Classes: `AsyncExecutor`, `TaskPool`
+- `deployment/` - Deployment automation
+  - Key Classes: `DeploymentManager`, `RollbackHandler`
+- `embodiment/` - Physical embodiment interfaces
+  - Key Classes: `EmbodimentInterface`, `SensorManager`
+- `evolutionary_ai/` - Evolutionary AI algorithms
+  - Key Classes: `EvolutionaryOptimizer`, `GeneticAlgorithm`
+- `feature_flags/` - Feature flag management
+  - Key Classes: `FeatureFlagManager`, `FlagEvaluator`
+- `metrics/` - Metrics collection and reporting
+  - Key Classes: `MetricsCollector`, `MetricsReporter`
+- `model_ops/` - ML model operations
+  - Key Classes: `ModelManager`, `ModelRegistry`
+- `skills/` - Agent skills and capabilities
+  - Key Classes: `SkillRegistry`, `SkillExecutor`
+- `telemetry/` - Telemetry and observability
+  - Key Classes: `TelemetryClient`, `TraceManager`
+- `tree_sitter/` - Tree-sitter parsing utilities
+  - Key Classes: `TreeSitterParser`, `ASTNavigator`
+- `website/` - Website generation and management
+  - Key Classes: `WebsiteBuilder`, `PageGenerator`
 
 **Development Layer**:
 
