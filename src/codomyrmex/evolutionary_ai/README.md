@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Evolutionary AI module providing genetic algorithms, neural architecture search, and evolutionary optimization. Enables automated AI model optimization.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `selection/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

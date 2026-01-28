@@ -4,11 +4,13 @@
 
 ## Overview
 
-Contains components for the src system.
+LLM performance metrics collection including latency, token usage, and throughput tracking.
 
 ## Directory Contents
-No files or subdirectories.
+
+- `README.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [outputs](../README.md)
 - **Project Root**: ../../../../README.md

@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Serialization module providing unified data serialization/deserialization with support for JSON, YAML, TOML, MessagePack, and other formats. Integrates with documents and config_management modules.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `serializer.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -105,5 +106,6 @@ Documentation files and guides.
 - `verify_module_docs.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [documentation](../README.md)
 - **Project Root**: ../../../../README.md

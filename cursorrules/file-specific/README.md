@@ -4,13 +4,15 @@
 
 ## Overview
 
-Contains components for the cursorrules system.
+File-specific cursor rules for individual file type patterns and behaviors.
 
 ## Directory Contents
+
 - `README.md` – File
 - `README.md.cursorrules` – File
 - `SPEC.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [cursorrules](../README.md)
 - **Project Root**: ../../README.md

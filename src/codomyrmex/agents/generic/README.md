@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Generic agent templates and base implementations for creating custom agents.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `task_planner.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md

@@ -9,6 +9,12 @@ from pathlib import Path
 from typing import Dict, Any, List
 import textwrap
 import os
+import sys
+
+# Ensure codomyrmex is in path
+_project_root = Path(__file__).resolve().parents[2]
+if str(_project_root / "src") not in sys.path:
+    sys.path.insert(0, str(_project_root / "src"))
 
 from codomyrmex.utils import ScriptBase
 
@@ -201,5 +207,7 @@ class DocumentationFixer(ScriptBase):
 
 if __name__ == "__main__":
     import sys
-    sys.path.append(str(Path.cwd() / "src"))
+    # Ensure src is in path for imports (file-relative for any working directory)
+    project_root = Path(__file__).resolve().parent.parent.parent
+    sys.path.insert(0, str(project_root / "src"))
     DocumentationFixer().execute()

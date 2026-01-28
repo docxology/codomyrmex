@@ -7,6 +7,7 @@
 Test files and validation suites.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `core/` – Subdirectory
@@ -15,5 +16,6 @@ Test files and validation suites.
 - `utils/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [documents](../README.md)
 - **Project Root**: ../../../../../../README.md

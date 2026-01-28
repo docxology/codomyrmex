@@ -7,10 +7,12 @@
 Test files and validation suites.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `python/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [review](../README.md)
 - **Project Root**: ../../../../../../../README.md

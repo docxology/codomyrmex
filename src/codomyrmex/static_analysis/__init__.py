@@ -53,6 +53,43 @@ def analyze_codebase(*args, **kwargs):
     return analyze_project(*args, **kwargs)
 
 
+def analyze_code_quality(path: str = None, **kwargs) -> dict:
+    """
+    Analyze code quality for workflow integration.
+    
+    Args:
+        path: Path to analyze (defaults to current directory)
+        **kwargs: Additional options
+        
+    Returns:
+        Dictionary with analysis results
+    """
+    import os
+    target_path = path or os.getcwd()
+    
+    try:
+        analyzer = StaticAnalyzer()
+        result = analyzer.analyze(target_path)
+        
+        return {
+            "success": True,
+            "path": target_path,
+            "issues_count": getattr(result, 'issues_count', 0),
+            "errors": getattr(result, 'errors', []),
+            "warnings": getattr(result, 'warnings', []),
+            "summary": getattr(result, 'summary', "Analysis complete"),
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "path": target_path,
+            "error": str(e),
+            "issues_count": 0,
+            "errors": [],
+            "warnings": [],
+        }
+
+
 __all__ = [
     "PyreflyRunner",
     "PyreflyResult",
@@ -63,6 +100,7 @@ __all__ = [
     "analyze_file",
     "analyze_project",
     "analyze_codebase",  # Alias for backward compatibility
+    "analyze_code_quality",  # For workflow integration
     "get_available_tools",
     "AnalysisResult",
     "AnalysisSummary",
@@ -71,4 +109,3 @@ __all__ = [
     "SeverityLevel",
     "Language",
 ]
-

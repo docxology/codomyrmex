@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Build automation module providing multi-language builds, artifact generation, and build pipelines. Orchestrates compilation, packaging, and deployment preparation workflows.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `requirements.txt` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

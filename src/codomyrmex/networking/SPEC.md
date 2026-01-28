@@ -103,6 +103,7 @@ graph TD
 ### Client Interface
 
 ```python
+
 ### `WebSocketClient`
 
 ```python

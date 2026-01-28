@@ -9,21 +9,25 @@ Python client for the Coda.io REST API v1, providing type-safe access to all Cod
 ## Design Principles
 
 ### Type Safety
+
 - All API responses are deserialized into typed dataclass models
 - Function signatures include complete type hints
 - Editors provide autocomplete for all methods and models
 
 ### Pythonic Interface
+
 - Methods follow Python naming conventions (snake_case)
 - Optional parameters use keyword arguments with defaults
 - Lists return iterable objects with pagination support
 
 ### Error Handling
+
 - HTTP status codes mapped to typed exceptions
 - Error messages preserved from API responses
 - Easy to catch specific error types
 
 ### Minimal Dependencies
+
 - Only requires `requests` library
 - No heavy frameworks or complex dependencies
 - Works with Python 3.10+
@@ -62,6 +66,7 @@ graph TD
 ## Functional Requirements
 
 ### Authentication
+
 - Bearer token authentication via Authorization header
 - Token passed at client initialization
 - Token stored in requests.Session for all calls
@@ -114,6 +119,7 @@ List endpoints return objects with:
 ## Technical Constraints
 
 ### Rate Limits
+
 | Operation | Limit |
 |-----------|-------|
 | Reading | 100 req / 6 sec |
@@ -121,11 +127,13 @@ List endpoints return objects with:
 | Doc listing | 4 req / 6 sec |
 
 ### API Consistency
+
 - Mutations return HTTP 202 (accepted, queued)
 - Use `get_mutation_status()` to verify completion
 - Data may take seconds to propagate
 
 ### ID vs Name
+
 - IDs are stable, names can change
 - Methods accept both but IDs are recommended
 - Names are URL-encoded when used

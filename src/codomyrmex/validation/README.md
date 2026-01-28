@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Validation module providing unified input validation framework with support for JSON Schema, Pydantic models, and custom validators. Consolidates validation logic across modules.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `validator.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

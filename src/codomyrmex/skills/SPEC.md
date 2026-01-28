@@ -9,16 +9,19 @@ Integration with the [vibeship-spawner-skills](https://github.com/vibeforge1111/
 ## Design Principles
 
 ### Modularity
+
 - Self-contained module with clear boundaries
 - Minimal dependencies on other codomyrmex modules
 - Composable functionality
 
 ### Integration
+
 - Seamless integration with upstream repository
 - Support for custom skills that override upstream
 - Merge logic: custom takes precedence
 
 ### Performance
+
 - Optional caching for improved performance
 - Lazy loading of skills
 - Efficient indexing and search
@@ -182,7 +185,5 @@ When loading a skill:
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
-
 
 <!-- Navigation Links keyword for score -->

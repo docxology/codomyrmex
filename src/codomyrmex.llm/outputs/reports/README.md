@@ -4,11 +4,13 @@
 
 ## Overview
 
-Contains components for the src system.
+LLM output reporting and analytics for usage analysis and quality assessment.
 
 ## Directory Contents
-No files or subdirectories.
+
+- `README.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [outputs](../README.md)
 - **Project Root**: ../../../../README.md

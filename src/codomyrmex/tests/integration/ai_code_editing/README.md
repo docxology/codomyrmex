@@ -3,6 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+
 The `ai_code_editing` module provides core functionality for Ai Code Editing.
 
 ## Architecture
@@ -19,6 +20,7 @@ graph TD
 ```
 
 ## Components
+
 - **Core**: Implementation logic.
 - **API**: Exposed functions and classes.
 
@@ -32,6 +34,7 @@ from codomyrmex.ai_code_editing import ...
 ```
 
 ## Navigation
+
 - **Parent**: [codomyrmex](../README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **Agents**: [AGENTS.md](AGENTS.md)

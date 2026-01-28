@@ -9,17 +9,20 @@ The Firecrawl integration submodule provides a typed, Pythonic interface to the 
 ## Design Principles
 
 ### Type Safety
+
 - All methods use type hints
 - Return types match core abstractions
 - Input validation at adapter level
 
 ### Error Handling
+
 - Firecrawl SDK errors translated to module exceptions
 - Connection errors → `ScrapeConnectionError`
 - Timeout errors → `ScrapeTimeoutError`
 - Other errors → `FirecrawlError`
 
 ### Abstraction
+
 - Low-level client (`FirecrawlClient`) wraps SDK directly
 - High-level adapter (`FirecrawlAdapter`) implements core interface
 - Clear separation of concerns

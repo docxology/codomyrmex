@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Agentic framework integrations providing AI code editing, task management, and multi-provider support (Claude, Codex, Gemini, Jules, Mistral). Core layer for intelligent automation workflows.
 
 ## Directory Contents
+
 - `AGENT_COMPARISON.md` – File
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -31,5 +32,6 @@ Contains components for the src system.
 - `theory/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

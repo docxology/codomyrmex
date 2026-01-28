@@ -3,6 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+
 The `mistral_vibe` module provides core functionality for Mistral Vibe.
 
 ## Architecture
@@ -19,6 +20,7 @@ graph TD
 ```
 
 ## Components
+
 - **Core**: Implementation logic.
 - **API**: Exposed functions and classes.
 
@@ -32,6 +34,7 @@ from codomyrmex.mistral_vibe import ...
 ```
 
 ## Navigation
+
 - **Parent**: [codomyrmex](../README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **Agents**: [AGENTS.md](AGENTS.md)

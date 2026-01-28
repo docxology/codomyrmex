@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Provides code analysis through AST parsing, pattern recognition, and embedding generation for semantic search and similarity. Core capability for intelligent code understanding.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `run_codomyrmex_analysis.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

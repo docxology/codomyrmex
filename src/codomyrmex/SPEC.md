@@ -9,30 +9,35 @@ Core Python package containing 30+ specialized modules organized in a four-layer
 ## Design Principles
 
 ### Modularity
+
 - Each module is self-contained with clear boundaries
 - Minimal inter-module dependencies
 - Composable functionality across modules
 - Independent development and testing
 
 ### Internal Coherence
+
 - Layered architecture (Foundation → Core → Service → Specialized)
 - Consistent module structure across all modules
 - Unified naming conventions and patterns
 - Logical dependency flow (no circular dependencies)
 
 ### Parsimony
+
 - Essential functionality per module
 - Minimal public API surface
 - Direct implementations without unnecessary abstractions
 - Focus on core capabilities
 
 ### Functionality
+
 - Working implementations over theoretical designs
 - Forward-looking architecture
 - Current and future needs focus
 - Practical solutions
 
 ### Testing
+
 - ≥80% test coverage per module
 - Unit tests for all public functions
 - Integration tests for module interactions
@@ -40,6 +45,7 @@ Core Python package containing 30+ specialized modules organized in a four-layer
 - Performance benchmarks where applicable
 
 ### Documentation
+
 - Self-documenting code structure
 - Complete API specifications
 - Usage examples for all modules
@@ -129,6 +135,7 @@ graph TB
 ### Module Layer Descriptions
 
 #### Foundation Layer
+
 **Purpose**: Provides core infrastructure services that all other modules depend on.
 
 **Modules**:
@@ -146,6 +153,7 @@ graph TB
 - Minimal external dependencies
 
 #### Core Layer
+
 **Purpose**: Provides primary functionality for code analysis, execution, and visualization.
 
 **Modules**:
@@ -172,6 +180,7 @@ graph TB
 - Can be used independently
 
 #### Service Layer
+
 **Purpose**: Provides higher-level services that build upon core functionality.
 
 **Modules**:
@@ -193,6 +202,7 @@ graph TB
 - Higher-level abstractions
 
 #### Specialized Layer
+
 **Purpose**: Provides advanced features and specialized capabilities.
 
 **Modules**:
@@ -222,6 +232,7 @@ graph TB
 ## Module Interface Contracts
 
 ### Public API Contract
+
 All modules must provide:
 1. **Clear Public API**: Well-defined entry points with type hints
 2. **Documentation**: Complete API documentation in `AGENTS.md`
@@ -230,6 +241,7 @@ All modules must provide:
 5. **Configuration**: Support configuration via `config_management`
 
 ### Module Structure Contract
+
 Each module must contain:
 1. `__init__.py` - Module exports and public API
 2. `README.md` - User-facing documentation
@@ -239,6 +251,7 @@ Each module must contain:
 6. Implementation files with comprehensive tests
 
 ### Dependency Contract
+
 Modules must follow dependency rules:
 1. **Foundation Layer**: No Codomyrmex dependencies
 2. **Core Layer**: Foundation Layer only
@@ -246,6 +259,7 @@ Modules must follow dependency rules:
 4. **Specialized Layer**: Any layer, but minimize dependencies
 
 ### Integration Contract
+
 Modules must integrate with:
 1. **Logging**: Use `logging_monitoring.get_logger()`
 2. **Exceptions**: Use `codomyrmex.exceptions` hierarchy
@@ -255,12 +269,14 @@ Modules must integrate with:
 ## Dependency Rules
 
 ### Strict Dependency Rules
+
 1. **No Circular Dependencies**: Modules cannot create circular import chains
 2. **Layer Boundaries**: Modules can only depend on lower layers
 3. **Foundation Independence**: Foundation modules have no Codomyrmex dependencies
 4. **Explicit Dependencies**: All dependencies must be explicit in imports
 
 ### Dependency Graph
+
 ```
 Foundation Layer (no dependencies)
     ↓
@@ -272,6 +288,7 @@ Specialized Layer (may depend on any layer)
 ```
 
 ### Dependency Validation
+
 - Static analysis tools check for circular dependencies
 - Import graph validation in CI/CD
 - Dependency documentation in module `AGENTS.md`
@@ -279,6 +296,7 @@ Specialized Layer (may depend on any layer)
 ## Module Lifecycle
 
 ### Module Creation
+
 1. **Template**: Use `module_template` to generate structure
 2. **Implementation**: Implement core functionality
 3. **Tests**: Add comprehensive test suite (≥80% coverage)
@@ -287,6 +305,7 @@ Specialized Layer (may depend on any layer)
 6. **Validation**: Run dependency checks and tests
 
 ### Module Maintenance
+
 1. **Updates**: Follow semantic versioning
 2. **Testing**: Maintain test coverage
 3. **Documentation**: Keep docs synchronized with code
@@ -294,6 +313,7 @@ Specialized Layer (may depend on any layer)
 5. **Performance**: Monitor and optimize performance
 
 ### Module Deprecation
+
 1. **Notice**: Provide deprecation notice in docs
 2. **Migration**: Provide migration guide
 3. **Support**: Maintain support for deprecation period
@@ -302,6 +322,7 @@ Specialized Layer (may depend on any layer)
 ## Functional Requirements
 
 ### Module Structure Requirements
+
 Each module must provide:
 1. **Core Functionality**: Working implementation of module purpose
 2. **Public API**: Clear, well-documented public interface
@@ -312,6 +333,7 @@ Each module must provide:
 7. **Documentation**: Complete documentation (README, AGENTS, SPEC, API_SPEC)
 
 ### Package Organization Requirements
+
 - **Consistent Structure**: All modules follow same structure
 - **Clear Hierarchy**: Dependency hierarchy is well-defined
 - **Unified Exceptions**: All modules use unified exception hierarchy
@@ -319,6 +341,7 @@ Each module must provide:
 - **Integrated Logging**: All modules use centralized logging
 
 ### Quality Requirements
+
 - **Code Quality**: PEP 8 compliant, type hints, docstrings
 - **Test Coverage**: ≥80% coverage per module
 - **Documentation**: Complete and up-to-date
@@ -328,6 +351,7 @@ Each module must provide:
 ## Quality Metrics
 
 ### Code Quality Metrics
+
 - **Type Coverage**: ≥90% of public functions have type hints
 - **Documentation Coverage**: 100% of public APIs documented
 - **Linting**: Zero linting errors (pylint, flake8)
@@ -335,6 +359,7 @@ Each module must provide:
 - **Dependencies**: No circular dependencies
 
 ### Testing Metrics
+
 - **Coverage**: ≥80% test coverage per module
 - **Unit Tests**: All public functions have unit tests
 - **Integration Tests**: Module interactions have integration tests
@@ -342,6 +367,7 @@ Each module must provide:
 - **Test Quality**: Tests use real data (no mocks)
 
 ### Documentation Metrics
+
 - **Completeness**: All modules have README, AGENTS, SPEC
 - **Accuracy**: Documentation matches implementation
 - **Examples**: All modules have usage examples
@@ -349,6 +375,7 @@ Each module must provide:
 - **Currency**: Documentation updated with code changes
 
 ### Performance Metrics
+
 - **Response Time**: API calls complete within acceptable time
 - **Resource Usage**: Memory and CPU usage within limits
 - **Scalability**: Modules scale to expected workloads
@@ -357,24 +384,28 @@ Each module must provide:
 ## Module-Specific Requirements
 
 ### Foundation Layer Requirements
+
 - **Zero Dependencies**: No dependencies on other Codomyrmex modules
 - **Essential Services**: Provide core infrastructure services
 - **Stability**: High stability, minimal breaking changes
 - **Performance**: Optimized for performance and low overhead
 
 ### Core Layer Requirements
+
 - **Foundation Dependencies**: Only depend on Foundation Layer
 - **Core Functionality**: Provide essential development capabilities
 - **Independence**: Can be used independently
 - **Composability**: Can be composed with other modules
 
 ### Service Layer Requirements
+
 - **Orchestration**: Orchestrate multiple core modules
 - **Workflows**: Provide end-to-end workflows
 - **Integration**: Integrate with external services
 - **Abstraction**: Provide higher-level abstractions
 
 ### Specialized Layer Requirements
+
 - **Specialization**: Provide specialized, advanced features
 - **Flexibility**: Flexible dependency structure
 - **Optional**: May be optional dependencies
@@ -383,6 +414,7 @@ Each module must provide:
 ## Implementation Guidelines
 
 ### Module Development Process
+
 1. **Define Purpose**: Clearly define module purpose and boundaries
 2. **Design API**: Design public API with type hints
 3. **Implement Core**: Implement core functionality
@@ -392,6 +424,7 @@ Each module must provide:
 7. **Validate**: Run validation checks and tests
 
 ### Code Organization Guidelines
+
 - **Follow Structure**: Use established module structure
 - **Maintain Boundaries**: Respect layer boundaries
 - **Respect Dependencies**: Follow dependency hierarchy
@@ -399,6 +432,7 @@ Each module must provide:
 - **Document Code**: Document all public APIs
 
 ### Testing Guidelines
+
 - **Test Coverage**: Achieve ≥80% coverage
 - **Real Data**: Use real data, avoid mocks
 - **Unit Tests**: Test all public functions
@@ -406,6 +440,7 @@ Each module must provide:
 - **Performance Tests**: Benchmark critical paths
 
 ### Documentation Guidelines
+
 - **Complete**: Document all public APIs
 - **Accurate**: Keep docs synchronized with code
 - **Examples**: Provide usage examples
@@ -415,16 +450,19 @@ Each module must provide:
 ## Navigation
 
 ### Quick Links
+
 - **Human Documentation**: [README.md](README.md) - User-facing documentation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md) - Technical specifications
 - **Exception Reference**: [exceptions.py](exceptions.py) - Exception hierarchy
-- **CLI Reference**: [cli.py](cli.py) - Command-line interface
+- **CLI Reference**: `cli.py` - Command-line interface
 
 ### Parent Navigation
+
 - **Source Root**: [../README.md](../README.md) - Source code overview
 - **Source SPEC**: [../SPEC.md](../SPEC.md) - Source code specification
 
 ### Related Documentation
+
 - **Module Template**: [module_template/SPEC.md](module_template/SPEC.md) - Creating new modules
 - **Testing Guide**: [tests/SPEC.md](tests/SPEC.md) - Test infrastructure
 - **API Reference**: [api/SPEC.md](api/SPEC.md) - API infrastructure

@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""Comprehensive triple-check of all SPEC, AGENTS, and README files."""
+
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Tuple
@@ -7,25 +10,10 @@ import re
 from codomyrmex.logging_monitoring import get_logger
 
 
+logger = get_logger(__name__)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
+# Placeholder patterns (using raw strings for proper regex escaping)
 PLACEHOLDER_PATTERNS = [
     (r'\[Architecture description[^\]]*\]', 'Architecture description placeholder'),
     (r'\[Functional requirements[^\]]*\]', 'Functional requirements placeholder'),
@@ -49,21 +37,9 @@ PLACEHOLDER_PATTERNS = [
     (r'Test files and validation suites\.$', 'Generic test placeholder'),
 ]
 
+
 def find_placeholders(content: str, file_path: Path) -> List[Dict]:
-    """
-
-
-
-    #!/usr/bin/env python3
-    """Comprehensive triple-check of all SPEC, AGENTS, and README files."""
-
-
-# Placeholder patterns
-
-
-logger = get_logger(__name__)
-
-Find placeholder content in file."""
+    """Find placeholder content in file."""
     issues = []
     for pattern, description in PLACEHOLDER_PATTERNS:
         matches = re.finditer(pattern, content, re.IGNORECASE)
@@ -82,6 +58,7 @@ Find placeholder content in file."""
                 'context': context
             })
     return issues
+
 
 def verify_relative_path(link_url: str, from_file: Path, base_path: Path) -> Tuple[bool, str, Path]:
     """Verify if a relative path is correct."""
@@ -119,6 +96,7 @@ def verify_relative_path(link_url: str, from_file: Path, base_path: Path) -> Tup
         return (True, "", resolved)
     except Exception as e:
         return (False, f"Error resolving path: {e}", None)
+
 
 def check_file_completeness(content: str, file_path: Path) -> List[str]:
     """Check if file has required sections."""
@@ -159,6 +137,7 @@ def check_file_completeness(content: str, file_path: Path) -> List[str]:
         issues.append("File appears to have minimal content")
     
     return issues
+
 
 def analyze_file(file_path: Path, base_path: Path) -> Dict:
     """Comprehensively analyze a documentation file."""
@@ -219,6 +198,7 @@ def analyze_file(file_path: Path, base_path: Path) -> Dict:
             'path': str(file_path.relative_to(base_path)),
             'error': str(e)
         }
+
 
 def main():
     """Run comprehensive triple-check."""
@@ -320,6 +300,7 @@ def main():
     
     report_path.write_text(''.join(report), encoding='utf-8')
     print(f"\nDetailed report: {report_path}")
+
 
 if __name__ == "__main__":
     main()

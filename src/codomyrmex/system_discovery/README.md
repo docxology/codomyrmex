@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Introspection capabilities module. Inspects the running environment to identify capabilities, tools, and status. Essential for system awareness.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -23,5 +24,6 @@ Contains components for the src system.
 - `status_reporter.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

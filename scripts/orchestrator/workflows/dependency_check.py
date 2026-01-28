@@ -137,10 +137,22 @@ async def verify_requirements_files(_task_results: dict = None) -> Dict[str, Any
     return results
 
 
+def _extract_result(obj) -> dict:
+    """Extract value from TaskResult or return dict directly."""
+    if obj is None:
+        return {}
+    # If it's a TaskResult object, get its value attribute
+    value = getattr(obj, "value", obj)
+    # If value is still not a dict, try to get from the object itself
+    if value is None:
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
 async def generate_dependency_report(task_results: dict = None, _task_results: dict = None) -> Dict[str, Any]:
     """Generate comprehensive dependency report."""
     # Handle both parameter naming conventions
-    results = task_results or _task_results or {}
+    raw_results = task_results or _task_results or {}
     
     report = {
         "timestamp": __import__("datetime").datetime.now().isoformat(),
@@ -148,11 +160,11 @@ async def generate_dependency_report(task_results: dict = None, _task_results: d
         "recommendations": []
     }
 
-    # Aggregate results
-    outdated = results.get("list_outdated", {})
-    security = results.get("check_security", {})
-    tree = results.get("check_tree", {})
-    reqs = results.get("verify_requirements", {})
+    # Aggregate results - extract from TaskResult objects
+    outdated = _extract_result(raw_results.get("list_outdated"))
+    security = _extract_result(raw_results.get("check_security"))
+    tree = _extract_result(raw_results.get("check_tree"))
+    reqs = _extract_result(raw_results.get("verify_requirements"))
 
     # Build summary
     report["summary"]["outdated_packages"] = outdated.get("outdated_count", 0)

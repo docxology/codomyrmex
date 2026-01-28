@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `COMPLETE_API_DOCUMENTATION.md` – File
@@ -19,5 +20,6 @@ Documentation files and guides.
 - `USAGE_EXAMPLES.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [git_operations](../README.md)
 - **Project Root**: ../../../../README.md

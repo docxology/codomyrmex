@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Central intelligence coordination module. Provides cognitive architecture, reasoning capabilities, and high-level AI orchestration for the platform.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -24,5 +25,6 @@ Contains components for the src system.
 - `visualization_theme.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

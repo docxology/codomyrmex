@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Container management module providing Docker lifecycle management and Kubernetes orchestration capabilities. Enables containerized deployment workflows.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `security/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Command-line interface module providing the `codomyrmex` CLI tool. Enables terminal-based interaction with all platform capabilities.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -22,5 +23,6 @@ Contains components for the src system.
 - `utils.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

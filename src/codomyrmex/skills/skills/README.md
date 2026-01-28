@@ -4,12 +4,14 @@
 
 ## Overview
 
-Contains components for the src system.
+Core skill definitions and implementations for built-in agent capabilities.
 
 ## Directory Contents
+
 - `README.md` – File
 - `custom/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [skills](../README.md)
 - **Project Root**: ../../../../README.md

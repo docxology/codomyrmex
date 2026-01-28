@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the cursorrules system.
+Cross-module cursor rules for multi-module interactions and shared patterns.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `build_synthesis.cursorrules` – File
@@ -19,5 +20,6 @@ Contains components for the cursorrules system.
 - `template_module.cursorrules` – File
 
 ## Navigation
+
 - **Parent Directory**: [cursorrules](../README.md)
 - **Project Root**: ../../README.md

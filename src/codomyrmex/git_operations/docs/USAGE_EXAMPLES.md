@@ -387,5 +387,5 @@ For more detailed function signatures and parameters, see [COMPLETE_API_DOCUMENT
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
+- **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)

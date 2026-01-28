@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Enables dynamic extension of the platform. Handles plugin discovery, loading, validation, and lifecycle management. Provides modular extension points.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `plugin_validator.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

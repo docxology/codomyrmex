@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+CI/CD pipeline management module providing pipeline orchestration and deployment automation. Enables continuous integration and continuous delivery workflows.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `rollback_manager.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

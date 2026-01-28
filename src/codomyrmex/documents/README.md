@@ -4,9 +4,10 @@
 
 ## Overview
 
-Documentation files and guides.
+Document handling module providing document parsing, generation, and manipulation capabilities. Supports PDF, Office formats, and Markdown.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -27,5 +28,6 @@ Documentation files and guides.
 - `utils/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

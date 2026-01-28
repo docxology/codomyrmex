@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Cloud provider integration module supporting AWS, GCP, and Azure. Provides unified interface for cloud resources, storage, and compute services.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `gcp/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

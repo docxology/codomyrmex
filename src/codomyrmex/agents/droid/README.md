@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Droid agent implementation for automated code tasks with specialized handlers.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `todo_list.txt` – File
 
 ## Navigation
+
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md

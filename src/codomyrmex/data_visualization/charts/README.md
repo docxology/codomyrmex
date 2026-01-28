@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Chart generation components for bar, line, pie, and other visualization types.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `scatter_plot.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [data_visualization](../README.md)
 - **Project Root**: ../../../../README.md

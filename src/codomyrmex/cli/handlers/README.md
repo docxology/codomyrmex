@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+CLI command handlers for processing user commands and executing actions.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `system.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [cli](../README.md)
 - **Project Root**: ../../../../README.md

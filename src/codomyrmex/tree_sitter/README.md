@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+High-fidelity source code parsing across multiple programming languages. Enables advanced static analysis, code transformation, and intelligent auditing within the Codomyrmex ecosystem.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `transformers/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

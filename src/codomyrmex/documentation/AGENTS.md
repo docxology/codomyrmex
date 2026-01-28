@@ -3,9 +3,11 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Documentation files and guides.
+
+Documentation generation module providing website generation, API documentation, and tutorial creation capabilities. Automates creation and maintenance of project documentation.
 
 ## Active Components
+
 - `API_SPECIFICATION.md` – Project file
 - `CHANGELOG.md` – Project file
 - `MCP_TOOL_SPECIFICATION.md` – Project file
@@ -31,10 +33,12 @@ Documentation files and guides.
 - `static/` – Directory containing static components
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../README.md - Main project documentation

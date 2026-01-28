@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+API standardization patterns for consistent request/response formats and error handling.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `PAI.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `rest_api.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [api](../README.md)
 - **Project Root**: ../../../../README.md

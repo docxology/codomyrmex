@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Event system module providing event emission, subscription, and handling capabilities. Enables loosely-coupled component communication.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -22,5 +23,6 @@ Contains components for the src system.
 - `exceptions.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

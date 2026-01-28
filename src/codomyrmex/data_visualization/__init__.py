@@ -48,15 +48,57 @@ try:
     create_dashboard = create_advanced_dashboard
     
     HAS_ADVANCED_PLOTTER = True
+    HAS_BASIC_CHARTS = False  # Not needed when advanced plotter is available
 except ImportError:
     HAS_ADVANCED_PLOTTER = False
     AdvancedPlotter = None
-    ChartStyle = None
-    ColorPalette = None
-    PlotType = None
+    
+    # Provide stub enums so scripts can iterate over them
+    from enum import Enum
+    
+    class ChartStyle(Enum):
+        """Fallback chart style enum."""
+        DEFAULT = "default"
+        MINIMAL = "minimal"
+        MODERN = "modern"
+        CLASSIC = "classic"
+        DARK = "dark"
+    
+    class ColorPalette(Enum):
+        """Fallback color palette enum."""
+        DEFAULT = "default"
+        VIRIDIS = "viridis"
+        PLASMA = "plasma"
+        CIVIDIS = "cividis"
+        RAINBOW = "rainbow"
+    
+    class PlotType(Enum):
+        """Fallback plot type enum."""
+        LINE = "line"
+        BAR = "bar"
+        SCATTER = "scatter"
+        HISTOGRAM = "histogram"
+        PIE = "pie"
+    
     PlotConfig = None
     DataPoint = None
     Dataset = None
+    
+    # Fallback to basic chart functions from charts module
+    try:
+        from .charts.bar_chart import create_bar_chart, BarChart
+        from .charts.line_plot import create_line_plot, LinePlot
+        from .charts.scatter_plot import create_scatter_plot, ScatterPlot
+        from .charts.histogram import create_histogram, Histogram
+        from .charts.pie_chart import create_pie_chart, PieChart
+        HAS_BASIC_CHARTS = True
+    except ImportError:
+        HAS_BASIC_CHARTS = False
+        create_bar_chart = None
+        create_line_plot = None
+        create_scatter_plot = None
+        create_histogram = None
+        create_pie_chart = None
 
 try:
     from .git.git_visualizer import (
@@ -125,6 +167,20 @@ if HAS_ADVANCED_PLOTTER:
         "create_bar_chart",
         "create_histogram",
         "create_dashboard",
+    ])
+elif HAS_BASIC_CHARTS:
+    # Export basic chart functions as fallback
+    __all__.extend([
+        "create_line_plot",
+        "create_scatter_plot",
+        "create_bar_chart",
+        "create_histogram",
+        "create_pie_chart",
+        "LinePlot",
+        "ScatterPlot",
+        "BarChart",
+        "Histogram",
+        "PieChart",
     ])
 
 if HAS_GIT_VIZ:

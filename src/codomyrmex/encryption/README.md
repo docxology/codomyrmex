@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Encryption and cryptographic operations module. Provides secure key management, data encryption/decryption, and hashing capabilities.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `key_manager.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

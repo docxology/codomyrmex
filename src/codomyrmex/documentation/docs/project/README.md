@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `CONTRIBUTING_TO_DOCUMENTATION.md` – File
 - `ERROR_HANDLING_LOGGING.md` – File
 - `README.md` – File
@@ -18,5 +19,6 @@ Documentation files and guides.
 - `license.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: ../../../../../README.md

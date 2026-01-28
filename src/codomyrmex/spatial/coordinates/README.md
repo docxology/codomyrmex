@@ -3,6 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+
 The `coordinates` module provides core functionality for Coordinates.
 
 ## Architecture
@@ -19,6 +20,7 @@ graph TD
 ```
 
 ## Components
+
 - **Core**: Implementation logic.
 - **API**: Exposed functions and classes.
 
@@ -32,6 +34,7 @@ from codomyrmex.coordinates import ...
 ```
 
 ## Navigation
+
 - **Parent**: [codomyrmex](../README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **Agents**: [AGENTS.md](AGENTS.md)

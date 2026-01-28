@@ -3,6 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active
 
 ## Overview
+
 The `api` module provides core functionality for Api.
 
 ## Architecture
@@ -19,6 +20,7 @@ graph TD
 ```
 
 ## Components
+
 - **Core**: Implementation logic.
 - **API**: Exposed functions and classes.
 
@@ -32,6 +34,7 @@ from codomyrmex.api import ...
 ```
 
 ## Navigation
+
 - **Parent**: [codomyrmex](../README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **Agents**: [AGENTS.md](AGENTS.md)

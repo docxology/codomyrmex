@@ -9,26 +9,31 @@ Provide centralized script orchestration capabilities for discovering, configuri
 ## Design Principles
 
 ### Modularity
+
 - Separate concerns: discovery, configuration, execution, reporting
 - Each component is independently testable
 - Clear interfaces between components
 
 ### Internal Coherence
+
 - Consistent result structures across all operations
 - Unified logging via `logging_monitoring`
 - Standardized CLI output via `utils.cli_helpers`
 
 ### Parsimony
+
 - Dependencies: `logging_monitoring`, `utils.cli_helpers`
 - Foundation layer module with minimal external requirements
 - Focus on script execution without higher-level abstractions
 
 ### Functionality
+
 - Subprocess-based execution with timeout control
 - Configurable per-script settings via YAML
 - JSON logs and Markdown reports
 
 ### Testing
+
 - Unit tests for each component
 - Integration tests for full orchestration flow
 - Real script execution (no mocks)
@@ -67,17 +72,20 @@ graph TD
 ## Functional Requirements
 
 ### Script Discovery
+
 - Traverse directory trees with configurable max depth
 - Apply exclusion filters via `SKIP_DIRS` and `SKIP_PATTERNS`
 - Support subdirectory filtering and glob patterns
 - Return sorted list of script paths
 
 ### Configuration
+
 - Load YAML configuration files
 - Provide per-script overrides for timeout, args, env, exit codes
 - Support default fallback values
 
 ### Execution
+
 - Run scripts via `subprocess.run()` with capture
 - Set working directory and environment variables
 - Add project `src/` to `PYTHONPATH` automatically
@@ -85,6 +93,7 @@ graph TD
 - Return structured result dictionary
 
 ### Reporting
+
 - Save individual script logs as JSON
 - Generate Markdown summary reports
 - Generate script documentation from discovery

@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Provides rich CLI capabilities: colored output, progress bars, interactive prompts, and a custom shell (`codomyrmex>`). Foundation layer for all terminal-based user interactions.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `utils/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

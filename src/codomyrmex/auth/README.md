@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Authentication and authorization module providing OAuth, JWT, and API key authentication. Manages user identity and access control.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `validator.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

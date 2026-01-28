@@ -230,9 +230,9 @@ python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis \
 ## See Also
 
 - [CEREBRUM README](README.md)
-- [FPF Integration Guide](docs/fpf_integration.md)
-- [Usage Examples](USAGE_EXAMPLES.md)
-- [FPF Module](../../../scripts/fpf/README.md)
+- [FPF Integration Guide](README.md)
+- [Usage Examples](README.md)
+- [FPF Module](../../fpf/README.md)
 
 
 
@@ -240,5 +240,5 @@ python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis \
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
+- **Documentation**: [Reference Guides](../README.md)
 - **Home**: [Root README](../../../README.md)

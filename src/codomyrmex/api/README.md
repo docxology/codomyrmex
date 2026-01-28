@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+API infrastructure module providing OpenAPI/Swagger specification generation, API standardization, and documentation. Enables consistent REST API development patterns.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -22,5 +23,6 @@ Contains components for the src system.
 - `versioning/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

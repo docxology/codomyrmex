@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+System for controlling functional and operational aspects of Codomyrmex at runtime. Enables gradual releases and rapid incident response through feature toggles.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `strategies/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

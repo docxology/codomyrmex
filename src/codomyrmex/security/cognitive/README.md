@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Cognitive security patterns for AI safety and human-AI interaction protection.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `social_engineering_detector.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: ../../../../README.md

@@ -4,11 +4,13 @@
 
 ## Overview
 
-Contains components for the src system.
+LLM output integration with external systems and downstream processing pipelines.
 
 ## Directory Contents
-No files or subdirectories.
+
+- `README.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [outputs](../README.md)
 - **Project Root**: ../../../../README.md

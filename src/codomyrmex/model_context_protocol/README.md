@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Defines the standard schemas (MCP) for communication between AI agents and platform tools. It is the syntax layer of the agent system, providing standardized interfaces for LLM interactions.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -23,5 +24,6 @@ Contains components for the src system.
 - `validators/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

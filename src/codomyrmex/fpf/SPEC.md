@@ -9,16 +9,19 @@ The `fpf` module serves as a functional interface for working with the First Pri
 ## Design Principles
 
 ### Modularity
+
 - **Component Separation**: Parser, extractor, indexer, fetcher, exporter, visualizer, and context builder are independent components
 - **Clear Interfaces**: Each component has well-defined inputs and outputs
 - **Testability**: All components are independently testable
 
 ### Performance
+
 - **Incremental Parsing**: Large specifications are parsed incrementally to avoid memory issues
 - **Indexed Search**: Fast in-memory indexes for search operations
 - **Caching**: Fetched specifications are cached locally
 
 ### Usability
+
 - **High-level API**: `FPFClient` provides convenient interface for common operations
 - **CLI Integration**: Full command-line interface for all operations
 - **Multiple Export Formats**: JSON, context strings, visualizations
@@ -98,6 +101,7 @@ The `fpf` module serves as a functional interface for working with the First Pri
 ### Public API
 
 #### FPFClient
+
 ```python
 class FPFClient:
     def load_from_file(file_path: str) -> FPFSpec
@@ -109,6 +113,7 @@ class FPFClient:
 ```
 
 #### Individual Components
+
 - `FPFParser.parse_spec(content: str) -> FPFSpec`
 - `FPFExtractor.extract_concepts(spec: FPFSpec) -> list[Concept]`
 - `FPFIndexer.search_patterns(query: str, filters: dict) -> list[Pattern]`
@@ -142,6 +147,7 @@ class FPFClient:
 ## Data Models
 
 ### Pattern
+
 - `id: str` - Pattern identifier (e.g., "A.1")
 - `title: str` - Pattern title
 - `status: PatternStatus` - Status (Stable, Draft, Stub, New)
@@ -153,6 +159,7 @@ class FPFClient:
 - `part: str` - Part identifier (A, B, C, etc.)
 
 ### Concept
+
 - `name: str` - Concept name
 - `definition: str` - Definition
 - `pattern_id: str` - Defining pattern
@@ -160,6 +167,7 @@ class FPFClient:
 - `references: list[str]` - Referencing patterns
 
 ### Relationship
+
 - `source: str` - Source pattern ID
 - `target: str` - Target pattern ID
 - `type: RelationshipType` - Relationship type

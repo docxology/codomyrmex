@@ -9,31 +9,37 @@ Encryption module providing encryption/decryption utilities and key management. 
 ## Design Principles
 
 ### Modularity
+
 - Algorithm-agnostic encryption interface
 - Support for multiple encryption algorithms
 - Pluggable encryption system
 
 ### Internal Coherence
+
 - Unified encryption/decryption
 - Consistent key management patterns
 - Integration with security
 
 ### Parsimony
+
 - Essential encryption operations
 - Minimal dependencies
 - Focus on common algorithms
 
 ### Functionality
+
 - Working implementations for common algorithms
 - Support for symmetric and asymmetric encryption
 - Key derivation and management
 
 ### Testing
+
 - Unit tests for all algorithms
 - Integration tests with key management
 - Security testing
 
 ### Documentation
+
 - Complete API specifications
 - Usage examples for each algorithm
 - SECURITY.md with best practices
@@ -57,6 +63,7 @@ graph TD
 ## Functional Requirements
 
 ### Core Operations
+
 1. **Encrypt**: Encrypt data with various algorithms
 2. **Decrypt**: Decrypt data with various algorithms
 3. **Key Management**: Generate, store, and retrieve keys
@@ -64,6 +71,7 @@ graph TD
 5. **Signing**: Digital signature support
 
 ### Integration Points
+
 - `security/` - Security integration
 - `config_management/` - Secret encryption
 - `documents/` - Document encryption
@@ -71,16 +79,19 @@ graph TD
 ## Quality Standards
 
 ### Code Quality
+
 - Type hints for all functions
 - PEP 8 compliance
 - Comprehensive security handling
 
 ### Testing Standards
+
 - ≥80% coverage
 - Algorithm-specific tests
 - Security testing
 
 ### Documentation Standards
+
 - README.md, AGENTS.md, SPEC.md
 - API_SPECIFICATION.md
 - SECURITY.md
@@ -88,6 +99,7 @@ graph TD
 ## Interface Contracts
 
 ### Encryption Interface
+
 ```python
 class Encryptor:
     def encrypt(data: bytes, key: bytes) -> bytes
@@ -99,12 +111,14 @@ class Encryptor:
 ## Implementation Guidelines
 
 ### Encryption Implementation
+
 1. Implement Encryption interface for each algorithm
 2. Handle encryption/decryption errors securely
 3. Support key management
 4. Provide secure key storage
 
 ### Integration
+
 1. Integrate with security module
 2. Add encryption to config_management
 3. Support document encryption
@@ -113,7 +127,6 @@ class Encryptor:
 
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [security](../security/AGENTS.md), [config_management](../config_management/AGENTS.md)
-
 
 <!-- Navigation Links keyword for score -->
 

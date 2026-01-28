@@ -4,9 +4,11 @@
 
 ## Overview
 
-Contains components for the src system.
+LLM output management including response parsing, storage, and structured extraction.
 
 ## Directory Contents
+
+- `README.md` – File
 - `config/` – Subdirectory
 - `integration/` – Subdirectory
 - `llm_outputs/` – Subdirectory
@@ -17,5 +19,6 @@ Contains components for the src system.
 - `test_results/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex.llm](../README.md)
 - **Project Root**: ../../../README.md

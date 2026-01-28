@@ -1,0 +1,24 @@
+{
+  "deployment_id": "deploy_rolling",
+  "strategy": "rolling",
+  "steps": [
+    {
+      "name": "identify_healthy_instances",
+      "description": "Identify instances that are still healthy",
+      "timeout": 30
+    },
+    {
+      "name": "rollback_instances",
+      "description": "Rollback instances one by one",
+      "timeout": 600
+    },
+    {
+      "name": "validate_rollback",
+      "description": "Validate that rollback completed successfully",
+      "timeout": 120
+    }
+  ],
+  "created_at": "2026-01-26T11:00:40.292674",
+  "reason": "Test rollback",
+  "estimated_duration": 750
+}

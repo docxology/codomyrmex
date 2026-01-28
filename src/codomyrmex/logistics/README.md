@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Consolidates orchestration, task management, and scheduling capabilities. Coordinates workflows, jobs, and time-based execution.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `tracking/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -54,7 +54,7 @@ register_tools()
 
 - [Module README](./README.md)
 - [API Specification](./API_SPECIFICATION.md)
-- [Usage Examples](../README.md#usage-examples) (See README for examples)
+- [Usage Examples](../README.md) (See README for examples)
 
 ---
 

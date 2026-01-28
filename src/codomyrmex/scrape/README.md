@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Web data extraction engine of Codomyrmex. Provides unified interface for scraping web content, crawling websites, mapping site structures, and extracting structured data. Abstracts complexities of different scraping providers (e.g., Firecrawl) behind a consistent Pythonic interface.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `PAI.md` – File
@@ -23,5 +24,6 @@ Contains components for the src system.
 - `scraper.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

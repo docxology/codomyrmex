@@ -9,16 +9,19 @@ Command-line interface providing unified access to all Codomyrmex modules and wo
 ## Design Principles
 
 ### Modularity
+
 - Commands organized by domain (workflow, project, ai, analyze, build, fpf, skills)
 - Handler implementations in separate files for maintainability
 - Composable command structure with subparsers
 
 ### Functionality
+
 - Supports both synchronous and asynchronous operations
 - Performance monitoring integration (--performance flag)
 - Verbose output mode (--verbose flag)
 
 ### Documentation
+
 - Built-in help for all commands and subcommands
 - Usage examples in epilog
 - Clear error messages for invalid usage

@@ -4,9 +4,10 @@
 
 ## Overview
 
-Test files and validation suites.
+Comprehensive test suites following test-driven development practices with real data analysis (no mock methods). Ensures code quality and reliability.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -21,5 +22,6 @@ Test files and validation suites.
 - `unit/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

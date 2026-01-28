@@ -3,9 +3,11 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Documentation files and guides.
+
+Document handling module providing document parsing, generation, and manipulation capabilities. Supports PDF, Office formats, and Markdown.
 
 ## Active Components
+
 - `API_SPECIFICATION.md` – Project file
 - `PAI.md` – Project file
 - `README.md` – Project file
@@ -26,10 +28,12 @@ Documentation files and guides.
 - `utils/` – Directory containing utils components
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../README.md - Main project documentation

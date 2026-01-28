@@ -9,13 +9,16 @@ The `data_visualization` module provides tools to transform raw data (logs, metr
 ## Design Principles
 
 ### Modularity
+
 - **Backend Agnostic**: Visualization logic should be separate from data sources.
 - **Renderer Abstraction**: Support multiple renderers (Console, HTML, PNG).
 
 ### Internal Coherence
+
 - **Consistent Styling**: All visualizations should share a common color palette and style guide (Codomyrmex branding).
 
 ### Parsimony
+
 - **Simple API**: `plot(data, type='bar')` style ease of use.
 
 ## Architecture
@@ -33,26 +36,31 @@ graph TD
 ## Functional Requirements
 
 ### Core Capabilities
-1.  **Rich Terminal Output**: Tables, progress bars, syntax highlighting (wrapping `rich`).
-2.  **Charting**: Line charts, bar graphs, scatter plots.
-3.  **Report Generation**: Embed charts into Markdown or HTML reports.
+
+1. **Rich Terminal Output**: Tables, progress bars, syntax highlighting (wrapping `rich`).
+2. **Charting**: Line charts, bar graphs, scatter plots.
+3. **Report Generation**: Embed charts into Markdown or HTML reports.
 
 ### Quality Standards
+
 - **Responsiveness**: Terminal output must respect terminal width.
 - **Accessibility**: Colors should be distinguishable.
 
 ## Interface Contracts
 
 ### Public API
+
 - `render_table(data: List[Dict], title: str) -> None`
 - `render_chart(data: Any, type: str) -> Path`: Returns path to generated image/file.
 
 ### Dependencies
+
 - **External**: `rich`, `matplotlib` (optional), `plotly` (optional).
 
 ## Implementation Guidelines
 
 ### Usage Patterns
+
 - Use `rich` for all real-time CLI feedback.
 - Use `matplotlib`/`plotly` for static artifacts generated for artifacts/reports.
 

@@ -9,14 +9,15 @@ The `pattern_matching` module provides code analysis through AST parsing, patter
 ## Design Principles
 
 ### Functionality
+
 - **Multi-Step Pipeline**: Parse -> Recognize -> Embed -> Analyze.
 - **Configurable Patterns**: Rules for patterns (e.g., code smells) are defined externally.
 
 ## Functional Requirements
 
-1.  **AST Parsing**: Convert source code to a syntax tree.
-2.  **Symbol Extraction**: Identify functions, classes, imports.
-3.  **Embedding**: Generate vector representations for semantic tasks.
+1. **AST Parsing**: Convert source code to a syntax tree.
+2. **Symbol Extraction**: Identify functions, classes, imports.
+3. **Embedding**: Generate vector representations for semantic tasks.
 
 ## Interface Contracts
 
@@ -24,6 +25,7 @@ The `pattern_matching` module provides code analysis through AST parsing, patter
 - Output: JSON files with structured analysis.
 
 ## Navigation
+
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 
@@ -36,10 +38,12 @@ The `pattern_matching` module provides code analysis through AST parsing, patter
 The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
 
 ### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
 
 ### Technical Implementation
+
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.

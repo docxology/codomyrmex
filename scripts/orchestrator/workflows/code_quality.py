@@ -28,7 +28,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-async def run_ruff_lint(task_results: dict = None, fix: bool = False) -> Dict[str, Any]:
+def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> Dict[str, Any]:
     """Run ruff linting."""
     cmd = ["uv", "run", "ruff", "check", "src/"]
     if fix:
@@ -63,7 +63,7 @@ async def run_ruff_lint(task_results: dict = None, fix: bool = False) -> Dict[st
     }
 
 
-async def run_mypy_check(task_results: dict = None, strict: bool = False) -> Dict[str, Any]:
+def run_mypy_check(_task_results: dict = None, strict: bool = False) -> Dict[str, Any]:
     """Run mypy type checking."""
     cmd = ["uv", "run", "mypy", "src/codomyrmex", "--ignore-missing-imports"]
     if strict:
@@ -90,7 +90,7 @@ async def run_mypy_check(task_results: dict = None, strict: bool = False) -> Dic
     }
 
 
-async def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
+def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
     """Check code complexity using radon."""
     # Try radon for complexity analysis
     result = subprocess.run(
@@ -134,7 +134,7 @@ async def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-async def run_security_scan(_task_results: dict = None) -> Dict[str, Any]:
+def run_security_scan(_task_results: dict = None) -> Dict[str, Any]:
     """Run security analysis using bandit."""
     result = subprocess.run(
         ["uv", "run", "bandit", "-r", "src/codomyrmex", "-f", "json", "-q"],
@@ -175,7 +175,7 @@ async def run_security_scan(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-async def run_docstring_coverage(_task_results: dict = None) -> Dict[str, Any]:
+def run_docstring_coverage(_task_results: dict = None) -> Dict[str, Any]:
     """Check docstring coverage using interrogate."""
     result = subprocess.run(
         ["uv", "run", "interrogate", "src/codomyrmex", "-v", "--fail-under=0"],
@@ -207,9 +207,11 @@ async def run_docstring_coverage(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-async def generate_quality_report(task_results: dict) -> Dict[str, Any]:
+def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
     """Generate comprehensive quality report."""
     import datetime
+    
+    _task_results = _task_results or {}
 
     report = {
         "timestamp": datetime.datetime.now().isoformat(),
@@ -220,11 +222,11 @@ async def generate_quality_report(task_results: dict) -> Dict[str, Any]:
     }
 
     # Process each check result
-    lint_result = task_results.get("lint", {})
-    type_result = task_results.get("typecheck", {})
-    complexity_result = task_results.get("complexity", {})
-    security_result = task_results.get("security", {})
-    docstring_result = task_results.get("docstrings", {})
+    lint_result = _task_results.get("lint", {})
+    type_result = _task_results.get("typecheck", {})
+    complexity_result = _task_results.get("complexity", {})
+    security_result = _task_results.get("security", {})
+    docstring_result = _task_results.get("docstrings", {})
 
     # Lint check
     report["checks"]["lint"] = {
@@ -343,16 +345,12 @@ async def main():
     # Add all quality checks (can run in parallel)
     workflow.add_task(
         name="lint",
-        action=lambda _tr=None: asyncio.get_event_loop().run_in_executor(
-            None, lambda: asyncio.run(run_ruff_lint(fix=args.fix))
-        ),
+        action=lambda _tr=None: run_ruff_lint(fix=args.fix),
         timeout=120
     )
     workflow.add_task(
         name="typecheck",
-        action=lambda _tr=None: asyncio.get_event_loop().run_in_executor(
-            None, lambda: asyncio.run(run_mypy_check(strict=args.strict))
-        ),
+        action=lambda _tr=None: run_mypy_check(strict=args.strict),
         timeout=180
     )
     workflow.add_task(

@@ -7,8 +7,10 @@
 Test files and validation suites.
 
 ## Directory Contents
-No files or subdirectories.
+
+- `README.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [config_management](../README.md)
 - **Project Root**: ../../../../../../README.md

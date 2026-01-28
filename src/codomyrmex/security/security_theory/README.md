@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Advanced security theory research and formal methods for security verification.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `threat_modeling.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: ../../../../README.md

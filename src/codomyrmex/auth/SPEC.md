@@ -9,31 +9,37 @@ Authentication and authorization module providing API key management, OAuth inte
 ## Design Principles
 
 ### Modularity
+
 - Provider-agnostic auth interface
 - Support for multiple auth methods
 - Pluggable auth system
 
 ### Internal Coherence
+
 - Unified auth token handling
 - Consistent permission patterns
 - Integration with security
 
 ### Parsimony
+
 - Essential auth operations
 - Minimal dependencies
 - Focus on common auth patterns
 
 ### Functionality
+
 - Working implementations for common auth methods
 - Support for OAuth 2.0
 - API key management
 
 ### Testing
+
 - Unit tests for all auth methods
 - Integration tests with auth providers
 - Security testing
 
 ### Documentation
+
 - Complete API specifications
 - Usage examples for each auth method
 - Security best practices
@@ -57,6 +63,7 @@ graph TD
 ## Functional Requirements
 
 ### Core Operations
+
 1. **Authentication**: Verify user credentials
 2. **Authorization**: Check user permissions
 3. **Token Management**: Issue, validate, and revoke tokens
@@ -64,6 +71,7 @@ graph TD
 5. **OAuth**: OAuth 2.0 flow support
 
 ### Integration Points
+
 - `security/` - Security integration
 - `api/` - API authentication
 - `config_management/` - Secret management
@@ -71,16 +79,19 @@ graph TD
 ## Quality Standards
 
 ### Code Quality
+
 - Type hints for all functions
 - PEP 8 compliance
 - Comprehensive security handling
 
 ### Testing Standards
+
 - ≥80% coverage
 - Auth method-specific tests
 - Security testing
 
 ### Documentation Standards
+
 - README.md, AGENTS.md, SPEC.md
 - API_SPECIFICATION.md
 - SECURITY.md
@@ -88,6 +99,7 @@ graph TD
 ## Interface Contracts
 
 ### Auth Interface
+
 ```python
 class Authenticator:
     def authenticate(credentials: dict) -> Optional[Token]
@@ -98,12 +110,14 @@ class Authenticator:
 ## Implementation Guidelines
 
 ### Auth Implementation
+
 1. Implement Auth interface for each method
 2. Handle token generation and validation
 3. Support permission checking
 4. Provide secure credential storage
 
 ### Integration
+
 1. Integrate with security module
 2. Add auth to API endpoints
 3. Support secret management
@@ -112,7 +126,6 @@ class Authenticator:
 
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [security](../security/AGENTS.md), [api](../api/AGENTS.md)
-
 
 <!-- Navigation Links keyword for score -->
 

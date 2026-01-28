@@ -74,10 +74,18 @@ class TelemetryScript(ScriptBase):
             return results
 
         # Import telemetry module (requires opentelemetry)
-        from codomyrmex.telemetry import (
-            TraceContext, start_span, get_current_span, traced,
-            SimpleSpanProcessor, BatchSpanProcessor, OTLPExporter
-        )
+        try:
+            from codomyrmex.telemetry import (
+                TraceContext, start_span, get_current_span, traced,
+                SimpleSpanProcessor, BatchSpanProcessor, OTLPExporter
+            )
+        except ImportError as e:
+            self.log_info(f"Telemetry dependencies not available: {e}")
+            self.log_info("OpenTelemetry package required for full telemetry support.")
+            self.log_info("Install with: pip install opentelemetry-api opentelemetry-sdk")
+            results["skipped"] = True
+            results["reason"] = str(e)
+            return results
 
         # Test 1: TraceContext initialization
         self.log_info(f"\n1. Initializing TraceContext for '{args.service_name}'")

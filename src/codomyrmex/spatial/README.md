@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Spatial module providing 3D/4D visualization, modeling, and world model capabilities for the Codomyrmex platform. Consolidates all spatial computing functionality.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `world_models/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Three-dimensional geometry and mesh processing for 3D visualization and modeling.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `requirements.txt` – File
 
 ## Navigation
+
 - **Parent Directory**: [spatial](../README.md)
 - **Project Root**: ../../../../README.md

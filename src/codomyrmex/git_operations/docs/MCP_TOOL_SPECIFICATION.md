@@ -13,7 +13,7 @@ For now, this specification is N/A (Not Applicable).
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
+- **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../../README.md)
 
 ## Detailed Architecture and Implementation

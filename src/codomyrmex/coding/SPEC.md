@@ -11,21 +11,25 @@ This module is critical for the "Verification" phase of the AI coding loop, allo
 ## Design Principles
 
 ### Modularity
+
 - **Submodule Separation**: Clear separation between execution, sandboxing, review, and monitoring concerns
 - **Isolation Providers**: Abstract the sandbox mechanism (Docker, gVisor, or simple `venv` for trusted mode)
 - **Execution Interface**: Standard API (`execute_code()`) regardless of backend
 - **Review Interface**: Unified review API with multiple analysis backends
 
 ### Internal Coherence
+
 - **Result Standardization**: All executions return a standard `ExecutionResult` (stdout, stderr, exit_code, duration, status)
 - **Review Standardization**: All reviews return standardized `AnalysisResult` objects
 - **Consistent Error Handling**: Unified error types and handling across submodules
 
 ### Parsimony
+
 - **Dependencies**: Should rely on `containerization` module for heavy lifting if using Docker
 - **Shared Infrastructure**: Common logging and monitoring infrastructure
 
 ### Functionality
+
 - **Timeouts**: Derived from configuration with sensible defaults
 - **Resource Limits**: Prevent fork bombs or memory exhaustion
 - **Quality Gates**: Configurable thresholds for code quality enforcement
@@ -67,6 +71,7 @@ graph TD
 ## Functional Requirements
 
 ### Execution & Sandboxing
+
 1. **Run Multiple Languages**: Execute code in Python, JavaScript, Java, C/C++, Go, Rust, Bash
 2. **File Access**: Mount specific directories as read-only or read-write
 3. **Network Control**: Block or allow network access (default block)
@@ -74,23 +79,27 @@ graph TD
 5. **Session Management**: Support persistent execution environments
 
 ### Code Review
+
 1. **Analysis**: Run configured checks on files and projects
 2. **Reporting**: Aggregate findings into structured reports
 3. **Quality Gates**: Enforce quality thresholds
 4. **Multiple Analysis Types**: Quality, security, performance, maintainability, complexity, style, documentation
 
 ### Monitoring
+
 1. **Resource Tracking**: Monitor CPU, memory, execution time
 2. **Execution Monitoring**: Track execution status and completion
 3. **Metrics Collection**: Aggregate metrics for analysis
 
 ### Autonomous Debugging
+
 1. **Error Analysis**: Parse execution outputs to identify error types and locations
 2. **Patch Generation**: Generate potential fixes for identified errors
 3. **Fix Verification**: Verify patches in a sandboxed environment
 4. **Closed Loop**: Orchestrate the cycle of execution -> failure -> diagnosis -> patch -> verify
 
 ### Quality Standards
+
 - **Security**: "Secure by Design". Default to least privilege
 - **Cleanup**: Ephemeral containers/envs must be destroyed after use
 - **Actionable Feedback**: Review feedback must identify location (line number) and suggestion
@@ -120,6 +129,7 @@ graph TD
 - `FixVerifier` - Verify patches in sandbox
 
 ### Dependencies
+
 - **Modules**: `containerization`, `logging_monitoring`
 - **System**: Docker (optional but recommended for sandboxing)
 - **Tools**: pyscn (for advanced code analysis)
@@ -127,6 +137,7 @@ graph TD
 ## Implementation Guidelines
 
 ### Usage Patterns
+
 - Always check Docker availability before executing code
 - Use resource limits for all executions
 - Validate inputs before processing
@@ -138,6 +149,5 @@ graph TD
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
-
 
 <!-- Navigation Links keyword for score -->

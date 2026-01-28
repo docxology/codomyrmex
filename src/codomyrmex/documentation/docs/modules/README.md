@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `ai_code_editing/` – Subdirectory
@@ -22,5 +23,6 @@ Documentation files and guides.
 - `template/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: ../../../../../README.md

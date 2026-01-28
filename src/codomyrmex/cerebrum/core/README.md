@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Core cerebrum infrastructure for advanced reasoning and cognitive processing.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `utils.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [cerebrum](../README.md)
 - **Project Root**: ../../../../README.md

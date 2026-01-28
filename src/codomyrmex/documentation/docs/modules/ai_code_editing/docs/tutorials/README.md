@@ -7,11 +7,13 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `generate_code_snippet_tutorial.md` – File
 - `refactor_code_snippet_tutorial.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: ../../../../../../../../README.md

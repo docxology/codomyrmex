@@ -83,6 +83,77 @@ def create_line_plot(
     logger.info(f"Line plot '{title}' generated successfully.")
     return fig  # Return the figure object for potential further manipulation
 
+
+class LinePlot:
+    """
+    Line plot class wrapper for object-oriented usage.
+    
+    Provides a class-based interface around the create_line_plot function.
+    """
+    
+    def __init__(
+        self,
+        x_data: list = None,
+        y_data: list = None,
+        title: str = "Line Plot",
+        x_label: str = "X-axis",
+        y_label: str = "Y-axis",
+        line_labels: list = None,
+        markers: bool = False,
+        figure_size: tuple = None
+    ):
+        """
+        Initialize a line plot.
+        
+        Args:
+            x_data: X-axis data points
+            y_data: Y-axis data points (can be list of lists for multiple lines)
+            title: Chart title
+            x_label: X-axis label
+            y_label: Y-axis label
+            line_labels: Labels for multiple lines
+            markers: Whether to show markers on data points
+            figure_size: Figure dimensions (width, height)
+        """
+        self.x_data = x_data or []
+        self.y_data = y_data or []
+        self.title = title
+        self.x_label = x_label
+        self.y_label = y_label
+        self.line_labels = line_labels
+        self.markers = markers
+        self.figure_size = figure_size or DEFAULT_FIGURE_SIZE
+    
+    def render(self, output_path: str = None, show_plot: bool = False):
+        """
+        Render the line plot.
+        
+        Args:
+            output_path: Optional path to save the chart
+            show_plot: Whether to display the plot interactively
+        """
+        return create_line_plot(
+            x_data=self.x_data,
+            y_data=self.y_data,
+            title=self.title,
+            x_label=self.x_label,
+            y_label=self.y_label,
+            output_path=output_path,
+            show_plot=show_plot,
+            line_labels=self.line_labels,
+            markers=self.markers,
+            figure_size=self.figure_size
+        )
+    
+    def save(self, output_path: str):
+        """Save the chart to a file."""
+        self.render(output_path=output_path, show_plot=False)
+    
+    def show(self):
+        """Display the chart interactively."""
+        self.render(show_plot=True)
+
+
 if __name__ == "__main__":
     # This section is for direct testing of line_plot.py
     # Assumes plot_utils.py is in the same directory or Python path is set correctly.

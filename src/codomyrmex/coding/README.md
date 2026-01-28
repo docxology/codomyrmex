@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Provides code execution sandbox, automated code review, and programming language interaction capabilities. Enables safe code execution and comprehensive review workflows.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MIGRATION_COMPLETE.md` – File
 - `PAI.md` – File
@@ -26,5 +27,6 @@ Contains components for the src system.
 - `testing/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

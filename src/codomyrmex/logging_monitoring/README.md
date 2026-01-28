@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Foundation module providing centralized logging infrastructure for the Codomyrmex platform. Implements unified logging system with consistent formatting, configurable output destinations, and proper log level management.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -23,5 +24,6 @@ Contains components for the src system.
 - `rotation.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

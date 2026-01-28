@@ -3,9 +3,11 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Contains components for the src system.
+
+Ollama-specific LLM integration providing local model support, model management, and efficient inference for self-hosted deployments.
 
 ## Active Components
+
 - `API_SPECIFICATION.md` – Project file
 - `MODEL_CONFIGS.md` – Project file
 - `PAI.md` – Project file
@@ -21,10 +23,12 @@ Contains components for the src system.
 - `output_manager.py` – Project file
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [llm](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../README.md - Main project documentation

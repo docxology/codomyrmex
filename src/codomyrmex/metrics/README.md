@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Metrics module providing metrics collection, aggregation, and Prometheus integration. Integrates with performance and logging_monitoring modules for observability.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `statsd_client.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

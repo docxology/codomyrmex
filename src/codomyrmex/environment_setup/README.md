@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Foundation module providing environment validation and dependency checking for the Codomyrmex platform. Manages API key validation, dependency verification, and automated setup workflows.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `scripts/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

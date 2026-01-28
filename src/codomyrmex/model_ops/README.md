@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Structured and scalable framework for LLM operations. Enables reproducible model optimization and rigorous performance verification.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -15,9 +16,11 @@ Contains components for the src system.
 - `__init__.py` – File
 - `datasets/` – Subdirectory
 - `evaluation/` – Subdirectory
+- `evaluators.py` – File
 - `fine_tuning/` – Subdirectory
 - `training/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

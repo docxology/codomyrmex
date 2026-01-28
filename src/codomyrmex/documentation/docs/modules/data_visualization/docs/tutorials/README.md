@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `generating_a_bar_chart_tutorial.md` – File
@@ -17,5 +18,6 @@ Documentation files and guides.
 - `mcp_heatmap_tutorial.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: ../../../../../../../../README.md

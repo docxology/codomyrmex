@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Project template definitions for standardized project initialization and scaffolding.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `ai_analysis.json` – File
@@ -15,5 +16,6 @@ Contains components for the src system.
 - `web_application.json` – File
 
 ## Navigation
+
 - **Parent Directory**: [project](../README.md)
 - **Project Root**: ../../../../../../README.md

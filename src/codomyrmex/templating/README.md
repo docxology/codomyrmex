@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Templating module providing template engine support (Jinja2, Mako) for code generation, documentation templates, and dynamic content. Consolidates template-related functionality.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `loaders/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

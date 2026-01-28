@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Utility scripts for project analysis and maintenance, including dependency checking, consolidation, and project health tools.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -22,5 +23,6 @@ Contains components for the src system.
 - `validate_dependencies.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Bridges the gap between digital codebase and physical world sensors/actuators. Manages SensorIntegration and SimulationEngine components.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -21,5 +22,6 @@ Contains components for the src system.
 - `simulation_engine.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

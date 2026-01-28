@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Provides automated code quality assessment without execution. Orchestrates parsers and analyzers to detect syntax errors, security vulnerabilities, and complexity issues.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -22,5 +23,6 @@ Contains components for the src system.
 - `static_analyzer.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

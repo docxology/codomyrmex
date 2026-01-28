@@ -50,7 +50,7 @@ result = function_name(param1="value")
 ## Related Documentation
 
 - [Module README](./README.md)
-- [Usage Examples](../README.md#usage-examples) (See README for examples)
+- [Usage Examples](../README.md) (See README for examples)
 - [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md) (if applicable)
 
 ---

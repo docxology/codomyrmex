@@ -4,9 +4,10 @@
 
 ## Overview
 
-Documentation files and guides.
+Documentation generation module providing website generation, API documentation, and tutorial creation capabilities. Automates creation and maintenance of project documentation.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -32,5 +33,6 @@ Documentation files and guides.
 - `static/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

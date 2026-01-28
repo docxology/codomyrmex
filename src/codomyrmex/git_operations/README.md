@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Provides programmatic Python interface for Git interactions. Abstracts raw subprocess calls into typed, error-handling functions for initializing, managing, and synchronizing repositories. Foundation for automated code modification and version control.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -23,5 +24,6 @@ Contains components for the src system.
 - `tools/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

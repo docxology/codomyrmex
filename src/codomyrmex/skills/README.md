@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Integration with vibeship-spawner-skills repository. Provides access to 462+ specialized skills organized across 35 categories. Enables skill management, syncing, and custom skills.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -25,5 +26,6 @@ Contains components for the src system.
 - `testing/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

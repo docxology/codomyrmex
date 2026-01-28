@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""Comprehensive placeholder content check and fix."""
+
 from pathlib import Path
 from typing import List, Dict
 import os
@@ -6,25 +9,10 @@ import re
 from codomyrmex.logging_monitoring import get_logger
 
 
+logger = get_logger(__name__)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
+# Enhanced placeholder patterns (using raw strings for proper regex escaping)
 PLACEHOLDER_PATTERNS = [
     (r'\[Architecture description if applicable\]', 'Architecture description placeholder'),
     (r'\[Functional requirements for', 'Functional requirements placeholder'),
@@ -40,21 +28,9 @@ PLACEHOLDER_PATTERNS = [
     (r'Test files and validation suites\.', 'Generic test placeholder'),
 ]
 
+
 def find_placeholders(content: str, file_path: Path) -> List[Dict]:
-    """
-
-
-
-    #!/usr/bin/env python3
-    """Comprehensive placeholder content check and fix."""
-
-
-# Enhanced placeholder patterns
-
-
-logger = get_logger(__name__)
-
-Find placeholder content in file."""
+    """Find placeholder content in file."""
     issues = []
     for pattern, description in PLACEHOLDER_PATTERNS:
         matches = re.finditer(pattern, content, re.IGNORECASE)
@@ -72,6 +48,7 @@ Find placeholder content in file."""
                 'context': context
             })
     return issues
+
 
 def fix_generic_placeholders(content: str, file_path: Path) -> str:
     """Fix generic placeholder descriptions."""
@@ -102,6 +79,7 @@ def fix_generic_placeholders(content: str, file_path: Path) -> str:
         content = content.replace('Test files and validation suites.', replacement)
     
     return content
+
 
 def main():
     """Run comprehensive placeholder check."""
@@ -149,6 +127,7 @@ def main():
     print(f"\n=== SUMMARY ===")
     print(f"Total placeholder issues found: {total_issues}")
     print(f"Files with generic placeholders fixed: {fixed_count}")
+
 
 if __name__ == "__main__":
     main()

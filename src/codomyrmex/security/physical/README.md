@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Physical security considerations for hardware, deployment environments, and access control.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `surveillance.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [security](../README.md)
 - **Project Root**: ../../../../README.md

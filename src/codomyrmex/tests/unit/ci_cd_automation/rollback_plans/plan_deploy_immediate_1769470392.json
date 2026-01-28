@@ -1,0 +1,24 @@
+{
+  "deployment_id": "deploy_immediate",
+  "strategy": "immediate",
+  "steps": [
+    {
+      "name": "stop_services",
+      "description": "Stop all running services",
+      "timeout": 60
+    },
+    {
+      "name": "restore_backup",
+      "description": "Restore from backup",
+      "timeout": 300
+    },
+    {
+      "name": "restart_services",
+      "description": "Restart services with restored version",
+      "timeout": 120
+    }
+  ],
+  "created_at": "2026-01-26T15:33:12.327642",
+  "reason": "Test rollback",
+  "estimated_duration": 480
+}

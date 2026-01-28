@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Embodiment module providing physical/robotic system integration capabilities. Bridges digital systems with physical world through sensor/actuator interfaces.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `transformation/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

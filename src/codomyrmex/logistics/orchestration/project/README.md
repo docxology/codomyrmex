@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Project lifecycle management for multi-project orchestration and coordination.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `COMPREHENSIVE_API_DOCUMENTATION.md` – File
@@ -30,5 +31,6 @@ Contains components for the src system.
 - `workflow_manager.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [orchestration](../README.md)
 - **Project Root**: ../../../../../README.md

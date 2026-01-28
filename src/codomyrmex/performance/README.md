@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Manages resource usage, caching, and lazy loading to ensure system responsiveness. Provides profiling, benchmarking, and optimization capabilities for the Codomyrmex platform.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -22,5 +23,6 @@ Contains components for the src system.
 - `resource_tracker.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

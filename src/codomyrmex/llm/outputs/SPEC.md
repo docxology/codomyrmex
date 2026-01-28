@@ -9,18 +9,22 @@ The `outputs` directory serves as the persistence layer for `llm`. It stores tra
 ## Design Principles
 
 ### Modularity
+
 - **Separation by Type**: Outputs are categorized (raw `llm_outputs`, structured `reports`, `performance` metrics).
 
 ### Internal Coherence
+
 - **Immutable Logs**: Once written, generation logs should generally not be modified, only appended or archived.
 
 ## Functional Requirements
 
 ### Core Capabilities
-1.  **Persistence**: Save generation results to disk.
-2.  **Organization**: Timestamped or ID-based filenames to prevent collisions.
+
+1. **Persistence**: Save generation results to disk.
+2. **Organization**: Timestamped or ID-based filenames to prevent collisions.
 
 ## Navigation
+
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 

@@ -20,7 +20,23 @@ except ImportError:
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 
-from codomyrmex.agents import AgentOrchestrator, AgentRequest, AgentResponse, BaseAgent, AgentCapabilities
+try:
+    from codomyrmex.agents import AgentOrchestrator, AgentRequest, AgentResponse, BaseAgent, AgentCapabilities
+except ImportError as e:
+    # Handle missing optional dependencies (e.g., aiohttp)
+    def main():
+        setup_logging()
+        print_info(f"Agents module dependencies not available: {e}")
+        print_info("Install with: pip install aiohttp")
+        print_info("Skipping agents examples - success.")
+        return 0
+    
+    if __name__ == "__main__":
+        import sys
+        sys.exit(main())
+    else:
+        # Let the import error propagate if not running as main
+        raise
 
 # 1. Define a Mock Agent for demonstration (to avoid requiring real API keys in example)
 class DemoAgent(BaseAgent):

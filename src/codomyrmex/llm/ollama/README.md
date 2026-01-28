@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Ollama integration for running local LLM models with unified API access.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MODEL_CONFIGS.md` – File
 - `PAI.md` – File
@@ -22,5 +23,6 @@ Contains components for the src system.
 - `output_manager.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [llm](../README.md)
 - **Project Root**: ../../../../README.md

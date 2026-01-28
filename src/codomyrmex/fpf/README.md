@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Functional interface for First Principles Framework specification. Transforms static FPF markdown into machine-readable, queryable format for prompt/context engineering.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `FPF-Spec.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -25,5 +26,6 @@ Contains components for the src system.
 - `visualization/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

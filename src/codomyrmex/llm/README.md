@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+LLM module providing language model integration, prompt management, and output handling for the Codomyrmex platform. Supports multi-provider backends (OpenAI, Anthropic, Ollama) and streaming responses.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -25,5 +26,6 @@ Contains components for the src system.
 - `tools/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+AI code editing integration for Cursor, Continue, Copilot, and other editor agents.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -26,5 +27,6 @@ Contains components for the src system.
 - `requirements.txt` – File
 
 ## Navigation
+
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md

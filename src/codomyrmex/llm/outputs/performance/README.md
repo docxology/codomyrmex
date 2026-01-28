@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+LLM performance metrics collection including latency, token usage, and throughput tracking.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `consistency_evaluation.json` – File
@@ -17,5 +18,6 @@ Contains components for the src system.
 - `token_generation_speed.json` – File
 
 ## Navigation
+
 - **Parent Directory**: [outputs](../README.md)
 - **Project Root**: ../../../../../README.md

@@ -12,8 +12,8 @@ import logging
 from pathlib import Path
 from typing import Set, Tuple, List
 
-# Add src to path to import AntigravityClient
-sys.path.append(str(Path(__file__).resolve().parents[3] / "src"))
+# Add src to path to import AntigravityClient (scripts/utils/file.py -> parents[2] is repo root)
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
 from codomyrmex.ide.antigravity import AntigravityClient
 
@@ -99,16 +99,19 @@ def main():
     
     print(report)
     
-    # Dispatch Agent to Report
-    client = AntigravityClient()
-    if client.connect():
-        logger.info("Dispatching report to Antigravity Chat...")
-        if args.gui:
-            client.send_chat_gui(report)
+    # Dispatch Agent to Report (optional - don't fail if unavailable)
+    try:
+        client = AntigravityClient()
+        if client.connect():
+            logger.info("Dispatching report to Antigravity Chat...")
+            if args.gui:
+                client.send_chat_gui(report)
+            else:
+                client.send_chat_message(report)
         else:
-            client.send_chat_message(report)
-    else:
-        logger.warning("Could not connect to Antigravity to send report.")
+            logger.info("Antigravity not available - report printed to stdout only.")
+    except Exception as e:
+        logger.info(f"Skipping Antigravity dispatch: {e}")
 
     sys.exit(0 if success else 1)
 

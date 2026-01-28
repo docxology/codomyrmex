@@ -7,6 +7,7 @@
 Test files and validation suites.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -21,5 +22,6 @@ Test files and validation suites.
 - `test_cross_module_workflows.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [tests](../README.md)
 - **Project Root**: ../../../../README.md

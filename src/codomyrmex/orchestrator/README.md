@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Centralized script orchestration capabilities for discovering, configuring, executing, and reporting on Python scripts within the Codomyrmex project. Core automation engine.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -29,5 +30,6 @@ Contains components for the src system.
 - `workflows/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Caching module providing multi-level caching, cache invalidation, and distributed cache support. Improves performance through intelligent data caching.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -27,5 +28,6 @@ Contains components for the src system.
 - `ttl_manager.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

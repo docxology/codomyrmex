@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Database operations module providing schema management, migrations, and backup capabilities. Enables programmatic database interactions and administration.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `schema_generator.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

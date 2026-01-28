@@ -3,9 +3,11 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Contains components for the src system.
+
+Manages resource usage, caching, and lazy loading to ensure system responsiveness. Provides profiling, benchmarking, and optimization capabilities for the Codomyrmex platform.
 
 ## Active Components
+
 - `API_SPECIFICATION.md` – Project file
 - `MCP_TOOL_SPECIFICATION.md` – Project file
 - `PAI.md` – Project file
@@ -21,10 +23,12 @@ Contains components for the src system.
 - `resource_tracker.py` – Project file
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../README.md - Main project documentation

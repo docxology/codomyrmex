@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Collaboration module enabling real-time editing, chat, and workflow coordination. Facilitates team communication and shared development.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `protocols/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

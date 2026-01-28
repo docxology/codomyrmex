@@ -9,6 +9,7 @@ The `agents` module provides integration with various agentic frameworks includi
 ## Design Principles
 
 ### Modularity
+
 - **Framework Separation**: Each agentic framework is implemented as a separate submodule
   - **CLI-based**: Jules, Gemini, OpenCode, Mistral Vibe, Every Code (extend `CLIAgentBase`)
   - **API-based**: Claude, Codex (extend `APIAgentBase`)
@@ -20,6 +21,7 @@ The `agents` module provides integration with various agentic frameworks includi
 - **Extensibility**: New agentic frameworks can be added by extending appropriate base class
 
 ### Internal Coherence
+
 - **Unified Interface**: All agents follow the same request/response pattern
 - **Consistent Configuration**: Configuration management follows standard patterns with `get_config_value()` helper method
 - **Standardized Error Handling**: API agents use `_handle_api_error()` for consistent error conversion
@@ -27,16 +29,19 @@ The `agents` module provides integration with various agentic frameworks includi
 - **Standardized Integration**: Integration adapters provide consistent interfaces to Codomyrmex modules
 
 ### Parsimony
+
 - **Dependencies**: Depends on `logging_monitoring` for logging, `ai_code_editing`, `llm`, and `code` for integration
 - **Focus**: Provides agent framework integrations, not direct code execution or file management
 - **Minimal External Dependencies**: Uses standard libraries and framework-specific packages (anthropic, openai)
 
 ### Functionality
+
 - **Robustness**: Handles API failures, timeouts, and configuration errors gracefully
 - **Quality**: Provides structured responses with metadata and error information
 - **Performance**: Supports streaming and non-streaming responses
 
 ### Testing
+
 - **Unit Tests**: Test each agent framework independently with mocks
 - **Integration Tests**: Test integration with Codomyrmex modules
 - **End-to-End Tests**: Test complete agent workflows
@@ -117,6 +122,7 @@ graph TD
 ## Functional Requirements
 
 ### Core Capabilities
+
 1. **Agent Framework Integration**: Integrate with multiple agent frameworks:
    - CLI-based: Jules, Gemini, OpenCode, Mistral Vibe, Every Code
    - API-based: Claude, Codex
@@ -127,6 +133,7 @@ graph TD
 6. **Multi-Agent Orchestration**: Coordinate multiple agents for complex tasks (via Every Code and AgentOrchestrator)
 
 ### Quality Standards
+
 - **Deterministic Output Structure**: All responses follow `AgentResponse` structure
 - **Error Handling**: All operations handle errors gracefully with informative messages
 - **Configuration Validation**: Validate configuration before agent operations
@@ -135,6 +142,7 @@ graph TD
 ## Interface Contracts
 
 ### Public API
+
 - `AgentInterface`: Abstract base class for all agents
   - `execute(request: AgentRequest) -> AgentResponse`
   - `stream(request: AgentRequest) -> Iterator[str]`
@@ -153,6 +161,7 @@ graph TD
   - API-based: `ClaudeClient`, `CodexClient`
 
 ### Dependencies
+
 - `codomyrmex.logging_monitoring`: For structured logging
 - `codomyrmex.agents.ai_code_editing`: For code generation workflows
 - `codomyrmex.llm`: For LLM infrastructure
@@ -161,6 +170,7 @@ graph TD
 ## Implementation Guidelines
 
 ### Usage Patterns
+
 - Use `AgentInterface` for type hints and abstract operations
 - Use framework-specific clients for direct operations:
   - CLI-based agents: `JulesClient`, `GeminiClient`, `OpenCodeClient`, `MistralVibeClient`, `EveryCodeClient`
@@ -169,6 +179,7 @@ graph TD
 - Use `AgentOrchestrator` or `EveryCodeClient` for multi-agent workflows
 
 ### Error Handling
+
 - Catch module-specific exceptions:
   - Base: `AgentError`, `AgentTimeoutError`, `AgentConfigurationError`
   - CLI-based: `JulesError`, `GeminiError`, `OpenCodeError`, `MistralVibeError`, `EveryCodeError`
@@ -177,6 +188,7 @@ graph TD
 - Return informative error messages in `AgentResponse`
 
 ### Performance Considerations
+
 - Set appropriate timeouts for agent operations
 - Use streaming for long-running operations
 - Cache configuration and client instances where appropriate
@@ -186,6 +198,5 @@ graph TD
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
-
 
 <!-- Navigation Links keyword for score -->

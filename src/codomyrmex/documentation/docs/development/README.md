@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `DocumentationMaintenance.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -15,5 +16,6 @@ Documentation files and guides.
 - `testing_strategy.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [docs](../README.md)
 - **Project Root**: ../../../../../README.md

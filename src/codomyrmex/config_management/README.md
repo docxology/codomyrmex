@@ -4,9 +4,10 @@
 
 ## Overview
 
-Configuration files and templates.
+Configuration management module providing centralized configuration loading, environment variable handling, and settings management. Foundation for all configurable components.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -22,5 +23,6 @@ Configuration files and templates.
 - `watcher.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

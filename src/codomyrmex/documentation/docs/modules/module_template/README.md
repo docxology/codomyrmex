@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `api_specification.md` – File
@@ -17,5 +18,6 @@ Documentation files and guides.
 - `usage_examples.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../../../../README.md

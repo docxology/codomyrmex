@@ -3,7 +3,8 @@
 **Version**: v0.1.0 | **Status**: Active
 
 ## Overview
-The `ide` module provides core functionality for Ide.
+
+IDE module providing programmatic integration and automation capabilities for various Integrated Development Environments. Enables AI agents to achieve maximum agentic operation of IDEs themselves.
 
 ## Architecture
 
@@ -19,6 +20,7 @@ graph TD
 ```
 
 ## Components
+
 - **Core**: Implementation logic.
 - **API**: Exposed functions and classes.
 
@@ -32,6 +34,7 @@ from codomyrmex.ide import ...
 ```
 
 ## Navigation
+
 - **Parent**: [codomyrmex](../README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **Agents**: [AGENTS.md](AGENTS.md)

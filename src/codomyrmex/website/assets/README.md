@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Website static assets including images, fonts, and media files.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `css/` – Subdirectory
@@ -14,5 +15,6 @@ Contains components for the src system.
 - `style.css` – File
 
 ## Navigation
+
 - **Parent Directory**: [website](../README.md)
 - **Project Root**: ../../../../README.md

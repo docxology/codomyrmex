@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Networking module providing HTTP client utilities, WebSocket support, and API client generation. Integrates with api and scrape modules for network operations.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `websocket_client.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

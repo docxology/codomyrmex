@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Core agent infrastructure for base classes, interfaces, and shared agent functionality.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `session.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../README.md

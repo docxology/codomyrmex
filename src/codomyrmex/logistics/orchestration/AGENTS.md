@@ -3,9 +3,11 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Purpose
-Contains components for the src system.
+
+Logistics orchestration layer for coordinating tasks, resources, and workflows.
 
 ## Active Components
+
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
@@ -13,10 +15,12 @@ Contains components for the src system.
 - `project/` – Directory containing project components
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [logistics](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../README.md - Main project documentation

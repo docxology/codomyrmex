@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Unified observability framework based on OpenTelemetry standard. Allows the system to record, correlate, and analyze the performance and behavior of distributed workflows.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `spans/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

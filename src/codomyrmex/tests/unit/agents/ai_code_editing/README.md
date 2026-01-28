@@ -7,11 +7,13 @@
 Test files and validation suites.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `integration/` – Subdirectory
 - `unit/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [agents](../README.md)
 - **Project Root**: ../../../../../../README.md

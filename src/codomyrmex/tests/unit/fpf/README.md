@@ -7,6 +7,7 @@
 Test files and validation suites.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -23,5 +24,6 @@ Test files and validation suites.
 - `test_visualizer.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md

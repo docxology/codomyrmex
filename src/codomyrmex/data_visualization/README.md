@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Provides data visualization capabilities including charts, plots, and interactive visualizations. Supports multiple output formats and integrates with data analysis workflows.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -24,5 +25,6 @@ Contains components for the src system.
 - `themes/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -12,9 +12,12 @@ import os
 from pathlib import Path
 from typing import Any
 
-from .plot_utils import get_codomyrmex_logger
-
-logger = get_codomyrmex_logger(__name__)
+try:
+    from codomyrmex.logging_monitoring import get_logger
+    logger = get_logger(__name__)
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)
 
 
 class MermaidDiagramGenerator:
@@ -525,9 +528,8 @@ if __name__ == "__main__":
     logger.info(f"Mermaid diagram examples generated in {output_dir}")
 
     # Basic logging setup if running standalone
-    import logging
-
-    if not get_codomyrmex_logger("").hasHandlers():
+    if not logger.hasHandlers():
+        import logging
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -535,3 +537,4 @@ if __name__ == "__main__":
         logger.info(
             "Basic logging configured for direct script execution of mermaid_generator.py."
         )
+

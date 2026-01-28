@@ -7,6 +7,7 @@
 Test files and validation suites.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -17,5 +18,6 @@ Test files and validation suites.
 - `verify_all_git_methods_comprehensive.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [integration](../README.md)
 - **Project Root**: ../../../../../README.md

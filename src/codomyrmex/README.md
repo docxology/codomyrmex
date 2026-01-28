@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Main package directory containing 60+ specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -74,5 +75,6 @@ Contains components for the src system.
 - `website/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [src](../README.md)
 - **Project Root**: ../../README.md

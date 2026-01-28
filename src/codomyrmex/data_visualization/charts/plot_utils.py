@@ -34,6 +34,36 @@ except ImportError:
 
 logger = get_codomyrmex_logger(__name__)
 
+# Default figure size for plots
+DEFAULT_FIGURE_SIZE = (10, 6)
+
+
+def apply_common_aesthetics(ax, title: str = None, x_label: str = None, y_label: str = None):
+    """
+    Apply common aesthetics to a matplotlib axes.
+    
+    Args:
+        ax: The matplotlib axes to style.
+        title: Optional title to set.
+        x_label: Optional x-axis label.
+        y_label: Optional y-axis label.
+    
+    Returns:
+        The styled axes object.
+    """
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.grid(True, alpha=0.3)
+    
+    if title:
+        ax.set_title(title, fontsize=12, fontweight='bold')
+    if x_label:
+        ax.set_xlabel(x_label)
+    if y_label:
+        ax.set_ylabel(y_label)
+    
+    return ax
+
 
 def save_plot(
     fig,

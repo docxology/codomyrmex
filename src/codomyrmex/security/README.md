@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Provides comprehensive security capabilities organized into four specialized submodules covering physical, digital, cognitive, and theoretical security aspects. Includes vulnerability scanning, threat modeling, and compliance checking.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `theory/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

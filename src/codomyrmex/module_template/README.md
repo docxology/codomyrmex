@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Scaffolding and generation logic for creating new Codomyrmex modules. Ensures new modules start with required structure, documentation (README, AGENTS, SPEC), and configuration.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -20,5 +21,6 @@ Contains components for the src system.
 - `scaffold.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

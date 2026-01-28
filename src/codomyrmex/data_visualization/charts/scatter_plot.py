@@ -55,6 +55,76 @@ def create_scatter_plot(
     logger.info(f"Scatter plot '{title}' generated successfully.")
 
 
+class ScatterPlot:
+    """
+    Scatter plot class wrapper for object-oriented usage.
+    
+    Provides a class-based interface around the create_scatter_plot function.
+    """
+    
+    def __init__(
+        self,
+        x_data: list = None,
+        y_data: list = None,
+        title: str = "Scatter Plot",
+        x_label: str = "X-axis",
+        y_label: str = "Y-axis",
+        dot_size: int = 20,
+        dot_color: str = "blue",
+        alpha: float = 0.7
+    ):
+        """
+        Initialize a scatter plot.
+        
+        Args:
+            x_data: X-axis data points
+            y_data: Y-axis data points
+            title: Chart title
+            x_label: X-axis label
+            y_label: Y-axis label
+            dot_size: Size of scatter points
+            dot_color: Color of scatter points
+            alpha: Transparency of points (0-1)
+        """
+        self.x_data = x_data or []
+        self.y_data = y_data or []
+        self.title = title
+        self.x_label = x_label
+        self.y_label = y_label
+        self.dot_size = dot_size
+        self.dot_color = dot_color
+        self.alpha = alpha
+    
+    def render(self, output_path: str = None, show_plot: bool = False):
+        """
+        Render the scatter plot.
+        
+        Args:
+            output_path: Optional path to save the chart
+            show_plot: Whether to display the plot interactively
+        """
+        create_scatter_plot(
+            x_data=self.x_data,
+            y_data=self.y_data,
+            title=self.title,
+            x_label=self.x_label,
+            y_label=self.y_label,
+            output_path=output_path,
+            show_plot=show_plot,
+            dot_size=self.dot_size,
+            dot_color=self.dot_color,
+            alpha=self.alpha
+        )
+    
+    def save(self, output_path: str):
+        """Save the chart to a file."""
+        self.render(output_path=output_path, show_plot=False)
+    
+    def show(self):
+        """Display the chart interactively."""
+        self.render(show_plot=True)
+
+
 if __name__ == "__main__":
     # Example Usage
     from pathlib import Path

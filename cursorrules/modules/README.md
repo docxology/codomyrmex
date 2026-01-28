@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the cursorrules system.
+Module-specific cursor rules for individual Codomyrmex module behaviors.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `ai_code_editing.cursorrules` – File
@@ -37,5 +38,6 @@ Contains components for the cursorrules system.
 - `terminal_interface.cursorrules` – File
 
 ## Navigation
+
 - **Parent Directory**: [cursorrules](../README.md)
 - **Project Root**: ../../README.md

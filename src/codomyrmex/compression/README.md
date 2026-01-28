@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Compression module providing archive creation, extraction, and streaming compression. Supports multiple formats including zip, tar, gzip, and bz2.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `zstd_compressor.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

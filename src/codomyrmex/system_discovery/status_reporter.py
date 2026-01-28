@@ -9,7 +9,7 @@ import sys
 import importlib
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.terminal_interface.terminal_utils import TerminalFormatter
+from codomyrmex.terminal_interface.utils.terminal_utils import TerminalFormatter
 
 
 

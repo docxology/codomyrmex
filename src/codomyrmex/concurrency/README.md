@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Concurrency module providing thread pools, async utilities, and parallel execution patterns. Enables efficient multi-tasking and parallel processing.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -18,5 +19,6 @@ Contains components for the src system.
 - `semaphore.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

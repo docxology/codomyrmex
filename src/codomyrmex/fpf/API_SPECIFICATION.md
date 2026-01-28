@@ -244,7 +244,7 @@ class ReportGenerator:
 
 ## Data Models
 
-See [models.py](models.py) for complete Pydantic model definitions.
+See `models.py` for complete Pydantic model definitions.
 
 ### Pattern
 - `id: str`

@@ -4,11 +4,14 @@
 
 ## Overview
 
-Contains components for the src system.
+Standalone LLM integration package for language model interactions and output processing.
 
 ## Directory Contents
+
+- `README.md` – File
 - `outputs/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [src](../README.md)
 - **Project Root**: ../../README.md

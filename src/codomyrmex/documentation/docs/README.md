@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `development/` – Subdirectory
@@ -18,5 +19,6 @@ Documentation files and guides.
 - `tutorials/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [documentation](../README.md)
 - **Project Root**: ../../../../README.md

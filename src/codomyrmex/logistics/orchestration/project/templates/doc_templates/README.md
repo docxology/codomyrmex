@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `AGENTS.nested.template.md` – File
 - `AGENTS.template.md` – File
 - `README.md` – File
@@ -15,5 +16,6 @@ Documentation files and guides.
 - `SPEC.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [templates](../README.md)
 - **Project Root**: ../../../../../../../README.md

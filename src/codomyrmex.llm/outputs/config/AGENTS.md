@@ -6,7 +6,7 @@
 Configuration files and templates.
 
 ## Active Components
-- No active components documented
+- `README.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

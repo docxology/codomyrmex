@@ -9,27 +9,32 @@ The `scrape` module is the web data extraction engine of Codomyrmex. It provides
 ## Design Principles
 
 ### Modularity
+
 - **Provider Abstraction**: `BaseScraper` interface allows multiple provider implementations
 - **Adapter Pattern**: Provider-specific adapters (e.g., `FirecrawlAdapter`) implement the core interface
 - **Pluggable Architecture**: Easy to add new scraping providers without changing core code
 
 ### Type Safety
+
 - **Strong Typing**: All methods use type hints
 - **Structured Results**: Standard result types (ScrapeResult, CrawlResult, etc.)
 - **Input Validation**: Validation at API boundaries
 
 ### Parsimony
+
 - **No Reinvention**: Wraps existing services (Firecrawl) rather than reimplementing scraping logic
 - **Minimal State**: Configuration is externalized, operations are stateless where possible
 - **Clear Abstractions**: Simple, focused interfaces
 
 ### Functionality
+
 - **Multiple Formats**: Support for markdown, HTML, JSON, screenshots, metadata
 - **Batch Operations**: Efficient processing of multiple URLs
 - **Dynamic Content**: Support for JavaScript-rendered content
 - **LLM Integration**: AI-powered structured data extraction
 
 ### Testing
+
 - **Unit Tests**: Test core abstractions and adapters
 - **Integration Tests**: Test end-to-end workflows (with controlled real URLs)
 - **Error Cases**: Comprehensive error handling tests
@@ -178,10 +183,12 @@ class FirecrawlError(ScrapeError): ...
 ## Dependencies
 
 ### Internal
+
 - `codomyrmex.logging_monitoring` - For logging
 - `codomyrmex.exceptions` - Base exception classes
 
 ### External
+
 - `firecrawl-py` - Firecrawl Python SDK (optional, for Firecrawl provider)
 
 ## Testing Strategy

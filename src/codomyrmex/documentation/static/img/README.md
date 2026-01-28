@@ -7,6 +7,7 @@
 Documentation files and guides.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `docusaurus-social-card.jpg` – File
@@ -14,5 +15,6 @@ Documentation files and guides.
 - `logo.svg` – File
 
 ## Navigation
+
 - **Parent Directory**: [static](../README.md)
 - **Project Root**: ../../../../../README.md

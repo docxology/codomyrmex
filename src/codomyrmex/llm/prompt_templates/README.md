@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Prompt template library for structured LLM interactions and reusable prompt patterns.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `context_template.md` – File
@@ -14,5 +15,6 @@ Contains components for the src system.
 - `task_template.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [llm](../README.md)
 - **Project Root**: ../../../../README.md

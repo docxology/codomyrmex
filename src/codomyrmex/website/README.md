@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Website generation and hosting module for Codomyrmex project documentation and marketing pages. Provides static site generation and deployment.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `CHANGELOG.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
@@ -24,5 +25,6 @@ Contains components for the src system.
 - `templates/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

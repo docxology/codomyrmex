@@ -7,7 +7,7 @@
 Test files and validation suites.
 
 ## Directory Contents
-No files or subdirectories.
+- `README.md` – File
 
 ## Navigation
 - **Parent Directory**: [outputs](../README.md)

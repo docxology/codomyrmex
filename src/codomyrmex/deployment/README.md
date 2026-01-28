@@ -4,9 +4,10 @@
 
 ## Overview
 
-Contains components for the src system.
+Deployment module providing infrastructure-as-code, environment management, and deployment automation. Integrates with containerization and ci_cd_automation modules.
 
 ## Directory Contents
+
 - `API_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -19,5 +20,6 @@ Contains components for the src system.
 - `strategies/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
