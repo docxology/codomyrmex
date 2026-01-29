@@ -1,29 +1,53 @@
-# examples
+# Agent Examples
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Example implementations and demonstrations.
+Working examples demonstrating all Codomyrmex agent capabilities. Each script is self-contained and handles missing API keys gracefully.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `advanced_workflow.py` – File
-- `agent_diagnostics.py` – File
-- `basic_usage.py` – File
-- `claude_example.py` – File
-- `code_editor_example.py` – File
-- `codex_example.py` – File
-- `codomyrmex.log` – File
-- `droid_example.py` – File
-- `gemini_example.py` – File
-- `jules_example.py` – File
-- `multi_agent_workflow.py` – File
-- `opencode_example.py` – File
-- `theory_example.py` – File
+## Quick Start
+
+```bash
+# Run a specific example
+uv run python scripts/agents/examples/claude_example.py
+
+# Run all examples
+uv run python scripts/agents/run_all_agents.py
+```
+
+## Examples by Agent
+
+### Claude Agent
+
+| Script | Features |
+|--------|----------|
+| `claude_example.py` | Basic API usage, streaming |
+| `claude_code_workflow.py` | Full Claude Code workflow |
+
+### Gemini Agent
+
+| Script | Features |
+|--------|----------|
+| `gemini_example.py` | Google AI code generation |
+
+### Multi-Agent
+
+| Script | Features |
+|--------|----------|
+| `multi_agent_workflow.py` | CodeEditor + Claude + Droid orchestration |
+| `advanced_workflow.py` | Complex multi-stage pipelines |
+| `agent_comparison.py` | Side-by-side agent comparison |
+
+### Utilities
+
+| Script | Features |
+|--------|----------|
+| `basic_usage.py` | Generic agent patterns |
+| `agent_diagnostics.py` | Capability validation |
+| `code_editor_example.py` | Code generation/refactoring |
 
 ## Navigation
-- **Parent Directory**: [agents](../README.md)
-- **Project Root**: ../../../README.md
+
+- **Parent**: [agents/README.md](../README.md)
+- **Claude Module**: [../../../src/codomyrmex/agents/claude/README.md](../../../src/codomyrmex/agents/claude/README.md)

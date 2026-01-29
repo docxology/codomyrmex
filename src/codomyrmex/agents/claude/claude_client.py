@@ -738,3 +738,858 @@ class ClaudeClient(APIAgentBase):
         raise ClaudeError(
             f"Maximum tool execution rounds ({max_tool_rounds}) exceeded"
         )
+
+    # Claude Code methods for agentic coding workflows
+
+    def edit_file(
+        self,
+        file_path: str,
+        instructions: str,
+        language: Optional[str] = None,
+    ) -> dict[str, Any]:
+        """Apply AI-guided edits to a file.
+
+        Uses Claude to understand the file content and apply edits
+        based on natural language instructions.
+
+        Args:
+            file_path: Absolute path to the file to edit
+            instructions: Natural language description of edits to make
+            language: Programming language (auto-detected if None)
+
+        Returns:
+            Dictionary containing:
+                - success: Whether editing succeeded
+                - original_content: Original file content
+                - modified_content: Modified file content
+                - diff: Unified diff of changes
+                - explanation: Description of changes made
+                - tokens_used: Tokens consumed
+                - cost_usd: Estimated cost
+
+        Example:
+            >>> result = client.edit_file(
+            ...     "/path/to/file.py",
+            ...     "Add type hints to all function parameters"
+            ... )
+            >>> print(result["diff"])
+        """
+        import os
+
+        # Read the file
+        if not os.path.isfile(file_path):
+            return {
+                "success": False,
+                "error": f"File not found: {file_path}",
+                "original_content": "",
+                "modified_content": "",
+            }
+
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                original_content = f.read()
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Failed to read file: {e}",
+                "original_content": "",
+                "modified_content": "",
+            }
+
+        # Auto-detect language from extension
+        if language is None:
+            ext = os.path.splitext(file_path)[1].lower()
+            lang_map = {
+                ".py": "python", ".js": "javascript", ".ts": "typescript",
+                ".java": "java", ".cpp": "cpp", ".c": "c", ".go": "go",
+                ".rs": "rust", ".rb": "ruby", ".php": "php", ".swift": "swift",
+                ".kt": "kotlin", ".scala": "scala", ".cs": "csharp",
+            }
+            language = lang_map.get(ext, "text")
+
+        # Build the prompt
+        system_prompt = f"""You are an expert {language} developer performing code edits.
+Apply the requested changes to the provided code.
+Return ONLY the complete modified code, no explanations.
+Preserve all existing functionality unless explicitly asked to change it."""
+
+        prompt = f"""Edit this {language} file according to the instructions.
+
+Instructions: {instructions}
+
+Current file content:
+```{language}
+{original_content}
+```
+
+Return the complete modified file content:"""
+
+        request = AgentRequest(
+            prompt=prompt,
+            context={"system": system_prompt},
+        )
+
+        response = self.execute(request)
+
+        if not response.is_success():
+            return {
+                "success": False,
+                "error": response.error,
+                "original_content": original_content,
+                "modified_content": "",
+            }
+
+        # Extract code from response
+        modified_content = self._extract_code_block(response.content, language)
+
+        # Generate diff
+        diff = self._generate_unified_diff(original_content, modified_content, file_path)
+
+        return {
+            "success": True,
+            "original_content": original_content,
+            "modified_content": modified_content,
+            "diff": diff,
+            "explanation": f"Applied edits: {instructions}",
+            "language": language,
+            "tokens_used": response.tokens_used,
+            "cost_usd": response.metadata.get("cost_usd", 0.0),
+        }
+
+    def create_file(
+        self,
+        file_path: str,
+        description: str,
+        language: str = "python",
+    ) -> dict[str, Any]:
+        """Generate a new file from a description.
+
+        Uses Claude to create file content based on a natural language
+        description of what the file should contain.
+
+        Args:
+            file_path: Path where file should be created
+            description: Description of what the file should contain
+            language: Programming language
+
+        Returns:
+            Dictionary containing:
+                - success: Whether creation succeeded
+                - content: Generated file content
+                - file_path: Path to created file
+                - tokens_used: Tokens consumed
+                - cost_usd: Estimated cost
+
+        Example:
+            >>> result = client.create_file(
+            ...     "/path/to/utils.py",
+            ...     "Utility functions for string manipulation"
+            ... )
+        """
+        import os
+
+        system_prompt = f"""You are an expert {language} developer.
+Generate clean, well-documented, production-ready code.
+Follow {language} best practices and include appropriate error handling.
+Return ONLY the code, no explanations or markdown wrappers."""
+
+        prompt = f"""Create a {language} file with the following content:
+
+Description: {description}
+Filename: {os.path.basename(file_path)}
+
+Generate the complete file content:"""
+
+        request = AgentRequest(
+            prompt=prompt,
+            context={"system": system_prompt},
+        )
+
+        response = self.execute(request)
+
+        if not response.is_success():
+            return {
+                "success": False,
+                "error": response.error,
+                "content": "",
+                "file_path": file_path,
+            }
+
+        content = self._extract_code_block(response.content, language)
+
+        return {
+            "success": True,
+            "content": content,
+            "file_path": file_path,
+            "language": language,
+            "tokens_used": response.tokens_used,
+            "cost_usd": response.metadata.get("cost_usd", 0.0),
+        }
+
+    def review_code(
+        self,
+        code: str,
+        language: str = "python",
+        analysis_type: str = "general",
+    ) -> dict[str, Any]:
+        """Perform AI-powered code review.
+
+        Uses Claude to analyze code for issues, bugs, security
+        vulnerabilities, and improvement opportunities.
+
+        Args:
+            code: Code to review
+            language: Programming language
+            analysis_type: Type of analysis:
+                - "general": Overall code review
+                - "security": Security-focused analysis
+                - "bugs": Bug and error detection
+                - "performance": Performance analysis
+
+        Returns:
+            Dictionary containing:
+                - success: Whether review succeeded
+                - output: Full analysis text
+                - issues: List of identified issues
+                - recommendations: List of suggestions
+                - tokens_used: Tokens consumed
+                - cost_usd: Estimated cost
+
+        Example:
+            >>> result = client.review_code(
+            ...     "def add(a, b): return a + b",
+            ...     language="python",
+            ...     analysis_type="general"
+            ... )
+        """
+        analysis_prompts = {
+            "general": "Analyze for correctness, style, and improvements.",
+            "security": "Identify security vulnerabilities and risks.",
+            "bugs": "Find bugs, edge cases, and potential runtime errors.",
+            "performance": "Identify performance issues and optimizations.",
+        }
+
+        analysis_instruction = analysis_prompts.get(analysis_type, analysis_prompts["general"])
+
+        system_prompt = f"""You are an expert {language} code analyst.
+Provide thorough, actionable code review.
+Structure your response with:
+1. Summary
+2. Issues (as bullet points)
+3. Recommendations (as bullet points)"""
+
+        prompt = f"""{analysis_instruction}
+
+```{language}
+{code}
+```"""
+
+        request = AgentRequest(
+            prompt=prompt,
+            context={"system": system_prompt},
+        )
+
+        response = self.execute(request)
+
+        if not response.is_success():
+            return {
+                "success": False,
+                "error": response.error,
+                "output": "",
+                "issues": [],
+                "recommendations": [],
+            }
+
+        # Parse issues and recommendations
+        issues, recommendations = self._parse_review_output(response.content)
+
+        return {
+            "success": True,
+            "output": response.content,
+            "issues": issues,
+            "recommendations": recommendations,
+            "language": language,
+            "analysis_type": analysis_type,
+            "tokens_used": response.tokens_used,
+            "cost_usd": response.metadata.get("cost_usd", 0.0),
+        }
+
+    def scan_directory(
+        self,
+        path: str,
+        max_depth: int = 3,
+        include_patterns: Optional[list[str]] = None,
+        exclude_patterns: Optional[list[str]] = None,
+    ) -> dict[str, Any]:
+        """Scan directory for project context.
+
+        Scans a directory structure to understand the project layout,
+        useful for providing context in agentic coding workflows.
+
+        Args:
+            path: Directory path to scan
+            max_depth: Maximum directory depth (default: 3)
+            include_patterns: Glob patterns to include (e.g., ["*.py", "*.js"])
+            exclude_patterns: Glob patterns to exclude (e.g., ["node_modules", "__pycache__"])
+
+        Returns:
+            Dictionary containing:
+                - success: Whether scan succeeded
+                - structure: Hierarchical dict of directory
+                - file_count: Total files found
+                - files: List of file paths
+                - summary: Directory summary
+
+        Example:
+            >>> result = client.scan_directory("/path/to/project")
+            >>> print(result["structure"])
+        """
+        import os
+        import fnmatch
+
+        if not os.path.isdir(path):
+            return {
+                "success": False,
+                "error": f"Directory not found: {path}",
+                "structure": {},
+                "file_count": 0,
+                "files": [],
+            }
+
+        # Default exclusions
+        default_exclude = [
+            "__pycache__", "node_modules", ".git", ".venv", "venv",
+            "*.pyc", "*.pyo", ".DS_Store", "*.egg-info",
+        ]
+        exclude = (exclude_patterns or []) + default_exclude
+
+        def should_exclude(name: str) -> bool:
+            return any(fnmatch.fnmatch(name, pat) for pat in exclude)
+
+        def should_include(name: str) -> bool:
+            if not include_patterns:
+                return True
+            return any(fnmatch.fnmatch(name, pat) for pat in include_patterns)
+
+        def scan_dir(dir_path: str, depth: int) -> dict:
+            if depth > max_depth:
+                return {"type": "directory", "truncated": True}
+
+            result: dict[str, Any] = {"type": "directory", "children": {}}
+
+            try:
+                for entry in os.scandir(dir_path):
+                    if should_exclude(entry.name):
+                        continue
+
+                    if entry.is_dir():
+                        result["children"][entry.name] = scan_dir(entry.path, depth + 1)
+                    elif entry.is_file() and should_include(entry.name):
+                        result["children"][entry.name] = {
+                            "type": "file",
+                            "size": entry.stat().st_size,
+                        }
+            except PermissionError:
+                result["error"] = "Permission denied"
+
+            return result
+
+        structure = scan_dir(path, 0)
+
+        # Collect all file paths
+        files: list[str] = []
+
+        def collect_files(node: dict, current_path: str) -> None:
+            for name, child in node.get("children", {}).items():
+                child_path = os.path.join(current_path, name)
+                if child.get("type") == "file":
+                    files.append(child_path)
+                elif child.get("type") == "directory":
+                    collect_files(child, child_path)
+
+        collect_files(structure, path)
+
+        return {
+            "success": True,
+            "structure": structure,
+            "file_count": len(files),
+            "files": files,
+            "summary": f"Scanned {len(files)} files in {path}",
+        }
+
+    def generate_diff(
+        self,
+        original: str,
+        modified: str,
+        filename: str = "file",
+    ) -> dict[str, Any]:
+        """Generate unified diff between code versions.
+
+        Creates a unified diff format output showing the differences
+        between original and modified code.
+
+        Args:
+            original: Original code content
+            modified: Modified code content
+            filename: Filename for diff header
+
+        Returns:
+            Dictionary containing:
+                - diff: Unified diff string
+                - additions: Number of lines added
+                - deletions: Number of lines removed
+                - has_changes: Whether there are any changes
+
+        Example:
+            >>> diff_result = client.generate_diff(
+            ...     "def foo():\\n    pass",
+            ...     "def foo():\\n    return 42"
+            ... )
+            >>> print(diff_result["diff"])
+        """
+        diff = self._generate_unified_diff(original, modified, filename)
+
+        # Count additions and deletions
+        additions = 0
+        deletions = 0
+        for line in diff.split("\n"):
+            if line.startswith("+") and not line.startswith("+++"):
+                additions += 1
+            elif line.startswith("-") and not line.startswith("---"):
+                deletions += 1
+
+        return {
+            "diff": diff,
+            "additions": additions,
+            "deletions": deletions,
+            "has_changes": additions > 0 or deletions > 0,
+        }
+
+    def _extract_code_block(self, response: str, language: str) -> str:
+        """Extract code from markdown-formatted response."""
+        import re
+
+        # Try language-specific block
+        pattern = rf"```{language}\n(.*?)```"
+        match = re.search(pattern, response, re.DOTALL | re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+
+        # Try generic code block
+        pattern = r"```\n?(.*?)```"
+        match = re.search(pattern, response, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+
+        return response.strip()
+
+    def _generate_unified_diff(
+        self,
+        original: str,
+        modified: str,
+        filename: str,
+    ) -> str:
+        """Generate unified diff between two strings."""
+        import difflib
+
+        original_lines = original.splitlines(keepends=True)
+        modified_lines = modified.splitlines(keepends=True)
+
+        diff = difflib.unified_diff(
+            original_lines,
+            modified_lines,
+            fromfile=f"a/{filename}",
+            tofile=f"b/{filename}",
+        )
+
+        return "".join(diff)
+
+    def _parse_review_output(self, output: str) -> tuple[list[str], list[str]]:
+        """Parse code review output for issues and recommendations."""
+        issues: list[str] = []
+        recommendations: list[str] = []
+
+        lines = output.split("\n")
+        current_section = None
+
+        for line in lines:
+            line_stripped = line.strip()
+            lower_line = line_stripped.lower()
+
+            if "issue" in lower_line or "problem" in lower_line or "bug" in lower_line:
+                current_section = "issues"
+            elif "recommend" in lower_line or "suggestion" in lower_line or "improvement" in lower_line:
+                current_section = "recommendations"
+            elif line_stripped.startswith(("-", "*", "•", "1", "2", "3", "4", "5", "6", "7", "8", "9")):
+                item = line_stripped.lstrip("-*•0123456789.) ").strip()
+                if item and len(item) > 5:  # Filter out very short items
+                    if current_section == "issues":
+                        issues.append(item)
+                    elif current_section == "recommendations":
+                        recommendations.append(item)
+
+        return issues, recommendations
+
+    def run_command(
+        self,
+        command: str,
+        cwd: Optional[str] = None,
+        timeout: int = 60,
+        capture_output: bool = True,
+    ) -> dict[str, Any]:
+        """Execute a shell command with optional AI analysis.
+
+        Runs the specified command and returns the output. Can optionally
+        analyze the output for errors or issues.
+
+        Args:
+            command: Shell command to execute
+            cwd: Working directory for command execution
+            timeout: Maximum execution time in seconds
+            capture_output: Whether to capture stdout/stderr
+
+        Returns:
+            Dictionary containing:
+                - success: Whether command executed successfully
+                - return_code: Process return code
+                - stdout: Standard output
+                - stderr: Standard error
+                - duration: Execution time in seconds
+
+        Example:
+            >>> result = client.run_command("ls -la")
+            >>> print(result["stdout"])
+        """
+        import subprocess
+        import time
+
+        start_time = time.time()
+
+        try:
+            result = subprocess.run(
+                command,
+                shell=True,
+                cwd=cwd,
+                capture_output=capture_output,
+                text=True,
+                timeout=timeout,
+            )
+            duration = time.time() - start_time
+
+            return {
+                "success": result.returncode == 0,
+                "return_code": result.returncode,
+                "stdout": result.stdout if capture_output else "",
+                "stderr": result.stderr if capture_output else "",
+                "duration": duration,
+                "command": command,
+            }
+        except subprocess.TimeoutExpired:
+            return {
+                "success": False,
+                "return_code": -1,
+                "stdout": "",
+                "stderr": f"Command timed out after {timeout} seconds",
+                "duration": timeout,
+                "command": command,
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "return_code": -1,
+                "stdout": "",
+                "stderr": str(e),
+                "duration": time.time() - start_time,
+                "command": command,
+            }
+
+    def get_project_structure(
+        self,
+        path: str,
+        max_depth: int = 4,
+        include_analysis: bool = False,
+    ) -> dict[str, Any]:
+        """Get comprehensive project structure analysis.
+
+        Scans the project directory and optionally uses AI to analyze
+        the project type, dependencies, and structure.
+
+        Args:
+            path: Root directory of the project
+            max_depth: Maximum scan depth
+            include_analysis: Whether to include AI-powered analysis
+
+        Returns:
+            Dictionary containing:
+                - success: Whether scan succeeded
+                - structure: Directory tree
+                - file_count: Total files
+                - language_breakdown: Files by language
+                - analysis: AI analysis (if requested)
+
+        Example:
+            >>> result = client.get_project_structure("/path/to/project")
+            >>> print(result["language_breakdown"])
+        """
+        import os
+        from collections import defaultdict
+
+        # First, do a basic scan
+        scan_result = self.scan_directory(path, max_depth=max_depth)
+
+        if not scan_result["success"]:
+            return scan_result
+
+        # Analyze language breakdown
+        lang_map = {
+            ".py": "Python", ".js": "JavaScript", ".ts": "TypeScript",
+            ".java": "Java", ".cpp": "C++", ".c": "C", ".go": "Go",
+            ".rs": "Rust", ".rb": "Ruby", ".php": "PHP", ".swift": "Swift",
+            ".kt": "Kotlin", ".scala": "Scala", ".cs": "C#",
+            ".html": "HTML", ".css": "CSS", ".scss": "SCSS",
+            ".md": "Markdown", ".json": "JSON", ".yaml": "YAML", ".yml": "YAML",
+            ".sh": "Shell", ".bash": "Shell",
+        }
+
+        language_breakdown: dict[str, int] = defaultdict(int)
+        for file_path in scan_result.get("files", []):
+            ext = os.path.splitext(file_path)[1].lower()
+            lang = lang_map.get(ext, "Other")
+            language_breakdown[lang] += 1
+
+        result = {
+            "success": True,
+            "path": path,
+            "structure": scan_result["structure"],
+            "file_count": scan_result["file_count"],
+            "files": scan_result["files"],
+            "language_breakdown": dict(language_breakdown),
+        }
+
+        # Optionally add AI analysis
+        if include_analysis and self.test_connection():
+            system_prompt = """You are a software architect analyzing a project.
+Provide a brief analysis including:
+1. Project type (web app, library, CLI tool, etc.)
+2. Primary language/framework
+3. Notable patterns or architecture
+Be concise."""
+
+            files_summary = "\n".join(scan_result["files"][:50])
+            langs = ", ".join(f"{k}: {v}" for k, v in sorted(
+                language_breakdown.items(), key=lambda x: -x[1]
+            )[:5])
+
+            prompt = f"""Analyze this project structure:
+Path: {path}
+Files: {scan_result['file_count']}
+Languages: {langs}
+
+Sample files:
+{files_summary}"""
+
+            try:
+                response = self.execute(AgentRequest(
+                    prompt=prompt,
+                    context={"system": system_prompt}
+                ))
+                if response.is_success():
+                    result["analysis"] = response.content
+                    result["tokens_used"] = response.tokens_used
+            except Exception:
+                pass  # Analysis is optional
+
+        return result
+
+    def explain_code(
+        self,
+        code: str,
+        language: str = "python",
+        detail_level: str = "medium",
+    ) -> dict[str, Any]:
+        """Generate a comprehensive explanation of code.
+
+        Uses Claude to explain what the code does, how it works,
+        and any notable patterns or algorithms used.
+
+        Args:
+            code: Code to explain
+            language: Programming language
+            detail_level: Level of detail ("brief", "medium", "detailed")
+
+        Returns:
+            Dictionary containing:
+                - success: Whether explanation succeeded
+                - explanation: Full explanation text
+                - summary: One-line summary
+                - concepts: Key concepts mentioned
+                - tokens_used: Tokens consumed
+                - cost_usd: Estimated cost
+
+        Example:
+            >>> result = client.explain_code("def fib(n): return n if n < 2 else fib(n-1) + fib(n-2)")
+            >>> print(result["summary"])
+        """
+        detail_prompts = {
+            "brief": "Provide a 2-3 sentence explanation.",
+            "medium": "Provide a clear explanation covering purpose, logic, and key patterns.",
+            "detailed": "Provide an in-depth explanation including purpose, step-by-step logic, patterns, edge cases, and potential improvements.",
+        }
+
+        detail_instruction = detail_prompts.get(detail_level, detail_prompts["medium"])
+
+        system_prompt = f"""You are an expert {language} developer and educator.
+Explain code clearly for developers of varying skill levels.
+Structure your response:
+1. Summary (one line)
+2. Explanation
+3. Key Concepts (bullet points)"""
+
+        prompt = f"""{detail_instruction}
+
+```{language}
+{code}
+```"""
+
+        request = AgentRequest(
+            prompt=prompt,
+            context={"system": system_prompt},
+        )
+
+        response = self.execute(request)
+
+        if not response.is_success():
+            return {
+                "success": False,
+                "error": response.error,
+                "explanation": "",
+                "summary": "",
+                "concepts": [],
+            }
+
+        # Parse the response
+        content = response.content
+        summary = ""
+        concepts = []
+
+        lines = content.split("\n")
+        for i, line in enumerate(lines):
+            if "summary" in line.lower() and i + 1 < len(lines):
+                summary = lines[i + 1].strip().lstrip("-•* ")
+                break
+            elif line.strip() and not any(h in line.lower() for h in ["explanation", "concept", "##", "#"]):
+                summary = line.strip()
+                break
+
+        # Extract concepts
+        in_concepts = False
+        for line in lines:
+            if "concept" in line.lower():
+                in_concepts = True
+                continue
+            if in_concepts and line.strip().startswith(("-", "*", "•")):
+                concept = line.strip().lstrip("-*• ").strip()
+                if concept:
+                    concepts.append(concept)
+            elif in_concepts and line.strip() and not line.strip().startswith(("-", "*", "•")):
+                if line.startswith("#"):
+                    in_concepts = False
+
+        return {
+            "success": True,
+            "explanation": content,
+            "summary": summary[:200] if summary else "See full explanation",
+            "concepts": concepts[:10],
+            "language": language,
+            "detail_level": detail_level,
+            "tokens_used": response.tokens_used,
+            "cost_usd": response.metadata.get("cost_usd", 0.0),
+        }
+
+    def suggest_tests(
+        self,
+        code: str,
+        language: str = "python",
+        framework: Optional[str] = None,
+    ) -> dict[str, Any]:
+        """Generate test suggestions for code.
+
+        Uses Claude to analyze code and suggest appropriate tests,
+        including edge cases and common testing patterns.
+
+        Args:
+            code: Code to generate tests for
+            language: Programming language
+            framework: Testing framework (e.g., "pytest", "unittest", "jest")
+
+        Returns:
+            Dictionary containing:
+                - success: Whether generation succeeded
+                - tests: Generated test code
+                - test_cases: List of test case descriptions
+                - coverage_notes: Notes about test coverage
+                - tokens_used: Tokens consumed
+                - cost_usd: Estimated cost
+
+        Example:
+            >>> result = client.suggest_tests("def add(a, b): return a + b")
+            >>> print(result["tests"])
+        """
+        if framework is None:
+            framework = "pytest" if language == "python" else "jest" if language in ("javascript", "typescript") else "default"
+
+        system_prompt = f"""You are an expert {language} testing specialist.
+Generate comprehensive tests using {framework}.
+Include:
+1. Basic functionality tests
+2. Edge cases
+3. Error handling tests
+
+Return:
+1. Test code (ready to run)
+2. List of test cases with descriptions"""
+
+        prompt = f"""Generate tests for this {language} code using {framework}:
+
+```{language}
+{code}
+```"""
+
+        request = AgentRequest(
+            prompt=prompt,
+            context={"system": system_prompt},
+        )
+
+        response = self.execute(request)
+
+        if not response.is_success():
+            return {
+                "success": False,
+                "error": response.error,
+                "tests": "",
+                "test_cases": [],
+                "coverage_notes": "",
+            }
+
+        content = response.content
+        tests = self._extract_code_block(content, language)
+
+        # Extract test case descriptions
+        test_cases = []
+        for line in content.split("\n"):
+            line_stripped = line.strip()
+            if line_stripped.startswith(("-", "*", "•", "1", "2", "3", "4", "5")):
+                case = line_stripped.lstrip("-*•0123456789.) ").strip()
+                if case and ("test" in case.lower() or "case" in case.lower() or "should" in case.lower()):
+                    test_cases.append(case)
+
+        return {
+            "success": True,
+            "tests": tests,
+            "test_cases": test_cases[:15],
+            "coverage_notes": f"Generated {len(test_cases)} test cases for {framework}",
+            "language": language,
+            "framework": framework,
+            "tokens_used": response.tokens_used,
+            "cost_usd": response.metadata.get("cost_usd", 0.0),
+        }
