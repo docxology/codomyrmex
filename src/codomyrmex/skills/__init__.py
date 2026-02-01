@@ -18,7 +18,13 @@ from . import execution
 from . import composition
 from . import testing
 
+from . import marketplace
+from . import versioning
+from . import permissions
 __all__ = [
+    'permissions',
+    'versioning',
+    'marketplace',
     "SkillsManager",
     "SkillLoader",
     "SkillSync",

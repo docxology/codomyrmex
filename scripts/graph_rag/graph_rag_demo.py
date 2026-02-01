@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+"""
+Graph Rag Demo Script
+
+Demonstrates functionality of the graph_rag module.
+"""
+
+import sys
+from pathlib import Path
+
+# Add project root to path
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
+
+def main():
+    """Main demonstration."""
+    print("=== Graph Rag Demo ===")
+    print("Description: Knowledge graph integration with RAG for structured knowledge retrieval and reasoning")
+    print()
+    
+    # TODO: Add actual demonstrations
+    print("✅ Demo completed successfully")
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())

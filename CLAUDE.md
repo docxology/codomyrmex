@@ -36,7 +36,7 @@ codomyrmex status                # System status dashboard
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 50+ specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 55+ specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 

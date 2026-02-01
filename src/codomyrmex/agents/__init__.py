@@ -30,7 +30,14 @@ Available submodules:
 - gemini: Gemini CLI integration
 - mistral_vibe: Mistral Vibe CLI integration
 - every_code: Every Code CLI integration (multi-agent orchestration)
+- o1: OpenAI o1/o3 reasoning model integration
+- deepseek: DeepSeek Coder integration
+- qwen: Qwen-Coder integration
+- pooling: Multi-agent load balancing and failover
+- evaluation: Agent benchmarking and quality metrics
+- history: Conversation and context persistence
 """
+
 
 from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
 from codomyrmex.agents.claude import ClaudeClient
@@ -71,6 +78,37 @@ from .core import (
     ParseResult,
     clean_response,
 )
+# Lazy imports for submodules that may not be installed yet
+try:
+    from .o1 import O1Client
+except ImportError:
+    O1Client = None
+
+try:
+    from .deepseek import DeepSeekClient
+except ImportError:
+    DeepSeekClient = None
+
+try:
+    from .qwen import QwenClient
+except ImportError:
+    QwenClient = None
+
+try:
+    from .pooling import AgentPool
+except ImportError:
+    AgentPool = None
+
+try:
+    from .evaluation import AgentEvaluator
+except ImportError:
+    AgentEvaluator = None
+
+try:
+    from .history import ConversationHistory
+except ImportError:
+    ConversationHistory = None
+
 from .git_agent import GitAgent
 from .generic import APIAgentBase, CLIAgentBase
 from .exceptions import (
@@ -131,6 +169,13 @@ __all__ = [
     "ToolError",
     "ContextError",
     "SessionError",
+    # New submodules (lazy-loaded, may be None if not installed)
+    "O1Client",
+    "DeepSeekClient",
+    "QwenClient",
+    "AgentPool",
+    "AgentEvaluator",
+    "ConversationHistory",
 ]
 
 __version__ = "0.1.0"

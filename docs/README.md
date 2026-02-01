@@ -1,24 +1,53 @@
-# docs
+# Codomyrmex Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
 
 ## Overview
 
-Documentation components and guides for the Codomyrmex platform.
+Comprehensive documentation for the Codomyrmex platform. This directory contains guides for users, developers, and AI agents working with the system.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `deployment/` – Subdirectory
-- `development/` – Subdirectory
-- `examples/` – Subdirectory
-- `getting-started/` – Subdirectory
-- `integration/` – Subdirectory
-- `modules/` – Subdirectory
-- `project/` – Subdirectory
-- `project_orchestration/` – Subdirectory
-- `reference/` – Subdirectory
+## Documentation Structure
+
+| Directory | Purpose |
+|-----------|---------|
+| [**getting-started/**](getting-started/) | Quick start, installation, setup, tutorials |
+| [**development/**](development/) | Development environment, testing, contribution |
+| [**reference/**](reference/) | API docs, CLI reference, troubleshooting |
+| [**deployment/**](deployment/) | Production deployment guides |
+| [**modules/**](modules/) | Per-module documentation (70+ modules) |
+| [**integration/**](integration/) | External service integration |
+| [**examples/**](examples/) | Code examples and demos |
+| [**project/**](project/) | Architecture, roadmap, contributing |
+| [**project_orchestration/**](project_orchestration/) | Multi-project workflow guides |
+
+## Quick Links
+
+### For New Users
+
+- [Quick Start Guide](getting-started/quickstart.md) - Get running in 5 minutes
+- [Installation](getting-started/installation.md) - Detailed setup instructions
+- [Tutorials](getting-started/tutorials/) - Step-by-step learning
+
+### For Developers
+
+- [Environment Setup](development/environment-setup.md) - Dev environment configuration
+- [Testing Strategy](development/testing-strategy.md) - Testing best practices
+- [Contributing](project/contributing.md) - How to contribute
+
+### Reference
+
+- [API Reference](reference/api.md) - Complete API documentation
+- [CLI Reference](reference/cli.md) - Command-line interface
+- [Troubleshooting](reference/troubleshooting.md) - Common issues and solutions
+
+## Companion Files
+
+- [**AGENTS.md**](AGENTS.md) - Agent coordination for docs
+- [**SPEC.md**](SPEC.md) - Documentation specification
+- [**PAI.md**](PAI.md) - Personal AI Infrastructure
 
 ## Navigation
-- **Project Root**: ../README.md
+
+- **Project Root**: [../README.md](../README.md)
+- **Source Code**: [../src/codomyrmex/](../src/codomyrmex/)
+- **Scripts**: [../scripts/](../scripts/)

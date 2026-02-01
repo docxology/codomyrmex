@@ -55,7 +55,15 @@ from .schema_generator import (
     generate_schema,
 )
 
+from . import connections
+from . import replication
+from . import sharding
+from . import audit
 __all__ = [
+    'audit',
+    'sharding',
+    'replication',
+    'connections',
     # Database management
     "DatabaseManager",
     "manage_databases",

@@ -1,69 +1,15 @@
+"""Shared pytest fixtures and configuration for Codomyrmex testing."""
+
 from pathlib import Path
 import json
 import os
 import subprocess
 import sys
-import tempfile
 
 import pytest
-import yaml
-import yaml
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Shared pytest fixtures and configuration for Codomyrmex testing."""
-
 
 try:
+    import yaml
     YAML_AVAILABLE = True
 except ImportError:
     yaml = None
@@ -76,76 +22,6 @@ except ImportError:
     setup_logging = None
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Shared pytest fixtures and configuration for Codomyrmex testing."""
-
-
-try:
-    YAML_AVAILABLE = True
-except ImportError:
-    YAML_AVAILABLE = False
-
-# Add the src directory to Python path for imports
-# From src/codomyrmex/tests/conftest.py, go up 4 levels to reach project root
-project_root = Path(__file__).parent.parent.parent.parent
-code_path = project_root / "src"
-if str(code_path) not in sys.path:
-    sys.path.insert(0, str(code_path))
-# Also add the package root (src/codomyrmex) so tests that import modules
-# using the package-local names (e.g. `ai_code_editing`) will resolve.
-package_root = code_path / "codomyrmex"
-if str(package_root) not in sys.path:
-    sys.path.insert(0, str(package_root))
-
 def pytest_configure(config):
     """Register custom pytest markers."""
     config.addinivalue_line("markers", "unit: Unit tests")
@@ -155,12 +31,12 @@ def pytest_configure(config):
 @pytest.fixture
 def project_root():
     """Fixture providing the project root path."""
-    return project_root
+    return Path(__file__).parent.parent.parent.parent
 
 @pytest.fixture
 def code_dir():
     """Fixture providing the code directory path."""
-    return code_path
+    return Path(__file__).parent.parent.parent.parent / "src"
 
 @pytest.fixture
 def temp_env_file(tmp_path):
@@ -432,4 +308,3 @@ def real_subprocess_result():
             return SubprocessError(e)
 
     return run_command
-

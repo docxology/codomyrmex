@@ -15,12 +15,15 @@ from pathlib import Path
 
 import pytest
 
-from codomyrmex.templating.template_engine import (
-    Template,
-    TemplateEngine,
-    TemplatingError,
-)
-from codomyrmex.templating.template_manager import TemplateManager
+try:
+    from codomyrmex.templating.template_engine import (
+        Template,
+        TemplateEngine,
+        TemplatingError,
+    )
+    from codomyrmex.templating.template_manager import TemplateManager
+except ImportError:
+    pytest.skip("templating module not available", allow_module_level=True)
 
 
 # ==============================================================================

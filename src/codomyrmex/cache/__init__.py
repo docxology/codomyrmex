@@ -28,7 +28,13 @@ from . import invalidation
 from . import distributed
 from . import serializers
 
+from . import warmers
+from . import async_ops
+from . import replication
 __all__ = [
+    'replication',
+    'async_ops',
+    'warmers',
     # Core classes
     "Cache",
     "CacheManager",

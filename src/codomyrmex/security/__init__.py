@@ -14,6 +14,10 @@ Integration:
 - Integrates with `static_analysis` for code security analysis
 """
 
+from . import scanning
+from . import secrets
+from . import compliance
+from . import audit
 __version__ = "0.1.0"
 
 # Import from digital security
@@ -138,7 +142,11 @@ except ImportError:
     THEORY_AVAILABLE = False
 
 # Build __all__ dynamically
-__all__ = []
+__all__ = [
+    'audit',
+    'compliance',
+    'secrets',
+    'scanning',]
 
 if DIGITAL_AVAILABLE:
     __all__.extend([

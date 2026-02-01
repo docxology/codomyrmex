@@ -1,0 +1,38 @@
+# Migration
+
+Cross-provider migration tools for cloud and database transitions
+
+## Overview
+
+The `migration` module provides cross-provider migration tools for cloud and database transitions.
+
+## Installation
+
+This module is part of the Codomyrmex platform and is installed with the main package.
+
+```bash
+pip install codomyrmex
+```
+
+## Quick Start
+
+```python
+from codomyrmex.migration import *
+
+# Example usage
+# TODO: Add practical examples
+```
+
+## Features
+
+- Feature 1: Description
+- Feature 2: Description
+- Feature 3: Description
+
+## API Reference
+
+See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
+
+## Related Modules
+
+- [`None`](../) - Parent module

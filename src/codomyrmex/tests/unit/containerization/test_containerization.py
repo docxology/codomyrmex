@@ -38,18 +38,21 @@ except ImportError:
     ImageNotFound = Exception
     NotFound = Exception
 
-from codomyrmex.containerization.docker_manager import (
-    DockerManager,
-    ContainerConfig,
-    build_containers,
-    manage_containers,
-)
-from codomyrmex.containerization.build_generator import (
-    BuildGenerator,
-    BuildStage,
-    MultiStageBuild,
-    BuildScript,
-)
+try:
+    from codomyrmex.containerization.docker_manager import (
+        DockerManager,
+        ContainerConfig,
+        build_containers,
+        manage_containers,
+    )
+    from codomyrmex.containerization.build_generator import (
+        BuildGenerator,
+        BuildStage,
+        MultiStageBuild,
+        BuildScript,
+    )
+except ImportError:
+    pytest.skip("containerization module not available", allow_module_level=True)
 
 
 # ==============================================================================

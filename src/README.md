@@ -4,15 +4,64 @@
 
 ## Overview
 
-Hosts core source code and agent-enabled services for the Codomyrmex platform.
+Source code directory containing all Python packages and modules for the Codomyrmex platform. The main package `codomyrmex/` contains 70+ specialized modules for AI-assisted development workflows.
 
 ## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `codomyrmex/` – Subdirectory
-- `codomyrmex.llm/` – Subdirectory
+
+| Directory | Description |
+|-----------|-------------|
+| [**codomyrmex/**](codomyrmex/) | Main Python package with 70+ modules |
+| [**codomyrmex.llm/**](codomyrmex.llm/) | Standalone LLM integration package |
+
+### Key Files
+
+- `__init__.py` – Package initialization
+- `PAI.md` – Personal AI Infrastructure documentation
+- `SPEC.md` – Technical specification
+- `README.md` – This file
+
+## Package Structure
+
+```
+src/
+├── codomyrmex/           # Main package (70+ modules)
+│   ├── agents/           # AI agent integrations
+│   ├── llm/              # LLM infrastructure
+│   ├── orchestrator/     # Workflow orchestration
+│   ├── coding/           # Code execution
+│   ├── documentation/    # Doc generation
+│   └── ...               # 65+ more modules
+└── codomyrmex.llm/       # Standalone LLM package
+```
+
+## Usage
+
+```python
+# Import from main package
+from codomyrmex.llm import LLMClient
+from codomyrmex.orchestrator import WorkflowEngine
+from codomyrmex.coding import CodeExecutor
+
+# Run with uv
+uv run python -c "from codomyrmex import __version__; print(__version__)"
+```
+
+## Development
+
+```bash
+# Install in development mode
+uv pip install -e .
+
+# Run tests
+uv run pytest src/codomyrmex/tests/
+
+# Type checking
+uv run mypy src/codomyrmex/
+```
 
 ## Navigation
-- **Project Root**: ../README.md
+
+- **Project Root**: [../README.md](../README.md)
+- **Module Details**: [codomyrmex/README.md](codomyrmex/README.md)
+- **Documentation**: [../docs/](../docs/)
+- **Scripts**: [../scripts/](../scripts/)

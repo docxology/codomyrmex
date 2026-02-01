@@ -59,18 +59,15 @@ def main():
     setup_logging()
     print_section("Running All Agent Examples")
 
-    examples_dir = Path(__file__).resolve().parent / "examples"
-    
-    if not examples_dir.exists():
-        print_error(f"Examples directory not found: {examples_dir}")
-        return 1
+    # Scripts are now in the same directory (flattened structure)
+    scripts_dir = Path(__file__).resolve().parent
 
     results = {}
     passed = 0
     failed = 0
 
     for script_name in EXAMPLE_SCRIPTS:
-        script_path = examples_dir / script_name
+        script_path = scripts_dir / script_name
         
         if not script_path.exists():
             print_warning(f"  SKIP: {script_name} (not found)")

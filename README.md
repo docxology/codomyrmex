@@ -11,12 +11,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 60+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 70+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 60+ independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 70+ independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -50,17 +50,79 @@ uv sync
 
 **New to Codomyrmex?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or explore [executable examples](scripts/documentation/examples/).
 
-## Navigation
+## Documentation Hub
+
+Codomyrmex documentation is organized into focused guides for different needs:
+
+### 🚀 Getting Started
+
+| Guide | Description |
+|-------|-------------|
+| [**Quick Start**](docs/getting-started/quickstart.md) | Get up and running in 5 minutes |
+| [**Installation**](docs/getting-started/installation.md) | Detailed installation instructions |
+| [**Setup**](docs/getting-started/setup.md) | Environment configuration |
+| [**Tutorials**](docs/getting-started/tutorials/) | Step-by-step learning paths |
+
+### 🏗️ Architecture & Design
+
+| Guide | Description |
+|-------|-------------|
+| [**Architecture**](docs/project/architecture.md) | System design and principles |
+| [**Module Overview**](docs/modules/overview.md) | Understanding the 70+ module system |
+| [**Contributing**](docs/project/contributing.md) | How to contribute to Codomyrmex |
+| [**Project Roadmap**](docs/project/todo.md) | Current priorities and future plans |
+
+### 💻 Development
+
+| Guide | Description |
+|-------|-------------|
+| [**Environment Setup**](docs/development/environment-setup.md) | Development environment configuration |
+| [**Testing Strategy**](docs/development/testing-strategy.md) | Testing approach and best practices |
+| [**Documentation Guide**](docs/development/documentation.md) | Writing documentation |
+| [**uv Usage Guide**](docs/development/uv-usage-guide.md) | Package management with uv |
+
+### 📚 Reference
+
+| Guide | Description |
+|-------|-------------|
+| [**API Reference**](docs/reference/api.md) | Complete API documentation |
+| [**CLI Reference**](docs/reference/cli.md) | Command-line interface |
+| [**Orchestrator**](docs/reference/orchestrator.md) | Workflow orchestration |
+| [**Performance**](docs/reference/performance.md) | Performance optimization |
+| [**Troubleshooting**](docs/reference/troubleshooting.md) | Common issues and solutions |
+
+### 🚢 Deployment & Operations
+
+| Guide | Description |
+|-------|-------------|
+| [**Production Deployment**](docs/deployment/production.md) | Production deployment guide |
+| [**Security**](docs/reference/security.md) | Security best practices |
+| [**Migration Guide**](docs/reference/migration-guide.md) | Upgrading between versions |
+
+### 🔌 Integration
+
+| Guide | Description |
+|-------|-------------|
+| [**Integration Overview**](docs/integration/) | External service integration |
+| [**Examples**](docs/examples/) | Working code examples |
+| [**Project Orchestration**](docs/project_orchestration/) | Multi-project workflows |
+
+### 🤖 AI Agents
+
+| Guide | Description |
+|-------|-------------|
+| [**AGENTS.md**](AGENTS.md) | Agent coordination protocols |
+| [**PAI.md**](PAI.md) | Personal AI Infrastructure |
+| [**SPEC.md**](SPEC.md) | Functional specification |
+
+---
 
 **Quick Links:**
 
-- 📚 **[Source Code](src/README.md)** - Browse all 60+ modules and implementations
-- 📖 **[Documentation Hub](docs/README.md)** - Comprehensive user and developer guides
-- 🚀 **[Quick Start Guide](docs/getting-started/quickstart.md)** - Get up and running in 5 minutes
-- 🏗️ **[Module Overview](docs/modules/overview.md)** - Understand the module system architecture
-- 🎯 **[Architecture Guide](docs/project/architecture.md)** - System design and principles
-- 💻 **[Examples](scripts/documentation/examples/)** - Working code examples and demonstrations
-- 🤝 **[Contributing](docs/project/contributing.md)** - How to contribute to Codomyrmex
+- 📚 **[Source Code](src/codomyrmex/README.md)** - Browse all 70+ modules
+- 📖 **[Full Documentation](docs/)** - Complete documentation
+- 🎯 **[Module Documentation](docs/modules/)** - Per-module guides
+- 💻 **[Scripts](scripts/)** - Utility and automation scripts
 
 <details>
 <summary><strong>📑 Table of Contents</strong></summary>
@@ -69,7 +131,7 @@ uv sync
   - [Key Features](#key-features)
   - [Why Codomyrmex?](#why-codomyrmex)
 - [Quick Start](#quick-start)
-- [Navigation](#navigation)
+- [Documentation Hub](#documentation-hub)
 - [Installation & Setup](#installation--setup)
 - [System Architecture](#system-architecture)
   - [Module Dependency Graph](#module-dependency-graph)
@@ -93,13 +155,6 @@ uv sync
 - [Contributing](#contributing)
 - [Security](#security)
 - [License](#license)
-- [Data Flow Architecture](#data-flow-architecture)
-- [Module Interaction Workflow](#module-interaction-workflow)
-- [Development Workflow Architecture](#development-workflow-architecture)
-- [Dependencies Overview](#dependencies-overview)
-- [Module Maturity Levels](#module-maturity-levels)
-- [Key Metrics](#key-metrics)
-- [Links](#links)
 
 </details>
 
@@ -123,6 +178,7 @@ graph TB
         AICode["AI Code Editing"]
         MCP["Model Context Protocol"]
         LLM["LLM Infrastructure"]
+        Ollama["Ollama (Local LLM)"]
     end
 
     subgraph analysisQuality ["Module Layer - Analysis & Quality"]
@@ -219,16 +275,10 @@ graph TB
     PluginSys --> ModTemplate
     SysDiscovery --> ModTemplate
     SysDiscovery --> Tools
-    DataViz --> Spatial
-    DataViz --> Spatial
-    DataViz --> Spatial
-    DataViz --> Spatial
-    DataViz --> Spatial
 
     %% Foundation connections (all modules depend on foundation)
     AICode -.-> Logging
     StaticAnalysis -.-> Logging
-    Coding -.-> Logging
     Coding -.-> Logging
     Security -.-> Logging
     Perf -.-> Logging
@@ -255,7 +305,6 @@ graph TB
 
     AICode -.-> Environment
     StaticAnalysis -.-> Environment
-    Coding -.-> Environment
     Coding -.-> Environment
     Security -.-> Environment
     Perf -.-> Environment
@@ -373,7 +422,7 @@ graph TD
     Logging --> Container
     Logging --> ConfigMgmt
     Logging --> Database
-    Logging --> ProjectOrch
+    Logging --> Logistics
     Logging --> PhysMgmt
 
     Env --> BuildSynth
@@ -385,7 +434,7 @@ graph TD
 
     Agents --> BuildSynth
     Agents --> Documentation
-    Agents --> ProjectOrch
+    Agents --> Logistics
 
     StaticAnalysis --> BuildSynth
     StaticAnalysis --> CICD
@@ -398,7 +447,7 @@ graph TD
 
     GitOps --> BuildSynth
     GitOps --> CICD
-    GitOps --> ProjectOrch
+    GitOps --> Logistics
 
     Security --> CICD
     Security --> Container
@@ -406,12 +455,12 @@ graph TD
     Performance --> CICD
     Performance --> Container
 
-    BuildSynth --> ProjectOrch
-    Documentation --> ProjectOrch
-    CICD --> ProjectOrch
-    Container --> ProjectOrch
-    ConfigMgmt --> ProjectOrch
-    Database --> ProjectOrch
+    BuildSynth --> Logistics
+    Documentation --> Logistics
+    CICD --> Logistics
+    Container --> Logistics
+    ConfigMgmt --> Logistics
+    Database --> Logistics
 
     %% Specialized layer dependencies
     Logging --> SysDiscovery
@@ -777,7 +826,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **60+ modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **70+ modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 
@@ -857,7 +906,7 @@ Advanced capabilities for specific domains:
 
 ### Development Workflows
 
-- **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/coding/review/) → [Security scan](src/codomyrmex/security/)
+- **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/coding/) → [Security scan](src/codomyrmex/security/)
 - **AI-Assisted Development**: [AI code editing](src/codomyrmex/agents/ai_code_editing/) with [pattern matching](src/codomyrmex/pattern_matching/) for code refactoring
 - **Build & Deploy**: [Build synthesis](src/codomyrmex/build_synthesis/) → [CI/CD automation](src/codomyrmex/ci_cd_automation/) → [Container management](src/codomyrmex/containerization/)
 
@@ -881,7 +930,7 @@ codomyrmex/
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
 │   ├── /src/codomyrmex/static_analysis/     # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 40+ additional modules
+│   └── ...                  # 55+ additional modules
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -912,7 +961,7 @@ codomyrmex/
 ```mermaid
 graph TD
     subgraph corePlatform ["Core Platform"]
-        CoreSrc["src/codomyrmex/ 30+ Modules"]
+        CoreSrc["src/codomyrmex/ 55+ Modules"]
         CoreScripts["scripts/ Automation & Orchestration"]
         CoreTests["src/codomyrmex/tests/ Unit & Integration Tests"]
     end
@@ -936,7 +985,7 @@ graph TD
     Config --> CoreSrc
     Rules --> CoreSrc
     Projects --> CoreScripts
-    Examples --> CoreSrc
+    ModuleExamples --> CoreSrc
     ScriptsExamples --> CoreScripts
     CoreSrc --> Output
     CoreScripts --> Output
@@ -948,7 +997,7 @@ graph TD
 
 Each module is self-contained with:
 
-- Own dependencies (`requirements.txt`)
+- Own dependencies (managed in `pyproject.toml`)
 - Tests (`tests/`)
 - API documentation (`API_SPECIFICATION.md`)
 - Usage examples (`USAGE_EXAMPLES.md`)
@@ -1204,11 +1253,11 @@ graph TD
 
     CLI --> SystemDiscovery
     InteractiveShell --> SystemDiscovery
-    APIEndpoint --> ProjectOrchestrator
+    APIEndpoint --> Orchestrator
     ConfigFile --> TaskScheduler
 
-    SystemDiscovery --> ProjectOrchestrator
-    ProjectOrchestrator --> TaskScheduler
+    SystemDiscovery --> Orchestrator
+    Orchestrator --> TaskScheduler
 
     TaskScheduler --> AICode
     TaskScheduler --> StaticAnalysis
@@ -1359,9 +1408,9 @@ pie title Module Development Status (January 2026)
 
 ## Key Metrics
 
-- **Lines of Code**: ~50K+ across 40+ modules
+- **Lines of Code**: ~50K+ across 55+ modules
 - **Test Coverage**: ≥80% target (currently 75%)
-- **Module Count**: 40+ core modules
+- **Module Count**: 55+ core modules
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

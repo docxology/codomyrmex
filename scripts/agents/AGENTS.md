@@ -4,24 +4,26 @@
 
 ## Purpose
 
-Agent utility scripts for testing, orchestrating, and demonstrating the full capabilities of the Codomyrmex agent ecosystem.
+Agent utility scripts for testing, orchestrating, and demonstrating the full capabilities of the Codomyrmex agent ecosystem. Flat structure - all scripts at this level.
 
-## Active Components
+## Script Inventory
 
 | File | Lines | Description |
-|------|-------|-------------|
+| ---- | ----- | ----------- |
 | `agent_status.py` | 124 | System health and configuration discovery |
-| `run_all_agents.py` | 112 | Execute all examples with results summary |
+| `run_all_agents.py` | 109 | Execute all examples with results summary |
 | `orchestrate.py` | 27 | Module-scoped script orchestration |
 | `test_gemini_dispatch.py` | 129 | Gemini dispatch and orchestrator tests |
-| `claude_code_demo.py` | ~100 | Claude Code methods demonstration |
+| `claude_code_demo.py` | 160 | Claude Code methods demonstration |
+| `claude_code_workflow.py` | 130 | Complete Claude Code workflow |
+| `agent_comparison.py` | 105 | Multi-agent comparison |
 
 ## Method Inventory
 
 ### agent_status.py
 
 | Function | Description |
-|----------|-------------|
+| -------- | ----------- |
 | `find_agents_configs()` | Discover AGENTS.md and config files |
 | `parse_agents_md(path)` | Extract sections from AGENTS.md |
 | `check_agent_health()` | Validate Python, codomyrmex, env vars |
@@ -30,17 +32,9 @@ Agent utility scripts for testing, orchestrating, and demonstrating the full cap
 ### run_all_agents.py
 
 | Function | Description |
-|----------|-------------|
+| -------- | ----------- |
 | `run_script(path)` | Execute script with timeout, capture output |
 | `main()` | Run all examples, report pass/fail summary |
-
-### test_gemini_dispatch.py
-
-| Function | Description |
-|----------|-------------|
-| `test_gemini_client()` | Direct GeminiClient API test |
-| `test_code_editor_gemini()` | CodeEditor generation and refactoring |
-| `test_orchestrator_dispatch()` | Multi-agent parallel execution |
 
 ## Operating Contracts
 

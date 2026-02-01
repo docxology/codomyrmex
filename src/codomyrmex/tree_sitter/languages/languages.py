@@ -1,24 +1,28 @@
 """Language management for tree-sitter."""
 
-import tree_sitter
+import importlib
 import os
 import logging
 from typing import Dict, Optional, Any
+
+# Import the external tree-sitter package explicitly to avoid shadowing
+# by the local codomyrmex.tree_sitter package.
+_tree_sitter = importlib.import_module("tree_sitter")
 
 logger = logging.getLogger(__name__)
 
 class LanguageManager:
     """Manages tree-sitter language libraries."""
-    
+
     _languages: Dict[str, Any] = {}
-    
+
     @classmethod
     def load_language(cls, library_path: str, lang_name: str) -> bool:
         """Load a language from a shared library (.so, .dll, .dylib)."""
         try:
             # Note: tree-sitter 0.20+ uses Language(library_path, lang_name)
             # This is a common wrapper pattern.
-            lang = tree_sitter.Language(library_path, lang_name)
+            lang = _tree_sitter.Language(library_path, lang_name)
             cls._languages[lang_name] = lang
             return True
         except Exception as e:
@@ -35,7 +39,7 @@ class LanguageManager:
         """Discovers and loads all .so files in a directory as languages."""
         if not os.path.exists(search_path):
             return
-            
+
         for root, _, files in os.walk(search_path):
             for file in files:
                 if file.endswith((".so", ".dylib", ".dll")):

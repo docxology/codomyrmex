@@ -44,7 +44,13 @@ except ImportError:
     HAS_OTLP_EXPORTER = False
     OTLPExporter = None
 
+from . import tracing
+from . import sampling
+from . import alerting
 __all__ = [
+    'alerting',
+    'sampling',
+    'tracing',
     "exporters",
     "spans",
     "metrics",
