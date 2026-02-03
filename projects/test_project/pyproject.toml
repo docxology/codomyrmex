@@ -20,6 +20,7 @@ classifiers = [
 
 dependencies = [
     "pyyaml>=6.0",
+    "codomyrmex",
 ]
 
 [project.optional-dependencies]
@@ -27,9 +28,9 @@ dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
 ]
-codomyrmex = [
-    "codomyrmex",
-]
+
+[tool.uv.sources]
+codomyrmex = { path = "../../", editable = true }
 
 [project.scripts]
 test-project = "src.main:main"

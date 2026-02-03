@@ -19,12 +19,11 @@ from datetime import datetime
 import json
 import logging
 
-# Try to import codomyrmex modules
-try:
-    from codomyrmex.logging_monitoring import get_logger
-except ImportError:
-    def get_logger(name: str) -> logging.Logger:
-        return logging.getLogger(name)
+# Real codomyrmex imports - no fallback for mega-seed project
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.serialization import serialize, SerializationFormat
+
+HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 
 logger = get_logger(__name__)
 
@@ -160,6 +159,17 @@ class ReportGenerator:
             paths[fmt] = self.generate(analysis_results, config)
             
         return paths
+
+    def _truncation_notice(self, files: list, config: "ReportConfig") -> str:
+        """Generate truncation notice HTML if files exceed max limit."""
+        if len(files) > config.max_files:
+            shown = min(len(files), config.max_files)
+            total = len(files)
+            return (
+                f'<p style="color: var(--muted); margin-top: 16px;">'
+                f'Showing {shown} of {total} files</p>'
+            )
+        return ''
         
     def _generate_json_report(
         self,
@@ -274,7 +284,10 @@ class ReportGenerator:
 """
             for issue in all_issues[:20]:
                 file_name = Path(issue.get("file", "")).name
-                content += f"| {file_name} | {issue.get('line', 0)} | {issue.get('severity', 'info')} | {issue.get('message', '')} |\n"
+                line_num = issue.get('line', 0)
+                severity = issue.get('severity', 'info')
+                message = issue.get('message', '')
+                content += f"| {file_name} | {line_num} | {severity} | {message} |\n"
             
             if len(all_issues) > 20:
                 content += f"\n*...and {len(all_issues) - 20} more issues*\n"
@@ -603,7 +616,7 @@ class ReportGenerator:
                     {file_rows}
                 </tbody>
             </table>
-            {f'<p style="color: var(--muted); margin-top: 16px;">Showing {min(len(files), config.max_files)} of {len(files)} files</p>' if len(files) > config.max_files else ''}
+            {self._truncation_notice(files, config)}
         </div>
         
         <div class="footer">

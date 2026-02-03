@@ -21,14 +21,15 @@ from datetime import datetime
 from enum import Enum
 import logging
 
-# Try to import codomyrmex modules
-try:
-    from codomyrmex.logging_monitoring import get_logger
-except ImportError:
-    def get_logger(name: str) -> logging.Logger:
-        return logging.getLogger(name)
+# Real codomyrmex imports - no fallback for mega-seed project
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.events import get_event_bus, Event, EventType
+from codomyrmex.orchestrator import TaskStatus as OrchestratorTaskStatus
+
+HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 
 logger = get_logger(__name__)
+event_bus = get_event_bus()
 
 
 class PipelineStatus(Enum):

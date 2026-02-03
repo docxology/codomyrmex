@@ -19,12 +19,10 @@ from datetime import datetime
 import json
 import logging
 
-# Try to import codomyrmex modules
-try:
-    from codomyrmex.logging_monitoring import get_logger
-except ImportError:
-    def get_logger(name: str) -> logging.Logger:
-        return logging.getLogger(name)
+# Real codomyrmex imports - no fallback for mega-seed project
+from codomyrmex.logging_monitoring import get_logger
+
+HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 
 logger = get_logger(__name__)
 
@@ -393,12 +391,26 @@ class DataVisualizer:
 <head>
     <title>{config.title}</title>
     <style>
-        body {{ font-family: sans-serif; background: {self.colors['background']}; color: {self.colors['text']}; padding: 20px; }}
+        body {{
+            font-family: sans-serif;
+            background: {self.colors['background']};
+            color: {self.colors['text']};
+            padding: 20px;
+        }}
         .chart-title {{ font-size: 1.5em; margin-bottom: 20px; }}
         .bar-row {{ display: flex; align-items: center; margin: 10px 0; }}
         .bar-label {{ width: 150px; }}
-        .bar-container {{ flex: 1; background: {self.colors['surface']}; border-radius: 4px; margin: 0 10px; }}
-        .bar {{ background: linear-gradient(90deg, {self.colors['primary']}, {self.colors['secondary']}); height: 24px; border-radius: 4px; }}
+        .bar-container {{
+            flex: 1;
+            background: {self.colors['surface']};
+            border-radius: 4px;
+            margin: 0 10px;
+        }}
+        .bar {{
+            background: linear-gradient(90deg, {self.colors['primary']}, {self.colors['secondary']});
+            height: 24px;
+            border-radius: 4px;
+        }}
         .bar-value {{ width: 60px; text-align: right; }}
     </style>
 </head>

@@ -20,12 +20,11 @@ from dataclasses import dataclass, field
 import logging
 import re
 
-# Try to import codomyrmex modules, fall back to basic implementations
-try:
-    from codomyrmex.logging_monitoring import get_logger
-except ImportError:
-    def get_logger(name: str) -> logging.Logger:
-        return logging.getLogger(name)
+# Real codomyrmex imports - no fallback for mega-seed project
+from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.validation import is_valid
+
+HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 
 logger = get_logger(__name__)
 
@@ -313,12 +312,13 @@ class ProjectAnalyzer:
                     "line": i
                 })
                 
-            # Check for TODO comments
-            if "TODO" in line or "FIXME" in line:
+            # Check for actual comment lines containing task markers
+            stripped = line.lstrip()
+            if stripped.startswith("#") and ("TODO" in stripped or "FIXME" in stripped):
                 issues.append({
-                    "type": "todo",
+                    "type": "task_marker",
                     "severity": "info",
-                    "message": f"TODO/FIXME comment found",
+                    "message": "Consider addressing task marker comment",
                     "line": i
                 })
                 

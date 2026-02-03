@@ -21,22 +21,15 @@ from typing import Optional, Dict, Any
 import sys
 import logging
 
-# Configure basic logging if codomyrmex is not available
-try:
-    from codomyrmex.logging_monitoring import setup_logging, get_logger
-    HAS_CODOMYRMEX_LOGGING = True
-except ImportError:
-    HAS_CODOMYRMEX_LOGGING = False
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
-    def get_logger(name: str) -> logging.Logger:
-        return logging.getLogger(name)
-    def setup_logging() -> None:
-        pass
+# Real codomyrmex imports - no fallback for mega-seed project
+from codomyrmex.logging_monitoring import setup_logging, get_logger
+from codomyrmex.events import get_event_bus, Event, EventType
+from codomyrmex.config_management import load_configuration
+
+HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 
 logger = get_logger(__name__)
+event_bus = get_event_bus()
 
 
 def run_analysis(
@@ -66,6 +59,13 @@ def run_analysis(
     """
     setup_logging()
     logger.info(f"Starting analysis of {target_path}")
+    
+    # Publish analysis start event
+    event_bus.publish(Event(
+        event_type=EventType.CUSTOM,
+        source="test_project.main",
+        data={"action": "analysis_start", "target": str(target_path)}
+    ))
     
     # Import here to avoid circular imports
     from .analyzer import ProjectAnalyzer
