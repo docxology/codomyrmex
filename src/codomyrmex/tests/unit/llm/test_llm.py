@@ -33,6 +33,7 @@ import pytest
 # Test the LLM Config Module
 # ============================================================================
 
+@pytest.mark.unit
 class TestLLMConfig(TestCase):
     """Tests for LLMConfig class."""
 
@@ -209,6 +210,7 @@ class TestLLMConfig(TestCase):
 # Test the Execution Options
 # ============================================================================
 
+@pytest.mark.unit
 class TestExecutionOptions(TestCase):
     """Tests for ExecutionOptions dataclass."""
 
@@ -262,6 +264,7 @@ class TestExecutionOptions(TestCase):
 # Test Model Runner with Mocks
 # ============================================================================
 
+@pytest.mark.unit
 class TestModelRunner(TestCase):
     """Tests for ModelRunner class with mocked OllamaManager."""
 
@@ -501,6 +504,7 @@ class TestModelRunner(TestCase):
 # Test Ollama Manager with Mocks
 # ============================================================================
 
+@pytest.mark.unit
 class TestOllamaManager(TestCase):
     """Tests for OllamaManager class with mocked external calls."""
 
@@ -682,6 +686,7 @@ class TestOllamaManager(TestCase):
 # Test Output Manager
 # ============================================================================
 
+@pytest.mark.unit
 class TestOutputManager(TestCase):
     """Tests for OutputManager class."""
 
@@ -826,6 +831,7 @@ class TestOutputManager(TestCase):
 # Test Config Manager
 # ============================================================================
 
+@pytest.mark.unit
 class TestConfigManager(TestCase):
     """Tests for ConfigManager class."""
 
@@ -914,6 +920,7 @@ class TestConfigManager(TestCase):
 # Test LLM Exceptions
 # ============================================================================
 
+@pytest.mark.unit
 class TestLLMExceptions(TestCase):
     """Tests for LLM exception classes."""
 
@@ -1019,6 +1026,7 @@ class TestLLMExceptions(TestCase):
 # Test Fabric Manager with Mocks
 # ============================================================================
 
+@pytest.mark.unit
 class TestFabricManager(TestCase):
     """Tests for FabricManager class."""
 
@@ -1103,6 +1111,7 @@ class TestFabricManager(TestCase):
 # Test Fabric Orchestrator
 # ============================================================================
 
+@pytest.mark.unit
 class TestFabricOrchestrator(TestCase):
     """Tests for FabricOrchestrator class."""
 
@@ -1160,6 +1169,7 @@ class TestFabricOrchestrator(TestCase):
 # Test Async Model Runner Methods
 # ============================================================================
 
+@pytest.mark.unit
 class TestAsyncModelRunner(TestCase):
     """Tests for async methods in ModelRunner."""
 
@@ -1221,6 +1231,7 @@ class TestAsyncModelRunner(TestCase):
 # Test Global Config Functions
 # ============================================================================
 
+@pytest.mark.unit
 class TestGlobalConfigFunctions(TestCase):
     """Tests for global config functions."""
 
@@ -1275,6 +1286,7 @@ class TestGlobalConfigFunctions(TestCase):
 # Test Token Counting Simulation
 # ============================================================================
 
+@pytest.mark.unit
 class TestTokenCounting(TestCase):
     """Tests for token counting functionality."""
 
@@ -1323,6 +1335,7 @@ class TestTokenCounting(TestCase):
 # Test Error Recovery Patterns
 # ============================================================================
 
+@pytest.mark.unit
 class TestErrorRecovery(TestCase):
     """Tests for error recovery and retry patterns."""
 

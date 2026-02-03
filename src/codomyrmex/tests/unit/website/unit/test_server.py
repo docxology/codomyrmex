@@ -43,6 +43,7 @@ def create_mock_request(path, method="GET", body=None, headers=None):
     return mock_handler
 
 
+@pytest.mark.unit
 class TestWebsiteServerInit:
     """Tests for WebsiteServer initialization."""
 
@@ -52,6 +53,7 @@ class TestWebsiteServerInit:
         assert hasattr(WebsiteServer, 'data_provider')
 
 
+@pytest.mark.unit
 class TestWebsiteServerGETEndpoints:
     """Tests for GET request handlers."""
 
@@ -96,6 +98,7 @@ class TestWebsiteServerGETEndpoints:
         mock_provider.get_pipeline_status.assert_called_once()
 
 
+@pytest.mark.unit
 class TestWebsiteServerPOSTEndpoints:
     """Tests for POST request handlers."""
 
@@ -146,6 +149,7 @@ class TestWebsiteServerPOSTEndpoints:
         mock_provider.get_available_scripts.assert_called_once()
 
 
+@pytest.mark.unit
 class TestWebsiteServerChat:
     """Tests for chat endpoint."""
 
@@ -189,6 +193,7 @@ class TestWebsiteServerChat:
         WebsiteServer.handle_chat(mock_handler)
 
 
+@pytest.mark.unit
 class TestWebsiteServerJsonResponse:
     """Tests for JSON response helper."""
 
@@ -210,6 +215,7 @@ class TestWebsiteServerJsonResponse:
         mock_handler.send_response.assert_called_with(404)
 
 
+@pytest.mark.unit
 class TestWebsiteServerSecurityChecks:
     """Tests for security-related functionality."""
 

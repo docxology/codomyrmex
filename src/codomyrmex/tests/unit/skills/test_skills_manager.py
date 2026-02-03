@@ -74,6 +74,7 @@ def test_sync_upstream(mock_pull, temp_dir):
     mock_pull.assert_called_once()
 
 
+@pytest.mark.unit
 def test_get_skill(temp_dir):
     """Test getting a skill."""
     skills_dir = temp_dir / "skills"
@@ -93,6 +94,7 @@ def test_get_skill(temp_dir):
     assert skill["description"] == "Test skill"
 
 
+@pytest.mark.unit
 def test_list_skills(temp_dir):
     """Test listing skills."""
     skills_dir = temp_dir / "skills"
@@ -117,6 +119,7 @@ def test_list_skills(temp_dir):
     assert len(skills) == 3
 
 
+@pytest.mark.unit
 def test_search_skills(temp_dir):
     """Test searching skills."""
     skills_dir = temp_dir / "skills"
@@ -139,6 +142,7 @@ def test_search_skills(temp_dir):
     assert len(results) > 0
 
 
+@pytest.mark.unit
 def test_add_custom_skill(temp_dir):
     """Test adding a custom skill."""
     skills_dir = temp_dir / "skills"
@@ -164,6 +168,7 @@ def test_add_custom_skill(temp_dir):
     assert skill["description"] == "Custom skill"
 
 
+@pytest.mark.unit
 def test_get_categories(temp_dir):
     """Test getting categories."""
     skills_dir = temp_dir / "skills"

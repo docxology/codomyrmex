@@ -23,6 +23,7 @@ except ImportError as e:
     raise
 
 
+@pytest.mark.unit
 class TestCLIBasics:
     """Test basic CLI functionality."""
 
@@ -56,6 +57,7 @@ class TestCLIBasics:
         assert len(show_info.__doc__.strip()) > 10
 
 
+@pytest.mark.unit
 class TestCLIRuntime:
     """Test CLI functionality that can run safely."""
 
@@ -80,6 +82,7 @@ class TestCLIRuntime:
             assert isinstance(e, Exception)
 
 
+@pytest.mark.unit
 class TestCLIModuleStructure:
     """Test CLI module structure and organization."""
 

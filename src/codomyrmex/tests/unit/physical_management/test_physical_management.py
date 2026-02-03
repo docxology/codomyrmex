@@ -5,6 +5,7 @@ import pytest
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestPhysicalManagement:
     """Test cases for physical management functionality."""
 

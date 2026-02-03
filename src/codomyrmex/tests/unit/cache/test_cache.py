@@ -13,6 +13,7 @@ from codomyrmex.cache.backends.in_memory import InMemoryCache
 from codomyrmex.cache.stats import CacheStats
 
 
+@pytest.mark.unit
 class TestCacheModuleImport:
     """Tests for cache module import."""
 
@@ -32,6 +33,7 @@ class TestCacheModuleImport:
         assert hasattr(cache, "get_cache")
 
 
+@pytest.mark.unit
 class TestCacheStats:
     """Tests for CacheStats class."""
 
@@ -131,6 +133,7 @@ class TestCacheStats:
         assert stats.usage_percent == 50.0
 
 
+@pytest.mark.unit
 class TestInMemoryCacheBasics:
     """Tests for basic InMemoryCache operations."""
 
@@ -213,6 +216,7 @@ class TestInMemoryCacheBasics:
         assert cache.stats.size == 0
 
 
+@pytest.mark.unit
 class TestInMemoryCacheTypes:
     """Tests for caching different types."""
 
@@ -281,6 +285,7 @@ class TestInMemoryCacheTypes:
         assert result == complex_value
 
 
+@pytest.mark.unit
 class TestInMemoryCacheTTL:
     """Tests for TTL (time-to-live) functionality."""
 
@@ -350,6 +355,7 @@ class TestInMemoryCacheTTL:
         assert cache.get("key") == "value"
 
 
+@pytest.mark.unit
 class TestInMemoryCacheEviction:
     """Tests for cache eviction."""
 
@@ -399,6 +405,7 @@ class TestInMemoryCacheEviction:
         assert cache.get("b") == 2
 
 
+@pytest.mark.unit
 class TestInMemoryCachePatterns:
     """Tests for pattern-based operations."""
 
@@ -428,6 +435,7 @@ class TestInMemoryCachePatterns:
         assert deleted == 0
 
 
+@pytest.mark.unit
 class TestCacheHitMissTracking:
     """Tests for hit/miss tracking."""
 
@@ -467,6 +475,7 @@ class TestCacheHitMissTracking:
         assert cache.stats.total_requests == 4
 
 
+@pytest.mark.unit
 class TestFileBasedCache:
     """Tests for FileBasedCache backend."""
 
@@ -569,6 +578,7 @@ class TestFileBasedCache:
         assert result == complex_value
 
 
+@pytest.mark.unit
 class TestNamespacedCache:
     """Tests for NamespacedCache."""
 
@@ -652,6 +662,7 @@ class TestNamespacedCache:
         assert ns_cache.get("config") == "value"
 
 
+@pytest.mark.unit
 class TestCacheManager:
     """Tests for CacheManager class."""
 
@@ -722,6 +733,7 @@ class TestCacheManager:
         assert isinstance(cache, InMemoryCache)
 
 
+@pytest.mark.unit
 class TestTTLManager:
     """Tests for TTLManager class."""
 
@@ -776,6 +788,7 @@ class TestTTLManager:
         mock_cache.cleanup_expired.assert_called_once()
 
 
+@pytest.mark.unit
 class TestGetCacheFunction:
     """Tests for get_cache convenience function."""
 
@@ -805,6 +818,7 @@ class TestGetCacheFunction:
         assert isinstance(cache, FileBasedCache)
 
 
+@pytest.mark.unit
 class TestCacheError:
     """Tests for CacheError exception."""
 
@@ -818,6 +832,7 @@ class TestCacheError:
         assert isinstance(error, Exception)
 
 
+@pytest.mark.unit
 class TestCacheIntegration:
     """Integration tests for cache module."""
 
@@ -901,6 +916,7 @@ class TestCacheIntegration:
         assert products_cache.get("1") == {"name": "Widget"}
 
 
+@pytest.mark.unit
 class TestCacheBasicOps:
     """Legacy test for basic operations."""
 

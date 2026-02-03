@@ -28,6 +28,7 @@ def gemini_client(mock_genai_client) -> Generator[GeminiClient, None, None]:
     client = GeminiClient(config=config)
     yield client
 
+@pytest.mark.unit
 class TestGeminiClient:
     
     def test_init(self, gemini_client):

@@ -251,9 +251,7 @@ class CircuitBreaker:
             self.record_failure()
 
 
-class CircuitOpenError(Exception):
-    """Exception raised when circuit is open."""
-    pass
+from codomyrmex.exceptions import CircuitOpenError, BulkheadFullError
 
 
 class RetryPolicy:

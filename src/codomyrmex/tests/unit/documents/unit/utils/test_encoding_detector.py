@@ -1,9 +1,11 @@
+import pytest
 
 import unittest
 import sys
 from unittest.mock import patch, mock_open, MagicMock
 from codomyrmex.documents.utils.encoding_detector import detect_encoding
 
+@pytest.mark.unit
 class TestEncodingDetector(unittest.TestCase):
     def test_detect_encoding_utf8_bom(self):
         """Test detecting UTF-8 with BOM using mock because no chardet."""

@@ -25,6 +25,7 @@ from codomyrmex.git_operations.core.git import (
 def repo_path(tmp_path):
     return str(tmp_path)
 
+@pytest.mark.unit
 @patch("subprocess.run")
 def test_add_remote(mock_run, repo_path):
     mock_run.return_value.returncode = 0

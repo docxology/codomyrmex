@@ -3,6 +3,7 @@
 import pytest
 from codomyrmex.model_ops import Dataset, FineTuningJob, DatasetSanitizer, Evaluator
 
+@pytest.mark.unit
 def test_dataset_validation():
     """Test dataset validation logic."""
     valid_data = [
@@ -16,6 +17,7 @@ def test_dataset_validation():
     ds_invalid = Dataset(invalid_data)
     assert ds_invalid.validate() is False
 
+@pytest.mark.unit
 def test_fine_tuning_flow():
     """Test the orchestration flow of a fine-tuning job."""
     ds = Dataset([{"prompt": "A", "completion": "B"}])
@@ -30,6 +32,7 @@ def test_fine_tuning_flow():
     assert status == "completed"
     assert job.status == "completed"
 
+@pytest.mark.unit
 def test_dataset_sanitizer():
     """Test sanitization logic."""
     data = [{"prompt": "hi", "pii": "secret"}, {"prompt": "hello"}]
@@ -38,6 +41,7 @@ def test_dataset_sanitizer():
     assert "pii" not in sanitized.data[0]
     assert len(sanitized.data) == 2
 
+@pytest.mark.unit
 def test_evaluator():
     """Test evaluation logic."""
     from codomyrmex.model_ops.evaluators import exact_match_metric

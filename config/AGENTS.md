@@ -1,28 +1,74 @@
 # Codomyrmex Agents — config
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-Configuration templates and examples.
+
+Configuration templates and examples for all Codomyrmex subsystems. Provides reusable configuration patterns for LLM providers, databases, monitoring, security, and workflows.
+
+## Directory Structure
+
+```
+config/
+├── api/           # API configuration templates
+├── cache/         # Cache strategy configurations
+├── database/      # Database connection configs
+├── examples/      # Example configuration files
+├── llm/           # LLM provider configurations
+├── monitoring/    # Monitoring and alerting configs
+├── security/      # Security policy templates
+├── templates/     # Generic configuration templates
+└── workflows/     # Workflow definition templates
+```
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `api/` – Directory containing api components
-- `cache/` – Directory containing cache components
-- `database/` – Directory containing database components
-- `examples/` – Directory containing examples components
-- `llm/` – Directory containing llm components
-- `monitoring/` – Directory containing monitoring components
-- `security/` – Directory containing security components
-- `templates/` – Directory containing templates components
-- `workflows/` – Directory containing workflows components
+
+| Component | Type | Description |
+|-----------|------|-------------|
+| `llm/` | Directory | LLM provider configs (OpenAI, Anthropic, Ollama) |
+| `database/` | Directory | Database connection templates |
+| `monitoring/` | Directory | Logging and metrics configuration |
+| `security/` | Directory | Security policies and API key management |
+| `workflows/` | Directory | Workflow orchestration templates |
+| `templates/` | Directory | Base configuration templates |
+| `examples/` | Directory | Working configuration examples |
+
+## Agent Guidelines
+
+### Configuration Quality Standards
+
+1. **Security**: Never commit real credentials; use placeholders
+2. **Validation**: All configs should have JSON Schema or Pydantic validation
+3. **Documentation**: Each config file should have inline documentation
+4. **Defaults**: Provide sensible defaults with override capability
+
+### When Modifying Configurations
+
+- Test configurations in isolation before integration
+- Update corresponding documentation when adding new fields
+- Ensure backward compatibility or document breaking changes
+- Validate against schemas where available
+
+### Configuration Categories
+
+| Category | Purpose | Location |
+|----------|---------|----------|
+| **LLM** | AI provider settings | `llm/` |
+| **Database** | Connection strings, pools | `database/` |
+| **Monitoring** | Logging levels, metrics | `monitoring/` |
+| **Security** | API keys, policies | `security/` |
+| **Workflows** | Orchestration definitions | `workflows/` |
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+- Maintain alignment between configurations and runtime requirements
+- Ensure Model Context Protocol interfaces remain available for sibling agents
+- Never expose sensitive credentials in configuration examples
+- Use environment variables for secrets with clear documentation
 
 ## Navigation Links
-- **🏠 Project Root**: ../README.md - Main project documentation
+
+- **📁 Parent**: [../README.md](../README.md) - Project root
+- **📖 Config Docs**: [../docs/reference/](../docs/reference/) - Reference documentation
+- **🔧 Deployment**: [../docs/deployment/](../docs/deployment/) - Deployment guides
+- **🔒 Security**: [../docs/reference/security.md](../docs/reference/security.md) - Security practices

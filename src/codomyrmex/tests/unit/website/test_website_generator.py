@@ -19,11 +19,13 @@ def mock_dirs(tmp_path):
     
     return output_dir, module_dir
 
+@pytest.mark.unit
 def test_generator_initialization(tmp_path):
     gen = WebsiteGenerator(output_dir=str(tmp_path / "out"), root_dir=str(tmp_path))
     assert gen.output_dir == tmp_path / "out"
     assert gen.root_dir == tmp_path
 
+@pytest.mark.unit
 def test_generate_flow(mock_dirs):
     output_dir, module_dir = mock_dirs
     

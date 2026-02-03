@@ -13,6 +13,7 @@ from codomyrmex.scrape.exceptions import ScrapeError, ScrapeValidationError, Scr
 from codomyrmex.scrape.scraper import Scraper
 
 
+@pytest.mark.unit
 class TestAdapter(BaseScraper):
     """Test adapter implementing BaseScraper interface with real data structures."""
 
@@ -47,6 +48,7 @@ class TestAdapter(BaseScraper):
         return ExtractResult(data={"extracted": "data"}, urls=urls)
 
 
+@pytest.mark.unit
 class TestScraper:
     """Test Scraper class with real implementations."""
 

@@ -104,6 +104,9 @@ dependencies = [
     "mako>=1.2.0",
     "redis>=5.0.0",
     "paramiko>=3.3.0",
+    "aiohttp>=3.13.3",
+    "msgpack>=1.1.2",
+    "fastavro>=1.12.1",
 ]
 
 [project.optional-dependencies]
@@ -203,6 +206,29 @@ scrape = [
     "firecrawl-py>=1.0.0",
 ]
 
+fpf = [
+    "pillow>=10.0.0",
+]
+
+documents = [
+    "chardet>=5.0.0",
+    "pypdf>=3.0.0",
+]
+
+audio = [
+    "faster-whisper>=1.0.0",  # Local Whisper STT (CTranslate2 backend)
+    "pyttsx3>=2.90",          # Offline local TTS
+    "edge-tts>=6.1.0",        # Free Microsoft Edge neural TTS
+    "pydub>=0.25.0",          # Audio manipulation
+    "soundfile>=0.12.0",      # Audio file I/O
+]
+
+video = [
+    "moviepy>=1.0.3",         # Video processing
+    "opencv-python>=4.8.0",   # Frame extraction, analysis
+    "pillow>=10.0.0",         # Image processing
+]
+
 [project.urls]
 Homepage = "https://github.com/codomyrmex/codomyrmex"
 Repository = "https://github.com/codomyrmex/codomyrmex"
@@ -218,6 +244,7 @@ dev = [
     "pytest-mock>=3.10.0",
     "pytest-cov>=4.0.0",
     "pytest-timeout>=2.1.0",
+    "pytest-asyncio>=0.23.0",
     "black>=23.0.0",
     "mypy>=1.0.0",
     "ruff>=0.1.0",

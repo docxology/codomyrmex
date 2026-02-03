@@ -38,6 +38,32 @@ class LLMConfig:
 
     Provides centralized configuration for model selection, generation parameters,
     and output settings with environment variable support.
+
+    Environment Variables:
+        All configuration parameters can be overridden via environment variables:
+
+        | Environment Variable | Description                    | Default           |
+        |---------------------|--------------------------------|-------------------|
+        | LLM_MODEL           | Model name                     | llama3.1:latest   |
+        | LLM_TEMPERATURE     | Generation temperature (0.0-2.0)| 0.7              |
+        | LLM_MAX_TOKENS      | Maximum tokens to generate     | 1000              |
+        | LLM_TOP_P           | Top-p sampling parameter       | 0.9               |
+        | LLM_TOP_K           | Top-k sampling parameter       | 40                |
+        | LLM_TIMEOUT         | Request timeout in seconds     | 30                |
+        | LLM_BASE_URL        | Ollama server base URL         | http://localhost:11434 |
+        | LLM_OUTPUT_ROOT     | Root directory for outputs     | src/codomyrmex.llm/outputs |
+
+    Example:
+        # Using environment variables
+        export LLM_MODEL="llama3.2:latest"
+        export LLM_TEMPERATURE="0.5"
+        export LLM_MAX_TOKENS="2000"
+
+        # Then in code:
+        config = LLMConfig()  # Will use env vars automatically
+
+        # Or override programmatically:
+        config = LLMConfig(model="phi3:latest", temperature=0.3)
     """
 
     # Default configurations

@@ -19,6 +19,7 @@ from codomyrmex.git_operations import (
 )
 
 
+@pytest.mark.integration
 class TestCompleteWorkflow:
     """Tests for complete Git workflows."""
 

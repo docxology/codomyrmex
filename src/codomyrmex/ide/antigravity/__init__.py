@@ -1,3 +1,15 @@
+"""Antigravity IDE Integration
+
+Integration with Google DeepMind's Antigravity IDE - the agentic AI coding
+assistant. Provides programmatic access to Antigravity's capabilities for
+meta-level control and automation.
+
+Example:
+    >>> from codomyrmex.ide.antigravity import AntigravityClient
+    >>> client = AntigravityClient()
+    >>> client.connect()
+    >>> capabilities = client.get_capabilities()
+"""
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional, Dict, List, Callable
@@ -35,18 +47,7 @@ except ImportError:
     SessionError = Exception
     ArtifactError = Exception
 
-"""Antigravity IDE Integration
 
-Integration with Google DeepMind's Antigravity IDE - the agentic AI coding
-assistant. Provides programmatic access to Antigravity's capabilities for
-meta-level control and automation.
-
-Example:
-    >>> from codomyrmex.ide.antigravity import AntigravityClient
-    >>> client = AntigravityClient()
-    >>> client.connect()
-    >>> capabilities = client.get_capabilities()
-"""
 
 @dataclass
 class Artifact:

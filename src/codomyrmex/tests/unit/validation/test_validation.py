@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 
+@pytest.mark.unit
 class TestValidationModuleImport:
     """Tests for module import."""
 
@@ -32,6 +33,7 @@ class TestValidationModuleImport:
         assert hasattr(validation, "get_errors")
 
 
+@pytest.mark.unit
 class TestValidationError:
     """Tests for ValidationError class."""
 
@@ -87,6 +89,7 @@ class TestValidationError:
         assert error.path == ["user", "contact", "email"]
 
 
+@pytest.mark.unit
 class TestValidationWarning:
     """Tests for ValidationWarning class."""
 
@@ -132,6 +135,7 @@ class TestValidationWarning:
         assert warning.path == ["settings", "config"]
 
 
+@pytest.mark.unit
 class TestValidationResult:
     """Tests for ValidationResult class."""
 
@@ -201,6 +205,7 @@ class TestValidationResult:
         assert result.is_valid is False
 
 
+@pytest.mark.unit
 class TestValidator:
     """Tests for Validator class."""
 
@@ -347,6 +352,7 @@ class TestValidator:
         assert result.is_valid is False
 
 
+@pytest.mark.unit
 class TestBasicValidation:
     """Tests for basic validation without external libraries."""
 
@@ -492,6 +498,7 @@ class TestBasicValidation:
         assert result.is_valid is True
 
 
+@pytest.mark.unit
 class TestCustomValidation:
     """Tests for custom validator support."""
 
@@ -575,6 +582,7 @@ class TestCustomValidation:
         assert result.is_valid is True
 
 
+@pytest.mark.unit
 class TestPydanticValidation:
     """Tests for Pydantic model validation."""
 
@@ -684,6 +692,7 @@ class TestPydanticValidation:
         assert result.is_valid is False
 
 
+@pytest.mark.unit
 class TestUnknownValidatorType:
     """Tests for unknown validator type handling."""
 
@@ -697,6 +706,7 @@ class TestUnknownValidatorType:
         assert result.is_valid is False
 
 
+@pytest.mark.unit
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions."""
 
@@ -746,6 +756,7 @@ class TestConvenienceFunctions:
         assert result.is_valid is True
 
 
+@pytest.mark.unit
 class TestContextualValidator:
     """Tests for ContextualValidator class."""
 
@@ -846,6 +857,7 @@ class TestContextualValidator:
         assert len(issues) == 1
 
 
+@pytest.mark.unit
 class TestValidationIssue:
     """Tests for ValidationIssue class."""
 
@@ -879,6 +891,7 @@ class TestValidationIssue:
         assert issue.severity == "warning"
 
 
+@pytest.mark.unit
 class TestTypeSafeParser:
     """Tests for TypeSafeParser class."""
 
@@ -932,6 +945,7 @@ class TestTypeSafeParser:
             TypeSafeParser.parse_dict(UserModel, {"name": "John"})
 
 
+@pytest.mark.unit
 class TestValidationManager:
     """Tests for ValidationManager class."""
 
@@ -990,6 +1004,7 @@ class TestValidationManager:
         assert result.is_valid is True
 
 
+@pytest.mark.unit
 class TestValidationSummary:
     """Tests for ValidationSummary class."""
 

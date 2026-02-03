@@ -10,6 +10,7 @@ if str(src_path) not in sys.path:
 from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
 from codomyrmex.system_discovery.capability_scanner import CapabilityScanner
 
+@pytest.mark.unit
 class TestSystemDiscovery:
     
     @pytest.fixture

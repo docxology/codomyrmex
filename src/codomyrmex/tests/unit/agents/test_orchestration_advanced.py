@@ -13,6 +13,7 @@ from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
 from codomyrmex.agents.core.exceptions import AgentError
 
 
+@pytest.mark.unit
 class TestAgent(BaseAgent):
     """Test agent for advanced orchestration testing.
     
@@ -58,6 +59,7 @@ class TestAgent(BaseAgent):
         yield f"Stream from {self.name}"
 
 
+@pytest.mark.unit
 class TestSimpleOrchestration:
     """Simple orchestration scenarios."""
 
@@ -103,6 +105,7 @@ class TestSimpleOrchestration:
         assert "agent2" in response.content
 
 
+@pytest.mark.unit
 class TestComplexOrchestration:
     """Complex orchestration scenarios."""
 

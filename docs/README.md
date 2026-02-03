@@ -20,6 +20,16 @@ Comprehensive documentation for the Codomyrmex platform. This directory contains
 | [**project/**](project/) | Architecture, roadmap, contributing |
 | [**project_orchestration/**](project_orchestration/) | Multi-project workflow guides |
 
+### Secure Cognitive Agent
+
+Documentation for the secure, autonomous agent capabilities:
+
+- **Identity**: [Identity & Verification](../src/codomyrmex/identity/README.md)
+- **Wallet**: [Self-Custody & Recovery](../src/codomyrmex/wallet/README.md)
+- **Defense**: [Active Defense](../src/codomyrmex/defense/README.md)
+- **Market**: [Anonymous Markets](../src/codomyrmex/market/README.md)
+- **Privacy**: [Privacy & Mixnets](../src/codomyrmex/privacy/README.md)
+
 ## Quick Links
 
 ### For New Users

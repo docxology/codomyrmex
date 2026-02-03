@@ -1,3 +1,5 @@
+"""CLI command handlers."""
+
 from .ai import handle_ai_generate, handle_ai_refactor
 from .analysis import handle_code_analysis, handle_git_analysis, handle_module_test
 from .demos import handle_module_demo, demo_data_visualization, demo_ai_code_editing, demo_code_execution, demo_git_operations

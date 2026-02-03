@@ -37,9 +37,18 @@ This document provides a guide to Personal AI Infrastructure (PAI) documentation
 
 | Guide | Location | Description |
 | :--- | :--- | :--- |
-| Project Lifecycle | [project_orchestration/project-lifecycle-guide.md](project_orchestration/project-lifecycle-guide.md) | Workflow management |
 | Task Orchestration | [project_orchestration/task-orchestration-guide.md](project_orchestration/task-orchestration-guide.md) | Task coordination |
 | Workflow Config | [project_orchestration/workflow-configuration-schema.md](project_orchestration/workflow-configuration-schema.md) | Configuration |
+
+### Secure Cognitive Agent Capabilities
+
+| Guide | Location | Description |
+| :--- | :--- | :--- |
+| **Pseudonymity** | [../src/codomyrmex/identity/](../src/codomyrmex/identity/) | 3-Tier Persona System |
+| **Self-Custody** | [../src/codomyrmex/wallet/](../src/codomyrmex/wallet/) | Natural Ritual Recovery |
+| **Active Defense** | [../src/codomyrmex/defense/](../src/codomyrmex/defense/) | Exploit Detection & Poisoning |
+| **Anon Markets** | [../src/codomyrmex/market/](../src/codomyrmex/market/) | Reverse Auctions |
+| **Privacy Core** | [../src/codomyrmex/privacy/](../src/codomyrmex/privacy/) | Mixnet & Crumb Scrubbing |
 
 ### Security & Privacy
 

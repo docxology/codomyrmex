@@ -1,27 +1,47 @@
 # Codomyrmex Agents — docs/project_orchestration
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-Documentation files and guides.
+
+Advanced documentation for multi-project workflow orchestration, task coordination, and resource management at scale.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `config-driven-operations.md` – Project file
-- `dispatch-coordination.md` – Project file
-- `project-lifecycle-guide.md` – Project file
-- `project-template-schema.md` – Project file
-- `resource-configuration.md` – Project file
-- `task-orchestration-guide.md` – Project file
-- `workflow-configuration-schema.md` – Project file
+
+| File | Priority | Description |
+|------|----------|-------------|
+| [task-orchestration-guide.md](task-orchestration-guide.md) | **Critical** | Complete orchestration guide |
+| [workflow-configuration-schema.md](workflow-configuration-schema.md) | **Critical** | Workflow schema spec |
+| [project-lifecycle-guide.md](project-lifecycle-guide.md) | High | Lifecycle management |
+| [dispatch-coordination.md](dispatch-coordination.md) | High | Task dispatch patterns |
+| [config-driven-operations.md](config-driven-operations.md) | High | Config-driven workflows |
+| [project-template-schema.md](project-template-schema.md) | Medium | Project templates |
+| [resource-configuration.md](resource-configuration.md) | Medium | Resource management |
+
+## Agent Guidelines
+
+### Orchestration Quality Standards
+
+1. **Correctness**: Workflow schemas must be valid YAML/JSON
+2. **Examples**: Include runnable workflow examples
+3. **Patterns**: Document common orchestration patterns
+4. **Error Handling**: Document retry and fallback strategies
+
+### When Modifying Orchestration Docs
+
+- Validate all workflow schemas against current spec
+- Test orchestration examples with the orchestrator module
+- Update DAG visualization when dependencies change
+- Keep resource limits current with available hardware
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+- Maintain alignment between orchestration docs and orchestrator module
+- Ensure Model Context Protocol interfaces remain available for sibling agents
+- Record outcomes in shared telemetry and update TODO queues when necessary
 
 ## Navigation Links
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+
+- **📁 Parent Directory**: [docs/](../README.md)
+- **🏠 Project Root**: [../../README.md](../../README.md)
+- **📦 Related**: [Orchestrator Reference](../reference/orchestrator.md) | [Examples](../examples/orchestration-examples.md)

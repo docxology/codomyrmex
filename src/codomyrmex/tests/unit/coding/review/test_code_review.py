@@ -5,6 +5,7 @@ import pytest
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestCodeReview:
     """Test cases for code review functionality."""
 

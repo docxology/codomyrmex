@@ -187,10 +187,10 @@ done
 
 **Solution**:
 ```bash
-# Install Codomyrmex
+# Install Codomyrmex (uv recommended)
 uv sync
-# Or with pip
-pip install -e .
+# Or with uv pip
+uv pip install -e .
 ```
 
 ### Permission Denied
@@ -210,11 +210,13 @@ chmod -R 755 scripts/output/
 
 **Solution**:
 ```bash
-# Install dependencies
+# Install dependencies (uv recommended)
 uv sync
-# Or with pip
-pip install -r requirements.txt
+# Or with uv pip for individual packages
+uv pip install <package-name>
 ```
+
+> **Note**: Module-specific `requirements.txt` files are deprecated. All dependencies are managed in `pyproject.toml`.
 
 ## Related Documentation
 

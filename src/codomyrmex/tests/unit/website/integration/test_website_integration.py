@@ -25,6 +25,7 @@ from codomyrmex.website.data_provider import DataProvider
 from codomyrmex.website.server import WebsiteServer
 
 
+@pytest.mark.integration
 class TestFullWebsiteGeneration:
     """Integration tests for complete website generation."""
 
@@ -143,6 +144,7 @@ class TestFullWebsiteGeneration:
         assert "run_tests" in scripts_content or "deploy" in scripts_content
 
 
+@pytest.mark.integration
 class TestConfigOperations:
     """Integration tests for configuration file operations."""
 
@@ -166,6 +168,7 @@ class TestConfigOperations:
         assert 'key = "modified"' in new_content
 
 
+@pytest.mark.integration
 class TestDocumentationTree:
     """Integration tests for documentation tree building."""
 
@@ -207,6 +210,7 @@ class TestDocumentationTree:
         assert "README.md" in child_names or len(child_names) > 0
 
 
+@pytest.mark.integration
 class TestAssetsCopying:
     """Integration tests for assets copying."""
 
@@ -233,6 +237,7 @@ class TestAssetsCopying:
                 assert (output_dir / "assets" / "js").exists()
 
 
+@pytest.mark.integration
 class TestWebsiteServerIntegration:
     """Integration tests for the HTTP server."""
 
@@ -255,6 +260,7 @@ class TestWebsiteServerIntegration:
         assert hasattr(WebsiteServer, 'handle_pipelines_list')
 
 
+@pytest.mark.integration
 class TestSecurityIntegration:
     """Integration tests for security features."""
 

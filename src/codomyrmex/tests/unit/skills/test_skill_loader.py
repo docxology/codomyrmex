@@ -38,6 +38,7 @@ def sample_skill():
     }
 
 
+@pytest.mark.unit
 def test_load_skill_file(temp_dirs, sample_skill):
     """Test loading a skill file."""
     upstream_dir, custom_dir, cache_dir = temp_dirs
@@ -56,6 +57,7 @@ def test_load_skill_file(temp_dirs, sample_skill):
     assert len(result["patterns"]) == 1
 
 
+@pytest.mark.unit
 def test_get_merged_skill_upstream_only(temp_dirs, sample_skill):
     """Test getting a skill from upstream only."""
     upstream_dir, custom_dir, cache_dir = temp_dirs
@@ -74,6 +76,7 @@ def test_get_merged_skill_upstream_only(temp_dirs, sample_skill):
     assert result["_source"] == "upstream"
 
 
+@pytest.mark.unit
 def test_get_merged_skill_custom_override(temp_dirs, sample_skill):
     """Test custom skill overriding upstream."""
     upstream_dir, custom_dir, cache_dir = temp_dirs
@@ -100,6 +103,7 @@ def test_get_merged_skill_custom_override(temp_dirs, sample_skill):
     assert result["_source"] == "custom"
 
 
+@pytest.mark.unit
 def test_get_merged_skill_not_found(temp_dirs):
     """Test getting a non-existent skill."""
     upstream_dir, custom_dir, cache_dir = temp_dirs
@@ -109,6 +113,7 @@ def test_get_merged_skill_not_found(temp_dirs):
     assert result is None
 
 
+@pytest.mark.unit
 def test_load_all_skills(temp_dirs, sample_skill):
     """Test loading all skills."""
     upstream_dir, custom_dir, cache_dir = temp_dirs
@@ -129,6 +134,7 @@ def test_load_all_skills(temp_dirs, sample_skill):
     assert len(all_skills["category1"]) == 3
 
 
+@pytest.mark.unit
 def test_clear_cache(temp_dirs, sample_skill):
     """Test clearing the cache."""
     upstream_dir, custom_dir, cache_dir = temp_dirs

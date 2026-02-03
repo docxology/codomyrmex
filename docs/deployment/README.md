@@ -1,17 +1,51 @@
-# deployment
+# Deployment Documentation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+Guides for deploying Codomyrmex to production environments. Covers infrastructure requirements, deployment strategies, monitoring, and operational best practices.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `production.md` – File
+## Contents
+
+| File | Description |
+|------|-------------|
+| [**production.md**](production.md) | Comprehensive production deployment guide |
+| [AGENTS.md](AGENTS.md) | Agent coordination for deployment docs |
+| [SPEC.md](SPEC.md) | Deployment documentation specification |
+| [PAI.md](PAI.md) | Personal AI deployment considerations |
+
+## Key Topics
+
+### Production Deployment
+
+- **Infrastructure Requirements**: Hardware, Docker, Kubernetes
+- **Configuration Management**: Environment variables, secrets
+- **Scaling Strategies**: Horizontal scaling, load balancing
+- **Monitoring & Observability**: Logging, metrics, alerting
+
+### Security Considerations
+
+- API key management
+- Network security
+- Access control
+
+## Quick Start
+
+For immediate production deployment:
+
+```bash
+# See production.md for full guide
+./scripts/deploy.sh production
+```
+
+## Related Documentation
+
+- [Environment Setup](../development/environment-setup.md) - Development setup
+- [Security Guide](../reference/security.md) - Security best practices
+- [Architecture](../project/architecture.md) - System design
 
 ## Navigation
-- **Parent Directory**: [docs](../README.md)
-- **Project Root**: ../../README.md
+
+- **Parent**: [docs/](../README.md)
+- **Root**: [Project Root](../../README.md)

@@ -5,12 +5,14 @@ import pytest
 from codomyrmex.fpf import FPFExtractor, FPFSpec, Pattern, PatternStatus
 
 
+@pytest.mark.unit
 def test_extractor_initialization():
     """Test extractor initialization."""
     extractor = FPFExtractor()
     assert extractor is not None
 
 
+@pytest.mark.unit
 def test_extract_concepts():
     """Test concept extraction."""
     extractor = FPFExtractor()
@@ -28,6 +30,7 @@ def test_extract_concepts():
     assert len(concepts) > 0
 
 
+@pytest.mark.unit
 def test_extract_relationships():
     """Test relationship extraction."""
     extractor = FPFExtractor()
@@ -48,6 +51,7 @@ def test_extract_relationships():
     assert relationships[0].target == "A.0"
 
 
+@pytest.mark.unit
 def test_extract_keywords():
     """Test keyword extraction."""
     extractor = FPFExtractor()
@@ -67,6 +71,7 @@ def test_extract_keywords():
     assert "holon" in keywords["A.1"]
 
 
+@pytest.mark.unit
 def test_extract_concepts_empty_spec():
     """Test concept extraction from empty spec."""
     extractor = FPFExtractor()
@@ -76,6 +81,7 @@ def test_extract_concepts_empty_spec():
     assert len(concepts) == 0
 
 
+@pytest.mark.unit
 def test_extract_relationships_empty_spec():
     """Test relationship extraction from empty spec."""
     extractor = FPFExtractor()
@@ -85,6 +91,7 @@ def test_extract_relationships_empty_spec():
     assert len(relationships) == 0
 
 
+@pytest.mark.unit
 def test_extract_relationships_multiple_types():
     """Test extraction of multiple relationship types."""
     extractor = FPFExtractor()
@@ -109,6 +116,7 @@ def test_extract_relationships_multiple_types():
     assert "builds_on" in rel_types or "prerequisite_for" in rel_types
 
 
+@pytest.mark.unit
 def test_extract_dependencies_empty():
     """Test dependency extraction from empty spec."""
     extractor = FPFExtractor()
@@ -118,6 +126,7 @@ def test_extract_dependencies_empty():
     assert len(deps) == 0
 
 
+@pytest.mark.unit
 def test_extract_keywords_empty():
     """Test keyword extraction from empty spec."""
     extractor = FPFExtractor()

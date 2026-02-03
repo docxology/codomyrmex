@@ -1,3 +1,4 @@
+import pytest
 
 import unittest
 from unittest.mock import patch, MagicMock
@@ -6,6 +7,7 @@ from codomyrmex.documents.core.document_writer import DocumentWriter, write_docu
 from codomyrmex.documents.models.document import Document, DocumentFormat
 from codomyrmex.documents.exceptions import DocumentWriteError, UnsupportedFormatError
 
+@pytest.mark.unit
 class TestDocumentWriter(unittest.TestCase):
     def setUp(self):
         self.writer = DocumentWriter()
@@ -45,6 +47,7 @@ class TestDocumentWriter(unittest.TestCase):
         with self.assertRaises(DocumentWriteError):
             self.writer.write(doc, "test.xml")
 
+@pytest.mark.unit
 class TestWriteDocumentConvenience(unittest.TestCase):
     @patch('codomyrmex.documents.core.document_writer.DocumentWriter.write')
     def test_write_document_wrapper(self, mock_write):

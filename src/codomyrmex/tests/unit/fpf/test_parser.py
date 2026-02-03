@@ -6,12 +6,14 @@ from pathlib import Path
 from codomyrmex.fpf import FPFParser, FPFSpec, Pattern
 
 
+@pytest.mark.unit
 def test_parser_initialization():
     """Test parser initialization."""
     parser = FPFParser()
     assert parser is not None
 
 
+@pytest.mark.unit
 def test_extract_table_of_contents():
     """Test table of contents extraction."""
     parser = FPFParser()
@@ -29,6 +31,7 @@ def test_extract_table_of_contents():
     assert "A" in toc["parts"]
 
 
+@pytest.mark.unit
 def test_extract_patterns():
     """Test pattern extraction."""
     parser = FPFParser()
@@ -47,6 +50,7 @@ This is a test solution.
     assert patterns[0].title == "Test Pattern Title"
 
 
+@pytest.mark.unit
 def test_extract_sections():
     """Test section extraction."""
     parser = FPFParser()
@@ -63,6 +67,7 @@ This is the solution section.
     assert "problem" in sections or "header" in sections
 
 
+@pytest.mark.unit
 def test_parse_spec():
     """Test full specification parsing."""
     parser = FPFParser()
@@ -82,6 +87,7 @@ Test solution.
     assert len(spec.patterns) > 0
 
 
+@pytest.mark.unit
 def test_parse_spec_with_empty_content():
     """Test parsing empty content."""
     parser = FPFParser()
@@ -90,6 +96,7 @@ def test_parse_spec_with_empty_content():
     assert len(spec.patterns) == 0
 
 
+@pytest.mark.unit
 def test_parse_spec_with_multiple_patterns():
     """Test parsing multiple patterns."""
     parser = FPFParser()
@@ -106,6 +113,7 @@ Content 2
     assert spec.patterns[1].id == "A.2"
 
 
+@pytest.mark.unit
 def test_extract_patterns_with_dependencies():
     """Test pattern extraction with dependencies."""
     parser = FPFParser()
@@ -119,6 +127,7 @@ def test_extract_patterns_with_dependencies():
     assert "builds_on" in pattern.dependencies or len(pattern.dependencies) > 0
 
 
+@pytest.mark.unit
 def test_extract_patterns_with_keywords():
     """Test pattern extraction with keywords."""
     parser = FPFParser()
@@ -131,6 +140,7 @@ def test_extract_patterns_with_keywords():
     # Keywords should be extracted during metadata extraction
 
 
+@pytest.mark.unit
 def test_extract_sections_empty():
     """Test section extraction from empty content."""
     parser = FPFParser()
@@ -138,6 +148,7 @@ def test_extract_sections_empty():
     assert isinstance(sections, dict)
 
 
+@pytest.mark.unit
 def test_extract_table_of_contents_empty():
     """Test TOC extraction from empty content."""
     parser = FPFParser()
@@ -145,6 +156,7 @@ def test_extract_table_of_contents_empty():
     assert isinstance(toc, dict)
 
 
+@pytest.mark.unit
 def test_extract_table_of_contents_multiple_parts():
     """Test TOC extraction with multiple parts."""
     parser = FPFParser()

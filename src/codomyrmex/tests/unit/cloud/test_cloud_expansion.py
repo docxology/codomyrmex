@@ -4,6 +4,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient
 
+@pytest.mark.unit
 def test_s3_client_list():
     """Test S3Client listing objects."""
     with patch('boto3.client') as mock_boto:
@@ -18,6 +19,7 @@ def test_s3_client_list():
         assert objects == ['file1.txt', 'file2.txt']
         mock_s3.list_objects_v2.assert_called_once_with(Bucket="my-bucket")
 
+@pytest.mark.unit
 def test_s3_client_download():
     """Test S3Client downloading objects."""
     with patch('boto3.client') as mock_boto:
@@ -27,6 +29,7 @@ def test_s3_client_download():
         assert client.download_file("bucket", "obj", "local") is True
         mock_s3.download_file.assert_called_once_with("bucket", "obj", "local")
 
+@pytest.mark.unit
 def test_gcs_client_list():
     """Test GCSClient listing blobs."""
     with patch('google.cloud.storage.Client') as mock_storage:
@@ -43,6 +46,7 @@ def test_gcs_client_list():
         assert blobs == ["blob1", "blob2"]
         mock_client.list_blobs.assert_called_once_with("my-bucket")
 
+@pytest.mark.unit
 def test_gcs_client_download():
     """Test GCSClient downloading blobs."""
     with patch('google.cloud.storage.Client') as mock_storage:
@@ -57,6 +61,7 @@ def test_gcs_client_download():
         assert client.download_blob("bucket", "blob", "local") is True
         mock_blob.download_to_filename.assert_called_once_with("local")
 
+@pytest.mark.unit
 def test_azure_blob_client_list():
     """Test AzureBlobClient listing blobs."""
     with patch('codomyrmex.cloud.azure.BlobServiceClient') as mock_blob_service, \

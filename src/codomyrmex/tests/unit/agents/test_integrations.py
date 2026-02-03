@@ -5,6 +5,7 @@ import pytest
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities
 
 
+@pytest.mark.integration
 class TestAgentIntegrations:
     """Integration tests for agent framework integrations."""
 

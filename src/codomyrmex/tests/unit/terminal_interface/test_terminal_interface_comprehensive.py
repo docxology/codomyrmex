@@ -18,6 +18,7 @@ except ImportError:
     pytest.skip("terminal_interface module not available", allow_module_level=True)
 
 
+@pytest.mark.unit
 class TestInteractiveShell:
     """Test cases for InteractiveShell functionality."""
 
@@ -306,6 +307,7 @@ class TestInteractiveShell:
         assert isinstance(self.shell.foraging_messages, list)
 
 
+@pytest.mark.unit
 class TestShellIntegration:
     """Integration tests for shell functionality."""
 
@@ -351,6 +353,7 @@ class TestShellIntegration:
             self.shell.do_help(command_name)
 
 
+@pytest.mark.unit
 class TestCommandValidation:
     """Test command validation and error handling."""
 
@@ -385,6 +388,7 @@ class TestCommandValidation:
         assert result is None
 
 
+@pytest.mark.unit
 class TestShellOutputFormatting:
     """Test shell output formatting and display."""
 
@@ -412,6 +416,7 @@ class TestShellOutputFormatting:
                 # Should complete without error
 
 
+@pytest.mark.unit
 class TestShellStateManagement:
     """Test shell state management and persistence."""
 

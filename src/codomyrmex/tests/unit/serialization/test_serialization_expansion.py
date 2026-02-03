@@ -3,6 +3,7 @@
 import pytest
 from codomyrmex.serialization import MsgpackSerializer, AvroSerializer, ParquetSerializer
 
+@pytest.mark.unit
 def test_msgpack_serialization():
     """Test Msgpack serialization/deserialization."""
     data = {"key": "value", "list": [1, 2, 3], "bool": True}
@@ -10,6 +11,7 @@ def test_msgpack_serialization():
     deserialized = MsgpackSerializer.deserialize(serialized)
     assert deserialized == data
 
+@pytest.mark.unit
 def test_avro_serialization():
     """Test Avro serialization/deserialization."""
     schema = {
@@ -27,6 +29,7 @@ def test_avro_serialization():
     deserialized = AvroSerializer.deserialize(serialized)
     assert deserialized == data
 
+@pytest.mark.unit
 def test_parquet_serialization():
     """Test Parquet serialization/deserialization."""
     data = [

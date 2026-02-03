@@ -29,6 +29,7 @@ from codomyrmex.security.theory import (
 )
 
 
+@pytest.mark.unit
 class TestSecurityPrinciples:
     """Test security principles."""
     
@@ -52,6 +53,7 @@ class TestSecurityPrinciples:
         assert "error" in result
 
 
+@pytest.mark.unit
 class TestSecurityFrameworks:
     """Test security frameworks."""
     
@@ -86,6 +88,7 @@ class TestSecurityFrameworks:
         assert framework.name == "ISO 27001"
 
 
+@pytest.mark.unit
 class TestThreatModeling:
     """Test threat modeling."""
     
@@ -115,6 +118,7 @@ class TestThreatModeling:
         assert "critical_count" in analysis
 
 
+@pytest.mark.unit
 class TestRiskAssessment:
     """Test risk assessment."""
     
@@ -142,6 +146,7 @@ class TestRiskAssessment:
         assert assessment.overall_risk_level in ["low", "medium", "high"]
 
 
+@pytest.mark.unit
 class TestArchitecturePatterns:
     """Test security architecture patterns."""
     
@@ -166,6 +171,7 @@ class TestArchitecturePatterns:
         assert "trust" in zero_trust.description.lower()
 
 
+@pytest.mark.unit
 class TestBestPractices:
     """Test security best practices."""
     

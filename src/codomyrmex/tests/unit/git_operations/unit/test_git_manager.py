@@ -19,6 +19,7 @@ from codomyrmex.git_operations import (
 )
 
 
+@pytest.mark.unit
 class TestCheckGitAvailability:
     """Tests for check_git_availability function."""
 
@@ -43,6 +44,7 @@ class TestCheckGitAvailability:
         assert result is False
 
 
+@pytest.mark.unit
 class TestIsGitRepository:
     """Tests for is_git_repository function."""
 
@@ -68,6 +70,7 @@ class TestIsGitRepository:
         assert result is False
 
 
+@pytest.mark.unit
 class TestGetStatus:
     """Tests for get_status function."""
 
@@ -91,6 +94,7 @@ class TestGetStatus:
         assert "error" in status
 
 
+@pytest.mark.unit
 class TestGetCurrentBranch:
     """Tests for get_current_branch function."""
 
@@ -108,6 +112,7 @@ class TestGetCurrentBranch:
         assert branch is None
 
 
+@pytest.mark.unit
 class TestCreateBranch:
     """Tests for create_branch function."""
 
@@ -140,6 +145,7 @@ class TestCreateBranch:
         assert result is False
 
 
+@pytest.mark.unit
 class TestAddFiles:
     """Tests for add_files function."""
 
@@ -173,6 +179,7 @@ class TestAddFiles:
         assert result is False
 
 
+@pytest.mark.unit
 class TestCommitChanges:
     """Tests for commit_changes function."""
 

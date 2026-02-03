@@ -1,11 +1,11 @@
 """Integration tests for Mistral Vibe agent integration.
 
-Tests use real implementations only. When Mistral Vibe CLI is not available,
-tests are skipped rather than using mocks. All data processing and
-conversion logic is tested with real data structures.
+Tests use real implementations only. When Mistral Vibe CLI is not available
+or API key is not configured, tests are skipped.
 """
 
 import pytest
+import os
 from typing import Any
 
 from codomyrmex.agents.core import AgentRequest, AgentCapabilities
@@ -13,6 +13,12 @@ from codomyrmex.agents.mistral_vibe import MistralVibeClient, MistralVibeIntegra
 from codomyrmex.agents.generic import AgentOrchestrator
 from codomyrmex.agents.core.exceptions import MistralVibeError
 from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+
+# Skip entire module if vibe CLI is not properly configured
+pytestmark = pytest.mark.skipif(
+    not os.getenv("MISTRAL_API_KEY"),
+    reason="MISTRAL_API_KEY not set - skipping mistral_vibe tests"
+)
 
 
 class TestMistralVibeIntegrationAdapter:

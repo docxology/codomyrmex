@@ -48,10 +48,7 @@ __all__ = [
 __version__ = "0.1.0"
 
 
-class CompressionError(CodomyrmexError):
-    """Raised when compression operations fail."""
-
-    pass
+from codomyrmex.exceptions import CompressionError
 
 
 def compress(data: bytes, level: int = 6, format: str = "gzip") -> bytes:

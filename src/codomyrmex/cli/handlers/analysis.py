@@ -26,9 +26,11 @@ def handle_code_analysis(path: str, output_dir: Optional[str]) -> bool:
         return True
 
     except ImportError:
+        logger.warning("Static analysis module not available")
         print("❌ Static analysis module not available")
         return False
     except (ValueError, TypeError, AttributeError, RuntimeError, OSError, FileNotFoundError) as e:
+        logger.error(f"Error analyzing code: {e}", exc_info=True)
         print(f"❌ Error analyzing code: {str(e)}")
         return False
 
@@ -48,9 +50,11 @@ def handle_git_analysis(repo_path: str) -> bool:
             return False
 
     except ImportError:
+        logger.warning("Git operations or data visualization modules not available")
         print("❌ Git operations or data visualization modules not available")
         return False
     except Exception as e:
+        logger.error(f"Error analyzing git repository: {e}", exc_info=True)
         print(f"❌ Error analyzing git repository: {str(e)}")
         return False
 
@@ -77,5 +81,6 @@ def handle_module_test(module_name: str) -> bool:
         return result.returncode == 0
 
     except Exception as e:
+        logger.error(f"Error testing module: {e}", exc_info=True)
         print(f"❌ Error testing module: {str(e)}")
         return False

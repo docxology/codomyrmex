@@ -1,9 +1,11 @@
+import pytest
 
 import unittest
 from pathlib import Path
 from datetime import datetime
 from codomyrmex.documents.models.document import Document, DocumentFormat, DocumentType
 
+@pytest.mark.unit
 class TestDocument(unittest.TestCase):
     def test_document_initialization(self):
         """Test basic document initialization."""

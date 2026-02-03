@@ -20,8 +20,8 @@ def handle_skills_sync(force: bool) -> bool:
             print("❌ Failed to sync skills")
         return success
     except Exception as e:
+        logger.error(f"Error syncing skills: {e}", exc_info=True)
         print(f"❌ Error syncing skills: {str(e)}")
-        traceback.print_exc()
         return False
 
 
@@ -47,8 +47,8 @@ def handle_skills_list(category: Optional[str]) -> bool:
 
         return True
     except Exception as e:
+        logger.error(f"Error listing skills: {e}", exc_info=True)
         print(f"❌ Error listing skills: {str(e)}")
-        traceback.print_exc()
         return False
 
 
@@ -79,8 +79,8 @@ def handle_skills_get(category: str, name: str, output: Optional[str]) -> bool:
 
         return True
     except Exception as e:
+        logger.error(f"Error getting skill: {e}", exc_info=True)
         print(f"❌ Error getting skill: {str(e)}")
-        traceback.print_exc()
         return False
 
 
@@ -106,6 +106,6 @@ def handle_skills_search(query: str) -> bool:
 
         return True
     except Exception as e:
+        logger.error(f"Error searching skills: {e}", exc_info=True)
         print(f"❌ Error searching skills: {str(e)}")
-        traceback.print_exc()
         return False

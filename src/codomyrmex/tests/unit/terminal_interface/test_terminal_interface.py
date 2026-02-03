@@ -6,6 +6,7 @@ try:
 except ImportError:
     pytest.skip("terminal_interface module not importable", allow_module_level=True)
 
+@pytest.mark.unit
 class TestTerminalInterface:
     
     @pytest.fixture

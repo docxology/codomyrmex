@@ -11,6 +11,7 @@ from pathlib import Path
 from codomyrmex.documentation.scripts.bootstrap_agents_readmes import DocumentationBootstrapper
 
 
+@pytest.mark.unit
 class TestDocumentationBootstrapper:
     """Test cases for DocumentationBootstrapper."""
 
@@ -206,6 +207,7 @@ class TestDocumentationBootstrapper:
             self.bootstrapper.repo_root = original_repo_root
 
 
+@pytest.mark.unit
 class TestIntegrationWithValidator:
     """Integration tests with AGENTS structure validator."""
 

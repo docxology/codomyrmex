@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 
 # Test ConfigValidator
+@pytest.mark.unit
 class TestConfigValidator:
     """Test cases for ConfigValidator functionality."""
 
@@ -197,6 +198,7 @@ class TestConfigValidator:
 
 
 # Test ConfigMigrator
+@pytest.mark.unit
 class TestConfigMigrator:
     """Test cases for ConfigMigrator functionality."""
 
@@ -383,6 +385,7 @@ class TestConfigMigrator:
 
 
 # Test Enhanced ConfigurationManager
+@pytest.mark.unit
 class TestConfigurationManagerEnhanced:
     """Test cases for enhanced ConfigurationManager functionality."""
 

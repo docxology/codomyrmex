@@ -9,6 +9,7 @@ from codomyrmex.agents.generic import APIAgentBase
 from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
 
 
+@pytest.mark.unit
 class TestAPIAgentBase(APIAgentBase):
     """Test implementation of APIAgentBase."""
 
@@ -54,6 +55,7 @@ class TestAPIAgentBase(APIAgentBase):
         yield " response"
 
 
+@pytest.mark.unit
 class TestAPIAgentBaseInitialization:
     """Test APIAgentBase initialization."""
 
@@ -112,6 +114,7 @@ class TestAPIAgentBaseInitialization:
         assert "Failed to initialize" in str(exc_info.value)
 
 
+@pytest.mark.unit
 class TestAPIAgentBaseConfigExtraction:
     """Test configuration extraction methods."""
 
@@ -146,6 +149,7 @@ class TestAPIAgentBaseConfigExtraction:
         assert value == "default_value"
 
 
+@pytest.mark.unit
 class TestAPIAgentBaseErrorHandling:
     """Test error handling methods."""
 
@@ -170,6 +174,7 @@ class TestAPIAgentBaseErrorHandling:
         assert "Unexpected error" in str(exc_info.value)
 
 
+@pytest.mark.unit
 class TestAPIAgentBaseTokenExtraction:
     """Test token extraction methods."""
 
@@ -207,6 +212,7 @@ class TestAPIAgentBaseTokenExtraction:
         assert output_tokens == 0
 
 
+@pytest.mark.unit
 class TestAPIAgentBaseResponseBuilding:
     """Test response building methods."""
 
@@ -227,6 +233,7 @@ class TestAPIAgentBaseResponseBuilding:
         assert response.execution_time == 1.5
 
 
+@pytest.mark.unit
 class TestAPIAgentBaseExecution:
     """Test execution methods."""
 

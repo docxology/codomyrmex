@@ -14,6 +14,7 @@ from codomyrmex.scrape.core import (
 )
 
 
+@pytest.mark.unit
 class TestScrapeFormat:
     """Test ScrapeFormat enum."""
 
@@ -27,6 +28,7 @@ class TestScrapeFormat:
         assert ScrapeFormat.METADATA == "metadata"
 
 
+@pytest.mark.unit
 class TestScrapeResult:
     """Test ScrapeResult dataclass."""
 
@@ -68,6 +70,7 @@ class TestScrapeResult:
         assert result.has_format("html") is False
 
 
+@pytest.mark.unit
 class TestScrapeOptions:
     """Test ScrapeOptions dataclass."""
 
@@ -105,6 +108,7 @@ class TestScrapeOptions:
         assert result["limit"] == 5
 
 
+@pytest.mark.unit
 class TestCrawlResult:
     """Test CrawlResult dataclass."""
 
@@ -117,6 +121,7 @@ class TestCrawlResult:
         assert len(result.results) == 0
 
 
+@pytest.mark.unit
 class TestMapResult:
     """Test MapResult dataclass."""
 
@@ -137,6 +142,7 @@ class TestMapResult:
         assert result.total == 2
 
 
+@pytest.mark.unit
 class TestSearchResult:
     """Test SearchResult dataclass."""
 
@@ -148,6 +154,7 @@ class TestSearchResult:
         assert result.total == 0
 
 
+@pytest.mark.unit
 class TestExtractResult:
     """Test ExtractResult dataclass."""
 
@@ -159,6 +166,7 @@ class TestExtractResult:
         assert len(result.urls) == 0
 
 
+@pytest.mark.unit
 class TestBaseScraper:
     """Test BaseScraper abstract class."""
 

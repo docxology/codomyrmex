@@ -32,9 +32,11 @@ def demo_data_visualization() -> bool:
         return True
 
     except ImportError:
+        logger.warning("Data visualization module not available")
         print("❌ Data visualization module not available")
         return False
     except Exception as e:
+        logger.error(f"Data visualization demo failed: {e}", exc_info=True)
         print(f"❌ Demo failed: {str(e)}")
         return False
 
@@ -60,9 +62,11 @@ def demo_ai_code_editing() -> bool:
             return False
 
     except ImportError:
+        logger.warning("AI code editing module not available")
         print("❌ AI code editing module not available")
         return False
     except Exception as e:
+        logger.error(f"AI code editing demo failed: {e}", exc_info=True)
         print(f"❌ Demo failed: {str(e)}")
         return False
 
@@ -96,9 +100,11 @@ for i in range(8):
             return False
 
     except ImportError:
+        logger.warning("Code execution sandbox module not available")
         print("❌ Code execution sandbox module not available")
         return False
     except Exception as e:
+        logger.error(f"Code execution demo failed: {e}", exc_info=True)
         print(f"❌ Demo failed: {str(e)}")
         return False
 
@@ -117,9 +123,11 @@ def demo_git_operations() -> bool:
         return True
 
     except ImportError:
+        logger.warning("Git operations module not available")
         print("❌ Git operations module not available")
         return False
     except Exception as e:
+        logger.error(f"Git operations demo failed: {e}", exc_info=True)
         print(f"❌ Demo failed: {str(e)}")
         return False
 

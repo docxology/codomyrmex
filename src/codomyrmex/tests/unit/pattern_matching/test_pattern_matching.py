@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestPatternMatching:
     """Test cases for pattern matching functionality."""
 

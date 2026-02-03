@@ -1,24 +1,53 @@
 # Codomyrmex Agents — docs/getting-started
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-Documentation files and guides.
+
+User onboarding documentation. Covers installation, quick start, environment setup, and step-by-step tutorials for new users.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `installation.md` – Project file
-- `quickstart.md` – Project file
-- `setup.md` – Project file
-- `tutorials/` – Directory containing tutorials components
+
+| File | Priority | Description |
+|------|----------|-------------|
+| [quickstart.md](quickstart.md) | **Critical** | 5-minute quick start |
+| [installation.md](installation.md) | **Critical** | Complete installation guide |
+| [setup.md](setup.md) | High | Environment configuration |
+| [tutorials/](tutorials/) | High | Step-by-step learning |
+| [README.md](README.md) | Medium | Directory overview |
+| [SPEC.md](SPEC.md) | Medium | Functional specification |
+
+## Agent Guidelines
+
+### Onboarding Quality Standards
+
+1. **Accuracy**: Installation commands must work on fresh systems
+2. **Clarity**: Write for users new to the platform
+3. **Speed**: Quick start should complete in <5 minutes
+4. **Completeness**: Cover all supported platforms
+
+### When Modifying Getting Started Docs
+
+- Test installation on Mac, Linux, and Windows (WSL)
+- Update uv/pip commands when versions change
+- Verify all quick start examples are runnable
+- Keep tutorials relevant to current module APIs
+
+### User Journey
+
+1. **Quick Start**: First successful interaction
+2. **Installation**: Complete environment setup
+3. **Configuration**: API keys, preferences
+4. **Tutorials**: Deeper learning paths
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+- Maintain alignment between docs and installation scripts
+- Ensure Model Context Protocol interfaces remain available for sibling agents
+- Record outcomes in shared telemetry and update TODO queues when necessary
 
 ## Navigation Links
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+
+- **📁 Parent Directory**: [docs/](../README.md)
+- **🏠 Project Root**: [../../README.md](../../README.md)
+- **📦 Related**: [Examples](../examples/) | [API Reference](../reference/api.md)

@@ -27,6 +27,7 @@ def check_docker_available():
 
 
 # Test ImageOptimizer
+@pytest.mark.unit
 class TestImageOptimizer:
     """Test cases for ImageOptimizer functionality."""
 
@@ -97,6 +98,7 @@ class TestImageOptimizer:
 
 
 # Test BuildGenerator
+@pytest.mark.unit
 class TestBuildGenerator:
     """Test cases for BuildGenerator functionality."""
 
@@ -241,6 +243,7 @@ ENV PASSWORD=secret123
 
 
 # Test Enhanced DockerManager
+@pytest.mark.unit
 class TestDockerManagerEnhanced:
     """Test cases for enhanced DockerManager functionality."""
 
@@ -261,6 +264,7 @@ class TestDockerManagerEnhanced:
             assert len(optimized) > 0
 
 
+@pytest.mark.unit
 class TestBuildStagesAndScripts:
     """Test cases for BuildStage and BuildScript classes."""
 

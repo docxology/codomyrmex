@@ -4,6 +4,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 from codomyrmex.networking import SSHClient, TCPClient, UDPClient, PortScanner
 
+@pytest.mark.unit
 def test_ssh_client_logic():
     """Test SSHClient command execution logic."""
     with patch('paramiko.SSHClient') as mock_ssh_cls:
@@ -29,6 +30,7 @@ def test_ssh_client_logic():
         mock_ssh.connect.assert_called_once()
         mock_ssh.exec_command.assert_called_once_with("echo hello world")
 
+@pytest.mark.unit
 def test_tcp_client_mock():
     """Test TCPClient interactions with socket."""
     with patch('socket.socket') as mock_socket_cls:
@@ -45,6 +47,7 @@ def test_tcp_client_mock():
         client.close()
         mock_sock.close.assert_called_once()
 
+@pytest.mark.unit
 def test_udp_client_mock():
     """Test UDPClient interactions with socket."""
     with patch('socket.socket') as mock_socket_cls:
@@ -55,6 +58,7 @@ def test_udp_client_mock():
         client.send(b"pulse")
         mock_sock.sendto.assert_called_once_with(b"pulse", ("127.0.0.1", 9090))
 
+@pytest.mark.unit
 def test_port_scanner():
     """Test PortScanner logic with socket mocks."""
     with patch('socket.socket') as mock_socket_cls:

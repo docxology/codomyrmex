@@ -26,6 +26,7 @@ sys.path.insert(0, str(SRC_DIR))
 from codomyrmex.website.data_provider import DataProvider
 
 
+@pytest.mark.unit
 class TestDataProviderInit:
     """Tests for DataProvider initialization."""
 
@@ -42,6 +43,7 @@ class TestDataProviderInit:
         assert provider.root_dir == root
 
 
+@pytest.mark.unit
 class TestGetSystemSummary:
     """Tests for get_system_summary() method."""
 
@@ -77,6 +79,7 @@ class TestGetSystemSummary:
         assert result["agent_count"] == 2
 
 
+@pytest.mark.unit
 class TestGetAgentsStatus:
     """Tests for get_agents_status() method."""
 
@@ -127,6 +130,7 @@ class TestGetAgentsStatus:
         assert "description" in agent
 
 
+@pytest.mark.unit
 class TestGetAvailableScripts:
     """Tests for get_available_scripts() method."""
 
@@ -186,6 +190,7 @@ class TestGetAvailableScripts:
         assert result[0]["name"] == "visible.py"
 
 
+@pytest.mark.unit
 class TestGetConfigFiles:
     """Tests for get_config_files() method."""
 
@@ -223,6 +228,7 @@ class TestGetConfigFiles:
         assert any(c["name"] == "settings.json" for c in result)
 
 
+@pytest.mark.unit
 class TestGetConfigContent:
     """Tests for get_config_content() method."""
 
@@ -258,6 +264,7 @@ class TestGetConfigContent:
             provider.get_config_content("nonexistent.toml")
 
 
+@pytest.mark.unit
 class TestSaveConfigContent:
     """Tests for save_config_content() method."""
 
@@ -285,6 +292,7 @@ class TestSaveConfigContent:
             provider.save_config_content("/evil.txt", "malicious")
 
 
+@pytest.mark.unit
 class TestGetDocTree:
     """Tests for get_doc_tree() method."""
 
@@ -325,6 +333,7 @@ class TestGetDocTree:
         assert has_modules or True  # May be empty if structure differs
 
 
+@pytest.mark.unit
 class TestGetPipelineStatus:
     """Tests for get_pipeline_status() method."""
 

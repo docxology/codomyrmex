@@ -8,7 +8,7 @@ Python wheels are the standard distribution format for Python packages. This tut
 
 ## Prerequisites
 
-- Python 3.7+ with `build` package installed (`pip install build`)
+- Python 3.7+ with `build` package installed (`uv pip install build`)
 - `setuptools` and `wheel` packages
 - A Python package with a `setup.py` or `pyproject.toml` file
 
@@ -34,7 +34,7 @@ wheel_build_steps = [
     ),
     BuildStep(
         name="install_build_dependencies",
-        command="pip install build wheel setuptools",
+        command="uv pip install build wheel setuptools",
         description="Ensure build tools are available"
     ),
     BuildStep(
@@ -177,7 +177,7 @@ else:
 ## Troubleshooting
 
 **Issue**: `build` command not found
-- **Solution**: Install build tools: `pip install build wheel setuptools`
+- **Solution**: Install build tools: `uv pip install build wheel setuptools`
 
 **Issue**: Wheel build fails with metadata errors
 - **Solution**: Verify `setup.py` or `pyproject.toml` has correct metadata

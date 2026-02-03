@@ -5,12 +5,14 @@ import pytest
 from codomyrmex.fpf import FPFIndexer, FPFSpec, Pattern, PatternStatus
 
 
+@pytest.mark.unit
 def test_indexer_initialization():
     """Test indexer initialization."""
     indexer = FPFIndexer()
     assert indexer is not None
 
 
+@pytest.mark.unit
 def test_build_index():
     """Test index building."""
     indexer = FPFIndexer()
@@ -30,6 +32,7 @@ def test_build_index():
     assert index.get_pattern("A.1") is not None
 
 
+@pytest.mark.unit
 def test_search_patterns():
     """Test pattern search."""
     indexer = FPFIndexer()
@@ -49,6 +52,7 @@ def test_search_patterns():
     assert len(results) > 0
 
 
+@pytest.mark.unit
 def test_get_pattern_by_id():
     """Test getting pattern by ID."""
     indexer = FPFIndexer()
@@ -68,6 +72,7 @@ def test_get_pattern_by_id():
     assert pattern.id == "A.1"
 
 
+@pytest.mark.unit
 def test_get_pattern_by_id_not_found():
     """Test getting non-existent pattern."""
     indexer = FPFIndexer()
@@ -77,6 +82,7 @@ def test_get_pattern_by_id_not_found():
     assert pattern is None
 
 
+@pytest.mark.unit
 def test_search_patterns_with_filters():
     """Test search with filters."""
     indexer = FPFIndexer()
@@ -106,6 +112,7 @@ def test_search_patterns_with_filters():
     assert results[0].status == PatternStatus.STABLE
 
 
+@pytest.mark.unit
 def test_get_related_patterns():
     """Test getting related patterns."""
     indexer = FPFIndexer()
@@ -131,6 +138,7 @@ def test_get_related_patterns():
     assert len(related) > 0
 
 
+@pytest.mark.unit
 def test_search_patterns_empty_query():
     """Test search with empty query."""
     indexer = FPFIndexer()

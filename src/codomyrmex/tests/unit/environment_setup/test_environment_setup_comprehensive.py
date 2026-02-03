@@ -9,6 +9,7 @@ import tempfile
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestEnvironmentSetupComprehensive:
     """Comprehensive test cases for environment setup functionality."""
 

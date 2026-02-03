@@ -35,6 +35,7 @@ from codomyrmex.ide.cursor import CursorClient
 from codomyrmex.ide.vscode import VSCodeClient
 
 
+@pytest.mark.unit
 class TestIDEBaseClasses:
     """Tests for IDE base classes and interfaces."""
     
@@ -64,6 +65,7 @@ class TestIDEBaseClasses:
         assert issubclass(ArtifactError, IDEError)
 
 
+@pytest.mark.unit
 class TestIDEDataClasses:
     """Tests for IDE data classes."""
     
@@ -132,6 +134,7 @@ class TestIDEDataClasses:
         assert d["line_count"] == 100
 
 
+@pytest.mark.unit
 class TestAntigravityDataClasses:
     """Tests for Antigravity-specific data classes."""
     
@@ -172,6 +175,7 @@ class TestAntigravityDataClasses:
         assert "artifacts" in d
 
 
+@pytest.mark.unit
 class TestAntigravityClient:
     """Tests for AntigravityClient."""
     
@@ -456,6 +460,7 @@ class TestAntigravityClient:
         assert events_received[0] == {"key": "value"}
 
 
+@pytest.mark.unit
 class TestCursorClient:
     """Tests for CursorClient."""
     
@@ -518,6 +523,7 @@ class TestCursorClient:
             assert rules["exists"] is False
 
 
+@pytest.mark.unit
 class TestVSCodeClient:
     """Tests for VSCodeClient."""
     
@@ -597,6 +603,7 @@ class TestVSCodeClient:
             client.stop_debug()
 
 
+@pytest.mark.unit
 class TestIDEClientHelperMethods:
     """Tests for IDEClient helper methods available to all implementations."""
     

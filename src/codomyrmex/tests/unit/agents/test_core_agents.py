@@ -75,6 +75,7 @@ def agent_modules():
     return modules
 
 
+@pytest.mark.unit
 class TestAgentCapabilities:
     """Test cases for AgentCapabilities enum."""
 
@@ -114,6 +115,7 @@ class TestAgentCapabilities:
         assert len(caps) >= 13
 
 
+@pytest.mark.unit
 class TestAgentRequest:
     """Test cases for AgentRequest dataclass."""
 
@@ -166,6 +168,7 @@ class TestAgentRequest:
         assert request2.metadata == {}
 
 
+@pytest.mark.unit
 class TestAgentResponse:
     """Test cases for AgentResponse dataclass."""
 
@@ -205,6 +208,7 @@ class TestAgentResponse:
         assert response.request_id == "req-123"
 
 
+@pytest.mark.unit
 class TestBaseAgent:
     """Test cases for BaseAgent class."""
 
@@ -329,6 +333,7 @@ class TestBaseAgent:
         assert agent.test_connection() is True
 
 
+@pytest.mark.unit
 class TestToolRegistry:
     """Test cases for ToolRegistry."""
 
@@ -383,6 +388,7 @@ class TestToolRegistry:
         assert len(schemas) >= 1
 
 
+@pytest.mark.unit
 class TestReActAgent:
     """Test cases for ReActAgent."""
 
@@ -522,6 +528,7 @@ class TestReActAgent:
         assert "42" in response.content
 
 
+@pytest.mark.unit
 class TestAgentIntegration:
     """Integration tests for agent components."""
 

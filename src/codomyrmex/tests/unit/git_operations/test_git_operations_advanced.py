@@ -1,3 +1,4 @@
+import pytest
 #!/usr/bin/env python3
 """
 Advanced Git Operations Tests - Comprehensive Testing for Fractal Git Operations.
@@ -53,6 +54,7 @@ from codomyrmex.git_operations.core.git import (
 )
 
 
+@pytest.mark.unit
 class TestAdvancedGitOperations(unittest.TestCase):
     """
     Comprehensive test suite for advanced Git operations.

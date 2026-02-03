@@ -1,9 +1,11 @@
+import pytest
 
 import unittest
 import sys
 from unittest.mock import patch, mock_open, MagicMock
 from codomyrmex.documents.formats.yaml_handler import read_yaml, write_yaml
 
+@pytest.mark.unit
 class TestYamlHandler(unittest.TestCase):
     def test_read_yaml_mocked(self):
         """Test reading YAML with mocked yaml module."""

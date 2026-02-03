@@ -8,6 +8,7 @@ import shutil
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestDocumentation:
     """Test cases for documentation functionality."""
 

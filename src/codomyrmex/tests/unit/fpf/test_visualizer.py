@@ -7,12 +7,14 @@ from tempfile import TemporaryDirectory
 from codomyrmex.fpf import FPFVisualizer, FPFSpec, Pattern, PatternStatus
 
 
+@pytest.mark.unit
 def test_visualizer_initialization():
     """Test visualizer initialization."""
     visualizer = FPFVisualizer()
     assert visualizer is not None
 
 
+@pytest.mark.unit
 def test_visualize_pattern_hierarchy():
     """Test pattern hierarchy visualization."""
     visualizer = FPFVisualizer()
@@ -37,6 +39,7 @@ def test_visualize_pattern_hierarchy():
     assert "graph TD" in diagram or "graph" in diagram
 
 
+@pytest.mark.unit
 def test_visualize_dependencies():
     """Test dependency visualization."""
     visualizer = FPFVisualizer()
@@ -55,6 +58,7 @@ def test_visualize_dependencies():
     assert "graph" in diagram
 
 
+@pytest.mark.unit
 def test_generate_report():
     """Test report generation."""
     visualizer = FPFVisualizer()
@@ -78,6 +82,7 @@ def test_generate_report():
         assert "FPF Specification Report" in content
 
 
+@pytest.mark.unit
 def test_create_pattern_card():
     """Test pattern card creation."""
     visualizer = FPFVisualizer()

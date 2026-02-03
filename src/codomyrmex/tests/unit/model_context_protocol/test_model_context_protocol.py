@@ -9,6 +9,7 @@ import json
 pydantic = pytest.importorskip("pydantic")
 
 
+@pytest.mark.unit
 class TestModelContextProtocol:
     """Test cases for model context protocol functionality."""
 

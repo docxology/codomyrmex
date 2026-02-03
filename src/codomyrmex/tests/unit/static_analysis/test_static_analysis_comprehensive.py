@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestStaticAnalysisComprehensive:
     """Comprehensive test cases for static analysis functionality."""
 

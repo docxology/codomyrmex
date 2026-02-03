@@ -176,6 +176,7 @@ def docker_manager_with_mock(mock_docker_client):
 # ContainerConfig Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestContainerConfig:
     """Test cases for ContainerConfig dataclass."""
 
@@ -257,6 +258,7 @@ class TestContainerConfig:
 # Docker Image Building Tests (Mocked)
 # ==============================================================================
 
+@pytest.mark.unit
 class TestDockerImageBuilding:
     """Test cases for Docker image building operations (mocked)."""
 
@@ -325,6 +327,7 @@ class TestDockerImageBuilding:
 # Container Lifecycle Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestContainerLifecycle:
     """Test cases for container lifecycle management."""
 
@@ -416,6 +419,7 @@ class TestContainerLifecycle:
 # Container Exec Operations Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestContainerExecOperations:
     """Test cases for container exec operations."""
 
@@ -449,6 +453,7 @@ class TestContainerExecOperations:
 # Volume Mounting Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestVolumeMounting:
     """Test cases for volume mounting operations."""
 
@@ -484,6 +489,7 @@ class TestVolumeMounting:
 # Network Configuration Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestNetworkConfiguration:
     """Test cases for network configuration."""
 
@@ -515,6 +521,7 @@ class TestNetworkConfiguration:
 # Port Mapping Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestPortMapping:
     """Test cases for port mapping configuration."""
 
@@ -563,6 +570,7 @@ class TestPortMapping:
 # Environment Variable Handling Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestEnvironmentVariableHandling:
     """Test cases for environment variable handling."""
 
@@ -613,6 +621,7 @@ class TestEnvironmentVariableHandling:
 # Dockerfile Parsing and Generation Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestDockerfileParsing:
     """Test cases for Dockerfile parsing and generation."""
 
@@ -746,6 +755,7 @@ RUN apt-get clean
 # BuildStage and BuildScript Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestBuildStageAndScript:
     """Test cases for BuildStage and BuildScript classes."""
 
@@ -841,6 +851,7 @@ class TestBuildStageAndScript:
 # Error Handling for Docker Daemon Failures Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestErrorHandling:
     """Test cases for error handling in Docker operations."""
 
@@ -911,6 +922,7 @@ class TestErrorHandling:
 # Docker System Information Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestDockerSystemInfo:
     """Test cases for Docker system information retrieval."""
 
@@ -944,6 +956,7 @@ class TestDockerSystemInfo:
 # Convenience Functions Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestConvenienceFunctions:
     """Test cases for module-level convenience functions."""
 
@@ -968,6 +981,7 @@ class TestConvenienceFunctions:
 # Image Analysis and Optimization Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestImageAnalysis:
     """Test cases for image analysis and optimization."""
 
@@ -1001,6 +1015,7 @@ class TestImageAnalysis:
 # Restart Policy Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestRestartPolicy:
     """Test cases for container restart policies."""
 
@@ -1029,6 +1044,7 @@ class TestRestartPolicy:
 # Labels Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestLabels:
     """Test cases for container and image labels."""
 

@@ -32,6 +32,7 @@ Main package directory containing 70+ specialized modules for the Codomyrmex pla
 - `data_lineage/` – Data lineage tracking
 - `data_visualization/` – Charts and plots
 - `database_management/` – Database operations
+- `defense/` – Active fiduciary defense
 - `deployment/` – Deployment automation
 - `documentation/` – Documentation generation
 - `documents/` – Document processing
@@ -47,16 +48,18 @@ Main package directory containing 70+ specialized modules for the Codomyrmex pla
 - `git_operations/` – Git automation
 - `graph_rag/` – Graph-based RAG
 - `ide/` – IDE integration
+- `identity/` – Identity and Persona Management
 - `inference_optimization/` – Inference caching/batching
 - `llm/` – LLM infrastructure
 - `logging_monitoring/` – Centralized logging
 - `logistics/` – Workflow logistics
+- `market/` – Anonymous marketplaces
 - `metrics/` – Metrics collection
 - `migration/` – Data migration
 - `model_context_protocol/` – MCP interfaces
 - `model_ops/` – ML model operations
 - `model_registry/` – Model versioning
-- `module_template/` – Module scaffolding
+- `module_template/` – Module scaffolding scaffolding
 - `multimodal/` – Multimodal processing
 - `networking/` – Network utilities
 - `notification/` – Notification channels
@@ -66,6 +69,7 @@ Main package directory containing 70+ specialized modules for the Codomyrmex pla
 - `performance/` – Performance monitoring
 - `physical_management/` – Physical systems
 - `plugin_system/` – Plugin architecture
+- `privacy/` – Data minimization and mixnets
 - `prompt_testing/` – Prompt evaluation
 - `scrape/` – Web scraping
 - `security/` – Security scanning
@@ -73,7 +77,7 @@ Main package directory containing 70+ specialized modules for the Codomyrmex pla
 - `skills/` – Agent skills
 - `spatial/` – 3D/4D modeling
 - `static_analysis/` – Code quality
-- `system_discovery/` – Module discovery
+- `system_discovery/` – Module discovery discovery
 - `telemetry/` – Telemetry and tracing
 - `templating/` – Template management
 - `terminal_interface/` – Terminal UI
@@ -83,6 +87,7 @@ Main package directory containing 70+ specialized modules for the Codomyrmex pla
 - `tree_sitter/` – Tree-sitter parsing
 - `utils/` – General utilities
 - `validation/` – Input validation
+- `wallet/` – Self-custody wallets
 - `website/` – Website generation
 - `workflow_testing/` – Workflow testing
 

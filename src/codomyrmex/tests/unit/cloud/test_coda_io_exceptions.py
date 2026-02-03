@@ -7,6 +7,7 @@ Tests the exception hierarchy, status code mapping, and error message handling.
 import pytest
 
 
+@pytest.mark.unit
 class TestCodaAPIErrorBase:
     """Tests for the base CodaAPIError exception."""
     
@@ -41,6 +42,7 @@ class TestCodaAPIErrorBase:
         assert error.response_body["details"]["code"] == "ERR001"
 
 
+@pytest.mark.unit
 class TestCodaAuthenticationError:
     """Tests for CodaAuthenticationError (401)."""
     
@@ -75,6 +77,7 @@ class TestCodaAuthenticationError:
         assert isinstance(error, CodaAPIError)
 
 
+@pytest.mark.unit
 class TestCodaForbiddenError:
     """Tests for CodaForbiddenError (403)."""
     
@@ -96,6 +99,7 @@ class TestCodaForbiddenError:
         assert "workspace member" in str(error)
 
 
+@pytest.mark.unit
 class TestCodaNotFoundError:
     """Tests for CodaNotFoundError (404)."""
     
@@ -117,6 +121,7 @@ class TestCodaNotFoundError:
         assert "AbCDeFGH" in str(error)
 
 
+@pytest.mark.unit
 class TestCodaGoneError:
     """Tests for CodaGoneError (410)."""
     
@@ -130,6 +135,7 @@ class TestCodaGoneError:
         assert "deleted" in str(error).lower()
 
 
+@pytest.mark.unit
 class TestCodaRateLimitError:
     """Tests for CodaRateLimitError (429)."""
     
@@ -152,6 +158,7 @@ class TestCodaRateLimitError:
         assert error.response_body["retryAfter"] == 6
 
 
+@pytest.mark.unit
 class TestCodaValidationError:
     """Tests for CodaValidationError (400)."""
     
@@ -178,6 +185,7 @@ class TestCodaValidationError:
         assert error.response_body["details"]["value"] == -1
 
 
+@pytest.mark.unit
 class TestRaiseForStatus:
     """Tests for the raise_for_status helper function."""
     
@@ -293,6 +301,7 @@ class TestRaiseForStatus:
         assert "title" in str(exc_info.value)
 
 
+@pytest.mark.unit
 class TestExceptionHierarchy:
     """Tests for the exception class hierarchy."""
     

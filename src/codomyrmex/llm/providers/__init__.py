@@ -12,9 +12,23 @@ import json
 
 
 class ProviderType(Enum):
-    """Supported LLM providers."""
+    """Supported LLM providers.
+
+    Implemented:
+        OPENAI - OpenAI API (GPT models)
+        ANTHROPIC - Anthropic API (Claude models)
+        OPENROUTER - OpenRouter API (multi-model access, includes free models)
+
+    Planned:
+        GOOGLE - Google AI (Gemini models)
+        OLLAMA - Local Ollama server
+        AZURE_OPENAI - Azure OpenAI Service
+        COHERE - Cohere API
+        MISTRAL - Mistral AI API
+    """
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
+    OPENROUTER = "openrouter"
     GOOGLE = "google"
     OLLAMA = "ollama"
     AZURE_OPENAI = "azure_openai"
@@ -75,14 +89,33 @@ class ProviderConfig:
 
 
 class LLMProvider(ABC):
-    """Abstract base class for LLM providers."""
-    
+    """Abstract base class for LLM providers.
+
+    Supports context manager protocol for clean resource management:
+
+        with get_provider(ProviderType.OPENAI, api_key="...") as provider:
+            response = provider.complete(messages)
+    """
+
     provider_type: ProviderType
-    
+
     def __init__(self, config: ProviderConfig):
         self.config = config
         self._client = None
-    
+
+    def __enter__(self):
+        """Enter context manager."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit context manager and cleanup resources."""
+        self.cleanup()
+        return False
+
+    def cleanup(self):
+        """Clean up provider resources. Override in subclasses if needed."""
+        self._client = None
+
     @abstractmethod
     def complete(
         self,
@@ -242,6 +275,12 @@ class OpenAIProvider(LLMProvider):
                 model=response.model,
                 provider=self.provider_type,
                 finish_reason=choice.finish_reason,
+                usage={
+                    "prompt_tokens": response.usage.prompt_tokens,
+                    "completion_tokens": response.usage.completion_tokens,
+                    "total_tokens": response.usage.total_tokens,
+                } if response.usage else None,
+                tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
                 raw_response=response,
             )
         except ImportError:
@@ -378,6 +417,12 @@ class AnthropicProvider(LLMProvider):
                 content=response.content[0].text if response.content else "",
                 model=response.model,
                 provider=self.provider_type,
+                finish_reason=response.stop_reason,
+                usage={
+                    "prompt_tokens": response.usage.input_tokens,
+                    "completion_tokens": response.usage.output_tokens,
+                    "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
+                } if response.usage else None,
                 raw_response=response,
             )
         except ImportError:
@@ -396,6 +441,172 @@ class AnthropicProvider(LLMProvider):
         return "claude-3-5-sonnet-20241022"
 
 
+class OpenRouterProvider(LLMProvider):
+    """OpenRouter API provider for multi-model access.
+
+    OpenRouter provides access to multiple LLM providers through a unified
+    OpenAI-compatible API. Includes free tier models for development and testing.
+
+    Environment variable: OPENROUTER_API_KEY
+
+    Example:
+        provider = get_provider(
+            ProviderType.OPENROUTER,
+            api_key=os.environ["OPENROUTER_API_KEY"]
+        )
+        response = provider.complete(
+            messages=[Message(role="user", content="Hello")],
+            model="openrouter/free"
+        )
+    """
+
+    provider_type = ProviderType.OPENROUTER
+    BASE_URL = "https://openrouter.ai/api/v1"
+
+    # Free models available on OpenRouter (as of 2026)
+    # See https://openrouter.ai/api/v1/models for current availability
+    FREE_MODELS = [
+        "openrouter/free",  # Auto-selects best available free model
+        "nvidia/nemotron-3-nano-30b-a3b:free",
+        "nvidia/nemotron-nano-12b-v2-vl:free",
+        "liquid/lfm-2.5-1.2b-instruct:free",
+        "arcee-ai/trinity-mini:free",
+    ]
+
+    def __init__(self, config: ProviderConfig):
+        super().__init__(config)
+        # Set OpenRouter base URL if not specified
+        if not self.config.base_url:
+            self.config.base_url = self.BASE_URL
+        # Add required OpenRouter headers
+        self.config.extra_headers.update({
+            "HTTP-Referer": "https://github.com/codomyrmex",
+            "X-Title": "Codomyrmex",
+        })
+        self._init_client()
+
+    def _init_client(self):
+        """Initialize the OpenAI-compatible client for OpenRouter."""
+        try:
+            from openai import OpenAI
+            self._client = OpenAI(
+                api_key=self.config.api_key,
+                base_url=self.config.base_url,
+                timeout=self.config.timeout,
+                max_retries=self.config.max_retries,
+                default_headers=self.config.extra_headers,
+            )
+        except ImportError:
+            self._client = None
+
+    def complete(
+        self,
+        messages: List[Message],
+        model: Optional[str] = None,
+        temperature: float = 0.7,
+        max_tokens: Optional[int] = None,
+        **kwargs
+    ) -> CompletionResponse:
+        if not self._client:
+            raise RuntimeError("OpenRouter client not initialized. Install openai package.")
+
+        response = self._client.chat.completions.create(
+            model=self.get_model(model),
+            messages=[m.to_dict() for m in messages],
+            temperature=temperature,
+            max_tokens=max_tokens,
+            **kwargs
+        )
+
+        choice = response.choices[0]
+        return CompletionResponse(
+            content=choice.message.content or "",
+            model=response.model,
+            provider=self.provider_type,
+            finish_reason=choice.finish_reason,
+            usage={
+                "prompt_tokens": response.usage.prompt_tokens,
+                "completion_tokens": response.usage.completion_tokens,
+                "total_tokens": response.usage.total_tokens,
+            } if response.usage else None,
+            tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
+            raw_response=response,
+        )
+
+    def complete_stream(
+        self,
+        messages: List[Message],
+        model: Optional[str] = None,
+        temperature: float = 0.7,
+        max_tokens: Optional[int] = None,
+        **kwargs
+    ) -> Iterator[str]:
+        if not self._client:
+            raise RuntimeError("OpenRouter client not initialized.")
+
+        stream = self._client.chat.completions.create(
+            model=self.get_model(model),
+            messages=[m.to_dict() for m in messages],
+            temperature=temperature,
+            max_tokens=max_tokens,
+            stream=True,
+            **kwargs
+        )
+
+        for chunk in stream:
+            if chunk.choices and chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+
+    async def complete_async(
+        self,
+        messages: List[Message],
+        model: Optional[str] = None,
+        temperature: float = 0.7,
+        max_tokens: Optional[int] = None,
+        **kwargs
+    ) -> CompletionResponse:
+        try:
+            from openai import AsyncOpenAI
+            async_client = AsyncOpenAI(
+                api_key=self.config.api_key,
+                base_url=self.config.base_url,
+                default_headers=self.config.extra_headers,
+            )
+            response = await async_client.chat.completions.create(
+                model=self.get_model(model),
+                messages=[m.to_dict() for m in messages],
+                temperature=temperature,
+                max_tokens=max_tokens,
+                **kwargs
+            )
+            choice = response.choices[0]
+            return CompletionResponse(
+                content=choice.message.content or "",
+                model=response.model,
+                provider=self.provider_type,
+                finish_reason=choice.finish_reason,
+                usage={
+                    "prompt_tokens": response.usage.prompt_tokens,
+                    "completion_tokens": response.usage.completion_tokens,
+                    "total_tokens": response.usage.total_tokens,
+                } if response.usage else None,
+                tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
+                raw_response=response,
+            )
+        except ImportError:
+            raise RuntimeError("OpenRouter async client not available. Install openai package.")
+
+    def list_models(self) -> List[str]:
+        """List free models available on OpenRouter.
+
+        For a full list of models, see: https://openrouter.ai/models
+        """
+        return self.FREE_MODELS
+
+    def _default_model(self) -> str:
+        return "openrouter/free"
+
+
 def get_provider(
     provider_type: ProviderType,
     config: Optional[ProviderConfig] = None,
@@ -408,6 +619,7 @@ def get_provider(
     providers = {
         ProviderType.OPENAI: OpenAIProvider,
         ProviderType.ANTHROPIC: AnthropicProvider,
+        ProviderType.OPENROUTER: OpenRouterProvider,
     }
     
     provider_class = providers.get(provider_type)
@@ -425,5 +637,6 @@ __all__ = [
     "LLMProvider",
     "OpenAIProvider",
     "AnthropicProvider",
+    "OpenRouterProvider",
     "get_provider",
 ]

@@ -21,6 +21,7 @@ Each test includes:
 - Execution: Actions performed
 - Assertions: Expected outcomes
 """
+import pytest
 
 import unittest
 import time
@@ -50,6 +51,7 @@ except ImportError as e:
     OLLAMA_AVAILABLE = False
 
 
+@pytest.mark.integration
 class TestInitializationPatterns(unittest.TestCase):
     """
     Test Category A: Initialization Patterns
@@ -158,6 +160,7 @@ class TestInitializationPatterns(unittest.TestCase):
         self.assertIsNotNone(config_manager.config.ollama_binary)
 
 
+@pytest.mark.integration
 class TestModelManagement(unittest.TestCase):
     """
     Test Category B: Model Management
@@ -279,6 +282,7 @@ class TestModelManagement(unittest.TestCase):
                 pass  # Expected if base name lookup not supported
 
 
+@pytest.mark.integration
 class TestExecutionMethods(unittest.TestCase):
     """
     Test Category C: Execution Methods
@@ -472,6 +476,7 @@ class TestExecutionMethods(unittest.TestCase):
             self.assertEqual(result.prompt, prompts[i])
 
 
+@pytest.mark.integration
 class TestConfigurationManagement(unittest.TestCase):
     """
     Test Category D: Configuration Management
@@ -576,6 +581,7 @@ class TestConfigurationManagement(unittest.TestCase):
             AssertionHelpers.assert_valid_execution_options(preset_options)
 
 
+@pytest.mark.integration
 class TestOutputManagement(unittest.TestCase):
     """
     Test Category E: Output Management
@@ -667,6 +673,7 @@ class TestOutputManagement(unittest.TestCase):
         self.assertGreaterEqual(stats['total_outputs'], 2)
 
 
+@pytest.mark.integration
 class TestErrorHandling(unittest.TestCase):
     """
     Test Category F: Error Handling
@@ -730,6 +737,7 @@ class TestErrorHandling(unittest.TestCase):
             self.assertIsNotNone(result)
 
 
+@pytest.mark.integration
 class TestIntegrationPatterns(unittest.TestCase):
     """
     Test Category G: Integration Patterns

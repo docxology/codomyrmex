@@ -30,6 +30,7 @@ from codomyrmex.compression import (
 )
 
 
+@pytest.mark.unit
 class TestCompressionModuleImport:
     """Tests for compression module import."""
 
@@ -48,6 +49,7 @@ class TestCompressionModuleImport:
         assert hasattr(compression, "ArchiveManager")
 
 
+@pytest.mark.unit
 class TestCompressor:
     """Tests for Compressor class."""
 
@@ -83,6 +85,7 @@ class TestCompressor:
         assert "zip" in Compressor.SUPPORTED_FORMATS
 
 
+@pytest.mark.unit
 class TestGzipCompression(unittest.TestCase):
     """Tests for gzip compression."""
 
@@ -134,6 +137,7 @@ class TestGzipCompression(unittest.TestCase):
         self.assertEqual(data, decompressed)
 
 
+@pytest.mark.unit
 class TestZlibCompression:
     """Tests for zlib compression."""
 
@@ -166,6 +170,7 @@ class TestZlibCompression:
         assert decompressed == b""
 
 
+@pytest.mark.unit
 class TestZipCompression:
     """Tests for ZIP compression."""
 
@@ -186,6 +191,7 @@ class TestZipCompression:
         assert decompressed == b""
 
 
+@pytest.mark.unit
 class TestZstdCompression(unittest.TestCase):
     """Tests for Zstandard compression."""
 
@@ -212,6 +218,7 @@ class TestZstdCompression(unittest.TestCase):
             self.skipTest("zstandard not installed")
 
 
+@pytest.mark.unit
 class TestParallelCompressor(unittest.TestCase):
     """Tests for parallel compression."""
 
@@ -252,6 +259,7 @@ class TestParallelCompressor(unittest.TestCase):
         self.assertEqual(result, [])
 
 
+@pytest.mark.unit
 class TestFormatDetection:
     """Tests for format detection."""
 
@@ -306,6 +314,7 @@ class TestFormatDetection:
         assert detected is None
 
 
+@pytest.mark.unit
 class TestCompressionRatio:
     """Tests for compression ratio calculation."""
 
@@ -353,6 +362,7 @@ class TestCompressionRatio:
         assert ratio > 0  # Should have positive compression
 
 
+@pytest.mark.unit
 class TestFileCompression:
     """Tests for file compression."""
 
@@ -423,6 +433,7 @@ class TestFileCompression:
         assert not decompressed_path.endswith(".gz")
 
 
+@pytest.mark.unit
 class TestStreamCompression:
     """Tests for stream compression."""
 
@@ -474,6 +485,7 @@ class TestStreamCompression:
         assert output_stream.read() == original_data
 
 
+@pytest.mark.unit
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions."""
 
@@ -576,6 +588,7 @@ class TestConvenienceFunctions:
             auto_decompress(b"random data")
 
 
+@pytest.mark.unit
 class TestArchiveManager:
     """Tests for ArchiveManager class."""
 
@@ -683,6 +696,7 @@ class TestArchiveManager:
         assert extract_path.exists()
 
 
+@pytest.mark.unit
 class TestCompressionError:
     """Tests for CompressionError handling."""
 
@@ -704,6 +718,7 @@ class TestCompressionError:
         assert str(error) == "Custom message"
 
 
+@pytest.mark.unit
 class TestCompareFormats:
     """Tests for format comparison function."""
 
@@ -738,6 +753,7 @@ class TestCompareFormats:
         assert "gzip" in results
 
 
+@pytest.mark.unit
 class TestEdgeCases:
     """Tests for edge cases and error handling."""
 

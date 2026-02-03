@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestEnvironmentSetup:
     """Test cases for environment setup functionality."""
 

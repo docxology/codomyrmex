@@ -29,6 +29,7 @@ from codomyrmex.api.openapi_generator import (
 )
 
 
+@pytest.mark.unit
 class TestAPIEndpoint:
     """Test cases for APIEndpoint dataclass."""
 
@@ -93,6 +94,7 @@ class TestAPIEndpoint:
         assert endpoint_dict["deprecated"] is True
 
 
+@pytest.mark.unit
 class TestAPIDocumentation:
     """Test cases for APIDocumentation dataclass."""
 
@@ -170,6 +172,7 @@ class TestAPIDocumentation:
         assert "get" in paths["/users/{id}"]
 
 
+@pytest.mark.unit
 class TestAPIDocumentationGenerator:
     """Test cases for APIDocumentationGenerator functionality."""
 
@@ -387,6 +390,7 @@ def get_user(user_id: int, name: str = "default"):
         assert isinstance(issues, list)
 
 
+@pytest.mark.unit
 class TestOpenAPIGenerator:
     """Test cases for OpenAPIGenerator functionality."""
 
@@ -564,6 +568,7 @@ class TestOpenAPIGenerator:
             assert "/users" in html_content
 
 
+@pytest.mark.unit
 class TestConvenienceFunctions:
     """Test cases for module-level convenience functions."""
 
@@ -604,6 +609,7 @@ class TestConvenienceFunctions:
         assert isinstance(result, list)
 
 
+@pytest.mark.unit
 class TestIntegration:
     """Integration tests for API documentation components."""
 
@@ -698,6 +704,7 @@ class TestIntegration:
         assert isinstance(errors, list)
 
 
+@pytest.mark.unit
 class TestErrorHandling:
     """Test cases for error handling in API documentation operations."""
 

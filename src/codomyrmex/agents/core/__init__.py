@@ -1,3 +1,5 @@
+"""Core agent infrastructure and base classes."""
+
 from .base import (
     BaseAgent,
     AgentCapabilities,

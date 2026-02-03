@@ -29,6 +29,7 @@ from codomyrmex.security.physical import (
 )
 
 
+@pytest.mark.unit
 class TestAccessControl:
     """Test access control functionality."""
     
@@ -100,6 +101,7 @@ class TestAccessControl:
         assert has_access is False
 
 
+@pytest.mark.unit
 class TestAssetInventory:
     """Test asset inventory functionality."""
     
@@ -153,6 +155,7 @@ class TestAssetInventory:
         assert asset is None
 
 
+@pytest.mark.unit
 class TestSurveillance:
     """Test surveillance functionality."""
     
@@ -187,6 +190,7 @@ class TestSurveillance:
         assert event.timestamp is not None
 
 
+@pytest.mark.unit
 class TestPhysicalVulnerability:
     """Test physical vulnerability assessment."""
     
@@ -209,6 +213,7 @@ class TestPhysicalVulnerability:
         assert assessment["location"] == "data_center"
 
 
+@pytest.mark.unit
 class TestPerimeterManagement:
     """Test perimeter management functionality."""
     

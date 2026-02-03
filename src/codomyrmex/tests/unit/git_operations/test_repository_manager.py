@@ -4,6 +4,7 @@ Unit tests for Repository Manager
 Tests the repository library management functionality including
 loading, searching, and Git operations integration.
 """
+import pytest
 
 import unittest
 import tempfile
@@ -30,6 +31,7 @@ def check_git_available():
         return False
 
 
+@pytest.mark.unit
 class TestRepositoryManager(unittest.TestCase):
     """Test cases for Repository Manager."""
     

@@ -23,6 +23,7 @@ from codomyrmex.config_management.config_loader import (
 )
 
 
+@pytest.mark.unit
 class TestConfigSchema:
     """Test cases for ConfigSchema functionality."""
 
@@ -103,6 +104,7 @@ class TestConfigSchema:
         assert len(errors) > 0
 
 
+@pytest.mark.unit
 class TestConfiguration:
     """Test cases for Configuration dataclass."""
 
@@ -194,6 +196,7 @@ class TestConfiguration:
         assert "loaded_at" in config_dict
 
 
+@pytest.mark.unit
 class TestConfigurationManager:
     """Test cases for ConfigurationManager functionality."""
 
@@ -587,6 +590,7 @@ database:
                 os.unlink(template_path)
 
 
+@pytest.mark.unit
 class TestConvenienceFunctions:
     """Test cases for module-level convenience functions."""
 
@@ -625,6 +629,7 @@ class TestConvenienceFunctions:
         assert len(result) > 0
 
 
+@pytest.mark.unit
 class TestIntegration:
     """Integration tests for configuration management components."""
 
@@ -735,6 +740,7 @@ class TestIntegration:
                 del os.environ["ENVIRONMENT"]
 
 
+@pytest.mark.unit
 class TestErrorHandling:
     """Test cases for error handling in configuration operations."""
 

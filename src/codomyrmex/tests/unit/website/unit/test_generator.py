@@ -24,6 +24,7 @@ sys.path.insert(0, str(SRC_DIR))
 from codomyrmex.website.generator import WebsiteGenerator
 
 
+@pytest.mark.unit
 class TestWebsiteGeneratorInit:
     """Tests for WebsiteGenerator initialization."""
 
@@ -55,6 +56,7 @@ class TestWebsiteGeneratorInit:
         assert generator.data_provider is not None
 
 
+@pytest.mark.unit
 class TestWebsiteGeneratorGenerate:
     """Tests for the generate() method."""
 
@@ -103,6 +105,7 @@ class TestWebsiteGeneratorGenerate:
         assert not (output_dir / "old_file.txt").exists()
 
 
+@pytest.mark.unit
 class TestWebsiteGeneratorRenderPage:
     """Tests for the _render_page() method."""
 
@@ -141,6 +144,7 @@ class TestWebsiteGeneratorRenderPage:
             mock_template.render.assert_called_once_with(**context)
 
 
+@pytest.mark.unit
 class TestWebsiteGeneratorCopyAssets:
     """Tests for the _copy_assets() method."""
 
@@ -179,6 +183,7 @@ class TestWebsiteGeneratorCopyAssets:
         assert not (output_dir / "assets").exists()
 
 
+@pytest.mark.unit
 class TestWebsiteGeneratorIntegration:
     """Integration tests for the full generation workflow."""
 

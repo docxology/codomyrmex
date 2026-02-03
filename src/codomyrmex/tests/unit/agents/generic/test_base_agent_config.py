@@ -7,6 +7,7 @@ from codomyrmex.agents.core import BaseAgent
 from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
 
 
+@pytest.mark.unit
 class TestAgent(BaseAgent):
     """Test agent for configuration testing."""
 
@@ -19,6 +20,7 @@ class TestAgent(BaseAgent):
         yield "test"
 
 
+@pytest.mark.unit
 class TestBaseAgentConfigExtraction:
     """Test BaseAgent configuration extraction."""
 

@@ -3,6 +3,7 @@
 import pytest
 from codomyrmex.feature_flags import FeatureManager
 
+@pytest.mark.unit
 def test_static_flags():
     """Test simple boolean flags."""
     config = {"feature-a": True, "feature-b": False}
@@ -12,6 +13,7 @@ def test_static_flags():
     assert manager.is_enabled("feature-b") is False
     assert manager.is_enabled("missing", default=True) is True
 
+@pytest.mark.unit
 def test_percentage_rollout():
     """Test percentage-based rollout logic."""
     config = {"new-feature": {"percentage": 50}}
@@ -32,6 +34,7 @@ def test_percentage_rollout():
     # The actual count depends on hash(f"new-feature:user_{i}") % 100
     assert enabled_count > 0 and enabled_count < 100
 
+@pytest.mark.unit
 def test_multivariate_flags():
     """Test non-boolean flags."""
     config = {"theme": "dark", "max-connections": 10}
@@ -41,6 +44,7 @@ def test_multivariate_flags():
     assert manager.get_value("max-connections") == 10
     assert manager.get_value("missing", default="blue") == "blue"
 
+@pytest.mark.unit
 def test_flag_persistence(tmp_path):
     """Test loading and saving flags."""
     file_path = str(tmp_path / "flags.json")

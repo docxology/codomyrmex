@@ -199,6 +199,7 @@ class AnotherClass:
 """
 
 
+@pytest.mark.unit
 class TestASTParsingAndTraversal:
     """Test cases for AST parsing and traversal."""
 
@@ -259,6 +260,7 @@ class TestASTParsingAndTraversal:
         assert "divide" in visitor.functions
 
 
+@pytest.mark.unit
 class TestCodeComplexityCalculation:
     """Test cases for code complexity calculation."""
 
@@ -312,6 +314,7 @@ class TestCodeComplexityCalculation:
         assert complexity == 1
 
 
+@pytest.mark.unit
 class TestImportAnalysis:
     """Test cases for import analysis."""
 
@@ -358,6 +361,7 @@ class TestImportAnalysis:
         assert aliases.get("json") == "j"
 
 
+@pytest.mark.unit
 class TestDependencyDetection:
     """Test cases for dependency detection."""
 
@@ -399,6 +403,7 @@ class TestDependencyDetection:
         assert any("requirements" in str(f) for f in req_files)
 
 
+@pytest.mark.unit
 class TestCodeMetrics:
     """Test cases for code metrics calculation."""
 
@@ -478,6 +483,7 @@ def func3():
         assert metrics.code_duplication >= 0
 
 
+@pytest.mark.unit
 class TestDeadCodeDetection:
     """Test cases for dead code detection."""
 
@@ -540,6 +546,7 @@ print(z)
         assert "UnusedClass" in defined_classes
 
 
+@pytest.mark.unit
 class TestCodeSmellDetection:
     """Test cases for code smell detection."""
 
@@ -594,6 +601,7 @@ class TestCodeSmellDetection:
                 assert line_count > 50  # Long function threshold
 
 
+@pytest.mark.unit
 class TestLintingIntegration:
     """Test cases for linting integration."""
 
@@ -660,6 +668,7 @@ class TestLintingIntegration:
         assert summary.analysis_time == 2.5
 
 
+@pytest.mark.unit
 class TestSecurityVulnerabilityDetection:
     """Test cases for security vulnerability detection."""
 
@@ -716,6 +725,7 @@ class TestSecurityVulnerabilityDetection:
         assert "call" in shell_true_calls
 
 
+@pytest.mark.unit
 class TestTypeCheckingIntegration:
     """Test cases for type checking integration."""
 
@@ -777,6 +787,7 @@ class TestTypeCheckingIntegration:
         assert result.issues[0].severity == "error"
 
 
+@pytest.mark.unit
 class TestErrorHandlingForMalformedCode:
     """Test cases for error handling with malformed code."""
 
@@ -879,6 +890,7 @@ def greet(name):
         assert metrics.lines_of_code > 0
 
 
+@pytest.mark.unit
 class TestLanguageDetection:
     """Test cases for language detection."""
 
@@ -933,6 +945,7 @@ class TestLanguageDetection:
         assert analyzer._should_analyze_file("test.md") is False
 
 
+@pytest.mark.unit
 class TestExportResults:
     """Test cases for exporting analysis results."""
 
@@ -1021,6 +1034,7 @@ class TestExportResults:
         assert success is False
 
 
+@pytest.mark.unit
 class TestResultFiltering:
     """Test cases for filtering analysis results."""
 

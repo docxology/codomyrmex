@@ -23,9 +23,11 @@ def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
             return False
 
     except ImportError:
+        logger.warning("AI code editing module not available")
         print("❌ AI code editing module not available")
         return False
     except (ValueError, TypeError, AttributeError, RuntimeError) as e:
+        logger.error(f"Error generating code: {e}", exc_info=True)
         print(f"❌ Error generating code: {str(e)}")
         return False
 
@@ -67,8 +69,10 @@ def handle_ai_refactor(file_path: str, instruction: str) -> bool:
             return False
 
     except ImportError:
+        logger.warning("AI code editing module not available")
         print("❌ AI code editing module not available")
         return False
     except (ValueError, TypeError, AttributeError, RuntimeError, OSError) as e:
+        logger.error(f"Error refactoring code: {e}", exc_info=True)
         print(f"❌ Error refactoring code: {str(e)}")
         return False

@@ -26,6 +26,7 @@ from codomyrmex.security.cognitive import (
 )
 
 
+@pytest.mark.unit
 class TestSocialEngineeringDetection:
     """Test social engineering detection."""
     
@@ -50,6 +51,7 @@ class TestSocialEngineeringDetection:
         assert 0.0 <= analysis["risk_score"] <= 1.0
 
 
+@pytest.mark.unit
 class TestPhishingAnalysis:
     """Test phishing analysis."""
     
@@ -75,6 +77,7 @@ class TestPhishingAnalysis:
         assert isinstance(is_phishing, bool)
 
 
+@pytest.mark.unit
 class TestAwarenessTraining:
     """Test awareness training."""
     
@@ -110,6 +113,7 @@ class TestAwarenessTraining:
         assert "effectiveness" in effectiveness
 
 
+@pytest.mark.unit
 class TestCognitiveThreatAssessment:
     """Test cognitive threat assessment."""
     
@@ -141,6 +145,7 @@ class TestCognitiveThreatAssessment:
         assert "experience" in factors
 
 
+@pytest.mark.unit
 class TestBehaviorAnalysis:
     """Test behavior analysis."""
     

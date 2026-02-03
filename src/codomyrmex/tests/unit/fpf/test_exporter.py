@@ -8,12 +8,14 @@ from tempfile import TemporaryDirectory
 from codomyrmex.fpf import FPFExporter, FPFSpec, Pattern, Relationship, PatternStatus, Concept, ConceptType
 
 
+@pytest.mark.unit
 def test_exporter_initialization():
     """Test exporter initialization."""
     exporter = FPFExporter()
     assert exporter is not None
 
 
+@pytest.mark.unit
 def test_export_json():
     """Test JSON export."""
     exporter = FPFExporter()
@@ -38,6 +40,7 @@ def test_export_json():
         assert len(data["patterns"]) == 1
 
 
+@pytest.mark.unit
 def test_export_patterns_json():
     """Test patterns-only export."""
     exporter = FPFExporter()
@@ -66,6 +69,7 @@ def test_export_patterns_json():
         assert len(data["patterns"]) == 2
 
 
+@pytest.mark.unit
 def test_export_concepts_json():
     """Test concepts-only export."""
     exporter = FPFExporter()
@@ -88,6 +92,7 @@ def test_export_concepts_json():
         assert len(data["concepts"]) == 1
 
 
+@pytest.mark.unit
 def test_export_for_context():
     """Test context-optimized export."""
     exporter = FPFExporter()
@@ -110,6 +115,7 @@ def test_export_for_context():
     assert context_data["summary"]["total_patterns"] == 1
 
 
+@pytest.mark.unit
 def test_export_for_context_with_filters():
     """Test context export with filters."""
     exporter = FPFExporter()

@@ -30,6 +30,7 @@ except ImportError:
 # TemplateEngine Jinja2 Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestTemplateEngineJinja2:
     """Tests for TemplateEngine with Jinja2."""
 
@@ -116,6 +117,7 @@ Line 3: {{ var3 }}"""
 # TemplateEngine Mako Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestTemplateEngineMako:
     """Tests for TemplateEngine with Mako."""
 
@@ -155,6 +157,7 @@ class TestTemplateEngineMako:
 # Template Loading Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestTemplateLoading:
     """Tests for loading templates from files."""
 
@@ -206,6 +209,7 @@ class TestTemplateLoading:
 # Custom Filter Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestCustomFilters:
     """Tests for custom template filters."""
 
@@ -260,6 +264,7 @@ class TestCustomFilters:
 # Template Class Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestTemplateClass:
     """Tests for Template class."""
 
@@ -282,6 +287,7 @@ class TestTemplateClass:
 # TemplateManager Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestTemplateManager:
     """Tests for TemplateManager."""
 
@@ -337,6 +343,7 @@ class TestTemplateManager:
 # Error Handling Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestErrorHandling:
     """Tests for error handling."""
 
@@ -369,6 +376,7 @@ class TestErrorHandling:
 # Integration Tests
 # ==============================================================================
 
+@pytest.mark.unit
 class TestIntegration:
     """Integration tests for templating module."""
 

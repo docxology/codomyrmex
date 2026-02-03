@@ -9,7 +9,7 @@ Before you begin, ensure you have the following:
 - The Build Synthesis module installed and configured (see main [README.md](../../README.md)).
 - A hypothetical Codomyrmex module named `sample_utility_module` existing within your project structure (e.g., `./codomyrmex/sample_utility_module/`).
 - This `sample_utility_module` must have a valid `pyproject.toml` file and a `setup.cfg` or `setup.py` if needed by the build backend, configured for building a Python wheel. (See example in Step 1).
-- Python build tools installed in your environment (e.g., `pip install build`).
+- Python build tools installed in your environment (e.g., `uv pip install build`).
 - Familiarity with Python packaging concepts (wheel, sdist) and MCP tool invocation (e.g., via a hypothetical `codomyrmex_mcp_client`).
 
 ## 2. Goal
@@ -82,7 +82,7 @@ By the end of this tutorial, you will be able to:
 5.  **Ensure Build Tools are Available**:
     Open your terminal in the Codomyrmex project root:
     ```bash
-    python -m pip install build --upgrade
+    uv pip install build --upgrade
     ```
 
 ### Step 2: Invoke `trigger_build`
@@ -157,7 +157,7 @@ The `.whl` file is a ready-to-install package for your module.
   - **Solution**:
     1. Carefully review the `log_output` and `error_message` from the MCP response.
     2. Manually try to build the module: `cd codomyrmex/sample_utility_module && python -m build`.
-    3. Ensure `python -m pip install build setuptools wheel` has been run in the execution environment.
+    3. Ensure `uv pip install build setuptools wheel` has been run in the execution environment.
 - **Artifacts not found in `output_path`**: 
   - **Cause**: The build might have succeeded locally within the module's `dist/` directory, but `build_synthesis` failed to copy them, or the `output_path` in the MCP response is different than expected.
   - **Solution**: Check the module's own `dist/` directory first. Review the `artifact_paths` from the MCP response carefully.
@@ -170,7 +170,7 @@ Now you can try:
 - Building other Python-based Codomyrmex modules.
 - Exploring how `trigger_build` might work for different types of components (e.g., Docker images, if supported by your `build_synthesis` module implementation, which would require a `Dockerfile` as `target` or similar).
 - Integrating this build step into an automated CI/CD pipeline.
-- Using the generated wheel file by installing it into a virtual environment (`pip install ./output/builds/sample_utility_module_pkg/codomyrmex_sample_utility_module-0.1.0-py3-none-any.whl`) and trying to import your module. 
+- Using the generated wheel file by installing it into a virtual environment (`uv pip install ./output/builds/sample_utility_module_pkg/codomyrmex_sample_utility_module-0.1.0-py3-none-any.whl`) and trying to import your module. 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

@@ -1,7 +1,9 @@
 """Unit tests for embodiment module."""
+import pytest
 
 from codomyrmex.embodiment import ROS2Bridge, Transform3D
 
+@pytest.mark.unit
 def test_ros_bridge_pub_sub():
     """Test the basic pub/sub orchestration of the bridge."""
     bridge = ROS2Bridge("test_node")
@@ -20,11 +22,13 @@ def test_ros_bridge_pub_sub():
     assert len(received) == 1
     assert received[0] == test_msg
 
+@pytest.mark.unit
 def test_bridge_publishing():
     """Test publishing interface."""
     bridge = ROS2Bridge("test_node")
     assert bridge.publish("/cmd_vel", {"speed": 1.0}) is True
 
+@pytest.mark.unit
 def test_transform_3d():
     """Test 3D transformation logic."""
     tf = Transform3D(translation=(1, 2, 3))

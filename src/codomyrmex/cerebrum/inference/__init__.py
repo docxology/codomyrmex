@@ -1,3 +1,5 @@
+"""Inference mechanisms for Cerebrum."""
+
 from .active_inference import ActiveInferenceAgent, BeliefState, PolicySelector, VariationalFreeEnergy
 from .bayesian import (
     BayesianNetwork,

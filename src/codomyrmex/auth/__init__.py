@@ -30,10 +30,7 @@ __all__ = [
 __version__ = "0.1.0"
 
 
-class AuthenticationError(CodomyrmexError):
-    """Raised when authentication operations fail."""
-
-    pass
+from codomyrmex.exceptions import AuthenticationError
 
 
 def authenticate(credentials: dict) -> Optional[Token]:

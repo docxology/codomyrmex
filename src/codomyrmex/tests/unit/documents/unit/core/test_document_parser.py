@@ -1,3 +1,4 @@
+import pytest
 
 import unittest
 from unittest.mock import patch
@@ -5,6 +6,7 @@ from codomyrmex.documents.core.document_parser import DocumentParser, parse_docu
 from codomyrmex.documents.models.document import DocumentFormat, Document
 from codomyrmex.documents.exceptions import DocumentParseError, UnsupportedFormatError
 
+@pytest.mark.unit
 class TestDocumentParser(unittest.TestCase):
     def setUp(self):
         self.parser = DocumentParser()
@@ -35,6 +37,7 @@ class TestDocumentParser(unittest.TestCase):
         # But if we had a binary format maybe?
         pass
 
+@pytest.mark.unit
 class TestParseDocumentConvenience(unittest.TestCase):
     @patch('codomyrmex.documents.core.document_parser.DocumentParser.parse')
     def test_parse_document_wrapper(self, mock_parse):

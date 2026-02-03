@@ -1,3 +1,8 @@
+# DEPRECATED: This file is deprecated.
+# All dependencies are now managed in pyproject.toml
+# See: pyproject.toml [project.optional-dependencies.scrape]
+# DO NOT modify this file - it will be removed in a future version.
+
 # Scrape Module Dependencies
 
 # Firecrawl Python SDK

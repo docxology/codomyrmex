@@ -20,6 +20,16 @@ Central documentation hub for the Codomyrmex platform. Contains user guides, dev
 | [**project/**](project/) | Architecture, contributing | Low - project info |
 | [**project_orchestration/**](project_orchestration/) | Multi-project workflows | Low - advanced |
 
+### Secure Cognitive Agent Documentation
+
+| Directory | Scope | Agent Priority |
+|-----------|-------|----------------|
+| [**src/codomyrmex/identity/**](../src/codomyrmex/identity/) | Identity & Verification | Critical - Security Core |
+| [**src/codomyrmex/wallet/**](../src/codomyrmex/wallet/) | Self-Custody & Recovery | Critical - Security Core |
+| [**src/codomyrmex/defense/**](../src/codomyrmex/defense/) | Active Defense | Critical - Security Core |
+| [**src/codomyrmex/market/**](../src/codomyrmex/market/) | Anonymous Markets | High - Economic Layer |
+| [**src/codomyrmex/privacy/**](../src/codomyrmex/privacy/) | Privacy & Mixnets | Critical - Privacy Core |
+
 ## Agent Guidelines
 
 ### Documentation Quality Standards

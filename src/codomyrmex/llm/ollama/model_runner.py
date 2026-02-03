@@ -22,10 +22,24 @@ from .ollama_manager import ModelExecutionResult, OllamaManager
 class ExecutionOptions:
     """
     Configuration options for model execution.
-    
+
     All parameters are modular and can be set independently.
     Defaults are optimized for general-purpose text generation.
-    
+
+    Parameter Translation to Ollama API:
+        This class uses standard LLM parameter names. When sent to Ollama,
+        they are translated as follows:
+
+        | Standard Name    | Ollama API Parameter |
+        |------------------|---------------------|
+        | max_tokens       | num_predict         |
+        | context_window   | num_ctx             |
+        | system_prompt    | system (at request level) |
+        | temperature      | temperature         |
+        | top_p            | top_p               |
+        | top_k            | top_k               |
+        | repeat_penalty   | repeat_penalty      |
+
     Parameters:
         temperature (float): Controls randomness (0.0-2.0). Lower = more deterministic.
             Default: 0.7
@@ -36,6 +50,7 @@ class ExecutionOptions:
         repeat_penalty (float): Penalty for repeating tokens (1.0 = no penalty).
             Default: 1.1
         max_tokens (int): Maximum number of tokens to generate.
+            Maps to Ollama's `num_predict` parameter.
             Default: 2048
         timeout (int): Execution timeout in seconds.
             Default: 300
@@ -44,8 +59,10 @@ class ExecutionOptions:
         format (Optional[str]): Output format, e.g., "json" for structured output.
             Default: None (text)
         system_prompt (Optional[str]): System prompt for the model.
+            Maps to Ollama's `system` parameter at request level.
             Default: None
         context_window (Optional[int]): Context window size (if supported by model).
+            Maps to Ollama's `num_ctx` parameter.
             Default: None
     """
     temperature: float = 0.7

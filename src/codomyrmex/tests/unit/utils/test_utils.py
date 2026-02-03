@@ -19,6 +19,7 @@ import pytest
 from codomyrmex.utils import RefinedUtilities
 
 
+@pytest.mark.unit
 class TestRefinedUtilities(unittest.TestCase):
     """Tests for RefinedUtilities class."""
 
@@ -65,6 +66,7 @@ class TestRefinedUtilities(unittest.TestCase):
         self.assertEqual(result, Path("/base/path/subdir/file.txt").resolve())
 
 
+@pytest.mark.unit
 class TestEnsureDirectory:
     """Tests for ensure_directory function."""
 
@@ -118,6 +120,7 @@ class TestEnsureDirectory:
         assert isinstance(result, Path)
 
 
+@pytest.mark.unit
 class TestSafeJsonLoads:
     """Tests for safe_json_loads function."""
 
@@ -178,6 +181,7 @@ class TestSafeJsonLoads:
         assert result == 42
 
 
+@pytest.mark.unit
 class TestSafeJsonDumps:
     """Tests for safe_json_dumps function."""
 
@@ -231,6 +235,7 @@ class TestSafeJsonDumps:
         assert "42" in result
 
 
+@pytest.mark.unit
 class TestHashContent:
     """Tests for hash_content function."""
 
@@ -290,6 +295,7 @@ class TestHashContent:
         assert len(result) == 64  # SHA256 always produces 64 char hex
 
 
+@pytest.mark.unit
 class TestHashFile:
     """Tests for hash_file function."""
 
@@ -352,6 +358,7 @@ class TestHashFile:
         assert hash1 == hash2
 
 
+@pytest.mark.unit
 class TestTimingDecorator:
     """Tests for timing_decorator."""
 
@@ -404,6 +411,7 @@ class TestTimingDecorator:
         assert result["execution_time_ms"] >= 100
 
 
+@pytest.mark.unit
 class TestRetryDecorator:
     """Tests for retry decorator."""
 
@@ -488,6 +496,7 @@ class TestRetryDecorator:
             assert delay2 > delay1
 
 
+@pytest.mark.unit
 class TestGetTimestamp:
     """Tests for get_timestamp function."""
 
@@ -522,6 +531,7 @@ class TestGetTimestamp:
         assert ts1 != ts2
 
 
+@pytest.mark.unit
 class TestTruncateString:
     """Tests for truncate_string function."""
 
@@ -576,6 +586,7 @@ class TestTruncateString:
         assert result == "long "
 
 
+@pytest.mark.unit
 class TestGetEnv:
     """Tests for get_env function."""
 
@@ -628,6 +639,7 @@ class TestGetEnv:
             del os.environ["EMPTY_VAR"]
 
 
+@pytest.mark.unit
 class TestFlattenDict:
     """Tests for flatten_dict function."""
 
@@ -680,6 +692,7 @@ class TestFlattenDict:
         assert result == {"a": [1, 2, 3]}
 
 
+@pytest.mark.unit
 class TestDeepMerge:
     """Tests for deep_merge function."""
 
@@ -748,6 +761,7 @@ class TestDeepMerge:
         assert result == {"a": "simple"}
 
 
+@pytest.mark.unit
 class TestCliHelpers:
     """Tests for CLI helper functions."""
 
@@ -857,6 +871,7 @@ class TestCliHelpers:
         assert result.parent.exists()
 
 
+@pytest.mark.unit
 class TestProgressReporter:
     """Tests for ProgressReporter class."""
 
@@ -907,6 +922,7 @@ class TestProgressReporter:
         assert reporter.current == 100
 
 
+@pytest.mark.unit
 class TestScriptBase:
     """Tests for ScriptBase and related classes."""
 
@@ -983,6 +999,7 @@ class TestScriptBase:
         assert '"test"' in json_str
 
 
+@pytest.mark.unit
 class TestAddCommonArguments:
     """Tests for add_common_arguments function."""
 
@@ -1031,6 +1048,7 @@ class TestAddCommonArguments:
         assert args.quiet is True
 
 
+@pytest.mark.unit
 class TestFormatResult:
     """Tests for format_result function."""
 
@@ -1073,6 +1091,7 @@ class TestFormatResult:
         assert message == "result string"
 
 
+@pytest.mark.unit
 class TestPrintFunctions:
     """Tests for print helper functions."""
 

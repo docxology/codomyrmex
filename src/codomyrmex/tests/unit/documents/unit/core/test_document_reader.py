@@ -1,3 +1,4 @@
+import pytest
 
 import unittest
 from unittest.mock import patch, MagicMock
@@ -6,6 +7,7 @@ from codomyrmex.documents.core.document_reader import DocumentReader, read_docum
 from codomyrmex.documents.models.document import DocumentFormat
 from codomyrmex.documents.exceptions import DocumentReadError, UnsupportedFormatError
 
+@pytest.mark.unit
 class TestDocumentReader(unittest.TestCase):
     def setUp(self):
         self.reader = DocumentReader()
@@ -76,6 +78,7 @@ class TestDocumentReader(unittest.TestCase):
             fmt = self.reader._detect_format(Path("test.md"))
             self.assertEqual(fmt, DocumentFormat.MARKDOWN)
 
+@pytest.mark.unit
 class TestReadDocumentConvenience(unittest.TestCase):
     @patch('codomyrmex.documents.core.document_reader.DocumentReader.read')
     def test_read_document_wrapper(self, mock_read):

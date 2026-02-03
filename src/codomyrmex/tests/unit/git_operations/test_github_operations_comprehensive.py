@@ -1,3 +1,4 @@
+import pytest
 #!/usr/bin/env python3
 """
 Comprehensive Unit Tests for GitHub Operations.
@@ -49,6 +50,7 @@ from codomyrmex.git_operations.core.git import (
 )
 
 
+@pytest.mark.unit
 class TestGitHubOperationsComprehensive(unittest.TestCase):
     """
     Comprehensive test suite for GitHub Operations.

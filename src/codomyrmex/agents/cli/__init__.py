@@ -1,3 +1,5 @@
+"""CLI agent implementation."""
+
 from .handlers import (
     handle_info,
     handle_agent_setup,

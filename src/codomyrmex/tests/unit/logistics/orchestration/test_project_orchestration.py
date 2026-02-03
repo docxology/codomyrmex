@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestProjectOrchestration:
     """Test cases for project orchestration functionality."""
 
@@ -254,6 +255,7 @@ class TestProjectOrchestration:
         assert templates_path.is_dir()
 
 
+@pytest.mark.unit
 class TestWorkflowDAG:
     """Test cases for WorkflowDAG functionality."""
 
@@ -391,6 +393,7 @@ class TestWorkflowDAG:
         assert "task1 --> task2" in mermaid_diagram
 
 
+@pytest.mark.unit
 class TestParallelExecutor:
     """Test cases for ParallelExecutor functionality."""
 
@@ -486,6 +489,7 @@ class TestParallelExecutor:
         assert len(execution_order) > 0
 
 
+@pytest.mark.unit
 class TestWorkflowManagerEnhancements:
     """Test cases for enhanced WorkflowManager functionality."""
 
@@ -626,6 +630,7 @@ class TestWorkflowManagerEnhancements:
         assert task_levels["report"] < task_levels["notify"]
 
 
+@pytest.mark.unit
 class TestWorkflowManagerLocation:
     """Test cases for WorkflowManager directory location."""
 

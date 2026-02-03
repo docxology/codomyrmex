@@ -23,6 +23,7 @@ from codomyrmex.api.openapi_generator import (
 )
 
 
+@pytest.mark.unit
 class TestRESTAPI:
     """Test the REST API functionality."""
 
@@ -100,6 +101,7 @@ class TestRESTAPI:
         assert response.body["method"] == "GET"
 
 
+@pytest.mark.unit
 class TestGraphQLAPI:
     """Test the GraphQL API functionality."""
 
@@ -176,6 +178,7 @@ class TestGraphQLAPI:
         assert "errors" in result or "data" in result
 
 
+@pytest.mark.unit
 class TestAPIVersioning:
     """Test the API versioning functionality."""
 
@@ -252,6 +255,7 @@ class TestAPIVersioning:
         assert version == "1.1.0"
 
 
+@pytest.mark.unit
 class TestOpenAPIGenerator:
     """Test the OpenAPI generator functionality."""
 
@@ -353,6 +357,7 @@ class TestOpenAPIGenerator:
             assert "info" in data
 
 
+@pytest.mark.unit
 class TestIntegration:
     """Integration tests for API standardization components."""
 

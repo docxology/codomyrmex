@@ -1,8 +1,10 @@
+import pytest
 
 import unittest
 from unittest.mock import patch, mock_open, ANY
 from codomyrmex.documents.formats.text_handler import read_text, write_text
 
+@pytest.mark.unit
 class TestTextHandler(unittest.TestCase):
     def test_read_text(self):
         """Test reading plain text."""

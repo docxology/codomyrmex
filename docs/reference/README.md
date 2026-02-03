@@ -1,25 +1,69 @@
-# reference
+# Reference Documentation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+Technical reference documentation for Codomyrmex. Includes comprehensive API documentation, CLI reference, troubleshooting guides, and performance optimization.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `api-complete.md` – File
-- `api.md` – File
-- `changelog.md` – File
-- `cli.md` – File
-- `migration-guide.md` – File
-- `orchestrator.md` – File
-- `performance.md` – File
-- `security.md` – File
-- `troubleshooting.md` – File
+## Contents
+
+| File | Description |
+|------|-------------|
+| [**api.md**](api.md) | Complete API reference |
+| [**api-complete.md**](api-complete.md) | Extended API documentation |
+| [**cli.md**](cli.md) | Command-line interface reference |
+| [**troubleshooting.md**](troubleshooting.md) | Common issues and solutions |
+| [**performance.md**](performance.md) | Performance optimization guide |
+| [**security.md**](security.md) | Security best practices |
+| [**migration-guide.md**](migration-guide.md) | Version migration guide |
+| [**changelog.md**](changelog.md) | Version changelog |
+| [**orchestrator.md**](orchestrator.md) | Orchestrator reference |
+
+## Quick Reference
+
+### API Layers
+
+1. **Python Module APIs** - Direct imports and function calls
+2. **CLI APIs** - Command-line interface
+3. **MCP Tool APIs** - AI/LLM integration
+4. **REST APIs** - HTTP endpoints (planned)
+
+### Common Commands
+
+```bash
+codomyrmex check      # System health
+codomyrmex info       # Project info
+codomyrmex modules    # List modules
+codomyrmex status     # Current status
+```
+
+### Key API Functions
+
+| Function | Module | Description |
+|----------|--------|-------------|
+| `generate_code_snippet()` | ai_code_editing | AI code generation |
+| `create_bar_chart()` | data_visualization | Create charts |
+| `execute_code()` | coding | Safe code execution |
+| `run_pyrefly_analysis()` | static_analysis | Code analysis |
+
+### Secure Cognitive APIs
+
+| Function | Module | Description |
+|----------|--------|-------------|
+| `IdentityManager()` | identity | Persona management |
+| `WalletCore()` | wallet | Key management |
+| `DefenseCore()` | defense | Active defense |
+| `MarketCore()` | market | Anonymous markets |
+| `PrivacyCore()` | privacy | Privacy layer |
+
+## Related Documentation
+
+- [API Reference](api.md) - Full API documentation
+- [Examples](../examples/) - Code examples
+- [Getting Started](../getting-started/) - Quick start guide
 
 ## Navigation
-- **Parent Directory**: [docs](../README.md)
-- **Project Root**: ../../README.md
+
+- **Parent**: [docs/](../README.md)
+- **Root**: [Project Root](../../README.md)

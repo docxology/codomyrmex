@@ -4,6 +4,7 @@ import pytest
 import sys
 
 
+@pytest.mark.unit
 class TestCodeExecutionSandbox:
     """Test cases for code execution sandbox functionality."""
 

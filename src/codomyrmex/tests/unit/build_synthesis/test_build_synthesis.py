@@ -1,3 +1,4 @@
+import pytest
 #!/usr/bin/env python3
 """
 Unit tests for the Build Synthesis module.
@@ -52,6 +53,7 @@ except ImportError:
         FULL_BUILD_AVAILABLE = False
 
 
+@pytest.mark.unit
 class TestBuildSynthesis(unittest.TestCase):
     """Test cases for build synthesis functionality."""
 

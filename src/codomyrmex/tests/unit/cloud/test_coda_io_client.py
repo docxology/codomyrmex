@@ -8,6 +8,7 @@ Note: These tests do not make actual API calls.
 import pytest
 
 
+@pytest.mark.unit
 class TestCodaClientInitialization:
     """Tests for CodaClient initialization."""
     
@@ -76,6 +77,7 @@ class TestCodaClientInitialization:
         assert client.session.headers["Content-Type"] == "application/json"
 
 
+@pytest.mark.unit
 class TestCodaClientMethods:
     """Tests for CodaClient method existence and signatures."""
     
@@ -308,6 +310,7 @@ class TestCodaClientMethods:
         assert callable(client.get_mutation_status)
 
 
+@pytest.mark.unit
 class TestCodaClientUrlEncoding:
     """Tests for URL encoding in CodaClient."""
     
@@ -333,6 +336,7 @@ class TestCodaClientUrlEncoding:
         assert result == "Table%2FWith%2FSlashes"
 
 
+@pytest.mark.unit
 class TestCodaClientImports:
     """Tests for module-level imports."""
     
@@ -389,6 +393,7 @@ class TestCodaClientImports:
         assert CodaValidationError is not None
 
 
+@pytest.mark.unit
 class TestCodaClientHelperMethods:
     """Tests for CodaClient helper methods."""
     

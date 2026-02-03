@@ -1,7 +1,9 @@
 """Unit tests for collaboration module."""
+import pytest
 
 from codomyrmex.collaboration import SwarmManager, AgentProxy, TaskDecomposer
 
+@pytest.mark.unit
 def test_swarm_execution():
     """Test mission distribution across a swarm of agents."""
     manager = SwarmManager()
@@ -19,6 +21,7 @@ def test_swarm_execution():
     assert results["A1"] == "Result from A1"
     assert results["A2"] == "Result from A2"
 
+@pytest.mark.unit
 def test_task_decomposition():
     """Test mission splitting."""
     tasks = TaskDecomposer.decompose("Design and Build")
@@ -26,6 +29,7 @@ def test_task_decomposition():
     assert "Design" in tasks
     assert "Build" in tasks
 
+@pytest.mark.unit
 def test_consensus():
     """Test voting logic."""
     manager = SwarmManager()

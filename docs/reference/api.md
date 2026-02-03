@@ -9,24 +9,28 @@ This comprehensive API reference provides detailed documentation for all Codomyr
 Codomyrmex provides **4 distinct API layers** to accommodate different integration needs:
 
 ### **1. 🐍 Python Module APIs** {#module-apis}
+
 - **Direct imports** and function calls from Python code
 - **Type-safe interfaces** with comprehensive documentation
 - **Modular design** - import only what you need
 - **Extensive examples** and usage patterns
 
 ### **2. 💻 CLI APIs**
+
 - **Command-line interface** for all functionality
 - **Scripting support** for automation workflows
 - **Rich output formatting** with JSON/structured data
 - **Comprehensive help system** and examples
 
 ### **3. 🤖 MCP Tool APIs**
+
 - **Model Context Protocol** tools for AI/LLM integration
 - **Standardized tool calling** interface
 - **AI agent compatibility** with OpenAI, Anthropic, and other providers
 - **Tool discovery** and metadata
 
 ### **4. 🌐 REST APIs** *(Planned)*
+
 - **HTTP endpoints** for web integration
 - **JSON-based communication**
 - **Authentication and authorization**
@@ -56,6 +60,7 @@ Navigate to specific module APIs using the links below, or continue reading for 
 These modules provide essential infrastructure used by all other Codomyrmex modules.
 
 #### **[📋 logging_monitoring](../../src/codomyrmex/logging_monitoring/API_SPECIFICATION.md)**
+
 **Centralized logging and monitoring system**
 
 | Function | Description | Status |
@@ -66,6 +71,7 @@ These modules provide essential infrastructure used by all other Codomyrmex modu
 | **`StructuredLogger`** | Advanced logging with JSON formatting | ✅ Stable |
 
 **Quick Example:**
+
 ```python
 from codomyrmex.logging_monitoring import setup_logging, get_logger
 
@@ -78,6 +84,7 @@ logger.info("Application started successfully")
 ```
 
 #### **[🌱 environment_setup](../../src/codomyrmex/environment_setup/API_SPECIFICATION.md)**
+
 **Development environment validation and setup automation**
 
 | Function | Description | Status |
@@ -88,6 +95,7 @@ logger.info("Application started successfully")
 | **`validate_environment()`** | Comprehensive environment health check | ✅ Stable |
 
 **Quick Example:**
+
 ```python
 from codomyrmex.environment_setup import ensure_dependencies_installed, validate_environment
 
@@ -100,6 +108,7 @@ print(f"Environment: {'✅ Good' if env_status['valid'] else '❌ Issues found'}
 ```
 
 #### **[🔗 model_context_protocol](../../src/codomyrmex/model_context_protocol/API_SPECIFICATION.md)**
+
 **Standardized AI/LLM communication framework**
 
 | Component | Description | Status |
@@ -110,6 +119,7 @@ print(f"Environment: {'✅ Good' if env_status['valid'] else '❌ Issues found'}
 | **`MCPServer`** | Server implementation for MCP tools | 🔄 Evolving |
 
 **Quick Example:**
+
 ```python
 from codomyrmex.model_context_protocol import MCPToolCall, MCPToolResult
 
@@ -130,6 +140,7 @@ result = MCPToolResult(
 ### **🤖 AI & Intelligence Modules**
 
 #### **[🤖 ai_code_editing](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md)**
+
 **AI-powered code generation, refactoring, and analysis**
 
 | Function | Description | Status | Example |
@@ -141,6 +152,7 @@ result = MCPToolResult(
 | **`generate_documentation()`** | Auto-generate code documentation | 🔄 Evolving | `generate_documentation(code, "python")` |
 
 **Quick Example:**
+
 ```python
 from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
@@ -158,6 +170,7 @@ if result["status"] == "success":
 ```
 
 #### **[📊 data_visualization](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md)**
+
 **Rich plotting and charting capabilities**
 
 | Function | Description | Status | Example |
@@ -170,6 +183,7 @@ if result["status"] == "success":
 | **`create_advanced_dashboard()`** | Multi-chart interactive dashboards | 🔄 Evolving | `create_advanced_dashboard(datasets, layout)` |
 
 **Quick Example:**
+
 ```python
 from codomyrmex.data_visualization import create_bar_chart
 import numpy as np
@@ -191,6 +205,7 @@ create_bar_chart(
 ```
 
 #### **[🔍 static_analysis](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md)**
+
 **Multi-language code quality and security analysis**
 
 | Function | Description | Status | Example |
@@ -201,6 +216,7 @@ create_bar_chart(
 | **`analyze_dependencies()`** | Dependency analysis and suggestions | 🔄 Evolving | `analyze_dependencies("requirements.txt")` |
 
 **Quick Example:**
+
 ```python
 from codomyrmex.static_analysis import run_pyrefly_analysis
 
@@ -217,6 +233,7 @@ print(f"⚡ Performance score: {analysis.get('performance_score', 'N/A')}")
 ```
 
 #### **[🏃 code](../../src/codomyrmex/coding/README.md)**
+
 **Secure multi-language code execution**
 
 | Function | Description | Status | Example |
@@ -227,6 +244,7 @@ print(f"⚡ Performance score: {analysis.get('performance_score', 'N/A')}")
 | **`CodeExecutor`** | Advanced code execution with resource limits | 🔄 Evolving | `CodeExecutor(language="python", timeout=30)` |
 
 **Quick Example:**
+
 ```python
 from codomyrmex.coding import execute_code
 
@@ -241,11 +259,13 @@ print(f"✅ Success: {result['success']}")
 print(f"📄 Output: {result['output']}")
 print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 ```
+
 - **`create_pie_chart(labels, sizes, **options)`**: Pie charts
 - **`create_heatmap(data, **options)`**: Heatmaps
 - **Status**: ✅ Stable API
 
 #### **[code](../../src/codomyrmex/coding/README.md)**
+
 - **`execute_code(language, code, timeout)`**: Safe code execution
 - **`CodeExecutor`**: Main execution class
 - **`ExecutionResult`**: Result data class
@@ -253,6 +273,7 @@ print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 - **Status**: 🔄 Evolving API
 
 #### **[static_analysis](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md)**
+
 - **`run_pyrefly_analysis(paths, project_root)`**: Python analysis
 - **`analyze_code_quality(file_path)`**: Quality metrics
 - **`run_security_scan(file_path)`**: Security analysis
@@ -260,14 +281,48 @@ print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 - **Status**: 🔄 Evolving API
 
 #### **[pattern_matching](../../src/codomyrmex/pattern_matching/API_SPECIFICATION.md)**
+
 - **`analyze_repository_path(path, config)`**: Repository analysis
 - **`find_patterns(code, pattern_type)`**: Pattern detection
 - **`PatternMatcher`**: Main pattern matching class
 - **Status**: 🔄 Evolving API
 
+### **🛡️ Secure Cognitive Modules**
+
+#### **[identity](../../src/codomyrmex/identity/README.md)**
+
+- **`IdentityManager`**: Manage 3-tier personas (Blue/Grey/Black)
+- **`verify_persona(tier)`**: Bio-cognitive verification
+- **Status**: ✅ Stable
+
+#### **[wallet](../../src/codomyrmex/wallet/README.md)**
+
+- **`WalletCore`**: Self-custody key management
+- **`recover_access(shards)`**: Natural Ritual recovery
+- **Status**: ✅ Stable
+
+#### **[defense](../../src/codomyrmex/defense/README.md)**
+
+- **`DefenseCore`**: Active defense system
+- **`detect_exploit(context)`**: Cognitive exploit detection
+- **Status**: ✅ Stable
+
+#### **[market](../../src/codomyrmex/market/README.md)**
+
+- **`MarketCore`**: Anonymous marketplace access
+- **`post_demand(item)`**: Reverse auction demand posting
+- **Status**: ✅ Stable
+
+#### **[privacy](../../src/codomyrmex/privacy/README.md)**
+
+- **`PrivacyCore`**: Digital exhaust management
+- **`scrub_crumbs(data)`**: Metadata sanitization
+- **Status**: ✅ Stable
+
 ### **Service Modules**
 
 #### **[build_synthesis](../../src/codomyrmex/build_synthesis/API_SPECIFICATION.md)**
+
 - **`trigger_build(target, config)`**: Build automation
 - **`synthesize_code_component(template, params)`**: Code generation
 - **`BuildOrchestrator`**: Main build class
@@ -275,12 +330,14 @@ print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 - **Status**: 🔄 Evolving API
 
 #### **[git_operations](../../src/codomyrmex/git_operations/API_SPECIFICATION.md)**
+
 - **`repository_manager`**: Repository management functions
 - **`metadata_cli`**: CLI for metadata operations
 - **`repo_cli`**: Repository CLI operations
 - **Status**: 🔄 Evolving API
 
 #### **[documentation](../../src/codomyrmex/documentation/API_SPECIFICATION.md)**
+
 - **`generate_documentation_website()`**: Website generation
 - **`build_static_site()`**: Static site building
 - **`DocumentationGenerator`**: Main documentation class
@@ -291,6 +348,7 @@ print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 Model Context Protocol tools for AI integration:
 
 ### **AI Code Editing Tools**
+
 ```typescript
 interface GenerateCodeSnippet {
   name: "generate_code_snippet"
@@ -325,6 +383,7 @@ interface RefactorCodeSnippet {
 ```
 
 ### **Code Execution Tools**
+
 ```typescript
 interface ExecuteCode {
   name: "execute_code"
@@ -346,6 +405,7 @@ interface ExecuteCode {
 ```
 
 ### **Build Synthesis Tools**
+
 ```typescript
 interface TriggerBuild {
   name: "trigger_build"
@@ -381,25 +441,30 @@ interface SynthesizeCodeComponent {
 Complete command-line interface. See [CLI Reference](cli.md) for full details.
 
 ### **Core Commands**
+
 - **`codomyrmex check`**: System health verification
 - **`codomyrmex info`**: Project information display
 - **`codomyrmex setup`**: Environment configuration
 
 ### **AI Commands**
+
 - **`codomyrmex generate`**: AI-powered code generation
 - **`codomyrmex refactor`**: AI-assisted code refactoring
 
 ### **Analysis Commands**
+
 - **`codomyrmex analyze`**: Static code analysis
 - **`codomyrmex visualize`**: Data visualization creation
 
 ### **Execution Commands**
+
 - **`codomyrmex execute`**: Safe code execution
 - **`codomyrmex test`**: Test execution and validation
 
 ## 📊 Usage Patterns
 
 ### **Basic Module Usage**
+
 ```python
 # Foundation setup
 from codomyrmex.logging_monitoring import setup_logging, get_logger
@@ -422,6 +487,7 @@ code_result = generate_code_snippet("Create a sorting function", "python")
 ```
 
 ### **MCP Integration Pattern**
+
 ```python
 from codomyrmex.model_context_protocol import MCPToolCall, MCPToolResult
 
@@ -440,6 +506,7 @@ result = mcp_framework.execute_tool(tool_call)
 ```
 
 ### **CLI Integration Pattern**
+
 ```bash
 # Scripted workflow
 codomyrmex generate "data processor" --language python --output processor.py
@@ -450,6 +517,7 @@ codomyrmex execute processor.py --input data.txt --output results.txt
 ## 🔍 API Discovery
 
 ### **Programmatic Discovery**
+
 ```python
 from codomyrmex.system_discovery import SystemDiscovery
 
@@ -464,6 +532,7 @@ for module_name, module_info in modules.items():
 ```
 
 ### **CLI Discovery**
+
 ```bash
 # Discover available APIs
 codomyrmex discover --detailed --output api-inventory.json
@@ -478,6 +547,7 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 ## 📚 Documentation Links
 
 ### **Module-Specific API Documentation**
+
 | Module | API Reference | MCP Tools | Status |
 |--------|---------------|-----------|--------|
 | **ai_code_editing** | [API Docs](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
@@ -493,6 +563,7 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 | **model_context_protocol** | [API Docs](../../src/codomyrmex/model_context_protocol/API_SPECIFICATION.md) | Schema Only | ✅ Stable |
 
 ### **Additional References**
+
 - **[CLI Reference](cli.md)**: Complete command-line interface documentation
 - **[Module Overview](../modules/overview.md)**: Module system architecture
 - **[Module Relationships](../modules/relationships.md)**: Inter-module dependencies
@@ -501,16 +572,19 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 ## 🚀 Getting Started with APIs
 
 ### **New Users**
+
 1. Start with [Installation Guide](../getting-started/installation.md)
 2. Try [Quick Start Examples](../getting-started/quickstart.md)
 3. Explore [Module Overview](../modules/overview.md)
 
 ### **API Developers**
+
 1. Read [Architecture Guide](../project/architecture.md)
 2. Study [Module Relationships](../modules/relationships.md)
 3. Follow [Module Creation Tutorial](../getting-started/tutorials/creating-a-module.md)
 
 ### **Integration Developers**
+
 1. Review MCP Tool Specifications (each module has `MCP_TOOL_SPECIFICATION.md` in its directory)
 2. Examine [CLI Reference](cli.md)
 3. Check Usage Examples (each module has `USAGE_EXAMPLES.md` in its directory)
@@ -520,6 +594,7 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 ## 📊 **API Usage Statistics**
 
 ### **Most Popular APIs**
+
 | API Function | Usage Count | Success Rate | Avg Response Time |
 |--------------|-------------|--------------|-------------------|
 | `generate_code_snippet()` | 12,847 | 94.2% | 2.3s |
@@ -528,12 +603,14 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 | `run_pyrefly_analysis()` | 3,291 | 96.1% | 3.2s |
 
 ### **API Reliability Metrics**
+
 - **Overall Uptime**: 99.7% (last 30 days)
 - **Average Response Time**: 1.2 seconds
 - **Error Rate**: 2.1%
 - **Rate Limiting**: Intelligent backoff implemented
 
 ### **Cost Tracking**
+
 - **Total API Costs (Last Month)**: $23.47
 - **Most Cost-Effective**: Data visualization APIs (free)
 - **Highest Cost**: AI code generation APIs

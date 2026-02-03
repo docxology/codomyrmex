@@ -53,6 +53,7 @@ from codomyrmex.cli import (
 )
 
 
+@pytest.mark.unit
 class TestCLIEnvironment:
     """Test CLI environment checking functionality."""
 
@@ -86,6 +87,7 @@ class TestCLIEnvironment:
         assert len(output) > 0
 
 
+@pytest.mark.unit
 class TestCLIInfo:
     """Test CLI info display functionality."""
 
@@ -105,6 +107,7 @@ class TestCLIInfo:
         assert "Codomyrmex" in output
 
 
+@pytest.mark.unit
 class TestCLIModules:
     """Test CLI module listing functionality."""
 
@@ -143,6 +146,7 @@ class TestCLIModules:
             pytest.fail(f"show_modules raised an exception: {e}")
 
 
+@pytest.mark.unit
 class TestCLIInteractiveShell:
     """Test CLI interactive shell functionality."""
 
@@ -168,6 +172,7 @@ class TestCLIInteractiveShell:
             pass
 
 
+@pytest.mark.unit
 class TestCLIWorkflows:
     """Test CLI workflow management functionality."""
 
@@ -205,6 +210,7 @@ class TestCLIWorkflows:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestCLISystemStatus:
     """Test CLI system status functionality."""
 
@@ -223,6 +229,7 @@ class TestCLISystemStatus:
         assert len(output) >= 0
 
 
+@pytest.mark.unit
 class TestCLIAI:
     """Test CLI AI functionality."""
 
@@ -269,6 +276,7 @@ class TestCLIAI:
         assert result is False
 
 
+@pytest.mark.unit
 class TestCLIAnalysis:
     """Test CLI analysis functionality."""
 
@@ -310,6 +318,7 @@ class TestCLIAnalysis:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestCLIBuild:
     """Test CLI build functionality."""
 
@@ -325,6 +334,7 @@ class TestCLIBuild:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestCLITesting:
     """Test CLI testing functionality."""
 
@@ -348,6 +358,7 @@ class TestCLITesting:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestCLIDemos:
     """Test CLI demo functionality."""
 
@@ -412,6 +423,7 @@ class TestCLIDemos:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestCLIWorkflowManagement:
     """Test CLI workflow creation and management."""
 
@@ -427,6 +439,7 @@ class TestCLIWorkflowManagement:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestCLIProjectManagement:
     """Test CLI project creation and management."""
 
@@ -453,6 +466,7 @@ class TestCLIProjectManagement:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestCLIOrchestration:
     """Test CLI orchestration status and health."""
 
@@ -479,6 +493,7 @@ class TestCLIOrchestration:
         assert isinstance(result, bool)
 
 
+@pytest.mark.unit
 class TestCLIMain:
     """Test CLI main function and argument parsing."""
 

@@ -1,3 +1,4 @@
+import pytest
 
 import unittest
 import json
@@ -5,6 +6,7 @@ from unittest.mock import patch, mock_open, ANY
 from codomyrmex.documents.formats.json_handler import read_json, write_json
 from codomyrmex.documents.exceptions import DocumentValidationError
 
+@pytest.mark.unit
 class TestJsonHandler(unittest.TestCase):
     def test_read_json(self):
         """Test reading JSON."""

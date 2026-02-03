@@ -26,6 +26,7 @@ from codomyrmex.tools.analyze_project import (
 # ==================== Module Import Tests ====================
 
 
+@pytest.mark.unit
 class TestToolsModuleImport:
     """Tests for tools module import."""
 
@@ -43,6 +44,7 @@ class TestToolsModuleImport:
 # ==================== DependencyAnalyzer Tests ====================
 
 
+@pytest.mark.unit
 class TestDependencyAnalyzerInit:
     """Tests for DependencyAnalyzer initialization."""
 
@@ -89,6 +91,7 @@ class TestDependencyAnalyzerInit:
         assert "environment_setup" in analyzer.allowed_dependencies
 
 
+@pytest.mark.unit
 class TestDependencyAnalyzerExtractImports:
     """Tests for extract_imports method."""
 
@@ -190,6 +193,7 @@ from codomyrmex.cache.backends import InMemoryCache
         assert "validation" in imports
 
 
+@pytest.mark.unit
 class TestDependencyAnalyzerScanModule:
     """Tests for scan_module method."""
 
@@ -230,6 +234,7 @@ class TestDependencyAnalyzerScanModule:
         assert len(analyzer.modules) == initial_count
 
 
+@pytest.mark.unit
 class TestDependencyAnalyzerScanAll:
     """Tests for scan_all_modules method."""
 
@@ -253,6 +258,7 @@ class TestDependencyAnalyzerScanAll:
         assert len(analyzer.imports) > 0
 
 
+@pytest.mark.unit
 class TestDependencyAnalyzerCircularDeps:
     """Tests for circular dependency detection."""
 
@@ -287,6 +293,7 @@ class TestDependencyAnalyzerCircularDeps:
         assert analyzer.circular_deps == result
 
 
+@pytest.mark.unit
 class TestDependencyAnalyzerValidateHierarchy:
     """Tests for dependency hierarchy validation."""
 
@@ -321,6 +328,7 @@ class TestDependencyAnalyzerValidateHierarchy:
         assert analyzer.violations == violations
 
 
+@pytest.mark.unit
 class TestDependencyAnalyzerReports:
     """Tests for report generation."""
 
@@ -360,6 +368,7 @@ class TestDependencyAnalyzerReports:
         assert "# Dependency Analysis Report" in report
 
 
+@pytest.mark.unit
 class TestDependencyAnalyzerAnalyze:
     """Tests for full analyze method."""
 
@@ -415,6 +424,7 @@ class TestDependencyAnalyzerAnalyze:
 # ==================== DependencyChecker Tests ====================
 
 
+@pytest.mark.unit
 class TestDependencyChecker:
     """Tests for dependency checking functionality."""
 
@@ -453,6 +463,7 @@ class TestDependencyChecker:
 # ==================== Project Analysis Tests ====================
 
 
+@pytest.mark.unit
 class TestAnalyzeProjectStructure:
     """Tests for project structure analysis."""
 
@@ -496,6 +507,7 @@ class TestAnalyzeProjectStructure:
         assert isinstance(result["directories"], dict)
 
 
+@pytest.mark.unit
 class TestAnalyzeDependencies:
     """Tests for dependency analysis."""
 
@@ -541,6 +553,7 @@ class TestAnalyzeDependencies:
             assert isinstance(dep, str)
 
 
+@pytest.mark.unit
 class TestAnalyzeCodeQuality:
     """Tests for code quality analysis."""
 
@@ -601,6 +614,7 @@ class TestAnalyzeCodeQuality:
         assert result["documentation_files"] >= 0
 
 
+@pytest.mark.unit
 class TestGenerateReport:
     """Tests for report generation."""
 
@@ -679,6 +693,7 @@ class TestGenerateReport:
 # ==================== Dependency Consolidator Tests ====================
 
 
+@pytest.mark.unit
 class TestDependencyConsolidator:
     """Tests for dependency consolidator functions."""
 
@@ -769,6 +784,7 @@ pytest==7.0.0  # inline comment
 # ==================== Deprecation Notice Tests ====================
 
 
+@pytest.mark.unit
 class TestDeprecationNotice:
     """Tests for deprecation notice utilities."""
 
@@ -810,6 +826,7 @@ class TestDeprecationNotice:
 # ==================== Integration Tests ====================
 
 
+@pytest.mark.unit
 class TestToolsIntegration:
     """Integration tests for tools module."""
 
@@ -859,6 +876,7 @@ class TestToolsIntegration:
 # ==================== Allowed Dependencies Tests ====================
 
 
+@pytest.mark.unit
 class TestAllowedDependencies:
     """Tests for allowed dependency configuration."""
 
@@ -896,6 +914,7 @@ class TestAllowedDependencies:
 # ==================== Edge Cases Tests ====================
 
 
+@pytest.mark.unit
 class TestToolsEdgeCases:
     """Tests for edge cases in tools module."""
 

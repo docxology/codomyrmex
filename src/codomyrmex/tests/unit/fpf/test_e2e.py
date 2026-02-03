@@ -11,6 +11,7 @@ from unittest.mock import patch, Mock
 from codomyrmex.fpf import FPFClient
 
 
+@pytest.mark.integration
 def test_e2e_load_from_file_workflow():
     """Test end-to-end workflow: load from file."""
     spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
@@ -25,6 +26,7 @@ def test_e2e_load_from_file_workflow():
     assert client.spec is not None
 
 
+@pytest.mark.integration
 def test_e2e_fetch_and_load_workflow():
     """Test end-to-end workflow: fetch and load."""
     with patch("codomyrmex.fpf.io.fetcher.requests.get") as mock_get:
@@ -50,6 +52,7 @@ Test solution.
         assert len(spec.patterns) > 0
 
 
+@pytest.mark.integration
 def test_e2e_search_workflow():
     """Test end-to-end workflow: search."""
     spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
@@ -67,6 +70,7 @@ def test_e2e_search_workflow():
     assert isinstance(results, list)
 
 
+@pytest.mark.integration
 def test_e2e_export_workflow():
     """Test end-to-end workflow: export."""
     spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
@@ -85,6 +89,7 @@ def test_e2e_export_workflow():
         assert "patterns" in data
 
 
+@pytest.mark.integration
 def test_e2e_context_building_workflow():
     """Test end-to-end workflow: context building."""
     spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
@@ -110,6 +115,7 @@ def test_e2e_context_building_workflow():
     assert isinstance(context, str)
 
 
+@pytest.mark.integration
 def test_e2e_full_pipeline():
     """Test complete end-to-end pipeline."""
     spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
@@ -140,6 +146,7 @@ def test_e2e_full_pipeline():
     assert isinstance(context, str)
 
 
+@pytest.mark.integration
 def test_e2e_error_handling():
     """Test error handling in workflows."""
     client = FPFClient()

@@ -12,7 +12,7 @@ The module's architecture is centered around the `env_checker.py` script. This s
 
 - **Key Components/Sub-modules**:
   - `env_checker.py`:
-    - `ensure_dependencies_installed()`: This function attempts to import essential Python packages (currently `cased` and `dotenv`). If an `ImportError` occurs for any of them, it prints an instructional message to `stderr` guiding the user to install dependencies (typically via `pip install -r requirements.txt` from the project root) and then calls `sys.exit(1)`.
+    - `ensure_dependencies_installed()`: This function attempts to import essential Python packages (currently `cased` and `dotenv`). If an `ImportError` occurs for any of them, it prints an instructional message to `stderr` guiding the user to install dependencies (typically via `uv sync` from the project root) and then calls `sys.exit(1)`.
     - `check_and_setup_env_vars(repo_root_path: str)`: This function checks for the existence of a `.env` file at the provided `repo_root_path`. 
         - If the file is missing, it prints detailed guidance to `stdout` on how to create one, including a template with common API key placeholders (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`), and then calls `sys.exit(1)`.
         - If the file exists, it attempts to load it using `dotenv.load_dotenv()` and prints a success message.

@@ -558,7 +558,52 @@ class SpatialError(CodomyrmexError):
 
 # Cerebrum Errors
 class CerebrumError(CodomyrmexError):
-    """Raised when cognitive processing fails."""
+    """Base exception class for all CEREBRUM-related errors."""
+    pass
+
+
+class CaseError(CerebrumError):
+    """Exception raised for case-related errors."""
+    pass
+
+
+class BayesianInferenceError(CerebrumError):
+    """Exception raised for Bayesian inference errors."""
+    pass
+
+
+class ActiveInferenceError(CerebrumError):
+    """Exception raised for active inference errors."""
+    pass
+
+
+class ModelError(CerebrumError):
+    """Exception raised for model-related errors."""
+    pass
+
+
+class TransformationError(CerebrumError):
+    """Exception raised for model transformation errors."""
+    pass
+
+
+class CaseNotFoundError(CaseError):
+    """Exception raised when a case is not found."""
+    pass
+
+
+class InvalidCaseError(CaseError):
+    """Exception raised when a case is invalid."""
+    pass
+
+
+class InferenceError(BayesianInferenceError):
+    """Exception raised when inference fails."""
+    pass
+
+
+class NetworkStructureError(BayesianInferenceError):
+    """Exception raised when Bayesian network structure is invalid."""
     pass
 
 
@@ -597,6 +642,57 @@ class PluginError(CodomyrmexError):
             self.context["plugin_name"] = plugin_name
         if plugin_version:
             self.context["plugin_version"] = plugin_version
+
+
+# Auth Errors
+class AuthenticationError(CodomyrmexError):
+    """Raised when authentication fails."""
+    pass
+
+
+# API Errors
+class CircuitOpenError(Exception):
+    """Raised when the circuit breaker is open."""
+    pass
+
+
+class BulkheadFullError(Exception):
+    """Raised when the bulkhead semaphore is exhausted."""
+    pass
+
+
+# Compression Errors
+class CompressionError(CodomyrmexError):
+    """Raised when compression operations fail."""
+    pass
+
+
+
+# IDE Errors
+class IDEError(CodomyrmexError):
+    """Base exception for IDE-related errors."""
+    pass
+
+
+class IDEConnectionError(IDEError):
+    """Raised when IDE connection fails."""
+    pass
+
+
+class CommandExecutionError(IDEError):
+    """Raised when an IDE command fails to execute."""
+    pass
+
+
+class SessionError(IDEError):
+    """Raised when there's a session-related error."""
+    pass
+
+
+class ArtifactError(IDEError):
+    """Raised when artifact operations fail."""
+    pass
+
 
 
 # Cache Errors

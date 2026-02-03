@@ -5,7 +5,9 @@ Codomyrmex is built on a **modular architecture** where each module provides spe
 ## 🏗️ Module Architecture Principles
 
 ### **1. Self-Contained Modules**
+
 Each module is a complete unit with:
+
 - Its own dependencies (`requirements.txt`)
 - Comprehensive tests (`tests/`)
 - API documentation (`API_SPECIFICATION.md`)
@@ -13,13 +15,16 @@ Each module is a complete unit with:
 - Security considerations (`SECURITY.md`)
 
 ### **2. Standardized Interfaces**
+
 All modules follow consistent patterns:
+
 - **MCP Tools**: Model Context Protocol specifications for AI integration
 - **Public APIs**: Well-defined functions and classes for programmatic access
 - **CLI Integration**: Commands accessible through the main Codomyrmex CLI
 - **Configuration**: Environment variables and config file support
 
 ### **3. Layered Dependencies**
+
 Modules are organized in dependency layers to prevent circular dependencies:
 
 ```mermaid
@@ -76,11 +81,13 @@ graph TD
 ```
 
 **Key Principles**:
+
 - **Upward Dependencies Only**: Higher layers depend on lower layers, never the reverse
 - **Foundation Services**: Used by all modules for consistency
 - **Clear Layer Boundaries**: Each layer has distinct responsibilities
 
 **Related Documentation**:
+
 - **[Module Relationships](./relationships.md)**: Detailed inter-module dependencies
 - **[Architecture Overview](../project/architecture.md)**: System architecture principles
 - **[Contributing Guide](../project/contributing.md)**: Adding new modules to the system
@@ -88,6 +95,7 @@ graph TD
 ## 📦 Module Categories
 
 ### **🏗️ Foundation Modules**
+
 *Essential infrastructure used by all other modules*
 
 | Module | Purpose | Key Features |
@@ -103,6 +111,7 @@ graph TD
 | **`metrics`** | Metrics collection | System metrics, custom metrics, aggregation, reporting |
 
 ### **⚙️ Core Functional Modules**
+
 *Primary capabilities that users directly interact with*
 
 | Module | Purpose | Key Features |
@@ -123,6 +132,7 @@ graph TD
 | **`validation`** | Data validation | Schema validation, input sanitization, constraint checking |
 
 ### **🔧 Service Modules**
+
 *Higher-level services that orchestrate core modules*
 
 | Module | Purpose | Key Features |
@@ -137,6 +147,7 @@ graph TD
 | **`auth`** | Authentication | OAuth, API keys, token management, access control |
 
 ### **🎮 Application Modules**
+
 *User-facing applications and interfaces*
 
 | Module | Purpose | Key Features |
@@ -146,7 +157,20 @@ graph TD
 | **`cli`** | Command-line interface | CLI commands, scripting support, interactive shell |
 | **`website`** | Website generation | Static site generation, templating, local server |
 
+### **🛡️ Secure Cognitive Modules**
+
+*Autonomous security and economic capabilities*
+
+| Module | Purpose | Key Features |
+|--------|---------|-------------|
+| **`identity`** | Identity & Verification | 3-Tier personas, bio-cognitive verification, revocation |
+| **`wallet`** | Self-Custody | Secure key management, Natural Ritual recovery, key rotation |
+| **`defense`** | Active Defense | Exploit detection, context poisoning, rabbit hole containment |
+| **`market`** | Anonymous Markets | Reverse auctions, demand aggregation, anonymous bidding |
+| **`privacy`** | Privacy & Anonymity | Crumb scrubbing, mixnet simulation, dynamic blacklists |
+
 ### **🔗 Integration Modules**
+
 *Standards, protocols, and IDE integrations*
 
 | Module | Purpose | Key Features |
@@ -158,6 +182,7 @@ graph TD
 | **`plugin_system`** | Plugin architecture | Plugin loading, registration, lifecycle management |
 
 ### **🧠 Intelligence Modules**
+
 *AI reasoning and agent capabilities*
 
 | Module | Purpose | Key Features |
@@ -168,6 +193,7 @@ graph TD
 | **`skills`** | Skills framework | Skill definitions, execution, chaining |
 
 ### **🚀 Advanced Modules**
+
 *Specialized capabilities for advanced use cases*
 
 | Module | Purpose | Key Features |
@@ -176,6 +202,7 @@ graph TD
 | **`physical_management`** | Physical system simulation | System monitoring, resource management, performance tracking |
 
 ### **🛠️ Utility Modules**
+
 *Common utilities and development tools*
 
 | Module | Purpose | Key Features |
@@ -188,7 +215,9 @@ graph TD
 ## 🔄 Module Communication Patterns
 
 ### **1. Direct API Calls**
+
 Modules expose public functions and classes:
+
 ```python
 from codomyrmex.data_visualization import create_line_plot
 from codomyrmex.agents.ai_code_editing import generate_code_snippet
@@ -199,7 +228,9 @@ code_result = generate_code_snippet("Create a factorial function", "python")
 ```
 
 ### **2. Event-Driven Integration**
+
 Modules can publish and subscribe to events:
+
 ```python
 # Publishing events
 from codomyrmex.logging_monitoring import get_logger
@@ -213,7 +244,9 @@ def on_code_generated(event_data):
 ```
 
 ### **3. Pipeline Composition**
+
 Modules can be chained together in processing pipelines:
+
 ```python
 # Analysis → AI Enhancement → Validation Pipeline
 def enhance_code_pipeline(source_code):
@@ -234,11 +267,13 @@ def enhance_code_pipeline(source_code):
 ### **Creating a New Module**
 
 1. **Use the Template**:
+
    ```bash
    cp -r src/codomyrmex/module_template src/codomyrmex/my_new_module
    ```
 
 2. **Follow the Structure**:
+
    ```
    my_new_module/
    ├── __init__.py                 # Module initialization
@@ -277,6 +312,7 @@ def enhance_code_pipeline(source_code):
    - Pin exact versions in `requirements.txt`
 
 2. **Error Handling**:
+
    ```python
    from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -295,6 +331,7 @@ def enhance_code_pipeline(source_code):
    ```
 
 3. **Configuration** {#module-specific-configuration}:
+
    ```python
    import os
    from codomyrmex.environment_setup import check_and_setup_env_vars
@@ -310,6 +347,7 @@ def enhance_code_pipeline(source_code):
 ## 🎯 Module Discovery and Usage
 
 ### **Discovering Available Modules**
+
 ```python
 from codomyrmex.system_discovery import SystemDiscovery
 
@@ -323,6 +361,7 @@ for module_name, module_info in modules.items():
 ```
 
 ### **Using Modules Programmatically**
+
 ```python
 # Import specific functionality
 from codomyrmex.data_visualization import create_bar_chart
@@ -347,6 +386,7 @@ def create_code_with_visualization():
 ```
 
 ### **Interactive Module Exploration** {#interactive-module-exploration}
+
 ```bash
 # Launch the interactive shell
 python -c "
@@ -362,6 +402,7 @@ InteractiveShell().run()
 ## 🔍 Module Health and Monitoring
 
 ### **Module Status Checking**
+
 ```python
 from codomyrmex.system_discovery import SystemDiscovery
 
@@ -374,6 +415,7 @@ print(f"Tests passing: {status['tests_passing']}")
 ```
 
 ### **Performance Monitoring**
+
 ```python
 from codomyrmex.logging_monitoring import get_logger
 import time

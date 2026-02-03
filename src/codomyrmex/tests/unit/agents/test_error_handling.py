@@ -51,6 +51,7 @@ class FailingAgent(BaseAgent):
         yield "test"
 
 
+@pytest.mark.unit
 class TestNetworkFailuresAndRetries:
     """Test network failure and retry scenarios."""
 
@@ -85,6 +86,7 @@ class TestNetworkFailuresAndRetries:
         assert failure_count == 1
 
 
+@pytest.mark.unit
 class TestTimeoutScenarios:
     """Test timeout handling scenarios."""
 
@@ -114,6 +116,7 @@ class TestTimeoutScenarios:
             pass
 
 
+@pytest.mark.unit
 class TestInvalidConfigurationHandling:
     """Test invalid configuration handling."""
 
@@ -157,6 +160,7 @@ class TestInvalidConfigurationHandling:
         assert any("opencode_timeout" in e or "positive" in e for e in errors)
 
 
+@pytest.mark.unit
 class TestAgentUnavailabilityHandling:
     """Test handling when agents are unavailable."""
 
@@ -188,6 +192,7 @@ class TestAgentUnavailabilityHandling:
         assert response.is_success()
 
 
+@pytest.mark.unit
 class TestPartialFailureScenarios:
     """Test partial failure scenarios."""
 
@@ -239,6 +244,7 @@ class TestPartialFailureScenarios:
         assert response.is_success()
 
 
+@pytest.mark.unit
 class TestErrorPropagationAndRecovery:
     """Test error propagation and recovery mechanisms."""
 
@@ -305,6 +311,7 @@ class TestErrorPropagationAndRecovery:
         assert response.is_success()
 
 
+@pytest.mark.unit
 class TestEdgeCases:
     """Test edge cases and boundary conditions."""
 

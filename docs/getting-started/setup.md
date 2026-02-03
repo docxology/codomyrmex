@@ -24,13 +24,13 @@ cd codomyrmex
 # 3. Create virtual environment and install
 uv venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install -e .
+uv sync
 
 # 4. Verify installation
 codomyrmex check
 ```
 
-### **Option 3: Traditional pip Setup (Alternative)**
+### **Option 3: Alternative Setup (if uv not available)**
 ```bash
 # 1. Clone and setup virtual environment
 git clone https://github.com/codomyrmex/codomyrmex.git
@@ -38,12 +38,15 @@ cd codomyrmex
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# 2. Install dependencies
-pip install -e .
+# 2. Install dependencies (uv is strongly recommended)
+uv pip install -e .
+# Or if uv is not installed: pip install -e .
 
 # 3. Verify installation
 codomyrmex check
 ```
+
+> **Note**: Using `uv` is strongly recommended over traditional pip for faster, more reliable dependency management.
 
 ## ✅ Installation Verification
 

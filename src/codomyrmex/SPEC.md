@@ -222,6 +222,37 @@ graph TB
 - `templating`: Template rendering engine
 - `skills`: Skills management and integration
 - `ide`: IDE integration
+- `agentic_memory`: Specialized module
+- `cli`: Specialized module
+- `collaboration`: Specialized module
+- `concurrency`: Specialized module
+- `cost_management`: Specialized module
+- `data_lineage`: Specialized module
+- `deployment`: Specialized module
+- `embodiment`: Specialized module
+- `evolutionary_ai`: Specialized module
+- `examples`: Specialized module
+- `feature_flags`: Specialized module
+- `feature_store`: Specialized module
+- `graph_rag`: Specialized module
+- `inference_optimization`: Specialized module
+- `migration`: Specialized module
+- `model_ops`: Specialized module
+- `model_registry`: Specialized module
+- `multimodal`: Specialized module
+- `notification`: Specialized module
+- `observability_dashboard`: Specialized module
+- `prompt_testing`: Specialized module
+- `telemetry`: Specialized module
+- `testing`: Specialized module
+- `tests`: Specialized module
+- `tree_sitter`: Specialized module
+- `workflow_testing`: Specialized module
+- `defense`: Specialized module
+- `identity`: Specialized module
+- `market`: Specialized module
+- `privacy`: Specialized module
+- `wallet`: Specialized module
 
 **Characteristics**:
 - May depend on any layer

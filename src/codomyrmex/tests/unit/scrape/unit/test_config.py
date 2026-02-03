@@ -8,6 +8,7 @@ from codomyrmex.scrape.config import ScrapeConfig, get_config, reset_config, set
 from codomyrmex.scrape.exceptions import ScrapeValidationError
 
 
+@pytest.mark.unit
 class TestScrapeConfig:
     """Test ScrapeConfig class."""
 
@@ -96,6 +97,7 @@ class TestScrapeConfig:
         assert result["base_url"] == "https://api.firecrawl.dev"
 
 
+@pytest.mark.unit
 class TestConfigFunctions:
     """Test global config functions."""
 

@@ -1,3 +1,4 @@
+import pytest
 
 import unittest
 from unittest.mock import patch, MagicMock
@@ -5,6 +6,7 @@ from codomyrmex.documents.core.document_validator import DocumentValidator, vali
 from codomyrmex.documents.models.document import Document, DocumentFormat
 from codomyrmex.documents.exceptions import DocumentValidationError
 
+@pytest.mark.unit
 class TestDocumentValidator(unittest.TestCase):
     def setUp(self):
         self.validator = DocumentValidator()
@@ -40,6 +42,7 @@ class TestDocumentValidator(unittest.TestCase):
         result = self.validator.validate(doc)
         self.assertTrue(result.is_valid)
 
+@pytest.mark.unit
 class TestValidateDocumentConvenience(unittest.TestCase):
     @patch('codomyrmex.documents.core.document_validator.DocumentValidator.validate')
     def test_validate_document_wrapper(self, mock_validate):

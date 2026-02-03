@@ -4,6 +4,7 @@ import pytest
 from unittest.mock import MagicMock
 from codomyrmex.deployment import DeploymentManager, CanaryStrategy, BlueGreenStrategy, GitOpsSynchronizer
 
+@pytest.mark.unit
 def test_canary_deployment():
     """Test Canary strategy execution via manager."""
     manager = DeploymentManager()
@@ -14,6 +15,7 @@ def test_canary_deployment():
     result = manager.deploy("test-service", "v1", strategy)
     assert result is True
 
+@pytest.mark.unit
 def test_blue_green_deployment():
     """Test Blue-Green strategy execution via manager."""
     manager = DeploymentManager()
@@ -22,6 +24,7 @@ def test_blue_green_deployment():
     result = manager.deploy("api-server", "v2", strategy)
     assert result is True
 
+@pytest.mark.unit
 def test_deployment_failure():
     """Test manager handling of strategy failures."""
     manager = DeploymentManager()
@@ -31,6 +34,7 @@ def test_deployment_failure():
     result = manager.deploy("failing-service", "v1", mock_strategy)
     assert result is False
 
+@pytest.mark.unit
 def test_gitops_sync():
     """Test GitOpsSynchronizer logic."""
     from unittest.mock import patch

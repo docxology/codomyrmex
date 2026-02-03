@@ -1,3 +1,5 @@
+"""Core Cerebrum reasoning logic and engine."""
+
 from .exceptions import (
     ActiveInferenceError,
     BayesianInferenceError,

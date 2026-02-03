@@ -4,6 +4,7 @@ import pytest
 import random
 from codomyrmex.evolutionary_ai import Genome, crossover, mutate, tournament_selection, Population
 
+@pytest.mark.unit
 def test_genome_creation():
     """Test genome initialization."""
     g = Genome([0.1, 0.2, 0.3])
@@ -13,6 +14,7 @@ def test_genome_creation():
     rand_g = Genome.random(10)
     assert len(rand_g) == 10
 
+@pytest.mark.unit
 def test_crossover_logic():
     """Test single-point crossover."""
     p1 = Genome([0, 0, 0, 0])
@@ -29,6 +31,7 @@ def test_crossover_logic():
     assert len(c1) == 4
     assert len(c2) == 4
 
+@pytest.mark.unit
 def test_mutation_logic():
     """Test mutation affects genes."""
     g = Genome([0.5, 0.5, 0.5])
@@ -38,6 +41,7 @@ def test_mutation_logic():
     assert mutated.genes != g.genes
     assert len(mutated) == 3
 
+@pytest.mark.unit
 def test_tournament_selection():
     """Test selection of the best individual."""
     g1 = Genome([1])
@@ -52,6 +56,7 @@ def test_tournament_selection():
     winner = tournament_selection(pop, size=3)
     assert winner == g2
 
+@pytest.mark.unit
 def test_population_evolution():
     """Test full population evolution cycle."""
     pop = Population(size=10, genome_length=5)

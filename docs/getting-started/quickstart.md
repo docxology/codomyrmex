@@ -32,7 +32,7 @@ uv sync
 codomyrmex check
 ```
 
-### **Option 3: Traditional pip Setup (Alternative)**
+### **Option 3: Alternative Setup (if uv not available)**
 
 ```bash
 # 1. Clone and setup virtual environment
@@ -41,12 +41,15 @@ cd codomyrmex
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# 2. Install dependencies
-pip install -e .
+# 2. Install dependencies (uv pip is preferred over pip)
+uv pip install -e .
+# Or if uv is not installed: pip install -e .
 
 # 3. Verify installation
 codomyrmex check
 ```
+
+> **Note**: Using `uv` is strongly recommended over traditional pip. See [uv installation guide](https://github.com/astral-sh/uv) for setup instructions.
 
 **[📦 Complete Setup Guide](setup.md)** • **[🔧 Troubleshooting](../reference/troubleshooting.md)** • **[📚 Full Documentation](../README.md)**
 
@@ -314,6 +317,7 @@ EOF
 | **Code Execution**     | `from codomyrmex.coding import execute_code`      | `execute_code()`            |
 | **Static Analysis**    | `from codomyrmex.static_analysis import run_pyrefly_analysis`     | `run_pyrefly_analysis()`    |
 | **Pattern Matching**   | `from codomyrmex.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
+| **Secure Identity**    | `from codomyrmex.identity import IdentityManager`                 | `IdentityManager()`         |
 
 ---
 
@@ -455,10 +459,10 @@ uv run python -c "import matplotlib; print(matplotlib.get_backend())"
 
 ### **Get Help**
 
--   📚 **Complete Setup Guide**: [Setup](setup.md) - Comprehensive installation and configuration
--   🔍 **Detailed Troubleshooting**: [Troubleshooting](../reference/troubleshooting.md)
--   💬 **Community Support**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
--   🐛 **Bug Reports**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
+- 📚 **Complete Setup Guide**: [Setup](setup.md) - Comprehensive installation and configuration
+- 🔍 **Detailed Troubleshooting**: [Troubleshooting](../reference/troubleshooting.md)
+- 💬 **Community Support**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
 
 ### **Next Steps**
 

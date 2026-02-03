@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestLoggingMonitoring:
     """Test cases for logging and monitoring functionality using real implementations."""
 

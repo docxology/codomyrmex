@@ -1,30 +1,59 @@
-# project
+# Project Documentation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+Project-level documentation covering architecture, contributing guidelines, roadmap, and project management. Also contains audit results and documentation improvement tracking.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `architecture.md` – File
-- `audit_results/` – Subdirectory
-- `comprehensive-improvements-complete.md` – File
-- `contributing.md` – File
-- `coverage-report.md` – File
-- `documentation-audit-report.md` – File
-- `documentation-audit-summary.md` – File
-- `documentation-completeness.md` – File
-- `documentation-improvements-summary.md` – File
-- `documentation-reorganization-summary.md` – File
-- `implementation-status.md` – File
-- `module-documentation-audit.md` – File
-- `module-documentation-standardization-summary.md` – File
-- `todo.md` – File
+## Contents
+
+| File | Description |
+|------|-------------|
+| [**architecture.md**](architecture.md) | System architecture and design principles |
+| [**contributing.md**](contributing.md) | Contribution guidelines |
+| [**todo.md**](todo.md) | Project roadmap and todo items |
+| [**implementation-status.md**](implementation-status.md) | Feature implementation status |
+| [audit_results/](audit_results/) | Documentation audit results |
+
+### Audit & Improvement Reports
+
+| File | Description |
+|------|-------------|
+| [documentation-audit-report.md](documentation-audit-report.md) | Comprehensive audit report |
+| [documentation-audit-summary.md](documentation-audit-summary.md) | Audit summary |
+| [module-documentation-audit.md](module-documentation-audit.md) | Module-specific audit |
+| [coverage-report.md](coverage-report.md) | Documentation coverage |
+
+## Key Topics
+
+### Architecture
+
+- **Layered Design**: Foundation → Core → Service → Application
+- **Modularity**: 70+ independent, composable modules
+- **AI Integration**: MCP-compatible tool interfaces
+- **Secure Cognitive Layer**: Identity, Wallet, Defense, Market, Privacy
+
+### Contributing
+
+- **Code Style**: PEP 8, type hints, docstrings
+- **Testing**: >80% coverage requirement
+- **Documentation**: RASP compliance (README, AGENTS, SPEC, PAI)
+- **Review**: PR review process
+
+### Project Status
+
+- **Version**: v0.1.0 (Alpha)
+- **Status**: Active Development
+- **License**: MIT
+
+## Related Documentation
+
+- [Getting Started](../getting-started/) - User onboarding
+- [Development](../development/) - Developer guides
+- [Reference](../reference/) - Technical reference
 
 ## Navigation
-- **Parent Directory**: [docs](../README.md)
-- **Project Root**: ../../README.md
+
+- **Parent**: [docs/](../README.md)
+- **Root**: [Project Root](../../README.md)

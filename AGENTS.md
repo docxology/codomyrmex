@@ -255,6 +255,19 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `website/` - Website generation and management
   - Key Classes: `WebsiteBuilder`, `PageGenerator`
 
+**Secure Cognitive Layer**:
+
+- `identity/` - Multi-persona and bio-verification
+  - Key Classes: `IdentityManager`, `BioCognitiveVerifier`, `Persona`
+- `wallet/` - Self-custody and recovery
+  - Key Classes: `WalletManager`, `NaturalRitualRecovery`
+- `defense/` - Active defense and rabbit holes
+  - Key Classes: `ActiveDefense`, `RabbitHole`
+- `market/` - Anonymous marketplaces
+  - Key Classes: `ReverseAuction`, `DemandAggregator`
+- `privacy/` - Data minimization and mixnets
+  - Key Classes: `CrumbCleaner`, `MixnetProxy`
+
 **Development Layer**:
 
 - `module_template/` - Module creation templates and scaffolding

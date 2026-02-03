@@ -25,6 +25,7 @@ class MockAgent(BaseAgent):
             return AgentResponse(content="", error="Mock error")
 
 
+@pytest.mark.unit
 class TestAgentOrchestration:
     """Tests for agent orchestration."""
 

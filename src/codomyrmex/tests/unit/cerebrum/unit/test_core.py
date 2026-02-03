@@ -8,6 +8,7 @@ from codomyrmex.cerebrum import Model
 from codomyrmex.cerebrum import ModelError
 
 
+@pytest.mark.unit
 class TestModelManager:
     """Test ModelManager class."""
 
@@ -39,6 +40,7 @@ class TestModelManager:
             manager.get_model("nonexistent")
 
 
+@pytest.mark.unit
 class TestCerebrumEngine:
     """Test CerebrumEngine class."""
 

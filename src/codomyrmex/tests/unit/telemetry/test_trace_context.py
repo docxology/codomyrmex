@@ -5,12 +5,14 @@ from codomyrmex.telemetry import TraceContext, start_span, get_current_span, tra
 from opentelemetry import trace
 from opentelemetry.trace import StatusCode
 
+@pytest.mark.unit
 def test_telemetry_initialization():
     """Test that the tracer provider can be initialized."""
     TraceContext.initialize(service_name="test-service")
     tracer = TraceContext.get_tracer("test-tracer")
     assert tracer is not None
 
+@pytest.mark.unit
 def test_span_lifecycle():
     """Test starting and ending a span."""
     TraceContext.initialize(service_name="test-service")
@@ -25,6 +27,7 @@ def test_span_lifecycle():
             
     assert not parent.is_recording()
 
+@pytest.mark.unit
 def test_span_attributes():
     """Test setting attributes on a span."""
     TraceContext.initialize(service_name="test-service")
@@ -35,6 +38,7 @@ def test_span_attributes():
         # but we verify the call doesn't fail.
         assert span.is_recording()
 
+@pytest.mark.unit
 def test_error_recording():
     """Test recording an exception on a span."""
     TraceContext.initialize(service_name="test-service")
@@ -49,6 +53,7 @@ def test_error_recording():
     # Status should be error
     assert span.status.status_code == StatusCode.ERROR
 
+@pytest.mark.unit
 def test_traced_decorator():
     """Test the @traced decorator."""
     TraceContext.initialize(service_name="test-service")

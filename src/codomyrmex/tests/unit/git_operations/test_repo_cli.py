@@ -1,3 +1,4 @@
+import pytest
 
 import unittest
 from unittest.mock import MagicMock, patch
@@ -10,6 +11,7 @@ from codomyrmex.git_operations.cli.repo import (
 )
 from codomyrmex.git_operations.core.repository import RepositoryManager
 
+@pytest.mark.unit
 class TestRepoCLI(unittest.TestCase):
     def setUp(self):
         self.manager = MagicMock(spec=RepositoryManager)

@@ -1,74 +1,83 @@
 # Codomyrmex Agents — docs/modules
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `agents/` – Directory containing agents components
-- `api/` – Directory containing api components
-- `auth/` – Directory containing auth components
-- `build_synthesis/` – Directory containing build_synthesis components
-- `cache/` – Directory containing cache components
-- `cerebrum/` – Directory containing cerebrum components
-- `ci_cd_automation/` – Directory containing ci_cd_automation components
-- `cli/` – Directory containing cli components
-- `cloud/` – Directory containing cloud components
-- `coding/` – Directory containing coding components
-- `compression/` – Directory containing compression components
-- `config_management/` – Directory containing config_management components
-- `containerization/` – Directory containing containerization components
-- `data_visualization/` – Directory containing data_visualization components
-- `database_management/` – Directory containing database_management components
-- `dependency-graph.md` – Project file
-- `documentation/` – Directory containing documentation components
-- `documents/` – Directory containing documents components
-- `encryption/` – Directory containing encryption components
-- `environment_setup/` – Directory containing environment_setup components
-- `events/` – Directory containing events components
-- `examples/` – Directory containing examples components
-- `fpf/` – Directory containing fpf components
-- `git_operations/` – Directory containing git_operations components
-- `ide/` – Directory containing ide components
-- `llm/` – Directory containing llm components
-- `logging_monitoring/` – Directory containing logging_monitoring components
-- `logistics/` – Directory containing logistics components
-- `metrics/` – Directory containing metrics components
-- `model_context_protocol/` – Directory containing model_context_protocol components
-- `module_template/` – Directory containing module_template components
-- `networking/` – Directory containing networking components
-- `ollama_integration.md` – Project file
-- `orchestrator/` – Directory containing orchestrator components
-- `overview.md` – Project file
-- `pattern_matching/` – Directory containing pattern_matching components
-- `performance/` – Directory containing performance components
-- `physical_management/` – Directory containing physical_management components
-- `plugin_system/` – Directory containing plugin_system components
-- `relationships.md` – Project file
-- `scrape/` – Directory containing scrape components
-- `security/` – Directory containing security components
-- `serialization/` – Directory containing serialization components
-- `skills/` – Directory containing skills components
-- `spatial/` – Directory containing spatial components
-- `static_analysis/` – Directory containing static_analysis components
-- `system_discovery/` – Directory containing system_discovery components
-- `templating/` – Directory containing templating components
-- `terminal_interface/` – Directory containing terminal_interface components
-- `tests/` – Directory containing tests components
-- `tools/` – Directory containing tools components
-- `utils/` – Directory containing utils components
-- `validation/` – Directory containing validation components
-- `website/` – Directory containing website components
+Comprehensive documentation hub for all 80+ Codomyrmex modules. Provides API specifications, usage guides, tutorials, and integration patterns for every module in the system.
+
+## Key Documentation Files
+
+| File | Description | Priority |
+|------|-------------|----------|
+| [overview.md](overview.md) | Complete module system overview | High |
+| [relationships.md](relationships.md) | Inter-module dependencies | High |
+| [dependency-graph.md](dependency-graph.md) | Visual dependency graph | Medium |
+| [ollama_integration.md](ollama_integration.md) | Local LLM integration | Medium |
+
+## Module Categories
+
+### 🏗️ Foundation (High Priority)
+
+- [logging_monitoring/](logging_monitoring/) - Centralized logging
+- [environment_setup/](environment_setup/) - Environment validation
+- [config_management/](config_management/) - Configuration management
+- [model_context_protocol/](model_context_protocol/) - MCP implementation
+
+### 🤖 AI & Intelligence
+
+- [agents/](agents/) - AI agent framework
+- [cerebrum/](cerebrum/) - Case-based reasoning
+- [llm/](llm/) - LLM provider abstraction
+- [skills/](skills/) - Skills framework
+
+### 🛡️ Secure Cognitive (New)
+
+- `identity/` - 3-Tier personas, bio-verification
+- `wallet/` - Self-custody, Natural Ritual recovery
+- `defense/` - Active defense, rabbit holes
+- `market/` - Reverse auctions, demand aggregation
+- `privacy/` - Crumb scrubbing, mixnet routing
+
+> **Source**: [src/codomyrmex/identity/](../../src/codomyrmex/identity/), [wallet/](../../src/codomyrmex/wallet/), [defense/](../../src/codomyrmex/defense/), [market/](../../src/codomyrmex/market/), [privacy/](../../src/codomyrmex/privacy/)
+
+### 📊 Analysis & Visualization
+
+- [static_analysis/](static_analysis/) - Code quality analysis
+- [pattern_matching/](pattern_matching/) - Code patterns
+- [data_visualization/](data_visualization/) - Charts and plots
+- [coding/](coding/) - Safe code execution
+
+### 🔧 Build & Deploy
+
+- [build_synthesis/](build_synthesis/) - Build automation
+- [ci_cd_automation/](ci_cd_automation/) - CI/CD pipelines
+- [containerization/](containerization/) - Container management
+- [git_operations/](git_operations/) - Git automation
+
+### 🌐 Service & Integration
+
+- [orchestrator/](orchestrator/) - Workflow orchestration
+- [api/](api/) - API infrastructure
+- [events/](events/) - Event system
+- [plugin_system/](plugin_system/) - Plugin architecture
+
+## Agent Quality Standards
+
+1. **Documentation Completeness**: Each module docs folder should have README.md, AGENTS.md, SPEC.md
+2. **Accuracy**: Documentation must match current source code implementations
+3. **Examples**: Include working code examples for all key features
+4. **Navigation**: Maintain proper links to source and related modules
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+- Keep documentation synchronized with source code changes
+- Ensure Model Context Protocol tool specs are documented
+- Update module relationships when dependencies change
+- Record new modules in overview.md and relationships.md
 
 ## Navigation Links
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+
+- **📁 Parent**: [docs/](../README.md)
+- **🏠 Root**: [../../README.md](../../README.md)
+- **📦 Source**: [src/codomyrmex/](../../src/codomyrmex/)

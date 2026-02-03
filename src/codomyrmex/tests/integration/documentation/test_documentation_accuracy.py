@@ -14,6 +14,7 @@ import matplotlib
 matplotlib.use('Agg')  # Non-interactive backend for testing
 
 
+@pytest.mark.unit
 class TestDocumentationAccuracy:
     """Test that all documented APIs actually exist and work."""
 
@@ -360,6 +361,7 @@ class TestDocumentationAccuracy:
                 pytest.fail(f"Documented module {module_name} cannot be imported: {e}")
 
 
+@pytest.mark.unit
 class TestRealMethodsInDocumentation:
     """Test that documentation examples use real methods, not placeholders."""
 

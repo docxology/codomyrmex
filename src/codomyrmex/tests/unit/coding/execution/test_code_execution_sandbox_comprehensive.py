@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestCodeExecutionSandboxComprehensive:
     """Comprehensive test cases for code execution sandbox functionality."""
 

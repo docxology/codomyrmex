@@ -10,6 +10,7 @@ from pathlib import Path
 matplotlib.use('Agg')
 
 
+@pytest.mark.unit
 class TestDataVisualization:
     """Test cases for data visualization functionality."""
 

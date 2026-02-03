@@ -1,4 +1,5 @@
 """Integration tests for CEREBRUM module."""
+import pytest
 
 from codomyrmex.cerebrum import (
     CerebrumEngine,
@@ -9,6 +10,7 @@ from codomyrmex.cerebrum import (
 )
 
 
+@pytest.mark.integration
 def test_end_to_end_reasoning():
     """Test end-to-end reasoning workflow."""
     # Create engine
@@ -33,6 +35,7 @@ def test_end_to_end_reasoning():
     assert len(result.retrieved_cases) > 0
 
 
+@pytest.mark.integration
 def test_bayesian_integration():
     """Test integration with Bayesian network."""
     engine = CerebrumEngine()

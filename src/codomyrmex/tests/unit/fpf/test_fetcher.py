@@ -7,6 +7,7 @@ from unittest.mock import Mock, patch
 from codomyrmex.fpf import FPFFetcher, FPFSpec
 
 
+@pytest.mark.unit
 def test_fetcher_initialization():
     """Test fetcher initialization."""
     fetcher = FPFFetcher()
@@ -27,6 +28,7 @@ def test_fetch_latest(mock_get):
     assert "FPF Specification" in content
 
 
+@pytest.mark.unit
 def test_get_version_info():
     """Test getting version info."""
     fetcher = FPFFetcher()
@@ -39,6 +41,7 @@ def test_get_version_info():
         pytest.skip("Network unavailable")
 
 
+@pytest.mark.unit
 def test_cache_spec():
     """Test caching specification."""
     fetcher = FPFFetcher()
@@ -57,6 +60,7 @@ def test_fetch_latest_error_handling(mock_get):
         fetcher.fetch_latest("ailev/FPF", "main")
 
 
+@pytest.mark.unit
 def test_check_for_updates_nonexistent_file():
     """Test checking updates for non-existent file."""
     fetcher = FPFFetcher()

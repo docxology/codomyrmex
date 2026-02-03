@@ -103,6 +103,7 @@ class ResourceLeakPlugin(MockPlugin):
 # Test Plugin Registry
 # ============================================================================
 
+@pytest.mark.unit
 class TestPluginRegistry:
     """Test cases for PluginRegistry functionality."""
 
@@ -563,6 +564,7 @@ class TestPluginRegistry:
 # Test Plugin Validator
 # ============================================================================
 
+@pytest.mark.unit
 class TestPluginValidator:
     """Test cases for PluginValidator functionality."""
 
@@ -842,6 +844,7 @@ RUN echo "no from instruction"
 # Test Plugin Loader
 # ============================================================================
 
+@pytest.mark.unit
 class TestPluginLoader:
     """Test cases for PluginLoader functionality."""
 
@@ -899,6 +902,7 @@ class TestPluginLoader:
                 f.write("""
 from codomyrmex.plugin_system import Plugin
 
+@pytest.mark.unit
 class TestPlugin(Plugin):
     def initialize(self, config): return True
     def shutdown(self): pass
@@ -956,6 +960,7 @@ class TestPlugin(Plugin):
 
         plugin_file = plugin_dir / "test_plugin.py"
         plugin_file.write_text("""
+@pytest.mark.unit
 class TestPlugin:
     def __init__(self):
         self.initialized = False
@@ -1142,6 +1147,7 @@ class TestPlugin:
 # Test Plugin Manager
 # ============================================================================
 
+@pytest.mark.unit
 class TestPluginManager:
     """Test cases for PluginManager functionality."""
 
@@ -1184,6 +1190,7 @@ class TestPluginManager:
 
         plugin_file = plugin_dir / "test_plugin.py"
         plugin_file.write_text("""
+@pytest.mark.unit
 class TestPlugin:
     def initialize(self, config): return True
     def shutdown(self): pass
@@ -1393,6 +1400,7 @@ class TestPlugin:
 
         plugin_file = plugin_dir / "test_plugin.py"
         plugin_file.write_text("""
+@pytest.mark.unit
 class TestPlugin:
     def initialize(self, config): return True
     def shutdown(self): pass
@@ -1466,6 +1474,7 @@ class TestPlugin:
 # Test Plugin Base Class
 # ============================================================================
 
+@pytest.mark.unit
 class TestPluginBaseClass:
     """Test cases for the Plugin base class."""
 
@@ -1600,6 +1609,7 @@ class TestPluginBaseClass:
 # Test Interface Enforcer
 # ============================================================================
 
+@pytest.mark.unit
 class TestInterfaceEnforcer:
     """Test cases for the InterfaceEnforcer."""
 
@@ -1663,6 +1673,7 @@ class TestInterfaceEnforcer:
 # Test Convenience Functions
 # ============================================================================
 
+@pytest.mark.unit
 class TestConvenienceFunctions:
     """Test cases for plugin system convenience functions."""
 
@@ -1716,6 +1727,7 @@ class TestConvenienceFunctions:
 # Test Plugin Isolation
 # ============================================================================
 
+@pytest.mark.unit
 class TestPluginIsolation:
     """Test cases for plugin isolation."""
 
@@ -1776,6 +1788,7 @@ class TestPluginIsolation:
 # Test Error Handling
 # ============================================================================
 
+@pytest.mark.unit
 class TestErrorHandling:
     """Test cases for error handling in the plugin system."""
 
@@ -1882,6 +1895,7 @@ class TestErrorHandling:
 # Test Plugin Types
 # ============================================================================
 
+@pytest.mark.unit
 class TestPluginTypes:
     """Test cases for different plugin types."""
 
@@ -1916,6 +1930,7 @@ class TestPluginTypes:
 # Test Plugin States
 # ============================================================================
 
+@pytest.mark.unit
 class TestPluginStates:
     """Test cases for plugin state management."""
 
@@ -1960,6 +1975,7 @@ class TestPluginStates:
 # Test YAML Plugin Metadata
 # ============================================================================
 
+@pytest.mark.unit
 class TestYAMLMetadata:
     """Test cases for YAML plugin metadata loading."""
 
@@ -2000,6 +2016,7 @@ class TestYAMLMetadata:
 # Test Hook Class
 # ============================================================================
 
+@pytest.mark.unit
 class TestHookClass:
     """Test cases for the Hook class."""
 

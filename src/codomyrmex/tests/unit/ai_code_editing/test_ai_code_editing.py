@@ -5,6 +5,7 @@ import pytest
 import sys
 
 
+@pytest.mark.unit
 class TestAICodeEditing:
     """Test cases for AI code editing functionality."""
 

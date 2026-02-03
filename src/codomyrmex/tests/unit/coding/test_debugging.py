@@ -1,3 +1,4 @@
+import pytest
 import unittest
 from unittest.mock import MagicMock, patch
 from codomyrmex.coding.debugging import (
@@ -9,6 +10,7 @@ from codomyrmex.coding.debugging import (
     Debugger
 )
 
+@pytest.mark.unit
 class TestErrorAnalyzer(unittest.TestCase):
     def setUp(self):
         self.analyzer = ErrorAnalyzer()
@@ -35,6 +37,7 @@ class TestErrorAnalyzer(unittest.TestCase):
         self.assertEqual(diagnosis.error_type, "TimeoutError")
         self.assertTrue(diagnosis.is_timeout)
 
+@pytest.mark.unit
 class TestPatchGenerator(unittest.TestCase):
     def setUp(self):
         self.mock_llm = MagicMock()
@@ -53,6 +56,7 @@ class TestPatchGenerator(unittest.TestCase):
         # In current stub implementation, it returns empty list if llm returns nothing
         self.assertIsInstance(patches, list)
 
+@pytest.mark.unit
 class TestDebugger(unittest.TestCase):
     def setUp(self):
         self.debugger = Debugger()

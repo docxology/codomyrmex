@@ -25,9 +25,11 @@ def handle_project_build(config_file: Optional[str]) -> bool:
             return False
 
     except ImportError:
+        logger.warning("Build synthesis module not available")
         print("❌ Build synthesis module not available")
         return False
     except Exception as e:
+        logger.error(f"Error building project: {e}", exc_info=True)
         print(f"❌ Error building project: {str(e)}")
         return False
 
@@ -102,9 +104,11 @@ def handle_workflow_create(name: str, template: Optional[str] = None) -> bool:
             return False
 
     except ImportError:
+        logger.warning("Project orchestration module not available")
         print("❌ Project orchestration module not available")
         return False
     except Exception as e:
+        logger.error(f"Error creating workflow: {e}", exc_info=True)
         print(f"❌ Error creating workflow: {str(e)}")
         return False
 
@@ -125,9 +129,11 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
         return True
 
     except ImportError:
+        logger.warning("Project orchestration module not available")
         print("❌ Project orchestration module not available")
         return False
     except Exception as e:
+        logger.error(f"Error creating project: {e}", exc_info=True)
         print(f"❌ Error creating project: {str(e)}")
         return False
 
@@ -174,9 +180,11 @@ def handle_project_list() -> bool:
         return True
 
     except ImportError:
+        logger.warning("Project orchestration module not available")
         print("❌ Project orchestration module not available")
         return False
     except Exception as e:
+        logger.error(f"Error listing projects: {e}", exc_info=True)
         print(f"❌ Error listing projects: {str(e)}")
         return False
 
@@ -223,9 +231,11 @@ def handle_orchestration_status() -> bool:
         return True
 
     except ImportError:
+        logger.warning("Project orchestration module not available")
         print("❌ Project orchestration module not available")
         return False
     except Exception as e:
+        logger.error(f"Error getting orchestration status: {e}", exc_info=True)
         print(f"❌ Error getting orchestration status: {str(e)}")
         return False
 
@@ -284,9 +294,11 @@ def handle_orchestration_health() -> bool:
         return overall_status in ["healthy", "degraded"]
 
     except ImportError:
+        logger.warning("Project orchestration module not available")
         print("❌ Project orchestration module not available")
         return False
     except Exception as e:
+        logger.error(f"Error checking orchestration health: {e}", exc_info=True)
         print(f"❌ Error checking orchestration health: {str(e)}")
         return False
 
@@ -328,9 +340,11 @@ def list_workflows() -> bool:
         return True
 
     except ImportError:
+        logger.warning("Project orchestration module not available")
         print("❌ Project orchestration module not available")
         return False
     except (AttributeError, KeyError, TypeError, ValueError) as e:
+        logger.error(f"Error listing workflows: {e}", exc_info=True)
         print(f"❌ Error listing workflows: {str(e)}")
         return False
 
@@ -355,8 +369,10 @@ def run_workflow(workflow_name: str, **kwargs) -> bool:
         return result["success"]
 
     except ImportError:
+        logger.warning("Project orchestration module not available")
         print("❌ Project orchestration module not available")
         return False
     except (AttributeError, KeyError, TypeError, ValueError, RuntimeError) as e:
+        logger.error(f"Error running workflow: {e}", exc_info=True)
         print(f"❌ Error running workflow: {str(e)}")
         return False

@@ -17,6 +17,7 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 | [llm/](llm/) | Model Management | Local (Ollama) and cloud model integration |
 | [model_context_protocol/](model_context_protocol/) | Tool Standards | Standardized AI tool interfaces |
 | [agents/](agents/) | Agent Framework | Multi-provider AI agent orchestration |
+| [multimodal/](multimodal/) | Multimodal | Audio/Video/Image processing |
 
 ### Intelligent Code Operations
 
@@ -27,12 +28,21 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 | [pattern_matching/](pattern_matching/) | Pattern Recognition | Code pattern identification |
 | [coding/](coding/) | Safe Execution | Sandboxed AI code execution |
 
+- **Secure Cognitive Architecture**:
+  - `identity`: Multi-persona management and bio-cognitive verification.
+  - `wallet`: Self-custody and "Natural Ritual" recovery (ZKP).
+  - `defense`: Active countermeasures and "Rabbit Hole" containment.
+  - `market`: Reverse auctions and demand aggregation.
+  - `privacy`: Metadata scrubbing and mixnet proxying.
+
 ### Knowledge & Reasoning
 
 | Module | PAI Capability | Description |
 | :--- | :--- | :--- |
 | [cerebrum/](cerebrum/) | Reasoning Engine | Case-based and Bayesian reasoning |
 | [documents/](documents/) | Knowledge Processing | Document analysis and retrieval |
+| [graph_rag/](graph_rag/) | Graph RAG | Graph-based Retrieval Augmented Generation |
+| [agentic_memory/](agentic_memory/) | Memory Systems | Long-term memory for agents |
 | [fpf/](fpf/) | Functional Analysis | Functional programming transformations |
 
 ### Workflow Automation
@@ -43,6 +53,13 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 | [events/](events/) | Event System | Pub/sub for agent communication |
 | [logistics/](logistics/) | Task Management | Scheduling and coordination |
 | [plugin_system/](plugin_system/) | Extensibility | Dynamic capability extension |
+
+### Development Tools
+
+| Module | PAI Capability | Description |
+| :--- | :--- | :--- |
+| [ide/](ide/) | IDE Integration | IDE control and automation (VSCode, Antigravity) |
+| [terminal_interface/](terminal_interface/) | CLI/TUI | Rich terminal interfaces |
 
 ### Security & Privacy
 

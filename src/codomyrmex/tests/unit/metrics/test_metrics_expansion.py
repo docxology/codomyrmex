@@ -4,6 +4,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 from codomyrmex.metrics import PrometheusExporter, StatsDClient, Metrics
 
+@pytest.mark.unit
 def test_prometheus_exporter_initialization():
     """Test PrometheusExporter wrapper."""
     exporter = PrometheusExporter(port=9999)
@@ -13,6 +14,7 @@ def test_prometheus_exporter_initialization():
         exporter.start()
         mock_start.assert_called_once_with(9999, addr="0.0.0.0")
 
+@pytest.mark.unit
 def test_statsd_client_lifecycle():
     """Test StatsDClient lifecycle."""
     with patch('statsd.StatsClient') as mock_client_cls:
@@ -26,6 +28,7 @@ def test_statsd_client_lifecycle():
         client.gauge("gauge.name", 100)
         mock_client.gauge.assert_called_once_with("gauge.name", 100, 1)
 
+@pytest.mark.unit
 def test_existing_metrics_integration():
     """Verify existing metrics still work as expected."""
     metrics = Metrics()

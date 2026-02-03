@@ -15,6 +15,7 @@ def fpf_spec_path():
     return spec_path
 
 
+@pytest.mark.integration
 def test_integration_parse_real_spec(fpf_spec_path):
     """Test parsing real FPF-Spec.md file."""
     parser = FPFParser()
@@ -28,6 +29,7 @@ def test_integration_parse_real_spec(fpf_spec_path):
     assert len(parts) > 0
 
 
+@pytest.mark.integration
 def test_integration_extract_concepts(fpf_spec_path):
     """Test concept extraction from real spec."""
     parser = FPFParser()
@@ -43,6 +45,7 @@ def test_integration_extract_concepts(fpf_spec_path):
     assert len(u_types) > 0
 
 
+@pytest.mark.integration
 def test_integration_extract_relationships(fpf_spec_path):
     """Test relationship extraction from real spec."""
     parser = FPFParser()
@@ -58,6 +61,7 @@ def test_integration_extract_relationships(fpf_spec_path):
     assert len(rel_types) > 0
 
 
+@pytest.mark.integration
 def test_integration_build_index(fpf_spec_path):
     """Test index building from real spec."""
     parser = FPFParser()
@@ -75,6 +79,7 @@ def test_integration_build_index(fpf_spec_path):
     assert len(index.pattern_index) > 0
 
 
+@pytest.mark.integration
 def test_integration_search_patterns(fpf_spec_path):
     """Test pattern search on real spec."""
     client = FPFClient()
@@ -88,6 +93,7 @@ def test_integration_search_patterns(fpf_spec_path):
     assert len(results) > 0
 
 
+@pytest.mark.integration
 def test_integration_get_pattern(fpf_spec_path):
     """Test getting specific pattern from real spec."""
     client = FPFClient()
@@ -106,6 +112,7 @@ def test_integration_get_pattern(fpf_spec_path):
             assert pattern is not None
 
 
+@pytest.mark.integration
 def test_integration_export_json(fpf_spec_path):
     """Test JSON export of real spec."""
     import json
@@ -124,6 +131,7 @@ def test_integration_export_json(fpf_spec_path):
         assert len(data["patterns"]) > 0
 
 
+@pytest.mark.integration
 def test_integration_full_pipeline(fpf_spec_path):
     """Test full pipeline: parse → extract → index → search."""
     parser = FPFParser()

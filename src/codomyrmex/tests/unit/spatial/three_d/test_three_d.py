@@ -5,6 +5,7 @@ import pytest
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestThreeD:
     """Test cases for 3D modeling functionality."""
 

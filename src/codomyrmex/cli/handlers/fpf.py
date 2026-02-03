@@ -21,6 +21,7 @@ def handle_fpf_fetch(repo: str, branch: str, output: Optional[str]) -> bool:
 
         return True
     except Exception as e:
+        logger.error(f"Error fetching FPF specification: {e}", exc_info=True)
         print(f"❌ Error fetching FPF specification: {str(e)}")
         return False
 
@@ -40,6 +41,7 @@ def handle_fpf_parse(file: str, output: Optional[str]) -> bool:
 
         return True
     except Exception as e:
+        logger.error(f"Error parsing FPF specification: {e}", exc_info=True)
         print(f"❌ Error parsing FPF specification: {str(e)}")
         return False
 
@@ -55,6 +57,7 @@ def handle_fpf_export(file: str, output: str, format: str) -> bool:
         print(f"✅ Exported FPF specification to {output}")
         return True
     except Exception as e:
+        logger.error(f"Error exporting FPF specification: {e}", exc_info=True)
         print(f"❌ Error exporting FPF specification: {str(e)}")
         return False
 
@@ -85,6 +88,7 @@ def handle_fpf_search(query: str, file: Optional[str], filters: dict) -> bool:
 
         return True
     except Exception as e:
+        logger.error(f"Error searching FPF: {e}", exc_info=True)
         print(f"❌ Error searching FPF: {str(e)}")
         return False
 
@@ -131,8 +135,8 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
 
         return True
     except Exception as e:
+        logger.error(f"Error generating visualization: {e}", exc_info=True)
         print(f"❌ Error generating visualization: {str(e)}")
-        traceback.print_exc()
         return False
 
 
@@ -156,6 +160,7 @@ def handle_fpf_context(file: str, pattern: Optional[str], output: Optional[str],
 
         return True
     except Exception as e:
+        logger.error(f"Error building context: {e}", exc_info=True)
         print(f"❌ Error building context: {str(e)}")
         return False
 
@@ -185,8 +190,8 @@ def handle_fpf_export_section(file: str, part: Optional[str], pattern: Optional[
 
         return True
     except Exception as e:
+        logger.error(f"Error exporting section: {e}", exc_info=True)
         print(f"❌ Error exporting section: {str(e)}")
-        traceback.print_exc()
         return False
 
 
@@ -211,8 +216,8 @@ def handle_fpf_analyze(file: str, output: Optional[str]) -> bool:
 
         return True
     except Exception as e:
+        logger.error(f"Error analyzing FPF: {e}", exc_info=True)
         print(f"❌ Error analyzing FPF: {str(e)}")
-        traceback.print_exc()
         return False
 
 
@@ -231,6 +236,6 @@ def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
         print(f"✅ Report generated at {output}")
         return True
     except Exception as e:
+        logger.error(f"Error generating report: {e}", exc_info=True)
         print(f"❌ Error generating report: {str(e)}")
-        traceback.print_exc()
         return False

@@ -1,16 +1,43 @@
-# tutorials
+# Tutorials
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+Step-by-step tutorials for learning Codomyrmex. From creating your first module to advanced AI integration patterns.
 
-## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `creating-a-module.md` – File
+## Available Tutorials
+
+| Tutorial | Description | Time |
+|----------|-------------|------|
+| [**Creating a Module**](creating-a-module.md) | Build your own Codomyrmex module from scratch | 45 min |
+
+## Learning Path
+
+### 1. Foundation
+
+Start with [creating-a-module.md](creating-a-module.md) to understand:
+
+- Module structure and conventions
+- RASP documentation (README, AGENTS, SPEC, PAI)
+- Testing requirements
+- Integration patterns
+
+### 2. Coming Soon
+
+- AI Code Generation Tutorial
+- Data Visualization Tutorial
+- Workflow Orchestration Tutorial
+- Secure Cognitive Agent Tutorial
+
+## Prerequisites
+
+Before starting tutorials:
+
+- Complete [Quick Start](../quickstart.md)
+- Have development environment [set up](../setup.md)
 
 ## Navigation
-- **Parent Directory**: [getting-started](../README.md)
-- **Project Root**: ../../../README.md
+
+- **Parent**: [Getting Started](../README.md)
+- **Root**: [Project Root](../../../README.md)

@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 
+@pytest.mark.unit
 class TestTemplate:
     """Test cases for template module functionality."""
 

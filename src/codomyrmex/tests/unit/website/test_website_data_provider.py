@@ -17,12 +17,14 @@ def mock_root(tmp_path):
     
     return tmp_path
 
+@pytest.mark.unit
 def test_get_system_summary(mock_root):
     provider = DataProvider(mock_root)
     summary = provider.get_system_summary()
     assert summary["status"] == "Operational"
     assert "agent_count" in summary
 
+@pytest.mark.unit
 def test_get_agents_status(mock_root):
     provider = DataProvider(mock_root)
     agents = provider.get_agents_status()
@@ -32,6 +34,7 @@ def test_get_agents_status(mock_root):
     assert agents[0]["description"] == "Test Description"
     assert agents[0]["status"] == "Active"
 
+@pytest.mark.unit
 def test_get_description_fallback(mock_root):
     # Create agent without description
     agent_dir = mock_root / "src" / "codomyrmex" / "mystery_agent"

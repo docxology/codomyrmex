@@ -6,6 +6,7 @@ from codomyrmex.fpf import ContextBuilder
 from codomyrmex.fpf import FPFSpec, Pattern, PatternStatus, Concept, ConceptType
 
 
+@pytest.mark.unit
 def test_context_builder_initialization():
     """Test context builder initialization."""
     spec = FPFSpec(patterns=[])
@@ -13,6 +14,7 @@ def test_context_builder_initialization():
     assert builder is not None
 
 
+@pytest.mark.unit
 def test_build_context_for_pattern():
     """Test building context for a pattern."""
     spec = FPFSpec(
@@ -35,6 +37,7 @@ def test_build_context_for_pattern():
     assert "Test Pattern" in context
 
 
+@pytest.mark.unit
 def test_build_context_for_pattern_not_found():
     """Test building context for non-existent pattern."""
     spec = FPFSpec(patterns=[])
@@ -43,6 +46,7 @@ def test_build_context_for_pattern_not_found():
     assert "not found" in context.lower()
 
 
+@pytest.mark.unit
 def test_build_context_for_concept():
     """Test building context for a concept."""
     spec = FPFSpec(
@@ -69,6 +73,7 @@ def test_build_context_for_concept():
     assert "U.Holon" in context or "Holon" in context
 
 
+@pytest.mark.unit
 def test_build_minimal_context():
     """Test building minimal context."""
     spec = FPFSpec(
@@ -97,6 +102,7 @@ def test_build_minimal_context():
     assert "A.1" in context
 
 
+@pytest.mark.unit
 def test_build_full_context():
     """Test building full context."""
     spec = FPFSpec(

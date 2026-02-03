@@ -9,6 +9,7 @@ Tests all aspects of the Ollama integration including:
 - Integration with Codomyrmex modules
 - Real execution tests (no mocks)
 """
+import pytest
 
 import unittest
 import time
@@ -40,6 +41,7 @@ except ImportError:
     LOGGING_AVAILABLE = False
 
 
+@pytest.mark.integration
 class TestOllamaIntegration(unittest.TestCase):
     """Comprehensive tests for Ollama integration."""
 
@@ -509,6 +511,7 @@ class TestOllamaIntegration(unittest.TestCase):
         self.assertIsInstance(models, list)
 
 
+@pytest.mark.integration
 class TestOllamaIntegrationRealExecution(unittest.TestCase):
     """Real execution tests that actually run models."""
 

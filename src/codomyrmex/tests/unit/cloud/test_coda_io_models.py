@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 
+@pytest.mark.unit
 class TestDocModel:
     """Tests for the Doc dataclass model."""
     
@@ -96,6 +97,7 @@ class TestDocModel:
         assert doc.folder.name == "My Folder"
 
 
+@pytest.mark.unit
 class TestDocListModel:
     """Tests for the DocList dataclass model."""
     
@@ -148,6 +150,7 @@ class TestDocListModel:
         assert doc_list.next_page_token is None
 
 
+@pytest.mark.unit
 class TestPageModel:
     """Tests for the Page dataclass model."""
     
@@ -209,6 +212,7 @@ class TestPageModel:
         assert page.children[1].name == "Child 2"
 
 
+@pytest.mark.unit
 class TestTableModel:
     """Tests for the Table dataclass model."""
     
@@ -256,6 +260,7 @@ class TestTableModel:
         assert table.layout == "card"
 
 
+@pytest.mark.unit
 class TestRowModel:
     """Tests for the Row dataclass model."""
     
@@ -289,6 +294,7 @@ class TestRowModel:
         assert row.created_at is not None
 
 
+@pytest.mark.unit
 class TestColumnModel:
     """Tests for the Column dataclass model."""
     
@@ -334,6 +340,7 @@ class TestColumnModel:
         assert column.formula == "thisRow.Price * thisRow.Quantity"
 
 
+@pytest.mark.unit
 class TestRowEditModel:
     """Tests for RowEdit and CellEdit models."""
     
@@ -363,6 +370,7 @@ class TestRowEditModel:
         assert result["cells"][0] == {"column": "Task", "value": "New task"}
 
 
+@pytest.mark.unit
 class TestUserModel:
     """Tests for the User dataclass model."""
     
@@ -395,6 +403,7 @@ class TestUserModel:
         assert user.workspace.id == "ws-123"
 
 
+@pytest.mark.unit
 class TestPermissionModels:
     """Tests for permission-related models."""
     
@@ -442,6 +451,7 @@ class TestPermissionModels:
         assert result == {"type": "email", "email": "user@example.com"}
 
 
+@pytest.mark.unit
 class TestMutationStatus:
     """Tests for MutationStatus model."""
     
@@ -470,6 +480,7 @@ class TestMutationStatus:
         assert status.warning == "Some rows were skipped"
 
 
+@pytest.mark.unit
 class TestInsertRowsResult:
     """Tests for InsertRowsResult model."""
     
@@ -488,6 +499,7 @@ class TestInsertRowsResult:
         assert result.added_row_ids == ["i-row1", "i-row2", "i-row3"]
 
 
+@pytest.mark.unit
 class TestDatetimeParsing:
     """Tests for datetime parsing utility."""
     

@@ -4,6 +4,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 from codomyrmex.tree_sitter import TreeSitterParser, LanguageManager
 
+@pytest.mark.unit
 def test_parser_initialization():
     """Test parser initialization with a mock language."""
     mock_language = MagicMock()
@@ -14,6 +15,7 @@ def test_parser_initialization():
         parser = TreeSitterParser(mock_language)
         mock_instance.set_language.assert_called_once_with(mock_language)
 
+@pytest.mark.unit
 def test_parse_call():
     """Test parse call delegation."""
     mock_language = MagicMock()
@@ -27,6 +29,7 @@ def test_parse_call():
         # Verify it was called with bytes
         mock_instance.parse.assert_called_once_with(b"print('hello')")
 
+@pytest.mark.unit
 def test_language_manager():
     """Test language manager loading logic."""
     with patch('tree_sitter.Language') as mock_lang_cls:

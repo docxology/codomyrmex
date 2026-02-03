@@ -16,6 +16,7 @@ def temp_dir():
         yield Path(tmpdir)
 
 
+@pytest.mark.unit
 def test_check_upstream_status_not_exists(temp_dir):
     """Test checking status when upstream doesn't exist."""
     sync = SkillSync(

@@ -1,3 +1,14 @@
+"""VS Code IDE Integration
+
+Integration with Visual Studio Code. Provides programmatic access to
+the Extension API, workspace management, and debugging capabilities.
+
+Example:
+    >>> from codomyrmex.ide.vscode import VSCodeClient
+    >>> client = VSCodeClient()
+    >>> client.connect()
+    >>> extensions = client.list_extensions()
+"""
 from pathlib import Path
 from typing import Any, Optional, Dict, List
 import json
@@ -27,18 +38,7 @@ from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutio
 
 
 
-"""VS Code IDE Integration
 
-
-Integration with Visual Studio Code. Provides programmatic access to
-the Extension API, workspace management, and debugging capabilities.
-
-Example:
-    >>> from codomyrmex.ide.vscode import VSCodeClient
-    >>> client = VSCodeClient()
-    >>> client.connect()
-    >>> extensions = client.list_extensions()
-"""
 
 class VSCodeClient(IDEClient):
     """Client for interacting with Visual Studio Code.

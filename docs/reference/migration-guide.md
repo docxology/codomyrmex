@@ -61,8 +61,8 @@ from codomyrmex.environment_setup import configure_advanced_caching
 
 #### **Migration Steps: 0.1.x → 0.2.0**
 ```bash
-# 1. Update package
-pip install --upgrade codomyrmex
+# 1. Update package (using uv)
+uv pip install --upgrade codomyrmex
 
 # 2. Run compatibility check
 codomyrmex check-compatibility --from 0.1.x --to 0.2.0
@@ -139,12 +139,12 @@ cp -r ~/.codomyrmex ~/.codomyrmex.backup.$(date +%Y%m%d)
 pyenv install 3.11
 pyenv local 3.11
 
-# Create new virtual environment
-python -m venv venv_codomyrmex_1.0
+# Create new virtual environment using uv (recommended)
+uv venv venv_codomyrmex_1.0
 source venv_codomyrmex_1.0/bin/activate
 
 # Install new version
-pip install codomyrmex==1.0.0
+uv pip install codomyrmex==1.0.0
 ```
 
 ##### **Step 3: Configuration Migration**
@@ -586,7 +586,7 @@ if __name__ == '__main__':
 ### **0.1.x → 0.2.x Migration**
 
 #### **Quick Migration Checklist**
-- [ ] Update package: `pip install --upgrade codomyrmex`
+- [ ] Update package: `uv pip install --upgrade codomyrmex`
 - [ ] Run compatibility check: `codomyrmex check-compatibility`
 - [ ] Update configuration (optional): Add new caching and monitoring settings
 - [ ] Test existing workflows: `codomyrmex test-workflows --all`
@@ -664,13 +664,13 @@ codomyrmex rollback --to-backup /path/to/backup
 
 # Or manually restore from backup
 cp -r /path/to/backup/* ./
-pip install codomyrmex==$(previous_version)
+uv pip install codomyrmex==$(previous_version)
 ```
 
 ### **Manual Rollback Steps**
 1. **Stop all Codomyrmex processes**
 2. **Restore code from backup**
-3. **Downgrade package**: `pip install codomyrmex==0.1.x`
+3. **Downgrade package**: `uv pip install codomyrmex==0.1.x`
 4. **Restore configuration**
 5. **Validate rollback**: `codomyrmex check --all`
 

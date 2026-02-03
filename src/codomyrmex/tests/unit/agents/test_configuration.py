@@ -17,6 +17,7 @@ from codomyrmex.agents.core.config import (
 )
 
 
+@pytest.mark.unit
 class TestAgentConfigSimple:
     """Simple configuration scenarios."""
 
@@ -148,6 +149,7 @@ class TestAgentConfigSimple:
             assert test_output_dir.is_dir()
 
 
+@pytest.mark.unit
 class TestAgentConfigComplex:
     """Complex configuration scenarios."""
 
@@ -357,6 +359,7 @@ class TestAgentConfigComplex:
         assert config.default_timeout == 30
 
 
+@pytest.mark.unit
 class TestGlobalConfigManagement:
     """Tests for global configuration management."""
 

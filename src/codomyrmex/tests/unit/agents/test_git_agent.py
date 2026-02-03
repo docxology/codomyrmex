@@ -1,3 +1,4 @@
+import pytest
 
 import unittest
 from unittest.mock import MagicMock, patch
@@ -5,6 +6,7 @@ from codomyrmex.agents.git_agent import GitAgent
 from codomyrmex.agents.core.base import AgentRequest
 from codomyrmex.git_operations.core.repository import RepositoryManager
 
+@pytest.mark.unit
 class TestGitAgent(unittest.TestCase):
     def setUp(self):
         self.mock_repo_manager = MagicMock(spec=RepositoryManager)

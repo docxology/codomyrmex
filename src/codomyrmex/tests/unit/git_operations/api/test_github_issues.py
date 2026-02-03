@@ -1,3 +1,4 @@
+import pytest
 
 import unittest
 from unittest.mock import patch, MagicMock
@@ -9,6 +10,7 @@ from codomyrmex.git_operations.api.github import (
     GitHubAPIError
 )
 
+@pytest.mark.unit
 class TestGitHubIssues(unittest.TestCase):
     
     @patch('codomyrmex.git_operations.api.github.requests.post')

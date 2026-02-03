@@ -1,8 +1,10 @@
+import pytest
 
 import unittest
 from unittest.mock import patch, mock_open, MagicMock
 from codomyrmex.documents.formats.markdown_handler import read_markdown, write_markdown
 
+@pytest.mark.unit
 class TestMarkdownHandler(unittest.TestCase):
     def test_read_markdown(self):
         """Test reading markdown."""

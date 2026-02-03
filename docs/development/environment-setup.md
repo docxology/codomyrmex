@@ -385,7 +385,7 @@ python -m cProfile -o profile.stats my_script.py
 python -c "import pstats; pstats.Stats('profile.stats').sort_stats('cumulative').print_stats()"
 
 # Memory profiling
-pip install memory-profiler
+uv pip install memory-profiler
 @profile
 def my_function():
     # Your code here

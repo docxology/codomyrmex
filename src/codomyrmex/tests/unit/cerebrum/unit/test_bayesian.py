@@ -11,6 +11,7 @@ from codomyrmex.cerebrum import (
 )
 
 
+@pytest.mark.unit
 class TestDistribution:
     """Test Distribution class."""
 
@@ -38,6 +39,7 @@ class TestDistribution:
         assert dist.mode() == "b"
 
 
+@pytest.mark.unit
 class TestBayesianNetwork:
     """Test BayesianNetwork class."""
 
@@ -85,6 +87,7 @@ class TestBayesianNetwork:
         assert (0,) in network.cpt["B"]
 
 
+@pytest.mark.unit
 class TestInferenceEngine:
     """Test InferenceEngine class."""
 

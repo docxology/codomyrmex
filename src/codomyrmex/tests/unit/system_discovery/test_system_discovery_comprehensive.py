@@ -25,6 +25,7 @@ from codomyrmex.system_discovery.discovery_engine import (
 from codomyrmex.system_discovery.status_reporter import StatusReporter
 
 
+@pytest.mark.unit
 class TestModuleCapability:
     """Test cases for ModuleCapability dataclass."""
 
@@ -67,6 +68,7 @@ class TestModuleCapability:
         assert cap.docstring == ""
 
 
+@pytest.mark.unit
 class TestModuleInfo:
     """Test cases for ModuleInfo dataclass."""
 
@@ -101,6 +103,7 @@ class TestModuleInfo:
         assert info.has_docs == True
 
 
+@pytest.mark.unit
 class TestSystemDiscovery:
     """Test cases for SystemDiscovery functionality."""
 
@@ -132,6 +135,7 @@ def _private_function():
     '''A private function.'''
     return "secret"
 
+@pytest.mark.unit
 class TestClass:
     '''A test class.'''
 
@@ -376,6 +380,7 @@ def test_func(x, y=10, *args, **kwargs):
         self.discovery.export_full_inventory()
 
 
+@pytest.mark.unit
 class TestStatusReporter:
     """Test cases for StatusReporter functionality."""
 
@@ -560,6 +565,7 @@ class TestStatusReporter:
         assert "python_environment" in loaded_report
 
 
+@pytest.mark.unit
 class TestIntegration:
     """Integration tests for system discovery components."""
 
@@ -586,6 +592,7 @@ def test_function():
     '''A test function.'''
     return "integration test"
 
+@pytest.mark.unit
 class TestClass:
     '''A test class.'''
 

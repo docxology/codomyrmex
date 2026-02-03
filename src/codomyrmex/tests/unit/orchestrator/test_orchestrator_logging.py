@@ -18,6 +18,7 @@ from codomyrmex.orchestrator.reporting import generate_report
 from codomyrmex.logging_monitoring.logger_config import LogContext
 
 
+@pytest.mark.unit
 class TestOrchestratorLogging:
     """Tests for orchestrator structured logging."""
 
@@ -110,6 +111,7 @@ class TestOrchestratorLogging:
             assert ctx.correlation_id == run_id
 
 
+@pytest.mark.unit
 class TestQuietReconfigMode:
     """Tests for quiet reconfig mode to reduce log noise."""
 

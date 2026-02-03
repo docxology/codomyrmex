@@ -8,6 +8,7 @@ from pathlib import Path
 from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
 
 
+@pytest.mark.unit
 class TestSimpleConfigurationConfirmations:
     """Simple configuration confirmations."""
 
@@ -51,6 +52,7 @@ class TestSimpleConfigurationConfirmations:
         assert hasattr(config, "opencode_timeout")
 
 
+@pytest.mark.unit
 class TestComplexConfigurationScenarios:
     """Complex configuration scenarios."""
 

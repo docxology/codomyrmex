@@ -1,9 +1,11 @@
+import pytest
 
 import unittest
 from unittest.mock import MagicMock, patch
 from codomyrmex.git_operations.core.repository import RepositoryManager, Repository, RepositoryType
 from concurrent.futures import Future
 
+@pytest.mark.unit
 class TestRepositoryPerformance(unittest.TestCase):
     def setUp(self):
         self.manager = RepositoryManager(library_file="/tmp/dummy", base_path="/tmp/repos")

@@ -13,6 +13,7 @@ from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapte
 from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
 
 
+@pytest.mark.unit
 class TestAgent(BaseAgent):
     """Test agent for testing modularity.
     
@@ -38,6 +39,7 @@ class TestAgent(BaseAgent):
         yield f"Stream from {self.name}"
 
 
+@pytest.mark.unit
 class TestAgentSwapping:
     """Test agent swapping functionality."""
 
@@ -141,6 +143,7 @@ class TestAgentSwapping:
         assert analysis_agent.execution_count == 1
 
 
+@pytest.mark.unit
 class TestModularIntegration:
     """Test modular integration patterns."""
 

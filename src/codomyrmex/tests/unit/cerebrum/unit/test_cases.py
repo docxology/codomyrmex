@@ -6,6 +6,7 @@ from codomyrmex.cerebrum import Case, CaseBase, CaseRetriever
 from codomyrmex.cerebrum import CaseNotFoundError, InvalidCaseError
 
 
+@pytest.mark.unit
 class TestCase:
     """Test Case class."""
 
@@ -49,6 +50,7 @@ class TestCase:
         assert case.outcome == "success"
 
 
+@pytest.mark.unit
 class TestCaseBase:
     """Test CaseBase class."""
 
@@ -109,6 +111,7 @@ class TestCaseBase:
         assert 0 <= similarity_different <= 1
 
 
+@pytest.mark.unit
 class TestCaseRetriever:
     """Test CaseRetriever class."""
 

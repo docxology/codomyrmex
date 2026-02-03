@@ -6,21 +6,18 @@ and Every Code CLI. It includes theoretical foundations, generic utilities, and
 framework-specific implementations.
 
 Integration:
-    pass 
 - Uses `logging_monitoring` for all logging
 - Integrates with `ai_code_editing` for code generation workflows
 - Integrates with `llm` for LLM infrastructure
 - Integrates with `code` for safe code execution
 
 Available classes:
-    pass 
 - AgentInterface: Abstract base class for all agents
 - AgentRequest, AgentResponse: Request/response data structures
 - AgentCapabilities: Enum of agent capabilities
 - AgentConfig: Configuration management
 
 Available submodules:
-    pass 
 - generic: Base agent classes and utilities
 - theory: Theoretical foundations for agentic systems
 - jules: Jules CLI integration

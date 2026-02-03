@@ -12,6 +12,7 @@ from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilitie
 from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
 
 
+@pytest.mark.unit
 class TestCLICommands:
     """Test CLI command functionality."""
 
@@ -70,6 +71,7 @@ class TestCLICommands:
                 assert "Test error" in str(e)
 
 
+@pytest.mark.unit
 class TestCLIOutputFormatting:
     """Test CLI output formatting."""
 
@@ -124,6 +126,7 @@ class TestCLIOutputFormatting:
         assert config_dict["opencode_api_key"] == "***"
 
 
+@pytest.mark.unit
 class TestCLIConfigurationIntegration:
     """Test CLI configuration integration."""
 
@@ -157,6 +160,7 @@ class TestCLIConfigurationIntegration:
 # Agent Command Tests
 # ============================================================================
 
+@pytest.mark.unit
 class TestJulesCommands:
     """Test Jules agent commands."""
 
@@ -194,6 +198,7 @@ class TestJulesCommands:
         assert isinstance(request.context, dict)
 
 
+@pytest.mark.unit
 class TestClaudeCommands:
     """Test Claude agent commands."""
 
@@ -220,6 +225,7 @@ class TestClaudeCommands:
             pass
 
 
+@pytest.mark.unit
 class TestCodexCommands:
     """Test Codex agent commands."""
 
@@ -246,6 +252,7 @@ class TestCodexCommands:
             pass
 
 
+@pytest.mark.unit
 class TestOpenCodeCommands:
     """Test OpenCode agent commands."""
 
@@ -272,17 +279,19 @@ class TestOpenCodeCommands:
         assert "version" in version_info
 
 
+@pytest.mark.unit
 class TestGeminiCommands:
     """Test Gemini agent commands."""
 
     def test_gemini_check_availability(self):
-        """Test gemini check command."""
+        """Test gemini client availability check."""
         from codomyrmex.agents.gemini import GeminiClient
-        
+
         client = GeminiClient()
-        # Use the correct inherited method from CLIAgentBase
-        available = client._check_command_available(check_args=["--help"])
-        
+        # GeminiClient is API-based, not CLI-based, so test its is_available method
+        # which checks if the client was initialized successfully
+        available = client.is_available if hasattr(client, 'is_available') else client.client is not None
+
         # Should return boolean
         assert isinstance(available, bool)
 
@@ -309,6 +318,7 @@ class TestGeminiCommands:
             pass
 
 
+@pytest.mark.unit
 class TestDroidCommands:
     """Test Droid controller commands."""
 
@@ -339,6 +349,7 @@ class TestDroidCommands:
         assert "llm_provider" in config_dict
 
 
+@pytest.mark.unit
 class TestOrchestratorCommands:
     """Test orchestrator commands."""
 
@@ -390,6 +401,7 @@ class TestOrchestratorCommands:
         assert response.execution_time == 1.5
 
 
+@pytest.mark.unit
 class TestTheoryCommands:
     """Test theory module commands."""
 
@@ -428,6 +440,7 @@ class TestTheoryCommands:
             pass
 
 
+@pytest.mark.unit
 class TestCommonOperations:
     """Test common operations across agents."""
 
@@ -461,6 +474,7 @@ class TestCommonOperations:
 # Config Management Tests
 # ============================================================================
 
+@pytest.mark.unit
 class TestConfigCommands:
     """Test config management commands."""
 
@@ -514,6 +528,7 @@ class TestConfigCommands:
 # Orchestrator Select Tests
 # ============================================================================
 
+@pytest.mark.unit
 class TestOrchestratorSelect:
     """Test orchestrator select-by-capability command."""
 
@@ -538,6 +553,7 @@ class TestOrchestratorSelect:
 # Droid Enhancement Tests
 # ============================================================================
 
+@pytest.mark.unit
 class TestDroidEnhancements:
     """Test droid enhancement commands."""
 
@@ -593,6 +609,7 @@ class TestDroidEnhancements:
 # Task Planner Tests
 # ============================================================================
 
+@pytest.mark.unit
 class TestTaskPlannerCommands:
     """Test task planner commands."""
 
@@ -644,6 +661,7 @@ class TestTaskPlannerCommands:
 # Message Bus Tests
 # ============================================================================
 
+@pytest.mark.unit
 class TestMessageBusCommands:
     """Test message bus commands."""
 

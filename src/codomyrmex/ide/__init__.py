@@ -248,29 +248,13 @@ class IDEClient(ABC):
         return successes / len(self._command_history)
 
 
-class IDEError(Exception):
-    """Base exception for IDE-related errors."""
-    pass
-
-
-class ConnectionError(IDEError):
-    """Raised when IDE connection fails."""
-    pass
-
-
-class CommandExecutionError(IDEError):
-    """Raised when an IDE command fails to execute."""
-    pass
-
-
-class SessionError(IDEError):
-    """Raised when there's a session-related error."""
-    pass
-
-
-class ArtifactError(IDEError):
-    """Raised when artifact operations fail."""
-    pass
+from codomyrmex.exceptions import (
+    IDEError,
+    IDEConnectionError as ConnectionError,
+    CommandExecutionError,
+    SessionError,
+    ArtifactError,
+)
 
 
 # Import submodule clients

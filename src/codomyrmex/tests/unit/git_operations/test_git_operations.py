@@ -123,6 +123,7 @@ def sample_file(temp_git_repo: str) -> Generator[str, None, None]:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestGitAvailability:
     """Tests for Git availability checking."""
 
@@ -138,6 +139,7 @@ class TestGitAvailability:
         assert result is True
 
 
+@pytest.mark.unit
 class TestRepositoryDetection:
     """Tests for Git repository detection."""
 
@@ -165,6 +167,7 @@ class TestRepositoryDetection:
         assert result is False
 
 
+@pytest.mark.unit
 class TestRepositoryInitialization:
     """Tests for Git repository initialization."""
 
@@ -204,6 +207,7 @@ class TestRepositoryInitialization:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestBranchOperations:
     """Tests for branch operations."""
 
@@ -260,6 +264,7 @@ class TestBranchOperations:
         assert result is False
 
 
+@pytest.mark.unit
 class TestMergeOperations:
     """Tests for merge operations."""
 
@@ -294,6 +299,7 @@ class TestMergeOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestCommitOperations:
     """Tests for commit operations."""
 
@@ -364,6 +370,7 @@ class TestCommitOperations:
         assert result is None
 
 
+@pytest.mark.unit
 class TestAmendCommit:
     """Tests for amend commit operations."""
 
@@ -401,6 +408,7 @@ class TestAmendCommit:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestStatusOperations:
     """Tests for repository status operations."""
 
@@ -447,6 +455,7 @@ class TestStatusOperations:
         assert "error" in status
 
 
+@pytest.mark.unit
 class TestDiffOperations:
     """Tests for diff operations."""
 
@@ -491,6 +500,7 @@ class TestDiffOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestRemoteOperations:
     """Tests for remote repository operations."""
 
@@ -546,6 +556,7 @@ class TestRemoteOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestCommitHistory:
     """Tests for commit history operations."""
 
@@ -590,6 +601,7 @@ class TestCommitHistory:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestTagOperations:
     """Tests for tag operations."""
 
@@ -631,6 +643,7 @@ class TestTagOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestStashOperations:
     """Tests for stash operations."""
 
@@ -669,6 +682,7 @@ class TestStashOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestConfigOperations:
     """Tests for Git config operations."""
 
@@ -703,6 +717,7 @@ class TestConfigOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestResetOperations:
     """Tests for reset operations."""
 
@@ -735,6 +750,7 @@ class TestResetOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestCherryPickOperations:
     """Tests for cherry-pick operations."""
 
@@ -754,6 +770,7 @@ class TestCherryPickOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestErrorHandling:
     """Tests for error handling in git operations."""
 
@@ -811,6 +828,7 @@ class TestErrorHandling:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestConcurrentOperations:
     """Tests for concurrent git operations."""
 
@@ -856,6 +874,7 @@ class TestConcurrentOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestGitHubAPIError:
     """Tests for GitHubAPIError exception."""
 
@@ -871,6 +890,7 @@ class TestGitHubAPIError:
         assert "Test error" in str(exc_info.value)
 
 
+@pytest.mark.unit
 class TestGitHubAPIOperations:
     """Tests for GitHub API operations (mocked)."""
 
@@ -1016,6 +1036,7 @@ class TestGitHubAPIOperations:
 # ==============================================================================
 
 
+@pytest.mark.unit
 class TestGitOperationsIntegration:
     """Integration tests for git operations workflow."""
 

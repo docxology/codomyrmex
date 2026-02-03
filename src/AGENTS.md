@@ -1,22 +1,85 @@
 # Codomyrmex Agents — src
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-Hosts core source code and agent-enabled services for the Codomyrmex platform.
+
+Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 70+ specialized modules organized by architectural layer.
+
+## Directory Structure
+
+```
+src/
+├── codomyrmex/           # Main package
+│   ├── agents/           # AI agent framework
+│   ├── cerebrum/         # Case-based reasoning
+│   ├── coding/           # Code execution sandbox
+│   ├── data_visualization/  # Charts and plots
+│   ├── identity/         # Secure Cognitive - Identity
+│   ├── wallet/           # Secure Cognitive - Self-custody
+│   ├── defense/          # Secure Cognitive - Active defense
+│   ├── market/           # Secure Cognitive - Anonymous markets
+│   ├── privacy/          # Secure Cognitive - Mixnets
+│   ├── llm/              # LLM integration
+│   ├── logging_monitoring/  # Centralized logging
+│   ├── model_context_protocol/  # MCP implementation
+│   ├── orchestrator/     # Workflow orchestration
+│   ├── static_analysis/  # Code quality analysis
+│   ├── tests/            # Unit and integration tests
+│   └── ... (60+ more)
+└── codomyrmex.llm/       # LLM subpackage
+```
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `codomyrmex/` – Directory containing codomyrmex components
-- `codomyrmex.llm/` – Directory containing codomyrmex.llm components
+
+| Component | Type | Description |
+|-----------|------|-------------|
+| `codomyrmex/` | Package | Main module package (70+ modules) |
+| `codomyrmex.llm/` | Package | LLM integration subpackage |
+| `__init__.py` | Module | Package initialization |
+| [README.md](README.md) | Doc | Directory overview |
+| [SPEC.md](SPEC.md) | Doc | Functional specification |
+| [PAI.md](PAI.md) | Doc | Personal AI considerations |
+
+## Agent Guidelines
+
+### Module Quality Standards
+
+1. **Testing**: Each module must have ≥80% test coverage
+2. **Documentation**: All public APIs must be documented
+3. **RASP Compliance**: Each module directory must have README, AGENTS, SPEC, PAI
+4. **MCP Tools**: Register tools in `MCP_TOOL_SPECIFICATION.md`
+
+### Key Entry Points
+
+| Module | Purpose | Priority |
+|--------|---------|----------|
+| `logging_monitoring/` | Start here for logging | Foundation |
+| `environment_setup/` | Environment validation | Foundation |
+| `model_context_protocol/` | AI tool interfaces | Foundation |
+| `agents/` | AI agent framework | Core |
+| `orchestrator/` | Workflow coordination | Service |
+
+### Secure Cognitive Modules
+
+| Module | Purpose |
+|--------|---------|
+| `identity/` | 3-tier personas, bio-verification |
+| `wallet/` | Self-custody, Natural Ritual recovery |
+| `defense/` | Exploit detection, context poisoning |
+| `market/` | Reverse auctions, demand aggregation |
+| `privacy/` | Crumb scrubbing, mixnet routing |
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+- Maintain alignment between code, documentation, and configured workflows
+- Ensure Model Context Protocol interfaces remain available for sibling agents
+- Record outcomes in shared telemetry and update TODO queues when necessary
+- Follow Python best practices (PEP 8, type hints, docstrings)
 
 ## Navigation Links
-- **🏠 Project Root**: ../README.md - Main project documentation
+
+- **📁 Parent**: [../README.md](../README.md) - Project root
+- **📦 Main Package**: [codomyrmex/AGENTS.md](codomyrmex/AGENTS.md) - Module hub
+- **🧪 Tests**: [codomyrmex/tests/AGENTS.md](codomyrmex/tests/AGENTS.md) - Test coordination
+- **📖 Docs**: [../docs/modules/](../docs/modules/) - Module documentation

@@ -1,29 +1,56 @@
 # Codomyrmex Agents — docs/reference
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-Documentation files and guides.
+
+Technical reference documentation for APIs, CLI, troubleshooting, and performance optimization. The authoritative source for implementation details.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `api-complete.md` – Project file
-- `api.md` – Project file
-- `changelog.md` – Project file
-- `cli.md` – Project file
-- `migration-guide.md` – Project file
-- `orchestrator.md` – Project file
-- `performance.md` – Project file
-- `security.md` – Project file
-- `troubleshooting.md` – Project file
+
+| File | Priority | Description |
+|------|----------|-------------|
+| [api.md](api.md) | **Critical** | Complete API reference |
+| [api-complete.md](api-complete.md) | **Critical** | Extended API documentation |
+| [cli.md](cli.md) | **Critical** | CLI command reference |
+| [troubleshooting.md](troubleshooting.md) | High | Common issues and solutions |
+| [performance.md](performance.md) | High | Performance optimization |
+| [security.md](security.md) | High | Security best practices |
+| [migration-guide.md](migration-guide.md) | Medium | Version migration |
+| [changelog.md](changelog.md) | Medium | Version history |
+| [orchestrator.md](orchestrator.md) | Medium | Orchestrator reference |
+
+## Agent Guidelines
+
+### Reference Quality Standards
+
+1. **Accuracy**: API docs must match actual function signatures
+2. **Completeness**: Document all public APIs
+3. **Currency**: Update immediately when APIs change
+4. **Examples**: Include working code snippets
+
+### When Modifying Reference Docs
+
+- Generate API docs from docstrings when possible
+- Verify all code examples are runnable
+- Update changelog for version changes
+- Keep troubleshooting current with reported issues
+
+### API Categories to Maintain
+
+- **Python Module APIs**: Direct imports and function calls
+- **CLI APIs**: Command-line interface commands
+- **MCP Tool APIs**: AI/LLM integration interfaces
+- **Secure Cognitive APIs**: Identity, Wallet, Defense, Market, Privacy
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+- Maintain alignment between reference docs and source code
+- Ensure Model Context Protocol interfaces remain available for sibling agents
+- Record outcomes in shared telemetry and update TODO queues when necessary
 
 ## Navigation Links
-- **📁 Parent Directory**: [docs](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+
+- **📁 Parent Directory**: [docs/](../README.md)
+- **🏠 Project Root**: [../../README.md](../../README.md)
+- **📦 Related**: [Getting Started](../getting-started/) | [Modules](../modules/)

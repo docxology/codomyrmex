@@ -5,6 +5,7 @@ import sys
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
 
+@pytest.mark.unit
 class TestModuleTemplate:
     """Test cases for module template functionality."""
 

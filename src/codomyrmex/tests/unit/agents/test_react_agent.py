@@ -8,6 +8,7 @@ def dummy_tool(x: int) -> int:
     """Multiplies by 2."""
     return x * 2
 
+@pytest.mark.unit
 def test_react_agent_initialization():
     registry = ToolRegistry()
     registry.register_function(dummy_tool)
@@ -16,6 +17,7 @@ def test_react_agent_initialization():
     assert agent.name == "TestAgent"
     assert agent.tool_registry == registry
 
+@pytest.mark.unit
 def test_react_system_prompt():
     registry = ToolRegistry()
     registry.register_function(dummy_tool)
@@ -27,6 +29,7 @@ def test_react_system_prompt():
     assert "dummy_tool" in prompt
     assert "Multiplies by 2" in prompt
 
+@pytest.mark.unit
 def test_react_execution_mock():
     """Test the mock execution path (since we don't have a real LLM connected)."""
     registry = ToolRegistry()
@@ -41,6 +44,7 @@ def test_react_execution_mock():
     assert response.error is None
     assert "Tool dummy_tool returned: 10" in response.content
 
+@pytest.mark.unit
 def test_react_execution_invalid_format():
     registry = ToolRegistry()
     agent = ReActAgent("TestAgent", registry)
