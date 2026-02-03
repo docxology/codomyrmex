@@ -9,9 +9,6 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from codomyrmex.dark.pdf.filters import DarkPDFFilter, apply_dark_mode
-from codomyrmex.dark.pdf.dark_pdf_wrapper import DarkPDF, _PRESETS
-
 # Try importing fitz for PDF tests
 try:
     import fitz
@@ -19,6 +16,22 @@ try:
     FITZ_AVAILABLE = True
 except ImportError:
     FITZ_AVAILABLE = False
+
+# Only import the dark PDF modules if fitz is available
+if FITZ_AVAILABLE:
+    from codomyrmex.dark.pdf.filters import DarkPDFFilter, apply_dark_mode
+    from codomyrmex.dark.pdf.dark_pdf_wrapper import DarkPDF, _PRESETS
+else:
+    DarkPDFFilter = None
+    apply_dark_mode = None
+    DarkPDF = None
+    _PRESETS = None
+
+# Skip entire module if fitz is not available
+pytestmark = pytest.mark.skipif(
+    not FITZ_AVAILABLE,
+    reason="PyMuPDF (fitz) not available - install with: uv sync --extra dark"
+)
 
 
 def _make_test_image(
@@ -276,7 +289,6 @@ class TestApplyToPdf:
             assert output_pdf.exists()
 
 
-@pytest.mark.skipif(not FITZ_AVAILABLE, reason="PyMuPDF not available")
 class TestDarkPDFPresets:
     """Test DarkPDF high-level wrapper and presets."""
 

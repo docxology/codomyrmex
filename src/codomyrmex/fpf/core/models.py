@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
 from enum import Enum
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -101,6 +101,8 @@ class Pattern(BaseModel):
     title, status, and structured content sections.
     """
 
+    model_config = ConfigDict(use_enum_values=True)
+
     id: str = Field(..., description="Pattern identifier (e.g., 'A.1', 'A.2.1')")
     title: str = Field(..., description="Pattern title")
     status: PatternStatus = Field(..., description="Pattern status")
@@ -123,11 +125,6 @@ class Pattern(BaseModel):
     part: Optional[str] = Field(None, description="Part identifier (A, B, C, etc.)")
     cluster: Optional[str] = Field(None, description="Cluster identifier if applicable")
 
-    class Config:
-        """Pydantic configuration."""
-
-        use_enum_values = True
-
 
 class Concept(BaseModel):
     """Represents a concept defined in FPF.
@@ -135,6 +132,8 @@ class Concept(BaseModel):
     Concepts are terms, types, mechanisms, or other defined entities
     that appear throughout the FPF specification.
     """
+
+    model_config = ConfigDict(use_enum_values=True)
 
     name: str = Field(..., description="Concept name")
     definition: str = Field(..., description="Concept definition or description")
@@ -150,11 +149,6 @@ class Concept(BaseModel):
         default_factory=dict, description="Additional metadata"
     )
 
-    class Config:
-        """Pydantic configuration."""
-
-        use_enum_values = True
-
 
 class Relationship(BaseModel):
     """Represents a relationship between patterns or concepts.
@@ -162,6 +156,8 @@ class Relationship(BaseModel):
     Relationships capture how different parts of FPF relate to each other,
     such as dependencies, constraints, or coordination.
     """
+
+    model_config = ConfigDict(use_enum_values=True)
 
     source: str = Field(..., description="Source pattern/concept ID")
     target: str = Field(..., description="Target pattern/concept ID")
@@ -175,11 +171,6 @@ class Relationship(BaseModel):
     metadata: Dict[str, Any] = Field(
         default_factory=dict, description="Additional metadata"
     )
-
-    class Config:
-        """Pydantic configuration."""
-
-        use_enum_values = True
 
 
 class FPFSpec(BaseModel):
