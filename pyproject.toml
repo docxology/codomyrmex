@@ -229,6 +229,11 @@ video = [
     "pillow>=10.0.0",         # Image processing
 ]
 
+dark = [
+    "PyMuPDF>=1.23.0",        # PDF rendering and page extraction
+    "Pillow>=10.0.0",         # Image processing for filters
+]
+
 [project.urls]
 Homepage = "https://github.com/codomyrmex/codomyrmex"
 Repository = "https://github.com/codomyrmex/codomyrmex"

@@ -1,0 +1,3 @@
+[submodule "src/codomyrmex/dark/pdf/vendor/dark-pdf"]
+	path = src/codomyrmex/dark/pdf/vendor/dark-pdf
+	url = https://github.com/benjifriedman/dark-pdf
