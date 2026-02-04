@@ -2,21 +2,23 @@
 Encryption module for Codomyrmex.
 
 This module provides encryption/decryption utilities and key management:
-- AES-256 symmetric encryption
+- AES-256 symmetric encryption (CBC mode, with deprecation warning)
+- AES-GCM authenticated encryption (recommended)
 - RSA asymmetric encryption
-- Key generation and derivation
+- Key generation and derivation (PBKDF2, HKDF)
+- HMAC message authentication
 - Digital signatures
 - File encryption utilities
 - Secure hashing functions
+- Secure data container
 """
 
 from typing import Optional
 
-from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.exceptions import EncryptionError
 
 from .encryptor import (
     Encryptor,
-    EncryptionError,
     encrypt_data,
     decrypt_data,
     generate_aes_key,
@@ -24,6 +26,8 @@ from .encryptor import (
 from .key_manager import KeyManager
 from .aes_gcm import AESGCMEncryptor
 from .container import SecureDataContainer
+from .hmac_utils import compute_hmac, verify_hmac
+from .kdf import derive_key_hkdf
 
 __all__ = [
     # Classes
@@ -32,7 +36,7 @@ __all__ = [
     "AESGCMEncryptor",
     "SecureDataContainer",
     "EncryptionError",
-    # Functions
+    # Convenience functions
     "encrypt",
     "decrypt",
     "generate_key",
@@ -43,16 +47,15 @@ __all__ = [
     "encrypt_file",
     "decrypt_file",
     "hash_data",
+    # HMAC
+    "compute_hmac",
+    "verify_hmac",
+    # KDF
+    "derive_key_hkdf",
 ]
 
 
 __version__ = "0.1.0"
-
-
-class EncryptionError(CodomyrmexError):
-    """Raised when encryption operations fail."""
-
-    pass
 
 
 def encrypt(data: bytes, key: bytes, algorithm: str = "AES") -> bytes:
@@ -91,5 +94,3 @@ def decrypt_file(input_path: str, output_path: str, key: bytes, algorithm: str =
 def hash_data(data: bytes, algorithm: str = "sha256") -> str:
     """Compute hash of data."""
     return Encryptor.hash_data(data, algorithm)
-
-

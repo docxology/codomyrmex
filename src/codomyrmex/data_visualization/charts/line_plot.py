@@ -1,5 +1,3 @@
-from codomyrmex.logging_monitoring import get_logger
-
 """Contains the create_line_plot function for generating line plots.
 
 - Uses logging_monitoring for logging.
@@ -13,6 +11,7 @@ import matplotlib.pyplot as plt
 from .plot_utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
+    apply_theme_to_axes,
     get_codomyrmex_logger,
     save_plot,
 )
@@ -30,6 +29,7 @@ def create_line_plot(
     line_labels: list = None,  # For multiple lines
     markers: bool = False,
     figure_size: tuple = DEFAULT_FIGURE_SIZE,
+    theme=None,
 ):
     """
     Generates a line plot.
@@ -43,6 +43,8 @@ def create_line_plot(
         return None
 
     fig, ax = plt.subplots(figsize=figure_size)
+    if theme is not None:
+        apply_theme_to_axes(ax, theme)
 
     if isinstance(y_data[0], list):  # Multiple lines
         if not line_labels or len(line_labels) != len(y_data):

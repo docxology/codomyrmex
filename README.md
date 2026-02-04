@@ -852,6 +852,14 @@ Primary capabilities for development workflows:
 - **[security](src/codomyrmex/security/)** - Security scanning with vulnerability detection, compliance checking, and threat assessment
 - **[llm](src/codomyrmex/llm/)** - LLM infrastructure with model management, local/remote providers (Ollama), and benchmarking
 - **[performance](src/codomyrmex/performance/)** - Performance monitoring with profiling, optimization, and benchmarking
+- **[cache](src/codomyrmex/cache/)** - Multi-level caching with pluggable backends
+- **[metrics](src/codomyrmex/metrics/)** - Metrics collection and reporting
+- **[validation](src/codomyrmex/validation/)** - Input validation and schema enforcement
+- **[serialization](src/codomyrmex/serialization/)** - Data serialization formats
+- **[utils](src/codomyrmex/utils/)** - Common utility functions
+- **[auth](src/codomyrmex/auth/)** - Authentication and authorization
+- **[templating](src/codomyrmex/templating/)** - Template rendering engine
+- **[tree_sitter](src/codomyrmex/tree_sitter/)** - Tree-sitter code parsing and analysis
 
 ### Service Layer
 
@@ -865,6 +873,13 @@ Higher-level services that orchestrate core modules:
 - **[database_management](src/codomyrmex/database_management/)** - Database operations with schema management, migrations, and backups
 - **[config_management](src/codomyrmex/config_management/)** - Configuration management with environment setup, secret management, and validation
 - **[logistics](src/codomyrmex/logistics/)** - Logistics module with orchestration, task management, and scheduling
+- **[orchestrator](src/codomyrmex/orchestrator/)** - Workflow execution and task orchestration
+- **[testing](src/codomyrmex/testing/)** - Test framework and automation
+- **[deployment](src/codomyrmex/deployment/)** - Deployment automation and strategies
+- **[migration](src/codomyrmex/migration/)** - Data and schema migration tools
+- **[notification](src/codomyrmex/notification/)** - Alert and notification delivery
+- **[collaboration](src/codomyrmex/collaboration/)** - Team collaboration tools
+- **[concurrency](src/codomyrmex/concurrency/)** - Concurrent execution and threading
 
 ### Specialized Layer
 
@@ -886,6 +901,56 @@ Advanced capabilities for specific domains:
 - **[encryption](src/codomyrmex/encryption/)** - Data encryption utilities
 - **[compression](src/codomyrmex/compression/)** - Data compression utilities
 
+### AI & Intelligence Layer
+
+Advanced AI/ML capabilities and intelligent systems:
+
+- **[agentic_memory](src/codomyrmex/agentic_memory/)** - Long-term agent memory and recall
+- **[graph_rag](src/codomyrmex/graph_rag/)** - Graph-based retrieval augmented generation
+- **[inference_optimization](src/codomyrmex/inference_optimization/)** - LLM inference speed and cost optimization
+- **[model_ops](src/codomyrmex/model_ops/)** - ML model lifecycle management
+- **[model_registry](src/codomyrmex/model_registry/)** - Model versioning and registry
+- **[feature_store](src/codomyrmex/feature_store/)** - Feature management for ML pipelines
+- **[evolutionary_ai](src/codomyrmex/evolutionary_ai/)** - Evolutionary algorithms and genetic programming
+- **[prompt_testing](src/codomyrmex/prompt_testing/)** - Prompt quality testing and evaluation
+- **[multimodal](src/codomyrmex/multimodal/)** - Multi-modal AI (text, image, audio)
+
+### Security & Cognitive Layer
+
+Identity, privacy, and cognitive defense systems:
+
+- **[identity](src/codomyrmex/identity/)** - Multi-persona management and bio-cognitive verification
+- **[wallet](src/codomyrmex/wallet/)** - Self-custody key management and natural ritual recovery
+- **[defense](src/codomyrmex/defense/)** - Active defense against cognitive exploits
+- **[market](src/codomyrmex/market/)** - Anonymous economic coordination and reverse auctions
+- **[privacy](src/codomyrmex/privacy/)** - Data minimization and mixnet routing
+- **[cost_management](src/codomyrmex/cost_management/)** - Cost tracking and budget management
+
+### Media & Content Layer
+
+Media processing and content management:
+
+- **[audio](src/codomyrmex/audio/)** - Audio processing and transcription
+- **[video](src/codomyrmex/video/)** - Video processing and analysis
+- **[documents](src/codomyrmex/documents/)** - Document processing and extraction
+- **[dark](src/codomyrmex/dark/)** - Dark mode utilities for PDFs and interfaces
+- **[website](src/codomyrmex/website/)** - Website generation and management
+- **[skills](src/codomyrmex/skills/)** - Skill management and registration
+- **[examples](src/codomyrmex/examples/)** - Example code and demonstrations
+- **[tests](src/codomyrmex/tests/)** - Centralized test suites
+
+### Observability & Operations Layer
+
+Monitoring, telemetry, and operational tooling:
+
+- **[telemetry](src/codomyrmex/telemetry/)** - Telemetry data collection
+- **[observability_dashboard](src/codomyrmex/observability_dashboard/)** - Monitoring dashboards
+- **[data_lineage](src/codomyrmex/data_lineage/)** - Data provenance tracking
+- **[feature_flags](src/codomyrmex/feature_flags/)** - Feature flag management
+- **[workflow_testing](src/codomyrmex/workflow_testing/)** - Workflow integration testing
+- **[cli](src/codomyrmex/cli/)** - Command-line interface (entry point)
+- **[embodiment](src/codomyrmex/embodiment/)** - Physical/robotic embodiment interfaces
+
 **See [Source Code Index](src/README.md) for complete module listing and [Module System Overview](docs/modules/overview.md) for detailed architecture.**
 
 ## Module Quick Reference
@@ -893,14 +958,13 @@ Advanced capabilities for specific domains:
 | Category | Modules |
 | :--- | :--- |
 | **Foundation** | [logging_monitoring](src/codomyrmex/logging_monitoring/) • [environment_setup](src/codomyrmex/environment_setup/) • [model_context_protocol](src/codomyrmex/model_context_protocol/) • [terminal_interface](src/codomyrmex/terminal_interface/) |
-| **AI & Intelligence** | [agents](src/codomyrmex/agents/) • [llm](src/codomyrmex/llm/) |
-| **Analysis & Quality** | [static_analysis](src/codomyrmex/static_analysis/) • [coding](src/codomyrmex/coding/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) |
-| **Build & Deploy** | [build_synthesis](src/codomyrmex/build_synthesis/) • [git_operations](src/codomyrmex/git_operations/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) |
-| **Visualization** | [data_visualization](src/codomyrmex/data_visualization/) • [spatial](src/codomyrmex/spatial/) |
-| **Infrastructure** | [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [physical_management](src/codomyrmex/physical_management/) |
-| **Orchestration** | [documentation](src/codomyrmex/documentation/) • [api](src/codomyrmex/api/) • [logistics](src/codomyrmex/logistics/) • [system_discovery](src/codomyrmex/system_discovery/) |
-| **Execution** | [coding](src/codomyrmex/coding/) • [performance](src/codomyrmex/performance/) |
-| **Extensions** | [events](src/codomyrmex/events/) • [plugin_system](src/codomyrmex/plugin_system/) • [module_template](src/codomyrmex/module_template/) • [tools](src/codomyrmex/tools/) |
+| **Core** | [agents](src/codomyrmex/agents/) • [llm](src/codomyrmex/llm/) • [static_analysis](src/codomyrmex/static_analysis/) • [coding](src/codomyrmex/coding/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) • [data_visualization](src/codomyrmex/data_visualization/) • [git_operations](src/codomyrmex/git_operations/) • [performance](src/codomyrmex/performance/) • [cache](src/codomyrmex/cache/) • [metrics](src/codomyrmex/metrics/) • [validation](src/codomyrmex/validation/) • [serialization](src/codomyrmex/serialization/) • [utils](src/codomyrmex/utils/) • [auth](src/codomyrmex/auth/) • [templating](src/codomyrmex/templating/) • [tree_sitter](src/codomyrmex/tree_sitter/) |
+| **Service** | [build_synthesis](src/codomyrmex/build_synthesis/) • [documentation](src/codomyrmex/documentation/) • [api](src/codomyrmex/api/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) • [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [logistics](src/codomyrmex/logistics/) • [orchestrator](src/codomyrmex/orchestrator/) • [testing](src/codomyrmex/testing/) • [deployment](src/codomyrmex/deployment/) • [migration](src/codomyrmex/migration/) • [notification](src/codomyrmex/notification/) • [collaboration](src/codomyrmex/collaboration/) • [concurrency](src/codomyrmex/concurrency/) |
+| **Specialized** | [spatial](src/codomyrmex/spatial/) • [physical_management](src/codomyrmex/physical_management/) • [system_discovery](src/codomyrmex/system_discovery/) • [module_template](src/codomyrmex/module_template/) • [events](src/codomyrmex/events/) • [plugin_system](src/codomyrmex/plugin_system/) • [tools](src/codomyrmex/tools/) • [cerebrum](src/codomyrmex/cerebrum/) • [fpf](src/codomyrmex/fpf/) • [ide](src/codomyrmex/ide/) • [cloud](src/codomyrmex/cloud/) • [networking](src/codomyrmex/networking/) • [scrape](src/codomyrmex/scrape/) • [encryption](src/codomyrmex/encryption/) • [compression](src/codomyrmex/compression/) |
+| **AI & Intelligence** | [agentic_memory](src/codomyrmex/agentic_memory/) • [graph_rag](src/codomyrmex/graph_rag/) • [inference_optimization](src/codomyrmex/inference_optimization/) • [model_ops](src/codomyrmex/model_ops/) • [model_registry](src/codomyrmex/model_registry/) • [feature_store](src/codomyrmex/feature_store/) • [evolutionary_ai](src/codomyrmex/evolutionary_ai/) • [prompt_testing](src/codomyrmex/prompt_testing/) • [multimodal](src/codomyrmex/multimodal/) |
+| **Security & Cognitive** | [identity](src/codomyrmex/identity/) • [wallet](src/codomyrmex/wallet/) • [defense](src/codomyrmex/defense/) • [market](src/codomyrmex/market/) • [privacy](src/codomyrmex/privacy/) • [cost_management](src/codomyrmex/cost_management/) |
+| **Media & Content** | [audio](src/codomyrmex/audio/) • [video](src/codomyrmex/video/) • [documents](src/codomyrmex/documents/) • [dark](src/codomyrmex/dark/) • [website](src/codomyrmex/website/) • [skills](src/codomyrmex/skills/) • [examples](src/codomyrmex/examples/) • [tests](src/codomyrmex/tests/) |
+| **Observability & Operations** | [telemetry](src/codomyrmex/telemetry/) • [observability_dashboard](src/codomyrmex/observability_dashboard/) • [data_lineage](src/codomyrmex/data_lineage/) • [feature_flags](src/codomyrmex/feature_flags/) • [workflow_testing](src/codomyrmex/workflow_testing/) • [cli](src/codomyrmex/cli/) • [embodiment](src/codomyrmex/embodiment/) |
 
 ## Common Use Cases
 

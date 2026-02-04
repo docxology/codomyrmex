@@ -387,11 +387,6 @@ class Bulkhead:
         self.release()
 
 
-class BulkheadFullError(Exception):
-    """Exception raised when bulkhead is full."""
-    pass
-
-
 def circuit_breaker(
     name: str = "default",
     failure_threshold: int = 5,

@@ -7,7 +7,7 @@ Generates bar charts.
 
 import matplotlib.pyplot as plt
 
-from .plot_utils import get_codomyrmex_logger, save_plot
+from .plot_utils import apply_theme_to_axes, get_codomyrmex_logger, save_plot
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -22,6 +22,7 @@ def create_bar_chart(
     show_plot: bool = False,
     horizontal: bool = False,
     bar_color: str = "skyblue",
+    theme=None,
 ):
     """
     Generates a bar chart (vertical or horizontal).
@@ -32,14 +33,16 @@ def create_bar_chart(
         logger.warning(
             "Empty data for categories or values in bar chart. No plot generated."
         )
-        return
+        return None
     if len(categories) != len(values):
         logger.warning(
             f"Length mismatch for bar chart: categories ({len(categories)}) vs values ({len(values)}). Plot not generated."
         )
-        return
+        return None
 
     fig, ax = plt.subplots()
+    if theme is not None:
+        apply_theme_to_axes(ax, theme)
     if horizontal:
         ax.barh(categories, values, color=bar_color)
         ax.set_xlabel(y_label)  # Note: y_label becomes the value axis label
@@ -65,6 +68,7 @@ def create_bar_chart(
     else:
         plt.close(fig)
     logger.info(f"Bar chart '{title}' generated successfully.")
+    return fig
 
 
 class BarChart:

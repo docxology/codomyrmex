@@ -1,67 +1,26 @@
+"""MIME type and format detection utilities."""
+
+import mimetypes
 from pathlib import Path
 from typing import Optional
 
-import mimetypes
-
 from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""MIME type and format detection utilities."""
-
 logger = get_logger(__name__)
+
+
 def detect_format_from_path(file_path: Path) -> str:
     """
     Detect document format from file extension.
-    
+
     Args:
         file_path: Path to file
-    
+
     Returns:
         Format string (e.g., "markdown", "json", "pdf")
     """
     suffix = file_path.suffix.lower().lstrip('.')
-    
+
     format_mapping = {
         "md": "markdown",
         "markdown": "markdown",
@@ -79,17 +38,17 @@ def detect_format_from_path(file_path: Path) -> str:
         "docx": "docx",
         "xlsx": "xlsx",
     }
-    
+
     return format_mapping.get(suffix, "text")
 
 
 def detect_mime_type(file_path: Path) -> Optional[str]:
     """
     Detect MIME type of a file.
-    
+
     Args:
         file_path: Path to file
-    
+
     Returns:
         MIME type string or None if detection fails
     """
@@ -98,4 +57,3 @@ def detect_mime_type(file_path: Path) -> Optional[str]:
         return mime_type
     except Exception:
         return None
-

@@ -109,9 +109,6 @@ Validate a document against a schema or format rules.
 
 **Returns:** `ValidationResult` with validation status and any errors/warnings
 
-**Raises:**
-- `DocumentValidationError`: If validation fails
-
 ## Format-Specific Functions
 
 ### Markdown
@@ -169,6 +166,39 @@ def read_text(file_path: str | Path, encoding: Optional[str] = None) -> str
 def write_text(content: str, file_path: str | Path, encoding: Optional[str] = None) -> None
 ```
 
+### HTML
+
+```python
+def read_html(file_path: str | Path, encoding: Optional[str] = None) -> str
+def write_html(content: str, file_path: str | Path, encoding: Optional[str] = None) -> None
+def strip_html_tags(html_content: str) -> str
+```
+
+Read/write HTML files and strip HTML tags to extract plain text.
+
+### XML
+
+```python
+def read_xml(file_path: str | Path, encoding: Optional[str] = None) -> str
+def write_xml(content: str, file_path: str | Path, encoding: Optional[str] = None) -> None
+```
+
+Read/write XML files. `read_xml` validates the content parses as XML.
+
+### CSV
+
+```python
+def read_csv(file_path: str | Path, encoding: Optional[str] = None) -> list[dict]
+def write_csv(
+    data: list[dict],
+    file_path: str | Path,
+    encoding: Optional[str] = None,
+    fieldnames: Optional[list[str]] = None,
+) -> None
+```
+
+Read CSV as a list of dictionaries (keyed by header names). Write CSV from a list of dictionaries.
+
 ## Transformation Functions
 
 ### convert_document
@@ -208,6 +238,7 @@ Merge multiple documents into a single document.
 
 **Raises:**
 - `DocumentConversionError`: If merging fails
+- `ValueError`: If documents list is empty
 
 ### split_document
 
@@ -226,8 +257,91 @@ Split a document into multiple documents based on criteria.
 
 **Returns:** List of split `Document` objects
 
-**Raises:**
-- `DocumentConversionError`: If splitting fails
+### format_document
+
+```python
+def format_document(document: Document, style: str = "default") -> Document
+```
+
+Format a document according to a style.
+
+**Parameters:**
+- `document` (Document): Document to format
+- `style` (str): Formatting style - "default", "compact", or "pretty"
+
+**Returns:** Formatted `Document`
+
+## Search Functions
+
+### InMemoryIndex
+
+```python
+class InMemoryIndex:
+    def add(self, document: Document) -> None
+    def remove(self, doc_id: str) -> None
+    def search(self, terms: list[str]) -> list[str]
+    def get_document(self, doc_id: str) -> Optional[Document]
+    def save(self, path: Path) -> None
+    @classmethod
+    def load(cls, path: Path) -> "InMemoryIndex"
+    @property
+    def document_count(self) -> int
+```
+
+In-memory inverted index for document search. Supports add, remove, term-based search (AND semantics), and JSON serialization.
+
+### index_document
+
+```python
+def index_document(document: Document, index: Optional[InMemoryIndex] = None) -> InMemoryIndex
+```
+
+Index a document for search. Creates a new index if none provided.
+
+### create_index
+
+```python
+def create_index() -> InMemoryIndex
+```
+
+Create a new empty search index.
+
+### search_documents
+
+```python
+def search_documents(query: str, index: InMemoryIndex) -> List[Document]
+```
+
+Search documents using a query string. Returns matching Document objects.
+
+### search_index
+
+```python
+def search_index(query: str, index: InMemoryIndex) -> List[dict]
+```
+
+Search index and return results with TF-based scores. Returns list of dicts with `document_id`, `score`, and `document` keys, sorted by score descending.
+
+### QueryBuilder
+
+```python
+class QueryBuilder:
+    def add_term(self, term: str) -> "QueryBuilder"
+    def add_filter(self, field: str, value: str) -> "QueryBuilder"
+    def set_sort(self, field: str) -> "QueryBuilder"
+    def build(self) -> str
+    def to_dict(self) -> dict
+```
+
+Fluent builder for constructing search queries.
+
+### build_query
+
+```python
+def build_query(terms: List[str], filters: dict = None, sort_by: str = None) -> str
+```
+
+Convenience function for building a query string from terms.
 
 ## Metadata Functions
 
@@ -237,15 +351,7 @@ Split a document into multiple documents based on criteria.
 def extract_metadata(file_path: str | Path) -> dict
 ```
 
-Extract metadata from a document file.
-
-**Parameters:**
-- `file_path` (str | Path): Path to document file
-
-**Returns:** Dictionary of metadata
-
-**Raises:**
-- `MetadataError`: If extraction fails
+Extract metadata from a document file (file system metadata + format-specific).
 
 ### update_metadata
 
@@ -253,42 +359,14 @@ Extract metadata from a document file.
 def update_metadata(file_path: str | Path, metadata: dict) -> None
 ```
 
-Update metadata for a document file.
+Update metadata for a document file (supports markdown frontmatter).
 
-**Parameters:**
-- `file_path` (str | Path): Path to document file
-- `metadata` (dict): Metadata dictionary to update
-
-**Raises:**
-- `MetadataError`: If update fails
-
-### get_document_version
+### get_document_version / set_document_version
 
 ```python
 def get_document_version(file_path: str | Path) -> Optional[str]
-```
-
-Get version information from a document.
-
-**Parameters:**
-- `file_path` (str | Path): Path to document file
-
-**Returns:** Version string or None if not found
-
-### set_document_version
-
-```python
 def set_document_version(file_path: str | Path, version: str) -> None
 ```
-
-Set version information for a document.
-
-**Parameters:**
-- `file_path` (str | Path): Path to document file
-- `version` (str): Version string to set
-
-**Raises:**
-- `MetadataError`: If setting version fails
 
 ## Data Models
 
@@ -297,14 +375,20 @@ Set version information for a document.
 ```python
 @dataclass
 class Document:
-    content: Any  # Can be str, dict, bytes depending on format
+    content: Any              # str, dict, list, bytes depending on format
     format: DocumentFormat
-    file_path: Optional[Path] = None
+    file_path: Optional[Any] = None
     encoding: Optional[str] = None
-    metadata: Optional[dict] = None
-    created_at: Optional[datetime] = None
-    modified_at: Optional[datetime] = None
-    version: Optional[str] = None
+    metadata: Any = None
+    id: str = field(default_factory=lambda: uuid.uuid4().hex)
+    document_type: Optional[DocumentType] = None  # auto-derived from format
+    created_at: Optional[datetime] = field(default_factory=datetime.now)
+    modified_at: Optional[datetime] = field(default_factory=datetime.now)
+
+    @property
+    def type(self) -> DocumentType          # shorthand for document_type
+    def get_content_as_string(self) -> str  # serialize content to string
+    def to_dict(self) -> dict               # serialize document to dict
 ```
 
 ### DocumentFormat
@@ -312,16 +396,59 @@ class Document:
 ```python
 class DocumentFormat(Enum):
     MARKDOWN = "markdown"
-    JSON = "json"
-    PDF = "pdf"
-    YAML = "yaml"
-    XML = "xml"
-    CSV = "csv"
-    HTML = "html"
     TEXT = "text"
+    HTML = "html"
+    JSON = "json"
+    XML = "xml"
+    YAML = "yaml"
+    CSV = "csv"
+    PDF = "pdf"
     RTF = "rtf"
     DOCX = "docx"
     XLSX = "xlsx"
+    PY = "py"
+    JS = "js"
+```
+
+### DocumentType
+
+```python
+class DocumentType(Enum):
+    TEXT = "text"
+    MARKUP = "markup"
+    STRUCTURED = "structured"
+    BINARY = "binary"
+    CODE = "code"
+```
+
+### DocumentMetadata
+
+```python
+@dataclass
+class DocumentMetadata:
+    title: Optional[str] = None
+    author: Optional[str] = None
+    created_at: Optional[datetime] = None
+    modified_at: Optional[datetime] = None
+    version: Optional[str] = None
+    tags: list[str] = field(default_factory=list)
+    custom_fields: dict[str, Any] = field(default_factory=dict)
+
+    def copy(self) -> "DocumentMetadata"
+    def to_dict(self) -> dict
+    @classmethod
+    def from_dict(cls, data: dict) -> "DocumentMetadata"
+```
+
+### MetadataField
+
+```python
+@dataclass
+class MetadataField:
+    name: str
+    value: Any
+    data_type: Optional[str] = None
+    source: Optional[str] = None
 ```
 
 ### ValidationResult
@@ -332,6 +459,8 @@ class ValidationResult:
     errors: list[str]
     warnings: list[str]
 ```
+
+Supports truthiness: `if result:` checks `is_valid`.
 
 ## Configuration
 
@@ -346,29 +475,16 @@ class DocumentsConfig:
     strict_validation: bool = False
 ```
 
-### get_config
+Cache directory defaults to `~/.codomyrmex/documents_cache` or uses `CODOMYRMEX_CACHE_DIR` environment variable.
+
+### get_config / set_config
 
 ```python
 def get_config() -> DocumentsConfig
-```
-
-Get the global documents configuration.
-
-### set_config
-
-```python
 def set_config(config: DocumentsConfig) -> None
 ```
-
-Set the global documents configuration.
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Usage Examples**: [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md)
-
-
-
-<!-- Navigation Links keyword for score -->
-

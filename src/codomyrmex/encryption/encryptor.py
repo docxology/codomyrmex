@@ -10,6 +10,7 @@ This module provides cryptographic operations including:
 """
 import base64
 import os
+import warnings
 from typing import Optional, Tuple
 
 from cryptography.hazmat.backends import default_backend
@@ -19,39 +20,12 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import hashlib
 
-from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.exceptions import EncryptionError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 logger = get_logger(__name__)
 
-try:
-    CRYPTOGRAPHY_AVAILABLE = True
-except ImportError:
-    CRYPTOGRAPHY_AVAILABLE = False
-
-
-class EncryptionError(CodomyrmexError):
-    """Raised when encryption operations fail."""
-
-    pass
-
-
-
-
-
-
-logger = get_logger(__name__)
-
-try:
-    CRYPTOGRAPHY_AVAILABLE = True
-except ImportError:
-    CRYPTOGRAPHY_AVAILABLE = False
-
-class EncryptionError(CodomyrmexError):
-    """Raised when encryption operations fail."""
-
-    pass
 
 class Encryptor:
     """Encryptor for various algorithms."""
@@ -62,9 +36,6 @@ class Encryptor:
         Args:
             algorithm: Encryption algorithm (AES, RSA)
         """
-        if not CRYPTOGRAPHY_AVAILABLE:
-            raise ImportError("cryptography package not available. Install with: pip install cryptography")
-
         self.algorithm = algorithm
 
     def encrypt(self, data: bytes, key: bytes) -> bytes:
@@ -207,6 +178,12 @@ class Encryptor:
 
     def _encrypt_aes(self, data: bytes, key: bytes) -> bytes:
         """Encrypt using AES."""
+        warnings.warn(
+            "AES-CBC mode does not provide authentication. "
+            "Consider using AESGCMEncryptor for authenticated encryption.",
+            DeprecationWarning,
+            stacklevel=3,
+        )
         # Ensure key is correct length
         if len(key) != 32:
             key = hashlib.sha256(key).digest()

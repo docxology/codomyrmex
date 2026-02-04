@@ -7,7 +7,7 @@ Generates scatter plots.
 
 import matplotlib.pyplot as plt
 
-from .plot_utils import get_codomyrmex_logger, save_plot
+from .plot_utils import apply_theme_to_axes, get_codomyrmex_logger, save_plot
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -23,6 +23,7 @@ def create_scatter_plot(
     dot_size: int = 20,
     dot_color: str = "blue",
     alpha: float = 0.7,
+    theme=None,
 ):
     """
     Generates a scatter plot.
@@ -31,14 +32,16 @@ def create_scatter_plot(
     logger.debug(f"Generating scatter plot titled '{title}'")
     if len(x_data) == 0 or len(y_data) == 0:
         logger.warning("Empty data provided for scatter plot. No plot generated.")
-        return
+        return None
     if len(x_data) != len(y_data):
         logger.warning(
             f"Length mismatch for scatter plot: x_data ({len(x_data)}) vs y_data ({len(y_data)}). Plot not generated."
         )
-        return
+        return None
 
     fig, ax = plt.subplots()
+    if theme is not None:
+        apply_theme_to_axes(ax, theme)
     ax.scatter(x_data, y_data, s=dot_size, c=dot_color, alpha=alpha)
     ax.set_title(title)
     ax.set_xlabel(x_label)
@@ -53,6 +56,7 @@ def create_scatter_plot(
     else:
         plt.close(fig)
     logger.info(f"Scatter plot '{title}' generated successfully.")
+    return fig
 
 
 class ScatterPlot:

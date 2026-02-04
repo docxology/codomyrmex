@@ -42,6 +42,31 @@ except ImportError:
     PDFDocument = None
     PDF_AVAILABLE = False
 
+try:
+    from .html_handler import read_html, write_html, strip_html_tags
+    HTML_AVAILABLE = True
+except ImportError:
+    read_html = None
+    write_html = None
+    strip_html_tags = None
+    HTML_AVAILABLE = False
+
+try:
+    from .xml_handler import read_xml, write_xml
+    XML_AVAILABLE = True
+except ImportError:
+    read_xml = None
+    write_xml = None
+    XML_AVAILABLE = False
+
+try:
+    from .csv_handler import read_csv, write_csv
+    CSV_AVAILABLE = True
+except ImportError:
+    read_csv = None
+    write_csv = None
+    CSV_AVAILABLE = False
+
 __all__ = []
 
 if MARKDOWN_AVAILABLE:
@@ -59,5 +84,11 @@ if TEXT_AVAILABLE:
 if PDF_AVAILABLE:
     __all__.extend(["read_pdf", "write_pdf", "PDFDocument"])
 
+if HTML_AVAILABLE:
+    __all__.extend(["read_html", "write_html", "strip_html_tags"])
 
+if XML_AVAILABLE:
+    __all__.extend(["read_xml", "write_xml"])
 
+if CSV_AVAILABLE:
+    __all__.extend(["read_csv", "write_csv"])

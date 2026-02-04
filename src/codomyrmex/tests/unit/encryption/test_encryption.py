@@ -8,12 +8,19 @@ Tests cover:
 - Digital signatures
 - File encryption
 - Hashing functions
-- Key management
+- Key management (including list, exists, rotate)
 - Secure data container
+- HMAC utilities
+- HKDF key derivation
+- Convenience functions from __init__.py
+- Edge cases
+- Integration workflows
+- EncryptionError identity
 """
 
 import os
 import tempfile
+import warnings
 from pathlib import Path
 
 import pytest
@@ -22,15 +29,26 @@ from codomyrmex.encryption import (
     AESGCMEncryptor,
     SecureDataContainer,
     generate_aes_key,
+    EncryptionError,
+    compute_hmac,
+    verify_hmac,
+    derive_key_hkdf,
+    encrypt,
+    decrypt,
+    generate_key,
+    get_encryptor,
+    encrypt_file,
+    decrypt_file,
+    hash_data,
 )
 from codomyrmex.encryption.encryptor import (
     Encryptor,
-    EncryptionError,
     encrypt_data,
     decrypt_data,
 )
 from codomyrmex.encryption.key_manager import KeyManager
 from codomyrmex.encryption.aes_gcm import AESGCMEncryptor
+from codomyrmex.exceptions import EncryptionError as ExceptionsEncryptionError
 
 
 # ==============================================================================
@@ -54,46 +72,57 @@ class TestEncryptorAES:
     def test_aes_encrypt_decrypt_roundtrip(self, encryptor, key):
         """Test basic AES encrypt/decrypt roundtrip."""
         plaintext = b"Hello, World!"
-        ciphertext = encryptor.encrypt(plaintext, key)
-        decrypted = encryptor.decrypt(ciphertext, key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext = encryptor.encrypt(plaintext, key)
+            decrypted = encryptor.decrypt(ciphertext, key)
         assert decrypted == plaintext
 
     def test_aes_encrypt_produces_different_output(self, encryptor, key):
         """Test that encrypting same data twice produces different ciphertext (due to IV)."""
         plaintext = b"Same data"
-        ciphertext1 = encryptor.encrypt(plaintext, key)
-        ciphertext2 = encryptor.encrypt(plaintext, key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext1 = encryptor.encrypt(plaintext, key)
+            ciphertext2 = encryptor.encrypt(plaintext, key)
         assert ciphertext1 != ciphertext2
 
     def test_aes_decrypt_with_wrong_key_fails(self, encryptor, key):
         """Test decryption with wrong key fails."""
         plaintext = b"Secret data"
-        ciphertext = encryptor.encrypt(plaintext, key)
-        wrong_key = os.urandom(32)
-
-        with pytest.raises(EncryptionError):
-            encryptor.decrypt(ciphertext, wrong_key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext = encryptor.encrypt(plaintext, key)
+            wrong_key = os.urandom(32)
+            with pytest.raises(EncryptionError):
+                encryptor.decrypt(ciphertext, wrong_key)
 
     def test_aes_encrypt_empty_data(self, encryptor, key):
         """Test encryption of empty data."""
         plaintext = b""
-        ciphertext = encryptor.encrypt(plaintext, key)
-        decrypted = encryptor.decrypt(ciphertext, key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext = encryptor.encrypt(plaintext, key)
+            decrypted = encryptor.decrypt(ciphertext, key)
         assert decrypted == plaintext
 
     def test_aes_encrypt_large_data(self, encryptor, key):
         """Test encryption of large data."""
         plaintext = os.urandom(1024 * 1024)  # 1MB
-        ciphertext = encryptor.encrypt(plaintext, key)
-        decrypted = encryptor.decrypt(ciphertext, key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext = encryptor.encrypt(plaintext, key)
+            decrypted = encryptor.decrypt(ciphertext, key)
         assert decrypted == plaintext
 
     def test_aes_key_normalization(self, encryptor):
         """Test that non-32-byte keys are normalized via hashing."""
         short_key = b"shortkey"
         plaintext = b"Test data"
-        ciphertext = encryptor.encrypt(plaintext, short_key)
-        decrypted = encryptor.decrypt(ciphertext, short_key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext = encryptor.encrypt(plaintext, short_key)
+            decrypted = encryptor.decrypt(ciphertext, short_key)
         assert decrypted == plaintext
 
     def test_generate_aes_key(self, encryptor):
@@ -298,22 +327,28 @@ class TestStringEncryption:
     def test_encrypt_decrypt_string(self, encryptor, key):
         """Test string encryption roundtrip."""
         plaintext = "Hello, World!"
-        ciphertext = encryptor.encrypt_string(plaintext, key)
-        decrypted = encryptor.decrypt_string(ciphertext, key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext = encryptor.encrypt_string(plaintext, key)
+            decrypted = encryptor.decrypt_string(ciphertext, key)
         assert decrypted == plaintext
 
     def test_encrypt_string_unicode(self, encryptor, key):
         """Test encryption of unicode strings."""
         plaintext = "Héllo, 世界! 🌍"
-        ciphertext = encryptor.encrypt_string(plaintext, key)
-        decrypted = encryptor.decrypt_string(ciphertext, key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext = encryptor.encrypt_string(plaintext, key)
+            decrypted = encryptor.decrypt_string(ciphertext, key)
         assert decrypted == plaintext
 
     def test_encrypt_string_empty(self, encryptor, key):
         """Test encryption of empty string."""
         plaintext = ""
-        ciphertext = encryptor.encrypt_string(plaintext, key)
-        decrypted = encryptor.decrypt_string(ciphertext, key)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ciphertext = encryptor.encrypt_string(plaintext, key)
+            decrypted = encryptor.decrypt_string(ciphertext, key)
         assert decrypted == plaintext
 
 
@@ -350,12 +385,14 @@ class TestFileEncryption:
         encrypted_file = temp_dir / "encrypted.enc"
         decrypted_file = temp_dir / "decrypted.txt"
 
-        # Encrypt
-        assert encryptor.encrypt_file(str(input_file), str(encrypted_file), key)
-        assert encrypted_file.exists()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            # Encrypt
+            assert encryptor.encrypt_file(str(input_file), str(encrypted_file), key)
+            assert encrypted_file.exists()
 
-        # Decrypt
-        assert encryptor.decrypt_file(str(encrypted_file), str(decrypted_file), key)
+            # Decrypt
+            assert encryptor.decrypt_file(str(encrypted_file), str(decrypted_file), key)
         assert decrypted_file.read_bytes() == input_file.read_bytes()
 
     def test_encrypt_file_not_found(self, encryptor, key, temp_dir):
@@ -627,6 +664,44 @@ class TestKeyManager:
         for key_id, key in keys.items():
             assert manager.get_key(key_id) == key
 
+    def test_list_keys(self, manager):
+        """Test listing stored keys."""
+        manager.store_key("alpha", os.urandom(32))
+        manager.store_key("bravo", os.urandom(32))
+        manager.store_key("charlie", os.urandom(32))
+        result = manager.list_keys()
+        assert result == ["alpha", "bravo", "charlie"]
+
+    def test_list_keys_empty(self, manager):
+        """Test listing keys when none are stored."""
+        assert manager.list_keys() == []
+
+    def test_key_exists_true(self, manager):
+        """Test key_exists returns True for stored key."""
+        manager.store_key("existing", os.urandom(32))
+        assert manager.key_exists("existing") is True
+
+    def test_key_exists_false(self, manager):
+        """Test key_exists returns False for missing key."""
+        assert manager.key_exists("missing") is False
+
+    def test_rotate_key(self, manager):
+        """Test key rotation returns old key and stores new one."""
+        old_key = os.urandom(32)
+        new_key = os.urandom(32)
+        manager.store_key("rotate-me", old_key)
+
+        returned = manager.rotate_key("rotate-me", new_key)
+        assert returned == old_key
+        assert manager.get_key("rotate-me") == new_key
+
+    def test_rotate_key_nonexistent(self, manager):
+        """Test rotating a nonexistent key returns None and stores new."""
+        new_key = os.urandom(32)
+        returned = manager.rotate_key("new-id", new_key)
+        assert returned is None
+        assert manager.get_key("new-id") == new_key
+
 
 # ==============================================================================
 # Convenience Function Tests
@@ -645,8 +720,10 @@ class TestConvenienceFunctions:
         """Test encrypt_data convenience function with AES."""
         key = generate_aes_key()
         data = b"test data"
-        encrypted = encrypt_data(data, key, "AES")
-        decrypted = decrypt_data(encrypted, key, "AES")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            encrypted = encrypt_data(data, key, "AES")
+            decrypted = decrypt_data(encrypted, key, "AES")
         assert decrypted == data
 
     def test_encrypt_data_rsa(self):
@@ -658,6 +735,54 @@ class TestConvenienceFunctions:
         encrypted = encrypt_data(data, public_key, "RSA")
         decrypted = decrypt_data(encrypted, private_key, "RSA")
         assert decrypted == data
+
+
+# ==============================================================================
+# __init__.py Convenience Function Tests
+# ==============================================================================
+
+@pytest.mark.crypto
+class TestInitConvenienceFunctions:
+    """Tests for the convenience functions exported by __init__.py."""
+
+    def test_encrypt_decrypt(self):
+        """Test encrypt/decrypt from package level."""
+        key = generate_aes_key()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ct = encrypt(b"hello", key)
+            pt = decrypt(ct, key)
+        assert pt == b"hello"
+
+    def test_generate_key(self):
+        """Test generate_key from package level."""
+        key = generate_key()
+        assert len(key) == 32
+
+    def test_get_encryptor(self):
+        """Test get_encryptor factory."""
+        enc = get_encryptor("AES")
+        assert isinstance(enc, Encryptor)
+        assert enc.algorithm == "AES"
+
+    def test_encrypt_decrypt_file(self):
+        """Test encrypt_file/decrypt_file from package level."""
+        key = generate_aes_key()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            src = Path(tmpdir) / "src.txt"
+            enc_f = Path(tmpdir) / "enc.bin"
+            dec_f = Path(tmpdir) / "dec.txt"
+            src.write_bytes(b"file content")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", DeprecationWarning)
+                assert encrypt_file(str(src), str(enc_f), key)
+                assert decrypt_file(str(enc_f), str(dec_f), key)
+            assert dec_f.read_bytes() == b"file content"
+
+    def test_hash_data(self):
+        """Test hash_data from package level."""
+        h = hash_data(b"data", "sha256")
+        assert len(h) == 64
 
 
 # ==============================================================================
@@ -681,3 +806,253 @@ class TestErrorHandling:
         except EncryptionError as e:
             assert "file_path" in e.context
             assert e.context["file_path"] == "/test/path"
+
+    def test_encryption_error_identity(self):
+        """Verify package-level EncryptionError catches encryptor.py raises."""
+        from codomyrmex.encryption import EncryptionError as PkgError
+        from codomyrmex.encryption.encryptor import EncryptionError as EncError
+
+        # Both should be the same class (from codomyrmex.exceptions)
+        assert PkgError is ExceptionsEncryptionError
+        assert EncError is ExceptionsEncryptionError
+
+        # Verify catching works
+        with pytest.raises(PkgError):
+            Encryptor("UNKNOWN").encrypt(b"x", b"k")
+
+
+# ==============================================================================
+# HMAC Tests
+# ==============================================================================
+
+@pytest.mark.crypto
+class TestHMAC:
+    """Tests for HMAC utilities."""
+
+    def test_compute_and_verify_sha256(self):
+        """Test HMAC roundtrip with sha256."""
+        mac = compute_hmac(b"message", b"key")
+        assert verify_hmac(b"message", b"key", mac)
+
+    def test_compute_and_verify_sha512(self):
+        """Test HMAC roundtrip with sha512."""
+        mac = compute_hmac(b"message", b"key", algorithm="sha512")
+        assert verify_hmac(b"message", b"key", mac, algorithm="sha512")
+
+    def test_verify_fails_tampered_data(self):
+        """Test verification fails with tampered data."""
+        mac = compute_hmac(b"original", b"key")
+        assert not verify_hmac(b"tampered", b"key", mac)
+
+    def test_verify_fails_wrong_key(self):
+        """Test verification fails with wrong key."""
+        mac = compute_hmac(b"message", b"key1")
+        assert not verify_hmac(b"message", b"key2", mac)
+
+    def test_invalid_algorithm(self):
+        """Test that invalid algorithm raises ValueError."""
+        with pytest.raises(ValueError, match="Unsupported algorithm"):
+            compute_hmac(b"data", b"key", algorithm="md5")
+
+    def test_empty_data(self):
+        """Test HMAC of empty data."""
+        mac = compute_hmac(b"", b"key")
+        assert isinstance(mac, bytes)
+        assert len(mac) > 0
+        assert verify_hmac(b"", b"key", mac)
+
+    def test_string_inputs(self):
+        """Test that str inputs are accepted and encoded."""
+        mac_bytes = compute_hmac(b"msg", b"key")
+        mac_str = compute_hmac("msg", "key")
+        assert mac_bytes == mac_str
+
+
+# ==============================================================================
+# HKDF Tests
+# ==============================================================================
+
+@pytest.mark.crypto
+class TestHKDF:
+    """Tests for HKDF key derivation."""
+
+    def test_basic_derivation(self):
+        """Test basic HKDF produces correct length."""
+        key = derive_key_hkdf(b"input-material", length=32)
+        assert len(key) == 32
+
+    def test_deterministic_with_same_inputs(self):
+        """Test same inputs produce same output."""
+        k1 = derive_key_hkdf(b"ikm", salt=b"salt", info=b"info")
+        k2 = derive_key_hkdf(b"ikm", salt=b"salt", info=b"info")
+        assert k1 == k2
+
+    def test_different_salt_different_key(self):
+        """Test different salt produces different key."""
+        k1 = derive_key_hkdf(b"ikm", salt=b"salt1")
+        k2 = derive_key_hkdf(b"ikm", salt=b"salt2")
+        assert k1 != k2
+
+    def test_different_info_different_key(self):
+        """Test different info produces different key."""
+        k1 = derive_key_hkdf(b"ikm", info=b"context-a")
+        k2 = derive_key_hkdf(b"ikm", info=b"context-b")
+        assert k1 != k2
+
+    def test_custom_length(self):
+        """Test custom output length."""
+        key = derive_key_hkdf(b"ikm", length=64)
+        assert len(key) == 64
+
+    def test_invalid_algorithm(self):
+        """Test invalid algorithm raises ValueError."""
+        with pytest.raises(ValueError, match="Unsupported algorithm"):
+            derive_key_hkdf(b"ikm", algorithm="md5")
+
+    def test_string_input(self):
+        """Test that str input is accepted."""
+        key = derive_key_hkdf("string-material")
+        assert len(key) == 32
+
+
+# ==============================================================================
+# Edge Case Tests
+# ==============================================================================
+
+@pytest.mark.crypto
+class TestEdgeCases:
+    """Edge case tests."""
+
+    def test_binary_data_with_null_bytes(self):
+        """Test encrypting data containing null bytes."""
+        key = generate_aes_key()
+        data = b"\x00\x01\x02\x00\xff\x00"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            ct = Encryptor().encrypt(data, key)
+            pt = Encryptor().decrypt(ct, key)
+        assert pt == data
+
+    def test_very_long_key_id(self):
+        """Test KeyManager with a very long key_id."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            km = KeyManager(key_dir=Path(tmpdir))
+            long_id = "k" * 200
+            key = os.urandom(32)
+            assert km.store_key(long_id, key)
+            assert km.get_key(long_id) == key
+
+    def test_empty_key_id(self):
+        """Test KeyManager with empty key_id."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            km = KeyManager(key_dir=Path(tmpdir))
+            key = os.urandom(32)
+            assert km.store_key("", key)
+            assert km.get_key("") == key
+
+    def test_container_non_serializable_data(self):
+        """Test SecureDataContainer with non-JSON-serializable data."""
+        key = generate_aes_key()
+        container = SecureDataContainer(key)
+        with pytest.raises(TypeError):
+            container.pack(object())
+
+    def test_aes_gcm_empty_data(self):
+        """Test AES-GCM with empty data."""
+        enc = AESGCMEncryptor()
+        ct = enc.encrypt(b"")
+        pt = enc.decrypt(ct)
+        assert pt == b""
+
+    def test_hash_empty_data(self):
+        """Test hashing empty data."""
+        h = Encryptor.hash_data(b"", "sha256")
+        assert len(h) == 64
+        # Well-known SHA-256 of empty string
+        assert h == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+    def test_aes_cbc_deprecation_warning(self):
+        """Test that AES-CBC emits a DeprecationWarning."""
+        key = os.urandom(32)
+        enc = Encryptor("AES")
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            enc.encrypt(b"test", key)
+            deprecation_warnings = [x for x in w if issubclass(x.category, DeprecationWarning)]
+            assert len(deprecation_warnings) >= 1
+            assert "AES-CBC" in str(deprecation_warnings[0].message)
+
+
+# ==============================================================================
+# Integration Tests
+# ==============================================================================
+
+@pytest.mark.crypto
+@pytest.mark.integration
+class TestEncryptionIntegration:
+    """Integration tests combining multiple encryption components."""
+
+    def test_key_manager_with_encryptor(self):
+        """Test KeyManager + Encryptor workflow."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            km = KeyManager(key_dir=Path(tmpdir))
+            key = generate_aes_key()
+            km.store_key("my-key", key)
+
+            retrieved = km.get_key("my-key")
+            enc = AESGCMEncryptor(retrieved)
+            ct = enc.encrypt(b"managed key encryption")
+            pt = enc.decrypt(ct)
+            assert pt == b"managed key encryption"
+
+    def test_file_encryption_with_key_manager(self):
+        """Test file encryption using a key from KeyManager."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
+            km = KeyManager(key_dir=tmpdir / "keys")
+            key = generate_aes_key()
+            km.store_key("file-key", key)
+
+            src = tmpdir / "source.txt"
+            enc_f = tmpdir / "encrypted.bin"
+            dec_f = tmpdir / "decrypted.txt"
+            src.write_bytes(b"integration test data")
+
+            retrieved = km.get_key("file-key")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", DeprecationWarning)
+                assert encrypt_file(str(src), str(enc_f), retrieved)
+                assert decrypt_file(str(enc_f), str(dec_f), retrieved)
+            assert dec_f.read_bytes() == b"integration test data"
+
+    def test_secure_container_with_derived_key(self):
+        """Test SecureDataContainer with a PBKDF2-derived key."""
+        enc = Encryptor()
+        salt = Encryptor.generate_salt()
+        key = enc.derive_key("my-password", salt)
+        container = SecureDataContainer(key)
+        data = {"secret": "derived-key-test"}
+        packed = container.pack(data)
+        unpacked = container.unpack(packed)
+        assert unpacked["data"] == data
+
+    def test_key_rotation_re_encryption(self):
+        """Test full key rotation + re-encryption workflow."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            km = KeyManager(key_dir=Path(tmpdir))
+            old_key = generate_aes_key()
+            km.store_key("app-key", old_key)
+
+            # Encrypt with old key
+            old_enc = AESGCMEncryptor(old_key)
+            ct_old = old_enc.encrypt(b"rotate me")
+
+            # Rotate
+            new_key = generate_aes_key()
+            returned_old = km.rotate_key("app-key", new_key)
+            assert returned_old == old_key
+
+            # Re-encrypt
+            pt = AESGCMEncryptor(returned_old).decrypt(ct_old)
+            ct_new = AESGCMEncryptor(new_key).encrypt(pt)
+            assert AESGCMEncryptor(new_key).decrypt(ct_new) == b"rotate me"

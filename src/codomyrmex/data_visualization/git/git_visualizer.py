@@ -21,13 +21,13 @@ from typing import Any
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
-from .mermaid_generator import (
+from ..mermaid.mermaid_generator import (
     MermaidDiagramGenerator,
     create_git_workflow_diagram,
 )
 
 # Import from data_visualization module
-from .plot_utils import (
+from ..charts.plot_utils import (
     apply_common_aesthetics,
     get_codomyrmex_logger,
     save_plot,
@@ -807,25 +807,6 @@ class GitVisualizer:
 
         return structure
 
-
-def visualize_git_repository(repository_path: str, output_dir: str) -> dict[str, bool]:
-    """
-    Visualize a git repository by creating a comprehensive report.
-
-    Args:
-        repository_path: Path to Git repository
-        output_dir: Directory to save all outputs
-
-    Returns:
-        Dictionary with success status for each visualization type
-    """
-    visualizer = GitVisualizer()
-    return visualizer.create_comprehensive_git_report(
-        repository_path=repository_path, output_dir=output_dir
-    )
-
-
-
     def _create_report_summary(
         self,
         output_dir: str,
@@ -846,7 +827,7 @@ def visualize_git_repository(repository_path: str, output_dir: str) -> dict[str,
         ]
 
         for viz_type, success in results.items():
-            status = "✅" if success else "❌"
+            status = "+" if success else "x"
             summary_content.append(f"- {viz_type}: {status}")
 
         summary_content.extend(

@@ -24,11 +24,11 @@ Comprehensive documentation for the Codomyrmex platform. This directory contains
 
 Documentation for the secure, autonomous agent capabilities:
 
-- **Identity**: [Identity & Verification](../src/codomyrmex/identity/README.md)
-- **Wallet**: [Self-Custody & Recovery](../src/codomyrmex/wallet/README.md)
-- **Defense**: [Active Defense](../src/codomyrmex/defense/README.md)
-- **Market**: [Anonymous Markets](../src/codomyrmex/market/README.md)
-- **Privacy**: [Privacy & Mixnets](../src/codomyrmex/privacy/README.md)
+- **Identity**: [Identity & Verification](modules/identity/README.md)
+- **Wallet**: [Self-Custody & Recovery](modules/wallet/README.md)
+- **Defense**: [Active Defense](modules/defense/README.md)
+- **Market**: [Anonymous Markets](modules/market/README.md)
+- **Privacy**: [Privacy & Mixnets](modules/privacy/README.md)
 
 ## Quick Links
 

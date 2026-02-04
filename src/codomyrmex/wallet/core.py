@@ -106,10 +106,13 @@ class WalletManager:
         Raises:
             WalletNotFoundError: If user has no wallet or key is missing.
         """
+        if user_id not in self._wallets:
+            raise WalletNotFoundError(f"Wallet not found for user {user_id}")
+
         key_id = f"wallet_{user_id}_private"
         key = self.key_manager.get_key(key_id)
         if not key:
-            raise WalletNotFoundError(f"Wallet not found or locked for user {user_id}")
+            raise WalletNotFoundError(f"Key missing for user {user_id}")
 
         return hmac.new(key, message, hashlib.sha256).digest()
 

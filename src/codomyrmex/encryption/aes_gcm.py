@@ -3,13 +3,14 @@
 import os
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from typing import Optional
-import logging
 
-logger = logging.getLogger(__name__)
+from codomyrmex.logging_monitoring.logger_config import get_logger
+
+logger = get_logger(__name__)
 
 class AESGCMEncryptor:
     """Encryptor using AES-GCM for authenticated encryption."""
-    
+
     def __init__(self, key: Optional[bytes] = None):
         if key and len(key) not in {16, 24, 32}:
             raise ValueError("Key must be 16, 24, or 32 bytes.")

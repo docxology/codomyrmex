@@ -8,6 +8,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Dict, Any, Optional, Tuple
 from datetime import datetime, timedelta
+from enum import Enum
 import time
 import threading
 from collections import defaultdict
@@ -338,12 +339,58 @@ def create_rate_limiter(
     return limiter_class(**kwargs)
 
 
+class RateLimitStrategy(Enum):
+    """Rate limiting strategies."""
+    FIXED_WINDOW = "fixed_window"
+    SLIDING_WINDOW = "sliding_window"
+    TOKEN_BUCKET = "token_bucket"
+
+
+class RateLimiterMiddleware:
+    """
+    Middleware for applying rate limits.
+
+    Usage:
+        limiter = RateLimiterMiddleware(
+            FixedWindowLimiter(limit=100, window_seconds=60)
+        )
+
+        def get_key(request):
+            return request.client_ip
+
+        def handle_request(request):
+            result = limiter.check(get_key(request))
+            if not result.allowed:
+                return {"error": "Rate limited"}, 429, result.to_headers()
+            return process(request)
+    """
+
+    def __init__(self, limiter: RateLimiter):
+        self.limiter = limiter
+
+    def check(self, key: str) -> RateLimitResult:
+        """Check and acquire rate limit."""
+        return self.limiter.consume(key)
+
+    def would_allow(self, key: str) -> bool:
+        """Check if request would be allowed without consuming."""
+        return self.limiter.check(key).allowed
+
+
 __all__ = [
+    # Enums
+    "RateLimitStrategy",
+    # Data classes
     "RateLimitResult",
+    # Abstract base
     "RateLimiter",
+    # Limiters
     "FixedWindowLimiter",
     "SlidingWindowLimiter",
     "TokenBucketLimiter",
     "CompositeRateLimiter",
+    # Middleware
+    "RateLimiterMiddleware",
+    # Factory
     "create_rate_limiter",
 ]

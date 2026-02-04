@@ -36,7 +36,7 @@ This specification defines the design principles, functional requirements, archi
 4. **FR-4**: Support custom `SecurityRule` subclasses registered at runtime
 
 ### Secrets (FR-5 through FR-8)
-5. **FR-5**: Detect 12 secret patterns (AWS keys, GitHub tokens, API keys, private keys, JWTs, database URLs, passwords, generic high-entropy strings)
+5. **FR-5**: Detect 13 secret patterns (AWS keys, GitHub tokens, API keys, private keys, JWTs, database URLs, passwords, generic high-entropy strings)
 6. **FR-6**: Scan text, files, and directories with confidence-based filtering
 7. **FR-7**: Provide encrypted secret vault with XOR-based encryption (development only)
 8. **FR-8**: Offer helper functions: `get_secret_from_env()`, `mask_secret()`, `generate_secret()`

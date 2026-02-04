@@ -1,5 +1,12 @@
+"""Advanced data visualization functionality for Codomyrmex.
+
+This module provides comprehensive plotting capabilities including statistical plots,
+interactive visualizations, dashboard generation, and data analysis charts.
+"""
+
 from datetime import datetime
 from typing import Any, Optional, Union
+import logging
 import os
 import sys
 import warnings
@@ -11,39 +18,15 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.performance import monitor_performance, performance_context
-
-
-
-
-
-
-
-"""Advanced data visualization functionality for Codomyrmex.
-
-This module provides comprehensive plotting capabilities including statistical plots,
-interactive visualizations, dashboard generation, and data analysis charts.
-"""
-
-# Add project root to Python path
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
-if PROJECT_ROOT not in sys.path:
-    pass
-#     sys.path.insert(0, PROJECT_ROOT)  # Removed sys.path manipulation
-
-# Import logger setup
-
-# Get module logger
-logger = get_logger(__name__)
-
-# Import performance monitoring
 try:
+    from codomyrmex.logging_monitoring.logger_config import get_logger
+except ImportError:
+    from logging import getLogger as get_logger
 
+try:
+    from codomyrmex.performance import monitor_performance, performance_context
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
-    logger.warning("Performance monitoring not available - decorators will be no-op")
     PERFORMANCE_MONITORING_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
@@ -53,18 +36,19 @@ except ImportError:
         return decorator
 
     class performance_context:
-
         def __init__(self, *args, **kwargs):
-
             pass
-
         def __enter__(self):
-
             return self
-
         def __exit__(self, *args):
-
             pass
+
+
+
+
+
+# Get module logger
+logger = get_logger(__name__)
 
 # Set up matplotlib and seaborn
 plt.style.use("default")

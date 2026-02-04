@@ -7,7 +7,7 @@ Generates histograms.
 
 import matplotlib.pyplot as plt
 
-from .plot_utils import get_codomyrmex_logger, save_plot
+from .plot_utils import apply_theme_to_axes, get_codomyrmex_logger, save_plot
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -22,6 +22,7 @@ def create_histogram(
     show_plot: bool = False,
     hist_color: str = "cornflowerblue",
     edge_color: str = "black",
+    theme=None,
 ):
     """
     Generates a histogram.
@@ -30,9 +31,11 @@ def create_histogram(
     logger.debug(f"Generating histogram titled '{title}'")
     if not data:
         logger.warning("Empty data provided for histogram. No plot generated.")
-        return
+        return None
 
     fig, ax = plt.subplots()
+    if theme is not None:
+        apply_theme_to_axes(ax, theme)
     ax.hist(data, bins=bins, color=hist_color, edgecolor=edge_color)
     ax.set_title(title)
     ax.set_xlabel(x_label)
@@ -49,6 +52,7 @@ def create_histogram(
     else:
         plt.close(fig)
     logger.info(f"Histogram '{title}' generated successfully.")
+    return fig
 
 
 class Histogram:

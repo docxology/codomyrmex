@@ -667,6 +667,12 @@ class CompressionError(CodomyrmexError):
     pass
 
 
+# Encryption Errors
+class EncryptionError(CodomyrmexError):
+    """Raised when encryption operations fail."""
+    pass
+
+
 
 # IDE Errors
 class IDEError(CodomyrmexError):

@@ -1,10 +1,11 @@
 """Document search and indexing operations."""
 
-from .indexer import index_document, create_index
+from .indexer import InMemoryIndex, index_document, create_index
 from .searcher import search_documents, search_index
 from .query_builder import QueryBuilder, build_query
 
 __all__ = [
+    "InMemoryIndex",
     "index_document",
     "create_index",
     "search_documents",
@@ -12,6 +13,3 @@ __all__ = [
     "QueryBuilder",
     "build_query",
 ]
-
-
-

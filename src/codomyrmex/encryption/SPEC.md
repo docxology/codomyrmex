@@ -1,74 +1,88 @@
 # encryption - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Proposed | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Encryption module providing encryption/decryption utilities and key management. Integrates with `security` and `config_management` modules.
+Encryption module providing encryption/decryption utilities, key management, HMAC authentication, and key derivation. Integrates with `security` and `config_management` modules.
 
 ## Design Principles
 
 ### Modularity
 
 - Algorithm-agnostic encryption interface
-- Support for multiple encryption algorithms
-- Pluggable encryption system
+- Support for multiple encryption algorithms (AES-CBC, AES-GCM, RSA)
+- Pluggable encryption system with separate files per concern
 
 ### Internal Coherence
 
-- Unified encryption/decryption
+- Unified encryption/decryption API
 - Consistent key management patterns
-- Integration with security
+- Single `EncryptionError` exception defined in `codomyrmex.exceptions`
 
 ### Parsimony
 
 - Essential encryption operations
-- Minimal dependencies
-- Focus on common algorithms
+- Minimal dependencies (`cryptography` + stdlib)
+- Focus on commonly needed algorithms
 
 ### Functionality
 
-- Working implementations for common algorithms
-- Support for symmetric and asymmetric encryption
-- Key derivation and management
+- Working implementations for AES-CBC, AES-GCM, RSA
+- HMAC message authentication with timing-safe verification
+- HKDF and PBKDF2 key derivation
+- File-based key management with rotation support
+- SecureDataContainer for encrypted JSON storage
 
 ### Testing
 
-- Unit tests for all algorithms
-- Integration tests with key management
-- Security testing
+- Unit tests for all algorithms and utilities
+- Integration tests for KeyManager + Encryptor workflows
+- Edge case coverage (empty data, binary data, key rotation)
 
 ### Documentation
 
-- Complete API specifications
-- Usage examples for each algorithm
-- SECURITY.md with best practices
+- Complete API specifications for all classes and functions
+- Usage examples for each feature
+- Security notes and best practices
 
 ## Architecture
 
 ```mermaid
 graph TD
-    EncryptionInterface[Encryption Interface]
-    AESEncryption[AES Encryption]
-    RSASEncryption[RSA Encryption]
-    KeyManager[Key Manager]
-    EncryptionManager[Encryption Manager]
-    
-    EncryptionInterface --> AESEncryption
-    EncryptionInterface --> RSASEncryption
-    KeyManager --> EncryptionInterface
-    EncryptionManager --> EncryptionInterface
+    Init["__init__.py<br/>(Public API)"]
+    Enc["encryptor.py<br/>(AES-CBC, RSA, Signing, Hashing)"]
+    GCM["aes_gcm.py<br/>(AES-GCM)"]
+    KM["key_manager.py<br/>(Key Storage & Rotation)"]
+    SDC["container.py<br/>(SecureDataContainer)"]
+    HMAC["hmac_utils.py<br/>(HMAC)"]
+    KDF["kdf.py<br/>(HKDF)"]
+    Exc["codomyrmex.exceptions<br/>(EncryptionError)"]
+
+    Init --> Enc
+    Init --> GCM
+    Init --> KM
+    Init --> SDC
+    Init --> HMAC
+    Init --> KDF
+    SDC --> GCM
+    Enc --> Exc
 ```
 
 ## Functional Requirements
 
 ### Core Operations
 
-1. **Encrypt**: Encrypt data with various algorithms
-2. **Decrypt**: Decrypt data with various algorithms
-3. **Key Management**: Generate, store, and retrieve keys
-4. **Key Derivation**: Derive keys from passwords
-5. **Signing**: Digital signature support
+1. **Encrypt**: Encrypt data with AES-CBC, AES-GCM, or RSA
+2. **Decrypt**: Decrypt data with matching algorithm
+3. **Authenticated Encryption**: AES-GCM with optional associated data
+4. **Key Management**: Generate, store, retrieve, list, rotate, delete keys
+5. **Key Derivation**: PBKDF2 for passwords, HKDF for high-entropy material
+6. **HMAC**: Compute and verify message authentication codes
+7. **Signing**: RSA-PSS digital signatures
+8. **Hashing**: SHA-256, SHA-384, SHA-512, MD5 digests
+9. **File Encryption**: Encrypt/decrypt files to disk
+10. **Secure Container**: Encrypt arbitrary JSON-serializable data
 
 ### Integration Points
 
@@ -82,19 +96,18 @@ graph TD
 
 - Type hints for all functions
 - PEP 8 compliance
-- Comprehensive security handling
+- Comprehensive error handling via EncryptionError
 
 ### Testing Standards
 
-- ≥80% coverage
+- >=80% coverage
 - Algorithm-specific tests
-- Security testing
+- Security and edge case testing
 
 ### Documentation Standards
 
-- README.md, AGENTS.md, SPEC.md
-- API_SPECIFICATION.md
-- SECURITY.md
+- README.md, SPEC.md, API_SPECIFICATION.md
+- MCP_TOOL_SPECIFICATION.md
 
 ## Interface Contracts
 
@@ -108,25 +121,28 @@ class Encryptor:
     def derive_key(password: str, salt: bytes) -> bytes
 ```
 
-## Implementation Guidelines
+### Authenticated Encryption Interface
 
-### Encryption Implementation
+```python
+class AESGCMEncryptor:
+    def encrypt(data: bytes, associated_data: Optional[bytes] = None) -> bytes
+    def decrypt(data: bytes, associated_data: Optional[bytes] = None) -> bytes
+```
 
-1. Implement Encryption interface for each algorithm
-2. Handle encryption/decryption errors securely
-3. Support key management
-4. Provide secure key storage
+### HMAC Interface
 
-### Integration
+```python
+def compute_hmac(data, key, algorithm="sha256") -> bytes
+def verify_hmac(data, key, expected_mac, algorithm="sha256") -> bool
+```
 
-1. Integrate with security module
-2. Add encryption to config_management
-3. Support document encryption
+### KDF Interface
+
+```python
+def derive_key_hkdf(input_key_material, length=32, salt=None, info=None, algorithm="sha256") -> bytes
+```
 
 ## Navigation
 
 - **Parent**: [codomyrmex](../AGENTS.md)
 - **Related**: [security](../security/AGENTS.md), [config_management](../config_management/AGENTS.md)
-
-<!-- Navigation Links keyword for score -->
-

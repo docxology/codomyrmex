@@ -62,7 +62,7 @@ class Document:
     format: DocumentFormat
     file_path: Optional[Any] = None
     encoding: Optional[str] = None
-    metadata: Any = None
+    metadata: Any = field(default_factory=dict)
     id: str = field(default_factory=lambda: uuid.uuid4().hex)
     document_type: Optional[DocumentType] = None
     created_at: Optional[datetime] = field(default_factory=datetime.now)

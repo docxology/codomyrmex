@@ -4,23 +4,68 @@
 
 ## Overview
 
-Encryption and cryptographic operations module. Provides secure key management, data encryption/decryption, and hashing capabilities.
+Encryption and cryptographic operations module for Codomyrmex. Provides symmetric and asymmetric encryption, authenticated encryption, key management, HMAC message authentication, key derivation functions, digital signatures, and secure hashing.
 
-## Directory Contents
+## Features
 
-- `API_SPECIFICATION.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `SECURITY.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `aes_gcm.py` – File
-- `container.py` – File
-- `encryptor.py` – File
-- `key_manager.py` – File
+- **AES-256 CBC** symmetric encryption (legacy, emits deprecation warning)
+- **AES-GCM** authenticated encryption (recommended for new code)
+- **RSA** asymmetric encryption with OAEP padding
+- **Digital signatures** using RSA-PSS
+- **PBKDF2** password-based key derivation
+- **HKDF** key derivation from high-entropy material
+- **HMAC** message authentication with constant-time verification
+- **Secure hashing** (SHA-256, SHA-384, SHA-512, MD5)
+- **Key management** with file-based storage, listing, rotation
+- **SecureDataContainer** for encrypting arbitrary JSON-serializable data
+
+## Quick Start
+
+```python
+from codomyrmex.encryption import (
+    generate_key, encrypt, decrypt,
+    AESGCMEncryptor,
+    compute_hmac, verify_hmac,
+    derive_key_hkdf,
+)
+
+# --- AES-GCM (recommended) ---
+key = generate_key()
+gcm = AESGCMEncryptor(key)
+ciphertext = gcm.encrypt(b"secret data")
+plaintext = gcm.decrypt(ciphertext)
+
+# --- HMAC ---
+mac = compute_hmac(b"message", b"secret-key")
+assert verify_hmac(b"message", b"secret-key", mac)
+
+# --- HKDF ---
+derived = derive_key_hkdf(b"shared-secret", length=32, info=b"app-v1")
+```
+
+## Security Notes
+
+- **Prefer AES-GCM** over AES-CBC. CBC mode does not authenticate ciphertext and is vulnerable to padding oracle attacks. The module now emits a `DeprecationWarning` when AES-CBC is used.
+- Key files are stored with `0o600` permissions via `KeyManager`.
+- HMAC verification uses `hmac.compare_digest()` for timing-safe comparison.
+
+## File Descriptions
+
+| File | Description |
+|------|-------------|
+| `encryptor.py` | Core `Encryptor` class: AES-CBC, RSA, signing, hashing, file encryption |
+| `aes_gcm.py` | `AESGCMEncryptor` for authenticated encryption |
+| `container.py` | `SecureDataContainer` for encrypted JSON storage |
+| `key_manager.py` | `KeyManager` for key storage, retrieval, listing, rotation |
+| `hmac_utils.py` | HMAC computation and constant-time verification |
+| `kdf.py` | HKDF key derivation |
+| `__init__.py` | Public API and convenience functions |
 
 ## Navigation
 
+- **API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Functional Spec**: [SPEC.md](SPEC.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
 - **Full Documentation**: [docs/modules/encryption/](../../../docs/modules/encryption/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

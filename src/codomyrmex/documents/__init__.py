@@ -26,13 +26,14 @@ try:
     from .core.document_reader import DocumentReader, read_document
     from .core.document_writer import DocumentWriter, write_document
     from .core.document_parser import DocumentParser, parse_document
-    from .core.document_validator import DocumentValidator, validate_document
+    from .core.document_validator import DocumentValidator, ValidationResult, validate_document
     CORE_AVAILABLE = True
 except ImportError:
     DocumentReader = None
     DocumentWriter = None
     DocumentParser = None
     DocumentValidator = None
+    ValidationResult = None
     read_document = None
     write_document = None
     parse_document = None
@@ -67,16 +68,43 @@ except ImportError:
     PDFDocument = None
     PDF_AVAILABLE = False
 
+# Import new format handlers
+try:
+    from .formats.html_handler import read_html, write_html
+    HTML_AVAILABLE = True
+except ImportError:
+    read_html = None
+    write_html = None
+    HTML_AVAILABLE = False
+
+try:
+    from .formats.xml_handler import read_xml, write_xml
+    XML_AVAILABLE = True
+except ImportError:
+    read_xml = None
+    write_xml = None
+    XML_AVAILABLE = False
+
+try:
+    from .formats.csv_handler import read_csv, write_csv
+    CSV_AVAILABLE = True
+except ImportError:
+    read_csv = None
+    write_csv = None
+    CSV_AVAILABLE = False
+
 # Import transformation capabilities
 try:
     from .transformation.converter import convert_document
     from .transformation.merger import merge_documents
     from .transformation.splitter import split_document
+    from .transformation.formatter import format_document
     TRANSFORMATION_AVAILABLE = True
 except ImportError:
     convert_document = None
     merge_documents = None
     split_document = None
+    format_document = None
     TRANSFORMATION_AVAILABLE = False
 
 # Import metadata operations
@@ -93,24 +121,42 @@ except ImportError:
 
 # Import search capabilities
 try:
-    from .search.indexer import index_document
-    from .search.searcher import search_documents
+    from .search.indexer import InMemoryIndex, index_document, create_index
+    from .search.searcher import search_documents, search_index
+    from .search.query_builder import QueryBuilder, build_query
     SEARCH_AVAILABLE = True
 except ImportError:
+    InMemoryIndex = None
     index_document = None
+    create_index = None
     search_documents = None
+    search_index = None
+    QueryBuilder = None
+    build_query = None
     SEARCH_AVAILABLE = False
 
 # Import models
 try:
-    from .models.document import Document, DocumentFormat
-    from .models.metadata import DocumentMetadata
+    from .models.document import Document, DocumentFormat, DocumentType
+    from .models.metadata import DocumentMetadata, MetadataField
     MODELS_AVAILABLE = True
 except ImportError:
     Document = None
     DocumentFormat = None
+    DocumentType = None
     DocumentMetadata = None
+    MetadataField = None
     MODELS_AVAILABLE = False
+
+# Import config
+try:
+    from .config import DocumentsConfig, get_config, set_config
+    CONFIG_AVAILABLE = True
+except ImportError:
+    DocumentsConfig = None
+    get_config = None
+    set_config = None
+    CONFIG_AVAILABLE = False
 
 # Build __all__ dynamically
 __all__ = []
@@ -121,6 +167,7 @@ if CORE_AVAILABLE:
         "DocumentWriter",
         "DocumentParser",
         "DocumentValidator",
+        "ValidationResult",
         "read_document",
         "write_document",
         "parse_document",
@@ -146,11 +193,30 @@ if PDF_AVAILABLE:
         "PDFDocument",
     ])
 
+if HTML_AVAILABLE:
+    __all__.extend([
+        "read_html",
+        "write_html",
+    ])
+
+if XML_AVAILABLE:
+    __all__.extend([
+        "read_xml",
+        "write_xml",
+    ])
+
+if CSV_AVAILABLE:
+    __all__.extend([
+        "read_csv",
+        "write_csv",
+    ])
+
 if TRANSFORMATION_AVAILABLE:
     __all__.extend([
         "convert_document",
         "merge_documents",
         "split_document",
+        "format_document",
     ])
 
 if METADATA_AVAILABLE:
@@ -162,15 +228,27 @@ if METADATA_AVAILABLE:
 
 if SEARCH_AVAILABLE:
     __all__.extend([
+        "InMemoryIndex",
         "index_document",
+        "create_index",
         "search_documents",
+        "search_index",
+        "QueryBuilder",
+        "build_query",
     ])
 
 if MODELS_AVAILABLE:
     __all__.extend([
         "Document",
         "DocumentFormat",
+        "DocumentType",
         "DocumentMetadata",
+        "MetadataField",
     ])
 
-
+if CONFIG_AVAILABLE:
+    __all__.extend([
+        "DocumentsConfig",
+        "get_config",
+        "set_config",
+    ])

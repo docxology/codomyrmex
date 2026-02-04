@@ -2,14 +2,11 @@
 Key management for encryption keys.
 """
 
-import json
 import tempfile
 from pathlib import Path
 from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-from .encryptor import Encryptor
 
 logger = get_logger(__name__)
 
@@ -88,4 +85,38 @@ class KeyManager:
             logger.error(f"Error deleting key: {e}")
             return False
 
+    def list_keys(self) -> list[str]:
+        """List all stored key identifiers.
 
+        Returns:
+            List of key ID strings
+        """
+        return sorted(p.stem for p in self.key_dir.glob("*.key"))
+
+    def key_exists(self, key_id: str) -> bool:
+        """Check whether a key exists without loading it.
+
+        Args:
+            key_id: Key identifier
+
+        Returns:
+            True if the key file exists
+        """
+        return (self.key_dir / f"{key_id}.key").exists()
+
+    def rotate_key(self, key_id: str, new_key: bytes) -> Optional[bytes]:
+        """Rotate a key: store a new key and return the old one.
+
+        The old key is returned so callers can re-encrypt data that was
+        protected by the previous key.
+
+        Args:
+            key_id: Key identifier to rotate
+            new_key: The replacement key bytes
+
+        Returns:
+            The previous key bytes, or None if no prior key existed
+        """
+        old_key = self.get_key(key_id)
+        self.store_key(key_id, new_key)
+        return old_key

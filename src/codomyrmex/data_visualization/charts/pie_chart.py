@@ -7,7 +7,7 @@ Generates pie charts.
 
 import matplotlib.pyplot as plt
 
-from .plot_utils import get_codomyrmex_logger, save_plot
+from .plot_utils import apply_theme_to_axes, get_codomyrmex_logger, save_plot
 
 logger = get_codomyrmex_logger(__name__)
 
@@ -21,6 +21,7 @@ def create_pie_chart(
     autopct: str = "%1.1f%%",
     startangle: int = 90,
     explode: list = None,  # e.g., [0, 0.1, 0, 0] to explode the 2nd slice
+    theme=None,
 ):
     """
     Generates a pie chart.
@@ -31,12 +32,12 @@ def create_pie_chart(
         logger.warning(
             "Empty data for labels or sizes in pie chart. No plot generated."
         )
-        return
+        return None
     if len(labels) != len(sizes):
         logger.warning(
             f"Length mismatch for pie chart: labels ({len(labels)}) vs sizes ({len(sizes)}). Plot not generated."
         )
-        return
+        return None
     if explode and len(explode) != len(labels):
         logger.warning(
             f"Length mismatch for pie chart explode: labels ({len(labels)}) vs explode ({len(explode)}). Ignoring explode."
@@ -44,6 +45,8 @@ def create_pie_chart(
         explode = None
 
     fig, ax = plt.subplots()
+    if theme is not None:
+        apply_theme_to_axes(ax, theme)
     # Add a check for sum of sizes to avoid division by zero in autopct if all sizes are 0
     if sum(s for s in sizes if isinstance(s, (int, float))) == 0:
         logger.warning(
@@ -74,6 +77,7 @@ def create_pie_chart(
     else:
         plt.close(fig)
     logger.info(f"Pie chart '{title}' generated successfully.")
+    return fig
 
 
 class PieChart:
