@@ -1,6 +1,6 @@
 # Metrics Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `metrics` module provides observability primitives for Codomyrmex applications. It supports standard metric types (Counter, Gauge, Histogram, Summary) and pluggable backends (InMemory, Prometheus).

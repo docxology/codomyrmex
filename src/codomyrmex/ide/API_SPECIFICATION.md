@@ -1,6 +1,6 @@
 # IDE Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `ide` module provides a unified interface for automating and interacting with Integrated Development Environments (IDEs) such as VS Code, Cursor, and Antigravity. It abstracts IDE-specific communication protocols into a standard set of commands and events.

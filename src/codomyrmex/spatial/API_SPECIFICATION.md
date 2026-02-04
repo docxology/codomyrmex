@@ -1,6 +1,6 @@
 # Spatial Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `spatial` module provides advanced modeling capabilities for 3D and 4D environments, including support for Synergetics-based geometry and world models.

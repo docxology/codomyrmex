@@ -1,6 +1,6 @@
 # Cloud Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `cloud` module encapsulates interactions with external cloud service APIs. Its primary component is the Coda.io integration for managing documents, tables, and permissions.

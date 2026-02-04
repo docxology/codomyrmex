@@ -1,6 +1,6 @@
 # API_SPECIFICATION.md
 
-**Version**: v0.1.0 | **Status**: Draft | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Draft | **Last Updated**: February 2026
 
 ## Module: notification
 

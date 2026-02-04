@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/model_context_protocol/docs/tutorials
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 

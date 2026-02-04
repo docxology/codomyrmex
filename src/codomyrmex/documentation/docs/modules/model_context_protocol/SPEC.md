@@ -1,6 +1,6 @@
 # Model Context Protocol - Module Doc Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 This directory mirrors `src/codomyrmex/model_context_protocol`.
 
 ## Navigation

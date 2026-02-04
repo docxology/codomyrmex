@@ -271,7 +271,7 @@ Security Workflow
 - **Python**: 3.11 (consistent across all workflows)
 - **UV Package Manager**: 0.5.7
 - **Node.js**: 20
-- **Last Updated**: January 2026
+- **Last Updated**: February 2026
 
 ---
 

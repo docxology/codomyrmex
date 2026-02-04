@@ -1,37 +1,17 @@
+"""Configuration management for the Documents module."""
+
+import os
 from pathlib import Path
 from typing import Optional
-import os
 
 from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Configuration management for the Documents module."""
-
 logger = get_logger(__name__)
+
+
 class DocumentsConfig:
     """Configuration for document operations."""
-    
+
     def __init__(
         self,
         default_encoding: str = "utf-8",
@@ -43,7 +23,7 @@ class DocumentsConfig:
         self.default_encoding = default_encoding
         self.max_file_size = max_file_size
         self.enable_caching = enable_caching
-        
+
         # Use environment variable for cache directory if set (for testing)
         if cache_directory is None:
             env_cache = os.environ.get('CODOMYRMEX_CACHE_DIR')
@@ -51,10 +31,10 @@ class DocumentsConfig:
                 cache_directory = Path(env_cache) / "documents_cache"
             else:
                 cache_directory = Path.home() / ".codomyrmex" / "documents_cache"
-        
+
         self.cache_directory = cache_directory
         self.strict_validation = strict_validation
-        
+
         # Create cache directory if needed (handle permission errors gracefully)
         if self.enable_caching:
             try:
@@ -80,4 +60,3 @@ def set_config(config: DocumentsConfig) -> None:
     """Set the global documents configuration."""
     global _config
     _config = config
-

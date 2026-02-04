@@ -1,6 +1,6 @@
 # First Principles Framework (FPF) — Core Conceptual Specification
 by Anatoly Levenchuk and assortment of LLMs.
-January 2026
+February 2026
 
 Pattern and headers templates are explained in pattern E.8.
 

@@ -1,6 +1,6 @@
 # Encryption Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `encryption` module provides secure cryptographic primitives for Codomyrmex. It wraps standard libraries to offer simplified interfaces for AES symmetric encryption, RSA asymmetric keys, and secure hashing.

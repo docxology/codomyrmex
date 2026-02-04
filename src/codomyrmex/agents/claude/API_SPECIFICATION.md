@@ -1,6 +1,6 @@
 # Claude Module - API Specification
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 

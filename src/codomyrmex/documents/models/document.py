@@ -3,64 +3,104 @@
 Defines core document types and formats.
 """
 
+import json
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 
 class DocumentType(Enum):
     """Types of documents."""
     TEXT = "text"
-    MARKDOWN = "markdown"
-    HTML = "html"
-    PDF = "pdf"
+    MARKUP = "markup"
+    STRUCTURED = "structured"
+    BINARY = "binary"
     CODE = "code"
-    JSON = "json"
-    XML = "xml"
-    YAML = "yaml"
 
 
 class DocumentFormat(Enum):
     """Document file formats."""
-    TXT = "txt"
-    MD = "md"
+    MARKDOWN = "markdown"
+    TEXT = "text"
     HTML = "html"
-    PDF = "pdf"
     JSON = "json"
     XML = "xml"
     YAML = "yaml"
+    CSV = "csv"
+    PDF = "pdf"
+    RTF = "rtf"
+    DOCX = "docx"
+    XLSX = "xlsx"
     PY = "py"
     JS = "js"
 
 
-@dataclass
-class DocumentMetadata:
-    """Document metadata."""
-    title: Optional[str] = None
-    author: Optional[str] = None
-    created_at: Optional[datetime] = None
-    modified_at: Optional[datetime] = None
-    tags: List[str] = field(default_factory=list)
-    custom: Dict[str, Any] = field(default_factory=dict)
+# Mapping from format to document type
+_FORMAT_TYPE_MAP = {
+    DocumentFormat.MARKDOWN: DocumentType.MARKUP,
+    DocumentFormat.HTML: DocumentType.MARKUP,
+    DocumentFormat.XML: DocumentType.MARKUP,
+    DocumentFormat.RTF: DocumentType.MARKUP,
+    DocumentFormat.TEXT: DocumentType.TEXT,
+    DocumentFormat.JSON: DocumentType.STRUCTURED,
+    DocumentFormat.YAML: DocumentType.STRUCTURED,
+    DocumentFormat.CSV: DocumentType.STRUCTURED,
+    DocumentFormat.XLSX: DocumentType.STRUCTURED,
+    DocumentFormat.PDF: DocumentType.BINARY,
+    DocumentFormat.DOCX: DocumentType.BINARY,
+    DocumentFormat.PY: DocumentType.CODE,
+    DocumentFormat.JS: DocumentType.CODE,
+}
 
 
 @dataclass
 class Document:
     """Represents a document."""
-    id: str
-    content: str
-    document_type: DocumentType
+    content: Any
     format: DocumentFormat
-    file_path: Optional[str] = None
-    metadata: DocumentMetadata = field(default_factory=DocumentMetadata)
+    file_path: Optional[Any] = None
+    encoding: Optional[str] = None
+    metadata: Any = None
+    id: str = field(default_factory=lambda: uuid.uuid4().hex)
+    document_type: Optional[DocumentType] = None
+    created_at: Optional[datetime] = field(default_factory=datetime.now)
+    modified_at: Optional[datetime] = field(default_factory=datetime.now)
+
+    def __post_init__(self):
+        if self.document_type is None:
+            self.document_type = _FORMAT_TYPE_MAP.get(self.format, DocumentType.TEXT)
+
+    @property
+    def type(self) -> DocumentType:
+        """Shorthand for document_type."""
+        return self.document_type
+
+    def get_content_as_string(self) -> str:
+        """Return content as a string."""
+        if isinstance(self.content, str):
+            return self.content
+        if isinstance(self.content, dict):
+            return json.dumps(self.content, ensure_ascii=False)
+        if isinstance(self.content, (list, tuple)):
+            return json.dumps(self.content, ensure_ascii=False)
+        if isinstance(self.content, bytes):
+            return self.content.decode(self.encoding or "utf-8", errors="replace")
+        return str(self.content)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
+        content_preview = self.get_content_as_string()
+        if len(content_preview) > 100:
+            content_preview = content_preview[:100] + "..."
         return {
             "id": self.id,
-            "content": self.content[:100] + "..." if len(self.content) > 100 else self.content,
-            "document_type": self.document_type.value,
+            "content": content_preview,
+            "document_type": self.document_type.value if self.document_type else None,
             "format": self.format.value,
-            "file_path": self.file_path,
+            "file_path": str(self.file_path) if self.file_path else None,
+            "encoding": self.encoding,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "modified_at": self.modified_at.isoformat() if self.modified_at else None,
         }

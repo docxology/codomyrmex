@@ -1,6 +1,6 @@
 # docs - Documentation Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 This directory contains **Documentation** documentation. It serves to educate users and developers about specific aspects of the system.

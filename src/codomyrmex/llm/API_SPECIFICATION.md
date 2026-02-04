@@ -1,6 +1,6 @@
 # LLM Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `llm` module manages Large Language Model integrations for Codomyrmex. It currently supports Ollama as a local inference backend and integrates with the Fabric framework for orchestration.

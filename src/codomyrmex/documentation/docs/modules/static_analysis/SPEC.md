@@ -1,6 +1,6 @@
 # Static Analysis - Module Doc Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 This directory mirrors `src/codomyrmex/static_analysis`.
 
 ## Navigation

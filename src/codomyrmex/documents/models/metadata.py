@@ -1,84 +1,42 @@
+"""Document metadata models."""
+
+import copy
 from datetime import datetime
 from typing import Any, Optional
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Document metadata models."""
-
 logger = get_logger(__name__)
+
+
 @dataclass
 class MetadataField:
     """A single metadata field."""
-    
+
     name: str
     value: Any
     data_type: Optional[str] = None
-    source: Optional[str] = None  # Where this metadata came from
+    source: Optional[str] = None
 
 
 @dataclass
 class DocumentMetadata:
     """Document metadata container."""
-    
+
     title: Optional[str] = None
     author: Optional[str] = None
     created_at: Optional[datetime] = None
     modified_at: Optional[datetime] = None
     version: Optional[str] = None
-    tags: list[str] = None
-    custom_fields: dict[str, Any] = None
-    
-    def __post_init__(self):
+    tags: list[str] = field(default_factory=list)
+    custom_fields: dict[str, Any] = field(default_factory=dict)
 
-        if self.tags is None:
-            self.tags = []
-        if self.custom_fields is None:
-            self.custom_fields = {}
-    
+    def copy(self) -> "DocumentMetadata":
+        """Return a deep copy of this metadata."""
+        return copy.deepcopy(self)
+
     def to_dict(self) -> dict:
         """Convert metadata to dictionary."""
         return {
@@ -90,18 +48,18 @@ class DocumentMetadata:
             "tags": self.tags,
             "custom_fields": self.custom_fields,
         }
-    
+
     @classmethod
     def from_dict(cls, data: dict) -> "DocumentMetadata":
         """Create metadata from dictionary."""
         created_at = None
         modified_at = None
-        
+
         if data.get("created_at"):
             created_at = datetime.fromisoformat(data["created_at"])
         if data.get("modified_at"):
             modified_at = datetime.fromisoformat(data["modified_at"])
-        
+
         return cls(
             title=data.get("title"),
             author=data.get("author"),
@@ -111,4 +69,3 @@ class DocumentMetadata:
             tags=data.get("tags", []),
             custom_fields=data.get("custom_fields", {}),
         )
-

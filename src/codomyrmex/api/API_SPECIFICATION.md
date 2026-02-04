@@ -1,6 +1,6 @@
 # API Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `api` module provides foundations for defining, documenting, and standardizing APIs within Codomyrmex. It supports REST and GraphQL paradigms and includes automated documentation generation.
