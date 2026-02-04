@@ -6,17 +6,19 @@ This module provides integrations with various cloud service APIs including:
 - AWS: Amazon Web Services (S3)
 - GCP: Google Cloud Platform (GCS)
 - Azure: Microsoft Azure (Blob Storage)
+- Infomaniak: OpenStack-based public cloud (Compute, Storage, Network, DNS, etc.)
 
 The module is organized into submodules for each cloud service:
 - coda_io: Coda.io REST API v1 client
 - aws: AWS S3 client
 - gcp: GCP Storage client
 - azure: Azure Blob client
+- infomaniak: Infomaniak Public Cloud clients (Nova, Cinder, Neutron, Swift, S3, Keystone, Designate, Heat)
 - common: Shared cloud utilities
 
 Usage:
     from codomyrmex.cloud import CodaClient
-    
+
     client = CodaClient(api_token="your-api-token")
     docs = client.list_docs()
 """
@@ -79,6 +81,41 @@ try:
 except ImportError:
     AzureBlobClient = None  # azure-storage-blob not installed
 
+# Infomaniak clients (requires openstacksdk and/or boto3)
+try:
+    from .infomaniak import (
+        InfomaniakComputeClient,
+        InfomaniakVolumeClient,
+        InfomaniakNetworkClient,
+        InfomaniakObjectStorageClient,
+        InfomaniakS3Client,
+        InfomaniakIdentityClient,
+        InfomaniakDNSClient,
+        InfomaniakHeatClient,
+        InfomaniakMeteringClient,
+        InfomaniakNewsletterClient,
+        InfomaniakCredentials,
+        InfomaniakS3Credentials,
+        create_openstack_connection,
+        create_s3_client,
+    )
+except ImportError:
+    # openstacksdk not installed
+    InfomaniakComputeClient = None
+    InfomaniakVolumeClient = None
+    InfomaniakNetworkClient = None
+    InfomaniakObjectStorageClient = None
+    InfomaniakS3Client = None
+    InfomaniakIdentityClient = None
+    InfomaniakDNSClient = None
+    InfomaniakHeatClient = None
+    InfomaniakMeteringClient = None
+    InfomaniakNewsletterClient = None
+    InfomaniakCredentials = None
+    InfomaniakS3Credentials = None
+    create_openstack_connection = None
+    create_s3_client = None
+
 # New submodule exports
 from . import common
 
@@ -125,6 +162,21 @@ __all__ = [
     "S3Client",
     "GCSClient",
     "AzureBlobClient",
+    # Infomaniak Clients
+    "InfomaniakComputeClient",
+    "InfomaniakVolumeClient",
+    "InfomaniakNetworkClient",
+    "InfomaniakObjectStorageClient",
+    "InfomaniakS3Client",
+    "InfomaniakIdentityClient",
+    "InfomaniakDNSClient",
+    "InfomaniakHeatClient",
+    "InfomaniakMeteringClient",
+    "InfomaniakNewsletterClient",
+    "InfomaniakCredentials",
+    "InfomaniakS3Credentials",
+    "create_openstack_connection",
+    "create_s3_client",
     # Submodules
     "common",
 ]

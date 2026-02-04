@@ -6,7 +6,7 @@
 
 ## Context
 
-Cloud provider integrations for AWS, GCP, Azure, and Coda.io with unified abstractions for storage, compute, and serverless operations.
+Cloud provider integrations for AWS, GCP, Azure, Coda.io, and Infomaniak with unified abstractions for storage, compute, serverless, DNS, orchestration, metering, and newsletter operations. Infomaniak provides Swiss-hosted, GDPR-compliant cloud infrastructure.
 
 ## AI Agent Strategy
 
@@ -22,6 +22,9 @@ available = []
 if S3Client: available.append("aws")
 if GCSClient: available.append("gcp")
 if AzureBlobClient: available.append("azure")
+
+from codomyrmex.cloud import InfomaniakComputeClient
+if InfomaniakComputeClient: available.append("infomaniak")
 
 # Choose based on context or preference
 ```
@@ -56,6 +59,7 @@ except Exception as e:
 - **GCP**: Use application default credentials or service account
 - **Azure**: Use DefaultAzureCredential for automatic chain
 - **Coda.io**: Pass API token to CodaClient constructor
+- **Infomaniak**: Application Credentials for OpenStack; OAuth2 Bearer token for Newsletter
 
 ## Key Files
 
@@ -76,7 +80,6 @@ except Exception as e:
 
 ## Future Considerations
 
-- **Compute Services**: EC2, GCE, Azure VMs
 - **Serverless**: Lambda, Cloud Functions, Azure Functions
 - **Databases**: RDS, Cloud SQL, Azure SQL
 - **Telemetry**: Emit metrics for cloud operations

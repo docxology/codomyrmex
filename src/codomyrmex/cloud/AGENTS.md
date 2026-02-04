@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Cloud provider integration module supporting AWS, GCP, Azure, and Coda.io. Provides unified interfaces for cloud resources, storage, compute, and serverless services.
+Cloud provider integration module supporting AWS, GCP, Azure, Coda.io, and Infomaniak. Provides unified interfaces for cloud resources, storage, compute, serverless, DNS, orchestration, metering, and newsletter services.
 
 ## Module Architecture
 
@@ -31,10 +31,21 @@ cloud/
 │   ├── storage/         # Extended storage operations
 │   ├── compute/         # VM operations (planned)
 │   └── serverless/      # Azure Functions (planned)
-└── coda_io/             # Coda.io API
-    ├── CodaClient       # REST API v1 client
-    ├── models.py        # Data models (Doc, Page, Table, Row, etc.)
-    └── exceptions.py    # API error types
+├── coda_io/             # Coda.io API
+│   ├── CodaClient       # REST API v1 client
+│   ├── models.py        # Data models (Doc, Page, Table, Row, etc.)
+│   └── exceptions.py    # API error types
+└── infomaniak/          # Infomaniak Public Cloud + Newsletter
+    ├── auth.py          # Credentials and connection factories
+    ├── compute/         # InfomaniakComputeClient (Nova)
+    ├── block_storage/   # InfomaniakVolumeClient (Cinder)
+    ├── network/         # InfomaniakNetworkClient (Neutron/Octavia)
+    ├── object_storage/  # InfomaniakObjectStorageClient (Swift) / InfomaniakS3Client
+    ├── identity/        # InfomaniakIdentityClient (Keystone)
+    ├── dns/             # InfomaniakDNSClient (Designate)
+    ├── orchestration/   # InfomaniakHeatClient (Heat)
+    ├── metering/        # InfomaniakMeteringClient
+    └── newsletter/      # InfomaniakNewsletterClient (REST API)
 ```
 
 ## Active Components
@@ -48,6 +59,16 @@ cloud/
 | `StorageClient` | ABC | Active | Abstract storage interface |
 | `ComputeClient` | ABC | Planned | Abstract compute interface |
 | `ServerlessClient` | ABC | Planned | Abstract serverless interface |
+| `InfomaniakComputeClient` | Class | Active | Infomaniak compute (Nova) |
+| `InfomaniakVolumeClient` | Class | Active | Infomaniak block storage (Cinder) |
+| `InfomaniakNetworkClient` | Class | Active | Infomaniak networking (Neutron/Octavia) |
+| `InfomaniakObjectStorageClient` | Class | Active | Infomaniak Swift object storage |
+| `InfomaniakS3Client` | Class | Active | Infomaniak S3-compatible storage |
+| `InfomaniakIdentityClient` | Class | Active | Infomaniak identity (Keystone) |
+| `InfomaniakDNSClient` | Class | Active | Infomaniak DNS (Designate) |
+| `InfomaniakHeatClient` | Class | Active | Infomaniak orchestration (Heat) |
+| `InfomaniakMeteringClient` | Class | Active | Infomaniak metering/billing |
+| `InfomaniakNewsletterClient` | Class | Active | Infomaniak Newsletter REST API |
 
 ## Operating Contracts
 
@@ -56,6 +77,10 @@ cloud/
 ```python
 # Recommended: Direct client imports
 from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient, CodaClient
+
+# Infomaniak clients
+from codomyrmex.cloud import InfomaniakComputeClient, InfomaniakS3Client
+from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
 # Access common abstractions
 from codomyrmex.cloud.common import StorageClient, CloudProvider
@@ -91,6 +116,9 @@ if GCSClient is None:
 
 if AzureBlobClient is None:
     print("azure-storage-blob not installed - Azure features unavailable")
+
+if InfomaniakComputeClient is None:
+    print("openstacksdk not installed - Infomaniak features unavailable")
 ```
 
 ## Agent Integration Guidelines

@@ -1,0 +1,175 @@
+"""
+Infomaniak Base Client Classes.
+
+Provides shared functionality for all Infomaniak cloud clients,
+eliminating factory method duplication across 8+ client modules.
+"""
+
+from typing import Any, Optional
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class InfomaniakOpenStackBase:
+    """
+    Base class for Infomaniak clients using OpenStack SDK.
+
+    Provides shared __init__, from_env(), from_credentials(),
+    context manager protocol, and connection validation.
+
+    Subclasses should set ``_service_name`` for error reporting.
+    """
+
+    _service_name: str = "openstack"
+
+    def __init__(self, connection: Any):
+        """
+        Initialize with an OpenStack connection.
+
+        Args:
+            connection: openstack.connection.Connection object
+        """
+        self._conn = connection
+
+    @classmethod
+    def from_env(cls) -> "InfomaniakOpenStackBase":
+        """Create client using environment variable credentials."""
+        from .auth import create_openstack_connection
+
+        conn = create_openstack_connection()
+        return cls(conn)
+
+    @classmethod
+    def from_credentials(
+        cls,
+        application_credential_id: str,
+        application_credential_secret: str,
+        auth_url: Optional[str] = None,
+        region: str = "dc3-a",
+    ) -> "InfomaniakOpenStackBase":
+        """
+        Create client with explicit credentials.
+
+        Args:
+            application_credential_id: Infomaniak app credential ID
+            application_credential_secret: Infomaniak app credential secret
+            auth_url: Optional auth URL override
+            region: Region name
+        """
+        from .auth import InfomaniakCredentials, create_openstack_connection
+
+        creds = InfomaniakCredentials(
+            application_credential_id=application_credential_id,
+            application_credential_secret=application_credential_secret,
+            auth_url=auth_url or "https://api.pub1.infomaniak.cloud/identity/v3/",
+            region=region,
+        )
+        conn = create_openstack_connection(creds)
+        return cls(conn)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
+
+    def close(self):
+        """Safely close the OpenStack connection."""
+        if hasattr(self._conn, "close"):
+            try:
+                self._conn.close()
+            except Exception as e:
+                logger.warning(f"Error closing {self._service_name} connection: {e}")
+
+    def validate_connection(self) -> bool:
+        """
+        Lightweight health check by listing projects.
+
+        Returns:
+            True if the connection is valid
+        """
+        try:
+            list(self._conn.identity.projects())
+            return True
+        except Exception as e:
+            logger.error(f"Connection validation failed for {self._service_name}: {e}")
+            return False
+
+
+class InfomaniakS3Base:
+    """
+    Base class for Infomaniak S3-compatible clients using boto3.
+
+    Provides shared __init__, from_env(), from_credentials(),
+    context manager protocol, and connection validation.
+    """
+
+    DEFAULT_ENDPOINT = "https://s3.pub1.infomaniak.cloud/"
+    DEFAULT_REGION = "us-east-1"
+
+    def __init__(self, client: Any):
+        """
+        Initialize with a boto3 S3 client.
+
+        Args:
+            client: boto3.client('s3') instance
+        """
+        self._client = client
+
+    @classmethod
+    def from_env(cls) -> "InfomaniakS3Base":
+        """Create client using environment variable credentials."""
+        from .auth import create_s3_client
+
+        client = create_s3_client()
+        return cls(client)
+
+    @classmethod
+    def from_credentials(
+        cls,
+        access_key: str,
+        secret_key: str,
+        endpoint_url: Optional[str] = None,
+        region: Optional[str] = None,
+    ) -> "InfomaniakS3Base":
+        """Create client with explicit credentials."""
+        try:
+            import boto3
+        except ImportError:
+            raise ImportError("boto3 is required for S3 operations")
+
+        client = boto3.client(
+            "s3",
+            endpoint_url=endpoint_url or cls.DEFAULT_ENDPOINT,
+            aws_access_key_id=access_key,
+            aws_secret_access_key=secret_key,
+            region_name=region or cls.DEFAULT_REGION,
+        )
+        return cls(client)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
+
+    def close(self):
+        """Close the S3 client (no-op for boto3, but provided for consistency)."""
+        pass
+
+    def validate_connection(self) -> bool:
+        """
+        Lightweight health check by listing buckets.
+
+        Returns:
+            True if the connection is valid
+        """
+        try:
+            self._client.list_buckets()
+            return True
+        except Exception as e:
+            logger.error(f"S3 connection validation failed: {e}")
+            return False

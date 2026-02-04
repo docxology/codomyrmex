@@ -12,8 +12,9 @@ The Cloud Services module provides unified, provider-agnostic interfaces for int
 | **GCP** | `GCSClient` | Google Cloud Storage |
 | **Azure** | `AzureBlobClient` | Azure Blob Storage |
 | **Coda.io** | `CodaClient` | Document and database API |
+| **Infomaniak** | `InfomaniakComputeClient`, `InfomaniakVolumeClient`, `InfomaniakNetworkClient`, `InfomaniakObjectStorageClient`, `InfomaniakS3Client`, `InfomaniakIdentityClient`, `InfomaniakDNSClient`, `InfomaniakHeatClient`, `InfomaniakMeteringClient`, `InfomaniakNewsletterClient` | Swiss-hosted OpenStack cloud (9 services) + Newsletter API |
 
-All storage clients share a consistent interface pattern with operations for upload, download, list, metadata retrieval, and bucket/container management.
+All storage clients share a consistent interface pattern with operations for upload, download, list, metadata retrieval, and bucket/container management. Infomaniak clients provide compute, storage, networking, DNS, orchestration, metering, and newsletter services via OpenStack and Infomaniak REST APIs.
 
 ## Architecture
 
@@ -51,10 +52,25 @@ graph TB
             Coda[CodaClient]
             Models[Data Models]
         end
+
+        subgraph "Infomaniak"
+            IKCompute[InfomaniakComputeClient]
+            IKVolume[InfomaniakVolumeClient]
+            IKNetwork[InfomaniakNetworkClient]
+            IKObjStore[InfomaniakObjectStorageClient]
+            IKS3[InfomaniakS3Client]
+            IKIdentity[InfomaniakIdentityClient]
+            IKDNS[InfomaniakDNSClient]
+            IKHeat[InfomaniakHeatClient]
+            IKMeter[InfomaniakMeteringClient]
+            IKNewsletter[InfomaniakNewsletterClient]
+        end
     end
-    
-    Init --> S3 & GCS & Blob & Coda
+
+    Init --> S3 & GCS & Blob & Coda & IKCompute
     Storage -.-> S3 & GCS & Blob
+    Compute -.-> IKCompute
+    IKS3 -.-> Storage
 ```
 
 ## Quick Start
@@ -73,6 +89,12 @@ pip install google-cloud-storage
 
 # Azure support
 pip install azure-storage-blob azure-identity
+
+# Infomaniak support (OpenStack services)
+pip install openstacksdk
+
+# Infomaniak S3-compatible storage
+pip install boto3
 ```
 
 ### Usage Examples
@@ -164,7 +186,32 @@ for row in rows.items:
 | [`gcp/`](gcp/README.md) | Google Cloud Platform integration |
 | [`azure/`](azure/README.md) | Microsoft Azure integration |
 | [`coda_io/`](coda_io/README.md) | Coda.io document/database API |
+| [`infomaniak/`](infomaniak/README.md) | Infomaniak OpenStack cloud + Newsletter API |
 | [`common/`](common/README.md) | Shared abstractions and utilities |
+
+#### Infomaniak
+
+```python
+from codomyrmex.cloud.infomaniak import InfomaniakComputeClient, InfomaniakS3Client
+
+# Compute (from environment variables)
+compute = InfomaniakComputeClient.from_env()
+instances = compute.list_instances()
+
+# S3-compatible storage
+s3 = InfomaniakS3Client.from_env()
+s3.upload_data("my-bucket", "data.csv", open("data.csv", "rb").read())
+```
+
+#### Infomaniak Newsletter
+
+```python
+from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+
+client = InfomaniakNewsletterClient.from_env()
+campaigns = client.list_campaigns()
+client.send_test(campaign_id="123", email="test@activeinference.tech")
+```
 
 ## Documentation
 

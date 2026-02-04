@@ -16,6 +16,7 @@ class CloudProvider(Enum):
     AWS = "aws"
     GCP = "gcp"
     AZURE = "azure"
+    INFOMANIAK = "infomaniak"
     LOCAL = "local"
 
 
@@ -262,7 +263,17 @@ class CloudConfig:
                 project_id=os.environ.get('GCP_PROJECT_ID'),
                 region=os.environ.get('GCP_REGION', 'us-central1'),
             ))
-        
+
+        # Infomaniak
+        if os.environ.get('INFOMANIAK_APP_CREDENTIAL_ID'):
+            config.add_provider(CloudCredentials(
+                provider=CloudProvider.INFOMANIAK,
+                access_key=os.environ.get('INFOMANIAK_APP_CREDENTIAL_ID'),
+                secret_key=os.environ.get('INFOMANIAK_APP_CREDENTIAL_SECRET'),
+                region=os.environ.get('INFOMANIAK_REGION', 'dc3-a'),
+                project_id=os.environ.get('INFOMANIAK_PROJECT_ID'),
+            ))
+
         return config
 
 

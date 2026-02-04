@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Cloud services integration module providing standardized Python clients for interacting with cloud-based platforms and APIs. Enables seamless integration with object storage, compute, serverless, and document management services across AWS, GCP, Azure, and Coda.io.
+Cloud services integration module providing standardized Python clients for interacting with cloud-based platforms and APIs. Enables seamless integration with object storage, compute, serverless, and document management services across AWS, GCP, Azure, Coda.io, and Infomaniak (OpenStack + Newsletter).
 
 ## Design Principles
 
@@ -57,14 +57,30 @@ graph TD
             Azure[azure/AzureBlobClient]
             Coda[coda_io/CodaClient]
         end
+
+        subgraph "Infomaniak Provider"
+            IKCompute[InfomaniakComputeClient]
+            IKVolume[InfomaniakVolumeClient]
+            IKNetwork[InfomaniakNetworkClient]
+            IKObj[InfomaniakObjectStorageClient]
+            IKS3[InfomaniakS3Client]
+            IKIdentity[InfomaniakIdentityClient]
+            IKDNS[InfomaniakDNSClient]
+            IKHeat[InfomaniakHeatClient]
+            IKMeter[InfomaniakMeteringClient]
+            IKNewsletter[InfomaniakNewsletterClient]
+        end
     end
-    
-    Init --> AWS & GCP & Azure & Coda
+
+    Init --> AWS & GCP & Azure & Coda & IKCompute
     StorageClient -.->|contract| AWS & GCP & Azure
     AWS --> |boto3| S3[AWS S3 API]
     GCP --> |google-cloud-storage| GCS[GCS API]
     Azure --> |azure-storage-blob| Blob[Azure Blob API]
     Coda --> |requests| CodaAPI[Coda.io API v1]
+    IKCompute & IKVolume & IKNetwork & IKObj & IKIdentity & IKDNS & IKHeat & IKMeter --> |openstacksdk| OpenStackAPI[Infomaniak OpenStack API]
+    IKS3 --> |boto3| IKS3API[Infomaniak S3 API]
+    IKNewsletter --> |requests| IKNewsAPI[Infomaniak Newsletter API]
 ```
 
 ## Functional Requirements
@@ -89,6 +105,8 @@ All storage clients must implement:
 | **GCP** | Application Default Credentials or service account JSON |
 | **Azure** | DefaultAzureCredential from azure-identity |
 | **Coda.io** | Bearer token authentication via API token |
+| **Infomaniak** | Application Credentials via openstacksdk (OpenStack services) |
+| **Infomaniak Newsletter** | OAuth2 Bearer token via `INFOMANIAK_NEWSLETTER_TOKEN` |
 
 ### FR-3: Coda.io API Coverage
 
@@ -109,6 +127,23 @@ The Coda client must support all major API v1 endpoints:
 | Analytics | doc analytics, page analytics, pack analytics |
 | Miscellaneous | whoami, resolve browser link, mutation status |
 
+### FR-5: Infomaniak Cloud Services
+
+Infomaniak integration must support:
+
+| Service | Client | Operations |
+|---------|--------|------------|
+| Compute | `InfomaniakComputeClient` | Instance CRUD, images, flavors, keypairs |
+| Block Storage | `InfomaniakVolumeClient` | Volume CRUD, attach/detach, snapshots, backups |
+| Network | `InfomaniakNetworkClient` | Networks, routers, security groups, floating IPs, load balancers |
+| Object Storage | `InfomaniakObjectStorageClient` | Swift containers and objects |
+| S3 Storage | `InfomaniakS3Client` | S3-compatible buckets and objects |
+| Identity | `InfomaniakIdentityClient` | Users, projects, application credentials, EC2 credentials |
+| DNS | `InfomaniakDNSClient` | Zones, records, reverse DNS |
+| Orchestration | `InfomaniakHeatClient` | Heat stacks, templates, resources |
+| Metering | `InfomaniakMeteringClient` | Usage, quotas, billing |
+| Newsletter | `InfomaniakNewsletterClient` | Campaigns, mailing lists, contacts, statistics |
+
 ### FR-4: Error Handling
 
 - Map HTTP status codes to typed exceptions
@@ -126,6 +161,8 @@ The Coda client must support all major API v1 endpoints:
 | AWS | `boto3` | Yes |
 | GCP | `google-cloud-storage` | Yes |
 | Azure | `azure-storage-blob`, `azure-identity` | Yes |
+| Infomaniak | `openstacksdk` | Yes |
+| Infomaniak S3 | `boto3` | Yes |
 
 ### Python Version
 
