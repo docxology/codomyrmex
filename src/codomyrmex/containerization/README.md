@@ -22,5 +22,6 @@ Container management module providing Docker lifecycle management and Kubernetes
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/containerization/](../../../docs/modules/containerization/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

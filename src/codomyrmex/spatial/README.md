@@ -22,5 +22,6 @@ Spatial module providing 3D/4D visualization, modeling, and world model capabili
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/spatial/](../../../docs/modules/spatial/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

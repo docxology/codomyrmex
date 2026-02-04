@@ -26,5 +26,6 @@ Website generation and hosting module for Codomyrmex project documentation and m
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/website/](../../../docs/modules/website/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

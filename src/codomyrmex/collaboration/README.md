@@ -21,5 +21,6 @@ Collaboration module enabling real-time editing, chat, and workflow coordination
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/collaboration/](../../../docs/modules/collaboration/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

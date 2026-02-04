@@ -24,5 +24,6 @@ Command-line interface module providing the `codomyrmex` CLI tool. Enables termi
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/cli/](../../../docs/modules/cli/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

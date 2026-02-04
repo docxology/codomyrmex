@@ -21,5 +21,6 @@ Encryption and cryptographic operations module. Provides secure key management, 
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/encryption/](../../../docs/modules/encryption/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -5,8 +5,11 @@ OpenRouter Free Example - Cost Tracking
 Simple example demonstrating cost tracking with OpenRouter's free models.
 Uses real API calls to show token counting and cost estimation.
 
+API Key Sources:
+    1. OPENROUTER_API_KEY environment variable
+    2. ~/.config/openrouter/api_key config file
+
 Usage:
-    export OPENROUTER_API_KEY='your-key-here'
     python openrouter_free_example.py
 """
 
@@ -20,6 +23,33 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
 
+# Config file locations
+CONFIG_PATHS = [
+    Path.home() / ".config" / "openrouter" / "api_key",
+    Path.home() / ".openrouter_api_key",
+]
+
+
+def get_api_key() -> str | None:
+    """Get API key from environment or config file."""
+    # Check environment variable first
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if api_key:
+        return api_key
+    
+    # Check config files
+    for path in CONFIG_PATHS:
+        try:
+            if path.exists():
+                content = path.read_text().strip()
+                if content.startswith("OPENROUTER_API_KEY="):
+                    return content.split("=", 1)[1].strip().strip('"').strip("'")
+                return content
+        except Exception:
+            pass
+    
+    return None
+
 
 def main():
     """Demonstrate cost tracking with OpenRouter free models."""
@@ -29,13 +59,13 @@ def main():
     print()
     
     # Check for API key
-    api_key = os.environ.get("OPENROUTER_API_KEY")
+    api_key = get_api_key()
     if not api_key:
-        print("❌ OPENROUTER_API_KEY environment variable not set")
+        print("❌ OPENROUTER_API_KEY not found")
         print("   Get your free API key at: https://openrouter.ai/keys")
-        print("\n   To run this example:")
-        print("   export OPENROUTER_API_KEY='your-key-here'")
-        print("   python openrouter_free_example.py")
+        print("\n   Setup options:")
+        print("   1. export OPENROUTER_API_KEY='your-key-here'")
+        print("   2. echo 'your-key' > ~/.config/openrouter/api_key")
         return 1
     
     # Create provider

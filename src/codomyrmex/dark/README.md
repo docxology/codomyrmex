@@ -55,3 +55,8 @@ DarkPDF.batch(
 The PDF filter logic is inspired by [dark-pdf](https://github.com/benjifriedman/dark-pdf), a Next.js application for applying dark mode to PDFs. The original JavaScript filter pipeline has been reimplemented natively in Python using PyMuPDF and Pillow.
 
 The dark-pdf source is included as a git submodule at `pdf/vendor/dark-pdf/` for reference.
+
+## Navigation
+
+- **Full Documentation**: [docs/modules/dark/](../../../docs/modules/dark/)
+- **Parent Directory**: [codomyrmex](../README.md)

@@ -20,5 +20,6 @@ Embodiment module providing physical/robotic system integration capabilities. Br
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/embodiment/](../../../docs/modules/embodiment/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

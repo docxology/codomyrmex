@@ -13,5 +13,6 @@ Documentation files and guides.
 - `index.md` – File
 
 ## Navigation
+- **Source**: [src/codomyrmex/spatial/](../../../src/codomyrmex/spatial/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

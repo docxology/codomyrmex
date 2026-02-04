@@ -23,5 +23,6 @@ Enables dynamic extension of the platform. Handles plugin discovery, loading, va
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/plugin_system/](../../../docs/modules/plugin_system/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

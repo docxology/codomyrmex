@@ -24,5 +24,6 @@ API infrastructure module providing OpenAPI/Swagger specification generation, AP
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/api/](../../../docs/modules/api/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

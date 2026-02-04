@@ -20,5 +20,6 @@ Compression module providing archive creation, extraction, and streaming compres
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/compression/](../../../docs/modules/compression/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -1,89 +1,163 @@
 # market - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-The `market` module provides the scaffolding and generation logic for creating *new* Codomyrmex modules. It ensures that all new modules start with the required structure, documentation files (`README`, `AGENTS`, `SPEC`), and configuration, enforcing the "Internal Coherence" design principle from day one.
+The `market` module facilitates anonymous economic coordination for Secure Cognitive Agents. It implements reverse auctions where agents post demands without revealing identity, and demand aggregation to pool purchasing power for collective bargaining.
 
 ## Design Principles
 
 ### Modularity
 
-- **Template Driven**: Uses Jinja2 or similar string substitution to generate files from `src/codomyrmex/template` or internal assets.
-- **Generator Pattern**: Separation between the configuration of a new module and the disk I/O.
+- Auction lifecycle decoupled from identity resolution
+- Pluggable bid evaluation strategies
+- Demand aggregation independent of auction mechanism
 
 ### Internal Coherence
 
-- **Dogfooding**: The template it generates MUST match the standards enforced by `cursorrules` and the documentation overhaul.
-- **Standards Enforcement**: It pre-populates `SPEC.md`, `README.md`, and `AGENTS.md` with the correct boilerplate.
+- Consistent auction state machine (Open -> Bid -> Close/Cancel)
+- Unified bid data model across auction types
+- Integration with identity module for persona-based anonymity
 
 ### Parsimony
 
-- **Simple Inputs**: Should only require a module name (snake_case) and a human-readable name.
+- Minimal transaction metadata — only what's needed for matching
+- Simple API for common marketplace operations
+- No persistent state beyond active auctions
 
 ### Functionality
 
-- **Idempotency**: Can "upgrade" an existing folder to a module (adding missing files) without overwriting existing code (unless forced).
+- Reverse auctions: buyers post demands, providers bid
+- Demand aggregation: bundle identical demands for bulk negotiation
+- Anonymous transaction history tracking
+- Provider registry for service verification
+
+### Testing
+
+- Unit tests for auction lifecycle
+- Bid evaluation strategy tests
+- Demand aggregation correctness tests
+
+### Documentation
+
+- Complete API specifications
+- Auction lifecycle reference
+- Demand aggregation examples
 
 ## Architecture
 
 ```mermaid
 graph TD
-    subgraph "Input"
-        CLI[CLI Command]
-        Config[Module Metadata]
+    subgraph "Public API"
+        RA[ReverseAuction]
+        DA[DemandAggregator]
     end
 
-    subgraph "Core Logic"
-        Generator[Module Generator]
-        Renderer[Template Renderer]
+    subgraph "Data Model"
+        Bid[Bid]
+        Auction[AuctionState]
     end
 
-    subgraph "Assets"
-        Templates[File Templates]
+    subgraph "Support"
+        BM[BidManager]
+        PR[ProviderRegistry]
     end
 
-    subgraph "Output"
-        FS[File System]
+    subgraph "Dependencies"
+        LOG[logging_monitoring]
+        ID[identity]
+        PRIV[privacy]
     end
 
-    CLI --> Config
-    Config --> Generator
-    Generator --> Renderer
-    Templates --> Renderer
-    Renderer --> FS
+    RA --> Bid
+    RA --> Auction
+    RA --> BM
+    DA --> Bid
+    RA --> PR
+    RA --> LOG
+    RA --> ID
+    DA --> PRIV
 ```
 
 ## Functional Requirements
 
 ### Core Capabilities
 
-1. **Scaffolding**: Create folder structure (`src/codomyrmex/<name>`, `tests/`, `docs/`).
-2. **File Generation**: Render `__init__.py`, `README.md`, `AGENTS.md`, `SPEC.md` with placeholders filled.
-3. **Registration**: Optionally register the new module in `system_discovery` or main `README` (though typically discovery is dynamic).
+1. **Reverse Auction Creation**: Post demands anonymously via `ReverseAuction.create_request()`
+2. **Bid Submission**: Providers submit bids via `ReverseAuction.place_bid()`
+3. **Bid Evaluation**: Select best bid via `ReverseAuction.get_best_bid()`
+4. **Demand Aggregation**: Bundle identical demands via `DemandAggregator.join_demand()`
+5. **Auction Lifecycle**: Manage state transitions (Open -> Bid -> Close/Cancel)
+6. **Transaction History**: Track participation anonymously
 
-### Quality Standards
+### Integration Points
 
-- **Valid Output**: Generated code must pass linting immediately.
-- **Documentation**: Generated docs must represent the "Ideal" state (no "Requirement 1" placeholders if possible, or at least standardized TODOs).
+- `identity/` - Persona-based anonymous participation
+- `privacy/` - Scrub transaction metadata
+- `wallet/` - Payment signing for completed auctions
+- `logging_monitoring/` - Marketplace event logging
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Anonymity-preserving design patterns
+
+### Testing Standards
+
+- ≥80% coverage
+- Auction state machine tests
+- Bid ordering and selection tests
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- Auction lifecycle documentation
+- Provider onboarding guide
 
 ## Interface Contracts
 
-### Public API
+### ReverseAuction API
 
-- `create_module(name: str, description: str) -> Path`: Creates the module.
-- `update_module_boilerplate(path: Path) -> None`: Updates standard files in an existing module.
+```python
+class ReverseAuction:
+    def create_request(persona_id: str, description: str, max_price: float) -> str
+    def place_bid(auction_id: str, provider_id: str, price: float, details: str) -> None
+    def get_best_bid(auction_id: str) -> Optional[Bid]
+    def close_auction(auction_id: str) -> Bid
+    def cancel_auction(auction_id: str) -> None
+    def get_auction_status(auction_id: str) -> AuctionState
+```
+
+### DemandAggregator API
+
+```python
+class DemandAggregator:
+    def join_demand(item: str, persona_id: str) -> str
+    def get_aggregate(item: str) -> dict
+    def list_active_demands() -> List[dict]
+```
 
 ### Dependencies
 
-- **Internal**: `codomyrmex.logging_monitoring`.
+- **Internal**: `codomyrmex.identity`, `codomyrmex.privacy`, `codomyrmex.logging_monitoring`.
 
 ## Implementation Guidelines
 
-### Usage Patterns
+### Auction Management
 
-- Run via CLI: `codomyrmex create-module my_new_feature`.
+1. Enforce state machine transitions — no invalid state changes
+2. All participant references use persona IDs, never real identities
+3. Bid evaluation is pluggable (lowest price, weighted score, etc.)
+
+### Demand Aggregation
+
+1. Group demands by normalized item descriptions
+2. Track participant count without revealing individual identities
+3. Trigger bulk negotiation when threshold is reached
 
 ## Navigation
 

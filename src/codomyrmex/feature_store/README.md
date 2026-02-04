@@ -36,3 +36,8 @@ See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentatio
 ## Related Modules
 
 - [`None`](../) - Parent module
+
+## Navigation
+
+- **Full Documentation**: [docs/modules/feature_store/](../../../docs/modules/feature_store/)
+- **Parent Directory**: [codomyrmex](../README.md)

@@ -34,5 +34,6 @@ Documentation generation module providing website generation, API documentation,
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/documentation/](../../../docs/modules/documentation/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

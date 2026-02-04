@@ -35,6 +35,7 @@ from codomyrmex.ide import ...
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/ide/](../../../docs/modules/ide/)
 - **Parent**: [codomyrmex](../README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **Agents**: [AGENTS.md](AGENTS.md)

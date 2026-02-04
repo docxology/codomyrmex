@@ -11,5 +11,6 @@ Documentation files and guides.
 - `SPEC.md` – File
 
 ## Navigation
+- **Source**: [src/codomyrmex/security/](../../../src/codomyrmex/security/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

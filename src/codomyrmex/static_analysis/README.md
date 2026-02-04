@@ -24,5 +24,6 @@ Provides automated code quality assessment without execution. Orchestrates parse
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/static_analysis/](../../../docs/modules/static_analysis/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -21,5 +21,6 @@ Provides comprehensive security capabilities organized into four specialized sub
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/security/](../../../docs/modules/security/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

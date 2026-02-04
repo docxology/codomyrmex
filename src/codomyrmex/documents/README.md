@@ -29,5 +29,6 @@ Document handling module providing document parsing, generation, and manipulatio
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/documents/](../../../docs/modules/documents/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

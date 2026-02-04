@@ -20,5 +20,6 @@ Concurrency module providing thread pools, async utilities, and parallel executi
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/concurrency/](../../../docs/modules/concurrency/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -31,5 +31,6 @@ Centralized script orchestration capabilities for discovering, configuring, exec
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/orchestrator/](../../../docs/modules/orchestrator/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

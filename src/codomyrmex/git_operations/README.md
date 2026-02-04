@@ -25,5 +25,6 @@ Provides programmatic Python interface for Git interactions. Abstracts raw subpr
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/git_operations/](../../../docs/modules/git_operations/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

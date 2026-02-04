@@ -36,3 +36,8 @@ See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentatio
 ## Related Modules
 
 - [`None`](../) - Parent module
+
+## Navigation
+
+- **Full Documentation**: [docs/modules/graph_rag/](../../../docs/modules/graph_rag/)
+- **Parent Directory**: [codomyrmex](../README.md)

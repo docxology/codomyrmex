@@ -19,5 +19,6 @@ The `defense` module implements "Fiduciary Defense" capabilities. It actively mo
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/defense/](../../../docs/modules/defense/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

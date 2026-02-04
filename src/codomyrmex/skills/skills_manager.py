@@ -5,20 +5,18 @@ Main interface for skill operations.
 
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+import logging
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
+    logger = get_logger(__name__)
 except ImportError:
-    import logging
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
 from .skill_loader import SkillLoader
 from .skill_registry import SkillRegistry
 from .skill_sync import SkillSync
-
-logger = get_logger(__name__)
 
 
 class SkillsManager:
@@ -254,4 +252,3 @@ class SkillsManager:
             Status dictionary
         """
         return self.sync.check_upstream_status()
-

@@ -36,3 +36,8 @@ See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentatio
 ## Related Modules
 
 - [`None`](../) - Parent module
+
+## Navigation
+
+- **Full Documentation**: [docs/modules/data_lineage/](../../../docs/modules/data_lineage/)
+- **Parent Directory**: [codomyrmex](../README.md)

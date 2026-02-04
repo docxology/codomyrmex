@@ -22,5 +22,6 @@ Networking module providing HTTP client utilities, WebSocket support, and API cl
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/networking/](../../../docs/modules/networking/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

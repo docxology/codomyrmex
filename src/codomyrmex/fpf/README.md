@@ -27,5 +27,6 @@ Functional interface for First Principles Framework specification. Transforms st
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/fpf/](../../../docs/modules/fpf/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

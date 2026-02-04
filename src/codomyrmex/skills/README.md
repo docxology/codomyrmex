@@ -27,5 +27,6 @@ Integration with vibeship-spawner-skills repository. Provides access to 462+ spe
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/skills/](../../../docs/modules/skills/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

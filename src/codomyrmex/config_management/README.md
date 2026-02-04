@@ -24,5 +24,6 @@ Configuration management module providing centralized configuration loading, env
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/config_management/](../../../docs/modules/config_management/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

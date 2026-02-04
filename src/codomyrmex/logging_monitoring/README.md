@@ -25,5 +25,6 @@ Foundation module providing centralized logging infrastructure for the Codomyrme
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/logging_monitoring/](../../../docs/modules/logging_monitoring/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

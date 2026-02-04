@@ -23,5 +23,6 @@ Provides rich CLI capabilities: colored output, progress bars, interactive promp
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/terminal_interface/](../../../docs/modules/terminal_interface/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

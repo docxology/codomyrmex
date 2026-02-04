@@ -22,5 +22,6 @@ Provides code analysis through AST parsing, pattern recognition, and embedding g
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/pattern_matching/](../../../docs/modules/pattern_matching/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

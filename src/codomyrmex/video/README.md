@@ -144,5 +144,6 @@ MP4, AVI, MOV, WEBM, MKV
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/video/](../../../docs/modules/video/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

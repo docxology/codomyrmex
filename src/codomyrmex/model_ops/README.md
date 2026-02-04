@@ -22,5 +22,6 @@ Structured and scalable framework for LLM operations. Enables reproducible model
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/model_ops/](../../../docs/modules/model_ops/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

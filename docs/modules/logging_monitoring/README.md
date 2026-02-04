@@ -14,5 +14,6 @@ Documentation files and guides.
 - `tutorials/` – Subdirectory
 
 ## Navigation
+- **Source**: [src/codomyrmex/logging_monitoring/](../../../src/codomyrmex/logging_monitoring/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

@@ -1,44 +1,19 @@
+"""Skill Registry Module
+
+Handles indexing, categorizing, and searching skills.
+"""
+
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import logging
 import re
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Skill Registry Module
-
-
-
-Handles indexing, categorizing, and searching skills.
-"""
-
-
-# Logger initialized below
-
-logger = get_logger(__name__)
+try:
+    from codomyrmex.logging_monitoring.logger_config import get_logger
+    logger = get_logger(__name__)
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
 
 class SkillRegistry:
@@ -228,5 +203,3 @@ class SkillRegistry:
         logger.info("Refreshing skill index...")
         self.skill_loader.clear_cache()
         self.build_index()
-
-

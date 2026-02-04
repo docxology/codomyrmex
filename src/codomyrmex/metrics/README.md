@@ -21,5 +21,6 @@ Metrics module providing metrics collection, aggregation, and Prometheus integra
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/metrics/](../../../docs/modules/metrics/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -23,5 +23,6 @@ Bridges the gap between digital codebase and physical world sensors/actuators. M
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/physical_management/](../../../docs/modules/physical_management/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

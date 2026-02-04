@@ -25,5 +25,6 @@ Web data extraction engine of Codomyrmex. Provides unified interface for scrapin
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/scrape/](../../../docs/modules/scrape/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

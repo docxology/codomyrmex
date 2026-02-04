@@ -14,5 +14,6 @@ Documentation files and guides.
 - `tutorials/` – Subdirectory
 
 ## Navigation
+- **Source**: [src/codomyrmex/pattern_matching/](../../../src/codomyrmex/pattern_matching/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

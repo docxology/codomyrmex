@@ -22,5 +22,6 @@ System for controlling functional and operational aspects of Codomyrmex at runti
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/feature_flags/](../../../docs/modules/feature_flags/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

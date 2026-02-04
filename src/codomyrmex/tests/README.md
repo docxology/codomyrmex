@@ -23,5 +23,6 @@ Comprehensive test suites following test-driven development practices with real 
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/tests/](../../../docs/modules/tests/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -20,5 +20,6 @@ Templating module providing template engine support (Jinja2, Mako) for code gene
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/templating/](../../../docs/modules/templating/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -5,8 +5,11 @@ OpenRouter Free Example - RAG (Retrieval-Augmented Generation)
 Simple example demonstrating RAG with OpenRouter's free models.
 Shows how to augment LLM responses with retrieved context.
 
+API Key Sources:
+    1. OPENROUTER_API_KEY environment variable
+    2. ~/.config/openrouter/api_key config file
+
 Usage:
-    export OPENROUTER_API_KEY='your-key-here'
     python openrouter_free_example.py
 """
 
@@ -19,6 +22,29 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
+
+# Config file locations
+CONFIG_PATHS = [
+    Path.home() / ".config" / "openrouter" / "api_key",
+    Path.home() / ".openrouter_api_key",
+]
+
+
+def get_api_key() -> str | None:
+    """Get API key from environment or config file."""
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if api_key:
+        return api_key
+    for path in CONFIG_PATHS:
+        try:
+            if path.exists():
+                content = path.read_text().strip()
+                if content.startswith("OPENROUTER_API_KEY="):
+                    return content.split("=", 1)[1].strip().strip('"').strip("'")
+                return content
+        except Exception:
+            pass
+    return None
 
 
 # Simple knowledge base (in real RAG, this would be from a vector database)
@@ -41,29 +67,19 @@ KNOWLEDGE_BASE = [
 def simple_retrieve(query: str, top_k: int = 2) -> list:
     """Simple keyword-based retrieval (real RAG uses vector similarity)."""
     query_words = set(query.lower().split())
-    
     scored = []
     for doc in KNOWLEDGE_BASE:
         doc_words = set(doc["content"].lower().split())
         overlap = len(query_words & doc_words)
         scored.append((overlap, doc))
-    
-    scored.sort(reverse=True)
+    scored.sort(key=lambda x: x[0], reverse=True)
     return [doc for _, doc in scored[:top_k]]
 
 
 def rag_completion(provider, question: str) -> str:
     """Perform RAG: retrieve context, then generate answer."""
-    # Retrieve relevant documents
     docs = simple_retrieve(question, top_k=2)
-    
-    # Build context
-    context = "\n\n".join([
-        f"[{doc['source']}]: {doc['content']}" 
-        for doc in docs
-    ])
-    
-    # Augmented prompt
+    context = "\n\n".join([f"[{doc['source']}]: {doc['content']}" for doc in docs])
     prompt = f"""Answer based on the following context. Cite sources in [brackets].
 
 Context:
@@ -74,14 +90,7 @@ Question: {question}
 Answer:"""
     
     messages = [Message(role="user", content=prompt)]
-    
-    response = provider.complete(
-        messages=messages,
-        model="openrouter/free",
-        temperature=0.3,
-        max_tokens=150,
-    )
-    
+    response = provider.complete(messages=messages, model="openrouter/free", temperature=0.3, max_tokens=150)
     return response.content, docs
 
 
@@ -93,10 +102,11 @@ def main():
     print()
     
     # Check for API key
-    api_key = os.environ.get("OPENROUTER_API_KEY")
+    api_key = get_api_key()
     if not api_key:
-        print("❌ OPENROUTER_API_KEY environment variable not set")
+        print("❌ OPENROUTER_API_KEY not found")
         print("   Get your free API key at: https://openrouter.ai/keys")
+        print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
     
     config = ProviderConfig(api_key=api_key, timeout=60.0)

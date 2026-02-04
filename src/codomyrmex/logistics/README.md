@@ -23,5 +23,6 @@ Consolidates orchestration, task management, and scheduling capabilities. Coordi
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/logistics/](../../../docs/modules/logistics/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

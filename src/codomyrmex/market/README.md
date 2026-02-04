@@ -20,5 +20,6 @@ The `market` module facilitates anonymous economic coordination. It implements "
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/market/](../../../docs/modules/market/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

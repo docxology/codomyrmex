@@ -20,5 +20,6 @@ Unified observability framework based on OpenTelemetry standard. Allows the syst
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/telemetry/](../../../docs/modules/telemetry/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

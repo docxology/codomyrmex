@@ -22,5 +22,6 @@ Database operations module providing schema management, migrations, and backup c
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/database_management/](../../../docs/modules/database_management/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

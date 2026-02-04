@@ -23,5 +23,6 @@ Foundation module providing environment validation and dependency checking for t
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/environment_setup/](../../../docs/modules/environment_setup/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

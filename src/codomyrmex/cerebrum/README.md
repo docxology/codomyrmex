@@ -26,5 +26,6 @@ Central intelligence coordination module. Provides cognitive architecture, reaso
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/cerebrum/](../../../docs/modules/cerebrum/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

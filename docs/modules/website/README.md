@@ -14,5 +14,6 @@ Documentation files and guides.
 - `tutorials/` – Subdirectory
 
 ## Navigation
+- **Source**: [src/codomyrmex/website/](../../../src/codomyrmex/website/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

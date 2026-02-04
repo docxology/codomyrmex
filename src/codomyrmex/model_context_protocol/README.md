@@ -25,5 +25,6 @@ Defines the standard schemas (MCP) for communication between AI agents and platf
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/model_context_protocol/](../../../docs/modules/model_context_protocol/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

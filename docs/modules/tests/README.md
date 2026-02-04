@@ -11,5 +11,6 @@ Test files and validation suites.
 - `SPEC.md` – File
 
 ## Navigation
+- **Source**: [src/codomyrmex/tests/](../../../src/codomyrmex/tests/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

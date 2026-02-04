@@ -10,7 +10,7 @@ Example implementations demonstrating real LLM provider integrations and usage p
 
 ### OpenRouter Usage (`openrouter_usage.py`)
 
-**Complete OpenRouter example with CLI interface.**
+**Complete OpenRouter example with CLI interface and flexible API key handling.**
 
 ```bash
 # List available free models
@@ -26,11 +26,30 @@ python openrouter_usage.py --prompt "Write a haiku" --stream
 python openrouter_usage.py --prompt "Hello" --model "nvidia/nemotron-3-nano-30b-a3b:free"
 ```
 
-**Environment:**
+**API Key Options (in order of precedence):**
 
 ```bash
-export OPENROUTER_API_KEY='your-key-here'  # Get at https://openrouter.ai/keys
+# 1. Command line argument
+python openrouter_usage.py --api-key "sk-..." --prompt "Hello"
+
+# 2. Environment variable
+export OPENROUTER_API_KEY='your-key-here'
+python openrouter_usage.py --prompt "Hello"
+
+# 3. Config file (auto-detected)
+mkdir -p ~/.config/openrouter
+echo 'your-key-here' > ~/.config/openrouter/api_key
+chmod 600 ~/.config/openrouter/api_key
+python openrouter_usage.py --prompt "Hello"
+
+# 4. Custom config file path
+python openrouter_usage.py --config /path/to/api_key.txt --prompt "Hello"
+
+# 5. Interactive prompt
+python openrouter_usage.py --prompt-key --prompt "Hello"
 ```
+
+**Get your free API key at:** <https://openrouter.ai/keys>
 
 ### Basic Usage (`basic_usage.py`)
 

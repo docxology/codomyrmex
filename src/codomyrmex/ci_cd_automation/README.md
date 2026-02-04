@@ -23,5 +23,6 @@ CI/CD pipeline management module providing pipeline orchestration and deployment
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/ci_cd_automation/](../../../docs/modules/ci_cd_automation/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

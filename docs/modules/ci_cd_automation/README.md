@@ -11,5 +11,6 @@ Documentation files and guides.
 - `SPEC.md` – File
 
 ## Navigation
+- **Source**: [src/codomyrmex/ci_cd_automation/](../../../src/codomyrmex/ci_cd_automation/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

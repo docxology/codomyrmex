@@ -33,5 +33,6 @@ Agentic framework integrations providing AI code editing, task management, and m
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/agents/](../../../docs/modules/agents/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

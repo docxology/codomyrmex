@@ -21,5 +21,6 @@ Serialization module providing unified data serialization/deserialization with s
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/serialization/](../../../docs/modules/serialization/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

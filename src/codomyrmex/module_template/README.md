@@ -22,5 +22,6 @@ Scaffolding and generation logic for creating new Codomyrmex modules. Ensures ne
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/module_template/](../../../docs/modules/module_template/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

@@ -21,5 +21,6 @@ Evolutionary AI module providing genetic algorithms, neural architecture search,
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/evolutionary_ai/](../../../docs/modules/evolutionary_ai/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

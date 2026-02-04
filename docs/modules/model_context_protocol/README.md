@@ -14,5 +14,6 @@ Documentation files and guides.
 - `tutorials/` – Subdirectory
 
 ## Navigation
+- **Source**: [src/codomyrmex/model_context_protocol/](../../../src/codomyrmex/model_context_protocol/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

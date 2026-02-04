@@ -21,5 +21,6 @@ Deployment module providing infrastructure-as-code, environment management, and 
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/deployment/](../../../docs/modules/deployment/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

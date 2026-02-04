@@ -35,6 +35,7 @@ from codomyrmex.utils import ...
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/utils/](../../../docs/modules/utils/)
 - **Parent**: [codomyrmex](../README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **Agents**: [AGENTS.md](AGENTS.md)

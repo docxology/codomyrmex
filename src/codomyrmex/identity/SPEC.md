@@ -1,89 +1,161 @@
 # identity - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-The `identity` module provides the scaffolding and generation logic for creating *new* Codomyrmex modules. It ensures that all new modules start with the required structure, documentation files (`README`, `AGENTS`, `SPEC`), and configuration, enforcing the "Internal Coherence" design principle from day one.
+The `identity` module provides multi-persona management and bio-cognitive verification for Secure Cognitive Agents. It allows agents to maintain distinct, verifiable identities (Personas) across a 3-tier trust model (KYC, Verified Anon, Anon) while preserving pseudonymity through behavioral biometric verification.
 
 ## Design Principles
 
 ### Modularity
 
-- **Template Driven**: Uses Jinja2 or similar string substitution to generate files from `src/codomyrmex/template` or internal assets.
-- **Generator Pattern**: Separation between the configuration of a new module and the disk I/O.
+- Persona management decoupled from verification engine
+- Pluggable verification backends (keystroke dynamics, behavioral patterns)
+- Clean separation between identity lifecycle and authentication
 
 ### Internal Coherence
 
-- **Dogfooding**: The template it generates MUST match the standards enforced by `cursorrules` and the documentation overhaul.
-- **Standards Enforcement**: It pre-populates `SPEC.md`, `README.md`, and `AGENTS.md` with the correct boilerplate.
+- Consistent verification levels across all persona operations
+- Unified persona data model with portable export format
+- Integration with wallet, defense, and privacy modules
 
 ### Parsimony
 
-- **Simple Inputs**: Should only require a module name (snake_case) and a human-readable name.
+- Minimal persona attributes — only what's needed per tier
+- Lightweight verification that doesn't require external services
+- Simple API for common identity operations
 
 ### Functionality
 
-- **Idempotency**: Can "upgrade" an existing folder to a module (adding missing files) without overwriting existing code (unless forced).
+- 3-tier persona management (Blue/Grey/Black corresponding to KYC/Verified Anon/Anon)
+- Bio-cognitive verification via behavioral biometrics
+- Persona lifecycle: create, switch, revoke, export
+- Credential revocation handling
+
+### Testing
+
+- Unit tests for persona CRUD operations
+- Verification accuracy benchmarks
+- Tier boundary enforcement tests
+
+### Documentation
+
+- Complete API specifications
+- Persona tier reference
+- Verification integration guide
 
 ## Architecture
 
 ```mermaid
 graph TD
-    subgraph "Input"
-        CLI[CLI Command]
-        Config[Module Metadata]
+    subgraph "Public API"
+        IM[IdentityManager]
+        BCV[BioCognitiveVerifier]
     end
 
-    subgraph "Core Logic"
-        Generator[Module Generator]
-        Renderer[Template Renderer]
+    subgraph "Data Model"
+        P[Persona]
+        VL[VerificationLevel]
     end
 
-    subgraph "Assets"
-        Templates[File Templates]
+    subgraph "Lifecycle"
+        RM[RevocationManager]
+        Export[Portable Export]
     end
 
-    subgraph "Output"
-        FS[File System]
+    subgraph "Dependencies"
+        LOG[logging_monitoring]
+        PRIV[privacy]
     end
 
-    CLI --> Config
-    Config --> Generator
-    Generator --> Renderer
-    Templates --> Renderer
-    Renderer --> FS
+    IM --> P
+    IM --> VL
+    IM --> RM
+    IM --> Export
+    BCV --> P
+    BCV --> LOG
+    IM --> LOG
+    IM --> PRIV
 ```
 
 ## Functional Requirements
 
 ### Core Capabilities
 
-1. **Scaffolding**: Create folder structure (`src/codomyrmex/<name>`, `tests/`, `docs/`).
-2. **File Generation**: Render `__init__.py`, `README.md`, `AGENTS.md`, `SPEC.md` with placeholders filled.
-3. **Registration**: Optionally register the new module in `system_discovery` or main `README` (though typically discovery is dynamic).
+1. **Persona Creation**: Create personas with specified verification tier via `IdentityManager.create_persona()`
+2. **Context Switching**: Switch active persona for agent operations via `IdentityManager.set_active_persona()`
+3. **Bio-Cognitive Verification**: Authenticate users via behavioral biometrics (keystroke dynamics) via `BioCognitiveVerifier.verify()`
+4. **Persona Revocation**: Invalidate compromised personas via `RevocationManager`
+5. **Portable Export**: Export persona claims in a portable format
 
-### Quality Standards
+### Integration Points
 
-- **Valid Output**: Generated code must pass linting immediately.
-- **Documentation**: Generated docs must represent the "Ideal" state (no "Requirement 1" placeholders if possible, or at least standardized TODOs).
+- `wallet/` - Persona-linked key management
+- `defense/` - Persona-aware threat detection
+- `privacy/` - Scrub identity metadata from communications
+- `logging_monitoring/` - Identity operation logging (never log persona mappings)
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Privacy-preserving logging (no persona mappings in logs)
+
+### Testing Standards
+
+- ≥80% coverage
+- Tier enforcement boundary tests
+- Verification accuracy benchmarks
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- Verification tier reference
+- Persona lifecycle documentation
 
 ## Interface Contracts
 
-### Public API
+### IdentityManager API
 
-- `create_module(name: str, description: str) -> Path`: Creates the module.
-- `update_module_boilerplate(path: Path) -> None`: Updates standard files in an existing module.
+```python
+class IdentityManager:
+    def create_persona(persona_id: str, name: str, level: VerificationLevel) -> Persona
+    def set_active_persona(persona_id: str) -> None
+    def get_active_persona() -> Optional[Persona]
+    def revoke_persona(persona_id: str) -> bool
+    def export_persona(persona_id: str) -> dict
+    def list_personas() -> List[Persona]
+```
+
+### BioCognitiveVerifier API
+
+```python
+class BioCognitiveVerifier:
+    def verify(user_id: str, metric_type: str, value: float) -> bool
+    def enroll(user_id: str, metric_type: str, baseline: List[float]) -> None
+    def get_confidence(user_id: str) -> float
+```
 
 ### Dependencies
 
-- **Internal**: `codomyrmex.logging_monitoring`.
+- **Internal**: `codomyrmex.logging_monitoring`, `codomyrmex.privacy`.
 
 ## Implementation Guidelines
 
-### Usage Patterns
+### Persona Management
 
-- Run via CLI: `codomyrmex create-module my_new_feature`.
+1. Enforce tier-appropriate attribute requirements
+2. Never expose persona-to-user mappings in logs
+3. Support graceful degradation when verification service is unavailable
+
+### Verification
+
+1. Collect behavioral baselines during enrollment
+2. Statistical comparison against enrolled patterns
+3. Confidence scoring with configurable thresholds
 
 ## Navigation
 

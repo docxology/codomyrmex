@@ -110,5 +110,6 @@ WAV, MP3, FLAC, OGG, M4A, WEBM, MP4, OPUS
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/audio/](../../../docs/modules/audio/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

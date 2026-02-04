@@ -13,5 +13,6 @@ Documentation files and guides.
 - `USAGE_EXAMPLES.md` – File
 
 ## Navigation
+- **Source**: [src/codomyrmex/scrape/](../../../src/codomyrmex/scrape/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

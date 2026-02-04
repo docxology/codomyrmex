@@ -1,66 +1,19 @@
-from pathlib import Path
-from typing import Any, Dict, Optional
-import logging
-import logging
-
-import yaml
-
-from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# import yaml (handled optionally below)
-
 """Skill Loader Module
-
-
 
 Handles loading and parsing YAML skill files with merge logic.
 """
 
+from pathlib import Path
+from typing import Any, Dict, Optional
+import logging
 
 try:
+    import yaml
+except ImportError:
+    yaml = None
+
+try:
+    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -289,4 +242,3 @@ class SkillLoader:
         """Clear the skill cache."""
         self._cache.clear()
         logger.debug("Skill cache cleared")
-

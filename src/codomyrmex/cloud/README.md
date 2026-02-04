@@ -21,5 +21,6 @@ Cloud provider integration module supporting AWS, GCP, and Azure. Provides unifi
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/cloud/](../../../docs/modules/cloud/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

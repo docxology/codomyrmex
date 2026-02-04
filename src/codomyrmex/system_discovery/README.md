@@ -25,5 +25,6 @@ Introspection capabilities module. Inspects the running environment to identify 
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/system_discovery/](../../../docs/modules/system_discovery/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

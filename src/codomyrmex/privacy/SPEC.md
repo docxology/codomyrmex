@@ -1,79 +1,141 @@
 # privacy - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-The `privacy` module provides the scaffolding and generation logic for creating *new* Codomyrmex modules. It ensures that all new modules start with the required structure, documentation files (`README`, `AGENTS`, `SPEC`), and configuration, enforcing the "Internal Coherence" design principle from day one.
+The `privacy` module enforces data minimization and network anonymity for Secure Cognitive Agents. It systematically removes metadata ("crumbs") from all agent communications and provides simulated onion routing transport via a mixnet proxy.
 
 ## Design Principles
 
 ### Modularity
 
-- **Template Driven**: Uses Jinja2 or similar string substitution to generate files from `src/codomyrmex/template` or internal assets.
-- **Generator Pattern**: Separation between the configuration of a new module and the disk I/O.
+- Scrubbing engine decoupled from routing layer
+- Pluggable blacklist patterns for metadata removal
+- Clean separation between data sanitization and transport
 
 ### Internal Coherence
 
-- **Dogfooding**: The template it generates MUST match the standards enforced by `cursorrules` and the documentation overhaul.
-- **Standards Enforcement**: It pre-populates `SPEC.md`, `README.md`, and `AGENTS.md` with the correct boilerplate.
+- Consistent scrubbing rules across all data types
+- Unified blacklist management with dynamic runtime updates
+- Integration with identity and defense modules
 
 ### Parsimony
 
-- **Simple Inputs**: Should only require a module name (snake_case) and a human-readable name.
+- Recursive metadata removal — scrub deeply nested structures
+- Minimal configuration for common use cases
+- Zero-knowledge default: remove everything not explicitly whitelisted
 
 ### Functionality
 
-- **Idempotency**: Can "upgrade" an existing folder to a module (adding missing files) without overwriting existing code (unless forced).
+- Crumb scrubbing: recursive removal of timestamps, location data, device IDs, headers
+- Mixnet proxy: simulated multi-hop encrypted routing
+- Dynamic blacklist: runtime update of metadata patterns to scrub
+- Trace analysis: audit data for remaining digital footprint
+
+### Testing
+
+- Unit tests for scrubbing completeness
+- Integration tests with realistic data payloads
+- Metadata leakage detection tests
+
+### Documentation
+
+- Complete API specifications
+- Blacklist pattern reference
+- Data flow documentation
 
 ## Architecture
 
 ```mermaid
 graph TD
-    subgraph "Input"
-        CLI[CLI Command]
-        Config[Module Metadata]
+    subgraph "Sanitization"
+        CC[CrumbCleaner]
+        DB[DynamicBlacklist]
+        TA[TraceAnalyzer]
     end
 
-    subgraph "Core Logic"
-        Generator[Module Generator]
-        Renderer[Template Renderer]
+    subgraph "Transport"
+        MP[MixnetProxy]
     end
 
-    subgraph "Assets"
-        Templates[File Templates]
+    subgraph "Dependencies"
+        LOG[logging_monitoring]
     end
 
-    subgraph "Output"
-        FS[File System]
-    end
-
-    CLI --> Config
-    Config --> Generator
-    Generator --> Renderer
-    Templates --> Renderer
-    Renderer --> FS
+    CC --> DB
+    TA --> CC
+    CC --> LOG
+    MP --> LOG
+    MP --> CC
 ```
 
 ## Functional Requirements
 
 ### Core Capabilities
 
-1. **Scaffolding**: Create folder structure (`src/codomyrmex/<name>`, `tests/`, `docs/`).
-2. **File Generation**: Render `__init__.py`, `README.md`, `AGENTS.md`, `SPEC.md` with placeholders filled.
-3. **Registration**: Optionally register the new module in `system_discovery` or main `README` (though typically discovery is dynamic).
+1. **Crumb Scrubbing**: Recursively remove metadata from data structures via `CrumbCleaner.scrub()`
+2. **Mixnet Routing**: Route payloads through simulated multi-hop network via `MixnetProxy.route_payload()`
+3. **Dynamic Blacklist**: Add/remove scrubbing patterns at runtime via `DynamicBlacklist`
+4. **Trace Analysis**: Audit data for remaining digital footprint via `TraceAnalyzer`
+5. **Configuration**: Runtime update of blacklisted metadata keys
 
-### Quality Standards
+### Integration Points
 
-- **Valid Output**: Generated code must pass linting immediately.
-- **Documentation**: Generated docs must represent the "Ideal" state (no "Requirement 1" placeholders if possible, or at least standardized TODOs).
+- `identity/` - Scrub persona metadata from outgoing data
+- `defense/` - Scrub defense event metadata
+- `wallet/` - Scrub transaction metadata
+- `logging_monitoring/` - Privacy-aware logging
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Deep recursion handling for nested structures
+
+### Testing Standards
+
+- ≥80% coverage
+- Metadata leakage tests
+- Nested structure scrubbing tests
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- Blacklist pattern reference
+- Data flow audit guide
 
 ## Interface Contracts
 
-### Public API
+### CrumbCleaner API
 
-- `create_module(name: str, description: str) -> Path`: Creates the module.
-- `update_module_boilerplate(path: Path) -> None`: Updates standard files in an existing module.
+```python
+class CrumbCleaner:
+    def scrub(data: dict) -> dict
+    def scrub_headers(headers: dict) -> dict
+    def add_pattern(pattern: str) -> None
+    def remove_pattern(pattern: str) -> None
+```
+
+### MixnetProxy API
+
+```python
+class MixnetProxy:
+    def route_payload(data: bytes, hops: int = 3) -> bytes
+    def get_route_info() -> dict
+```
+
+### DynamicBlacklist API
+
+```python
+class DynamicBlacklist:
+    def add_pattern(pattern: str) -> None
+    def remove_pattern(pattern: str) -> None
+    def list_patterns() -> List[str]
+    def matches(key: str) -> bool
+```
 
 ### Dependencies
 
@@ -81,9 +143,18 @@ graph TD
 
 ## Implementation Guidelines
 
-### Usage Patterns
+### Scrubbing
 
-- Run via CLI: `codomyrmex create-module my_new_feature`.
+1. Recursively traverse all nested dictionaries and lists
+2. Match keys against blacklist patterns (exact and regex)
+3. Remove matched entries entirely — do not redact or mask
+4. Default blacklist covers: timestamps, location, device IDs, IP addresses, user agents
+
+### Routing
+
+1. Simulate multi-hop routing with configurable hop count
+2. Each hop applies encryption layer (simulated)
+3. Log routing events without revealing payload content
 
 ## Navigation
 

@@ -14,5 +14,6 @@ Documentation files and guides.
 - `index.md` – File
 
 ## Navigation
+- **Source**: [src/codomyrmex/physical_management/](../../../src/codomyrmex/physical_management/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

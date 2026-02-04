@@ -1,89 +1,152 @@
 # defense - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: January 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-The `defense` module provides the scaffolding and generation logic for creating *new* Codomyrmex modules. It ensures that all new modules start with the required structure, documentation files (`README`, `AGENTS`, `SPEC`), and configuration, enforcing the "Internal Coherence" design principle from day one.
+The `defense` module implements "Fiduciary Defense" capabilities for Secure Cognitive Agents. It actively monitors for cognitive exploits (jailbreaks, prompt injections, social engineering) and responds with active countermeasures including context poisoning and attacker engagement via rabbit holes.
 
 ## Design Principles
 
 ### Modularity
 
-- **Template Driven**: Uses Jinja2 or similar string substitution to generate files from `src/codomyrmex/template` or internal assets.
-- **Generator Pattern**: Separation between the configuration of a new module and the disk I/O.
+- Pluggable detection backends (heuristic, ML-based, signature)
+- Separate detection from response — countermeasures are independently configurable
+- Clean interface between ExploitDetector and ActiveDefense
 
 ### Internal Coherence
 
-- **Dogfooding**: The template it generates MUST match the standards enforced by `cursorrules` and the documentation overhaul.
-- **Standards Enforcement**: It pre-populates `SPEC.md`, `README.md`, and `AGENTS.md` with the correct boilerplate.
+- All defense activations are logged for audit
+- Consistent threat-level classification across components
+- Integration with identity and privacy modules for coordinated response
 
 ### Parsimony
 
-- **Simple Inputs**: Should only require a module name (snake_case) and a human-readable name.
+- Detection-first approach — never respond without confirmation
+- Minimal false-positive surface area
+- Proportional response to threat severity
 
 ### Functionality
 
-- **Idempotency**: Can "upgrade" an existing folder to a module (adding missing files) without overwriting existing code (unless forced).
+- Working exploit detection with pattern-based scanning
+- Active countermeasures: context poisoning and rabbit hole engagement
+- Configurable threat response thresholds
+
+### Testing
+
+- Unit tests for detection patterns
+- Integration tests with simulated attack vectors
+- False-positive rate benchmarks
+
+### Documentation
+
+- Complete API specifications
+- Countermeasure response documentation
+- Threat classification reference
 
 ## Architecture
 
 ```mermaid
 graph TD
-    subgraph "Input"
-        CLI[CLI Command]
-        Config[Module Metadata]
+    subgraph "Detection"
+        ED[ExploitDetector]
+        Patterns[Attack Patterns]
     end
 
-    subgraph "Core Logic"
-        Generator[Module Generator]
-        Renderer[Template Renderer]
+    subgraph "Response"
+        AD[ActiveDefense]
+        CP[ContextPoisoner]
+        RH[RabbitHole]
     end
 
-    subgraph "Assets"
-        Templates[File Templates]
+    subgraph "Dependencies"
+        LOG[logging_monitoring]
+        ID[identity]
     end
 
-    subgraph "Output"
-        FS[File System]
-    end
-
-    CLI --> Config
-    Config --> Generator
-    Generator --> Renderer
-    Templates --> Renderer
-    Renderer --> FS
+    ED --> Patterns
+    AD --> ED
+    AD --> CP
+    AD --> RH
+    AD --> LOG
+    RH --> LOG
+    AD --> ID
 ```
 
 ## Functional Requirements
 
 ### Core Capabilities
 
-1. **Scaffolding**: Create folder structure (`src/codomyrmex/<name>`, `tests/`, `docs/`).
-2. **File Generation**: Render `__init__.py`, `README.md`, `AGENTS.md`, `SPEC.md` with placeholders filled.
-3. **Registration**: Optionally register the new module in `system_discovery` or main `README` (though typically discovery is dynamic).
+1. **Exploit Detection**: Heuristic scanning for known attack patterns via `ActiveDefense.detect_exploit()`
+2. **Context Poisoning**: Inject adversarial noise to disrupt attacker models via `ContextPoisoner`
+3. **Rabbit Hole Containment**: Trap persistent attackers in simulated loops via `RabbitHole.engage()`
+4. **Threat Classification**: Categorize detected threats by severity and type
+5. **Audit Trail**: Log all defense activations with full context
 
-### Quality Standards
+### Integration Points
 
-- **Valid Output**: Generated code must pass linting immediately.
-- **Documentation**: Generated docs must represent the "Ideal" state (no "Requirement 1" placeholders if possible, or at least standardized TODOs).
+- `identity/` - Persona-aware threat assessment
+- `privacy/` - Scrub defense metadata from outgoing data
+- `wallet/` - Protect key operations from cognitive attacks
+- `logging_monitoring/` - Defense event logging
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Comprehensive error handling
+
+### Testing Standards
+
+- ≥80% coverage
+- Attack pattern coverage tests
+- False-positive rate tracking
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- Attack pattern reference
+- Response configuration guide
 
 ## Interface Contracts
 
-### Public API
+### ActiveDefense API
 
-- `create_module(name: str, description: str) -> Path`: Creates the module.
-- `update_module_boilerplate(path: Path) -> None`: Updates standard files in an existing module.
+```python
+class ActiveDefense:
+    def detect_exploit(input_text: str) -> bool
+    def poison_context(attacker_id: str, intensity: float = 0.5) -> dict
+    def classify_threat(input_text: str) -> ThreatLevel
+```
+
+### RabbitHole API
+
+```python
+class RabbitHole:
+    def engage(attacker_id: str) -> str
+    def is_engaged(attacker_id: str) -> bool
+    def release(attacker_id: str) -> None
+```
 
 ### Dependencies
 
-- **Internal**: `codomyrmex.logging_monitoring`.
+- **Internal**: `codomyrmex.logging_monitoring`, `codomyrmex.identity`.
 
 ## Implementation Guidelines
 
-### Usage Patterns
+### Detection
 
-- Run via CLI: `codomyrmex create-module my_new_feature`.
+1. Maintain curated pattern database for known exploit types
+2. Score inputs against multiple detection heuristics
+3. Threshold-based escalation to countermeasures
+
+### Response
+
+1. Detection must precede any response action
+2. Match countermeasure intensity to threat level
+3. Log all activations for post-incident review
 
 ## Navigation
 

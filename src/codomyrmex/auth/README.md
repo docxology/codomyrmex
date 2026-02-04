@@ -22,5 +22,6 @@ Authentication and authorization module providing OAuth, JWT, and API key authen
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/auth/](../../../docs/modules/auth/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

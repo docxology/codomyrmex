@@ -24,5 +24,6 @@ Event system module providing event emission, subscription, and handling capabil
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/events/](../../../docs/modules/events/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

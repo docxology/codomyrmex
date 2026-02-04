@@ -19,5 +19,6 @@ The `privacy` module enforces data minimization and network anonymity. It system
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/privacy/](../../../docs/modules/privacy/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

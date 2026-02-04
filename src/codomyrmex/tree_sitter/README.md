@@ -20,5 +20,6 @@ High-fidelity source code parsing across multiple programming languages. Enables
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/tree_sitter/](../../../docs/modules/tree_sitter/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

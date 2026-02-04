@@ -90,6 +90,7 @@ with get_provider(ProviderType.OPENROUTER, api_key=key) as provider:
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/llm/](../../../docs/modules/llm/)
 - **Parent**: [codomyrmex](../README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **Agents**: [AGENTS.md](AGENTS.md)

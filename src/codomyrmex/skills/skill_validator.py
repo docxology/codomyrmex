@@ -1,65 +1,21 @@
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-import logging
-
-import yaml
-
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Skill Validator Module
 
 Validates YAML skill files against schema.
 """
 
-try:
-    HAS_YAML = True
-except ImportError:
-    HAS_YAML = False
-    yaml = None
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+import logging
 
 try:
+    import yaml
+    HAS_YAML = True
+except ImportError:
+    yaml = None
+    HAS_YAML = False
+
+try:
+    from codomyrmex.logging_monitoring.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -189,4 +145,3 @@ class SkillValidator:
                     results[str(skill_item)] = self.validate_file(skill_item)
 
         return results
-

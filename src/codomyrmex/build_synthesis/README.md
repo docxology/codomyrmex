@@ -23,5 +23,6 @@ Build automation module providing multi-language builds, artifact generation, an
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/build_synthesis/](../../../docs/modules/build_synthesis/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

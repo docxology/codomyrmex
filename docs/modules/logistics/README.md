@@ -11,5 +11,6 @@ Documentation files and guides.
 - `SPEC.md` – File
 
 ## Navigation
+- **Source**: [src/codomyrmex/logistics/](../../../src/codomyrmex/logistics/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

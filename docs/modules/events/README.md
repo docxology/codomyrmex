@@ -11,5 +11,6 @@ Documentation files and guides.
 - `SPEC.md` – File
 
 ## Navigation
+- **Source**: [src/codomyrmex/events/](../../../src/codomyrmex/events/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md

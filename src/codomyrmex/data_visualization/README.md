@@ -26,5 +26,6 @@ Provides data visualization capabilities including charts, plots, and interactiv
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/data_visualization/](../../../docs/modules/data_visualization/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

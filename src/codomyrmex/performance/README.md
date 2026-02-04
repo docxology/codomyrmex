@@ -24,5 +24,6 @@ Manages resource usage, caching, and lazy loading to ensure system responsivenes
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/performance/](../../../docs/modules/performance/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

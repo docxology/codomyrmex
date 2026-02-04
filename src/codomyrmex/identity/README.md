@@ -20,5 +20,6 @@ The `identity` module provides multi-persona management and bio-cognitive verifi
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/identity/](../../../docs/modules/identity/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

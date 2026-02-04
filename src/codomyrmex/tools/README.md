@@ -24,5 +24,6 @@ Utility scripts for project analysis and maintenance, including dependency check
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/tools/](../../../docs/modules/tools/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md

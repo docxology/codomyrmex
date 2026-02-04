@@ -28,5 +28,6 @@ Provides code execution sandbox, automated code review, and programming language
 
 ## Navigation
 
+- **Full Documentation**: [docs/modules/coding/](../../../docs/modules/coding/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
