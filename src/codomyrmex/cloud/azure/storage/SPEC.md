@@ -1,9 +1,7 @@
-# Azure Storage - Technical Specification
+# Azure Storage - Specification
 
-## Overview
+**Status**: Planned
 
-Blob storage
+## Navigation
 
-## Architecture
-
-See implementation files for detailed API.
+- **Parent**: [azure/](../README.md)

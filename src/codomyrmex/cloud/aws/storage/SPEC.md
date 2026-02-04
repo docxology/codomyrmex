@@ -1,9 +1,12 @@
-# Aws Storage - Technical Specification
+# AWS Storage - Specification
 
-## Overview
+**Status**: Planned
 
-S3 object storage
+## Planned Interface
 
-## Architecture
+Extended S3 operations beyond basic CRUD in `S3Client`.
 
-See implementation files for detailed API.
+## Navigation
+
+- **README**: [README.md](README.md)
+- **Parent**: [aws/](../README.md)

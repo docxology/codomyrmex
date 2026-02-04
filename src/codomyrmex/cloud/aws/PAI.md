@@ -1,26 +1,33 @@
-# Personal AI Infrastructure - Aws Context
+# Personal AI Infrastructure - cloud/aws
 
-**Module**: aws
+**Module**: cloud/aws  
 **Status**: Active
 
 ## Context
 
-Amazon Web Services integration for S3, EC2, Lambda, and other AWS services.
+AWS integration using boto3 for S3, EC2, and Lambda operations.
 
-## AI Strategy
+## AI Agent Strategy
 
-As an AI agent, when working with this module:
+1. **Credential Check**: Verify `S3Client is not None` before use
+2. **Region Selection**: Pass `region_name` for cross-region operations
+3. **Error Handling**: All methods return `False` on failure; check return values
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+## Key Patterns
 
-## Key Files
+```python
+from codomyrmex.cloud import S3Client
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+client = S3Client(region_name="us-east-1")
 
-## Future Considerations
+# Always check success
+if client.upload_file("data.csv", "bucket", "data.csv"):
+    print("Upload successful")
+else:
+    print("Upload failed - check logs")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+## Navigation
+
+- **Specification**: [SPEC.md](SPEC.md)
+- **Parent**: [cloud/](../README.md)

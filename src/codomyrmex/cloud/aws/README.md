@@ -1,40 +1,63 @@
-# Aws
+# AWS Integration Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `aws` module provides core functionality for Aws.
-
-## Architecture
-
-```mermaid
-graph TD
-    aws --> Utils[codomyrmex.utils]
-    aws --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph aws
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+Amazon Web Services integration providing S3 object storage, with planned support for EC2 compute and Lambda serverless.
 
 ## Components
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+| Component | Status | Description |
+|-----------|--------|-------------|
+| `S3Client` | ✅ Active | S3 object storage operations |
+| `storage/` | Planned | Extended storage utilities |
+| `compute/` | Planned | EC2 instance management |
+| `serverless/` | Planned | Lambda function management |
 
-## Usage
+## Quick Start
 
 ```python
-from codomyrmex.aws import ...
+from codomyrmex.cloud.aws import S3Client
 
-# Example usage
-# result = process(...)
+# Uses boto3 default credential chain
+client = S3Client(region_name="us-west-2")
+
+# Upload
+client.upload_file("local.txt", "my-bucket", "remote.txt")
+
+# List
+for obj in client.list_objects("my-bucket"):
+    print(obj)
+
+# Download
+client.download_file("my-bucket", "remote.txt", "downloaded.txt")
 ```
+
+## Authentication
+
+Uses boto3 credential chain:
+
+1. Environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)
+2. AWS config file (`~/.aws/credentials`)
+3. IAM instance role (EC2/ECS/Lambda)
+
+## Dependencies
+
+```bash
+pip install boto3
+```
+
+## Directory Structure
+
+| Path | Description |
+|------|-------------|
+| `__init__.py` | S3Client implementation |
+| `storage/` | Extended storage operations |
+| `compute/` | EC2 operations (planned) |
+| `serverless/` | Lambda operations (planned) |
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent**: [cloud/](../README.md)
+- **Specification**: [SPEC.md](SPEC.md)

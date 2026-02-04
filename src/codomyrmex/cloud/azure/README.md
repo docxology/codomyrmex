@@ -1,40 +1,55 @@
-# Azure
+# Azure Integration Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `azure` module provides core functionality for Azure.
-
-## Architecture
-
-```mermaid
-graph TD
-    azure --> Utils[codomyrmex.utils]
-    azure --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph azure
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+Microsoft Azure integration providing Blob Storage, with planned support for VMs and Azure Functions.
 
 ## Components
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+| Component | Status | Description |
+|-----------|--------|-------------|
+| `AzureBlobClient` | ✅ Active | Blob Storage operations |
+| `storage/` | Planned | Extended storage utilities |
+| `compute/` | Planned | VM management |
+| `serverless/` | Planned | Azure Functions management |
 
-## Usage
+## Quick Start
 
 ```python
-from codomyrmex.azure import ...
+from codomyrmex.cloud.azure import AzureBlobClient
 
-# Example usage
-# result = process(...)
+# Uses DefaultAzureCredential
+client = AzureBlobClient(account_url="https://myaccount.blob.core.windows.net")
+
+# Upload
+client.upload_blob("my-container", "remote.txt", "local.txt")
+
+# List
+for blob in client.list_blobs("my-container"):
+    print(blob)
+
+# Download
+client.download_blob("my-container", "remote.txt", "downloaded.txt")
+```
+
+## Authentication
+
+Uses DefaultAzureCredential chain:
+
+1. Environment variables (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_CLIENT_SECRET`)
+2. Managed Identity (on Azure VMs/App Service)
+3. Azure CLI credentials
+4. Visual Studio Code Azure extension
+
+## Dependencies
+
+```bash
+pip install azure-storage-blob azure-identity
 ```
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent**: [cloud/](../README.md)
+- **Specification**: [SPEC.md](SPEC.md)

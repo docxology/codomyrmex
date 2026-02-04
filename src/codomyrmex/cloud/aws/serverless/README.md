@@ -1,40 +1,19 @@
-# Serverless
+# AWS Serverless Submodule
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.2.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `serverless` module provides core functionality for Serverless.
+AWS Lambda serverless function management.
 
-## Architecture
+## Planned Features
 
-```mermaid
-graph TD
-    serverless --> Utils[codomyrmex.utils]
-    serverless --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph serverless
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.serverless import ...
-
-# Example usage
-# result = process(...)
-```
+- Function deployment
+- Invocation (sync/async)
+- Layer management
+- Event source mapping
+- Alias and version management
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent**: [aws/](../README.md)

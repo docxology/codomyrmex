@@ -1,40 +1,18 @@
-# Storage
+# Azure Storage Submodule
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.2.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `storage` module provides core functionality for Storage.
+Extended Azure Blob Storage utilities including SAS tokens, lifecycle management, and tiering.
 
-## Architecture
+## Planned Features
 
-```mermaid
-graph TD
-    storage --> Utils[codomyrmex.utils]
-    storage --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph storage
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.storage import ...
-
-# Example usage
-# result = process(...)
-```
+- SAS token generation
+- Lifecycle policy management
+- Access tier management
+- Blob versioning
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent**: [azure/](../README.md)

@@ -1,26 +1,30 @@
-# Personal AI Infrastructure - Gcp Context
+# Personal AI Infrastructure - cloud/gcp
 
-**Module**: gcp
+**Module**: cloud/gcp  
 **Status**: Active
 
 ## Context
 
-Google Cloud Platform integration for GCP services, BigQuery, and Cloud Storage.
+GCP integration using google-cloud-storage for Cloud Storage operations.
 
-## AI Strategy
+## AI Agent Strategy
 
-As an AI agent, when working with this module:
+1. **Credential Check**: Verify `GCSClient is not None` before use
+2. **Project Selection**: Pass `project` for multi-project environments
+3. **Error Handling**: All methods return `False` on failure
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+## Key Patterns
 
-## Key Files
+```python
+from codomyrmex.cloud import GCSClient
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+client = GCSClient(project="my-project")
 
-## Future Considerations
+if client.upload_blob("bucket", "local.csv", "remote.csv"):
+    print("Upload successful")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+## Navigation
+
+- **Specification**: [SPEC.md](SPEC.md)
+- **Parent**: [cloud/](../README.md)

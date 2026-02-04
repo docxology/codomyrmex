@@ -1,9 +1,7 @@
 # Azure Storage - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.azure.storage`
+## Navigation
 
-## Purpose
-
-Blob storage
+- **Parent**: [azure/](../README.md)

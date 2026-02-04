@@ -1,9 +1,7 @@
-# Aws Compute - PAI
+# AWS Compute - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.aws.compute`
+## Navigation
 
-## Purpose
-
-EC2 and container instances
+- **Parent**: [aws/](../README.md)

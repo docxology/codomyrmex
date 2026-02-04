@@ -1,9 +1,7 @@
-# Gcp Serverless - Technical Specification
+# GCP Serverless - Specification
 
-## Overview
+**Status**: Planned
 
-Cloud Run and Functions
+## Navigation
 
-## Architecture
-
-See implementation files for detailed API.
+- **Parent**: [gcp/](../README.md)

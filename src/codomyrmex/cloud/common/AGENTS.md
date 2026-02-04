@@ -1,25 +1,59 @@
-# Codomyrmex Agents — src/codomyrmex/cloud/common
+# Codomyrmex Agents — cloud/common
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Cloud-agnostic utilities and abstractions shared across all cloud providers.
+Shared abstractions and utilities for cloud provider implementations. Defines contracts that ensure consistent interfaces across AWS, GCP, and Azure.
 
 ## Active Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
+| Component | Type | Description |
+|-----------|------|-------------|
+| `CloudProvider` | Enum | AWS, GCP, AZURE, LOCAL identifiers |
+| `ResourceType` | Enum | COMPUTE, STORAGE, DATABASE, etc. |
+| `CloudCredentials` | Dataclass | Provider credentials container |
+| `CloudResource` | Dataclass | Generic resource representation |
+| `CloudClient` | ABC | Generic resource management interface |
+| `StorageClient` | ABC | Object storage interface |
+| `ComputeClient` | ABC | VM/Instance management interface |
+| `ServerlessClient` | ABC | FaaS interface |
+| `CloudConfig` | Class | Multi-provider configuration manager |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+### Import Pattern
 
-## Navigation Links
+```python
+from codomyrmex.cloud.common import (
+    CloudProvider,
+    ResourceType,
+    CloudCredentials,
+    CloudResource,
+    StorageClient,
+    ComputeClient,
+    ServerlessClient,
+    CloudConfig,
+)
+```
 
-- **📁 Parent Directory**: [cloud](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+### Implementing Custom Clients
+
+When creating provider-specific implementations:
+
+1. Inherit from appropriate ABC (`StorageClient`, `ComputeClient`, etc.)
+2. Implement ALL abstract methods
+3. Handle provider exceptions internally
+4. Use consistent return types as specified in contracts
+5. Log errors using Python `logging` module
+
+## Modification Guidelines
+
+- **Adding New ABCs**: Follow existing pattern with `@abstractmethod` decorators
+- **Extending Enums**: Add new values to `CloudProvider` or `ResourceType` as needed
+- **Updating Dataclasses**: Maintain backward compatibility with optional fields
+
+## Navigation
+
+- **📁 Parent**: [cloud/](../README.md)
+- **📖 Specification**: [SPEC.md](SPEC.md)

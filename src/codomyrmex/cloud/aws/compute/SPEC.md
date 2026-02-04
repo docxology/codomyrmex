@@ -1,9 +1,7 @@
-# Aws Compute - Technical Specification
+# AWS Compute - Specification
 
-## Overview
+**Status**: Planned
 
-EC2 and container instances
+## Navigation
 
-## Architecture
-
-See implementation files for detailed API.
+- **Parent**: [aws/](../README.md)

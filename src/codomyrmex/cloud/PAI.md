@@ -1,26 +1,88 @@
 # Personal AI Infrastructure - Cloud Context
 
-**Module**: cloud
+**Module**: cloud  
+**Version**: v0.2.0  
 **Status**: Active
 
 ## Context
 
-Cloud provider integrations for AWS, GCP, Azure with unified abstractions for storage, compute, and serverless.
+Cloud provider integrations for AWS, GCP, Azure, and Coda.io with unified abstractions for storage, compute, and serverless operations.
 
-## AI Strategy
+## AI Agent Strategy
 
-As an AI agent, when working with this module:
+When working with this module as an AI agent:
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+### 1. Provider Selection
+
+```python
+# Evaluate available providers
+from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient
+
+available = []
+if S3Client: available.append("aws")
+if GCSClient: available.append("gcp")
+if AzureBlobClient: available.append("azure")
+
+# Choose based on context or preference
+```
+
+### 2. Unified Operations
+
+All storage clients share common patterns:
+
+| Operation | AWS | GCP | Azure |
+|-----------|-----|-----|-------|
+| Upload | `upload_file()` | `upload_blob()` | `upload_blob()` |
+| Download | `download_file()` | `download_blob()` | `download_blob()` |
+| List | `list_objects()` | `list_blobs()` | `list_blobs()` |
+| Metadata | `get_metadata()` | `get_metadata()` | `get_metadata()` |
+| Ensure | `ensure_bucket()` | `ensure_bucket()` | `ensure_container()` |
+
+### 3. Error Handling Strategy
+
+```python
+# Wrap all cloud operations in try/except
+try:
+    client.upload_file(local, bucket, remote)
+except Exception as e:
+    # Log error, notify user, or retry
+    logger.error(f"Cloud upload failed: {e}")
+    return fallback_action()
+```
+
+### 4. Credential Management
+
+- **AWS**: Use environment variables or IAM roles
+- **GCP**: Use application default credentials or service account
+- **Azure**: Use DefaultAzureCredential for automatic chain
+- **Coda.io**: Pass API token to CodaClient constructor
 
 ## Key Files
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Public API exports |
+| `common/__init__.py` | Abstract base classes |
+| `coda_io/client.py` | Full Coda.io REST API client |
+| `SPEC.md` | Technical specification |
+
+## Best Practices
+
+1. **Check Dependencies**: Verify client availability before use
+2. **Use Logging**: Integrate with `logging_monitoring` module
+3. **Handle Pagination**: List operations may return partial results
+4. **Respect Rate Limits**: Especially for Coda.io API calls
+5. **Clean Up**: Delete temporary cloud resources when done
 
 ## Future Considerations
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+- **Compute Services**: EC2, GCE, Azure VMs
+- **Serverless**: Lambda, Cloud Functions, Azure Functions
+- **Databases**: RDS, Cloud SQL, Azure SQL
+- **Telemetry**: Emit metrics for cloud operations
+
+## Navigation
+
+- **Specification**: [SPEC.md](SPEC.md)
+- **Agent Guide**: [AGENTS.md](AGENTS.md)
+- **Parent**: [codomyrmex](../README.md)

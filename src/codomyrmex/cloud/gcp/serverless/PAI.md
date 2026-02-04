@@ -1,9 +1,7 @@
-# Gcp Serverless - PAI
+# GCP Serverless - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.gcp.serverless`
+## Navigation
 
-## Purpose
-
-Cloud Run and Functions
+- **Parent**: [gcp/](../README.md)

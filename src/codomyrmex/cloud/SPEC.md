@@ -1,30 +1,39 @@
 # cloud - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Cloud services integration module providing standardized Python clients for interacting with cloud-based platforms and APIs. Enables seamless integration with document management, collaboration, and data services.
+Cloud services integration module providing standardized Python clients for interacting with cloud-based platforms and APIs. Enables seamless integration with object storage, compute, serverless, and document management services across AWS, GCP, Azure, and Coda.io.
 
 ## Design Principles
 
-### Modularity
+### 1. Modularity
 
 - Each cloud service has its own submodule
-- Shared utilities extracted to common components
+- Shared utilities extracted to `common/` components
 - Clear separation of concerns between services
+- Optional dependencies per provider
 
-### Consistency
+### 2. Consistency
 
 - Uniform interface patterns across all cloud clients
 - Standardized error handling and exceptions
 - Common data model patterns using dataclasses
+- Abstract base classes in `common/` define contracts
 
-### Reliability
+### 3. Reliability
 
 - Proper error handling with typed exceptions
 - Rate limit awareness and handling
 - Pagination support for list endpoints
+- Graceful degradation for optional dependencies
+
+### 4. Provider Agnosticism
+
+- Common abstractions enable provider-swapping
+- Consistent method signatures across providers
+- Unified credential management patterns
 
 ## Architecture
 
@@ -32,53 +41,58 @@ Cloud services integration module providing standardized Python clients for inte
 graph TD
     subgraph "Cloud Module"
         Init[__init__.py]
-        AWS[aws/S3Client]
-        GCP[gcp/GCSClient]
-        Azure[azure/AzureBlobClient]
         
-        subgraph "coda_io Submodule"
-            CodaClient[CodaClient]
-            Models[Data Models]
-            Exceptions[Exceptions]
+        subgraph "Common Layer"
+            CloudClient[CloudClient ABC]
+            StorageClient[StorageClient ABC]
+            ComputeClient[ComputeClient ABC]
+            ServerlessClient[ServerlessClient ABC]
+            Models[CloudCredentials, CloudResource]
+            Enums[CloudProvider, ResourceType]
+        end
+        
+        subgraph "Provider Implementations"
+            AWS[aws/S3Client]
+            GCP[gcp/GCSClient]
+            Azure[azure/AzureBlobClient]
+            Coda[coda_io/CodaClient]
         end
     end
     
-    Init --> AWS
-    Init --> GCP
-    Init --> Azure
-    Init --> CodaClient
-    CodaClient --> Models
-    CodaClient --> Exceptions
-    CodaClient -->|HTTP| CodaAPI[Coda.io API v1]
+    Init --> AWS & GCP & Azure & Coda
+    StorageClient -.->|contract| AWS & GCP & Azure
+    AWS --> |boto3| S3[AWS S3 API]
+    GCP --> |google-cloud-storage| GCS[GCS API]
+    Azure --> |azure-storage-blob| Blob[Azure Blob API]
+    Coda --> |requests| CodaAPI[Coda.io API v1]
 ```
 
 ## Functional Requirements
 
-### Object Storage (AWS, GCP, Azure)
+### FR-1: Object Storage Operations
 
-#### Core Operations
+All storage clients must implement:
 
-- `upload_file(local_path: str, bucket: str, object_name: str) -> bool`
-- `download_file(bucket: str, object_name: str, local_path: str) -> bool`
-- `get_metadata(bucket: str, object_name: str) -> dict`
-- `ensure_bucket(bucket: str) -> bool` / `ensure_container(container: str) -> bool`
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `upload_file` | `(local_path, bucket, object_name) -> bool` | Upload local file to storage |
+| `download_file` | `(bucket, object_name, local_path) -> bool` | Download object to local file |
+| `list_objects` | `(bucket) -> list[str]` | List all objects in bucket |
+| `get_metadata` | `(bucket, object_name) -> dict` | Get object metadata |
+| `ensure_bucket` | `(bucket) -> bool` | Create bucket if not exists |
 
-#### Authentication
+### FR-2: Authentication
 
-- **AWS**: Uses `boto3` default credential chain.
-- **GCP**: Uses `google-cloud-storage` default credentials or service account JSON.
-- **Azure**: Uses `DefaultAzureCredential` from `azure-identity`.
+| Provider | Method |
+|----------|--------|
+| **AWS** | boto3 default credential chain (env, config, IAM role) |
+| **GCP** | Application Default Credentials or service account JSON |
+| **Azure** | DefaultAzureCredential from azure-identity |
+| **Coda.io** | Bearer token authentication via API token |
 
-### Coda.io Integration
+### FR-3: Coda.io API Coverage
 
-#### Authentication
-
-- Bearer token authentication via API token
-- Token passed in Authorization header
-
-#### API Coverage
-
-The client must support all major Coda API v1 endpoints:
+The Coda client must support all major API v1 endpoints:
 
 | Category | Endpoints |
 |----------|-----------|
@@ -95,39 +109,58 @@ The client must support all major Coda API v1 endpoints:
 | Analytics | doc analytics, page analytics, pack analytics |
 | Miscellaneous | whoami, resolve browser link, mutation status |
 
-#### Error Handling
+### FR-4: Error Handling
 
 - Map HTTP status codes to typed exceptions
 - Preserve error messages from API responses
 - Support for rate limit detection (429)
-
-#### Pagination
-
-- Support `pageToken` and `limit` parameters
-- Provide iterator helpers for automatic pagination
+- Graceful handling of missing optional dependencies
 
 ## Technical Constraints
 
 ### Dependencies
 
-- `requests` library for HTTP
+| Provider | Required Package | Optional |
+|----------|-----------------|----------|
+| Core | `requests` | No |
+| AWS | `boto3` | Yes |
+| GCP | `google-cloud-storage` | Yes |
+| Azure | `azure-storage-blob`, `azure-identity` | Yes |
+
+### Python Version
+
 - Python 3.10+ for modern type hints
+- Full typing with `py.typed` marker
 
-### API Versioning
+### Rate Limits (Coda.io)
 
-- Target Coda API v1 (base URL: `https://coda.io/apis/v1`)
-- API version included in base URL
+| Operation | Limit |
+|-----------|-------|
+| Reading | 100 requests / 6 seconds |
+| Writing | 10 requests / 6 seconds |
+| Listing docs | 4 requests / 6 seconds |
 
-### Rate Limits
+## Non-Functional Requirements
 
-Per Coda documentation:
+### NFR-1: Performance
 
-- Reading: 100 requests / 6 seconds
-- Writing: 10 requests / 6 seconds
-- Listing docs: 4 requests / 6 seconds
+- Connection pooling via requests.Session
+- Lazy initialization of provider clients
+- Streaming for large file transfers
+
+### NFR-2: Observability
+
+- Structured logging via `codomyrmex.logging_monitoring`
+- Error classification and metrics
+
+### NFR-3: Testing
+
+- Unit tests with mocked provider APIs
+- Integration tests for local development
 
 ## Navigation Links
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 - **Parent**: [codomyrmex](../README.md)

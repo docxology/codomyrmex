@@ -1,9 +1,7 @@
-# Aws Serverless - PAI
+# AWS Serverless - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.aws.serverless`
+## Navigation
 
-## Purpose
-
-Lambda functions
+- **Parent**: [aws/](../README.md)

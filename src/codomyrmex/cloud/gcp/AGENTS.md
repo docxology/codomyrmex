@@ -1,28 +1,32 @@
-# Codomyrmex Agents — src/codomyrmex/cloud/gcp
+# Codomyrmex Agents — cloud/gcp
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Google Cloud Platform integration for storage, compute, and managed services.
+GCP service integrations including Cloud Storage, GCE (planned), and Cloud Functions (planned).
 
 ## Active Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `compute/` – Directory containing compute components
-- `serverless/` – Directory containing serverless components
-- `storage/` – Directory containing storage components
+| Component | Type | Status |
+|-----------|------|--------|
+| `GCSClient` | Class | Active |
+| `storage/` | Module | Planned |
+| `compute/` | Module | Planned |
+| `serverless/` | Module | Planned |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+```python
+from codomyrmex.cloud import GCSClient
 
-## Navigation Links
+if GCSClient is None:
+    print("google-cloud-storage not installed")
+else:
+    client = GCSClient(project="my-project")
+```
 
-- **📁 Parent Directory**: [cloud](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+## Navigation
+
+- **📁 Parent**: [cloud/](../README.md)
+- **📖 Specification**: [SPEC.md](SPEC.md)

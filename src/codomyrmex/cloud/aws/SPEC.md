@@ -1,22 +1,43 @@
-# Aws Specification
+# AWS - Functional Specification
 
-## 1. Functional Requirements
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-The `aws` module must:
-- Provide robust implementations of Aws logic.
-- Handle errors gracefully without crashing the host process.
-- Expose a clean, type-hinted API.
+## Purpose
 
-## 2. API Surface
+Provide AWS cloud service integrations for S3 storage, EC2 compute, and Lambda serverless.
 
-See `API_SPECIFICATION.md` (if available) or `__init__.py` for exact signatures.
+## S3Client Specification
 
-## 3. Dependencies
+### Constructor
 
-- **Internal**: `codomyrmex.logging_monitoring`, `codomyrmex.utils`.
-- **External**: Standard library.
+```python
+S3Client(region_name: Optional[str] = None)
+```
 
-## 4. Constraints
+### Methods
 
-- **Performance**: Operations should be non-blocking where possible.
-- **Security**: Validate all inputs; sanity check paths.
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `upload_file(file_path, bucket, object_name=None)` | `bool` | Upload local file |
+| `download_file(bucket, object_name, file_path)` | `bool` | Download to local |
+| `list_objects(bucket)` | `list[str]` | List object keys |
+| `get_metadata(bucket, object_name)` | `dict` | Get object metadata |
+| `ensure_bucket(bucket, region=None)` | `bool` | Create if not exists |
+
+### Error Handling
+
+- Returns `False` on failure
+- Logs errors via `logging` module
+- Catches `botocore.exceptions.ClientError`
+
+## Dependencies
+
+| Package | Version | Required |
+|---------|---------|----------|
+| `boto3` | >=1.26 | Yes |
+| `botocore` | >=1.29 | Transitive |
+
+## Navigation
+
+- **README**: [README.md](README.md)
+- **Parent**: [cloud/](../README.md)

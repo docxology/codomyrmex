@@ -1,9 +1,7 @@
-# Azure Compute - Technical Specification
+# Azure Compute - Specification
 
-## Overview
+**Status**: Planned
 
-VM and AKS
+## Navigation
 
-## Architecture
-
-See implementation files for detailed API.
+- **Parent**: [azure/](../README.md)

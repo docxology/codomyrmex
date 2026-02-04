@@ -1,9 +1,9 @@
-# Aws Storage - PAI
+# AWS Storage - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.aws.storage`
+Extended S3 utilities for advanced file operations.
 
-## Purpose
+## Navigation
 
-S3 object storage
+- **Parent**: [aws/](../README.md)

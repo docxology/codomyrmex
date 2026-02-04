@@ -1,28 +1,32 @@
-# Codomyrmex Agents — src/codomyrmex/cloud/azure
+# Codomyrmex Agents — cloud/azure
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Microsoft Azure cloud service integration for storage, compute, and serverless resources.
+Azure service integrations including Blob Storage, VMs (planned), and Azure Functions (planned).
 
 ## Active Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `compute/` – Directory containing compute components
-- `serverless/` – Directory containing serverless components
-- `storage/` – Directory containing storage components
+| Component | Type | Status |
+|-----------|------|--------|
+| `AzureBlobClient` | Class | Active |
+| `storage/` | Module | Planned |
+| `compute/` | Module | Planned |
+| `serverless/` | Module | Planned |
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+```python
+from codomyrmex.cloud import AzureBlobClient
 
-## Navigation Links
+if AzureBlobClient is None:
+    print("azure-storage-blob not installed")
+else:
+    client = AzureBlobClient(account_url="https://myaccount.blob.core.windows.net")
+```
 
-- **📁 Parent Directory**: [cloud](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+## Navigation
+
+- **📁 Parent**: [cloud/](../README.md)
+- **📖 Specification**: [SPEC.md](SPEC.md)

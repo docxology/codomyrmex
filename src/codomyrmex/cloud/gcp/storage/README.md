@@ -1,40 +1,19 @@
-# Storage
+# GCP Storage Submodule
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.2.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `storage` module provides core functionality for Storage.
+Extended GCP Cloud Storage utilities including resumable uploads, signed URLs, and lifecycle management.
 
-## Architecture
+## Planned Features
 
-```mermaid
-graph TD
-    storage --> Utils[codomyrmex.utils]
-    storage --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph storage
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.storage import ...
-
-# Example usage
-# result = process(...)
-```
+- Resumable uploads for large files
+- Signed URL generation
+- Lifecycle policy management
+- Cross-region replication
+- Object versioning
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent**: [gcp/](../README.md)

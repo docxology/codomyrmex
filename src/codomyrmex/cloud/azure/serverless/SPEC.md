@@ -1,9 +1,7 @@
-# Azure Serverless - Technical Specification
+# Azure Serverless - Specification
 
-## Overview
+**Status**: Planned
 
-Azure Functions
+## Navigation
 
-## Architecture
-
-See implementation files for detailed API.
+- **Parent**: [azure/](../README.md)

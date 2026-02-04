@@ -1,40 +1,54 @@
-# Gcp
+# GCP Integration Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `gcp` module provides core functionality for Gcp.
-
-## Architecture
-
-```mermaid
-graph TD
-    gcp --> Utils[codomyrmex.utils]
-    gcp --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph gcp
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+Google Cloud Platform integration providing Cloud Storage, with planned support for GCE compute and Cloud Functions.
 
 ## Components
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+| Component | Status | Description |
+|-----------|--------|-------------|
+| `GCSClient` | ✅ Active | Cloud Storage operations |
+| `storage/` | Planned | Extended storage utilities |
+| `compute/` | Planned | GCE instance management |
+| `serverless/` | Planned | Cloud Functions management |
 
-## Usage
+## Quick Start
 
 ```python
-from codomyrmex.gcp import ...
+from codomyrmex.cloud.gcp import GCSClient
 
-# Example usage
-# result = process(...)
+# Uses Application Default Credentials
+client = GCSClient(project="my-project")
+
+# Upload
+client.upload_blob("my-bucket", "local.txt", "remote.txt")
+
+# List
+for blob in client.list_blobs("my-bucket"):
+    print(blob)
+
+# Download
+client.download_blob("my-bucket", "remote.txt", "downloaded.txt")
+```
+
+## Authentication
+
+Uses Google Application Default Credentials:
+
+1. `GOOGLE_APPLICATION_CREDENTIALS` environment variable
+2. gcloud CLI credentials
+3. Service account on GCE/GKE/Cloud Run
+
+## Dependencies
+
+```bash
+pip install google-cloud-storage
 ```
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent**: [cloud/](../README.md)
+- **Specification**: [SPEC.md](SPEC.md)

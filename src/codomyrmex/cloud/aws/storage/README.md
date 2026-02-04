@@ -1,40 +1,26 @@
-# Storage
+# AWS Storage Submodule
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.2.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `storage` module provides core functionality for Storage.
+Extended AWS S3 storage utilities including multipart uploads, transfer acceleration, and lifecycle management.
 
-## Architecture
+## Planned Features
 
-```mermaid
-graph TD
-    storage --> Utils[codomyrmex.utils]
-    storage --> Logs[codomyrmex.logging_monitoring]
+- Multipart upload for large files
+- Transfer acceleration configuration
+- Lifecycle policy management
+- Cross-region replication setup
+- Versioning and object lock
 
-    subgraph storage
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+## Current Implementation
 
-## Components
+The `S3Client` in `aws/__init__.py` provides core operations:
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.storage import ...
-
-# Example usage
-# result = process(...)
-```
+- `upload_file`, `download_file`, `list_objects`, `get_metadata`, `ensure_bucket`
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent**: [aws/](../README.md)
+- **Cloud Root**: [cloud/](../../README.md)

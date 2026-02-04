@@ -1,9 +1,7 @@
-# Gcp Storage - PAI
+# GCP Storage - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.gcp.storage`
+## Navigation
 
-## Purpose
-
-Cloud Storage
+- **Parent**: [gcp/](../README.md)

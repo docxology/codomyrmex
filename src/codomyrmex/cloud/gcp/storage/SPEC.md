@@ -1,9 +1,7 @@
-# Gcp Storage - Technical Specification
+# GCP Storage - Specification
 
-## Overview
+**Status**: Planned
 
-Cloud Storage
+## Navigation
 
-## Architecture
-
-See implementation files for detailed API.
+- **Parent**: [gcp/](../README.md)

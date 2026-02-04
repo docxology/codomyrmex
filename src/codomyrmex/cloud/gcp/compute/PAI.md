@@ -1,9 +1,7 @@
-# Gcp Compute - PAI
+# GCP Compute - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.gcp.compute`
+## Navigation
 
-## Purpose
-
-GCE and GKE
+- **Parent**: [gcp/](../README.md)

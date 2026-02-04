@@ -1,9 +1,7 @@
 # Azure Serverless - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.azure.serverless`
+## Navigation
 
-## Purpose
-
-Azure Functions
+- **Parent**: [azure/](../README.md)

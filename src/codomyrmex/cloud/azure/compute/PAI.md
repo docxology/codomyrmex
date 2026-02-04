@@ -1,9 +1,7 @@
 # Azure Compute - PAI
 
-## Path
+**Status**: Planned
 
-`codomyrmex.cloud.azure.compute`
+## Navigation
 
-## Purpose
-
-VM and AKS
+- **Parent**: [azure/](../README.md)

@@ -1,9 +1,7 @@
-# Gcp Compute - Technical Specification
+# GCP Compute - Specification
 
-## Overview
+**Status**: Planned
 
-GCE and GKE
+## Navigation
 
-## Architecture
-
-See implementation files for detailed API.
+- **Parent**: [gcp/](../README.md)

@@ -1,40 +1,17 @@
-# Compute
+# Azure Compute Submodule
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.2.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `compute` module provides core functionality for Compute.
+Azure Virtual Machine management.
 
-## Architecture
+## Planned Features
 
-```mermaid
-graph TD
-    compute --> Utils[codomyrmex.utils]
-    compute --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph compute
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.compute import ...
-
-# Example usage
-# result = process(...)
-```
+- VM lifecycle management
+- Scale set operations
+- Disk management
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent**: [azure/](../README.md)

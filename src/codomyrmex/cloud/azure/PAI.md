@@ -1,26 +1,32 @@
-# Personal AI Infrastructure - Azure Context
+# Personal AI Infrastructure - cloud/azure
 
-**Module**: azure
+**Module**: cloud/azure  
 **Status**: Active
 
 ## Context
 
-Microsoft Azure cloud integration for Azure-specific services, storage, and compute resources.
+Azure integration using azure-storage-blob for Blob Storage operations.
 
-## AI Strategy
+## AI Agent Strategy
 
-As an AI agent, when working with this module:
+1. **Credential Check**: Verify `AzureBlobClient is not None` before use
+2. **Account URL**: Required for client initialization
+3. **Error Handling**: Client is `None` if misconfigured
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+## Key Patterns
 
-## Key Files
+```python
+from codomyrmex.cloud import AzureBlobClient
+import os
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+account_url = os.environ.get("AZURE_STORAGE_ACCOUNT_URL")
+if account_url:
+    client = AzureBlobClient(account_url=account_url)
+    if client.client:  # Check internal client initialized
+        client.upload_blob("container", "remote.txt", "local.txt")
+```
 
-## Future Considerations
+## Navigation
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+- **Specification**: [SPEC.md](SPEC.md)
+- **Parent**: [cloud/](../README.md)

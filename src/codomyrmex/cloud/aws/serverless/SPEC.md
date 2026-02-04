@@ -1,9 +1,7 @@
-# Aws Serverless - Technical Specification
+# AWS Serverless - Specification
 
-## Overview
+**Status**: Planned
 
-Lambda functions
+## Navigation
 
-## Architecture
-
-See implementation files for detailed API.
+- **Parent**: [aws/](../README.md)
