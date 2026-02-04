@@ -346,9 +346,14 @@ class TestBackupManager:
 
     def test_create_backup_no_key_raises(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            backup_mgr = BackupManager(backup_dir=Path(tmpdir))
+            from codomyrmex.encryption.key_manager import KeyManager
+
+            isolated_km = KeyManager(key_dir=Path(tmpdir) / "keys")
+            backup_mgr = BackupManager(
+                backup_dir=Path(tmpdir) / "backups", key_manager=isolated_km
+            )
             with pytest.raises(WalletNotFoundError):
-                backup_mgr.create_backup("u1", "0xfake")
+                backup_mgr.create_backup("nonexistent_user", "0xfake")
 
     def test_verify_backup_valid(self):
         wallet_mgr = WalletManager()

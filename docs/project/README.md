@@ -30,7 +30,7 @@ Project-level documentation covering architecture, contributing guidelines, road
 ### Architecture
 
 - **Layered Design**: Foundation → Core → Service → Application
-- **Modularity**: 70+ independent, composable modules
+- **Modularity**: 80+ independent, composable modules
 - **AI Integration**: MCP-compatible tool interfaces
 - **Secure Cognitive Layer**: Identity, Wallet, Defense, Market, Privacy
 

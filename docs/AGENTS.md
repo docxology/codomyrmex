@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 70+ specialized modules.
+Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 80+ specialized modules.
 
 ## Documentation Organization
 
@@ -14,7 +14,7 @@ Central documentation hub for the Codomyrmex platform. Contains user guides, dev
 | [**development/**](development/) | Dev environment, testing | Medium - dev workflows |
 | [**reference/**](reference/) | API, CLI, troubleshooting | High - technical reference |
 | [**deployment/**](deployment/) | Production deployment | Medium - operations |
-| [**modules/**](modules/) | Per-module docs (70+) | High - module details |
+| [**modules/**](modules/) | Per-module docs (80+) | High - module details |
 | [**integration/**](integration/) | External integrations | Medium - integrations |
 | [**examples/**](examples/) | Code examples | Medium - learning |
 | [**project/**](project/) | Architecture, contributing | Low - project info |

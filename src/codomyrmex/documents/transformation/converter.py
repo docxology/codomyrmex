@@ -47,13 +47,18 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
                 format=target_format.value
             )
         
-        # Create new document
+        # Create new document with copied metadata
+        if document.metadata is not None and hasattr(document.metadata, 'copy'):
+            new_metadata = document.metadata.copy()
+        else:
+            new_metadata = document.metadata
+
         converted_doc = Document(
             content=converted_content,
             format=target_format,
             file_path=document.file_path,
             encoding=document.encoding,
-            metadata=document.metadata.copy() if document.metadata else {},
+            metadata=new_metadata,
         )
         
         return converted_doc
