@@ -92,7 +92,7 @@ repos:
     hooks:
       - id: validate-dependencies
         name: Validate Dependencies
-        entry: python3 tools/validate_dependencies.py
+        entry: python3 scripts/validation/validate_dependencies.py
         language: system
         files: ^(pyproject\.toml|src/.*/requirements\.txt)$
         pass_filenames: false
@@ -114,13 +114,13 @@ repos:
         files: \.md$
         pass_filenames: false
         always_run: false
-      
+
       - id: check-placeholders
         name: Check for Placeholder Content
         entry: python3 -c "import sys, re; content = open(sys.argv[1]).read(); patterns = ['TODO', 'FIXME', 'placeholder', 'TBD']; found = [p for p in patterns if p in content]; sys.exit(1 if found else 0)"
         language: system
         files: \.md$
-        
+
       - id: validate-agents-structure
         name: Validate AGENTS.md Structure
         entry: python3 scripts/documentation/validate_agents_structure.py --repo-root . --output output --fail-on-invalid

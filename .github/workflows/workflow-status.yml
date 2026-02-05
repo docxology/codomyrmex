@@ -46,6 +46,16 @@ jobs:
               'Repository Maintenance'
             ];
             
+            // Proper name-to-filename mapping
+            const workflowFileMap = {
+              'Continuous Integration': 'ci.yml',
+              'Pre-commit Checks': 'pre-commit.yml',
+              'Security Scanning and Dependency Management': 'security.yml',
+              'Documentation Build and Deploy': 'documentation.yml',
+              'Performance Benchmarks': 'benchmarks.yml',
+              'Repository Maintenance': 'maintenance.yml'
+            };
+            
             let statusData = {
               updated: new Date().toISOString(),
               workflows: {}
@@ -56,7 +66,7 @@ jobs:
                 const workflowRuns = await github.rest.actions.listWorkflowRuns({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  workflow_id: `${workflowName.toLowerCase().replace(/ /g, '-')}.yml`,
+                  workflow_id: workflowFileMap[workflowName],
                   per_page: 5
                 });
                 

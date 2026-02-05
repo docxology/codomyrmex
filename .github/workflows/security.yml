@@ -440,7 +440,7 @@ jobs:
         if: steps.check_updates.outputs.updates_available == 'true'
         run: |
           echo "🧪 Running tests with updated dependencies..."
-          uv run pytest testing/unit/ -v --tb=short --maxfail=5
+          uv run pytest src/codomyrmex/tests/unit/ -v --tb=short --maxfail=5
 
       - name: Create Pull Request
         if: steps.check_updates.outputs.updates_available == 'true'

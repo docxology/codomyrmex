@@ -92,8 +92,8 @@ jobs:
             uv run pytest -m benchmark --benchmark-json=benchmarks/results/unit-benchmarks.json -v || true
           else
             echo "No pytest benchmarks found, creating basic performance test"
-            mkdir -p testing/benchmarks
-            cat > testing/benchmarks/test_basic_benchmarks.py << 'EOF'
+            mkdir -p src/codomyrmex/tests/benchmarks
+            cat > src/codomyrmex/tests/benchmarks/test_basic_benchmarks.py << 'EOF'
 import pytest
 import time
 
@@ -117,7 +117,7 @@ def test_memory_allocation(benchmark):
     result = benchmark(memory_operation)
     assert result == 1000
 EOF
-            uv run pytest testing/benchmarks/ -m benchmark --benchmark-json=benchmarks/results/unit-benchmarks.json -v || true
+            uv run pytest src/codomyrmex/tests/benchmarks/ -m benchmark --benchmark-json=benchmarks/results/unit-benchmarks.json -v || true
           fi
 
       - name: Generate benchmark report
@@ -179,8 +179,8 @@ EOF
           echo "🔗 Running integration performance benchmarks..."
           
           # Create basic integration benchmark
-          mkdir -p testing/benchmarks
-          cat > testing/benchmarks/test_integration_benchmarks.py << 'EOF'
+          mkdir -p src/codomyrmex/tests/benchmarks
+          cat > src/codomyrmex/tests/benchmarks/test_integration_benchmarks.py << 'EOF'
 import pytest
 import time
 import sys
@@ -216,7 +216,7 @@ def test_workflow_simulation(benchmark):
     assert result == 100
 EOF
           
-          uv run pytest testing/benchmarks/test_integration_benchmarks.py -m benchmark --benchmark-json=benchmarks/results/integration-benchmarks.json -v || true
+          uv run pytest src/codomyrmex/tests/benchmarks/test_integration_benchmarks.py -m benchmark --benchmark-json=benchmarks/results/integration-benchmarks.json -v || true
 
       - name: Generate integration report
         run: |
