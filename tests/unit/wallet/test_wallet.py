@@ -1,7 +1,6 @@
 """Comprehensive tests for the wallet module."""
 
 import hashlib
-import json
 import tempfile
 from pathlib import Path
 
@@ -11,6 +10,7 @@ from codomyrmex.wallet import (
     BackupManager,
     KeyRotation,
     NaturalRitualRecovery,
+    RitualError,
     RitualStep,
     RotationPolicy,
     RotationRecord,
@@ -18,13 +18,11 @@ from codomyrmex.wallet import (
     WalletKeyError,
     WalletManager,
     WalletNotFoundError,
-    RitualError,
-    hash_response,
     create_wallet,
     get_wallet_manager,
+    hash_response,
 )
 from codomyrmex.wallet.wallet import Wallet
-
 
 # ---------------------------------------------------------------------------
 # WalletManager Tests
@@ -414,8 +412,8 @@ class TestBackupManager:
             backup_mgr = BackupManager(
                 backup_dir=Path(tmpdir), key_manager=wallet_mgr.key_manager
             )
-            r1 = backup_mgr.create_backup("u1", address)
-            r2 = backup_mgr.create_backup("u1", address, metadata={"seq": 2})
+            backup_mgr.create_backup("u1", address)
+            backup_mgr.create_backup("u1", address, metadata={"seq": 2})
             backups = backup_mgr.list_backups("u1")
             assert len(backups) == 2
             # Newest first
@@ -546,9 +544,11 @@ class TestWalletFacade:
     def test_setup_recovery_and_recover(self):
         w = Wallet("u1")
         w.create()
-        w.setup_recovery([
-            RitualStep("Q?", hash_response("A")),
-        ])
+        w.setup_recovery(
+            [
+                RitualStep("Q?", hash_response("A")),
+            ]
+        )
         assert w.recover(["A"])
         assert not w.recover(["B"])
 
@@ -626,10 +626,12 @@ class TestModuleMetadata:
 
     def test_version(self):
         import codomyrmex.wallet as wallet_module
+
         assert wallet_module.__version__ == "0.1.0"
 
     def test_all_exports(self):
         import codomyrmex.wallet as wallet_module
+
         assert "WalletManager" in wallet_module.__all__
         assert "NaturalRitualRecovery" in wallet_module.__all__
         assert "BackupManager" in wallet_module.__all__
