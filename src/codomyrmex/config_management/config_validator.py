@@ -386,15 +386,15 @@ class ConfigValidator:
             "bool": bool,
             "list": list,
             "dict": dict,
-            "any": lambda x: True  # Accept any type
         }
 
-        type_checker = type_map.get(expected_type)
-        if type_checker:
-            if callable(type_checker):
-                return type_checker(value)
-            else:
-                return isinstance(value, type_checker)
+        # Handle "any" type - accept everything
+        if expected_type == "any":
+            return True
+
+        type_class = type_map.get(expected_type)
+        if type_class is not None:
+            return isinstance(value, type_class)
 
         return False
 

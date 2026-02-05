@@ -1,40 +1,21 @@
-# Networking
+# networking
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `networking` module provides core functionality for Networking.
+The `networking` module provides core functionality for Networking..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    networking --> Utils[codomyrmex.utils]
-    networking --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph networking
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.networking import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_networking.py` - Test Networking
+- `test_networking_expansion.py` - Test Networking Expansion
+- `test_websocket_client.py` - Test Websocket Client
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

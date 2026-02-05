@@ -1,40 +1,20 @@
-# Concurrency
+# concurrency
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `concurrency` module provides core functionality for Concurrency.
+The `concurrency` module provides core functionality for Concurrency..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    concurrency --> Utils[codomyrmex.utils]
-    concurrency --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph concurrency
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.concurrency import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_async_concurrency.py` - Test Async Concurrency
+- `test_concurrency.py` - Test Concurrency
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

@@ -106,6 +106,11 @@ try:
 except ImportError:
     ConversationHistory = None
 
+try:
+    from .infrastructure import InfrastructureAgent
+except ImportError:
+    InfrastructureAgent = None
+
 from .git_agent import GitAgent
 from .generic import APIAgentBase, CLIAgentBase
 from .exceptions import (
@@ -173,6 +178,8 @@ __all__ = [
     "AgentPool",
     "AgentEvaluator",
     "ConversationHistory",
+    # Infrastructure agent (lazy-loaded)
+    "InfrastructureAgent",
 ]
 
 __version__ = "0.1.0"

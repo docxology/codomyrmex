@@ -41,7 +41,13 @@ class StatusReporter:
     """
 
     def __init__(self, project_root: Optional[Path] = None):
-        """Initialize the status reporter."""
+        """Initialize the status reporter.
+
+        Args:
+            project_root: Root directory of the project to inspect. Defaults to
+                the current working directory. Sets up project_root, src_path,
+                and the optional TerminalFormatter for colored output.
+        """
         self.project_root = project_root or Path.cwd()
         self.src_path = self.project_root / "src"
 
@@ -67,7 +73,12 @@ class StatusReporter:
             return self.formatter.info(message)
 
     def check_python_environment(self) -> dict[str, Any]:
-        """Check Python environment status."""
+        """Check the current Python environment and return diagnostic info.
+
+        Returns:
+            Dict with keys: version, version_string, executable,
+            virtual_env (bool), path (first 5 sys.path entries), platform.
+        """
         status = {
             "version": sys.version_info,
             "version_string": sys.version.split()[0],
@@ -86,7 +97,14 @@ class StatusReporter:
         )
 
     def check_project_structure(self) -> dict[str, Any]:
-        """Check project directory structure."""
+        """Verify expected project directory structure exists.
+
+        Checks for the presence of key directories (src, testing, docs,
+        virtual env) and configuration files (pyproject.toml, pytest.ini, etc.).
+
+        Returns:
+            Dict with boolean flags for each directory and a config_files sub-dict.
+        """
         status = {
             "project_root_exists": self.project_root.exists(),
             "src_exists": self.src_path.exists(),
@@ -121,7 +139,15 @@ class StatusReporter:
         return config_files
 
     def check_dependencies(self) -> dict[str, Any]:
-        """Check core dependencies status."""
+        """Check importability of core Python dependencies.
+
+        Tests imports for LLM providers, data science libraries, dev tools,
+        and web frameworks to determine what is available in the environment.
+
+        Returns:
+            Dict with keys: dependencies (name -> bool), available_count,
+            total_count, success_rate (percentage).
+        """
         dependencies = {
             # Core dependencies
             "python-dotenv": self._check_import("dotenv"),
@@ -164,7 +190,16 @@ class StatusReporter:
             return False
 
     def check_git_status(self) -> dict[str, Any]:
-        """Check git repository status."""
+        """Inspect the git repository rooted at project_root.
+
+        Collects branch, remote, recent commit, and working-tree change info
+        via subprocess calls to git. Gracefully handles missing git or non-repo.
+
+        Returns:
+            Dict with keys: is_git_repo, git_available, current_branch,
+            clean_working_tree, remotes, recent_commits, staged_changes,
+            unstaged_changes.
+        """
         status = {
             "is_git_repo": False,
             "git_available": False,
@@ -268,7 +303,13 @@ class StatusReporter:
         return status
 
     def check_external_tools(self) -> dict[str, bool]:
-        """Check availability of external tools."""
+        """Check availability of external CLI tools on the system PATH.
+
+        Probes git, npm, node, docker, and uv by running --version on each.
+
+        Returns:
+            Dict mapping tool name to a boolean indicating availability.
+        """
         tools = {
             "git": False,
             "npm": False,
@@ -289,7 +330,15 @@ class StatusReporter:
         return tools
 
     def generate_comprehensive_report(self) -> dict[str, Any]:
-        """Generate comprehensive system status report."""
+        """Generate a full system status report by running all checks.
+
+        Aggregates results from check_python_environment, check_project_structure,
+        check_dependencies, check_git_status, and check_external_tools.
+
+        Returns:
+            Dict with keys: timestamp, python_environment, project_structure,
+            dependencies, git_status, external_tools.
+        """
         report = {
             "timestamp": datetime.now().isoformat(),
             "python_environment": self.check_python_environment(),
@@ -302,7 +351,12 @@ class StatusReporter:
         return report
 
     def display_status_report(self) -> None:
-        """Display comprehensive status report with formatting."""
+        """Print a formatted system status report to the terminal.
+
+        Calls generate_comprehensive_report and renders each section
+        (Python env, project structure, dependencies, git, external tools)
+        with color formatting and a summary health score.
+        """
         report = self.generate_comprehensive_report()
 
         print("\n" + "=" * 70)

@@ -1,40 +1,27 @@
-# Llm
+# llm
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `llm` module provides core functionality for Llm.
+The `llm` module provides core functionality for Llm..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    llm --> Utils[codomyrmex.utils]
-    llm --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph llm
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.llm import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `cost_tracking/` - Subdirectory
+- `embeddings/` - Subdirectory
+- `examples/` - Subdirectory
+- `guardrails/` - Subdirectory
+- `rag/` - Subdirectory
+- `streaming/` - Subdirectory
+- `test_llm.py` - Test Llm
+- `test_ollama_integration.py` - Test Ollama Integration
+- `test_openrouter_provider.py` - Test Openrouter Provider
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

@@ -1,38 +1,25 @@
-# Marketplace
+# marketplace
 
-Skill discovery from external sources and repositories
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `marketplace` submodule provides skill discovery from external sources and repositories.
+Skill discovery and installation from external sources and repositories. Provides a marketplace client that manages a registry of remote skill sources (defaulting to the vibeship-spawner-skills GitHub repository), supports searching remote sources for skills by query, installing skills by ID from a named source, and adding or removing custom source configurations.
 
-## Installation
+## Key Exports
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- **`SkillMarketplace`** -- Main marketplace client for remote skill discovery and installation. Manages a list of source configurations (each with name, URL, and type). Methods: `search_remote()` searches sources for skills matching a query, `install()` installs a skill by ID from a source, `list_sources()` returns all configured sources, `add_source()` registers a new remote source, and `remove_source()` removes a source by name.
 
-```bash
-pip install codomyrmex
-```
+## Directory Contents
 
-## Quick Start
+- `__init__.py` - SkillMarketplace class with source management and search/install interface
+- `README.md` - This file
+- `SPEC.md` - Module specification
+- `AGENTS.md` - Agent integration notes
+- `PAI.md` - PAI algorithm context
+- `py.typed` - PEP 561 typing marker
 
-```python
-from codomyrmex.skills.marketplace import *
+## Navigation
 
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`skills`](../) - Parent module
+- **Parent Module**: [skills](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

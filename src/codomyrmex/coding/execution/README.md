@@ -1,40 +1,27 @@
-# Execution
+# coding/execution
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `execution` module provides core functionality for Execution.
+Secure code execution capabilities in sandboxed Docker environments. Supports multiple programming languages with configurable timeouts and session management for persistent execution contexts.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    execution --> Utils[codomyrmex.utils]
-    execution --> Logs[codomyrmex.logging_monitoring]
+- **`execute_code()`** -- Main function to execute code snippets; accepts language and source code, returns dict with stdout, stderr, and exit code
+- **`SUPPORTED_LANGUAGES`** -- Dictionary of supported language configurations (name, Docker image, command, file extension)
+- **`validate_language()`** -- Check if a given language string is supported
+- **`validate_session_id()`** -- Validate and sanitize session identifiers for persistent execution contexts
 
-    subgraph execution
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+## Directory Contents
 
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.execution import ...
-
-# Example usage
-# result = process(...)
-```
+- `__init__.py` - Package init; re-exports public API
+- `executor.py` - Core execution logic with Docker integration
+- `language_support.py` - Language configuration registry and validation
+- `session_manager.py` - Session lifecycle and identifier validation
+- `py.typed` - PEP 561 type-checking marker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [coding](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

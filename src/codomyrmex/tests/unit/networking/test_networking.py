@@ -19,19 +19,28 @@ from unittest.mock import MagicMock, AsyncMock, patch, PropertyMock
 
 import pytest
 
-from codomyrmex import networking
-from codomyrmex.networking import (
-    HTTPClient,
-    Response,
-    WebSocketClient,
-    SSHClient,
-    TCPClient,
-    TCPServer,
-    UDPClient,
-    PortScanner,
-    get_http_client,
+try:
+    from codomyrmex import networking
+    from codomyrmex.networking import (
+        HTTPClient,
+        Response,
+        WebSocketClient,
+        SSHClient,
+        TCPClient,
+        TCPServer,
+        UDPClient,
+        PortScanner,
+        get_http_client,
+    )
+    from codomyrmex.networking.http_client import NetworkingError
+    NETWORKING_AVAILABLE = True
+except ImportError:
+    NETWORKING_AVAILABLE = False
+
+pytestmark = pytest.mark.skipif(
+    not NETWORKING_AVAILABLE,
+    reason="networking dependencies (paramiko, etc.) not installed",
 )
-from codomyrmex.networking.http_client import NetworkingError
 
 
 # ==============================================================================

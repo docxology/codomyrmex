@@ -32,8 +32,17 @@ workflow_testing/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.workflow_testing import WorkflowStepType
+from codomyrmex.workflow_testing import StepStatus
+from codomyrmex.workflow_testing import WorkflowStep
+from codomyrmex.workflow_testing import StepResult
+from codomyrmex.workflow_testing import WorkflowResult
+from codomyrmex.workflow_testing import Workflow
+from codomyrmex.workflow_testing import StepExecutor
+from codomyrmex.workflow_testing import AssertionExecutor
+from codomyrmex.workflow_testing import WaitExecutor
+from codomyrmex.workflow_testing import ScriptExecutor
+# ... and 1 more
 ```
 
 ### 3.2 Configuration

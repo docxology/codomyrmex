@@ -17,6 +17,7 @@ These example scripts provide orchestrator interfaces for PAI agents to:
 - **Network**: Configure networks, security groups, load balancers
 - **Identity**: Create app credentials for service automation
 - **Orchestration**: Deploy Heat stacks from templates
+- **Newsletter**: Campaign management, mailing lists, contact operations
 
 ## Data Residency
 

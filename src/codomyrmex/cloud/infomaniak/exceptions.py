@@ -6,6 +6,12 @@ enabling precise error handling and classification.
 """
 
 
+try:
+    import requests as _requests
+except ImportError:
+    _requests = None  # type: ignore[assignment]
+
+
 class InfomaniakCloudError(Exception):
     """
     Base exception for all Infomaniak cloud operations.
@@ -96,3 +102,52 @@ def classify_openstack_error(
         return InfomaniakConnectionError(str(error), **kwargs)
     else:
         return InfomaniakCloudError(str(error), **kwargs)
+
+
+def classify_http_error(
+    error: Exception,
+    service: str = "",
+    operation: str = "",
+    resource_id: str = "",
+) -> InfomaniakCloudError:
+    """
+    Classify a ``requests`` HTTP error into the appropriate
+    Infomaniak error type based on the HTTP status code.
+
+    Works with ``requests.exceptions.HTTPError`` (extracts status code
+    from the response), ``requests.exceptions.ConnectionError``,
+    ``requests.exceptions.Timeout``, and generic exceptions.
+
+    Args:
+        error: The original exception.
+        service: Cloud service name for context.
+        operation: Operation name for context.
+        resource_id: Resource ID for context.
+
+    Returns:
+        An appropriate InfomaniakCloudError subclass instance.
+    """
+    kwargs = dict(service=service, operation=operation, resource_id=resource_id)
+
+    # Connection errors (requires requests)
+    if _requests is not None:
+        if isinstance(error, _requests.exceptions.ConnectionError):
+            return InfomaniakConnectionError(str(error), **kwargs)
+        if isinstance(error, _requests.exceptions.Timeout):
+            return InfomaniakTimeoutError(str(error), **kwargs)
+
+    # HTTP errors with response status codes
+    response = getattr(error, "response", None)
+    if response is not None:
+        status = getattr(response, "status_code", None)
+        if status in (401, 403):
+            return InfomaniakAuthError(str(error), **kwargs)
+        elif status == 404:
+            return InfomaniakNotFoundError(str(error), **kwargs)
+        elif status == 409:
+            return InfomaniakConflictError(str(error), **kwargs)
+        elif status in (413, 429):
+            return InfomaniakQuotaExceededError(str(error), **kwargs)
+
+    # Fallback to string-based classification
+    return classify_openstack_error(error, **kwargs)

@@ -495,8 +495,14 @@ class StandardizationOpenAPIGenerator:
         Args:
             api: GraphQL API instance
         """
-        if GraphQLAPI is None:
-            raise ImportError("GraphQLAPI class not available. Ensure standardization module is properly imported.")
+        _GraphQLAPI = GraphQLAPI
+        if _GraphQLAPI is None:
+            # Lazy import to work around circular import at module load time
+            try:
+                from codomyrmex.api.standardization.graphql_api import GraphQLAPI as _GQL
+                _GraphQLAPI = _GQL
+            except ImportError:
+                raise ImportError("GraphQLAPI class not available. Ensure standardization module is properly imported.")
 
         # Add GraphQL endpoint
         graphql_path = "/graphql"
@@ -564,8 +570,13 @@ class StandardizationOpenAPIGenerator:
         Args:
             version_manager: API version manager
         """
-        if APIVersionManager is None:
-            raise ImportError("APIVersionManager class not available. Ensure standardization module is properly imported.")
+        _AVM = APIVersionManager
+        if _AVM is None:
+            try:
+                from codomyrmex.api.standardization.api_versioning import APIVersionManager as _AVM2
+                _AVM = _AVM2
+            except ImportError:
+                raise ImportError("APIVersionManager class not available. Ensure standardization module is properly imported.")
 
         # Add version parameter
         self.spec.spec["components"]["parameters"]["ApiVersion"] = {

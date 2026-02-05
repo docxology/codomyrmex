@@ -226,13 +226,13 @@ class TestComplexConfigurationScenarios:
         assert config.opencode_api_key == "opencode-key"
         assert config.default_timeout == 30
 
-    def test_output_directory_configuration(self):
+    def test_output_directory_configuration(self, tmp_path):
         """Test output directory configuration."""
-        custom_output = Path("/tmp/custom_output")
+        custom_output = tmp_path / "custom_output"
         config = AgentConfig(output_dir=custom_output)
-        
+
         assert config.output_dir == custom_output
-        
+
         # Test default output directory
         config2 = AgentConfig()
         assert config2.output_dir is not None

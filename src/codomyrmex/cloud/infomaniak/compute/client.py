@@ -407,7 +407,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             "id": server.id,
             "name": server.name,
             "status": server.status,
-            "flavor": getattr(server, "flavor", {}).get("id"),
+            "flavor": (getattr(server, "flavor", None) or {}).get("id"),
             "image": getattr(server, "image", {}).get("id") if server.image else None,
             "addresses": dict(server.addresses) if server.addresses else {},
             "key_name": server.key_name,

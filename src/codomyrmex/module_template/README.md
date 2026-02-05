@@ -4,21 +4,32 @@
 
 ## Overview
 
-Scaffolding and generation logic for creating new Codomyrmex modules. Ensures new modules start with required structure, documentation (README, AGENTS, SPEC), and configuration.
+Scaffolding module for creating new Codomyrmex modules from a standardized template. The `scaffold_new_module()` function generates a complete module directory with all required documentation files (README, AGENTS, SPEC, API_SPECIFICATION, CHANGELOG, MCP_TOOL_SPECIFICATION, SECURITY, USAGE_EXAMPLES), a customized `__init__.py`, and a core Python source file with a boilerplate class and factory function. Module names are validated to enforce snake_case naming conventions.
+
+## Key Exports
+
+### Functions
+
+- **`scaffold_new_module()`** -- Create a new Codomyrmex module directory from the template, copying and customizing all standard files. Accepts module_name, target_path, description, and author. Raises FileExistsError if target exists, ValueError for invalid names.
+- **`list_template_files()`** -- List all files available in the module template directory
+
+### Internal Helpers
+
+- **`_copy_and_customize()`** -- Copy a template file to the target, performing text replacements for module name and description
+- **`_create_core_module()`** -- Generate the main Python source file with a boilerplate class and factory function
 
 ## Directory Contents
 
-- `API_SPECIFICATION.md` – File
-- `CHANGELOG.md` – File
-- `MCP_TOOL_SPECIFICATION.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `SECURITY.md` – File
-- `SPEC.md` – File
-- `USAGE_EXAMPLES.md` – File
-- `__init__.py` – File
-- `requirements.template.txt` – File
-- `scaffold.py` – File
+- `__init__.py` - Package marker with module docstring
+- `scaffold.py` - Core scaffolding logic: `scaffold_new_module()`, `list_template_files()`, and template file helpers
+- `requirements.template.txt` - Template requirements file copied into new modules
+- `AGENTS.md` - Template AGENTS documentation
+- `API_SPECIFICATION.md` - Template API specification
+- `CHANGELOG.md` - Template changelog
+- `MCP_TOOL_SPECIFICATION.md` - Template MCP tool specification
+- `SECURITY.md` - Template security documentation
+- `SPEC.md` - Template module specification
+- `USAGE_EXAMPLES.md` - Template usage examples
 
 ## Navigation
 

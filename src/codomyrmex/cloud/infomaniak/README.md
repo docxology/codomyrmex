@@ -16,7 +16,7 @@ Comprehensive integration with Infomaniak's OpenStack-based public cloud platfor
 | Identity / EC2 | `InfomaniakIdentityClient` | Keystone |
 | DNS | `InfomaniakDNSClient` | Designate |
 | Orchestration | `InfomaniakHeatClient` | Heat |
-| Metering | `InfomaniakMeteringClient` | Ceilometer |
+| Metering | `InfomaniakMeteringClient` | Resource Aggregation |
 | Newsletter | `InfomaniakNewsletterClient` | Infomaniak REST API |
 
 ## Quick Start

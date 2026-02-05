@@ -1,40 +1,21 @@
-# Module Template
+# module_template
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `module_template` module provides core functionality for Module Template.
+The `module_template` module provides core functionality for Module Template..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    module_template --> Utils[codomyrmex.utils]
-    module_template --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph module_template
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.module_template import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `integration/` - Subdirectory
+- `test_module_template.py` - Test Module Template
+- `unit/` - Subdirectory
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

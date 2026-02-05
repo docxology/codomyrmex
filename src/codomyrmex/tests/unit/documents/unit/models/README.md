@@ -1,40 +1,19 @@
-# Models
+# models
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `models` module provides core functionality for Models.
+The `models` module provides core functionality for Models..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    models --> Utils[codomyrmex.utils]
-    models --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph models
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.models import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_document.py` - Test Document
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../../../README.md

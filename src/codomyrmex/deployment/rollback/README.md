@@ -1,40 +1,19 @@
-# Rollback
+# rollback
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `rollback` module provides core functionality for Rollback.
+Rollback and snapshots. This submodule is scaffolded for future implementation; no exports are currently defined.
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    rollback --> Utils[codomyrmex.utils]
-    rollback --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph rollback
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.rollback import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `__init__.py` - Module entry point (scaffolded, no exports yet)
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [deployment](../README.md)
+- **Project Root**: ../../../README.md

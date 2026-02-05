@@ -15,17 +15,19 @@ When working with this module:
 ### Key Patterns
 
 1. **Import Convention**:
+
    ```python
-   from codomyrmex.agentic_memory import <specific_import>
+   from codomyrmex.agentic_memory import AgentMemory, MemoryType
    ```
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
+2. **Persistence**: Favor `JSONFileStore` for long-running agents.
+3. **Hierarchy**: Use `EPISODIC` for specific events and `SEMANTIC` for general knowledge.
 
 ### Common Operations
 
-- Operation 1: Description
-- Operation 2: Description
+- **Recall**: Retrieve memories via keyword or (if enabled) embedding search.
+- **Pruning**: Automatically handles eviction when `max_memories` is reached.
+- **Specialized**: Use `ConversationMemory` for human-ai dialogue tracking.
 
 ### Integration Points
 

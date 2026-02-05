@@ -43,12 +43,17 @@ try:
         AssertionHelpers,
         ModelAvailabilityChecker,
         create_test_config,
-        cleanup_test_resources
+        cleanup_test_resources,
     )
-    OLLAMA_AVAILABLE = True
+    from codomyrmex.tests.unit import ollama_test_helpers as _helpers
+    OLLAMA_AVAILABLE = _helpers.OLLAMA_AVAILABLE
 except ImportError as e:
     print(f"Ollama integration not available: {e}")
     OLLAMA_AVAILABLE = False
+
+
+if not OLLAMA_AVAILABLE:
+    pytest.skip("Ollama integration not available", allow_module_level=True)
 
 
 @pytest.mark.integration

@@ -305,7 +305,7 @@ def teardown_infrastructure(clients, name: str):
     # Delete in reverse order
     if resources.get("bucket"):
         print(f"\n   Deleting S3 bucket...")
-        clients["s3"].delete_bucket(resources["bucket"], force=True)
+        clients["s3"].delete_bucket(resources["bucket"])
         print(f"   ✅ Deleted bucket")
     
     if resources.get("volume"):

@@ -32,8 +32,8 @@ versioning/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.skills.versioning import SkillVersionManager
+from codomyrmex.skills.versioning import parse_version
 ```
 
 ### 3.2 Configuration

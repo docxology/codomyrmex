@@ -8,27 +8,39 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch, Mock
 
-from codomyrmex.fpf import FPFClient
+from codomyrmex.fpf import FPFClient, FPFFetcher
 
 
 @pytest.mark.integration
-def test_e2e_load_from_file_workflow():
+def test_e2e_load_from_file_workflow(tmp_path, monkeypatch):
     """Test end-to-end workflow: load from file."""
     spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
     if not spec_path.exists():
         pytest.skip("FPF-Spec.md not found")
-    
+
+    # Patch FPFFetcher to use tmp_path
+    original_init = FPFFetcher.__init__
+    def patched_init(self, cache_dir=None):
+        original_init(self, cache_dir=tmp_path / "fpf_cache")
+    monkeypatch.setattr(FPFFetcher, "__init__", patched_init)
+
     client = FPFClient()
     spec = client.load_from_file(str(spec_path))
-    
+
     assert spec is not None
     assert len(spec.patterns) > 0
     assert client.spec is not None
 
 
 @pytest.mark.integration
-def test_e2e_fetch_and_load_workflow():
+def test_e2e_fetch_and_load_workflow(tmp_path, monkeypatch):
     """Test end-to-end workflow: fetch and load."""
+    # Patch FPFFetcher to use tmp_path
+    original_init = FPFFetcher.__init__
+    def patched_init(self, cache_dir=None):
+        original_init(self, cache_dir=tmp_path / "fpf_cache")
+    monkeypatch.setattr(FPFFetcher, "__init__", patched_init)
+
     with patch("codomyrmex.fpf.io.fetcher.requests.get") as mock_get:
         mock_response = Mock()
         mock_response.text = """
@@ -44,10 +56,10 @@ Test solution.
 """
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
-        
+
         client = FPFClient()
         spec = client.fetch_and_load()
-        
+
         assert spec is not None
         assert len(spec.patterns) > 0
 
@@ -147,22 +159,28 @@ def test_e2e_full_pipeline():
 
 
 @pytest.mark.integration
-def test_e2e_error_handling():
+def test_e2e_error_handling(tmp_path, monkeypatch):
     """Test error handling in workflows."""
+    # Patch FPFFetcher to use tmp_path
+    original_init = FPFFetcher.__init__
+    def patched_init(self, cache_dir=None):
+        original_init(self, cache_dir=tmp_path / "fpf_cache")
+    monkeypatch.setattr(FPFFetcher, "__init__", patched_init)
+
     client = FPFClient()
-    
+
     # Search without loading
     with pytest.raises(ValueError):
         client.search("test")
-    
+
     # Get pattern without loading
     with pytest.raises(ValueError):
         client.get_pattern("A.1")
-    
+
     # Export without loading
     with pytest.raises(ValueError):
         client.export_json("/tmp/test.json")
-    
+
     # Build context without loading
     with pytest.raises(ValueError):
         client.build_context()

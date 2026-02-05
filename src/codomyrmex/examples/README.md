@@ -1,41 +1,27 @@
-# Examples
+# examples
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Reference implementations, demonstrations, and validation reports showcasing Codomyrmex capabilities. Learning resource and advanced usage patterns reference.
+Example implementations and demonstration data showcasing Codomyrmex capabilities. Contains reference configuration validation reports, link checking results, and module integration patterns. This module serves as a learning resource for developers working with the framework and does not export any public API -- all content is accessed directly as reference files.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    examples --> Utils[codomyrmex.utils]
-    examples --> Logs[codomyrmex.logging_monitoring]
+This module has an empty `__all__` -- it provides no programmatic exports. All content is accessed by reading the example files directly.
 
-    subgraph examples
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+## Directory Contents
 
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.examples import ...
-
-# Example usage
-# result = process(...)
-```
+- `__init__.py` - Module definition with descriptive docstring (no exports)
+- `config_validation_report.json` - Example output from configuration validation showing report structure and fields
+- `link_check_report.json` - Example output from link checking showing report structure and detected issues
+- `AGENTS.md` - Agent integration specification
+- `API_SPECIFICATION.md` - API documentation
+- `SPEC.md` - Module specification
+- `PAI.md` - PAI integration notes
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/examples/](../../../docs/modules/examples/)
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

@@ -92,6 +92,8 @@ class AgentCapabilities(Enum):
     FILE_OPERATIONS = "file_operations"
     CACHING = "caching"
     BATCH = "batch"
+    CLOUD_INFRASTRUCTURE = "cloud_infrastructure"
+    CLOUD_STORAGE = "cloud_storage"
 
 
 @dataclass

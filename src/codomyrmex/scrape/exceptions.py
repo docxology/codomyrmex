@@ -56,7 +56,6 @@ class ScrapeValidationError(ScrapeError):
     def __init__(
         self,
         message: str,
- str,
         field: str | None = None,
         value: str | None = None,
         **kwargs,

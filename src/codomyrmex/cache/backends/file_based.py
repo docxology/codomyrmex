@@ -158,9 +158,14 @@ class FileBasedCache(Cache):
         except Exception:
             return False
 
-    def get_stats(self) -> CacheStats:
+    @property
+    def stats(self) -> CacheStats:
         """Get cache statistics."""
         self._stats.size = len(list(self.cache_dir.glob("*.cache")))
         return self._stats
+
+    def get_stats(self) -> CacheStats:
+        """Get cache statistics (legacy alias)."""
+        return self.stats
 
 

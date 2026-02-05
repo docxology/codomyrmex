@@ -1,38 +1,25 @@
-# Permissions
+# permissions
 
-Skill capability permissions and access control
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `permissions` submodule provides skill capability permissions and access control.
+Skill capability permissions and access control. Manages a per-skill permission registry that tracks which actions each skill is authorized to perform. Supports granting, revoking, and querying individual or bulk permissions, enabling fine-grained access control over skill execution, modification, and deletion operations.
 
-## Installation
+## Key Exports
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- **`SkillPermissionManager`** -- Main permission manager for skills. Maintains an internal mapping of skill IDs to granted action sets. Methods: `check_permission()` tests if a specific action is allowed for a skill, `grant()` adds a single permission, `revoke()` removes a single permission, `list_permissions()` returns all permissions for a skill as a sorted list, `grant_all()` adds multiple permissions at once, and `revoke_all()` clears all permissions from a skill.
 
-```bash
-pip install codomyrmex
-```
+## Directory Contents
 
-## Quick Start
+- `__init__.py` - SkillPermissionManager class with grant/revoke/check interface
+- `README.md` - This file
+- `SPEC.md` - Module specification
+- `AGENTS.md` - Agent integration notes
+- `PAI.md` - PAI algorithm context
+- `py.typed` - PEP 561 typing marker
 
-```python
-from codomyrmex.skills.permissions import *
+## Navigation
 
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`skills`](../) - Parent module
+- **Parent Module**: [skills](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

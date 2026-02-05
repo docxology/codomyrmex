@@ -32,8 +32,15 @@ inference_optimization/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.inference_optimization import QuantizationType
+from codomyrmex.inference_optimization import BatchingStrategy
+from codomyrmex.inference_optimization import OptimizationConfig
+from codomyrmex.inference_optimization import InferenceStats
+from codomyrmex.inference_optimization import InferenceRequest
+from codomyrmex.inference_optimization import InferenceResult
+from codomyrmex.inference_optimization import InferenceCache
+from codomyrmex.inference_optimization import RequestBatcher
+from codomyrmex.inference_optimization import InferenceOptimizer
 ```
 
 ### 3.2 Configuration

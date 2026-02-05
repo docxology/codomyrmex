@@ -40,7 +40,7 @@ git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
 
 # Use the automated UV setup script (recommended)
-./install_with_uv.sh
+./start_here.sh
 
 # OR manual setup
 uv venv .venv

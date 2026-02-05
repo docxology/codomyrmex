@@ -4,24 +4,47 @@
 
 ## Overview
 
-Web data extraction engine of Codomyrmex. Provides unified interface for scraping web content, crawling websites, mapping site structures, and extracting structured data. Abstracts complexities of different scraping providers (e.g., Firecrawl) behind a consistent Pythonic interface.
+Web scraping module providing a unified interface for extracting content from websites. Supports multiple output formats (Markdown, HTML), site crawling, URL mapping, search, and structured data extraction. Abstracts provider-specific details (currently Firecrawl) behind a consistent API with configurable options and a robust exception hierarchy.
+
+## Key Exports
+
+### Main Classes
+
+- **`Scraper`** -- Primary scraping interface that delegates to provider-specific backends; supports `scrape()`, `crawl()`, `map()`, `search()`, and `extract()` operations
+- **`BaseScraper`** -- Abstract base class defining the scraper contract for provider implementations
+- **`ScrapeConfig`** -- Configuration dataclass holding API keys, timeouts, and provider settings
+
+### Core Types
+
+- **`ScrapeResult`** -- Result object from a single page scrape containing content and metadata
+- **`ScrapeOptions`** -- Options dataclass for configuring scrape behavior (formats, selectors, wait strategies)
+- **`ScrapeFormat`** -- Enum of supported output formats (`MARKDOWN`, `HTML`, etc.)
+- **`CrawlResult`** -- Result object from a multi-page crawl operation
+- **`MapResult`** -- Result object from a site URL mapping operation
+- **`SearchResult`** -- Result object from a web search operation
+- **`ExtractResult`** -- Result object from structured data extraction
+
+### Exceptions
+
+- **`ScrapeError`** -- Base exception for all scraping errors
+- **`ScrapeConnectionError`** -- Raised when connection to the target URL fails
+- **`ScrapeTimeoutError`** -- Raised when a scrape operation exceeds the configured timeout
+- **`ScrapeValidationError`** -- Raised for invalid input parameters or configuration
+- **`FirecrawlError`** -- Raised for Firecrawl provider-specific errors
+
+### Config Functions
+
+- **`get_config()`** -- Retrieve the current scrape configuration
+- **`set_config()`** -- Update scrape configuration values
+- **`reset_config()`** -- Reset configuration to defaults
 
 ## Directory Contents
 
-- `API_SPECIFICATION.md` – File
-- `CHANGELOG.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `SECURITY.md` – File
-- `SPEC.md` – File
-- `TESTING.md` – File
-- `__init__.py` – File
-- `config.py` – File
-- `core.py` – File
-- `exceptions.py` – File
-- `firecrawl/` – Subdirectory
-- `requirements.txt` – File
-- `scraper.py` – File
+- `scraper.py` -- `Scraper` class implementation with provider delegation
+- `core.py` -- `BaseScraper` ABC and all result/option dataclasses and enums
+- `config.py` -- `ScrapeConfig` and configuration management functions
+- `exceptions.py` -- Exception hierarchy for scrape error handling
+- `firecrawl/` -- Firecrawl provider implementation
 
 ## Navigation
 

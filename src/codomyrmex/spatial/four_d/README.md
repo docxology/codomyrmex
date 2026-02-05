@@ -1,40 +1,24 @@
 # Four D
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `four_d` module provides core functionality for Four D.
+4D modeling module based on Synergetics. Provides support for Quadray coordinates, the Isotropic Vector Matrix (IVM), and close-packed sphere arrangements.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    four_d --> Utils[codomyrmex.utils]
-    four_d --> Logs[codomyrmex.logging_monitoring]
+- **`QuadrayCoordinate`** -- Represents a coordinate in the Quadray (4-vector) system with components (a, b, c, d)
+- **`IsotropicVectorMatrix`** -- Represents the IVM structure (stub)
+- **`ClosePackedSphere`** -- Represents a sphere in a close-packed arrangement (stub)
+- **`synergetics_transform()`** -- Transforms 3D coordinates to 4D Synergetic coordinates (stub)
 
-    subgraph four_d
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+## Directory Contents
 
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.four_d import ...
-
-# Example usage
-# result = process(...)
-```
+- `__init__.py` - Quadray, IVM, and close-packed sphere definitions (25 lines)
+- `py.typed` - PEP 561 type stub marker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [spatial](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

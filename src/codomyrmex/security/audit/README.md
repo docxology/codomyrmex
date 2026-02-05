@@ -1,38 +1,31 @@
-# Audit
+# audit
 
-Security audit logging and forensic analysis
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `audit` submodule provides security audit logging and forensic analysis.
+Audit logging and event tracking for the security module. Records structured security-relevant events (authentication, data access, permission changes, admin actions) with SHA-256 integrity signatures. Supports pluggable storage backends including an in-memory store with configurable retention and a file-based JSONL store, plus convenience methods for common event patterns.
 
-## Installation
+## Key Exports
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- **`AuditEventType`** -- Enum of audit event categories: AUTH_LOGIN, AUTH_LOGOUT, AUTH_FAILED, DATA_ACCESS, DATA_CREATE, DATA_UPDATE, DATA_DELETE, PERMISSION_CHANGE, CONFIG_CHANGE, SYSTEM_ERROR, ADMIN_ACTION
+- **`AuditSeverity`** -- Enum of event severity levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
+- **`AuditEvent`** -- Dataclass representing an audit log entry with actor, resource, IP address, details, timestamp, and a SHA-256 signature property for integrity verification
+- **`AuditStore`** -- Abstract base class defining the store/query interface for audit event persistence
+- **`InMemoryAuditStore`** -- Thread-safe in-memory audit store with configurable max event retention (default 10,000)
+- **`FileAuditStore`** -- File-based audit store that appends events as JSONL and supports filtered queries by time range, event type, and actor
+- **`AuditLogger`** -- Main audit logging service with auto-generated event IDs, pluggable store backend, and convenience methods: `log()`, `log_login()`, `log_data_access()`, `log_admin_action()`, and `query()`
 
-```bash
-pip install codomyrmex
-```
+## Directory Contents
 
-## Quick Start
+- `__init__.py` - All audit classes, enums, dataclasses, and storage backends
+- `README.md` - This file
+- `SPEC.md` - Module specification
+- `AGENTS.md` - Agent integration notes
+- `PAI.md` - PAI algorithm context
+- `py.typed` - PEP 561 typing marker
 
-```python
-from codomyrmex.security.audit import *
+## Navigation
 
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`security`](../) - Parent module
+- **Parent Module**: [security](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

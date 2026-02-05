@@ -1,38 +1,19 @@
-# Sanitizers
+# sanitizers
 
-Input sanitization and normalization utilities
+**Version**: v0.1.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `sanitizers` submodule provides input sanitization and normalization utilities.
+Input sanitization and normalization utilities. This submodule is scaffolded for future implementation; no exports are currently defined.
 
-## Installation
+## Directory Contents
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- `__init__.py` - Module entry point (scaffolded, no exports yet)
+- `AGENTS.md` - Agent integration specification
+- `SPEC.md` - Module specification
+- `PAI.md` - PAI integration notes
 
-```bash
-pip install codomyrmex
-```
+## Navigation
 
-## Quick Start
-
-```python
-from codomyrmex.validation.sanitizers import *
-
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`validation`](../) - Parent module
+- **Parent Module**: [validation](../README.md)
+- **Project Root**: ../../../../README.md

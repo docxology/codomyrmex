@@ -1,40 +1,19 @@
-# Evolutionary Ai
+# evolutionary_ai
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `evolutionary_ai` module provides core functionality for Evolutionary Ai.
+The `evolutionary_ai` module provides core functionality for Evolutionary Ai..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    evolutionary_ai --> Utils[codomyrmex.utils]
-    evolutionary_ai --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph evolutionary_ai
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.evolutionary_ai import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_evolutionary_ai.py` - Test Evolutionary Ai
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

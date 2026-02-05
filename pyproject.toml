@@ -135,6 +135,7 @@ cloud = [
     "google-cloud-storage>=2.10.0",
     "azure-storage-blob>=12.17.0",
     "azure-identity>=1.13.0",
+    "openstacksdk>=1.0.0",
 ]
 
 serialization = [

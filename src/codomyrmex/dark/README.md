@@ -11,6 +11,17 @@ Dark mode utilities for different domains: PDF, network, hardware, and software.
 | `hardware` | Placeholder | Hardware dark mode utilities |
 | `software` | Placeholder | Software dark mode utilities |
 
+## Key Exports
+
+### Submodules
+- **`pdf`** — PDF dark mode filters (inversion, brightness, contrast, sepia); `None` if dependencies missing
+- **`network`** — Network dark mode utilities (placeholder)
+- **`hardware`** — Hardware dark mode utilities (placeholder)
+- **`software`** — Software dark mode utilities (placeholder)
+
+### Availability Flags
+- **`PDF_AVAILABLE`** — Boolean flag indicating whether PDF processing dependencies (PyMuPDF, Pillow) are available
+
 ## Installation
 
 ```bash

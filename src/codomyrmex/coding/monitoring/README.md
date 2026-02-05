@@ -1,40 +1,22 @@
-# Monitoring
+# monitoring
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `monitoring` module provides core functionality for Monitoring.
+Provides execution monitoring, resource tracking, and metrics collection.. This submodule is scaffolded for future implementation; no exports are currently defined.
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    monitoring --> Utils[codomyrmex.utils]
-    monitoring --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph monitoring
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.monitoring import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `__init__.py` - Module entry point (scaffolded, no exports yet)
+- `execution_monitor.py` - Execution Monitor
+- `metrics_collector.py` - Metrics Collector
+- `resource_tracker.py` - Resource Tracker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [coding](../README.md)
+- **Project Root**: ../../../README.md

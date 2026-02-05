@@ -4,32 +4,85 @@
 
 ## Overview
 
-Agentic framework integrations providing AI code editing, task management, and multi-provider support (Claude, Codex, Gemini, Jules, Mistral). Core layer for intelligent automation workflows.
+Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 11 provider integrations, session management, response parsing, and theoretical architecture foundations.
+
+## Key Exports
+
+### Core Framework
+- **`AgentInterface`** — Abstract base class for all agents
+- **`BaseAgent`** — Base implementation with common agent behavior
+- **`AgentIntegrationAdapter`** — Adapter pattern for integrating external agent frameworks
+- **`APIAgentBase`** / **`CLIAgentBase`** — Base classes for API-based and CLI-based agents
+- **`AgentCapabilities`** — Enum of agent capabilities
+- **`AgentRequest`** — Dataclass request structure for agent operations (prompt, context, parameters)
+- **`AgentResponse`** — Dataclass response structure from agent operations (content, error, tokens)
+- **`AgentConfig`** / `get_config` / `set_config` / `reset_config` — Configuration management
+
+### Code Editing
+- **`CodeEditor`** — Agent specialized in code editing, generation, and analysis (extends BaseAgent)
+
+### Provider Clients
+- **`ClaudeClient`** — Claude API integration
+- **`CodexClient`** — OpenAI Codex integration
+- **`GeminiClient`** — Gemini CLI integration
+- **`JulesClient`** — Jules CLI integration
+- **`MistralVibeClient`** — Mistral Vibe CLI integration
+- **`EveryCodeClient`** — Every Code CLI (multi-agent orchestration)
+- **`OpenCodeClient`** — OpenCode CLI integration
+- **`DroidController`** — Droid controller integration
+- **`O1Client`** — OpenAI o1/o3 reasoning models (lazy-loaded)
+- **`DeepSeekClient`** — DeepSeek Coder integration (lazy-loaded)
+- **`QwenClient`** — Qwen-Coder integration (lazy-loaded)
+
+### Session & Parsing
+- **`AgentSession`** / **`SessionManager`** / **`Message`** — Session lifecycle management
+- **`parse_json_response`** / **`parse_code_blocks`** / **`parse_first_code_block`** — Response parsing utilities
+- **`parse_structured_output`** / **`CodeBlock`** / **`ParseResult`** / **`clean_response`**
+
+### Architecture & Theory
+- **`ReactiveArchitecture`** / **`DeliberativeArchitecture`** / **`HybridArchitecture`** — Agent architectures
+- **`KnowledgeBase`** — Knowledge management for agents
+- **`AgentOrchestrator`** — Multi-agent orchestration
+
+### Additional Submodules (lazy-loaded)
+- **`AgentPool`** — Multi-agent load balancing and failover (`pooling/`)
+- **`AgentEvaluator`** — Agent benchmarking and quality metrics (`evaluation/`)
+- **`ConversationHistory`** — Conversation and context persistence (`history/`)
+- **`InfrastructureAgent`** — Infrastructure management agent (`infrastructure/`)
+
+### Exceptions
+- `AgentError`, `AgentTimeoutError`, `AgentConfigurationError`, `ExecutionError`, `ToolError`, `ContextError`, `SessionError`
 
 ## Directory Contents
 
-- `AGENT_COMPARISON.md` – File
-- `API_SPECIFICATION.md` – File
-- `MCP_TOOL_SPECIFICATION.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `ai_code_editing/` – Subdirectory
-- `claude/` – Subdirectory
-- `cli/` – Subdirectory
-- `codex/` – Subdirectory
-- `core/` – Subdirectory
-- `droid/` – Subdirectory
-- `every_code/` – Subdirectory
-- `exceptions.py` – File
-- `gemini/` – Subdirectory
-- `generic/` – Subdirectory
-- `git_agent/` – Subdirectory
-- `jules/` – Subdirectory
-- `mistral_vibe/` – Subdirectory
-- `opencode/` – Subdirectory
-- `theory/` – Subdirectory
+- `AGENT_COMPARISON.md` - Provider comparison reference
+- `API_SPECIFICATION.md` - Programmatic interface documentation
+- `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
+- `PAI.md` - PAI integration details
+- `SPEC.md` - Functional specification
+- `__init__.py` - Module exports (40+ items)
+- `exceptions.py` - Agent exception hierarchy
+- `ai_code_editing/` - AI-powered code editing integration
+- `claude/` - Claude API client
+- `cli/` - CLI subcommands and handlers
+- `codex/` - OpenAI Codex client
+- `core/` - Core agent framework (base classes, config, sessions, parsers)
+- `deepseek/` - DeepSeek Coder integration
+- `droid/` - Droid controller integration
+- `evaluation/` - Agent benchmarking and quality metrics
+- `every_code/` - Every Code multi-agent orchestration
+- `gemini/` - Gemini CLI client
+- `generic/` - Base agent classes (APIAgentBase, CLIAgentBase, AgentOrchestrator)
+- `git_agent/` - Git-specialized agent (GitAgent)
+- `history/` - Conversation and context persistence
+- `infrastructure/` - Infrastructure management agent
+- `jules/` - Jules CLI client
+- `mistral_vibe/` - Mistral Vibe CLI client
+- `o1/` - OpenAI o1/o3 reasoning model client
+- `opencode/` - OpenCode CLI client
+- `pooling/` - Multi-agent load balancing and failover
+- `qwen/` - Qwen-Coder integration
+- `theory/` - Theoretical foundations (reactive, deliberative, hybrid architectures)
 
 ## Navigation
 

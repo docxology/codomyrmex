@@ -431,10 +431,8 @@ class TestConfigurationManagerEnhanced:
 
         # Add a test configuration
         config = Configuration(
-            name="test_config",
-            config_data={"version": "1.0.0", "setting": "old_value"},
+            data={"version": "1.0.0", "setting": "old_value"},
             source="test",
-            loaded_at=datetime.now()
         )
         manager.configurations["test_config"] = config
 
@@ -474,10 +472,8 @@ class TestConfigurationManagerEnhanced:
 
         # Add test configuration
         config = Configuration(
-            name="test_config",
-            config_data={"level": "INFO", "format": "TEXT"},
+            data={"level": "INFO", "format": "TEXT"},
             source="test",
-            loaded_at=datetime.now()
         )
         manager.configurations["test_config"] = config
 
@@ -502,10 +498,8 @@ class TestConfigurationManagerEnhanced:
 
         # Add test configuration
         config = Configuration(
-            name="test_config",
-            config_data={"version": "1.0.0", "data": "value"},
+            data={"version": "1.0.0", "data": "value"},
             source="test",
-            loaded_at=datetime.now()
         )
         manager.configurations["test_config"] = config
 

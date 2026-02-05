@@ -1,43 +1,49 @@
-# Migration
+# migration
 
-Cross-provider migration tools for cloud and database transitions
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `migration` module provides cross-provider migration tools for cloud and database transitions.
+Provider and data migration tools for schema changes and data transformations. Supports defining multi-step migrations with up/down (rollback) functions, running them in sequence with status tracking, and transforming data records through composable field-level transformers for renaming, type conversion, and custom logic.
 
-## Installation
+## Key Exports
 
-This module is part of the Codomyrmex platform and is installed with the main package.
+### Enums
 
-```bash
-pip install codomyrmex
-```
+- **`MigrationStatus`** -- Status of a migration: PENDING, RUNNING, COMPLETED, FAILED, ROLLED_BACK
+- **`MigrationDirection`** -- Direction of execution: UP (forward) or DOWN (rollback)
 
-## Quick Start
+### Data Classes
 
-```python
-from codomyrmex.migration import *
+- **`MigrationStep`** -- A single migration step with ID, name, optional up/down callable functions, and dependency declarations
+- **`MigrationResult`** -- Result of a migration run with status, step progress tracking, duration, and error details; includes `progress` percentage and `duration_seconds` properties
+- **`Migration`** -- A complete migration definition with ID, name, version, and ordered list of steps; supports fluent `add_step()` and `add_simple_step()` builders
 
-# Example usage
-# TODO: Add practical examples
-```
+### Transformers
 
-## Features
+- **`DataTransformer`** -- Abstract base class for data transformation with a single `transform()` method
+- **`FieldRenameTransformer`** -- Renames dictionary keys according to a provided mapping
+- **`FieldTypeTransformer`** -- Converts dictionary field values to specified Python types (e.g., str to int)
+- **`CompositeTransformer`** -- Chains multiple transformers to apply in sequence
 
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
+### Services
 
-## API Reference
+- **`MigrationRunner`** -- Executes migrations in forward or rollback direction; tracks completed migrations, supports `rollback()` shorthand, and provides `is_completed()` status checks
+- **`DataMigrator`** -- Migrates lists of data records through a chain of transformers; supports both batch `migrate()` and single-record `migrate_single()` operations
 
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
+## Directory Contents
 
-## Related Modules
-
-- [`None`](../) - Parent module
+- `__init__.py` -- Module implementation with runner, migrator, transformers, and data models
+- `README.md` -- This file
+- `AGENTS.md` -- Agent integration documentation
+- `API_SPECIFICATION.md` -- Programmatic API specification
+- `MCP_TOOL_SPECIFICATION.md` -- Model Context Protocol tool definitions
+- `PAI.md` -- PAI integration notes
+- `SPEC.md` -- Module specification
+- `py.typed` -- PEP 561 type stub marker
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/migration/](../../../docs/modules/migration/)
 - **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

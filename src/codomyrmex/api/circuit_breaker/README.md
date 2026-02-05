@@ -1,38 +1,34 @@
-# Circuit Breaker
+# circuit_breaker
 
-Resilience patterns including retry, circuit breaker, and bulkhead
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `circuit_breaker` submodule provides resilience patterns including retry, circuit breaker, and bulkhead.
+Resilience patterns for API calls including circuit breaker, retry with backoff, and bulkhead isolation. The `CircuitBreaker` class implements the standard closed/open/half-open state machine with configurable failure thresholds, error-rate monitoring, and timed recovery. Works as a context manager, a standalone recorder, or a function decorator. Complemented by `RetryPolicy` for configurable exponential backoff with jitter and `Bulkhead` for limiting concurrent executions to prevent resource exhaustion.
 
-## Installation
+## Key Exports
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- **`CircuitState`** -- Enum of circuit breaker states (closed, open, half_open)
+- **`CircuitStats`** -- Dataclass tracking success/failure counts, consecutive failures, latency totals, error rate, and average latency
+- **`CircuitBreakerConfig`** -- Configuration dataclass with failure threshold, success threshold for half-open recovery, reset timeout, half-open max calls, and optional error-rate threshold
+- **`CircuitBreaker`** -- Thread-safe circuit breaker with state transitions, request gating, context manager support (`with breaker:`), and manual record/reset methods
+- **`RetryPolicy`** -- Configurable retry policy with exponential backoff, jitter, max delay cap, and exception-type filtering
+- **`Bulkhead`** -- Concurrency limiter using semaphores with optional queue and timeout, usable as a context manager
+- **`CircuitOpenError`** -- Exception raised when a request is rejected by an open circuit (imported from `codomyrmex.exceptions`)
+- **`BulkheadFullError`** -- Exception raised when a bulkhead has no available slots (imported from `codomyrmex.exceptions`)
+- **`circuit_breaker()`** -- Decorator that wraps a function with a `CircuitBreaker`; exposes the breaker instance via `func.circuit_breaker`
+- **`retry()`** -- Decorator that wraps a function with `RetryPolicy` for automatic retry on failure
 
-```bash
-pip install codomyrmex
-```
+## Directory Contents
 
-## Quick Start
+- `__init__.py` - All resilience logic: circuit breaker state machine, retry policy, bulkhead pattern, decorators
+- `README.md` - This file
+- `AGENTS.md` - Agent integration notes
+- `PAI.md` - PAI-specific documentation
+- `SPEC.md` - Module specification
+- `py.typed` - PEP 561 type-checking marker
 
-```python
-from codomyrmex.api.circuit_breaker import *
+## Navigation
 
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`api`](../) - Parent module
+- **Parent Module**: [api](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

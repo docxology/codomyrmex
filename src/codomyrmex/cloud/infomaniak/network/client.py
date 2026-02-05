@@ -162,6 +162,20 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to add interface to router {router_id}: {e}")
             return False
     
+    def remove_router_interface(
+        self,
+        router_id: str,
+        subnet_id: str
+    ) -> bool:
+        """Remove a subnet interface from a router."""
+        try:
+            self._conn.network.remove_interface_from_router(router_id, subnet_id=subnet_id)
+            logger.info(f"Removed interface for subnet {subnet_id} from router {router_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to remove interface from router {router_id}: {e}")
+            return False
+
     def delete_router(self, router_id: str) -> bool:
         """Delete a router."""
         try:
@@ -659,18 +673,27 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
     def create_health_monitor(
         self,
         pool_id: str,
-        type: str,
+        monitor_type: str,
         delay: int,
         timeout: int,
         max_retries: int = 3,
         name: Optional[str] = None,
         **kwargs
     ) -> Optional[Dict[str, Any]]:
-        """Create a health monitor for a pool."""
+        """Create a health monitor for a pool.
+
+        Args:
+            pool_id: Pool to monitor.
+            monitor_type: Monitor type (HTTP, HTTPS, PING, TCP, etc.).
+            delay: Delay between checks in seconds.
+            timeout: Timeout for each check in seconds.
+            max_retries: Max retries before marking member down.
+            name: Optional monitor name.
+        """
         try:
             hm = self._conn.load_balancer.create_health_monitor(
                 pool_id=pool_id,
-                type=type,
+                type=monitor_type,
                 delay=delay,
                 timeout=timeout,
                 max_retries=max_retries,
@@ -678,7 +701,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 **kwargs
             )
             logger.info(f"Created health monitor: {hm.id}")
-            return {"id": hm.id, "type": type, "pool_id": pool_id}
+            return {"id": hm.id, "type": monitor_type, "pool_id": pool_id}
         except Exception as e:
             logger.error(f"Failed to create health monitor for pool {pool_id}: {e}")
             return None

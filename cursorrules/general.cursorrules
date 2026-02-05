@@ -26,7 +26,7 @@ These are the general guiding principles for AI-assisted development across the 
 2.  **Error Handling**: Implement comprehensive error handling. Use specific exceptions. Provide informative error messages. Log errors appropriately using the `logging_monitoring` module.
 3.  **Dependencies**:
     *   Minimize new external dependencies. Justify their inclusion based on significant benefit.
-    *   Update relevant requirements files (`requirements.txt`, `package.json`, etc.) with version pinning for stability.
+    *   Update `pyproject.toml` (and `package.json` for JS modules) with version pinning for stability. Note: module-specific `requirements.txt` files are deprecated.
 4.  **Configuration**: Configuration should be clear, manageable, and externalized from code where appropriate (e.g., environment variables, config files). Avoid hardcoding sensitive information.
 5.  **Language Best Practices**: Apply best practices for the specific programming language being used in a module.
 

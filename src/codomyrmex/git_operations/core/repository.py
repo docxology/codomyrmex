@@ -463,16 +463,17 @@ class RepositoryManager:
         if owner_filter:
             repos = [repo for repo in repos if repo.owner == owner_filter]
 
-        # Filter for only locally existing repos before queueing
+        # Separate locally cloned repos from uncloned ones
         repos_to_update = []
+        results = {}
         for repo in repos:
             local_path = self.get_local_path(repo)
             if is_git_repository(str(local_path)):
                 repos_to_update.append(repo)
             else:
                 logger.info(f"Skipping {repo.full_name} - not cloned locally")
+                results[repo.full_name] = False
 
-        results = {}
         futures = {}
 
         logger.info(f"Bulk updating {len(repos_to_update)} repositories with {max_workers} workers...")

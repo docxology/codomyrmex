@@ -1118,7 +1118,7 @@ class TestPipelineTriggeringGitHubActions:
             )
 
             assert result.status == PipelineStatus.FAILURE
-            assert "timeout" in result.error.lower()
+            assert "timed out" in result.error.lower() or "timeout" in result.error.lower()
 
 
 class TestPipelineStatusMonitoring:

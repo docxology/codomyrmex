@@ -39,6 +39,8 @@ class TestInfomaniakModuleExports:
             # Base classes
             "InfomaniakOpenStackBase",
             "InfomaniakS3Base",
+            "InfomaniakRESTBase",
+            "classify_http_error",
             # Authentication
             "InfomaniakCredentials",
             "InfomaniakS3Credentials",

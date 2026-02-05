@@ -1,43 +1,48 @@
-# Cost Management
+# cost_management
 
-Cloud and API spend tracking, optimization, and budget alerting
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `cost_management` module provides cloud and api spend tracking, optimization, and budget alerting.
+Spend tracking, budgeting, and cost optimization for AI/cloud infrastructure. Provides a `CostTracker` to record and aggregate cost entries across categories (LLM inference, compute, storage, network, API calls), a `BudgetManager` for creating budgets with configurable periods and alert thresholds, and pluggable storage backends for persistence.
 
-## Installation
+## Key Exports
 
-This module is part of the Codomyrmex platform and is installed with the main package.
+### Enums
 
-```bash
-pip install codomyrmex
-```
+- **`CostCategory`** -- Categories of costs: LLM_INFERENCE, LLM_EMBEDDING, COMPUTE, STORAGE, NETWORK, API_CALLS, OTHER
+- **`BudgetPeriod`** -- Budget time periods: HOURLY, DAILY, WEEKLY, MONTHLY
 
-## Quick Start
+### Data Classes
 
-```python
-from codomyrmex.cost_management import *
+- **`CostEntry`** -- A single cost record with amount, category, resource ID, tags, and timestamp; includes `to_dict()` serialization
+- **`Budget`** -- A budget allocation with amount, period, optional category filter, tags filter, and configurable alert thresholds (default: 50%, 80%, 90%, 100%); computes period start boundaries
+- **`CostSummary`** -- Aggregated cost summary with totals broken down by category, resource, and tag
+- **`BudgetAlert`** -- A budget alert containing budget ID, threshold, current spend, and computed utilization percentage with a human-readable message
 
-# Example usage
-# TODO: Add practical examples
-```
+### Storage
 
-## Features
+- **`CostStore`** -- Abstract base class for cost storage backends with `save_entry()` and `get_entries()` methods
+- **`InMemoryCostStore`** -- Thread-safe in-memory implementation of CostStore for development and testing
 
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
+### Services
 
-## API Reference
+- **`CostTracker`** -- Main cost tracking service; records cost entries with auto-generated IDs and produces aggregated summaries filtered by period, date range, or category
+- **`BudgetManager`** -- Budget management and alerting; creates budgets, checks utilization against thresholds, emits alerts when thresholds are crossed, and validates whether a proposed spend fits within budget limits
 
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
+## Directory Contents
 
-## Related Modules
-
-- [`None`](../) - Parent module
+- `__init__.py` -- Module implementation with all classes, enums, and data models
+- `README.md` -- This file
+- `AGENTS.md` -- Agent integration documentation
+- `API_SPECIFICATION.md` -- Programmatic API specification
+- `MCP_TOOL_SPECIFICATION.md` -- Model Context Protocol tool definitions
+- `PAI.md` -- PAI integration notes
+- `SPEC.md` -- Module specification
+- `py.typed` -- PEP 561 type stub marker
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/cost_management/](../../../docs/modules/cost_management/)
 - **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

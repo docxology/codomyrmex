@@ -10,12 +10,15 @@ Tests cover:
 - InfomaniakDNSClient
 - InfomaniakHeatClient
 - InfomaniakMeteringClient
-- InfomaniakNewsletterClient
-- Authentication utilities and error paths
+- InfomaniakNewsletterClient (42 tests with instance-level mocking)
+- Exception hierarchy and error classification
+- classify_openstack_error (20 tests) and classify_http_error (12 tests)
+- Base classes: OpenStackBase, S3Base, RESTBase (context manager, close, validate)
+- Authentication utilities (create_openstack_connection, create_s3_client)
 - Factory methods (from_credentials)
 - Module-level exports and CloudConfig integration
 
-Total: ~100 tests across 14 test classes.
+Total: 316 tests across 33 test classes.
 """
 
 import pytest
@@ -1571,30 +1574,54 @@ class TestModuleExports:
 # =========================================================================
 
 class TestInfomaniakNewsletterClient:
-    """Tests for InfomaniakNewsletterClient."""
+    """Tests for InfomaniakNewsletterClient.
+
+    Uses instance-level mocking: creates a real client (exercises __init__,
+    URL construction, header setup, payload building), then replaces
+    ``_session.get/post/put/delete`` with mocks so only HTTP transport
+    is faked.
+    """
+
+    BASE = "https://api.infomaniak.com"
+    NL_ID = "nl-123"
+    URL_PREFIX = f"{BASE}/1/newsletters/{NL_ID}"
 
     def _make_client(self):
-        """Create a newsletter client with test credentials."""
+        """Create a newsletter client and replace its session with a mock."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        return InfomaniakNewsletterClient(
-            token="test-token",
-            newsletter_id="nl-123",
-            base_url="https://api.infomaniak.com",
-        )
 
-    def test_newsletter_from_credentials(self):
-        """Test creating client with explicit credentials."""
+        client = InfomaniakNewsletterClient(
+            token="test-token",
+            newsletter_id=self.NL_ID,
+            base_url=self.BASE,
+        )
+        client._session = MagicMock()
+        return client
+
+    @staticmethod
+    def _mock_response(json_data, status_code=200):
+        resp = MagicMock()
+        resp.status_code = status_code
+        resp.json.return_value = json_data
+        resp.raise_for_status = MagicMock()
+        return resp
+
+    # ------------------------------------------------------------------
+    # Factory methods & construction
+    # ------------------------------------------------------------------
+
+    def test_from_credentials(self):
+        """from_credentials stores token and newsletter_id."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
         client = InfomaniakNewsletterClient.from_credentials(
-            token="tok-abc",
-            newsletter_id="nl-456",
+            token="tok-abc", newsletter_id="nl-456",
         )
         assert client._token == "tok-abc"
         assert client._newsletter_id == "nl-456"
 
-    def test_newsletter_from_env(self):
-        """Test creating client from environment variables."""
+    def test_from_env(self):
+        """from_env reads correct environment variables."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
         with patch.dict("os.environ", {
@@ -1605,198 +1632,2141 @@ class TestInfomaniakNewsletterClient:
             assert client._token == "env-token"
             assert client._newsletter_id == "env-nl-id"
 
-    def test_newsletter_from_env_missing(self):
-        """Test that missing env vars raises ValueError."""
+    def test_from_env_missing(self):
+        """from_env raises ValueError when env vars are missing."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
         with patch.dict("os.environ", {}, clear=True):
             with pytest.raises(ValueError, match="Missing required environment variables"):
                 InfomaniakNewsletterClient.from_env()
 
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_list_campaigns(self, MockSession):
-        """Test listing campaigns."""
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = {"data": [
-            {"id": "camp-1", "subject": "Test Campaign", "status": "draft"},
-        ]}
-        mock_resp.raise_for_status = MagicMock()
-
-        mock_session = MagicMock()
-        mock_session.get.return_value = mock_resp
-        MockSession.return_value = mock_session
-
+    def test_auth_header_set(self):
+        """__init__ sets Authorization Bearer header on session."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
-        campaigns = client.list_campaigns()
 
-        assert len(campaigns) == 1
-        assert campaigns[0]["id"] == "camp-1"
-        assert campaigns[0]["subject"] == "Test Campaign"
+        client = InfomaniakNewsletterClient(
+            token="my-secret-token", newsletter_id="nl-1",
+        )
+        assert client._session.headers["Authorization"] == "Bearer my-secret-token"
+        assert client._session.headers["Content-Type"] == "application/json"
 
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_create_campaign(self, MockSession):
-        """Test creating a campaign."""
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = {"data": {"id": "camp-new", "subject": "New"}}
-        mock_resp.raise_for_status = MagicMock()
+    def test_context_manager(self):
+        """Context manager protocol calls close on exit."""
+        client = self._make_client()
+        client.__enter__()
+        client.__exit__(None, None, None)
+        client._session.close.assert_called_once()
 
-        mock_session = MagicMock()
-        mock_session.post.return_value = mock_resp
-        MockSession.return_value = mock_session
+    def test_inherits_rest_base(self):
+        """Client inherits from InfomaniakRESTBase."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+        client = self._make_client()
+        assert isinstance(client, InfomaniakRESTBase)
 
-        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
+    def test_validate_connection(self):
+        """validate_connection calls GET credits endpoint."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": {"remaining": 100}},
+        )
+        assert client.validate_connection() is True
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/credits"
+
+    # ------------------------------------------------------------------
+    # Campaign operations
+    # ------------------------------------------------------------------
+
+    def test_list_campaigns(self):
+        """list_campaigns GETs campaigns URL and returns list."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": [{"id": "c-1", "subject": "Hello"}]},
+        )
+        result = client.list_campaigns()
+
+        assert len(result) == 1
+        assert result[0]["id"] == "c-1"
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns"
+
+    def test_get_campaign(self):
+        """get_campaign GETs campaign by ID."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": {"id": "c-99", "subject": "Detail"}},
+        )
+        result = client.get_campaign("c-99")
+
+        assert result["id"] == "c-99"
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns/c-99"
+
+    def test_create_campaign(self):
+        """create_campaign POSTs with all 5 payload fields."""
+        client = self._make_client()
+        client._session.post.return_value = self._mock_response(
+            {"data": {"id": "c-new"}},
+        )
         result = client.create_campaign(
             subject="New",
-            sender_email="news@activeinference.tech",
-            sender_name="AI Institute",
-            content_html="<h1>Hello</h1>",
+            sender_email="news@test.com",
+            sender_name="Tester",
+            content_html="<p>Hi</p>",
             mailing_list_id="ml-1",
         )
 
-        assert result is not None
-        assert result["id"] == "camp-new"
-        mock_session.post.assert_called_once()
+        assert result["id"] == "c-new"
+        url = client._session.post.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns"
+        payload = client._session.post.call_args[1]["json"]
+        assert payload["subject"] == "New"
+        assert payload["sender_email"] == "news@test.com"
+        assert payload["sender_name"] == "Tester"
+        assert payload["content"] == "<p>Hi</p>"
+        assert payload["mailing_list_id"] == "ml-1"
 
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_send_campaign(self, MockSession):
-        """Test sending a campaign."""
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = {"data": {"status": "sending"}}
-        mock_resp.raise_for_status = MagicMock()
+    def test_update_campaign(self):
+        """update_campaign PUTs kwargs to campaign URL."""
+        client = self._make_client()
+        client._session.put.return_value = self._mock_response(
+            {"data": {"id": "c-1", "subject": "Updated"}},
+        )
+        result = client.update_campaign("c-1", subject="Updated")
 
-        mock_session = MagicMock()
-        mock_session.post.return_value = mock_resp
-        MockSession.return_value = mock_session
+        assert result["subject"] == "Updated"
+        url = client._session.put.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns/c-1"
+        payload = client._session.put.call_args[1]["json"]
+        assert payload == {"subject": "Updated"}
 
-        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
-        result = client.send_campaign("camp-1")
+    def test_delete_campaign(self):
+        """delete_campaign DELETEs campaign URL and returns True."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status = MagicMock()
+        client._session.delete.return_value = resp
 
-        assert result is True
+        assert client.delete_campaign("c-del") is True
+        url = client._session.delete.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns/c-del"
 
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_list_mailing_lists(self, MockSession):
-        """Test listing mailing lists."""
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = {"data": [
-            {"id": "ml-1", "name": "Subscribers"},
-            {"id": "ml-2", "name": "VIPs"},
-        ]}
-        mock_resp.raise_for_status = MagicMock()
+    def test_send_test(self):
+        """send_test POSTs email payload to test endpoint."""
+        client = self._make_client()
+        client._session.post.return_value = self._mock_response(
+            {"data": {"status": "sent"}},
+        )
+        assert client.send_test("c-1", "test@example.com") is True
+        url = client._session.post.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns/c-1/test"
+        payload = client._session.post.call_args[1]["json"]
+        assert payload == {"email": "test@example.com"}
 
-        mock_session = MagicMock()
-        mock_session.get.return_value = mock_resp
-        MockSession.return_value = mock_session
+    def test_schedule_campaign(self):
+        """schedule_campaign POSTs send_at to schedule endpoint."""
+        client = self._make_client()
+        client._session.post.return_value = self._mock_response(
+            {"data": {"scheduled": True}},
+        )
+        assert client.schedule_campaign("c-1", "2026-03-01T10:00:00Z") is True
+        url = client._session.post.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns/c-1/schedule"
+        payload = client._session.post.call_args[1]["json"]
+        assert payload == {"send_at": "2026-03-01T10:00:00Z"}
 
-        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
-        lists = client.list_mailing_lists()
+    def test_unschedule_campaign(self):
+        """unschedule_campaign POSTs to unschedule endpoint."""
+        client = self._make_client()
+        client._session.post.return_value = self._mock_response(
+            {"data": {"unscheduled": True}},
+        )
+        assert client.unschedule_campaign("c-1") is True
+        url = client._session.post.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns/c-1/unschedule"
 
-        assert len(lists) == 2
-        assert lists[0]["name"] == "Subscribers"
+    def test_send_campaign(self):
+        """send_campaign POSTs to send endpoint."""
+        client = self._make_client()
+        client._session.post.return_value = self._mock_response(
+            {"data": {"status": "sending"}},
+        )
+        assert client.send_campaign("c-1") is True
+        url = client._session.post.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns/c-1/send"
 
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_create_mailing_list(self, MockSession):
-        """Test creating a mailing list."""
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = {"data": {"id": "ml-new", "name": "New List"}}
-        mock_resp.raise_for_status = MagicMock()
+    def test_get_campaign_statistics(self):
+        """get_campaign_statistics GETs statistics URL."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": {"sent": 1000, "opened": 450}},
+        )
+        stats = client.get_campaign_statistics("c-1")
 
-        mock_session = MagicMock()
-        mock_session.post.return_value = mock_resp
-        MockSession.return_value = mock_session
-
-        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
-        result = client.create_mailing_list("New List")
-
-        assert result is not None
-        assert result["name"] == "New List"
-
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_import_contacts(self, MockSession):
-        """Test importing contacts to a mailing list."""
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = {"data": {"task_id": "task-123", "imported": 3}}
-        mock_resp.raise_for_status = MagicMock()
-
-        mock_session = MagicMock()
-        mock_session.post.return_value = mock_resp
-        MockSession.return_value = mock_session
-
-        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
-        result = client.import_contacts("ml-1", [
-            {"email": "a@example.com"},
-            {"email": "b@example.com"},
-            {"email": "c@example.com"},
-        ])
-
-        assert result is not None
-        assert result["task_id"] == "task-123"
-
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_get_campaign_statistics(self, MockSession):
-        """Test getting campaign statistics."""
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = {"data": {
-            "sent": 1000, "opened": 450, "clicked": 120, "bounced": 5,
-        }}
-        mock_resp.raise_for_status = MagicMock()
-
-        mock_session = MagicMock()
-        mock_session.get.return_value = mock_resp
-        MockSession.return_value = mock_session
-
-        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
-        stats = client.get_campaign_statistics("camp-1")
-
-        assert stats is not None
         assert stats["sent"] == 1000
         assert stats["opened"] == 450
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/campaigns/c-1/statistics"
 
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_get_credits(self, MockSession):
-        """Test getting newsletter credits."""
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = {"data": {"remaining": 5000, "used": 1500}}
-        mock_resp.raise_for_status = MagicMock()
+    # ------------------------------------------------------------------
+    # Mailing list operations
+    # ------------------------------------------------------------------
 
-        mock_session = MagicMock()
-        mock_session.get.return_value = mock_resp
-        MockSession.return_value = mock_session
+    def test_list_mailing_lists(self):
+        """list_mailing_lists GETs mailing-lists URL."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": [{"id": "ml-1", "name": "Subs"}, {"id": "ml-2", "name": "VIPs"}]},
+        )
+        result = client.list_mailing_lists()
 
-        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
+        assert len(result) == 2
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/mailing-lists"
+
+    def test_get_mailing_list(self):
+        """get_mailing_list GETs specific list by ID."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": {"id": "ml-1", "name": "Subs"}},
+        )
+        result = client.get_mailing_list("ml-1")
+
+        assert result["id"] == "ml-1"
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/mailing-lists/ml-1"
+
+    def test_create_mailing_list(self):
+        """create_mailing_list POSTs name payload."""
+        client = self._make_client()
+        client._session.post.return_value = self._mock_response(
+            {"data": {"id": "ml-new", "name": "New List"}},
+        )
+        result = client.create_mailing_list("New List")
+
+        assert result["name"] == "New List"
+        url = client._session.post.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/mailing-lists"
+        payload = client._session.post.call_args[1]["json"]
+        assert payload == {"name": "New List"}
+
+    def test_update_mailing_list(self):
+        """update_mailing_list PUTs kwargs."""
+        client = self._make_client()
+        client._session.put.return_value = self._mock_response(
+            {"data": {"id": "ml-1", "name": "Renamed"}},
+        )
+        result = client.update_mailing_list("ml-1", name="Renamed")
+
+        assert result["name"] == "Renamed"
+        url = client._session.put.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/mailing-lists/ml-1"
+
+    def test_delete_mailing_list(self):
+        """delete_mailing_list DELETEs list URL."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status = MagicMock()
+        client._session.delete.return_value = resp
+
+        assert client.delete_mailing_list("ml-del") is True
+        url = client._session.delete.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/mailing-lists/ml-del"
+
+    def test_get_list_contacts(self):
+        """get_list_contacts GETs contacts for a list."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": [{"id": "ct-1", "email": "a@test.com"}]},
+        )
+        result = client.get_list_contacts("ml-1")
+
+        assert len(result) == 1
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/mailing-lists/ml-1/contacts"
+
+    def test_import_contacts(self):
+        """import_contacts POSTs contacts list."""
+        client = self._make_client()
+        client._session.post.return_value = self._mock_response(
+            {"data": {"task_id": "task-123", "imported": 3}},
+        )
+        contacts = [{"email": "a@test.com"}, {"email": "b@test.com"}]
+        result = client.import_contacts("ml-1", contacts)
+
+        assert result["task_id"] == "task-123"
+        url = client._session.post.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/mailing-lists/ml-1/contacts/import"
+        payload = client._session.post.call_args[1]["json"]
+        assert payload == {"contacts": contacts}
+
+    def test_manage_contact(self):
+        """manage_contact POSTs to action URL."""
+        client = self._make_client()
+        client._session.post.return_value = self._mock_response(
+            {"data": {"subscribed": True}},
+        )
+        assert client.manage_contact("ml-1", "ct-5", "subscribe") is True
+        url = client._session.post.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/mailing-lists/ml-1/contacts/ct-5/subscribe"
+
+    # ------------------------------------------------------------------
+    # Contact operations
+    # ------------------------------------------------------------------
+
+    def test_get_contact(self):
+        """get_contact GETs contact by ID."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": {"id": "ct-1", "email": "a@test.com"}},
+        )
+        result = client.get_contact("ct-1")
+
+        assert result["email"] == "a@test.com"
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/contacts/ct-1"
+
+    def test_update_contact(self):
+        """update_contact PUTs kwargs."""
+        client = self._make_client()
+        client._session.put.return_value = self._mock_response(
+            {"data": {"id": "ct-1", "name": "Updated"}},
+        )
+        result = client.update_contact("ct-1", name="Updated")
+
+        assert result["name"] == "Updated"
+        url = client._session.put.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/contacts/ct-1"
+        payload = client._session.put.call_args[1]["json"]
+        assert payload == {"name": "Updated"}
+
+    def test_delete_contact(self):
+        """delete_contact DELETEs contact URL."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status = MagicMock()
+        client._session.delete.return_value = resp
+
+        assert client.delete_contact("ct-del") is True
+        url = client._session.delete.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/contacts/ct-del"
+
+    # ------------------------------------------------------------------
+    # Utility operations
+    # ------------------------------------------------------------------
+
+    def test_get_task_status(self):
+        """get_task_status GETs tasks URL."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": {"id": "t-1", "status": "completed"}},
+        )
+        result = client.get_task_status("t-1")
+
+        assert result["status"] == "completed"
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/tasks/t-1"
+
+    def test_get_credits(self):
+        """get_credits GETs credits URL."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": {"remaining": 5000, "used": 1500}},
+        )
         credits = client.get_credits()
 
-        assert credits is not None
         assert credits["remaining"] == 5000
+        url = client._session.get.call_args[0][0]
+        assert url == f"{self.URL_PREFIX}/credits"
 
-    @patch("codomyrmex.cloud.infomaniak.newsletter.client.requests.Session")
-    def test_error_handling(self, MockSession):
-        """Test that API errors return None/False/[] instead of raising."""
-        mock_session = MagicMock()
-        mock_resp = MagicMock()
-        mock_resp.raise_for_status.side_effect = Exception("500 Server Error")
-        mock_session.get.return_value = mock_resp
-        mock_session.post.return_value = mock_resp
-        mock_session.delete.return_value = mock_resp
-        MockSession.return_value = mock_session
+    # ------------------------------------------------------------------
+    # Error paths
+    # ------------------------------------------------------------------
 
-        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
-        client = InfomaniakNewsletterClient(token="t", newsletter_id="n")
+    def test_error_get_returns_none(self):
+        """GET error returns None."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status.side_effect = Exception("500 Server Error")
+        client._session.get.return_value = resp
 
-        # GET operations return None or empty list
+        assert client.get_campaign("c-1") is None
+
+    def test_error_post_returns_none(self):
+        """POST error returns None (bool methods return False)."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status.side_effect = Exception("500 Server Error")
+        client._session.post.return_value = resp
+
+        assert client.send_campaign("c-1") is False
+
+    def test_error_delete_returns_false(self):
+        """DELETE error returns False."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status.side_effect = Exception("500 Server Error")
+        client._session.delete.return_value = resp
+
+        assert client.delete_campaign("c-1") is False
+
+    def test_list_returns_empty_on_error(self):
+        """list_campaigns and list_mailing_lists return [] on error."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status.side_effect = Exception("Connection refused")
+        client._session.get.return_value = resp
+
         assert client.list_campaigns() == []
-        assert client.get_campaign("123") is None
-        assert client.get_credits() is None
+        assert client.list_mailing_lists() == []
 
-        # POST operations return None or False
-        assert client.send_campaign("123") is False
+    # ------------------------------------------------------------------
+    # Edge cases
+    # ------------------------------------------------------------------
 
-        # DELETE operations return False
-        assert client.delete_campaign("123") is False
+    def test_list_campaigns_dict_response(self):
+        """list_campaigns extracts items from dict-wrapped response."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"data": {"total": 5, "items": [{"id": "c1"}]}},
+        )
+        result = client.list_campaigns()
+        # Dict-wrapped response: items extracted
+        assert isinstance(result, list)
+        assert result == [{"id": "c1"}]
+
+    def test_list_campaigns_none_response(self):
+        """list_campaigns returns [] when _get returns None."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status.side_effect = Exception("error")
+        client._session.get.return_value = resp
+
+        assert client.list_campaigns() == []
+
+    def test_get_response_without_data_key(self):
+        """_get returns full dict when no 'data' key in response."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response(
+            {"result": "ok", "value": 42},
+        )
+        result = client.get_credits()
+        # dict.get("data", dict) returns dict itself
+        assert result["result"] == "ok"
+        assert result["value"] == 42
+
+    def test_put_error_returns_none(self):
+        """PUT error returns None."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status.side_effect = Exception("500 Server Error")
+        client._session.put.return_value = resp
+
+        assert client.update_campaign("c-1", subject="X") is None
+
+    def test_base_url_trailing_slash_stripped(self):
+        """Trailing slash in base_url is stripped."""
+        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+        client = InfomaniakNewsletterClient(
+            token="t", newsletter_id="n", base_url="https://api.test.com/"
+        )
+        assert client._base_url == "https://api.test.com"
+
+    def test_service_name_is_newsletter(self):
+        """Client _service_name is 'newsletter'."""
+        client = self._make_client()
+        assert client._service_name == "newsletter"
+
+    def test_get_list_contacts_empty(self):
+        """get_list_contacts returns [] for empty contact list."""
+        client = self._make_client()
+        client._session.get.return_value = self._mock_response({"data": []})
+        assert client.get_list_contacts("ml-1") == []
+
+    def test_validate_connection_failure(self):
+        """validate_connection returns False on error."""
+        client = self._make_client()
+        resp = MagicMock()
+        resp.raise_for_status.side_effect = Exception("timeout")
+        client._session.get.return_value = resp
+
+        assert client.validate_connection() is False
+
+
+# =========================================================================
+# Test Exception Hierarchy
+# =========================================================================
+
+class TestInfomaniakExceptionHierarchy:
+    """Tests for Infomaniak exception hierarchy and attributes."""
+
+    def test_cloud_error_attributes(self):
+        """InfomaniakCloudError stores service, operation, resource_id."""
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakCloudError
+
+        err = InfomaniakCloudError(
+            "test msg", service="compute", operation="create", resource_id="srv-1"
+        )
+        assert str(err) == "test msg"
+        assert err.service == "compute"
+        assert err.operation == "create"
+        assert err.resource_id == "srv-1"
+
+    def test_cloud_error_default_attributes(self):
+        """InfomaniakCloudError defaults to empty strings."""
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakCloudError
+
+        err = InfomaniakCloudError("msg")
+        assert err.service == ""
+        assert err.operation == ""
+        assert err.resource_id == ""
+
+    def test_all_exceptions_inherit_from_cloud_error(self):
+        """All custom exceptions inherit from InfomaniakCloudError."""
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            InfomaniakCloudError,
+            InfomaniakAuthError,
+            InfomaniakNotFoundError,
+            InfomaniakConflictError,
+            InfomaniakQuotaExceededError,
+            InfomaniakConnectionError,
+            InfomaniakTimeoutError,
+        )
+
+        for exc_cls in [
+            InfomaniakAuthError,
+            InfomaniakNotFoundError,
+            InfomaniakConflictError,
+            InfomaniakQuotaExceededError,
+            InfomaniakConnectionError,
+            InfomaniakTimeoutError,
+        ]:
+            err = exc_cls("test", service="svc")
+            assert isinstance(err, InfomaniakCloudError)
+            assert isinstance(err, Exception)
+            assert err.service == "svc"
+
+    def test_exception_message_propagation(self):
+        """Message passes through to Exception base class."""
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
+
+        err = InfomaniakAuthError("auth failed", service="identity")
+        assert "auth failed" in str(err)
+
+    def test_exception_kwargs_preserved(self):
+        """All kwargs preserved on all subclasses."""
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakNotFoundError
+
+        err = InfomaniakNotFoundError(
+            "not found", service="dns", operation="get_zone", resource_id="zone-42"
+        )
+        assert err.service == "dns"
+        assert err.operation == "get_zone"
+        assert err.resource_id == "zone-42"
+
+
+# =========================================================================
+# Test classify_openstack_error
+# =========================================================================
+
+class TestClassifyOpenstackError:
+    """Tests for classify_openstack_error() string-based classification."""
+
+    def _classify(self, msg, **kwargs):
+        from codomyrmex.cloud.infomaniak.exceptions import classify_openstack_error
+        return classify_openstack_error(Exception(msg), **kwargs)
+
+    def test_401_returns_auth_error(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
+        assert isinstance(self._classify("HTTP 401 Unauthorized"), InfomaniakAuthError)
+
+    def test_403_returns_auth_error(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
+        assert isinstance(self._classify("403 Forbidden"), InfomaniakAuthError)
+
+    def test_authentication_keyword_returns_auth_error(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
+        assert isinstance(self._classify("Authentication required"), InfomaniakAuthError)
+
+    def test_404_returns_not_found(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakNotFoundError
+        assert isinstance(self._classify("HTTP 404"), InfomaniakNotFoundError)
+
+    def test_not_found_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakNotFoundError
+        assert isinstance(self._classify("Resource not found"), InfomaniakNotFoundError)
+
+    def test_409_returns_conflict(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConflictError
+        assert isinstance(self._classify("HTTP 409"), InfomaniakConflictError)
+
+    def test_conflict_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConflictError
+        assert isinstance(self._classify("State conflict detected"), InfomaniakConflictError)
+
+    def test_413_returns_quota(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
+        assert isinstance(self._classify("HTTP 413 Request Entity Too Large"), InfomaniakQuotaExceededError)
+
+    def test_quota_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
+        assert isinstance(self._classify("Quota exceeded"), InfomaniakQuotaExceededError)
+
+    def test_limit_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
+        assert isinstance(self._classify("Rate limit hit"), InfomaniakQuotaExceededError)
+
+    def test_timeout_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakTimeoutError
+        assert isinstance(self._classify("Request timeout"), InfomaniakTimeoutError)
+
+    def test_timed_out_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakTimeoutError
+        assert isinstance(self._classify("Connection timed out"), InfomaniakTimeoutError)
+
+    def test_connection_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
+        assert isinstance(self._classify("Connection refused"), InfomaniakConnectionError)
+
+    def test_refused_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
+        assert isinstance(self._classify("refused by server"), InfomaniakConnectionError)
+
+    def test_unreachable_keyword(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
+        assert isinstance(self._classify("Host unreachable"), InfomaniakConnectionError)
+
+    def test_generic_error_fallback(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakCloudError
+        result = self._classify("Something unknown went wrong")
+        assert type(result) is InfomaniakCloudError
+
+    def test_case_insensitive(self):
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
+        assert isinstance(self._classify("AUTHENTICATION FAILED"), InfomaniakAuthError)
+
+    def test_kwargs_propagated(self):
+        result = self._classify(
+            "HTTP 404", service="dns", operation="get_zone", resource_id="z-1"
+        )
+        assert result.service == "dns"
+        assert result.operation == "get_zone"
+        assert result.resource_id == "z-1"
+
+    def test_preserves_original_message(self):
+        result = self._classify("HTTP 404 zone missing")
+        assert "HTTP 404 zone missing" in str(result)
+
+
+# =========================================================================
+# Test classify_http_error
+# =========================================================================
+
+class TestClassifyHttpError:
+    """Tests for classify_http_error() status-code-based classification."""
+
+    def _make_http_error(self, status_code):
+        """Create a requests-like HTTPError with a response object."""
+        import requests
+        resp = MagicMock()
+        resp.status_code = status_code
+        err = requests.exceptions.HTTPError(f"HTTP {status_code}")
+        err.response = resp
+        return err
+
+    def test_connection_error_instance(self):
+        """requests.ConnectionError maps to InfomaniakConnectionError."""
+        import requests
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakConnectionError,
+        )
+        err = requests.exceptions.ConnectionError("refused")
+        result = classify_http_error(err, service="newsletter")
+        assert isinstance(result, InfomaniakConnectionError)
+        assert result.service == "newsletter"
+
+    def test_timeout_instance(self):
+        """requests.Timeout maps to InfomaniakTimeoutError."""
+        import requests
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakTimeoutError,
+        )
+        err = requests.exceptions.Timeout("timed out")
+        result = classify_http_error(err, operation="GET credits")
+        assert isinstance(result, InfomaniakTimeoutError)
+        assert result.operation == "GET credits"
+
+    def test_401_response(self):
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakAuthError,
+        )
+        result = classify_http_error(self._make_http_error(401))
+        assert isinstance(result, InfomaniakAuthError)
+
+    def test_403_response(self):
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakAuthError,
+        )
+        result = classify_http_error(self._make_http_error(403))
+        assert isinstance(result, InfomaniakAuthError)
+
+    def test_404_response(self):
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakNotFoundError,
+        )
+        result = classify_http_error(self._make_http_error(404))
+        assert isinstance(result, InfomaniakNotFoundError)
+
+    def test_409_response(self):
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakConflictError,
+        )
+        result = classify_http_error(self._make_http_error(409))
+        assert isinstance(result, InfomaniakConflictError)
+
+    def test_413_response(self):
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakQuotaExceededError,
+        )
+        result = classify_http_error(self._make_http_error(413))
+        assert isinstance(result, InfomaniakQuotaExceededError)
+
+    def test_429_response(self):
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakQuotaExceededError,
+        )
+        result = classify_http_error(self._make_http_error(429))
+        assert isinstance(result, InfomaniakQuotaExceededError)
+
+    def test_no_response_attribute(self):
+        """Error without response falls back to string classification."""
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakCloudError,
+        )
+        err = Exception("Something generic happened")
+        result = classify_http_error(err)
+        assert isinstance(result, InfomaniakCloudError)
+
+    def test_response_without_status_code(self):
+        """Response without status_code falls back to string classification."""
+        from codomyrmex.cloud.infomaniak.exceptions import classify_http_error
+        err = Exception("weird error")
+        err.response = MagicMock(spec=[])  # no status_code attr
+        result = classify_http_error(err)
+        assert result is not None
+
+    def test_500_falls_through_to_string_classification(self):
+        """HTTP 500 has no explicit mapping, falls to string classifier."""
+        from codomyrmex.cloud.infomaniak.exceptions import (
+            classify_http_error, InfomaniakCloudError,
+        )
+        result = classify_http_error(self._make_http_error(500))
+        assert isinstance(result, InfomaniakCloudError)
+
+    def test_kwargs_propagated(self):
+        from codomyrmex.cloud.infomaniak.exceptions import classify_http_error
+        result = classify_http_error(
+            self._make_http_error(404),
+            service="newsletter",
+            operation="GET campaigns/1",
+            resource_id="camp-1",
+        )
+        assert result.service == "newsletter"
+        assert result.operation == "GET campaigns/1"
+        assert result.resource_id == "camp-1"
+
+
+# =========================================================================
+# Test Base Classes (OpenStack, S3, REST)
+# =========================================================================
+
+class TestInfomaniakOpenStackBaseClass:
+    """Tests for InfomaniakOpenStackBase protocol methods."""
+
+    def test_context_manager_calls_close(self):
+        """__exit__ calls close()."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+
+        mock_conn = MagicMock()
+        client = InfomaniakOpenStackBase(mock_conn)
+        client.__enter__()
+        result = client.__exit__(None, None, None)
+
+        assert result is False
+        mock_conn.close.assert_called_once()
+
+    def test_exit_does_not_suppress_exception(self):
+        """__exit__ returns False — does not suppress exceptions."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+
+        mock_conn = MagicMock()
+        client = InfomaniakOpenStackBase(mock_conn)
+
+        result = client.__exit__(ValueError, ValueError("boom"), None)
+        assert result is False
+
+    def test_close_handles_exception(self):
+        """close() logs warning when conn.close() raises."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+
+        mock_conn = MagicMock()
+        mock_conn.close.side_effect = RuntimeError("close failed")
+
+        client = InfomaniakOpenStackBase(mock_conn)
+        # Should not raise
+        client.close()
+
+    def test_close_no_close_method(self):
+        """close() is safe when connection has no close() method."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+
+        mock_conn = MagicMock(spec=[])  # no close attribute
+        client = InfomaniakOpenStackBase(mock_conn)
+        client.close()  # Should not raise
+
+    def test_validate_connection_success(self):
+        """validate_connection returns True on success."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+
+        mock_conn = MagicMock()
+        mock_conn.identity.projects.return_value = []
+        client = InfomaniakOpenStackBase(mock_conn)
+        assert client.validate_connection() is True
+
+    def test_validate_connection_failure(self):
+        """validate_connection returns False on exception."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+
+        mock_conn = MagicMock()
+        mock_conn.identity.projects.side_effect = Exception("auth expired")
+        client = InfomaniakOpenStackBase(mock_conn)
+        assert client.validate_connection() is False
+
+    def test_service_name_default(self):
+        """Default _service_name is 'openstack'."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+        assert InfomaniakOpenStackBase._service_name == "openstack"
+
+
+class TestInfomaniakS3BaseClass:
+    """Tests for InfomaniakS3Base protocol methods."""
+
+    def test_context_manager(self):
+        """Context manager protocol enters and exits cleanly."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakS3Base
+
+        mock_client = MagicMock()
+        s3 = InfomaniakS3Base(mock_client)
+        assert s3.__enter__() is s3
+        assert s3.__exit__(None, None, None) is False
+
+    def test_close_is_noop(self):
+        """close() is a no-op for S3 (boto3 doesn't need explicit close)."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakS3Base
+
+        mock_client = MagicMock()
+        s3 = InfomaniakS3Base(mock_client)
+        s3.close()
+        # No assertions needed — just verify no exceptions
+
+    def test_validate_connection_success(self):
+        """validate_connection returns True when list_buckets succeeds."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakS3Base
+
+        mock_client = MagicMock()
+        mock_client.list_buckets.return_value = {"Buckets": []}
+        s3 = InfomaniakS3Base(mock_client)
+        assert s3.validate_connection() is True
+
+    def test_validate_connection_failure(self):
+        """validate_connection returns False on exception."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakS3Base
+
+        mock_client = MagicMock()
+        mock_client.list_buckets.side_effect = Exception("invalid creds")
+        s3 = InfomaniakS3Base(mock_client)
+        assert s3.validate_connection() is False
+
+    def test_default_constants(self):
+        """S3Base has correct default endpoint and region."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakS3Base
+
+        assert InfomaniakS3Base.DEFAULT_ENDPOINT == "https://s3.pub1.infomaniak.cloud/"
+        assert InfomaniakS3Base.DEFAULT_REGION == "us-east-1"
+
+    def test_exit_does_not_suppress_exception(self):
+        """__exit__ returns False — does not suppress exceptions."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakS3Base
+
+        mock_client = MagicMock()
+        s3 = InfomaniakS3Base(mock_client)
+        result = s3.__exit__(TypeError, TypeError("bad"), None)
+        assert result is False
+
+
+class TestInfomaniakRESTBaseClass:
+    """Tests for InfomaniakRESTBase protocol methods."""
+
+    def test_from_env_raises_not_implemented(self):
+        """Base from_env() raises NotImplementedError."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
+        with pytest.raises(NotImplementedError, match="must override from_env"):
+            InfomaniakRESTBase.from_env()
+
+    def test_close_handles_exception(self):
+        """close() logs warning when session.close() raises."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
+        client = InfomaniakRESTBase(token="t")
+        client._session = MagicMock()
+        client._session.close.side_effect = RuntimeError("close boom")
+        # Should not raise
+        client.close()
+
+    def test_close_no_session(self):
+        """close() is safe when _session doesn't exist."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
+        client = InfomaniakRESTBase.__new__(InfomaniakRESTBase)
+        # _session never set
+        client.close()  # Should not raise
+
+    def test_validate_connection_base_returns_true(self):
+        """Base validate_connection() returns True (stub)."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
+        client = InfomaniakRESTBase(token="t")
+        assert client.validate_connection() is True
+
+    def test_init_strips_trailing_slash(self):
+        """base_url trailing slash is stripped."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
+        client = InfomaniakRESTBase(token="t", base_url="https://api.test.com/")
+        assert client._base_url == "https://api.test.com"
+
+    def test_init_sets_headers(self):
+        """__init__ configures Bearer auth and JSON content type."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
+        client = InfomaniakRESTBase(token="my-token")
+        assert client._session.headers["Authorization"] == "Bearer my-token"
+        assert client._session.headers["Content-Type"] == "application/json"
+
+    def test_service_name_default(self):
+        """Default _service_name is 'rest'."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+        assert InfomaniakRESTBase._service_name == "rest"
+
+    def test_exit_does_not_suppress_exception(self):
+        """__exit__ returns False — does not suppress exceptions."""
+        from codomyrmex.cloud.infomaniak.base import InfomaniakRESTBase
+
+        client = InfomaniakRESTBase(token="t")
+        result = client.__exit__(ValueError, ValueError("test"), None)
+        assert result is False
+
+
+# =========================================================================
+# Test Auth Module
+# =========================================================================
+
+class TestAuthFunctions:
+    """Tests for create_openstack_connection and create_s3_client."""
+
+    def test_create_openstack_connection_import_error(self):
+        """create_openstack_connection raises ImportError when openstacksdk missing."""
+        import sys
+        from codomyrmex.cloud.infomaniak.auth import create_openstack_connection
+
+        # Temporarily hide openstack module
+        saved = sys.modules.get("openstack")
+        sys.modules["openstack"] = None
+        try:
+            with pytest.raises(ImportError, match="openstacksdk is required"):
+                create_openstack_connection(
+                    MagicMock()  # credentials arg doesn't matter — import fails first
+                )
+        finally:
+            if saved is not None:
+                sys.modules["openstack"] = saved
+            else:
+                sys.modules.pop("openstack", None)
+
+    def test_create_openstack_connection_auth_failure(self):
+        """create_openstack_connection raises InfomaniakAuthError on connection failure."""
+        import sys
+        from codomyrmex.cloud.infomaniak.auth import (
+            create_openstack_connection,
+            InfomaniakCredentials,
+            InfomaniakAuthError,
+        )
+
+        mock_openstack = MagicMock()
+        mock_openstack.connect.side_effect = Exception("auth failed")
+        sys.modules["openstack"] = mock_openstack
+        try:
+            creds = InfomaniakCredentials(
+                application_credential_id="id",
+                application_credential_secret="secret",
+            )
+            with pytest.raises(InfomaniakAuthError, match="Authentication failed"):
+                create_openstack_connection(creds)
+        finally:
+            sys.modules.pop("openstack", None)
+
+    def test_create_openstack_connection_success(self):
+        """create_openstack_connection returns Connection on success."""
+        import sys
+        from codomyrmex.cloud.infomaniak.auth import (
+            create_openstack_connection,
+            InfomaniakCredentials,
+        )
+
+        mock_conn = MagicMock()
+        mock_openstack = MagicMock()
+        mock_openstack.connect.return_value = mock_conn
+        sys.modules["openstack"] = mock_openstack
+        try:
+            creds = InfomaniakCredentials(
+                application_credential_id="id",
+                application_credential_secret="secret",
+            )
+            result = create_openstack_connection(creds)
+            assert result is mock_conn
+            mock_openstack.connect.assert_called_once()
+        finally:
+            sys.modules.pop("openstack", None)
+
+    def test_create_s3_client_import_error(self):
+        """create_s3_client raises ImportError when boto3 missing."""
+        import sys
+        from codomyrmex.cloud.infomaniak.auth import create_s3_client
+
+        saved = sys.modules.get("boto3")
+        sys.modules["boto3"] = None
+        try:
+            with pytest.raises(ImportError, match="boto3 is required"):
+                create_s3_client(MagicMock())
+        finally:
+            if saved is not None:
+                sys.modules["boto3"] = saved
+            else:
+                sys.modules.pop("boto3", None)
+
+    def test_create_s3_client_success(self):
+        """create_s3_client returns boto3 client on success."""
+        import sys
+        from codomyrmex.cloud.infomaniak.auth import (
+            create_s3_client,
+            InfomaniakS3Credentials,
+        )
+
+        mock_s3 = MagicMock()
+        mock_boto3 = MagicMock()
+        mock_boto3.client.return_value = mock_s3
+        sys.modules["boto3"] = mock_boto3
+        try:
+            creds = InfomaniakS3Credentials(
+                access_key="ak", secret_key="sk",
+            )
+            result = create_s3_client(creds)
+            assert result is mock_s3
+            mock_boto3.client.assert_called_once_with(
+                "s3",
+                endpoint_url=creds.endpoint_url,
+                aws_access_key_id="ak",
+                aws_secret_access_key="sk",
+                region_name=creds.region,
+            )
+        finally:
+            sys.modules.pop("boto3", None)
+
+    def test_credentials_to_openstack_auth(self):
+        """InfomaniakCredentials.to_openstack_auth returns correct dict."""
+        from codomyrmex.cloud.infomaniak.auth import InfomaniakCredentials
+
+        creds = InfomaniakCredentials(
+            application_credential_id="id-123",
+            application_credential_secret="secret-456",
+            auth_url="https://custom.url/identity/v3/",
+        )
+        auth = creds.to_openstack_auth()
+
+        assert auth["auth_url"] == "https://custom.url/identity/v3/"
+        assert auth["application_credential_id"] == "id-123"
+        assert auth["application_credential_secret"] == "secret-456"
+        assert len(auth) == 3
+
+    def test_credentials_metadata_field(self):
+        """InfomaniakCredentials supports metadata dict."""
+        from codomyrmex.cloud.infomaniak.auth import InfomaniakCredentials
+
+        creds = InfomaniakCredentials(
+            application_credential_id="id",
+            application_credential_secret="secret",
+            metadata={"env": "prod"},
+        )
+        assert creds.metadata == {"env": "prod"}
+
+    def test_credentials_default_metadata_empty(self):
+        """InfomaniakCredentials metadata defaults to empty dict."""
+        from codomyrmex.cloud.infomaniak.auth import InfomaniakCredentials
+
+        creds = InfomaniakCredentials(
+            application_credential_id="id",
+            application_credential_secret="secret",
+        )
+        assert creds.metadata == {}
+
+    def test_auth_constants(self):
+        """Auth module defines correct default constants."""
+        from codomyrmex.cloud.infomaniak.auth import (
+            DEFAULT_AUTH_URL,
+            DEFAULT_S3_ENDPOINT,
+            DEFAULT_S3_REGION,
+        )
+        assert DEFAULT_AUTH_URL == "https://api.pub1.infomaniak.cloud/identity/v3/"
+        assert DEFAULT_S3_ENDPOINT == "https://s3.pub1.infomaniak.cloud/"
+        assert DEFAULT_S3_REGION == "us-east-1"
+
+
+# =========================================================================
+# Test Module Exports (expanded)
+# =========================================================================
+
+class TestExpandedModuleExports:
+    """Comprehensive tests for __all__ exports and import paths."""
+
+    def test_classify_http_error_exported(self):
+        """classify_http_error is in __all__ and importable."""
+        from codomyrmex.cloud.infomaniak import classify_http_error
+        assert callable(classify_http_error)
+
+    def test_rest_base_exported(self):
+        """InfomaniakRESTBase is in __all__ and importable."""
+        from codomyrmex.cloud.infomaniak import InfomaniakRESTBase
+        assert InfomaniakRESTBase is not None
+
+    def test_all_exports_importable(self):
+        """Every item in __all__ can be imported and is not None."""
+        import codomyrmex.cloud.infomaniak as pkg
+
+        for name in pkg.__all__:
+            obj = getattr(pkg, name)
+            # Client classes may be None if optional deps missing,
+            # but base classes and exceptions should always exist
+            if name.startswith("Infomaniak") and name.endswith("Client"):
+                # Client may be None on systems without openstacksdk/boto3
+                continue
+            assert obj is not None, f"{name} is None but should be available"
+
+    def test_all_contains_classify_http_error(self):
+        """Verify __all__ includes classify_http_error."""
+        import codomyrmex.cloud.infomaniak as pkg
+        assert "classify_http_error" in pkg.__all__
+
+    def test_all_contains_rest_base(self):
+        """Verify __all__ includes InfomaniakRESTBase."""
+        import codomyrmex.cloud.infomaniak as pkg
+        assert "InfomaniakRESTBase" in pkg.__all__
+
+    def test_newsletter_importable_from_package(self):
+        """InfomaniakNewsletterClient importable from package root."""
+        from codomyrmex.cloud.infomaniak import InfomaniakNewsletterClient
+        assert InfomaniakNewsletterClient is not None
+
+    def test_newsletter_importable_from_submodule(self):
+        """InfomaniakNewsletterClient importable from newsletter submodule."""
+        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+        assert InfomaniakNewsletterClient is not None
+
+
+# =========================================================================
+# ADDITIONAL COMPUTE CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakComputeClientExpanded:
+    """Tests for InfomaniakComputeClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
+        mock_conn = MagicMock()
+        return InfomaniakComputeClient(connection=mock_conn), mock_conn
+
+    def test_get_image(self):
+        """get_image returns dict with image details."""
+        client, mc = self._make_client()
+        img = MagicMock(id="img-1", status="active",
+                        min_disk=10, min_ram=512, size=2048)
+        img.name = "Ubuntu"
+        mc.image.find_image.return_value = img
+        result = client.get_image("img-1")
+        mc.image.find_image.assert_called_once_with("img-1")
+        assert result["id"] == "img-1"
+        assert result["name"] == "Ubuntu"
+
+    def test_get_image_not_found(self):
+        """get_image returns None when not found."""
+        client, mc = self._make_client()
+        mc.image.find_image.return_value = None
+        assert client.get_image("nope") is None
+
+    def test_create_keypair(self):
+        """create_keypair returns dict with keypair details."""
+        client, mc = self._make_client()
+        kp = MagicMock(fingerprint="aa:bb", public_key="ssh-rsa AAA")
+        kp.name = "mykey"
+        kp.private_key = None
+        mc.compute.create_keypair.return_value = kp
+        result = client.create_keypair("mykey", "ssh-rsa AAA")
+        mc.compute.create_keypair.assert_called_once_with(name="mykey", public_key="ssh-rsa AAA")
+        assert result["name"] == "mykey"
+        assert result["fingerprint"] == "aa:bb"
+
+    def test_delete_keypair(self):
+        """delete_keypair calls SDK and returns True."""
+        client, mc = self._make_client()
+        assert client.delete_keypair("mykey") is True
+        mc.compute.delete_keypair.assert_called_once_with("mykey")
+
+    def test_list_availability_zones(self):
+        """list_availability_zones returns list of dicts."""
+        client, mc = self._make_client()
+        az = MagicMock()
+        az.name = "dc3-a"
+        az.state = {"available": True}
+        mc.compute.availability_zones.return_value = [az]
+        result = client.list_availability_zones()
+        assert len(result) == 1
+        assert result[0]["name"] == "dc3-a"
+
+    def test_terminate_instance(self):
+        """terminate_instance delegates to delete_instance with force=True."""
+        client, mc = self._make_client()
+        assert client.terminate_instance("inst-1") is True
+        mc.compute.delete_server.assert_called_once_with("inst-1", force=True)
+
+    def test_server_to_dict_flavor_none(self):
+        """_server_to_dict handles None flavor safely."""
+        client, _ = self._make_client()
+        srv = MagicMock(id="s1", name="test", status="ACTIVE",
+                        addresses={}, key_name=None, created_at=None,
+                        updated_at=None, security_groups=[])
+        srv.flavor = None
+        srv.image = None
+        result = client._server_to_dict(srv)
+        assert result["flavor"] is None
+        assert result["image"] is None
+
+
+# =========================================================================
+# ADDITIONAL VOLUME CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakVolumeClientExpanded:
+    """Tests for InfomaniakVolumeClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.block_storage import InfomaniakVolumeClient
+        mock_conn = MagicMock()
+        return InfomaniakVolumeClient(connection=mock_conn), mock_conn
+
+    def test_get_volume(self):
+        """get_volume returns dict via _volume_to_dict."""
+        client, mc = self._make_client()
+        vol = MagicMock(id="v1", name="data", status="available", size=50,
+                        volume_type="SSD", availability_zone="dc3-a",
+                        is_bootable=False, is_encrypted=False,
+                        attachments=[], created_at=None)
+        mc.block_storage.get_volume.return_value = vol
+        result = client.get_volume("v1")
+        assert result["id"] == "v1"
+        assert result["size"] == 50
+
+    def test_create_backup(self):
+        """create_backup returns dict with backup details."""
+        client, mc = self._make_client()
+        bk = MagicMock(id="bk1", name="mybk", status="creating", volume_id="v1")
+        mc.block_storage.create_backup.return_value = bk
+        result = client.create_backup("v1", "mybk")
+        assert result["id"] == "bk1"
+        assert result["volume_id"] == "v1"
+
+    def test_restore_backup(self):
+        """restore_backup returns dict with volume_id."""
+        client, mc = self._make_client()
+        res = MagicMock(volume_id="v-new")
+        mc.block_storage.restore_backup.return_value = res
+        result = client.restore_backup("bk1")
+        assert result["volume_id"] == "v-new"
+
+    def test_delete_backup(self):
+        """delete_backup returns True on success."""
+        client, mc = self._make_client()
+        assert client.delete_backup("bk1") is True
+        mc.block_storage.delete_backup.assert_called_once_with("bk1", force=False)
+
+    def test_create_snapshot(self):
+        """create_snapshot returns dict with snapshot details."""
+        client, mc = self._make_client()
+        snap = MagicMock(id="sn1", name="mysnap", status="creating", volume_id="v1")
+        mc.block_storage.create_snapshot.return_value = snap
+        result = client.create_snapshot("v1", "mysnap")
+        assert result["id"] == "sn1"
+
+    def test_delete_snapshot(self):
+        """delete_snapshot returns True on success."""
+        client, mc = self._make_client()
+        assert client.delete_snapshot("sn1") is True
+        mc.block_storage.delete_snapshot.assert_called_once_with("sn1", force=False)
+
+    def test_list_volumes_error(self):
+        """list_volumes returns [] on error."""
+        client, mc = self._make_client()
+        mc.block_storage.volumes.side_effect = Exception("fail")
+        assert client.list_volumes() == []
+
+
+# =========================================================================
+# ADDITIONAL NETWORK CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakNetworkClientExpanded:
+    """Tests for InfomaniakNetworkClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.network import InfomaniakNetworkClient
+        mock_conn = MagicMock()
+        return InfomaniakNetworkClient(connection=mock_conn), mock_conn
+
+    def test_create_subnet(self):
+        client, mc = self._make_client()
+        sn = MagicMock(id="sn1", name="sub1", cidr="10.0.0.0/24")
+        mc.network.create_subnet.return_value = sn
+        result = client.create_subnet("n1", "sub1", "10.0.0.0/24")
+        assert result["id"] == "sn1"
+
+    def test_create_router(self):
+        client, mc = self._make_client()
+        rt = MagicMock(id="rt1", name="router1")
+        mc.network.create_router.return_value = rt
+        result = client.create_router("router1")
+        assert result["id"] == "rt1"
+
+    def test_add_router_interface(self):
+        client, mc = self._make_client()
+        assert client.add_router_interface("rt1", "sn1") is True
+        mc.network.add_interface_to_router.assert_called_once_with("rt1", subnet_id="sn1")
+
+    def test_delete_router(self):
+        client, mc = self._make_client()
+        assert client.delete_router("rt1") is True
+        mc.network.delete_router.assert_called_once_with("rt1")
+
+    def test_create_security_group(self):
+        client, mc = self._make_client()
+        sg = MagicMock(id="sg1", name="web")
+        mc.network.create_security_group.return_value = sg
+        result = client.create_security_group("web")
+        assert result["id"] == "sg1"
+
+    def test_delete_security_group(self):
+        client, mc = self._make_client()
+        assert client.delete_security_group("sg1") is True
+
+    def test_allocate_floating_ip(self):
+        client, mc = self._make_client()
+        ext = MagicMock(id="ext1")
+        mc.network.find_network.return_value = ext
+        fip = MagicMock(id="fip1", floating_ip_address="1.2.3.4")
+        mc.network.create_ip.return_value = fip
+        result = client.allocate_floating_ip("external")
+        assert result["floating_ip_address"] == "1.2.3.4"
+
+    def test_associate_floating_ip(self):
+        client, mc = self._make_client()
+        assert client.associate_floating_ip("fip1", "port1") is True
+        mc.network.update_ip.assert_called_once_with("fip1", port_id="port1")
+
+    def test_create_loadbalancer(self):
+        client, mc = self._make_client()
+        lb = MagicMock(id="lb1", name="web-lb", vip_address="10.0.0.5")
+        mc.load_balancer.create_load_balancer.return_value = lb
+        result = client.create_loadbalancer("web-lb", "sn1")
+        assert result["id"] == "lb1"
+
+    def test_delete_loadbalancer(self):
+        client, mc = self._make_client()
+        assert client.delete_loadbalancer("lb1") is True
+
+    def test_list_subnets(self):
+        client, mc = self._make_client()
+        sn = MagicMock(id="sn1", name="s", network_id="n1", cidr="10.0.0.0/24",
+                       ip_version=4, gateway_ip="10.0.0.1", is_dhcp_enabled=True)
+        mc.network.subnets.return_value = [sn]
+        result = client.list_subnets()
+        assert len(result) == 1
+        assert result[0]["id"] == "sn1"
+
+    def test_get_subnet(self):
+        client, mc = self._make_client()
+        sn = MagicMock(id="sn1", name="s", network_id="n1", cidr="10.0.0.0/24",
+                       ip_version=4, gateway_ip="10.0.0.1")
+        mc.network.get_subnet.return_value = sn
+        result = client.get_subnet("sn1")
+        assert result["id"] == "sn1"
+
+    def test_delete_subnet(self):
+        client, mc = self._make_client()
+        assert client.delete_subnet("sn1") is True
+
+    def test_release_floating_ip(self):
+        client, mc = self._make_client()
+        assert client.release_floating_ip("fip1") is True
+        mc.network.delete_ip.assert_called_once_with("fip1")
+
+    def test_disassociate_floating_ip(self):
+        client, mc = self._make_client()
+        assert client.disassociate_floating_ip("fip1") is True
+        mc.network.update_ip.assert_called_once_with("fip1", port_id=None)
+
+    def test_list_listeners(self):
+        client, mc = self._make_client()
+        li = MagicMock(id="li1", name="http", protocol="HTTP", protocol_port=80)
+        mc.load_balancer.listeners.return_value = [li]
+        result = client.list_listeners()
+        assert len(result) == 1
+
+    def test_create_listener(self):
+        client, mc = self._make_client()
+        li = MagicMock(id="li1", name="http")
+        mc.load_balancer.create_listener.return_value = li
+        result = client.create_listener("lb1", "http", "HTTP", 80)
+        assert result["id"] == "li1"
+
+    def test_delete_listener(self):
+        client, mc = self._make_client()
+        assert client.delete_listener("li1") is True
+
+    def test_list_pools(self):
+        client, mc = self._make_client()
+        p = MagicMock(id="p1", name="pool1", protocol="HTTP", lb_algorithm="ROUND_ROBIN")
+        mc.load_balancer.pools.return_value = [p]
+        result = client.list_pools()
+        assert len(result) == 1
+
+    def test_create_pool(self):
+        client, mc = self._make_client()
+        p = MagicMock(id="p1", name="pool1")
+        mc.load_balancer.create_pool.return_value = p
+        result = client.create_pool("pool1", "HTTP", "ROUND_ROBIN")
+        assert result["id"] == "p1"
+
+    def test_delete_pool(self):
+        client, mc = self._make_client()
+        assert client.delete_pool("p1") is True
+
+    def test_list_pool_members(self):
+        client, mc = self._make_client()
+        m = MagicMock(id="m1", name="srv1", address="10.0.0.2",
+                      protocol_port=80, weight=1)
+        mc.load_balancer.members.return_value = [m]
+        result = client.list_pool_members("p1")
+        assert len(result) == 1
+
+    def test_add_pool_member(self):
+        client, mc = self._make_client()
+        m = MagicMock(id="m1")
+        mc.load_balancer.create_member.return_value = m
+        result = client.add_pool_member("p1", "10.0.0.2", 80)
+        assert result["id"] == "m1"
+
+    def test_remove_pool_member(self):
+        client, mc = self._make_client()
+        assert client.remove_pool_member("p1", "m1") is True
+        mc.load_balancer.delete_member.assert_called_once_with("m1", "p1")
+
+    def test_list_health_monitors(self):
+        client, mc = self._make_client()
+        hm = MagicMock(id="hm1", name="check", type="HTTP",
+                       delay=5, timeout=3, max_retries=3)
+        mc.load_balancer.health_monitors.return_value = [hm]
+        result = client.list_health_monitors()
+        assert len(result) == 1
+
+    def test_create_health_monitor(self):
+        """Uses renamed monitor_type parameter."""
+        client, mc = self._make_client()
+        hm = MagicMock(id="hm1")
+        mc.load_balancer.create_health_monitor.return_value = hm
+        result = client.create_health_monitor("p1", monitor_type="HTTP", delay=5, timeout=3)
+        assert result["id"] == "hm1"
+        assert result["type"] == "HTTP"
+
+    def test_delete_health_monitor(self):
+        client, mc = self._make_client()
+        assert client.delete_health_monitor("hm1") is True
+
+    def test_remove_router_interface(self):
+        client, mc = self._make_client()
+        assert client.remove_router_interface("rt1", "sn1") is True
+        mc.network.remove_interface_from_router.assert_called_once_with("rt1", subnet_id="sn1")
+
+    def test_remove_router_interface_error(self):
+        client, mc = self._make_client()
+        mc.network.remove_interface_from_router.side_effect = Exception("fail")
+        assert client.remove_router_interface("rt1", "sn1") is False
+
+    def test_list_networks_error(self):
+        """list_networks returns [] on error."""
+        client, mc = self._make_client()
+        mc.network.networks.side_effect = Exception("fail")
+        assert client.list_networks() == []
+
+    # --- Error-path tests for get/create/delete methods ---
+
+    def test_create_network_error(self):
+        client, mc = self._make_client()
+        mc.network.create_network.side_effect = Exception("fail")
+        assert client.create_network("test") is None
+
+    def test_delete_network_error(self):
+        client, mc = self._make_client()
+        mc.network.delete_network.side_effect = Exception("fail")
+        assert client.delete_network("n1") is False
+
+    def test_create_subnet_error(self):
+        client, mc = self._make_client()
+        mc.network.create_subnet.side_effect = Exception("fail")
+        assert client.create_subnet("n1", "s1", "10.0.0.0/24") is None
+
+    def test_get_subnet_error(self):
+        client, mc = self._make_client()
+        mc.network.get_subnet.side_effect = Exception("fail")
+        assert client.get_subnet("sn1") is None
+
+    def test_delete_subnet_error(self):
+        client, mc = self._make_client()
+        mc.network.delete_subnet.side_effect = Exception("fail")
+        assert client.delete_subnet("sn1") is False
+
+    def test_create_router_error(self):
+        client, mc = self._make_client()
+        mc.network.create_router.side_effect = Exception("fail")
+        assert client.create_router("r1") is None
+
+    def test_add_router_interface_error(self):
+        client, mc = self._make_client()
+        mc.network.add_interface_to_router.side_effect = Exception("fail")
+        assert client.add_router_interface("rt1", "sn1") is False
+
+    def test_delete_router_error(self):
+        client, mc = self._make_client()
+        mc.network.delete_router.side_effect = Exception("fail")
+        assert client.delete_router("rt1") is False
+
+    def test_create_security_group_error(self):
+        client, mc = self._make_client()
+        mc.network.create_security_group.side_effect = Exception("fail")
+        assert client.create_security_group("sg") is None
+
+    def test_delete_security_group_error(self):
+        client, mc = self._make_client()
+        mc.network.delete_security_group.side_effect = Exception("fail")
+        assert client.delete_security_group("sg1") is False
+
+    def test_allocate_floating_ip_error(self):
+        client, mc = self._make_client()
+        mc.network.find_network.side_effect = Exception("fail")
+        assert client.allocate_floating_ip("ext-net") is None
+
+    def test_create_loadbalancer_error(self):
+        client, mc = self._make_client()
+        mc.load_balancer.create_load_balancer.side_effect = Exception("fail")
+        assert client.create_loadbalancer("lb", "sn1") is None
+
+    def test_delete_loadbalancer_error(self):
+        client, mc = self._make_client()
+        mc.load_balancer.delete_load_balancer.side_effect = Exception("fail")
+        assert client.delete_loadbalancer("lb1") is False
+
+    def test_create_listener_error(self):
+        client, mc = self._make_client()
+        mc.load_balancer.create_listener.side_effect = Exception("fail")
+        assert client.create_listener("lb1", "http", "HTTP", 80) is None
+
+    def test_delete_listener_error(self):
+        client, mc = self._make_client()
+        mc.load_balancer.delete_listener.side_effect = Exception("fail")
+        assert client.delete_listener("li1") is False
+
+    def test_add_security_group_rule_error(self):
+        client, mc = self._make_client()
+        mc.network.create_security_group_rule.side_effect = Exception("fail")
+        assert client.add_security_group_rule("sg1") is None
+
+
+# =========================================================================
+# ADDITIONAL OBJECT STORAGE (SWIFT) CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakSwiftClientExpanded:
+    """Tests for InfomaniakObjectStorageClient (Swift) untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakObjectStorageClient
+        mock_conn = MagicMock()
+        return InfomaniakObjectStorageClient(connection=mock_conn), mock_conn
+
+    def test_delete_container(self):
+        client, mc = self._make_client()
+        assert client.delete_container("mybucket") is True
+        mc.object_store.delete_container.assert_called_once_with("mybucket")
+
+    def test_get_container_metadata(self):
+        client, mc = self._make_client()
+        meta = MagicMock()
+        meta.metadata = {"x-count": "5"}
+        mc.object_store.get_container_metadata.return_value = meta
+        result = client.get_container_metadata("mybucket")
+        assert isinstance(result, dict)
+
+    def test_list_objects(self):
+        client, mc = self._make_client()
+        obj = MagicMock()
+        obj.name = "file.txt"
+        mc.object_store.objects.return_value = [obj]
+        result = client.list_objects("mybucket")
+        assert result == ["file.txt"]
+
+    def test_list_objects_with_prefix(self):
+        client, mc = self._make_client()
+        mc.object_store.objects.return_value = []
+        client.list_objects("mybucket", prefix="logs/")
+        mc.object_store.objects.assert_called_once_with("mybucket", prefix="logs/")
+
+    def test_get_object_metadata(self):
+        client, mc = self._make_client()
+        obj = MagicMock(content_length=1024,
+                        content_type="text/plain", etag="abc",
+                        last_modified_at=None)
+        obj.name = "file.txt"
+        mc.object_store.get_object_metadata.return_value = obj
+        result = client.get_object_metadata("mybucket", "file.txt")
+        assert result["name"] == "file.txt"
+        assert result["content_length"] == 1024
+
+    def test_set_container_read_acl(self):
+        client, mc = self._make_client()
+        assert client.set_container_read_acl("mybucket", ".r:*") is True
+        mc.object_store.set_container_metadata.assert_called_once()
+
+    def test_set_container_write_acl(self):
+        client, mc = self._make_client()
+        assert client.set_container_write_acl("mybucket", "user:admin") is True
+
+    def test_list_containers_error(self):
+        client, mc = self._make_client()
+        mc.object_store.containers.side_effect = Exception("fail")
+        assert client.list_containers() == []
+
+
+# =========================================================================
+# ADDITIONAL S3 CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakS3ClientExpanded:
+    """Tests for InfomaniakS3Client untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakS3Client
+        mock_s3 = MagicMock()
+        return InfomaniakS3Client(client=mock_s3), mock_s3
+
+    def test_create_bucket(self):
+        client, s3 = self._make_client()
+        assert client.create_bucket("mybucket") is True
+        s3.create_bucket.assert_called_once_with(Bucket="mybucket")
+
+    def test_delete_bucket(self):
+        client, s3 = self._make_client()
+        assert client.delete_bucket("mybucket") is True
+        s3.delete_bucket.assert_called_once_with(Bucket="mybucket")
+
+    def test_upload_file(self):
+        client, s3 = self._make_client()
+        assert client.upload_file("bkt", "key.txt", "/tmp/f.txt") is True
+        s3.upload_file.assert_called_once_with("/tmp/f.txt", "bkt", "key.txt", ExtraArgs=None)
+
+    def test_download_file(self):
+        client, s3 = self._make_client()
+        assert client.download_file("bkt", "key.txt", "/tmp/out.txt") is True
+        s3.download_file.assert_called_once_with("bkt", "key.txt", "/tmp/out.txt")
+
+    def test_delete_file_delegates(self):
+        client, s3 = self._make_client()
+        assert client.delete_file("bkt", "key.txt") is True
+        s3.delete_object.assert_called_once_with(Bucket="bkt", Key="key.txt")
+
+    def test_get_metadata(self):
+        client, s3 = self._make_client()
+        s3.head_object.return_value = {
+            "ContentLength": 100, "ContentType": "text/plain",
+            "ETag": '"abc"', "LastModified": "2026-01-01",
+            "Metadata": {}
+        }
+        result = client.get_metadata("bkt", "key.txt")
+        assert result["content_length"] == 100
+        assert result["content_type"] == "text/plain"
+
+    def test_copy_object(self):
+        client, s3 = self._make_client()
+        assert client.copy_object("src", "sk", "dst", "dk") is True
+        s3.copy_object.assert_called_once_with(
+            Bucket="dst", Key="dk",
+            CopySource={"Bucket": "src", "Key": "sk"}
+        )
+
+    def test_list_objects_paginated(self):
+        client, s3 = self._make_client()
+        paginator = MagicMock()
+        paginator.paginate.return_value = [
+            {"Contents": [{"Key": "a.txt"}, {"Key": "b.txt"}]}
+        ]
+        s3.get_paginator.return_value = paginator
+        result = client.list_objects_paginated("bkt")
+        assert result == ["a.txt", "b.txt"]
+
+    def test_delete_objects_batch(self):
+        client, s3 = self._make_client()
+        s3.delete_objects.return_value = {
+            "Deleted": [{"Key": "a.txt"}, {"Key": "b.txt"}],
+            "Errors": []
+        }
+        result = client.delete_objects_batch("bkt", ["a.txt", "b.txt"])
+        assert result["deleted"] == 2
+        assert result["errors"] == []
+
+    def test_enable_versioning(self):
+        client, s3 = self._make_client()
+        assert client.enable_versioning("bkt") is True
+        s3.put_bucket_versioning.assert_called_once()
+
+    def test_get_versioning(self):
+        client, s3 = self._make_client()
+        s3.get_bucket_versioning.return_value = {"Status": "Enabled"}
+        assert client.get_versioning("bkt") == "Enabled"
+
+    def test_get_bucket_policy(self):
+        client, s3 = self._make_client()
+        s3.get_bucket_policy.return_value = {"Policy": '{"Version":"2012"}'}
+        assert client.get_bucket_policy("bkt") == '{"Version":"2012"}'
+
+    def test_put_bucket_policy(self):
+        client, s3 = self._make_client()
+        assert client.put_bucket_policy("bkt", '{"Version":"2012"}') is True
+        s3.put_bucket_policy.assert_called_once()
+
+    def test_list_buckets_error(self):
+        client, s3 = self._make_client()
+        s3.list_buckets.side_effect = Exception("fail")
+        assert client.list_buckets() == []
+
+
+# =========================================================================
+# ADDITIONAL IDENTITY CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakIdentityClientExpanded:
+    """Tests for InfomaniakIdentityClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.identity import InfomaniakIdentityClient
+        mock_conn = MagicMock()
+        mock_conn.current_user_id = "uid-1"
+        mock_conn.current_project_id = "proj-1"
+        return InfomaniakIdentityClient(connection=mock_conn), mock_conn
+
+    def test_get_user(self):
+        client, mc = self._make_client()
+        u = MagicMock(id="u1", domain_id="d1")
+        u.name = "alice"
+        mc.identity.get_user.return_value = u
+        result = client.get_user("u1")
+        assert result["id"] == "u1"
+        assert result["name"] == "alice"
+
+    def test_get_current_project(self):
+        client, mc = self._make_client()
+        p = MagicMock(id="proj-1", name="default", description="desc")
+        mc.identity.get_project.return_value = p
+        result = client.get_current_project()
+        assert result["id"] == "proj-1"
+
+    def test_create_application_credential(self):
+        client, mc = self._make_client()
+        cred = MagicMock(id="ac1", name="mycred", secret="s3cret", expires_at=None)
+        mc.identity.create_application_credential.return_value = cred
+        result = client.create_application_credential("mycred")
+        assert result["id"] == "ac1"
+        assert result["secret"] == "s3cret"
+
+    def test_get_application_credential(self):
+        client, mc = self._make_client()
+        cred = MagicMock(id="ac1", name="mycred", expires_at=None)
+        mc.identity.get_application_credential.return_value = cred
+        result = client.get_application_credential("ac1")
+        assert result["id"] == "ac1"
+
+    def test_delete_application_credential(self):
+        client, mc = self._make_client()
+        assert client.delete_application_credential("ac1") is True
+
+    def test_list_roles(self):
+        client, mc = self._make_client()
+        r = MagicMock(id="r1", description="Full access")
+        r.name = "admin"
+        mc.identity.roles.return_value = [r]
+        result = client.list_roles()
+        assert len(result) == 1
+        assert result[0]["name"] == "admin"
+
+    def test_list_user_roles(self):
+        client, mc = self._make_client()
+        ra = MagicMock()
+        ra.role = {"id": "r1"}
+        role = MagicMock(id="r1")
+        role.name = "member"
+        mc.identity.role_assignments.return_value = [ra]
+        mc.identity.get_role.return_value = role
+        result = client.list_user_roles()
+        assert len(result) == 1
+        assert result[0]["name"] == "member"
+
+    def test_list_ec2_credentials(self):
+        client, mc = self._make_client()
+        cred = MagicMock(id="ec1", access="AK123", project_id="proj-1", type="ec2")
+        mc.identity.credentials.return_value = [cred]
+        result = client.list_ec2_credentials()
+        assert len(result) == 1
+        assert result[0]["access"] == "AK123"
+
+    def test_list_projects_error(self):
+        client, mc = self._make_client()
+        mc.identity.projects.side_effect = Exception("fail")
+        assert client.list_projects() == []
+
+
+# =========================================================================
+# ADDITIONAL DNS CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakDNSClientExpanded:
+    """Tests for InfomaniakDNSClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.dns import InfomaniakDNSClient
+        mock_conn = MagicMock()
+        return InfomaniakDNSClient(connection=mock_conn), mock_conn
+
+    def test_get_zone(self):
+        client, mc = self._make_client()
+        z = MagicMock(id="z1", email="a@b.com",
+                      status="ACTIVE", ttl=3600)
+        z.name = "example.com."
+        mc.dns.find_zone.return_value = z
+        result = client.get_zone("z1")
+        assert result["id"] == "z1"
+        assert result["name"] == "example.com."
+
+    def test_update_zone(self):
+        client, mc = self._make_client()
+        assert client.update_zone("z1", email="new@b.com") is True
+        mc.dns.update_zone.assert_called_once_with("z1", email="new@b.com")
+
+    def test_get_record(self):
+        client, mc = self._make_client()
+        r = MagicMock(id="r1", name="www.example.com.", type="A",
+                      records=["1.2.3.4"], ttl=300)
+        mc.dns.get_recordset.return_value = r
+        result = client.get_record("z1", "r1")
+        assert result["id"] == "r1"
+        assert result["type"] == "A"
+
+    def test_update_record(self):
+        client, mc = self._make_client()
+        assert client.update_record("z1", "r1", records=["5.6.7.8"]) is True
+
+    def test_list_ptr_records(self):
+        client, mc = self._make_client()
+        ptr = MagicMock(id="ptr1", ptrdname="host.example.com.",
+                        address="1.2.3.4", status="ACTIVE")
+        mc.dns.ptr_records.return_value = [ptr]
+        result = client.list_ptr_records()
+        assert len(result) == 1
+        assert result[0]["ptrdname"] == "host.example.com."
+
+    def test_set_reverse_dns(self):
+        client, mc = self._make_client()
+        fip = MagicMock(id="fip1")
+        mc.network.find_ip.return_value = fip
+        ptr = MagicMock(id="ptr1")
+        mc.dns.create_ptr_record.return_value = ptr
+        result = client.set_reverse_dns("1.2.3.4", "host.example.com")
+        assert result["address"] == "1.2.3.4"
+        assert result["ptrdname"] == "host.example.com."
+
+    def test_get_reverse_dns(self):
+        client, mc = self._make_client()
+        fip = MagicMock(id="fip1")
+        mc.network.find_ip.return_value = fip
+        ptr = MagicMock(id="ptr1", ptrdname="host.example.com.", ttl=3600)
+        mc.dns.get_ptr_record.return_value = ptr
+        result = client.get_reverse_dns("1.2.3.4")
+        assert result["ptrdname"] == "host.example.com."
+
+    def test_delete_reverse_dns(self):
+        client, mc = self._make_client()
+        fip = MagicMock(id="fip1")
+        mc.network.find_ip.return_value = fip
+        assert client.delete_reverse_dns("1.2.3.4") is True
+        mc.dns.delete_ptr_record.assert_called_once_with("fip1")
+
+    def test_list_zones_error(self):
+        client, mc = self._make_client()
+        mc.dns.zones.side_effect = Exception("fail")
+        assert client.list_zones() == []
+
+
+# =========================================================================
+# ADDITIONAL HEAT (ORCHESTRATION) CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakHeatClientExpanded:
+    """Tests for InfomaniakHeatClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.orchestration import InfomaniakHeatClient
+        mock_conn = MagicMock()
+        return InfomaniakHeatClient(connection=mock_conn), mock_conn
+
+    def test_update_stack(self):
+        client, mc = self._make_client()
+        assert client.update_stack("stk1", template="heat: {}") is True
+        mc.orchestration.update_stack.assert_called_once()
+
+    def test_suspend_stack(self):
+        client, mc = self._make_client()
+        assert client.suspend_stack("stk1") is True
+        mc.orchestration.suspend_stack.assert_called_once_with("stk1")
+
+    def test_resume_stack(self):
+        client, mc = self._make_client()
+        assert client.resume_stack("stk1") is True
+        mc.orchestration.resume_stack.assert_called_once_with("stk1")
+
+    def test_get_stack_resource(self):
+        client, mc = self._make_client()
+        res = MagicMock(name="srv", resource_type="OS::Nova::Server",
+                        status="CREATE_COMPLETE", physical_resource_id="inst1",
+                        attributes={"ip": "1.2.3.4"})
+        mc.orchestration.get_resource.return_value = res
+        result = client.get_stack_resource("stk1", "srv")
+        assert result["resource_type"] == "OS::Nova::Server"
+
+    def test_list_stack_events(self):
+        client, mc = self._make_client()
+        ev = MagicMock(id="ev1", resource_name="srv",
+                       resource_status="CREATE_COMPLETE",
+                       resource_status_reason="OK", event_time=None)
+        mc.orchestration.events.return_value = [ev]
+        result = client.list_stack_events("stk1")
+        assert len(result) == 1
+        assert result[0]["resource_name"] == "srv"
+
+    def test_get_stack_template(self):
+        client, mc = self._make_client()
+        tpl = "heat_template_version: 2021-04-16"
+        mc.orchestration.get_stack_template.return_value = tpl
+        assert client.get_stack_template("stk1") == tpl
+
+    def test_get_stack_outputs(self):
+        client, mc = self._make_client()
+        stk = MagicMock()
+        stk.outputs = [
+            {"output_key": "server_ip", "output_value": "10.0.0.5"}
+        ]
+        mc.orchestration.find_stack.return_value = stk
+        result = client.get_stack_outputs("stk1")
+        assert result["server_ip"] == "10.0.0.5"
+
+    def test_list_stacks_error(self):
+        client, mc = self._make_client()
+        mc.orchestration.stacks.side_effect = Exception("fail")
+        assert client.list_stacks() == []
+
+
+# =========================================================================
+# ADDITIONAL METERING CLIENT TESTS
+# =========================================================================
+
+class TestInfomaniakMeteringClientExpanded:
+    """Tests for InfomaniakMeteringClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.metering import InfomaniakMeteringClient
+        mock_conn = MagicMock()
+        mock_conn.current_project_id = "proj-1"
+        return InfomaniakMeteringClient(connection=mock_conn), mock_conn
+
+    def test_get_object_storage_usage(self):
+        client, mc = self._make_client()
+        c = MagicMock(count=100, bytes=2048000)
+        mc.object_store.containers.return_value = [c]
+        result = client.get_object_storage_usage()
+        assert result["container_count"] == 1
+        assert result["object_count"] == 100
+        assert result["total_bytes"] == 2048000
+
+    def test_list_resources_with_usage(self):
+        client, mc = self._make_client()
+        srv = MagicMock(id="s1", name="web", status="ACTIVE", created_at=None)
+        vol = MagicMock(id="v1", name="data", status="in-use", size=50)
+        fip = MagicMock(id="f1", floating_ip_address="1.2.3.4", status="ACTIVE", port_id="p1")
+        mc.compute.servers.return_value = [srv]
+        mc.block_storage.volumes.return_value = [vol]
+        mc.network.ips.return_value = [fip]
+        result = client.list_resources_with_usage()
+        assert len(result) == 3
+        types = [r["type"] for r in result]
+        assert "compute.instance" in types
+        assert "storage.volume" in types
+        assert "network.floating_ip" in types
+
+    def test_get_network_quotas(self):
+        client, mc = self._make_client()
+        q = MagicMock(networks=10, subnets=20, routers=5,
+                      floatingips=3, security_groups=10, security_group_rules=50)
+        mc.network.get_quota.return_value = q
+        result = client.get_network_quotas()
+        assert result["networks"] == 10
+        assert result["floating_ips"] == 3
+
+    def test_get_storage_quotas(self):
+        client, mc = self._make_client()
+        q = MagicMock(volumes=20, gigabytes=1000, snapshots=10, backups=5)
+        mc.block_storage.get_quota_set.return_value = q
+        result = client.get_storage_quotas()
+        assert result["volumes"] == 20
+        assert result["gigabytes"] == 1000
+
+    def test_get_compute_usage_error(self):
+        client, mc = self._make_client()
+        mc.compute.servers.side_effect = Exception("fail")
+        assert client.get_compute_usage() == {}
+
+
+# =========================================================================
+# FACTORY METHOD TESTS FOR REMAINING CLIENTS
+# =========================================================================
+
+class TestClientFactoryMethodsExpanded:
+    """Factory method tests for clients not previously tested."""
+
+    @patch("codomyrmex.cloud.infomaniak.auth.create_openstack_connection")
+    def test_volume_from_credentials(self, mock_create):
+        from codomyrmex.cloud.infomaniak.block_storage import InfomaniakVolumeClient
+        mock_create.return_value = MagicMock()
+        client = InfomaniakVolumeClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakVolumeClient)
+
+    @patch("codomyrmex.cloud.infomaniak.auth.create_openstack_connection")
+    def test_network_from_credentials(self, mock_create):
+        from codomyrmex.cloud.infomaniak.network import InfomaniakNetworkClient
+        mock_create.return_value = MagicMock()
+        client = InfomaniakNetworkClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakNetworkClient)
+
+    @patch("codomyrmex.cloud.infomaniak.auth.create_openstack_connection")
+    def test_dns_from_credentials(self, mock_create):
+        from codomyrmex.cloud.infomaniak.dns import InfomaniakDNSClient
+        mock_create.return_value = MagicMock()
+        client = InfomaniakDNSClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakDNSClient)
+
+    @patch("codomyrmex.cloud.infomaniak.auth.create_openstack_connection")
+    def test_heat_from_credentials(self, mock_create):
+        from codomyrmex.cloud.infomaniak.orchestration import InfomaniakHeatClient
+        mock_create.return_value = MagicMock()
+        client = InfomaniakHeatClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakHeatClient)
+
+    @patch("codomyrmex.cloud.infomaniak.auth.create_openstack_connection")
+    def test_metering_from_credentials(self, mock_create):
+        from codomyrmex.cloud.infomaniak.metering import InfomaniakMeteringClient
+        mock_create.return_value = MagicMock()
+        client = InfomaniakMeteringClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakMeteringClient)
+
+
+# =========================================================================
+# NEWSLETTER VALIDATION TESTS
+# =========================================================================
+
+class TestNewsletterValidationExpanded:
+    """Tests for newsletter input validation and edge cases."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+        client = InfomaniakNewsletterClient(
+            token="test-token", newsletter_id="nl-1",
+            base_url="https://api.infomaniak.com"
+        )
+        client._session = MagicMock()
+        return client
+
+    def test_manage_contact_invalid_action(self):
+        """manage_contact raises ValueError for invalid action."""
+        client = self._make_client()
+        with pytest.raises(ValueError, match="Invalid action"):
+            client.manage_contact("list-1", "contact-1", "delete")
+
+    def test_manage_contact_subscribe(self):
+        """manage_contact accepts 'subscribe' action."""
+        client = self._make_client()
+        resp = MagicMock(status_code=200)
+        resp.json.return_value = {"data": {"ok": True}}
+        resp.raise_for_status = MagicMock()
+        client._session.post.return_value = resp
+        assert client.manage_contact("list-1", "c1", "subscribe") is True
+
+    def test_manage_contact_unsubscribe(self):
+        """manage_contact accepts 'unsubscribe' action."""
+        client = self._make_client()
+        resp = MagicMock(status_code=200)
+        resp.json.return_value = {"data": {"ok": True}}
+        resp.raise_for_status = MagicMock()
+        client._session.post.return_value = resp
+        assert client.manage_contact("list-1", "c1", "unsubscribe") is True
+
+    def test_list_campaigns_dict_with_items_key(self):
+        """list_campaigns extracts from dict with 'items' key."""
+        client = self._make_client()
+        resp = MagicMock(status_code=200)
+        resp.json.return_value = {"data": {"items": [{"id": "c1"}], "total": 1}}
+        resp.raise_for_status = MagicMock()
+        client._session.get.return_value = resp
+        result = client.list_campaigns()
+        assert result == [{"id": "c1"}]
+
+    def test_list_mailing_lists_dict_with_items_key(self):
+        """list_mailing_lists extracts from dict with 'items' key."""
+        client = self._make_client()
+        resp = MagicMock(status_code=200)
+        resp.json.return_value = {"data": {"items": [{"id": "ml1"}], "total": 1}}
+        resp.raise_for_status = MagicMock()
+        client._session.get.return_value = resp
+        result = client.list_mailing_lists()
+        assert result == [{"id": "ml1"}]

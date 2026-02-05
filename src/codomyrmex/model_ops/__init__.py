@@ -65,16 +65,18 @@ class Dataset:
     def validate(self) -> bool:
         """
         Validate the dataset.
-        
+
         Returns:
-            True if all examples have required keys
+            True if all examples have required keys.
+            Accepts both prompt/completion and messages formats.
         """
         if not self.data:
             return True
-        
-        required_keys = {"prompt", "completion"}
+
         for example in self.data:
-            if not required_keys.issubset(example.keys()):
+            has_prompt_completion = "prompt" in example and "completion" in example
+            has_messages = "messages" in example
+            if not (has_prompt_completion or has_messages):
                 return False
         return True
     
@@ -186,23 +188,23 @@ class FineTuningJob:
     def run(self) -> str:
         """
         Start the fine-tuning job.
-        
+
         Returns:
             Job ID
         """
         self.job_id = f"ft-{uuid.uuid4().hex[:8]}"
         self.status = "running"
-        # Simulate quick completion
-        self.status = "succeeded"
         return self.job_id
-    
+
     def refresh_status(self) -> str:
         """
-        Get current job status.
-        
+        Get current job status. Transitions running jobs to completed.
+
         Returns:
             Status string
         """
+        if self.status == "running":
+            self.status = "completed"
         return self.status
 
 
@@ -246,10 +248,10 @@ class Evaluator:
 
 # Convenience metric functions
 def exact_match_metric(predictions: List[str], references: List[str]) -> float:
-    """Calculate exact match ratio."""
+    """Calculate exact match ratio (strips whitespace before comparison)."""
     if not predictions:
         return 0.0
-    matches = sum(1 for p, r in zip(predictions, references) if p == r)
+    matches = sum(1 for p, r in zip(predictions, references) if p.strip() == r.strip())
     return matches / len(predictions)
 
 

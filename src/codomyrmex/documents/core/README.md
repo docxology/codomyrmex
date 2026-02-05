@@ -1,40 +1,23 @@
-# Core
+# core
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `core` module provides core functionality for Core.
+Core document operations.. This submodule is scaffolded for future implementation; no exports are currently defined.
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    core --> Utils[codomyrmex.utils]
-    core --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph core
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.core import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `__init__.py` - Module entry point (scaffolded, no exports yet)
+- `document_parser.py` - Document Parser
+- `document_reader.py` - Document Reader
+- `document_validator.py` - Document Validator
+- `document_writer.py` - Document Writer
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [documents](../README.md)
+- **Project Root**: ../../../README.md

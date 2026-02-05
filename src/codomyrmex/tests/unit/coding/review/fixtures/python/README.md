@@ -1,40 +1,22 @@
-# Python
+# python
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `python` module provides core functionality for Python.
+The `python` module provides core functionality for Python..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    python --> Utils[codomyrmex.utils]
-    python --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph python
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.python import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `clone_example.py` - Clone Example
+- `complex_function.py` - Complex Function
+- `security_issues.py` - Security Issues
+- `simple_function.py` - Simple Function
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [fixtures](../README.md)
+- **Project Root**: ../../../../../../../README.md

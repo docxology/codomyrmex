@@ -49,10 +49,11 @@ from .exceptions import (
     InfomaniakConnectionError,
     InfomaniakTimeoutError,
     classify_openstack_error,
+    classify_http_error,
 )
 
 # Base classes
-from .base import InfomaniakOpenStackBase, InfomaniakS3Base
+from .base import InfomaniakOpenStackBase, InfomaniakS3Base, InfomaniakRESTBase
 
 # Core authentication
 from .auth import (
@@ -120,9 +121,11 @@ __all__ = [
     "InfomaniakConnectionError",
     "InfomaniakTimeoutError",
     "classify_openstack_error",
+    "classify_http_error",
     # Base classes
     "InfomaniakOpenStackBase",
     "InfomaniakS3Base",
+    "InfomaniakRESTBase",
     # Authentication
     "InfomaniakCredentials",
     "InfomaniakS3Credentials",

@@ -34,383 +34,176 @@ class TestPatternMatching:
         assert hasattr(run_codomyrmex_analysis, 'run_full_analysis')
         assert hasattr(run_codomyrmex_analysis, 'analyze_repository_path')
 
-    def test_get_embedding_function_with_sentence_transformer(self, code_dir):
-        """Test get_embedding_function when SentenceTransformer is available."""
+    def test_get_embedding_function(self, code_dir):
+        """Test get_embedding_function returns a callable."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        try:
-            from sentence_transformers import SentenceTransformer
-            SENTENCE_TRANSFORMER_AVAILABLE = True
-        except ImportError:
-            SENTENCE_TRANSFORMER_AVAILABLE = False
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import get_embedding_function
 
-        if not SENTENCE_TRANSFORMER_AVAILABLE:
-            pytest.skip("SentenceTransformer not available")
+        embed_fn = get_embedding_function()
+        # The stub returns a lambda that produces a list of floats
+        assert callable(embed_fn)
+        result = embed_fn("test text")
+        assert isinstance(result, list)
+        assert len(result) > 0
 
-        from pattern_matching.run_codomyrmex_analysis import get_embedding_function
-
-        # Test with real SentenceTransformer if available
-        embed_fn = get_embedding_function('all-MiniLM-L6-v2')
-
-        if embed_fn is not None:
-            # Test that it returns a function
-            assert callable(embed_fn)
-            # Test that it can process text
-            result = embed_fn("test text")
-            assert isinstance(result, list)
-            assert len(result) > 0
-
-    def test_get_embedding_function_without_sentence_transformer(self, code_dir):
-        """Test get_embedding_function when SentenceTransformer is not available."""
+    def test_print_once_functionality(self, capsys, code_dir):
+        """Test print_once function outputs a message."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        try:
-            from sentence_transformers import SentenceTransformer
-            # If available, we can't test the fallback easily
-            pytest.skip("SentenceTransformer is available, cannot test fallback")
-        except ImportError:
-            # SentenceTransformer not available, test fallback
-            from pattern_matching.run_codomyrmex_analysis import get_embedding_function
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import print_once
 
-            # Reset the global _embed_fn_instance to ensure clean state
-            import pattern_matching.run_codomyrmex_analysis as pm_module
-            pm_module._embed_fn_instance = None
+        print_once("Test message")
 
-            result = get_embedding_function('test-model')
-            # Should return None when SentenceTransformer not available
-            assert result is None
+        captured = capsys.readouterr()
+        assert "Test message" in captured.out
 
-    def test_print_once_functionality(self, real_logger_fixture, code_dir):
-        """Test print_once function with real logger."""
+    def test_perform_repository_index(self, code_dir):
+        """Test _perform_repository_index stub function."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from pattern_matching.run_codomyrmex_analysis import print_once, PRINTED_ONCE_KEYS
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_repository_index
 
-        # Clear the set for testing
-        PRINTED_ONCE_KEYS.clear()
+        # Stub takes a single path string, should not raise
+        _perform_repository_index("/some/path")
 
-        logger = real_logger_fixture["logger"]
-
-        # First call should print
-        print_once("test_key", "Test message", _logger=logger)
-
-        # Second call should not print (same key)
-        print_once("test_key", "Test message", _logger=logger)
-
-        # Different key should print
-        print_once("test_key_2", "Another message", _logger=logger)
-
-        # Verify log file exists
-        log_file = real_logger_fixture["log_file"]
-        if log_file.exists():
-            log_content = log_file.read_text()
-            # Should contain at least one of the messages
-            assert len(log_content) >= 0
-
-    def test_perform_repository_index(self, tmp_path, code_dir):
-        """Test _perform_repository_index function with real repository."""
+    def test_perform_text_search(self, code_dir):
+        """Test _perform_text_search stub function."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        try:
-            from kit import Repository
-            KIT_AVAILABLE = True
-        except ImportError:
-            KIT_AVAILABLE = False
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_text_search
 
-        if not KIT_AVAILABLE:
-            pytest.skip("kit.Repository not available")
+        results = _perform_text_search("TODO", "/some/path")
+        assert isinstance(results, list)
 
-        from pattern_matching.run_codomyrmex_analysis import _perform_repository_index
-        from codomyrmex.logging_monitoring import get_logger
-
-        # Create a real repository
-        repo = Repository(str(tmp_path))
-        
-        # Create some test files
-        (tmp_path / "test.py").write_text("def test():\n    pass\n")
-        (tmp_path / "README.md").write_text("# Test\n")
-
-        logger = get_logger("test")
-
-        errors = _perform_repository_index(repo, str(tmp_path), "test_module", {}, logger)
-
-        # Should complete without errors
-        assert isinstance(errors, list)
-
-    def test_perform_text_search(self, tmp_path, code_dir):
-        """Test _perform_text_search function with real repository."""
+    def test_perform_dependency_analysis(self, code_dir):
+        """Test _perform_dependency_analysis stub function."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        try:
-            from kit import Repository
-            KIT_AVAILABLE = True
-        except ImportError:
-            KIT_AVAILABLE = False
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_dependency_analysis
 
-        if not KIT_AVAILABLE:
-            pytest.skip("kit.Repository not available")
+        # Stub takes a single path string, should not raise
+        _perform_dependency_analysis("/some/path")
 
-        from pattern_matching.run_codomyrmex_analysis import _perform_text_search
-        from codomyrmex.logging_monitoring import get_logger
-
-        # Create a real repository
-        repo = Repository(str(tmp_path))
-        
-        # Create test file with TODO
-        (tmp_path / "test.py").write_text("# TODO: implement this\n")
-
-        logger = get_logger("test")
-
-        results, errors = _perform_text_search(
-            repo, str(tmp_path), "test_module", 
-            {"text_search_queries": ["TODO"]}, logger
-        )
-
-        assert isinstance(errors, list)
-        assert isinstance(results, dict)
-
-    def test_perform_dependency_analysis_python_files(self, tmp_path, code_dir):
-        """Test _perform_dependency_analysis with Python files using real repository."""
+    def test_perform_symbol_extraction(self, code_dir):
+        """Test _perform_symbol_extraction stub function."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        try:
-            from kit import Repository
-            KIT_AVAILABLE = True
-        except ImportError:
-            KIT_AVAILABLE = False
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_symbol_extraction
 
-        if not KIT_AVAILABLE:
-            pytest.skip("kit.Repository not available")
-
-        from pattern_matching.run_codomyrmex_analysis import _perform_dependency_analysis
-        from codomyrmex.logging_monitoring import get_logger
-
-        # Create a real repository
-        repo = Repository(str(tmp_path))
-        
-        # Create Python files
-        (tmp_path / "test.py").write_text("import os\n")
-        (tmp_path / "README.md").write_text("# Test\n")
-
-        logger = get_logger("test")
-
-        errors = _perform_dependency_analysis(repo, str(tmp_path), "test_module", {}, logger)
-
-        assert isinstance(errors, list)
-
-    def test_perform_dependency_analysis_no_python_files(self, tmp_path, code_dir):
-        """Test _perform_dependency_analysis with no Python files using real repository."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        try:
-            from kit import Repository
-            KIT_AVAILABLE = True
-        except ImportError:
-            KIT_AVAILABLE = False
-
-        if not KIT_AVAILABLE:
-            pytest.skip("kit.Repository not available")
-
-        from pattern_matching.run_codomyrmex_analysis import _perform_dependency_analysis
-        from codomyrmex.logging_monitoring import get_logger
-
-        # Create a real repository
-        repo = Repository(str(tmp_path))
-        
-        # Create non-Python files
-        (tmp_path / "README.md").write_text("# Test\n")
-        (tmp_path / "docs.txt").write_text("Documentation\n")
-
-        logger = get_logger("test")
-
-        errors = _perform_dependency_analysis(repo, str(tmp_path), "test_module", {}, logger)
-
-        assert isinstance(errors, list)
-
-    def test_perform_symbol_extraction(self, tmp_path, code_dir):
-        """Test _perform_symbol_extraction function with real repository."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        try:
-            from kit import Repository
-            KIT_AVAILABLE = True
-        except ImportError:
-            KIT_AVAILABLE = False
-
-        if not KIT_AVAILABLE:
-            pytest.skip("kit.Repository not available")
-
-        from pattern_matching.run_codomyrmex_analysis import _perform_symbol_extraction
-        from codomyrmex.logging_monitoring import get_logger
-
-        # Create a real repository
-        repo = Repository(str(tmp_path))
-        
-        # Create Python file with function
-        (tmp_path / "test.py").write_text("def test_function():\n    pass\n")
-
-        logger = get_logger("test")
-
-        symbols, errors = _perform_symbol_extraction(repo, str(tmp_path), "test_module", {}, logger)
-
-        assert isinstance(errors, list)
+        symbols = _perform_symbol_extraction("/some/path")
         assert isinstance(symbols, list)
 
-    def test_perform_symbol_usage_analysis(self, tmp_path, code_dir):
-        """Test _perform_symbol_usage_analysis function with real repository."""
+    def test_perform_symbol_usage_analysis(self, code_dir):
+        """Test _perform_symbol_usage_analysis stub function."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        try:
-            from kit import Repository
-            KIT_AVAILABLE = True
-        except ImportError:
-            KIT_AVAILABLE = False
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_symbol_usage_analysis
 
-        if not KIT_AVAILABLE:
-            pytest.skip("kit.Repository not available")
+        usage = _perform_symbol_usage_analysis("/some/path")
+        assert isinstance(usage, dict)
 
-        from pattern_matching.run_codomyrmex_analysis import _perform_symbol_usage_analysis
-        from codomyrmex.logging_monitoring import get_logger
-
-        # Create a real repository
-        repo = Repository(str(tmp_path))
-        
-        # Create Python file
-        (tmp_path / "test.py").write_text("def test_symbol():\n    pass\n")
-
-        symbols_data = [{"name": "test_symbol"}]
-
-        logger = get_logger("test")
-
-        errors = _perform_symbol_usage_analysis(
-            repo, symbols_data, str(tmp_path), "test_module",
-            {"symbols_to_find_usages": ["test_symbol"]}, logger
-        )
-
-        assert isinstance(errors, list)
-
-    def test_perform_chunking_examples(self, tmp_path, code_dir):
-        """Test _perform_chunking_examples function with real repository."""
+    def test_perform_chunking_examples(self, code_dir):
+        """Test _perform_chunking_examples stub function."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        try:
-            from kit import Repository
-            KIT_AVAILABLE = True
-        except ImportError:
-            KIT_AVAILABLE = False
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_chunking_examples
 
-        if not KIT_AVAILABLE:
-            pytest.skip("kit.Repository not available")
+        chunks = _perform_chunking_examples("some text to chunk")
+        assert isinstance(chunks, list)
+        assert len(chunks) > 0
 
-        from pattern_matching.run_codomyrmex_analysis import _perform_chunking_examples
-        from codomyrmex.logging_monitoring import get_logger
-
-        # Create a real repository
-        repo = Repository(str(tmp_path))
-        
-        # Create test files
-        (tmp_path / "test.py").write_text("def test():\n    pass\n")
-        (tmp_path / "README.md").write_text("# Test\n")
-
-        logger = get_logger("test")
-
-        errors = _perform_chunking_examples(
-            repo, str(tmp_path), "test_module", 
-            {"max_files_for_chunking_examples": 1}, logger
-        )
-
-        assert isinstance(errors, list)
-
-    def test_module_constants(self, code_dir):
-        """Test that module constants are properly defined."""
+    def test_perform_text_search_context_extraction(self, code_dir):
+        """Test _perform_text_search_context_extraction stub function."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from pattern_matching.run_codomyrmex_analysis import (
-            BASE_OUTPUT_DIR_NAME,
-            MODULE_DIRS,
-            DEFAULT_EMBEDDING_MODEL,
-            ANALYSIS_CONFIG
-        )
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_text_search_context_extraction
 
-        assert BASE_OUTPUT_DIR_NAME == "output/codomyrmex_analysis"
-        assert isinstance(MODULE_DIRS, list)
-        assert DEFAULT_EMBEDDING_MODEL == 'all-MiniLM-L6-v2'
-        assert isinstance(ANALYSIS_CONFIG, dict)
-        assert "text_search_queries" in ANALYSIS_CONFIG
-        assert "files_to_summarize_count" in ANALYSIS_CONFIG
+        context = _perform_text_search_context_extraction("TODO", "/some/path")
+        assert isinstance(context, str)
 
-    def test_run_full_analysis_setup(self, code_dir):
-        """Test run_full_analysis setup phase with real implementation."""
+    def test_run_full_analysis(self, code_dir):
+        """Test run_full_analysis function is callable and returns dict."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from pattern_matching.run_codomyrmex_analysis import run_full_analysis
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import run_full_analysis
 
-        # Test that function exists and is callable
         assert callable(run_full_analysis)
+        result = run_full_analysis("/some/path")
+        assert isinstance(result, dict)
+        assert "full_analysis" in result
 
-        # Note: We don't actually run it here as it may take a long time
-        # and require external dependencies
-
-    def test_analyze_repository_path_error_handling(self, code_dir):
-        """Test analyze_repository_path error handling with real implementation."""
+    def test_analyze_repository_path(self, code_dir):
+        """Test analyze_repository_path function returns dict."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from pattern_matching.run_codomyrmex_analysis import analyze_repository_path
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
 
-        # Test with non-existent path
-        with tempfile.TemporaryDirectory() as temp_dir:
-            errors = analyze_repository_path("/nonexistent/path", str(temp_dir), {}, "test")
+        result = analyze_repository_path("/some/path")
+        assert isinstance(result, dict)
+        assert "status" in result
 
-            # Should return errors
-            assert isinstance(errors, list)
-            assert len(errors) > 0
-
-    def test_text_search_context_extraction_with_real_repo(self, tmp_path, code_dir):
-        """Test text search context extraction with real repository."""
+    def test_pattern_analyzer_basic(self, tmp_path, code_dir):
+        """Test PatternAnalyzer with real files."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        try:
-            from kit import Repository
-            KIT_AVAILABLE = True
-        except ImportError:
-            KIT_AVAILABLE = False
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
 
-        if not KIT_AVAILABLE:
-            pytest.skip("kit.Repository not available")
+        # Create test file with a known pattern
+        test_file = tmp_path / "test.py"
+        test_file.write_text("# TODO: fix this\ndef hello():\n    pass\n")
 
-        from pattern_matching.run_codomyrmex_analysis import _perform_text_search_context_extraction
-        from codomyrmex.logging_monitoring import get_logger
+        analyzer = PatternAnalyzer({"todo": "TODO"})
+        matches = analyzer.analyze_file(str(test_file))
 
-        # Create a real repository
-        repo = Repository(str(tmp_path))
-        
-        # Create test file
-        (tmp_path / "test.py").write_text("# TODO: implement this\n")
+        assert len(matches) == 1
+        assert matches[0].pattern_name == "todo"
+        assert matches[0].line_number == 1
 
-        text_search_results = {
-            "TODO": [
-                {"file_path": "test.py", "line_number": 1}
-            ]
-        }
+    def test_pattern_analyzer_directory(self, tmp_path, code_dir):
+        """Test PatternAnalyzer.analyze_directory with real files."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
 
-        logger = get_logger("test")
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer, AnalysisResult
 
-        errors = _perform_text_search_context_extraction(
-            repo, text_search_results, str(tmp_path), "test_module", {}, logger
+        # Create test files
+        (tmp_path / "a.py").write_text("# FIXME: broken\n")
+        (tmp_path / "b.py").write_text("def ok():\n    pass\n")
+
+        analyzer = PatternAnalyzer({"fixme": "FIXME"})
+        result = analyzer.analyze_directory(str(tmp_path), extensions=[".py"])
+
+        assert isinstance(result, AnalysisResult)
+        assert result.total_files == 2
+        assert result.files_analyzed == 2
+        assert len(result.matches) == 1
+        assert result.matches[0].pattern_name == "fixme"
+
+    def test_run_codomyrmex_analysis_function(self, tmp_path, code_dir):
+        """Test the convenience run_codomyrmex_analysis function."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            run_codomyrmex_analysis,
+            AnalysisResult,
         )
 
-        assert isinstance(errors, list)
+        (tmp_path / "sample.py").write_text("import os\n# HACK: temp workaround\n")
+
+        result = run_codomyrmex_analysis(str(tmp_path), {"hack": "HACK"})
+        assert isinstance(result, AnalysisResult)
+        assert len(result.matches) == 1

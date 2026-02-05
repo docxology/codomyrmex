@@ -2,9 +2,23 @@
 
 import pytest
 from unittest.mock import MagicMock, patch
-from codomyrmex.metrics import PrometheusExporter, StatsDClient, Metrics
+from codomyrmex.metrics import Metrics
+
+try:
+    from codomyrmex.metrics import PrometheusExporter
+    HAS_PROMETHEUS = PrometheusExporter is not None
+except ImportError:
+    HAS_PROMETHEUS = False
+
+try:
+    from codomyrmex.metrics import StatsDClient
+    import statsd  # noqa: F401
+    HAS_STATSD = StatsDClient is not None
+except (ImportError, ModuleNotFoundError):
+    HAS_STATSD = False
 
 @pytest.mark.unit
+@pytest.mark.skipif(not HAS_PROMETHEUS, reason="prometheus_client not installed")
 def test_prometheus_exporter_initialization():
     """Test PrometheusExporter wrapper."""
     exporter = PrometheusExporter(port=9999)
@@ -15,6 +29,7 @@ def test_prometheus_exporter_initialization():
         mock_start.assert_called_once_with(9999, addr="0.0.0.0")
 
 @pytest.mark.unit
+@pytest.mark.skipif(not HAS_STATSD, reason="statsd not installed")
 def test_statsd_client_lifecycle():
     """Test StatsDClient lifecycle."""
     with patch('statsd.StatsClient') as mock_client_cls:

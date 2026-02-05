@@ -1,40 +1,48 @@
-# Coordination
+# collaboration/coordination
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `coordination` module provides core functionality for Coordination.
+Task coordination submodule. Provides task distribution, consensus protocols, and leader election algorithms for multi-agent collaboration. Includes a dependency-aware task manager with configurable scheduling strategies, a consensus builder with multiple voting mechanisms, and four leader election algorithm implementations.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    coordination --> Utils[codomyrmex.utils]
-    coordination --> Logs[codomyrmex.logging_monitoring]
+### Task Management
 
-    subgraph coordination
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+- **`SchedulingStrategy`** -- Task scheduling strategy enumeration (FIFO, priority, round-robin, etc.)
+- **`TaskQueue`** -- Priority-aware task queue
+- **`DependencyGraph`** -- DAG-based task dependency tracker
+- **`TaskManager`** -- Distributes tasks to agents respecting dependencies and scheduling strategy
 
-## Components
+### Consensus
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+- **`VoteType`** -- Vote type enumeration (approve, reject, abstain)
+- **`Vote`** -- Individual vote from an agent
+- **`Proposal`** -- Proposal submitted for consensus voting
+- **`VotingResult`** -- Aggregated voting outcome
+- **`VotingMechanism`** -- Voting rule (majority, unanimous, weighted, etc.)
+- **`ConsensusBuilder`** -- Orchestrates proposal submission, voting rounds, and result tallying
 
-## Usage
+### Leader Election
 
-```python
-from codomyrmex.coordination import ...
+- **`ElectionState`** -- Election lifecycle state enumeration
+- **`ElectionResult`** -- Election outcome with winner and vote counts
+- **`LeaderElection`** -- Base class for election algorithms
+- **`BullyElection`** -- Bully algorithm; highest-priority agent wins
+- **`RingElection`** -- Ring algorithm; token-passing election
+- **`RandomElection`** -- Random selection among candidates
+- **`RotatingLeadership`** -- Round-robin leadership rotation
 
-# Example usage
-# result = process(...)
-```
+## Directory Contents
+
+- `__init__.py` - Package init; re-exports from task_manager, consensus, and leader_election
+- `task_manager.py` - TaskQueue, DependencyGraph, and TaskManager
+- `consensus.py` - Voting types, ConsensusBuilder, and VotingMechanism
+- `leader_election.py` - Election algorithms (Bully, Ring, Random, Rotating)
+- `py.typed` - PEP 561 type-checking marker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [collaboration](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

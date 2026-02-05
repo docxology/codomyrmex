@@ -1,38 +1,31 @@
-# History
+# history
 
-Conversation and context persistence for stateful interactions
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `history` submodule provides conversation and context persistence for stateful interactions.
+Conversation and context persistence for agent sessions. Provides data models for messages and conversations, three pluggable storage backends (in-memory, file-based JSON, SQLite), and a high-level `ConversationManager` that handles creation, truncation, search, and active-conversation tracking.
 
-## Installation
+## Key Exports
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- **`MessageRole`** -- Enum of standard conversation roles (system, user, assistant, tool, function)
+- **`HistoryMessage`** -- Dataclass representing a single message with role, content, auto-generated ID via SHA-256, timestamp, token count, and metadata
+- **`Conversation`** -- Dataclass for a full conversation with message list, add/truncate helpers, API-compatible message export, and dict serialization
+- **`InMemoryHistoryStore`** -- In-memory conversation storage with save, load, delete, list (sorted by updated_at), and content search
+- **`FileHistoryStore`** -- File-based JSON conversation storage with one JSON file per conversation on disk
+- **`SQLiteHistoryStore`** -- SQLite-backed conversation storage with conversations and messages tables, indexed by conversation_id
+- **`ConversationManager`** -- High-level manager that wraps any store, supports active-conversation tracking, auto-truncation at configurable message limits, and search
 
-```bash
-pip install codomyrmex
-```
+## Directory Contents
 
-## Quick Start
+- `__init__.py` - All history logic: message/conversation models, three storage backends, conversation manager
+- `README.md` - This file
+- `AGENTS.md` - Agent integration notes
+- `PAI.md` - PAI-specific documentation
+- `SPEC.md` - Module specification
+- `py.typed` - PEP 561 type-checking marker
 
-```python
-from codomyrmex.agents.history import *
+## Navigation
 
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`agents`](../) - Parent module
+- **Parent Module**: [agents](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

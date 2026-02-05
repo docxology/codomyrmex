@@ -1,3 +1,16 @@
+"""Validation framework supporting JSON Schema, Pydantic, and custom validators.
+
+Provides a unified interface for data validation with three strategies:
+JSON Schema validation (default), Pydantic model validation, and custom
+callable validators. All strategies return consistent ValidationResult objects.
+
+Example:
+    >>> from codomyrmex.validation.validator import Validator
+    >>> v = Validator("json_schema")
+    >>> result = v.validate({"name": "test"}, {"type": "object", "required": ["name"]})
+    >>> result.is_valid
+    True
+"""
 from typing import Any, Callable, Optional
 import json
 
@@ -11,7 +24,12 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 logger = get_logger(__name__)
 
 class ValidationError(CodomyrmexError):
-    """Raised when validation fails."""
+    """Raised when validation fails.
+
+    Note:
+        Inherits from CodomyrmexError, so str(error) returns
+        '[ValidationError] message' with the error_code prefix.
+    """
 
     def __init__(self, message: str, field: Optional[str] = None, code: Optional[str] = None, path: Optional[list[str]] = None):
 
@@ -38,11 +56,21 @@ class ValidationResult:
     warnings: list[ValidationWarning] = field(default_factory=list)
 
     def __bool__(self) -> bool:
+        """Allow ValidationResult to be used in boolean context.
 
+        Returns:
+            True if validation passed (is_valid is True), False otherwise.
+        """
         return self.is_valid
 
 class Validator:
-    """Base validator interface."""
+    """Base validator with support for JSON Schema, Pydantic, and custom validation.
+
+    Supports three validation strategies selected via validator_type:
+        - "json_schema": Validates data against a JSON Schema dict using jsonschema.
+        - "pydantic": Validates data against a Pydantic model class.
+        - "custom": Validates data using a callable that returns bool or ValidationResult.
+    """
 
     def __init__(self, validator_type: str = "json_schema"):
         """Initialize validator.
@@ -80,7 +108,10 @@ class Validator:
             )
 
     def _validate_json_schema(self, data: Any, schema: dict) -> ValidationResult:
-        """Validate using JSON Schema."""
+        """Validate data against a JSON Schema dict using the jsonschema library.
+
+        Falls back to _basic_validation if jsonschema is not importable.
+        """
         try:
             jsonschema.validate(instance=data, schema=schema)
             return ValidationResult(is_valid=True)
@@ -95,7 +126,11 @@ class Validator:
             return ValidationResult(is_valid=False, errors=[error])
 
     def _validate_pydantic(self, data: Any, model: Any) -> ValidationResult:
-        """Validate using Pydantic model."""
+        """Validate data by instantiating a Pydantic model class.
+
+        If data is a dict, it is unpacked as keyword arguments.
+        Pydantic validation errors are converted to ValidationError instances.
+        """
         try:
 
             if isinstance(data, dict):
@@ -121,7 +156,11 @@ class Validator:
             return ValidationResult(is_valid=False, errors=errors)
 
     def _validate_custom(self, data: Any, validator_func: Callable) -> ValidationResult:
-        """Validate using custom validator function."""
+        """Validate data using a custom callable.
+
+        The callable may return a bool, a ValidationResult, or any other value
+        (treated as valid). Exceptions are caught and wrapped as errors.
+        """
         try:
             result = validator_func(data)
             if isinstance(result, bool):
@@ -137,7 +176,18 @@ class Validator:
             )
 
     def _basic_validation(self, data: Any, schema: dict) -> ValidationResult:
-        """Basic validation without external libraries."""
+        """Fallback validation without external libraries.
+
+        Performs type checking and required-field validation using only
+        built-in Python types. Used when jsonschema is not available.
+
+        Args:
+            data: Data to validate.
+            schema: JSON Schema-like dict with optional "type" and "required" keys.
+
+        Returns:
+            ValidationResult with any type or required-field errors found.
+        """
         errors = []
         if "type" in schema:
             expected_type = schema["type"]
@@ -162,11 +212,11 @@ class Validator:
         return ValidationResult(is_valid=len(errors) == 0, errors=errors)
 
     def is_valid(self, data: Any, schema: Any) -> bool:
-        """Check if data is valid against a schema."""
+        """Return True if data passes validation, False otherwise."""
         result = self.validate(data, schema)
         return result.is_valid
 
     def get_errors(self, data: Any, schema: Any) -> list[ValidationError]:
-        """Get validation errors for data."""
+        """Return the list of ValidationError objects from validating data."""
         result = self.validate(data, schema)
         return result.errors

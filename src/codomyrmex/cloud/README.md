@@ -16,6 +16,61 @@ The Cloud Services module provides unified, provider-agnostic interfaces for int
 
 All storage clients share a consistent interface pattern with operations for upload, download, list, metadata retrieval, and bucket/container management. Infomaniak clients provide compute, storage, networking, DNS, orchestration, metering, and newsletter services via OpenStack and Infomaniak REST APIs.
 
+## Key Exports
+
+### Clients
+- **`CodaClient`** — Coda.io REST API v1 client with pagination and rate limiting
+- **`S3Client`** — Amazon S3 object storage client (lazy-loaded, requires boto3)
+- **`GCSClient`** — Google Cloud Storage client (lazy-loaded, requires google-cloud-storage)
+- **`AzureBlobClient`** — Azure Blob Storage client (lazy-loaded, requires azure-storage-blob)
+- **`InfomaniakComputeClient`** / **`InfomaniakVolumeClient`** / **`InfomaniakNetworkClient`** — Infomaniak compute, volume, and network clients
+- **`InfomaniakObjectStorageClient`** / **`InfomaniakS3Client`** — Infomaniak Swift and S3-compatible storage clients
+- **`InfomaniakIdentityClient`** / **`InfomaniakDNSClient`** / **`InfomaniakHeatClient`** / **`InfomaniakMeteringClient`** — Infomaniak identity, DNS, orchestration, and metering clients
+- **`InfomaniakNewsletterClient`** — Infomaniak Newsletter REST API client
+
+### Coda.io Data Models
+- **`Doc`** — A Coda document
+- **`DocList`** — Paginated list of Coda documents
+- **`Page`** — A page in a Coda doc
+- **`PageList`** — Paginated list of pages
+- **`PageReference`** — Reference to a page (id, name, href)
+- **`Table`** — A table in a Coda doc
+- **`TableList`** — Paginated list of tables
+- **`TableReference`** — Reference to a table (id, name, href)
+- **`Column`** — A column in a Coda table
+- **`ColumnList`** — Paginated list of columns
+- **`Row`** — A row in a Coda table
+- **`RowList`** — Paginated list of rows
+- **`RowEdit`** — A row edit with cell values for upsert operations
+- **`CellEdit`** — A cell value edit (column + value)
+- **`Formula`** — A named formula in a Coda doc
+- **`FormulaList`** — Paginated list of formulas
+- **`Control`** — A control widget in a Coda doc
+- **`ControlList`** — Paginated list of controls
+- **`Permission`** — A permission on a doc
+- **`PermissionList`** — Paginated list of permissions
+- **`SharingMetadata`** — Sharing metadata for a doc (can_share, can_copy)
+- **`ACLSettings`** — Access control list settings for a doc
+- **`User`** — Current user information from the whoami endpoint
+- **`WorkspaceReference`** — Reference to a Coda workspace
+- **`FolderReference`** — Reference to a Coda folder
+- **`Icon`** — Icon information (name, type, browser URL)
+- **`DocSize`** — Size information for a doc (row counts, table/page counts)
+
+### Coda.io Exceptions
+- **`CodaAPIError`** — Base exception for all Coda API errors
+- **`CodaAuthenticationError`** — Raised when the API token is invalid or missing (HTTP 401)
+- **`CodaForbiddenError`** — Raised when the API token lacks access to a resource (HTTP 403)
+- **`CodaNotFoundError`** — Raised when the requested resource could not be found (HTTP 404)
+- **`CodaRateLimitError`** — Raised when the API rate limit has been exceeded (HTTP 429)
+- **`CodaValidationError`** — Raised when request parameters did not conform to expectations (HTTP 400)
+- **`CodaGoneError`** — Raised when the requested resource has been deleted (HTTP 410)
+
+### Infomaniak Authentication
+- **`InfomaniakCredentials`** — Credentials dataclass for Infomaniak OpenStack services
+- **`InfomaniakS3Credentials`** — Credentials dataclass for Infomaniak S3-compatible Object Storage
+- **`create_openstack_connection`** — Factory function to create an authenticated OpenStack connection
+
 ## Architecture
 
 ```mermaid

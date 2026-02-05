@@ -158,19 +158,15 @@ def is_uv_environment() -> bool:
     return os.environ.get("VIRTUAL_ENV") is not None or is_uv_available()
 
 def generate_environment_report() -> str:
-    """Generate a detailed report of the current environment status.
+    """Generate an environment status report.
 
-    Creates a human-readable report containing information about Python
-    version, installed dependencies, environment variables, and system
-    configuration relevant to Codomyrmex operation.
+    Note:
+        This function is a placeholder. A future implementation will return
+        a detailed report of Python version, dependencies, environment
+        variables, and system configuration.
 
     Returns:
-        A string containing the formatted environment report.
-
-    Example:
-        >>> report = generate_environment_report()
-        >>> print(report)
-        # Displays environment details
+        A placeholder string. Will return a full report once implemented.
     """
     return "Environment report generation placeholder."
 

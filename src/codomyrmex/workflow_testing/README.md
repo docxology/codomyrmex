@@ -1,43 +1,47 @@
-# Workflow Testing
+# workflow_testing
 
-End-to-end workflow validation and integration testing
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `workflow_testing` module provides end-to-end workflow validation and integration testing.
+End-to-end workflow validation and testing framework. Defines multi-step workflows composed of typed steps (HTTP requests, assertions, waits, scripts, conditionals) with dependency tracking and retry support. Includes pluggable step executors, shared context propagation between steps, and aggregate pass/fail reporting with per-step duration metrics.
 
-## Installation
+## Key Exports
 
-This module is part of the Codomyrmex platform and is installed with the main package.
+### Enums
 
-```bash
-pip install codomyrmex
-```
+- **`WorkflowStepType`** -- Step classification: HTTP_REQUEST, ASSERTION, WAIT, SCRIPT, CONDITIONAL
+- **`StepStatus`** -- Step execution status: PENDING, RUNNING, PASSED, FAILED, SKIPPED, ERROR
 
-## Quick Start
+### Data Classes
 
-```python
-from codomyrmex.workflow_testing import *
+- **`WorkflowStep`** -- A single workflow step with id, name, type, config dict, dependency list, retry count, and timeout
+- **`StepResult`** -- Result of executing one step with status, output, error, duration in milliseconds, and retry count
+- **`WorkflowResult`** -- Aggregate result of a complete workflow run with per-step results, pass rate, total duration, and timestamps
+- **`Workflow`** -- A workflow test definition with ordered steps, variables, tags, and convenience methods for adding assertion and wait steps
 
-# Example usage
-# TODO: Add practical examples
-```
+### Executors
 
-## Features
+- **`StepExecutor`** -- Abstract base class for step executors; subclasses implement `execute(step, context) -> StepResult`
+- **`AssertionExecutor`** -- Executes assertion steps supporting equals, contains, not_null, greater_than, and less_than comparisons
+- **`WaitExecutor`** -- Executes wait/delay steps for a configurable number of seconds
+- **`ScriptExecutor`** -- Executes script steps via callable functions or evaluated expressions with access to workflow context
 
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
+### Core
 
-## API Reference
+- **`WorkflowRunner`** -- Main workflow execution engine that runs steps sequentially, propagates context between steps, applies retries on failure, and stops on error; supports custom executor registration
 
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
+## Directory Contents
 
-## Related Modules
-
-- [`None`](../) - Parent module
+- `__init__.py` - Module definition with all workflow testing classes and executors
+- `AGENTS.md` - Agent integration specification
+- `API_SPECIFICATION.md` - Detailed API documentation
+- `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
+- `SPEC.md` - Module specification
+- `PAI.md` - PAI integration notes
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/workflow_testing/](../../../docs/modules/workflow_testing/)
 - **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

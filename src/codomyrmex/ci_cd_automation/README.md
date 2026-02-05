@@ -4,22 +4,62 @@
 
 ## Overview
 
-CI/CD pipeline management module providing pipeline orchestration and deployment automation. Enables continuous integration and continuous delivery workflows.
+CI/CD pipeline management module providing end-to-end continuous integration and deployment capabilities. The `PipelineManager` creates and executes multi-stage pipelines composed of `PipelineStage` and `PipelineJob` definitions. `DeploymentOrchestrator` handles deployment to target environments with promotion and rollback support. `PipelineMonitor` tracks pipeline health and generates analytics reports. `RollbackManager` implements configurable rollback strategies for failed deployments. `PipelineOptimizer` identifies and applies performance improvements to pipeline execution. Includes a full exception hierarchy for granular error handling across pipeline, build, deployment, artifact, stage, and rollback operations.
+
+## Key Exports
+
+### Pipeline Management
+
+- **`PipelineManager`** -- Creates, configures, and executes CI/CD pipelines
+- **`create_pipeline()`** -- Create a new pipeline with stages and configuration
+- **`run_pipeline()`** -- Execute a pipeline with full stage orchestration
+- **`Pipeline`** -- Pipeline definition with stages, triggers, and metadata
+- **`PipelineJob`** -- Individual job within a pipeline stage
+- **`PipelineStage`** -- Pipeline stage grouping related jobs with ordering
+
+### Deployment Orchestration
+
+- **`DeploymentOrchestrator`** -- Manages deployment lifecycle across environments
+- **`manage_deployments()`** -- Orchestrate deployments with environment promotion
+- **`Deployment`** -- Deployment configuration with target, strategy, and status
+- **`Environment`** -- Target environment definition (dev, staging, production)
+
+### Pipeline Monitoring
+
+- **`PipelineMonitor`** -- Tracks pipeline execution health and metrics
+- **`monitor_pipeline_health()`** -- Monitor running pipelines for failures and bottlenecks
+- **`generate_pipeline_reports()`** -- Generate analytics reports for pipeline performance
+- **`PipelineReport`** -- Pipeline execution report with timing, success rates, and trends
+
+### Rollback Management
+
+- **`RollbackManager`** -- Manages rollback operations for failed deployments
+- **`handle_rollback()`** -- Execute a rollback with the configured strategy
+- **`RollbackStrategy`** -- Rollback strategy configuration (blue-green, canary, immediate)
+
+### Performance Optimization
+
+- **`PipelineOptimizer`** -- Analyzes and optimizes pipeline performance
+- **`optimize_pipeline_performance()`** -- Apply optimizations to reduce pipeline duration
+
+### Exceptions
+
+- **`PipelineError`** -- Base exception for pipeline operations
+- **`BuildError`** -- Error during build stage execution
+- **`DeploymentError`** -- Error during deployment operations
+- **`ArtifactError`** -- Error with build artifact handling
+- **`StageError`** -- Error in a specific pipeline stage
+- **`RollbackError`** -- Error during rollback execution
 
 ## Directory Contents
 
-- `API_SPECIFICATION.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `SECURITY.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `deployment_orchestrator.py` – File
-- `exceptions.py` – File
-- `performance_optimizer.py` – File
-- `pipeline_manager.py` – File
-- `pipeline_monitor.py` – File
-- `rollback_manager.py` – File
+- `__init__.py` - Module entry point aggregating all manager and orchestrator exports
+- `pipeline_manager.py` - `PipelineManager`, `Pipeline`, `PipelineStage`, and `PipelineJob`
+- `deployment_orchestrator.py` - `DeploymentOrchestrator`, `Deployment`, and `Environment`
+- `pipeline_monitor.py` - `PipelineMonitor` and `PipelineReport` for monitoring and analytics
+- `rollback_manager.py` - `RollbackManager` and `RollbackStrategy` for rollback operations
+- `performance_optimizer.py` - `PipelineOptimizer` for pipeline performance tuning
+- `exceptions.py` - Exception hierarchy for CI/CD operations
 
 ## Navigation
 

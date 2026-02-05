@@ -66,13 +66,26 @@ class WorkflowExecution:
 class WorkflowManager:
     """Manages workflow definitions and execution."""
 
-    def __init__(self, persistence_dir: Optional[Path] = None):
-        """Initialize the workflow manager."""
+    def __init__(self, persistence_dir: Optional[Path] = None, config_dir: Optional[Path] = None):
+        """Initialize the workflow manager.
+
+        Args:
+            persistence_dir: Directory for workflow execution persistence data.
+            config_dir: Directory containing workflow definition JSON files.
+                        Defaults to ``config/workflows/production`` relative to cwd.
+        """
         self.workflows: Dict[str, List[WorkflowStep]] = {}
         self.executions: Dict[str, WorkflowExecution] = {}
         self.task_orchestrator = get_task_orchestrator()
         self.persistence_dir = persistence_dir or Path(".workflows")
         self.persistence_dir.mkdir(parents=True, exist_ok=True)
+
+        # Config directory for workflow JSON definitions
+        self.config_dir: Path = config_dir or (Path.cwd() / "config" / "workflows" / "production")
+        self.config_dir.mkdir(parents=True, exist_ok=True)
+
+        # Load any workflow definitions found in config_dir
+        self._load_workflows_from_config()
 
     def create_workflow(self, name: str, steps: List[WorkflowStep]) -> bool:
         """Create and register a new workflow."""
@@ -154,6 +167,129 @@ class WorkflowManager:
             logger.error(f"Workflow execution failed: {e}")
             return execution
             
+    # ------------------------------------------------------------------
+    # Config-directory workflow loading
+    # ------------------------------------------------------------------
+
+    def _load_workflows_from_config(self) -> None:
+        """Load workflow definitions from JSON files in ``self.config_dir``."""
+        if not self.config_dir.exists():
+            return
+
+        for workflow_file in sorted(self.config_dir.glob("*.json")):
+            try:
+                with open(workflow_file, "r") as f:
+                    data = json.load(f)
+
+                workflow_name = data.get("name", workflow_file.stem)
+                raw_steps = data.get("steps", [])
+
+                steps: List[WorkflowStep] = []
+                for raw in raw_steps:
+                    steps.append(WorkflowStep(
+                        name=raw.get("name", ""),
+                        module=raw.get("module", ""),
+                        action=raw.get("action", ""),
+                        parameters=raw.get("parameters", {}),
+                        dependencies=raw.get("dependencies", []),
+                        timeout=raw.get("timeout"),
+                        retry_count=raw.get("max_retries", 0),
+                    ))
+
+                self.workflows[workflow_name] = steps
+                logger.info(f"Loaded workflow '{workflow_name}' from {workflow_file}")
+            except Exception as exc:
+                logger.warning(f"Failed to load workflow from {workflow_file}: {exc}")
+
+    # ------------------------------------------------------------------
+    # DAG & dependency helpers
+    # ------------------------------------------------------------------
+
+    def create_workflow_dag(self, tasks: List[Dict[str, Any]]) -> "WorkflowDAG":
+        """Create a :class:`WorkflowDAG` from a list of task dictionaries.
+
+        Args:
+            tasks: List of task dicts, each with at least ``name``, ``module``,
+                   ``action``, and optionally ``dependencies``.
+
+        Returns:
+            A populated :class:`WorkflowDAG` instance.
+        """
+        from .workflow_dag import WorkflowDAG
+        return WorkflowDAG(tasks)
+
+    def validate_workflow_dependencies(self, tasks: List[Dict[str, Any]]) -> List[str]:
+        """Validate that all task dependencies are satisfiable.
+
+        Args:
+            tasks: List of task dicts with ``name`` and ``dependencies`` keys.
+
+        Returns:
+            List of error strings. Empty list means valid.
+        """
+        from .parallel_executor import validate_workflow_dependencies
+        return validate_workflow_dependencies(tasks)
+
+    def get_workflow_execution_order(self, tasks: List[Dict[str, Any]]) -> List[List[str]]:
+        """Get the topological execution order for a set of tasks.
+
+        Args:
+            tasks: List of task dicts (must include ``name`` and ``dependencies``).
+
+        Returns:
+            List of lists -- each inner list contains task names that can run
+            in parallel at that level.
+        """
+        from .parallel_executor import get_workflow_execution_order
+        return get_workflow_execution_order(tasks)
+
+    def execute_parallel_workflow(self, workflow: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute a workflow using the :class:`ParallelExecutor`.
+
+        Args:
+            workflow: Dictionary with keys ``tasks`` (list of task dicts),
+                      ``dependencies`` (dict mapping task name to list of dep names),
+                      and optionally ``max_parallel`` (int).
+
+        Returns:
+            Result dictionary with ``status``, ``total_tasks``,
+            ``completed_tasks``, ``failed_tasks``, and ``task_results``.
+        """
+        from .parallel_executor import ParallelExecutor
+
+        tasks = workflow.get("tasks", [])
+        dependencies = workflow.get("dependencies", {})
+        max_parallel = workflow.get("max_parallel", 4)
+
+        with ParallelExecutor(max_workers=max_parallel) as executor:
+            results = executor.execute_tasks(tasks, dependencies)
+
+        completed_count = sum(
+            1 for r in results.values()
+            if r.status.value == "completed"
+        )
+        failed_count = sum(
+            1 for r in results.values()
+            if r.status.value in ("failed", "timeout", "cancelled")
+        )
+
+        if failed_count == 0:
+            status = "completed"
+        elif completed_count > 0:
+            status = "partial_failure"
+        else:
+            status = "failed"
+
+        return {
+            "status": status,
+            "total_tasks": len(tasks),
+            "completed_tasks": completed_count,
+            "failed_tasks": failed_count,
+            "task_results": {name: r.to_dict() for name, r in results.items()},
+        }
+
+    # ------------------------------------------------------------------
+
     def get_execution_status(self, execution_id: str) -> Optional[WorkflowExecution]:
         """Get the status of a workflow execution."""
         return self.executions.get(execution_id)

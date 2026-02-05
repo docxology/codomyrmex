@@ -519,6 +519,27 @@ class ConfigurationManager:
         else:
             return None
 
+    def load_configuration_from_file(self, path: str) -> Optional[Configuration]:
+        """
+        Load configuration directly from a file path.
+
+        Args:
+            path: Path to configuration file
+
+        Returns:
+            Configuration object or None if loading fails
+        """
+        config_data = self._load_file(path)
+        if config_data is None:
+            return None
+
+        config = Configuration(
+            data=config_data,
+            source=path,
+            environment=self.environment,
+        )
+        return config
+
     def load_config_with_validation(self, path: str, schema: Optional[Dict[str, Any]] = None) -> Optional[Configuration]:
         """
         Load configuration with automatic validation.
@@ -539,7 +560,7 @@ class ConfigurationManager:
             if schema:
                 from .config_validator import ConfigValidator
                 validator = ConfigValidator(schema)
-                result = validator.validate(config.config_data)
+                result = validator.validate(config.data)
 
                 if not result.is_valid:
                     logger.error(f"Configuration validation failed for {path}:")
@@ -579,24 +600,23 @@ class ConfigurationManager:
             from .config_migrator import migrate_config
 
             # Assume current version is stored in config
-            current_version = config.config_data.get("version", "1.0.0")
+            current_version = config.data.get("version", "1.0.0")
 
-            migration_result = migrate_config(config.config_data, current_version, target_version)
+            migration_result = migrate_config(config.data, current_version, target_version)
 
             if migration_result.success:
                 # Update configuration with migrated data
-                config.config_data = migration_result.migrated_config
-                config.config_data["version"] = target_version
+                config.data = migration_result.migrated_config
+                config.data["version"] = target_version
 
                 # Save backup if needed
                 if migration_result.backup_config:
                     backup_name = f"{name}_backup_{current_version}"
-                    self.configurations[backup_name] = Configuration(
-                        name=backup_name,
-                        config_data=migration_result.backup_config,
+                    backup_config = Configuration(
+                        data=migration_result.backup_config,
                         source=f"migration_backup_{current_version}",
-                        loaded_at=datetime.now(timezone.utc)
                     )
+                    self.configurations[backup_name] = backup_config
 
                 logger.info(f"Successfully migrated {name} from {current_version} to {target_version}")
                 return True
@@ -646,14 +666,14 @@ class ConfigurationManager:
 
             # Try different schemas based on configuration content
             schema = None
-            if "level" in config.config_data or "format" in config.config_data:
+            if "level" in config.data or "format" in config.data:
                 schema = get_logging_config_schema()
-            elif "host" in config.config_data and "database" in config.config_data:
+            elif "host" in config.data and "database" in config.data:
                 schema = get_database_config_schema()
 
             if schema:
                 validator = ConfigValidator(schema)
-                result = validator.validate(config.config_data)
+                result = validator.validate(config.data)
                 return result.to_dict()
             else:
                 # Basic validation without schema
@@ -687,17 +707,15 @@ class ConfigurationManager:
             return False
 
         config = self.configurations[name]
-        version = config.config_data.get("version", "unknown")
+        version = config.data.get("version", "unknown")
 
         backup_name = f"{name}_backup_{version}_{int(datetime.now(timezone.utc).timestamp())}"
 
         try:
             # Create backup configuration
             backup_config = Configuration(
-                name=backup_name,
-                config_data=config.config_data.copy(),
+                data=config.data.copy(),
                 source=f"backup_of_{name}",
-                loaded_at=datetime.now(timezone.utc)
             )
 
             self.configurations[backup_name] = backup_config

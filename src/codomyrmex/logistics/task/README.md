@@ -1,40 +1,33 @@
 # Task
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `task` module provides core functionality for Task.
+Task queue management for logistics operations. Provides job scheduling, queue management, and async task execution with pluggable backends.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    task --> Utils[codomyrmex.utils]
-    task --> Logs[codomyrmex.logging_monitoring]
+- **`Queue`** -- Task queue supporting configurable backends for job management
+- **`Job`** -- Representation of a single job with status tracking
+- **`JobStatus`** -- Enum of job lifecycle states
+- **`JobScheduler`** -- Scheduler for deferred and recurring job execution
+- **`get_queue()`** -- Factory function to obtain a Queue instance (supports "in_memory" and "redis" backends)
 
-    subgraph task
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+## Additional Classes
 
-## Components
+- **`QueueError`** -- Exception raised when queue operations fail (extends `CodomyrmexError`)
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+## Directory Contents
 
-## Usage
-
-```python
-from codomyrmex.task import ...
-
-# Example usage
-# result = process(...)
-```
+- `__init__.py` - Package exports, QueueError definition, and `get_queue()` factory
+- `job.py` - Job and JobStatus definitions
+- `queue.py` - Queue implementation with backend support
+- `scheduler.py` - JobScheduler for deferred execution
+- `backends/` - Pluggable queue backend implementations
+- `py.typed` - PEP 561 type stub marker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [logistics](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

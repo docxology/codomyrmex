@@ -247,3 +247,177 @@ class TestLoggingMonitoring:
         metric_records = [r for r in records if hasattr(r, 'metric_name')]
         assert len(metric_records) >= 2
 
+
+@pytest.mark.unit
+class TestLogRotationManager:
+    """Test cases for LogRotationManager from rotation.py."""
+
+    def test_log_rotation_manager_init(self, tmp_path):
+        """Test that LogRotationManager creates the log directory and sets log_dir."""
+        from codomyrmex.logging_monitoring.rotation import LogRotationManager
+
+        log_dir = str(tmp_path / "rotation_logs")
+        manager = LogRotationManager(log_dir=log_dir)
+
+        assert manager.log_dir == log_dir
+        assert os.path.isdir(log_dir)
+
+    def test_attach_rotating_handler(self, tmp_path):
+        """Test attaching a rotating handler returns a RotatingFileHandler on the logger."""
+        from codomyrmex.logging_monitoring.rotation import LogRotationManager
+        from logging.handlers import RotatingFileHandler
+
+        log_dir = str(tmp_path / "rotation_logs")
+        manager = LogRotationManager(log_dir=log_dir)
+
+        logger_name = "test_rotation_attach"
+        handler = manager.attach_rotating_handler(logger_name, "test.log")
+
+        try:
+            assert isinstance(handler, RotatingFileHandler)
+            logger = logging.getLogger(logger_name)
+            assert handler in logger.handlers
+        finally:
+            handler.close()
+            logging.getLogger(logger_name).removeHandler(handler)
+
+    def test_rotation_parameters(self, tmp_path):
+        """Test that max_bytes and backup_count are correctly set on the handler."""
+        from codomyrmex.logging_monitoring.rotation import LogRotationManager
+        from logging.handlers import RotatingFileHandler
+
+        log_dir = str(tmp_path / "rotation_logs")
+        manager = LogRotationManager(log_dir=log_dir)
+
+        handler = manager.attach_rotating_handler(
+            "test_rotation_params", "params.log",
+            max_bytes=2048, backup_count=3
+        )
+
+        try:
+            assert handler.maxBytes == 2048
+            assert handler.backupCount == 3
+        finally:
+            handler.close()
+            logging.getLogger("test_rotation_params").removeHandler(handler)
+
+    def test_rotation_creates_file(self, tmp_path):
+        """Test that logging through the handler creates the log file on disk."""
+        from codomyrmex.logging_monitoring.rotation import LogRotationManager
+
+        log_dir = str(tmp_path / "rotation_logs")
+        manager = LogRotationManager(log_dir=log_dir)
+
+        handler = manager.attach_rotating_handler("test_rotation_file", "created.log")
+        logger = logging.getLogger("test_rotation_file")
+        logger.setLevel(logging.DEBUG)
+
+        try:
+            logger.info("This message should create the file")
+            handler.flush()
+
+            log_file = Path(log_dir) / "created.log"
+            assert log_file.exists()
+            content = log_file.read_text()
+            assert "This message should create the file" in content
+        finally:
+            handler.close()
+            logger.removeHandler(handler)
+
+
+@pytest.mark.unit
+class TestStandaloneJSONFormatter:
+    """Test cases for the standalone JSONFormatter from json_formatter.py."""
+
+    def test_standalone_json_formatter(self):
+        """Test formatting a LogRecord produces valid JSON with expected fields."""
+        from codomyrmex.logging_monitoring.json_formatter import JSONFormatter
+
+        formatter = JSONFormatter()
+
+        record = logging.LogRecord(
+            name="test.json", level=logging.WARNING, pathname="test_file.py",
+            lineno=42, msg="Standalone formatter test", args=(), exc_info=None
+        )
+
+        output = formatter.format(record)
+        parsed = json.loads(output)
+
+        assert parsed["level"] == "WARNING"
+        assert parsed["name"] == "test.json"
+        assert parsed["message"] == "Standalone formatter test"
+        assert parsed["line"] == 42
+        assert "timestamp" in parsed
+        assert "module" in parsed
+
+    def test_json_formatter_with_exception(self):
+        """Test formatting a LogRecord with exception info includes the exception key."""
+        from codomyrmex.logging_monitoring.json_formatter import JSONFormatter
+
+        formatter = JSONFormatter()
+
+        try:
+            raise ValueError("test exception for formatter")
+        except ValueError:
+            import sys
+            exc_info = sys.exc_info()
+
+        record = logging.LogRecord(
+            name="test.json.exc", level=logging.ERROR, pathname="test_file.py",
+            lineno=99, msg="Error occurred", args=(), exc_info=exc_info
+        )
+
+        output = formatter.format(record)
+        parsed = json.loads(output)
+
+        assert "exception" in parsed
+        assert "ValueError" in parsed["exception"]
+        assert "test exception for formatter" in parsed["exception"]
+        assert parsed["level"] == "ERROR"
+
+
+@pytest.mark.unit
+class TestAuditLogger:
+    """Test cases for AuditLogger from audit.py."""
+
+    def test_audit_logger_init(self):
+        """Test AuditLogger initialization creates a logger with a handler."""
+        from codomyrmex.logging_monitoring.audit import AuditLogger
+
+        # Use a unique name to avoid handler leakage from other tests
+        audit = AuditLogger(name="test.audit.init")
+
+        try:
+            assert audit.logger is not None
+            assert audit.logger.name == "test.audit.init"
+            assert audit.logger.level == logging.INFO
+            assert len(audit.logger.handlers) >= 1
+        finally:
+            for h in audit.logger.handlers[:]:
+                audit.logger.removeHandler(h)
+                h.close()
+
+    def test_audit_log_event(self, caplog):
+        """Test log_event records the audit message with correct content."""
+        from codomyrmex.logging_monitoring.audit import AuditLogger
+
+        audit = AuditLogger(name="test.audit.event")
+
+        try:
+            with caplog.at_level(logging.INFO, logger="test.audit.event"):
+                audit.log_event(
+                    event_type="file_access",
+                    user_id="user_42",
+                    details={"file": "/etc/passwd", "action": "read"},
+                    status="denied"
+                )
+
+            assert len(caplog.records) >= 1
+            record = caplog.records[-1]
+            assert "Audit event: file_access" in record.message
+            assert record.levelname == "INFO"
+        finally:
+            for h in audit.logger.handlers[:]:
+                audit.logger.removeHandler(h)
+                h.close()
+

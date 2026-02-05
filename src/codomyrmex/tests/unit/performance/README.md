@@ -1,40 +1,20 @@
-# Performance
+# performance
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `performance` module provides core functionality for Performance.
+The `performance` module provides core functionality for Performance..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    performance --> Utils[codomyrmex.utils]
-    performance --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph performance
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.performance import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_monitoring.py` - Test Monitoring
+- `test_performance_comprehensive.py` - Test Performance Comprehensive
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

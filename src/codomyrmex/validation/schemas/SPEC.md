@@ -32,8 +32,16 @@ schemas/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.validation.schemas import SchemaType
+from codomyrmex.validation.schemas import ValidationError
+from codomyrmex.validation.schemas import ValidationResult
+from codomyrmex.validation.schemas import FieldSchema
+from codomyrmex.validation.schemas import Constraint
+from codomyrmex.validation.schemas import TypeConstraint
+from codomyrmex.validation.schemas import MinLengthConstraint
+from codomyrmex.validation.schemas import MaxLengthConstraint
+from codomyrmex.validation.schemas import MinValueConstraint
+from codomyrmex.validation.schemas import MaxValueConstraint
 ```
 
 ### 3.2 Configuration

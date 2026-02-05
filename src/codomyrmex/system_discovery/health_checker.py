@@ -232,7 +232,7 @@ class HealthChecker:
         Returns:
             HealthCheckResult with detailed health information
         """
-        result = HealthCheckResult(module_name=module_name)
+        result = HealthCheckResult(module_name=module_name, status=HealthStatus.UNKNOWN)
 
         try:
             # Basic availability check

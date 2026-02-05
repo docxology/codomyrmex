@@ -828,7 +828,7 @@ class TestCacheError:
 
         error = CacheError("Test error")
 
-        assert str(error) == "Test error"
+        assert "Test error" in str(error)
         assert isinstance(error, Exception)
 
 

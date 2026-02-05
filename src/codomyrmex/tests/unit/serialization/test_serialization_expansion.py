@@ -1,7 +1,17 @@
 """Unit tests for serialization module expansion."""
 
 import pytest
-from codomyrmex.serialization import MsgpackSerializer, AvroSerializer, ParquetSerializer
+
+try:
+    from codomyrmex.serialization import MsgpackSerializer, AvroSerializer, ParquetSerializer
+    SERIALIZATION_AVAILABLE = True
+except ImportError:
+    SERIALIZATION_AVAILABLE = False
+
+pytestmark = pytest.mark.skipif(
+    not SERIALIZATION_AVAILABLE,
+    reason="serialization dependencies (msgpack, etc.) not installed",
+)
 
 @pytest.mark.unit
 def test_msgpack_serialization():

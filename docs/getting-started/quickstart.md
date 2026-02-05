@@ -10,7 +10,7 @@ Get up and running with Codomyrmex in **5 minutes or less**! This guide will sho
 # Clone and setup everything automatically with uv
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-./install_with_uv.sh
+./start_here.sh
 ```
 
 ### **Option 2: Manual UV Setup**

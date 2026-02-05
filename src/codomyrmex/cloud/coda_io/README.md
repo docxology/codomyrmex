@@ -1,40 +1,67 @@
-# Coda Io
+# cloud/coda_io
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `coda_io` module provides core functionality for Coda Io.
+Coda.io API client submodule. Provides a comprehensive Python client for the Coda.io REST API v1, enabling programmatic access to Coda docs, pages, tables, rows, formulas, controls, and permissions. Includes typed data models for all API resources and a structured exception hierarchy for error handling.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    coda_io --> Utils[codomyrmex.utils]
-    coda_io --> Logs[codomyrmex.logging_monitoring]
+### Client
 
-    subgraph coda_io
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+- **`CodaClient`** -- Main API client; initialized with `api_token`; provides methods for docs, pages, tables, rows, and permissions
 
-## Components
+### Core Resource Models
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+- **`Doc`** / **`DocList`** -- Coda document and paginated list
+- **`Page`** / **`PageList`** -- Document page and paginated list
+- **`PageReference`** / **`PageContentItem`** -- Page reference and content item
+- **`Table`** / **`TableList`** -- Table and paginated list
+- **`TableReference`** -- Table reference
+- **`Column`** / **`ColumnList`** -- Table column and paginated list
+- **`Row`** / **`RowList`** -- Table row and paginated list
+- **`RowEdit`** / **`CellEdit`** -- Row and cell edit operations
+- **`Formula`** / **`FormulaList`** -- Document formula and paginated list
+- **`Control`** / **`ControlList`** -- Document control and paginated list
 
-## Usage
+### Permission Models
 
-```python
-from codomyrmex.coda_io import ...
+- **`Permission`** / **`PermissionList`** -- Permission entry and paginated list
+- **`SharingMetadata`** -- Document sharing metadata
+- **`ACLSettings`** -- Access control list settings
+- **`Principal`** -- Permission principal (user, group, etc.)
 
-# Example usage
-# result = process(...)
-```
+### Reference Models
+
+- **`WorkspaceReference`** / **`FolderReference`** -- Workspace and folder references
+- **`Icon`** / **`DocSize`** -- Document icon and size metadata
+
+### User and Mutation Models
+
+- **`User`** -- Coda user information
+- **`MutationStatus`** -- Status of a mutation operation
+- **`InsertRowsResult`** -- Result of a row insertion operation
+
+### Exceptions
+
+- **`CodaAPIError`** -- Base Coda API exception
+- **`CodaAuthenticationError`** -- 401 authentication failure
+- **`CodaForbiddenError`** -- 403 forbidden access
+- **`CodaNotFoundError`** -- 404 resource not found
+- **`CodaRateLimitError`** -- 429 rate limit exceeded
+- **`CodaValidationError`** -- 400 validation failure
+- **`CodaGoneError`** -- 410 resource gone
+
+## Directory Contents
+
+- `__init__.py` - Package init; re-exports client, models, and exceptions
+- `client.py` - CodaClient implementation with REST API methods
+- `models.py` - Typed dataclass models for all Coda API resources
+- `exceptions.py` - Exception hierarchy for Coda API errors
+- `py.typed` - PEP 561 type-checking marker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [cloud](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

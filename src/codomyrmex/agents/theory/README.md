@@ -1,40 +1,35 @@
-# Theory
+# agents/theory
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `theory` module provides core functionality for Theory.
+Theoretical foundations for agentic systems. Defines abstract agent architecture types (reactive, deliberative, hybrid) and reasoning model abstractions (symbolic, neural, hybrid) used as base classes throughout the agents module.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    theory --> Utils[codomyrmex.utils]
-    theory --> Logs[codomyrmex.logging_monitoring]
+From `agent_architectures`:
 
-    subgraph theory
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+- **`AgentArchitecture`** -- Base class for agent architecture definitions
+- **`ReactiveArchitecture`** -- Stimulus-response architecture without internal state
+- **`DeliberativeArchitecture`** -- Planning-based architecture with world models
+- **`HybridArchitecture`** -- Combined reactive and deliberative architecture
 
-## Components
+From `reasoning_models`:
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+- **`ReasoningModel`** -- Base class for reasoning model abstractions
+- **`SymbolicReasoningModel`** -- Logic and rule-based reasoning
+- **`NeuralReasoningModel`** -- Neural network-based reasoning
+- **`HybridReasoningModel`** -- Combined symbolic and neural reasoning
 
-## Usage
+## Directory Contents
 
-```python
-from codomyrmex.theory import ...
-
-# Example usage
-# result = process(...)
-```
+- `__init__.py` - Package init; re-exports all architecture and reasoning classes
+- `agent_architectures.py` - Agent architecture type definitions
+- `reasoning_models.py` - Reasoning model type definitions
+- `py.typed` - PEP 561 type-checking marker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [agents](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

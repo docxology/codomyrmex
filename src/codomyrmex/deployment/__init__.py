@@ -82,7 +82,7 @@ class DeploymentManager:
             True if deployment was successful
         """
         strategy = strategy or self._default_strategy
-        
+
         # Create mock targets if not provided
         if targets is None:
             targets = [
@@ -93,14 +93,24 @@ class DeploymentManager:
                 )
                 for i in range(3)
             ]
-        
+
         # Mock deploy function
         def deploy_fn(target: DeploymentTarget, ver: str) -> bool:
             target.version = ver
             return True
-        
-        result = strategy.deploy(targets, version, deploy_fn)
-        
+
+        try:
+            result = strategy.deploy(targets, version, deploy_fn)
+        except Exception:
+            self._deployments.append({
+                "service": service_name,
+                "version": version,
+                "strategy": type(strategy).__name__,
+                "success": False,
+                "targets_updated": 0,
+            })
+            return False
+
         self._deployments.append({
             "service": service_name,
             "version": version,
@@ -108,7 +118,7 @@ class DeploymentManager:
             "success": result.success,
             "targets_updated": result.targets_updated,
         })
-        
+
         return result.success
     
     def get_deployment_history(self) -> List[Dict[str, Any]]:
@@ -174,11 +184,23 @@ class GitOpsSynchronizer:
     
     def get_version(self) -> str:
         """
-        Get the current synced version.
-        
+        Get the current synced version via git rev-parse.
+
         Returns:
             Version string or 'unknown'
         """
+        import subprocess
+        if self.local_path:
+            try:
+                result = subprocess.run(
+                    ['git', 'rev-parse', 'HEAD'],
+                    capture_output=True, text=True,
+                    cwd=self.local_path,
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return result.stdout.strip()
+            except Exception:
+                pass
         if not self._synced:
             return "unknown"
         return "v1.0.0"

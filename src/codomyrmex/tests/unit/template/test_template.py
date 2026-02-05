@@ -12,13 +12,13 @@ class TestTemplate:
 
     def test_template_directory_exists(self, code_dir):
         """Test that template directory exists."""
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
         assert template_dir.exists()
         assert template_dir.is_dir()
 
     def test_template_directory_contains_template_files(self, code_dir):
         """Test that template directory contains the expected template files."""
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
 
         # List all items in the template directory
         items = list(template_dir.iterdir())
@@ -27,7 +27,7 @@ class TestTemplate:
         non_hidden_items = [item for item in items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
 
         # The template directory should contain essential template files
-        expected_files = ['README.md', 'AGENTS.md']
+        expected_files = ['README.md', 'AGENTS.md', '__init__.py', 'scaffold.py']
         actual_files = [item.name for item in non_hidden_items]
 
         for expected_file in expected_files:
@@ -39,7 +39,7 @@ class TestTemplate:
             sys.path.insert(0, str(code_dir))
 
         # Test that the template directory is accessible
-        template_path = code_dir / "template"
+        template_path = code_dir / "codomyrmex" / "module_template"
         assert template_path.exists()
 
         # Verify it's a directory that can be used as a module base
@@ -47,7 +47,7 @@ class TestTemplate:
 
     def test_template_as_placeholder(self, code_dir):
         """Test that template serves as a proper template directory."""
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
 
         # Template should exist as a directory with template files
         assert template_dir.exists()
@@ -57,12 +57,12 @@ class TestTemplate:
         items = list(template_dir.iterdir())
         non_hidden_items = [item for item in items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
 
-        # Should have some template files
+        # Should have scaffolding files (Python and documentation)
         assert len(non_hidden_items) > 0
 
     def test_template_directory_structure(self, code_dir):
         """Test template directory structure."""
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
 
         # Basic directory properties
         assert template_dir.exists()
@@ -75,25 +75,24 @@ class TestTemplate:
     def test_template_module_inheritance_pattern(self, code_dir):
         """Test that template follows the module inheritance pattern."""
         # The template directory should follow the same pattern as other modules
-        # but be empty to serve as a clean starting point
+        # and contain scaffolding files for creating new modules
 
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
         assert template_dir.exists()
 
-        # While template is empty, other modules have __init__.py
-        # This test verifies the template is truly empty as intended
+        # Template should have Python scaffolding files
         python_files = list(template_dir.glob("*.py"))
-        assert len(python_files) == 0
+        assert len(python_files) >= 2  # At least __init__.py and scaffold.py
 
-        # Should not have subdirectories (unlike other modules)
-        subdirs = [item for item in template_dir.iterdir() if item.is_dir()]
-        assert len(subdirs) == 0
+        # Should have __init__.py to be a proper Python package
+        assert (template_dir / "__init__.py").exists()
+        assert (template_dir / "scaffold.py").exists()
 
     def test_template_can_be_copied(self, code_dir, tmp_path):
         """Test that template directory can be copied (used as template)."""
         import shutil
 
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
         target_dir = tmp_path / "copied_template"
 
         # Should be able to copy the template directory
@@ -107,7 +106,7 @@ class TestTemplate:
         non_hidden_items = [item for item in copied_items if not item.name.startswith('.') and not item.name.endswith('.pyc')]
 
         # Should contain the essential template files
-        expected_files = ['README.md', 'AGENTS.md']
+        expected_files = ['README.md', 'AGENTS.md', '__init__.py', 'scaffold.py']
         copied_files = [item.name for item in non_hidden_items]
 
         for expected_file in expected_files:
@@ -115,48 +114,48 @@ class TestTemplate:
 
     def test_template_module_path_resolution(self, code_dir):
         """Test template module path resolution."""
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
 
         # Path should be absolute and resolvable
         assert template_dir.is_absolute()
         assert template_dir.exists()
 
         # Should be able to resolve relative to code directory
-        assert template_dir == code_dir / "template"
+        assert template_dir == code_dir / "codomyrmex" / "module_template"
 
     def test_template_placeholder_behavior(self, code_dir):
         """Test that template behaves as expected template directory."""
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
 
         # Should exist and contain template files
         assert template_dir.exists()
         assert template_dir.is_dir()
 
-        # Should contain template files for module creation
+        # Should contain scaffolding files for module creation
         contents = list(template_dir.iterdir())
         non_hidden_items = [item for item in contents if not item.name.startswith('.') and not item.name.endswith('.pyc')]
 
-        # Should have template files
+        # Should have scaffolding files (Python and documentation)
         assert len(non_hidden_items) > 0
 
     def test_template_vs_other_modules(self, code_dir):
         """Test how template differs from other modules."""
-        template_dir = code_dir / "template"
+        template_dir = code_dir / "codomyrmex" / "module_template"
 
-        # Template should be empty while other modules have content
+        # Template should have scaffolding while other modules have full implementation
         assert template_dir.exists()
 
         # Compare with a known module that has content
-        ai_code_editing_dir = code_dir / "codomyrmex" / "ai_code_editing"
-        assert ai_code_editing_dir.exists()
+        agents_dir = code_dir / "codomyrmex" / "agents"
+        assert agents_dir.exists()
 
-        # Template should have fewer items than a developed module
+        # Template should have fewer items than a fully developed module
         template_items = list(template_dir.iterdir())
-        ai_items = list(ai_code_editing_dir.iterdir())
+        agents_items = list(agents_dir.iterdir())
 
-        # Template should be much emptier than developed modules
-        assert len(template_items) <= len(ai_items)
+        # Template should be simpler than fully developed modules
+        assert len(template_items) <= len(agents_items)
 
-        # Specifically, template should have no Python files
+        # Template should have Python scaffolding files
         python_files = list(template_dir.glob("*.py"))
-        assert len(python_files) == 0
+        assert len(python_files) >= 2  # At least __init__.py and scaffold.py

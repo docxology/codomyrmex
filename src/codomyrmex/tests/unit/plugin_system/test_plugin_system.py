@@ -24,6 +24,27 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch, PropertyMock
 from typing import Dict, Any, List, Optional
 
+from codomyrmex.plugin_system.plugin_registry import (
+    PluginRegistry,
+    Plugin,
+    PluginInfo,
+    PluginType,
+    PluginState,
+    Hook,
+    get_registry,
+    create_plugin_info,
+)
+from codomyrmex.plugin_system.plugin_validator import PluginValidator, validate_plugin
+from codomyrmex.plugin_system.plugin_loader import PluginLoader, LoadResult, discover_plugins as loader_discover
+from codomyrmex.plugin_system.plugin_manager import (
+    PluginManager,
+    get_plugin_manager,
+    discover_plugins,
+    load_plugin,
+    unload_plugin,
+)
+from codomyrmex.plugin_system.enforcer import InterfaceEnforcer
+
 
 # ============================================================================
 # Mock Plugin Classes for Testing
@@ -109,11 +130,6 @@ class TestPluginRegistry:
 
     def test_plugin_registry_creation(self):
         """Test creating a plugin registry."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, PluginType
-        except ImportError:
-            pytest.skip("PluginRegistry not available")
-
         registry = PluginRegistry()
         assert registry is not None
         assert registry._plugins == {}
@@ -121,11 +137,6 @@ class TestPluginRegistry:
 
     def test_plugin_info_creation(self):
         """Test creating PluginInfo."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("PluginInfo not available")
-
         info = PluginInfo(
             name="test_plugin",
             version="1.0.0",
@@ -141,11 +152,6 @@ class TestPluginRegistry:
 
     def test_plugin_info_to_dict(self):
         """Test PluginInfo serialization to dictionary."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("PluginInfo not available")
-
         info = PluginInfo(
             name="serialization_test",
             version="2.0.0",
@@ -167,11 +173,6 @@ class TestPluginRegistry:
 
     def test_plugin_registration(self):
         """Test plugin registration."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
         plugin = Plugin(PluginInfo(
             name="test_plugin",
@@ -191,11 +192,6 @@ class TestPluginRegistry:
 
     def test_duplicate_registration_rejected(self):
         """Test that duplicate plugin registration is rejected."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
         plugin1 = Plugin(PluginInfo(
             name="duplicate_test",
@@ -224,11 +220,6 @@ class TestPluginRegistry:
 
     def test_plugin_unregistration(self):
         """Test plugin unregistration."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
         plugin = Plugin(PluginInfo(
             name="unregister_test",
@@ -250,11 +241,6 @@ class TestPluginRegistry:
 
     def test_unregister_nonexistent_plugin(self):
         """Test unregistering a non-existent plugin."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
         result = registry.unregister("nonexistent_plugin")
 
@@ -262,11 +248,6 @@ class TestPluginRegistry:
 
     def test_plugin_listing(self):
         """Test plugin listing and filtering."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
 
         plugins = [
@@ -292,11 +273,6 @@ class TestPluginRegistry:
 
     def test_get_plugin_by_name(self):
         """Test retrieving a plugin by name."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
         plugin = Plugin(PluginInfo(
             name="get_test",
@@ -319,11 +295,6 @@ class TestPluginRegistry:
 
     def test_dependency_checking(self):
         """Test dependency validation."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
 
         # Register plugin with dependencies
@@ -359,11 +330,6 @@ class TestPluginRegistry:
 
     def test_multiple_dependencies(self):
         """Test checking multiple dependencies."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
 
         plugin = Plugin(PluginInfo(
@@ -392,11 +358,6 @@ class TestPluginRegistry:
 
     def test_hook_system(self):
         """Test plugin hook system."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry
-        except ImportError:
-            pytest.skip("PluginRegistry not available")
-
         registry = PluginRegistry()
 
         # Register a hook
@@ -419,11 +380,6 @@ class TestPluginRegistry:
 
     def test_multiple_hook_handlers(self):
         """Test multiple handlers on the same hook."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry
-        except ImportError:
-            pytest.skip("PluginRegistry not available")
-
         registry = PluginRegistry()
         hook = registry.register_global_hook("multi_handler_hook")
 
@@ -455,11 +411,6 @@ class TestPluginRegistry:
 
     def test_hook_error_handling(self):
         """Test that hook errors don't prevent other handlers from running."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry
-        except ImportError:
-            pytest.skip("PluginRegistry not available")
-
         registry = PluginRegistry()
         hook = registry.register_global_hook("error_hook")
 
@@ -491,11 +442,6 @@ class TestPluginRegistry:
 
     def test_emit_nonexistent_hook(self):
         """Test emitting a non-existent hook."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry
-        except ImportError:
-            pytest.skip("PluginRegistry not available")
-
         registry = PluginRegistry()
         results = registry.emit_global_hook("nonexistent_hook", "data")
 
@@ -503,11 +449,6 @@ class TestPluginRegistry:
 
     def test_initialize_all_plugins(self):
         """Test initializing all registered plugins."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
 
         plugins = [
@@ -526,11 +467,6 @@ class TestPluginRegistry:
 
     def test_shutdown_all_plugins(self):
         """Test shutting down all registered plugins."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry = PluginRegistry()
 
         plugins = [
@@ -549,11 +485,6 @@ class TestPluginRegistry:
 
     def test_global_registry_singleton(self):
         """Test global registry is a singleton."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import get_registry
-        except ImportError:
-            pytest.skip("get_registry not available")
-
         registry1 = get_registry()
         registry2 = get_registry()
 
@@ -570,11 +501,6 @@ class TestPluginValidator:
 
     def test_plugin_validator_creation(self):
         """Test creating a plugin validator."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
         assert validator is not None
         assert len(validator.risky_imports) > 0
@@ -582,11 +508,6 @@ class TestPluginValidator:
 
     def test_validate_plugin_metadata(self):
         """Test plugin metadata validation."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         # Valid metadata
@@ -615,11 +536,6 @@ class TestPluginValidator:
 
     def test_validate_metadata_missing_name(self):
         """Test validation fails when name is missing."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         metadata = {
@@ -633,11 +549,6 @@ class TestPluginValidator:
 
     def test_security_scanning(self):
         """Test plugin security scanning."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         # Create test plugin file
@@ -669,11 +580,6 @@ def dangerous_function():
 
     def test_security_scanning_safe_plugin(self):
         """Test security scanning on a safe plugin."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -701,11 +607,6 @@ class SafePlugin:
 
     def test_detect_eval_exec(self):
         """Test detection of eval and exec usage."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -726,11 +627,6 @@ def run_code(code_string):
 
     def test_dependency_validation(self):
         """Test dependency validation."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         # Test safe dependencies
@@ -746,11 +642,6 @@ def run_code(code_string):
 
     def test_dependency_validation_with_available_list(self):
         """Test dependency validation against available plugins."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         available = ["plugin_a", "plugin_b"]
@@ -763,11 +654,6 @@ def run_code(code_string):
 
     def test_dockerfile_validation(self):
         """Test Dockerfile validation."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         # Valid Dockerfile
@@ -793,11 +679,6 @@ USER root
 
     def test_dockerfile_missing_from(self):
         """Test Dockerfile validation without FROM instruction."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         invalid_dockerfile = """
@@ -811,12 +692,6 @@ RUN echo "no from instruction"
 
     def test_validate_plugin_instance(self):
         """Test validating a plugin instance."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         validator = PluginValidator()
 
         plugin = Plugin(PluginInfo("test", "1.0.0", "", "", PluginType.UTILITY, "test.py"))
@@ -826,11 +701,6 @@ RUN echo "no from instruction"
 
     def test_validate_plugin_missing_methods(self):
         """Test validating plugin without required methods."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         class IncompletePlugin:
@@ -850,22 +720,12 @@ class TestPluginLoader:
 
     def test_plugin_loader_creation(self):
         """Test creating a plugin loader with real implementation."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         loader = PluginLoader()
         assert loader is not None
         assert len(loader.plugin_directories) > 0
 
     def test_plugin_loader_custom_directories(self):
         """Test creating plugin loader with custom directories."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         with tempfile.TemporaryDirectory() as temp_dir:
             custom_dirs = [temp_dir]
             loader = PluginLoader(custom_dirs)
@@ -874,11 +734,6 @@ class TestPluginLoader:
 
     def test_plugin_discovery(self):
         """Test plugin discovery with real files."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create real plugin directory
             plugin_dir = os.path.join(temp_dir, "test_plugin")
@@ -916,11 +771,6 @@ class TestPlugin(Plugin):
 
     def test_discover_multiple_plugins(self):
         """Test discovering multiple plugins."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         with tempfile.TemporaryDirectory() as temp_dir:
             for i in range(3):
                 plugin_dir = os.path.join(temp_dir, f"plugin_{i}")
@@ -948,12 +798,6 @@ class TestPlugin(Plugin):
 
     def test_plugin_loading(self, tmp_path):
         """Test plugin loading with real Python module."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         # Create a real plugin module
         plugin_dir = tmp_path / "test_plugin"
         plugin_dir.mkdir()
@@ -1006,12 +850,6 @@ class TestPlugin:
 
     def test_load_already_loaded_plugin(self, tmp_path):
         """Test loading an already loaded plugin returns warning."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         loader = PluginLoader([str(tmp_path)])
 
         info = PluginInfo(
@@ -1035,12 +873,6 @@ class TestPlugin:
 
     def test_unload_plugin(self, tmp_path):
         """Test unloading a plugin."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         loader = PluginLoader([str(tmp_path)])
 
         info = PluginInfo(
@@ -1062,11 +894,6 @@ class TestPlugin:
 
     def test_unload_nonexistent_plugin(self, tmp_path):
         """Test unloading a non-existent plugin."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         loader = PluginLoader([str(tmp_path)])
 
         result = loader.unload_plugin("nonexistent")
@@ -1075,12 +902,6 @@ class TestPlugin:
 
     def test_get_loaded_plugins(self, tmp_path):
         """Test getting all loaded plugins."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         loader = PluginLoader([str(tmp_path)])
 
         # Add some mock plugins
@@ -1097,12 +918,6 @@ class TestPlugin:
 
     def test_validate_plugin_dependencies(self, tmp_path):
         """Test validating plugin dependencies."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         loader = PluginLoader([str(tmp_path)])
 
         info = PluginInfo(
@@ -1122,11 +937,6 @@ class TestPlugin:
 
     def test_load_result_dataclass(self):
         """Test LoadResult dataclass."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import LoadResult
-        except ImportError:
-            pytest.skip("LoadResult not available")
-
         result = LoadResult(
             plugin_name="test",
             success=True,
@@ -1153,11 +963,6 @@ class TestPluginManager:
 
     def test_plugin_manager_creation(self):
         """Test creating a plugin manager."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
         assert manager is not None
         assert manager.registry is not None
@@ -1166,11 +971,6 @@ class TestPluginManager:
 
     def test_plugin_manager_default_settings(self):
         """Test plugin manager default settings."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         assert manager.auto_discover is True
@@ -1179,11 +979,6 @@ class TestPluginManager:
 
     def test_plugin_discovery_through_manager(self, tmp_path):
         """Test plugin discovery through manager with real files."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         # Create a real plugin directory
         plugin_dir = tmp_path / "test_plugin"
         plugin_dir.mkdir()
@@ -1219,12 +1014,6 @@ class TestPlugin:
 
     def test_plugin_listing(self):
         """Test plugin listing through manager."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         # Manually add plugin to registry for testing
@@ -1239,12 +1028,6 @@ class TestPlugin:
 
     def test_list_plugins_by_type(self):
         """Test listing plugins filtered by type."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         plugins = [
@@ -1262,11 +1045,6 @@ class TestPlugin:
 
     def test_hook_registration(self):
         """Test hook registration through manager."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         # Register a hook
@@ -1285,12 +1063,6 @@ class TestPlugin:
 
     def test_plugin_status(self):
         """Test getting plugin status."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         # Add plugin to registry
@@ -1310,11 +1082,6 @@ class TestPlugin:
 
     def test_plugin_status_nonexistent(self):
         """Test getting status of non-existent plugin."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         status = manager.get_plugin_status("nonexistent")
@@ -1325,12 +1092,6 @@ class TestPlugin:
 
     def test_system_status(self):
         """Test getting system status."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         # Add some plugins
@@ -1351,12 +1112,6 @@ class TestPlugin:
 
     def test_enable_disable_plugin(self):
         """Test enabling and disabling plugins."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin, PluginState
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         plugin = Plugin(PluginInfo("toggle_test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
@@ -1374,11 +1129,6 @@ class TestPlugin:
 
     def test_enable_nonexistent_plugin(self):
         """Test enabling a non-existent plugin."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         result = manager.enable_plugin("nonexistent")
@@ -1386,12 +1136,6 @@ class TestPlugin:
 
     def test_load_plugin_with_validation(self, tmp_path):
         """Test loading plugin with validation using real validator and loader."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         # Create a real plugin file
@@ -1433,11 +1177,6 @@ class TestPlugin:
 
     def test_load_plugin_not_found(self):
         """Test loading a non-existent plugin."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         result = manager.load_plugin("definitely_not_a_real_plugin")
@@ -1447,12 +1186,6 @@ class TestPlugin:
 
     def test_cleanup(self):
         """Test manager cleanup."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import PluginManager
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType, Plugin
-        except ImportError:
-            pytest.skip("PluginManager not available")
-
         manager = PluginManager()
 
         # Add plugins and also add them to the loader's loaded_plugins
@@ -1480,11 +1213,6 @@ class TestPluginBaseClass:
 
     def test_plugin_base_creation(self):
         """Test creating a plugin base class."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType, PluginState
-        except ImportError:
-            pytest.skip("Plugin base class not available")
-
         info = PluginInfo(
             name="test_plugin",
             version="1.0.0",
@@ -1503,11 +1231,6 @@ class TestPluginBaseClass:
 
     def test_plugin_creation_without_info(self):
         """Test creating plugin without explicit info."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginState
-        except ImportError:
-            pytest.skip("Plugin base class not available")
-
         plugin = Plugin()
 
         assert plugin.info is not None
@@ -1515,11 +1238,6 @@ class TestPluginBaseClass:
 
     def test_plugin_hook_registration(self):
         """Test plugin hook registration."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         plugin = Plugin(PluginInfo(
             "test", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py"
         ))
@@ -1540,11 +1258,6 @@ class TestPluginBaseClass:
 
     def test_emit_nonexistent_hook(self):
         """Test emitting a non-existent hook returns empty list."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         plugin = Plugin(PluginInfo("test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
 
         results = plugin.emit_hook("nonexistent")
@@ -1552,11 +1265,6 @@ class TestPluginBaseClass:
 
     def test_plugin_lifecycle(self):
         """Test plugin lifecycle methods."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType, PluginState
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         plugin = Plugin(PluginInfo(
             "test", "1.0.0", "Test", "Author", PluginType.UTILITY, "test.py"
         ))
@@ -1574,11 +1282,6 @@ class TestPluginBaseClass:
 
     def test_plugin_initialize_with_config(self):
         """Test plugin initialization with configuration."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType, PluginState
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         plugin = Plugin(PluginInfo("config_test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
 
         config = {"setting1": "value1", "setting2": 42}
@@ -1591,11 +1294,6 @@ class TestPluginBaseClass:
 
     def test_plugin_shutdown(self):
         """Test plugin shutdown."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType, PluginState
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         plugin = Plugin(PluginInfo("shutdown_test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
         plugin.initialize()
 
@@ -1615,11 +1313,6 @@ class TestInterfaceEnforcer:
 
     def test_enforcer_valid_interface(self):
         """Test enforcer with valid interface implementation."""
-        try:
-            from codomyrmex.plugin_system.enforcer import InterfaceEnforcer
-        except ImportError:
-            pytest.skip("InterfaceEnforcer not available")
-
         class RequiredInterface:
             def method_a(self): pass
             def method_b(self): pass
@@ -1633,11 +1326,6 @@ class TestInterfaceEnforcer:
 
     def test_enforcer_invalid_interface(self):
         """Test enforcer with invalid interface implementation."""
-        try:
-            from codomyrmex.plugin_system.enforcer import InterfaceEnforcer
-        except ImportError:
-            pytest.skip("InterfaceEnforcer not available")
-
         class RequiredInterface:
             def method_a(self): pass
             def method_b(self): pass
@@ -1651,11 +1339,6 @@ class TestInterfaceEnforcer:
 
     def test_enforcer_partial_implementation(self):
         """Test enforcer with partial interface implementation."""
-        try:
-            from codomyrmex.plugin_system.enforcer import InterfaceEnforcer
-        except ImportError:
-            pytest.skip("InterfaceEnforcer not available")
-
         class RequiredInterface:
             def method_a(self): pass
             def method_b(self): pass
@@ -1679,11 +1362,6 @@ class TestConvenienceFunctions:
 
     def test_get_plugin_manager(self):
         """Test getting the global plugin manager."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import get_plugin_manager
-        except ImportError:
-            pytest.skip("Convenience functions not available")
-
         manager1 = get_plugin_manager()
         manager2 = get_plugin_manager()
 
@@ -1691,13 +1369,6 @@ class TestConvenienceFunctions:
 
     def test_convenience_functions(self):
         """Test other convenience functions."""
-        try:
-            from codomyrmex.plugin_system.plugin_manager import discover_plugins, load_plugin, unload_plugin
-            from codomyrmex.plugin_system.plugin_loader import discover_plugins as loader_discover
-            from codomyrmex.plugin_system.plugin_validator import validate_plugin
-        except ImportError:
-            pytest.skip("Convenience functions not available")
-
         # Test that functions exist and are callable
         assert callable(discover_plugins)
         assert callable(load_plugin)
@@ -1706,11 +1377,6 @@ class TestConvenienceFunctions:
 
     def test_create_plugin_info_helper(self):
         """Test plugin info creation helper."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import create_plugin_info, PluginType
-        except ImportError:
-            pytest.skip("Helper functions not available")
-
         info = create_plugin_info(
             name="helper_test",
             version="1.0.0",
@@ -1733,11 +1399,6 @@ class TestPluginIsolation:
 
     def test_plugins_have_separate_state(self):
         """Test that plugins maintain separate state."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         plugin1 = Plugin(PluginInfo("isolation1", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
         plugin2 = Plugin(PluginInfo("isolation2", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
 
@@ -1749,11 +1410,6 @@ class TestPluginIsolation:
 
     def test_plugins_have_separate_hooks(self):
         """Test that plugins have separate hook registrations."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         plugin1 = Plugin(PluginInfo("hook_iso1", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
         plugin2 = Plugin(PluginInfo("hook_iso2", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
 
@@ -1768,11 +1424,6 @@ class TestPluginIsolation:
 
     def test_registry_isolation(self):
         """Test that separate registries are isolated."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         registry1 = PluginRegistry()
         registry2 = PluginRegistry()
 
@@ -1794,12 +1445,6 @@ class TestErrorHandling:
 
     def test_load_invalid_plugin_path(self, tmp_path):
         """Test loading plugin with invalid path."""
-        try:
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
-            from codomyrmex.plugin_system.plugin_registry import PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("PluginLoader not available")
-
         loader = PluginLoader([str(tmp_path)])
 
         info = PluginInfo(
@@ -1818,11 +1463,6 @@ class TestErrorHandling:
 
     def test_validate_corrupted_file(self, tmp_path):
         """Test validating a corrupted plugin file."""
-        try:
-            from codomyrmex.plugin_system.plugin_validator import PluginValidator
-        except ImportError:
-            pytest.skip("PluginValidator not available")
-
         validator = PluginValidator()
 
         # Create a file with invalid content
@@ -1836,11 +1476,6 @@ class TestErrorHandling:
 
     def test_registry_handles_shutdown_errors(self):
         """Test that registry handles shutdown errors gracefully."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         class FaultyPlugin(Plugin):
             def shutdown(self):
                 raise RuntimeError("Shutdown error")
@@ -1858,11 +1493,6 @@ class TestErrorHandling:
 
     def test_hook_continues_after_handler_error(self):
         """Test that hooks continue execution after handler errors."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Hook
-        except ImportError:
-            pytest.skip("Hook not available")
-
         hook = Hook("error_test")
 
         executed = []
@@ -1901,11 +1531,6 @@ class TestPluginTypes:
 
     def test_all_plugin_types_exist(self):
         """Test that all expected plugin types are defined."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginType
-        except ImportError:
-            pytest.skip("PluginType not available")
-
         expected_types = [
             "ANALYZER", "FORMATTER", "EXPORTER", "IMPORTER",
             "PROCESSOR", "HOOK", "UTILITY", "ADAPTER", "AGENT"
@@ -1916,11 +1541,6 @@ class TestPluginTypes:
 
     def test_plugin_type_values(self):
         """Test plugin type enum values."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginType
-        except ImportError:
-            pytest.skip("PluginType not available")
-
         assert PluginType.ANALYZER.value == "analyzer"
         assert PluginType.UTILITY.value == "utility"
         assert PluginType.AGENT.value == "agent"
@@ -1936,11 +1556,6 @@ class TestPluginStates:
 
     def test_all_plugin_states_exist(self):
         """Test that all expected plugin states are defined."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import PluginState
-        except ImportError:
-            pytest.skip("PluginState not available")
-
         expected_states = [
             "UNKNOWN", "REGISTERED", "LOADED", "ACTIVE",
             "DISABLED", "ERROR", "INITIALIZING", "SHUTTING_DOWN",
@@ -1952,11 +1567,6 @@ class TestPluginStates:
 
     def test_plugin_state_transitions(self):
         """Test plugin state transitions."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Plugin, PluginInfo, PluginType, PluginState
-        except ImportError:
-            pytest.skip("Plugin system not available")
-
         plugin = Plugin(PluginInfo("state_test", "1.0.0", "", "", PluginType.UTILITY, "t.py"))
 
         # Initial state
@@ -1983,9 +1593,8 @@ class TestYAMLMetadata:
         """Test discovering plugin with YAML metadata."""
         try:
             import yaml
-            from codomyrmex.plugin_system.plugin_loader import PluginLoader
         except ImportError:
-            pytest.skip("YAML or PluginLoader not available")
+            pytest.skip("YAML not available")
 
         plugin_dir = tmp_path / "yaml_plugin"
         plugin_dir.mkdir()
@@ -2022,11 +1631,6 @@ class TestHookClass:
 
     def test_hook_creation(self):
         """Test creating a hook."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Hook
-        except ImportError:
-            pytest.skip("Hook not available")
-
         hook = Hook("test_hook", description="Test description")
 
         assert hook.name == "test_hook"
@@ -2035,11 +1639,6 @@ class TestHookClass:
 
     def test_hook_register_handler(self):
         """Test registering handlers with a hook."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Hook
-        except ImportError:
-            pytest.skip("Hook not available")
-
         hook = Hook("test")
 
         def handler1(): pass
@@ -2054,11 +1653,6 @@ class TestHookClass:
 
     def test_hook_emit_with_args(self):
         """Test emitting hook with arguments."""
-        try:
-            from codomyrmex.plugin_system.plugin_registry import Hook
-        except ImportError:
-            pytest.skip("Hook not available")
-
         hook = Hook("args_test")
 
         def handler(a, b, c=None):

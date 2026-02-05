@@ -1,40 +1,42 @@
-# Cursor
+# ide/cursor
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `cursor` module provides core functionality for Cursor.
+Integration with Cursor IDE -- the AI-first code editor. Provides programmatic access to Cursor's AI-assisted development capabilities including Composer automation, `.cursorrules` management, and model configuration.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    cursor --> Utils[codomyrmex.utils]
-    cursor --> Logs[codomyrmex.logging_monitoring]
+- **`CursorClient`** -- Client extending `IDEClient` for Cursor IDE integration. Key capabilities:
 
-    subgraph cursor
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+  **Connection**
+  - `connect()` -- Detect a Cursor workspace by checking for `.cursor` directory or `.cursorrules` file
+  - `disconnect()` -- Clean up connection state
+  - `is_connected()` -- Check connection status
+  - `get_capabilities()` -- Return supported features (composer, chat, inline_edit, code_generation, code_explanation, rules_management, model_selection) and available models
 
-## Components
+  **Rules Management**
+  - `get_rules()` -- Read current `.cursorrules` configuration from the workspace root
+  - `update_rules()` -- Write updated rules; accepts string or dict content (dicts are JSON-serialized)
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+  **Model Configuration**
+  - `get_models()` -- List available AI models (gpt-4, gpt-4-turbo, gpt-3.5-turbo, claude-3-opus, claude-3-sonnet)
+  - `set_model()` -- Validate and set the active AI model
 
-## Usage
+  **File Operations**
+  - `execute_command()` -- Execute a Cursor command
+  - `get_active_file()` / `open_file()` / `get_open_files()` -- IDE file management
 
-```python
-from codomyrmex.cursor import ...
+## Directory Contents
 
-# Example usage
-# result = process(...)
-```
+- `__init__.py` - CursorClient with rules/model management and workspace detection (130 lines)
+- `py.typed` - PEP 561 typing marker
+- `SPEC.md` - Module specification
+- `AGENTS.md` - Agent integration documentation
+- `PAI.md` - PAI integration notes
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [ide](../README.md)
+- **Project Root**: [codomyrmex](../../../../README.md)

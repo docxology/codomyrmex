@@ -1,40 +1,19 @@
-# Documentation
+# documentation
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `documentation` module provides core functionality for Documentation.
+The `documentation` module provides core functionality for Documentation..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    documentation --> Utils[codomyrmex.utils]
-    documentation --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph documentation
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.documentation import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_documentation_accuracy.py` - Test Documentation Accuracy
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [integration](../README.md)
+- **Project Root**: ../../../../README.md

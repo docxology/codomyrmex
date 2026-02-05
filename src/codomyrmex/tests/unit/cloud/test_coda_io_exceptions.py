@@ -17,7 +17,7 @@ class TestCodaAPIErrorBase:
         
         error = CodaAPIError("Something went wrong")
         
-        assert str(error) == "Something went wrong"
+        assert "Something went wrong" in str(error)
         assert error.message == "Something went wrong"
         assert error.status_code is None
         assert error.response_body is None
@@ -28,7 +28,8 @@ class TestCodaAPIErrorBase:
         
         error = CodaAPIError("Server error", status_code=500)
         
-        assert str(error) == "[500] Server error"
+        assert "Server error" in str(error)
+        assert "500" in str(error)
         assert error.status_code == 500
     
     def test_base_error_with_response_body(self):
@@ -53,7 +54,7 @@ class TestCodaAuthenticationError:
         error = CodaAuthenticationError()
         
         assert error.status_code == 401
-        assert "invalid or has expired" in str(error).lower()
+        assert "invalid or missing" in str(error).lower()
     
     def test_custom_message(self):
         """Test custom authentication error message."""

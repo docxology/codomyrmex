@@ -353,9 +353,9 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
             library_file=self.library_file,
             base_path=self.base_path
         )
-        
+
         results = manager.bulk_update()
-        
+
         # Should return results for all repositories
         self.assertEqual(len(results), 3)
         # Results may be True or False depending on whether repos are cloned

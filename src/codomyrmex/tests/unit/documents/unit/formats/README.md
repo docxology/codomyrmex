@@ -1,40 +1,22 @@
-# Formats
+# formats
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `formats` module provides core functionality for Formats.
+The `formats` module provides core functionality for Formats..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    formats --> Utils[codomyrmex.utils]
-    formats --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph formats
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.formats import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_json_handler.py` - Test Json Handler
+- `test_markdown_handler.py` - Test Markdown Handler
+- `test_text_handler.py` - Test Text Handler
+- `test_yaml_handler.py` - Test Yaml Handler
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../../../README.md

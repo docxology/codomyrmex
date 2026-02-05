@@ -1,40 +1,20 @@
-# Serialization
+# serialization
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `serialization` module provides core functionality for Serialization.
+The `serialization` module provides core functionality for Serialization..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    serialization --> Utils[codomyrmex.utils]
-    serialization --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph serialization
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.serialization import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_serialization.py` - Test Serialization
+- `test_serialization_expansion.py` - Test Serialization Expansion
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

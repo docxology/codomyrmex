@@ -1,40 +1,20 @@
-# Orchestration
+# orchestration
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `orchestration` module provides core functionality for Orchestration.
+The `orchestration` module provides core functionality for Orchestration..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    orchestration --> Utils[codomyrmex.utils]
-    orchestration --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph orchestration
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.orchestration import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `project/` - Subdirectory
+- `test_project_orchestration.py` - Test Project Orchestration
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [logistics](../README.md)
+- **Project Root**: ../../../../../README.md

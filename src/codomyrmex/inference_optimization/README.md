@@ -1,43 +1,47 @@
-# Inference Optimization
+# inference_optimization
 
-Model quantization, distillation, and pruning for cost-effective inference
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `inference_optimization` module provides model quantization, distillation, and pruning for cost-effective inference.
+Model inference optimization techniques including request batching, LRU caching, and quantization configuration. Provides a `RequestBatcher` that collects inference requests into batches using configurable size and timeout parameters, an `InferenceCache` with thread-safe LRU eviction, and an `InferenceOptimizer` that wraps a model function with caching, batching, and performance statistics tracking.
 
-## Installation
+## Key Exports
 
-This module is part of the Codomyrmex platform and is installed with the main package.
+### Enums
 
-```bash
-pip install codomyrmex
-```
+- **`QuantizationType`** -- Quantization precision levels: FP32, FP16, INT8, INT4
+- **`BatchingStrategy`** -- Request batching strategies: FIXED, DYNAMIC, ADAPTIVE
 
-## Quick Start
+### Data Classes
 
-```python
-from codomyrmex.inference_optimization import *
+- **`OptimizationConfig`** -- Configuration for inference optimization including quantization type, max batch size, batch timeout, caching toggle, cache size limit, and worker count
+- **`InferenceStats`** -- Performance statistics with total requests/batches, average batch size, average latency, cache hits/misses, and computed cache hit rate
+- **`InferenceRequest`** -- A generic inference request with ID, input data, priority, and creation timestamp; includes `age_ms` property
+- **`InferenceResult`** -- Result of an inference call with request ID, output, latency in milliseconds, cache-hit flag, and batch size
 
-# Example usage
-# TODO: Add practical examples
-```
+### Components
 
-## Features
+- **`InferenceCache`** -- Thread-safe LRU cache for inference results; supports get, put, contains, clear, and reports current size; evicts least-recently-used entries when capacity is exceeded
+- **`RequestBatcher`** -- Generic request batcher that collects requests in a background thread, groups them by configurable max batch size and timeout, and dispatches to a batch processor function; supports both synchronous (`submit_sync`) and asynchronous (`submit_async` returning `Future`) submission
 
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
+### Services
 
-## API Reference
+- **`InferenceOptimizer`** -- Main inference optimization engine; wraps any batch-capable model function with LRU caching, single and batch inference methods, performance statistics, and cache management
 
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
+## Directory Contents
 
-## Related Modules
-
-- [`None`](../) - Parent module
+- `__init__.py` -- Module implementation with optimizer, batcher, cache, and data models
+- `README.md` -- This file
+- `AGENTS.md` -- Agent integration documentation
+- `API_SPECIFICATION.md` -- Programmatic API specification
+- `MCP_TOOL_SPECIFICATION.md` -- Model Context Protocol tool definitions
+- `PAI.md` -- PAI integration notes
+- `SPEC.md` -- Module specification
+- `py.typed` -- PEP 561 type stub marker
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/inference_optimization/](../../../docs/modules/inference_optimization/)
 - **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

@@ -29,8 +29,13 @@ class NamespacedCache(Cache):
     def exists(self, key: str) -> bool:
         return self.cache.exists(self._full_key(key))
 
+    @property
+    def stats(self) -> CacheStats:
+        return self.cache.stats
+
     def get_stats(self) -> CacheStats:
-        return self.cache.get_stats()
+        """Legacy alias."""
+        return self.stats
 
     def delete_pattern(self, pattern: str) -> int:
         return self.cache.delete_pattern(f"{self.namespace}:{pattern}")

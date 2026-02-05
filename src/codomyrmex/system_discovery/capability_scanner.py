@@ -37,7 +37,7 @@ except ImportError:
 
 @dataclass
 class FunctionCapability:
-    """Detailed information about a function capability."""
+    """Metadata about a discovered function capability."""
 
     name: str
     signature: str
@@ -53,7 +53,7 @@ class FunctionCapability:
 
 @dataclass
 class ClassCapability:
-    """Detailed information about a class capability."""
+    """Metadata about a discovered class capability."""
 
     name: str
     docstring: str
@@ -68,7 +68,7 @@ class ClassCapability:
 
 @dataclass
 class ModuleCapability:
-    """Detailed information about a module's capabilities."""
+    """Aggregated capability information for a module."""
 
     name: str
     path: str
@@ -91,7 +91,12 @@ class CapabilityScanner:
     """
 
     def __init__(self, project_root: Optional[Path] = None):
-        """Initialize the capability scanner."""
+        """Initialize the capability scanner.
+
+        Args:
+            project_root: Root directory of the project. Defaults to the current
+                working directory if not provided.
+        """
         self.project_root = project_root or Path.cwd()
         self.src_path = self.project_root / "src"
         self.codomyrmex_path = self.src_path / "codomyrmex"
@@ -102,7 +107,14 @@ class CapabilityScanner:
 #             sys.path.insert(0, str(self.src_path))  # Removed sys.path manipulation
 
     def scan_all_modules(self) -> dict[str, ModuleCapability]:
-        """Scan all modules and return detailed capability information."""
+        """Scan all modules under the codomyrmex package path.
+
+        Iterates over every directory in ``self.codomyrmex_path`` that contains
+        an ``__init__.py`` and delegates to :meth:`scan_module` for each one.
+
+        Returns:
+            A mapping of module name to its :class:`ModuleCapability` descriptor.
+        """
         capabilities = {}
 
         if not self.codomyrmex_path.exists():
@@ -128,7 +140,18 @@ class CapabilityScanner:
     def scan_module(
         self, module_name: str, module_path: Path
     ) -> Optional[ModuleCapability]:
-        """Scan a specific module for capabilities."""
+        """Scan a specific module for capabilities using both runtime and static analysis.
+
+        Attempts to import the module for runtime introspection (exports, ``__all__``).
+        Falls back to pure AST-based static analysis when the import fails.
+
+        Args:
+            module_name: Short name of the module (e.g. ``"logging_monitoring"``).
+            module_path: Filesystem path to the module directory.
+
+        Returns:
+            A :class:`ModuleCapability` descriptor, or ``None`` on failure.
+        """
         try:
             # Try to import the module for runtime analysis
             module_import_path = f"codomyrmex.{module_name}"
@@ -220,7 +243,7 @@ class CapabilityScanner:
     ) -> tuple[
         list[FunctionCapability], list[ClassCapability], dict[str, Any], set[str]
     ]:
-        """Analyze AST and extract capabilities."""
+        """Extract function, class, constant, and import info from an AST."""
         functions = []
         classes = []
         constants = {}

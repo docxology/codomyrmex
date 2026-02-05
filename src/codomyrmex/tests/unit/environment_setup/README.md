@@ -1,40 +1,22 @@
-# Environment Setup
+# environment_setup
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `environment_setup` module provides core functionality for Environment Setup.
+The `environment_setup` module provides core functionality for Environment Setup..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    environment_setup --> Utils[codomyrmex.utils]
-    environment_setup --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph environment_setup
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.environment_setup import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `integration/` - Subdirectory
+- `test_environment_setup.py` - Test Environment Setup
+- `test_environment_setup_comprehensive.py` - Test Environment Setup Comprehensive
+- `unit/` - Subdirectory
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

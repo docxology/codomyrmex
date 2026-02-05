@@ -1,40 +1,39 @@
-# Serializers
+# cache/serializers
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `serializers` module provides core functionality for Serializers.
+Cache serialization utilities. Provides a family of serializers for converting cache values to and from bytes. Includes JSON, pickle, string, and typed serializers as core implementations, plus composable wrappers for compression (zlib) and base64 encoding. All serializers implement a common `CacheSerializer` ABC with `serialize(value) -> bytes` and `deserialize(data) -> Any`.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    serializers --> Utils[codomyrmex.utils]
-    serializers --> Logs[codomyrmex.logging_monitoring]
+### Abstract Base
 
-    subgraph serializers
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+- **`CacheSerializer`** -- ABC defining `serialize(value)` and `deserialize(data)` interface
 
-## Components
+### Core Serializers
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+- **`JSONSerializer`** -- JSON serialization with optional indent; uses `default=str` for non-serializable types
+- **`PickleSerializer`** -- Python pickle serialization with configurable protocol version
+- **`StringSerializer`** -- Simple string serialization with configurable encoding (default UTF-8)
+- **`TypedSerializer`** -- Wraps values with type metadata (`_type`, `_value`) to preserve type information across serialization boundaries
 
-## Usage
+### Composable Wrappers
 
-```python
-from codomyrmex.serializers import ...
+- **`CompressedSerializer`** -- Wraps any serializer with zlib compression at configurable level
+- **`Base64Serializer`** -- Wraps any serializer with base64 encoding for text-safe transport
 
-# Example usage
-# result = process(...)
-```
+### Factory
+
+- **`create_serializer()`** -- Factory function accepting serializer_type ("json", "pickle", "string", "typed") and optional `compress=True` flag
+
+## Directory Contents
+
+- `__init__.py` - Package init; contains all serializer classes inline (single-file module)
+- `py.typed` - PEP 561 type-checking marker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [cache](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

@@ -14,12 +14,18 @@ Integration with Infomaniak Public Cloud, an OpenStack-based infrastructure prov
 - Compatible with upstream OpenStack tooling and Terraform providers
 - Application Credentials for secure, scoped authentication
 
-### 2. Dual Object Storage
+### 2. Three Auth Base Classes
+
+- `InfomaniakOpenStackBase`: OpenStack SDK with Application Credentials (compute, network, storage, DNS, orchestration, metering, identity)
+- `InfomaniakS3Base`: boto3 S3 with access key / secret key (S3-compatible storage)
+- `InfomaniakRESTBase`: REST API with OAuth2 Bearer token (Newsletter API)
+
+### 3. Dual Object Storage
 
 - Swift API via openstacksdk for native OpenStack operations
 - S3-compatible API via boto3 for broad tooling compatibility
 
-### 3. Consistency
+### 4. Consistency
 
 - Follows existing cloud module patterns (AWS, GCP, Azure)
 - Uniform error handling and logging
@@ -41,7 +47,7 @@ graph TD
         Identity[identity/] --> Keystone[Keystone API]
         DNS[dns/] --> Designate[Designate API]
         Orch[orchestration/] --> Heat[Heat API]
-        Meter[metering/] --> Ceilometer[Ceilometer API]
+        Meter[metering/] --> Aggregation[Resource Aggregation]
     end
     
     Auth --> Init
@@ -53,22 +59,31 @@ graph TD
 
 ### FR-1: Compute Operations
 
-- List, create, start, stop, delete instances
-- List images, flavors, availability zones
-- Key pair management
+- List, create, start, stop, reboot, delete, terminate instances
+- Get instance details
+- List images, get image by ID, list flavors, list availability zones
+- Key pair management (create, delete, list)
 
 ### FR-2: Block Storage
 
-- Volume CRUD operations
+- Volume CRUD operations (list, create, get, delete)
 - Attach/detach volumes to instances
+- Extend volume size
+- List, create, delete snapshots
 - Backup and restore
 
 ### FR-3: Networking
 
-- Network and subnet management
-- Router operations with external gateway
-- Security groups and rules
-- Load balancer (Octavia) operations
+- Network and subnet management (CRUD)
+- Router operations with external gateway (create, delete, add/remove interface)
+- Security groups and rules (create, delete, add rules)
+- Floating IP operations (allocate, release, associate, disassociate)
+- Load balancer (Octavia) operations:
+  - Load balancer CRUD
+  - Listener CRUD
+  - Pool CRUD
+  - Pool member add/remove/list
+  - Health monitor CRUD
 
 ### FR-4: Object Storage
 
@@ -85,15 +100,17 @@ graph TD
 
 ### FR-6: DNS
 
-- Zone management (Designate)
-- Record set CRUD
-- Reverse DNS (PTR record) management
+- Zone management (Designate) — CRUD
+- Record set CRUD (list, create, update, delete)
+- Reverse DNS (PTR record) management (list, set, delete)
 
 ### FR-7: Orchestration
 
-- Heat stack CRUD
+- Heat stack CRUD (create, get, update, delete, list)
 - Template validation
 - Stack event and resource listing
+- Stack suspend and resume
+- Stack outputs retrieval
 
 ### FR-8: Metering
 
@@ -119,7 +136,7 @@ graph TD
 |---------|---------|----------|
 | `openstacksdk` | OpenStack services | Optional |
 | `boto3` | S3-compatible storage | Optional |
-| `requests` | Newsletter API (core dep) | No |
+| `requests` | Newsletter REST API (InfomaniakRESTBase) | Required for RESTBase |
 
 ### Endpoints
 

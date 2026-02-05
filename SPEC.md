@@ -4,7 +4,7 @@
 
 ## System Concept
 
-Codomyrmex is an idealized modular workspace designed to facilitate interaction between (pairwise) and among (multiple) humans, people, agents, synthetic systems, embodiments tools, and things most broadly.
+Codomyrmex is an idealized modular workspace designed to facilitate interaction between (pairwise) and among (multiple) humans, people, agents, synthetic systems, embodiments, tools, and things most broadly.
 
 It functions as a cohesive "colony" of specialized modules where each component has a single responsibility, clear boundaries, and standardized interfaces. The system abstracts complexity through layering, ensuring that high-level workflows can be orchestrated without tight coupling to low-level implementations.
 
@@ -47,7 +47,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Documentation
 - Self-documenting code with clear docstrings and type annotations.
-- Complete API specifications (`API_SPECIFICATION.md`) and MCP tool definitions (`MCP_TOOL_SPECIFICATION.md`) for every module.
+- Complete API specifications (`API_SPECIFICATION.md`) and MCP tool definitions (`MCP_TOOL_SPECIFICATION.md`) for applicable modules with AI-callable tools.
 - Living documentation that stays synchronized with implementation through scaffolding tools.
 
 ## Architecture

@@ -35,9 +35,9 @@ def test_crossover_logic():
 def test_mutation_logic():
     """Test mutation affects genes."""
     g = Genome([0.5, 0.5, 0.5])
-    # 100% mutation rate
-    mutated = mutate(g, rate=1.0, amount=0.1)
-    
+    # 100% mutation rate - API in __init__.py doesn't support 'amount' parameter
+    mutated = mutate(g, rate=1.0)
+
     assert mutated.genes != g.genes
     assert len(mutated) == 3
 
@@ -50,11 +50,12 @@ def test_tournament_selection():
     g2.fitness = 20
     g3 = Genome([3])
     g3.fitness = 5
-    
+
     pop = [g1, g2, g3]
-    # Tournament of size 3 will always pick the best (g2)
-    winner = tournament_selection(pop, size=3)
-    assert winner == g2
+    # Tournament - API in __init__.py uses 'tournament_size' not 'size'
+    winner = tournament_selection(pop, tournament_size=3)
+    # Check fitness since tournament_selection is non-deterministic in some implementations
+    assert winner.fitness == 20
 
 @pytest.mark.unit
 def test_population_evolution():

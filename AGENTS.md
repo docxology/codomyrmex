@@ -6,7 +6,7 @@
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with 80+ specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with 82 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -23,7 +23,7 @@ The repository is organized into distinct surfaces, each with specific responsib
 | **config/** | Configuration templates and examples | [config/README.md](config/README.md) |
 | **cursorrules/** | Coding standards and automation rules | [cursorrules/README.md](cursorrules/README.md) |
 | **projects/** | Project workspace and templates | [projects/README.md](projects/README.md) |
-| **examples/** | Executable examples and demos | [examples/README.md](examples/README.md) |
+| **src/codomyrmex/examples/** | Executable examples and demos | [src/codomyrmex/examples/README.md](src/codomyrmex/examples/README.md) |
 
 ### Repository Root Files
 
@@ -37,10 +37,10 @@ The repository is organized into distinct surfaces, each with specific responsib
 - `uv.lock` - Python dependency lock file
 - `start_here.sh` - Interactive entry point for exploration
 - `package.json` - Node.js package configuration
-- `general.cursorrules` - General coding standards
+- `cursorrules/general.cursorrules` - General coding standards (in `cursorrules/` directory)
 - `resources.json` - Resource configuration
-- `test.db` - Test database file
-- `workflow.db` - Workflow database file
+- `test.db` - Generated test database (artifact, not source)
+- `workflow.db` - Generated workflow database (artifact, not source)
 
 ## Operating Contracts
 
@@ -116,6 +116,10 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 
 **Core Layer**:
 
+- `agents/` - Agentic framework integrations
+  - Key Classes: `AgentInterface`, `BaseAgent`, `JulesClient`, `ClaudeClient`, `CodexClient`, `AgentOrchestrator`
+  - Key Functions: `execute(request: AgentRequest) -> AgentResponse`
+  - Key Submodules: `ai_code_editing/`, `droid/` (task management), `claude/`, `codex/`
 - `static_analysis/` - Code quality analysis
   - Key Classes: `CodeAnalyzer`, `LintRunner`, `ComplexityCalculator`
   - Key Functions: `analyze_file(filepath: str) -> dict`, `calculate_complexity(code: str) -> float`
@@ -187,10 +191,6 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `cerebrum/` - Case-based reasoning and Bayesian inference
   - Key Classes: `CerebrumEngine`, `CaseBase`, `BayesianNetwork`, `ActiveInferenceAgent`
   - Key Functions: `reason(case: Case, context: dict) -> ReasoningResult`, `infer(network: BayesianNetwork, evidence: dict) -> InferenceResult`
-- `agents/` - Agentic framework integrations
-  - Key Classes: `AgentInterface`, `BaseAgent`, `JulesClient`, `ClaudeClient`, `CodexClient`, `AgentOrchestrator`
-  - Key Functions: `execute(request: AgentRequest) -> AgentResponse`
-  - Key Submodules: `ai_code_editing/`, `droid/` (task management), `claude/`, `codex/`
 - `fpf/` - Functional Programming Framework
   - Key Classes: `FPFOrchestrator`, `CombinatorEngine`, `TransformationPipeline`
   - Key Functions: `compose(functions: list) -> ComposedFunction`, `transform(data: Any, pipeline: Pipeline) -> Any`
@@ -215,7 +215,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `ide/` - IDE Integration
   - Key Classes: `EditorInterface`
 - `cloud/` - Cloud provider integration
-  - Key Classes: `AWSClient`, `GCPClient`
+  - Key Classes: `AWSClient`, `GCPClient`, `InfomaniakComputeClient`, `InfomaniakVolumeClient`, `InfomaniakNetworkClient`, `InfomaniakObjectStorageClient`, `InfomaniakS3Client`, `InfomaniakIdentityClient`, `InfomaniakDNSClient`, `InfomaniakHeatClient`, `InfomaniakMeteringClient`, `InfomaniakNewsletterClient`
 - `networking/` - Network utilities
   - Key Classes: `NetworkClient`
 - `serialization/` - Data serialization
@@ -317,7 +317,6 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 | **config/** | [config/AGENTS.md](config/AGENTS.md) | Configuration coordination |
 | **cursorrules/** | [cursorrules/AGENTS.md](cursorrules/AGENTS.md) | Coding standards coordination |
 | **projects/** | [projects/AGENTS.md](projects/AGENTS.md) | Project workspace coordination |
-| **examples/** | [examples/AGENTS.md](examples/AGENTS.md) | Examples coordination |
 
 ### Key Module AGENTS.md Files
 
@@ -357,16 +356,6 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 
 ## Navigation Links
 
-- `LICENSE` – Project license file
-- `Makefile` – Build automation file
-- `README.md` – Documentation file
-- `SECURITY.md` – Security policy and vulnerability reporting
-- `SPEC.md` – Documentation file
-- `config/` – Directory for config components.
-- `cursorrules/` – Directory for cursorrules components.
-- `docs/` – Directory for docs components.
-- `general.cursorrules` – Project file
-- `uv.lock` – UV dependency lock file
 - **Main Documentation**: [README.md](README.md) - Main project README
 - **Documentation Hub**: [docs/README.md](docs/README.md) - Documentation structure
 - **Source Code**: [src/README.md](src/README.md) - Source code structure
@@ -375,14 +364,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 - **Configuration**: [config/README.md](config/README.md) - Configuration templates
 - **Cursor Rules**: [cursorrules/README.md](cursorrules/README.md) - Coding standards
 - **Projects**: [projects/README.md](projects/README.md) - Projects workspace
-- **Scripts Examples**: [examples/README.md](examples/README.md) - Executable examples and demos
-- **Source Agents**: [src/AGENTS.md](src/AGENTS.md) - Source code agent coordination
-- **Docs Agents**: [docs/AGENTS.md](docs/AGENTS.md) - Documentation agent coordination
-- **Scripts Agents**: [scripts/AGENTS.md](scripts/AGENTS.md) - Scripts agent coordination
-- **Testing Agents**: [src/codomyrmex/tests/AGENTS.md](src/codomyrmex/tests/AGENTS.md) - Testing agent coordination
-- **Config Agents**: [config/AGENTS.md](config/AGENTS.md) - Configuration agents
-- **Rules Agents**: [cursorrules/AGENTS.md](cursorrules/AGENTS.md) - Cursor rules agents
-- **Projects Agents**: [projects/AGENTS.md](projects/AGENTS.md) - Projects agent coordination
+- **Examples**: [src/codomyrmex/examples/README.md](src/codomyrmex/examples/README.md) - Executable examples and demos
 
 ## Agent Coordination
 

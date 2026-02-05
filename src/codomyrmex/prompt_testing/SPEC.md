@@ -32,8 +32,17 @@ prompt_testing/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.prompt_testing import EvaluationType
+from codomyrmex.prompt_testing import TestStatus
+from codomyrmex.prompt_testing import PromptTestCase
+from codomyrmex.prompt_testing import TestResult
+from codomyrmex.prompt_testing import TestSuiteResult
+from codomyrmex.prompt_testing import Evaluator
+from codomyrmex.prompt_testing import ExactMatchEvaluator
+from codomyrmex.prompt_testing import ContainsEvaluator
+from codomyrmex.prompt_testing import CustomEvaluator
+from codomyrmex.prompt_testing import PromptTestSuite
+# ... and 2 more
 ```
 
 ### 3.2 Configuration

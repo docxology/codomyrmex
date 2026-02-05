@@ -32,6 +32,15 @@ codomyrmex --help
 codomyrmex check                 # Verify environment setup
 codomyrmex modules               # List available modules
 codomyrmex status                # System status dashboard
+codomyrmex shell                 # Interactive shell
+codomyrmex workflow list         # List workflows
+codomyrmex project list          # List projects
+codomyrmex ai generate           # AI code generation
+codomyrmex analyze <path>        # Code analysis
+codomyrmex build <path>          # Project build
+codomyrmex test <module>         # Run module tests
+codomyrmex fpf fetch <url>       # FPF fetch/parse/export
+codomyrmex skills list           # Skill management
 ```
 
 ## Architecture Overview
@@ -86,8 +95,14 @@ Tests use pytest markers defined in `pytest.ini`:
 - `@pytest.mark.unit` - Unit tests
 - `@pytest.mark.integration` - Integration tests
 - `@pytest.mark.slow` - Long-running tests
+- `@pytest.mark.performance` - Performance and benchmarking tests
+- `@pytest.mark.examples` - Example validation tests
 - `@pytest.mark.network` - Tests requiring network
+- `@pytest.mark.database` - Tests requiring database access
 - `@pytest.mark.external` - Tests requiring external services
+- `@pytest.mark.security` - Security-related tests
+- `@pytest.mark.asyncio` - Asynchronous tests
+- `@pytest.mark.crypto` - Cryptography tests
 - `@pytest.mark.orchestrator` - Orchestrator/workflow tests
 
 Run specific categories: `uv run pytest -m unit`

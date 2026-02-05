@@ -21,12 +21,11 @@ except ImportError:
 
 # Import health checker
 try:
-    from .health_checker import HealthChecker, HealthStatus, HealthCheckResult, perform_health_check
+    from .health_checker import HealthChecker, HealthStatus, HealthCheckResult
 except ImportError:
     HealthChecker = None
     HealthStatus = None
     HealthCheckResult = None
-    perform_health_check = None
 
 
 @dataclass

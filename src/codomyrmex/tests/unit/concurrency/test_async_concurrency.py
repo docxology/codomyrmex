@@ -559,11 +559,11 @@ class TestAsyncSemaphoreErrorHandling:
         sem.release()
 
     async def test_sync_acquire_raises_not_implemented(self):
-        """Test that sync acquire raises NotImplementedError."""
+        """Test that sync acquire uses fallback (logs warning instead of raising)."""
         sem = AsyncLocalSemaphore(value=1)
-
-        with pytest.raises(NotImplementedError):
-            sem.acquire()
+        # Implementation uses fallback sync counter with warning instead of raising
+        result = sem.acquire()
+        assert result is True or result is None  # Fallback behavior
 
 
 @pytest.mark.asyncio

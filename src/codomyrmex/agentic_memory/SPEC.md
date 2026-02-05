@@ -32,13 +32,25 @@ agentic_memory/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Core Classes
+from codomyrmex.agentic_memory import (
+    AgentMemory,       # Main memory system
+    Memory,            # Single memory unit
+    MemoryType,        # EPISODIC, SEMANTIC, PROCEDURAL, WORKING
+    MemoryImportance,  # LOW, MEDIUM, HIGH, CRITICAL
+    InMemoryStore,     # Default storage
+    JSONFileStore,     # Persistent storage
+)
+
+# Implementation details
+# Each memory has recency_score, importance_score, and combined_score.
+# AgentMemory.recall(query, k=5) provides the ranking logic.
 ```
 
 ### 3.2 Configuration
 
 Environment variables:
+
 - `CODOMYRMEX_*`: Configuration options
 
 ## 4. Implementation Notes
@@ -60,6 +72,13 @@ pytest tests/agentic_memory/
 ```
 
 ## 6. Future Considerations
+
+### Common Operations
+
+- **Storage**: Choose between `InMemoryStore` (volatile) or `JSONFileStore` (persistent).
+- **Remembering**: Use `memory.remember(content, ...)` to store information.
+- **Recalling**: Use `memory.recall(query, k=N)` to retrieve the top N relevant memories.
+- **LLM Context**: Use `memory.get_context(query)` to get a pre-formatted string for LLM prompts.
 
 - Enhancement 1
 - Enhancement 2

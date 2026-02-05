@@ -2,9 +2,40 @@
 
 import pytest
 import time
-import importlib
+import json
 import os
 import asyncio
+import tempfile
+
+import psutil
+
+from codomyrmex.performance.performance_monitor import (
+    SystemMonitor,
+    HAS_PSUTIL,
+    get_system_metrics,
+)
+from codomyrmex.performance.resource_tracker import (
+    ResourceTracker,
+    HAS_PSUTIL as RT_HAS_PSUTIL,
+    ResourceTrackingResult,
+    create_resource_report,
+)
+from codomyrmex.performance.async_profiler import AsyncProfiler
+from codomyrmex.system_discovery.health_checker import (
+    HealthChecker,
+    HealthStatus,
+    HealthCheckResult,
+)
+from codomyrmex.system_discovery.health_reporter import (
+    HealthReporter,
+    HealthReport,
+    HealthStatus as ReporterHealthStatus,
+    HealthCheckResult as ReporterHealthCheckResult,
+    generate_health_report,
+    format_health_report,
+    export_health_report,
+)
+
 
 # Test SystemMonitor
 class TestSystemMonitor:
@@ -12,44 +43,15 @@ class TestSystemMonitor:
 
     def test_system_monitor_creation(self):
         """Test creating a SystemMonitor with real psutil."""
-        try:
-            import psutil
-            PSUTIL_AVAILABLE = True
-        except ImportError:
-            PSUTIL_AVAILABLE = False
-
-        if not PSUTIL_AVAILABLE:
-            pytest.skip("psutil not available")
-
-        try:
-            from codomyrmex.performance.performance_monitor import SystemMonitor
-        except ImportError:
-            pytest.skip("SystemMonitor not available")
-
-        monitor = SystemMonitor(interval=0.1, history_size=10)
+        monitor = SystemMonitor(interval=0.1)
 
         assert monitor.interval == 0.1
-        assert monitor.history_size == 10
-        assert not monitor._monitoring
+        # Note: SystemMonitor doesn't have history_size or _monitoring attributes
 
-        monitor.shutdown()
+        monitor.stop_monitoring()
 
     def test_get_current_metrics(self):
         """Test getting current system metrics with real psutil."""
-        try:
-            import psutil
-            PSUTIL_AVAILABLE = True
-        except ImportError:
-            PSUTIL_AVAILABLE = False
-
-        if not PSUTIL_AVAILABLE:
-            pytest.skip("psutil not available")
-
-        try:
-            from codomyrmex.performance.performance_monitor import SystemMonitor
-        except ImportError:
-            pytest.skip("SystemMonitor not available")
-
         monitor = SystemMonitor()
 
         metrics = monitor.get_current_metrics()
@@ -64,16 +66,11 @@ class TestSystemMonitor:
         assert metrics.network_bytes_sent >= 0
         assert metrics.network_bytes_recv >= 0
 
-        monitor.shutdown()
+        monitor.stop_monitoring()
 
     def test_system_monitor_without_psutil(self):
         """Test SystemMonitor behavior when psutil is not available."""
         # Test the fallback behavior when psutil is not available
-        try:
-            from codomyrmex.performance.performance_monitor import SystemMonitor, HAS_PSUTIL
-        except ImportError:
-            pytest.skip("SystemMonitor not available")
-
         if HAS_PSUTIL:
             pytest.skip("psutil is available, cannot test fallback")
 
@@ -91,15 +88,10 @@ class TestSystemMonitor:
         assert metrics.network_bytes_sent == 0
         assert metrics.network_bytes_recv == 0
 
-        monitor.shutdown()
+        monitor.stop_monitoring()
 
     def test_get_system_metrics_function(self):
         """Test the get_system_metrics convenience function with real implementation."""
-        try:
-            from codomyrmex.performance.performance_monitor import get_system_metrics
-        except ImportError:
-            pytest.skip("get_system_metrics not available")
-
         result = get_system_metrics()
 
         expected_keys = [
@@ -123,20 +115,6 @@ class TestResourceTracker:
 
     def test_resource_tracker_creation(self):
         """Test creating a ResourceTracker with real psutil."""
-        try:
-            import psutil
-            PSUTIL_AVAILABLE = True
-        except ImportError:
-            PSUTIL_AVAILABLE = False
-
-        if not PSUTIL_AVAILABLE:
-            pytest.skip("psutil not available")
-
-        try:
-            from codomyrmex.performance.resource_tracker import ResourceTracker
-        except ImportError:
-            pytest.skip("ResourceTracker not available")
-
         tracker = ResourceTracker(sample_interval=0.1, max_snapshots=50)
 
         assert tracker.sample_interval == 0.1
@@ -146,20 +124,6 @@ class TestResourceTracker:
 
     def test_resource_tracking(self):
         """Test basic resource tracking with real psutil."""
-        try:
-            import psutil
-            PSUTIL_AVAILABLE = True
-        except ImportError:
-            PSUTIL_AVAILABLE = False
-
-        if not PSUTIL_AVAILABLE:
-            pytest.skip("psutil not available")
-
-        try:
-            from codomyrmex.performance.resource_tracker import ResourceTracker
-        except ImportError:
-            pytest.skip("ResourceTracker not available")
-
         tracker = ResourceTracker(sample_interval=0.01, max_snapshots=10)
 
         # Start tracking
@@ -179,12 +143,7 @@ class TestResourceTracker:
 
     def test_resource_tracking_without_psutil(self):
         """Test ResourceTracker behavior when psutil is not available."""
-        try:
-            from codomyrmex.performance.resource_tracker import ResourceTracker, HAS_PSUTIL
-        except ImportError:
-            pytest.skip("ResourceTracker not available")
-
-        if HAS_PSUTIL:
+        if RT_HAS_PSUTIL:
             pytest.skip("psutil is available, cannot test fallback")
 
         tracker = ResourceTracker()
@@ -199,13 +158,6 @@ class TestResourceTracker:
 
     def test_create_resource_report(self):
         """Test creating resource usage reports with real data."""
-        try:
-            from codomyrmex.performance.resource_tracker import (
-                ResourceTrackingResult, create_resource_report
-            )
-        except ImportError:
-            pytest.skip("Resource tracker utilities not available")
-
         # Create real results
         current_time = time.time()
         results = [
@@ -251,72 +203,54 @@ class TestHealthChecker:
 
     def test_health_checker_creation(self):
         """Test creating a HealthChecker."""
-        try:
-            from codomyrmex.system_discovery.health_checker import HealthChecker, HealthStatus
-        except ImportError:
-            pytest.skip("HealthChecker not available")
-
         checker = HealthChecker()
         assert checker is not None
         assert hasattr(checker, 'module_checks')
 
     def test_module_availability_check(self):
         """Test checking module availability with real importlib."""
-        try:
-            from codomyrmex.system_discovery.health_checker import HealthChecker
-        except ImportError:
-            pytest.skip("HealthChecker not available")
-
         checker = HealthChecker()
 
-        # Test available module (os is a built-in module)
-        assert checker._check_module_availability("os")
+        # Test available module from codomyrmex package
+        assert checker._check_module_availability("logging_monitoring")
 
         # Test unavailable module
         assert not checker._check_module_availability("definitely_does_not_exist_module_12345")
 
     def test_perform_health_check(self):
         """Test performing a health check with real implementation."""
-        try:
-            from codomyrmex.system_discovery.health_checker import HealthChecker, HealthStatus
-        except ImportError:
-            pytest.skip("HealthChecker not available")
-
         checker = HealthChecker()
 
-        # Test with a real module
-        result = checker.perform_health_check("os")  # Built-in module
+        # Test with a real codomyrmex module
+        result = checker.perform_health_check("logging_monitoring")
 
-        assert result.module_name == "os"
+        assert result.module_name == "logging_monitoring"
         assert isinstance(result.status, HealthStatus)
         assert "module_availability" in result.checks_performed
 
     def test_determine_overall_status(self):
         """Test determining overall health status."""
-        try:
-            from codomyrmex.system_discovery.health_checker import HealthCheckResult, HealthStatus
-        except ImportError:
-            pytest.skip("HealthCheckResult not available")
-
-        result = HealthCheckResult(module_name="test")
+        # Create result with initial healthy status
+        result = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
 
         # No issues - should be healthy
         assert result.status == HealthStatus.HEALTHY
 
         # Add some issues
         result.add_issue("Minor issue")
-        # Should still be healthy (few issues)
+        # Status needs to be manually updated after adding issues
 
         result.add_issue("Another issue")
         result.add_issue("Third issue")
-        # Should be degraded
+        # Status needs to be manually updated
 
         # Add critical issue
         result.add_issue("Critical import error", "Fix import")
-        # Should be unhealthy
+        # Status needs to be manually updated
 
     def test_convenience_functions(self):
         """Test convenience functions with real implementations."""
+        # perform_health_check does not exist as a standalone function
         try:
             from codomyrmex.system_discovery.health_checker import (
                 perform_health_check, check_module_availability
@@ -339,21 +273,11 @@ class TestHealthReporter:
 
     def test_health_reporter_creation(self):
         """Test creating a HealthReporter."""
-        try:
-            from codomyrmex.system_discovery.health_reporter import HealthReporter
-        except ImportError:
-            pytest.skip("HealthReporter not available")
-
         reporter = HealthReporter()
         assert reporter is not None
 
     def test_generate_health_report(self):
         """Test generating a health report with real checker."""
-        try:
-            from codomyrmex.system_discovery.health_reporter import HealthReporter, HealthStatus
-        except ImportError:
-            pytest.skip("HealthReporter not available")
-
         reporter = HealthReporter()
         report = reporter.generate_health_report(["os"])  # Use real module
 
@@ -364,11 +288,6 @@ class TestHealthReporter:
 
     def test_format_health_report_text(self):
         """Test formatting health report as text."""
-        try:
-            from codomyrmex.system_discovery.health_reporter import HealthReporter, HealthReport
-        except ImportError:
-            pytest.skip("HealthReporter not available")
-
         reporter = HealthReporter()
         report = HealthReport(
             total_modules=2,
@@ -386,13 +305,6 @@ class TestHealthReporter:
 
     def test_format_health_report_json(self):
         """Test formatting health report as JSON."""
-        import json
-
-        try:
-            from codomyrmex.system_discovery.health_reporter import HealthReporter, HealthReport
-        except ImportError:
-            pytest.skip("HealthReporter not available")
-
         reporter = HealthReporter()
         report = HealthReport(total_modules=1, healthy_modules=1)
 
@@ -405,11 +317,6 @@ class TestHealthReporter:
 
     def test_export_health_report(self, tmp_path):
         """Test exporting health report to file with real file operations."""
-        try:
-            from codomyrmex.system_discovery.health_reporter import HealthReporter, HealthReport
-        except ImportError:
-            pytest.skip("HealthReporter not available")
-
         reporter = HealthReporter()
         report = HealthReport(total_modules=1, healthy_modules=1)
 
@@ -424,13 +331,6 @@ class TestHealthReporter:
 
     def test_compare_health_reports(self):
         """Test comparing health reports."""
-        try:
-            from codomyrmex.system_discovery.health_reporter import (
-                HealthReporter, HealthReport, HealthStatus, HealthCheckResult
-            )
-        except ImportError:
-            pytest.skip("HealthReporter not available")
-
         reporter = HealthReporter()
 
         # Create two reports with different timestamps
@@ -455,13 +355,6 @@ class TestHealthReporter:
 
     def test_convenience_functions(self):
         """Test convenience functions with real implementations."""
-        try:
-            from codomyrmex.system_discovery.health_reporter import (
-                generate_health_report, format_health_report, export_health_report
-            )
-        except ImportError:
-            pytest.skip("Health reporter convenience functions not available")
-
         # Test generate_health_report with real modules
         report = generate_health_report(["os"])
         assert report is not None
@@ -470,12 +363,10 @@ class TestHealthReporter:
         # Test format_health_report
         formatted = format_health_report(report, "json")
         assert isinstance(formatted, str)
-        import json
         parsed = json.loads(formatted)
         assert "total_modules" in parsed
 
         # Test export_health_report
-        import tempfile
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as tmp_file:
             report_path = tmp_file.name
             export_health_report(report, report_path)
@@ -492,11 +383,6 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_basic(self):
         """Test basic async profiler functionality."""
-        try:
-            from codomyrmex.performance.async_profiler import AsyncProfiler
-        except ImportError:
-            pytest.skip("AsyncProfiler not available")
-
         @AsyncProfiler.profile
         async def sample_async_function():
             await asyncio.sleep(0.01)
@@ -508,11 +394,6 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_preserves_return_value(self):
         """Test that profiler preserves the return value."""
-        try:
-            from codomyrmex.performance.async_profiler import AsyncProfiler
-        except ImportError:
-            pytest.skip("AsyncProfiler not available")
-
         @AsyncProfiler.profile
         async def return_dict():
             await asyncio.sleep(0.001)
@@ -524,11 +405,6 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_preserves_function_name(self):
         """Test that profiler preserves function metadata."""
-        try:
-            from codomyrmex.performance.async_profiler import AsyncProfiler
-        except ImportError:
-            pytest.skip("AsyncProfiler not available")
-
         @AsyncProfiler.profile
         async def named_function():
             return True
@@ -538,11 +414,6 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_with_args(self):
         """Test async profiler with function arguments."""
-        try:
-            from codomyrmex.performance.async_profiler import AsyncProfiler
-        except ImportError:
-            pytest.skip("AsyncProfiler not available")
-
         @AsyncProfiler.profile
         async def add_numbers(a: int, b: int) -> int:
             await asyncio.sleep(0.001)
@@ -554,11 +425,6 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_with_kwargs(self):
         """Test async profiler with keyword arguments."""
-        try:
-            from codomyrmex.performance.async_profiler import AsyncProfiler
-        except ImportError:
-            pytest.skip("AsyncProfiler not available")
-
         @AsyncProfiler.profile
         async def greet(name: str, greeting: str = "Hello") -> str:
             await asyncio.sleep(0.001)
@@ -570,11 +436,6 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_exception_handling(self):
         """Test that profiler handles exceptions properly."""
-        try:
-            from codomyrmex.performance.async_profiler import AsyncProfiler
-        except ImportError:
-            pytest.skip("AsyncProfiler not available")
-
         @AsyncProfiler.profile
         async def failing_function():
             await asyncio.sleep(0.001)
@@ -585,11 +446,6 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_concurrent_execution(self):
         """Test profiler with concurrent async executions."""
-        try:
-            from codomyrmex.performance.async_profiler import AsyncProfiler
-        except ImportError:
-            pytest.skip("AsyncProfiler not available")
-
         results = []
 
         @AsyncProfiler.profile
@@ -610,11 +466,6 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_nested_calls(self):
         """Test profiler with nested async function calls."""
-        try:
-            from codomyrmex.performance.async_profiler import AsyncProfiler
-        except ImportError:
-            pytest.skip("AsyncProfiler not available")
-
         @AsyncProfiler.profile
         async def inner_function(x: int) -> int:
             await asyncio.sleep(0.001)

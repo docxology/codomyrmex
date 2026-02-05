@@ -256,7 +256,8 @@ class TestComplexScenarios:
         response = orchestrator.execute_with_fallback(request)
         
         assert response.is_success()
-        assert "backup" in response.content or "backup" in str(response.metadata)
+        # The backup agent handled the request (failing agent returned error)
+        assert backup_agent.execution_count >= 1
 
     def test_context_management_across_operations(self):
         """Test managing context across multiple operations."""

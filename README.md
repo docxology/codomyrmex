@@ -11,7 +11,7 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 80+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 82 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
@@ -68,7 +68,7 @@ Codomyrmex documentation is organized into focused guides for different needs:
 | Guide | Description |
 |-------|-------------|
 | [**Architecture**](docs/project/architecture.md) | System design and principles |
-| [**Module Overview**](docs/modules/overview.md) | Understanding the 80+ module system |
+| [**Module Overview**](docs/modules/overview.md) | Understanding the 82 module system |
 | [**Contributing**](docs/project/contributing.md) | How to contribute to Codomyrmex |
 | [**Project Roadmap**](docs/project/todo.md) | Current priorities and future plans |
 
@@ -107,13 +107,34 @@ Codomyrmex documentation is organized into focused guides for different needs:
 | [**Examples**](docs/examples/) | Working code examples |
 | [**Project Orchestration**](docs/project_orchestration/) | Multi-project workflows |
 
-### 🤖 AI Agents
+- [**AGENTS.md**](AGENTS.md) | Agent coordination protocols |
+- [**PAI.md**](PAI.md) | Personal AI Infrastructure |
+- [**SPEC.md**](SPEC.md) | Functional specification |
 
-| Guide | Description |
-|-------|-------------|
-| [**AGENTS.md**](AGENTS.md) | Agent coordination protocols |
-| [**PAI.md**](PAI.md) | Personal AI Infrastructure |
-| [**SPEC.md**](SPEC.md) | Functional specification |
+## 📚 Examples & Tutorials
+
+Codomyrmex provides comprehensive examples to help you get started quickly:
+
+### 🛠️ Hands-on Examples
+
+- [**Basic Usage**](scripts/documentation/examples/basic_usage.py) - Core module interactions
+- [**Advanced Workflows**](scripts/documentation/examples/advanced_workflow.py) - Multi-module orchestration
+- [**Agent Demos**](src/codomyrmex/agents/ai_code_editing/README.md#examples) - AI-assisted coding examples
+
+### 📖 Documentation Examples
+
+- [**Orchestration Patterns**](docs/examples/orchestration-examples.md) - How to build complex pipelines
+- [**Integration Guides**](docs/examples/integration-examples.md) - Connecting to external services
+- [**Tutorial Series**](docs/getting-started/tutorials/) - Step-by-step learning paths
+
+### 🧪 Executable Demos
+
+Run these from the root using `uv run python`:
+
+```bash
+uv run scripts/documentation/examples/basic_usage.py
+uv run scripts/documentation/examples/advanced_workflow.py
+```
 
 ---
 
@@ -826,7 +847,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **80+ modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **82 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 
@@ -1025,7 +1046,7 @@ codomyrmex/
 ```mermaid
 graph TD
     subgraph corePlatform ["Core Platform"]
-        CoreSrc["src/codomyrmex/ 80+ Modules"]
+        CoreSrc["src/codomyrmex/ 82 Modules"]
         CoreScripts["scripts/ Automation & Orchestration"]
         CoreTests["src/codomyrmex/tests/ Unit & Integration Tests"]
     end
@@ -1466,15 +1487,15 @@ pie title Module Development Status (February 2026)
 | Level | Description | Example Modules |
 | :--- | :--- | :--- |
 | **Production Ready** | Fully tested, documented, stable APIs | logging_monitoring, environment_setup, terminal_interface |
-| **Beta** | Core functionality complete, API stabilization | agents, static_analysis, code |
+| **Beta** | Core functionality complete, API stabilization | agents, static_analysis, coding |
 | **Alpha** | Basic functionality, APIs may change | spatial, physical_management, system_discovery |
 | **Planning** | Requirements gathering, initial design | Future specialized modules |
 
 ## Key Metrics
 
-- **Lines of Code**: ~50K+ across 80+ modules
+- **Lines of Code**: ~50K+ across 82 modules
 - **Test Coverage**: ≥80% target (currently 75%)
-- **Module Count**: 80+ core modules
+- **Module Count**: 82 core modules
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules
@@ -1483,9 +1504,9 @@ pie title Module Development Status (February 2026)
 
 - **Repository**: [github.com/codomyrmex/codomyrmex](https://github.com/codomyrmex/codomyrmex)
 - **Issues**: [github.com/codomyrmex/codomyrmex/issues](https://github.com/codomyrmex/codomyrmex/issues)
-- **Documentation**: [codomyrmex.readthedocs.io](https://codomyrmex.readthedocs.io/)
-- **PyPI**: [pypi.org/project/codomyrmex/](https://pypi.org/project/codomyrmex/)
-- **Docker Hub**: [hub.docker.com/r/codomyrmex/codomyrmex](https://hub.docker.com/r/codomyrmex/codomyrmex)
+- **Documentation**: codomyrmex.readthedocs.io (coming soon)
+- **PyPI**: pypi.org/project/codomyrmex/ (coming soon)
+- **Docker Hub**: hub.docker.com/r/codomyrmex/codomyrmex (coming soon)
 
 ---
 
@@ -1500,11 +1521,17 @@ pie title Module Development Status (February 2026)
 
 ## Example Usage
 
-```python
-from codomyrmex import core
+```bash
+# CLI usage (primary entry point)
+codomyrmex check                 # Verify environment setup
+codomyrmex modules               # List available modules
+codomyrmex status                # System status dashboard
+codomyrmex shell                 # Interactive shell
 
-def main():
-    # Standard usage pattern
-    app = core.Application()
-    app.run()
+# Python API usage
+uv run python -c "
+from codomyrmex.system_discovery import SystemDiscovery
+sd = SystemDiscovery()
+sd.discover_modules()
+"
 ```

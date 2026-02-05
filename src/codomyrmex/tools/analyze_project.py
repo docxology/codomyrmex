@@ -191,42 +191,45 @@ def generate_report(structure: Dict, deps: Dict, quality: Dict) -> str:
 
     # Project Structure
     report.append("## Project Structure")
-    report.append(f"- **Total Size**: {structure['total_size'] / 1024 / 1024:.2f} MB")
-    report.append(f"- **Directories**: {len(structure['directories'])}")
-    report.append(f"- **Python Files**: {quality['total_python_files']}")
-    report.append(f"- **Documentation Files**: {quality['documentation_files']}")
+    total_size = structure.get('total_size', 0)
+    report.append(f"- **Total Size**: {total_size / 1024 / 1024:.2f} MB")
+    report.append(f"- **Directories**: {len(structure.get('directories', {}))}")
+    report.append(f"- **Python Files**: {quality.get('total_python_files', 0)}")
+    report.append(f"- **Documentation Files**: {quality.get('documentation_files', 0)}")
     report.append("")
 
     # File Types
     report.append("## File Types")
-    for ext, files in sorted(structure['file_types'].items()):
+    for ext, files in sorted(structure.get('file_types', {}).items()):
         report.append(f"- **{ext}**: {len(files)} files")
     report.append("")
 
     # Dependencies
     report.append("## Dependencies")
-    report.append(f"- **Main Dependencies**: {len(deps['main_dependencies'])}")
-    report.append(f"- **Dev Dependencies**: {len(deps['dev_dependencies'])}")
-    report.append(f"- **Total Dependencies**: {deps['total_count']}")
+    report.append(f"- **Main Dependencies**: {len(deps.get('main_dependencies', []))}")
+    report.append(f"- **Dev Dependencies**: {len(deps.get('dev_dependencies', []))}")
+    report.append(f"- **Total Dependencies**: {deps.get('total_count', 0)}")
     report.append("")
 
     # Code Quality
     report.append("## Code Quality")
-    report.append(f"- **Has Tests**: {'✅' if quality['has_tests'] else '❌'}")
-    report.append(f"- **Has CI**: {'✅' if quality['has_ci'] else '❌'}")
-    report.append(f"- **Has Linting**: {'✅' if quality['has_linting'] else '❌'}")
-    report.append(f"- **Test Coverage**: {quality['test_files']}/{quality['total_python_files']} files")
+    report.append(f"- **Has Tests**: {'✅' if quality.get('has_tests') else '❌'}")
+    report.append(f"- **Has CI**: {'✅' if quality.get('has_ci') else '❌'}")
+    report.append(f"- **Has Linting**: {'✅' if quality.get('has_linting') else '❌'}")
+    total_py = quality.get('total_python_files', 0)
+    test_files = quality.get('test_files', 0)
+    report.append(f"- **Test Coverage**: {test_files}/{total_py} files")
     report.append("")
 
     # Recommendations
     report.append("## Recommendations")
-    if not quality['has_tests']:
+    if not quality.get('has_tests'):
         report.append("- ⚠️  Consider adding tests for better code reliability")
-    if not quality['has_ci']:
+    if not quality.get('has_ci'):
         report.append("- ⚠️  Consider adding GitHub Actions for continuous integration")
-    if not quality['has_linting']:
+    if not quality.get('has_linting'):
         report.append("- ⚠️  Consider adding code linting configuration")
-    if quality['total_python_files'] > 100 and quality['test_files'] < quality['total_python_files'] * 0.5:
+    if total_py > 100 and test_files < total_py * 0.5:
         report.append("- ⚠️  Consider increasing test coverage")
     report.append("")
 

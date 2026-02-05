@@ -64,7 +64,8 @@ class LogRotationManager:
                 and the oldest beyond this count is deleted. Defaults to 5.
 
         Returns:
-            The configured RotatingFileHandler instance.
+            The configured RotatingFileHandler instance. The handler uses
+            a fixed format: ``%(asctime)s - %(name)s - %(levelname)s - %(message)s``.
 
         Example:
             >>> manager = LogRotationManager("./logs")

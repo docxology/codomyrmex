@@ -65,17 +65,17 @@ class TestGetSystemSummary:
 
     def test_agent_count_matches_agents(self, tmp_path):
         """Test that agent_count matches actual agent count."""
-        # Create mock agent structure
-        src_path = tmp_path / "src" / "codomyrmex"
-        src_path.mkdir(parents=True)
-        (src_path / "agent1" / "__init__.py").parent.mkdir()
-        (src_path / "agent1" / "__init__.py").write_text('"""Agent 1"""')
-        (src_path / "agent2" / "__init__.py").parent.mkdir()
-        (src_path / "agent2" / "__init__.py").write_text('"""Agent 2"""')
-        
+        # Create mock agent structure under src/codomyrmex/agents/ (where DataProvider looks)
+        agents_path = tmp_path / "src" / "codomyrmex" / "agents"
+        agents_path.mkdir(parents=True)
+        (agents_path / "agent1").mkdir()
+        (agents_path / "agent1" / "__init__.py").write_text('"""Agent 1"""')
+        (agents_path / "agent2").mkdir()
+        (agents_path / "agent2" / "__init__.py").write_text('"""Agent 2"""')
+
         provider = DataProvider(tmp_path)
         result = provider.get_system_summary()
-        
+
         assert result["agent_count"] == 2
 
 

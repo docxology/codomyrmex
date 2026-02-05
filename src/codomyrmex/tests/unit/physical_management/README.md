@@ -1,40 +1,19 @@
-# Physical Management
+# physical_management
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `physical_management` module provides core functionality for Physical Management.
+The `physical_management` module provides core functionality for Physical Management..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    physical_management --> Utils[codomyrmex.utils]
-    physical_management --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph physical_management
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.physical_management import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_physical_management.py` - Test Physical Management
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

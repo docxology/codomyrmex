@@ -1,40 +1,21 @@
-# Opencode
+# opencode
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `opencode` module provides core functionality for Opencode.
+OpenCode CLI integration for Codomyrmex agents.. This submodule is scaffolded for future implementation; no exports are currently defined.
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    opencode --> Utils[codomyrmex.utils]
-    opencode --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph opencode
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.opencode import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `__init__.py` - Module entry point (scaffolded, no exports yet)
+- `opencode_client.py` - Opencode Client
+- `opencode_integration.py` - Opencode Integration
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [agents](../README.md)
+- **Project Root**: ../../../README.md

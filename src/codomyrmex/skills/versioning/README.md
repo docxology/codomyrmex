@@ -1,38 +1,26 @@
-# Versioning
+# versioning
 
-Skill version management and compatibility tracking
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `versioning` submodule provides skill version management and compatibility tracking.
+Skill version management and compatibility tracking. Provides semver-like version parsing, major-version compatibility checking between a skill's current version and a required version, and a version history registry for tracking all known versions of each skill over time.
 
-## Installation
+## Key Exports
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- **`SkillVersionManager`** -- Main version manager for skills. Maintains a version history registry keyed by skill ID. Methods: `get_version()` extracts the current version string from a skill instance or dict (defaults to "0.0.0"), `check_compatibility()` performs major-version semver compatibility checking and returns a dict with compatible (bool), current_version, and required_version, `list_versions()` returns all registered versions for a skill, and `register_version()` records a new version in the history.
+- **`parse_version()`** -- Parses a semver-like version string (e.g., "1.2.3") into a tuple of integers for comparison.
 
-```bash
-pip install codomyrmex
-```
+## Directory Contents
 
-## Quick Start
+- `__init__.py` - SkillVersionManager class and parse_version utility function
+- `README.md` - This file
+- `SPEC.md` - Module specification
+- `AGENTS.md` - Agent integration notes
+- `PAI.md` - PAI algorithm context
+- `py.typed` - PEP 561 typing marker
 
-```python
-from codomyrmex.skills.versioning import *
+## Navigation
 
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`skills`](../) - Parent module
+- **Parent Module**: [skills](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

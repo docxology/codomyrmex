@@ -50,23 +50,29 @@ except ImportError:
     PARQUET_AVAILABLE = False
 
 # Import serialization module and components
-from codomyrmex import serialization
-from codomyrmex.serialization import (
-    Serializer,
-    SerializationFormat,
-    SerializationManager,
-    serialize,
-    deserialize,
-    MsgpackSerializer,
-    AvroSerializer,
-    ParquetSerializer,
-)
-# Import SerializationError from the serializer module directly since
-# the Serializer uses its local definition
-from codomyrmex.serialization.serializer import SerializationError
+try:
+    from codomyrmex import serialization
+    from codomyrmex.serialization import (
+        Serializer,
+        SerializationFormat,
+        SerializationManager,
+        serialize,
+        deserialize,
+        MsgpackSerializer,
+        AvroSerializer,
+        ParquetSerializer,
+    )
+    # Import SerializationError from the serializer module directly since
+    # the Serializer uses its local definition
+    from codomyrmex.serialization.serializer import SerializationError
+    SERIALIZATION_MODULE_AVAILABLE = True
+except ImportError:
+    SERIALIZATION_MODULE_AVAILABLE = False
 
-# Module is available if we got here
-SERIALIZATION_MODULE_AVAILABLE = True
+pytestmark = pytest.mark.skipif(
+    not SERIALIZATION_MODULE_AVAILABLE,
+    reason="serialization dependencies (msgpack, etc.) not installed",
+)
 
 
 # ==============================================================================

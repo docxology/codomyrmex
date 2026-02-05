@@ -22,7 +22,7 @@ This file now serves as a redirect to the complete setup guide that includes:
 # Clone and setup everything automatically with uv
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-./install_with_uv.sh
+./start_here.sh
 ```
 
 ### **Option 2: Manual UV Setup**

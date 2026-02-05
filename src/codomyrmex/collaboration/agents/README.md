@@ -1,40 +1,42 @@
-# Agents
+# collaboration/agents
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `agents` module provides core functionality for Agents.
+Multi-agent coordination submodule. Provides agent definitions, lifecycle management, and a registry for collaborative workflows. Defines a hierarchy from abstract agents through collaborative and worker specializations to supervisor agents that orchestrate multi-agent tasks.
 
-## Architecture
+## Key Exports
 
-```mermaid
-graph TD
-    agents --> Utils[codomyrmex.utils]
-    agents --> Logs[codomyrmex.logging_monitoring]
+### Base Classes
 
-    subgraph agents
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
+- **`AbstractAgent`** -- Abstract base class for all agents with lifecycle hooks
+- **`CollaborativeAgent`** -- Agent with collaboration capabilities (messaging, task sharing)
 
-## Components
+### Worker Agents
 
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
+- **`WorkerAgent`** -- Standard worker agent that executes assigned tasks
+- **`SpecializedWorker`** -- Worker with domain-specific capabilities
 
-## Usage
+### Supervisor
 
-```python
-from codomyrmex.agents import ...
+- **`SupervisorAgent`** -- Orchestrates and delegates work to worker agents
 
-# Example usage
-# result = process(...)
-```
+### Registry
+
+- **`AgentRegistry`** -- Central registry for agent registration, lookup, and lifecycle management
+- **`get_registry()`** -- Get the singleton AgentRegistry instance
+
+## Directory Contents
+
+- `__init__.py` - Package init; re-exports all agent classes and registry
+- `base.py` - AbstractAgent and CollaborativeAgent base classes
+- `worker.py` - WorkerAgent and SpecializedWorker implementations
+- `supervisor.py` - SupervisorAgent implementation
+- `registry.py` - AgentRegistry and singleton accessor
+- `py.typed` - PEP 561 type-checking marker
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [collaboration](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

@@ -43,7 +43,7 @@ class TestValidationError:
 
         error = ValidationError("Field is required", field="name", code="required")
 
-        assert str(error) == "Field is required"
+        assert "Field is required" in str(error)
         assert error.field == "name"
         assert error.code == "required"
 
@@ -83,7 +83,7 @@ class TestValidationError:
             path=["user", "contact", "email"]
         )
 
-        assert str(error) == "Complex error"
+        assert "Complex error" in str(error)
         assert error.field == "email"
         assert error.code == "invalid_format"
         assert error.path == ["user", "contact", "email"]

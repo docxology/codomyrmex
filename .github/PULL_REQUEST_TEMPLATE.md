@@ -196,6 +196,6 @@ result = new_function(param="example")
 **By submitting this pull request, I confirm that:**
 - [ ] I have read the [Contributing Guidelines](../docs/project/contributing.md)
 - [ ] My code follows the [Contributing Guidelines](../docs/project/contributing.md)
-- [ ] I have followed the [Code of Conduct](../src/codomyrmex/documentation/docs/project/code-of-conduct.md)
+- [ ] I have followed the [Code of Conduct](../docs/project/code-of-conduct.md)
 - [ ] My contribution is made under the same license as the project (MIT)
 - [ ] I am willing to address feedback and make necessary changes

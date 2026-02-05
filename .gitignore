@@ -411,3 +411,5 @@ Desktop.ini
 
 # Project specific
 # Add any project-specific patterns here
+/rollback_plans
+/@output

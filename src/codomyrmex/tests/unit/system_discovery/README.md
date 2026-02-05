@@ -1,40 +1,20 @@
-# System Discovery
+# system_discovery
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `system_discovery` module provides core functionality for System Discovery.
+The `system_discovery` module provides core functionality for System Discovery..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    system_discovery --> Utils[codomyrmex.utils]
-    system_discovery --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph system_discovery
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.system_discovery import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_system_discovery.py` - Test System Discovery
+- `test_system_discovery_comprehensive.py` - Test System Discovery Comprehensive
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

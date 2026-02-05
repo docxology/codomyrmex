@@ -1,38 +1,35 @@
-# Streaming
+# streaming
 
-Streaming response handlers for real-time LLM output processing
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `streaming` submodule provides streaming response handlers for real-time llm output processing.
+Streaming response handlers for LLM outputs. Provides a complete toolkit for consuming, buffering, processing, and parsing streamed LLM responses in real time, including event-driven callbacks, pluggable processor pipelines, incremental JSON parsing, and throughput statistics tracking.
 
-## Installation
+## Key Exports
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- **`StreamEventType`** -- Enum of streaming event types: START, DELTA, ERROR, END, TOOL_CALL, METADATA
+- **`StreamEvent`** -- Dataclass representing a single streaming event with type, content delta, metadata, and timestamp
+- **`StreamStats`** -- Dataclass tracking stream statistics: total tokens, first-token latency, duration, and tokens-per-second
+- **`StreamBuffer`** -- Thread-safe buffer for accumulating streamed content chunks with configurable max size
+- **`StreamProcessor`** -- Abstract base class for stream event processors (filter/transform pipeline stages)
+- **`PassthroughProcessor`** -- StreamProcessor that passes all events through unchanged
+- **`ContentFilterProcessor`** -- StreamProcessor that replaces delta content matching block patterns with "[FILTERED]"
+- **`JSONStreamParser`** -- Incremental JSON parser that extracts complete JSON objects from a character stream
+- **`StreamHandler`** -- Main stream handler: iterates events, applies processors, buffers content, collects stats, and dispatches callbacks
+- **`stream_to_string()`** -- Convenience function to consume an entire stream iterator and return the concatenated string
+- **`chunk_stream()`** -- Utility generator that splits text into fixed-size chunks with simulated delay (useful for testing)
 
-```bash
-pip install codomyrmex
-```
+## Directory Contents
 
-## Quick Start
+- `__init__.py` - All streaming classes, enums, dataclasses, and utility functions
+- `README.md` - This file
+- `SPEC.md` - Module specification
+- `AGENTS.md` - Agent integration notes
+- `PAI.md` - PAI algorithm context
+- `py.typed` - PEP 561 typing marker
 
-```python
-from codomyrmex.llm.streaming import *
+## Navigation
 
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`llm`](../) - Parent module
+- **Parent Module**: [llm](../README.md)
+- **Project Root**: [../../../../README.md](../../../../README.md)

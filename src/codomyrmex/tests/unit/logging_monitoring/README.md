@@ -1,40 +1,21 @@
-# Logging Monitoring
+# logging_monitoring
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `logging_monitoring` module provides core functionality for Logging Monitoring.
+The `logging_monitoring` module provides core functionality for Logging Monitoring..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    logging_monitoring --> Utils[codomyrmex.utils]
-    logging_monitoring --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph logging_monitoring
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.logging_monitoring import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `integration/` - Subdirectory
+- `test_logging_monitoring.py` - Test Logging Monitoring
+- `unit/` - Subdirectory
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

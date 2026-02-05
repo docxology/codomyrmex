@@ -141,7 +141,7 @@ except ImportError:
 
 @dataclass
 class ModuleCapability:
-    """Represents a discovered capability in a module."""
+    """A single discovered capability (function, class, method, or constant) within a module."""
 
     name: str
     module_path: str
@@ -156,7 +156,7 @@ class ModuleCapability:
 
 @dataclass
 class ModuleInfo:
-    """Complete information about a discovered module."""
+    """Aggregated metadata and capabilities for a single discovered Codomyrmex module."""
 
     name: str
     path: str
@@ -179,7 +179,12 @@ class SystemDiscovery:
     """
 
     def __init__(self, project_root: Optional[Path] = None):
-        """Initialize the system discovery engine."""
+        """Initialize the system discovery engine.
+
+        Args:
+            project_root: Filesystem path to the project root directory.
+                Defaults to the current working directory if not provided.
+        """
         self.project_root = project_root or Path.cwd()
         self.src_path = self.project_root / "src"
         self.codomyrmex_path = self.src_path / "codomyrmex"
@@ -194,7 +199,12 @@ class SystemDiscovery:
 #             sys.path.insert(0, str(self.src_path))  # Removed sys.path manipulation
 
     def run_full_discovery(self) -> None:
-        """Run complete system discovery and display results."""
+        """Run complete system discovery, scanning all modules and printing results.
+
+        Orchestrates the full discovery pipeline: scans the codomyrmex package
+        for modules, then displays the discovery results and capability summary
+        to stdout.
+        """
         print("\n🔍 " + "=" * 60)
         print("   CODOMYRMEX SYSTEM DISCOVERY")
         print("=" * 60)
@@ -278,7 +288,7 @@ class SystemDiscovery:
         self._check_git_status()
 
     def _discover_modules(self) -> None:
-        """Discover all modules in the codomyrmex package."""
+        """Find all Python modules under the codomyrmex package directory and analyze each one."""
         print(f"\n🔎 Scanning modules in {self.codomyrmex_path}...")
 
         if not self.codomyrmex_path.exists():
@@ -299,7 +309,7 @@ class SystemDiscovery:
     def _analyze_module(
         self, module_name: str, module_path: Path
     ) -> Optional[ModuleInfo]:
-        """Analyze a single module and extract its capabilities."""
+        """Analyze a single module directory, extracting metadata, dependencies, and capabilities."""
         try:
             # Try to import the module
             module_import_path = f"codomyrmex.{module_name}"
@@ -353,7 +363,7 @@ class SystemDiscovery:
     def _discover_module_capabilities(
         self, module: Any, module_path: Path
     ) -> list[ModuleCapability]:
-        """Discover capabilities by inspecting the imported module."""
+        """Discover capabilities via runtime inspection of an imported module's public members."""
         capabilities = []
 
         try:
@@ -373,7 +383,7 @@ class SystemDiscovery:
     def _static_analysis_capabilities(
         self, module_path: Path
     ) -> list[ModuleCapability]:
-        """Discover capabilities using static analysis when import fails."""
+        """Discover capabilities via AST parsing of Python files when runtime import fails."""
         capabilities = []
 
         try:
@@ -433,7 +443,7 @@ class SystemDiscovery:
     def _analyze_object(
         self, name: str, obj: Any, module_path: Path
     ) -> Optional[ModuleCapability]:
-        """Analyze a single object and create a capability description."""
+        """Inspect a runtime object (function, class, method, or constant) and build a ModuleCapability."""
         try:
             obj_type = "unknown"
             signature = str(obj)
@@ -495,7 +505,7 @@ class SystemDiscovery:
             return None
 
     def _get_function_signature_from_ast(self, node: ast.FunctionDef) -> str:
-        """Extract function signature from AST node."""
+        """Reconstruct a human-readable function signature string from an AST FunctionDef node."""
         args = []
 
         # Regular arguments
@@ -520,7 +530,7 @@ class SystemDiscovery:
         return f"{node.name}({', '.join(args)})"
 
     def _get_module_description(self, module_path: Path) -> str:
-        """Extract module description from README or __init__.py."""
+        """Extract a short description from the module's README.md or __init__.py docstring."""
         # Try README first
         readme_path = module_path / "README.md"
         if readme_path.exists():
@@ -548,7 +558,7 @@ class SystemDiscovery:
         return "No description available"
 
     def _get_module_version(self, module_path: Path) -> str:
-        """Extract module version."""
+        """Detect the module version by parsing __version__ from __init__.py via AST."""
         # Try __init__.py
         init_path = module_path / "__init__.py"
         if init_path.exists():
@@ -572,7 +582,7 @@ class SystemDiscovery:
         return "unknown"
 
     def _get_module_dependencies(self, module_path: Path) -> list[str]:
-        """Extract module dependencies from requirements.txt or imports."""
+        """Scan the module's requirements.txt for dependency package names."""
         dependencies = []
 
         # Check for module-specific requirements.txt
@@ -597,12 +607,12 @@ class SystemDiscovery:
         return dependencies
 
     def _has_tests(self, module_name: str) -> bool:
-        """Check if module has tests."""
+        """Check whether a corresponding unit test file exists in the testing directory."""
         test_file = self.testing_path / "unit" / f"test_{module_name}.py"
         return test_file.exists()
 
     def _has_docs(self, module_path: Path) -> bool:
-        """Check if module has documentation."""
+        """Check whether the module has documentation (README, docs dir, or API spec)."""
         doc_indicators = [
             module_path / "README.md",
             module_path / "docs",
@@ -612,7 +622,7 @@ class SystemDiscovery:
         return any(path.exists() for path in doc_indicators)
 
     def _get_last_modified(self, module_path: Path) -> str:
-        """Get last modified time of the module."""
+        """Return the most recent modification timestamp across all Python files in the module."""
         try:
             latest_time = 0
             for py_file in module_path.glob("**/*.py"):
@@ -631,7 +641,7 @@ class SystemDiscovery:
         return "unknown"
 
     def _display_discovery_results(self) -> None:
-        """Display the results of module discovery."""
+        """Print a formatted summary of all discovered modules with status icons to stdout."""
         print("\n📊 Discovery Results:")
         print(f"   Found {len(self.modules)} modules")
 
@@ -664,7 +674,7 @@ class SystemDiscovery:
             )
 
     def _display_capability_summary(self) -> None:
-        """Display summary of discovered capabilities."""
+        """Print an aggregated breakdown of all capabilities grouped by type (function, class, etc.)."""
         print("\n🔧 Capability Summary:")
 
         all_capabilities = []
@@ -684,7 +694,11 @@ class SystemDiscovery:
         print(f"\n🎯 Total Capabilities Discovered: {len(all_capabilities)}")
 
     def show_status_dashboard(self) -> None:
-        """Show comprehensive system status dashboard."""
+        """Display a comprehensive system status dashboard to stdout.
+
+        Reports Python environment details, project structure health,
+        core dependency availability, and git repository status.
+        """
         print("\n📊 " + "=" * 60)
         print("   CODOMYRMEX STATUS DASHBOARD")
         print("=" * 60)
@@ -713,7 +727,7 @@ class SystemDiscovery:
         self._check_git_status()
 
     def _check_core_dependencies(self) -> None:
-        """Check core dependencies status."""
+        """Attempt to import each core dependency and print pass/fail status."""
         print("\n📦 Core Dependencies:")
 
         # Map package names to their actual import names
@@ -739,7 +753,7 @@ class SystemDiscovery:
                 print(f"   ❌ {dep}")
 
     def _check_git_status(self) -> None:
-        """Check git repository status."""
+        """Run git commands to report repo initialization, current branch, and uncommitted changes."""
         print("\n🌐 Git Repository:")
 
         try:
@@ -784,7 +798,11 @@ class SystemDiscovery:
             print(f"   ❌ Git error: {e}")
 
     def run_demo_workflows(self) -> None:
-        """Run demonstration workflows using available modules."""
+        """Execute demonstration workflows for available modules to validate system functionality.
+
+        Runs sample operations (data visualization, logging, code execution) using
+        discovered modules and reports success/failure for each demo.
+        """
         print("\n🚀 " + "=" * 60)
         print("   CODOMYRMEX DEMO WORKFLOWS")
         print("=" * 60)

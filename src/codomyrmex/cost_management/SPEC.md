@@ -32,8 +32,16 @@ cost_management/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.cost_management import CostCategory
+from codomyrmex.cost_management import BudgetPeriod
+from codomyrmex.cost_management import CostEntry
+from codomyrmex.cost_management import Budget
+from codomyrmex.cost_management import CostSummary
+from codomyrmex.cost_management import BudgetAlert
+from codomyrmex.cost_management import CostStore
+from codomyrmex.cost_management import InMemoryCostStore
+from codomyrmex.cost_management import CostTracker
+from codomyrmex.cost_management import BudgetManager
 ```
 
 ### 3.2 Configuration

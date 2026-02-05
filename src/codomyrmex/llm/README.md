@@ -15,6 +15,27 @@ LLM module providing language model integration, prompt management, and output h
 | **Anthropic** | ✅ Active | `AnthropicProvider` | Claude models |
 | **Ollama** | ✅ Active | `OllamaManager` | Local LLM inference |
 
+## Key Exports
+
+### Ollama Integration
+- **`OllamaManager`** — Main Ollama integration manager for local LLM model management
+- **`ModelRunner`** — Advanced model execution engine for running Ollama models with streaming and batching
+- **`OutputManager`** — Manages output saving and configuration for Ollama inference results
+- **`ConfigManager`** — Manages all configuration aspects of the Ollama integration (paths, defaults, profiles)
+
+### Fabric Integration
+- **`FabricManager`** — Main Fabric integration manager for Codomyrmex workflows
+- **`FabricOrchestrator`** — Orchestrates workflows combining Fabric patterns with Codomyrmex capabilities
+- **`FabricConfigManager`** — Manages Fabric configuration and patterns
+
+### Configuration
+- **`LLMConfig`** — Configuration manager for LLM parameters and settings (temperature, tokens, model selection)
+- **`LLMConfigPresets`** — Preset configurations for different use cases (creative, precise, balanced)
+- `get_config` / `set_config` / `reset_config` — Global configuration access
+
+### Submodules
+- `providers` / `chains` / `memory` / `tools` / `guardrails` / `streaming` / `embeddings` / `rag` / `cost_tracking` / `prompts`
+
 ## Quick Start
 
 ### OpenRouter (Recommended for Development)

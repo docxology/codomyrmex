@@ -1,40 +1,19 @@
-# Ai Code Editing
+# ai_code_editing
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `ai_code_editing` module provides core functionality for Ai Code Editing.
+The `ai_code_editing` module provides core functionality for Ai Code Editing..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    ai_code_editing --> Utils[codomyrmex.utils]
-    ai_code_editing --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph ai_code_editing
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.ai_code_editing import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_ai_code_editing.py` - Test Ai Code Editing
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

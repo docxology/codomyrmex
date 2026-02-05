@@ -110,84 +110,73 @@ class AgentConfig:
     output_dir: Optional[Path] = None
 
     def __post_init__(self):
-        """Initialize configuration from environment variables."""
+        """Initialize configuration from environment variables.
+
+        Env vars are only used as fallbacks when no explicit value was passed.
+        For Optional[str] fields (default None), env var applies only if field is None.
+        For fields with non-None defaults, env var applies only if field equals the class default.
+        """
+        _defaults = AgentConfig.__dataclass_fields__
+
+        def _env_or(field_name: str, env_var: str, cast=str):
+            """Return env var value only if field is still at its default."""
+            current = getattr(self, field_name)
+            default = _defaults[field_name].default
+            if current == default:
+                env_val = os.getenv(env_var)
+                if env_val is not None:
+                    return cast(env_val)
+            return current
+
         # Jules configuration
-        self.jules_command = os.getenv("JULES_COMMAND", self.jules_command)
-        self.jules_timeout = int(os.getenv("JULES_TIMEOUT", str(self.jules_timeout)))
-        self.jules_working_dir = os.getenv("JULES_WORKING_DIR", self.jules_working_dir)
+        self.jules_command = _env_or("jules_command", "JULES_COMMAND")
+        self.jules_timeout = _env_or("jules_timeout", "JULES_TIMEOUT", int)
+        self.jules_working_dir = _env_or("jules_working_dir", "JULES_WORKING_DIR")
 
         # Claude configuration
-        self.claude_api_key = os.getenv("ANTHROPIC_API_KEY", self.claude_api_key)
-        self.claude_model = os.getenv("CLAUDE_MODEL", self.claude_model)
-        self.claude_timeout = int(os.getenv("CLAUDE_TIMEOUT", str(self.claude_timeout)))
-        self.claude_max_tokens = int(
-            os.getenv("CLAUDE_MAX_TOKENS", str(self.claude_max_tokens))
-        )
-        self.claude_temperature = float(
-            os.getenv("CLAUDE_TEMPERATURE", str(self.claude_temperature))
-        )
+        self.claude_api_key = _env_or("claude_api_key", "ANTHROPIC_API_KEY")
+        self.claude_model = _env_or("claude_model", "CLAUDE_MODEL")
+        self.claude_timeout = _env_or("claude_timeout", "CLAUDE_TIMEOUT", int)
+        self.claude_max_tokens = _env_or("claude_max_tokens", "CLAUDE_MAX_TOKENS", int)
+        self.claude_temperature = _env_or("claude_temperature", "CLAUDE_TEMPERATURE", float)
 
         # Codex configuration
-        self.codex_api_key = os.getenv("OPENAI_API_KEY", self.codex_api_key)
-        self.codex_model = os.getenv("CODEX_MODEL", self.codex_model)
-        self.codex_timeout = int(os.getenv("CODEX_TIMEOUT", str(self.codex_timeout)))
-        self.codex_max_tokens = int(
-            os.getenv("CODEX_MAX_TOKENS", str(self.codex_max_tokens))
-        )
-        self.codex_temperature = float(
-            os.getenv("CODEX_TEMPERATURE", str(self.codex_temperature))
-        )
+        self.codex_api_key = _env_or("codex_api_key", "OPENAI_API_KEY")
+        self.codex_model = _env_or("codex_model", "CODEX_MODEL")
+        self.codex_timeout = _env_or("codex_timeout", "CODEX_TIMEOUT", int)
+        self.codex_max_tokens = _env_or("codex_max_tokens", "CODEX_MAX_TOKENS", int)
+        self.codex_temperature = _env_or("codex_temperature", "CODEX_TEMPERATURE", float)
 
         # OpenCode configuration
-        self.opencode_command = os.getenv("OPENCODE_COMMAND", self.opencode_command)
-        self.opencode_timeout = int(
-            os.getenv("OPENCODE_TIMEOUT", str(self.opencode_timeout))
-        )
-        self.opencode_working_dir = os.getenv(
-            "OPENCODE_WORKING_DIR", self.opencode_working_dir
-        )
-        self.opencode_api_key = os.getenv("OPENCODE_API_KEY", self.opencode_api_key)
+        self.opencode_command = _env_or("opencode_command", "OPENCODE_COMMAND")
+        self.opencode_timeout = _env_or("opencode_timeout", "OPENCODE_TIMEOUT", int)
+        self.opencode_working_dir = _env_or("opencode_working_dir", "OPENCODE_WORKING_DIR")
+        self.opencode_api_key = _env_or("opencode_api_key", "OPENCODE_API_KEY")
 
         # Gemini configuration
-        self.gemini_command = os.getenv("GEMINI_COMMAND", self.gemini_command)
-        self.gemini_timeout = int(
-            os.getenv("GEMINI_TIMEOUT", str(self.gemini_timeout))
-        )
-        self.gemini_working_dir = os.getenv(
-            "GEMINI_WORKING_DIR", self.gemini_working_dir
-        )
-        self.gemini_api_key = os.getenv("GEMINI_API_KEY", self.gemini_api_key)
-        self.gemini_model = os.getenv("GEMINI_MODEL", self.gemini_model)
-        self.gemini_auth_method = os.getenv(
-            "GEMINI_AUTH_METHOD", self.gemini_auth_method
-        )
-        self.gemini_settings_path = os.getenv(
-            "GEMINI_SETTINGS_PATH", self.gemini_settings_path
-        )
+        self.gemini_command = _env_or("gemini_command", "GEMINI_COMMAND")
+        self.gemini_timeout = _env_or("gemini_timeout", "GEMINI_TIMEOUT", int)
+        self.gemini_working_dir = _env_or("gemini_working_dir", "GEMINI_WORKING_DIR")
+        self.gemini_api_key = _env_or("gemini_api_key", "GEMINI_API_KEY")
+        self.gemini_model = _env_or("gemini_model", "GEMINI_MODEL")
+        self.gemini_auth_method = _env_or("gemini_auth_method", "GEMINI_AUTH_METHOD")
+        self.gemini_settings_path = _env_or("gemini_settings_path", "GEMINI_SETTINGS_PATH")
 
         # Mistral Vibe configuration
-        self.mistral_vibe_command = os.getenv("MISTRAL_VIBE_COMMAND", self.mistral_vibe_command)
-        self.mistral_vibe_timeout = int(
-            os.getenv("MISTRAL_VIBE_TIMEOUT", str(self.mistral_vibe_timeout))
-        )
-        self.mistral_vibe_working_dir = os.getenv(
-            "MISTRAL_VIBE_WORKING_DIR", self.mistral_vibe_working_dir
-        )
-        self.mistral_vibe_api_key = os.getenv("MISTRAL_API_KEY", self.mistral_vibe_api_key)
+        self.mistral_vibe_command = _env_or("mistral_vibe_command", "MISTRAL_VIBE_COMMAND")
+        self.mistral_vibe_timeout = _env_or("mistral_vibe_timeout", "MISTRAL_VIBE_TIMEOUT", int)
+        self.mistral_vibe_working_dir = _env_or("mistral_vibe_working_dir", "MISTRAL_VIBE_WORKING_DIR")
+        self.mistral_vibe_api_key = _env_or("mistral_vibe_api_key", "MISTRAL_API_KEY")
 
         # Every Code configuration
-        self.every_code_command = os.getenv("EVERY_CODE_COMMAND", self.every_code_command)
-        self.every_code_alt_command = os.getenv("EVERY_CODE_ALT_COMMAND", self.every_code_alt_command)
-        self.every_code_timeout = int(
-            os.getenv("EVERY_CODE_TIMEOUT", str(self.every_code_timeout))
-        )
-        self.every_code_working_dir = os.getenv(
-            "EVERY_CODE_WORKING_DIR", self.every_code_working_dir
-        )
-        self.every_code_api_key = os.getenv("OPENAI_API_KEY", self.every_code_api_key)
+        self.every_code_command = _env_or("every_code_command", "EVERY_CODE_COMMAND")
+        self.every_code_alt_command = _env_or("every_code_alt_command", "EVERY_CODE_ALT_COMMAND")
+        self.every_code_timeout = _env_or("every_code_timeout", "EVERY_CODE_TIMEOUT", int)
+        self.every_code_working_dir = _env_or("every_code_working_dir", "EVERY_CODE_WORKING_DIR")
+        self.every_code_api_key = _env_or("every_code_api_key", "OPENAI_API_KEY")
         self.every_code_config_path = os.getenv(
             "CODE_HOME", os.path.expanduser("~/.code")
-        )
+        ) if self.every_code_config_path is None else self.every_code_config_path
 
         # General configuration
         self.default_timeout = int(

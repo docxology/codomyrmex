@@ -32,8 +32,17 @@ feature_store/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.feature_store import FeatureType
+from codomyrmex.feature_store import ValueType
+from codomyrmex.feature_store import FeatureDefinition
+from codomyrmex.feature_store import FeatureValue
+from codomyrmex.feature_store import FeatureVector
+from codomyrmex.feature_store import FeatureGroup
+from codomyrmex.feature_store import FeatureStore
+from codomyrmex.feature_store import InMemoryFeatureStore
+from codomyrmex.feature_store import FeatureTransform
+from codomyrmex.feature_store import FeatureService
+# ... and 2 more
 ```
 
 ### 3.2 Configuration

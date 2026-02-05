@@ -4,21 +4,60 @@
 
 ## Overview
 
-Database operations module providing schema management, migrations, and backup capabilities. Enables programmatic database interactions and administration.
+Database administration module providing connection management, schema generation, migration execution, backup/recovery, and performance monitoring. The `DatabaseManager` handles core database operations through `DatabaseConnection` configurations. Supports automated schema generation via `SchemaGenerator`, versioned migrations through `MigrationManager`, backup scheduling with `BackupManager`, and real-time performance monitoring via `DatabaseMonitor`. Includes submodules for connection pooling, replication, sharding, and auditing.
+
+## Key Exports
+
+### Submodules
+
+- **`connections`** -- Connection pooling and connection lifecycle management
+- **`replication`** -- Database replication and synchronization
+- **`sharding`** -- Database sharding strategies and shard management
+- **`audit`** -- Database security and compliance auditing
+
+### Database Management
+
+- **`DatabaseManager`** -- Core class for database administration operations
+- **`manage_databases()`** -- Comprehensive database administration entry point
+- **`DatabaseConnection`** -- Connection configuration with host, port, credentials, and options
+
+### Migration Management
+
+- **`MigrationManager`** -- Manages versioned database migrations with up/down support
+- **`run_migrations()`** -- Execute pending migrations in order
+- **`Migration`** -- Individual migration definition with version and SQL statements
+
+### Backup Management
+
+- **`BackupManager`** -- Automated database backup and recovery orchestration
+- **`backup_database()`** -- Create a database backup with configurable strategy
+- **`Backup`** -- Backup configuration and status tracking
+
+### Performance Monitoring
+
+- **`DatabaseMonitor`** -- Real-time database health and performance monitoring
+- **`monitor_database()`** -- Start monitoring database metrics
+- **`optimize_database()`** -- Apply performance tuning recommendations
+- **`DatabaseMetrics`** -- Performance metrics container (query latency, connections, throughput)
+
+### Schema Generation
+
+- **`SchemaGenerator`** -- Generates database schemas from definitions
+- **`generate_schema()`** -- Generate DDL from a schema definition
+- **`SchemaDefinition`** -- Schema definition with tables, columns, and constraints
 
 ## Directory Contents
 
-- `API_SPECIFICATION.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `SECURITY.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `backup_manager.py` – File
-- `db_manager.py` – File
-- `migration_manager.py` – File
-- `performance_monitor.py` – File
-- `schema_generator.py` – File
+- `__init__.py` - Module entry point aggregating all submodule exports
+- `db_manager.py` - `DatabaseManager` and `DatabaseConnection` core operations
+- `migration_manager.py` - `MigrationManager` and `Migration` for versioned migrations
+- `backup_manager.py` - `BackupManager` and `Backup` for backup/recovery
+- `performance_monitor.py` - `DatabaseMonitor` and `DatabaseMetrics` for monitoring
+- `schema_generator.py` - `SchemaGenerator` and `SchemaDefinition` for DDL generation
+- `connections/` - Connection pooling and lifecycle management
+- `replication/` - Database replication configuration and sync
+- `sharding/` - Sharding strategy definitions and shard routing
+- `audit/` - Database security auditing and compliance
 
 ## Navigation
 

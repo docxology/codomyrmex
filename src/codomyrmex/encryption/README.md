@@ -19,6 +19,26 @@ Encryption and cryptographic operations module for Codomyrmex. Provides symmetri
 - **Key management** with file-based storage, listing, rotation
 - **SecureDataContainer** for encrypting arbitrary JSON-serializable data
 
+## Key Exports
+
+### Classes
+- **`Encryptor`** — Core encryption class supporting AES-CBC and RSA with signing and hashing
+- **`AESGCMEncryptor`** — Authenticated encryption using AES-GCM (recommended over AES-CBC)
+- **`KeyManager`** — Key storage, retrieval, listing, and rotation with secure file permissions
+- **`SecureDataContainer`** — Encrypted container for arbitrary JSON-serializable data
+- **`EncryptionError`** — Raised when encryption or decryption operations fail
+
+### Convenience Functions
+- **`encrypt`** / **`decrypt`** — Encrypt or decrypt data with a given key and algorithm
+- **`generate_key`** — Generate an encryption key for the specified algorithm
+- **`get_encryptor`** — Get an Encryptor instance for a given algorithm
+- **`encrypt_data`** / **`decrypt_data`** — Lower-level AES encryption/decryption functions
+- **`generate_aes_key`** — Generate a raw AES key
+- **`encrypt_file`** / **`decrypt_file`** — Encrypt or decrypt a file in place
+- **`hash_data`** — Compute a hash of data (SHA-256, SHA-384, SHA-512, MD5)
+- **`compute_hmac`** / **`verify_hmac`** — HMAC computation and constant-time verification
+- **`derive_key_hkdf`** — HKDF key derivation from high-entropy material
+
 ## Quick Start
 
 ```python

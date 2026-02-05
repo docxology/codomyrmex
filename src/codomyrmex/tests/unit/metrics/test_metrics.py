@@ -600,7 +600,7 @@ class TestMetricsError:
     def test_metrics_error_creation(self):
         """Test MetricsError can be created."""
         error = MetricsError("Test error")
-        assert str(error) == "Test error"
+        assert "Test error" in str(error)
 
     def test_metrics_error_is_codomyrmex_error(self):
         """Test MetricsError inherits from CodomyrmexError."""

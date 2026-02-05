@@ -9,11 +9,10 @@ from codomyrmex.documents.utils.encoding_detector import detect_encoding
 class TestEncodingDetector(unittest.TestCase):
     def test_detect_encoding_utf8_bom(self):
         """Test detecting UTF-8 with BOM using mock because no chardet."""
-        # Since chardet is not available, it hits ImportError logic and returns default (utf-8)
-        # So we just test that it returns default without crashing
+        # The BOM (\xef\xbb\xbf) is correctly detected as UTF-8-SIG
         with patch("builtins.open", new_callable=mock_open, read_data=b'\xef\xbb\xbfcontent'):
              enc = detect_encoding("test.txt")
-             self.assertEqual(enc, "utf-8") # Expect default
+             self.assertEqual(enc, "UTF-8-SIG") # Correct encoding for UTF-8 with BOM
 
     def test_detect_encoding_chardet(self):
         """Test delegation to chardet (mocked)."""

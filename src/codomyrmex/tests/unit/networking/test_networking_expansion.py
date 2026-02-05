@@ -2,7 +2,17 @@
 
 import pytest
 from unittest.mock import MagicMock, patch
-from codomyrmex.networking import SSHClient, TCPClient, UDPClient, PortScanner
+
+try:
+    from codomyrmex.networking import SSHClient, TCPClient, UDPClient, PortScanner
+    NETWORKING_AVAILABLE = True
+except ImportError:
+    NETWORKING_AVAILABLE = False
+
+pytestmark = pytest.mark.skipif(
+    not NETWORKING_AVAILABLE,
+    reason="networking dependencies (paramiko, etc.) not installed",
+)
 
 @pytest.mark.unit
 def test_ssh_client_logic():

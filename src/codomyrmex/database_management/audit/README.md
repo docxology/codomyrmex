@@ -1,38 +1,19 @@
-# Audit
+# audit
 
-Query logging, analysis, and slow query detection
+**Version**: v0.1.0 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 
-The `audit` submodule provides query logging, analysis, and slow query detection.
+Query logging, analysis, and slow query detection. This submodule is scaffolded for future implementation; no exports are currently defined.
 
-## Installation
+## Directory Contents
 
-This submodule is part of the Codomyrmex platform and is installed with the main package.
+- `__init__.py` - Module entry point (scaffolded, no exports yet)
+- `AGENTS.md` - Agent integration specification
+- `SPEC.md` - Module specification
+- `PAI.md` - PAI integration notes
 
-```bash
-pip install codomyrmex
-```
+## Navigation
 
-## Quick Start
-
-```python
-from codomyrmex.database_management.audit import *
-
-# Example usage
-# TODO: Add practical examples
-```
-
-## Features
-
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
-
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`database_management`](../) - Parent module
+- **Parent Module**: [database_management](../README.md)
+- **Project Root**: ../../../../README.md

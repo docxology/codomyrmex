@@ -844,10 +844,11 @@ class TestConfigManager(TestCase):
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_config_manager_initialization(self):
-        """Test ConfigManager initializes with default config."""
+        """Test ConfigManager initializes with config."""
         from codomyrmex.llm.ollama.config_manager import ConfigManager
 
-        manager = ConfigManager()
+        # Use a non-existent config path so defaults are used
+        manager = ConfigManager(str(Path(self.temp_dir) / "nonexistent_config.json"))
 
         assert manager.config is not None
         assert manager.config.ollama_binary == "ollama"

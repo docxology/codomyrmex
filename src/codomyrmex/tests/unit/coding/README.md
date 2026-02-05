@@ -1,40 +1,23 @@
-# Coding
+# coding
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `coding` module provides core functionality for Coding.
+The `coding` module provides core functionality for Coding..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    coding --> Utils[codomyrmex.utils]
-    coding --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph coding
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.coding import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `execution/` - Subdirectory
+- `monitoring/` - Subdirectory
+- `review/` - Subdirectory
+- `sandbox/` - Subdirectory
+- `test_debugging.py` - Test Debugging
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

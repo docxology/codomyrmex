@@ -1,43 +1,56 @@
-# Feature Store
+# feature_store
 
-ML feature management, versioning, and serving
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `feature_store` module provides ml feature management, versioning, and serving.
+ML feature management, storage, and retrieval for machine learning applications. Provides feature registration with type definitions, entity-keyed value storage with versioning, feature grouping, batch ingestion, and pluggable transformation pipelines. Designed for both online (low-latency serving) and offline (batch processing) feature access patterns.
 
-## Installation
+## Key Exports
 
-This module is part of the Codomyrmex platform and is installed with the main package.
+### Enums
 
-```bash
-pip install codomyrmex
-```
+- **`FeatureType`** -- Semantic types for features: NUMERIC, CATEGORICAL, EMBEDDING, TEXT, TIMESTAMP, BOOLEAN
+- **`ValueType`** -- Data types for feature values: INT, FLOAT, STRING, BOOL, LIST, DICT
 
-## Quick Start
+### Data Classes
 
-```python
-from codomyrmex.feature_store import *
+- **`FeatureDefinition`** -- Definition of a feature including name, type, value type, description, default value, tags, and metadata
+- **`FeatureValue`** -- A stored feature value for a specific entity with timestamp and version tracking; includes `age_seconds` property
+- **`FeatureVector`** -- A collection of feature values for an entity; supports dictionary access via `get()` and ordered list conversion via `to_list()`
+- **`FeatureGroup`** -- A named group of related feature definitions with entity type and tag support; provides `feature_names` listing and lookup by name
 
-# Example usage
-# TODO: Add practical examples
-```
+### Storage
 
-## Features
+- **`FeatureStore`** -- Abstract base class for feature storage backends with register, set, get, and vector retrieval methods
+- **`InMemoryFeatureStore`** -- Thread-safe in-memory implementation with auto-versioning on value updates, feature listing, and deletion support
 
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
+### Transforms
 
-## API Reference
+- **`FeatureTransform`** -- Applies registered per-feature transformation functions to feature vectors; supports method chaining for adding transforms
 
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
+### Services
 
-## Related Modules
+- **`FeatureService`** -- High-level feature service for ML applications; manages feature groups, supports single and batch ingestion, retrieves feature vectors with optional transforms, and serves features by group name
 
-- [`None`](../) - Parent module
+### Constants
+
+- **`USER_ID_FEATURE`** -- Pre-defined categorical feature definition for user identifiers
+- **`TIMESTAMP_FEATURE`** -- Pre-defined timestamp feature definition for event timestamps
+
+## Directory Contents
+
+- `__init__.py` -- Module implementation with store, service, transform, and data models
+- `README.md` -- This file
+- `AGENTS.md` -- Agent integration documentation
+- `API_SPECIFICATION.md` -- Programmatic API specification
+- `MCP_TOOL_SPECIFICATION.md` -- Model Context Protocol tool definitions
+- `PAI.md` -- PAI integration notes
+- `SPEC.md` -- Module specification
+- `py.typed` -- PEP 561 type stub marker
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/feature_store/](../../../docs/modules/feature_store/)
 - **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

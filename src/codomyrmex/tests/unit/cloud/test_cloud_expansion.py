@@ -2,7 +2,23 @@
 
 import pytest
 from unittest.mock import MagicMock, patch
-from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient
+
+try:
+    from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient
+    # The cloud module may import successfully but set classes to None
+    # when underlying SDKs (boto3, google-cloud-storage, azure) aren't installed
+    CLOUD_DEPS_AVAILABLE = (
+        S3Client is not None
+        and GCSClient is not None
+        and AzureBlobClient is not None
+    )
+except ImportError:
+    CLOUD_DEPS_AVAILABLE = False
+
+pytestmark = pytest.mark.skipif(
+    not CLOUD_DEPS_AVAILABLE,
+    reason="Cloud SDK dependencies (boto3, google-cloud-storage, azure-storage-blob) not installed"
+)
 
 @pytest.mark.unit
 def test_s3_client_list():

@@ -232,7 +232,9 @@ class WorkflowDAG:
             raise DAGValidationError(f"DAG validation failed: {errors}")
 
         # Kahn's algorithm for topological sorting
-        in_degree = {task: len(deps) for task, deps in self.graph.items()}
+        # Ensure every task has an in_degree entry (tasks with no deps may
+        # not appear in self.graph if no one ever accessed them).
+        in_degree = {task: len(self.graph.get(task, set())) for task in self.tasks}
         queue = deque([task for task in self.tasks if in_degree[task] == 0])
         result = []
         processed = 0

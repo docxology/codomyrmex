@@ -32,8 +32,7 @@ rules/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# No exports defined yet (scaffolded for future implementation)
 ```
 
 ### 3.2 Configuration

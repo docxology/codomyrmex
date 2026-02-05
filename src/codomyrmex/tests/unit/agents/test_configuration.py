@@ -263,19 +263,20 @@ class TestAgentConfigComplex:
         assert config3.default_timeout == 30  # Default value
         assert config3 is not config1
 
-    def test_nested_configuration_scenarios(self):
+    def test_nested_configuration_scenarios(self, tmp_path):
         """Test nested configuration scenarios with working directories."""
+        output_dir = tmp_path / "output"
         config = AgentConfig(
             jules_working_dir="/tmp/jules",
             opencode_working_dir="/tmp/opencode",
             gemini_working_dir="/tmp/gemini",
-            output_dir=Path("/tmp/output"),
+            output_dir=output_dir,
         )
-        
+
         assert config.jules_working_dir == "/tmp/jules"
         assert config.opencode_working_dir == "/tmp/opencode"
         assert config.gemini_working_dir == "/tmp/gemini"
-        assert config.output_dir == Path("/tmp/output")
+        assert config.output_dir == output_dir
 
     def test_configuration_merging_and_precedence(self):
         """Test configuration merging and precedence."""
@@ -290,14 +291,14 @@ class TestAgentConfigComplex:
             
             # Reset config to pick up environment variables
             reset_config()
-            # Environment variables override explicit values in __post_init__
+            # Explicit values take precedence over env vars
             config = AgentConfig(
-                jules_timeout=50,  # Will be overridden by env var
+                jules_timeout=50,  # Explicit value wins over env var
             )
-            
-            # Environment variable takes precedence (as implemented)
-            assert config.jules_timeout == 100
-            # Environment variable applies where not overridden
+
+            # Explicit value takes precedence
+            assert config.jules_timeout == 50
+            # Env var applies when field is at default (60)
             assert config.claude_timeout == 200
         finally:
             # Restore original values

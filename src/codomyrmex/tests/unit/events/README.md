@@ -1,40 +1,20 @@
-# Events
+# events
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `events` module provides core functionality for Events.
+The `events` module provides core functionality for Events..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    events --> Utils[codomyrmex.utils]
-    events --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph events
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.events import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_async_events.py` - Test Async Events
+- `test_events.py` - Test Events
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md

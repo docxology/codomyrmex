@@ -33,6 +33,44 @@ The video module provides comprehensive video processing capabilities including 
 - Frame count, aspect ratio
 - Compare two videos
 
+## Key Exports
+
+### Processing Classes (when dependencies available)
+- **`VideoProcessor`** — Video manipulation operations (resize, crop, rotate, convert, filter, trim, merge)
+- **`FrameExtractor`** — Frame extraction, thumbnail generation, and audio extraction from video
+- **`VideoAnalyzer`** — Video metadata extraction, duration queries, and comparison
+
+### Exceptions
+- **`VideoError`** — Base exception for all video-related errors
+- **`VideoReadError`** — Raised when reading a video file fails (not found, corrupted, missing codec)
+- **`VideoWriteError`** — Raised when writing a video file fails (invalid path, disk full, codec error)
+- **`VideoProcessingError`** — Raised when a video processing operation fails (resize, crop, filter)
+- **`FrameExtractionError`** — Raised when frame extraction fails (invalid timestamp, corrupted frame)
+- **`AudioExtractionError`** — Raised when audio extraction from video fails (no audio track, codec error)
+- **`UnsupportedFormatError`** — Raised when the video format is not supported
+- **`VideoAnalysisError`** — Raised when video analysis fails (metadata extraction, codec detection)
+
+### Configuration
+- **`VideoConfig`** — Global configuration for video processing (temp dir, codecs, FPS, bitrate defaults)
+- `get_config` / `set_config` / `reset_config` / `configure` — Configuration management functions
+
+### Data Models
+- **`VideoCodec`** — Enum of common video codecs (H264, H265, VP8, VP9, AV1, MPEG4, MJPEG)
+- **`AudioCodec`** — Enum of common audio codecs (AAC, MP3, OPUS, VORBIS, FLAC, PCM)
+- **`VideoInfo`** — Dataclass with complete video file metadata (duration, resolution, FPS, codec, bitrate)
+- **`ProcessingResult`** — Dataclass result of a video processing operation (output path, dimensions, timing)
+- **`ExtractionResult`** — Dataclass result of frame or audio extraction (frames, timestamps, paths)
+- **`VideoComparison`** — Dataclass result of comparing two videos (resolution, duration, codec differences)
+- **`FilterType`** — Enum of available video filters (grayscale, blur, sharpen, brightness, etc.)
+
+### Availability Flags
+- **`PIL_AVAILABLE`** — Boolean flag indicating whether Pillow (PIL) image dependencies are available
+- **`MOVIEPY_AVAILABLE`** — Boolean flag indicating whether moviepy video editing dependencies are available
+- **`OPENCV_AVAILABLE`** — Boolean flag indicating whether OpenCV (cv2) dependencies are available
+- **`PROCESSING_AVAILABLE`** — Boolean flag indicating whether video processing is available (moviepy or OpenCV)
+- **`EXTRACTION_AVAILABLE`** — Boolean flag indicating whether frame/audio extraction dependencies are available
+- **`ANALYSIS_AVAILABLE`** — Boolean flag indicating whether video analysis dependencies are available
+
 ## Installation
 
 ```bash

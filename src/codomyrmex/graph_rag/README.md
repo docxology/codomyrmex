@@ -1,43 +1,42 @@
-# Graph Rag
+# graph_rag
 
-Knowledge graph integration with RAG for structured knowledge retrieval and reasoning
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `graph_rag` module provides knowledge graph integration with rag for structured knowledge retrieval and reasoning.
+Knowledge graph-enhanced Retrieval-Augmented Generation (RAG) with entity relationships. Provides an in-memory knowledge graph for storing entities and typed relationships, with neighbor traversal, BFS shortest-path finding, subgraph extraction, and text search. The `GraphRAGPipeline` retrieves structured graph context from queries and formats it as text for LLM consumption, combining entity/relationship knowledge with traditional document context.
 
-## Installation
+## Key Exports
 
-This module is part of the Codomyrmex platform and is installed with the main package.
+### Enums
 
-```bash
-pip install codomyrmex
-```
+- **`EntityType`** -- Types of entities: PERSON, ORGANIZATION, LOCATION, CONCEPT, EVENT, DOCUMENT, CUSTOM
+- **`RelationType`** -- Types of relationships: IS_A, PART_OF, RELATED_TO, AUTHORED_BY, LOCATED_IN, OCCURRED_ON, REFERENCES, CUSTOM
 
-## Quick Start
+### Data Classes
 
-```python
-from codomyrmex.graph_rag import *
+- **`Entity`** -- An entity in the knowledge graph with ID, name, type, properties, and optional embedding vector; provides a unique `key` property
+- **`Relationship`** -- A weighted, directed relationship between two entities with type, properties, and a unique `key` property
+- **`GraphContext`** -- Context retrieved from the knowledge graph for a query; contains matched entities, relationships, and paths; includes `to_text()` for generating LLM-ready text representation
 
-# Example usage
-# TODO: Add practical examples
-```
+### Services
 
-## Features
+- **`KnowledgeGraph`** -- Thread-safe in-memory knowledge graph; supports entity and relationship CRUD, bidirectional neighbor traversal, BFS shortest-path finding, subgraph extraction with optional neighbor expansion, and case-insensitive entity search by name
+- **`GraphRAGPipeline`** -- RAG pipeline enhanced with knowledge graph context; extracts entities from queries via word matching and text search, expands to neighbors, collects inter-entity relationships, and combines graph context with document context for LLM prompts
 
-- Feature 1: Description
-- Feature 2: Description
-- Feature 3: Description
+## Directory Contents
 
-## API Reference
-
-See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentation.
-
-## Related Modules
-
-- [`None`](../) - Parent module
+- `__init__.py` -- Module implementation with knowledge graph, RAG pipeline, and data models
+- `README.md` -- This file
+- `AGENTS.md` -- Agent integration documentation
+- `API_SPECIFICATION.md` -- Programmatic API specification
+- `MCP_TOOL_SPECIFICATION.md` -- Model Context Protocol tool definitions
+- `PAI.md` -- PAI integration notes
+- `SPEC.md` -- Module specification
+- `py.typed` -- PEP 561 type stub marker
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/graph_rag/](../../../docs/modules/graph_rag/)
 - **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

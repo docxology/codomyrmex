@@ -34,7 +34,7 @@ class TestImageOptimizer:
     def test_image_optimizer_creation(self):
         """Test creating an ImageOptimizer with real Docker."""
         try:
-            from codomyrmex.containerization.image_optimizer import ImageOptimizer
+            from codomyrmex.containerization.docker.image_optimizer import ImageOptimizer
         except ImportError:
             pytest.skip("ImageOptimizer not available")
 
@@ -50,9 +50,12 @@ class TestImageOptimizer:
     def test_optimization_suggestions(self):
         """Test generation of optimization suggestions with real implementation."""
         try:
-            from codomyrmex.containerization.image_optimizer import ImageOptimizer, OptimizationSuggestion
+            from codomyrmex.containerization.docker.image_optimizer import ImageOptimizer, OptimizationSuggestion
         except ImportError:
             pytest.skip("ImageOptimizer not available")
+
+        if not check_docker_available():
+            pytest.skip("Docker daemon not available")
 
         optimizer = ImageOptimizer()
 
@@ -77,9 +80,12 @@ class TestImageOptimizer:
     def test_optimize_image_config(self):
         """Test image configuration optimization with real implementation."""
         try:
-            from codomyrmex.containerization.image_optimizer import ImageOptimizer
+            from codomyrmex.containerization.docker.image_optimizer import ImageOptimizer
         except ImportError:
             pytest.skip("ImageOptimizer not available")
+
+        if not check_docker_available():
+            pytest.skip("Docker daemon not available")
 
         optimizer = ImageOptimizer()
 
@@ -105,7 +111,7 @@ class TestBuildGenerator:
     def test_build_generator_creation(self):
         """Test creating a BuildGenerator."""
         try:
-            from codomyrmex.containerization.build_generator import BuildGenerator
+            from codomyrmex.containerization.docker.build_generator import BuildGenerator
         except ImportError:
             pytest.skip("BuildGenerator not available")
 
@@ -116,7 +122,7 @@ class TestBuildGenerator:
     def test_create_multi_stage_build_python(self):
         """Test creating multi-stage build for Python."""
         try:
-            from codomyrmex.containerization.build_generator import BuildGenerator, MultiStageBuild
+            from codomyrmex.containerization.docker.build_generator import BuildGenerator, MultiStageBuild
         except ImportError:
             pytest.skip("BuildGenerator not available")
 
@@ -137,7 +143,7 @@ class TestBuildGenerator:
     def test_create_multi_stage_build_node(self):
         """Test creating multi-stage build for Node.js."""
         try:
-            from codomyrmex.containerization.build_generator import BuildGenerator
+            from codomyrmex.containerization.docker.build_generator import BuildGenerator
         except ImportError:
             pytest.skip("BuildGenerator not available")
 
@@ -156,7 +162,7 @@ class TestBuildGenerator:
     def test_optimize_dockerfile(self, tmp_path):
         """Test Dockerfile optimization with real file operations."""
         try:
-            from codomyrmex.containerization.build_generator import BuildGenerator
+            from codomyrmex.containerization.docker.build_generator import BuildGenerator
         except ImportError:
             pytest.skip("BuildGenerator not available")
 
@@ -182,7 +188,7 @@ RUN apt-get clean
     def test_validate_dockerfile(self):
         """Test Dockerfile validation with real implementation."""
         try:
-            from codomyrmex.containerization.build_generator import BuildGenerator
+            from codomyrmex.containerization.docker.build_generator import BuildGenerator
         except ImportError:
             pytest.skip("BuildGenerator not available")
 
@@ -214,7 +220,7 @@ ENV PASSWORD=secret123
     def test_generate_build_script(self):
         """Test build script generation with real implementation."""
         try:
-            from codomyrmex.containerization.build_generator import BuildGenerator, BuildScript
+            from codomyrmex.containerization.docker.build_generator import BuildGenerator, BuildScript
         except ImportError:
             pytest.skip("BuildGenerator not available")
 
@@ -250,7 +256,7 @@ class TestDockerManagerEnhanced:
     def test_optimize_container_image(self):
         """Test container image optimization with real implementation."""
         try:
-            from codomyrmex.containerization.docker_manager import DockerManager
+            from codomyrmex.containerization.docker.docker_manager import DockerManager
         except ImportError:
             pytest.skip("DockerManager not available")
 
@@ -271,7 +277,7 @@ class TestBuildStagesAndScripts:
     def test_build_stage_creation(self):
         """Test creating a BuildStage."""
         try:
-            from codomyrmex.containerization.build_generator import BuildStage
+            from codomyrmex.containerization.docker.build_generator import BuildStage
         except ImportError:
             pytest.skip("BuildStage not available")
 
@@ -294,7 +300,7 @@ class TestBuildStagesAndScripts:
     def test_multi_stage_build(self):
         """Test MultiStageBuild functionality."""
         try:
-            from codomyrmex.containerization.build_generator import MultiStageBuild, BuildStage
+            from codomyrmex.containerization.docker.build_generator import MultiStageBuild, BuildStage
         except ImportError:
             pytest.skip("MultiStageBuild not available")
 
@@ -325,7 +331,7 @@ class TestBuildStagesAndScripts:
     def test_build_script_generation(self):
         """Test BuildScript shell script generation."""
         try:
-            from codomyrmex.containerization.build_generator import BuildScript
+            from codomyrmex.containerization.docker.build_generator import BuildScript
         except ImportError:
             pytest.skip("BuildScript not available")
 

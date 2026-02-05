@@ -32,8 +32,17 @@ multimodal/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.multimodal import MediaType
+from codomyrmex.multimodal import ImageFormat
+from codomyrmex.multimodal import AudioFormat
+from codomyrmex.multimodal import MediaContent
+from codomyrmex.multimodal import ImageContent
+from codomyrmex.multimodal import AudioContent
+from codomyrmex.multimodal import MultimodalMessage
+from codomyrmex.multimodal import MultimodalProcessor
+from codomyrmex.multimodal import ImageProcessor
+from codomyrmex.multimodal import AudioProcessor
+# ... and 1 more
 ```
 
 ### 3.2 Configuration

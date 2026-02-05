@@ -25,7 +25,7 @@ Provide ready-to-use orchestrator scripts for all Infomaniak OpenStack and S3 op
 | `dns_examples.py` | 14 methods (zones, records, reverse DNS) |
 | `orchestration_examples.py` | 15 methods (Heat stacks, templates) |
 | `metering_examples.py` | 10 methods (usage, quotas) |
-| `newsletter_examples.py` | 12 methods (campaigns, mailing lists, contacts, credits) |
+| `newsletter_examples.py` | 23 methods (campaigns, mailing lists, contacts, credits, tasks) |
 | `full_workflow.py` | Multi-service deployment workflow |
 
 ## Environment Variables

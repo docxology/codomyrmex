@@ -1,9 +1,510 @@
 {
-  "total_files": 0,
+  "total_files": 45,
   "valid_files": 0,
-  "invalid_files": 0,
-  "errors": [],
-  "warnings": [],
-  "file_results": {},
-  "success_rate": 0
+  "invalid_files": 45,
+  "errors": [
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Parse error: while scanning a double-quoted scalar\n  in \"/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml\", line 29, column 11\nfound unknown escape character '.'\n  in \"/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml\", line 29, column 14",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging",
+    "Missing required sections: output, logging"
+  ],
+  "warnings": [
+    "logging.level '${LOG_LEVEL:INFO}' not in valid levels: ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']"
+  ],
+  "file_results": {
+    "/Users/4d/Documents/GitHub/codomyrmex/config/database/backups.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/backups.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/database/connections.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/connections.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/database/pools.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/pools.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/database/migrations.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/migrations.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/models.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/models.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/providers.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/providers.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/inference.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/inference.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/cache/policies.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/cache/policies.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/cache/backends.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/cache/backends.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/security/api-keys.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/api-keys.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Parse error: while scanning a double-quoted scalar\n  in \"/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml\", line 29, column 11\nfound unknown escape character '.'\n  in \"/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml\", line 29, column 14"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/security/authentication.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/authentication.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/security/authorization.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/authorization.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/security/encryption.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/encryption.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/api/versions.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/api/versions.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/api/endpoints.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/api/endpoints.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/api/rate-limiting.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/api/rate-limiting.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/logging.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/logging.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output"
+      ],
+      "warnings": [
+        "logging.level '${LOG_LEVEL:INFO}' not in valid levels: ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']"
+      ],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/metrics.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/metrics.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/alerts.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/alerts.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/telemetry.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/telemetry.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/examples/logging-example.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/examples/logging-example.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/security/examples/authentication-example.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/examples/authentication-example.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/security/examples/api-keys-example.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/examples/api-keys-example.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/examples/ollama-example.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/examples/ollama-example.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/examples/openai-example.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/examples/openai-example.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/redis-example.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/redis-example.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/sqlite-example.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/sqlite-example.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/postgresql-example.yaml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/postgresql-example.yaml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/docker-compose.yml": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/docker-compose.yml",
+      "type": "yaml",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/resources-custom.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/resources-custom.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/project-template-custom.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/project-template-custom.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/workflow-with-dependencies.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/workflow-with-dependencies.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/workflow-basic.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/workflow-basic.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_0.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_0.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/error_test_workflow.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/error_test_workflow.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_1.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_1.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/perf_test_workflow.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/perf_test_workflow.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_2.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_2.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/test_workflow.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/test_workflow.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/basic-analysis.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/basic-analysis.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/sample_analysis_workflow.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/sample_analysis_workflow.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/complex-analysis.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/complex-analysis.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/code-analysis-pipeline.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/code-analysis-pipeline.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    },
+    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/production/test_workflow.json": {
+      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/production/test_workflow.json",
+      "type": "json",
+      "valid": false,
+      "errors": [
+        "Missing required sections: output, logging"
+      ],
+      "warnings": [],
+      "fixed": false
+    }
+  },
+  "success_rate": 0.0
 }

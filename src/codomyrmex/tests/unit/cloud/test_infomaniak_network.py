@@ -520,7 +520,7 @@ class TestInfomaniakNetwork:
 
         result = client.create_health_monitor(
             pool_id="pool-1",
-            type="HTTP",
+            monitor_type="HTTP",
             delay=10,
             timeout=5,
             max_retries=3,

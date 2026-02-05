@@ -1,40 +1,19 @@
-# Model Ops
+# model_ops
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `model_ops` module provides core functionality for Model Ops.
+The `model_ops` module provides core functionality for Model Ops..
 
-## Architecture
+## Directory Contents
 
-```mermaid
-graph TD
-    model_ops --> Utils[codomyrmex.utils]
-    model_ops --> Logs[codomyrmex.logging_monitoring]
-
-    subgraph model_ops
-        Core[Core Logic]
-        API[Public Interface]
-    end
-```
-
-## Components
-
-- **Core**: Implementation logic.
-- **API**: Exposed functions and classes.
-
-## Usage
-
-```python
-from codomyrmex.model_ops import ...
-
-# Example usage
-# result = process(...)
-```
+- `AGENTS.md` - Agent integration specification
+- `PAI.md` - PAI integration notes
+- `SPEC.md` - Module specification
+- `test_model_ops.py` - Test Model Ops
 
 ## Navigation
 
-- **Parent**: [codomyrmex](../README.md)
-- **Spec**: [SPEC.md](SPEC.md)
-- **Agents**: [AGENTS.md](AGENTS.md)
+- **Parent Module**: [unit](../README.md)
+- **Project Root**: ../../../../README.md
